@@ -75,4 +75,5 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if not self.connected:
             self._use_mqtt()
 
-        return "Unknown"
+        # TODO:  Not sure this is the way to handle this.  Could do with some sort of state
+        return "not_connected"

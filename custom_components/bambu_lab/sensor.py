@@ -55,7 +55,7 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     def native_value(self) -> datetime | StateType:
         """Return the state of the sensor."""
 
-        if self.coordinator.data == "Unknown":
+        if self.coordinator.data == "not_connected":
             return
 
         if self.coordinator.data.get("print"):

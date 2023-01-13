@@ -3,15 +3,14 @@ from __future__ import annotations
 from .const import LOGGER
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Final
-import json
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
     POWER_WATT,
     PERCENTAGE,
     TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    SPEED
+    SPEED,
+    UnitOfTemperature
 )
 
 from homeassistant.components.sensor import (
@@ -65,6 +64,7 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="bed_temper",
         name="Bed Temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda device: to_whole(device["print"]["bed_temper"])
@@ -72,9 +72,36 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="bed_target_temper",
         name="Target Bed Temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda device: to_whole(device["print"]["bed_target_temper"])
+    ),
+    BambuLabSensorEntityDescription(
+        key="chamber_temper",
+        name="Chamber Temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda device: to_whole(device["print"]["chamber_temper"])
+    ),
+    BambuLabSensorEntityDescription(
+        key="nozzle_target_temper",
+        name="Nozzle Target Temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda device: to_whole(device["print"]["nozzle_target_temper"])
+    ),
+    BambuLabSensorEntityDescription(
+        key="nozzle_temper",
+        name="Nozzle Temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda device: to_whole(device["print"]["nozzle_temper"])
     ),
 
 )
