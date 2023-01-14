@@ -26,6 +26,7 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             bambu = BambuClient(user_input[CONF_HOST])
+            LOGGER.debug("Config Flow: Trying Connection")
             serial_number = await bambu.try_connection()
 
             if serial_number:

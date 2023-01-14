@@ -29,14 +29,15 @@ def fan_to_percent(speed):
     return round(int(speed) / 15) * 100
 
 
-def to_whole(number):
-    if not number:
-        return 0
-    return round(number)
-
+# Temperature(bed_temp=14, target_bed_temp=0, chamber_temp=20, nozzle_temp=25, target_nozzle_temp=0)
 
 def temp_as_string(value):
     return round(int(value))
+
+
+def log_test(data, key):
+    LOGGER.debug(f"Log Test: {data.temperature[key]}")
+    return data.temperature[key]
 
 
 @dataclass
@@ -59,49 +60,84 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.SIGNAL_STRENGTH,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda device: trim_wifi(device["print"]["wifi_signal"])
+        value_fn=lambda device: device.info.wifi_signal
     ),
     BambuLabSensorEntityDescription(
-        key="bed_temper",
+        key="bed_temp",
         name="Bed Temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda device: to_whole(device["print"]["bed_temper"])
+        value_fn=lambda device: device.temperature.bed_temp
     ),
     BambuLabSensorEntityDescription(
-        key="bed_target_temper",
+        key="target_bed_temp",
         name="Target Bed Temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda device: to_whole(device["print"]["bed_target_temper"])
+        value_fn=lambda device: device.temperature.target_bed_temp
     ),
     BambuLabSensorEntityDescription(
-        key="chamber_temper",
+        key="chamber_temp",
         name="Chamber Temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda device: to_whole(device["print"]["chamber_temper"])
+        value_fn=lambda device: device.temperature.chamber_temp
     ),
     BambuLabSensorEntityDescription(
-        key="nozzle_target_temper",
+        key="target_nozzle_temp",
         name="Nozzle Target Temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda device: to_whole(device["print"]["nozzle_target_temper"])
+        value_fn=lambda device: device.temperature.target_nozzle_temp
     ),
     BambuLabSensorEntityDescription(
-        key="nozzle_temper",
+        key="nozzle_temp",
         name="Nozzle Temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda device: to_whole(device["print"]["nozzle_temper"])
+        value_fn=lambda device: device.temperature.nozzle_temp
     ),
-
+    BambuLabSensorEntityDescription(
+        key="aux_fan_speed",
+        name="Aux Fan Speed",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.SPEED,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda device: device.fans.aux_fan_speed
+    ),
+    BambuLabSensorEntityDescription(
+        key="chamber_fan_speed",
+        name="Chamber Fan Speed",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.SPEED,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda device: device.fans.chamber_fan_speed
+    ),
+    BambuLabSensorEntityDescription(
+        key="cooling_fan_speed",
+        name="Cooling Fan Speed",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.SPEED,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda device: device.fans.cooling_fan_speed
+    ),
+    BambuLabSensorEntityDescription(
+        key="heatbreak_fan_speed",
+        name="Heatbreak Fan Speed",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.SPEED,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda device: device.fans.heatbreak_fan_speed
+    ),
 )

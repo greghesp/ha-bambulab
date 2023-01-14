@@ -25,6 +25,7 @@ class BambuClient:
     @property
     def connected(self):
         """Return if connected to server"""
+        LOGGER.debug(f"Connected: {self._connected}")
         return self._connected
 
     def connect(self, callback):
@@ -32,6 +33,7 @@ class BambuClient:
         self._callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
+        LOGGER.debug("Connect: Attempting Connection")
         self.client.connect(self.host, 1883)
         self.client.loop_start()
 
@@ -42,12 +44,13 @@ class BambuClient:
                    result_code: int,
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.debug("Connected to Broker")
+        LOGGER.debug("On Connected: Connected to Broker")
         self._connected = True
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         json_data = json.loads(message.payload)
+        # LOGGER.debug(f"On Message: Received Message: {json_data}")
         if json_data.get("print"):
             if self._device is None:
                 self._device = Device(json_data.get("print"))
@@ -58,35 +61,38 @@ class BambuClient:
 
     def subscribe(self, serial):
         """Subscribe to report topic"""
-        LOGGER.debug(f"Subscribing to device/{serial}/report")
+        LOGGER.debug(f"Subscribed: Device/{serial}/report")
         self.client.subscribe(f"device/{serial}/report")
 
     def get_device(self):
         """Return device"""
-        LOGGER.debug(f"Returning device: {self._device}")
+        LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
 
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
-        LOGGER.debug("Client Disconnecting")
+        LOGGER.debug("Disconnect: Client Disconnecting")
         self.client.disconnect()
         self._connected = False
         self.client.loop_stop()
 
     async def try_connection(self):
         """Test if we can connect to an MQTT broker."""
+
         result: queue.Queue[bool] = queue.Queue(maxsize=1)
 
         def on_message(client, userdata, message):
             """Wait for a message and grab the serial number from topic"""
             self._serial = message.topic.split('/')[1]
+            LOGGER.debug(f"Try Connection: Got topic and serial {self._serial}")
             result.put(True)
 
         self.client.on_connect = self.on_connect
         self.client.on_message = on_message
-        LOGGER.debug("Connecting to %s for connection test", self.host)
+        LOGGER.debug("Try Connection: Connecting to %s for connection test", self.host)
         self.client.connect(self.host, 1883)
         self.client.loop_start()
+        LOGGER.debug("Try Connection: Connected OK, Now Subscribing...")
         self.client.subscribe("device/+/report")
 
         try:

@@ -34,11 +34,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _use_mqtt(self) -> None:
         """Use MQTT for updates, instead of polling."""
 
+        LOGGER.debug("Forcing to use MQTT")
+
         def message_handler(message):
-            LOGGER.debug("Received Message %s", message)
-            self.async_set_updated_data(json.loads(message.payload))
+            LOGGER.debug("Received Message")
+            self.async_set_updated_data(message)
 
         async def listen():
+            LOGGER.debug("Use MQTT: Listen")
             self.client = BambuClient(self._entry.data[CONF_HOST])
             self.client.connect(callback=message_handler)
             self.client.subscribe(self._entry.data['serial'])
