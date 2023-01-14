@@ -26,7 +26,7 @@ async def async_setup_entry(
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"Entry {entry.data['serial']}")
-    LOGGER.debug(f"Async Setup Sensor {coordinator}")
+    LOGGER.debug(f"Async Setup Sensor {coordinator.data}")
     async_add_entities(
         BambuLabSensor(coordinator, description, entry)
         for description in SENSORS
@@ -54,11 +54,4 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     @property
     def native_value(self) -> datetime | StateType:
         """Return the state of the sensor."""
-
-        if self.coordinator.data == "not_connected":
-            return
-
-        if self.coordinator.data.get("print"):
-            return self.entity_description.value_fn(self.coordinator.data)
-
-        return
+        return self.entity_description.value_fn(self.coordinator.data)
