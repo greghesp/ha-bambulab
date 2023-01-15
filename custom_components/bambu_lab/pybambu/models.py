@@ -11,6 +11,7 @@ class Device:
         self.light = Lights.from_dict(data)
         self.fans = Fans.from_dict(data)
         self.info = Info.from_dict(data)
+        self.ams = AMS.from_dict(data)
 
     def update_from_dict(self, data):
         """Update from dict"""
@@ -18,6 +19,7 @@ class Device:
         self.light.update_from_dict(data)
         self.fans.update_from_dict(data)
         self.info.update_from_dict(data)
+        self.ams.update_from_dict(data)
 
 
 @dataclass
@@ -117,3 +119,22 @@ class Info:
         """Update from dict"""
 
         self.wifi_signal = int(data.get("wifi_signal", self.wifi_signal).replace("dBm", ""))
+
+
+@dataclass
+class AMS:
+    """Return all AMS related info"""
+    version: int
+
+    @staticmethod
+    def from_dict(data):
+        """Load from dict"""
+
+        return AMS(
+            version=int(data.get("ams").get("version")),
+        )
+
+    def update_from_dict(self, data):
+        """Update from dict"""
+
+        self.version = int(data.get("ams").get("version"))
