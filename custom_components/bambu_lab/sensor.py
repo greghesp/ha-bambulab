@@ -46,10 +46,15 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
             config_entry: ConfigEntry
     ) -> None:
         """Initialize the sensor."""
-
-        super().__init__(coordinator=coordinator)
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
+        super().__init__(coordinator=coordinator)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return the state attributes."""
+        LOGGER.debug(f"Extra Attributes: {self.entity_description.extra_attributes(self.coordinator.data)}")
+        return self.entity_description.extra_attributes(self.coordinator.data)
 
     @property
     def native_value(self) -> datetime | StateType:

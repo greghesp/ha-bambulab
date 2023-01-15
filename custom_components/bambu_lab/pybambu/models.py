@@ -11,7 +11,7 @@ class Device:
         self.light = Lights.from_dict(data)
         self.fans = Fans.from_dict(data)
         self.info = Info.from_dict(data)
-        self.ams = AMS.from_dict(data)
+        # self.ams = AMS.from_dict(data)
         self.speed = Speed.from_dict(data)
         self.stage = StageAction.from_dict(data)
 
@@ -21,10 +21,9 @@ class Device:
         self.light.update_from_dict(data)
         self.fans.update_from_dict(data)
         self.info.update_from_dict(data)
-        self.ams.update_from_dict(data)
+        # self.ams.update_from_dict(data)
         self.speed.update_from_dict(data)
         self.stage.update_from_dict(data)
-
 
 
 @dataclass
@@ -46,8 +45,10 @@ class Lights:
         """Update from dict"""
 
         self.chamber_light_on = \
-            search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light", {"mode":self.chamber_light_on}).get("mode", "Unknown")
-        self.work_light = search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light", {"mode":self.work_light}).get("mode", "Unknown")
+            search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light",
+                   {"mode": self.chamber_light_on}).get("mode", "Unknown")
+        self.work_light = search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
+                                 {"mode": self.work_light}).get("mode", "Unknown")
 
 
 @dataclass
@@ -125,21 +126,22 @@ class Info:
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
 
 
-@dataclass
-class AMS:
-    """Return all AMS related info"""
-    version: int
-
-    @staticmethod
-    def from_dict(data):
-        """Load from dict"""
-        return AMS(
-            version=int(data.get("ams").get("version")),
-        )
-        
-    def update_from_dict(self, data):
-        """Update from dict"""
-        self.version = int(data.get("ams").get("version")) 
+# @dataclass
+# class AMS:
+#     """Return all AMS related info"""
+#     version: int
+#
+#     # TODO: Handle if AMS doesn't exist
+#     @staticmethod
+#     def from_dict(data):
+#         """Load from dict"""
+#         return AMS(
+#             version=int(data.get("ams").get("version")),
+#         )
+#
+#     def update_from_dict(self, data):
+#         """Update from dict"""
+#         self.version = int(data.get("ams").get("version"))
 
 
 @dataclass
@@ -156,12 +158,12 @@ class Speed:
             name=get_speed_name(int(data.get("spd_lvl"))),
             modifier=int(data.get("spd_mag"))
         )
-    
+
     def update_from_dict(self, data):
         """Update from dict"""
         self._id = int(data.get("spd_lvl", self._id))
         self.name = get_speed_name(int(data.get("spd_lvl", self._id)))
-        self.modifier=int(data.get("spd_mag", self.modifier))
+        self.modifier = int(data.get("spd_mag", self.modifier))
 
 
 @dataclass
@@ -177,9 +179,8 @@ class StageAction:
             _id=int(data.get("stg_cur")),
             description=get_stage_action(int(data.get("stg_cur")))
         )
-    
+
     def update_from_dict(self, data):
         """Update from dict"""
-        self._id=int(data.get("stg_cur", self._id))
-        self.description=get_stage_action(int(data.get("stg_cur", self._id)))
-
+        self._id = int(data.get("stg_cur", self._id))
+        self.description = get_stage_action(int(data.get("stg_cur", self._id)))

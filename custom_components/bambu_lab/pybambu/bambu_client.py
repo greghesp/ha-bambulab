@@ -59,8 +59,8 @@ class BambuClient:
 
         LOGGER.debug(f"On Message, return device: {self._device.__dict__}")
 
-        #return self._callback(self._device)
-
+        # TODO: This should return, however it appears to cause blocking issues in HA
+        # return self._callback(self._device)
 
     def subscribe(self, serial):
         """Subscribe to report topic"""

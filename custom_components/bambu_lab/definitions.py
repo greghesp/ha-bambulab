@@ -27,7 +27,7 @@ def trim_wifi(string):
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
-    return math.ceil( percentage / 10) * 10
+    return math.ceil(percentage / 10) * 10
 
 
 # Temperature(bed_temp=14, target_bed_temp=0, chamber_temp=20, nozzle_temp=25, target_nozzle_temp=0)
@@ -51,6 +51,7 @@ class BambuLabSensorEntityDescriptionMixin:
 class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEntityDescriptionMixin):
     """Sensor entity description for Bambu Lab."""
     exists_fn: Callable[..., bool] = lambda _: True
+    extra_attributes: Callable[..., dict] = lambda _: {}
 
 
 SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
@@ -141,8 +142,8 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="speed_profile",
         name="Speed Profile",
         icon="mdi:speedometer",
-        value_fn=lambda device: device.speed.name
-        #json attributes? lambda device: {"modifier": device.speed.modifier}
+        value_fn=lambda device: device.speed.name,
+        extra_attributes=lambda device: {"modifier": device.speed.modifier}
     ),
     BambuLabSensorEntityDescription(
         key="stage",
