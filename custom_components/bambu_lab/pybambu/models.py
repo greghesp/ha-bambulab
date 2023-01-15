@@ -11,6 +11,7 @@ class Device:
         self.light = Lights.from_dict(data)
         self.fans = Fans.from_dict(data)
         self.info = Info.from_dict(data)
+        self.ams = AMS.from_dict(data)
         self.speed = Speed.from_dict(data)
         self.stage = StageAction.from_dict(data)
 
@@ -20,8 +21,10 @@ class Device:
         self.light.update_from_dict(data)
         self.fans.update_from_dict(data)
         self.info.update_from_dict(data)
+        self.ams.update_from_dict(data)
         self.speed.update_from_dict(data)
         self.stage.update_from_dict(data)
+
 
 
 @dataclass
@@ -119,8 +122,24 @@ class Info:
 
     def update_from_dict(self, data):
         """Update from dict"""
-
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
+
+
+@dataclass
+class AMS:
+    """Return all AMS related info"""
+    version: int
+
+    @staticmethod
+    def from_dict(data):
+        """Load from dict"""
+        return AMS(
+            version=int(data.get("ams").get("version")),
+        )
+        
+    def update_from_dict(self, data):
+        """Update from dict"""
+        self.version = int(data.get("ams").get("version")) 
 
 
 @dataclass
@@ -130,7 +149,6 @@ class Speed:
     name: str
     modifier: int
 
-    @staticmethod
     def from_dict(data):
         """Load from dict"""
         return Speed(
@@ -164,3 +182,4 @@ class StageAction:
         """Update from dict"""
         self._id=int(data.get("stg_cur", self._id))
         self.description=get_stage_action(int(data.get("stg_cur", self._id)))
+

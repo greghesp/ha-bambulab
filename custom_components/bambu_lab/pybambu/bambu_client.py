@@ -57,7 +57,10 @@ class BambuClient:
 
             self._device.update_from_dict(data=json_data.get("print"))
 
+        LOGGER.debug(f"On Message, return device: {self._device.__dict__}")
+
         #return self._callback(self._device)
+
 
     def subscribe(self, serial):
         """Subscribe to report topic"""
