@@ -26,7 +26,8 @@ def trim_wifi(string):
 
 
 def fan_to_percent(speed):
-    return round(int(speed) / 15) * 100
+    percentage = (int(speed) / 15) * 100
+    return math.ceil( percentage / 10) * 10
 
 
 # Temperature(bed_temp=14, target_bed_temp=0, chamber_temp=20, nozzle_temp=25, target_nozzle_temp=0)
@@ -108,7 +109,6 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="aux_fan_speed",
         name="Aux Fan Speed",
         native_unit_of_measurement=PERCENTAGE,
-        device_class=SensorDeviceClass.SPEED,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda device: device.fans.aux_fan_speed
@@ -117,7 +117,6 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="chamber_fan_speed",
         name="Chamber Fan Speed",
         native_unit_of_measurement=PERCENTAGE,
-        device_class=SensorDeviceClass.SPEED,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda device: device.fans.chamber_fan_speed
@@ -126,7 +125,6 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="cooling_fan_speed",
         name="Cooling Fan Speed",
         native_unit_of_measurement=PERCENTAGE,
-        device_class=SensorDeviceClass.SPEED,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda device: device.fans.cooling_fan_speed
@@ -135,9 +133,21 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="heatbreak_fan_speed",
         name="Heatbreak Fan Speed",
         native_unit_of_measurement=PERCENTAGE,
-        device_class=SensorDeviceClass.SPEED,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda device: device.fans.heatbreak_fan_speed
     ),
+    BambuLabSensorEntityDescription(
+        key="speed_profile",
+        name="Speed Profile",
+        icon="mdi:speedometer",
+        value_fn=lambda device: device.speed.name
+        #json attributes? lambda device: {"modifier": device.speed.modifier}
+    ),
+    BambuLabSensorEntityDescription(
+        key="stage",
+        name="Current Stage",
+        icon="mdi:file-tree",
+        value_fn=lambda device: device.stage.description
+    )
 )
