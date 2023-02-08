@@ -44,7 +44,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug("Use MQTT: Listen")
             self.client = BambuClient(self._entry.data[CONF_HOST])
             self.client.connect(callback=message_handler)
-            self.client.subscribe(self._entry.data['serial'])
+            #self.client.subscribe(self._entry.data['serial'])
 
         # async def listen() -> None:
         #     def on_message(client, userdata, message):

@@ -17,10 +17,10 @@ class BambuClient:
     def __init__(self, host: str):
         self.host = host
         self.client = mqtt.Client()
-        self._serial = None
+        self._serial = ""
         self._connected = False
         self._callback = None
-        self._device: Device | None = None
+        self._device = Device()
 
     @property
     def connected(self):
@@ -32,6 +32,7 @@ class BambuClient:
         """Connect to the MQTT Broker"""
         self._callback = callback
         self.client.on_connect = self.on_connect
+        self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
         LOGGER.debug("Connect: Attempting Connection")
         self.client.connect(self.host, 1883)
@@ -44,59 +45,86 @@ class BambuClient:
                    result_code: int,
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.debug("On Connected: Connected to Broker")
+        LOGGER.debug("On Connect: Connected to Broker")
         self._connected = True
+        LOGGER.debug("Now Subscribing...")
+        self.subscribe(self._serial)
+
+    def on_disconnect(self,
+                      client_: mqtt.Client,
+                      userdata: None,
+                      result_code: int ):
+        LOGGER.debug(f"On Disconnect: Disconnected from Broker: {result_code}")
+        self._connected = False
+        self.client.loop_stop()
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
-        json_data = json.loads(message.payload)
-        # LOGGER.debug(f"On Message: Received Message: {json_data}")
-        if json_data.get("print"):
-            if self._device is None:
-                self._device = Device(json_data.get("print"))
-
-            self._device.update_from_dict(data=json_data.get("print"))
-
-        LOGGER.debug(f"On Message, return device: {self._device.__dict__}")
+        try:
+          LOGGER.debug(f"On Message: Received Message: {message.payload}")
+          json_data = json.loads(message.payload)
+          if json_data.get("print"):
+            self._device.update(data=json_data.get("print"))
+            #LOGGER.debug(f"On Message, return device: {self._device.__dict__}")
+        except Exception as e:
+          template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+          message = template.format(type(e).__name__, e.args)
+          LOGGER.debug(message)
 
         # TODO: This should return, however it appears to cause blocking issues in HA
         # return self._callback(self._device)
 
     def subscribe(self, serial):
         """Subscribe to report topic"""
-        LOGGER.debug(f"Subscribed: Device/{serial}/report")
-        self.client.subscribe(f"device/{serial}/report")
+        if (serial != "")
+        {
+          LOGGER.debug(f"Subscribing: Device/{serial}/report")
+          self.client.subscribe(f"device/{serial}/report")
+        }
+        else
+        {
+          LOGGER.debug(f"Subscribing: Device/#/report")
+          self.client.subscribe(f"device/#/report")
+        }
 
     def get_device(self):
         """Return device"""
         LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
-
+ 
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
         self.client.disconnect()
-        self._connected = False
-        self.client.loop_stop()
 
-    async def try_connection(self):
+    async def try_connection(self, serial):
         """Test if we can connect to an MQTT broker."""
 
         result: queue.Queue[bool] = queue.Queue(maxsize=1)
 
+        if (serial != "")
+        {
+          LOGGER.debug(f"Try Connection: Hard coded serial: {serial}")
+        }
+        else
+        {
+          LOGGER.debug("Try Connection: Auto serial discovery")
+        }
+
         def on_message(client, userdata, message):
             """Wait for a message and grab the serial number from topic"""
-            self._serial = message.topic.split('/')[1]
+            #self._serial = message.topic.split('/')[1]
+            LOGGER.debug(f"Try Connection: Got '{message}'")
             LOGGER.debug(f"Try Connection: Got topic and serial {self._serial}")
             result.put(True)
 
+        self._serial = serial
         self.client.on_connect = self.on_connect
+        self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
         LOGGER.debug("Try Connection: Connecting to %s for connection test", self.host)
         self.client.connect(self.host, 1883)
         self.client.loop_start()
-        LOGGER.debug("Try Connection: Connected OK, Now Subscribing...")
-        self.client.subscribe("device/+/report")
 
         try:
             if result.get(timeout=5):

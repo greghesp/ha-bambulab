@@ -19,7 +19,7 @@ def fan_percentage(speed):
 
 def to_whole(number):
     if not number:
-        return 0
+        return 100
     return round(number)
 
 def get_filament_name(idx):

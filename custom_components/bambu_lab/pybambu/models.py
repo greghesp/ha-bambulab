@@ -1,29 +1,25 @@
 from dataclasses import dataclass
-from .utils import search, fan_percentage, to_whole, get_speed_name, get_stage_action
+from .utils import search, fan_percentage, get_speed_name, get_stage_action
 from .const import LOGGER
 
 
 class Device:
-    """Returns the device class for a Bambu printer"""
+    def __init__(self):
+      self.temperature = Temperature()
+      self.info = Info()
+      self.fans = Fans()
+      self.speed = Speed()
+      self.stage = StageAction()
 
-    def __init__(self, data):
-        self.temperature = Temperature.from_dict(data)
-        self.light = Lights.from_dict(data)
-        self.fans = Fans.from_dict(data)
-        self.info = Info.from_dict(data)
-        # self.ams = AMS.from_dict(data)
-        self.speed = Speed.from_dict(data)
-        self.stage = StageAction.from_dict(data)
-
-    def update_from_dict(self, data):
+    def update(self, data):
         """Update from dict"""
-        self.temperature.update_from_dict(data)
-        self.light.update_from_dict(data)
-        self.fans.update_from_dict(data)
-        self.info.update_from_dict(data)
-        # self.ams.update_from_dict(data)
-        self.speed.update_from_dict(data)
-        self.stage.update_from_dict(data)
+        self.temperature.update(data)
+        #self.light.update(data)
+        self.fans.update(data)
+        self.info.update(data)
+        #self.ams.update(data)
+        self.speed.update(data)
+        self.stage.update(data)
 
 
 @dataclass
@@ -60,25 +56,21 @@ class Temperature:
     nozzle_temp: int
     target_nozzle_temp: int
 
-    @staticmethod
-    def from_dict(data):
-        """Load from dict"""
-        return Temperature(
-            bed_temp=to_whole(data.get("bed_temper", 0)),
-            target_bed_temp=to_whole(data.get("bed_target_temper", 0)),
-            chamber_temp=to_whole(data.get("chamber_temper", 0)),
-            nozzle_temp=to_whole(data.get("nozzle_temper", 0)),
-            target_nozzle_temp=to_whole(data.get("nozzle_target_temper", 0)),
-        )
+    def __init__(self):
+      self.bed_temp = 0
+      self.target_bed_temp = 0
+      self.chamber_temp = 0
+      self.nozzle_temp = 0
+      self.target_nozzle_temp = 0
 
-    def update_from_dict(self, data):
+    def update(self, data):
         """Update from dict"""
-        self.bed_temp = to_whole(data.get("bed_temper", self.bed_temp))
-        self.target_bed_temp = to_whole(data.get("bed_target_temper", self.target_bed_temp))
-        self.chamber_temp = to_whole(data.get("chamber_temper", self.chamber_temp))
-        self.nozzle_temp = to_whole(data.get("nozzle_temper", self.nozzle_temp))
-        self.target_nozzle_temp = to_whole(data.get("nozzle_target_temper", self.target_nozzle_temp))
 
+        self.bed_temp = round(data.get("bed_temper", self.bed_temp))
+        self.target_bed_temp = data.get("bed_target_temper", self.target_bed_temp)
+        self.chamber_temp = data.get("chamber_temper", self.chamber_temp)
+        self.nozzle_temp = round(data.get("nozzle_temper", self.nozzle_temp))
+        self.target_nozzle_temp = data.get("nozzle_target_temper", self.target_nozzle_temp)
 
 @dataclass
 class Fans:
@@ -88,24 +80,19 @@ class Fans:
     cooling_fan_speed: int
     heatbreak_fan_speed: int
 
-    @staticmethod
-    def from_dict(data):
-        """Load from dict"""
+    def __init__(self):
+        self.aux_fan_speed = 0
+        self.chamber_fan_speed = 0
+        self.cooling_fan_speed = 0
+        self.heatbreak_fan_speed = 0
 
-        return Fans(
-            aux_fan_speed=fan_percentage(data.get("big_fan1_speed")),
-            chamber_fan_speed=fan_percentage(data.get("big_fan2_speed")),
-            cooling_fan_speed=fan_percentage(data.get("cooling_fan_speed")),
-            heatbreak_fan_speed=fan_percentage(data.get("heatbreak_fan_speed")),
-        )
-
-    def update_from_dict(self, data):
+    def update(self, data):
         """Update from dict"""
 
-        self.aux_fan_speed = fan_percentage(data.get("big_fan1_speed", self.aux_fan_speed))
-        self.chamber_fan_speed = fan_percentage(data.get("big_fan2_speed", self.chamber_fan_speed))
-        self.cooling_fan_speed = fan_percentage(data.get("cooling_fan_speed", self.cooling_fan_speed))
-        self.heatbreak_fan_speed = fan_percentage(data.get("heatbreak_fan_speed", self.heatbreak_fan_speed))
+        self.aux_fan_speed = fan_percentage(data.get("big_fan1_speed"))
+        self.chamber_fan_speed = fan_percentage(data.get("big_fan2_speed"))
+        self.cooling_fan_speed = fan_percentage(data.get("cooling_fan_speed"))
+        self.heatbreak_fan_speed = fan_percentage(data.get("heatbreak_fan_speed"))
 
 
 @dataclass
@@ -113,18 +100,12 @@ class Info:
     """Return all temperature related info"""
     wifi_signal: int
 
-    @staticmethod
-    def from_dict(data):
-        """Load from dict"""
+    def __init__(self):
+       self.wifi_signal = 0
 
-        return Info(
-            wifi_signal=int(data.get("wifi_signal").replace("dBm", "")),
-        )
-
-    def update_from_dict(self, data):
+    def update(self, data):
         """Update from dict"""
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
-
 
 # @dataclass
 # class AMS:
@@ -151,18 +132,16 @@ class Speed:
     name: str
     modifier: int
 
-    def from_dict(data):
+    def __init__(self):
         """Load from dict"""
-        return Speed(
-            _id=int(data.get("spd_lvl")),
-            name=get_speed_name(int(data.get("spd_lvl"))),
-            modifier=int(data.get("spd_mag"))
-        )
+        self._id = 0
+        self.name = get_speed_name(0),
+        self.modifier = 0
 
-    def update_from_dict(self, data):
+    def update(self, data):
         """Update from dict"""
         self._id = int(data.get("spd_lvl", self._id))
-        self.name = get_speed_name(int(data.get("spd_lvl", self._id)))
+        self.name = get_speed_name(self._id)
         self.modifier = int(data.get("spd_mag", self.modifier))
 
 
@@ -172,15 +151,12 @@ class StageAction:
     _id: int
     description: str
 
-    @staticmethod
-    def from_dict(data):
+    def __init__(self):
         """Load from dict"""
-        return StageAction(
-            _id=int(data.get("stg_cur")),
-            description=get_stage_action(int(data.get("stg_cur")))
-        )
+        self._id = 99
+        self.description = get_stage_action(self._id)
 
-    def update_from_dict(self, data):
+    def update(self, data):
         """Update from dict"""
         self._id = int(data.get("stg_cur", self._id))
-        self.description = get_stage_action(int(data.get("stg_cur", self._id)))
+        self.description = get_stage_action(self._id)
