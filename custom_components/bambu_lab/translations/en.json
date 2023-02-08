@@ -12,7 +12,7 @@
             "user": {
                 "data": {
                     "host": "Host",
-                    "name": "Device Name"
+                    "name": "Device Name",
                     "serial": "Serial Number (P1P only)"
                 }
             }

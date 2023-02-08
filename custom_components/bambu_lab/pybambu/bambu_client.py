@@ -65,7 +65,6 @@ class BambuClient:
           json_data = json.loads(message.payload)
           if json_data.get("print"):
             self._device.update(data=json_data.get("print"))
-            #LOGGER.debug(f"On Message, return device: {self._device.__dict__}")
         except Exception as e:
           template = "An exception of type {0} occurred. Arguments:\n{1!r}"
           message = template.format(type(e).__name__, e.args)
@@ -76,16 +75,12 @@ class BambuClient:
 
     def subscribe(self, serial):
         """Subscribe to report topic"""
-        if (serial != "")
-        {
+        if (serial == ""):
+          LOGGER.debug(f"Subscribing: Device/#/report")
+          self.client.subscribe("device/#/report")
+        else:
           LOGGER.debug(f"Subscribing: Device/{serial}/report")
           self.client.subscribe(f"device/{serial}/report")
-        }
-        else
-        {
-          LOGGER.debug(f"Subscribing: Device/#/report")
-          self.client.subscribe(f"device/#/report")
-        }
 
     def get_device(self):
         """Return device"""
@@ -99,21 +94,13 @@ class BambuClient:
 
     async def try_connection(self, serial):
         """Test if we can connect to an MQTT broker."""
+        LOGGER.debug("Try Connection")
 
         result: queue.Queue[bool] = queue.Queue(maxsize=1)
 
-        if (serial != "")
-        {
-          LOGGER.debug(f"Try Connection: Hard coded serial: {serial}")
-        }
-        else
-        {
-          LOGGER.debug("Try Connection: Auto serial discovery")
-        }
-
         def on_message(client, userdata, message):
             """Wait for a message and grab the serial number from topic"""
-            #self._serial = message.topic.split('/')[1]
+            self._serial = message.topic.split('/')[1]
             LOGGER.debug(f"Try Connection: Got '{message}'")
             LOGGER.debug(f"Try Connection: Got topic and serial {self._serial}")
             result.put(True)

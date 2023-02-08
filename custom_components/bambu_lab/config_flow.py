@@ -27,8 +27,8 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             bambu = BambuClient(user_input[CONF_HOST])
             LOGGER.debug("Config Flow: Trying Connection")
-            serial = user_input["serial"]
-            serial_number = await bambu.try_connection(serial)
+            user_serial = user_input.get("serial", default="")
+            serial_number = await bambu.try_connection(user_serial)
 
             if serial_number:
                 return self.async_create_entry(
