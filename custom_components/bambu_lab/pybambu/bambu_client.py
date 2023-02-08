@@ -14,10 +14,10 @@ from .models import Device
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
 
-    def __init__(self, host: str):
+    def __init__(self, host: str, serial = None):
         self.host = host
         self.client = mqtt.Client()
-        self._serial = ""
+        self._serial = serial
         self._connected = False
         self._callback = None
         self._device = Device()
@@ -75,7 +75,7 @@ class BambuClient:
 
     def subscribe(self, serial):
         """Subscribe to report topic"""
-        if (serial == ""):
+        if (serial == None):
           LOGGER.debug(f"Subscribing: Device/#/report")
           self.client.subscribe("device/#/report")
         else:

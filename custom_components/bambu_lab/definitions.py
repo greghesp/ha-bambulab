@@ -79,7 +79,6 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda device: device.temperature.target_bed_temp
-#        available_fn=lambda device: (device.temperature.target_bed_temp != 0)
     ),
     BambuLabSensorEntityDescription(
         key="chamber_temp",

@@ -50,10 +50,6 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
         super().__init__(coordinator=coordinator)
 
-    #@property
-    #def available(self) -> bool:
-    #    return False
-
     @property
     def extra_state_attributes(self) -> dict:
         """Return the state attributes."""
