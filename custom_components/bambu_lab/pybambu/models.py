@@ -6,6 +6,7 @@ from .const import LOGGER
 class Device:
     def __init__(self):
       self.temperature = Temperature()
+      self.lights = Lights()
       self.info = Info()
       self.fans = Fans()
       self.speed = Speed()
@@ -14,7 +15,7 @@ class Device:
     def update(self, data):
         """Update from dict"""
         self.temperature.update(data)
-        #self.light.update(data)
+        self.lights.update(data)
         self.fans.update(data)
         self.info.update(data)
         #self.ams.update(data)
@@ -25,26 +26,22 @@ class Device:
 @dataclass
 class Lights:
     """Return all light related info"""
-    chamber_light_on: str
+    chamber_light: str
     work_light: str
 
-    @staticmethod
-    def from_dict(data):
-        """Loads from dict"""
+    def __init__(self):
+        chamber_light = "Unknown"
+        work_light = "Unknown"
 
-        return Lights(
-            chamber_light_on=search(data["lights_report"], lambda x: x['node'] == "chamber_light")["mode"],
-            work_light=search(data["lights_report"], lambda x: x['node'] == "work_light")["mode"],
-        )
-
-    def update_from_dict(self, data):
+    def update(self, data):
         """Update from dict"""
 
-        self.chamber_light_on = \
+        self.chamber_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light",
-                   {"mode": self.chamber_light_on}).get("mode", "Unknown")
-        self.work_light = search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
-                                 {"mode": self.work_light}).get("mode", "Unknown")
+                   {"mode": self.chamber_light}).get("mode")
+        self.work_light = \
+            search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
+                   {"mode": self.work_light}).get("mode")
 
 
 @dataclass
