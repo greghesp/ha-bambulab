@@ -30,8 +30,8 @@ class Lights:
     work_light: str
 
     def __init__(self):
-        chamber_light = "Unknown"
-        work_light = "Unknown"
+        self.chamber_light = "Unknown"
+        self.work_light = "Unknown"
 
     def update(self, data):
         """Update from dict"""
