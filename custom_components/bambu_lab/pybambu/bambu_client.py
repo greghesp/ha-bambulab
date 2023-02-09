@@ -14,7 +14,7 @@ from .models import Device
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
 
-    def __init__(self, host: str, serial = None):
+    def __init__(self, host: str, serial: str):
         self.host = host
         self.client = mqtt.Client()
         self._serial = serial
@@ -34,7 +34,7 @@ class BambuClient:
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
-        LOGGER.debug("Connect: Attempting Connection")
+        LOGGER.debug("Connect: Attempting Connection to {self.host}")
         self.client.connect(self.host, 1883)
         self.client.loop_start()
 
@@ -48,7 +48,7 @@ class BambuClient:
         LOGGER.debug("On Connect: Connected to Broker")
         self._connected = True
         LOGGER.debug("Now Subscribing...")
-        self.subscribe(self._serial)
+        self.subscribe()
 
     def on_disconnect(self,
                       client_: mqtt.Client,
@@ -73,14 +73,10 @@ class BambuClient:
         # TODO: This should return, however it appears to cause blocking issues in HA
         # return self._callback(self._device)
 
-    def subscribe(self, serial):
+    def subscribe(self):
         """Subscribe to report topic"""
-        if (serial == None):
-          LOGGER.debug(f"Subscribing: Device/#/report")
-          self.client.subscribe("device/#/report")
-        else:
-          LOGGER.debug(f"Subscribing: Device/{serial}/report")
-          self.client.subscribe(f"device/{serial}/report")
+        LOGGER.debug(f"Subscribing: Device/{self._serial}/report")
+        self.client.subscribe(f"device/{self._serial}/report")
 
     def get_device(self):
         """Return device"""
@@ -92,20 +88,16 @@ class BambuClient:
         LOGGER.debug("Disconnect: Client Disconnecting")
         self.client.disconnect()
 
-    async def try_connection(self, serial):
+    async def try_connection(self):
         """Test if we can connect to an MQTT broker."""
         LOGGER.debug("Try Connection")
 
         result: queue.Queue[bool] = queue.Queue(maxsize=1)
 
         def on_message(client, userdata, message):
-            """Wait for a message and grab the serial number from topic"""
-            self._serial = message.topic.split('/')[1]
             LOGGER.debug(f"Try Connection: Got '{message}'")
-            LOGGER.debug(f"Try Connection: Got topic and serial {self._serial}")
             result.put(True)
 
-        self._serial = serial
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
@@ -114,8 +106,8 @@ class BambuClient:
         self.client.loop_start()
 
         try:
-            if result.get(timeout=5):
-                return self._serial
+            if result.get(timeout=10):
+                return True
         except queue.Empty:
             return False
         finally:
