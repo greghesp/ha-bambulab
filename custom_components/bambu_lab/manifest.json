@@ -5,6 +5,7 @@
   "config_flow": true,
   "documentation": "https://github.com/greghesp/ha-bambulab",
   "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
+  "dependencies": ["mqtt"],
   "codeowners": ["@greghesp"],
   "iot_class": "local_push"
 }
