@@ -11,8 +11,9 @@
         "step": {
             "user": {
                 "data": {
-                    "host": "Host",
-                    "name": "Device Name"
+                    "host": "Host IP",
+                    "lancode": "Lan Code",
+                    "serial": "Serial Number"
                 }
             }
         }
