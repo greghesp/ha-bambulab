@@ -4,7 +4,7 @@
       "user": {
         "data": {
           "host": "host",
-          "name": "name",
+          "access_code": "access_code",
           "serial": "serial"
         }
       }
