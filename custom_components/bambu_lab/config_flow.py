@@ -34,7 +34,7 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
                     title=user_input["serial"],
                     data={
                         "host": user_input["host"],
-                        "lancode": user_input["lancode"],
+                        "access_code": user_input["access_code"],
                         "serial": user_input["serial"]
                     }
                 )
@@ -43,6 +43,6 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema({vol.Required("host"): str, vol.Required("lancode"): str, vol.Required("serial"): str}),
+            data_schema=vol.Schema({vol.Required("host"): str, vol.Required("access_code"): str, vol.Required("serial"): str}),
             errors=errors or {},
         )

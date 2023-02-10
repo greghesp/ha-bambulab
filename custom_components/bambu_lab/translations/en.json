@@ -12,7 +12,7 @@
             "user": {
                 "data": {
                     "host": "Host IP",
-                    "lancode": "Lan Code",
+                    "access_code": "Access Code",
                     "serial": "Serial Number"
                 }
             }
