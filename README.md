@@ -4,6 +4,9 @@
 
 This is still a WIP.
 
-For now, enter your Printers IP address as the host and give it a name. It should create a device (still needs work)
-with some sensors.
-Some of them are bugged and report as Unavailable. No clue why at the moment
+For now, you will need the following information:
+- Printer IP
+- LAN Access Code (Can be found on the Printer settings)
+- Serial Number (Can be found in the printer settings or in Bambu Studio)
+
+If you are running the latest firmware which requires TLS MQTT Support, please check the `Enable TLS` box
