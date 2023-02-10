@@ -1,6 +1,6 @@
 {
   "domain": "bambu_lab",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "name": "Bambu Lab",
   "config_flow": true,
   "documentation": "https://github.com/greghesp/ha-bambulab",
