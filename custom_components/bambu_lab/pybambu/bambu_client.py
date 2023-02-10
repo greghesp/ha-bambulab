@@ -66,9 +66,9 @@ class BambuClient:
           if json_data.get("print"):
             self._device.update(data=json_data.get("print"))
         except Exception as e:
-          template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-          message = template.format(type(e).__name__, e.args)
-          LOGGER.debug(message)
+          LOGGER.debug("An exception occurred:")
+          LOGGER.debug(f"Type: {type(e)}")
+          LOGGER.debug(f"Args: {e.args}")
 
         # TODO: This should return, however it appears to cause blocking issues in HA
         # return self._callback(self._device)
