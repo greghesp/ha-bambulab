@@ -8,7 +8,6 @@ from typing import Any
 
 import paho.mqtt.client as mqtt
 
-
 from .const import LOGGER
 from .models import Device
 
@@ -48,7 +47,6 @@ class BambuClient:
             self._port = 8883
             self.client.username_pw_set("bblp", password=self._access_code)
 
-
         self.client.connect(self.host, self._port)
         self.client.loop_start()
 
@@ -67,7 +65,8 @@ class BambuClient:
     def on_disconnect(self,
                       client_: mqtt.Client,
                       userdata: None,
-                      result_code: int ):
+                      result_code: int):
+        """Called when MQTT Disconnects"""
         LOGGER.debug(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
         self.client.loop_stop()
@@ -75,14 +74,14 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-          LOGGER.debug(f"On Message: Received Message: {message.payload}")
-          json_data = json.loads(message.payload)
-          if json_data.get("print"):
-            self._device.update(data=json_data.get("print"))
+            LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            json_data = json.loads(message.payload)
+            if json_data.get("print"):
+                self._device.update(data=json_data.get("print"))
         except Exception as e:
-          LOGGER.debug("An exception occurred:")
-          LOGGER.debug(f"Type: {type(e)}")
-          LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug("An exception occurred:")
+            LOGGER.debug(f"Type: {type(e)}")
+            LOGGER.debug(f"Args: {e.args}")
 
         # TODO: This should return, however it appears to cause blocking issues in HA
         # return self._callback(self._device)
@@ -92,11 +91,22 @@ class BambuClient:
         LOGGER.debug(f"Subscribing: device/{self._serial}/report")
         self.client.subscribe(f"device/{self._serial}/report")
 
+    def publish(self, msg):
+        """Publish a message"""
+        result = self.client.publish(f"device/{self._serial}/request", msg)
+        status = result[0]
+        if status == 0:
+            LOGGER.debug(f"Sent {msg} to topic device/{self._serial}/request")
+            return True
+
+        LOGGER.debug(f"Failed to send message to topic device/{self._serial}/request")
+        return False
+
     def get_device(self):
         """Return device"""
         LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
- 
+
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
