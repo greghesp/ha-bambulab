@@ -22,7 +22,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._entry = entry
-        self.client = BambuClient(entry.data["host"], entry.data["serial"])
+        self.client = BambuClient(entry.data["host"], entry.data["serial"], entry.data["access_code"], entry.data["tls"])
         super().__init__(
             hass,
             LOGGER,
@@ -42,7 +42,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         async def listen():
             LOGGER.debug("Use MQTT: Listen")
-            self.client = BambuClient(self._entry.data["host"], self._entry.data["serial"])
+            self.client = BambuClient(self._entry.data["host"], self._entry.data["serial"], self._entry.data["access_code"], self._entry.data["tls"])
             self.client.connect(callback=message_handler)
 
         # async def listen() -> None:

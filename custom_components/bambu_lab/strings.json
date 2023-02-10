@@ -5,7 +5,8 @@
         "data": {
           "host": "host",
           "access_code": "access_code",
-          "serial": "serial"
+          "serial": "serial",
+          "tls": "tls"
         }
       }
     },

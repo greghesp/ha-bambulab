@@ -1,11 +1,14 @@
 from __future__ import annotations
 import queue
 import json
+import ssl
 
 from dataclasses import dataclass
 from typing import Any
 
 import paho.mqtt.client as mqtt
+
+
 from .const import LOGGER
 from .models import Device
 
@@ -14,13 +17,16 @@ from .models import Device
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
 
-    def __init__(self, host: str, serial: str):
+    def __init__(self, host: str, serial: str, access_code: str, tls: bool):
         self.host = host
         self.client = mqtt.Client()
         self._serial = serial
+        self._access_code = access_code
+        self._tls = tls
         self._connected = False
         self._callback = None
         self._device = Device()
+        self._port = 1883
 
     @property
     def connected(self):
@@ -35,7 +41,15 @@ class BambuClient:
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
         LOGGER.debug("Connect: Attempting Connection to {self.host}")
-        self.client.connect(self.host, 1883)
+
+        if self._tls:
+            self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
+            self.client.tls_insecure_set(True)
+            self._port = 8883
+            self.client.username_pw_set("bblp", password=self._access_code)
+
+
+        self.client.connect(self.host, self._port)
         self.client.loop_start()
 
     def on_connect(self,
@@ -75,7 +89,7 @@ class BambuClient:
 
     def subscribe(self):
         """Subscribe to report topic"""
-        LOGGER.debug(f"Subscribing: Device/{self._serial}/report")
+        LOGGER.debug(f"Subscribing: device/{self._serial}/report")
         self.client.subscribe(f"device/{self._serial}/report")
 
     def get_device(self):
@@ -101,8 +115,14 @@ class BambuClient:
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
+
+        if self._tls:
+            self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
+            self.client.tls_insecure_set(True)
+            self._port = 8883
+            self.client.username_pw_set("bblp", password=self._access_code)
         LOGGER.debug("Try Connection: Connecting to %s for connection test", self.host)
-        self.client.connect(self.host, 1883)
+        self.client.connect(self.host, self._port)
         self.client.loop_start()
 
         try:
