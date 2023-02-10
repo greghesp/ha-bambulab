@@ -150,5 +150,13 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         name="Current Stage",
         icon="mdi:file-tree",
         value_fn=lambda device: device.stage.description
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_progress",
+        name="Print Progress",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:progress-clock",
+        value_fn=lambda device: device.info.print_percentage
     )
 )

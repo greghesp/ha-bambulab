@@ -94,15 +94,18 @@ class Fans:
 
 @dataclass
 class Info:
-    """Return all temperature related info"""
+    """Return all information related content"""
     wifi_signal: int
+    print_percentage: int
 
     def __init__(self):
-       self.wifi_signal = 0
+        self.wifi_signal = 0
+        self.print_percentage = 0
 
     def update(self, data):
         """Update from dict"""
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
+        self.print_percentage = data.get("mc_percent", self.print_percentage)
 
 # @dataclass
 # class AMS:
