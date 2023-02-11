@@ -68,6 +68,8 @@ class BambuClient:
         """Handle connection"""
         LOGGER.debug("On Connect: Connected to Broker")
         self._connected = True
+        LOGGER.debug("On Connect: Getting Version Info")
+        self.publish(GET_VERSION)
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
 
@@ -83,10 +85,14 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            # LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
                 self._device.update(data=json_data.get("print"))
+            elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
+                LOGGER.debug("Get Version Command Data")
+                self._device.update(data=json_data.get("info"))
+
         except Exception as e:
             LOGGER.debug("An exception occurred:")
             LOGGER.debug(f"Type: {type(e)}")

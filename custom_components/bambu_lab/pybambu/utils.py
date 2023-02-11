@@ -1,6 +1,7 @@
 import math
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES
+from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, LOGGER
+
 
 def search(lst, predicate, default={}):
     """Search an array for a string"""
@@ -15,21 +16,39 @@ def fan_percentage(speed):
     if not speed:
         return 0
     percentage = (int(speed) / 15) * 100
-    return math.ceil( percentage / 10) * 10
+    return math.ceil(percentage / 10) * 10
+
 
 def to_whole(number):
     if not number:
         return 0
     return round(number)
 
+
 def get_filament_name(idx):
     """Converts a filament idx to a human-readable name"""
     return FILAMENT_NAMES.get(idx, "Unknown")
+
 
 def get_speed_name(_id):
     """Return the human-readable name for a speed id"""
     return SPEED_PROFILE.get(int(_id), "Unknown")
 
+
 def get_stage_action(_id):
     """Return the human-readable description for a stage action"""
     return ACTION_IDS.get(_id, "Unknown")
+
+
+def get_printer_type(modules, default):
+    esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
+    rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
+    if len(esp32.keys()) > 1:
+        if esp32.get("hw_ver") == "AP04":
+            LOGGER.debug("Device is P1P")
+            return "P1P"
+    elif len(rv1126.keys()) > 1:
+        if rv1126.get("hw_ver") == "AP05":
+            LOGGER.debug("Device is X1C")
+            return "X1C"
+    return default

@@ -26,10 +26,8 @@ async def async_setup_entry(
 
     entities_to_add: list = []
 
-    #   TODO:  Somehow need to handle this for the P1P. State is always unknown for all at initialisation,
-    #    so we need to be able to do this after the MQTT data is populated
-    # if not coordinator.data.lights.chamber_light == "Unknown":
-    entities_to_add.append(BambuLabChamberLight(coordinator, entry))
+    if coordinator.data.info.device_type == "X1C" or coordinator.data.info.device_type == "P1P":
+        entities_to_add.append(BambuLabChamberLight(coordinator, entry))
     async_add_entities(entities_to_add)
 
 
@@ -49,9 +47,7 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
     @property
     def available(self) -> bool:
         """Is the light available"""
-        if not self.coordinator.data.lights.chamber_light == "Unknown":
-            return True
-        return False
+        return True
 
     @property
     def is_on(self) -> bool:
