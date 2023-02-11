@@ -22,7 +22,7 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up WLED sensor based on a config entry."""
+    """Set up BambuLab sensor based on a config entry."""
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"Entry {entry.data['serial']}")
@@ -53,7 +53,7 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     @property
     def extra_state_attributes(self) -> dict:
         """Return the state attributes."""
-        #LOGGER.debug(f"Extra Attributes: {self.entity_description.extra_attributes(self.coordinator.data)}")
+        # LOGGER.debug(f"Extra Attributes: {self.entity_description.extra_attributes(self.coordinator.data)}")
         return self.entity_description.extra_attributes(self.coordinator.data)
 
     @property

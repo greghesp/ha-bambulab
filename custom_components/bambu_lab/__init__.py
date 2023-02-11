@@ -6,7 +6,10 @@ from homeassistant.core import HomeAssistant
 from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
 
-PLATFORMS = [Platform.SENSOR]
+PLATFORMS = (
+    Platform.LIGHT,
+    Platform.SENSOR
+)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

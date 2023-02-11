@@ -1,5 +1,6 @@
 """Definitions for Bambu Lab sensors added to MQTT."""
 from __future__ import annotations
+
 from .const import LOGGER
 from collections.abc import Callable
 from dataclasses import dataclass
