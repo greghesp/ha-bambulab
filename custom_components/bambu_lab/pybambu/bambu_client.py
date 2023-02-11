@@ -10,6 +10,15 @@ import paho.mqtt.client as mqtt
 
 from .const import LOGGER
 from .models import Device
+from .commands import (
+    CHAMBER_LIGHT_ON,
+    CHAMBER_LIGHT_OFF,
+    SPEED_PROFILE_TEMPLATE,
+    GET_VERSION,
+    PAUSE,
+    RESUME,
+    STOP
+)
 
 
 @dataclass
@@ -92,8 +101,8 @@ class BambuClient:
         self.client.subscribe(f"device/{self._serial}/report")
 
     def publish(self, msg):
-        """Publish a message"""
-        result = self.client.publish(f"device/{self._serial}/request", msg)
+        """Publish a custom message"""
+        result = self.client.publish(f"device/{self._serial}/request", json.dumps(msg))
         status = result[0]
         if status == 0:
             LOGGER.debug(f"Sent {msg} to topic device/{self._serial}/request")
@@ -101,6 +110,13 @@ class BambuClient:
 
         LOGGER.debug(f"Failed to send message to topic device/{self._serial}/request")
         return False
+
+    def command(self, cmd):
+        """Publish a command"""
+        if cmd == "CHAMBER_LIGHT_ON":
+            return self.publish(CHAMBER_LIGHT_ON)
+        if cmd == "CHAMBER_LIGHT_OFF":
+            return self.publish(CHAMBER_LIGHT_OFF)
 
     def get_device(self):
         """Return device"""

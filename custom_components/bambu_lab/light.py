@@ -3,6 +3,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant, callback
 from .const import DOMAIN, LOGGER
+from .pybambu.commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
@@ -63,3 +64,11 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
     def icon(self) -> str:
         """Return the icon to use in the frontend, if any."""
         return "mdi:led-strip-variant"
+
+    def turn_off(self) -> None:
+        """ Turn off the power"""
+        self.coordinator.client.publish(CHAMBER_LIGHT_OFF)
+
+    def turn_on(self) -> None:
+        """ Turn on the power"""
+        self.coordinator.client.publish(CHAMBER_LIGHT_ON)
