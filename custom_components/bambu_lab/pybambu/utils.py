@@ -52,3 +52,27 @@ def get_printer_type(modules, default):
             LOGGER.debug("Device is X1C")
             return "X1C"
     return default
+
+
+def get_hw_version(modules, default):
+    esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
+    rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
+    if len(esp32.keys()) > 1:
+        if esp32.get("hw_ver") == "AP04":
+            return esp32.get("hw_ver")
+    elif len(rv1126.keys()) > 1:
+        if rv1126.get("hw_ver") == "AP05":
+            return rv1126.get("hw_ver")
+    return default
+
+
+def get_sw_version(modules, default):
+    esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
+    rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
+    if len(esp32.keys()) > 1:
+        if esp32.get("hw_ver") == "AP04":
+            return esp32.get("sw_ver")
+    elif len(rv1126.keys()) > 1:
+        if rv1126.get("sw_ver") == "AP05":
+            return rv1126.get("hw_ver")
+    return default

@@ -104,12 +104,16 @@ class Info:
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = "Unknown"
+        self.hw_ver = "Unknown"
+        self.sw_ver = "Unknown"
 
     def update(self, data):
         """Update from dict"""
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
+        self.hw_ver = get_printer_type(data.get("module", []), self.hw_ver)
+        self.sw_ver = get_printer_type(data.get("module", []), self.sw_ver)
 
 
 # @dataclass
