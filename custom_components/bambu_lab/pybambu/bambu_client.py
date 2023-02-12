@@ -5,6 +5,7 @@ import ssl
 
 from dataclasses import dataclass
 from typing import Any
+from threading import Thread
 
 import paho.mqtt.client as mqtt
 
@@ -12,6 +13,21 @@ import paho.mqtt.client as mqtt
 from .const import LOGGER
 from .models import Device
 
+def listen_thread(self):
+    LOGGER.debug("Starting listener thread.")
+    while True:
+        LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
+        self.client.connect(self.host, self._port, keepalive=5)
+
+        LOGGER.debug("Starting listen loop")
+        try:
+           self.client.loop_forever()
+           break
+        except Exception as e:
+           LOGGER.debug("A loop exception occurred:")
+           LOGGER.debug(f"Type: {type(e)}")
+           LOGGER.debug(f"Args: {e.args}")
+           self.disconnect()
 
 @dataclass
 class BambuClient:
@@ -40,7 +56,7 @@ class BambuClient:
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
-        LOGGER.debug("Connect: Attempting Connection to {self.host}")
+        self.client.enable_logger(LOGGER)
 
         if self._tls:
             self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
@@ -48,9 +64,9 @@ class BambuClient:
             self._port = 8883
             self.client.username_pw_set("bblp", password=self._access_code)
 
-
-        self.client.connect(self.host, self._port)
-        self.client.loop_start()
+        LOGGER.debug("Starting listener thread")
+        thread = Thread(target = listen_thread, args = (self, ))
+        thread.start()
 
     def on_connect(self,
                    client_: mqtt.Client,
@@ -70,12 +86,13 @@ class BambuClient:
                       result_code: int ):
         LOGGER.debug(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
-        self.client.loop_stop()
+        #self.client.loop_stop()
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
+        #LOGGER.debug("On Message: Received Message:")
         try:
-          LOGGER.debug(f"On Message: Received Message: {message.payload}")
+          LOGGER.debug(f"{message.payload}")
           json_data = json.loads(message.payload)
           if json_data.get("print"):
             self._device.update(data=json_data.get("print"))
@@ -84,8 +101,7 @@ class BambuClient:
           LOGGER.debug(f"Type: {type(e)}")
           LOGGER.debug(f"Args: {e.args}")
 
-        # TODO: This should return, however it appears to cause blocking issues in HA
-        # return self._callback(self._device)
+        return self._callback(self._device)
 
     def subscribe(self):
         """Subscribe to report topic"""
