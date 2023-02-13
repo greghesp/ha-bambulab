@@ -35,8 +35,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _use_mqtt(self) -> None:
         """Use MQTT for updates, instead of polling."""
 
-        LOGGER.debug("Forcing to use MQTT")
-
         def message_handler(message):
             self.async_set_updated_data(message)
 
@@ -45,47 +43,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self.client = BambuClient(self._entry.data["host"], self._entry.data["serial"], self._entry.data["access_code"], self._entry.data["tls"])
             self.client.connect(callback=message_handler)
 
-        # async def listen() -> None:
-        #     def on_message(client, userdata, message):
-        #         LOGGER.debug(f"Received message {message}")
-        #         self.async_set_updated_data(json.loads(message.payload))
-        #
-        #     def on_connect(
-        #             client_: mqtt.Client,
-        #             userdata: None,
-        #             flags: dict[str, Any],
-        #             result_code: int,
-        #             properties: mqtt.Properties | None = None,
-        #     ) -> None:
-        #         """Handle connection result."""
-        #         LOGGER.debug("MQTT Connected")
-        #         self.connected = True
-        #
-        #     self.client.on_connect = on_connect
-        #     self.client.on_message = on_message
-        #     LOGGER.debug(f"Connecting to MQTT {self._entry.data[CONF_HOST]}")
-        #
-        #     self.client.connect(self._entry.data[CONF_HOST], 1883)
-        #     self.client.loop_start()
-        #     LOGGER.debug(f"Subscribing to device/{self._entry.data['serial']}/report")
-        #     self.client.subscribe(f"device/{self._entry.data['serial']}/report")
-        #
-        # async def close_connection(_: Event) -> None:
-        #     self.client.disconnect()
-        #     self.client.loop_stop()
-        #     self.connected = False
-
-        # Clean disconnect WebSocket on Home Assistant shutdown
-        # self.hass.bus.async_listen_once(
-        #     EVENT_HOMEASSISTANT_STOP, self.client.disconnect()
-        # )
-
         asyncio.create_task(listen())
 
     async def _async_update_data(self):
-        LOGGER.debug(f"MQTT connected: {self.client.connected}")
-        #if not self.client.connected:
-        #    self._use_mqtt()
+        LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
 
         # TODO:  Not sure this is the way to handle this.  Could do with some sort of state
         device = self.client.get_device()
