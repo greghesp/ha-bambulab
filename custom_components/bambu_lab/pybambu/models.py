@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type
+from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type, get_hw_version, get_sw_version
 from .const import LOGGER
 
 
@@ -127,8 +127,8 @@ class Info:
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
-        self.hw_ver = get_printer_type(data.get("module", []), self.hw_ver)
-        self.sw_ver = get_printer_type(data.get("module", []), self.sw_ver)
+        self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
+        self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
 
 

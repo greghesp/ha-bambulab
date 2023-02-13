@@ -43,7 +43,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug("Use MQTT: Listen")
             self.client = BambuClient(self._entry.data["host"], self._entry.data["serial"],
                                       self._entry.data["access_code"], self._entry.data["tls"])
-            self.client.connect(callback=message_handler)
+            await self.client.connect(callback=message_handler)
 
         asyncio.create_task(listen())
 

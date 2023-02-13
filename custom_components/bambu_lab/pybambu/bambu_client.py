@@ -2,6 +2,7 @@ from __future__ import annotations
 import queue
 import json
 import ssl
+import time
 
 from dataclasses import dataclass
 from typing import Any
@@ -49,6 +50,7 @@ class BambuClient:
         self._access_code = access_code
         self._tls = tls
         self._connected = False
+        self._version_info_ok = False
         self._callback = None
         self._device = Device()
         self._port = 1883
@@ -59,7 +61,7 @@ class BambuClient:
         LOGGER.debug(f"Connected: {self._connected}")
         return self._connected
 
-    def connect(self, callback):
+    async def connect(self, callback):
         """Connect to the MQTT Broker"""
         self._callback = callback
         self.client.on_connect = self.on_connect
@@ -75,6 +77,9 @@ class BambuClient:
         LOGGER.debug("Starting MQTT listener thread")
         thread = Thread(target = listen_thread, args = (self, ))
         thread.start()
+        while not self._version_info_ok:
+            time.sleep(5)
+        return
 
     def on_connect(self,
                    client_: mqtt.Client,
@@ -91,6 +96,7 @@ class BambuClient:
         self.publish(GET_VERSION)
         LOGGER.debug("On Connect: Request Push All")
         self.publish(PUSH_ALL)
+
 
     def on_disconnect(self,
                       client_: mqtt.Client,
@@ -110,6 +116,7 @@ class BambuClient:
             elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.update(data=json_data.get("info"))
+                self._version_info_ok = True
 
         except Exception as e:
             LOGGER.debug("An exception occurred:")
