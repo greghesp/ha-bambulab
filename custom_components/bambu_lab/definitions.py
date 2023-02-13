@@ -1,5 +1,6 @@
 """Definitions for Bambu Lab sensors added to MQTT."""
 from __future__ import annotations
+
 from .const import LOGGER
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -158,5 +159,11 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:progress-clock",
         value_fn=lambda device: device.info.print_percentage
+    ),
+    BambuLabSensorEntityDescription(
+        key="printer_type",
+        name="Printer Type",
+        icon="mdi:progress-clock",
+        value_fn=lambda device: device.info.device_type
     )
 )

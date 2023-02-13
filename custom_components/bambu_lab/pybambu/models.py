@@ -1,16 +1,16 @@
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_speed_name, get_stage_action
+from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type
 from .const import LOGGER
 
 
 class Device:
     def __init__(self):
-      self.temperature = Temperature()
-      self.lights = Lights()
-      self.info = Info()
-      self.fans = Fans()
-      self.speed = Speed()
-      self.stage = StageAction()
+        self.temperature = Temperature()
+        self.lights = Lights()
+        self.info = Info()
+        self.fans = Fans()
+        self.speed = Speed()
+        self.stage = StageAction()
 
     def update(self, data):
         """Update from dict"""
@@ -18,7 +18,7 @@ class Device:
         self.lights.update(data)
         self.fans.update(data)
         self.info.update(data)
-        #self.ams.update(data)
+        # self.ams.update(data)
         self.speed.update(data)
         self.stage.update(data)
 
@@ -54,11 +54,11 @@ class Temperature:
     target_nozzle_temp: int
 
     def __init__(self):
-      self.bed_temp = 0
-      self.target_bed_temp = 0
-      self.chamber_temp = 0
-      self.nozzle_temp = 0
-      self.target_nozzle_temp = 0
+        self.bed_temp = 0
+        self.target_bed_temp = 0
+        self.chamber_temp = 0
+        self.nozzle_temp = 0
+        self.target_nozzle_temp = 0
 
     def update(self, data):
         """Update from dict"""
@@ -69,27 +69,39 @@ class Temperature:
         self.nozzle_temp = round(data.get("nozzle_temper", self.nozzle_temp))
         self.target_nozzle_temp = data.get("nozzle_target_temper", self.target_nozzle_temp)
 
+
 @dataclass
 class Fans:
     """Return all temperature related info"""
     aux_fan_speed: int
+    _aux_fan_speed: int
     chamber_fan_speed: int
+    _chamber_fan_speed: int
     cooling_fan_speed: int
+    _cooling_fan_speed: int
     heatbreak_fan_speed: int
+    _heatbreak_fan_speed: int
 
     def __init__(self):
         self.aux_fan_speed = 0
+        self._aux_fan_speed = 0
         self.chamber_fan_speed = 0
+        self._chamber_fan_speed = 0
         self.cooling_fan_speed = 0
+        self._cooling_fan_speed = 0
         self.heatbreak_fan_speed = 0
+        self._heatbreak_fan_speed = 0
 
     def update(self, data):
         """Update from dict"""
-
-        self.aux_fan_speed = fan_percentage(data.get("big_fan1_speed"))
-        self.chamber_fan_speed = fan_percentage(data.get("big_fan2_speed"))
-        self.cooling_fan_speed = fan_percentage(data.get("cooling_fan_speed"))
-        self.heatbreak_fan_speed = fan_percentage(data.get("heatbreak_fan_speed"))
+        self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
+        self.aux_fan_speed = fan_percentage(self._aux_fan_speed)
+        self._chamber_fan_speed = data.get("big_fan2_speed", self._chamber_fan_speed)
+        self.chamber_fan_speed = fan_percentage(self._chamber_fan_speed)
+        self._cooling_fan_speed = data.get("cooling_fan_speed", self._cooling_fan_speed)
+        self.cooling_fan_speed = fan_percentage(self._cooling_fan_speed)
+        self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
+        self.heatbreak_fan_speed = fan_percentage(self._heatbreak_fan_speed)
 
 
 @dataclass
@@ -97,15 +109,25 @@ class Info:
     """Return all information related content"""
     wifi_signal: int
     print_percentage: int
+    device_type: str
+    hw_ver: str
+    sw_ver: str
 
     def __init__(self):
         self.wifi_signal = 0
         self.print_percentage = 0
+        self.device_type = "Unknown"
+        self.hw_ver = "Unknown"
+        self.sw_ver = "Unknown"
 
     def update(self, data):
         """Update from dict"""
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
+        self.device_type = get_printer_type(data.get("module", []), self.device_type)
+        self.hw_ver = get_printer_type(data.get("module", []), self.hw_ver)
+        self.sw_ver = get_printer_type(data.get("module", []), self.sw_ver)
+
 
 # @dataclass
 # class AMS:
