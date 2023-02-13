@@ -69,7 +69,7 @@ class BambuLabPauseButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        if self.coordinator.data.info.gcode_state == "PAUSE":
+        if self.coordinator.data.info.gcode_state == "PAUSE" or self.coordinator.data.info.gcode_state == "FINISH":
             return False
         return True
 
@@ -101,6 +101,13 @@ class BambuLabStopButton(BambuLabButton):
 
     __attr_icon = "mdi:stop"
     entity_description = STOP_BUTTON_DESCRIPTION
+
+    @property
+    def available(self) -> bool:
+        """Return if the button is available"""
+        if self.coordinator.data.info.gcode_state == "FINISH":
+            return False
+        return True
 
     async def async_press(self) -> None:
         """ Stop the Print on button press"""
