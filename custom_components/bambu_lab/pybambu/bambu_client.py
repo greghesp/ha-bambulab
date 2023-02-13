@@ -2,12 +2,14 @@ from __future__ import annotations
 import queue
 import json
 import ssl
+import time
 
 from dataclasses import dataclass
 from typing import Any
 from threading import Thread
 
 import paho.mqtt.client as mqtt
+import asyncio
 
 from .const import LOGGER
 from .models import Device
@@ -59,7 +61,7 @@ class BambuClient:
         LOGGER.debug(f"Connected: {self._connected}")
         return self._connected
 
-    def connect(self, callback):
+    async def connect(self, callback):
         """Connect to the MQTT Broker"""
         self._callback = callback
         self.client.on_connect = self.on_connect
@@ -92,6 +94,7 @@ class BambuClient:
         LOGGER.debug("On Connect: Request Push All")
         self.publish(PUSH_ALL)
 
+
     def on_disconnect(self,
                       client_: mqtt.Client,
                       userdata: None,
@@ -103,7 +106,7 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            # LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
                 self._device.update(data=json_data.get("print"))
