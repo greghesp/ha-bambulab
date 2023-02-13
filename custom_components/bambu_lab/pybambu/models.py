@@ -112,6 +112,7 @@ class Info:
     device_type: str
     hw_ver: str
     sw_ver: str
+    gcode_state: str
 
     def __init__(self):
         self.wifi_signal = 0
@@ -119,6 +120,7 @@ class Info:
         self.device_type = "Unknown"
         self.hw_ver = "Unknown"
         self.sw_ver = "Unknown"
+        self.gcode_state = "Unknown"
 
     def update(self, data):
         """Update from dict"""
@@ -127,6 +129,7 @@ class Info:
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_printer_type(data.get("module", []), self.hw_ver)
         self.sw_ver = get_printer_type(data.get("module", []), self.sw_ver)
+        self.gcode_state = data.get("gcode_state", self.gcode_state)
 
 
 # @dataclass
