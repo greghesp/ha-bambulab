@@ -26,7 +26,7 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             LOGGER.debug("Config Flow: Trying Connection")
-            bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], user_input["tls"])
+            bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], user_input.get("tls", False))
             success = await bambu.try_connection()
 
             if success:
@@ -36,7 +36,7 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
                         "host": user_input["host"],
                         "access_code": user_input["access_code"],
                         "serial": user_input["serial"],
-                        "tls": user_input["tls"]
+                        "tls": user_input.get("tls", False)
                     }
                 )
 

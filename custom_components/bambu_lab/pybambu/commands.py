@@ -14,3 +14,5 @@ GET_VERSION = {"info": {"sequence_id": "20004", "command": "get_version"}, "user
 PAUSE = {"print": {"sequence_id": "2008", "command": "pause"}, "user_id": "123456789"}
 RESUME = {"print": {"sequence_id": "2009", "command": "resume"}, "user_id": "123456789"}
 STOP = {"print": {"sequence_id": "2010", "command": "stop"}, "user_id": "123456789"}
+
+PUSH_ALL = { "pushing": { "sequence_id": "1", "command": "pushall" }, "user_id": "1234567890" }
