@@ -73,22 +73,33 @@ class Temperature:
 class Fans:
     """Return all temperature related info"""
     aux_fan_speed: int
+    _aux_fan_speed: int
     chamber_fan_speed: int
+    _chamber_fan_speed: int
     cooling_fan_speed: int
+    _cooling_fan_speed: int
     heatbreak_fan_speed: int
+    _heatbreak_fan_speed: int
 
     def __init__(self):
         self.aux_fan_speed = 0
+        self._aux_fan_speed = 0
         self.chamber_fan_speed = 0
+        self._chamber_fan_speed = 0
         self.cooling_fan_speed = 0
+        self._cooling_fan_speed = 0
         self.heatbreak_fan_speed = 0
+        self._heatbreak_fan_speed = 0
 
     def update(self, data):
         """Update from dict"""
-
-        self.aux_fan_speed = fan_percentage(data.get("big_fan1_speed"))
+        self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
+        self.aux_fan_speed = fan_percentage(self._aux_fan_speed)
+        self._chamber_fan_speed = data.get("big_fan2_speed", self._chamber_fan_speed)
         self.chamber_fan_speed = fan_percentage(data.get("big_fan2_speed"))
+        self._cooling_fan_speed = data.get("cooling_fan_speed", self._cooling_fan_speed)
         self.cooling_fan_speed = fan_percentage(data.get("cooling_fan_speed"))
+        self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self.heatbreak_fan_speed = fan_percentage(data.get("heatbreak_fan_speed"))
 
 
