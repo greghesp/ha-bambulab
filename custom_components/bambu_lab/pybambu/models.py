@@ -96,11 +96,11 @@ class Fans:
         self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
         self.aux_fan_speed = fan_percentage(self._aux_fan_speed)
         self._chamber_fan_speed = data.get("big_fan2_speed", self._chamber_fan_speed)
-        self.chamber_fan_speed = fan_percentage(data.get("big_fan2_speed"))
+        self.chamber_fan_speed = fan_percentage(self._chamber_fan_speed)
         self._cooling_fan_speed = data.get("cooling_fan_speed", self._cooling_fan_speed)
-        self.cooling_fan_speed = fan_percentage(data.get("cooling_fan_speed"))
+        self.cooling_fan_speed = fan_percentage(self._cooling_fan_speed)
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
-        self.heatbreak_fan_speed = fan_percentage(data.get("heatbreak_fan_speed"))
+        self.heatbreak_fan_speed = fan_percentage(self._heatbreak_fan_speed)
 
 
 @dataclass
