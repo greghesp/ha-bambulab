@@ -103,7 +103,7 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            # LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
                 self._device.update(data=json_data.get("print"))
