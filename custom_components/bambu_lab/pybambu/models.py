@@ -110,6 +110,8 @@ class Info:
     wifi_signal: int
     print_percentage: int
     device_type: str
+    hw_ver: str
+    sw_ver: str
 
     def __init__(self):
         self.wifi_signal = 0
