@@ -24,6 +24,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._entry = entry
         self.client = BambuClient(entry.data["host"], entry.data["serial"], entry.data["access_code"],
                                   entry.data["tls"])
+        self._use_mqtt()
         super().__init__(
             hass,
             LOGGER,
@@ -35,10 +36,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _use_mqtt(self) -> None:
         """Use MQTT for updates, instead of polling."""
 
-        LOGGER.debug("Forcing to use MQTT")
-
         def message_handler(message):
-            LOGGER.debug("Received Message")
             self.async_set_updated_data(message)
 
         async def listen():
@@ -53,9 +51,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
-        LOGGER.debug(f"Coordinator update connected? {self.client.connected}")
-        if not self.client.connected:
-            self._use_mqtt()
+        LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
 
         # TODO:  Not sure this is the way to handle this.  Could do with some sort of state
         device = self.client.get_device()
