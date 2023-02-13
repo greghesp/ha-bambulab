@@ -17,17 +17,17 @@ from .coordinator import BambuDataUpdateCoordinator
 
 PAUSE_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="pause",
-    name="Pause",
+    name="Pause Printing",
     entity_category=EntityCategory.CONFIG,
 )
 RESUME_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="resume",
-    name="Resume",
+    name="Resume Printing",
     entity_category=EntityCategory.CONFIG,
 )
 STOP_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="stop",
-    name="Stop",
+    name="Stop Printing",
     entity_category=EntityCategory.CONFIG,
 )
 
