@@ -22,7 +22,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._entry = entry
-        self.client = BambuClient(entry.data["host"], entry.data["serial"], entry.data["access_code"], entry.data["tls"])
+        self.client = BambuClient(entry.data["host"], entry.data["serial"], entry.data["access_code"],
+                                  entry.data["tls"])
         super().__init__(
             hass,
             LOGGER,
@@ -42,45 +43,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         async def listen():
             LOGGER.debug("Use MQTT: Listen")
-            self.client = BambuClient(self._entry.data["host"], self._entry.data["serial"], self._entry.data["access_code"], self._entry.data["tls"])
+            self.client = BambuClient(self._entry.data["host"], self._entry.data["serial"],
+                                      self._entry.data["access_code"], self._entry.data["tls"])
             self.client.connect(callback=message_handler)
 
-        # async def listen() -> None:
-        #     def on_message(client, userdata, message):
-        #         LOGGER.debug(f"Received message {message}")
-        #         self.async_set_updated_data(json.loads(message.payload))
-        #
-        #     def on_connect(
-        #             client_: mqtt.Client,
-        #             userdata: None,
-        #             flags: dict[str, Any],
-        #             result_code: int,
-        #             properties: mqtt.Properties | None = None,
-        #     ) -> None:
-        #         """Handle connection result."""
-        #         LOGGER.debug("MQTT Connected")
-        #         self.connected = True
-        #
-        #     self.client.on_connect = on_connect
-        #     self.client.on_message = on_message
-        #     LOGGER.debug(f"Connecting to MQTT {self._entry.data[CONF_HOST]}")
-        #
-        #     self.client.connect(self._entry.data[CONF_HOST], 1883)
-        #     self.client.loop_start()
-        #     LOGGER.debug(f"Subscribing to device/{self._entry.data['serial']}/report")
-        #     self.client.subscribe(f"device/{self._entry.data['serial']}/report")
-        #
-        # async def close_connection(_: Event) -> None:
-        #     self.client.disconnect()
-        #     self.client.loop_stop()
-        #     self.connected = False
-
-        # Clean disconnect WebSocket on Home Assistant shutdown
-        # self.hass.bus.async_listen_once(
-        #     EVENT_HOMEASSISTANT_STOP, self.client.disconnect()
-        # )
-
         asyncio.create_task(listen())
+
+    async def _publish(self, msg):
+        return self.client.publish(msg)
 
     async def _async_update_data(self):
         LOGGER.debug(f"Coordinator update connected? {self.client.connected}")

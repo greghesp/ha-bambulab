@@ -8,9 +8,17 @@ from typing import Any
 
 import paho.mqtt.client as mqtt
 
-
 from .const import LOGGER
 from .models import Device
+from .commands import (
+    CHAMBER_LIGHT_ON,
+    CHAMBER_LIGHT_OFF,
+    SPEED_PROFILE_TEMPLATE,
+    GET_VERSION,
+    PAUSE,
+    RESUME,
+    STOP
+)
 
 
 @dataclass
@@ -48,7 +56,6 @@ class BambuClient:
             self._port = 8883
             self.client.username_pw_set("bblp", password=self._access_code)
 
-
         self.client.connect(self.host, self._port)
         self.client.loop_start()
 
@@ -61,13 +68,16 @@ class BambuClient:
         """Handle connection"""
         LOGGER.debug("On Connect: Connected to Broker")
         self._connected = True
+        LOGGER.debug("On Connect: Getting Version Info")
+        self.publish(GET_VERSION)
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
 
     def on_disconnect(self,
                       client_: mqtt.Client,
                       userdata: None,
-                      result_code: int ):
+                      result_code: int):
+        """Called when MQTT Disconnects"""
         LOGGER.debug(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
         self.client.loop_stop()
@@ -75,14 +85,18 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-          LOGGER.debug(f"On Message: Received Message: {message.payload}")
-          json_data = json.loads(message.payload)
-          if json_data.get("print"):
-            self._device.update(data=json_data.get("print"))
+            # LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            json_data = json.loads(message.payload)
+            if json_data.get("print"):
+                self._device.update(data=json_data.get("print"))
+            elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
+                LOGGER.debug("Get Version Command Data")
+                self._device.update(data=json_data.get("info"))
+
         except Exception as e:
-          LOGGER.debug("An exception occurred:")
-          LOGGER.debug(f"Type: {type(e)}")
-          LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug("An exception occurred:")
+            LOGGER.debug(f"Type: {type(e)}")
+            LOGGER.debug(f"Args: {e.args}")
 
         # TODO: This should return, however it appears to cause blocking issues in HA
         # return self._callback(self._device)
@@ -92,11 +106,29 @@ class BambuClient:
         LOGGER.debug(f"Subscribing: device/{self._serial}/report")
         self.client.subscribe(f"device/{self._serial}/report")
 
+    def publish(self, msg):
+        """Publish a custom message"""
+        result = self.client.publish(f"device/{self._serial}/request", json.dumps(msg))
+        status = result[0]
+        if status == 0:
+            LOGGER.debug(f"Sent {msg} to topic device/{self._serial}/request")
+            return True
+
+        LOGGER.debug(f"Failed to send message to topic device/{self._serial}/request")
+        return False
+
+    def command(self, cmd):
+        """Publish a command"""
+        if cmd == "CHAMBER_LIGHT_ON":
+            return self.publish(CHAMBER_LIGHT_ON)
+        if cmd == "CHAMBER_LIGHT_OFF":
+            return self.publish(CHAMBER_LIGHT_OFF)
+
     def get_device(self):
         """Return device"""
         LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
- 
+
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
