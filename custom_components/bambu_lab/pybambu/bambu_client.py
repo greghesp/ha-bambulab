@@ -33,9 +33,9 @@ def listen_thread(self):
             self.client.loop_forever()
             break
         except Exception as e:
-            LOGGER.debug("A loop exception occurred:")
-            LOGGER.debug(f"Type: {type(e)}")
-            LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug("A listener loop thread exception occurred:")
+            LOGGER.debug(f"Exception type: {type(e)}")
+            LOGGER.debug(f"Exception args: {e.args}")
             self.disconnect()
 
 @dataclass
@@ -103,7 +103,7 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            # LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
                 self._device.update(data=json_data.get("print"))
@@ -113,8 +113,8 @@ class BambuClient:
 
         except Exception as e:
             LOGGER.debug("An exception occurred:")
-            LOGGER.debug(f"Type: {type(e)}")
-            LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug(f"Exception type: {type(e)}")
+            LOGGER.debug(f"Exception args: {e.args}")
 
         return self._callback(self._device)
 

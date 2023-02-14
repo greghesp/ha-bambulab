@@ -23,6 +23,7 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"Entry {entry.data['serial']}")
     LOGGER.debug(f"Async Setup Light {coordinator.data}")
+    LOGGER.debug(f"Printer type: {coordinator.data.info.device_type}")
 
     entities_to_add: list = []
 
