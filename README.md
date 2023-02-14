@@ -22,38 +22,38 @@ This currently exposes the following Sensors (where applicable):
 
 | Sensor        	            | X1C               	 | X1  	              | P1P 	              | 
 |----------------------------|---------------------|--------------------|--------------------|
-| Aux Fan Speed 	            | :heavy_check_mark:  | :heavy_check_mark: | :white_check_mark: |
-| Bed Temperature 	          | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Chamber Fan Speed	         | :heavy_check_mark:  | :heavy_check_mark: | :x:                |
-| Chamber Temperature	       | :heavy_check_mark:  | :heavy_check_mark: | :x:                |
-| Cooling Fan Speed	         | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Current Stage	             | :heavy_check_mark:  | :heavy_check_mark: | :x:                |
-| End Time                   | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Heatbreak Fan Speed	       | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Nozzle Target Temperature	 | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Nozzle Temperature	        | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Print Progress	            | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Print Status	              | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Remaining Time	            | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Speed Profile              | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Start Time                 | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| Target Bed Temperature     | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| Aux Fan Speed 	            | :white_check_mark:  | :white_check_mark: | :heavy_check_mark: |
+| Bed Temperature 	          | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Chamber Fan Speed	         | :white_check_mark:  | :white_check_mark: | :x:                |
+| Chamber Temperature	       | :white_check_mark:  | :white_check_mark: | :x:                |
+| Cooling Fan Speed	         | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Current Stage	             | :white_check_mark:  | :white_check_mark: | :x:                |
+| End Time                   | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Heatbreak Fan Speed	       | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Nozzle Target Temperature	 | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Nozzle Temperature	        | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Print Progress	            | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Print Status	              | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Remaining Time	            | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Speed Profile              | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Start Time                 | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Target Bed Temperature     | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 
 ### Buttons 
 This currently exposes the following Buttons:
 
 | Sensor        	| X1C                	 | X1  	                | P1P 	              |
 |-----------------|----------------------|----------------------|---------------------|
-| Pause	          | :heavy_check_mark: 	 | :heavy_check_mark:   | :heavy_check_mark:  |
-| Resume 	        | :heavy_check_mark:	 | :heavy_check_mark:   | :heavy_check_mark:  |
-| Stop	          | :heavy_check_mark:	 | :heavy_check_mark:	  | :heavy_check_mark:  |
+| Pause	          | :white_check_mark: 	 | :white_check_mark:   | :white_check_mark:  |
+| Resume 	        | :white_check_mark:	 | :white_check_mark:   | :white_check_mark:  |
+| Stop	          | :white_check_mark:	 | :white_check_mark:	  | :white_check_mark:  |
 
 ### Diagnostics 
 This currently exposes the following Diagnostic Sensors:
 
 | Sensor       | X1C                	 | X1  	              | P1P 	              |
 |--------------|----------------------|--------------------|--------------------|
-| Wifi Signal	 | :heavy_check_mark: 	 | :heavy_check_mark: | :heavy_check_mark: |
+| Wifi Signal	 | :white_check_mark: 	 | :white_check_mark: | :white_check_mark: |
 
 ### Cameras
 
