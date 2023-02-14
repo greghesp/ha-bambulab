@@ -8,7 +8,8 @@ from .coordinator import BambuDataUpdateCoordinator
 
 PLATFORMS = (
     Platform.LIGHT,
-    Platform.SENSOR
+    Platform.SENSOR,
+    Platform.BUTTON
 )
 
 

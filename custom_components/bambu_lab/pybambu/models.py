@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type, get_hw_version, get_sw_version
+from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type
 from .const import LOGGER
 
 import asyncio
@@ -131,6 +131,7 @@ class Info:
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
+
 
 # @dataclass
 # class AMS:

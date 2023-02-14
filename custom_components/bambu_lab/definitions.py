@@ -165,5 +165,11 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         name="Printer Type",
         icon="mdi:progress-clock",
         value_fn=lambda device: device.info.device_type
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_status",
+        name="Print Status",
+        icon="mdi:progress-clock",
+        value_fn=lambda device: device.info.gcode_state.title()
     )
 )
