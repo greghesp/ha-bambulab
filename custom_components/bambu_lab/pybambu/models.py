@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type
+from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type, get_hw_version, get_sw_version
 from .const import LOGGER
 
 import asyncio
