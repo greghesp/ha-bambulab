@@ -105,7 +105,7 @@ class BambuLabStopButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        if self.coordinator.data.info.gcode_state == "RUNNING" or self.cordinator.data.info.gcode_state == "PAUSE":
+        if self.coordinator.data.info.gcode_state == "RUNNING" or self.coordinator.data.info.gcode_state == "PAUSE":
             return True
         return False
 
