@@ -4,7 +4,8 @@ import logging
 LOGGER = logging.getLogger(__package__)
 
 class Features(Enum):
-    AUX_FAN = 1
+    AUX_FAN = 1,
+    CHAMBER_LIGHT = 2
 
 ACTION_IDS = {
     "default": "Unknown",
