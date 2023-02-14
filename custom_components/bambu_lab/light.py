@@ -23,8 +23,6 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    # await coordinator.wait_for_data_ready()
-    # LOGGER.debug(f"Printer type: {coordinator.data.info.device_type}")
 
     entities_to_add: list = []
 

@@ -15,6 +15,7 @@ PLATFORMS = (
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
+    LOGGER.debug("Async Setup Entry Started")
     coordinator = BambuDataUpdateCoordinator(hass, entry=entry)
     await coordinator.async_config_entry_first_refresh()
     LOGGER.debug(f"Coordinator {coordinator.__dict__}")
