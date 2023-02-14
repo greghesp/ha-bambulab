@@ -18,7 +18,7 @@ class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
         # TODO: Populate with device name and serial
         return DeviceInfo(
             identifiers={(DOMAIN, self.coordinator.data.info.serial)},
-            name=self.coordinator.data.info.device_type,
+            name=f"{self.coordinator.data.info.device_type}_{self.coordinator.data.info.serial}",
             manufacturer=BRAND,
             model=self.coordinator.data.info.device_type,
             hw_version=self.coordinator.data.info.hw_ver,
