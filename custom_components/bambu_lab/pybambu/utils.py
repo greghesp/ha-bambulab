@@ -73,6 +73,6 @@ def get_sw_version(modules, default):
         if esp32.get("hw_ver") == "AP04":
             return esp32.get("sw_ver")
     elif len(rv1126.keys()) > 1:
-        if rv1126.get("sw_ver") == "AP05":
+        if rv1126.get("hw_ver") == "AP05":
             return rv1126.get("sw_ver")
     return default
