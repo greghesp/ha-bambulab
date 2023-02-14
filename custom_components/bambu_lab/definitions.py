@@ -14,7 +14,7 @@ from homeassistant.const import (
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     SPEED,
     UnitOfTemperature,
-    UnitOfTime
+    TIME_MINUTES
 )
 
 from homeassistant.components.sensor import (
@@ -179,7 +179,7 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="remaining_time",
         name="Remaining Time",
         icon="mdi:timer-sand",
-        native_unit_of_measurement=UnitOfTime.MINUTES,
+        native_unit_of_measurement=TIME_MINUTES,
         device_class=SensorDeviceClass.DURATION,
         value_fn=lambda device: device.info.remaining_time
     ),
