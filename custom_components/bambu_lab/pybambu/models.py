@@ -23,6 +23,9 @@ class Device:
         self.speed.update(data)
         self.stage.update(data)
 
+    def add_serial(self, data):
+        self.info.add_serial(data)
+
 
 @dataclass
 class Lights:
@@ -122,6 +125,7 @@ class Info:
         self.hw_ver = "Unknown"
         self.sw_ver = "Unknown"
         self.gcode_state = "Unknown"
+        self.serial = "Unknown"
 
     def update(self, data):
         """Update from dict"""
@@ -131,6 +135,9 @@ class Info:
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
+
+    def add_serial(self, data):
+        self.serial = data or self.serial
 
 
 # @dataclass

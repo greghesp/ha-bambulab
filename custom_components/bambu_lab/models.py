@@ -17,13 +17,12 @@ class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
 
         # TODO: Populate with device name and serial
         return DeviceInfo(
-            identifiers={(DOMAIN, "1234")},
-            # name=self.coordinator.data.info.ssdp,
+            identifiers={(DOMAIN, self.coordinator.data.info.serial)},
+            name=self.coordinator.data.info.device_type,
             manufacturer=BRAND,
             model=self.coordinator.data.info.device_type,
             hw_version=self.coordinator.data.info.hw_ver,
             sw_version=self.coordinator.data.info.sw_ver,
-            # configuration_url=f"http://{self.platform.config_entry.data[CONF_HOST]}"
         )
 
 # class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):

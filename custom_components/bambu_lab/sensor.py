@@ -25,6 +25,7 @@ async def async_setup_entry(
     """Set up BambuLab sensor based on a config entry."""
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    await coordinator.wait_for_data_ready()
     LOGGER.debug(f"Entry {entry.data['serial']}")
     LOGGER.debug(f"Async Setup Sensor {coordinator.data}")
     async_add_entities(
@@ -36,8 +37,6 @@ async def async_setup_entry(
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
     """Representation of a BambuLab that is updated via MQTT."""
-
-    entity_description: BambuLabSensorEntityDescription
 
     def __init__(
             self,

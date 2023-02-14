@@ -1,0 +1,24 @@
+### On every Merge to Main, create a release
+#name: Build Release
+#
+#on:
+#  pull_request:
+#    types:
+#      cl- closed
+#    branches:
+#      - main
+#
+#jobs:
+#  if_merged:
+#    if: github.event.pull_request.merged == true
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write
+#    steps:
+#      - uses: actions/checkout@master
+#      - name: Create Release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          bodyFile: "release_notes.md"
+#
+#

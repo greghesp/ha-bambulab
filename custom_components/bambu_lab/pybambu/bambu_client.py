@@ -24,6 +24,7 @@ from .commands import (
     PUSH_ALL
 )
 
+
 def listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
     while True:
@@ -39,6 +40,7 @@ def listen_thread(self):
             LOGGER.debug(f"Exception type: {type(e)}")
             LOGGER.debug(f"Exception args: {e.args}")
             self.disconnect()
+
 
 @dataclass
 class BambuClient:
@@ -75,7 +77,7 @@ class BambuClient:
             self.client.username_pw_set("bblp", password=self._access_code)
 
         LOGGER.debug("Starting MQTT listener thread")
-        thread = Thread(target = listen_thread, args = (self, ))
+        thread = Thread(target=listen_thread, args=(self,))
         thread.start()
         return
 
@@ -88,6 +90,7 @@ class BambuClient:
         """Handle connection"""
         LOGGER.debug("On Connect: Connected to Broker")
         self._connected = True
+        self._device.add_serial(self._serial)
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
         LOGGER.debug("On Connect: Getting Version Info")
@@ -149,7 +152,7 @@ class BambuClient:
         """Return device"""
         LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
- 
+
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
