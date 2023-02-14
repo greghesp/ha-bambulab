@@ -15,7 +15,7 @@ from homeassistant.core import CALLBACK_TYPE, Event, HomeAssistant, callback
 from homeassistant.const import CONF_HOST, EVENT_HOMEASSISTANT_STOP
 import paho.mqtt.client as mqtt
 from .pybambu import BambuClient
-
+from .pybambu.const import Features
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     config_entry: ConfigEntry
@@ -57,3 +57,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         device = self.client.get_device()
         LOGGER.debug(f"update data device: {device}")
         return device
+
+    async def wait_for_data_ready(self):
+        """Wait until we have received version data"""
+        counter = 0
+        while self.data.info.device_type == "Unknown":
+            counter = counter + 1
+            if counter == 30:
+                raise Exception('Failed to receive version response from printer in 30 seconds') 
+            await asyncio.sleep(1)
+
+        return
+
+    def supports_feature(self, feature):
+        if feature == Features.AUX_FAN:
+            return self.data.info.device_type == "X1C" or self.data.info.device_type == "P1P"
+        if feature == Features.CHAMBER_LIGHT:
+            return self.data.info.device_type == "X1C" or self.data.info.device_type == "P1P"
+        return False

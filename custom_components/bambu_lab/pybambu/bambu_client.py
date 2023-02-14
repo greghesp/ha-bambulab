@@ -9,6 +9,7 @@ from typing import Any
 from threading import Thread
 
 import paho.mqtt.client as mqtt
+import asyncio
 
 from .const import LOGGER
 from .models import Device
@@ -34,9 +35,9 @@ def listen_thread(self):
             self.client.loop_forever()
             break
         except Exception as e:
-            LOGGER.debug("A loop exception occurred:")
-            LOGGER.debug(f"Type: {type(e)}")
-            LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug("A listener loop thread exception occurred:")
+            LOGGER.debug(f"Exception type: {type(e)}")
+            LOGGER.debug(f"Exception args: {e.args}")
             self.disconnect()
 
 @dataclass
@@ -50,7 +51,6 @@ class BambuClient:
         self._access_code = access_code
         self._tls = tls
         self._connected = False
-        self._version_info_ok = False
         self._callback = None
         self._device = Device()
         self._port = 1883
@@ -77,8 +77,6 @@ class BambuClient:
         LOGGER.debug("Starting MQTT listener thread")
         thread = Thread(target = listen_thread, args = (self, ))
         thread.start()
-        while not self._version_info_ok:
-            time.sleep(5)
         return
 
     def on_connect(self,
@@ -116,12 +114,11 @@ class BambuClient:
             elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.update(data=json_data.get("info"))
-                self._version_info_ok = True
 
         except Exception as e:
             LOGGER.debug("An exception occurred:")
-            LOGGER.debug(f"Type: {type(e)}")
-            LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug(f"Exception type: {type(e)}")
+            LOGGER.debug(f"Exception args: {e.args}")
 
         return self._callback(self._device)
 
