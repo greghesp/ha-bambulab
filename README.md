@@ -24,7 +24,7 @@ This currently exposes the following Sensors (where applicable):
 |----------------------------|----------------------|----------------------|----------------------|
 | Aux Fan Speed 	           |  :white_check_mark:  |  :white_check_mark:  |  :heavy_check_mark:  |
 | Bed Temperature 	         |  :white_check_mark:  |  :white_check_mark:  |  :white_check_mark:  |
-| Chamber Fan Speed	         |  :white_check_mark:  |  :white_check_mark:  |  :heavy_check_mark:  |
+| Chamber Fan Speed	         |  :white_check_mark:  |  :white_check_mark:  |  :x:                 |
 | Chamber Temperature	       |  :white_check_mark:  |  :white_check_mark:  |  :x:                 |
 | Cooling Fan Speed	         |  :white_check_mark:  |  :white_check_mark:  |  :white_check_mark:  |
 | Current Stage	             |  :white_check_mark:  |  :white_check_mark:  |  :x:                 |
