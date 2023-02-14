@@ -1,5 +1,5 @@
 ### On every Merge to Main, create a release
-#name: Build Release
+name: Build Release
 #
 #on:
 #  pull_request:

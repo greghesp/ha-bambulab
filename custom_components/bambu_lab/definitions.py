@@ -1,6 +1,8 @@
 """Definitions for Bambu Lab sensors added to MQTT."""
 from __future__ import annotations
 
+import math
+
 from .const import LOGGER
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -11,7 +13,8 @@ from homeassistant.const import (
     TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     SPEED,
-    UnitOfTemperature
+    UnitOfTemperature,
+    UnitOfTime
 )
 
 from homeassistant.components.sensor import (
@@ -161,15 +164,29 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda device: device.info.print_percentage
     ),
     BambuLabSensorEntityDescription(
-        key="printer_type",
-        name="Printer Type",
-        icon="mdi:progress-clock",
-        value_fn=lambda device: device.info.device_type
-    ),
-    BambuLabSensorEntityDescription(
         key="print_status",
         name="Print Status",
-        icon="mdi:progress-clock",
+        icon="mdi:list-status",
         value_fn=lambda device: device.info.gcode_state.title()
+    ),
+    BambuLabSensorEntityDescription(
+        key="start_time",
+        name="Start Time",
+        icon="mdi:clock",
+        value_fn=lambda device: device.info.start_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="remaining_time",
+        name="Remaining Time",
+        icon="mdi:timer-sand",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        device_class=SensorDeviceClass.DURATION,
+        value_fn=lambda device: device.info.remaining_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="end_time",
+        name="End Time",
+        icon="mdi:clock",
+        value_fn=lambda device: device.info.end_time
     )
 )
