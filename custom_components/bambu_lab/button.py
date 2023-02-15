@@ -38,7 +38,6 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    # await coordinator.wait_for_data_ready()
     LOGGER.debug(f"Async Setup Button")
 
     async_add_entities([BambuLabPauseButton(coordinator, entry), BambuLabResumeButton(coordinator, entry), BambuLabStopButton(coordinator, entry)])

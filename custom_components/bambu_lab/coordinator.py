@@ -68,10 +68,3 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             await asyncio.sleep(1)
 
         return
-
-    def supports_feature(self, feature):
-        if feature == Features.AUX_FAN:
-            return self.data.info.device_type == "X1C" or self.data.info.device_type == "P1P"
-        if feature == Features.CHAMBER_LIGHT:
-            return self.data.info.device_type == "X1C" or self.data.info.device_type == "P1P"
-        return False

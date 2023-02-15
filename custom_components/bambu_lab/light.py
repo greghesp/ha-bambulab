@@ -23,12 +23,10 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    # await coordinator.wait_for_data_ready()
-    # LOGGER.debug(f"Printer type: {coordinator.data.info.device_type}")
 
     entities_to_add: list = []
 
-    if coordinator.supports_feature(Features.CHAMBER_LIGHT):
+    if coordinator.data.supports_feature(Features.CHAMBER_LIGHT):
         entities_to_add.append(BambuLabChamberLight(coordinator, entry))
     async_add_entities(entities_to_add)
 
