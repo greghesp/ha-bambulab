@@ -5,6 +5,7 @@ from .const import LOGGER, Features
 
 import asyncio
 
+
 class Device:
     def __init__(self):
         self.temperature = Temperature()
@@ -13,6 +14,7 @@ class Device:
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
+        self.ams = AMS()
 
     def update(self, data):
         """Update from dict"""
@@ -20,9 +22,9 @@ class Device:
         self.lights.update(data)
         self.fans.update(data)
         self.info.update(data)
-        # self.ams.update(data)
         self.speed.update(data)
         self.stage.update(data)
+        self.ams.update(data)
 
     def add_serial(self, data):
         self.info.add_serial(data)
@@ -161,22 +163,28 @@ class Info:
         self.serial = data or self.serial
 
 
-# @dataclass
-# class AMS:
-#     """Return all AMS related info"""
-#     version: int
-#
-#     # TODO: Handle if AMS doesn't exist
-#     @staticmethod
-#     def from_dict(data):
-#         """Load from dict"""
-#         return AMS(
-#             version=int(data.get("ams").get("version")),
-#         )
-#
-#     def update_from_dict(self, data):
-#         """Update from dict"""
-#         self.version = int(data.get("ams").get("version"))
+@dataclass
+class AMS:
+    """Return all AMS related info"""
+    number_of_ams: int
+    version: int
+    ams_data: []
+
+    def __init__(self):
+        """Load from dict"""
+        self.number_of_ams = 0
+        self.version = 0
+        self.ams_data = []
+
+    def update(self, data):
+        """Update from dict"""
+        self.number_of_ams = int(data.get("ams").get("ams_exist_bits"), self.number_of_ams)
+        self.version = int(data.get("ams").get("version"), self.version)
+
+        # TODO:  If AMS exists, for each field where name contains ams (ie ams/0), append to an array and populate
+        #  the data. Things such as sw_ver, hw_ver, but also slot data, humidity etc
+        if data.get("ams").get("ams_exist_bits") > 0:
+            return
 
 
 @dataclass

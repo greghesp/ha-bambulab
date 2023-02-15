@@ -3,11 +3,13 @@ import logging
 
 LOGGER = logging.getLogger(__package__)
 
+
 class Features(Enum):
     AUX_FAN = 1,
     CHAMBER_LIGHT = 2,
     CHAMBER_TEMPERATURE = 3,
-    CURRENT_STAGE = 3
+    CURRENT_STAGE = 3,
+
 
 ACTION_IDS = {
     "default": "Unknown",

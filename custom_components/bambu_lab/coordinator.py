@@ -10,12 +10,13 @@ import json
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import (DataUpdateCoordinator, UpdateFailed)
 from homeassistant.core import CALLBACK_TYPE, Event, HomeAssistant, callback
 from homeassistant.const import CONF_HOST, EVENT_HOMEASSISTANT_STOP
 import paho.mqtt.client as mqtt
 from .pybambu import BambuClient
 from .pybambu.const import Features
+
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     config_entry: ConfigEntry
@@ -53,7 +54,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
 
-        # TODO:  Not sure this is the way to handle this.  Could do with some sort of state
         device = self.client.get_device()
         LOGGER.debug(f"update data device: {device}")
         return device
@@ -64,7 +64,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         while self.data.info.device_type == "Unknown":
             counter = counter + 1
             if counter == 30:
-                raise Exception('Failed to receive version response from printer in 30 seconds') 
+                raise Exception('Failed to receive version response from printer in 30 seconds')
             await asyncio.sleep(1)
 
         return

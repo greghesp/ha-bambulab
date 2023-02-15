@@ -100,3 +100,4 @@ def round_minute(date: datetime = None, round_to: int = 1):
     date = date.replace(second=0, microsecond=0)
     delta = date.minute % round_to
     return date.replace(minute=date.minute - delta)
+

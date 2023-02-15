@@ -25,20 +25,22 @@ class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
             sw_version=self.coordinator.data.info.sw_ver,
         )
 
-# class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
-#     """Defines a base AMS entity."""
-#
-#     _attr_has_entity_name = True
-#
-#     @property
-#     def device_info(self) -> DeviceInfo:
-#         """Return device information about this AMS device."""
-#
-#         return DeviceInfo(
-#             identifiers={
-#                 (DOMAIN, "AMS123")
-#             },
-#             name="AMS 1",
-#             model="AMS",
-#             manufacturer="Bambu Lab",
-#         )
+
+class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
+    """Defines a base AMS entity."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this AMS device."""
+
+        return DeviceInfo(
+            identifiers={
+                (DOMAIN, "AMS123")
+            },
+            name="AMS 1",
+            model="AMS",
+            manufacturer="Bambu Lab",
+            hw_version=self.coordinator.data.ams.version,
+        )

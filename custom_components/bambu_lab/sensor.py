@@ -14,7 +14,7 @@ from homeassistant.helpers.entity import DeviceInfo
 from .const import DOMAIN, LOGGER
 from .definitions import SENSORS, BambuLabSensorEntityDescription
 from .coordinator import BambuDataUpdateCoordinator
-from .models import BambuLabEntity
+from .models import BambuLabEntity, AMSEntity
 
 
 async def async_setup_entry(
@@ -24,14 +24,23 @@ async def async_setup_entry(
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
 
+    # @callback
+    # def async_add_ams_entity() -> None:
+    #     async_add_entities([BambuLabAMSSensor(coordinator, description, entry)])
+    #
+    # @callback
+    # def async_add_base_entity() -> None:
+    #     async_add_entities([BambuLabAMSSensor(coordinator, description, entry)])
+
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"Entry {entry.data['serial']}")
     LOGGER.debug(f"Async Setup Sensor {coordinator.data}")
-    async_add_entities(
-        BambuLabSensor(coordinator, description, entry)
-        for description in SENSORS
-        if description.exists_fn(coordinator.data)
-    )
+
+    for description in SENSORS:
+        if description.exists_fn(coordinator.data) and description.product_type == "ams":
+            async_add_entities([BambuLabAMSSensor(coordinator, description, entry)])
+        elif description.exists_fn(coordinator.data) and description.product_type == "base":
+            async_add_entities([BambuLabSensor(coordinator, description, entry)])
 
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
@@ -45,13 +54,38 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     ) -> None:
         """Initialize the sensor."""
         self.entity_description = description
+        LOGGER.debug(f"Description is {description.product_type}")
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
         super().__init__(coordinator=coordinator)
 
     @property
     def extra_state_attributes(self) -> dict:
         """Return the state attributes."""
-        # LOGGER.debug(f"Extra Attributes: {self.entity_description.extra_attributes(self.coordinator.data)}")
+        return self.entity_description.extra_attributes(self.coordinator.data)
+
+    @property
+    def native_value(self) -> datetime | StateType:
+        """Return the state of the sensor."""
+        return self.entity_description.value_fn(self.coordinator.data)
+
+
+class BambuLabAMSSensor(AMSEntity, SensorEntity):
+    """Representation of a BambuLab AMS that is updated via MQTT."""
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            description: BambuLabSensorEntityDescription,
+            config_entry: ConfigEntry
+    ) -> None:
+        """Initialise the sensor"""
+        self.entity_description = description
+        self._attr_unique_id = f"{config_entry.data['serial']}_ams_{description.key}"
+        super().__init__(coordinator=coordinator)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return the state attributes."""
         return self.entity_description.extra_attributes(self.coordinator.data)
 
     @property

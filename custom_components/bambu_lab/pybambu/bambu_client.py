@@ -98,7 +98,6 @@ class BambuClient:
         LOGGER.debug("On Connect: Request Push All")
         self.publish(PUSH_ALL)
 
-
     def on_disconnect(self,
                       client_: mqtt.Client,
                       userdata: None,

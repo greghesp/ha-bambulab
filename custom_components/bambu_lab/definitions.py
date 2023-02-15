@@ -57,6 +57,7 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     """Sensor entity description for Bambu Lab."""
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
+    product_type: str = "base"
 
 
 SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
@@ -191,5 +192,12 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         name="End Time",
         icon="mdi:clock",
         value_fn=lambda device: device.info.end_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="ams_test",
+        name="Test",
+        icon="mdi:clock",
+        value_fn=lambda device: "Test Sensor",
+        product_type="ams"
     )
 )
