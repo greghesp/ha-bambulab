@@ -178,13 +178,21 @@ class AMS:
 
     def update(self, data):
         """Update from dict"""
-        self.number_of_ams = int(data.get("ams").get("ams_exist_bits"), self.number_of_ams)
-        self.version = int(data.get("ams").get("version"), self.version)
+        self.number_of_ams = len(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
+        self.version = int(data.get("ams", []).get("version", self.version))
 
-        # TODO:  If AMS exists, for each field where name contains ams (ie ams/0), append to an array and populate
-        #  the data. Things such as sw_ver, hw_ver, but also slot data, humidity etc
-        if data.get("ams").get("ams_exist_bits") > 0:
-            return
+        # TODO: Bug in the below logic that keeps adding more and more elements to the array, rather than updating it. Probably need to break this out a bit more
+        # if int(data.get("ams", []).get("ams_exist_bits", 0)) > 0:
+        #     ams_arr = data.get("ams").get("ams")
+        #     for index, ams_device in enumerate(ams_arr):
+        #         current_ams = {
+        #             "id": int(ams_device.get("id", 0)),
+        #             "temperature": round(float(ams_device.get("temp", 0.0))),
+        #             "humidity": int(ams_device.get("humidity", 0)),
+        #             # "tray": ams_device.get("tray", [])
+        #         }
+        #         self.ams_data.append(current_ams)
+        #     return
 
 
 @dataclass

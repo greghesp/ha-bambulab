@@ -38,6 +38,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         """Use MQTT for updates, instead of polling."""
 
         def message_handler(message):
+            LOGGER.debug(message.__dict__)
             self.async_set_updated_data(message)
 
         async def listen():
