@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
     get_sw_version, start_time, end_time
-from .const import LOGGER
+from .const import LOGGER, Features
 
 import asyncio
 
@@ -26,6 +26,17 @@ class Device:
 
     def add_serial(self, data):
         self.info.add_serial(data)
+
+    def supports_feature(self, feature):
+        if feature == Features.AUX_FAN:
+            return self.info.device_type == "X1C" or self.info.device_type == "P1P"
+        if feature == Features.CHAMBER_LIGHT:
+            return self.info.device_type == "X1C" or self.info.device_type == "P1P"
+        if feature == Features.CHAMBER_TEMPERATURE:
+            return self.info.device_type == "X1C"
+        if feature == Features.CURRENT_STAGE:
+            return self.info.device_type == "X1C"
+        return False
 
 
 @dataclass

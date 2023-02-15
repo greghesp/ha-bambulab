@@ -4,6 +4,7 @@ from __future__ import annotations
 import math
 
 from .const import LOGGER
+from .pybambu.const import Features
 from collections.abc import Callable
 from dataclasses import dataclass
 from homeassistant.helpers.entity import EntityCategory
@@ -90,7 +91,8 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda device: device.temperature.chamber_temp
+        value_fn=lambda device: device.temperature.chamber_temp,
+        exists_fn=lambda device: device.supports_feature(Features.CHAMBER_TEMPERATURE)
     ),
     BambuLabSensorEntityDescription(
         key="target_nozzle_temp",
@@ -153,7 +155,8 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="stage",
         name="Current Stage",
         icon="mdi:file-tree",
-        value_fn=lambda device: device.stage.description
+        value_fn=lambda device: device.stage.description,
+        exists_fn=lambda device: device.supports_feature(Features.CURRENT_STAGE)
     ),
     BambuLabSensorEntityDescription(
         key="print_progress",
