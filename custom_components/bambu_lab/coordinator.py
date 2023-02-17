@@ -22,8 +22,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._entry = entry
+        LOGGER.debug(f"{entry.entry_id}")
+        LOGGER.debug(f"Entry: {entry.data}")
         self.client = BambuClient(entry.data["host"], entry.data["serial"], entry.data["access_code"],
-                                  entry.data["tls"])
+                                  entry.data["tls"], entry.data["device_type"])
+
+        LOGGER.debug("Setting starting data")
+        self.data = self.client.get_device()
+        LOGGER.debug(f"Data: {self.data.__dict__}")
+        LOGGER.debug("_use_mqtt")
         self._use_mqtt()
         super().__init__(
             hass,
@@ -42,7 +49,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         async def listen():
             LOGGER.debug("Use MQTT: Listen")
             self.client = BambuClient(self._entry.data["host"], self._entry.data["serial"],
-                                      self._entry.data["access_code"], self._entry.data["tls"])
+                                      self._entry.data["access_code"], self._entry.data["tls"],
+                                      self._entry.data["device_type"])
             await self.client.connect(callback=message_handler)
 
         asyncio.create_task(listen())
@@ -52,19 +60,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
-
-        # TODO:  Not sure this is the way to handle this.  Could do with some sort of state
-        device = self.client.get_device()
-        LOGGER.debug(f"update data device: {device}")
-        return device
+        return self.client.get_device()
 
     async def wait_for_data_ready(self):
         """Wait until we have received version data"""
-        counter = 0
-        while self.data.info.device_type == "Unknown":
-            counter = counter + 1
-            if counter == 30:
-                raise Exception('Failed to receive version response from printer in 30 seconds') 
+        LOGGER.debug("WAITING FOR DATA READY")
+        while (self.data == None) or (self.data.info.device_type) == "Unknown":
             await asyncio.sleep(1)
-
         return

@@ -5,8 +5,13 @@
   "config_flow": true,
   "documentation": "https://github.com/greghesp/ha-bambulab",
   "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
-  "dependencies": ["mqtt"],
+  "dependencies": ["mqtt", "ssdp"],
   "codeowners": ["@greghesp"],
-  "iot_class": "local_push"
+  "iot_class": "local_push",
+  "ssdp": [
+    {
+      "st": "urn:bambulab-com:device:3dprinter:1"
+    }
+  ]
 }
 

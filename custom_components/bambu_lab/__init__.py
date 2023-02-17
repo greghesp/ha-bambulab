@@ -23,10 +23,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
     # Set up all platforms for this device/entry.
-    await coordinator.wait_for_data_ready()
+    #await coordinator.wait_for_data_ready()
+    LOGGER.debug("async_forward_entry_setups")
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     # Reload entry when its updated.
+    LOGGER.debug("add_update_listener")
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
     LOGGER.debug("Async Setup Entry Complete")
     return True

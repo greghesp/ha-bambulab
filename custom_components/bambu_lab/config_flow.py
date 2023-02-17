@@ -6,6 +6,7 @@ import queue
 from typing import Any
 from homeassistant.const import CONF_HOST, CONF_MAC
 
+from homeassistant.components import ssdp
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.config_entries import ConfigEntry, ConfigFlow
@@ -26,17 +27,19 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             LOGGER.debug("Config Flow: Trying Connection")
-            bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], user_input.get("tls", False))
+            bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], user_input.get("tls", False), "Unknown")
             success = await bambu.try_connection()
 
             if success:
+                device = bambu.get_device()
                 return self.async_create_entry(
                     title=user_input["serial"],
                     data={
                         "host": user_input["host"],
                         "access_code": user_input["access_code"],
                         "serial": user_input["serial"],
-                        "tls": user_input.get("tls", False)
+                        "tls": user_input.get("tls", False),
+                        "device_type": device.info.device_type
                     }
                 )
 
@@ -47,3 +50,11 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema({vol.Required("host"): str, vol.Required("access_code"): str, vol.Required("serial"): str, vol.Optional("tls"): bool}),
             errors=errors or {},
         )
+
+    async def async_step_ssdp(
+        self, discovery_info: ssdp.SsdpServiceInfo
+    ) -> FlowResult:
+        """Handle ssdp discovery flow."""
+
+        LOGGER.debug("async_step_ssdp");
+        return await self.async_step_user()

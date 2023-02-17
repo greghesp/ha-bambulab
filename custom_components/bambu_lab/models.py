@@ -14,8 +14,7 @@ class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device information about this Bambu  device."""
-
-        # TODO: Populate with device name and serial
+        LOGGER.debug("device_info() called")
         return DeviceInfo(
             identifiers={(DOMAIN, self.coordinator.data.info.serial)},
             name=f"{self.coordinator.data.info.device_type}_{self.coordinator.data.info.serial}",

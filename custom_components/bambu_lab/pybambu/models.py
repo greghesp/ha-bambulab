@@ -6,10 +6,10 @@ from .const import LOGGER, Features
 import asyncio
 
 class Device:
-    def __init__(self):
+    def __init__(self, device_type):
         self.temperature = Temperature()
         self.lights = Lights()
-        self.info = Info()
+        self.info = Info(device_type)
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
@@ -133,10 +133,10 @@ class Info:
     start_time: str
     end_time: str
 
-    def __init__(self):
+    def __init__(self, device_type):
         self.wifi_signal = 0
         self.print_percentage = 0
-        self.device_type = "Unknown"
+        self.device_type = device_type
         self.hw_ver = "Unknown"
         self.sw_ver = "Unknown"
         self.gcode_state = "Unknown"
