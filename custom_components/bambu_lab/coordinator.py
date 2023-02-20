@@ -10,6 +10,7 @@ import json
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers import device_registry
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.core import CALLBACK_TYPE, Event, HomeAssistant, callback
 from homeassistant.const import CONF_HOST, EVENT_HOMEASSISTANT_STOP
@@ -18,19 +19,20 @@ from .pybambu import BambuClient
 from .pybambu.const import Features
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
-    config_entry: ConfigEntry
+    _hass: HomeAssistant
+    _updatedDevice: Bool
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._entry = entry
+        self._hass = hass
         LOGGER.debug(f"{entry.entry_id}")
         LOGGER.debug(f"Entry: {entry.data}")
         self.client = BambuClient(entry.data["host"], entry.data["serial"], entry.data["access_code"],
                                   entry.data["tls"], entry.data["device_type"])
 
-        LOGGER.debug("Setting starting data")
+        self._updatedDevice = False
         self.data = self.client.get_device()
         LOGGER.debug(f"Data: {self.data.__dict__}")
-        LOGGER.debug("_use_mqtt")
         self._use_mqtt()
         super().__init__(
             hass,
@@ -41,10 +43,19 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     @callback
     def _use_mqtt(self) -> None:
-        """Use MQTT for updates, instead of polling."""
+        """Use MQTT for updates."""
 
         def message_handler(message):
             self.async_set_updated_data(message)
+            if not self._updatedDevice:
+                new_sw_ver = message.info.sw_ver
+                new_hw_ver = message.info.hw_ver
+                LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
+                if (new_sw_ver != "Unknown"):
+                    dev_reg = device_registry.async_get(self._hass)
+                    device = dev_reg.async_get_device(identifiers={(DOMAIN, self.data.info.serial)})
+                    dev_reg.async_update_device(device.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
+                    self._updatedDevice = True
 
         async def listen():
             LOGGER.debug("Use MQTT: Listen")
@@ -59,12 +70,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
+        device = self.client.get_device()
         LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
-        return self.client.get_device()
+        LOGGER.debug(f"'{device.info.sw_ver}'/'{device.info.hw_ver}'")
+        return device;
 
-    async def wait_for_data_ready(self):
-        """Wait until we have received version data"""
-        LOGGER.debug("WAITING FOR DATA READY")
-        while (self.data == None) or (self.data.info.device_type) == "Unknown":
-            await asyncio.sleep(1)
-        return
