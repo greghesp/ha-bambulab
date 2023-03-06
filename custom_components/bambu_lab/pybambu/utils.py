@@ -84,11 +84,15 @@ def get_sw_version(modules, default):
 
 def start_time(timestamp):
     """Return start time of a print"""
+    if timestamp == 000:
+        return "N/A"
     return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
 
 
 def end_time(remaining_time):
     """Calculate the end time of a print"""
+    if remaining_time <= 0:
+        return "N/A"
     endtime = datetime.now() + timedelta(minutes=remaining_time)
     return round_minute(endtime).strftime('%d %B %Y %H:%M:%S')
 
