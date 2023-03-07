@@ -2,12 +2,14 @@ from __future__ import annotations
 import queue
 import json
 import ssl
+import time
 
 from dataclasses import dataclass
 from typing import Any
 from threading import Thread
 
 import paho.mqtt.client as mqtt
+import asyncio
 
 from .const import LOGGER
 from .models import Device
@@ -22,6 +24,7 @@ from .commands import (
     PUSH_ALL
 )
 
+
 def listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
     while True:
@@ -33,10 +36,11 @@ def listen_thread(self):
             self.client.loop_forever()
             break
         except Exception as e:
-            LOGGER.debug("A loop exception occurred:")
-            LOGGER.debug(f"Type: {type(e)}")
-            LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug("A listener loop thread exception occurred:")
+            LOGGER.debug(f"Exception type: {type(e)}")
+            LOGGER.debug(f"Exception args: {e.args}")
             self.disconnect()
+
 
 @dataclass
 class BambuClient:
@@ -59,7 +63,7 @@ class BambuClient:
         LOGGER.debug(f"Connected: {self._connected}")
         return self._connected
 
-    def connect(self, callback):
+    async def connect(self, callback):
         """Connect to the MQTT Broker"""
         self._callback = callback
         self.client.on_connect = self.on_connect
@@ -73,8 +77,9 @@ class BambuClient:
             self.client.username_pw_set("bblp", password=self._access_code)
 
         LOGGER.debug("Starting MQTT listener thread")
-        thread = Thread(target = listen_thread, args = (self, ))
+        thread = Thread(target=listen_thread, args=(self,))
         thread.start()
+        return
 
     def on_connect(self,
                    client_: mqtt.Client,
@@ -85,12 +90,14 @@ class BambuClient:
         """Handle connection"""
         LOGGER.debug("On Connect: Connected to Broker")
         self._connected = True
+        self._device.add_serial(self._serial)
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
         LOGGER.debug("On Connect: Getting Version Info")
         self.publish(GET_VERSION)
         LOGGER.debug("On Connect: Request Push All")
         self.publish(PUSH_ALL)
+
 
     def on_disconnect(self,
                       client_: mqtt.Client,
@@ -113,8 +120,8 @@ class BambuClient:
 
         except Exception as e:
             LOGGER.debug("An exception occurred:")
-            LOGGER.debug(f"Type: {type(e)}")
-            LOGGER.debug(f"Args: {e.args}")
+            LOGGER.debug(f"Exception type: {type(e)}")
+            LOGGER.debug(f"Exception args: {e.args}")
 
         return self._callback(self._device)
 
@@ -145,7 +152,7 @@ class BambuClient:
         """Return device"""
         LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
- 
+
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")

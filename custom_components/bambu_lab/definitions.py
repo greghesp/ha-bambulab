@@ -1,7 +1,10 @@
 """Definitions for Bambu Lab sensors added to MQTT."""
 from __future__ import annotations
 
+import math
+
 from .const import LOGGER
+from .pybambu.const import Features
 from collections.abc import Callable
 from dataclasses import dataclass
 from homeassistant.helpers.entity import EntityCategory
@@ -11,7 +14,8 @@ from homeassistant.const import (
     TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     SPEED,
-    UnitOfTemperature
+    UnitOfTemperature,
+    TIME_MINUTES
 )
 
 from homeassistant.components.sensor import (
@@ -87,7 +91,8 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda device: device.temperature.chamber_temp
+        value_fn=lambda device: device.temperature.chamber_temp,
+        exists_fn=lambda device: device.supports_feature(Features.CHAMBER_TEMPERATURE)
     ),
     BambuLabSensorEntityDescription(
         key="target_nozzle_temp",
@@ -150,7 +155,8 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="stage",
         name="Current Stage",
         icon="mdi:file-tree",
-        value_fn=lambda device: device.stage.description
+        value_fn=lambda device: device.stage.description,
+        exists_fn=lambda device: device.supports_feature(Features.CURRENT_STAGE)
     ),
     BambuLabSensorEntityDescription(
         key="print_progress",
@@ -161,9 +167,29 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda device: device.info.print_percentage
     ),
     BambuLabSensorEntityDescription(
-        key="printer_type",
-        name="Printer Type",
-        icon="mdi:progress-clock",
-        value_fn=lambda device: device.info.device_type
+        key="print_status",
+        name="Print Status",
+        icon="mdi:list-status",
+        value_fn=lambda device: device.info.gcode_state.title()
+    ),
+    BambuLabSensorEntityDescription(
+        key="start_time",
+        name="Start Time",
+        icon="mdi:clock",
+        value_fn=lambda device: device.info.start_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="remaining_time",
+        name="Remaining Time",
+        icon="mdi:timer-sand",
+        native_unit_of_measurement=TIME_MINUTES,
+        device_class=SensorDeviceClass.DURATION,
+        value_fn=lambda device: device.info.remaining_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="end_time",
+        name="End Time",
+        icon="mdi:clock",
+        value_fn=lambda device: device.info.end_time
     )
 )

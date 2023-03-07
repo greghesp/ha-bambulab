@@ -1,9 +1,11 @@
+from enum import Enum
 from .models import BambuLabEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant, callback
 from .const import DOMAIN, LOGGER
 from .pybambu.commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
+from .pybambu.const import Features
 
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
@@ -21,12 +23,10 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    LOGGER.debug(f"Entry {entry.data['serial']}")
-    LOGGER.debug(f"Async Setup Light {coordinator.data}")
 
     entities_to_add: list = []
 
-    if coordinator.data.info.device_type == "X1C" or coordinator.data.info.device_type == "P1P":
+    if coordinator.data.supports_feature(Features.CHAMBER_LIGHT):
         entities_to_add.append(BambuLabChamberLight(coordinator, entry))
     async_add_entities(entities_to_add)
 

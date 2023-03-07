@@ -37,8 +37,6 @@ async def async_setup_entry(
 class BambuLabSensor(BambuLabEntity, SensorEntity):
     """Representation of a BambuLab that is updated via MQTT."""
 
-    entity_description: BambuLabSensorEntityDescription
-
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,

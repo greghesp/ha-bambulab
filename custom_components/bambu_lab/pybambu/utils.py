@@ -1,4 +1,5 @@
 import math
+from datetime import datetime, timezone, timedelta
 
 from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, LOGGER
 
@@ -41,6 +42,7 @@ def get_stage_action(_id):
 
 
 def get_printer_type(modules, default):
+    """Retrieve printer type"""
     esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
     rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
     if len(esp32.keys()) > 1:
@@ -55,6 +57,7 @@ def get_printer_type(modules, default):
 
 
 def get_hw_version(modules, default):
+    """Retrieve hardware version of printer"""
     esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
     rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
     if len(esp32.keys()) > 1:
@@ -67,12 +70,37 @@ def get_hw_version(modules, default):
 
 
 def get_sw_version(modules, default):
+    """Retrieve software version of printer"""
     esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
     rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
     if len(esp32.keys()) > 1:
         if esp32.get("hw_ver") == "AP04":
             return esp32.get("sw_ver")
     elif len(rv1126.keys()) > 1:
-        if rv1126.get("sw_ver") == "AP05":
-            return rv1126.get("hw_ver")
+        if rv1126.get("hw_ver") == "AP05":
+            return rv1126.get("sw_ver")
     return default
+
+
+def start_time(timestamp):
+    """Return start time of a print"""
+    if timestamp == 000:
+        return "N/A"
+    return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
+
+
+def end_time(remaining_time):
+    """Calculate the end time of a print"""
+    if remaining_time <= 0:
+        return "N/A"
+    endtime = datetime.now() + timedelta(minutes=remaining_time)
+    return round_minute(endtime).strftime('%d %B %Y %H:%M:%S')
+
+
+def round_minute(date: datetime = None, round_to: int = 1):
+    """ Round datetime object to minutes"""
+    if not date:
+        date = datetime.now()
+    date = date.replace(second=0, microsecond=0)
+    delta = date.minute % round_to
+    return date.replace(minute=date.minute - delta)
