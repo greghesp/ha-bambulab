@@ -6,12 +6,17 @@
 
 ## Setup
 
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab&category=Integration)
+
+To install, add this Github Repo to the HACS Custom Repositories, or click the badge above.
+
 For now, you will need the following information:
 - Printer IP
 - LAN Access Code (Can be found on the Printer settings)
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
 If you are running the latest firmware which requires TLS MQTT Support, please check the `Enable TLS` box
+
 
 ## Features
 
