@@ -62,4 +62,6 @@ This currently exposes the following Diagnostic Sensors:
 
 ### Cameras
 
-Cameras are currently not supported across any Bambu Lab device
+Cameras are currently not supported across any Bambu Lab device, due to them using a proprietary streaming implementation.
+
+If you want to get tbis changed, please comment and vote on [this issue](https://github.com/bambulab/BambuStudio/issues/1372)
