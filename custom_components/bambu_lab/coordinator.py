@@ -71,8 +71,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
-        device = self.client.get_device()
         LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
-        LOGGER.debug(f"'{device.info.sw_ver}'/'{device.info.hw_ver}'")
+        device = self.client.get_device()
         return device;
 
