@@ -40,7 +40,8 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"Async Setup Button")
 
-    async_add_entities([BambuLabPauseButton(coordinator, entry), BambuLabResumeButton(coordinator, entry), BambuLabStopButton(coordinator, entry)])
+    async_add_entities([BambuLabPauseButton(coordinator, entry), BambuLabResumeButton(coordinator, entry),
+                        BambuLabStopButton(coordinator, entry)])
 
 
 class BambuLabButton(BambuLabEntity, ButtonEntity):

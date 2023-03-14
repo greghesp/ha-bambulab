@@ -9,7 +9,8 @@ from .coordinator import BambuDataUpdateCoordinator
 PLATFORMS = (
     Platform.LIGHT,
     Platform.SENSOR,
-    Platform.BUTTON
+    Platform.BUTTON,
+    Platform.FAN
 )
 
 

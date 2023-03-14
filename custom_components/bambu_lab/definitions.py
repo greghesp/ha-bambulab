@@ -113,38 +113,6 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda device: device.temperature.nozzle_temp
     ),
     BambuLabSensorEntityDescription(
-        key="aux_fan_speed",
-        name="Aux Fan Speed",
-        native_unit_of_measurement=PERCENTAGE,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:fan",
-        value_fn=lambda device: device.fans.aux_fan_speed
-    ),
-    BambuLabSensorEntityDescription(
-        key="chamber_fan_speed",
-        name="Chamber Fan Speed",
-        native_unit_of_measurement=PERCENTAGE,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:fan",
-        value_fn=lambda device: device.fans.chamber_fan_speed
-    ),
-    BambuLabSensorEntityDescription(
-        key="cooling_fan_speed",
-        name="Cooling Fan Speed",
-        native_unit_of_measurement=PERCENTAGE,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:fan",
-        value_fn=lambda device: device.fans.cooling_fan_speed
-    ),
-    BambuLabSensorEntityDescription(
-        key="heatbreak_fan_speed",
-        name="Heatbreak Fan Speed",
-        native_unit_of_measurement=PERCENTAGE,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:fan",
-        value_fn=lambda device: device.fans.heatbreak_fan_speed
-    ),
-    BambuLabSensorEntityDescription(
         key="speed_profile",
         name="Speed Profile",
         icon="mdi:speedometer",
