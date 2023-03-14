@@ -35,7 +35,7 @@ class Device:
         if feature == Features.CHAMBER_TEMPERATURE:
             return self.info.device_type == "X1C"
         if feature == Features.CURRENT_STAGE:
-            return self.info.device_type == "X1C"
+            return True
         return False
 
 
