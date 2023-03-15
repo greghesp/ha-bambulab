@@ -1,9 +1,9 @@
 name: Bug report
 description: Create a report to help us improve
-title: '[Bug] <Replace this part>'
-labels: [ "bug" ]
-assignees: ''
-
+title: "[Bug] <Replace this part>"
+labels:
+  - bug
+assignees: ""
 body:
   - type: textarea
     id: description
@@ -45,19 +45,20 @@ body:
     id: firmware
     attributes:
       label: Firmware Version
-      description: "What version of the firmware are you using? (Please get this from the printer, not Home Assistant)"
+      description: What version of the firmware are you using? (Please get this from
+        the printer, not Home Assistant)
   - type: input
     id: haversion
     attributes:
       label: Home Assistant Version
-      description: "What version of Home Assistant?"
+      description: What version of Home Assistant?
     validations:
       required: true
   - type: input
     id: componentversion
     attributes:
       label: Component Version
-      description: "What version of this component?"
+      description: What version of this component?
     validations:
       required: true
   - type: textarea
