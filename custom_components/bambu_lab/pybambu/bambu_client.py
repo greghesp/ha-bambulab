@@ -38,6 +38,7 @@ def listen_thread(self):
         except Exception as e:
             LOGGER.debug(f"Exception {e.args.__str__}")
             if (e.args.__str__ == 'Host is unreachable'):
+                LOGGER.debug("Host is unreachable. Sleeping.")
                 time.sleep(5)
             else:
                 LOGGER.debug("A listener loop thread exception occurred:")
