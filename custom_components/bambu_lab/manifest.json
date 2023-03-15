@@ -1,6 +1,5 @@
 {
   "domain": "bambu_lab",
-  "version": "0.0.1",
   "name": "Bambu Lab",
   "codeowners": ["@greghesp"],
   "config_flow": true,
