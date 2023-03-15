@@ -133,10 +133,10 @@ class Info:
     start_time: str
     end_time: str
 
-    def __init__(self):
+    def __init__(self, device_type):
         self.wifi_signal = 0
         self.print_percentage = 0
-        self.device_type = "Unknown"
+        self.device_type = device_type
         self.hw_ver = "Unknown"
         self.sw_ver = "Unknown"
         self.gcode_state = "Unknown"
