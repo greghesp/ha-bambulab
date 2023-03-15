@@ -2,7 +2,7 @@
 
 # Bambu Lab
 
-> This is still a WIP.
+A Home Assistant Integration for Bambu Lab printers
 
 ## Setup
 
