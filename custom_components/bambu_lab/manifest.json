@@ -2,16 +2,17 @@
   "domain": "bambu_lab",
   "version": "0.0.1",
   "name": "Bambu Lab",
-  "config_flow": true,
-  "documentation": "https://github.com/greghesp/ha-bambulab",
-  "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
-  "dependencies": ["mqtt", "ssdp"],
   "codeowners": ["@greghesp"],
-  "iot_class": "local_push",
+  "config_flow": true,
+  "dependencies": ["mqtt", "ssdp"],
   "ssdp": [
     {
       "st": "urn:bambulab-com:device:3dprinter:1"
     }
-  ]
+  ],
+  "documentation": "https://github.com/greghesp/ha-bambulab",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
+  "version": "0.1.0"
 }
 

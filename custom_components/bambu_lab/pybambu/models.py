@@ -35,7 +35,7 @@ class Device:
         if feature == Features.CHAMBER_TEMPERATURE:
             return self.info.device_type == "X1C"
         if feature == Features.CURRENT_STAGE:
-            return True
+            return self.info.device_type == "X1C" or self.info.device_type == "P1P"
         return False
 
 
@@ -133,10 +133,10 @@ class Info:
     start_time: str
     end_time: str
 
-    def __init__(self, device_type):
+    def __init__(self):
         self.wifi_signal = 0
         self.print_percentage = 0
-        self.device_type = device_type
+        self.device_type = "Unknown"
         self.hw_ver = "Unknown"
         self.sw_ver = "Unknown"
         self.gcode_state = "Unknown"
