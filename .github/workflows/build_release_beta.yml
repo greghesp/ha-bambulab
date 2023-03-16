@@ -1,0 +1,21 @@
+name: Build Beta Release
+
+on:
+  push:
+    branches:
+      - develop
+    tags:
+      - 'v*-beta'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@master
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      prerelease: true
+      with:
+        bodyFile: "release_notes.md"
