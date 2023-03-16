@@ -73,7 +73,4 @@ on [this issue](https://github.com/bambulab/BambuStudio/issues/1372)
 
 ## Release Notes
 
-### V1.0.0
-
-- Main release containing features listed above
-- Switched to zip releases over commits
+Please check `release_notes.md`
