@@ -6,8 +6,7 @@ on:
       - main
     tags:
       - 'v*'
-    tags-ignore:
-      - 'v*-beta'
+      - '!v*-beta'
 
 jobs:
   build:
