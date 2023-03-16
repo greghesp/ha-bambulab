@@ -2,8 +2,6 @@ name: Build Production Release
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'
       - '!v*-beta'

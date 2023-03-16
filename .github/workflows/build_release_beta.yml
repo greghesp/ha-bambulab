@@ -2,8 +2,6 @@ name: Build Beta Release
 
 on:
   push:
-    branches:
-      - develop
     tags:
       - 'v*-beta'
 
