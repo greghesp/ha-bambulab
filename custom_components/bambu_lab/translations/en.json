@@ -13,8 +13,7 @@
                 "data": {
                     "host": "Host IP",
                     "access_code": "Access Code",
-                    "serial": "Serial Number",
-                    "tls": "Enable TLS"
+                    "serial": "Serial Number"
                 }
             }
         }

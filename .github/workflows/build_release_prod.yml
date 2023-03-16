@@ -1,0 +1,19 @@
+name: Build Production Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - '!v*-beta'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@master
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        bodyFile: "release_notes.md"

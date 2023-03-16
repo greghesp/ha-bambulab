@@ -23,7 +23,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
     # Set up all platforms for this device/entry.
-    await coordinator.wait_for_data_ready()
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     # Reload entry when its updated.
