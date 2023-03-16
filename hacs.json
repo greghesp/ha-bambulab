@@ -1,5 +1,5 @@
 {
   "name": "Bambu Lab",
   "render_readme": true,
-  "zip_release": false
+  "zip_release": true
 }
