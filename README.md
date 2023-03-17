@@ -16,8 +16,6 @@ For now, you will need the following information:
 - LAN Access Code (Can be found on the Printer settings)
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
-If you are running the latest firmware which requires TLS MQTT Support, please check the `Enable TLS` box
-
 ## Features
 
 ### Sensors
@@ -68,8 +66,8 @@ This currently exposes the following Diagnostic Sensors:
 Cameras are currently not supported across any Bambu Lab device, due to them using a proprietary streaming
 implementation.
 
-If you want to get tbis changed, please comment and vote
-on [this issue](https://github.com/bambulab/BambuStudio/issues/1372)
+If you want to see this changed, please comment and vote
+on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1372)
 
 ## Release Notes
 
