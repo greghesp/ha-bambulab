@@ -16,6 +16,10 @@ For now, you will need the following information:
 - LAN Access Code (Can be found on the Printer settings)
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
+### P1P Owners
+
+In the latest firmware update, Bambu Lab removed the ability to use MQTT if the printer is not in LAN mode.  For this to work, the P1P must be in LAN mode
+
 ## Features
 
 ### Sensors
