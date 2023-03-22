@@ -36,7 +36,7 @@ This currently exposes the following Sensors (where applicable):
 | Chamber Fan Speed	         | :white_check_mark:  | :white_check_mark: | :x:                |
 | Chamber Temperature	       | :white_check_mark:  | :white_check_mark: | :x:                |
 | Cooling Fan Speed	         | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Current Layer	             | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Current Layer	             | :white_check_mark:  | :white_check_mark: |:x:  |
 | Current Stage	             | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | End Time                   | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Heatbreak Fan Speed	       | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
@@ -48,7 +48,7 @@ This currently exposes the following Sensors (where applicable):
 | Speed Profile              | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Start Time                 | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Target Bed Temperature     | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Total Layer Count          | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Total Layer Count          | :white_check_mark:  | :white_check_mark: | :x:  |
 
 ### Buttons
 

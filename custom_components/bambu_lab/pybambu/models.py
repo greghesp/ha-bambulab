@@ -37,6 +37,8 @@ class Device:
             return self.info.device_type == "X1C"
         if feature == Features.CURRENT_STAGE:
             return self.info.device_type == "X1C" or self.info.device_type == "P1P"
+        if feature == Features.PRINT_LAYERS:
+            return self.info.device_type == "X1C"
         return False
 
 

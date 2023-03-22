@@ -196,12 +196,14 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="current_layer",
         name="Current Layer",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda device: device.info.current_layer
+        value_fn=lambda device: device.info.current_layer,
+        exists_fn= lambda device: device.supports_feature(Features.PRINT_LAYERS)
     ),
     BambuLabSensorEntityDescription(
         key="total_layers",
         name="Total Layer Count",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda device: device.info.total_layers
+        value_fn=lambda device: device.info.total_layers,
+        exists_fn=lambda device: device.supports_feature(Features.PRINT_LAYERS)
     ),
 )
