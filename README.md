@@ -16,7 +16,10 @@ For now, you will need the following information:
 - LAN Access Code (Can be found on the Printer settings)
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
-If you are running the latest firmware which requires TLS MQTT Support, please check the `Enable TLS` box
+### P1P Owners
+
+In the latest firmware update, Bambu Lab removed the ability to use MQTT if the printer is not in LAN mode. For this to
+work, the P1P must be in LAN mode
 
 ## Features
 
@@ -33,6 +36,7 @@ This currently exposes the following Sensors (where applicable):
 | Chamber Fan Speed	         | :white_check_mark:  | :white_check_mark: | :x:                |
 | Chamber Temperature	       | :white_check_mark:  | :white_check_mark: | :x:                |
 | Cooling Fan Speed	         | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Current Layer	             | :white_check_mark:  | :white_check_mark: |:x:  |
 | Current Stage	             | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | End Time                   | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Heatbreak Fan Speed	       | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
@@ -44,6 +48,7 @@ This currently exposes the following Sensors (where applicable):
 | Speed Profile              | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Start Time                 | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Target Bed Temperature     | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Total Layer Count          | :white_check_mark:  | :white_check_mark: | :x:  |
 
 ### Buttons
 
@@ -68,8 +73,8 @@ This currently exposes the following Diagnostic Sensors:
 Cameras are currently not supported across any Bambu Lab device, due to them using a proprietary streaming
 implementation.
 
-If you want to get tbis changed, please comment and vote
-on [this issue](https://github.com/bambulab/BambuStudio/issues/1372)
+If you want to see this changed, please comment and vote
+on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1372)
 
 ## Release Notes
 
