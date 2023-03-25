@@ -71,7 +71,7 @@ Cameras are currently not supported across any Bambu Lab device, due to them usi
 implementation.
 
 If you want to see this changed, please comment and vote
-on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1372)
+on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
 
 ## Release Notes
 
