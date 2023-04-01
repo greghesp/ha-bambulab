@@ -5,7 +5,7 @@
         "title": "",
         "description": "",
         "data": {
-          "printer_type": "",
+          "device_type": "",
           "printer_mode": "",
           "serial": "",
         }

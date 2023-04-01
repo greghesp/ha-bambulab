@@ -27,8 +27,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._hass = hass
         LOGGER.debug(f"{entry.entry_id}")
         LOGGER.debug(f"Entry: {entry.data}")
-        self.client = BambuClient(entry.data["host"], entry.data["serial"], entry.data["access_code"],
-                                  entry.data["device_type"])
+        self.client = BambuClient(device_type = entry.data["device_type"],
+                                  serial = entry.data["serial"],
+                                  host = entry.data["host"],
+                                  access_code = entry.data["access_code"])
 
         self._updatedDevice = False
         self.data = self.client.get_device()
@@ -59,10 +61,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         async def listen():
             LOGGER.debug("Use MQTT: Listen")
-            self.client = BambuClient(self._entry.data["host"],
-                                      self._entry.data["serial"],
-                                      self._entry.data["access_code"],
-                                      self._entry.data["device_type"])
+            self.client = BambuClient(device_type = self._entry.data["device_type"],
+                                      serial = self._entry.data["serial"],
+                                      host = self._entry.data["host"],
+                                      access_code = self._entry.data["access_code"])
             await self.client.connect(callback=message_handler)
 
         asyncio.create_task(listen())

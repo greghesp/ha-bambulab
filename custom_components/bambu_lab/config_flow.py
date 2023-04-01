@@ -30,7 +30,8 @@ TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
 PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
 SUPPORTED_PRINTERS = [
     SelectOptionDict(value="P1P", label="P1P"),
-    SelectOptionDict(value="X1", label="X1/X1C"),
+    SelectOptionDict(value="X1", label="X1"),
+    SelectOptionDict(value="X1C", label="X1C"),
 ]
 PRINTER_SELECTOR = SelectSelector(
     SelectSelectorConfig(
@@ -62,13 +63,13 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             if (user_input["printer_mode"] == "Bambu"):
-                return await self.async_step_Bambu()
+                return await self.async_step_Bambu(user_input)
             if (user_input["printer_mode"] == "Lan"):
-                return await self.async_step_Lan()
+                return await self.async_step_Lan(user_input)
         
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("printer_type")] = PRINTER_SELECTOR
+        fields[vol.Required("device_type")] = PRINTER_SELECTOR
         fields[vol.Required("printer_mode")] = MODE_SELECTOR
         fields[vol.Required("serial")] = TEXT_SELECTOR
 
@@ -85,7 +86,23 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-           errors["base"] = "cannot_connect"
+            authToken = "TODO"
+            bambu = BambuClient(device_type = user_input["device_type"], serial = user_input["serial"], host = "us.mqtt.bambulab.com", access_code = authToken)
+            success = await bambu.try_connection()
+
+            if success:
+                device = bambu.get_device()
+                return self.async_create_entry(
+                    title=user_input["serial"],
+                    data={
+                        "device_type": user_input["device_type"],
+                        "serial": user_input["serial"],
+                        "host": "us.mqtt.bambulab.com",
+                        "access_code": authToken
+                    }
+                )
+            
+            errors["base"] = "cannot_connect"
         
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -105,8 +122,8 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            LOGGER.debug("Config Flow: Trying Connection")
-            bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], "Unknown")
+            LOGGER.debug("Config Flow: Trying Lan Mode Connection")
+            bambu = BambuClient(device_type = user_input["device_type"], serial = user_input["serial"], host = user_input["host"], access_code = user_input["access_code"])
             success = await bambu.try_connection()
 
             if success:
@@ -114,10 +131,11 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
                 return self.async_create_entry(
                     title=user_input["serial"],
                     data={
+                        "device_type": user_input["device_type"],
+                        "serial": user_input["serial"],
                         "host": user_input["host"],
                         "access_code": user_input["access_code"],
-                        "serial": user_input["serial"],
-                        "device_type": device.info.device_type
+                        "authToken": "",
                     }
                 )
             

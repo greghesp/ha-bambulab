@@ -13,7 +13,7 @@
                 "title": "Bambu Lab",
                 "description": "Please select your printer and provide it's serial number.",
                 "data": {
-                    "printer_type": "Printer Model",
+                    "device_type": "Printer Model",
                     "printer_mode": "Connection Mode",
                     "serial": "Serial Number"
                 }
