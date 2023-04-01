@@ -2,11 +2,33 @@
   "config": {
     "step": {
       "user": {
+        "title": "",
+        "description": "",
         "data": {
-          "host": "host",
-          "access_code": "access_code",
-          "serial": "serial"
+          "printer_type": "",
+          "printer_mode": "",
+          "serial": "",
         }
+      },
+      "Bambu": {
+        "title": "",
+        "description": "",
+        "data": {
+          "username": "",
+          "password": ""
+        }
+      },
+      "Lan": {
+        "title": "",
+        "description": "",
+        "data": {
+          "host": "",
+          "access_code": ""
+        }
+      },
+      "Done": {
+        "title": "",
+        "description": ""
       }
     },
     "error": {

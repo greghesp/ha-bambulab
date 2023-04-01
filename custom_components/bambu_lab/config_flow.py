@@ -4,15 +4,50 @@ from __future__ import annotations
 import voluptuous as vol
 import queue
 from typing import Any
-from homeassistant.const import CONF_HOST, CONF_MAC
+from collections import OrderedDict
 
+from homeassistant.const import CONF_HOST, CONF_MAC
 from homeassistant.components import ssdp
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.config_entries import ConfigEntry, ConfigFlow
+from homeassistant.helpers.selector import (
+    BooleanSelector,
+    SelectOptionDict,
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+)
+
 from .const import DOMAIN, LOGGER
 from .pybambu import BambuClient
 
+BOOLEAN_SELECTOR = BooleanSelector()
+TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
+PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
+SUPPORTED_PRINTERS = [
+    SelectOptionDict(value="P1P", label="P1P"),
+    SelectOptionDict(value="X1", label="X1/X1C"),
+]
+PRINTER_SELECTOR = SelectSelector(
+    SelectSelectorConfig(
+        options=SUPPORTED_PRINTERS,
+        mode=SelectSelectorMode.LIST,
+    )
+)
+SUPPORTED_MODES = [
+    SelectOptionDict(value="Bambu", label="Bambu Cloud"),
+    SelectOptionDict(value="Lan", label="Lan Mode"),
+]
+MODE_SELECTOR = SelectSelector(
+    SelectSelectorConfig(
+        options=SUPPORTED_MODES,
+        mode=SelectSelectorMode.LIST,
+    )
+)
 
 class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
     """Handle Bambu Lab config flow. The MQTT step is inherited from the parent class."""
@@ -26,30 +61,78 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            LOGGER.debug("Config Flow: Trying Connection")
-            bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], "Unknown")
-            success = await bambu.try_connection()
-
-            if success:
-                device = bambu.get_device()
-                return self.async_create_entry(
-                    title=user_input["serial"],
-                    data={
-                        "host": user_input["host"],
-                        "access_code": user_input["access_code"],
-                        "serial": user_input["serial"],
-                        "device_type": device.info.device_type
-                    }
-                )
-
-            errors["base"] = "cannot_connect"
+            if (user_input["printer_mode"] == "Bambu"):
+                return await self.async_step_Bambu()
+            if (user_input["printer_mode"] == "Lan"):
+                return await self.async_step_Lan()
+        
+        # Build form
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Required("printer_type")] = PRINTER_SELECTOR
+        fields[vol.Required("printer_mode")] = MODE_SELECTOR
+        fields[vol.Required("serial")] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema({vol.Required("host"): str, vol.Required("access_code"): str, vol.Required("serial"): str}),
+            data_schema=vol.Schema(fields),
             errors=errors or {},
+            last_step=False,
+        )
+    
+    async def async_step_Bambu(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        errors = {}
+
+        if user_input is not None:
+           errors["base"] = "cannot_connect"
+        
+        # Build form
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Required("username")] = TEXT_SELECTOR
+        fields[vol.Required("password")] = PASSWORD_SELECTOR
+
+        return self.async_show_form(
+            step_id="Bambu",
+            data_schema=vol.Schema(fields),
+            errors=errors or {},
+            last_step=False,
         )
 
+    async def async_step_Lan(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        errors = {}
+
+        if user_input is not None:
+           errors["base"] = "cannot_connect"
+        
+        # Build form
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Required("host")] = TEXT_SELECTOR
+        fields[vol.Required("access_code")] = PASSWORD_SELECTOR
+
+        return self.async_show_form(
+            step_id="Lan",
+            data_schema=vol.Schema(fields),
+            errors=errors or {},
+            last_step=False,
+        )
+    
+    async def async_step_done(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        errors = {}
+
+        # Build form
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+
+        return self.async_show_form(
+            step_id="Done",
+            data_schema=vol.Schema(fields),
+            errors=errors or {}
+        )   
+    
     async def async_step_ssdp(
         self, discovery_info: ssdp.SsdpServiceInfo
     ) -> FlowResult:
@@ -57,3 +140,24 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
 
         LOGGER.debug("async_step_ssdp");
         return await self.async_step_user()
+
+
+        # if user_input is not None:
+        #     LOGGER.debug("Config Flow: Trying Connection")
+        #     bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], "Unknown")
+        #     success = await bambu.try_connection()
+
+        #     if success:
+        #         device = bambu.get_device()
+        #         return self.async_create_entry(
+        #             title=user_input["serial"],
+        #             data={
+        #                 "host": user_input["host"],
+        #                 "access_code": user_input["access_code"],
+        #                 "serial": user_input["serial"],
+        #                 "device_type": device.info.device_type
+        #             }
+        #         )
+
+        #     errors["base"] = "cannot_connect"
+

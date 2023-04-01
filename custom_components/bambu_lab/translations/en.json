@@ -10,11 +10,33 @@
         },
         "step": {
             "user": {
+                "title": "Bambu Lab",
+                "description": "Please select your printer and provide it's serial number.",
                 "data": {
-                    "host": "Host IP",
-                    "access_code": "Access Code",
+                    "printer_type": "Printer Model",
+                    "printer_mode": "Connection Mode",
                     "serial": "Serial Number"
                 }
+            },
+            "Bambu": {
+                "title": "Bambu Cloud Connection",
+                "description": "Please provide your Bambu Lab credentials.",
+                "data": {
+                    "username": "Email Address",
+                    "password": "Password"
+                }
+            },
+            "Lan": {
+                "title": "Lan Mode Connection",
+                "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+                "data": {
+                  "host": "Host IP",
+                  "access_code": "Access Code"
+                }
+            },
+            "Done": {
+                "title": "Bambu Lab",
+                "description": "Configuration complete."
             }
         }
     }
