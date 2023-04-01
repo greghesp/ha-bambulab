@@ -105,8 +105,24 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-           errors["base"] = "cannot_connect"
-        
+            LOGGER.debug("Config Flow: Trying Connection")
+            bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], "Unknown")
+            success = await bambu.try_connection()
+
+            if success:
+                device = bambu.get_device()
+                return self.async_create_entry(
+                    title=user_input["serial"],
+                    data={
+                        "host": user_input["host"],
+                        "access_code": user_input["access_code"],
+                        "serial": user_input["serial"],
+                        "device_type": device.info.device_type
+                    }
+                )
+            
+            errors["base"] = "cannot_connect"
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required("host")] = TEXT_SELECTOR
@@ -140,24 +156,3 @@ class BambuLabFlowHandler(ConfigFlow, domain=DOMAIN):
 
         LOGGER.debug("async_step_ssdp");
         return await self.async_step_user()
-
-
-        # if user_input is not None:
-        #     LOGGER.debug("Config Flow: Trying Connection")
-        #     bambu = BambuClient(user_input["host"], user_input["serial"], user_input["access_code"], "Unknown")
-        #     success = await bambu.try_connection()
-
-        #     if success:
-        #         device = bambu.get_device()
-        #         return self.async_create_entry(
-        #             title=user_input["serial"],
-        #             data={
-        #                 "host": user_input["host"],
-        #                 "access_code": user_input["access_code"],
-        #                 "serial": user_input["serial"],
-        #                 "device_type": device.info.device_type
-        #             }
-        #         )
-
-        #     errors["base"] = "cannot_connect"
-
