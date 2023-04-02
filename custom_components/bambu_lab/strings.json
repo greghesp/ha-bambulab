@@ -47,23 +47,23 @@
         "data": {
           "printer_mode": ""
         }
-      }
-    },
-    "Bambu": {
-      "title": "",
-      "description": "",
-      "data": {
-        "username": "",
-        "password": ""
-      }
-    },
-    "Lan": {
-      "title": "",
-      "description": "",
-      "data": {
-        "host": "",
-        "access_code": ""
-      }
+      },
+      "Bambu": {
+        "title": "",
+        "description": "",
+        "data": {
+          "username": "",
+          "password": ""
+        }
+      },
+      "Lan": {
+        "title": "",
+        "description": "",
+        "data": {
+          "host": "",
+          "access_code": ""
+        }
+      },
     },
     "error": {
       "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
