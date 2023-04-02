@@ -20,7 +20,7 @@ from .pybambu.const import Features
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     _hass: HomeAssistant
-    _updatedDevice: Bool
+    _updatedDevice: bool
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._entry = entry
@@ -59,10 +59,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         async def listen():
             LOGGER.debug("Use MQTT: Listen")
-            self.client = BambuClient(device_type = self._entry.data["device_type"],
-                                      serial = self._entry.data["serial"],
-                                      host = self._entry.data["host"],
-                                      access_code = self._entry.data["access_code"])
             await self.client.connect(callback=message_handler)
 
         asyncio.create_task(listen())

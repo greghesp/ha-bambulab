@@ -120,7 +120,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             if gotToken:
                 authToken = result['accessToken']
-                bambu = BambuClient(device_type = self.config_data["device_type"], serial = self.config_data["serial"], host = "us.mqtt.bambulab.com", access_code = authToken)
+                bambu = BambuClient(device_type = self.config_data["device_type"],
+                                    serial = self.config_data["serial"],
+                                    host = "us.mqtt.bambulab.com",
+                                    access_code = authToken)
                 success = await bambu.try_connection()
 
                 if success:
@@ -156,7 +159,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             LOGGER.debug("Config Flow: Trying Lan Mode Connection")
-            bambu = BambuClient(device_type = self.config_data["device_type"], serial = self.config_data["serial"], host = user_input["host"], access_code = user_input["access_code"])
+            bambu = BambuClient(device_type = self.config_data["device_type"],
+                                serial = self.config_data["serial"],
+                                host = user_input["host"],
+                                access_code = user_input["access_code"])
             success = await bambu.try_connection()
 
             if success:
