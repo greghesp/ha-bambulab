@@ -125,7 +125,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
                 if success:
                     LOGGER.debug("Config Flow: Writing entry")
-                    device = bambu.get_device()
                     return self.async_create_entry(
                         title=self.config_data["serial"],
                         data={
@@ -162,7 +161,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             if success:
                 LOGGER.debug("Config Flow: Writing entry")
-                device = bambu.get_device()
                 return self.async_create_entry(
                     title=self.config_data["serial"],
                     data={
@@ -253,7 +251,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
                 if success:
                     LOGGER.debug("Config Flow: Writing new entry")
-                    device = bambu.get_device()
                     return self.async_create_entry(
                         title=self.config_data["serial"],
                         data={
@@ -290,7 +287,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if success:
                 LOGGER.debug("Config Flow: Writing new entry")
-                device = bambu.get_device()
                 return self.async_create_entry(
                     title=self.config_data["serial"],
                     data={
