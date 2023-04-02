@@ -2,7 +2,6 @@
   "config": {
     "step": {
       "user": {
-        "title": "",
         "description": "",
         "data": {
           "device_type": "",

@@ -10,7 +10,6 @@
         },
         "step": {
             "user": {
-                "title": "Bambu Lab",
                 "description": "Please select your printer and provide it's serial number.",
                 "data": {
                     "device_type": "Printer Model:",
