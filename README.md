@@ -18,16 +18,17 @@ For now, you will need the following information:
 
 ### P1P Owners
 
-In the latest firmware update, Bambu Lab removed the ability to use MQTT if the printer is not in LAN mode.  For this to work, the P1P must be in LAN mode.
-If you want to see this changed, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1395)
+In the latest firmware update, Bambu Lab removed the ability to use the local printer MQTT if the printer is not in LAN mode. Support has been added to enable use of the Bambu Cloud MQTT instead. This will require your Bambu email address and password to retrieve an authentication token. Your email address and password will not be saved - only the authentication token will be saved into home assistant. The authentication token will expire in 360 days. Before/after that you can refresh it manually by using the new 'Configuration' flow from the Home Assistant integrations page.
+
+If you want to see this changed so that you can use the local MQTT directly off the printer, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1395)
 
 ## Features
+
+(:heavy_check_mark: Optional accessory)
 
 ### Sensors
 
 This currently exposes the following Sensors (where applicable):
-
-(:heavy_check_mark: Optional accessory)
 
 | Sensor        	            | X1C               	 | X1  	              | P1P 	              | 
 |----------------------------|---------------------|--------------------|--------------------|
@@ -49,6 +50,12 @@ This currently exposes the following Sensors (where applicable):
 | Start Time                 | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Target Bed Temperature     | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
 | Total Layer Count          | :white_check_mark:  | :white_check_mark: | :x:  |
+
+### Lights
+
+| Sensor        	            | X1C               	 | X1  	              | P1P 	              | 
+|----------------------------|---------------------|--------------------|--------------------|
+| Chamber Light 	            | :white_check_mark:  | :white_check_mark: | :heavy_check_mark: |
 
 ### Buttons
 
