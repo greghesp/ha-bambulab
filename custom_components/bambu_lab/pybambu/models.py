@@ -5,6 +5,7 @@ from .const import LOGGER, Features
 
 import asyncio
 
+
 class Device:
     def __init__(self, device_type):
         self.temperature = Temperature()
@@ -36,6 +37,8 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.CURRENT_STAGE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
+        if feature == Features.PRINT_LAYERS:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
 
@@ -132,6 +135,8 @@ class Info:
     remaining_time: int
     start_time: str
     end_time: str
+    current_layer: int
+    total_layers: int
 
     def __init__(self, device_type):
         self.wifi_signal = 0
@@ -144,6 +149,8 @@ class Info:
         self.remaining_time = 0
         self.end_time = 000
         self.start_time = 000
+        self.current_layer = 0
+        self.total_layers = 0
 
     def update(self, data):
         """Update from dict"""
@@ -156,6 +163,8 @@ class Info:
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
         self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
+        self.current_layer = data.get("layer_num", self.current_layer)
+        self.total_layers = data.get("total_layer_num", self.total_layers)
 
     def add_serial(self, data):
         self.serial = data or self.serial
