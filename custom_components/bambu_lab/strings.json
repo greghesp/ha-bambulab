@@ -63,7 +63,7 @@
           "host": "",
           "access_code": ""
         }
-      },
+      }
     },
     "error": {
       "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",

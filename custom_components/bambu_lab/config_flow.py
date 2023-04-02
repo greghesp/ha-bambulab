@@ -251,7 +251,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
                 if success:
                     LOGGER.debug("Config Flow: Writing new entry")
-                    return self.async_create_entry(
+                    return self.hass.config_entries.async_update_entry(
+                        self.config_entry,
                         title=self.config_data["serial"],
                         data={
                             "device_type": self.config_data["device_type"],
@@ -287,7 +288,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if success:
                 LOGGER.debug("Config Flow: Writing new entry")
-                return self.async_create_entry(
+                return self.hass.config_entries.async_update_entry(
+                    self.config_entry,
                     title=self.config_data["serial"],
                     data={
                         "device_type": self.config_data["device_type"],
