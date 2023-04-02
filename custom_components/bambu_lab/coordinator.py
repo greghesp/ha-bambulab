@@ -63,6 +63,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         asyncio.create_task(listen())
 
+    def shutdown(self) -> None:
+        """ Halt the MQTT listener thread """
+        self.client.disconnect()
+
     async def _publish(self, msg):
         return self.client.publish(msg)
 
