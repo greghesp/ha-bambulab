@@ -18,8 +18,8 @@ For now, you will need the following information:
 
 ### P1P Owners
 
-In the latest firmware update, Bambu Lab removed the ability to use MQTT if the printer is not in LAN mode. For this to
-work, the P1P must be in LAN mode
+In the latest firmware update, Bambu Lab removed the ability to use MQTT if the printer is not in LAN mode.  For this to work, the P1P must be in LAN mode.
+If you want to see this changed, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1395)
 
 ## Features
 
@@ -74,7 +74,7 @@ Cameras are currently not supported across any Bambu Lab device, due to them usi
 implementation.
 
 If you want to see this changed, please comment and vote
-on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1372)
+on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
 
 ## Release Notes
 

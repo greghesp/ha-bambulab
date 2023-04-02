@@ -2,7 +2,7 @@ name: Feature Request
 description: Request a feature
 title: "[Feature] <Replace this part>"
 labels:
-  - feature
+  - "feature request"
 body:
   - type: textarea
     id: description

@@ -30,15 +30,15 @@ class Device:
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
-            return self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.CHAMBER_LIGHT:
-            return self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.CHAMBER_TEMPERATURE:
-            return self.info.device_type == "X1C"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.CURRENT_STAGE:
-            return self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.PRINT_LAYERS:
-            return self.info.device_type == "X1C"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
 

@@ -61,6 +61,11 @@ body:
     validations:
       required: true
   - type: textarea
+    id: logs
+    attributes:
+      label: Log Extracts
+      description: Any log information?
+  - type: textarea
     id: other
     attributes:
       label: Other Information
