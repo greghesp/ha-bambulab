@@ -44,6 +44,8 @@ def listen_thread(self):
                 LOGGER.debug("A listener loop thread exception occurred:")
                 LOGGER.debug(f"Exception type: {type(e)}")
                 LOGGER.debug(f"Exception args: {e.args}")
+                # Avoid a tight loop if this is a persistent error.
+                time.sleep(1)
             self.disconnect()
 
 @dataclass
