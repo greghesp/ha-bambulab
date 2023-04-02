@@ -187,20 +187,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             last_step=False,
         )
     
-    async def async_step_done(
-            self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        errors = {}
-
-        # Build form
-        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-
-        return self.async_show_form(
-            step_id="Done",
-            data_schema=vol.Schema(fields),
-            errors=errors or {}
-        )
-    
     async def async_step_ssdp(
         self, discovery_info: ssdp.SsdpServiceInfo
     ) -> FlowResult:

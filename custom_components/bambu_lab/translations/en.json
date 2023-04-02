@@ -13,16 +13,9 @@
                 "title": "Bambu Lab",
                 "description": "Please select your printer and provide it's serial number.",
                 "data": {
-                    "device_type": "Printer Model",
+                    "device_type": "Printer Model:",
                     "serial": "Serial Number",
-                    "printer_mode": "Connection Mode"
-                }
-            },
-            "init": {
-                "title": "Adjust connection settings",
-                "description": "Choose the connection type for this printer.",
-                "data": {
-                    "printer_mode": "Connection Mode"
+                    "printer_mode": "Connection Mode:"
                 }
             },
             "Bambu": {
@@ -40,10 +33,6 @@
                   "host": "Host IP",
                   "access_code": "Access Code"
                 }
-            },
-            "Done": {
-                "title": "Bambu Lab",
-                "description": "Configuration complete."
             }
         }
     },
@@ -56,9 +45,9 @@
         "step": {
             "init": {
                 "title": "Adjust connection settings",
-                "description": "Choose the connection type for this printer.",
+                "description": "Choose the new connection mode for this printer.",
                 "data": {
-                    "printer_mode": "Connection Mode"
+                    "printer_mode": "Connection Mode:"
                 }
             },
             "Bambu": {
@@ -76,10 +65,6 @@
                   "host": "Host IP",
                   "access_code": "Access Code"
                 }
-            },
-            "Done": {
-                "title": "Bambu Lab",
-                "description": "Configuration complete."
             }
         }
     }
