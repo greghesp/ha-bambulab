@@ -48,10 +48,6 @@ def listen_thread(self):
                 time.sleep(1)
             self.client.disconnect()
 
-        if self._exitListenerThread:
-            LOGGER.debug("MQTT listener thread exiting.")
-            break
-
 @dataclass
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
@@ -66,7 +62,6 @@ class BambuClient:
         self._device = Device(device_type)
         self._device.add_serial(self._serial)
         self._port = 1883
-        self._exitListenerThread = False
 
     @property
     def connected(self):
@@ -87,8 +82,6 @@ class BambuClient:
         self._port = 8883
         self.client.username_pw_set("bblp", password=self._access_code)
 
-        self._exitListenerThread = False
-        
         LOGGER.debug("Starting MQTT listener thread")
         thread = Thread(target=listen_thread, args=(self,))
         thread.start()
@@ -168,7 +161,6 @@ class BambuClient:
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
-        self._exitListenerThread = True
         self.client.disconnect()
 
     async def try_connection(self):
