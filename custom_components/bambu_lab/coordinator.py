@@ -25,8 +25,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._entry = entry
         self._hass = hass
-        LOGGER.debug(f"{entry.entry_id}")
-        LOGGER.debug(f"Entry: {entry.data}")
+        LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
         self.client = BambuClient(device_type = entry.data["device_type"],
                                   serial = entry.data["serial"],
                                   host = entry.data["host"],
@@ -34,7 +33,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         self._updatedDevice = False
         self.data = self.client.get_device()
-        LOGGER.debug(f"Data: {self.data.__dict__}")
         self._use_mqtt()
         super().__init__(
             hass,

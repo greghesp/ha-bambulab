@@ -14,8 +14,51 @@
                 "description": "Please select your printer and provide it's serial number.",
                 "data": {
                     "device_type": "Printer Model",
-                    "printer_mode": "Connection Mode",
-                    "serial": "Serial Number"
+                    "serial": "Serial Number",
+                    "printer_mode": "Connection Mode"
+                }
+            },
+            "init": {
+                "title": "Adjust connection settings",
+                "description": "Choose the connection type for this printer.",
+                "data": {
+                    "printer_mode": "Connection Mode"
+                }
+            },
+            "Bambu": {
+                "title": "Bambu Cloud Connection",
+                "description": "Please provide your Bambu Lab credentials.",
+                "data": {
+                    "username": "Email Address",
+                    "password": "Password"
+                }
+            },
+            "Lan": {
+                "title": "Lan Mode Connection",
+                "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+                "data": {
+                  "host": "Host IP",
+                  "access_code": "Access Code"
+                }
+            },
+            "Done": {
+                "title": "Bambu Lab",
+                "description": "Configuration complete."
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "init": {
+                "title": "Adjust connection settings",
+                "description": "Choose the connection type for this printer.",
+                "data": {
+                    "printer_mode": "Connection Mode"
                 }
             },
             "Bambu": {
