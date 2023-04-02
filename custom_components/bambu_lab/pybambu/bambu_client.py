@@ -44,13 +44,15 @@ def listen_thread(self):
                 LOGGER.debug("A listener loop thread exception occurred:")
                 LOGGER.debug(f"Exception type: {type(e)}")
                 LOGGER.debug(f"Exception args: {e.args}")
+                # Avoid a tight loop if this is a persistent error.
+                time.sleep(1)
             self.disconnect()
 
 @dataclass
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
 
-    def __init__(self, host: str, serial: str, access_code: str, device_type: str):
+    def __init__(self, device_type: str, serial: str, host: str, access_code: str):
         self.host = host
         self.client = mqtt.Client()
         self._serial = serial
@@ -113,7 +115,7 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            #LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
                 self._device.update(data=json_data.get("print"))
@@ -181,8 +183,8 @@ class BambuClient:
 
         self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
         self.client.tls_insecure_set(True)
-        self._port = 8883
         self.client.username_pw_set("bblp", password=self._access_code)
+        self._port = 8883
 
         LOGGER.debug("Try Connection: Connecting to %s for connection test", self.host)
         self.client.connect(self.host, self._port)
@@ -209,3 +211,4 @@ class BambuClient:
             _exc_info: Exec type.
         """
         self.disconnect()
+

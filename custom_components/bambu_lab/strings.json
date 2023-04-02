@@ -2,11 +2,32 @@
   "config": {
     "step": {
       "user": {
+        "description": "",
         "data": {
-          "host": "host",
-          "access_code": "access_code",
-          "serial": "serial"
+          "device_type": "",
+          "serial": "",
+          "printer_mode": ""
         }
+      },
+      "Bambu": {
+        "title": "",
+        "description": "",
+        "data": {
+          "username": "",
+          "password": ""
+        }
+      },
+      "Lan": {
+        "title": "",
+        "description": "",
+        "data": {
+          "host": "",
+          "access_code": ""
+        }
+      },
+      "Done": {
+        "title": "",
+        "description": ""
       }
     },
     "error": {
@@ -16,6 +37,38 @@
     },
     "abort": {
       "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "",
+        "description": "",
+        "data": {
+          "printer_mode": ""
+        }
+      },
+      "Bambu": {
+        "title": "",
+        "description": "",
+        "data": {
+          "username": "",
+          "password": ""
+        }
+      },
+      "Lan": {
+        "title": "",
+        "description": "",
+        "data": {
+          "host": "",
+          "access_code": ""
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
     }
   }
 }
