@@ -19,7 +19,7 @@
             },
             "Bambu": {
                 "title": "Bambu Cloud Connection",
-                "description": "Please provide your Bambu Lab credentials.",
+                "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
                 "data": {
                     "username": "Email Address",
                     "password": "Password"
@@ -51,7 +51,7 @@
             },
             "Bambu": {
                 "title": "Bambu Cloud Connection",
-                "description": "Please provide your Bambu Lab credentials.",
+                "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
                 "data": {
                     "username": "Email Address",
                     "password": "Password"
