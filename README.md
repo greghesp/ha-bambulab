@@ -14,9 +14,11 @@ For now, you will need the following information:
 
 Cloud Mode MQTT connection:
 - Registed Bambu email address & password
-Lan mode
+
+Lan mode MQTT connection:
 - Printer IP
 - LAN Access Code (Can be found on the Printer settings)
+
 Both:
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
