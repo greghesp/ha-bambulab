@@ -46,7 +46,7 @@ def listen_thread(self):
                 LOGGER.debug(f"Exception args: {e.args}")
                 # Avoid a tight loop if this is a persistent error.
                 time.sleep(1)
-            self.disconnect()
+            self.client.disconnect()
 
 @dataclass
 class BambuClient:
