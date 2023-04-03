@@ -126,7 +126,8 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
-        value_fn=lambda device: device.fans.chamber_fan_speed
+        value_fn=lambda device: device.fans.chamber_fan_speed,
+        exists_fn=lambda device: device.supports_feature(Features.CHAMBER_FAN)
     ),
     BambuLabSensorEntityDescription(
         key="cooling_fan_speed",

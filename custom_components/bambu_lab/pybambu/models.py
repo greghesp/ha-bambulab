@@ -33,6 +33,8 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.CHAMBER_LIGHT:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
+        if feature == Features.CHAMBER_FAN:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.CHAMBER_TEMPERATURE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.CURRENT_STAGE:
@@ -198,8 +200,8 @@ class Speed:
     def __init__(self):
         """Load from dict"""
         self._id = 0
-        self.name = get_speed_name(0),
-        self.modifier = 0
+        self.name = get_speed_name(2)
+        self.modifier = 100
 
     def update(self, data):
         """Update from dict"""
