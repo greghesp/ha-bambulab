@@ -200,8 +200,8 @@ class Speed:
     def __init__(self):
         """Load from dict"""
         self._id = 0
-        self.name = get_speed_name(0),
-        self.modifier = 0
+        self.name = get_speed_name(2)
+        self.modifier = 100
 
     def update(self, data):
         """Update from dict"""
