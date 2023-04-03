@@ -21,10 +21,12 @@ from .pybambu.const import Features
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     _hass: HomeAssistant
     _updatedDevice: bool
+    _entry: ConfigEntry
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._entry = entry
         self._hass = hass
+        self._entry = entry
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
         self.client = BambuClient(device_type = entry.data.get("device_type", "X1C"),
                                   serial = entry.data["serial"],
@@ -55,6 +57,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     dev_reg = device_registry.async_get(self._hass)
                     device = dev_reg.async_get_device(identifiers={(DOMAIN, self.data.info.serial)})
                     dev_reg.async_update_device(device.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
+
+                    # Fix up missing or incorrect device_type now that we know what the printer model is.
+                    device_type = self.client.get_device().info.device_type
+                    if self._entry.data.get("device_type", "") != device_type:
+                        LOGGER.debug(f"Force updating device type: {device_type}")
+                        self.hass.config_entries.async_update_entry(
+                            self._entry,
+                            title=self._entry.data["serial"],
+                            data={
+                                "device_type": device_type,
+                                "serial": self._entry.data["serial"],
+                                "host": self._entry.data["host"],
+                                "access_code": self._entry.data["access_code"]
+                            }
+                        )
                     self._updatedDevice = True
 
         async def listen():
@@ -73,5 +90,4 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
         device = self.client.get_device()
-        return device;
-
+        return device
