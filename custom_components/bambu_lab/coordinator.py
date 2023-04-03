@@ -26,7 +26,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._entry = entry
         self._hass = hass
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
-        self.client = BambuClient(device_type = entry.data["device_type"],
+        self.client = BambuClient(device_type = entry.data.get("device_type", "X1C"),
                                   serial = entry.data["serial"],
                                   host = entry.data["host"],
                                   access_code = entry.data["access_code"])
