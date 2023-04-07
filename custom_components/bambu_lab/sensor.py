@@ -25,7 +25,6 @@ async def async_setup_entry(
     """Set up BambuLab sensor based on a config entry."""
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    LOGGER.debug(f"Entry {entry.data['serial']}")
     LOGGER.debug(f"Async Setup Sensor {coordinator.data}")
 
     for description in SENSORS:

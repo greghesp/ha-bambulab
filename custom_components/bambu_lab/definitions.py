@@ -127,7 +127,8 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
-        value_fn=lambda device: device.fans.chamber_fan_speed
+        value_fn=lambda device: device.fans.chamber_fan_speed,
+        exists_fn=lambda device: device.supports_feature(Features.CHAMBER_FAN)
     ),
     BambuLabSensorEntityDescription(
         key="cooling_fan_speed",
@@ -192,6 +193,20 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         name="End Time",
         icon="mdi:clock",
         value_fn=lambda device: device.info.end_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="current_layer",
+        name="Current Layer",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda device: device.info.current_layer,
+        exists_fn= lambda device: device.supports_feature(Features.PRINT_LAYERS)
+    ),
+    BambuLabSensorEntityDescription(
+        key="total_layers",
+        name="Total Layer Count",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda device: device.info.total_layers,
+        exists_fn=lambda device: device.supports_feature(Features.PRINT_LAYERS)
     ),
     BambuLabSensorEntityDescription(
         key="ams_test",

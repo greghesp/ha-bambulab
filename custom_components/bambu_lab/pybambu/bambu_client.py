@@ -28,39 +28,44 @@ from .commands import (
 def listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
     while True:
-        LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
-        self.client.connect(self.host, self._port, keepalive=5)
-
         try:
+            LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
+            self.client.connect(self.host, self._port, keepalive=5)
+            
             LOGGER.debug("Starting listen loop")
             self.client.loop_forever()
             break
         except Exception as e:
-            LOGGER.debug("A listener loop thread exception occurred:")
-            LOGGER.debug(f"Exception type: {type(e)}")
-            LOGGER.debug(f"Exception args: {e.args}")
-            self.disconnect()
-
+            LOGGER.debug(f"Exception {e.args.__str__}")
+            if (e.args.__str__ == 'Host is unreachable'):
+                LOGGER.debug("Host is unreachable. Sleeping.")
+                time.sleep(5)
+            else:
+                LOGGER.debug("A listener loop thread exception occurred:")
+                LOGGER.debug(f"Exception type: {type(e)}")
+                LOGGER.debug(f"Exception args: {e.args}")
+                # Avoid a tight loop if this is a persistent error.
+                time.sleep(1)
+            self.client.disconnect()
 
 @dataclass
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
 
-    def __init__(self, host: str, serial: str, access_code: str, tls: bool):
+    def __init__(self, device_type: str, serial: str, host: str, access_code: str):
         self.host = host
         self.client = mqtt.Client()
         self._serial = serial
         self._access_code = access_code
-        self._tls = tls
         self._connected = False
         self._callback = None
-        self._device = Device()
+        self._device = Device(device_type)
+        self._device.add_serial(self._serial)
         self._port = 1883
 
     @property
     def connected(self):
         """Return if connected to server"""
-        LOGGER.debug(f"Connected: {self._connected}")
         return self._connected
 
     async def connect(self, callback):
@@ -69,12 +74,13 @@ class BambuClient:
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
+        # Set aggressive reconnect polling.
+        self.client.reconnect_delay_set(min_delay=1, max_delay=1)
 
-        if self._tls:
-            self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
-            self.client.tls_insecure_set(True)
-            self._port = 8883
-            self.client.username_pw_set("bblp", password=self._access_code)
+        self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
+        self.client.tls_insecure_set(True)
+        self._port = 8883
+        self.client.username_pw_set("bblp", password=self._access_code)
 
         LOGGER.debug("Starting MQTT listener thread")
         thread = Thread(target=listen_thread, args=(self,))
@@ -90,7 +96,6 @@ class BambuClient:
         """Handle connection"""
         LOGGER.debug("On Connect: Connected to Broker")
         self._connected = True
-        self._device.add_serial(self._serial)
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
         LOGGER.debug("On Connect: Getting Version Info")
@@ -109,7 +114,7 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            # LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            #LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
                 self._device.update(data=json_data.get("print"))
@@ -149,7 +154,7 @@ class BambuClient:
 
     def get_device(self):
         """Return device"""
-        LOGGER.debug(f"Get Device: Returning device: {self._device}")
+        #LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
 
     def disconnect(self):
@@ -165,17 +170,20 @@ class BambuClient:
 
         def on_message(client, userdata, message):
             LOGGER.debug(f"Try Connection: Got '{message}'")
-            result.put(True)
+            json_data = json.loads(message.payload)
+            if json_data.get("info") and json_data.get("info").get("command") == "get_version":
+                LOGGER.debug("Got Version Command Data")
+                self._device.update(data=json_data.get("info"))
+                result.put(True)
 
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
 
-        if self._tls:
-            self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
-            self.client.tls_insecure_set(True)
-            self._port = 8883
-            self.client.username_pw_set("bblp", password=self._access_code)
+        self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
+        self.client.tls_insecure_set(True)
+        self.client.username_pw_set("bblp", password=self._access_code)
+        self._port = 8883
 
         LOGGER.debug("Try Connection: Connecting to %s for connection test", self.host)
         self.client.connect(self.host, self._port)
@@ -202,3 +210,4 @@ class BambuClient:
             _exc_info: Exec type.
         """
         self.disconnect()
+

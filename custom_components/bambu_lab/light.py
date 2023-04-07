@@ -25,7 +25,6 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     entities_to_add: list = []
-
     if coordinator.data.supports_feature(Features.CHAMBER_LIGHT):
         entities_to_add.append(BambuLabChamberLight(coordinator, entry))
     async_add_entities(entities_to_add)
