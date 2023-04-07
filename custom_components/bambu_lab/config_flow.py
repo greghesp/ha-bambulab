@@ -131,7 +131,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     return self.async_create_entry(
                         title=self.config_data["serial"],
                         data={
-                            "device_type": "",
+                            "device_type": self.config_date["device_type"],
                             "serial": self.config_data["serial"],
                             "host": "us.mqtt.bambulab.com",
                             "access_code": authToken,
