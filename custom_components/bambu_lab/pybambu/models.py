@@ -42,6 +42,8 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.PRINT_LAYERS:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.AMS:
+            return self.ams.number_of_ams > 0
         return False
 
 
@@ -188,7 +190,8 @@ class AMS:
 
     def update(self, data):
         """Update from dict"""
-        self.number_of_ams = len(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
+        LOGGER.debug(data.get("ams", []))
+        self.number_of_ams = int(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
         self.version = int(data.get("ams", []).get("version", self.version))
 
         # TODO: Bug in the below logic that keeps adding more and more elements to the array, rather than updating it. Probably need to break this out a bit more

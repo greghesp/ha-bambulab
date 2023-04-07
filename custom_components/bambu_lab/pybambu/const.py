@@ -9,7 +9,8 @@ class Features(Enum):
     CHAMBER_FAN = 3,
     CHAMBER_TEMPERATURE = 4,
     CURRENT_STAGE = 5,
-    PRINT_LAYERS = 6
+    PRINT_LAYERS = 6,
+    AMS = 7
 
 ACTION_IDS = {
     "default": "Unknown",

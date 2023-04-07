@@ -213,6 +213,7 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         name="Test",
         icon="mdi:clock",
         value_fn=lambda device: "Test Sensor",
+        exists_fn=lambda device: device.supports_feature(Features.AMS),
         product_type="ams"
     )
 )
