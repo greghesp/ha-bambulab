@@ -13,7 +13,10 @@ To install, add this Github Repo to the HACS Custom Repositories, or click the b
 For now, you will need the following information:
 
 Cloud Mode MQTT connection:
-- Registed Bambu email address & password
+- Registed Bambu email address & password.
+- If you used an OAuth solution like a google account and you can add a password to that account, you can use that here.
+- Your full credentials will not be saved but an authentication token that's generated using them will be saved into the home assistant store.
+- The token expires after 360 days. You can re-auth using the configuration button on the integrations page.
 
 Lan mode MQTT connection:
 - Printer IP
@@ -24,9 +27,7 @@ Both:
 
 ### P1P Owners
 
-In the latest firmware update, Bambu Lab removed the ability to use the local printer MQTT if the printer is not in LAN mode. Support has been added to enable use of the Bambu Cloud MQTT instead. This will require your Bambu email address and password to retrieve an authentication token. Your email address and password will not be saved - only the authentication token will be saved into home assistant. The authentication token will expire in 360 days. Before/after that you can refresh it manually by using the new 'Configuration' flow from the Home Assistant integrations page.
-
-If you want to see this changed so that you can use the local MQTT directly off the printer, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1395)
+In the latest firmware update, Bambu Lab added back the ability to connect to the MQTT een in cloud mode. But the ability to use cloud MQTT will remain in case that changes again in a future update.
 
 ## Features
 
