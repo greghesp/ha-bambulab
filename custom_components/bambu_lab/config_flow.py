@@ -131,7 +131,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     return self.async_create_entry(
                         title=self.config_data["serial"],
                         data={
-                            "device_type": self.config_data["device_type"],
+                            "device_type": "",
                             "serial": self.config_data["serial"],
                             "host": "us.mqtt.bambulab.com",
                             "access_code": authToken,
@@ -257,7 +257,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
                 if success:
                     LOGGER.debug("Config Flow: Writing new entry")
-                    return self.hass.config_entries.async_update_entry(
+                    self.hass.config_entries.async_update_entry(
                         self.config_entry,
                         title=self.config_data["serial"],
                         data={
@@ -267,6 +267,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             "access_code": authToken,
                         }
                     )
+                    return self.async_create_entry(title="", data={})
             
             errors["base"] = "cannot_connect"
         
@@ -294,7 +295,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if success:
                 LOGGER.debug("Config Flow: Writing new entry")
-                return self.hass.config_entries.async_update_entry(
+                self.hass.config_entries.async_update_entry(
                     self.config_entry,
                     title=self.config_data["serial"],
                     data={
@@ -304,6 +305,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "access_code": user_input["access_code"],
                     }
                 )
+                return self.async_create_entry(title="", data={})
             
             errors["base"] = "cannot_connect"
 
