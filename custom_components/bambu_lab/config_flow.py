@@ -257,7 +257,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
                 if success:
                     LOGGER.debug("Config Flow: Writing new entry")
-                    return self.hass.config_entries.async_update_entry(
+                    self.hass.config_entries.async_update_entry(
                         self.config_entry,
                         title=self.config_data["serial"],
                         data={
@@ -267,6 +267,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             "access_code": authToken,
                         }
                     )
+                    return self.async_create_entry(title="", data={})
             
             errors["base"] = "cannot_connect"
         
@@ -294,7 +295,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if success:
                 LOGGER.debug("Config Flow: Writing new entry")
-                return self.hass.config_entries.async_update_entry(
+                self.hass.config_entries.async_update_entry(
                     self.config_entry,
                     title=self.config_data["serial"],
                     data={
@@ -304,6 +305,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "access_code": user_input["access_code"],
                     }
                 )
+                return self.async_create_entry(title="", data={})
             
             errors["base"] = "cannot_connect"
 
