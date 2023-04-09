@@ -1,3 +1,6 @@
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry
+
 from dataclasses import dataclass
 from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
     get_sw_version, start_time, end_time
@@ -7,14 +10,15 @@ import asyncio
 
 
 class Device:
-    def __init__(self, device_type):
+    def __init__(self, client, device_type, serial):
+        self.client = client
         self.temperature = Temperature()
         self.lights = Lights()
-        self.info = Info(device_type)
+        self.info = Info(device_type, serial)
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
-        self.ams = AMS()
+        self.ams = AMS(self)
 
     def update(self, data):
         """Update from dict"""
@@ -25,9 +29,6 @@ class Device:
         self.speed.update(data)
         self.stage.update(data)
         self.ams.update(data)
-
-    def add_serial(self, data):
-        self.info.add_serial(data)
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -42,8 +43,6 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.PRINT_LAYERS:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
-        if feature == Features.AMS:
-            return self.ams.number_of_ams > 0
         return False
 
 
@@ -143,14 +142,14 @@ class Info:
     current_layer: int
     total_layers: int
 
-    def __init__(self, device_type):
+    def __init__(self, device_type, serial):
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = device_type
         self.hw_ver = "Unknown"
         self.sw_ver = "Unknown"
         self.gcode_state = "Unknown"
-        self.serial = "Unknown"
+        self.serial = serial
         self.remaining_time = 0
         self.end_time = 000
         self.start_time = 000
@@ -178,21 +177,116 @@ class Info:
 @dataclass
 class AMS:
     """Return all AMS related info"""
-    number_of_ams: int
-    version: int
-    ams_data: []
 
-    def __init__(self):
+    def __init__(self, device):
         """Load from dict"""
-        self.number_of_ams = 0
-        self.version = 0
-        self.ams_data = []
+        self.device = device
+        self.data = []
 
     def update(self, data):
         """Update from dict"""
-        LOGGER.debug(data.get("ams", []))
-        self.number_of_ams = int(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
-        self.version = int(data.get("ams", []).get("version", self.version))
+
+        # First determine if this the version info data or the json payload data. We use the version info to determine
+        # what devices to add to home assistant and add all the sensors as entititied. And then then json payload data
+        # to populate the values for all those entities.
+
+        # The module entries are of this form:
+        # {
+        #     "name": "ams/0",
+        #     "project_name": "",
+        #     "sw_ver": "00.00.05.96",
+        #     "loader_ver": "00.00.00.00",
+        #     "ota_ver": "00.00.00.00",
+        #     "hw_ver": "AMS08",
+        #     "sn": "<SERIAL>"
+        # }
+
+        received_ams_data = False
+        module_list = data.get("module", [])
+        for module in module_list:
+            name = module["name"]
+            if name.startswith("ams/"):
+                received_ams_data = True
+                index = int(name[4])
+                LOGGER.debug(f"ADDING AMS {index}: {module['sn']}")
+                new_ams = { 
+                    "serial": module['sn'],
+                    "sw_version": module['sw_ver'],
+                    "hw_version": module['hw_ver'],
+                }
+                if not self.data:
+                    self.data.append(new_ams)
+                else:
+                    self.data[index] = new_ams
+
+        if received_ams_data:
+            self.device.client.callback("event_ams_info_update")
+
+        # AMS json payload is of the form:
+        # "ams": {
+        #     "ams": [
+        #         {
+        #             "id": "0",
+        #             "humidity": "4",
+        #             "temp": "0.0",
+        #             "tray": [
+        #                 {
+        #                     "id": "0",
+        #                     "remain": -1,
+        #                     "k": 0.019999999552965164,
+        #                     "n": 1.399999976158142,
+        #                     "tag_uid": "0000000000000000",
+        #                     "tray_id_name": "",
+        #                     "tray_info_idx": "GFL99",
+        #                     "tray_type": "PLA",
+        #                     "tray_sub_brands": "",
+        #                     "tray_color": "FFFF00FF",
+        #                     "tray_weight": "0",
+        #                     "tray_diameter": "0.00",
+        #                     "drying_temp": "0",
+        #                     "drying_time": "0",
+        #                     "bed_temp_type": "0",
+        #                     "bed_temp": "0",
+        #                     "nozzle_temp_max": "240",
+        #                     "nozzle_temp_min": "190",
+        #                     "xcam_info": "000000000000000000000000",
+        #                     "tray_uuid": "00000000000000000000000000000000"
+        #                 },
+        #                 {
+        #                     "id": "1",
+        #                     ...
+        #                 },
+        #                 {
+        #                     "id": "2",
+        #                     ...
+        #                 },
+        #                 {
+        #                     "id": "3",
+        #                     ...
+        #                 }
+        #             ]
+        #         }
+        #     ],
+        #     "ams_exist_bits": "1",
+        #     "tray_exist_bits": "f",
+        #     "tray_is_bbl_bits": "f",
+        #     "tray_now": "255",
+        #     "tray_read_done_bits": "f",
+        #     "tray_reading_bits": "0",
+        #     "tray_tar": "255",
+        #     "version": 3,
+        #     "insert_flag": true,
+        #     "power_on_flag": false
+        # },
+
+        ams_data = data.get("ams", [])
+        if len(ams_data) != 0:
+            ams_list = ams_data.get("ams", [])
+            for ams in ams_list:
+                LOGGER.debug(f"AMS: {ams}")
+
+        #self.number_of_ams = int(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
+        #self.version = int(data.get("ams", []).get("version", self.version))
 
         # TODO: Bug in the below logic that keeps adding more and more elements to the array, rather than updating it. Probably need to break this out a bit more
         # if int(data.get("ams", []).get("ams_exist_bits", 0)) > 0:

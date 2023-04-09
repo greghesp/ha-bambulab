@@ -29,14 +29,16 @@ class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     """Defines a base AMS entity."""
 
     _attr_has_entity_name = True
+    id = "AMS"
 
     @property
     def device_info(self) -> DeviceInfo:
         """Return device information about this AMS device."""
+        LOGGER.debug(f"RETURNING DEVICEINFO: {self.id}")
 
         return DeviceInfo(
             identifiers={
-                (DOMAIN, "AMS123")
+                (DOMAIN, id)
             },
             name="AMS 1",
             model="AMS",

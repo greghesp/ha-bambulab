@@ -23,13 +23,14 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
-
+    
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    LOGGER.debug(f"Async Setup Sensor {coordinator.data}")
+    LOGGER.debug(f"ASYNC SETUP SENSOR: {coordinator.data}")
 
     for description in SENSORS:
         if description.exists_fn(coordinator.data) and description.product_type == "ams":
-            async_add_entities([BambuLabAMSSensor(coordinator, description, entry)])
+            LOGGER.debug(f"ADDING AMS SENSOR: '{description}'")
+            #async_add_entities([BambuLabAMSSensor(coordinator, description, entry)])
         elif description.exists_fn(coordinator.data) and description.product_type == "base":
             async_add_entities([BambuLabSensor(coordinator, description, entry)])
 
@@ -45,7 +46,6 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     ) -> None:
         """Initialize the sensor."""
         self.entity_description = description
-        LOGGER.debug(f"Description is {description.product_type}")
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
         super().__init__(coordinator=coordinator)
 
@@ -70,6 +70,9 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
             config_entry: ConfigEntry
     ) -> None:
         """Initialise the sensor"""
+        self.id = config_entry.data['serial']
+        LOGGER.debug(f"SENSOR ID: {self.id}")
+        LOGGER.debug(f"NAME IS: {description.name}")
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_ams_{description.key}"
         super().__init__(coordinator=coordinator)
