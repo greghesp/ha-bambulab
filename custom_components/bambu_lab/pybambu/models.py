@@ -201,12 +201,12 @@ class AMS:
         #     "sn": "<SERIAL>"
         # }
 
-        received_ams_data = False
+        received_ams_info = False
         module_list = data.get("module", [])
         for module in module_list:
             name = module["name"]
             if name.startswith("ams/"):
-                received_ams_data = True
+                received_ams_info = True
                 index = int(name[4])
                 LOGGER.debug(f"ADDING AMS {index}: {module['sn']}")
                 new_ams = { 
@@ -219,7 +219,7 @@ class AMS:
                 else:
                     self.data[index] = new_ams
 
-        if received_ams_data:
+        if received_ams_info:
             self.device.client.callback("event_ams_info_update")
 
         # AMS json payload is of the form:
@@ -279,11 +279,17 @@ class AMS:
         #     "power_on_flag": false
         # },
 
+        received_ams_data = False
         ams_data = data.get("ams", [])
         if len(ams_data) != 0:
             ams_list = ams_data.get("ams", [])
+
             for ams in ams_list:
+                received_ams_data = True
                 LOGGER.debug(f"AMS: {ams}")
+
+        if received_ams_data:
+            self.device.client.callback("event_ams_info_update")
 
         #self.number_of_ams = int(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
         #self.version = int(data.get("ams", []).get("version", self.version))

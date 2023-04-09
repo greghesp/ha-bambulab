@@ -57,10 +57,9 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     """Sensor entity description for Bambu Lab."""
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
-    product_type: str = "base"
 
 
-SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="wifi_signal",
         name="Wi-Fi Signal",
@@ -208,12 +207,13 @@ SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda device: device.info.total_layers,
         exists_fn=lambda device: device.supports_feature(Features.PRINT_LAYERS)
     ),
+)
+
+AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
-        key="ams_test",
+        key="test",
         name="Test",
         icon="mdi:clock",
-        value_fn=lambda device: "Test Sensor",
-        exists_fn=lambda device: device.supports_feature(Features.AMS),
-        product_type="ams"
-    )
+        value_fn=lambda device: "Test Sensor"
+    ),
 )

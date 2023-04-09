@@ -14,7 +14,7 @@ class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device information about this Bambu  device."""
-        LOGGER.debug("device_info() called")
+        #LOGGER.debug("device_info() called")
         return DeviceInfo(
             identifiers={(DOMAIN, self.coordinator.data.info.serial)},
             name=f"{self.coordinator.data.info.device_type}_{self.coordinator.data.info.serial}",
@@ -29,19 +29,8 @@ class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     """Defines a base AMS entity."""
 
     _attr_has_entity_name = True
-    id = "AMS"
 
     @property
     def device_info(self) -> DeviceInfo:
-        """Return device information about this AMS device."""
-        LOGGER.debug(f"RETURNING DEVICEINFO: {self.id}")
-
-        return DeviceInfo(
-            identifiers={
-                (DOMAIN, id)
-            },
-            name="AMS 1",
-            model="AMS",
-            manufacturer="Bambu Lab",
-            hw_version=self.coordinator.data.ams.version,
-        )
+        """Return device information about this AMS entity."""
+        return self.coordinator.get_ams_device(self.index)

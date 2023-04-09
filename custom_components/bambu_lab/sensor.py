@@ -12,7 +12,7 @@ from homeassistant.util import slugify
 from homeassistant.helpers.entity import DeviceInfo
 
 from .const import DOMAIN, LOGGER
-from .definitions import SENSORS, BambuLabSensorEntityDescription
+from .definitions import PRINTER_SENSORS, AMS_SENSORS, BambuLabSensorEntityDescription
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity, AMSEntity
 
@@ -27,12 +27,13 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"ASYNC SETUP SENSOR: {coordinator.data}")
 
-    for description in SENSORS:
-        if description.exists_fn(coordinator.data) and description.product_type == "ams":
-            LOGGER.debug(f"ADDING AMS SENSOR: '{description}'")
-            #async_add_entities([BambuLabAMSSensor(coordinator, description, entry)])
-        elif description.exists_fn(coordinator.data) and description.product_type == "base":
-            async_add_entities([BambuLabSensor(coordinator, description, entry)])
+    for sensor in AMS_SENSORS:
+        for index in range (0, len(coordinator.get_model().ams.data)):
+            async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
+
+    for sensor in PRINTER_SENSORS:    
+        if sensor.exists_fn(coordinator.data):
+            async_add_entities([BambuLabSensor(coordinator, sensor, entry)])
 
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
@@ -67,14 +68,15 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
             self,
             coordinator: BambuDataUpdateCoordinator,
             description: BambuLabSensorEntityDescription,
-            config_entry: ConfigEntry
+            index: int
     ) -> None:
         """Initialise the sensor"""
-        self.id = config_entry.data['serial']
-        LOGGER.debug(f"SENSOR ID: {self.id}")
-        LOGGER.debug(f"NAME IS: {description.name}")
+        self.coordinator = coordinator
+        self.index = index
+        printer = coordinator.get_model().info
+        ams_data = coordinator.get_model().ams.data[index]
         self.entity_description = description
-        self._attr_unique_id = f"{config_entry.data['serial']}_ams_{description.key}"
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_AMS_{ams_data['serial']}_{description.key}"
         super().__init__(coordinator=coordinator)
 
     @property
