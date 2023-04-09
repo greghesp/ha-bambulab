@@ -289,7 +289,7 @@ class AMS:
                 LOGGER.debug(f"AMS: {ams}")
 
         if received_ams_data:
-            self.device.client.callback("event_ams_info_update")
+            self.device.client.callback("event_ams_data_update")
 
         #self.number_of_ams = int(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
         #self.version = int(data.get("ams", []).get("version", self.version))
