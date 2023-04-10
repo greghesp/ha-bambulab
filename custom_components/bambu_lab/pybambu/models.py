@@ -188,12 +188,11 @@ class AMSInstance:
         self.sw_version = ""
         self.hw_version = ""
         self.humidity_index = 0
-        #self.tray = [AMSTray()] * 4
-        self.tray = []
-        self.tray.append(AMSTray())
-        self.tray.append(AMSTray())
-        self.tray.append(AMSTray())
-        self.tray.append(AMSTray())
+        self.tray = [None] * 4
+        self.tray[0] = AMSTray()
+        self.tray[1] = AMSTray()
+        self.tray[2] = AMSTray()
+        self.tray[3] = AMSTray()
 
 @dataclass
 class AMSList:
