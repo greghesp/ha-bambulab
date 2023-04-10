@@ -244,7 +244,8 @@ class AMSList:
                 self.data[index].hw_version = module['hw_ver']
 
         if received_ams_info:
-            self.device.client.callback("event_ams_info_update")
+            if self.device.client.callback is not None:
+                self.device.client.callback("event_ams_info_update")
 
         # AMS json payload is of the form:
         # "ams": {
@@ -330,7 +331,8 @@ class AMSList:
                     self.data[index].tray[tray_id].nozzle_temp_max = tray['nozzle_temp_max']
 
         if received_ams_data:
-            self.device.client.callback("event_ams_data_update")
+            if self.device.client.callback is not None:
+                self.device.client.callback("event_ams_data_update")
 
 @dataclass
 class Speed:
