@@ -53,6 +53,8 @@ FILAMENT_NAMES = {
     "GFS99": "Generic PVA",
     "GFL98": "Generic PLA-CF",
     "GFL99": "Generic PLA",
+    "GFSL99_01": "Generic PLA Silk",
+    "GFSL99_12": "Generic PLA Silk",
     "GFG99": "Generic PETG",
     "GFC99": "Generic PC",
     "GFN98": "Generic PA-CF",

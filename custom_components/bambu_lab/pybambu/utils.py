@@ -28,7 +28,10 @@ def to_whole(number):
 
 def get_filament_name(idx):
     """Converts a filament idx to a human-readable name"""
-    return FILAMENT_NAMES.get(idx, "Unknown")
+    result = FILAMENT_NAMES.get(idx, "Unknown")
+    if result == "Unknown":
+        LOGGER.debug(f"UNKNOWN FILAMENT IDX: {idx}")
+    return result
 
 
 def get_speed_name(_id):

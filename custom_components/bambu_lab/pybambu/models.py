@@ -2,7 +2,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry
 
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
+from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
     get_sw_version, start_time, end_time
 from .const import LOGGER, Features
 
@@ -178,6 +178,7 @@ class Info:
 class AMSTray:
     """Return all AMS tray related info"""
     def __init__(self):
+        self.name = ""
         self.type = ""
         self.sub_brands = ""
         self.color = "00000000" # RRGGBBAA
@@ -319,6 +320,7 @@ class AMSList:
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
+                    self.data[index].tray[tray_id].name = get_filament_name(tray['tray_info_idx'])
                     self.data[index].tray[tray_id].type = tray['tray_type']
                     self.data[index].tray[tray_id].sub_brands = tray['tray_sub_brands']
                     self.data[index].tray[tray_id].color = tray['tray_color']
@@ -361,3 +363,4 @@ class StageAction:
         """Update from dict"""
         self._id = int(data.get("stg_cur", self._id))
         self.description = get_stage_action(self._id)
+get_filament_name
