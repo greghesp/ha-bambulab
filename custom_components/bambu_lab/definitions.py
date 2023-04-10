@@ -211,6 +211,12 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
 
 AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
+        key="tray_now",
+        name="Current Tray",
+        icon="mdi:indentifier",
+        value_fn=lambda self: self.coordinator.get_model().ams.tray_now
+    ),
+    BambuLabSensorEntityDescription(
         key="humidify_index",
         name="Humidity Index",
         icon="mdi:cloud-percent",
