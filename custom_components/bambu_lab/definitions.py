@@ -246,4 +246,28 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].type
     ),
+    BambuLabSensorEntityDescription(
+        key="tray_sub_brands_1",
+        name="Tray 1 Sub Brands",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[0].sub_brands
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_sub_brands_2",
+        name="Tray 2 Sub Brands",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[1].sub_brands
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_sub_brands_3",
+        name="Tray 3 Sub Brands",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[2].sub_brands
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_sub_brands_4",
+        name="Tray 4 Sub Brands",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].sub_brands
+    ),
 )

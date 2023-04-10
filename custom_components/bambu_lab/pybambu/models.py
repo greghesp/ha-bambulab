@@ -178,7 +178,8 @@ class Info:
 class AMSTray:
     """Return all AMS tray related info"""
     def __init__(self):
-        self.type = "N/A"
+        self.type = ""
+        self.sub_brands = ""
 
 @dataclass
 class AMSInstance:
@@ -317,6 +318,7 @@ class AMSList:
                 for tray in tray_list:
                     tray_id = int(tray['id'])
                     self.data[index].tray[tray_id].type = tray['tray_type']
+                    self.data[index].tray[tray_id].sub_brands = tray['tray_sub_brands']
 
         if received_ams_data:
             self.device.client.callback("event_ams_data_update")
