@@ -182,6 +182,8 @@ class AMSTray:
         self.type = ""
         self.sub_brands = ""
         self.color = "00000000" # RRGGBBAA
+        self.nozzle_temp_min = 0
+        self.nozzle_temp_max = 0
 
 @dataclass
 class AMSInstance:
@@ -324,6 +326,8 @@ class AMSList:
                     self.data[index].tray[tray_id].type = tray['tray_type']
                     self.data[index].tray[tray_id].sub_brands = tray['tray_sub_brands']
                     self.data[index].tray[tray_id].color = tray['tray_color']
+                    self.data[index].tray[tray_id].nozzle_temp_min = tray['nozzle_temp_min']
+                    self.data[index].tray[tray_id].nozzle_temp_max = tray['nozzle_temp_max']
 
         if received_ams_data:
             self.device.client.callback("event_ams_data_update")

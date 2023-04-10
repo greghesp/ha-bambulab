@@ -324,4 +324,52 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:palette",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].color
     ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_min_1",
+        name="Tray 1 Min Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[0].nozzle_temp_min
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_min_2",
+        name="Tray 2 Min Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[1].nozzle_temp_min
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_min_3",
+        name="Tray 3 Min Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[2].nozzle_temp_min
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_min_4",
+        name="Tray 4 Min Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].nozzle_temp_min
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_max_1",
+        name="Tray 1 Max Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[0].nozzle_temp_max
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_max_2",
+        name="Tray 2 Max Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[1].nozzle_temp_max
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_max_3",
+        name="Tray 3 Max Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[2].nozzle_temp_max
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_max_4",
+        name="Tray 4 Max Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].nozzle_temp_max
+    ),
 )
