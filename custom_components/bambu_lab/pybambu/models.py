@@ -180,6 +180,7 @@ class AMSTray:
     def __init__(self):
         self.type = ""
         self.sub_brands = ""
+        self.color = "00000000" # RRGGBBAA
 
 @dataclass
 class AMSInstance:
@@ -253,14 +254,14 @@ class AMSList:
         #                 {
         #                     "id": "0",
         #                     "remain": -1,
-        #                     "k": 0.019999999552965164,        P1P only
-        #                     "n": 1.399999976158142,           P1P only
+        #                     "k": 0.019999999552965164,        # P1P only
+        #                     "n": 1.399999976158142,           # P1P only
         #                     "tag_uid": "0000000000000000",
         #                     "tray_id_name": "",
         #                     "tray_info_idx": "GFL99",
         #                     "tray_type": "PLA",
         #                     "tray_sub_brands": "",
-        #                     "tray_color": "FFFF00FF",
+        #                     "tray_color": "FFFF00FF",         # RRGGBBAA
         #                     "tray_weight": "0",
         #                     "tray_diameter": "0.00",
         #                     "drying_temp": "0",
@@ -319,6 +320,7 @@ class AMSList:
                     tray_id = int(tray['id'])
                     self.data[index].tray[tray_id].type = tray['tray_type']
                     self.data[index].tray[tray_id].sub_brands = tray['tray_sub_brands']
+                    self.data[index].tray[tray_id].color = tray['tray_color']
 
         if received_ams_data:
             self.device.client.callback("event_ams_data_update")
