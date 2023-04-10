@@ -190,7 +190,6 @@ class AMSInstance:
         self.sw_version = ""
         self.hw_version = ""
         self.humidity_index = 0
-        self.tray_now = 0
         self.tray = [None] * 4
         self.tray[0] = AMSTray()
         self.tray[1] = AMSTray()
@@ -205,6 +204,7 @@ class AMSList:
         """Load from dict"""
         self.device = device
         self.tray_now = 0
+        self.version = 0
         self.data = []
 
     def update(self, data):
@@ -304,6 +304,7 @@ class AMSList:
         ams_data = data.get("ams", [])
         if len(ams_data) != 0:
             self.tray_now = int(ams_data['tray_now'])
+            self.version = ams_data['version']
 
             ams_list = ams_data.get("ams", [])
             for ams in ams_list:
