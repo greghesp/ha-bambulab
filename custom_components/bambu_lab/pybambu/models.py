@@ -18,7 +18,7 @@ class Device:
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
-        self.ams = AMS(self)
+        self.ams = AMSList(self)
 
     def update(self, data):
         """Update from dict"""
@@ -175,7 +175,28 @@ class Info:
 
 
 @dataclass
-class AMS:
+class AMSTray:
+    """Return all AMS tray related info"""
+    def __init__(self):
+        self.type = "N/A"
+
+@dataclass
+class AMSInstance:
+    """Return all AMS instance related info"""
+    def __init__(self):
+        self.serial = ""
+        self.sw_version = ""
+        self.hw_version = ""
+        self.humidity_index = 0
+        #self.tray = [AMSTray()] * 4
+        self.tray = []
+        self.tray.append(AMSTray())
+        self.tray.append(AMSTray())
+        self.tray.append(AMSTray())
+        self.tray.append(AMSTray())
+
+@dataclass
+class AMSList:
     """Return all AMS related info"""
 
     def __init__(self, device):
@@ -187,7 +208,7 @@ class AMS:
         """Update from dict"""
 
         # First determine if this the version info data or the json payload data. We use the version info to determine
-        # what devices to add to home assistant and add all the sensors as entititied. And then then json payload data
+        # what devices to add to humidity_index assistant and add all the sensors as entititied. And then then json payload data
         # to populate the values for all those entities.
 
         # The module entries are of this form:
@@ -211,10 +232,10 @@ class AMS:
                 LOGGER.debug(f"RECEIVED AMS INFO: {index}")
                 # May get data before info so create entry if necessary
                 if len(self.data) <= index:
-                    self.data.append({})
-                self.data[index]['serial'] = module['sn']
-                self.data[index]['sw_version'] = module['sw_ver']
-                self.data[index]['hw_version'] = module['hw_ver']
+                    self.data.append(AMSInstance())
+                self.data[index].serial = module['sn']
+                self.data[index].sw_version = module['sw_ver']
+                self.data[index].hw_version = module['hw_ver']
 
         if received_ams_info:
             self.device.client.callback("event_ams_info_update")
@@ -287,22 +308,13 @@ class AMS:
                 LOGGER.debug(f"RECEIVED AMS DATA: {index}")
                 # May get data before info so create entry if necessary
                 if len(self.data) <= index:
-                    self.data.append({})
-                self.data[index]['humidity_index'] = int(ams['humidity'])
-
-                if not 'tray' in self.data[index]:
-                    self.data[index]['tray']=[]
-                    self.data[index]['tray'].append({})
-                    self.data[index]['tray'].append({})
-                    self.data[index]['tray'].append({})
-                    self.data[index]['tray'].append({})
+                    self.data.append(AMSInstance())
+                self.data[index].humidity_index = int(ams['humidity'])
 
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
-                    self.data[index]['tray'][tray_id]['tray_type'] = tray['tray_type']
-
-                LOGGER.debug(f"RECEIVED AMS DATA DONE")
+                    self.data[index].tray[tray_id].type = tray['tray_type']
 
         if received_ams_data:
             self.device.client.callback("event_ams_data_update")

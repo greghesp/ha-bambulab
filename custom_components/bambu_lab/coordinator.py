@@ -95,7 +95,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             if (new_sw_ver != "Unknown"):
                 dev_reg = device_registry.async_get(self._hass)
                 device = dev_reg.async_get_device(identifiers={(DOMAIN, self.data.info.serial)})
-                dev_reg.async_update_device(device.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
+                dev_reg.async_update_device(device.id, sw_version="new_sw_ver", hw_version=new_hw_ver)
 
                 # Fix up missing or incorrect device_type now that we know what the printer model is.
                 device_type = self.get_model().info.device_type
@@ -118,15 +118,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         dev_reg = device_registry.async_get(self._hass)
         for index in range (0, len(device.ams.data)):
             hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
-                                                   identifiers={(DOMAIN, device.ams.data[index]["serial"])})
+                                                   identifiers={(DOMAIN, device.ams.data[index].serial)})
             serial = self._entry.data["serial"]
             device_type = self._entry.data["device_type"]
             dev_reg.async_update_device(hadevice.id,
                                         name=f"{device_type}_{serial}_AMS_{index+1}",
                                         model="AMS",
                                         manufacturer=BRAND,
-                                        sw_version=device.ams.data[index]["sw_version"],
-                                        hw_version=device.ams.data[index]["hw_version"])
+                                        sw_version=device.ams.data[index].sw_version,
+                                        hw_version=device.ams.data[index].hw_version)
         
         self.hass.async_create_task(
             self.hass.config_entries.async_forward_entry_unload(
@@ -151,12 +151,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         device_name=f"{device_type}_{printer_serial}_AMS_{index+1}"
 
         return DeviceInfo(
-            identifiers={(DOMAIN, self.get_model().ams.data[index]['serial'])},
+            identifiers={(DOMAIN, self.get_model().ams.data[index].serial)},
             name=device_name,
             model="AMS",
             manufacturer=BRAND,
-            hw_version=self.get_model().ams.data[index]['hw_version'],
-            sw_version=self.get_model().ams.data[index]['sw_version']
+            hw_version=self.get_model().ams.data[index].hw_version,
+            sw_version=self.get_model().ams.data[index].sw_version
         )
 
     

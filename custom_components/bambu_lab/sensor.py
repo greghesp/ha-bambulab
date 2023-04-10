@@ -73,9 +73,9 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
         self.coordinator = coordinator
         self.index = index
         printer = coordinator.get_model().info
-        ams_data = coordinator.get_model().ams.data[index]
+        ams_instance = coordinator.get_model().ams.data[index]
         self.entity_description = description
-        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_AMS_{ams_data['serial']}_{description.key}"
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_AMS_{ams_instance.serial}_{description.key}"
         super().__init__(coordinator=coordinator)
 
     @property

@@ -214,30 +214,30 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="humidify_index",
         name="Humidity Index",
         icon="mdi:cloud-percent",
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index]['humidity_index']
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity_index
     ),
     BambuLabSensorEntityDescription(
         key="tray_type_1",
         name="Tray 1 Type",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index]['tray'][0]['tray_type']
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[0].type
     ),
     BambuLabSensorEntityDescription(
         key="tray_type_2",
         name="Tray 2 Type",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index]['tray'][1]['tray_type']
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[1].type
     ),
     BambuLabSensorEntityDescription(
         key="tray_type_3",
         name="Tray 3 Type",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index]['tray'][2]['tray_type']
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[2].type
     ),
     BambuLabSensorEntityDescription(
         key="tray_type_4",
         name="Tray 4 Type",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index]['tray'][3]['tray_type']
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].type
     ),
 )
