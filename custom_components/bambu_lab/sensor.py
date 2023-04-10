@@ -25,7 +25,6 @@ async def async_setup_entry(
     """Set up BambuLab sensor based on a config entry."""
     
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    LOGGER.debug(f"ASYNC SETUP SENSOR: {coordinator.data}")
 
     for sensor in AMS_SENSORS:
         for index in range (0, len(coordinator.get_model().ams.data)):
@@ -87,4 +86,4 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
     @property
     def native_value(self) -> datetime | StateType:
         """Return the state of the sensor."""
-        return self.entity_description.value_fn(self.coordinator.data)
+        return self.entity_description.value_fn(self)

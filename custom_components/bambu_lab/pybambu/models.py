@@ -208,16 +208,13 @@ class AMS:
             if name.startswith("ams/"):
                 received_ams_info = True
                 index = int(name[4])
-                LOGGER.debug(f"ADDING AMS {index}: {module['sn']}")
-                new_ams = { 
-                    "serial": module['sn'],
-                    "sw_version": module['sw_ver'],
-                    "hw_version": module['hw_ver'],
-                }
-                if not self.data:
-                    self.data.append(new_ams)
-                else:
-                    self.data[index] = new_ams
+                LOGGER.debug(f"RECEIVED AMS INFO: {index}")
+                # May get data before info so create entry if necessary
+                if len(self.data) <= index:
+                    self.data.append({})
+                self.data[index]['serial'] = module['sn']
+                self.data[index]['sw_version'] = module['sw_ver']
+                self.data[index]['hw_version'] = module['hw_ver']
 
         if received_ams_info:
             self.device.client.callback("event_ams_info_update")
@@ -233,8 +230,8 @@ class AMS:
         #                 {
         #                     "id": "0",
         #                     "remain": -1,
-        #                     "k": 0.019999999552965164,
-        #                     "n": 1.399999976158142,
+        #                     "k": 0.019999999552965164,        P1P only
+        #                     "n": 1.399999976158142,           P1P only
         #                     "tag_uid": "0000000000000000",
         #                     "tray_id_name": "",
         #                     "tray_info_idx": "GFL99",
@@ -286,27 +283,29 @@ class AMS:
 
             for ams in ams_list:
                 received_ams_data = True
-                LOGGER.debug(f"AMS: {ams}")
+                index = int(ams['id'])
+                LOGGER.debug(f"RECEIVED AMS DATA: {index}")
+                # May get data before info so create entry if necessary
+                if len(self.data) <= index:
+                    self.data.append({})
+                self.data[index]['humidity_index'] = int(ams['humidity'])
+
+                if not 'tray' in self.data[index]:
+                    self.data[index]['tray']=[]
+                    self.data[index]['tray'].append({})
+                    self.data[index]['tray'].append({})
+                    self.data[index]['tray'].append({})
+                    self.data[index]['tray'].append({})
+
+                tray_list = ams['tray']
+                for tray in tray_list:
+                    tray_id = int(tray['id'])
+                    self.data[index]['tray'][tray_id]['tray_type'] = tray['tray_type']
+
+                LOGGER.debug(f"RECEIVED AMS DATA DONE")
 
         if received_ams_data:
             self.device.client.callback("event_ams_data_update")
-
-        #self.number_of_ams = int(data.get("ams", []).get("ams_exist_bits", self.number_of_ams))
-        #self.version = int(data.get("ams", []).get("version", self.version))
-
-        # TODO: Bug in the below logic that keeps adding more and more elements to the array, rather than updating it. Probably need to break this out a bit more
-        # if int(data.get("ams", []).get("ams_exist_bits", 0)) > 0:
-        #     ams_arr = data.get("ams").get("ams")
-        #     for index, ams_device in enumerate(ams_arr):
-        #         current_ams = {
-        #             "id": int(ams_device.get("id", 0)),
-        #             "temperature": round(float(ams_device.get("temp", 0.0))),
-        #             "humidity": int(ams_device.get("humidity", 0)),
-        #             # "tray": ams_device.get("tray", [])
-        #         }
-        #         self.ams_data.append(current_ams)
-        #     return
-
 
 @dataclass
 class Speed:
