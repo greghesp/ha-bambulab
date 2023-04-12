@@ -141,7 +141,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                         sw_version=device.ams.data[index].sw_version,
                                         hw_version=device.ams.data[index].hw_version)
         
-        self.hass.async_create_task(self._reinitialize_sensors())
+        #self.hass.async_create_task(self._reinitialize_sensors())
+
+        self.hass.async_create_task(
+            self.hass.config_entries.async_forward_entry_unload(
+                self.config_entry, Platform.SENSOR
+            )
+        )
+        self.hass.async_create_task(
+            self.hass.config_entries.async_forward_entry_setup(
+                self.config_entry, Platform.SENSOR
+            )
+        )
 
     def _update_external_spool_info(self):
         device = self.get_model()
@@ -157,7 +168,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                     sw_version="",
                                     hw_version="")
         
-        self.hass.async_create_task(self._reinitialize_sensors())
+        # self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_ams_data(self):
         LOGGER.debug("_update_ams_data")
