@@ -31,7 +31,7 @@ async def async_setup_entry(
             async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
 
     for sensor in PRINTER_SENSORS:    
-        if sensor.exists_fn(coordinator.data):
+        if sensor.exists_fn(coordinator):
             async_add_entities([BambuLabSensor(coordinator, sensor, entry)])
 
 
@@ -45,6 +45,7 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
             config_entry: ConfigEntry
     ) -> None:
         """Initialize the sensor."""
+        self.coordinator = coordinator
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
         super().__init__(coordinator=coordinator)
@@ -52,12 +53,12 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     @property
     def extra_state_attributes(self) -> dict:
         """Return the state attributes."""
-        return self.entity_description.extra_attributes(self.coordinator.data)
+        return self.entity_description.extra_attributes(self)
 
     @property
     def native_value(self) -> datetime | StateType:
         """Return the state of the sensor."""
-        return self.entity_description.value_fn(self.coordinator.data)
+        return self.entity_description.value_fn(self)
 
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
@@ -81,7 +82,7 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
     @property
     def extra_state_attributes(self) -> dict:
         """Return the state attributes."""
-        return self.entity_description.extra_attributes(self.coordinator.data)
+        return self.entity_description.extra_attributes(self)
 
     @property
     def native_value(self) -> datetime | StateType:
