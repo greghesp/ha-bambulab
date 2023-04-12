@@ -122,6 +122,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     )
                 self._updatedDevice = True
 
+    async def _reinitialize_sensors(self):
+        self.hass.config_entries.async_forward_entry_unload(
+            self.config_entry, Platform.SENSOR
+        )
+        self.hass.config_entries.async_forward_entry_setup(
+            self.config_entry, Platform.SENSOR
+        )
+
     def _update_ams_info(self):
         device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
@@ -137,16 +145,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                         sw_version=device.ams.data[index].sw_version,
                                         hw_version=device.ams.data[index].hw_version)
         
-        self.hass.async_create_task(
-            self.hass.config_entries.async_forward_entry_unload(
-                self.config_entry, Platform.SENSOR
-            )
-        )
-        self.hass.async_create_task(
-            self.hass.config_entries.async_forward_entry_setup(
-                self.config_entry, Platform.SENSOR
-            )
-        )
+        self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_external_spool_info(self):
         device = self.get_model()
@@ -162,16 +161,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                     sw_version="",
                                     hw_version="")
         
-        # self.hass.async_create_task(
-        #     self.hass.config_entries.async_forward_entry_unload(
-        #         self.config_entry, Platform.SENSOR
-        #     )
-        # )
-        # self.hass.async_create_task(
-        #     self.hass.config_entries.async_forward_entry_setup(
-        #         self.config_entry, Platform.SENSOR
-        #     )
-        # )
+        self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_ams_data(self):
         LOGGER.debug("_update_ams_data")
@@ -181,7 +171,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def get_model(self):
         return self.client.get_device()
-    
+
     def get_ams_device(self, index):
         printer_serial = self._entry.data["serial"]
         device_type = self._entry.data["device_type"]
@@ -209,4 +199,3 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             hw_version="",
             sw_version=""
         )
-    
