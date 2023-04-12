@@ -123,12 +123,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._updatedDevice = True
 
     async def _reinitialize_sensors(self):
-        self.hass.config_entries.async_forward_entry_unload(
-            self.config_entry, Platform.SENSOR
-        )
-        self.hass.config_entries.async_forward_entry_setup(
-            self.config_entry, Platform.SENSOR
-        )
+        self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
+        self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
 
     def _update_ams_info(self):
         device = self.get_model()
