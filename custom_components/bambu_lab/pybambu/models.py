@@ -397,6 +397,9 @@ class ExternalSpool(AMSTray):
         #     "k": 0.029999999329447746,
         #     "n": 1.399999976158142
         # },
+        #
+        # This is exact same data as the AMS exposes so we can just defer to the AMSTray object
+        # to parse this json.
 
         received_virtual_tray_data = False
         tray_data = data.get("vt_tray", {})
