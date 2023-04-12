@@ -123,8 +123,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._updatedDevice = True
 
     async def _reinitialize_sensors(self):
-        self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
-        self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
+        await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
+        await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
 
     def _update_ams_info(self):
         device = self.get_model()
@@ -141,18 +141,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                         sw_version=device.ams.data[index].sw_version,
                                         hw_version=device.ams.data[index].hw_version)
         
-        #self.hass.async_create_task(self._reinitialize_sensors())
+        self.hass.async_create_task(self._reinitialize_sensors())
 
-        self.hass.async_create_task(
-            self.hass.config_entries.async_forward_entry_unload(
-                self.config_entry, Platform.SENSOR
-            )
-        )
-        self.hass.async_create_task(
-            self.hass.config_entries.async_forward_entry_setup(
-                self.config_entry, Platform.SENSOR
-            )
-        )
+        # self.hass.async_create_task(
+        #     self.hass.config_entries.async_forward_entry_unload(
+        #         self.config_entry, Platform.SENSOR
+        #     )
+        # )
+        # self.hass.async_create_task(
+        #     self.hass.config_entries.async_forward_entry_setup(
+        #         self.config_entry, Platform.SENSOR
+        #     )
+        # )
 
     def _update_external_spool_info(self):
         device = self.get_model()
@@ -201,7 +201,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return DeviceInfo(
             identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")},
             name=device_name,
-            model="External Spool",
+            model="P1P External Spool",
             manufacturer=BRAND,
             hw_version="",
             sw_version=""

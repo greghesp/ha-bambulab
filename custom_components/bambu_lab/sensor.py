@@ -15,6 +15,7 @@ from .const import DOMAIN, LOGGER
 from .definitions import PRINTER_SENSORS, VIRTUAL_TRAY_SENSORS, AMS_SENSORS, BambuLabSensorEntityDescription
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity
+from .pybambu.const import Features
 
 
 async def async_setup_entry(
@@ -26,9 +27,10 @@ async def async_setup_entry(
     
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    for sensor in VIRTUAL_TRAY_SENSORS:
-        if sensor.exists_fn(coordinator):
-            async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor)])
+    if coordinator.get_model().supports_feature(Features.EXTERNAL_SPOOL):
+        for sensor in VIRTUAL_TRAY_SENSORS:
+            if sensor.exists_fn(coordinator):
+                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor)])
 
     for sensor in AMS_SENSORS:
         for index in range (0, len(coordinator.get_model().ams.data)):

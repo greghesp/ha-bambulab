@@ -223,8 +223,7 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="external_spool",
         name="External Spool Name",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().external_spool.name,
-        exists_fn=lambda coordinator: coordinator.data.supports_feature(Features.EXTERNAL_SPOOL)
+        value_fn=lambda self: self.coordinator.get_model().external_spool.name
     ),
     BambuLabSensorEntityDescription(
         key="tray_type",
