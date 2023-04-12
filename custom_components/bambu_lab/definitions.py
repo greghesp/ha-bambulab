@@ -55,6 +55,7 @@ class BambuLabSensorEntityDescriptionMixin:
 @dataclass
 class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEntityDescriptionMixin):
     """Sensor entity description for Bambu Lab."""
+    available_fn: Callable[..., bool] = lambda _: True
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
 
@@ -211,6 +212,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="tray_now",
         name="Active Tray",
         icon="mdi:printer-3d-nozzle",
+        available_fn = lambda self: self.coordinator.get_model().ams.tray_now != 255,
         value_fn=lambda self: self.coordinator.get_model().ams.tray_now + 1,
         exists_fn=lambda coordinator: len(coordinator.get_model().ams.data) != 0
     ),

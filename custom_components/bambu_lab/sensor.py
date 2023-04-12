@@ -60,6 +60,10 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         """Return the state of the sensor."""
         return self.entity_description.value_fn(self)
 
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        return self.entity_description.available_fn(self)
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
     """Representation of a BambuLab AMS that is updated via MQTT."""
@@ -88,3 +92,8 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
     def native_value(self) -> datetime | StateType:
         """Return the state of the sensor."""
         return self.entity_description.value_fn(self)
+
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        return self.entity_description.available_fn(self)
