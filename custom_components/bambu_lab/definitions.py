@@ -211,12 +211,6 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
 
 AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
-        key="tray_now",
-        name="Current Tray",
-        icon="mdi:identifier",
-        value_fn=lambda self: self.coordinator.get_model().ams.tray_now
-    ),
-    BambuLabSensorEntityDescription(
         key="version",
         name="Version",
         icon="mdi:identifier",
@@ -371,5 +365,29 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         name="Tray 4 Max Nozzle Temp",
         icon="mdi:printer-3d-nozzle-heat",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].nozzle_temp_max
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_1_active",
+        name="Tray 1 Active",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: (self.coordinator.get_model().ams.tray_now%4 == 0) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index)
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_2_active",
+        name="Tray 2 Active",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: (self.coordinator.get_model().ams.tray_now%4 == 1) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index)
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_3_active",
+        name="Tray 3 Active",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: (self.coordinator.get_model().ams.tray_now%4 == 2) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index)
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_4_active",
+        name="Tray 4 Active",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: (self.coordinator.get_model().ams.tray_now%4 == 3) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index)
     ),
 )
