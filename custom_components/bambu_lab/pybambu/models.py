@@ -20,6 +20,7 @@ class Device:
         self.speed = Speed()
         self.stage = StageAction()
         self.ams = AMSList(client)
+        self.external_spool = ExternalSpool(client)
 
     def update(self, data):
         """Update from dict"""
@@ -30,6 +31,7 @@ class Device:
         self.speed.update(data)
         self.stage.update(data)
         self.ams.update(data)
+        self.external_spool.update(data)
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -191,17 +193,6 @@ class Info:
 
 
 @dataclass
-class AMSTray:
-    """Return all AMS tray related info"""
-    def __init__(self):
-        self.name = ""
-        self.type = ""
-        self.sub_brands = ""
-        self.color = "00000000" # RRGGBBAA
-        self.nozzle_temp_min = 0
-        self.nozzle_temp_max = 0
-
-@dataclass
 class AMSInstance:
     """Return all AMS instance related info"""
     def __init__(self):
@@ -214,6 +205,7 @@ class AMSInstance:
         self.tray[1] = AMSTray()
         self.tray[2] = AMSTray()
         self.tray[3] = AMSTray()
+
 
 @dataclass
 class AMSList:
@@ -339,16 +331,44 @@ class AMSList:
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
-                    self.data[index].tray[tray_id].name = get_filament_name(tray['tray_info_idx'])
-                    self.data[index].tray[tray_id].type = tray['tray_type']
-                    self.data[index].tray[tray_id].sub_brands = tray['tray_sub_brands']
-                    self.data[index].tray[tray_id].color = tray['tray_color']
-                    self.data[index].tray[tray_id].nozzle_temp_min = tray['nozzle_temp_min']
-                    self.data[index].tray[tray_id].nozzle_temp_max = tray['nozzle_temp_max']
+                    self.data[index].tray[tray_id].update(tray)
 
         if received_ams_data:
             if self.client.callback is not None:
                 self.client.callback("event_ams_data_update")
+
+
+@dataclass
+class AMSTray:
+    """Return all AMS tray related info"""
+    def __init__(self):
+        self.idx = ""
+        self.name = ""
+        self.type = ""
+        self.sub_brands = ""
+        self.color = "00000000" # RRGGBBAA
+        self.nozzle_temp_min = 0
+        self.nozzle_temp_max = 0
+
+    def update(self, data):
+        self.idx = data.get('tray_info_idx', self.idx)
+        self.name = get_filament_name(self.idx)
+        self.type = data.get('tray_type', self.type)
+        self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+        self.color = data.get('tray_color', self.color)
+        self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
+        self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+
+
+@dataclass
+class ExternalSpool(AMSTray):
+    """Return the virtual tray related info"""
+    def __init__(self, client):
+        super().__init__()
+        self.client = client
+
+    def update(self, data):
+        """Update from dict"""
 
         # P1P virtual tray example
         # "vt_tray": {
@@ -373,6 +393,18 @@ class AMSList:
         #     "k": 0.029999999329447746,
         #     "n": 1.399999976158142
         # },
+
+        received_virtual_tray_data = False
+        tray_data = data.get("vt_tray", {})
+        if len(tray_data) != 0:
+            LOGGER.debug(f"RECEIVED VIRTUAL TRAY DATA")
+            received_virtual_tray_data = True
+            super().update(tray_data)
+
+        if received_virtual_tray_data:
+            if self.client.callback is not None:
+                self.client.callback("event_virtual_tray_data_update")
+
 
 @dataclass
 class Speed:

@@ -218,6 +218,52 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     ),
 )
 
+VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabSensorEntityDescription(
+        key="external_spool",
+        name="External Spool Name",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().external_spool.name,
+        exists_fn=lambda coordinator: coordinator.data.supports_feature(Features.EXTERNAL_SPOOL)
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_type",
+        name="Tray Type",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().external_spool.type
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_sub_brands",
+        name="Tray Sub Brands",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().external_spool.sub_brands
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_color",
+        name="Tray Color",
+        icon="mdi:palette",
+        value_fn=lambda self: self.coordinator.get_model().external_spool.color
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_min",
+        name="Tray Min Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().external_spool.nozzle_temp_min
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_nozzle_temp_max",
+        name="Tray Max Nozzle Temp",
+        icon="mdi:printer-3d-nozzle-heat",
+        value_fn=lambda self: self.coordinator.get_model().external_spool.nozzle_temp_max
+    ),
+    BambuLabSensorEntityDescription(
+        key="tray_active",
+        name="Tray Active",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: False # FIXME
+    ),
+)
+
 AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="version",

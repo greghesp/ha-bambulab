@@ -34,3 +34,14 @@ class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     def device_info(self) -> DeviceInfo:
         """Return device information about this AMS entity."""
         return self.coordinator.get_ams_device(self.index)
+
+
+class VirtualTrayEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
+    """Defines an External Spool entity."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this AMS entity."""
+        return self.coordinator.get_virtual_tray_device()

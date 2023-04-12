@@ -9,6 +9,7 @@ from .const import (
 )
 import asyncio
 import json
+import time
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -55,7 +56,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             match event:
                 case "event_printer_info_update":
                     self._update_device_info()
-                    
+                    if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
+                        self._update_external_spool_info()
+
                 case "event_light_update":
                     self._update_device_data()
 
@@ -67,6 +70,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
                 case "event_ams_info_data":
                     self._update_ams_data()
+
+                case "event_virtual_tray_data_update":
+                    self._update_virtual_tray_data()
 
         async def listen():
             await self.client.connect(callback=event_handler)
@@ -142,8 +148,36 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             )
         )
 
+    def _update_external_spool_info(self):
+        device = self.get_model()
+        dev_reg = device_registry.async_get(self._hass)
+        hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
+                                               identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")})
+        serial = self._entry.data["serial"]
+        device_type = self._entry.data["device_type"]
+        dev_reg.async_update_device(hadevice.id,
+                                    name=f"{device_type}_{serial}_ExternalSpool",
+                                    model="External Spool",
+                                    manufacturer=BRAND,
+                                    sw_version="",
+                                    hw_version="")
+        
+        # self.hass.async_create_task(
+        #     self.hass.config_entries.async_forward_entry_unload(
+        #         self.config_entry, Platform.SENSOR
+        #     )
+        # )
+        # self.hass.async_create_task(
+        #     self.hass.config_entries.async_forward_entry_setup(
+        #         self.config_entry, Platform.SENSOR
+        #     )
+        # )
+
     def _update_ams_data(self):
         LOGGER.debug("_update_ams_data")
+
+    def _update_virtual_tray_data(self):
+        LOGGER.debug("_update_virtual_tray_data")
 
     def get_model(self):
         return self.client.get_device()
@@ -162,4 +196,17 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             sw_version=self.get_model().ams.data[index].sw_version
         )
 
+    def get_virtual_tray_device(self):
+        printer_serial = self._entry.data["serial"]
+        device_type = self._entry.data["device_type"]
+        device_name=f"{device_type}_{printer_serial}_ExternalSpool"
+
+        return DeviceInfo(
+            identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")},
+            name=device_name,
+            model="External Spool",
+            manufacturer=BRAND,
+            hw_version="",
+            sw_version=""
+        )
     
