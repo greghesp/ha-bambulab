@@ -48,6 +48,8 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.EXTERNAL_SPOOL:
             return self.info.device_type == "P1P"
+        if feature == Features.K_VALUE:
+            return self.info.device_type == "P1P"
         return False
 
 
@@ -349,6 +351,7 @@ class AMSTray:
         self.color = "00000000" # RRGGBBAA
         self.nozzle_temp_min = 0
         self.nozzle_temp_max = 0
+        self.k = 0
 
     def update(self, data):
         self.idx = data.get('tray_info_idx', self.idx)
@@ -358,6 +361,7 @@ class AMSTray:
         self.color = data.get('tray_color', self.color)
         self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
         self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+        self.k = data.get('k', self.k)
 
 
 @dataclass
