@@ -152,7 +152,6 @@ class BambuClient:
 
     def get_device(self):
         """Return device"""
-        #LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
 
     def disconnect(self):

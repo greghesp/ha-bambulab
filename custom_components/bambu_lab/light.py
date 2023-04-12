@@ -4,7 +4,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant, callback
 from .const import DOMAIN, LOGGER
-from .pybambu.commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 from .pybambu.const import Features
 
 from homeassistant.components.light import (
@@ -51,7 +50,7 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
     @property
     def is_on(self) -> bool:
         """Return the state of the switch"""
-        if self.coordinator.data.lights.chamber_light == "on":
+        if self.coordinator.get_model().lights.chamber_light == "on":
             return True
         return False
 
@@ -62,8 +61,8 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
 
     def turn_off(self) -> None:
         """ Turn off the power"""
-        self.coordinator.client.publish(CHAMBER_LIGHT_OFF)
+        self.coordinator.get_model().lights.TurnChamberLightOff()
 
     def turn_on(self) -> None:
         """ Turn on the power"""
-        self.coordinator.client.publish(CHAMBER_LIGHT_ON)
+        self.coordinator.get_model().lights.TurnChamberLightOn()

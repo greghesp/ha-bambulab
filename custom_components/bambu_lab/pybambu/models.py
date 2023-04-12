@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
     get_sw_version, start_time, end_time
 from .const import LOGGER, Features
+from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
 import asyncio
 
@@ -13,12 +14,12 @@ class Device:
     def __init__(self, client, device_type, serial):
         self.client = client
         self.temperature = Temperature()
-        self.lights = Lights()
+        self.lights = Lights(client)
         self.info = Info(device_type, serial)
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
-        self.ams = AMSList(self)
+        self.ams = AMSList(client)
 
     def update(self, data):
         """Update from dict"""
@@ -43,6 +44,8 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.PRINT_LAYERS:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.EXTERNAL_SPOOL:
+            return self.info.device_type == "P1P"
         return False
 
 
@@ -52,7 +55,8 @@ class Lights:
     chamber_light: str
     work_light: str
 
-    def __init__(self):
+    def __init__(self, client):
+        self.client = client
         self.chamber_light = "Unknown"
         self.work_light = "Unknown"
 
@@ -65,6 +69,18 @@ class Lights:
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
+        
+    def TurnChamberLightOn(self):
+        self.chamber_light = "on"
+        if self.client.callback is not None:
+            self.client.callback("event_light_update")
+        self.client.publish(CHAMBER_LIGHT_ON)
+
+    def TurnChamberLightOff(self):
+        self.chamber_light = "off"
+        if self.client.callback is not None:
+            self.client.callback("event_light_update")
+        self.client.publish(CHAMBER_LIGHT_OFF)
 
 
 @dataclass
@@ -203,9 +219,9 @@ class AMSInstance:
 class AMSList:
     """Return all AMS related info"""
 
-    def __init__(self, device):
+    def __init__(self, client):
         """Load from dict"""
-        self.device = device
+        self.client = client
         self.tray_now = 0
         self.version = 0
         self.data = []
@@ -244,8 +260,8 @@ class AMSList:
                 self.data[index].hw_version = module['hw_ver']
 
         if received_ams_info:
-            if self.device.client.callback is not None:
-                self.device.client.callback("event_ams_info_update")
+            if self.client.callback is not None:
+                self.client.callback("event_ams_info_update")
 
         # AMS json payload is of the form:
         # "ams": {
@@ -331,8 +347,32 @@ class AMSList:
                     self.data[index].tray[tray_id].nozzle_temp_max = tray['nozzle_temp_max']
 
         if received_ams_data:
-            if self.device.client.callback is not None:
-                self.device.client.callback("event_ams_data_update")
+            if self.client.callback is not None:
+                self.client.callback("event_ams_data_update")
+
+        # P1P virtual tray example
+        # "vt_tray": {
+        #     "id": "254",
+        #     "tag_uid": "0000000000000000",
+        #     "tray_id_name": "",
+        #     "tray_info_idx": "GFB99",
+        #     "tray_type": "ABS",
+        #     "tray_sub_brands": "",
+        #     "tray_color": "000000FF",
+        #     "tray_weight": "0",
+        #     "tray_diameter": "0.00",
+        #     "tray_temp": "0",
+        #     "tray_time": "0",
+        #     "bed_temp_type": "0",
+        #     "bed_temp": "0",
+        #     "nozzle_temp_max": "280",
+        #     "nozzle_temp_min": "240",
+        #     "xcam_info": "000000000000000000000000",
+        #     "tray_uuid": "00000000000000000000000000000000",
+        #     "remain": 0,
+        #     "k": 0.029999999329447746,
+        #     "n": 1.399999976158142
+        # },
 
 @dataclass
 class Speed:
@@ -369,4 +409,3 @@ class StageAction:
         """Update from dict"""
         self._id = int(data.get("stg_cur", self._id))
         self.description = get_stage_action(self._id)
-get_filament_name
