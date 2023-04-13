@@ -37,50 +37,77 @@ In the latest firmware update, Bambu Lab added back the ability to connect to th
 
 This currently exposes the following Sensors (where applicable):
 
-| Sensor        	            | X1C               	 | X1  	              | P1P 	              | 
-|----------------------------|---------------------|--------------------|--------------------|
-| Aux Fan Speed 	            | :white_check_mark:  | :white_check_mark: | :heavy_check_mark: |
-| Bed Temperature 	          | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Chamber Fan Speed	         | :white_check_mark:  | :white_check_mark: | :x:                |
-| Chamber Temperature	       | :white_check_mark:  | :white_check_mark: | :x:                |
-| Cooling Fan Speed	         | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Current Layer	             | :white_check_mark:  | :white_check_mark: |:x:  |
-| Current Stage	             | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| End Time                   | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Heatbreak Fan Speed	       | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Nozzle Target Temperature	 | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Nozzle Temperature	        | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Print Progress	            | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Print Status	              | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Remaining Time	            | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Speed Profile              | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Start Time                 | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Target Bed Temperature     | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
-| Total Layer Count          | :white_check_mark:  | :white_check_mark: | :x:  |
+| Sensor                     | X1C                | X1                 | P1P                | 
+|----------------------------|--------------------|--------------------|--------------------|
+| Aux Fan Speed              | :white_check_mark: | :white_check_mark: | :heavy_check_mark: |
+| Bed Temperature 	         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Chamber Fan Speed	         | :white_check_mark: | :white_check_mark: | :x:                |
+| Chamber Temperature        | :white_check_mark: | :white_check_mark: | :x:                |
+| Cooling Fan Speed	         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Current Tray               | Only if AMS(s) present                                       |
+| Current Layer	             | :white_check_mark: | :white_check_mark: | :x:                |
+| Current Stage	             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| End Time                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Heatbreak Fan Speed        | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Nozzle Target Temperature	 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Nozzle Temperature         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Print Progress             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Print Status	             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Remaining Time             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Speed Profile              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Start Time                 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Target Bed Temperature     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Total Layer Count          | :white_check_mark: | :white_check_mark: | :x:                |
 
 ### Lights
 
-| Sensor        	            | X1C               	 | X1  	              | P1P 	              | 
-|----------------------------|---------------------|--------------------|--------------------|
-| Chamber Light 	            | :white_check_mark:  | :white_check_mark: | :heavy_check_mark: |
+| Sensor                     | X1C                | X1                 | P1P                | 
+|----------------------------|--------------------|--------------------|--------------------|
+| Chamber Light              | :white_check_mark: | :white_check_mark: | :heavy_check_mark: |
 
 ### Buttons
 
 This currently exposes the following Buttons:
 
-| Sensor        	 | X1C                	 | X1  	               | P1P 	              |
+| Sensor          | X1C                  | X1                  | P1P                |
 |-----------------|----------------------|---------------------|--------------------|
-| Pause	          | :white_check_mark: 	 | :white_check_mark:  | :white_check_mark: |
-| Resume 	        | :white_check_mark:	  | :white_check_mark:  | :white_check_mark: |
-| Stop	           | :white_check_mark:	  | :white_check_mark:	 | :white_check_mark: |
+| Pause	          | :white_check_mark:   | :white_check_mark:  | :white_check_mark: |
+| Resume          | :white_check_mark:   | :white_check_mark:  | :white_check_mark: |
+| Stop	          | :white_check_mark:   | :white_check_mark:  | :white_check_mark: |
+
+### AMS
+
+This currently exposes the following Sensors
+| Sensor                   | X1C                | X1                 | P1P                |
+|--------------------------|--------------------|--------------------|--------------------|
+| Humidity Index           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1-4 Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1-4 Color           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1-4 K Value         | :x:                | :x:                | :white_check_mark: |
+| Tray 1-4 Max Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1-4 Min Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1-4 Name            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1-4 Sub Brands      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1-4 Type            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+
+### External Spool (P1P only)
+| Sensor          | X1C | X1  | P1P                |
+|-----------------|-----|-----|--------------------|
+| Active          | :x: | :x: | :white_check_mark: |
+| Color           | :x: | :x: | :white_check_mark: |
+| K Value         | :x: | :x: | :white_check_mark: |
+| Max Nozzle Temp | :x: | :x: | :white_check_mark: |
+| Min Nozzle Temp | :x: | :x: | :white_check_mark: |
+| Name            | :x: | :x: | :white_check_mark: |
+| Sub Brands      | :x: | :x: | :white_check_mark: |
 
 ### Diagnostics
 
 This currently exposes the following Diagnostic Sensors:
 
-| Sensor       | X1C                	 | X1  	              | P1P 	              |
-|--------------|----------------------|--------------------|--------------------|
-| Wifi Signal	 | :white_check_mark: 	 | :white_check_mark: | :white_check_mark: |
+| Sensor       | X1C                | X1                 | P1P                |
+|--------------|--------------------|--------------------|--------------------|
+| Wifi Signal  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### Cameras
 
