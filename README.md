@@ -35,8 +35,6 @@ In the latest firmware update, Bambu Lab added back the ability to connect to th
 
 ### Sensors
 
-This currently exposes the following Sensors (where applicable):
-
 | Sensor                     | X1C                | X1                 | P1P                | 
 |----------------------------|--------------------|--------------------|--------------------|
 | Aux Fan Speed              | :white_check_mark: | :white_check_mark: | :heavy_check_mark: |
@@ -78,7 +76,6 @@ This currently exposes the following Buttons:
 
 ### AMS
 
-This currently exposes the following Sensors
 | Sensor                   | X1C                | X1                 | P1P                |
 |--------------------------|--------------------|--------------------|--------------------|
 | Humidity Index           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -92,6 +89,7 @@ This currently exposes the following Sensors
 | Tray 1-4 Type            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### External Spool (P1P only)
+
 | Sensor          | X1C | X1  | P1P                |
 |-----------------|-----|-----|--------------------|
 | Active          | :x: | :x: | :white_check_mark: |
