@@ -212,9 +212,9 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="tray_now",
         name="Active Tray",
         icon="mdi:printer-3d-nozzle",
-        available_fn = lambda self: self.coordinator.get_model().ams.tray_now != 255,
+        available_fn = lambda self: self.coordinator.get_model().supports_feature(Features.AMS) and self.coordinator.get_model().ams.tray_now != 255,
         value_fn=lambda self: self.coordinator.get_model().ams.tray_now + 1,
-        exists_fn=lambda coordinator: len(coordinator.get_model().ams.data) != 0
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
     ),
 )
 
@@ -259,7 +259,7 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="tray_active",
         name="Tray Active",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: False # FIXME
+        value_fn=lambda self: not self.coordinator.get_model().supports_feature(Features.AMS) or (self.coordinator.get_model().ams.tray_now == 254)
     ),
     BambuLabSensorEntityDescription(
         key="k",

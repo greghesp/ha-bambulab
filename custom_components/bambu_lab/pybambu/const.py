@@ -10,8 +10,9 @@ class Features(Enum):
     CHAMBER_TEMPERATURE = 4,
     CURRENT_STAGE = 5,
     PRINT_LAYERS = 6,
-    EXTERNAL_SPOOL = 7,
-    K_VALUE = 8,
+    AMS = 7,
+    EXTERNAL_SPOOL = 8,
+    K_VALUE = 9,
 
 ACTION_IDS = {
     "default": "Unknown",
