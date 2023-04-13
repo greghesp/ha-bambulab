@@ -44,7 +44,7 @@ This currently exposes the following Sensors (where applicable):
 | Chamber Fan Speed	         | :white_check_mark: | :white_check_mark: | :x:                |
 | Chamber Temperature        | :white_check_mark: | :white_check_mark: | :x:                |
 | Cooling Fan Speed	         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Current Tray               | Only if AMS(s) present                                       |
+| Current Tray               | :white_check_mark: | :white_check_mark: | :white_check_mark: | (Only if AMS(s) present)
 | Current Layer	             | :white_check_mark: | :white_check_mark: | :x:                |
 | Current Stage	             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | End Time                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
