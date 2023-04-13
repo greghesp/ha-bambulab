@@ -14,15 +14,7 @@ class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device information about this Bambu  device."""
-        #LOGGER.debug("device_info() called")
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.data.info.serial)},
-            name=f"{self.coordinator.data.info.device_type}_{self.coordinator.data.info.serial}",
-            manufacturer=BRAND,
-            model=self.coordinator.data.info.device_type,
-            hw_version=self.coordinator.data.info.hw_ver,
-            sw_version=self.coordinator.data.info.sw_ver,
-        )
+        return self.coordinator.get_printer_device()
 
 
 class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):

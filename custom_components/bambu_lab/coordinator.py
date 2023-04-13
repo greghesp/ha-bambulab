@@ -104,7 +104,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             if (new_sw_ver != "Unknown"):
                 dev_reg = device_registry.async_get(self._hass)
                 device = dev_reg.async_get_device(identifiers={(DOMAIN, self.data.info.serial)})
-                dev_reg.async_update_device(device.id, sw_version="new_sw_ver", hw_version=new_hw_ver)
+                dev_reg.async_update_device(device.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
 
                 # Fix up missing or incorrect device_type now that we know what the printer model is.
                 device_type = self.get_model().info.device_type
@@ -178,6 +178,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def get_model(self):
         return self.client.get_device()
+
+    def get_printer_device(self):
+        printer_serial = self._entry.data["serial"]
+        device_type = self._entry.data["device_type"]
+        return DeviceInfo(
+            identifiers={(DOMAIN, printer_serial)},
+            name=f"{device_type}_{printer_serial}",
+            manufacturer=BRAND,
+            model=device_type,
+            hw_version=self.get_model().info.hw_ver,
+            sw_version=self.get_model().info.sw_ver,
+        )
 
     def get_ams_device(self, index):
         printer_serial = self._entry.data["serial"]

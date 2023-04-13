@@ -74,14 +74,9 @@ def get_hw_version(modules, default):
 
 def get_sw_version(modules, default):
     """Retrieve software version of printer"""
-    esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
-    rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
-    if len(esp32.keys()) > 1:
-        if esp32.get("hw_ver") == "AP04":
-            return esp32.get("sw_ver")
-    elif len(rv1126.keys()) > 1:
-        if rv1126.get("hw_ver") == "AP05":
-            return rv1126.get("sw_ver")
+    ota = search(modules, lambda x: x.get('name', "") == "ota")
+    if len(ota.keys()) > 1:
+        return ota.get("sw_ver")
     return default
 
 
