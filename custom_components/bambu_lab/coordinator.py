@@ -59,20 +59,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
                         self._update_external_spool_info()
 
-                case "event_light_update":
-                    self._update_device_data()
-
-                case "event_printer_data_update":
-                    self._update_device_data()
-
                 case "event_ams_info_update":
                     self._update_ams_info()
 
+                case "event_light_update":
+                    self._update_data()
+
+                case "event_printer_data_update":
+                    self._update_data()
+
                 case "event_ams_info_data":
-                    self._update_ams_data()
+                    self._update_data()
 
                 case "event_virtual_tray_data_update":
-                    self._update_virtual_tray_data()
+                    self._update_data()
 
         async def listen():
             await self.client.connect(callback=event_handler)
@@ -91,7 +91,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         device = self.get_model()
         return device
     
-    def _update_device_data(self):
+    def _update_data(self):
         device = self.get_model()
         self.async_set_updated_data(device)
 
@@ -143,17 +143,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         self.hass.async_create_task(self._reinitialize_sensors())
 
-        # self.hass.async_create_task(
-        #     self.hass.config_entries.async_forward_entry_unload(
-        #         self.config_entry, Platform.SENSOR
-        #     )
-        # )
-        # self.hass.async_create_task(
-        #     self.hass.config_entries.async_forward_entry_setup(
-        #         self.config_entry, Platform.SENSOR
-        #     )
-        # )
-
     def _update_external_spool_info(self):
         device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
@@ -169,12 +158,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                     hw_version="")
         
         # self.hass.async_create_task(self._reinitialize_sensors())
-
-    def _update_ams_data(self):
-        LOGGER.debug("_update_ams_data")
-
-    def _update_virtual_tray_data(self):
-        LOGGER.debug("_update_virtual_tray_data")
 
     def get_model(self):
         return self.client.get_device()
@@ -211,9 +194,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         device_name=f"{device_type}_{printer_serial}_ExternalSpool"
 
         return DeviceInfo(
-            identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")},
+            identifiers={(DOMAIN, f"{printer_serial}_ExternalSpool")},
             name=device_name,
-            model="P1P External Spool",
+            model="External Spool",
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
