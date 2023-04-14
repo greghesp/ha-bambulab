@@ -343,6 +343,7 @@ class AMSList:
 class AMSTray:
     """Return all AMS tray related info"""
     def __init__(self):
+        self.Empty = True
         self.idx = ""
         self.name = ""
         self.type = ""
@@ -353,14 +354,27 @@ class AMSTray:
         self.k = 0
 
     def update(self, data):
-        self.idx = data.get('tray_info_idx', self.idx)
-        self.name = get_filament_name(self.idx)
-        self.type = data.get('tray_type', self.type)
-        self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
-        self.color = data.get('tray_color', self.color)
-        self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
-        self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
-        self.k = data.get('k', self.k)
+        if len(data) == 1:
+            # If the day is exactly one entry then it's just the ID and the tray is empty.
+            self.Empty = True
+            self.idx = ""
+            self.name = "Empty"
+            self.type = "Empty"
+            self.sub_brands = ""
+            self.color = "00000000" # RRGGBBAA
+            self.nozzle_temp_min = 0
+            self.nozzle_temp_max = 0
+            self.k = 0
+        else:
+            self.empty = False
+            self.idx = data.get('tray_info_idx', self.idx)
+            self.name = get_filament_name(self.idx)
+            self.type = data.get('tray_type', self.type)
+            self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+            self.color = data.get('tray_color', self.color)
+            self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
+            self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+            self.k = data.get('k', self.k)
 
 
 @dataclass
