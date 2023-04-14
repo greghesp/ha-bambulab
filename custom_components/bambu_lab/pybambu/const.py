@@ -54,6 +54,7 @@ FILAMENT_NAMES = {
     "default": "Unknown",
     "GFA00": "Bambu PLA Basic",
     "GFA01": "Bambu PLA Matte",
+    "GFA05": "Generic PLA Silk",
     "GFB00": "Bambu ABS",
     "GFB98": "Generic ASA",
     "GFB99": "Generic ABS",

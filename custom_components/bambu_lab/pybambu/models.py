@@ -317,7 +317,7 @@ class AMSList:
         received_ams_data = False
         ams_data = data.get("ams", [])
         if len(ams_data) != 0:
-            self.tray_now = int(ams_data['tray_now'])
+            self.tray_now = int(ams_data.get('tray_now', self.tray_now))
 
             ams_list = ams_data.get("ams", [])
             for ams in ams_list:
