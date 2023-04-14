@@ -87,7 +87,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
-        LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
+        .LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
         device = self.get_model()
         return device
     
@@ -103,8 +103,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
             if (new_sw_ver != "Unknown"):
                 dev_reg = device_registry.async_get(self._hass)
-                device = dev_reg.async_get_device(identifiers={(DOMAIN, self.data.info.serial)})
-                dev_reg.async_update_device(device.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
+                hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+                dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
 
                 # Fix up missing or incorrect device_type now that we know what the printer model is.
                 device_type = self.get_model().info.device_type
@@ -144,7 +144,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_external_spool_info(self):
-        device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
                                                identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")})
@@ -165,6 +164,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def get_printer_device(self):
         printer_serial = self._entry.data["serial"]
         device_type = self._entry.data["device_type"]
+
         return DeviceInfo(
             identifiers={(DOMAIN, printer_serial)},
             name=f"{device_type}_{printer_serial}",
@@ -181,6 +181,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         return DeviceInfo(
             identifiers={(DOMAIN, self.get_model().ams.data[index].serial)},
+            via_device=(DOMAIN, printer_serial),
             name=device_name,
             model="AMS",
             manufacturer=BRAND,
@@ -195,6 +196,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         return DeviceInfo(
             identifiers={(DOMAIN, f"{printer_serial}_ExternalSpool")},
+            via_device=(DOMAIN, printer_serial),
             name=device_name,
             model="External Spool",
             manufacturer=BRAND,
