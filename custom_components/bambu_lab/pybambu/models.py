@@ -194,9 +194,6 @@ class Info:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
 
-    def add_serial(self, data):
-        self.serial = data or self.serial
-
 
 @dataclass
 class AMSInstance:
