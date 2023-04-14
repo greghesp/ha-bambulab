@@ -52,6 +52,8 @@ class Device:
             return self.info.device_type == "P1P"
         if feature == Features.K_VALUE:
             return self.info.device_type == "P1P"
+        if feature == Features.START_TIME:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
 

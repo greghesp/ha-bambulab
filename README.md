@@ -52,7 +52,7 @@ In the latest firmware update, Bambu Lab added back the ability to connect to th
 | Print Status	            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Remaining Time            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Speed Profile             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Start Time                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Start Time                | :white_check_mark: | :white_check_mark: | :x:                |
 | Target Bed Temperature    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Total Layer Count         | :white_check_mark: | :white_check_mark: | :x:                |
 
@@ -79,26 +79,33 @@ This currently exposes the following Buttons:
 | Sensor                    | X1C                | X1                 | P1P                |
 |---------------------------|--------------------|--------------------|--------------------|
 | Humidity Index            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1-4 Active           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1-4 Color            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1-4 K Value          | :x:                | :x:                | :white_check_mark: |
-| Tray 1-4 Max Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1-4 Min Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1-4 Name             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1-4 Sub Brands       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1-4 Type             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 2                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 3                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 4                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray Attributes:          |                    |                    |                    |
+| Active                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Color                     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| K Value                   | :x:                | :x:                | :white_check_mark: |
+| Max Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Min Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Name                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Sub Brand                 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Type                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### External Spool (P1P only)
 
 | Sensor                    | X1C                | X1                 | P1P                |
 |---------------------------|--------------------|--------------------|--------------------|
+| External Spool            | :x:                | :x:                | :white_check_mark: |
+| Attributes:               |                    |                    |                    |
 | Active                    | :x:                | :x:                | :white_check_mark: |
 | Color                     | :x:                | :x:                | :white_check_mark: |
 | K Value                   | :x:                | :x:                | :white_check_mark: |
 | Max Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
 | Min Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
 | Name                      | :x:                | :x:                | :white_check_mark: |
-| Sub Brands                | :x:                | :x:                | :white_check_mark: |
+| Sub Brand                 | :x:                | :x:                | :white_check_mark: |
 
 ### Diagnostics
 
