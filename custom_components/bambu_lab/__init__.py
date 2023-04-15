@@ -1,24 +1,15 @@
 """The Bambu Lab component."""
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, LOGGER, PLATFORMS
 from .coordinator import BambuDataUpdateCoordinator
-
-PLATFORMS = (
-    Platform.LIGHT,
-    Platform.SENSOR,
-    Platform.BUTTON
-)
-
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
-    LOGGER.debug("Async Setup Entry Started")
+    LOGGER.debug("async_setup_entry")
     coordinator = BambuDataUpdateCoordinator(hass, entry=entry)
     await coordinator.async_config_entry_first_refresh()
-    LOGGER.debug(f"Coordinator {coordinator.__dict__}")
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
@@ -28,7 +19,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Reload entry when its updated.
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
-    LOGGER.debug("Async Setup Entry Complete")
+    LOGGER.debug("async_setup_entry Complete")
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -43,7 +34,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     coordinator.shutdown()
 
-    # Do this because the sample has us do it. Doesn't seem to do anything.
+    # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
 
     LOGGER.debug("Async Setup Unload Done")

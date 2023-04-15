@@ -1,19 +1,26 @@
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry
+
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
+from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
     get_sw_version, start_time, end_time
 from .const import LOGGER, Features
+from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
 import asyncio
 
 
 class Device:
-    def __init__(self, device_type):
+    def __init__(self, client, device_type, serial):
+        self.client = client
         self.temperature = Temperature()
-        self.lights = Lights()
-        self.info = Info(device_type)
+        self.lights = Lights(client)
+        self.info = Info(device_type, serial)
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
+        self.ams = AMSList(client)
+        self.external_spool = ExternalSpool(client)
 
     def update(self, data):
         """Update from dict"""
@@ -21,12 +28,10 @@ class Device:
         self.lights.update(data)
         self.fans.update(data)
         self.info.update(data)
-        # self.ams.update(data)
         self.speed.update(data)
         self.stage.update(data)
-
-    def add_serial(self, data):
-        self.info.add_serial(data)
+        self.ams.update(data)
+        self.external_spool.update(data)
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -41,6 +46,14 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.PRINT_LAYERS:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.AMS:
+            return len(self.ams.data) != 0
+        if feature == Features.EXTERNAL_SPOOL:
+            return self.info.device_type == "P1P"
+        if feature == Features.K_VALUE:
+            return self.info.device_type == "P1P"
+        if feature == Features.START_TIME:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
 
@@ -50,7 +63,8 @@ class Lights:
     chamber_light: str
     work_light: str
 
-    def __init__(self):
+    def __init__(self, client):
+        self.client = client
         self.chamber_light = "Unknown"
         self.work_light = "Unknown"
 
@@ -63,6 +77,18 @@ class Lights:
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
+        
+    def TurnChamberLightOn(self):
+        self.chamber_light = "on"
+        if self.client.callback is not None:
+            self.client.callback("event_light_update")
+        self.client.publish(CHAMBER_LIGHT_ON)
+
+    def TurnChamberLightOff(self):
+        self.chamber_light = "off"
+        if self.client.callback is not None:
+            self.client.callback("event_light_update")
+        self.client.publish(CHAMBER_LIGHT_OFF)
 
 
 @dataclass
@@ -140,14 +166,14 @@ class Info:
     current_layer: int
     total_layers: int
 
-    def __init__(self, device_type):
+    def __init__(self, device_type, serial):
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = device_type
         self.hw_ver = "Unknown"
         self.sw_ver = "Unknown"
         self.gcode_state = "Unknown"
-        self.serial = "Unknown"
+        self.serial = serial
         self.remaining_time = 0
         self.end_time = 000
         self.start_time = 000
@@ -168,26 +194,236 @@ class Info:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
 
-    def add_serial(self, data):
-        self.serial = data or self.serial
+
+@dataclass
+class AMSInstance:
+    """Return all AMS instance related info"""
+    def __init__(self):
+        self.serial = ""
+        self.sw_version = ""
+        self.hw_version = ""
+        self.humidity_index = 0
+        self.tray = [None] * 4
+        self.tray[0] = AMSTray()
+        self.tray[1] = AMSTray()
+        self.tray[2] = AMSTray()
+        self.tray[3] = AMSTray()
 
 
-# @dataclass
-# class AMS:
-#     """Return all AMS related info"""
-#     version: int
-#
-#     # TODO: Handle if AMS doesn't exist
-#     @staticmethod
-#     def from_dict(data):
-#         """Load from dict"""
-#         return AMS(
-#             version=int(data.get("ams").get("version")),
-#         )
-#
-#     def update_from_dict(self, data):
-#         """Update from dict"""
-#         self.version = int(data.get("ams").get("version"))
+@dataclass
+class AMSList:
+    """Return all AMS related info"""
+
+    def __init__(self, client):
+        """Load from dict"""
+        self.client = client
+        self.tray_now = 0
+        self.data = []
+
+    def update(self, data):
+        """Update from dict"""
+
+        # First determine if this the version info data or the json payload data. We use the version info to determine
+        # what devices to add to humidity_index assistant and add all the sensors as entititied. And then then json payload data
+        # to populate the values for all those entities.
+
+        # The module entries are of this form:
+        # {
+        #     "name": "ams/0",
+        #     "project_name": "",
+        #     "sw_ver": "00.00.05.96",
+        #     "loader_ver": "00.00.00.00",
+        #     "ota_ver": "00.00.00.00",
+        #     "hw_ver": "AMS08",
+        #     "sn": "<SERIAL>"
+        # }
+
+        received_ams_info = False
+        module_list = data.get("module", [])
+        for module in module_list:
+            name = module["name"]
+            if name.startswith("ams/"):
+                received_ams_info = True
+                index = int(name[4])
+                LOGGER.debug(f"RECEIVED AMS INFO: {index}")
+                # May get data before info so create entry if necessary
+                if len(self.data) <= index:
+                    self.data.append(AMSInstance())
+                self.data[index].serial = module['sn']
+                self.data[index].sw_version = module['sw_ver']
+                self.data[index].hw_version = module['hw_ver']
+
+        if received_ams_info:
+            if self.client.callback is not None:
+                self.client.callback("event_ams_info_update")
+
+        # AMS json payload is of the form:
+        # "ams": {
+        #     "ams": [
+        #         {
+        #             "id": "0",
+        #             "humidity": "4",
+        #             "temp": "0.0",
+        #             "tray": [
+        #                 {
+        #                     "id": "0",
+        #                     "remain": -1,
+        #                     "k": 0.019999999552965164,        # P1P only
+        #                     "n": 1.399999976158142,           # P1P only
+        #                     "tag_uid": "0000000000000000",
+        #                     "tray_id_name": "",
+        #                     "tray_info_idx": "GFL99",
+        #                     "tray_type": "PLA",
+        #                     "tray_sub_brands": "",
+        #                     "tray_color": "FFFF00FF",         # RRGGBBAA
+        #                     "tray_weight": "0",
+        #                     "tray_diameter": "0.00",
+        #                     "drying_temp": "0",
+        #                     "drying_time": "0",
+        #                     "bed_temp_type": "0",
+        #                     "bed_temp": "0",
+        #                     "nozzle_temp_max": "240",
+        #                     "nozzle_temp_min": "190",
+        #                     "xcam_info": "000000000000000000000000",
+        #                     "tray_uuid": "00000000000000000000000000000000"
+        #                 },
+        #                 {
+        #                     "id": "1",
+        #                     ...
+        #                 },
+        #                 {
+        #                     "id": "2",
+        #                     ...
+        #                 },
+        #                 {
+        #                     "id": "3",
+        #                     ...
+        #                 }
+        #             ]
+        #         }
+        #     ],
+        #     "ams_exist_bits": "1",
+        #     "tray_exist_bits": "f",
+        #     "tray_is_bbl_bits": "f",
+        #     "tray_now": "255",
+        #     "tray_read_done_bits": "f",
+        #     "tray_reading_bits": "0",
+        #     "tray_tar": "255",
+        #     "version": 3,
+        #     "insert_flag": true,
+        #     "power_on_flag": false
+        # },
+
+        received_ams_data = False
+        ams_data = data.get("ams", [])
+        if len(ams_data) != 0:
+            self.tray_now = int(ams_data.get('tray_now', self.tray_now))
+
+            ams_list = ams_data.get("ams", [])
+            for ams in ams_list:
+                received_ams_data = True
+                index = int(ams['id'])
+                LOGGER.debug(f"RECEIVED AMS DATA: {index}")
+                # May get data before info so create entry if necessary
+                if len(self.data) <= index:
+                    self.data.append(AMSInstance())
+                self.data[index].humidity_index = int(ams['humidity'])
+
+                tray_list = ams['tray']
+                for tray in tray_list:
+                    tray_id = int(tray['id'])
+                    self.data[index].tray[tray_id].update(tray)
+
+        if received_ams_data:
+            if self.client.callback is not None:
+                self.client.callback("event_ams_data_update")
+
+
+@dataclass
+class AMSTray:
+    """Return all AMS tray related info"""
+    def __init__(self):
+        self.Empty = True
+        self.idx = ""
+        self.name = ""
+        self.type = ""
+        self.sub_brands = ""
+        self.color = "00000000" # RRGGBBAA
+        self.nozzle_temp_min = 0
+        self.nozzle_temp_max = 0
+        self.k = 0
+
+    def update(self, data):
+        if len(data) == 1:
+            # If the day is exactly one entry then it's just the ID and the tray is empty.
+            self.Empty = True
+            self.idx = ""
+            self.name = "Empty"
+            self.type = "Empty"
+            self.sub_brands = ""
+            self.color = "00000000" # RRGGBBAA
+            self.nozzle_temp_min = 0
+            self.nozzle_temp_max = 0
+            self.k = 0
+        else:
+            self.empty = False
+            self.idx = data.get('tray_info_idx', self.idx)
+            self.name = get_filament_name(self.idx)
+            self.type = data.get('tray_type', self.type)
+            self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+            self.color = data.get('tray_color', self.color)
+            self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
+            self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+            self.k = data.get('k', self.k)
+
+
+@dataclass
+class ExternalSpool(AMSTray):
+    """Return the virtual tray related info"""
+    def __init__(self, client):
+        super().__init__()
+        self.client = client
+
+    def update(self, data):
+        """Update from dict"""
+
+        # P1P virtual tray example
+        # "vt_tray": {
+        #     "id": "254",
+        #     "tag_uid": "0000000000000000",
+        #     "tray_id_name": "",
+        #     "tray_info_idx": "GFB99",
+        #     "tray_type": "ABS",
+        #     "tray_sub_brands": "",
+        #     "tray_color": "000000FF",
+        #     "tray_weight": "0",
+        #     "tray_diameter": "0.00",
+        #     "tray_temp": "0",
+        #     "tray_time": "0",
+        #     "bed_temp_type": "0",
+        #     "bed_temp": "0",
+        #     "nozzle_temp_max": "280",
+        #     "nozzle_temp_min": "240",
+        #     "xcam_info": "000000000000000000000000",
+        #     "tray_uuid": "00000000000000000000000000000000",
+        #     "remain": 0,
+        #     "k": 0.029999999329447746,
+        #     "n": 1.399999976158142
+        # },
+        #
+        # This is exact same data as the AMS exposes so we can just defer to the AMSTray object
+        # to parse this json.
+
+        received_virtual_tray_data = False
+        tray_data = data.get("vt_tray", {})
+        if len(tray_data) != 0:
+            LOGGER.debug(f"RECEIVED VIRTUAL TRAY DATA")
+            received_virtual_tray_data = True
+            super().update(tray_data)
+
+        if received_virtual_tray_data:
+            if self.client.callback is not None:
+                self.client.callback("event_virtual_tray_data_update")
 
 
 @dataclass
