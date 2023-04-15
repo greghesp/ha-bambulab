@@ -27,7 +27,7 @@ Both:
 
 ### P1P Owners
 
-In the latest firmware update, Bambu Lab added back the ability to connect to the MQTT een in cloud mode. But the ability to use cloud MQTT will remain in case that changes again in a future update.
+In the latest firmware update, Bambu Lab added back the ability to connect to the local MQTT server on the printer even in cloud mode. But the ability to use cloud MQTT will remain in case that changes again in a future update.
 
 ## Features
 
