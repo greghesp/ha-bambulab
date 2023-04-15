@@ -58,9 +58,8 @@ class BambuClient:
         self._serial = serial
         self._access_code = access_code
         self._connected = False
-        self._callback = None
-        self._device = Device(device_type)
-        self._device.add_serial(self._serial)
+        self.callback = None
+        self._device = Device(self, device_type, serial)
         self._port = 1883
 
     @property
@@ -70,7 +69,7 @@ class BambuClient:
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
-        self._callback = callback
+        self.callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
@@ -103,7 +102,6 @@ class BambuClient:
         LOGGER.debug("On Connect: Request Push All")
         self.publish(PUSH_ALL)
 
-
     def on_disconnect(self,
                       client_: mqtt.Client,
                       userdata: None,
@@ -119,16 +117,15 @@ class BambuClient:
             json_data = json.loads(message.payload)
             if json_data.get("print"):
                 self._device.update(data=json_data.get("print"))
+                self.callback("event_printer_data_update")
             elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.update(data=json_data.get("info"))
-
+                self.callback("event_printer_info_update")
         except Exception as e:
             LOGGER.debug("An exception occurred:")
             LOGGER.debug(f"Exception type: {type(e)}")
             LOGGER.debug(f"Exception args: {e.args}")
-
-        return self._callback(self._device)
 
     def subscribe(self):
         """Subscribe to report topic"""
@@ -155,7 +152,6 @@ class BambuClient:
 
     def get_device(self):
         """Return device"""
-        #LOGGER.debug(f"Get Device: Returning device: {self._device}")
         return self._device
 
     def disconnect(self):

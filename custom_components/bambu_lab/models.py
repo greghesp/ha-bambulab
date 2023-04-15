@@ -14,30 +14,26 @@ class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device information about this Bambu  device."""
-        LOGGER.debug("device_info() called")
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.data.info.serial)},
-            name=f"{self.coordinator.data.info.device_type}_{self.coordinator.data.info.serial}",
-            manufacturer=BRAND,
-            model=self.coordinator.data.info.device_type,
-            hw_version=self.coordinator.data.info.hw_ver,
-            sw_version=self.coordinator.data.info.sw_ver,
-        )
+        return self.coordinator.get_printer_device()
 
-# class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
-#     """Defines a base AMS entity."""
-#
-#     _attr_has_entity_name = True
-#
-#     @property
-#     def device_info(self) -> DeviceInfo:
-#         """Return device information about this AMS device."""
-#
-#         return DeviceInfo(
-#             identifiers={
-#                 (DOMAIN, "AMS123")
-#             },
-#             name="AMS 1",
-#             model="AMS",
-#             manufacturer="Bambu Lab",
-#         )
+
+class AMSEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
+    """Defines a base AMS entity."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this AMS entity."""
+        return self.coordinator.get_ams_device(self.index)
+
+
+class VirtualTrayEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
+    """Defines an External Spool entity."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this AMS entity."""
+        return self.coordinator.get_virtual_tray_device()
