@@ -38,18 +38,18 @@ In the latest firmware update, Bambu Lab added back the ability to connect to th
 | Sensor                    | X1C                | X1                 | P1P                | 
 |---------------------------|--------------------|--------------------|--------------------|
 | Aux Fan Speed             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: |
-| Bed Temperature 	        | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Chamber Fan Speed	        | :white_check_mark: | :white_check_mark: | :x:                |
+| Bed Temperature           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Chamber Fan Speed         | :white_check_mark: | :white_check_mark: | :x:                |
 | Chamber Temperature       | :white_check_mark: | :white_check_mark: | :x:                |
-| Cooling Fan Speed	        | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Current Layer	            | :white_check_mark: | :white_check_mark: | :x:                |
-| Current Stage	            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Cooling Fan Speed         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Current Layer             | :white_check_mark: | :white_check_mark: | :x:                |
+| Current Stage             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | End Time                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Heatbreak Fan Speed       | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Nozzle Target Temperature	| :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Nozzle Target Temperature | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Nozzle Temperature        | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Print Progress            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Print Status	            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Print Status              | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Remaining Time            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Speed Profile             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Start Time                | :white_check_mark: | :white_check_mark: | :x:                |
@@ -70,9 +70,9 @@ This currently exposes the following Buttons:
 
 | Sensor                    | X1C                | X1                 | P1P                |
 |---------------------------|--------------------|--------------------|--------------------|
-| Pause	                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Pause                     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Resume                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Stop	                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Stop                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### AMS
 
