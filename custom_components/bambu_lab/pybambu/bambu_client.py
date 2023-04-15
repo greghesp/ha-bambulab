@@ -113,15 +113,16 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            #LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
-                self._device.update(data=json_data.get("print"))
+                self._device.print_update(data=json_data.get("print"))
                 self.callback("event_printer_data_update")
+            elif json_data.get("mc_print"):
+                self._device.mc_print_update(data=json_data.get("mc_print"))
             elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
-                self._device.update(data=json_data.get("info"))
-                self.callback("event_printer_info_update")
+                self._device.info_update(data=json_data.get("info"))
         except Exception as e:
             LOGGER.debug("An exception occurred:")
             LOGGER.debug(f"Exception type: {type(e)}")

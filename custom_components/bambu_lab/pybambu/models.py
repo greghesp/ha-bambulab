@@ -15,23 +15,31 @@ class Device:
         self.client = client
         self.temperature = Temperature()
         self.lights = Lights(client)
-        self.info = Info(device_type, serial)
+        self.info = Info(client, device_type, serial)
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
         self.ams = AMSList(client)
         self.external_spool = ExternalSpool(client)
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
         self.temperature.update(data)
         self.lights.update(data)
         self.fans.update(data)
-        self.info.update(data)
         self.speed.update(data)
         self.stage.update(data)
-        self.ams.update(data)
+        self.ams.print_update(data)
         self.external_spool.update(data)
+
+    def info_update(self, data):
+        """Update from dict"""
+        self.info.info_update(data)
+        self.ams.info_update(data)
+
+    def mc_print_update(self, data):
+        """Update from dict"""
+        self.ams.mc_print_update(data)
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -166,7 +174,8 @@ class Info:
     current_layer: int
     total_layers: int
 
-    def __init__(self, device_type, serial):
+    def __init__(self, client, device_type, serial):
+        self.client = client
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = device_type
@@ -180,7 +189,7 @@ class Info:
         self.current_layer = 0
         self.total_layers = 0
 
-    def update(self, data):
+    def info_update(self, data):
         """Update from dict"""
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
@@ -193,6 +202,7 @@ class Info:
         self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
+        self.client.callback("event_printer_info_update")
 
 
 @dataclass
@@ -202,7 +212,9 @@ class AMSInstance:
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
+        self.humidity = 0
         self.humidity_index = 0
+        self.temperature = 0
         self.tray = [None] * 4
         self.tray[0] = AMSTray()
         self.tray[1] = AMSTray()
@@ -220,7 +232,7 @@ class AMSList:
         self.tray_now = 0
         self.data = []
 
-    def update(self, data):
+    def info_update(self, data):
         """Update from dict"""
 
         # First determine if this the version info data or the json payload data. We use the version info to determine
@@ -256,6 +268,9 @@ class AMSList:
         if received_ams_info:
             if self.client.callback is not None:
                 self.client.callback("event_ams_info_update")
+
+    def print_update(self, data):
+        """Update from dict"""
 
         # AMS json payload is of the form:
         # "ams": {
@@ -338,6 +353,27 @@ class AMSList:
             if self.client.callback is not None:
                 self.client.callback("event_ams_data_update")
 
+    def mc_print_update(self, data):
+        """Update from dict"""
+
+        # LOG format we need to parse for this data is like this:
+        # {
+        #     "mc_print": {
+        #         "param": "[AMS][TASK]ams0 temp:27.0;humidity:21%;humidity_idx:4",
+        #         "command": "push_info",
+        #         "sequence_id": "299889"
+        #     }
+        # }
+
+        data = data.get('param', '')
+        if data.startsWith('[AMS][TASK]ams'):
+            LOGGER.debug(data)
+            data = data[14]
+            LOGGER.debug(data)
+            ams_index = int(data)
+            LOGGER.debug(ams_index)
+            self.client.callback("event_ams_data_update")
+                
 
 @dataclass
 class AMSTray:
