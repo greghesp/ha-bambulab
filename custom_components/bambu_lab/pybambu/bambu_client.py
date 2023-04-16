@@ -41,9 +41,9 @@ def listen_thread(self):
                 LOGGER.debug("Host is unreachable. Sleeping.")
                 time.sleep(5)
             else:
-                LOGGER.debug("A listener loop thread exception occurred:")
-                LOGGER.debug(f"Exception type: {type(e)}")
-                LOGGER.debug(f"Exception args: {e.args}")
+                LOGGER.exception("A listener loop thread exception occurred:")
+                LOGGER.exception(f"Exception type: {type(e)}")
+                LOGGER.exception(f"Exception args: {e.args}")
                 # Avoid a tight loop if this is a persistent error.
                 time.sleep(1)
             self.client.disconnect()
@@ -93,7 +93,7 @@ class BambuClient:
                    result_code: int,
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.debug("On Connect: Connected to Broker")
+        LOGGER.info("On Connect: Connected to Broker")
         self._connected = True
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
@@ -123,9 +123,9 @@ class BambuClient:
                 self._device.update(data=json_data.get("info"))
                 self.callback("event_printer_info_update")
         except Exception as e:
-            LOGGER.debug("An exception occurred:")
-            LOGGER.debug(f"Exception type: {type(e)}")
-            LOGGER.debug(f"Exception args: {e.args}")
+            LOGGER.error("An exception occurred processing a message:")
+            LOGGER.error(f"Exception type: {type(e)}")
+            LOGGER.error(f"Exception args: {e.args}")
 
     def subscribe(self):
         """Subscribe to report topic"""
