@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timezone, timedelta
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, LOGGER
+from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER
 
 
 def search(lst, predicate, default={}):
@@ -43,6 +43,11 @@ def get_stage_action(_id):
     """Return the human-readable description for a stage action"""
     return ACTION_IDS.get(_id, "Unknown")
 
+
+def get_HMS_error_text(_id)
+    """Return the human-readable description for an HMS error"""
+    return HMS_ERRORS.get(_id, "Unknown")
+    
 
 def get_printer_type(modules, default):
     """Retrieve printer type"""
