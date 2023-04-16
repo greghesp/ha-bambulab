@@ -44,7 +44,7 @@ def get_stage_action(_id):
     return ACTION_IDS.get(_id, "Unknown")
 
 
-def get_HMS_error_text(_id)
+def get_HMS_error_text(_id):
     """Return the human-readable description for an HMS error"""
     return HMS_ERRORS.get(_id, "Unknown")
     
