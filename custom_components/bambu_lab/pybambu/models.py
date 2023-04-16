@@ -526,3 +526,4 @@ class HMSList:
                 attr = hms['attr']
                 code = hms['code']
                 hms = f'{int(attr/0x10000):0>4X}_{attr&0x10000:0>4X}_{int(code/0x10000):0>4X}_{code&0x10000:0>4X}' # 0300_0100_0001_0007
+                self.errors.append(hms)
