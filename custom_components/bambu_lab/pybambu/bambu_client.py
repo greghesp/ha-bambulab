@@ -41,9 +41,9 @@ def listen_thread(self):
                 LOGGER.debug("Host is unreachable. Sleeping.")
                 time.sleep(5)
             else:
-                LOGGER.exception("A listener loop thread exception occurred:")
-                LOGGER.exception(f"Exception type: {type(e)}")
-                LOGGER.exception(f"Exception args: {e.args}")
+                LOGGER.error("A listener loop thread exception occurred:")
+                LOGGER.error(f"Exception type: {type(e)}")
+                LOGGER.error(f"Exception args: {e.args}")
                 # Avoid a tight loop if this is a persistent error.
                 time.sleep(1)
             self.client.disconnect()
