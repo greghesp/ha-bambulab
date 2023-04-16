@@ -107,7 +107,7 @@ class BambuClient:
                       userdata: None,
                       result_code: int):
         """Called when MQTT Disconnects"""
-        LOGGER.debug(f"On Disconnect: Disconnected from Broker: {result_code}")
+        LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
 
     def on_message(self, client, userdata, message):
@@ -140,7 +140,7 @@ class BambuClient:
             LOGGER.debug(f"Sent {msg} to topic device/{self._serial}/request")
             return True
 
-        LOGGER.debug(f"Failed to send message to topic device/{self._serial}/request")
+        LOGGER.error(f"Failed to send message to topic device/{self._serial}/request")
         return False
 
     def command(self, cmd):
