@@ -273,7 +273,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[1].name,
         extra_attributes=lambda self: 
           {
-            "active": (self.coordinator.get_model().ams.tray_now%4 == 0) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
+            "active": (self.coordinator.get_model().ams.tray_now%4 == 1) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
             "brand": self.coordinator.get_model().ams.data[self.index].tray[1].sub_brands,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[1].color}",
             "name": self.coordinator.get_model().ams.data[self.index].tray[1].name,
@@ -290,7 +290,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[2].name,
         extra_attributes=lambda self: 
           {
-            "active": (self.coordinator.get_model().ams.tray_now%4 == 0) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
+            "active": (self.coordinator.get_model().ams.tray_now%4 == 2) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
             "brand": self.coordinator.get_model().ams.data[self.index].tray[2].sub_brands,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[2].color}",
             "name": self.coordinator.get_model().ams.data[self.index].tray[2].name,
@@ -307,7 +307,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].name,
         extra_attributes=lambda self: 
           {
-            "active": (self.coordinator.get_model().ams.tray_now%4 == 0) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
+            "active": (self.coordinator.get_model().ams.tray_now%4 == 3) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
             "brand": self.coordinator.get_model().ams.data[self.index].tray[3].sub_brands,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[3].color}",
             "name": self.coordinator.get_model().ams.data[self.index].tray[3].name,
