@@ -244,7 +244,7 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
 
 AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
-        key="humidify_index",
+        key="humidity_index",
         name="Humidity Index",
         icon="mdi:cloud-percent",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity_index
