@@ -21,16 +21,18 @@ class Device:
         self.stage = StageAction()
         self.ams = AMSList(client)
         self.external_spool = ExternalSpool(client)
+        self.hms = HMSList()
 
     def print_update(self, data):
         """Update from dict"""
-        self.temperature.update(data)
-        self.lights.update(data)
-        self.fans.update(data)
-        self.speed.update(data)
-        self.stage.update(data)
+        self.temperature.print_update(data)
+        self.lights.print_update(data)
+        self.fans.print_update(data)
+        self.speed.print_update(data)
+        self.stage.print_update(data)
         self.ams.print_update(data)
-        self.external_spool.update(data)
+        self.external_spool.print_update(data)
+        self.hms.print_update(data)
 
     def info_update(self, data):
         """Update from dict"""
@@ -76,7 +78,7 @@ class Lights:
         self.chamber_light = "Unknown"
         self.work_light = "Unknown"
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
 
         self.chamber_light = \
@@ -115,7 +117,7 @@ class Temperature:
         self.nozzle_temp = 0
         self.target_nozzle_temp = 0
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
 
         self.bed_temp = round(data.get("bed_temper", self.bed_temp))
@@ -147,7 +149,7 @@ class Fans:
         self.heatbreak_fan_speed = 0
         self._heatbreak_fan_speed = 0
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
         self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
         self.aux_fan_speed = fan_percentage(self._aux_fan_speed)
@@ -221,13 +223,11 @@ class AMSInstance:
         self.tray[2] = AMSTray()
         self.tray[3] = AMSTray()
 
-
 @dataclass
 class AMSList:
     """Return all AMS related info"""
 
     def __init__(self, client):
-        """Load from dict"""
         self.client = client
         self.tray_now = 0
         self.data = []
@@ -347,7 +347,7 @@ class AMSList:
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
-                    self.data[index].tray[tray_id].update(tray)
+                    self.data[index].tray[tray_id].print_update(tray)
 
         if received_ams_data:
             if self.client.callback is not None:
@@ -389,7 +389,7 @@ class AMSTray:
         self.nozzle_temp_max = 0
         self.k = 0
 
-    def update(self, data):
+    def print_update(self, data):
         if len(data) == 1:
             # If the day is exactly one entry then it's just the ID and the tray is empty.
             self.Empty = True
@@ -420,7 +420,7 @@ class ExternalSpool(AMSTray):
         super().__init__()
         self.client = client
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
 
         # P1P virtual tray example
@@ -455,7 +455,7 @@ class ExternalSpool(AMSTray):
         if len(tray_data) != 0:
             LOGGER.debug(f"RECEIVED VIRTUAL TRAY DATA")
             received_virtual_tray_data = True
-            super().update(tray_data)
+            super().print_update(tray_data)
 
         if received_virtual_tray_data:
             if self.client.callback is not None:
@@ -475,7 +475,7 @@ class Speed:
         self.name = get_speed_name(2)
         self.modifier = 100
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
         self._id = int(data.get("spd_lvl", self._id))
         self.name = get_speed_name(self._id)
@@ -493,7 +493,36 @@ class StageAction:
         self._id = 99
         self.description = get_stage_action(self._id)
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
         self._id = int(data.get("stg_cur", self._id))
         self.description = get_stage_action(self._id)
+
+
+@dataclass
+class HMSList:
+    """Return all HMS related info"""
+    def __init__(self):
+        self.errors = []
+    
+    def print_update(self, data):
+        """Update from dict"""
+
+        # Example payload:
+        # "hms": [
+        #     {
+        #         "attr": 50331904, # In hex this is 0300 0100
+        #         "code": 65543     # In hex this is 0001 0007
+        #     }
+        # ],
+        # So this is HMS_0300_0100_0001_0007:
+        # https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/0300_0100_0001_0007
+
+        if 'hms' in data.keys():
+            self.errors.clear()
+            hmsList = data.get('hms', [])
+            for hms in hmsList:
+                # Example
+                attr = hms['attr']
+                code = hms['code']
+                hms = f'{int(attr/0x10000):0>4X}_{attr&0x10000:0>4X}_{int(code/0x10000):0>4X}_{code&0x10000:0>4X}' # 0300_0100_0001_0007
