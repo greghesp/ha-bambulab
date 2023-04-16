@@ -33,6 +33,7 @@ class Device:
         self.ams.print_update(data)
         self.external_spool.print_update(data)
         self.hms.print_update(data)
+        self.client.callback("event_printer_data_update")
 
     def info_update(self, data):
         """Update from dict"""
