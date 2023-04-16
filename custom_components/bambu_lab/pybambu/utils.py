@@ -87,7 +87,7 @@ def get_sw_version(modules, default):
 
 def start_time(timestamp):
     """Return start time of a print"""
-    if timestamp == 000:
+    if timestamp == 0:
         return "N/A"
     return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
 

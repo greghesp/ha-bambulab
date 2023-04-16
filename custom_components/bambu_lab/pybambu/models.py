@@ -187,8 +187,8 @@ class Info:
         self.gcode_state = "Unknown"
         self.serial = serial
         self.remaining_time = 0
-        self.end_time = 000
-        self.start_time = 000
+        self.end_time = 0
+        self.start_time = 0
         self.current_layer = 0
         self.total_layers = 0
 
