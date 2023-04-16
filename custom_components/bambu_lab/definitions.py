@@ -257,7 +257,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         extra_attributes=lambda self: 
           {
             "active": (self.coordinator.get_model().ams.tray_now%4 == 0) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
-            "brand": self.coordinator.get_model().ams.data[self.index].tray[0].sub_brands,
+#            "brand": self.coordinator.get_model().ams.data[self.index].tray[0].sub_brands,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[0].color}",
             "name": self.coordinator.get_model().ams.data[self.index].tray[0].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[0].nozzle_temp_min,
@@ -274,7 +274,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         extra_attributes=lambda self: 
           {
             "active": (self.coordinator.get_model().ams.tray_now%4 == 1) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
-            "brand": self.coordinator.get_model().ams.data[self.index].tray[1].sub_brands,
+#            "brand": self.coordinator.get_model().ams.data[self.index].tray[1].sub_brands,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[1].color}",
             "name": self.coordinator.get_model().ams.data[self.index].tray[1].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[1].nozzle_temp_min,
@@ -291,7 +291,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         extra_attributes=lambda self: 
           {
             "active": (self.coordinator.get_model().ams.tray_now%4 == 2) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
-            "brand": self.coordinator.get_model().ams.data[self.index].tray[2].sub_brands,
+#            "brand": self.coordinator.get_model().ams.data[self.index].tray[2].sub_brands,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[2].color}",
             "name": self.coordinator.get_model().ams.data[self.index].tray[2].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[2].nozzle_temp_min,
@@ -308,7 +308,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         extra_attributes=lambda self: 
           {
             "active": (self.coordinator.get_model().ams.tray_now%4 == 3) and (math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
-            "brand": self.coordinator.get_model().ams.data[self.index].tray[3].sub_brands,
+#            "brand": self.coordinator.get_model().ams.data[self.index].tray[3].sub_brands,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[3].color}",
             "name": self.coordinator.get_model().ams.data[self.index].tray[3].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[3].nozzle_temp_min,
