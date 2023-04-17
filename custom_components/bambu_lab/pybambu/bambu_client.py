@@ -41,9 +41,9 @@ def listen_thread(self):
                 LOGGER.debug("Host is unreachable. Sleeping.")
                 time.sleep(5)
             else:
-                LOGGER.debug("A listener loop thread exception occurred:")
-                LOGGER.debug(f"Exception type: {type(e)}")
-                LOGGER.debug(f"Exception args: {e.args}")
+                LOGGER.error("A listener loop thread exception occurred:")
+                LOGGER.error(f"Exception type: {type(e)}")
+                LOGGER.error(f"Exception args: {e.args}")
                 # Avoid a tight loop if this is a persistent error.
                 time.sleep(1)
             self.client.disconnect()
@@ -93,7 +93,7 @@ class BambuClient:
                    result_code: int,
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.debug("On Connect: Connected to Broker")
+        LOGGER.info("On Connect: Connected to Broker")
         self._connected = True
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
@@ -107,25 +107,26 @@ class BambuClient:
                       userdata: None,
                       result_code: int):
         """Called when MQTT Disconnects"""
-        LOGGER.debug(f"On Disconnect: Disconnected from Broker: {result_code}")
+        LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            #LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
-                self._device.update(data=json_data.get("print"))
-                self.callback("event_printer_data_update")
+                self._device.print_update(data=json_data.get("print"))
+            elif json_data.get("mc_print"):
+                LOGGER.debug("!!!! GOT mc_print_update")
+                self._device.mc_print_update(data=json_data.get("mc_print"))
             elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
-                self._device.update(data=json_data.get("info"))
-                self.callback("event_printer_info_update")
+                self._device.info_update(data=json_data.get("info"))
         except Exception as e:
-            LOGGER.debug("An exception occurred:")
-            LOGGER.debug(f"Exception type: {type(e)}")
-            LOGGER.debug(f"Exception args: {e.args}")
+            LOGGER.error("An exception occurred processing a message:")
+            LOGGER.error(f"Exception type: {type(e)}")
+            LOGGER.error(f"Exception args: {e.args}")
 
     def subscribe(self):
         """Subscribe to report topic"""
@@ -140,7 +141,7 @@ class BambuClient:
             LOGGER.debug(f"Sent {msg} to topic device/{self._serial}/request")
             return True
 
-        LOGGER.debug(f"Failed to send message to topic device/{self._serial}/request")
+        LOGGER.error(f"Failed to send message to topic device/{self._serial}/request")
         return False
 
     def command(self, cmd):

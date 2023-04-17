@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timezone, timedelta
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, LOGGER
+from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER
 
 
 def search(lst, predicate, default={}):
@@ -44,6 +44,11 @@ def get_stage_action(_id):
     return ACTION_IDS.get(_id, "Unknown")
 
 
+def get_HMS_error_text(_id):
+    """Return the human-readable description for an HMS error"""
+    return HMS_ERRORS.get(_id, "Unknown")
+    
+
 def get_printer_type(modules, default):
     """Retrieve printer type"""
     esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
@@ -82,7 +87,7 @@ def get_sw_version(modules, default):
 
 def start_time(timestamp):
     """Return start time of a print"""
-    if timestamp == 000:
+    if timestamp == 0:
         return "N/A"
     return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
 

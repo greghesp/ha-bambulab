@@ -116,7 +116,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 )
                 gotToken = True
             except Exception as e:
-                LOGGER.debug(f"Failed to retrieve auth token with error code {e.args}")
+                LOGGER.warn(f"Failed to retrieve auth token with error code {e.args}")
 
             if gotToken:
                 authToken = result['accessToken']
@@ -248,7 +248,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 )
                 gotToken = True
             except Exception as e:
-                LOGGER.debug(f"Failed to retrieve auth token with error code {e.args}")
+                LOGGER.warn(f"Failed to retrieve auth token with error code {e.args}")
 
             if gotToken:
                 authToken = result['accessToken']
