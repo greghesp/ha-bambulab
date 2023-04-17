@@ -3,7 +3,7 @@ from homeassistant.helpers import device_registry
 
 from dataclasses import dataclass
 from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
-    get_sw_version, start_time, end_time
+    get_sw_version, start_time, end_time, get_HMS_error_text
 from .const import LOGGER, Features
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
@@ -504,7 +504,7 @@ class StageAction:
 class HMSList:
     """Return all HMS related info"""
     def __init__(self):
-        self.errors = []
+        self.errors = {}
     
     def print_update(self, data):
         """Update from dict"""
@@ -518,13 +518,18 @@ class HMSList:
         # ],
         # So this is HMS_0300_0100_0001_0007:
         # https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/0300_0100_0001_0007
+        # 'The heatbed temperature is abnormal; the sensor may have an open circuit.'
 
         if 'hms' in data.keys():
             self.errors.clear()
             hmsList = data.get('hms', [])
+            index: int = 0
             for hms in hmsList:
-                # Example
+                index = index + 1
                 attr = hms['attr']
                 code = hms['code']
-                hms = f'HMS_{int(attr/0x10000):0>4X}_{attr&0x10000:0>4X}_{int(code/0x10000):0>4X}_{code&0x10000:0>4X}' # 0300_0100_0001_0007
-                self.errors.append(hms)
+                hms_error = f'{int(attr/0x10000):0>4X}_{attr&0xFFFF:0>4X}_{int(code/0x10000):0>4X}_{code&0xFFFF:0>4X}' # 0300_0100_0001_0007
+                LOGGER.warning(f"HMS ERROR: HMS_{hms_error} : {get_HMS_error_text(hms_error)}")
+                self.errors[f"{index} HMS code"] = f"HMS_{hms_error}"
+                self.errors[f"{index} URL"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{hms_error}"
+                self.errors[f"{index} Text Description"] = f"{get_HMS_error_text(hms_error)}"
