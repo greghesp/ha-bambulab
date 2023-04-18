@@ -256,20 +256,20 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:cloud-percent",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity_index
     ),
-    # BambuLabSensorEntityDescription(
-    #     key="humidity",
-    #     name="Humidity",
-    #     icon="mdi:cloud-percent",
-    #     value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity,
-    #     exists_fn=lambda coordinator: False
-    # ),
-    # BambuLabSensorEntityDescription(
-    #     key="temperature",
-    #     name="Temperature",
-    #     icon="mdi:thermometer",
-    #     value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].temperature,
-    #     exists_fn=lambda coordinator: False
-    # ),
+    BambuLabSensorEntityDescription(
+        key="humidity",
+        name="Humidity",
+        icon="mdi:cloud-percent",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRA_AMS_DATA)
+    ),
+    BambuLabSensorEntityDescription(
+        key="temperature",
+        name="Temperature",
+        icon="mdi:thermometer",
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].temperature,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRA_AMS_DATA)
+    ),
     BambuLabSensorEntityDescription(
         key="tray_1",
         name="Tray 1",
