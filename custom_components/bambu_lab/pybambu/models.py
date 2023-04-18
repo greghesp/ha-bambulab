@@ -234,6 +234,8 @@ class AMSList:
         self.client = client
         self.tray_now = 0
         self.data = []
+        self.temperature = 0.0
+        self.humidity = 0
 
     def info_update(self, data):
         """Update from dict"""
@@ -369,14 +371,23 @@ class AMSList:
         # }
 
         data = data.get('param', '')
-        if data.startsWith('[AMS][TASK]ams'):
+        if data.startswith('[AMS][TASK]ams'):
             LOGGER.debug(data)
-            data = data[14]
+            data = data[14:]
             LOGGER.debug(data)
-            ams_index = int(data)
+            ams_index = int(data.split()[0])
             LOGGER.debug(ams_index)
             self.client.callback("event_ams_data_update")
-                
+            data = data[2:]
+            data = data.split(';')
+            for entry in data:
+                entry = entry.split(':')
+                if entry[0] == "temp":
+                    self.temperature = float(entry[1])
+                    LOGGER.debug(f"GOT AMS TEMP: {self.temperature}")
+                elif entry[0] == "humidity":
+                    self.humidity = int(entry[1][0:2])
+                    LOGGER.debug(f"GOT AMS HUMIDITY: {self.humidity}")
 
 @dataclass
 class AMSTray:
