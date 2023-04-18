@@ -14,7 +14,8 @@ class Features(Enum):
     EXTERNAL_SPOOL = 8,
     K_VALUE = 9,
     START_TIME = 10,
-    EXTRA_AMS_DATA = 11,
+    AMS_TEMPERATURE = 11,
+    AMS_RAW_HUMIDITY = 12,
 
 ACTION_IDS = {
     "default": "Unknown",

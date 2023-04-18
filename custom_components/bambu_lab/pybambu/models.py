@@ -65,7 +65,9 @@ class Device:
             return self.info.device_type == "P1P"
         if feature == Features.START_TIME:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
-        if feature == Features.EXTRA_AMS_DATA:
+        if feature == Features.AMS_TEMPERATURE:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.AMS_RAW_HUMIDITY:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
@@ -234,8 +236,6 @@ class AMSList:
         self.client = client
         self.tray_now = 0
         self.data = []
-        self.temperature = 0.0
-        self.humidity = 0
 
     def info_update(self, data):
         """Update from dict"""
@@ -348,6 +348,7 @@ class AMSList:
                 if len(self.data) <= index:
                     self.data.append(AMSInstance())
                 self.data[index].humidity_index = int(ams['humidity'])
+                self.data[index].temperature = float(ams['temp'])
 
                 tray_list = ams['tray']
                 for tray in tray_list:
@@ -383,11 +384,11 @@ class AMSList:
             for entry in data:
                 entry = entry.split(':')
                 if entry[0] == "temp":
-                    self.temperature = float(entry[1])
-                    LOGGER.debug(f"GOT AMS TEMP: {self.temperature}")
+                    #self.temperature = float(entry[1])
+                    LOGGER.debug(f"GOT RAW AMS TEMP: {float(entry[1])}")
                 elif entry[0] == "humidity":
                     self.humidity = int(entry[1][0:2])
-                    LOGGER.debug(f"GOT AMS HUMIDITY: {self.humidity}")
+                    LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.humidity}")
 
 @dataclass
 class AMSTray:
