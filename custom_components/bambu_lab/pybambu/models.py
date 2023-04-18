@@ -530,6 +530,5 @@ class HMSList:
                 code = hms['code']
                 hms_error = f'{int(attr/0x10000):0>4X}_{attr&0xFFFF:0>4X}_{int(code/0x10000):0>4X}_{code&0xFFFF:0>4X}' # 0300_0100_0001_0007
                 LOGGER.warning(f"HMS ERROR: HMS_{hms_error} : {get_HMS_error_text(hms_error)}")
-                self.errors[f"{index} HMS code"] = f"HMS_{hms_error}"
-                self.errors[f"{index} URL"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{hms_error}"
-                self.errors[f"{index} Text Description"] = f"{get_HMS_error_text(hms_error)}"
+                self.errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
+                self.errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{hms_error}"

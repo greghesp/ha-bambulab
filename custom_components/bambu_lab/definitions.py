@@ -208,7 +208,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:alert",
         entity_category=EntityCategory.DIAGNOSTIC,
         available_fn = lambda self: True,
-        value_fn=lambda self: int(len(self.coordinator.get_model().hms.errors)/3),
+        value_fn=lambda self: int(len(self.coordinator.get_model().hms.errors)/2),
         extra_attributes=lambda self: self.coordinator.get_model().hms.errors
     ),
 )
