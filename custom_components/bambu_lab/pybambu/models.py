@@ -25,6 +25,7 @@ class Device:
 
     def print_update(self, data):
         """Update from dict"""
+        self.info.print_update(data)
         self.temperature.print_update(data)
         self.lights.print_update(data)
         self.fans.print_update(data)
@@ -180,6 +181,7 @@ class Info:
     end_time: str
     current_layer: int
     total_layers: int
+    timelapse: str
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -195,6 +197,7 @@ class Info:
         self.start_time = 0
         self.current_layer = 0
         self.total_layers = 0
+        self.timelapse = ""
 
     def info_update(self, data):
         """Update from dict"""
@@ -203,13 +206,18 @@ class Info:
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
+        self.client.callback("event_printer_info_update")
+
+    def print_update(self, data):
+        """Update from dict"""
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
         self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.client.callback("event_printer_info_update")
+        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
+        self.client.callback("event_printer_print_update")
 
 
 @dataclass
