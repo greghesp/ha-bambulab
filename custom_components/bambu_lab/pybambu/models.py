@@ -25,6 +25,7 @@ class Device:
 
     def print_update(self, data):
         """Update from dict"""
+        self.info.print_update(data)
         self.temperature.print_update(data)
         self.lights.print_update(data)
         self.fans.print_update(data)
@@ -64,6 +65,10 @@ class Device:
         if feature == Features.K_VALUE:
             return self.info.device_type == "P1P"
         if feature == Features.START_TIME:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.AMS_TEMPERATURE:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.AMS_RAW_HUMIDITY:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
@@ -176,6 +181,7 @@ class Info:
     end_time: str
     current_layer: int
     total_layers: int
+    timelapse: str
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -191,6 +197,7 @@ class Info:
         self.start_time = 0
         self.current_layer = 0
         self.total_layers = 0
+        self.timelapse = ""
 
     def info_update(self, data):
         """Update from dict"""
@@ -199,13 +206,18 @@ class Info:
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
+        self.client.callback("event_printer_info_update")
+
+    def print_update(self, data):
+        """Update from dict"""
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
         self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.client.callback("event_printer_info_update")
+        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
+        self.client.callback("event_printer_print_update")
 
 
 @dataclass
@@ -344,6 +356,7 @@ class AMSList:
                 if len(self.data) <= index:
                     self.data.append(AMSInstance())
                 self.data[index].humidity_index = int(ams['humidity'])
+                self.data[index].temperature = float(ams['temp'])
 
                 tray_list = ams['tray']
                 for tray in tray_list:
@@ -367,14 +380,23 @@ class AMSList:
         # }
 
         data = data.get('param', '')
-        if data.startsWith('[AMS][TASK]ams'):
+        if data.startswith('[AMS][TASK]ams'):
             LOGGER.debug(data)
-            data = data[14]
+            data = data[14:]
             LOGGER.debug(data)
-            ams_index = int(data)
+            ams_index = int(data.split()[0])
             LOGGER.debug(ams_index)
             self.client.callback("event_ams_data_update")
-                
+            data = data[2:]
+            data = data.split(';')
+            for entry in data:
+                entry = entry.split(':')
+                if entry[0] == "temp":
+                    #self.temperature = float(entry[1])
+                    LOGGER.debug(f"GOT RAW AMS TEMP: {float(entry[1])}")
+                elif entry[0] == "humidity":
+                    self.humidity = int(entry[1][0:2])
+                    LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.humidity}")
 
 @dataclass
 class AMSTray:
