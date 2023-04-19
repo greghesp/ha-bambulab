@@ -47,7 +47,7 @@ def get_stage_action(_id):
 def get_HMS_error_text(_id):
     """Return the human-readable description for an HMS error"""
     return HMS_ERRORS.get(_id, "Unknown")
-    
+
 
 def get_printer_type(modules, default):
     """Retrieve printer type"""
@@ -108,3 +108,8 @@ def round_minute(date: datetime = None, round_to: int = 1):
     delta = date.minute % round_to
     return date.replace(minute=date.minute - delta)
 
+
+def timelapse_state(value):
+    if not value:
+        return value
+    return f"{value}d".capitalize()
