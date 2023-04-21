@@ -163,6 +163,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="start_time",
         name="Start Time",
         icon="mdi:clock",
+        available_fn = lambda self: self.coordinator.get_model().info.start_time != 0,
         value_fn=lambda self: self.coordinator.get_model().info.start_time,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME)
     ),
@@ -207,7 +208,6 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         name="HMS Errors",
         icon="mdi:alert",
         entity_category=EntityCategory.DIAGNOSTIC,
-        available_fn = lambda self: True,
         value_fn=lambda self: int(len(self.coordinator.get_model().hms.errors)/2),
         extra_attributes=lambda self: self.coordinator.get_model().hms.errors
     ),
