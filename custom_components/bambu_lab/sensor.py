@@ -72,7 +72,7 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     def available(self) -> bool:
         """Return if entity is available."""
         return self.entity_description.available_fn(self)
-
+    
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
     """Representation of a BambuLab AMS that is updated via MQTT."""
