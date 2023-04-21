@@ -2,8 +2,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry
 
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
-    get_sw_version, start_time, end_time, get_HMS_error_text
+from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, \
+    get_hw_version, \
+    get_sw_version, start_time, end_time, get_HMS_error_text, timelapse_state
 from .const import LOGGER, Features
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
@@ -93,7 +94,7 @@ class Lights:
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
-        
+
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
         if self.client.callback is not None:
@@ -216,13 +217,14 @@ class Info:
         self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
+        self.timelapse = timelapse_state(data.get("ipcam", {}).get("timelapse", self.timelapse))
         self.client.callback("event_printer_print_update")
 
 
 @dataclass
 class AMSInstance:
     """Return all AMS instance related info"""
+
     def __init__(self):
         self.serial = ""
         self.sw_version = ""
@@ -235,6 +237,7 @@ class AMSInstance:
         self.tray[1] = AMSTray()
         self.tray[2] = AMSTray()
         self.tray[3] = AMSTray()
+
 
 @dataclass
 class AMSList:
@@ -392,22 +395,24 @@ class AMSList:
             for entry in data:
                 entry = entry.split(':')
                 if entry[0] == "temp":
-                    #self.temperature = float(entry[1])
+                    # self.temperature = float(entry[1])
                     LOGGER.debug(f"GOT RAW AMS TEMP: {float(entry[1])}")
                 elif entry[0] == "humidity":
                     self.humidity = int(entry[1][0:2])
                     LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.humidity}")
 
+
 @dataclass
 class AMSTray:
     """Return all AMS tray related info"""
+
     def __init__(self):
         self.Empty = True
         self.idx = ""
         self.name = ""
         self.type = ""
         self.sub_brands = ""
-        self.color = "00000000" # RRGGBBAA
+        self.color = "00000000"  # RRGGBBAA
         self.nozzle_temp_min = 0
         self.nozzle_temp_max = 0
         self.k = 0
@@ -420,7 +425,7 @@ class AMSTray:
             self.name = "Empty"
             self.type = "Empty"
             self.sub_brands = ""
-            self.color = "00000000" # RRGGBBAA
+            self.color = "00000000"  # RRGGBBAA
             self.nozzle_temp_min = 0
             self.nozzle_temp_max = 0
             self.k = 0
@@ -439,6 +444,7 @@ class AMSTray:
 @dataclass
 class ExternalSpool(AMSTray):
     """Return the virtual tray related info"""
+
     def __init__(self, client):
         super().__init__()
         self.client = client
@@ -525,9 +531,10 @@ class StageAction:
 @dataclass
 class HMSList:
     """Return all HMS related info"""
+
     def __init__(self):
         self.errors = {}
-    
+
     def print_update(self, data):
         """Update from dict"""
 
@@ -550,7 +557,7 @@ class HMSList:
                 index = index + 1
                 attr = hms['attr']
                 code = hms['code']
-                hms_error = f'{int(attr/0x10000):0>4X}_{attr&0xFFFF:0>4X}_{int(code/0x10000):0>4X}_{code&0xFFFF:0>4X}' # 0300_0100_0001_0007
+                hms_error = f'{int(attr / 0x10000):0>4X}_{attr & 0xFFFF:0>4X}_{int(code / 0x10000):0>4X}_{code & 0xFFFF:0>4X}'  # 0300_0100_0001_0007
                 LOGGER.warning(f"HMS ERROR: HMS_{hms_error} : {get_HMS_error_text(hms_error)}")
                 self.errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
                 self.errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{hms_error}"
