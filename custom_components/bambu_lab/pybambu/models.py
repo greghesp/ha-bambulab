@@ -88,6 +88,17 @@ class Lights:
     def print_update(self, data):
         """Update from dict"""
 
+        # "lights_report": [
+        #     {
+        #         "node": "chamber_light",
+        #         "mode": "on"
+        #     },
+        #     {
+        #         "node": "work_light",  # X1 only
+        #         "mode": "flashing"
+        #     }
+        # ],
+
         self.chamber_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light",
                    {"mode": self.chamber_light}).get("mode")
