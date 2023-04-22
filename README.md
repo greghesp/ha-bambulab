@@ -96,7 +96,6 @@ This currently exposes the following Buttons:
 | Max Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Min Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Name                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Sub Brand                 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Type                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### External Spool (P1P only)
