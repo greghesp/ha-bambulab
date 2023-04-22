@@ -295,6 +295,9 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="temperature",
         name="Temperature",
         icon="mdi:thermometer",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].temperature,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS_TEMPERATURE)
     ),
