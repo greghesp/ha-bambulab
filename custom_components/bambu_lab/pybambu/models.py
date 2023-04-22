@@ -554,6 +554,8 @@ class HMSList:
             self.errors.clear()
             hmsList = data.get('hms', [])
             index: int = 0
+            if len(hmsList) != 0:
+                self.errors["Count"] = len(hmsList)
             for hms in hmsList:
                 index = index + 1
                 attr = hms['attr']

@@ -59,6 +59,7 @@ class BambuLabBinarySensorEntityDescriptionMixIn:
 class BambuLabBinarySensorEntityDescription(BinarySensorEntityDescription, BambuLabBinarySensorEntityDescriptionMixIn):
     """Sensor entity description for Bambu Lab."""
     exists_fn: Callable[..., bool] = lambda _: True
+    extra_attributes: Callable[..., dict] = lambda _: {}
 
 
 PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
@@ -68,6 +69,15 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         icon="mdi:camera",
         device_class=BinarySensorDeviceClass.RUNNING,
         is_on_fn=lambda self: self.coordinator.get_model().info.timelapse == 'enabled'
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="hms",
+        name="HMS Errors",
+        icon="mdi:alert",
+        device_class=BinarySensorDeviceClass.PROBLEM
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: len(self.coordinator.get_model().hms.errors) != 0,
+        extra_attributes=lambda self: self.coordinator.get_model().hms.errors
     ),
 )
 
@@ -228,14 +238,6 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         available_fn = lambda self: self.coordinator.get_model().supports_feature(Features.AMS) and self.coordinator.get_model().ams.tray_now != 255,
         value_fn=lambda self: self.coordinator.get_model().ams.tray_now + 1,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
-    ),
-    BambuLabSensorEntityDescription(
-        key="hms",
-        name="HMS Errors",
-        icon="mdi:alert",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda self: int(len(self.coordinator.get_model().hms.errors)/2),
-        extra_attributes=lambda self: self.coordinator.get_model().hms.errors
     ),
 )
 
