@@ -118,6 +118,17 @@ This currently exposes the following Diagnostic Sensors:
 | Sensor                    | X1C                | X1                 | P1P                |
 |---------------------------|--------------------|--------------------|--------------------|
 | Wifi Signal               | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| HMS Errors                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Attributes:               |                    |                    |                    |
+| Count                     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 1-Error                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 1-Wiki                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2-Error                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2-Wiki                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| ... and so on             |                    |                    |                    |
+
+
+HMS erro
 
 ### Cameras
 
