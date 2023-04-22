@@ -389,7 +389,6 @@ class AMSList:
             LOGGER.debug(data)
             ams_index = int(data.split()[0])
             LOGGER.debug(ams_index)
-            self.client.callback("event_ams_data_update")
             data = data[2:]
             data = data.split(';')
             for entry in data:
@@ -401,6 +400,7 @@ class AMSList:
                     entry = entry[1].split('%')
                     self.humidity = int(entry[0])
                     LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.humidity}")
+                    self.client.callback("event_ams_data_update")
 
 
 @dataclass
