@@ -25,6 +25,10 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntityDescription
+)
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
@@ -44,6 +48,28 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
 
+
+@dataclass
+class BambuLabBinarySensorEntityDescriptionMixIn:
+    """Mixin for required keys."""
+    is_on_fn: Callable[..., bool]
+
+
+@dataclass
+class BambuLabBinarySensorEntityDescription(BinarySensorEntityDescription, BambuLabBinarySensorEntityDescriptionMixIn):
+    """Sensor entity description for Bambu Lab."""
+    exists_fn: Callable[..., bool] = lambda _: True
+
+
+PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
+    BambuLabBinarySensorEntityDescription(
+        key="timelapse",
+        name="Recording TimeLapse",
+        icon="mdi:camera",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        is_on_fn=lambda self: self.coordinator.get_model().info.timelapse == 'enabled'
+    ),
+)
 
 PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
