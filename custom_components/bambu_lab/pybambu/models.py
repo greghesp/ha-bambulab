@@ -383,6 +383,7 @@ class AMSList:
         # }
 
         data = data.get('param', '')
+        LOGGER.debug(f"Got data: '{data}'")
         if data.startswith('[AMS][TASK]ams') and data.find('humidity') != -1:
             LOGGER.debug(data)
             data = data[14:]
