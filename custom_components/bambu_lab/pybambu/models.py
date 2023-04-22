@@ -398,7 +398,8 @@ class AMSList:
                     # self.temperature = float(entry[1])
                     LOGGER.debug(f"GOT RAW AMS TEMP: {float(entry[1])}")
                 elif entry[0] == "humidity":
-                    self.humidity = int(entry[1][0:2])
+                    entry = entry[1].split('%')
+                    self.humidity = int(entry[0])
                     LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.humidity}")
 
 
@@ -553,6 +554,8 @@ class HMSList:
             self.errors.clear()
             hmsList = data.get('hms', [])
             index: int = 0
+            if len(hmsList) != 0:
+                self.errors["Count"] = len(hmsList)
             for hms in hmsList:
                 index = index + 1
                 attr = hms['attr']

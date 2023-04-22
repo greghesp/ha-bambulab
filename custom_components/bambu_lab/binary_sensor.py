@@ -51,3 +51,8 @@ class BambuLabBinarySensor(BambuLabEntity, BinarySensorEntity):
     def is_on(self) -> bool:
         """Return if binary sensor is on."""
         return self.entity_description.is_on_fn(self)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return the state attributes."""
+        return self.entity_description.extra_attributes(self)
