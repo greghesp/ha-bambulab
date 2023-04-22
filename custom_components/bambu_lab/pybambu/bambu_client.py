@@ -118,7 +118,6 @@ class BambuClient:
             if json_data.get("print"):
                 self._device.print_update(data=json_data.get("print"))
             elif json_data.get("mc_print"):
-                LOGGER.debug("!!!! GOT mc_print_update")
                 self._device.mc_print_update(data=json_data.get("mc_print"))
             elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")

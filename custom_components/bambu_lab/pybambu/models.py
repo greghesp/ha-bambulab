@@ -4,7 +4,7 @@ from homeassistant.helpers import device_registry
 from dataclasses import dataclass
 from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, \
     get_hw_version, \
-    get_sw_version, start_time, end_time, get_HMS_error_text, timelapse_state
+    get_sw_version, start_time, end_time, get_HMS_error_text
 from .const import LOGGER, Features
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
@@ -213,6 +213,28 @@ class Info:
 
     def info_update(self, data):
         """Update from dict"""
+
+        # Example payload:
+        # {
+        # "info": {
+        #     "command": "get_version",
+        #     "sequence_id": "20004",
+        #     "module": [
+        #     {
+        #         "name": "ota",
+        #         "project_name": "C11",
+        #         "sw_ver": "01.02.03.00",
+        #         "hw_ver": "OTA",
+        #         "sn": "..."
+        #     },
+        #     {
+        #         "name": "esp32",
+        #         "project_name": "C11",
+        #         "sw_ver": "00.03.12.31",
+        #         "hw_ver": "AP04",
+        #         "sn": "..."
+        #     },
+
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
@@ -220,6 +242,26 @@ class Info:
 
     def print_update(self, data):
         """Update from dict"""
+
+        # Example payload:
+        # {
+        #     "print": {
+        #         "gcode_start_time": "1681479206",
+        #         "gcode_state": "IDLE",
+        #         "mc_print_stage": "1",
+        #         "mc_percent": 100,
+        #         "mc_remaining_time": 0,
+        #         "wifi_signal": "-53dBm",
+        #         "print_type": "idle",
+        #         "ipcam": {
+        #             "ipcam_dev": "1",
+        #             "ipcam_record": "enable"
+        #             "resolution": "1080p",        # X1 only
+        #             "timelapse": "disable"
+        #         },
+        #         "layer_num": 0,                   # X1 only
+        #         "total_layer_num": 0,             # X1 only
+
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
@@ -228,7 +270,7 @@ class Info:
         self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.timelapse = timelapse_state(data.get("ipcam", {}).get("timelapse", self.timelapse))
+        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
         self.client.callback("event_printer_print_update")
 
 

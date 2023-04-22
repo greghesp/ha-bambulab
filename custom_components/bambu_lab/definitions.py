@@ -68,7 +68,7 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         name="Recording TimeLapse",
         icon="mdi:camera",
         device_class=BinarySensorDeviceClass.RUNNING,
-        is_on_fn=lambda self: self.coordinator.get_model().info.timelapse == 'enabled'
+        is_on_fn=lambda self: self.coordinator.get_model().info.timelapse == 'enable'
     ),
     BambuLabBinarySensorEntityDescription(
         key="hms",
