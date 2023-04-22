@@ -202,8 +202,6 @@ class Info:
 
     def info_update(self, data):
         """Update from dict"""
-        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
-        self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
@@ -211,6 +209,8 @@ class Info:
 
     def print_update(self, data):
         """Update from dict"""
+        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
+        self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
