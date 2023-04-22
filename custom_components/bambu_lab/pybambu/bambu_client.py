@@ -170,7 +170,7 @@ class BambuClient:
             json_data = json.loads(message.payload)
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
-                self._device.update(data=json_data.get("info"))
+                self._device.info_update(data=json_data.get("info"))
                 result.put(True)
 
         self.client.on_connect = self.on_connect
