@@ -127,9 +127,6 @@ This currently exposes the following Diagnostic Sensors:
 | 2-Wiki                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | ... and so on             |                    |                    |                    |
 
-
-HMS erro
-
 ### Cameras
 
 Cameras are currently not supported across any Bambu Lab device, due to them using a proprietary streaming
