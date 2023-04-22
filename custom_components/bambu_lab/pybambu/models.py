@@ -438,11 +438,8 @@ class AMSList:
         data = data.get('param', '')
         LOGGER.debug(f"Got data: '{data}'")
         if data.startswith('[AMS][TASK]ams') and data.find('humidity') != -1:
-            LOGGER.debug(data)
             data = data[14:]
-            LOGGER.debug(data)
             ams_index = int(data.split()[0])
-            LOGGER.debug(ams_index)
             data = data[2:]
             data = data.split(';')
             for entry in data:
@@ -452,8 +449,8 @@ class AMSList:
                     LOGGER.debug(f"GOT RAW AMS TEMP: {float(entry[1])}")
                 elif entry[0] == "humidity":
                     entry = entry[1].split('%')
-                    self.humidity = int(entry[0])
-                    LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.humidity}")
+                    self.data[ams_index].humidity = int(entry[0])
+                    LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.data[ams_index].humidity}")
                     self.client.callback("event_ams_data_update")
 
 
