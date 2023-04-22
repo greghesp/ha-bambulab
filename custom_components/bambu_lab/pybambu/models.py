@@ -35,7 +35,8 @@ class Device:
         self.ams.print_update(data)
         self.external_spool.print_update(data)
         self.hms.print_update(data)
-        self.client.callback("event_printer_data_update")
+        if self.client.callback is not None:
+            self.client.callback("event_printer_data_update")
 
     def info_update(self, data):
         """Update from dict"""
@@ -238,7 +239,8 @@ class Info:
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
-        self.client.callback("event_printer_info_update")
+        if self.client.callback is not None:
+            self.client.callback("event_printer_info_update")
 
     def print_update(self, data):
         """Update from dict"""
@@ -271,7 +273,8 @@ class Info:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
-        self.client.callback("event_printer_print_update")
+        if self.client.callback is not None:
+            self.client.callback("event_printer_print_update")
 
 
 @dataclass
@@ -451,7 +454,8 @@ class AMSList:
                     entry = entry[1].split('%')
                     self.data[ams_index].humidity = int(entry[0])
                     LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.data[ams_index].humidity}")
-                    self.client.callback("event_ams_data_update")
+                    if self.client.callback is not None:
+                        self.client.callback("event_ams_data_update")
 
 
 @dataclass
