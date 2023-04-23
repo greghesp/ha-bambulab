@@ -35,18 +35,19 @@ def listen_thread(self):
             LOGGER.debug("Starting listen loop")
             self.client.loop_forever()
             break
+        except TimeoutError as e:
+            LOGGER.debug("TimeoutError. Sleeping.")
+            time.sleep(5)
+        except ConnectionError as e:
+            LOGGER.debug("ConnectionError. Sleeping.")
+            time.sleep(5)
         except Exception as e:
             LOGGER.debug(f"Exception {e.args.__str__}")
-            if (e.args.__str__ == 'Host is unreachable'):
-                LOGGER.debug("Host is unreachable. Sleeping.")
-                time.sleep(5)
-            else:
-                LOGGER.error("A listener loop thread exception occurred:")
-                LOGGER.error(f"Exception type: {type(e)}")
-                LOGGER.error(f"Exception args: {e.args}")
-                # Avoid a tight loop if this is a persistent error.
-                time.sleep(1)
-            self.client.disconnect()
+            LOGGER.error("A listener loop thread exception occurred:")
+            LOGGER.error(f"Exception type: {type(e)}")
+            LOGGER.error(f"Exception args: {e.args}")
+            time.sleep(1) # Avoid a tight loop if this is a persistent error.
+        self.client.disconnect()
 
 @dataclass
 class BambuClient:
