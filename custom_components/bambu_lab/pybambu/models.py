@@ -22,7 +22,7 @@ class Device:
         self.stage = StageAction()
         self.ams = AMSList(client)
         self.external_spool = ExternalSpool(client)
-        self.hms = HMSList()
+        self.hms = HMSList(client)
 
     def print_update(self, data):
         """Update from dict"""
@@ -588,7 +588,9 @@ class StageAction:
 class HMSList:
     """Return all HMS related info"""
 
-    def __init__(self):
+    def __init__(self, client):
+        self.client = client
+        self.count = 0
         self.errors = {}
 
     def print_update(self, data):
@@ -606,16 +608,23 @@ class HMSList:
         # 'The heatbed temperature is abnormal; the sensor may have an open circuit.'
 
         if 'hms' in data.keys():
-            self.errors.clear()
             hmsList = data.get('hms', [])
+            self.count = len(hmsList)
+            errors = {}
+            if self.count != 0:
+                errors["Count"] = self.count
+
             index: int = 0
-            if len(hmsList) != 0:
-                self.errors["Count"] = len(hmsList)
             for hms in hmsList:
                 index = index + 1
                 attr = hms['attr']
                 code = hms['code']
                 hms_error = f'{int(attr / 0x10000):0>4X}_{attr & 0xFFFF:0>4X}_{int(code / 0x10000):0>4X}_{code & 0xFFFF:0>4X}'  # 0300_0100_0001_0007
                 LOGGER.warning(f"HMS ERROR: HMS_{hms_error} : {get_HMS_error_text(hms_error)}")
-                self.errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
-                self.errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{hms_error}"
+                errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
+                errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{hms_error}"
+
+            if self.errors != errors:
+                self.errors = errors
+                if self.client.callback is not None:
+                    self.client.callback("event_hms_errors")

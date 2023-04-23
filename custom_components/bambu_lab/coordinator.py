@@ -74,6 +74,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_virtual_tray_data_update":
                     self._update_data()
 
+                case "event_hms_errors":
+                    self._update_hms()
+
         async def listen():
             await self.client.connect(callback=event_handler)
 
@@ -94,6 +97,26 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _update_data(self):
         device = self.get_model()
         self.async_set_updated_data(device)
+
+    def _update_hms(self):
+        device = self.get_model()
+        if device.hms.count == 0:
+            event_data = {
+                "device_id": device.info.serial,
+                "type": "hms_errors_cleared_event",
+            }
+            LOGGER.debug(f"EVENT: HMS errors cleared: {event_data}")
+            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors_cleared", event_data)
+        else:
+            event_data = {
+                "device_id": device.info.serial,
+                "type": "hms_errors_event",
+                "count": device.hms.count
+            }
+            for error in device.hms.errors:
+                event_data[error] = device.hms.errors[error]
+            LOGGER.debug(f"EVENT: HMS errors: {event_data}")
+            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors", event_data)
 
     def _update_device_info(self):
         if not self._updatedDevice:
@@ -121,12 +144,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                         }
                     )
                 self._updatedDevice = True
-
-                # event_data = {
-                #     "device_id": self._entry.data["serial"],
-                #     "type": "test_event",
-                # }
-                # self.hass.bus.async_fire("bambulab_event", event_data) 
 
     async def _reinitialize_sensors(self):
         LOGGER.debug("async_forward_entry_unload")
