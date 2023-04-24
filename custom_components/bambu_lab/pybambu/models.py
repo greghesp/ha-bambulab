@@ -1,6 +1,3 @@
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry
-
 from dataclasses import dataclass
 from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, \
     get_hw_version, \
@@ -9,7 +6,6 @@ from .const import LOGGER, Features
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
 import asyncio
-
 
 class Device:
     def __init__(self, client, device_type, serial):
@@ -329,7 +325,6 @@ class AMSList:
             if name.startswith("ams/"):
                 received_ams_info = True
                 index = int(name[4])
-                LOGGER.debug(f"RECEIVED AMS INFO: {index}")
                 # May get data before info so create entry if necessary
                 if len(self.data) <= index:
                     self.data.append(AMSInstance())
@@ -463,7 +458,7 @@ class AMSTray:
     """Return all AMS tray related info"""
 
     def __init__(self):
-        self.Empty = True
+        self.empty = True
         self.idx = ""
         self.name = ""
         self.type = ""
@@ -476,7 +471,7 @@ class AMSTray:
     def print_update(self, data):
         if len(data) == 1:
             # If the day is exactly one entry then it's just the ID and the tray is empty.
-            self.Empty = True
+            self.empty = True
             self.idx = ""
             self.name = "Empty"
             self.type = "Empty"
@@ -538,7 +533,6 @@ class ExternalSpool(AMSTray):
         received_virtual_tray_data = False
         tray_data = data.get("vt_tray", {})
         if len(tray_data) != 0:
-            LOGGER.debug(f"RECEIVED VIRTUAL TRAY DATA")
             received_virtual_tray_data = True
             super().print_update(tray_data)
 

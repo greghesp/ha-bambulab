@@ -9,7 +9,6 @@ from typing import Any
 from threading import Thread
 
 import paho.mqtt.client as mqtt
-import asyncio
 
 from .const import LOGGER
 from .models import Device
@@ -61,6 +60,7 @@ def listen_thread(self):
             LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
             time.sleep(1) # Avoid a tight loop if this is a persistent error.
         self.client.disconnect()
+
 
 @dataclass
 class BambuClient:
