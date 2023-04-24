@@ -28,6 +28,7 @@ from .commands import (
 def listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
     while True:
+        exceptionSeen = ""
         try:
             LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
             self.client.connect(self.host, self._port, keepalive=5)
@@ -36,16 +37,28 @@ def listen_thread(self):
             self.client.loop_forever()
             break
         except TimeoutError as e:
-            LOGGER.debug("TimeoutError. Sleeping.")
+            if exceptionSeen != "TimeoutError":
+                LOGGER.debug(f"TimeoutError: {e.args}. Sleeping.")
+            exceptionSeen = "TimeoutError"
             time.sleep(5)
         except ConnectionError as e:
-            LOGGER.debug("ConnectionError. Sleeping.")
+            if exceptionSeen != "ConnectionError":
+                LOGGER.debug("fConnectionError: {e.args}. Sleeping.")
+            exceptionSeen = "ConnectionError"
             time.sleep(5)
+        except OSError as e:
+            if e.errno == 113:
+                if exceptionSeen != "OSError113":
+                    LOGGER.debug(f"OSError: {e.args}. Sleeping.")
+                exceptionSeen = "OSError113"
+                time.sleep(5)
+            else:
+                LOGGER.error("A listener loop thread exception occurred:")
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
+                time.sleep(1) # Avoid a tight loop if this is a persistent error.
         except Exception as e:
-            LOGGER.debug(f"Exception {e.args.__str__}")
             LOGGER.error("A listener loop thread exception occurred:")
-            LOGGER.error(f"Exception type: {type(e)}")
-            LOGGER.error(f"Exception args: {e.args}")
+            LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
             time.sleep(1) # Avoid a tight loop if this is a persistent error.
         self.client.disconnect()
 
