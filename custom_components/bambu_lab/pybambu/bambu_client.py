@@ -38,18 +38,18 @@ def listen_thread(self):
             break
         except TimeoutError as e:
             if exceptionSeen != "TimeoutError":
-                LOGGER.debug(f"TimeoutError: {e.args}. Sleeping.")
+                LOGGER.debug(f"TimeoutError: {e.args}.")
             exceptionSeen = "TimeoutError"
             time.sleep(5)
         except ConnectionError as e:
             if exceptionSeen != "ConnectionError":
-                LOGGER.debug("fConnectionError: {e.args}. Sleeping.")
+                LOGGER.debug(f"ConnectionError: {e.args}.")
             exceptionSeen = "ConnectionError"
             time.sleep(5)
         except OSError as e:
             if e.errno == 113:
                 if exceptionSeen != "OSError113":
-                    LOGGER.debug(f"OSError: {e.args}. Sleeping.")
+                    LOGGER.debug(f"OSError: {e.args}.")
                 exceptionSeen = "OSError113"
                 time.sleep(5)
             else:
