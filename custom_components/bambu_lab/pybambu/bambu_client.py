@@ -28,6 +28,7 @@ from .commands import (
 def listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
     while True:
+        exceptionSeen = ""
         try:
             LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
             self.client.connect(self.host, self._port, keepalive=5)
@@ -35,18 +36,31 @@ def listen_thread(self):
             LOGGER.debug("Starting listen loop")
             self.client.loop_forever()
             break
-        except Exception as e:
-            LOGGER.debug(f"Exception {e.args.__str__}")
-            if (e.args.__str__ == 'Host is unreachable'):
-                LOGGER.debug("Host is unreachable. Sleeping.")
+        except TimeoutError as e:
+            if exceptionSeen != "TimeoutError":
+                LOGGER.debug(f"TimeoutError: {e.args}.")
+            exceptionSeen = "TimeoutError"
+            time.sleep(5)
+        except ConnectionError as e:
+            if exceptionSeen != "ConnectionError":
+                LOGGER.debug(f"ConnectionError: {e.args}.")
+            exceptionSeen = "ConnectionError"
+            time.sleep(5)
+        except OSError as e:
+            if e.errno == 113:
+                if exceptionSeen != "OSError113":
+                    LOGGER.debug(f"OSError: {e.args}.")
+                exceptionSeen = "OSError113"
                 time.sleep(5)
             else:
                 LOGGER.error("A listener loop thread exception occurred:")
-                LOGGER.error(f"Exception type: {type(e)}")
-                LOGGER.error(f"Exception args: {e.args}")
-                # Avoid a tight loop if this is a persistent error.
-                time.sleep(1)
-            self.client.disconnect()
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
+                time.sleep(1) # Avoid a tight loop if this is a persistent error.
+        except Exception as e:
+            LOGGER.error("A listener loop thread exception occurred:")
+            LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
+            time.sleep(1) # Avoid a tight loop if this is a persistent error.
+        self.client.disconnect()
 
 @dataclass
 class BambuClient:
@@ -113,15 +127,15 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            #LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("print"):
-                self._device.update(data=json_data.get("print"))
-                self.callback("event_printer_data_update")
+                self._device.print_update(data=json_data.get("print"))
+            elif json_data.get("mc_print"):
+                self._device.mc_print_update(data=json_data.get("mc_print"))
             elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
-                self._device.update(data=json_data.get("info"))
-                self.callback("event_printer_info_update")
+                self._device.info_update(data=json_data.get("info"))
         except Exception as e:
             LOGGER.error("An exception occurred processing a message:")
             LOGGER.error(f"Exception type: {type(e)}")
@@ -170,7 +184,7 @@ class BambuClient:
             json_data = json.loads(message.payload)
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
-                self._device.update(data=json_data.get("info"))
+                self._device.info_update(data=json_data.get("info"))
                 result.put(True)
 
         self.client.on_connect = self.on_connect

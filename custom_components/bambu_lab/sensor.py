@@ -54,7 +54,8 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         """Initialize the sensor."""
         self.coordinator = coordinator
         self.entity_description = description
-        self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
+        printer = coordinator.get_model().info
+        self._attr_unique_id = f"{printer.serial}_{description.key}"
         super().__init__(coordinator=coordinator)
 
     @property
@@ -71,7 +72,7 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     def available(self) -> bool:
         """Return if entity is available."""
         return self.entity_description.available_fn(self)
-
+    
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
     """Representation of a BambuLab AMS that is updated via MQTT."""

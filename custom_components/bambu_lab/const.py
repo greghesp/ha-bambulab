@@ -8,10 +8,11 @@ DOMAIN = "bambu_lab"
 BRAND = "Bambu Lab"
 
 LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=10)
+SCAN_INTERVAL = timedelta(seconds=60)
 
 PLATFORMS = (
     Platform.LIGHT,
     Platform.SENSOR,
+    Platform.BINARY_SENSOR,
     Platform.BUTTON
 )

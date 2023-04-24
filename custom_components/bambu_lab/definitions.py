@@ -25,6 +25,10 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntityDescription
+)
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
@@ -44,6 +48,38 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
 
+
+@dataclass
+class BambuLabBinarySensorEntityDescriptionMixIn:
+    """Mixin for required keys."""
+    is_on_fn: Callable[..., bool]
+
+
+@dataclass
+class BambuLabBinarySensorEntityDescription(BinarySensorEntityDescription, BambuLabBinarySensorEntityDescriptionMixIn):
+    """Sensor entity description for Bambu Lab."""
+    exists_fn: Callable[..., bool] = lambda _: True
+    extra_attributes: Callable[..., dict] = lambda _: {}
+
+
+PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
+    BambuLabBinarySensorEntityDescription(
+        key="timelapse",
+        name="Recording TimeLapse",
+        icon="mdi:camera",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        is_on_fn=lambda self: self.coordinator.get_model().info.timelapse == 'enable'
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="hms",
+        name="HMS Errors",
+        icon="mdi:alert",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: len(self.coordinator.get_model().hms.errors) != 0,
+        extra_attributes=lambda self: self.coordinator.get_model().hms.errors
+    ),
+)
 
 PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
@@ -163,6 +199,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="start_time",
         name="Start Time",
         icon="mdi:clock",
+        available_fn = lambda self: self.coordinator.get_model().info.start_time != 0,
         value_fn=lambda self: self.coordinator.get_model().info.start_time,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME)
     ),
@@ -244,8 +281,28 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="humidity_index",
         name="Humidity Index",
-        icon="mdi:cloud-percent",
+        icon="mdi:water-percent",
+        state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity_index
+    ),
+    BambuLabSensorEntityDescription(
+        key="humidity",
+        name="Humidity",
+        icon="mdi:water-percent",
+        device_class=SensorDeviceClass.HUMIDITY,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS_RAW_HUMIDITY)
+    ),
+    BambuLabSensorEntityDescription(
+        key="temperature",
+        name="Temperature",
+        icon="mdi:thermometer",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].temperature,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS_TEMPERATURE)
     ),
     BambuLabSensorEntityDescription(
         key="tray_1",

@@ -74,6 +74,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_virtual_tray_data_update":
                     self._update_data()
 
+                case "event_hms_errors":
+                    self._update_hms()
+
         async def listen():
             await self.client.connect(callback=event_handler)
 
@@ -87,13 +90,33 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
-        LOGGER.debug(f"_async_update_data: MQTT connected: {self.client.connected}")
+        LOGGER.debug(f"HA POLL: MQTT connected: {self.client.connected}")
         device = self.get_model()
         return device
     
     def _update_data(self):
         device = self.get_model()
         self.async_set_updated_data(device)
+
+    def _update_hms(self):
+        device = self.get_model()
+        if device.hms.count == 0:
+            event_data = {
+                "device_id": device.info.serial,
+                "type": "hms_errors_cleared_event",
+            }
+            LOGGER.debug(f"EVENT: HMS errors cleared: {event_data}")
+            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors_cleared", event_data)
+        else:
+            event_data = {
+                "device_id": device.info.serial,
+                "type": "hms_errors_event",
+                "count": device.hms.count
+            }
+            for error in device.hms.errors:
+                event_data[error] = device.hms.errors[error]
+            LOGGER.debug(f"EVENT: HMS errors: {event_data}")
+            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors", event_data)
 
     def _update_device_info(self):
         if not self._updatedDevice:
@@ -123,8 +146,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._updatedDevice = True
 
     async def _reinitialize_sensors(self):
+        LOGGER.debug("async_forward_entry_unload")
         await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
+        LOGGER.debug("async_forward_entry_setup")
         await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
+        LOGGER.debug("_reinitialize_sensors DONE")
 
     def _update_ams_info(self):
         device = self.get_model()

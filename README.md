@@ -14,9 +14,14 @@ For now, you will need the following information:
 
 Cloud Mode MQTT connection:
 - Registed Bambu email address & password.
-- If you used an OAuth solution like a google account and you can add a password to that account, you can use that here.
 - Your full credentials will not be saved but an authentication token that's generated using them will be saved into the home assistant store.
 - The token expires after 360 days. You can re-auth using the configuration button on the integrations page.
+
+If you signed up using any OAuth method, you need to set a password for your Bambu Cloud account:
+- Login to the Bambu mobile app using OAuth.
+- Tap the person icon at the bottom right.
+- Tap Account Security > Change Password
+Now you can login to the HA integration using your Bambu username and that password.
 
 Lan mode MQTT connection:
 - Printer IP
@@ -55,6 +60,7 @@ In the latest firmware update, Bambu Lab added back the ability to connect to th
 | Start Time                | :white_check_mark: | :white_check_mark: | :x:                |
 | Target Bed Temperature    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Total Layer Count         | :white_check_mark: | :white_check_mark: | :x:                |
+| Timelapse Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 If AMS(s) are present, an additional 'Current Tray' sensor is present on the Printer device.
 
@@ -90,7 +96,6 @@ This currently exposes the following Buttons:
 | Max Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Min Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Name                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Sub Brand                 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Type                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### External Spool (P1P only)
@@ -105,7 +110,7 @@ This currently exposes the following Buttons:
 | Max Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
 | Min Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
 | Name                      | :x:                | :x:                | :white_check_mark: |
-| Sub Brand                 | :x:                | :x:                | :white_check_mark: |
+| Type                      | :x:                | :x:                | :white_check_mark: |
 
 ### Diagnostics
 
@@ -114,6 +119,14 @@ This currently exposes the following Diagnostic Sensors:
 | Sensor                    | X1C                | X1                 | P1P                |
 |---------------------------|--------------------|--------------------|--------------------|
 | Wifi Signal               | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| HMS Errors                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Attributes:               |                    |                    |                    |
+| Count                     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 1-Error                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 1-Wiki                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2-Error                   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2-Wiki                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| ... and so on             |                    |                    |                    |
 
 ### Cameras
 

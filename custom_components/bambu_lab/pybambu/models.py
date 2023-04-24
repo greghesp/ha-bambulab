@@ -2,8 +2,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry
 
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, get_hw_version, \
-    get_sw_version, start_time, end_time
+from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, \
+    get_hw_version, \
+    get_sw_version, start_time, end_time, get_HMS_error_text
 from .const import LOGGER, Features
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
 
@@ -15,23 +16,36 @@ class Device:
         self.client = client
         self.temperature = Temperature()
         self.lights = Lights(client)
-        self.info = Info(device_type, serial)
+        self.info = Info(client, device_type, serial)
         self.fans = Fans()
         self.speed = Speed()
         self.stage = StageAction()
         self.ams = AMSList(client)
         self.external_spool = ExternalSpool(client)
+        self.hms = HMSList(client)
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
-        self.temperature.update(data)
-        self.lights.update(data)
-        self.fans.update(data)
-        self.info.update(data)
-        self.speed.update(data)
-        self.stage.update(data)
-        self.ams.update(data)
-        self.external_spool.update(data)
+        self.info.print_update(data)
+        self.temperature.print_update(data)
+        self.lights.print_update(data)
+        self.fans.print_update(data)
+        self.speed.print_update(data)
+        self.stage.print_update(data)
+        self.ams.print_update(data)
+        self.external_spool.print_update(data)
+        self.hms.print_update(data)
+        if self.client.callback is not None:
+            self.client.callback("event_printer_data_update")
+
+    def info_update(self, data):
+        """Update from dict"""
+        self.info.info_update(data)
+        self.ams.info_update(data)
+
+    def mc_print_update(self, data):
+        """Update from dict"""
+        self.ams.mc_print_update(data)
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -54,6 +68,10 @@ class Device:
             return self.info.device_type == "P1P"
         if feature == Features.START_TIME:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.AMS_TEMPERATURE:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+        if feature == Features.AMS_RAW_HUMIDITY:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
 
@@ -68,8 +86,19 @@ class Lights:
         self.chamber_light = "Unknown"
         self.work_light = "Unknown"
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
+
+        # "lights_report": [
+        #     {
+        #         "node": "chamber_light",
+        #         "mode": "on"
+        #     },
+        #     {
+        #         "node": "work_light",  # X1 only
+        #         "mode": "flashing"
+        #     }
+        # ],
 
         self.chamber_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light",
@@ -77,7 +106,7 @@ class Lights:
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
-        
+
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
         if self.client.callback is not None:
@@ -107,7 +136,7 @@ class Temperature:
         self.nozzle_temp = 0
         self.target_nozzle_temp = 0
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
 
         self.bed_temp = round(data.get("bed_temper", self.bed_temp))
@@ -139,7 +168,7 @@ class Fans:
         self.heatbreak_fan_speed = 0
         self._heatbreak_fan_speed = 0
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
         self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
         self.aux_fan_speed = fan_percentage(self._aux_fan_speed)
@@ -165,8 +194,10 @@ class Info:
     end_time: str
     current_layer: int
     total_layers: int
+    timelapse: str
 
-    def __init__(self, device_type, serial):
+    def __init__(self, client, device_type, serial):
+        self.client = client
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = device_type
@@ -175,34 +206,88 @@ class Info:
         self.gcode_state = "Unknown"
         self.serial = serial
         self.remaining_time = 0
-        self.end_time = 000
-        self.start_time = 000
+        self.end_time = 0
+        self.start_time = 0
         self.current_layer = 0
         self.total_layers = 0
+        self.timelapse = ""
 
-    def update(self, data):
+    def info_update(self, data):
         """Update from dict"""
-        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
-        self.print_percentage = data.get("mc_percent", self.print_percentage)
+
+        # Example payload:
+        # {
+        # "info": {
+        #     "command": "get_version",
+        #     "sequence_id": "20004",
+        #     "module": [
+        #     {
+        #         "name": "ota",
+        #         "project_name": "C11",
+        #         "sw_ver": "01.02.03.00",
+        #         "hw_ver": "OTA",
+        #         "sn": "..."
+        #     },
+        #     {
+        #         "name": "esp32",
+        #         "project_name": "C11",
+        #         "sw_ver": "00.03.12.31",
+        #         "hw_ver": "AP04",
+        #         "sn": "..."
+        #     },
+
         self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
+        if self.client.callback is not None:
+            self.client.callback("event_printer_info_update")
+
+    def print_update(self, data):
+        """Update from dict"""
+
+        # Example payload:
+        # {
+        #     "print": {
+        #         "gcode_start_time": "1681479206",
+        #         "gcode_state": "IDLE",
+        #         "mc_print_stage": "1",
+        #         "mc_percent": 100,
+        #         "mc_remaining_time": 0,
+        #         "wifi_signal": "-53dBm",
+        #         "print_type": "idle",
+        #         "ipcam": {
+        #             "ipcam_dev": "1",
+        #             "ipcam_record": "enable"
+        #             "resolution": "1080p",        # X1 only
+        #             "timelapse": "disable"
+        #         },
+        #         "layer_num": 0,                   # X1 only
+        #         "total_layer_num": 0,             # X1 only
+
+        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
+        self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
         self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
+        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
+        if self.client.callback is not None:
+            self.client.callback("event_printer_print_update")
 
 
 @dataclass
 class AMSInstance:
     """Return all AMS instance related info"""
+
     def __init__(self):
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
+        self.humidity = 0
         self.humidity_index = 0
+        self.temperature = 0
         self.tray = [None] * 4
         self.tray[0] = AMSTray()
         self.tray[1] = AMSTray()
@@ -215,12 +300,11 @@ class AMSList:
     """Return all AMS related info"""
 
     def __init__(self, client):
-        """Load from dict"""
         self.client = client
         self.tray_now = 0
         self.data = []
 
-    def update(self, data):
+    def info_update(self, data):
         """Update from dict"""
 
         # First determine if this the version info data or the json payload data. We use the version info to determine
@@ -256,6 +340,9 @@ class AMSList:
         if received_ams_info:
             if self.client.callback is not None:
                 self.client.callback("event_ams_info_update")
+
+    def print_update(self, data):
+        """Update from dict"""
 
         # AMS json payload is of the form:
         # "ams": {
@@ -328,32 +415,65 @@ class AMSList:
                 if len(self.data) <= index:
                     self.data.append(AMSInstance())
                 self.data[index].humidity_index = int(ams['humidity'])
+                self.data[index].temperature = float(ams['temp'])
 
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
-                    self.data[index].tray[tray_id].update(tray)
+                    self.data[index].tray[tray_id].print_update(tray)
 
         if received_ams_data:
             if self.client.callback is not None:
                 self.client.callback("event_ams_data_update")
 
+    def mc_print_update(self, data):
+        """Update from dict"""
+
+        # LOG format we need to parse for this data is like this:
+        # {
+        #     "mc_print": {
+        #         "param": "[AMS][TASK]ams0 temp:27.0;humidity:21%;humidity_idx:4",
+        #         "command": "push_info",
+        #         "sequence_id": "299889"
+        #     }
+        # }
+
+        data = data.get('param', '')
+        LOGGER.debug(f"Got data: '{data}'")
+        if data.startswith('[AMS][TASK]ams') and data.find('humidity') != -1:
+            data = data[14:]
+            ams_index = int(data.split()[0])
+            data = data[2:]
+            data = data.split(';')
+            for entry in data:
+                entry = entry.split(':')
+                if entry[0] == "temp":
+                    # self.temperature = float(entry[1])
+                    LOGGER.debug(f"GOT RAW AMS TEMP: {float(entry[1])}")
+                elif entry[0] == "humidity":
+                    entry = entry[1].split('%')
+                    self.data[ams_index].humidity = int(entry[0])
+                    LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.data[ams_index].humidity}")
+                    if self.client.callback is not None:
+                        self.client.callback("event_ams_data_update")
+
 
 @dataclass
 class AMSTray:
     """Return all AMS tray related info"""
+
     def __init__(self):
         self.Empty = True
         self.idx = ""
         self.name = ""
         self.type = ""
         self.sub_brands = ""
-        self.color = "00000000" # RRGGBBAA
+        self.color = "00000000"  # RRGGBBAA
         self.nozzle_temp_min = 0
         self.nozzle_temp_max = 0
         self.k = 0
 
-    def update(self, data):
+    def print_update(self, data):
         if len(data) == 1:
             # If the day is exactly one entry then it's just the ID and the tray is empty.
             self.Empty = True
@@ -361,7 +481,7 @@ class AMSTray:
             self.name = "Empty"
             self.type = "Empty"
             self.sub_brands = ""
-            self.color = "00000000" # RRGGBBAA
+            self.color = "00000000"  # RRGGBBAA
             self.nozzle_temp_min = 0
             self.nozzle_temp_max = 0
             self.k = 0
@@ -380,11 +500,12 @@ class AMSTray:
 @dataclass
 class ExternalSpool(AMSTray):
     """Return the virtual tray related info"""
+
     def __init__(self, client):
         super().__init__()
         self.client = client
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
 
         # P1P virtual tray example
@@ -419,7 +540,7 @@ class ExternalSpool(AMSTray):
         if len(tray_data) != 0:
             LOGGER.debug(f"RECEIVED VIRTUAL TRAY DATA")
             received_virtual_tray_data = True
-            super().update(tray_data)
+            super().print_update(tray_data)
 
         if received_virtual_tray_data:
             if self.client.callback is not None:
@@ -439,7 +560,7 @@ class Speed:
         self.name = get_speed_name(2)
         self.modifier = 100
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
         self._id = int(data.get("spd_lvl", self._id))
         self.name = get_speed_name(self._id)
@@ -457,7 +578,53 @@ class StageAction:
         self._id = 99
         self.description = get_stage_action(self._id)
 
-    def update(self, data):
+    def print_update(self, data):
         """Update from dict"""
         self._id = int(data.get("stg_cur", self._id))
         self.description = get_stage_action(self._id)
+
+
+@dataclass
+class HMSList:
+    """Return all HMS related info"""
+
+    def __init__(self, client):
+        self.client = client
+        self.count = 0
+        self.errors = {}
+
+    def print_update(self, data):
+        """Update from dict"""
+
+        # Example payload:
+        # "hms": [
+        #     {
+        #         "attr": 50331904, # In hex this is 0300 0100
+        #         "code": 65543     # In hex this is 0001 0007
+        #     }
+        # ],
+        # So this is HMS_0300_0100_0001_0007:
+        # https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/0300_0100_0001_0007
+        # 'The heatbed temperature is abnormal; the sensor may have an open circuit.'
+
+        if 'hms' in data.keys():
+            hmsList = data.get('hms', [])
+            self.count = len(hmsList)
+            errors = {}
+            if self.count != 0:
+                errors["Count"] = self.count
+
+            index: int = 0
+            for hms in hmsList:
+                index = index + 1
+                attr = hms['attr']
+                code = hms['code']
+                hms_error = f'{int(attr / 0x10000):0>4X}_{attr & 0xFFFF:0>4X}_{int(code / 0x10000):0>4X}_{code & 0xFFFF:0>4X}'  # 0300_0100_0001_0007
+                LOGGER.warning(f"HMS ERROR: HMS_{hms_error} : {get_HMS_error_text(hms_error)}")
+                errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
+                errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{hms_error}"
+
+            if self.errors != errors:
+                self.errors = errors
+                if self.client.callback is not None:
+                    self.client.callback("event_hms_errors")
