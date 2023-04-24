@@ -441,13 +441,9 @@ class AMSList:
             data = data.split(';')
             for entry in data:
                 entry = entry.split(':')
-                if entry[0] == "temp":
-                    # self.temperature = float(entry[1])
-                    LOGGER.debug(f"GOT RAW AMS TEMP: {float(entry[1])}")
-                elif entry[0] == "humidity":
+                if entry[0] == "humidity":
                     entry = entry[1].split('%')
                     self.data[ams_index].humidity = int(entry[0])
-                    LOGGER.debug(f"GOT RAW AMS HUMIDITY: {self.data[ams_index].humidity}")
                     if self.client.callback is not None:
                         self.client.callback("event_ams_data_update")
 
