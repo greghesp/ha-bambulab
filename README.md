@@ -110,6 +110,7 @@ This currently exposes the following Buttons:
 | Max Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
 | Min Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
 | Name                      | :x:                | :x:                | :white_check_mark: |
+| Type                      | :x:                | :x:                | :white_check_mark: |
 
 ### Diagnostics
 
