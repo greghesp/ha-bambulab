@@ -405,7 +405,6 @@ class AMSList:
             for ams in ams_list:
                 received_ams_data = True
                 index = int(ams['id'])
-                LOGGER.debug(f"RECEIVED AMS DATA: {index}")
                 # May get data before info so create entry if necessary
                 if len(self.data) <= index:
                     self.data.append(AMSInstance())
