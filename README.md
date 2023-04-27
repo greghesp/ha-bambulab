@@ -99,19 +99,19 @@ This currently exposes the following Buttons:
 | Name                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Type                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-### External Spool (P1P only)
+### External Spool
 
 | Sensor                    | X1C                | X1                 | P1P                |
 |---------------------------|--------------------|--------------------|--------------------|
-| External Spool            | :x:                | :x:                | :white_check_mark: |
+| External Spool            | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Attributes:               |                    |                    |                    |
-| Active                    | :x:                | :x:                | :white_check_mark: |
-| Color                     | :x:                | :x:                | :white_check_mark: |
+| Active                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Color                     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | K Value                   | :x:                | :x:                | :white_check_mark: |
-| Max Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
-| Min Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
-| Name                      | :x:                | :x:                | :white_check_mark: |
-| Type                      | :x:                | :x:                | :white_check_mark: |
+| Max Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Min Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Name                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Type                      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### Diagnostics
 
