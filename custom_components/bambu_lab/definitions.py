@@ -291,6 +291,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="humidity",
         name="Humidity",
         icon="mdi:water-percent",
+        native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.HUMIDITY,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity,
