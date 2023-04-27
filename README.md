@@ -107,7 +107,6 @@ This currently exposes the following Buttons:
 | Attributes:               |                    |                    |                    |
 | Active                    | :x:                | :x:                | :white_check_mark: |
 | Color                     | :x:                | :x:                | :white_check_mark: |
-| Empty                     | :x:                | :x:                | :white_check_mark: |
 | K Value                   | :x:                | :x:                | :white_check_mark: |
 | Max Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
 | Min Nozzle Temp           | :x:                | :x:                | :white_check_mark: |
