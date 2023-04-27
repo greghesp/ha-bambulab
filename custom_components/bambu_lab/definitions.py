@@ -251,7 +251,6 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
           {
             "active": not self.coordinator.get_model().supports_feature(Features.AMS) or (self.coordinator.get_model().ams.tray_now == 254),
             "color": f"#{self.coordinator.get_model().external_spool.color}",
-            "empty": self.coordinator.get_model().external_spool.empty,
             "name": self.coordinator.get_model().external_spool.name,
             "nozzle_temp_min": self.coordinator.get_model().external_spool.nozzle_temp_min,
             "nozzle_temp_max": self.coordinator.get_model().external_spool.nozzle_temp_max,
@@ -268,7 +267,6 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
           {
             "active": not self.coordinator.get_model().supports_feature(Features.AMS) or (self.coordinator.get_model().ams.tray_now == 254),
             "color": f"#{self.coordinator.get_model().external_spool.color}",
-            "empty": self.coordinator.get_model().external_spool.empty,
             "k_value": self.coordinator.get_model().external_spool.k,
             "name": self.coordinator.get_model().external_spool.name,
             "nozzle_temp_min": self.coordinator.get_model().external_spool.nozzle_temp_min,
