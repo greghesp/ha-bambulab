@@ -27,6 +27,8 @@ Lan mode MQTT connection:
 - Printer IP
 - LAN Access Code (Can be found on the Printer settings)
 
+> For the X1C, this mode also works without the printer needing to be in LAN mode
+
 Both:
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
