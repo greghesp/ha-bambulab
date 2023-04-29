@@ -205,6 +205,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
 class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle Bambu options."""
+    cloud_supported: bool = False
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize MQTT options flow."""
