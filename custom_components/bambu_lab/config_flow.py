@@ -41,8 +41,8 @@ PRINTER_SELECTOR = SelectSelector(
     )
 )
 SUPPORTED_MODES = [
-    SelectOptionDict(value="Bambu", label="Bambu Cloud"),
-    SelectOptionDict(value="Lan", label="Lan Mode"),
+    SelectOptionDict(value="Bambu", label="Bambu Cloud MQTT Connection"),
+    SelectOptionDict(value="Lan", label="Local MQTT Connection"),
 ]
 MODE_SELECTOR = SelectSelector(
     SelectSelectorConfig(
@@ -57,7 +57,9 @@ def get_authentication_token(username: str, password: str) -> dict:
     data = { 'account':username, 'password':password }
     response = requests.post(url, json=data, timeout=10)
     if not response.ok:
+        LOGGER.debug(f"Received error: {response.status_code}")
         raise ValueError(response.status_code)
+    LOGGER.debug(f"Success: {response.json()}")
     return response.json()
 
 class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -65,6 +67,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
     config_data: dict[str, Any] = {}
+    cloud_supported: bool = False
 
     @staticmethod
     @callback
@@ -83,16 +86,17 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             self.config_data = user_input
-            if (user_input["printer_mode"] == "Bambu"):
-                return await self.async_step_Bambu(None)
-            if (user_input["printer_mode"] == "Lan"):
+            if not self.cloud_supported or (user_input["printer_mode"] == "Lan"):
                 return await self.async_step_Lan(None)
+            if self.cloud_supported and (user_input["printer_mode"] == "Bambu"):
+                return await self.async_step_Bambu(None)
         
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required("device_type")] = PRINTER_SELECTOR
         fields[vol.Required("serial")] = TEXT_SELECTOR
-        fields[vol.Required("printer_mode")] = MODE_SELECTOR
+        if self.cloud_supported:
+            fields[vol.Required("printer_mode")] = MODE_SELECTOR
 
         return self.async_show_form(
             step_id="user",
@@ -201,6 +205,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
 class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle Bambu options."""
+    cloud_supported: bool = False
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize MQTT options flow."""
@@ -217,14 +222,15 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             self.config_data = user_input
             self.config_data['device_type'] = self.config_entry.data['device_type']
             self.config_data['serial'] = self.config_entry.data['serial']
-            if (user_input["printer_mode"] == "Bambu"):
-                return await self.async_step_Bambu(None)
-            if (user_input["printer_mode"] == "Lan"):
+            if not self.cloud_supported or (user_input["printer_mode"] == "Lan"):
                 return await self.async_step_Lan(None)
+            if self.cloud_supported and (user_input["printer_mode"] == "Bambu"):
+                return await self.async_step_Bambu(None)
         
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("printer_mode")] = MODE_SELECTOR
+        if self.cloud_supported:
+            fields[vol.Required("printer_mode")] = MODE_SELECTOR
 
         return self.async_show_form(
             step_id="init",
