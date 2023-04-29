@@ -18,7 +18,7 @@
                 }
             },
             "Bambu": {
-                "title": "Bambu Cloud Connection",
+                "title": "Bambu Cloud MQTT Connection",
                 "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
                 "data": {
                     "username": "Email Address",
@@ -26,7 +26,7 @@
                 }
             },
             "Lan": {
-                "title": "Lan Mode Connection",
+                "title": "Local MQTT Connection",
                 "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
                 "data": {
                   "host": "Host IP",
@@ -50,7 +50,7 @@
                 }
             },
             "Bambu": {
-                "title": "Bambu Cloud Connection",
+                "title": "Bambu Cloud MQTT Connection",
                 "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
                 "data": {
                     "username": "Email Address",
@@ -58,7 +58,7 @@
                 }
             },
             "Lan": {
-                "title": "Lan Mode Connection",
+                "title": "Local MQTT Connection",
                 "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
                 "data": {
                   "host": "Host IP",
