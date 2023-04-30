@@ -79,6 +79,14 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         is_on_fn=lambda self: len(self.coordinator.get_model().hms.errors) != 0,
         extra_attributes=lambda self: self.coordinator.get_model().hms.errors
     ),
+    BambuLabBinarySensorEntityDescription(
+        key="online",
+        name="Online",
+        icon="mdi:power",
+        device_class=BinarySensorDeviceClass.POWER,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().info.online
+    ),
 )
 
 PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
@@ -178,7 +186,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="stage",
         name="Current Stage",
         icon="mdi:file-tree",
-        value_fn=lambda self: self.coordinator.get_model().stage.description,
+        value_fn=lambda self: "Offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().stage.description,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CURRENT_STAGE)
     ),
     BambuLabSensorEntityDescription(
@@ -193,7 +201,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="print_status",
         name="Print Status",
         icon="mdi:list-status",
-        value_fn=lambda self: self.coordinator.get_model().info.gcode_state.title()
+        value_fn=lambda self: "Offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().info.gcode_state.title()
     ),
     BambuLabSensorEntityDescription(
         key="start_time",

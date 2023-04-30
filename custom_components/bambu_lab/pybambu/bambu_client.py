@@ -109,6 +109,7 @@ class BambuClient:
         """Handle connection"""
         LOGGER.info("On Connect: Connected to Broker")
         self._connected = True
+        self._device.info.online = True
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
         LOGGER.debug("On Connect: Getting Version Info")
@@ -123,6 +124,7 @@ class BambuClient:
         """Called when MQTT Disconnects"""
         LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
+        self._device.info.online = False
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""

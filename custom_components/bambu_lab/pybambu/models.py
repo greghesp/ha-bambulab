@@ -191,6 +191,7 @@ class Info:
     current_layer: int
     total_layers: int
     timelapse: str
+    online: bool
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -207,6 +208,7 @@ class Info:
         self.current_layer = 0
         self.total_layers = 0
         self.timelapse = ""
+        self.online = False
 
     def info_update(self, data):
         """Update from dict"""
