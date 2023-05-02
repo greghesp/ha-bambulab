@@ -125,6 +125,8 @@ class BambuClient:
         LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
         self._device.info.online = False
+        if self.callback is not None:
+            self.callback("event_printer_data_update")
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""

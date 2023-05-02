@@ -272,7 +272,7 @@ class Info:
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
         if self.client.callback is not None:
-            self.client.callback("event_printer_print_update")
+            self.client.callback("event_printer_data_update")
 
 
 @dataclass
