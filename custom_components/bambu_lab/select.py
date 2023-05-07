@@ -3,8 +3,10 @@ from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.select import SelectEntity
+
 
 from .const import DOMAIN, LOGGER 
 from .pybambu.const import SPEED_PROFILE
@@ -31,7 +33,6 @@ async def async_setup_entry(
 class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     """Speed select options."""
 
-    #_attr_entity_category = EntityCategory.CONFIG
     _attr_icon = "mdi:speedometer"
     _attr_name = "Printing Speed"
     #_attr_translation_key = "print_speed"
