@@ -45,7 +45,6 @@ ACTION_IDS = {
 }
 
 SPEED_PROFILE = {
-    "default": "Unknown",
     1: "Silent",
     2: "Standard",
     3: "Sport",

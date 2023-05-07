@@ -65,6 +65,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_light_update":
                     self._update_data()
 
+                case "event_speed_update":
+                    self._update_data()
+
                 case "event_printer_data_update":
                     self._update_data()
 
