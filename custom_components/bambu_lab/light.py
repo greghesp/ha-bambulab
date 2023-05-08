@@ -1,17 +1,13 @@
-from enum import Enum
-from .models import BambuLabEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant
+
 from .const import DOMAIN, LOGGER
+from .models import BambuLabEntity
 from .pybambu.const import Features
 
 from homeassistant.components.light import (
-    ATTR_BRIGHTNESS,
-    ATTR_EFFECT,
-    ColorMode,
-    LightEntity,
-    LightEntityFeature
+    LightEntity
 )
 from .coordinator import BambuDataUpdateCoordinator
 

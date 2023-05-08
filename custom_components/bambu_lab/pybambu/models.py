@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, \
     get_hw_version, \
     get_sw_version, start_time, end_time, get_HMS_error_text
-from .const import LOGGER, Features
-from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
+from .const import LOGGER, Features, SPEED_PROFILE
+from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
 import asyncio
 
@@ -14,7 +14,7 @@ class Device:
         self.lights = Lights(client)
         self.info = Info(client, device_type, serial)
         self.fans = Fans()
-        self.speed = Speed()
+        self.speed = Speed(client)
         self.stage = StageAction()
         self.ams = AMSList(client)
         self.external_spool = ExternalSpool(client)
@@ -271,8 +271,6 @@ class Info:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
-        if self.client.callback is not None:
-            self.client.callback("event_printer_data_update")
 
 
 @dataclass
@@ -545,9 +543,10 @@ class Speed:
     name: str
     modifier: int
 
-    def __init__(self):
+    def __init__(self, client):
         """Load from dict"""
-        self._id = 0
+        self.client = client
+        self._id = 2
         self.name = get_speed_name(2)
         self.modifier = 100
 
@@ -557,6 +556,16 @@ class Speed:
         self.name = get_speed_name(self._id)
         self.modifier = int(data.get("spd_mag", self.modifier))
 
+    def SetSpeed(self, option: str):
+        for id,speed in SPEED_PROFILE.items():
+            if option == speed:
+                self._id = id
+                self.name = speed
+                command = SPEED_PROFILE_TEMPLATE
+                command['print']['param'] = f"{id}"
+                self.client.publish(command)
+                if self.client.callback is not None:
+                    self.client.callback("event_speed_update")
 
 @dataclass
 class StageAction:

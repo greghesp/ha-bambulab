@@ -26,8 +26,8 @@ from .commands import (
 
 def listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
+    exceptionSeen = ""
     while True:
-        exceptionSeen = ""
         try:
             LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
             self.client.connect(self.host, self._port, keepalive=5)

@@ -1,21 +1,15 @@
 """Support for Bambu Lab through MQTT."""
 from __future__ import annotations
-import json
-from homeassistant.components import mqtt
-from homeassistant.components.binary_sensor import BinarySensorEntity, BinarySensorDeviceClass
-from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.core import HomeAssistant, callback
+
+from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from homeassistant.util import slugify
-from homeassistant.helpers.entity import DeviceInfo
 
 from .const import DOMAIN, LOGGER
-from .definitions import PRINTER_BINARY_SENSORS, BambuLabBinarySensorEntityDescription
 from .coordinator import BambuDataUpdateCoordinator
+from .definitions import PRINTER_BINARY_SENSORS, BambuLabBinarySensorEntityDescription
 from .models import BambuLabEntity
-from .pybambu.const import Features
 
 
 async def async_setup_entry(
@@ -41,11 +35,11 @@ class BambuLabBinarySensor(BambuLabEntity, BinarySensorEntity):
             config_entry: ConfigEntry
     ) -> None:
         """Initialize the sensor."""
+        super().__init__(coordinator=coordinator)
         self.coordinator = coordinator
         self.entity_description = description
-        printer = coordinator.get_model().info
+        printer = self.coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
-        super().__init__(coordinator=coordinator)
     
     @property
     def is_on(self) -> bool:
