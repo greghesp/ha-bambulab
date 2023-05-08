@@ -1,23 +1,20 @@
-from datetime import datetime
-
-from .models import BambuLabEntity
-from homeassistant.config_entries import ConfigEntry
+from dataclasses import dataclass
 from collections.abc import Callable
 
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.core import HomeAssistant, callback
-from .const import DOMAIN, LOGGER
-from dataclasses import dataclass
-from .pybambu.commands import part_cooling_fan_speed
-
 from homeassistant.components.fan import (
-    DIRECTION_FORWARD,
-    DIRECTION_REVERSE,
     FanEntity,
     FanEntityFeature,
     FanEntityDescription
 )
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
+from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
+from .models import BambuLabEntity
+from .pybambu.const import Features
+#from .pybambu.commands import part_cooling_fan_speed
 
 
 @dataclass
@@ -36,19 +33,17 @@ class BambuLabFanEntityDescription(FanEntityDescription, BambuLabFanEntityDescri
 FANS: tuple[FanEntityDescription, ...] = (
     BambuLabFanEntityDescription(
         key="aux_fan_speed",
-        type="aux_fan",
         name="Aux Fan Speed",
         value_fn=lambda device: device.fans.aux_fan_speed
     ),
     BambuLabFanEntityDescription(
         key="chamber_fan_speed",
-        type="chamber_fan",
         name="Chamber Fan Speed",
-        value_fn=lambda device: device.fans.chamber_fan_speed
+        value_fn=lambda device: device.fans.chamber_fan_speed,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
     ),
     BambuLabFanEntityDescription(
         key="cooling_fan_speed",
-        type="part_fan",
         name="Cooling Fan Speed",
         value_fn=lambda device: device.fans.cooling_fan_speed
     ),
@@ -65,6 +60,7 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback
 ) -> None:
+    LOGGER.debug("FAN::async_setup_entry")
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     async_add_entities(
@@ -108,6 +104,12 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         LOGGER.debug(f"Fan Speed % {self.entity_description.value_fn(self.coordinator.data)}")
         return self.entity_description.value_fn(self.coordinator.data)
 
-    async def async_turn_off(self, **kwargs) -> None:
-        """Turn the fan off."""
-        self.coordinator.client.publish(part_cooling_fan_speed(0))
+    def set_percentage(self, percentage: int) -> None:
+        """Set the speed percentage of the fan."""
+
+    #def turn_on(self, speed: Optional[str] = None, percentage: Optional[int] = None, preset_mode: Optional[str] = None, **kwargs: Any) -> None:
+    #    """Turn on the fan."""
+
+    #def turn_off(self, **kwargs) -> None:
+    #    """Turn the fan off."""
+    #    self.coordinator.client.publish(part_cooling_fan_speed(0))

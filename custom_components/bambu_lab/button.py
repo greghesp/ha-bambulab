@@ -37,10 +37,13 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    LOGGER.debug(f"Async Setup Button")
+    LOGGER.debug(f"BUTTON::Async Setup Button")
 
-    async_add_entities([BambuLabPauseButton(coordinator, entry), BambuLabResumeButton(coordinator, entry),
-                        BambuLabStopButton(coordinator, entry)])
+    async_add_entities([
+        BambuLabPauseButton(coordinator, entry),
+        BambuLabResumeButton(coordinator, entry),
+        BambuLabStopButton(coordinator, entry)
+        ])
 
 
 class BambuLabButton(BambuLabEntity, ButtonEntity):
@@ -53,7 +56,7 @@ class BambuLabButton(BambuLabEntity, ButtonEntity):
             coordinator: BambuDataUpdateCoordinator,
             config_entry: ConfigEntry
     ) -> None:
-        """Initialise a LIFX button."""
+        """Initialise a button."""
         super().__init__(coordinator)
         self._attr_unique_id = (
             f"{config_entry.data['serial']}_{self.entity_description.key}"
