@@ -36,7 +36,7 @@ def get_filament_name(idx):
 
 def get_speed_name(_id):
     """Return the human-readable name for a speed id"""
-    return SPEED_PROFILE.get(int(_id), "Unknown")
+    return SPEED_PROFILE.get(int(_id), "Standard")
 
 
 def get_stage_action(_id):
