@@ -31,25 +31,20 @@ class BambuLabFanEntityDescription(FanEntityDescription, BambuLabFanEntityDescri
 
 FANS: tuple[FanEntityDescription, ...] = (
     BambuLabFanEntityDescription(
-        key="cooling_fan_speed",
-        name="Cooling Fan Speed",
+        key="cooling_fan",
+        name="Cooling Fan",
         value_fn=lambda device: device.fans.cooling_fan_speed
     ),
     BambuLabFanEntityDescription(
-        key="aux_fan_speed",
-        name="Aux Fan Speed",
+        key="aux_fan",
+        name="Aux Fan",
         value_fn=lambda device: device.fans.aux_fan_speed
     ),
     BambuLabFanEntityDescription(
-        key="chamber_fan_speed",
-        name="Chamber Fan Speed",
+        key="chamber_fan",
+        name="Chamber Fan",
         value_fn=lambda device: device.fans.chamber_fan_speed,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
-    ),
-    BambuLabFanEntityDescription(
-        key="heatbreak_fan_speed",
-        name="Heatbreak Fan Speed",
-        value_fn=lambda device: device.fans.heatbreak_fan_speed
     )
 )
 
