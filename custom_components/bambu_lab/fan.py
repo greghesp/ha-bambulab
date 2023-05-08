@@ -63,11 +63,11 @@ async def async_setup_entry(
     LOGGER.debug("FAN::async_setup_entry")
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    async_add_entities(
-        BambuLabFan(coordinator, description, entry)
-        for description in FANS
-    )
+    for description in FANS:
+        if description.exists_fn(coordinator):
+            async_add_entities([BambuLabFan(coordinator, description, entry)])
 
+    LOGGER.debug("FAN::async_setup_entry DONE")
 
 class BambuLabFan(BambuLabEntity, FanEntity):
     """ Defined the Fan"""
@@ -101,8 +101,7 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     @property
     def percentage(self) -> int:
         """Return the current speed percentage."""
-        LOGGER.debug(f"Fan Speed % {self.entity_description.value_fn(self.coordinator.data)}")
-        return self.entity_description.value_fn(self.coordinator.data)
+        return self.entity_description.value_fn(self.coordinator.get_model())
 
     def set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
