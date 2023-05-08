@@ -1,5 +1,14 @@
+import math
+
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, \
+from .utils import \
+    search, \
+    fan_percentage, \
+    fan_percentage_to_gcode, \
+    get_filament_name, \
+    get_speed_name, \
+    get_stage_action, \
+    get_printer_type, \
     get_hw_version, \
     get_sw_version, start_time, end_time, get_HMS_error_text
 from .const import LOGGER, Features, SPEED_PROFILE
@@ -13,7 +22,7 @@ class Device:
         self.temperature = Temperature()
         self.lights = Lights(client)
         self.info = Info(client, device_type, serial)
-        self.fans = Fans()
+        self.fans = Fans(client)
         self.speed = Speed(client)
         self.stage = StageAction()
         self.ams = AMSList(client)
@@ -154,7 +163,8 @@ class Fans:
     heatbreak_fan_speed: int
     _heatbreak_fan_speed: int
 
-    def __init__(self):
+    def __init__(self, client):
+        self.client = client
         self.aux_fan_speed = 0
         self._aux_fan_speed = 0
         self.chamber_fan_speed = 0
@@ -175,6 +185,24 @@ class Fans:
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self.heatbreak_fan_speed = fan_percentage(self._heatbreak_fan_speed)
 
+    def set_part_cooling_fan_speed(self, percentage):
+        """Set fan speed"""
+        command = fan_percentage_to_gcode("P1", percentage)
+        LOGGER.debug(command)
+        self.client.publish(command)
+        
+    def set_aux_fan_speed(self, percentage):
+        """Set fan speed"""
+        command = fan_percentage_to_gcode("P2", percentage)
+        LOGGER.debug(command)
+        self.client.publish(command)
+        
+    def set_chamber_fan_speed(self, percentage):
+        """Set fan speed"""
+        command = fan_percentage_to_gcode("P3", percentage)
+        LOGGER.debug(command)
+        self.client.publish(command)
+        
 
 @dataclass
 class Info:

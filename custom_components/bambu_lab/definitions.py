@@ -9,18 +9,15 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
-    POWER_WATT,
     PERCENTAGE,
     TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    SPEED,
     UnitOfTemperature,
     TIME_MINUTES
 )
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
-    SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )

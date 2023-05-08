@@ -32,6 +32,11 @@ class BambuLabFanEntityDescription(FanEntityDescription, BambuLabFanEntityDescri
 
 FANS: tuple[FanEntityDescription, ...] = (
     BambuLabFanEntityDescription(
+        key="cooling_fan_speed",
+        name="Cooling Fan Speed",
+        value_fn=lambda device: device.fans.cooling_fan_speed
+    ),
+    BambuLabFanEntityDescription(
         key="aux_fan_speed",
         name="Aux Fan Speed",
         value_fn=lambda device: device.fans.aux_fan_speed
@@ -41,11 +46,6 @@ FANS: tuple[FanEntityDescription, ...] = (
         name="Chamber Fan Speed",
         value_fn=lambda device: device.fans.chamber_fan_speed,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
-    ),
-    BambuLabFanEntityDescription(
-        key="cooling_fan_speed",
-        name="Cooling Fan Speed",
-        value_fn=lambda device: device.fans.cooling_fan_speed
     ),
     BambuLabFanEntityDescription(
         key="heatbreak_fan_speed",
@@ -105,10 +105,31 @@ class BambuLabFan(BambuLabEntity, FanEntity):
 
     def set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
+        match self.entity_description.key:
+            case "cooling_fan_speed":
+                self.coordinator.get_model().fans.set_part_cooling_fan_speed(percentage)
+            case "aux_fan_speed":
+                self.coordinator.get_model().fans.set_aux_fan_speed(percentage)
+            case "chamber_fan_speed":
+                self.coordinator.get_model().fans.set_chamber_fan_speed(percentage)
 
-    #def turn_on(self, speed: Optional[str] = None, percentage: Optional[int] = None, preset_mode: Optional[str] = None, **kwargs: Any) -> None:
-    #    """Turn on the fan."""
+    def turn_on(self, speed: str = None, percentage: int = None, preset_mode: str = None, **kwargs: any) -> None:
+        """Turn the fan on."""
+        match self.entity_description.key:
+            case "cooling_fan_speed":
+                self.coordinator.get_model().fans.set_part_cooling_fan_speed(100)
+            case "aux_fan_speed":
+                self.coordinator.get_model().fans.set_aux_fan_speed(100)
+            case "chamber_fan_speed":
+                self.coordinator.get_model().fans.set_chamber_fan_speed(100)
 
-    #def turn_off(self, **kwargs) -> None:
-    #    """Turn the fan off."""
-    #    self.coordinator.client.publish(part_cooling_fan_speed(0))
+
+    def turn_off(self, **kwargs) -> None:
+        """Turn the fan off."""
+        match self.entity_description.key:
+            case "cooling_fan_speed":
+                self.coordinator.get_model().fans.set_part_cooling_fan_speed(0)
+            case "aux_fan_speed":
+                self.coordinator.get_model().fans.set_aux_fan_speed(0)
+            case "chamber_fan_speed":
+                self.coordinator.get_model().fans.set_chamber_fan_speed(0)
