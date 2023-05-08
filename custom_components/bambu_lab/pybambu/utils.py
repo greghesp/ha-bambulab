@@ -1,5 +1,5 @@
 import math
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 
 from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER
 from .commands import SEND_GCODE_TEMPLATE

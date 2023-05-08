@@ -7,7 +7,6 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.select import SelectEntity
 
-
 from .const import DOMAIN, LOGGER 
 from .pybambu.const import SPEED_PROFILE
 from .coordinator import BambuDataUpdateCoordinator
