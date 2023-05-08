@@ -9,8 +9,11 @@ from .utils import \
     get_stage_action, \
     get_printer_type, \
     get_hw_version, \
-    get_sw_version, start_time, end_time, get_HMS_error_text
-from .const import LOGGER, Features, SPEED_PROFILE
+    get_sw_version, \
+    start_time, \
+    end_time, \
+    get_HMS_error_text
+from .const import LOGGER, Features, FansEnum, SPEED_PROFILE
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
 class Device:
@@ -182,21 +185,9 @@ class Fans:
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self.heatbreak_fan_speed = fan_percentage(self._heatbreak_fan_speed)
 
-    def set_part_cooling_fan_speed(self, percentage):
+    def SetFanSpeed(self, fan: FansEnum, percentage: int):
         """Set fan speed"""
-        command = fan_percentage_to_gcode("P1", percentage)
-        LOGGER.debug(command)
-        self.client.publish(command)
-        
-    def set_aux_fan_speed(self, percentage):
-        """Set fan speed"""
-        command = fan_percentage_to_gcode("P2", percentage)
-        LOGGER.debug(command)
-        self.client.publish(command)
-        
-    def set_chamber_fan_speed(self, percentage):
-        """Set fan speed"""
-        command = fan_percentage_to_gcode("P3", percentage)
+        command = fan_percentage_to_gcode(fan, percentage)
         LOGGER.debug(command)
         self.client.publish(command)
         
