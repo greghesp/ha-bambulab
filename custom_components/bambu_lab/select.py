@@ -49,7 +49,7 @@ class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self.coordinator.get_model().info.gcode_state == 'Running'
+        return self.coordinator.get_model().info.gcode_state == 'RUNNING'
     
     @property
     def current_option(self) -> str:
