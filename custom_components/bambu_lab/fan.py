@@ -96,34 +96,25 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     def percentage(self) -> int:
         """Return the current speed percentage."""
         return self.entity_description.value_fn(self.coordinator.get_model())
+    
+    def _set_percentage(self, percentage: int) -> None:
+        """Set the speed percentage of the fan."""
+        match self.entity_description.key:
+            case "cooling_fan":
+                self.coordinator.get_model().fans.set_part_cooling_fan_speed(percentage)
+            case "aux_fan":
+                self.coordinator.get_model().fans.set_aux_fan_speed(percentage)
+            case "chamber_fan":
+                self.coordinator.get_model().fans.set_chamber_fan_speed(percentage)
 
     def set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
-        match self.entity_description.key:
-            case "cooling_fan_speed":
-                self.coordinator.get_model().fans.set_part_cooling_fan_speed(percentage)
-            case "aux_fan_speed":
-                self.coordinator.get_model().fans.set_aux_fan_speed(percentage)
-            case "chamber_fan_speed":
-                self.coordinator.get_model().fans.set_chamber_fan_speed(percentage)
+        self._set_percentage(percentage)
 
     def turn_on(self, speed: str = None, percentage: int = None, preset_mode: str = None, **kwargs: any) -> None:
         """Turn the fan on."""
-        match self.entity_description.key:
-            case "cooling_fan_speed":
-                self.coordinator.get_model().fans.set_part_cooling_fan_speed(100)
-            case "aux_fan_speed":
-                self.coordinator.get_model().fans.set_aux_fan_speed(100)
-            case "chamber_fan_speed":
-                self.coordinator.get_model().fans.set_chamber_fan_speed(100)
-
+        self._set_percentage(100)
 
     def turn_off(self, **kwargs) -> None:
         """Turn the fan off."""
-        match self.entity_description.key:
-            case "cooling_fan_speed":
-                self.coordinator.get_model().fans.set_part_cooling_fan_speed(0)
-            case "aux_fan_speed":
-                self.coordinator.get_model().fans.set_aux_fan_speed(0)
-            case "chamber_fan_speed":
-                self.coordinator.get_model().fans.set_chamber_fan_speed(0)
+        self._set_percentage(0)
