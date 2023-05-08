@@ -14,7 +14,6 @@ from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
 from .pybambu.const import Features
-#from .pybambu.commands import part_cooling_fan_speed
 
 
 @dataclass
