@@ -1,14 +1,13 @@
-from .models import BambuLabEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 
 from .const import DOMAIN, LOGGER
+from .models import BambuLabEntity
 from .pybambu.commands import PAUSE, RESUME, STOP
 
 from homeassistant.components.button import (
-    ButtonDeviceClass,
     ButtonEntity,
     ButtonEntityDescription,
 )

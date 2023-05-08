@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timezone, timedelta
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, LOGGER
+from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER
 
 
 def search(lst, predicate, default={}):
@@ -28,17 +28,25 @@ def to_whole(number):
 
 def get_filament_name(idx):
     """Converts a filament idx to a human-readable name"""
-    return FILAMENT_NAMES.get(idx, "Unknown")
+    result = FILAMENT_NAMES.get(idx, "Unknown")
+    if result == "Unknown":
+        LOGGER.debug(f"UNKNOWN FILAMENT IDX: {idx}")
+    return result
 
 
 def get_speed_name(_id):
     """Return the human-readable name for a speed id"""
-    return SPEED_PROFILE.get(int(_id), "Unknown")
+    return SPEED_PROFILE.get(int(_id), "Standard")
 
 
 def get_stage_action(_id):
     """Return the human-readable description for a stage action"""
     return ACTION_IDS.get(_id, "Unknown")
+
+
+def get_HMS_error_text(_id):
+    """Return the human-readable description for an HMS error"""
+    return HMS_ERRORS.get(_id, "Unknown")
 
 
 def get_printer_type(modules, default):
@@ -71,20 +79,15 @@ def get_hw_version(modules, default):
 
 def get_sw_version(modules, default):
     """Retrieve software version of printer"""
-    esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
-    rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
-    if len(esp32.keys()) > 1:
-        if esp32.get("hw_ver") == "AP04":
-            return esp32.get("sw_ver")
-    elif len(rv1126.keys()) > 1:
-        if rv1126.get("hw_ver") == "AP05":
-            return rv1126.get("sw_ver")
+    ota = search(modules, lambda x: x.get('name', "") == "ota")
+    if len(ota.keys()) > 1:
+        return ota.get("sw_ver")
     return default
 
 
 def start_time(timestamp):
     """Return start time of a print"""
-    if timestamp == 000:
+    if timestamp == 0:
         return "N/A"
     return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
 

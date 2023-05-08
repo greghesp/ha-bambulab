@@ -10,11 +10,59 @@
         },
         "step": {
             "user": {
+                "description": "Please select your printer and provide it's serial number.",
                 "data": {
-                    "host": "Host IP",
-                    "access_code": "Access Code",
+                    "device_type": "Printer Model:",
                     "serial": "Serial Number",
-                    "tls": "Enable TLS"
+                    "printer_mode": "Connection Mode:"
+                }
+            },
+            "Bambu": {
+                "title": "Bambu Cloud MQTT Connection",
+                "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+                "data": {
+                    "username": "Email Address",
+                    "password": "Password"
+                }
+            },
+            "Lan": {
+                "title": "Local MQTT Connection",
+                "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+                "data": {
+                  "host": "Host IP",
+                  "access_code": "Access Code"
+                }
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "init": {
+                "title": "Adjust connection settings",
+                "description": "Choose the new connection mode for this printer.",
+                "data": {
+                    "printer_mode": "Connection Mode:"
+                }
+            },
+            "Bambu": {
+                "title": "Bambu Cloud MQTT Connection",
+                "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+                "data": {
+                    "username": "Email Address",
+                    "password": "Password"
+                }
+            },
+            "Lan": {
+                "title": "Local MQTT Connection",
+                "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+                "data": {
+                  "host": "Host IP",
+                  "access_code": "Access Code"
                 }
             }
         }
