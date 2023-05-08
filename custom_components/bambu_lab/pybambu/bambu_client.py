@@ -1,6 +1,7 @@
 from __future__ import annotations
-import queue
+
 import json
+import queue
 import ssl
 import time
 
@@ -13,13 +14,7 @@ import paho.mqtt.client as mqtt
 from .const import LOGGER
 from .models import Device
 from .commands import (
-    CHAMBER_LIGHT_ON,
-    CHAMBER_LIGHT_OFF,
-    SPEED_PROFILE_TEMPLATE,
     GET_VERSION,
-    PAUSE,
-    RESUME,
-    STOP,
     PUSH_ALL
 )
 
@@ -160,13 +155,6 @@ class BambuClient:
 
         LOGGER.error(f"Failed to send message to topic device/{self._serial}/request")
         return False
-
-    def command(self, cmd):
-        """Publish a command"""
-        if cmd == "CHAMBER_LIGHT_ON":
-            return self.publish(CHAMBER_LIGHT_ON)
-        if cmd == "CHAMBER_LIGHT_OFF":
-            return self.publish(CHAMBER_LIGHT_OFF)
 
     def get_device(self):
         """Return device"""

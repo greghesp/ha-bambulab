@@ -2,25 +2,20 @@
 from __future__ import annotations
 
 import math
-
-from .const import LOGGER
-from .pybambu.const import Features
 from collections.abc import Callable
 from dataclasses import dataclass
+
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
-    POWER_WATT,
     PERCENTAGE,
     TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    SPEED,
     UnitOfTemperature,
     TIME_MINUTES
 )
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
-    SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )
@@ -29,6 +24,9 @@ from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntityDescription
 )
+
+from .const import LOGGER
+from .pybambu.const import Features
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
@@ -174,7 +172,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda self: self.coordinator.get_model().fans.heatbreak_fan_speed
-    ),
+    ),    
     BambuLabSensorEntityDescription(
         key="speed_profile",
         name="Speed Profile",

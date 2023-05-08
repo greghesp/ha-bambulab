@@ -7,7 +7,6 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.select import SelectEntity
 
-
 from .const import DOMAIN, LOGGER 
 from .pybambu.const import SPEED_PROFILE
 from .coordinator import BambuDataUpdateCoordinator
@@ -49,7 +48,7 @@ class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self.coordinator.get_model().info.gcode_state == 'Running'
+        return self.coordinator.get_model().info.gcode_state == 'RUNNING'
     
     @property
     def current_option(self) -> str:

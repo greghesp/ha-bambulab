@@ -1,5 +1,6 @@
-from enum import Enum
 import logging
+
+from enum import Enum
 
 LOGGER = logging.getLogger(__package__)
 
