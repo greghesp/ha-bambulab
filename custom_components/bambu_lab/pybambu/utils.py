@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timedelta
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER
+from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER, FansEnum
 from .commands import SEND_GCODE_TEMPLATE
 
 def search(lst, predicate, default={}):
@@ -20,16 +20,20 @@ def fan_percentage(speed):
     return math.ceil(percentage / 10) * 10
 
 
-def fan_percentage_to_gcode(fan, percentage):
+def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
     """Converts a fan speed percentage to the gcode command to set that"""
-    # fan parameter must be one of:
-    # 'P1' = Part cooling fan
-    # 'P2' = Aux fan
-    # 'P3' = Chamber cooling fan
+    match fan:
+        case FansEnum.PART_COOLING:
+            fanString = "P1"
+        case FansEnum.AUXILIARY:
+            fanString = "P2"
+        case FansEnum.CHAMBER:
+            fanString = "P3"
+           
     percentage = math.ceil(percentage / 10) * 10
     speed = math.ceil(255 * percentage / 100)
     command = SEND_GCODE_TEMPLATE
-    command['print']['param'] = f"M106 {fan} S{speed}\n"
+    command['print']['param'] = f"M106 {fanString} S{speed}\n"
     return command
 
 
