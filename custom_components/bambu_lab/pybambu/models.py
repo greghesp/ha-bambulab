@@ -1,11 +1,17 @@
 from dataclasses import dataclass
-from .utils import search, fan_percentage, get_filament_name, get_speed_name, get_stage_action, get_printer_type, \
+
+from .utils import \
+    search, \
+    fan_percentage, \
+    fan_percentage_to_gcode, \
+    get_filament_name, \
+    get_speed_name, \
+    get_stage_action, \
+    get_printer_type, \
     get_hw_version, \
     get_sw_version, start_time, end_time, get_HMS_error_text
-from .const import LOGGER, Features
-from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF
-
-import asyncio
+from .const import LOGGER, Features, SPEED_PROFILE
+from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
 class Device:
     def __init__(self, client, device_type, serial):
@@ -13,8 +19,8 @@ class Device:
         self.temperature = Temperature()
         self.lights = Lights(client)
         self.info = Info(client, device_type, serial)
-        self.fans = Fans()
-        self.speed = Speed()
+        self.fans = Fans(client)
+        self.speed = Speed(client)
         self.stage = StageAction()
         self.ams = AMSList(client)
         self.external_spool = ExternalSpool(client)
@@ -154,7 +160,8 @@ class Fans:
     heatbreak_fan_speed: int
     _heatbreak_fan_speed: int
 
-    def __init__(self):
+    def __init__(self, client):
+        self.client = client
         self.aux_fan_speed = 0
         self._aux_fan_speed = 0
         self.chamber_fan_speed = 0
@@ -175,6 +182,24 @@ class Fans:
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self.heatbreak_fan_speed = fan_percentage(self._heatbreak_fan_speed)
 
+    def set_part_cooling_fan_speed(self, percentage):
+        """Set fan speed"""
+        command = fan_percentage_to_gcode("P1", percentage)
+        LOGGER.debug(command)
+        self.client.publish(command)
+        
+    def set_aux_fan_speed(self, percentage):
+        """Set fan speed"""
+        command = fan_percentage_to_gcode("P2", percentage)
+        LOGGER.debug(command)
+        self.client.publish(command)
+        
+    def set_chamber_fan_speed(self, percentage):
+        """Set fan speed"""
+        command = fan_percentage_to_gcode("P3", percentage)
+        LOGGER.debug(command)
+        self.client.publish(command)
+        
 
 @dataclass
 class Info:
@@ -191,6 +216,7 @@ class Info:
     current_layer: int
     total_layers: int
     timelapse: str
+    online: bool
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -207,6 +233,7 @@ class Info:
         self.current_layer = 0
         self.total_layers = 0
         self.timelapse = ""
+        self.online = False
 
     def info_update(self, data):
         """Update from dict"""
@@ -269,8 +296,6 @@ class Info:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
-        if self.client.callback is not None:
-            self.client.callback("event_printer_print_update")
 
 
 @dataclass
@@ -543,9 +568,10 @@ class Speed:
     name: str
     modifier: int
 
-    def __init__(self):
+    def __init__(self, client):
         """Load from dict"""
-        self._id = 0
+        self.client = client
+        self._id = 2
         self.name = get_speed_name(2)
         self.modifier = 100
 
@@ -555,6 +581,16 @@ class Speed:
         self.name = get_speed_name(self._id)
         self.modifier = int(data.get("spd_mag", self.modifier))
 
+    def SetSpeed(self, option: str):
+        for id,speed in SPEED_PROFILE.items():
+            if option == speed:
+                self._id = id
+                self.name = speed
+                command = SPEED_PROFILE_TEMPLATE
+                command['print']['param'] = f"{id}"
+                self.client.publish(command)
+                if self.client.callback is not None:
+                    self.client.callback("event_speed_update")
 
 @dataclass
 class StageAction:

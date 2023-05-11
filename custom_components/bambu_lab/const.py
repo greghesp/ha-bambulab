@@ -11,8 +11,10 @@ LOGGER = logging.getLogger(__package__)
 SCAN_INTERVAL = timedelta(seconds=60)
 
 PLATFORMS = (
-    Platform.LIGHT,
-    Platform.SENSOR,
     Platform.BINARY_SENSOR,
-    Platform.BUTTON
+    Platform.BUTTON,
+    Platform.FAN,
+    Platform.LIGHT,
+    Platform.SELECT,
+    Platform.SENSOR
 )

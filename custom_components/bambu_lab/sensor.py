@@ -1,15 +1,10 @@
 """Support for Bambu Lab through MQTT."""
 from __future__ import annotations
-import json
-from homeassistant.components import mqtt
+
 from homeassistant.components.sensor import SensorEntity
-from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from homeassistant.util import slugify
-from homeassistant.helpers.entity import DeviceInfo
 
 from .const import DOMAIN, LOGGER
 from .definitions import PRINTER_SENSORS, VIRTUAL_TRAY_SENSORS, AMS_SENSORS, BambuLabSensorEntityDescription

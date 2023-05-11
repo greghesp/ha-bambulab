@@ -1,6 +1,7 @@
 from __future__ import annotations
-import queue
+
 import json
+import queue
 import ssl
 import time
 
@@ -13,21 +14,15 @@ import paho.mqtt.client as mqtt
 from .const import LOGGER
 from .models import Device
 from .commands import (
-    CHAMBER_LIGHT_ON,
-    CHAMBER_LIGHT_OFF,
-    SPEED_PROFILE_TEMPLATE,
     GET_VERSION,
-    PAUSE,
-    RESUME,
-    STOP,
     PUSH_ALL
 )
 
 
 def listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
+    exceptionSeen = ""
     while True:
-        exceptionSeen = ""
         try:
             LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
             self.client.connect(self.host, self._port, keepalive=5)
@@ -109,6 +104,7 @@ class BambuClient:
         """Handle connection"""
         LOGGER.info("On Connect: Connected to Broker")
         self._connected = True
+        self._device.info.online = True
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
         LOGGER.debug("On Connect: Getting Version Info")
@@ -123,6 +119,9 @@ class BambuClient:
         """Called when MQTT Disconnects"""
         LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
+        self._device.info.online = False
+        if self.callback is not None:
+            self.callback("event_printer_data_update")
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
@@ -156,13 +155,6 @@ class BambuClient:
 
         LOGGER.error(f"Failed to send message to topic device/{self._serial}/request")
         return False
-
-    def command(self, cmd):
-        """Publish a command"""
-        if cmd == "CHAMBER_LIGHT_ON":
-            return self.publish(CHAMBER_LIGHT_ON)
-        if cmd == "CHAMBER_LIGHT_OFF":
-            return self.publish(CHAMBER_LIGHT_OFF)
 
     def get_device(self):
         """Return device"""

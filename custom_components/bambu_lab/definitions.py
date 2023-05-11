@@ -2,25 +2,20 @@
 from __future__ import annotations
 
 import math
-
-from .const import LOGGER
-from .pybambu.const import Features
 from collections.abc import Callable
 from dataclasses import dataclass
+
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
-    POWER_WATT,
     PERCENTAGE,
     TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    SPEED,
     UnitOfTemperature,
     TIME_MINUTES
 )
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
-    SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )
@@ -29,6 +24,9 @@ from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntityDescription
 )
+
+from .const import LOGGER
+from .pybambu.const import Features
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
@@ -78,6 +76,14 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         is_on_fn=lambda self: len(self.coordinator.get_model().hms.errors) != 0,
         extra_attributes=lambda self: self.coordinator.get_model().hms.errors
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="online",
+        name="Online",
+        icon="mdi:power",
+        device_class=BinarySensorDeviceClass.POWER,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().info.online
     ),
 )
 
@@ -166,7 +172,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda self: self.coordinator.get_model().fans.heatbreak_fan_speed
-    ),
+    ),    
     BambuLabSensorEntityDescription(
         key="speed_profile",
         name="Speed Profile",
@@ -178,7 +184,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="stage",
         name="Current Stage",
         icon="mdi:file-tree",
-        value_fn=lambda self: self.coordinator.get_model().stage.description,
+        value_fn=lambda self: "Offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().stage.description,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CURRENT_STAGE)
     ),
     BambuLabSensorEntityDescription(
@@ -193,7 +199,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="print_status",
         name="Print Status",
         icon="mdi:list-status",
-        value_fn=lambda self: self.coordinator.get_model().info.gcode_state.title()
+        value_fn=lambda self: "Offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().info.gcode_state.title()
     ),
     BambuLabSensorEntityDescription(
         key="start_time",

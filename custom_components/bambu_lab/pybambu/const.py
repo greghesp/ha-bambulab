@@ -1,5 +1,6 @@
-from enum import Enum
 import logging
+
+from enum import Enum
 
 LOGGER = logging.getLogger(__package__)
 
@@ -19,7 +20,6 @@ class Features(Enum):
 
 ACTION_IDS = {
     "default": "Unknown",
-    -1: "Idle",
     0: "Printing",
     1: "Auto Bed Leveling",
     2: "Heatbed Preheating",
@@ -41,11 +41,11 @@ ACTION_IDS = {
     18: "Calibrating Micro Lidar",
     19: "Calibrating Extrusion Flow",
     20: "Paused due to nozzle temperature malfunction",
-    21: "Paused due to heat bed temperature malfunction"
+    21: "Paused due to heat bed temperature malfunction",
+    255: "Idle"
 }
 
 SPEED_PROFILE = {
-    "default": "Unknown",
     1: "Silent",
     2: "Standard",
     3: "Sport",
