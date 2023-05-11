@@ -13,7 +13,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
-from .pybambu.const import Features
+from .pybambu.const import Features, FansEnum
 
 
 @dataclass
@@ -101,11 +101,11 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         """Set the speed percentage of the fan."""
         match self.entity_description.key:
             case "cooling_fan":
-                self.coordinator.get_model().fans.set_part_cooling_fan_speed(percentage)
+                self.coordinator.get_model().fans.SetFanSpeed(FansEnum.PART_COOLING, percentage)
             case "aux_fan":
-                self.coordinator.get_model().fans.set_aux_fan_speed(percentage)
+                self.coordinator.get_model().fans.SetFanSpeed(FansEnum.AUXILIARY, percentage)
             case "chamber_fan":
-                self.coordinator.get_model().fans.set_chamber_fan_speed(percentage)
+                self.coordinator.get_model().fans.SetFanSpeed(FansEnum.CHAMBER, percentage)
 
     def set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""

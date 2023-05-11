@@ -18,6 +18,11 @@ class Features(Enum):
     AMS_TEMPERATURE = 11,
     AMS_RAW_HUMIDITY = 12,
 
+class FansEnum(Enum):
+    PART_COOLING = 1,
+    AUXILIARY = 2,
+    CHAMBER = 3,
+
 ACTION_IDS = {
     "default": "Unknown",
     0: "Printing",
