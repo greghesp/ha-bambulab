@@ -85,6 +85,14 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         is_on_fn=lambda self: self.coordinator.get_model().info.online
     ),
+    BambuLabBinarySensorEntityDescription(
+        key="firmware_update",
+        name="Firmware Update Available",
+        icon="mdi:new-box",
+        device_class=BinarySensorDeviceClass.UPDATE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: len(self.coordinator.get_model().info.firmware_updates) != 0
+    ),
 )
 
 PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
