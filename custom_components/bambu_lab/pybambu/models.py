@@ -64,7 +64,7 @@ class Device:
         if feature == Features.CURRENT_STAGE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.PRINT_LAYERS:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
         if feature == Features.AMS:
             return len(self.ams.data) != 0
         if feature == Features.EXTERNAL_SPOOL:
