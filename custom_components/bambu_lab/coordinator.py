@@ -10,6 +10,7 @@ from .const import (
 import asyncio
 import json
 import time
+import threading
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -41,6 +42,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._updatedDevice = False
         self.data = self.get_model()
         self._use_mqtt()
+        self._lock = threading.Lock()
         super().__init__(
             hass,
             LOGGER,
@@ -149,11 +151,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._updatedDevice = True
 
     async def _reinitialize_sensors(self):
-        LOGGER.debug("async_forward_entry_unload")
-        await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
-        LOGGER.debug("async_forward_entry_setup")
-        await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
-        LOGGER.debug("_reinitialize_sensors DONE")
+        with self._lock:
+            LOGGER.debug("async_forward_entry_unload")
+            await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
+            LOGGER.debug("async_forward_entry_setup")
+            await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
+            LOGGER.debug("_reinitialize_sensors DONE")
 
     def _update_ams_info(self):
         device = self.get_model()
