@@ -76,7 +76,7 @@ class Device:
         if feature == Features.AMS_TEMPERATURE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.AMS_RAW_HUMIDITY:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            return False
         return False
 
 
