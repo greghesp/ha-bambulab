@@ -76,7 +76,7 @@ class Device:
         if feature == Features.AMS_TEMPERATURE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.AMS_RAW_HUMIDITY:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            return False
         return False
 
 
@@ -208,6 +208,7 @@ class Info:
     total_layers: int
     timelapse: str
     online: bool
+    firmware_updates: dict
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -225,6 +226,7 @@ class Info:
         self.total_layers = 0
         self.timelapse = ""
         self.online = False
+        self.firmware_updates = {}
 
     def info_update(self, data):
         """Update from dict"""
@@ -287,7 +289,7 @@ class Info:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
-
+        self.firmware_updates = data.get("upgrade_state", {}).get("new_ver_list", self.firmware_updates)
 
 @dataclass
 class AMSInstance:
