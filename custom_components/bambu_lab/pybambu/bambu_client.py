@@ -4,10 +4,10 @@ import json
 import queue
 import ssl
 import time
+import threading
 
 from dataclasses import dataclass
 from typing import Any
-from threading import Thread
 
 import paho.mqtt.client as mqtt
 
@@ -15,8 +15,41 @@ from .const import LOGGER
 from .models import Device
 from .commands import (
     GET_VERSION,
-    PUSH_ALL
+    PUSH_ALL,
+    START_PUSH,
 )
+
+class WatchdogThread(threading.Thread):
+
+    def __init__(self, client):
+        self._client = client
+        self._watchdog_fired = False
+        self._stop_event = threading.Event()
+        self._last_received_data = time.time()
+        super().__init__()
+
+    def stop(self):
+        self._stop_event.set()
+    
+    def stopped(self):
+        return self._stop_event.is_set()
+    
+    def received_data(self):
+        self._last_received_data = time.time()
+    
+    def run(self):
+        WATCHDOG_TIMER = 15
+        while True:
+            exit = self._stop_event.wait(1)
+            if exit:
+                break
+            interval = time.time() - self._last_received_data
+            if not self._watchdog_fired and (interval > WATCHDOG_TIMER):
+                LOGGER.debug(f"Watchdog fired. No data received for {interval} seconds.")
+                self._watchdog_fired = True
+                self._client.on_watchdog_fired()
+            elif interval < WATCHDOG_TIMER:
+                self._watchdog_fired = False
 
 
 def listen_thread(self):
@@ -60,6 +93,7 @@ def listen_thread(self):
 @dataclass
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
+    _watchdog = None
 
     def __init__(self, device_type: str, serial: str, host: str, access_code: str):
         self.host = host
@@ -91,7 +125,7 @@ class BambuClient:
         self.client.username_pw_set("bblp", password=self._access_code)
 
         LOGGER.debug("Starting MQTT listener thread")
-        thread = Thread(target=listen_thread, args=(self,))
+        thread = threading.Thread(target=listen_thread, args=(self,))
         thread.start()
         return
 
@@ -111,6 +145,9 @@ class BambuClient:
         self.publish(GET_VERSION)
         LOGGER.debug("On Connect: Request Push All")
         self.publish(PUSH_ALL)
+        LOGGER.debug("Starting watchdog thread")
+        self._watchdog = WatchdogThread(self)
+        self._watchdog.start()
 
     def on_disconnect(self,
                       client_: mqtt.Client,
@@ -122,9 +159,17 @@ class BambuClient:
         self._device.info.online = False
         if self.callback is not None:
             self.callback("event_printer_data_update")
+        if self._watchdog is not None:
+            self._watchdog.stop()
+            self._watchdog.join()
+
+    def on_watchdog_fired(self):
+        LOGGER.debug("Watch dog fired")
+        self.publish(START_PUSH)
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
+        self._watchdog.received_data()
         try:
             LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)

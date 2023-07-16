@@ -16,4 +16,6 @@ STOP = {"print": {"sequence_id": "0", "command": "stop"}}
 
 PUSH_ALL = {"pushing": {"sequence_id": "0", "command": "pushall"}}
 
+START_PUSH = { "pushing": {"sequence_id": "0", "command": "start" }}
+
 SEND_GCODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "gcode_line", "param": ""}} # param = GCODE_EACH_LINE_SEPARATED_BY_\n
