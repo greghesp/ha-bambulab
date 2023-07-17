@@ -54,23 +54,23 @@ class Device:
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return True
         if feature == Features.CHAMBER_LIGHT:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return True
         if feature == Features.CHAMBER_FAN:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1S"
         if feature == Features.CHAMBER_TEMPERATURE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.CURRENT_STAGE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return True
         if feature == Features.PRINT_LAYERS:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return True
         if feature == Features.AMS:
             return len(self.ams.data) != 0
         if feature == Features.EXTERNAL_SPOOL:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P"
+            return True
         if feature == Features.K_VALUE:
-            return self.info.device_type == "P1P"
+            return self.info.device_type == "P1P" or self.info.device_type == "P1S"
         if feature == Features.START_TIME:
             return self.info.device_type == "X1" or self.info.device_type == "X1C"
         if feature == Features.AMS_TEMPERATURE:
@@ -252,7 +252,6 @@ class Info:
         #         "sn": "..."
         #     },
 
-        self.device_type = get_printer_type(data.get("module", []), self.device_type)
         self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
         self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
         if self.client.callback is not None:

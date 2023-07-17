@@ -42,7 +42,7 @@ class WatchdogThread(threading.Thread):
             interval = time.time() - self._last_received_data
             wait_time = max(1, WATCHDOG_TIMER - interval)
             if self._stop_event.wait(wait_time):
-                # Stop even has been set.
+                # Stop event has been set. Exit thread.
                 break
             interval = time.time() - self._last_received_data
             if not self._watchdog_fired and (interval > WATCHDOG_TIMER):

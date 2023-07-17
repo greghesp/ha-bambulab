@@ -72,11 +72,11 @@ def get_printer_type(modules, default):
     rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
     if len(esp32.keys()) > 1:
         if esp32.get("hw_ver") == "AP04":
-            LOGGER.debug("Device is P1P")
+            LOGGER.debug("Device is P1P/S")
             return "P1P"
     elif len(rv1126.keys()) > 1:
         if rv1126.get("hw_ver") == "AP05":
-            LOGGER.debug("Device is X1C")
+            LOGGER.debug("Device is X1/C")
             return "X1C"
     return default
 
