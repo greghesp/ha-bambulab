@@ -31,6 +31,7 @@ TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
 PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
 SUPPORTED_PRINTERS = [
     SelectOptionDict(value="P1P", label="P1P"),
+    SelectOptionDict(value="P1S", label="P1S"),
     SelectOptionDict(value="X1", label="X1"),
     SelectOptionDict(value="X1C", label="X1C"),
 ]

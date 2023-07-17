@@ -44,7 +44,7 @@
         "step": {
             "init": {
                 "title": "Adjust connection settings",
-                "description": "Choose the new connection mode for this printer.",
+                "description": "Choose the new connection settings for this printer.",
                 "data": {
                     "printer_mode": "Connection Mode:"
                 }
