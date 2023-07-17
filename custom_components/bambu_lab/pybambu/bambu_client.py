@@ -31,17 +31,15 @@ class WatchdogThread(threading.Thread):
     def stop(self):
         self._stop_event.set()
     
-    def stopped(self):
-        return self._stop_event.is_set()
-    
     def received_data(self):
         self._last_received_data = time.time()
     
     def run(self):
+        LOGGER.debug("Watchdog thread started.")
         WATCHDOG_TIMER = 15
         while True:
-            exit = self._stop_event.wait(1)
-            if exit:
+            if self._stop_event.wait(1):
+                # Stop even has been set.
                 break
             interval = time.time() - self._last_received_data
             if not self._watchdog_fired and (interval > WATCHDOG_TIMER):
@@ -50,6 +48,8 @@ class WatchdogThread(threading.Thread):
                 self._client.on_watchdog_fired()
             elif interval < WATCHDOG_TIMER:
                 self._watchdog_fired = False
+
+        LOGGER.debug("Watchdog thread exited.")
 
 
 def listen_thread(self):
@@ -62,6 +62,7 @@ def listen_thread(self):
             
             LOGGER.debug("Starting listen loop")
             self.client.loop_forever()
+            LOGGER.debug("MQTT listener thread exited.")
             break
         except TimeoutError as e:
             if exceptionSeen != "TimeoutError":
