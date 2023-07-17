@@ -7,7 +7,6 @@ from .utils import \
     get_filament_name, \
     get_speed_name, \
     get_stage_action, \
-    get_printer_type, \
     get_hw_version, \
     get_sw_version, \
     start_time, \
@@ -53,30 +52,31 @@ class Device:
         self.ams.mc_print_update(data)
 
     def supports_feature(self, feature):
-        if feature == Features.AUX_FAN:
-            return True
-        if feature == Features.CHAMBER_LIGHT:
-            return True
-        if feature == Features.CHAMBER_FAN:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1S"
-        if feature == Features.CHAMBER_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C"
-        if feature == Features.CURRENT_STAGE:
-            return True
-        if feature == Features.PRINT_LAYERS:
-            return True
-        if feature == Features.AMS:
-            return len(self.ams.data) != 0
-        if feature == Features.EXTERNAL_SPOOL:
-            return True
-        if feature == Features.K_VALUE:
-            return self.info.device_type == "P1P" or self.info.device_type == "P1S"
-        if feature == Features.START_TIME:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C"
-        if feature == Features.AMS_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C"
-        if feature == Features.AMS_RAW_HUMIDITY:
-            return False
+        match feature:
+            case Features.AUX_FAN:
+                return True
+            case Features.CHAMBER_LIGHT:
+                return True
+            case Features.CHAMBER_FAN:
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1S"
+            case Features.CHAMBER_TEMPERATURE:
+                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            case Features.CURRENT_STAGE:
+                return True
+            case Features.PRINT_LAYERS:
+                return True
+            case Features.AMS:
+                return len(self.ams.data) != 0
+            case Features.EXTERNAL_SPOOL:
+                return True
+            case Features.K_VALUE:
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
+            case Features.START_TIME:
+                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            case Features.AMS_TEMPERATURE:
+                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            case Features.AMS_RAW_HUMIDITY:
+                return False
         return False
 
 
