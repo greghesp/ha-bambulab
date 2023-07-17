@@ -38,7 +38,10 @@ class WatchdogThread(threading.Thread):
         LOGGER.debug("Watchdog thread started.")
         WATCHDOG_TIMER = 15
         while True:
-            if self._stop_event.wait(1):
+            # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
+            interval = time.time() - self._last_received_data
+            wait_time = max(1, WATCHDOG_TIMER - interval)
+            if self._stop_event.wait(wait_time):
                 # Stop even has been set.
                 break
             interval = time.time() - self._last_received_data
