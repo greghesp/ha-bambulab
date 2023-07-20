@@ -25,7 +25,7 @@ For now, you will need the following information:
 
 | Sensor                    | X1C                | X1                 | P1P                | P1S                | 
 |---------------------------|--------------------|--------------------|--------------------|--------------------|
-| Aux Fan Speed             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Aux Fan Speed             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :white_check_mark: |
 | Bed Temperature           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Chamber Fan Speed         | :white_check_mark: | :white_check_mark: | :x:                | :white_check_mark: |
 | Chamber Temperature       | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
