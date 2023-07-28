@@ -161,6 +161,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug("_reinitialize_sensors DONE")
 
     def _update_ams_info(self):
+        self._lock.acquire(True)
         device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
         for index in range (0, len(device.ams.data)):
@@ -176,6 +177,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                         sw_version=device.ams.data[index].sw_version,
                                         hw_version=device.ams.data[index].hw_version)
 
+        self._lock.release()
         self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_external_spool_info(self):
