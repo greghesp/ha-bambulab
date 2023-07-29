@@ -340,14 +340,20 @@ class AMSList:
         for module in module_list:
             name = module["name"]
             if name.startswith("ams/"):
-                received_ams_info = True
                 index = int(name[4])
                 # May get data before info so create entry if necessary
                 if len(self.data) <= index:
+                    received_ams_info = True
                     self.data.append(AMSInstance())
-                self.data[index].serial = module['sn']
-                self.data[index].sw_version = module['sw_ver']
-                self.data[index].hw_version = module['hw_ver']
+                if self.data[index].serial != module['sn']:
+                    received_ams_info = True
+                    self.data[index].serial = module['sn']
+                if self.data[index].sw_version != module['sw_ver']:
+                    received_ams_info = True
+                    self.data[index].sw_version = module['sw_ver']
+                if self.data[index].hw_version != module['hw_ver']:
+                    received_ams_info = True
+                    self.data[index].hw_version = module['hw_ver']
 
         if received_ams_info:
             if self.client.callback is not None:
