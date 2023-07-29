@@ -341,19 +341,22 @@ class AMSList:
             name = module["name"]
             if name.startswith("ams/"):
                 index = int(name[4])
-                # May get data before info so create entry if necessary
-                if len(self.data) <= index:
-                    received_ams_info = True
-                    self.data.append(AMSInstance())
-                if self.data[index].serial != module['sn']:
-                    received_ams_info = True
-                    self.data[index].serial = module['sn']
-                if self.data[index].sw_version != module['sw_ver']:
-                    received_ams_info = True
-                    self.data[index].sw_version = module['sw_ver']
-                if self.data[index].hw_version != module['hw_ver']:
-                    received_ams_info = True
-                    self.data[index].hw_version = module['hw_ver']
+                # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
+                # requires as part of the home assistant device identity.
+                if not module['sn'] == '':
+                    # May get data before info so create entry if necessary
+                    if len(self.data) <= index:
+                        received_ams_info = True
+                        self.data.append(AMSInstance())
+                    if self.data[index].serial != module['sn']:
+                        received_ams_info = True
+                        self.data[index].serial = module['sn']
+                    if self.data[index].sw_version != module['sw_ver']:
+                        received_ams_info = True
+                        self.data[index].sw_version = module['sw_ver']
+                    if self.data[index].hw_version != module['hw_ver']:
+                        received_ams_info = True
+                        self.data[index].hw_version = module['hw_ver']
 
         if received_ams_info:
             if self.client.callback is not None:
