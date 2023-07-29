@@ -1,4 +1,4 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+![image](https://github.com/ianschmitz/ha-bambulab/assets/6355370/c4b9527c-ad9c-4a6a-a09e-b47bddbde5ce)[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 
 # Bambu Lab
 
@@ -25,7 +25,7 @@ For now, you will need the following information:
 
 | Sensor                    | X1C                | X1                 | P1P                | P1S                | 
 |---------------------------|--------------------|--------------------|--------------------|--------------------|
-| Aux Fan Speed             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Aux Fan Speed             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :white_check_mark: |
 | Bed Temperature           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Chamber Fan Speed         | :white_check_mark: | :white_check_mark: | :x:                | :white_check_mark: |
 | Chamber Temperature       | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
@@ -51,7 +51,7 @@ If AMS(s) are present, an additional 'Current Tray' sensor is present on the Pri
 
 | Sensor                    | X1C                | X1                 | P1P                | P1S                |  
 |---------------------------|--------------------|--------------------|--------------------|--------------------|
-| Chamber Light             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Chamber Light             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :white_check_mark: |
 
 ### Buttons
 
