@@ -100,8 +100,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return device
     
     def _update_data(self):
+        self._lock.acquire()
         device = self.get_model()
         self.async_set_updated_data(device)
+        self._lock.release()
 
     def _update_hms(self):
         device = self.get_model()
@@ -130,6 +132,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             new_hw_ver = device.info.hw_ver
             LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
             if (new_sw_ver != "Unknown"):
+                self._lock.acquire()
                 dev_reg = device_registry.async_get(self._hass)
                 hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
@@ -149,6 +152,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                         }
                     )
                 self._updatedDevice = True
+                self._lock.release()
 
     async def _reinitialize_sensors(self):
         LOGGER.debug("_reinitialize_sensors START")
@@ -161,6 +165,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug("_reinitialize_sensors DONE")
 
     def _update_ams_info(self):
+        self._lock.acquire()
         device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
         for index in range (0, len(device.ams.data)):
@@ -176,9 +181,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                         sw_version=device.ams.data[index].sw_version,
                                         hw_version=device.ams.data[index].hw_version)
 
+        self._lock.release()
         self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_external_spool_info(self):
+        self._lock.acquire()
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
                                                identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")})
@@ -191,6 +198,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                     sw_version="",
                                     hw_version="")
         
+        self._lock.release()
         # self.hass.async_create_task(self._reinitialize_sensors())
 
     def get_model(self):
