@@ -77,7 +77,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> BambuOptionsFlowHandler:
         """Get the options flow for this handler."""
         return BambuOptionsFlowHandler(config_entry)
-    
+
 
     async def async_step_user(
             self, user_input: dict[str, Any] | None = None
@@ -91,7 +91,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 return await self.async_step_Lan(None)
             if self.cloud_supported and (user_input["printer_mode"] == "Bambu"):
                 return await self.async_step_Bambu(None)
-        
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required("device_type")] = PRINTER_SELECTOR
@@ -105,7 +105,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors or {},
             last_step=False,
         )
-    
+
     async def async_step_Bambu(
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
@@ -142,9 +142,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             "access_code": authToken,
                         }
                     )
-            
+
             errors["base"] = "cannot_connect"
-        
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required("username")] = TEXT_SELECTOR
@@ -181,7 +181,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "access_code": user_input["access_code"],
                     }
                 )
-            
+
             errors["base"] = "cannot_connect"
 
         # Build form
@@ -195,7 +195,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors or {},
             last_step=False,
         )
-    
+
     async def async_step_ssdp(
         self, discovery_info: ssdp.SsdpServiceInfo
     ) -> FlowResult:
@@ -227,7 +227,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 return await self.async_step_Lan(None)
             if self.cloud_supported and (user_input["printer_mode"] == "Bambu"):
                 return await self.async_step_Bambu(None)
-        
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         if self.cloud_supported:
@@ -278,9 +278,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         }
                     )
                     return self.async_create_entry(title="", data={})
-            
+
             errors["base"] = "cannot_connect"
-        
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required("username")] = TEXT_SELECTOR
@@ -319,7 +319,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     }
                 )
                 return self.async_create_entry(title="", data={})
-            
+
             errors["base"] = "cannot_connect"
 
         # Build form

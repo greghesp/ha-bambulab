@@ -131,7 +131,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             new_sw_ver = device.info.sw_ver
             new_hw_ver = device.info.hw_ver
             LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
-            if (new_sw_ver != "Unknown"):
+            if (new_sw_ver != "unknown"):
                 self._lock.acquire()
                 dev_reg = device_registry.async_get(self._hass)
                 hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})

@@ -28,6 +28,9 @@ async def async_setup_entry(
 class BambuLabChamberLight(BambuLabEntity, LightEntity):
     """ Defined the Chamber Light """
 
+    _attr_translation_key = "chamber_light"
+    _attr_icon = "mdi:led-strip-variant"
+
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
@@ -35,7 +38,6 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
     ) -> None:
         """Initialize the sensor."""
         self._attr_unique_id = f"{config_entry.data['serial']}_chamber_light"
-        self._attr_name = "Chamber Light"
         super().__init__(coordinator=coordinator)
 
     @property
@@ -49,11 +51,6 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
         if self.coordinator.get_model().lights.chamber_light == "on":
             return True
         return False
-
-    @property
-    def icon(self) -> str:
-        """Return the icon to use in the frontend, if any."""
-        return "mdi:led-strip-variant"
 
     def turn_off(self) -> None:
         """ Turn off the power"""

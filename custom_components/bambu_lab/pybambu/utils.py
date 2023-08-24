@@ -29,7 +29,7 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
             fanString = "P2"
         case FansEnum.CHAMBER:
             fanString = "P3"
-           
+
     percentage = math.ceil(percentage / 10) * 10
     speed = math.ceil(255 * percentage / 100)
     command = SEND_GCODE_TEMPLATE
@@ -45,25 +45,25 @@ def to_whole(number):
 
 def get_filament_name(idx):
     """Converts a filament idx to a human-readable name"""
-    result = FILAMENT_NAMES.get(idx, "Unknown")
-    if result == "Unknown":
+    result = FILAMENT_NAMES.get(idx, "unknown")
+    if result == "unknown":
         LOGGER.debug(f"UNKNOWN FILAMENT IDX: {idx}")
     return result
 
 
 def get_speed_name(_id):
     """Return the human-readable name for a speed id"""
-    return SPEED_PROFILE.get(int(_id), "Standard")
+    return SPEED_PROFILE.get(int(_id), "standard")
 
 
 def get_stage_action(_id):
     """Return the human-readable description for a stage action"""
-    return ACTION_IDS.get(_id, "Unknown")
+    return ACTION_IDS.get(_id, "unknown")
 
 
 def get_HMS_error_text(_id):
     """Return the human-readable description for an HMS error"""
-    return HMS_ERRORS.get(_id, "Unknown")
+    return HMS_ERRORS.get(_id, "unknown")
 
 
 def get_printer_type(modules, default):
