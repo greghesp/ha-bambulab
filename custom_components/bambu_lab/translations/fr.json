@@ -1,0 +1,361 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "L'appareil est déjà configuré"
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion",
+      "invalid_auth": "Authentification invalide",
+      "unknown": "Erreur inattendue"
+    },
+    "step": {
+      "user": {
+        "description": "Veuillez sélectionner votre imprimante et fournir son numéro de série.",
+        "data": {
+          "device_type": "Modèle de l'imprimante :",
+          "serial": "Numéro de série",
+          "printer_mode": "Mode de connexion :"
+        }
+      },
+      "Bambu": {
+        "title": "Connexion Bambu Cloud MQTT",
+        "description": "Veuillez fournir vos identifiants Bambu Lab pour permettre la génération d'un jeton d'authentification. Seul le jeton sera enregistré, vos identifiants Bambu ne le seront pas.",
+        "data": {
+          "username": "Adresse e-mail",
+          "password": "Mot de passe"
+        }
+      },
+      "Lan": {
+        "title": "Connexion MQTT Locale",
+        "description": "Veuillez fournir l'adresse IP locale de votre imprimante et le code d'accès. Le code d'accès peut être trouvé sur l'écran de l'imprimante dans les paramètres réseau.",
+        "data": {
+          "host": "Adresse IP de l'hôte",
+          "access_code": "Code d'accès"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "cannot_connect": "Échec de la connexion",
+      "invalid_auth": "Authentification invalide",
+      "unknown": "Erreur inattendue"
+    },
+    "step": {
+      "init": {
+        "title": "Ajuster les paramètres de connexion",
+        "description": "Choisissez les nouveaux paramètres de connexion pour cette imprimante.",
+        "data": {
+          "printer_mode": "Mode de connexion :"
+        }
+      },
+      "Bambu": {
+        "title": "Connexion Bambu Cloud MQTT",
+        "description": "Veuillez fournir vos identifiants Bambu Lab pour permettre la génération d'un jeton d'authentification. Seul le jeton sera enregistré, vos identifiants Bambu ne le seront pas.",
+        "data": {
+          "username": "Adresse e-mail",
+          "password": "Mot de passe"
+        }
+      },
+      "Lan": {
+        "title": "Connexion MQTT Locale",
+        "description": "Veuillez fournir l'adresse IP locale de votre imprimante et le code d'accès. Le code d'accès peut être trouvé sur l'écran de l'imprimante dans les paramètres réseau.",
+        "data": {
+          "host": "Adresse IP de l'hôte",
+          "access_code": "Code d'accès"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "timelapse": {
+        "name": "Enregistrement du timelapse"
+      },
+      "hms_errors": {
+        "name": "Erreurs HMS"
+      },
+      "online": {
+        "name": "En ligne"
+      },
+      "firmware_update": {
+        "name": "Mise à jour du micrologiciel"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Mettre en pause l'impression"
+      },
+      "resume": {
+        "name": "Reprendre l'impression"
+      },
+      "stop": {
+        "name": "Arrêter l'impression"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Ventilateur de refroidissement"
+      },
+      "aux_fan": {
+        "name": "Ventilateur auxiliaire"
+      },
+      "chamber_fan": {
+        "name": "Ventilateur de l'enceinte"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Éclairage de l'enceinte"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Vitesse d'impression",
+        "state": {
+          "silent": "Silencieux",
+          "standard": "Standard",
+          "sport": "Sport",
+          "ludicrous": "Insensé"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Signal Wi-Fi"
+      },
+      "bed_temp": {
+        "name": "Température du lit"
+      },
+      "target_bed_temp": {
+        "name": "Température cible du lit"
+      },
+      "chamber_temp": {
+        "name": "Température de l'enceinte"
+      },
+      "target_nozzle_temp": {
+        "name": "Température cible de la buse"
+      },
+      "nozzle_temp": {
+        "name": "Température de la buse"
+      },
+      "aux_fan_speed": {
+        "name": "Vitesse du ventilateur auxiliaire"
+      },
+      "cooling_fan_speed": {
+        "name": "Vitesse du ventilateur de refroidissement"
+      },
+      "chamber_fan_speed": {
+        "name": "Vitesse du ventilateur de l'enceinte"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Vitesse du ventilateur de l'isolateur thermique"
+      },
+      "speed_profile": {
+        "name": "Profil de vitesse",
+        "state": {
+          "silent": "Silencieux",
+          "standard": "Standard",
+          "sport": "Sport",
+          "ludicrous": "Insensé"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modificateur"
+          }
+        }
+      },
+      "stage": {
+        "name": "Étape actuelle",
+        "state": {
+          "offline": "Hors ligne",
+          "printing": "Impression en cours",
+          "auto_bed_leveling": "Nivellement automatique",
+          "heatbed_preheating": "Préchauffage du lit",
+          "sweeping_xy_mech_mode": "Mode balayage XY mécanique",
+          "changing_filament": "Changement de filament",
+          "m400_pause": "Pause M400",
+          "paused_filament_runout": "En pause à cause d'une fin de filament",
+          "heating_hotend": "Préchauffage de l'extrudeur",
+          "calibrating_extrusion": "Calibration de l'extrusion",
+          "scanning_bed_surface": "Numérisation de la surface du lit",
+          "inspecting_first_layer": "Inspection de la première couche",
+          "identifying_build_plate_type": "Identification du type de plateaun",
+          "calibrating_micro_lidar": "Calibration du lidar",
+          "homing_toolhead": "Recentrage de la tête d'impression",
+          "cleaning_nozzle_tip": "Nettoyage de la buse",
+          "checking_extruder_temperature": "Vérification de la température de l'extrudeur",
+          "paused_user": "Pause par l'utilisateur",
+          "paused_front_cover_falling": "Pause en raison de la chute du couvercle avant",
+          "calibrating_extrusion_flow": "Calibration du débit de l'extrusion",
+          "paused_nozzle_temperature_malfunction": "Pause en raison d'un dysfonctionnement de la température de la buse",
+          "paused_heat_bed_temperature_malfunction": "Pause en raison d'un dysfonctionnement de la température du lit",
+          "idle": "Inactif"
+        }
+      },
+      "print_progress": {
+        "name": "Progression de l'impression"
+      },
+      "print_status": {
+        "name": "État de l'impression",
+        "state": {
+          "offline": "Hors ligne",
+          "running": "En cours",
+          "finish": "Terminé",
+          "idle": "Inactif"
+        }
+      },
+      "start_time": {
+        "name": "Heure de début"
+      },
+      "remaining_time": {
+        "name": "Temps restant"
+      },
+      "end_time": {
+        "name": "Heure de fin"
+      },
+      "current_layer": {
+        "name": "Couche actuelle"
+      },
+      "total_layers": {
+        "name": "Nombre total de couches"
+      },
+      "active_tray": {
+        "name": "Emplacement actif"
+      },
+      "humidity_index": {
+        "name": "Indice d'humidité"
+      },
+      "external_spool": {
+        "name": "Bobine externe",
+        "state_attributes": {
+          "active": {
+            "name": "Actif"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "k_value": {
+            "name": "Valeur K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Température minimale de la buse"
+          },
+          "nozzle_temp_max": {
+            "name": "Température maximale de la buse"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Emplacement 1",
+        "state_attributes": {
+          "active": {
+            "name": "Actif"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "k_value": {
+            "name": "Valeur K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Température minimale de la buse"
+          },
+          "nozzle_temp_max": {
+            "name": "Température maximale de la buse"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Emplacement 2",
+        "state_attributes": {
+          "active": {
+            "name": "Actif"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "k_value": {
+            "name": "Valeur K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Température minimale de la buse"
+          },
+          "nozzle_temp_max": {
+            "name": "Température maximale de la buse"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Emplacement 3",
+        "state_attributes": {
+          "active": {
+            "name": "Actif"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "k_value": {
+            "name": "Valeur K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Température minimale de la buse"
+          },
+          "nozzle_temp_max": {
+            "name": "Température maximale de la buse"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Emplacement 4",
+        "state_attributes": {
+          "active": {
+            "name": "Actif"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "k_value": {
+            "name": "Valeur K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Température minimale de la buse"
+          },
+          "nozzle_temp_max": {
+            "name": "Température maximale de la buse"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      }
+    }
+  }
+}
