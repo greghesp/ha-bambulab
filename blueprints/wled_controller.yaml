@@ -1,0 +1,158 @@
+blueprint:
+  name: Bambu Wled Controller
+  description: Control Wled lights with Bambu 3d printer
+  domain: automation
+  input:
+    printer_status:
+      name: Bambu Lab Printer Status entity
+      description: "Select the printer status entity."
+      selector:
+        entity:
+          filter:
+            domain: sensor
+            integration: bambu_lab
+    printer_stage:
+      name: Bambu Lab Printer Stage entity
+      description: "Select the printer stage entity."
+      selector:
+        entity:
+          filter:
+            domain: sensor
+            integration: bambu_lab
+    chamber_light:
+      name: Bambu Lab Printer Chamber Light entity
+      description: "Select the printer chamber light entity."
+      selector:
+        entity:
+          filter:
+            domain: light
+            integration: bambu_lab
+    wled_lights:
+      name: Wled Light device
+      description: "Select the Wled light device."
+      selector:
+        device:
+          filter:
+            integration: wled
+alias: Bambu Wled Controller
+description: ""
+
+trigger:
+  - platform: state
+    entity_id:
+      - !input printer_stage
+      - !input chamber_light
+      - !input printer_status
+    alias: When printer stage,status or chamber light state changes
+condition: []
+action:
+  - if:
+      - condition: state
+        entity_id: !input chamber_light
+        state: "on"
+        alias: chamber light is on
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: !input printer_stage
+            state: Scanning Bed Surface
+            alias: Scanning Bed Surface
+          - condition: state
+            entity_id: !input printer_stage
+            state: Cleaning Nozzle Tip
+            alias: Cleaning Nozzle Tip
+          - condition: state
+            entity_id: !input printer_stage
+            state: Calibrating Extrusion
+            alias: Calibrating Extrusion
+        alias: And Lidar is NOT on
+    then:
+      - service: light.turn_on
+        data:
+          rgb_color:
+            - 255
+            - 255
+            - 255
+          brightness: 255
+        target:
+          device_id: !input wled_lights
+        alias: Turn WLED light on white
+      - choose:
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Paused due to filament runout
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Pause of front cover falling
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Paused due to nozzle temperature malfunction
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Paused due to heat bed temperature malfunction
+            sequence:
+              - service: light.turn_on
+                data:
+                  rgb_color:
+                    - 255
+                    - 0
+                    - 0
+                  brightness: 255
+                target:
+                  device_id: !input wled_lights
+                alias: Turn on Wled to red
+        alias: Do we need to set color to red?
+      - choose:
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Idle
+                  - condition: state
+                    entity_id: !input printer_status
+                    state: Finish
+                  - condition: state
+                    entity_id: !input printer_status
+                    state: Offlilne
+            sequence:
+              - service: light.turn_on
+                data:
+                  rgb_color:
+                    - 0
+                    - 255
+                    - 0
+                  brightness: 255
+                target:
+                  device_id: !input wled_lights
+                alias: Turn on Wled to green
+        alias: Do we need to set color to green?
+      - choose:
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Auto Bed Leveling
+            sequence:
+              - service: light.turn_on
+                data:
+                  rgb_color:
+                    - 0
+                    - 0
+                    - 255
+                  brightness: 255
+                target:
+                  device_id: !input wled_lights
+                alias: Turn on Wled to blue
+        alias: Do we need to set color to blue?
+    else:
+      - service: light.turn_off
+        data: {}
+        target:
+          device_id: !input wled_lights
+        alias: Turn WLED light off
+mode: restart
