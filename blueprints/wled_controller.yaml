@@ -1,26 +1,26 @@
 blueprint:
-  name: Bambu Wled Controller
-  description: Control Wled lights with Bambu 3d printer
+  name: Bambu Lab WLED Controller
+  description: Control one or more WLED lights with Bambu 3d printer
   domain: automation
   input:
     printer_status:
-      name: Bambu Lab Printer Status entity
-      description: "Select the printer status entity."
+      name: Print Status of your Bambu Lab printer
+      description: "Select the print status entity."
       selector:
         entity:
           filter:
             domain: sensor
             integration: bambu_lab
     printer_stage:
-      name: Bambu Lab Printer Stage entity
-      description: "Select the printer stage entity."
+      name: Current Stage of your Bambu Lab Printer
+      description: "Select the printer current stage entity."
       selector:
         entity:
           filter:
             domain: sensor
             integration: bambu_lab
     chamber_light:
-      name: Bambu Lab Printer Chamber Light entity
+      name: Chamber Light of your Bambu Lab Printer
       description: "Select the printer chamber light entity."
       selector:
         entity:
@@ -28,30 +28,31 @@ blueprint:
             domain: light
             integration: bambu_lab
     wled_lights:
-      name: Wled Light device
-      description: "Select the Wled light device."
+      name: WLED Light devices
+      description: "Select the WLED light devices you wish to control."
       selector:
         device:
           filter:
             integration: wled
           multiple: true
-alias: Bambu Wled Controller
-description: ""
 
+alias: Bambu Lab WLED Controller
+description: ""
 trigger:
   - platform: state
     entity_id:
-      - !input printer_stage
       - !input chamber_light
       - !input printer_status
+      - !input printer_stage
     alias: When printer stage,status or chamber light state changes
+    #not_to: Unknown
 condition: []
 action:
   - if:
       - condition: state
-        entity_id: !input chamber_light
         state: "on"
         alias: chamber light is on
+        entity_id: !input chamber_light
       - condition: not
         conditions:
           - condition: state
@@ -66,6 +67,10 @@ action:
             entity_id: !input printer_stage
             state: Calibrating Extrusion
             alias: Calibrating Extrusion
+          - condition: state
+            entity_id: !input printer_status
+            state: Offline
+            alias: Printer is off
         alias: And Lidar is NOT on
     then:
       - service: light.turn_on
@@ -118,11 +123,11 @@ action:
                     entity_id: !input printer_stage
                     state: Idle
                   - condition: state
-                    entity_id: sensor.x1c_printer_print_status
+                    entity_id: !input printer_status
                     state: Finish
                   - condition: state
-                    entity_id: sensor.x1c_printer_print_status
-                    state: Offlilne
+                    entity_id: !input printer_status
+                    state: Offline
             sequence:
               - service: light.turn_on
                 data:
@@ -186,6 +191,7 @@ action:
       - service: light.turn_off
         data: {}
         target:
-          device_id: !input wled_lights
+          device_id:
+            !input wled_lights
         alias: Turn WLED light off
-mode: restart
+mode: single
