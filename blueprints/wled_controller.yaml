@@ -34,6 +34,7 @@ blueprint:
         device:
           filter:
             integration: wled
+          multiple: true
 alias: Bambu Wled Controller
 description: ""
 
@@ -73,10 +74,12 @@ action:
             - 255
             - 255
             - 255
-          brightness: 255
-        target:
-          device_id: !input wled_lights
+          brightness_pct: 100
+          effect: Solid
         alias: Turn WLED light on white
+        target:
+          device_id:
+            !input wled_lights
       - choose:
           - conditions:
               - condition: or
@@ -101,8 +104,10 @@ action:
                     - 0
                     - 0
                   brightness: 255
+                  effect: Blink
                 target:
-                  device_id: !input wled_lights
+                  device_id:
+                    !input wled_lights
                 alias: Turn on Wled to red
         alias: Do we need to set color to red?
       - choose:
@@ -113,10 +118,10 @@ action:
                     entity_id: !input printer_stage
                     state: Idle
                   - condition: state
-                    entity_id: !input printer_status
+                    entity_id: sensor.x1c_printer_print_status
                     state: Finish
                   - condition: state
-                    entity_id: !input printer_status
+                    entity_id: sensor.x1c_printer_print_status
                     state: Offlilne
             sequence:
               - service: light.turn_on
@@ -126,8 +131,10 @@ action:
                     - 255
                     - 0
                   brightness: 255
+                  effect: Solid
                 target:
-                  device_id: !input wled_lights
+                  device_id:
+                    !input wled_lights
                 alias: Turn on Wled to green
         alias: Do we need to set color to green?
       - choose:
@@ -145,10 +152,36 @@ action:
                     - 0
                     - 255
                   brightness: 255
+                  effect: Blink
                 target:
-                  device_id: !input wled_lights
+                  device_id:
+                    !input wled_lights
                 alias: Turn on Wled to blue
         alias: Do we need to set color to blue?
+      - choose:
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Heatbed Preheating
+                  - condition: state
+                    entity_id: !input printer_stage
+                    state: Heating Hotend
+            sequence:
+              - service: light.turn_on
+                data:
+                  rgb_color:
+                    - 255
+                    - 169
+                    - 0
+                  brightness: 255
+                  effect: Blink
+                target:
+                  device_id:
+                    !input wled_lights
+                alias: Turn on Wled to yellow
+        alias: Do we need to set color to yellow?
     else:
       - service: light.turn_off
         data: {}
