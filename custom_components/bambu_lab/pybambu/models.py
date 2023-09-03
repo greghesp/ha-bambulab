@@ -283,12 +283,17 @@ class Info:
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
-        self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
-        self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
+        if data.get("gcode_start_time") is not None:
+            self.start_time = start_time(int(data.get("gcode_start_time")))
+        # self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
+        if data.get("mc_remaining_time") is not None:
+            self.end_time = end_time(data.get("mc_remaining_time"))
+        # self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
         self.firmware_updates = data.get("upgrade_state", {}).get("new_ver_list", self.firmware_updates)
+
 
 @dataclass
 class AMSInstance:
@@ -583,7 +588,7 @@ class Speed:
         self.modifier = int(data.get("spd_mag", self.modifier))
 
     def SetSpeed(self, option: str):
-        for id,speed in SPEED_PROFILE.items():
+        for id, speed in SPEED_PROFILE.items():
             if option == speed:
                 self._id = id
                 self.name = speed
@@ -592,6 +597,7 @@ class Speed:
                 self.client.publish(command)
                 if self.client.callback is not None:
                     self.client.callback("event_speed_update")
+
 
 @dataclass
 class StageAction:
