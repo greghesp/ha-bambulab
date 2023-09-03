@@ -88,8 +88,8 @@ class Lights:
 
     def __init__(self, client):
         self.client = client
-        self.chamber_light = "Unknown"
-        self.work_light = "Unknown"
+        self.chamber_light = "unknown"
+        self.work_light = "unknown"
 
     def print_update(self, data):
         """Update from dict"""
@@ -190,7 +190,7 @@ class Fans:
         command = fan_percentage_to_gcode(fan, percentage)
         LOGGER.debug(command)
         self.client.publish(command)
-        
+
 
 @dataclass
 class Info:
@@ -215,9 +215,9 @@ class Info:
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = device_type
-        self.hw_ver = "Unknown"
-        self.sw_ver = "Unknown"
-        self.gcode_state = "Unknown"
+        self.hw_ver = "unknown"
+        self.sw_ver = "unknown"
+        self.gcode_state = "unknown"
         self.serial = serial
         self.remaining_time = 0
         self.end_time = 0

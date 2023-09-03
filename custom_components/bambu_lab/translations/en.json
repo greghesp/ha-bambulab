@@ -1,70 +1,361 @@
 {
-    "config": {
-        "abort": {
-            "already_configured": "Device is already configured"
-        },
-        "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
-        },
-        "step": {
-            "user": {
-                "description": "Please select your printer and provide it's serial number.",
-                "data": {
-                    "device_type": "Printer Model:",
-                    "serial": "Serial Number",
-                    "printer_mode": "Connection Mode:"
-                }
-            },
-            "Bambu": {
-                "title": "Bambu Cloud MQTT Connection",
-                "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
-                "data": {
-                    "username": "Email Address",
-                    "password": "Password"
-                }
-            },
-            "Lan": {
-                "title": "Local MQTT Connection",
-                "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
-                "data": {
-                  "host": "Host IP",
-                  "access_code": "Access Code"
-                }
-            }
-        }
+  "config": {
+      "abort": {
+          "already_configured": "Device is already configured"
+      },
+      "error": {
+          "cannot_connect": "Failed to connect",
+          "invalid_auth": "Invalid authentication",
+          "unknown": "Unexpected error"
+      },
+      "step": {
+          "user": {
+              "description": "Please select your printer and provide it's serial number.",
+              "data": {
+                  "device_type": "Printer Model:",
+                  "serial": "Serial Number",
+                  "printer_mode": "Connection Mode:"
+              }
+          },
+          "Bambu": {
+              "title": "Bambu Cloud MQTT Connection",
+              "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+              "data": {
+                  "username": "Email Address",
+                  "password": "Password"
+              }
+          },
+          "Lan": {
+              "title": "Local MQTT Connection",
+              "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+              "data": {
+                "host": "Host IP",
+                "access_code": "Access Code"
+              }
+          }
+      }
+  },
+  "options": {
+      "error": {
+          "cannot_connect": "Failed to connect",
+          "invalid_auth": "Invalid authentication",
+          "unknown": "Unexpected error"
+      },
+      "step": {
+          "init": {
+              "title": "Adjust connection settings",
+              "description": "Choose the new connection settings for this printer.",
+              "data": {
+                  "printer_mode": "Connection Mode:"
+              }
+          },
+          "Bambu": {
+              "title": "Bambu Cloud MQTT Connection",
+              "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+              "data": {
+                  "username": "Email Address",
+                  "password": "Password"
+              }
+          },
+          "Lan": {
+              "title": "Local MQTT Connection",
+              "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+              "data": {
+                "host": "Host IP",
+                "access_code": "Access Code"
+              }
+          }
+      }
+  },
+  "entity": {
+    "binary_sensor": {
+      "timelapse": {
+        "name": "Recording timelapse"
+      },
+      "hms_errors": {
+        "name": "HMS errors"
+      },
+      "online": {
+        "name": "Online"
+      },
+      "firmware_update": {
+        "name": "Firmware update"
+      }
     },
-    "options": {
-        "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
-        },
-        "step": {
-            "init": {
-                "title": "Adjust connection settings",
-                "description": "Choose the new connection settings for this printer.",
-                "data": {
-                    "printer_mode": "Connection Mode:"
-                }
-            },
-            "Bambu": {
-                "title": "Bambu Cloud MQTT Connection",
-                "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
-                "data": {
-                    "username": "Email Address",
-                    "password": "Password"
-                }
-            },
-            "Lan": {
-                "title": "Local MQTT Connection",
-                "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
-                "data": {
-                  "host": "Host IP",
-                  "access_code": "Access Code"
-                }
-            }
+    "button": {
+      "pause": {
+        "name": "Pause printing"
+      },
+      "resume": {
+        "name": "Resume printing"
+      },
+      "stop": {
+        "name": "Stop printing"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Cooling fan"
+      },
+      "aux_fan": {
+        "name": "Aux fan"
+      },
+      "chamber_fan": {
+        "name": "Chamber fan"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Chamber light"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Printing speed",
+        "state": {
+          "silent": "Silent",
+          "standard": "Standard",
+          "sport": "Sport",
+          "ludicrous": "Ludicrous"
         }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Wi-Fi signal"
+      },
+      "bed_temp": {
+        "name": "Bed temperature"
+      },
+      "target_bed_temp": {
+        "name": "Target Bed temperature"
+      },
+      "chamber_temp": {
+        "name": "Chamber temperature"
+      },
+      "target_nozzle_temp": {
+        "name": "Nozzle target temperature"
+      },
+      "nozzle_temp": {
+        "name": "Nozzle temperature"
+      },
+      "aux_fan_speed": {
+        "name": "Aux fan speed"
+      },
+      "cooling_fan_speed": {
+        "name": "Cooling fan speed"
+      },
+      "chamber_fan_speed": {
+        "name": "Chamber fan speed"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Heatbreak fan speed"
+      },
+      "speed_profile": {
+        "name": "Speed profile",
+        "state": {
+          "silent": "Silent",
+          "standard": "Standard",
+          "sport": "Sport",
+          "ludicrous": "Ludicrous"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modifier"
+          }
+        }
+      },
+      "stage": {
+        "name": "Current stage",
+        "state": {
+          "offline": "Offline",
+          "printing": "Printing",
+          "auto_bed_leveling": "Auto bed leveling",
+          "heatbed_preheating": "Heatbed preheating",
+          "sweeping_xy_mech_mode": "Sweeping XY mech mode",
+          "changing_filament": "Changing gilament",
+          "m400_pause": "M400 pause",
+          "paused_filament_runout": "Paused due to filament runout",
+          "heating_hotend": "Heating hotend",
+          "calibrating_extrusion": "Calibrating extrusion",
+          "scanning_bed_surface": "Scanning bed durface",
+          "inspecting_first_layer": "Inspecting first layer",
+          "identifying_build_plate_type": "Identifying build plate type",
+          "calibrating_micro_lidar": "Calibrating micro lidar",
+          "homing_toolhead": "Homing toolhead",
+          "cleaning_nozzle_tip": "Cleaning nozzle tip",
+          "checking_extruder_temperature": "Checking extruder temperature",
+          "paused_user": "Printing was paused by the user",
+          "paused_front_cover_falling": "Pause of front cover falling",
+          "calibrating_extrusion_flow": "Calibrating extrusion flow",
+          "paused_nozzle_temperature_malfunction": "Paused due to nozzle temperature malfunction",
+          "paused_heat_bed_temperature_malfunction": "Paused due to heat bed temperature malfunction",
+          "idle": "Idle"
+        }
+      },
+      "print_progress": {
+        "name": "Print progress"
+      },
+      "print_status": {
+        "name": "Print status",
+        "state": {
+          "offline": "Offline",
+          "running": "Running",
+          "finish": "Finish",
+          "idle": "Idle"
+        }
+      },
+      "start_time": {
+        "name": "Start time"
+      },
+      "remaining_time": {
+        "name": "Remaining time"
+      },
+      "end_time": {
+        "name": "End time"
+      },
+      "current_layer": {
+        "name": "Current layer"
+      },
+      "total_layers": {
+        "name": "Total layer count"
+      },
+      "active_tray": {
+        "name": "Active tray"
+      },
+      "humidity_index": {
+        "name": "Humidity index"
+      },
+      "external_spool": {
+        "name": "External spool",
+        "state_attributes": {
+          "active": {
+            "name": "Active"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "k_value": {
+            "name": "K value"
+          },
+          "name": {
+            "name": "Name"
+          },
+          "nozzle_temp_min": {
+            "name": "Nozzle min temperature"
+          },
+          "nozzle_temp_max": {
+            "name": "Nozzle max temperature"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Tray 1",
+        "state_attributes": {
+          "active": {
+            "name": "Active"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "k_value": {
+            "name": "K value"
+          },
+          "name": {
+            "name": "Name"
+          },
+          "nozzle_temp_min": {
+            "name": "Nozzle min temperature"
+          },
+          "nozzle_temp_max": {
+            "name": "Nozzle max temperature"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Tray 2",
+        "state_attributes": {
+          "active": {
+            "name": "Active"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "k_value": {
+            "name": "K value"
+          },
+          "name": {
+            "name": "Name"
+          },
+          "nozzle_temp_min": {
+            "name": "Nozzle min temperature"
+          },
+          "nozzle_temp_max": {
+            "name": "Nozzle max temperature"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Tray 3",
+        "state_attributes": {
+          "active": {
+            "name": "Active"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "k_value": {
+            "name": "K value"
+          },
+          "name": {
+            "name": "Name"
+          },
+          "nozzle_temp_min": {
+            "name": "Nozzle min temperature"
+          },
+          "nozzle_temp_max": {
+            "name": "Nozzle max temperature"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Tray 4",
+        "state_attributes": {
+          "active": {
+            "name": "Active"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "k_value": {
+            "name": "K value"
+          },
+          "name": {
+            "name": "Name"
+          },
+          "nozzle_temp_min": {
+            "name": "Nozzle min temperature"
+          },
+          "nozzle_temp_max": {
+            "name": "Nozzle max temperature"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      }
     }
+  }
 }

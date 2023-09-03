@@ -32,17 +32,17 @@ class BambuLabFanEntityDescription(FanEntityDescription, BambuLabFanEntityDescri
 FANS: tuple[FanEntityDescription, ...] = (
     BambuLabFanEntityDescription(
         key="cooling_fan",
-        name="Cooling Fan",
-        value_fn=lambda device: device.fans.cooling_fan_speed
+        translation_key="cooling_fan",
+        value_fn=lambda device: device.fans.cooling_fan_speed,
     ),
     BambuLabFanEntityDescription(
         key="aux_fan",
-        name="Aux Fan",
+        translation_key="aux_fan",
         value_fn=lambda device: device.fans.aux_fan_speed
     ),
     BambuLabFanEntityDescription(
         key="chamber_fan",
-        name="Chamber Fan",
+        translation_key="chamber_fan",
         value_fn=lambda device: device.fans.chamber_fan_speed,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
     )
@@ -75,7 +75,6 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         """Initialize the fan."""
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
-        self._attr_name = description.name
         self._attr_supported_features = FanEntityFeature.SET_SPEED
 
         super().__init__(coordinator=coordinator)
@@ -96,7 +95,7 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     def percentage(self) -> int:
         """Return the current speed percentage."""
         return self.entity_description.value_fn(self.coordinator.get_model())
-    
+
     def _set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
         match self.entity_description.key:
