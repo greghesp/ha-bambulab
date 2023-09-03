@@ -202,7 +202,8 @@
           "offline": "Hors ligne",
           "running": "En cours",
           "finish": "Terminé",
-          "idle": "Inactif"
+          "idle": "Inactif",
+          "prepare": "Préparer"
         }
       },
       "start_time": {

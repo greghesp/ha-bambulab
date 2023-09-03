@@ -202,7 +202,8 @@
           "offline": "Offline",
           "running": "Running",
           "finish": "Finish",
-          "idle": "Idle"
+          "idle": "Idle",
+          "prepare": "Prepare"
         }
       },
       "start_time": {
