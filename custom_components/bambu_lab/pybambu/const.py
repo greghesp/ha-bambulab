@@ -4,6 +4,7 @@ from enum import Enum
 
 LOGGER = logging.getLogger(__package__)
 
+
 class Features(Enum):
     AUX_FAN = 1,
     CHAMBER_LIGHT = 2,
@@ -18,10 +19,12 @@ class Features(Enum):
     AMS_TEMPERATURE = 11,
     AMS_RAW_HUMIDITY = 12,
 
+
 class FansEnum(Enum):
     PART_COOLING = 1,
     AUXILIARY = 2,
     CHAMBER = 3,
+
 
 ACTION_IDS = {
     "default": "unknown",
@@ -85,6 +88,8 @@ FILAMENT_NAMES = {
     "GFB99": "Generic ABS",
     "GFB98": "Generic ASA",
     "GFS98": "Generic HIPS",
+    "GFN98": "Generic PA-CF",
+    "GFN99": "Generic PA",
     "GFC99": "Generic PC",
     "GFG99": "Generic PETG",
     "GFG98": "Generic PETG-CF",
@@ -92,6 +97,7 @@ FILAMENT_NAMES = {
     "GFL96": "Generic PLA Silk",
     "GFL98": "Generic PLA-CF",
     "GFS99": "Generic PVA",
+    "GFU99": "Generic TPU",
     "GFL00": "PolyLite PLA",
     "GFL01": "PolyTerra PLA",
     "GFL03": "eSUN PLA+",
