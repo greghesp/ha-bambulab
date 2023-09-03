@@ -70,7 +70,7 @@
   "entity": {
     "binary_sensor": {
       "timelapse": {
-        "name": "Enregistrement du timelapse"
+        "name": "Timelapse"
       },
       "hms_errors": {
         "name": "Erreurs HMS"
@@ -101,12 +101,12 @@
         "name": "Ventilateur auxiliaire"
       },
       "chamber_fan": {
-        "name": "Ventilateur de l'enceinte"
+        "name": "Ventilateur de la chambre"
       }
     },
     "light": {
       "chamber_light": {
-        "name": "Éclairage de l'enceinte"
+        "name": "Lumière de la chambre"
       }
     },
     "select": {
@@ -131,7 +131,7 @@
         "name": "Température cible du lit"
       },
       "chamber_temp": {
-        "name": "Température de l'enceinte"
+        "name": "Température de la chambre"
       },
       "target_nozzle_temp": {
         "name": "Température cible de la buse"
@@ -146,7 +146,7 @@
         "name": "Vitesse du ventilateur de refroidissement"
       },
       "chamber_fan_speed": {
-        "name": "Vitesse du ventilateur de l'enceinte"
+        "name": "Vitesse du ventilateur de la chambre"
       },
       "heatbreak_fan_speed": {
         "name": "Vitesse du ventilateur de l'isolateur thermique"
@@ -169,13 +169,13 @@
         "name": "Étape actuelle",
         "state": {
           "offline": "Hors ligne",
-          "printing": "Impression en cours",
-          "auto_bed_leveling": "Nivellement automatique",
+          "printing": "Impression",
+          "auto_bed_leveling": "Nivellement automatique du lit",
           "heatbed_preheating": "Préchauffage du lit",
           "sweeping_xy_mech_mode": "Mode balayage XY mécanique",
           "changing_filament": "Changement de filament",
           "m400_pause": "Pause M400",
-          "paused_filament_runout": "En pause à cause d'une fin de filament",
+          "paused_filament_runout": "Pause à cause d'une fin de filament",
           "heating_hotend": "Préchauffage de l'extrudeur",
           "calibrating_extrusion": "Calibration de l'extrusion",
           "scanning_bed_surface": "Numérisation de la surface du lit",
