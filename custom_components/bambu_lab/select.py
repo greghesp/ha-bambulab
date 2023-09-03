@@ -7,7 +7,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.select import SelectEntity
 
-from .const import DOMAIN, LOGGER 
+from .const import DOMAIN, LOGGER
 from .pybambu.const import SPEED_PROFILE
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
@@ -33,8 +33,7 @@ class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     """Speed select options."""
 
     _attr_icon = "mdi:speedometer"
-    _attr_name = "Printing Speed"
-    #_attr_translation_key = "print_speed"
+    _attr_translation_key = "printing_speed"
 
     def __init__(self, coordinator: BambuDataUpdateCoordinator) -> None:
         """Initialize Speed Select."""
@@ -49,7 +48,7 @@ class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return self.coordinator.get_model().info.gcode_state == 'RUNNING'
-    
+
     @property
     def current_option(self) -> str:
         """Return the current selected live override."""

@@ -16,17 +16,20 @@ from .coordinator import BambuDataUpdateCoordinator
 
 PAUSE_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="pause",
-    name="Pause Printing",
+    icon="mdi:pause",
+    translation_key="pause",
     entity_category=EntityCategory.CONFIG,
 )
 RESUME_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="resume",
-    name="Resume Printing",
+    icon="mdi:play",
+    translation_key="resume",
     entity_category=EntityCategory.CONFIG,
 )
 STOP_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="stop",
-    name="Stop Printing",
+    icon="mdi:stop",
+    translation_key="stop",
     entity_category=EntityCategory.CONFIG,
 )
 
@@ -48,9 +51,6 @@ async def async_setup_entry(
 
 class BambuLabButton(BambuLabEntity, ButtonEntity):
     """Base BambuLab Button"""
-
-    __attr_has_entity_name: bool = True
-
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
@@ -66,7 +66,6 @@ class BambuLabButton(BambuLabEntity, ButtonEntity):
 class BambuLabPauseButton(BambuLabButton):
     """BambuLab Print Pause Button"""
 
-    __attr_icon = "mdi:pause"
     entity_description = PAUSE_BUTTON_DESCRIPTION
 
     @property
@@ -84,7 +83,6 @@ class BambuLabPauseButton(BambuLabButton):
 class BambuLabResumeButton(BambuLabButton):
     """BambuLab Print Resume Button"""
 
-    __attr_icon = "mdi:play"
     entity_description = RESUME_BUTTON_DESCRIPTION
 
     @property
@@ -102,7 +100,6 @@ class BambuLabResumeButton(BambuLabButton):
 class BambuLabStopButton(BambuLabButton):
     """BambuLab Print Stop Button"""
 
-    __attr_icon = "mdi:stop"
     entity_description = STOP_BUTTON_DESCRIPTION
 
     @property
