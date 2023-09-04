@@ -39,7 +39,8 @@ class BambuLabCamera(BambuLabEntity, Camera):
     ) -> None:
         """Initialize the sensor."""
 
-        self._attr_unique_id = f"{config_entry.data['serial']}camera"
+        self._attr_unique_id = f"{config_entry.data['serial']}_camera"
+
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
 
