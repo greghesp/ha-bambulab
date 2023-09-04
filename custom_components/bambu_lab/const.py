@@ -16,5 +16,6 @@ PLATFORMS = (
     Platform.FAN,
     Platform.LIGHT,
     Platform.SELECT,
-    Platform.SENSOR
+    Platform.SENSOR,
+    Platform.CAMERA
 )

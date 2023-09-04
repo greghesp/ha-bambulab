@@ -15,6 +15,7 @@ from .utils import \
 from .const import LOGGER, Features, FansEnum, SPEED_PROFILE
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
+
 class Device:
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -27,6 +28,7 @@ class Device:
         self.ams = AMSList(client)
         self.external_spool = ExternalSpool(client)
         self.hms = HMSList(client)
+        self.camera = Camera()
 
     def print_update(self, data):
         """Update from dict"""
@@ -39,6 +41,7 @@ class Device:
         self.ams.print_update(data)
         self.external_spool.print_update(data)
         self.hms.print_update(data)
+        self.camera.print_update(data)
         if self.client.callback is not None:
             self.client.callback("event_printer_data_update")
 
@@ -126,6 +129,38 @@ class Lights:
 
 
 @dataclass
+class Camera:
+    """Return camera related info"""
+    recording: str
+    resolution: str
+    rtsp_url: str
+    timelapse: str
+
+    def __init__(self):
+        self.recording = ''
+        self.resolution = ''
+        self.rtsp_url = ''
+        self.timelapse = ''
+
+    def print_update(self, data):
+        """Update from dict"""
+        # "ipcam": {
+        #   "ipcam_dev": "1",
+        #   "ipcam_record": "enable",
+        #   "mode_bits": 2,
+        #   "resolution": "1080p",
+        #   "rtsp_url": "rtsps://192.168.1.64/streaming/live/1",
+        #   "timelapse": "disable",
+        #   "tutk_server": "disable"
+        # }
+
+        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
+        self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
+        self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
+        self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
+
+
+@dataclass
 class Temperature:
     """Return all temperature related info"""
     bed_temp: int
@@ -206,7 +241,6 @@ class Info:
     end_time: str
     current_layer: int
     total_layers: int
-    timelapse: str
     online: bool
     firmware_updates: dict
 
@@ -224,7 +258,6 @@ class Info:
         self.start_time = 0
         self.current_layer = 0
         self.total_layers = 0
-        self.timelapse = ""
         self.online = False
         self.firmware_updates = {}
 
@@ -285,13 +318,15 @@ class Info:
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         if data.get("gcode_start_time") is not None:
             self.start_time = start_time(int(data.get("gcode_start_time")))
+        # TODO: Check this logic actually works
+        if self.gcode_state is not 'Running':
+            self.start_time = 0
         # self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
         if data.get("mc_remaining_time") is not None:
             self.end_time = end_time(data.get("mc_remaining_time"))
         # self.end_time = end_time(data.get("mc_remaining_time", self.remaining_time))
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
         self.firmware_updates = data.get("upgrade_state", {}).get("new_ver_list", self.firmware_updates)
 
 
