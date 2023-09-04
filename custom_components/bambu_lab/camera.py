@@ -58,7 +58,7 @@ class BambuLabCamera(BambuLabEntity, Camera):
     async def stream_source(self) -> str | None:
         url = yarl.URL(self.coordinator.get_model().camera.rtsp_url)
         # TODO: Replace password with access code from config flow
-        url = url.with_user('bblp').with_password('xxxxxxx')
+        url = url.with_user('bblp').with_password('xxxxxx')
         return str(url)
 
     # TODO: async camera image doesn't work for some reason
