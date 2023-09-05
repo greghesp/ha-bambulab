@@ -19,7 +19,7 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    if coordinator.get_model().supports_feature(Features.CHAMBER_FAN):
+    if coordinator.get_model().supports_feature(Features.CAMERA_RTSP):
         entities_to_add: list = [BambuLabCamera(coordinator, entry)]
         async_add_entities(entities_to_add)
 
