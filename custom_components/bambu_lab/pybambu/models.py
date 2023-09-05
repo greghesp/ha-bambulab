@@ -139,7 +139,7 @@ class Camera:
     def __init__(self):
         self.recording = ''
         self.resolution = ''
-        self.rtsp_url = ''
+        self.rtsp_url = None
         self.timelapse = ''
 
     def print_update(self, data):

@@ -1,7 +1,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
-import yarl
+from yarl import URL
 from homeassistant.components import ffmpeg
 
 from .const import DOMAIN, LOGGER
@@ -19,7 +19,6 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-
     entities_to_add: list = [BambuLabCamera(coordinator, entry)]
     async_add_entities(entities_to_add)
 
@@ -40,13 +39,14 @@ class BambuLabCamera(BambuLabEntity, Camera):
         """Initialize the sensor."""
 
         self._attr_unique_id = f"{config_entry.data['serial']}_camera"
+        self._access_code = config_entry.data['access_code']
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
 
     @property
     def is_streaming(self) -> bool:
-        if self.coordinator.get_model().camera.rtsp_url == "disable":
+        if self.coordinator.get_model().camera.rtsp_url == "disable" or None:
             return False
         return True
 
@@ -57,10 +57,11 @@ class BambuLabCamera(BambuLabEntity, Camera):
         return False
 
     async def stream_source(self) -> str | None:
-        url = yarl.URL(self.coordinator.get_model().camera.rtsp_url)
-        # TODO: Replace password with access code from config flow
-        url = url.with_user('bblp').with_password('xxxxxx')
-        return str(url)
+        if self.coordinator.get_model().camera.rtsp_url is not None:
+            url = URL(self.coordinator.get_model().camera.rtsp_url).with_user('bblp').with_password(
+                self._access_code)
+            return str(url)
+        return None
 
     # TODO: async camera image doesn't work for some reason
     async def async_camera_image(
