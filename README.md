@@ -48,7 +48,7 @@ If AMS(s) are present, an additional 'Current Tray' sensor is present on the Pri
 
 ### Lights
 
-| Sensor        | X1C                | X1                 | P1P                | P1S                |  
+| Light         | X1C                | X1                 | P1P                | P1S                |  
 |---------------|--------------------|--------------------|--------------------|--------------------|
 | Chamber Light | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :white_check_mark: |
 
@@ -56,7 +56,7 @@ If AMS(s) are present, an additional 'Current Tray' sensor is present on the Pri
 
 This currently exposes the following Buttons:
 
-| Sensor | X1C                | X1                 | P1P                | P1S                |
+| Button | X1C                | X1                 | P1P                | P1S                |
 |--------|--------------------|--------------------|--------------------|--------------------|
 | Pause  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Resume | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
