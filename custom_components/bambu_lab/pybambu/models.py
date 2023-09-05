@@ -80,6 +80,8 @@ class Device:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.AMS_RAW_HUMIDITY:
                 return False
+            case Features.CAMERA_RTSP:
+                return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
 
 
