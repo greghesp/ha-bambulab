@@ -16,7 +16,6 @@ For now, you will need the following information:
 - LAN Access Code (Can be found on the Printer settings)
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
-
 ## Features
 
 (:heavy_check_mark: Optional accessory)
@@ -49,68 +48,68 @@ If AMS(s) are present, an additional 'Current Tray' sensor is present on the Pri
 
 ### Lights
 
-| Sensor                    | X1C                | X1                 | P1P                | P1S                |  
-|---------------------------|--------------------|--------------------|--------------------|--------------------|
-| Chamber Light             | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :white_check_mark: |
+| Light         | X1C                | X1                 | P1P                | P1S                |  
+|---------------|--------------------|--------------------|--------------------|--------------------|
+| Chamber Light | :white_check_mark: | :white_check_mark: | :heavy_check_mark: | :white_check_mark: |
 
 ### Buttons
 
 This currently exposes the following Buttons:
 
-| Sensor                    | X1C                | X1                 | P1P                | P1S                |
-|---------------------------|--------------------|--------------------|--------------------|--------------------|
-| Pause                     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Resume                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Stop                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Button | X1C                | X1                 | P1P                | P1S                |
+|--------|--------------------|--------------------|--------------------|--------------------|
+| Pause  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Resume | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Stop   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### AMS
 
-| Sensor                    | X1C                | X1                 | P1P                | P1S                |
-|---------------------------|--------------------|--------------------|--------------------|--------------------|
-| Humidity Index            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 2                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 3                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 4                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray Attributes:          |                    |                    |                    |                    |
-| Active                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Color                     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Empty                     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| K Value                   | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
-| Max Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Min Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Name                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Type                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Sensor           | X1C                | X1                 | P1P                | P1S                |
+|------------------|--------------------|--------------------|--------------------|--------------------|
+| Humidity Index   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 1           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 2           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 3           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray 4           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Tray Attributes: |                    |                    |                    |                    |
+| Active           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Color            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Empty            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| K Value          | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
+| Max Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Min Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Name             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Type             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### External Spool
 
-| Sensor                    | X1C                | X1                 | P1P                | P1S                |
-|---------------------------|--------------------|--------------------|--------------------|--------------------|
-| External Spool            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Attributes:               |                    |                    |                    |                    |
-| Active                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Color                     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| K Value                   | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
-| Max Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Min Nozzle Temp           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Name                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Type                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Sensor          | X1C                | X1                 | P1P                | P1S                |
+|-----------------|--------------------|--------------------|--------------------|--------------------|
+| External Spool  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Attributes:     |                    |                    |                    |                    |
+| Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Color           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| K Value         | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
+| Max Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Min Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Name            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Type            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ### Diagnostics
 
 This currently exposes the following Diagnostic Sensors:
 
-| Sensor                    | X1C                | X1                 | P1P                | P1S                |
-|---------------------------|--------------------|--------------------|--------------------|--------------------|
-| Wifi Signal               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| HMS Errors                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Attributes:               |                    |                    |                    |                    |
-| Count                     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 1-Error                   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 1-Wiki                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2-Error                   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2-Wiki                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| ... and so on             |                    |                    |                    |                    |
+| Sensor        | X1C                | X1                 | P1P                | P1S                |
+|---------------|--------------------|--------------------|--------------------|--------------------|
+| Wifi Signal   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| HMS Errors    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Attributes:   |                    |                    |                    |                    |
+| Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 1-Error       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 1-Wiki        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2-Error       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2-Wiki        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| ... and so on |                    |                    |                    |                    |
 
 ### Cameras
 
