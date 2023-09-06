@@ -320,8 +320,7 @@ class Info:
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         if data.get("gcode_start_time") is not None:
             self.start_time = start_time(int(data.get("gcode_start_time")))
-        # TODO: Check this logic actually works
-        if self.gcode_state is not 'Running':
+        if self.gcode_state is not 'RUNNING':
             self.start_time = 0
         # self.start_time = start_time(int(data.get("gcode_start_time", self.remaining_time)))
         if data.get("mc_remaining_time") is not None:
