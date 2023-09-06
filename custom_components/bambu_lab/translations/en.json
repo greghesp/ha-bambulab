@@ -360,6 +360,11 @@
           }
         }
       }
+    },
+    "camera": {
+      "camera": {
+        "name": "Camera"
+      }
     }
   }
 }

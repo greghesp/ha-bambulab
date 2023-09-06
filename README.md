@@ -113,11 +113,14 @@ This currently exposes the following Diagnostic Sensors:
 
 ### Cameras
 
-Cameras are currently not supported across any Bambu Lab device, due to them using a proprietary streaming
-implementation.
+Camera functionality is currently only supported for the X1C
 
 If you want to see this changed, please comment and vote
 on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
+
+| Camera  | X1C                | X1                 | P1P | P1S |
+|---------|--------------------|--------------------|-----|-----|
+| Chamber | :white_check_mark: | :white_check_mark: | :x: | :x: |
 
 ## Release Notes
 
