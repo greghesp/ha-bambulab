@@ -1,4 +1,4 @@
-![image](https://github.com/ianschmitz/ha-bambulab/assets/6355370/c4b9527c-ad9c-4a6a-a09e-b47bddbde5ce)[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 
 # Bambu Lab
 
@@ -142,3 +142,7 @@ on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
 ## Release Notes
 
 Please check `release_notes.md`
+
+## Example integration
+
+![image](https://github.com/ianschmitz/ha-bambulab/assets/6355370/c4b9527c-ad9c-4a6a-a09e-b47bddbde5ce)
