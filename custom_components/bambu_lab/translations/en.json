@@ -206,6 +206,12 @@
           "prepare": "Prepare"
         }
       },
+      "gcode_file": {
+        "name": "Gcode filename"
+      },
+      "subtask_name": {
+        "name": "Task name"
+      },
       "start_time": {
         "name": "Start time"
       },

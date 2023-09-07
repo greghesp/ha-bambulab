@@ -288,6 +288,20 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().ams.tray_now + 1,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
     ),
+    BambuLabSensorEntityDescription(
+        key="gcode_file",
+        translation_key="gcode_file",
+        icon="mdi:file",
+        available_fn=lambda self: self.coordinator.get_model().info.gcode_file != "",
+        value_fn=lambda self: self.coordinator.get_model().info.gcode_file
+    ),
+    BambuLabSensorEntityDescription(
+        key="subtask_name",
+        translation_key="subtask_name",
+        icon="mdi:file",
+        available_fn=lambda self: self.coordinator.get_model().info.subtask_name != "",
+        value_fn=lambda self: self.coordinator.get_model().info.subtask_name
+    ),
 )
 
 VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
