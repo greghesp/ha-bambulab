@@ -206,6 +206,12 @@
           "prepare": "Prepare"
         }
       },
+      "gcode_file": {
+        "name": "Gcode filename"
+      },
+      "subtask_name": {
+        "name": "Task name"
+      },
       "start_time": {
         "name": "Start time"
       },
@@ -223,6 +229,9 @@
       },
       "active_tray": {
         "name": "Active tray"
+      },
+      "active_tray_index": {
+        "name": "Active tray index"
       },
       "humidity_index": {
         "name": "Humidity index"

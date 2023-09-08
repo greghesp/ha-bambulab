@@ -1,3 +1,5 @@
+import math
+
 from dataclasses import dataclass
 
 from .utils import \
@@ -29,6 +31,7 @@ class Device:
         self.external_spool = ExternalSpool(client)
         self.hms = HMSList(client)
         self.camera = Camera()
+        self._active_tray = None
 
     def print_update(self, data):
         """Update from dict"""
@@ -83,7 +86,19 @@ class Device:
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
-
+    
+    def get_active_tray(self):
+        if self.supports_feature(Features.AMS):
+            if self.ams.tray_now == 255:
+                return None
+            if self.ams.tray_now == 254:
+                return self.external_spool
+            for ams in self.ams.data:
+                active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
+                active_tray = self.ams.tray_now % 4
+                return active_ams.tray[active_tray]
+        else:
+            return self.external_spool
 
 @dataclass
 class Lights:
@@ -254,6 +269,8 @@ class Info:
         self.hw_ver = "unknown"
         self.sw_ver = "unknown"
         self.gcode_state = "unknown"
+        self.gcode_file = ""
+        self.subtask_name = ""
         self.serial = serial
         self.remaining_time = 0
         self.end_time = 0
@@ -317,6 +334,8 @@ class Info:
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
+        self.gcode_file = data.get("gcode_file", self.gcode_file)
+        self.subtask_name = data.get("subtask_name", self.subtask_name)
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         if data.get("gcode_start_time") is not None:
             self.start_time = start_time(int(data.get("gcode_start_time")))
@@ -532,7 +551,7 @@ class AMSTray:
 
     def print_update(self, data):
         if len(data) == 1:
-            # If the day is exactly one entry then it's just the ID and the tray is empty.
+            # If the data is exactly one entry then it's just the ID and the tray is empty.
             self.empty = True
             self.idx = ""
             self.name = "Empty"
