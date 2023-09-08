@@ -230,6 +230,9 @@
       "active_tray": {
         "name": "Active tray"
       },
+      "active_tray_index": {
+        "name": "Active tray index"
+      },
       "humidity_index": {
         "name": "Humidity index"
       },

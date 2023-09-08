@@ -1,3 +1,5 @@
+import math
+
 from dataclasses import dataclass
 
 from .utils import \
@@ -29,6 +31,7 @@ class Device:
         self.external_spool = ExternalSpool(client)
         self.hms = HMSList(client)
         self.camera = Camera()
+        self._active_tray = None
 
     def print_update(self, data):
         """Update from dict"""
@@ -83,7 +86,19 @@ class Device:
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
-
+    
+    def get_active_tray(self):
+        if self.supports_feature(Features.AMS):
+            if self.ams.tray_now == 255:
+                return None
+            if self.ams.tray_now == 254:
+                return self.external_spool
+            for ams in self.ams.data:
+                active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
+                active_tray = self.ams.tray_now % 4
+                return active_ams.tray[active_tray]
+        else:
+            return self.external_spool
 
 @dataclass
 class Lights:
@@ -536,7 +551,7 @@ class AMSTray:
 
     def print_update(self, data):
         if len(data) == 1:
-            # If the day is exactly one entry then it's just the ID and the tray is empty.
+            # If the data is exactly one entry then it's just the ID and the tray is empty.
             self.empty = True
             self.idx = ""
             self.name = "Empty"
