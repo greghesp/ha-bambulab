@@ -61,7 +61,9 @@ class BambuLabCamera(BambuLabEntity, Camera):
         if self.coordinator.get_model().camera.rtsp_url is not None:
             url = URL(self.coordinator.get_model().camera.rtsp_url).with_user('bblp').with_password(
                 self._access_code)
+            LOGGER.debug(f"Camera RTSP Feed is {url}")
             return str(url)
+        LOGGER.debug("No RTSP Feed available")
         return None
 
     # TODO: async camera image doesn't work for some reason
