@@ -281,12 +281,59 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     ),
     BambuLabSensorEntityDescription(
         key="tray_now",
-        translation_key="active_tray",
+        translation_key="active_tray_index",
         icon="mdi:printer-3d-nozzle",
         available_fn=lambda self: self.coordinator.get_model().supports_feature(
             Features.AMS) and self.coordinator.get_model().ams.tray_now != 255,
         value_fn=lambda self: self.coordinator.get_model().ams.tray_now + 1,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
+    ),
+    BambuLabSensorEntityDescription(
+        key="gcode_file",
+        translation_key="gcode_file",
+        icon="mdi:file",
+        available_fn=lambda self: self.coordinator.get_model().info.gcode_file != "",
+        value_fn=lambda self: self.coordinator.get_model().info.gcode_file
+    ),
+    BambuLabSensorEntityDescription(
+        key="subtask_name",
+        translation_key="subtask_name",
+        icon="mdi:file",
+        available_fn=lambda self: self.coordinator.get_model().info.subtask_name != "",
+        value_fn=lambda self: self.coordinator.get_model().info.subtask_name
+    ),
+    BambuLabSensorEntityDescription(
+        key="active_tray",
+        translation_key="active_tray",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().get_active_tray().name,
+        extra_attributes=lambda self:
+        {
+            "color": f"#{self.coordinator.get_model().get_active_tray().color}",
+            "name": self.coordinator.get_model().get_active_tray().name,
+            "nozzle_temp_min": self.coordinator.get_model().get_active_tray().nozzle_temp_min,
+            "nozzle_temp_max": self.coordinator.get_model().get_active_tray().nozzle_temp_max,
+            "type": self.coordinator.get_model().get_active_tray().type,
+        },
+        available_fn=lambda self: self.coordinator.get_model().get_active_tray() is not None,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS) and not coordinator.get_model().supports_feature(Features.K_VALUE)
+    ),
+    BambuLabSensorEntityDescription(
+        key="active_tray",
+        translation_key="active_tray",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().get_active_tray().name,
+        extra_attributes=lambda self:
+        {
+            "color": f"#{self.coordinator.get_model().get_active_tray().color}",
+            "k_value": self.coordinator.get_model().get_active_tray().k,
+            "name": self.coordinator.get_model().get_active_tray().name,
+            "nozzle_temp_min": self.coordinator.get_model().get_active_tray().nozzle_temp_min,
+            "nozzle_temp_max": self.coordinator.get_model().get_active_tray().nozzle_temp_max,
+            "type": self.coordinator.get_model().get_active_tray().type,
+        },
+        available_fn=lambda self: self.coordinator.get_model().get_active_tray() is not None,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS) and coordinator.get_model().supports_feature(Features.K_VALUE)
     ),
 )
 
