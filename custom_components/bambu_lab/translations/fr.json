@@ -206,6 +206,12 @@
           "prepare": "Préparer"
         }
       },
+      "gcode_file": {
+        "name": "Ficher G-code"
+      },
+      "subtask_name": {
+        "name": "Nom de la tâche"
+      },
       "start_time": {
         "name": "Heure de début"
       },
@@ -224,6 +230,9 @@
       "active_tray": {
         "name": "Emplacement actif"
       },
+      "active_tray_index": {
+        "name": "Emplacement actif (index)"
+      },
       "humidity_index": {
         "name": "Indice d'humidité"
       },
@@ -238,6 +247,9 @@
           },
           "color": {
             "name": "Couleur"
+          },
+          "empty": {
+            "name": "Vide"
           },
           "k_value": {
             "name": "Valeur K"
@@ -265,6 +277,9 @@
           "color": {
             "name": "Couleur"
           },
+          "empty": {
+            "name": "Vide"
+          },
           "k_value": {
             "name": "Valeur K"
           },
@@ -290,6 +305,9 @@
           },
           "color": {
             "name": "Couleur"
+          },
+          "empty": {
+            "name": "Vide"
           },
           "k_value": {
             "name": "Valeur K"
@@ -317,6 +335,9 @@
           "color": {
             "name": "Couleur"
           },
+          "empty": {
+            "name": "Vide"
+          },
           "k_value": {
             "name": "Valeur K"
           },
@@ -343,6 +364,9 @@
           "color": {
             "name": "Couleur"
           },
+          "empty": {
+            "name": "Vide"
+          },
           "k_value": {
             "name": "Valeur K"
           },
@@ -359,6 +383,11 @@
             "name": "Type"
           }
         }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Caméra"
       }
     }
   }
