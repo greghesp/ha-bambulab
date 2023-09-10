@@ -199,7 +199,7 @@
       "print_status": {
         "name": "État de l'impression",
         "state": {
-          "failed": "Échec",
+          "failed": "Échoué",
           "finish": "Terminé",
           "idle": "Inactif",
           "offline": "Hors ligne",
