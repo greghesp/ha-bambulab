@@ -199,11 +199,12 @@
       "print_status": {
         "name": "État de l'impression",
         "state": {
-          "offline": "Hors ligne",
-          "running": "En cours",
+          "failed": "Échoué",
           "finish": "Terminé",
           "idle": "Inactif",
-          "prepare": "Préparer"
+          "offline": "Hors ligne",
+          "prepare": "Préparer",
+          "running": "En cours"
         }
       },
       "start_time": {
