@@ -41,6 +41,7 @@ class BambuLabCamera(BambuLabEntity, Camera):
 
         self._attr_unique_id = f"{config_entry.data['serial']}_camera"
         self._access_code = config_entry.data['access_code']
+        self._host = config_entry.data['host']
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
@@ -59,9 +60,12 @@ class BambuLabCamera(BambuLabEntity, Camera):
 
     async def stream_source(self) -> str | None:
         if self.coordinator.get_model().camera.rtsp_url is not None:
-            url = URL(self.coordinator.get_model().camera.rtsp_url).with_user('bblp').with_password(
+            # rtsps://192.168.1.1/streaming/live/1
+            url = URL(f"rtsps://{self._host}/streaming/live/1").with_user('bblp').with_password(
                 self._access_code)
+            LOGGER.debug(f"Camera RTSP Feed is {url}")
             return str(url)
+        LOGGER.debug("No RTSP Feed available")
         return None
 
     # TODO: async camera image doesn't work for some reason
