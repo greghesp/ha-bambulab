@@ -249,6 +249,9 @@
           "color": {
             "name": "Color"
           },
+          "empty": {
+            "name": "Empty"
+          },
           "k_value": {
             "name": "K value"
           },
@@ -274,6 +277,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "empty": {
+            "name": "Empty"
           },
           "k_value": {
             "name": "K value"
@@ -301,6 +307,9 @@
           "color": {
             "name": "Color"
           },
+          "empty": {
+            "name": "Empty"
+          },
           "k_value": {
             "name": "K value"
           },
@@ -327,6 +336,9 @@
           "color": {
             "name": "Color"
           },
+          "empty": {
+            "name": "Empty"
+          },
           "k_value": {
             "name": "K value"
           },
@@ -352,6 +364,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "empty": {
+            "name": "Empty"
           },
           "k_value": {
             "name": "K value"
