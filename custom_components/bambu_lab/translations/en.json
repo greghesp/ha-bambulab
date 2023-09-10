@@ -199,11 +199,12 @@
       "print_status": {
         "name": "Print status",
         "state": {
-          "offline": "Offline",
-          "running": "Running",
+          "failed": "Failed",
           "finish": "Finish",
           "idle": "Idle",
-          "prepare": "Prepare"
+          "offline": "Offline",
+          "prepare": "Prepare",
+          "running": "Running"
         }
       },
       "gcode_file": {
