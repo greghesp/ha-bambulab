@@ -46,8 +46,8 @@ def to_whole(number):
 def get_filament_name(idx):
     """Converts a filament idx to a human-readable name"""
     result = FILAMENT_NAMES.get(idx, "unknown")
-    if result == "unknown":
-        LOGGER.debug(f"UNKNOWN FILAMENT IDX: {idx}")
+    if result == "unknown" and idx != "":
+        LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
     return result
 
 

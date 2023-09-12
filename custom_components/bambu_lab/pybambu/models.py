@@ -334,6 +334,8 @@ class Info:
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         self.gcode_state = data.get("gcode_state", self.gcode_state)
+        if self.gcode_state == "":
+            self.gcode_state = "unknown"
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
         self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
