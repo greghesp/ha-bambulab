@@ -4,6 +4,14 @@
 
 A Home Assistant Integration for Bambu Lab printers
 
+## Contribution
+
+Want to contribute to ha-bambulab? Great!  We have a few small asks though!
+
+- Please do not fork and PR against the `main` branch
+- Use the `develop` branch, this is our working area.  Anything in the `main` branch should be considered live, released code.
+- Please name your commits accordingly, and add some context as to what you have added.
+
 ## Setup
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab&category=Integration)
