@@ -204,7 +204,10 @@
           "idle": "Idle",
           "offline": "Offline",
           "prepare": "Prepare",
-          "running": "Running"
+          "running": "Running",
+          "pause": "Pause",
+          "slicing": "Slicing",
+          "init": "Init"
         }
       },
       "gcode_file": {

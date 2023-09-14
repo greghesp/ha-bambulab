@@ -203,8 +203,11 @@
           "finish": "Terminé",
           "idle": "Inactif",
           "offline": "Hors ligne",
-          "prepare": "Préparer",
-          "running": "En cours"
+          "prepare": "Préparation",
+          "running": "En cours",
+          "pause": "En pause",
+          "slicing": "Tranchage",
+          "init": "Initialisation"
         }
       },
       "gcode_file": {
