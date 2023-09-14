@@ -110,7 +110,7 @@ HMS_ERRORS = {
     "0300_1000_0002_0001": "The 1st order mechanical resonance mode of X axis is low.",
     "0300_1000_0002_0002": "The 1st order mechanical resonance mode of X axis differ much...",
     "0300_0F00_0001_0001": "The accelerometer data is unavailable",
-    "0300_0D00_0001_000B": "The Z axis motor seems got stuck when moving up)",
+    "0300_0D00_0001_000B": "The Z axis motor seems got stuck when moving up",
     "0300_0D00_0001_0002": "Hotbed homing failed . The environmental vibration is too great",
     "0300_0D00_0001_0003": "The build plate is not placed properly ...",
     "0300_0D00_0002_0001": "Heatbed homing abnormal. There may be a bulge on the ...",
