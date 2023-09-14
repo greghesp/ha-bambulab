@@ -204,7 +204,8 @@
           "idle": "Inactif",
           "offline": "Hors ligne",
           "prepare": "Préparer",
-          "running": "En cours"
+          "running": "En cours",
+          "pause": "En pause"
         }
       },
       "gcode_file": {
