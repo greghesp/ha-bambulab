@@ -238,7 +238,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda
             self: "offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().info.gcode_state.lower(),
         device_class=SensorDeviceClass.ENUM,
-        options=["failed", "finish", "idle", "offline", "prepare", "running", "unknown", "pause"],
+        options=["failed", "finish", "idle", "init", "offline", "pause","prepare", "running", "slicing", "unknown"],
     ),
     BambuLabSensorEntityDescription(
         key="start_time",

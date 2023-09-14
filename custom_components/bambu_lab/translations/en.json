@@ -205,7 +205,9 @@
           "offline": "Offline",
           "prepare": "Prepare",
           "running": "Running",
-          "pause": "Pause"
+          "pause": "Pause",
+          "slicing": "Slicing",
+          "init": "Init"
         }
       },
       "gcode_file": {
