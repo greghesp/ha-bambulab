@@ -95,6 +95,14 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
 
 PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
+        key="mqtt_mode",
+        translation_key="mqtt_mode",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=SensorDeviceClass.ENUM,
+        options=["bambu_cloud", "local"],
+        value_fn=lambda self: self.coordinator.get_model().info.mqtt_mode
+    ),
+    BambuLabSensorEntityDescription(
         key="wifi_signal",
         translation_key="wifi_signal",
         native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
