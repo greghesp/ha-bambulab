@@ -278,6 +278,7 @@ class Info:
         self.current_layer = 0
         self.total_layers = 0
         self.online = False
+        self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
         self.firmware_updates = {}
 
     def info_update(self, data):

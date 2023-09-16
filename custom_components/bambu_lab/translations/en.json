@@ -210,6 +210,13 @@
           "init": "Init"
         }
       },
+      "mqtt_mode": {
+        "name": "MQTT connection mode",
+        "state": {
+          "local": "Local",
+          "bambu_cloud": "Bambu Cloud"
+        }
+      },
       "gcode_file": {
         "name": "Gcode filename"
       },
