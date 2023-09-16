@@ -1,9 +1,12 @@
 """Config flow to configure Bambu Lab."""
 from __future__ import annotations
 
+import base64
+import json
+import queue
 import requests
 import voluptuous as vol
-import queue
+
 from typing import Any
 from collections import OrderedDict
 
@@ -52,6 +55,7 @@ MODE_SELECTOR = SelectSelector(
     )
 )
 
+
 def get_authentication_token(username: str, password: str) -> dict:
     LOGGER.debug("Config Flow: Getting accessToken from Bambu Cloud")
     url='https://api.bambulab.com/v1/user-service/user/login'
@@ -63,12 +67,24 @@ def get_authentication_token(username: str, password: str) -> dict:
     LOGGER.debug(f"Success: {response.json()}")
     return response.json()
 
+
+def get_username_from_authentication_token(authToken: str) -> str:
+
+    # User name is in 2nd portion of the auth token (delimited with periods)
+    b64_string = authToken.split(".")[1]
+    # String must be multiples of 4 chars in length. For decode pad with = character
+    b64_string += "=" * ((4 - len(b64_string) % 4) % 4)
+    jsonAuthToken = json.loads(base64.b64decode(b64_string))
+    # Gives json payload with "username":"u_<digits>" within it
+    return jsonAuthToken['username']
+
+
 class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle Bambu Lab config flow."""
 
     VERSION = 1
     config_data: dict[str, Any] = {}
-    cloud_supported: bool = False
+    cloud_supported: bool = True
 
     @staticmethod
     @callback
@@ -125,9 +141,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             if gotToken:
                 authToken = result['accessToken']
+                username = get_username_from_authentication_token(authToken)
+
                 bambu = BambuClient(device_type = self.config_data["device_type"],
                                     serial = self.config_data["serial"],
                                     host = "us.mqtt.bambulab.com",
+                                    username = username,
                                     access_code = authToken)
                 success = await bambu.try_connection()
 
@@ -139,6 +158,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             "device_type": self.config_data["device_type"],
                             "serial": self.config_data["serial"],
                             "host": "us.mqtt.bambulab.com",
+                            "username": username,
                             "access_code": authToken,
                         }
                     )
@@ -167,6 +187,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             bambu = BambuClient(device_type = self.config_data["device_type"],
                                 serial = self.config_data["serial"],
                                 host = user_input["host"],
+                                username = "bblp",
                                 access_code = user_input["access_code"])
             success = await bambu.try_connection()
 
@@ -178,6 +199,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "device_type": self.config_data["device_type"],
                         "serial": self.config_data["serial"],
                         "host": user_input["host"],
+                        "username": "bblp",
                         "access_code": user_input["access_code"],
                     }
                 )
@@ -206,7 +228,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
 class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle Bambu options."""
-    cloud_supported: bool = False
+    cloud_supported: bool = True
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize MQTT options flow."""
@@ -259,9 +281,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if gotToken:
                 authToken = result['accessToken']
+                username = get_username_from_authentication_token(authToken)
+
                 bambu = BambuClient(device_type = self.config_data["device_type"],
                                     serial = self.config_data["serial"],
                                     host = "us.mqtt.bambulab.com",
+                                    username = username,
                                     access_code = authToken)
                 success = await bambu.try_connection()
 
@@ -274,6 +299,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             "device_type": self.config_data["device_type"],
                             "serial": self.config_data["serial"],
                             "host": "us.mqtt.bambulab.com",
+                            "username": username,
                             "access_code": authToken,
                         }
                     )
@@ -303,6 +329,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             bambu = BambuClient(device_type = self.config_data["device_type"],
                                 serial = self.config_data["serial"],
                                 host = user_input["host"],
+                                username = "bblp",
                                 access_code = user_input["access_code"])
             success = await bambu.try_connection()
 
@@ -315,6 +342,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "device_type": self.config_data["device_type"],
                         "serial": self.config_data["serial"],
                         "host": user_input["host"],
+                        "username": "bblp",
                         "access_code": user_input["access_code"],
                     }
                 )

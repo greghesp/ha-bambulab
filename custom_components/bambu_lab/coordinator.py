@@ -37,6 +37,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client = BambuClient(device_type = entry.data.get("device_type", "X1C"),
                                   serial = entry.data["serial"],
                                   host = entry.data["host"],
+                                  username = entry.data.get("username", "bblp"),
                                   access_code = entry.data["access_code"])
 
         self._updatedDevice = False
@@ -148,6 +149,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                             "device_type": device_type,
                             "serial": self._entry.data["serial"],
                             "host": self._entry.data["host"],
+                            "username": self._entry.data.get("username", "bblp"),
                             "access_code": self._entry.data["access_code"]
                         }
                     )
