@@ -52,7 +52,7 @@ For now, you will need the following information:
 | Total Layer Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Timelapse Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-If AMS(s) are present, an additional 'Current Tray' sensor is present on the Printer device.
+If AMS(s) are present, additional 'Active tray index' and 'Active tray' sensors are present on the Printer device.
 
 ### Lights
 
@@ -120,6 +120,16 @@ This currently exposes the following Diagnostic Sensors:
 | 2-Wiki        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | ... and so on |                    |                    |                    |                    |
 
+### Cameras
+
+Camera functionality is currently only supported for the X1C.
+
+If you want to see this changed, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536).
+
+| Camera  | X1C                | X1                 | P1P | P1S |
+|---------|--------------------|--------------------|-----|-----|
+| Chamber | :white_check_mark: | :white_check_mark: | :x: | :x: |
+
 ### WLED Lights
 
 Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
@@ -136,21 +146,10 @@ Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
 - LED lights turn blue when bed is auto leveling
 - LED lights turn green when print is finished
 
-### Cameras
+## Example dashboard
 
-Camera functionality is currently only supported for the X1C
+You can find an amazing web configurator to easily create a Dashboard for your Bambu printer like the one below at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/.
 
-If you want to see this changed, please comment and vote
-on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
-
-| Camera  | X1C                | X1                 | P1P | P1S |
-|---------|--------------------|--------------------|-----|-----|
-| Chamber | :white_check_mark: | :white_check_mark: | :x: | :x: |
-
-## Release Notes
-
-Please check `release_notes.md`
-
-## Example integration
-
-![image](https://github.com/ianschmitz/ha-bambulab/assets/6355370/c4b9527c-ad9c-4a6a-a09e-b47bddbde5ce)
+![image](blueprints\ExampleIntegration.png)
+![image](blueprints\ExampleDevice1.png)
+![image](blueprints\ExampleDevice2.png)
