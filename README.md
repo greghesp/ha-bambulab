@@ -52,7 +52,7 @@ For now, you will need the following information:
 | Total Layer Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Timelapse Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-If AMS(s) are present, an additional 'Current Tray' sensor is present on the Printer device.
+If AMS(s) are present, additional 'Current Tray Index' and 'Current Tray' sensors are present on the Printer device.
 
 ### Lights
 
@@ -122,9 +122,9 @@ This currently exposes the following Diagnostic Sensors:
 
 ### Cameras
 
-Camera functionality is currently only supported for the X1C
+Camera functionality is currently only supported for the X1C.
 
-If you want to see this changed, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
+If you want to see this changed, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536).
 
 | Camera  | X1C                | X1                 | P1P | P1S |
 |---------|--------------------|--------------------|-----|-----|
@@ -148,7 +148,7 @@ Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
 
 ## Example dashboard
 
-You can find an amazing web configurator to easily create a Dashboard for your Bambu printer like the one below at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/
+You can find an amazing web configurator to easily create a Dashboard for your Bambu printer like the one below at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/.
 
 ![image](blueprints\ExampleIntegration.png)
 ![image](blueprints\ExampleDevice1.png)
