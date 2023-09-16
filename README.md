@@ -52,7 +52,7 @@ For now, you will need the following information:
 | Total Layer Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Timelapse Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-If AMS(s) are present, additional 'Current Tray Index' and 'Current Tray' sensors are present on the Printer device.
+If AMS(s) are present, additional 'Active tray index' and 'Active tray' sensors are present on the Printer device.
 
 ### Lights
 
