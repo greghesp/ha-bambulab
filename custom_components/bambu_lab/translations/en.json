@@ -10,11 +10,11 @@
     },
     "step": {
       "user": {
-        "description": "Please select your printer and provide it's serial number.",
+        "description": "Please select your printer and provide it's serial number.\n\nNote that the latest P1P firmware (1.0.4.0) only correctly supports a single local connection. If you need a second (e.g. for P1Touch), you can use Bambu Cloud in this integration.\n\nUse local in all other cases.",
         "data": {
           "device_type": "Printer Model:",
           "serial": "Serial Number",
-          "printer_mode": "Connection Mode:"
+          "printer_mode": "Printer MQTT connection mode:"
         }
       },
       "Bambu": {
@@ -44,9 +44,9 @@
     "step": {
       "init": {
         "title": "Adjust connection settings",
-        "description": "Choose the new connection settings for this printer.",
+        "description": "Choose the new connection settings for this printer.\n\nNote that the latest P1P firmware (1.0.4.0) only correctly supports a single local connection. If you need a second (e.g. for P1Touch), you can use Bambu Cloud in this integration.\n\nUse local in all other cases.",
         "data": {
-          "printer_mode": "Connection Mode:"
+          "printer_mode": "Printer MQTT Connection Mode:"
         }
       },
       "Bambu": {

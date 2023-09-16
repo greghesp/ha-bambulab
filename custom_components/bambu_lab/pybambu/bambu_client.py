@@ -99,11 +99,12 @@ class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
     _watchdog = None
 
-    def __init__(self, device_type: str, serial: str, host: str, access_code: str):
+    def __init__(self, device_type: str, serial: str, host: str, username: str, access_code: str):
         self.host = host
         self.client = mqtt.Client()
         self._serial = serial
         self._access_code = access_code
+        self._username = username
         self._connected = False
         self.callback = None
         self._device = Device(self, device_type, serial)
@@ -126,7 +127,7 @@ class BambuClient:
         self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
         self.client.tls_insecure_set(True)
         self._port = 8883
-        self.client.username_pw_set("bblp", password=self._access_code)
+        self.client.username_pw_set(self._username, password=self._access_code)
 
         LOGGER.debug("Starting MQTT listener thread")
         thread = threading.Thread(target=listen_thread, args=(self,))
@@ -234,7 +235,7 @@ class BambuClient:
 
         self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
         self.client.tls_insecure_set(True)
-        self.client.username_pw_set("bblp", password=self._access_code)
+        self.client.username_pw_set(self._username, password=self._access_code)
         self._port = 8883
 
         LOGGER.debug("Try Connection: Connecting to %s for connection test", self.host)
