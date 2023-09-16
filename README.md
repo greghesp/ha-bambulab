@@ -124,8 +124,7 @@ This currently exposes the following Diagnostic Sensors:
 
 Camera functionality is currently only supported for the X1C
 
-If you want to see this changed, please comment and vote
-on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
+If you want to see this changed, please comment and vote on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536)
 
 | Camera  | X1C                | X1                 | P1P | P1S |
 |---------|--------------------|--------------------|-----|-----|
@@ -149,7 +148,7 @@ Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
 
 ## Example dashboard
 
-You can find an amazing web configurator to easily create a Dashobard for your Bambu printer like the one below at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/
+You can find an amazing web configurator to easily create a Dashboard for your Bambu printer like the one below at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/
 
 ![image](blueprints\ExampleIntegration.png)
 ![image](blueprints\ExampleDevice1.png)
