@@ -11,8 +11,8 @@ from .utils import \
     get_stage_action, \
     get_hw_version, \
     get_sw_version, \
-    start_time, \
-    end_time, \
+    get_start_time, \
+    get_end_time, \
     get_HMS_error_text
 from .const import LOGGER, Features, FansEnum, SPEED_PROFILE
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
