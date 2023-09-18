@@ -42,7 +42,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         self._updatedDevice = False
         self.data = self.get_model()
-        self._use_mqtt()
         self._lock = threading.Lock()
         super().__init__(
             hass,
@@ -52,8 +51,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     @callback
-    def _use_mqtt(self) -> None:
+    async def start_mqtt(self) -> None:
         """Use MQTT for updates."""
+        LOGGER.debug("Starting MQTT")
 
         def event_handler(event):
             match event:
