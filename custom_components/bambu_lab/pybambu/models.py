@@ -281,6 +281,11 @@ class Info:
         self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
         self.firmware_updates = {}
 
+    def set_online(self, online):
+        self.online = online
+        if self.client.callback is not None:
+            self.client.callback("event_printer_data_update")
+
     def info_update(self, data):
         """Update from dict"""
 
