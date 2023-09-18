@@ -303,6 +303,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             "access_code": authToken,
                         }
                     )
+                    await self.hass.config_entries.async_reload(self.config_entry.entry_id)
                     return self.async_create_entry(title="", data={})
 
             errors["base"] = "cannot_connect"
@@ -346,6 +347,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "access_code": user_input["access_code"],
                     }
                 )
+                await self.hass.config_entries.async_reload(self.config_entry.entry_id)
                 return self.async_create_entry(title="", data={})
 
             errors["base"] = "cannot_connect"
