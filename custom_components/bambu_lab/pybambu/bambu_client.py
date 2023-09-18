@@ -133,6 +133,14 @@ class BambuClient:
         thread = threading.Thread(target=listen_thread, args=(self,))
         thread.start()
         return
+    
+    def subscribe_and_request_info(self):
+        LOGGER.debug("Now Subscribing...")
+        self.subscribe()
+        LOGGER.debug("On Connect: Getting Version Info")
+        self.publish(GET_VERSION)
+        LOGGER.debug("On Connect: Request Push All")
+        self.publish(PUSH_ALL)
 
     def on_connect(self,
                    client_: mqtt.Client,
@@ -143,13 +151,8 @@ class BambuClient:
         """Handle connection"""
         LOGGER.info("On Connect: Connected to Broker")
         self._connected = True
-        self._device.info.online = True
-        LOGGER.debug("Now Subscribing...")
-        self.subscribe()
-        LOGGER.debug("On Connect: Getting Version Info")
-        self.publish(GET_VERSION)
-        LOGGER.debug("On Connect: Request Push All")
-        self.publish(PUSH_ALL)
+        self.subscribe_and_request_info()
+
         LOGGER.debug("Starting watchdog thread")
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
@@ -161,30 +164,40 @@ class BambuClient:
         """Called when MQTT Disconnects"""
         LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._connected = False
-        self._device.info.online = False
-        if self.callback is not None:
-            self.callback("event_printer_data_update")
+        self._device.info.set_online(False)
         if self._watchdog is not None:
             self._watchdog.stop()
             self._watchdog.join()
 
     def on_watchdog_fired(self):
         LOGGER.debug("Watch dog fired")
+        self._device.info.set_online(False)
         self.publish(START_PUSH)
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
-        self._watchdog.received_data()
         try:
             LOGGER.debug(f"On Message: Received Message: {message.payload}")
             json_data = json.loads(message.payload)
-            if json_data.get("print"):
-                self._device.print_update(data=json_data.get("print"))
-            elif json_data.get("mc_print"):
-                self._device.mc_print_update(data=json_data.get("mc_print"))
-            elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
-                LOGGER.debug("Got Version Command Data")
-                self._device.info_update(data=json_data.get("info"))
+            if json_data.get("event"):
+                if json_data.get("event").get("event") == "client.connected":
+                    LOGGER.debug("Client connected event received.")
+                    self._device.info.set_online(True)
+                    self.subscribe_and_request_info()
+                    self._watchdog.received_data()
+                elif json_data.get("event").get("event") == "client.disconnected":
+                    LOGGER.debug("Client disconnected event received.")
+                    self._device.info.set_online(False)
+            else:
+                self._device.info.set_online(True)
+                self._watchdog.received_data()
+                if json_data.get("print"):
+                    self._device.print_update(data=json_data.get("print"))
+                elif json_data.get("mc_print"):
+                    self._device.mc_print_update(data=json_data.get("mc_print"))
+                elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
+                    LOGGER.debug("Got Version Command Data")
+                    self._device.info_update(data=json_data.get("info"))
         except Exception as e:
             LOGGER.error("An exception occurred processing a message:")
             LOGGER.error(f"Exception type: {type(e)}")
