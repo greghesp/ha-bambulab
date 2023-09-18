@@ -7,7 +7,7 @@ from .coordinator import BambuDataUpdateCoordinator
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
-    LOGGER.debug("async_setup_entry")
+    LOGGER.debug("async_setup_entry Start")
     coordinator = BambuDataUpdateCoordinator(hass, entry=entry)
     await coordinator.async_config_entry_first_refresh()
 
@@ -20,6 +20,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     LOGGER.debug("async_setup_entry Complete")
+
+    # Now that we've finished initialization fully, start the MQTT connection so that any necessary
+    # sensor reinitialization happens entirely after the initial setup.
+    await coordinator.start_mqtt()
+    
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
