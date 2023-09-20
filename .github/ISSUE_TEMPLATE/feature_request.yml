@@ -18,7 +18,9 @@ body:
       options:
         - X1C
         - P1P
+        - A1 Mini
         - AMS
+        - AMS Lite
     validations:
       required: true
   - type: textarea
