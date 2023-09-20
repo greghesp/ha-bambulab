@@ -38,6 +38,7 @@ body:
       options:
         - X1C
         - P1P
+        - A1 Mini
     validations:
       required: true
   - type: input
