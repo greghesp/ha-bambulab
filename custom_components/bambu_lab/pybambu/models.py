@@ -32,6 +32,8 @@ class Device:
         self.hms = HMSList(client)
         self.camera = Camera()
         self._active_tray = None
+        self.push_all_data = None
+        self.get_version_data = None
 
     def print_update(self, data):
         """Update from dict"""
@@ -47,11 +49,15 @@ class Device:
         self.camera.print_update(data)
         if self.client.callback is not None:
             self.client.callback("event_printer_data_update")
+        if data.get("msg") == 0:
+            self.push_all_data = data
 
     def info_update(self, data):
         """Update from dict"""
         self.info.info_update(data)
         self.ams.info_update(data)
+        if data.get("command") == "get_version":
+            self.get_version_data = data
 
     def mc_print_update(self, data):
         """Update from dict"""
