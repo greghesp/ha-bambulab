@@ -2,7 +2,7 @@
   "domain": "bambu_lab",
   "name": "Bambu Lab",
   "codeowners": [
-    "@greghesp"
+    "@greghesp", "@AdrianGarside"
   ],
   "config_flow": true,
   "dependencies": [
