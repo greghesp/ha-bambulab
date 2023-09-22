@@ -157,6 +157,8 @@ You can find an amazing web configurator to easily create a Dashboard for your B
 
 ## Issues
 
+### Diagnostic File
+
 If you run into any issues, we now have built in diagnostics.  
 To grab the latest information, hit the "Force Refresh Data" button under the Diagnostic section.
 
@@ -166,3 +168,10 @@ Then on the device info page for the printer entity, you will see a "Download Di
 Make sure you upload this to your Bug ticket
 
 ![img.png](docs/images/diagnostics.png)
+
+### Debug Logging
+
+When logging a bug, always ensure you send us the debug logs. These can be enabled from the Integration page itself.
+The debug logs will appear in the standard Home Assistant logs
+
+![img.png](docs/images/debugging.png)
