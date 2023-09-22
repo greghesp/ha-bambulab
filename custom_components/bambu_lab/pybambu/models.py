@@ -351,13 +351,13 @@ class Info:
             self.gcode_state = "unknown"
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
+        self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
         if data.get("gcode_start_time") is not None:
-            self.start_time = get_start_time(self._start_time)
+            self.start_time = get_start_time(int(data.get("gcode_start_time")))
+        if self.remaining_time == 0:
+            self.start_time = ""
         if data.get("mc_remaining_time") is not None:
-            existing_remaining_time = self.remaining_time
-            self.remaining_time = data.get("mc_remaining_time")
-            if existing_remaining_time != self.remaining_time:
-                self.end_time = get_end_time(self.remaining_time)
+            self.end_time = get_end_time(self.remaining_time)
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.firmware_updates = data.get("upgrade_state", {}).get("new_ver_list", self.firmware_updates)

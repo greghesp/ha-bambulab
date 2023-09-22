@@ -111,6 +111,8 @@ def get_start_time(timestamp):
 
 def get_end_time(remaining_time):
     """Calculate the end time of a print"""
+    if remaining_time <= 0:
+        return ""
     endtime = datetime.now() + timedelta(minutes=remaining_time)
     return round_minute(endtime).strftime('%d %B %Y %H:%M:%S')
 
