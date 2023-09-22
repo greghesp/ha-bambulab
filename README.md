@@ -150,9 +150,9 @@ Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
 
 You can find an amazing web configurator to easily create a Dashboard for your Bambu printer like the one below at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/.
 
-![image](blueprints\ExampleIntegration.png)
-![image](blueprints\ExampleDevice1.png)
-![image](blueprints\ExampleDevice2.png)
+![image](docs/images/ExampleIntegration.png)
+![image](docs/images/ExampleDevice1.png)
+![image](docs/images/ExampleDevice2.png)
 
 
 ## Issues
