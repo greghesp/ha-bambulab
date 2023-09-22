@@ -32,6 +32,12 @@ STOP_BUTTON_DESCRIPTION = ButtonEntityDescription(
     translation_key="stop",
     entity_category=EntityCategory.CONFIG,
 )
+FORCE_REFRESH_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="refresh",
+    icon="mdi:refresh",
+    translation_key="refresh",
+    entity_category=EntityCategory.DIAGNOSTIC,
+)
 
 
 async def async_setup_entry(
@@ -45,12 +51,14 @@ async def async_setup_entry(
     async_add_entities([
         BambuLabPauseButton(coordinator, entry),
         BambuLabResumeButton(coordinator, entry),
-        BambuLabStopButton(coordinator, entry)
-        ])
+        BambuLabStopButton(coordinator, entry),
+        BambuLabRefreshButton(coordinator, entry)
+    ])
 
 
 class BambuLabButton(BambuLabEntity, ButtonEntity):
     """Base BambuLab Button"""
+
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
@@ -112,3 +120,17 @@ class BambuLabStopButton(BambuLabButton):
     async def async_press(self) -> None:
         """ Stop the Print on button press"""
         self.coordinator.client.publish(STOP)
+
+
+class BambuLabRefreshButton(BambuLabButton):
+    """BambuLab Refresh data Button"""
+
+    entity_description = FORCE_REFRESH_BUTTON_DESCRIPTION
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    async def async_press(self) -> None:
+        """ Force refresh MQTT info"""
+        self.coordinator.client.refresh()

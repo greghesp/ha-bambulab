@@ -91,6 +91,9 @@
       },
       "stop": {
         "name": "Stop printing"
+      },
+      "refresh": {
+        "name": "Force Refresh Data"
       }
     },
     "fan": {
