@@ -2,7 +2,7 @@
   "domain": "bambu_lab",
   "name": "Bambu Lab",
   "codeowners": [
-    "@greghesp"
+    "@greghesp", "@AdrianGarside"
   ],
   "config_flow": true,
   "dependencies": [
@@ -17,6 +17,6 @@
       "st": "urn:bambulab-com:device:3dprinter:1"
     }
   ],
-  "version": "1.0.0"
+  "version": "1.5.0"
 }
 
