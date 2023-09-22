@@ -282,9 +282,10 @@ class Info:
         self.firmware_updates = {}
 
     def set_online(self, online):
-        self.online = online
-        if self.client.callback is not None:
-            self.client.callback("event_printer_data_update")
+        if self.online != online:
+            self.online = online
+            if self.client.callback is not None:
+                self.client.callback("event_printer_data_update")
 
     def info_update(self, data):
         """Update from dict"""
