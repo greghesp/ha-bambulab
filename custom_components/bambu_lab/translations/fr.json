@@ -91,6 +91,9 @@
       },
       "stop": {
         "name": "Arrêter l'impression"
+      },
+      "refresh": {
+        "name": "Forcer l'actualisation des données"
       }
     },
     "fan": {
