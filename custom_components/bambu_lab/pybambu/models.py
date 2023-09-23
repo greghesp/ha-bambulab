@@ -365,7 +365,6 @@ class Info:
                 self.end_time = get_end_time(self.remaining_time)
 
                 # Generate the start_time for P1P/S when remaining_time changes from 0 to non-zero. We already know the value changed.
-                LOGGER.debug(f"WTF: {existing_remaining_time} {self.remaining_time}")
                 if device.supports_feature(Features.START_TIME_GENERATED) and existing_remaining_time == 0:
                     # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                     self.start_time = get_end_time(0)
