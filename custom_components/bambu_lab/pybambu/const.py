@@ -17,7 +17,6 @@ class Features(Enum):
     K_VALUE = 9,
     START_TIME = 10,
     AMS_TEMPERATURE = 11,
-    AMS_RAW_HUMIDITY = 12,
     CAMERA_RTSP = 13
 
 
