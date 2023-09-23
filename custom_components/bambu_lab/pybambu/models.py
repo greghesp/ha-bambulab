@@ -360,6 +360,56 @@ class Info:
                 self.end_time = get_end_time(self.remaining_time)
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
+
+        # Version data is provided differently for X1 and P1
+        # P!P example:
+        # "upgrade_state": {
+        #   "sequence_id": 0,
+        #   "progress": "",
+        #   "status": "",
+        #   "consistency_request": false,
+        #   "dis_state": 1,
+        #   "err_code": 0,
+        #   "force_upgrade": false,
+        #   "message": "",
+        #   "module": "",
+        #   "new_version_state": 1,
+        #   "new_ver_list": [
+        #     {
+        #       "name": "ota",
+        #       "cur_ver": "01.02.03.00",
+        #       "new_ver": "01.03.00.00"
+        #     },
+        #     {
+        #       "name": "ams/0",
+        #       "cur_ver": "00.00.05.96",
+        #       "new_ver": "00.00.06.32"
+        #     }
+        #   ]
+        # },
+        # X1 example:
+        # "upgrade_state": {
+        #     "ahb_new_version_number": "",
+        #     "ams_new_version_number": "",
+        #     "consistency_request": false,
+        #     "dis_state": 0,
+        #     "err_code": 0,
+        #     "force_upgrade": false,
+        #     "message": "",
+        #     "module": "null",
+        #     "new_version_state": 2,
+        #     "ota_new_version_number": "",
+        #     "progress": "0",
+        #     "sequence_id": 0,
+        #     "status": "IDLE"
+        # },
+        # The 'new_version_state' value is common to indicate a new upgrade is available.
+        # Observed values so far are:
+        # 1 - upgrade available
+        # 2 - no upgrades available
+        # And the P1P lists it's versions in new_ver_list as a structured set of data with old
+        # and new versions provided for each component. While the X1 lists only the new version
+        # in separate string properties.
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
 
