@@ -59,6 +59,10 @@ class Device:
         if data.get("command") == "get_version":
             self.get_version_data = data
 
+    def mc_print_update(self, data):
+        """Update from dict"""
+        self.ams.mc_print_update(data)
+
     def supports_feature(self, feature):
         match feature:
             case Features.AUX_FAN:
@@ -417,6 +421,7 @@ class AMSInstance:
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
+        self.humidity = 0
         self.humidity_index = 0
         self.temperature = 0
         self.tray = [None] * 4
@@ -563,6 +568,33 @@ class AMSList:
         if received_ams_data:
             if self.client.callback is not None:
                 self.client.callback("event_ams_data_update")
+
+    def mc_print_update(self, data):
+        """Update from dict"""
+
+        # LOG format we need to parse for this data is like this:
+        # {
+        #     "mc_print": {
+        #         "param": "[AMS][TASK]ams0 temp:27.0;humidity:21%;humidity_idx:4",
+        #         "command": "push_info",
+        #         "sequence_id": "299889"
+        #     }
+        # }
+
+        data = data.get('param', '')
+        LOGGER.debug(f"Got data: '{data}'")
+        if data.startswith('[AMS][TASK]ams') and data.find('humidity') != -1:
+            data = data[14:]
+            ams_index = int(data.split()[0])
+            data = data[2:]
+            data = data.split(';')
+            for entry in data:
+                entry = entry.split(':')
+                if entry[0] == "humidity":
+                    entry = entry[1].split('%')
+                    self.data[ams_index].humidity = int(entry[0])
+                    if self.client.callback is not None:
+                        self.client.callback("event_ams_data_update")
 
 
 @dataclass
