@@ -281,7 +281,7 @@ class Info:
         self.gcode_file = ""
         self.subtask_name = ""
         self.serial = serial
-        self.remaining_time = 0
+        self.remaining_time = -1
         self.end_time = ""
         self.start_time = ""
         self.current_layer = 0
