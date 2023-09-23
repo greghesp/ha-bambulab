@@ -1,6 +1,7 @@
 import math
 
 from dataclasses import dataclass
+from datetime import datetime
 
 from .utils import \
     search, \
@@ -37,7 +38,7 @@ class Device:
 
     def print_update(self, data):
         """Update from dict"""
-        self.info.print_update(data)
+        self.info.print_update(self, data)
         self.temperature.print_update(data)
         self.lights.print_update(data)
         self.fans.print_update(data)
@@ -81,6 +82,8 @@ class Device:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.START_TIME:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            case Features.START_TIME_GENERATED:
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.AMS_TEMPERATURE:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CAMERA_RTSP:
@@ -272,7 +275,7 @@ class Info:
         self.gcode_file = ""
         self.subtask_name = ""
         self.serial = serial
-        self.remaining_time = 0
+        self.remaining_time = -1
         self.end_time = ""
         self.start_time = ""
         self.current_layer = 0
@@ -316,7 +319,7 @@ class Info:
         if self.client.callback is not None:
             self.client.callback("event_printer_info_update")
 
-    def print_update(self, data):
+    def print_update(self, device, data):
         """Update from dict"""
 
         # Example payload:
@@ -345,6 +348,8 @@ class Info:
             self.gcode_state = "unknown"
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
+
+        # Generate the end_time from the remaining_time mqtt payload value.
         if data.get("gcode_start_time") is not None:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
         if data.get("mc_remaining_time") is not None:
@@ -352,6 +357,12 @@ class Info:
             self.remaining_time = data.get("mc_remaining_time")
             if existing_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
+
+                # Generate the start_time for P1P/S when remaining_time changes from 0 to non-zero. We already know the value changed.
+                if device.supports_feature(Features.START_TIME_GENERATED) and existing_remaining_time == 0:
+                    # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
+                    self.start_time = get_end_time(0)
+
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
 

@@ -254,7 +254,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:clock",
         available_fn=lambda self: self.coordinator.get_model().info.start_time != "",
         value_fn=lambda self: self.coordinator.get_model().info.start_time,
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME) or coordinator.get_model().supports_feature(Features.START_TIME_GENERATED),
     ),
     BambuLabSensorEntityDescription(
         key="remaining_time",
