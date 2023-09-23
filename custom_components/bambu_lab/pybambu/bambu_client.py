@@ -194,8 +194,6 @@ class BambuClient:
                 self._watchdog.received_data()
                 if json_data.get("print"):
                     self._device.print_update(data=json_data.get("print"))
-                elif json_data.get("mc_print"):
-                    self._device.mc_print_update(data=json_data.get("mc_print"))
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     LOGGER.debug("Got Version Command Data")
                     self._device.info_update(data=json_data.get("info"))
