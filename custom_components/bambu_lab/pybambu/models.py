@@ -341,8 +341,8 @@ class Info:
         #             "resolution": "1080p",        # X1 only
         #             "timelapse": "disable"
         #         },
-        #         "layer_num": 0,                   # X1 only
-        #         "total_layer_num": 0,             # X1 only
+        #         "layer_num": 0,
+        #         "total_layer_num": 0,
 
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
