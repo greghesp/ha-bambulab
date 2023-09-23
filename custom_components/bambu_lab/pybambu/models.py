@@ -265,7 +265,7 @@ class Info:
     current_layer: int
     total_layers: int
     online: bool
-    firmware_updates: dict
+    new_version_state: int
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -285,7 +285,7 @@ class Info:
         self.total_layers = 0
         self.online = False
         self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
-        self.firmware_updates = {}
+        self.new_version_state = 0
 
     def set_online(self, online):
         if self.online != online:
@@ -360,7 +360,7 @@ class Info:
                 self.end_time = get_end_time(self.remaining_time)
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.firmware_updates = data.get("upgrade_state", {}).get("new_ver_list", self.firmware_updates)
+        self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
 
 @dataclass
