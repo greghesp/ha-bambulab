@@ -343,25 +343,28 @@ class Info:
 
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
+        previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         if self.gcode_state == "":
             self.gcode_state = "unknown"
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
 
-        # Generate the end_time from the remaining_time mqtt payload value.
+        # Generate the end_time from the remaining_time mqtt payload value if present.
         if data.get("gcode_start_time") is not None:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
+
+        # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
+        # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was cancelled.
+        if device.supports_feature(Features.START_TIME_GENERATED) and previous_gcode_state == "IDLE" and self.gcode_state != "IDLE":
+            # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
+            self.start_time = get_end_time(0)
+
         if data.get("mc_remaining_time") is not None:
             existing_remaining_time = self.remaining_time
             self.remaining_time = data.get("mc_remaining_time")
             if existing_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
-
-                # Generate the start_time for P1P/S when remaining_time changes from 0 to non-zero. We already know the value changed.
-                if device.supports_feature(Features.START_TIME_GENERATED) and existing_remaining_time == 0:
-                    # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
-                    self.start_time = get_end_time(0)
 
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
