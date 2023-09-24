@@ -6,6 +6,7 @@
   ],
   "config_flow": true,
   "dependencies": [
+    "device_automation",
     "mqtt",
     "ffmpeg"
   ],

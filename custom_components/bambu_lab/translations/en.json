@@ -1,4 +1,9 @@
 {
+  "device_automation": {
+    "trigger_type": {
+      "something_happened": "Something happened"
+    }
+  },
   "config": {
     "abort": {
       "already_configured": "Device is already configured"
