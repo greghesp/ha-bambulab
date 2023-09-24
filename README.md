@@ -47,12 +47,14 @@ For now, you will need the following information:
 | Print Status              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Remaining Time            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Speed Profile             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Start Time                | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
+| Start Time                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Target Bed Temperature    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Total Layer Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Timelapse Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-If AMS(s) are present, additional 'Active tray index' and 'Active tray' sensors are present on the Printer device.
+Notes:
+- If AMS(s) are present, additional 'Active tray index' and 'Active tray' sensors are present on the Printer device.
+- Start time on the P1P/S is simulated since the printer itself doesn't track that so the integration must be running when the print starts.
 
 ### Lights
 
