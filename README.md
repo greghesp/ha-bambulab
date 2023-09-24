@@ -47,12 +47,14 @@ For now, you will need the following information:
 | Print Status              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Remaining Time            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Speed Profile             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Start Time                | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
+| Start Time                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Target Bed Temperature    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Total Layer Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Timelapse Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-If AMS(s) are present, additional 'Active tray index' and 'Active tray' sensors are present on the Printer device.
+Notes:
+- If AMS(s) are present, additional 'Active tray index' and 'Active tray' sensors are present on the Printer device.
+- Start time on the P1P/S is simulated since the printer itself doesn't track that so the integration must be running when the print starts.
 
 ### Lights
 
@@ -150,6 +152,28 @@ Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
 
 You can find an amazing web configurator to easily create a Dashboard for your Bambu printer like the one below at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/.
 
-![image](blueprints/ExampleIntegration.png)
-![image](blueprints/ExampleDevice1.png)
-![image](blueprints/ExampleDevice2.png)
+![image](docs/images/ExampleIntegration.png)
+![image](docs/images/ExampleDevice1.png)
+![image](docs/images/ExampleDevice2.png)
+
+
+## Issues
+
+### Diagnostic File
+
+If you run into any issues, we now have built in diagnostics.  
+To grab the latest information, hit the "Force Refresh Data" button under the Diagnostic section.
+
+![image](docs/images/force-refresh.png)
+
+Then on the device info page for the printer entity, you will see a "Download Diagnostics" button.
+Make sure you upload this to your Bug ticket
+
+![img.png](docs/images/diagnostics.png)
+
+### Debug Logging
+
+When logging a bug, always ensure you send us the debug logs. These can be enabled from the Integration page itself.
+The debug logs will appear in the standard Home Assistant logs
+
+![img.png](docs/images/debugging.png)

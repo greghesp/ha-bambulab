@@ -19,6 +19,7 @@ from .commands import (
     START_PUSH,
 )
 
+
 class WatchdogThread(threading.Thread):
 
     def __init__(self, client):
@@ -30,10 +31,10 @@ class WatchdogThread(threading.Thread):
 
     def stop(self):
         self._stop_event.set()
-    
+
     def received_data(self):
         self._last_received_data = time.time()
-    
+
     def run(self):
         LOGGER.debug("Watchdog thread started.")
         WATCHDOG_TIMER = 20
@@ -62,7 +63,7 @@ def listen_thread(self):
         try:
             LOGGER.debug(f"Connect: Attempting Connection to {self.host}")
             self.client.connect(self.host, self._port, keepalive=5)
-            
+
             LOGGER.debug("Starting listen loop")
             self.client.loop_forever()
             LOGGER.debug("MQTT listener thread exited.")
@@ -86,11 +87,11 @@ def listen_thread(self):
             else:
                 LOGGER.error("A listener loop thread exception occurred:")
                 LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
-                time.sleep(1) # Avoid a tight loop if this is a persistent error.
+                time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         except Exception as e:
             LOGGER.error("A listener loop thread exception occurred:")
             LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
-            time.sleep(1) # Avoid a tight loop if this is a persistent error.
+            time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         self.client.disconnect()
 
 
@@ -133,7 +134,7 @@ class BambuClient:
         thread = threading.Thread(target=listen_thread, args=(self,))
         thread.start()
         return
-    
+
     def subscribe_and_request_info(self):
         LOGGER.debug("Now Subscribing...")
         self.subscribe()
@@ -193,8 +194,6 @@ class BambuClient:
                 self._watchdog.received_data()
                 if json_data.get("print"):
                     self._device.print_update(data=json_data.get("print"))
-                elif json_data.get("mc_print"):
-                    self._device.mc_print_update(data=json_data.get("mc_print"))
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     LOGGER.debug("Got Version Command Data")
                     self._device.info_update(data=json_data.get("info"))
@@ -218,6 +217,14 @@ class BambuClient:
 
         LOGGER.error(f"Failed to send message to topic device/{self._serial}/request")
         return False
+
+    def refresh(self):
+        """Force refresh data"""
+        LOGGER.debug("Force Refresh: Getting Version Info")
+        self.publish(GET_VERSION)
+        LOGGER.debug("Force Refresh: Request Push All")
+        self.publish(PUSH_ALL)
+        return
 
     def get_device(self):
         """Return device"""
@@ -276,4 +283,3 @@ class BambuClient:
             _exc_info: Exec type.
         """
         self.disconnect()
-

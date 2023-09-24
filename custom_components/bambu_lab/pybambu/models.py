@@ -1,6 +1,7 @@
 import math
 
 from dataclasses import dataclass
+from datetime import datetime
 
 from .utils import \
     search, \
@@ -32,10 +33,12 @@ class Device:
         self.hms = HMSList(client)
         self.camera = Camera()
         self._active_tray = None
+        self.push_all_data = None
+        self.get_version_data = None
 
     def print_update(self, data):
         """Update from dict"""
-        self.info.print_update(data)
+        self.info.print_update(self, data)
         self.temperature.print_update(data)
         self.lights.print_update(data)
         self.fans.print_update(data)
@@ -47,15 +50,15 @@ class Device:
         self.camera.print_update(data)
         if self.client.callback is not None:
             self.client.callback("event_printer_data_update")
+        if data.get("msg") == 0:
+            self.push_all_data = data
 
     def info_update(self, data):
         """Update from dict"""
         self.info.info_update(data)
         self.ams.info_update(data)
-
-    def mc_print_update(self, data):
-        """Update from dict"""
-        self.ams.mc_print_update(data)
+        if data.get("command") == "get_version":
+            self.get_version_data = data
 
     def supports_feature(self, feature):
         match feature:
@@ -79,10 +82,10 @@ class Device:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.START_TIME:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            case Features.START_TIME_GENERATED:
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.AMS_TEMPERATURE:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
-            case Features.AMS_RAW_HUMIDITY:
-                return False
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
         return False
@@ -259,7 +262,7 @@ class Info:
     current_layer: int
     total_layers: int
     online: bool
-    firmware_updates: dict
+    new_version_state: int
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -272,19 +275,20 @@ class Info:
         self.gcode_file = ""
         self.subtask_name = ""
         self.serial = serial
-        self.remaining_time = 0
+        self.remaining_time = -1
         self.end_time = ""
         self.start_time = ""
         self.current_layer = 0
         self.total_layers = 0
         self.online = False
         self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
-        self.firmware_updates = {}
+        self.new_version_state = 0
 
     def set_online(self, online):
-        self.online = online
-        if self.client.callback is not None:
-            self.client.callback("event_printer_data_update")
+        if self.online != online:
+            self.online = online
+            if self.client.callback is not None:
+                self.client.callback("event_printer_data_update")
 
     def info_update(self, data):
         """Update from dict"""
@@ -315,7 +319,7 @@ class Info:
         if self.client.callback is not None:
             self.client.callback("event_printer_info_update")
 
-    def print_update(self, data):
+    def print_update(self, device, data):
         """Update from dict"""
 
         # Example payload:
@@ -334,26 +338,87 @@ class Info:
         #             "resolution": "1080p",        # X1 only
         #             "timelapse": "disable"
         #         },
-        #         "layer_num": 0,                   # X1 only
-        #         "total_layer_num": 0,             # X1 only
+        #         "layer_num": 0,
+        #         "total_layer_num": 0,
 
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
+        previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         if self.gcode_state == "":
             self.gcode_state = "unknown"
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
-        self.remaining_time = data.get("mc_remaining_time", self.remaining_time)
+
+        # Generate the end_time from the remaining_time mqtt payload value if present.
         if data.get("gcode_start_time") is not None:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
-        if self.remaining_time == 0:
-            self.start_time = ""
+
+        # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
+        # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was cancelled.
+        if device.supports_feature(Features.START_TIME_GENERATED) and previous_gcode_state == "IDLE" and self.gcode_state != "IDLE":
+            # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
+            self.start_time = get_end_time(0)
+
         if data.get("mc_remaining_time") is not None:
-            self.end_time = get_end_time(self.remaining_time)
+            existing_remaining_time = self.remaining_time
+            self.remaining_time = data.get("mc_remaining_time")
+            if existing_remaining_time != self.remaining_time:
+                self.end_time = get_end_time(self.remaining_time)
+
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.firmware_updates = data.get("upgrade_state", {}).get("new_ver_list", self.firmware_updates)
+
+        # Version data is provided differently for X1 and P1
+        # P!P example:
+        # "upgrade_state": {
+        #   "sequence_id": 0,
+        #   "progress": "",
+        #   "status": "",
+        #   "consistency_request": false,
+        #   "dis_state": 1,
+        #   "err_code": 0,
+        #   "force_upgrade": false,
+        #   "message": "",
+        #   "module": "",
+        #   "new_version_state": 1,
+        #   "new_ver_list": [
+        #     {
+        #       "name": "ota",
+        #       "cur_ver": "01.02.03.00",
+        #       "new_ver": "01.03.00.00"
+        #     },
+        #     {
+        #       "name": "ams/0",
+        #       "cur_ver": "00.00.05.96",
+        #       "new_ver": "00.00.06.32"
+        #     }
+        #   ]
+        # },
+        # X1 example:
+        # "upgrade_state": {
+        #     "ahb_new_version_number": "",
+        #     "ams_new_version_number": "",
+        #     "consistency_request": false,
+        #     "dis_state": 0,
+        #     "err_code": 0,
+        #     "force_upgrade": false,
+        #     "message": "",
+        #     "module": "null",
+        #     "new_version_state": 2,
+        #     "ota_new_version_number": "",
+        #     "progress": "0",
+        #     "sequence_id": 0,
+        #     "status": "IDLE"
+        # },
+        # The 'new_version_state' value is common to indicate a new upgrade is available.
+        # Observed values so far are:
+        # 1 - upgrade available
+        # 2 - no upgrades available
+        # And the P1P lists it's versions in new_ver_list as a structured set of data with old
+        # and new versions provided for each component. While the X1 lists only the new version
+        # in separate string properties.
+        self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
 
 @dataclass
@@ -364,7 +429,6 @@ class AMSInstance:
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
-        self.humidity = 0
         self.humidity_index = 0
         self.temperature = 0
         self.tray = [None] * 4
@@ -511,33 +575,6 @@ class AMSList:
         if received_ams_data:
             if self.client.callback is not None:
                 self.client.callback("event_ams_data_update")
-
-    def mc_print_update(self, data):
-        """Update from dict"""
-
-        # LOG format we need to parse for this data is like this:
-        # {
-        #     "mc_print": {
-        #         "param": "[AMS][TASK]ams0 temp:27.0;humidity:21%;humidity_idx:4",
-        #         "command": "push_info",
-        #         "sequence_id": "299889"
-        #     }
-        # }
-
-        data = data.get('param', '')
-        LOGGER.debug(f"Got data: '{data}'")
-        if data.startswith('[AMS][TASK]ams') and data.find('humidity') != -1:
-            data = data[14:]
-            ams_index = int(data.split()[0])
-            data = data[2:]
-            data = data.split(';')
-            for entry in data:
-                entry = entry.split(':')
-                if entry[0] == "humidity":
-                    entry = entry[1].split('%')
-                    self.data[ams_index].humidity = int(entry[0])
-                    if self.client.callback is not None:
-                        self.client.callback("event_ams_data_update")
 
 
 @dataclass

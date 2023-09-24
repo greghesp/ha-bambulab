@@ -89,7 +89,7 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         translation_key="firmware_update",
         device_class=BinarySensorDeviceClass.UPDATE,
         entity_category=EntityCategory.DIAGNOSTIC,
-        is_on_fn=lambda self: len(self.coordinator.get_model().info.firmware_updates) != 0
+        is_on_fn=lambda self: self.coordinator.get_model().info.new_version_state == 1
     ),
 )
 
@@ -254,7 +254,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:clock",
         available_fn=lambda self: self.coordinator.get_model().info.start_time != "",
         value_fn=lambda self: self.coordinator.get_model().info.start_time,
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME) or coordinator.get_model().supports_feature(Features.START_TIME_GENERATED),
     ),
     BambuLabSensorEntityDescription(
         key="remaining_time",
@@ -390,14 +390,6 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:water-percent",
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity_index
-    ),
-    BambuLabSensorEntityDescription(
-        key="humidity",
-        native_unit_of_measurement=PERCENTAGE,
-        device_class=SensorDeviceClass.HUMIDITY,
-        state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity,
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS_RAW_HUMIDITY)
     ),
     BambuLabSensorEntityDescription(
         key="temperature",
