@@ -71,7 +71,6 @@ async def async_attach_trigger(
             },
         }
     )
-    LOGGER.debug(f"ASYNC_ATTACH_TRIGGER: {event_config}")
     return await event_trigger.async_attach_trigger(
         hass, event_config, action, trigger_info, platform_type="device"
     )
