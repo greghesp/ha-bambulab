@@ -84,7 +84,17 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     self._update_hms()
 
                 case "event_print_canceled":
-                    self._print_canceled()
+                    self.PublishDeviceTriggerEvent(event)
+
+                case "event_print_failed":
+                    self.PublishDeviceTriggerEvent(event)
+
+                case "event_print_finished":
+                    self.PublishDeviceTriggerEvent(event)
+
+                case "event_print_started":
+                    self.PublishDeviceTriggerEvent(event)
+
 
         async def listen():
             await self.client.connect(callback=event_handler)
@@ -210,15 +220,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._lock.release()
         # self.hass.async_create_task(self._reinitialize_sensors())
 
-    def _print_canceled(self):
+    def PublishDeviceTriggerEvent(self, event: str):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
 
         event_data = {
             "device_id": hadevice.id,
-            "type": "print_canceled",
+            "type": event,
         }
-        LOGGER.debug(f"EVENT: Print Canceled")
+        LOGGER.debug(f"EVENT: {event}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
         
 

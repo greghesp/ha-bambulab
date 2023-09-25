@@ -21,6 +21,7 @@ from .const import DOMAIN, LOGGER
 
 TRIGGER_TYPES = {
     "print_canceled",
+    "print_failed",
     "print_finished",
     "print_started",
     "printer_error",
