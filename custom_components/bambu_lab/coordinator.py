@@ -83,6 +83,19 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_hms_errors":
                     self._update_hms()
 
+                case "event_print_canceled":
+                    self.PublishDeviceTriggerEvent(event)
+
+                case "event_print_failed":
+                    self.PublishDeviceTriggerEvent(event)
+
+                case "event_print_finished":
+                    self.PublishDeviceTriggerEvent(event)
+
+                case "event_print_started":
+                    self.PublishDeviceTriggerEvent(event)
+
+
         async def listen():
             await self.client.connect(callback=event_handler)
 
@@ -107,24 +120,28 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._lock.release()
 
     def _update_hms(self):
+        dev_reg = device_registry.async_get(self._hass)
+        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+
         device = self.get_model()
         if device.hms.count == 0:
             event_data = {
-                "device_id": device.info.serial,
-                "type": "hms_errors_cleared_event",
+                "device_id": hadevice.id,
+                "type": "printer_error_cleared",
             }
             LOGGER.debug(f"EVENT: HMS errors cleared: {event_data}")
-            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors_cleared", event_data)
+            self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
         else:
-            event_data = {
-                "device_id": device.info.serial,
-                "type": "hms_errors_event",
-                "count": device.hms.count
-            }
-            for error in device.hms.errors:
-                event_data[error] = device.hms.errors[error]
-            LOGGER.debug(f"EVENT: HMS errors: {event_data}")
-            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors", event_data)
+            for index in range (device.hms.count):
+                event_data = {
+                    "device_id": hadevice.id,
+                    "type": "printer_error",
+                }
+                event_data["hms_code"] = device.hms.errors[f"{index+1}-Error"][:device.hms.errors[f"{index+1}-Error"].index(':')]
+                event_data["description"] = device.hms.errors[f"{index+1}-Error"][device.hms.errors[f"{index+1}-Error"].index(':')+2:]
+                event_data["url"] = device.hms.errors[f"{index+1}-Wiki"]
+                LOGGER.debug(f"EVENT: HMS errors: {event_data}")
+                self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
     def _update_device_info(self):
         if not self._updatedDevice:
@@ -202,6 +219,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         self._lock.release()
         # self.hass.async_create_task(self._reinitialize_sensors())
+
+    def PublishDeviceTriggerEvent(self, event: str):
+        dev_reg = device_registry.async_get(self._hass)
+        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+
+        event_data = {
+            "device_id": hadevice.id,
+            "type": event,
+        }
+        LOGGER.debug(f"EVENT: {event}")
+        self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
+        
 
     def get_model(self):
         return self.client.get_device()
