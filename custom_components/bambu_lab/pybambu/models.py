@@ -380,7 +380,7 @@ class Info:
                self.client.callback("event_print_failed")
 
         # Handle print finish
-        if previous_gcode_state != "FINISHED" and self.gcode_state == "FINISHED":
+        if previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
             if self.client.callback is not None:
                self.client.callback("event_print_finished")
 
