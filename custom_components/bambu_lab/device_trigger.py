@@ -37,7 +37,6 @@ async def async_get_triggers(
     hass: HomeAssistant, device_id: str
 ) -> list[dict[str, Any]]:
     """Return a list of triggers."""
-    LOGGER.debug("!!!!!!!!!!!!!!!!!!!! device_trigger::async_get_triggers")
 
     triggers = []
 
@@ -61,7 +60,6 @@ async def async_attach_trigger(
     trigger_info: TriggerInfo,
 ) -> CALLBACK_TYPE:
     """Attach a trigger."""
-    LOGGER.debug("!!!!!!!!!!!!!!!!!!!! device_trigger::async_attach_trigger")
 
     event_config = event_trigger.TRIGGER_SCHEMA(
         {
