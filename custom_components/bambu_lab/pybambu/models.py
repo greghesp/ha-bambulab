@@ -355,7 +355,7 @@ class Info:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
-        # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was cancelled.
+        # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
         if device.supports_feature(Features.START_TIME_GENERATED) and previous_gcode_state == "IDLE" and self.gcode_state != "IDLE":
             # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
             self.start_time = get_end_time(0)
@@ -420,6 +420,16 @@ class Info:
         # in separate string properties.
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
+        # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
+        # print_error will be reset to zero.
+        # {
+        #     "print": {
+        #         "print_error": 50348044,
+        #     }
+        # }
+        if data.get("print_error") == 50348044:
+            if self.client.callback is not None:
+               self.client.callback("event_print_canceled")
 
 @dataclass
 class AMSInstance:

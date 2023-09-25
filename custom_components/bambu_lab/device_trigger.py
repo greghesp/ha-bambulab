@@ -20,7 +20,7 @@ from homeassistant.helpers.typing import ConfigType
 from .const import DOMAIN, LOGGER
 
 TRIGGER_TYPES = {
-    "print_cancelled",
+    "print_canceled",
     "print_finished",
     "print_started",
     "printer_error",
