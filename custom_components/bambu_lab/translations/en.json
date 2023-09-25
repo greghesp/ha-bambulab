@@ -1,7 +1,10 @@
 {
   "device_automation": {
     "trigger_type": {
-      "something_happened": "Something happened"
+      "print_cancelled": "Print cancelled",
+      "print_finished": "Print finished",
+      "print_started": "Print started",
+      "printer_error": "Printer error detected"
     }
   },
   "config": {

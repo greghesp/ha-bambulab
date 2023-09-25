@@ -107,24 +107,27 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._lock.release()
 
     def _update_hms(self):
+        dev_reg = device_registry.async_get(self._hass)
+        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+
         device = self.get_model()
         if device.hms.count == 0:
             event_data = {
-                "device_id": device.info.serial,
-                "type": "hms_errors_cleared_event",
+                "device_id": hadevice.id,
+                "type": "printer_error_cleared",
             }
             LOGGER.debug(f"EVENT: HMS errors cleared: {event_data}")
-            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors_cleared", event_data)
+            self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
         else:
             event_data = {
-                "device_id": device.info.serial,
-                "type": "hms_errors_event",
+                "device_id": hadevice.id,
+                "type": "printer_error",
                 "count": device.hms.count
             }
             for error in device.hms.errors:
                 event_data[error] = device.hms.errors[error]
-            LOGGER.debug(f"EVENT: HMS errors: {event_data}")
-            self._hass.bus.async_fire(f"{DOMAIN}.hms_errors", event_data)
+                LOGGER.debug(f"EVENT: HMS errors: {event_data}")
+                self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
     def _update_device_info(self):
         if not self._updatedDevice:

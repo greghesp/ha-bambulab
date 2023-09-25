@@ -15,13 +15,18 @@ from homeassistant.const import (
     CONF_TYPE,
 )
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant
-from homeassistant.helpers import config_validation as cv, entity_registry as er
+from homeassistant.helpers import config_validation as cv, device_registry as dr
 from homeassistant.helpers.trigger import TriggerActionType, TriggerInfo
 from homeassistant.helpers.typing import ConfigType
 
 from .const import DOMAIN, LOGGER
 
-TRIGGER_TYPES = {"something_happened"}
+TRIGGER_TYPES = {
+    "print_cancelled",
+    "print_finished",
+    "print_started",
+    "printer_error",
+}
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
     {
@@ -36,22 +41,22 @@ async def async_get_triggers(
     """Return a list of triggers."""
     LOGGER.debug("!!!!!!!!!!!!!!!!!!!! device_trigger::async_get_triggers")
 
-    #device_registry = device_registry.async_get(hass)
+    #device_registry = dr.async_get(hass)
     #device = device_registry.async_get(device_id)
 
     triggers = []
 
     # Determine which triggers are supported by this device_id ...
 
-    triggers.append({
-        # Required fields of TRIGGER_BASE_SCHEMA
+    base_trigger = {
         CONF_PLATFORM: "device",
-        CONF_DOMAIN: DOMAIN,
         CONF_DEVICE_ID: device_id,
-        # Required fields of TRIGGER_SCHEMA
-        CONF_TYPE: "something_happened",
+        CONF_DOMAIN: DOMAIN,
         "metadata": {"secondary": False},
-    })
+    }
+
+    for trigger in TRIGGER_TYPES:
+        triggers.append({**base_trigger, CONF_TYPE: trigger})
 
     return triggers
 
@@ -68,13 +73,14 @@ async def async_attach_trigger(
     event_config = event_trigger.TRIGGER_SCHEMA(
         {
             event_trigger.CONF_PLATFORM: "event",
-            event_trigger.CONF_EVENT_TYPE: "mydomain_event",
+            event_trigger.CONF_EVENT_TYPE: f"{DOMAIN}_event",
             event_trigger.CONF_EVENT_DATA: {
                 CONF_DEVICE_ID: config[CONF_DEVICE_ID],
                 CONF_TYPE: config[CONF_TYPE],
             },
         }
     )
+    LOGGER.debug(f"ASYNC_ATTACH_TRIGGER: {event_config}")
     return await event_trigger.async_attach_trigger(
         hass, event_config, action, trigger_info, platform_type="device"
     )
