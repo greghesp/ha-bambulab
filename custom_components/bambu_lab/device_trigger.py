@@ -20,11 +20,11 @@ from homeassistant.helpers.typing import ConfigType
 from .const import DOMAIN, LOGGER
 
 TRIGGER_TYPES = {
-    "print_canceled",
-    "print_failed",
-    "print_finished",
-    "print_started",
-    "printer_error",
+    "event_print_canceled",
+    "event_print_failed",
+    "event_print_finished",
+    "event_print_started",
+    "event_printer_error",
 }
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
