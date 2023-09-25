@@ -119,13 +119,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug(f"EVENT: HMS errors cleared: {event_data}")
             self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
         else:
-            event_data = {
-                "device_id": hadevice.id,
-                "type": "printer_error",
-                "count": device.hms.count
-            }
-            for error in device.hms.errors:
-                event_data[error] = device.hms.errors[error]
+            for index in range (device.hms.count):
+                event_data = {
+                    "device_id": hadevice.id,
+                    "type": "printer_error",
+                }
+                event_data["hms_code"] = device.hms.errors[f"{index+1}-Error"][:device.hms.errors[f"{index+1}-Error"].index(':')]
+                event_data["description"] = device.hms.errors[f"{index+1}-Error"][device.hms.errors[f"{index+1}-Error"].index(':')+2:]
+                event_data["url"] = device.hms.errors[f"{index+1}-Wiki"]
                 LOGGER.debug(f"EVENT: HMS errors: {event_data}")
                 self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 

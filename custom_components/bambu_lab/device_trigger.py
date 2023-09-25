@@ -10,12 +10,10 @@ from homeassistant.components.homeassistant.triggers import event as event_trigg
 from homeassistant.const import (
     CONF_DEVICE_ID,
     CONF_DOMAIN,
-    CONF_ENTITY_ID,
     CONF_PLATFORM,
     CONF_TYPE,
 )
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant
-from homeassistant.helpers import config_validation as cv, device_registry as dr
 from homeassistant.helpers.trigger import TriggerActionType, TriggerInfo
 from homeassistant.helpers.typing import ConfigType
 
@@ -30,7 +28,6 @@ TRIGGER_TYPES = {
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
     {
-#        vol.Required(CONF_ENTITY_ID): cv.entity_id,
         vol.Required(CONF_TYPE): vol.In(TRIGGER_TYPES),
     }
 )
@@ -41,12 +38,7 @@ async def async_get_triggers(
     """Return a list of triggers."""
     LOGGER.debug("!!!!!!!!!!!!!!!!!!!! device_trigger::async_get_triggers")
 
-    #device_registry = dr.async_get(hass)
-    #device = device_registry.async_get(device_id)
-
     triggers = []
-
-    # Determine which triggers are supported by this device_id ...
 
     base_trigger = {
         CONF_PLATFORM: "device",
