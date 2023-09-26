@@ -263,6 +263,7 @@ class Info:
     total_layers: int
     online: bool
     new_version_state: int
+    print_error: int
 
     def __init__(self, client, device_type, serial):
         self.client = client
@@ -283,6 +284,7 @@ class Info:
         self.online = False
         self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
         self.new_version_state = 0
+        self.print_error = 0
 
     def set_online(self, online):
         if self.online != online:
@@ -391,9 +393,10 @@ class Info:
         #         "print_error": 50348044,
         #     }
         # }
-        if data.get("print_error") == 50348044:
+        if data.get("print_error") == 50348044 and self.print_error == 0:
             if self.client.callback is not None:
                self.client.callback("event_print_canceled")
+        self.print_error = data.get("print_error", self.print_error)
 
         # Version data is provided differently for X1 and P1
         # P!P example:
