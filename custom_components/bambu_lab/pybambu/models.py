@@ -366,7 +366,7 @@ class Info:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Handle print start
-        if previous_gcode_state == "IDLE" and self.gcode_state != "IDLE":
+        if previous_gcode_state != "PREPARE" and self.gcode_state == "PREPARE":
             if self.client.callback is not None:
                self.client.callback("event_print_started")
 
