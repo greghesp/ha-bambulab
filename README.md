@@ -132,6 +132,10 @@ If you want to see this changed, please comment and vote on [this BambuStudio is
 |---------|--------------------|--------------------|-----|-----|
 | Chamber | :white_check_mark: | :white_check_mark: | :x: | :x: |
 
+### Automation device triggers
+
+This integration implements a handful of device triggers to make some common automation scenarios a little easier. See [device triggers](docs/DeviceTrigger.md).
+
 ### WLED Lights
 
 Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
@@ -155,7 +159,6 @@ You can find an amazing web configurator to easily create a Dashboard for your B
 ![image](docs/images/ExampleIntegration.png)
 ![image](docs/images/ExampleDevice1.png)
 ![image](docs/images/ExampleDevice2.png)
-
 
 ## Issues
 

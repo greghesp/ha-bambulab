@@ -1,4 +1,13 @@
 {
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Print canceled",
+      "event_print_failed": "Print failed",
+      "event_print_finished": "Print finished",
+      "event_print_started": "Print started",
+      "event_printer_error": "Printer error detected"
+    }
+  },
   "config": {
     "abort": {
       "already_configured": "Device is already configured"
