@@ -480,7 +480,7 @@ class AMSList:
         """Update from dict"""
 
         # First determine if this the version info data or the json payload data. We use the version info to determine
-        # what devices to add to humidity_index assistant and add all the sensors as entititied. And then then json payload data
+        # what devices to add to humidity_index assistant and add all the sensors as entities. And then then json payload data
         # to populate the values for all those entities.
 
         # The module entries are of this form:
