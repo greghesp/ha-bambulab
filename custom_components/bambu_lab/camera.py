@@ -61,7 +61,7 @@ class BambuLabCamera(BambuLabEntity, Camera):
     async def stream_source(self) -> str | None:
         if self.coordinator.get_model().camera.rtsp_url is not None:
             # rtsps://192.168.1.1/streaming/live/1
-            url = URL(f"rtsps://{self._host}/streaming/live/1").with_user('bblp').with_password(
+            url = URL(self.coordinator.get_model().camera.rtsp_url).with_user('bblp').with_password(
                 self._access_code)
             LOGGER.debug(f"Camera RTSP Feed is {url}")
             return str(url)
