@@ -377,12 +377,12 @@ class Info:
                 self.start_time = get_end_time(0)
 
         # Handle print failed
-        if previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
             if self.client.callback is not None:
                self.client.callback("event_print_failed")
 
         # Handle print finish
-        if previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
             if self.client.callback is not None:
                self.client.callback("event_print_finished")
 
