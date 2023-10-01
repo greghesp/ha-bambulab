@@ -156,23 +156,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
                 self._updatedDevice = True
                 self._lock.release()
-
-            # Fix up missing or incorrect device_type now that we know what the printer model is.
-            new_data = {}
-            for entry in self._entry.data:
-                new_data[entry] = self._entry.data[entry]
-            LOGGER.debug(f"Data = {new_data}")
-            new_data["device_type"] = self.get_model().info.device_type
-            #new_data["username"] = "foo"
-            if new_data != self._entry.data:
-                self._lock.acquire()
-                LOGGER.debug(f"Updating device data: {new_data}")
-                self._hass.config_entries.async_update_entry(
-                    self._entry,
-                    title=self._entry.data["serial"],
-                    data=new_data
-                )
-                self._lock.release()
             LOGGER.debug("Done updating device info")
 
     async def _reinitialize_sensors(self):
