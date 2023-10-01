@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
     PERCENTAGE,
-    TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
     TIME_MINUTES
@@ -263,6 +262,24 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=TIME_MINUTES,
         device_class=SensorDeviceClass.DURATION,
         value_fn=lambda self: self.coordinator.get_model().info.remaining_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="total_print_time",
+        translation_key="total_print_time",
+        native_unit_of_measurement=TIME_MINUTES,
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:clock",
+        value_fn=lambda self: self.coordinator.get_model().info.print_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="test_printing_time",
+        translation_key="test_printing_time",
+        native_unit_of_measurement=TIME_MINUTES,
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL,
+        icon="mdi:clock",
+        value_fn=lambda self: self.coordinator.get_model().info.printing_time
     ),
     BambuLabSensorEntityDescription(
         key="end_time",

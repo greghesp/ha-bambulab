@@ -163,6 +163,12 @@
       "heatbreak_fan_speed": {
         "name": "Heatbreak fan speed"
       },
+      "total_print_time": {
+        "name": "Total print time"
+      },
+      "test_printing_time": {
+        "name": "Test printing time"
+      },
       "speed_profile": {
         "name": "Speed profile",
         "state": {

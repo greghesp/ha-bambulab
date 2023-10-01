@@ -256,6 +256,8 @@ class Info:
     hw_ver: str
     sw_ver: str
     gcode_state: str
+    printing_time: int
+    print_time: int
     remaining_time: int
     start_time: str
     end_time: str
@@ -276,6 +278,8 @@ class Info:
         self.gcode_file = ""
         self.subtask_name = ""
         self.serial = serial
+        self.printing_time = 0
+        self.print_time = 0
         self.remaining_time = -1
         self.end_time = ""
         self.start_time = ""
@@ -353,10 +357,17 @@ class Info:
         self.subtask_name = data.get("subtask_name", self.subtask_name)
 
         if data.get("mc_remaining_time") is not None:
-            existing_remaining_time = self.remaining_time
+            previous_remaining_time = self.remaining_time
             self.remaining_time = data.get("mc_remaining_time")
-            if existing_remaining_time != self.remaining_time:
+            if previous_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
+
+            if previous_remaining_time <= 0 and self.remaining_time > 0:
+                # This is a print start, or HA restarted mid-print. Set baseline to calculate print usage in minutes.
+                self.print_time = self.remaining_time
+                self.printing_time = 0
+            else:
+                self.printing_time = self.print_time - self.remaining_time
 
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
@@ -377,12 +388,12 @@ class Info:
                 self.start_time = get_end_time(0)
 
         # Handle print failed
-        if previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
             if self.client.callback is not None:
                self.client.callback("event_print_failed")
 
         # Handle print finish
-        if previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
             if self.client.callback is not None:
                self.client.callback("event_print_finished")
 

@@ -149,29 +149,31 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             new_sw_ver = device.info.sw_ver
             new_hw_ver = device.info.hw_ver
             LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
-            if (new_sw_ver != "unknown"):
+            if new_sw_ver != "unknown":
                 self._lock.acquire()
                 dev_reg = device_registry.async_get(self._hass)
                 hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
-
-                # Fix up missing or incorrect device_type now that we know what the printer model is.
-                device_type = self.get_model().info.device_type
-                if self._entry.data.get("device_type", "") != device_type:
-                    LOGGER.debug(f"Force updating device type: {device_type}")
-                    self._hass.config_entries.async_update_entry(
-                        self._entry,
-                        title=self._entry.data["serial"],
-                        data={
-                            "device_type": device_type,
-                            "serial": self._entry.data["serial"],
-                            "host": self._entry.data["host"],
-                            "username": self._entry.data.get("username", "bblp"),
-                            "access_code": self._entry.data["access_code"]
-                        }
-                    )
                 self._updatedDevice = True
                 self._lock.release()
+
+            # Fix up missing or incorrect device_type now that we know what the printer model is.
+            new_data = {}
+            for entry in self._entry.data:
+                new_data[entry] = self._entry.data[entry]
+            LOGGER.debug(f"Data = {new_data}")
+            new_data["device_type"] = self.get_model().info.device_type
+            #new_data["username"] = "foo"
+            if new_data != self._entry.data:
+                self._lock.acquire()
+                LOGGER.debug(f"Updating device data: {new_data}")
+                self._hass.config_entries.async_update_entry(
+                    self._entry,
+                    title=self._entry.data["serial"],
+                    data=new_data
+                )
+                self._lock.release()
+            LOGGER.debug("Done updating device info")
 
     async def _reinitialize_sensors(self):
         LOGGER.debug("_reinitialize_sensors START")
