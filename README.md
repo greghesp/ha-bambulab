@@ -24,6 +24,16 @@ For now, you will need the following information:
 - LAN Access Code (Can be found on the Printer settings)
 - Serial Number (Can be found in the printer settings or in Bambu Studio)
 
+### Setup using OAuth
+
+If you signed up using any OAuth method, you need to set a password for your Bambu Cloud account:
+
+- Login to the Bambu mobile app using OAuth.
+- Tap the person icon at the bottom right.
+- Tap Account Security > Change Password
+
+This will allow you to set a password. Now you can login to the HA integration using your Bambu username and password instead of OAuth.
+
 ## Features
 
 (:heavy_check_mark: Optional accessory)

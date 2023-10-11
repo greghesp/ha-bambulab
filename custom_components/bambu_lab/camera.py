@@ -2,6 +2,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
 from yarl import URL
+from urllib.parse import urlparse, urlunparse, quote
+
 from homeassistant.components import ffmpeg
 
 from .const import DOMAIN, LOGGER
@@ -61,8 +63,10 @@ class BambuLabCamera(BambuLabEntity, Camera):
     async def stream_source(self) -> str | None:
         if self.coordinator.get_model().camera.rtsp_url is not None:
             # rtsps://192.168.1.1/streaming/live/1
-            url = URL(f"rtsps://{self._host}/streaming/live/1").with_user('bblp').with_password(
-                self._access_code)
+
+            parsed_url = urlparse(self.coordinator.get_model().camera.rtsp_url)
+            url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{parsed_url.netloc}{parsed_url.path}"
+
             LOGGER.debug(f"Camera RTSP Feed is {url}")
             return str(url)
         LOGGER.debug("No RTSP Feed available")

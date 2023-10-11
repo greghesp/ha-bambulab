@@ -377,12 +377,12 @@ class Info:
                 self.start_time = get_end_time(0)
 
         # Handle print failed
-        if previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
             if self.client.callback is not None:
                self.client.callback("event_print_failed")
 
         # Handle print finish
-        if previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
             if self.client.callback is not None:
                self.client.callback("event_print_finished")
 
@@ -480,7 +480,7 @@ class AMSList:
         """Update from dict"""
 
         # First determine if this the version info data or the json payload data. We use the version info to determine
-        # what devices to add to humidity_index assistant and add all the sensors as entititied. And then then json payload data
+        # what devices to add to humidity_index assistant and add all the sensors as entities. And then then json payload data
         # to populate the values for all those entities.
 
         # The module entries are of this form:
