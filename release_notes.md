@@ -1,3 +1,6 @@
+### V1.7.1
+- Minor fixes.
+
 ### V1.7.0
 - Added a set of device triggers to make common automations easier
 
