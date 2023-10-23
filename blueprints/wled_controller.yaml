@@ -57,19 +57,19 @@ action:
         conditions:
           - condition: state
             entity_id: !input printer_stage
-            state: Scanning Bed Surface
+            state: scanning_bed_surface
             alias: Scanning Bed Surface
           - condition: state
             entity_id: !input printer_stage
-            state: Cleaning Nozzle Tip
+            state: cleaning_nozzle_tip
             alias: Cleaning Nozzle Tip
           - condition: state
             entity_id: !input printer_stage
-            state: Calibrating Extrusion
+            state: calibrating_extrusion
             alias: Calibrating Extrusion
           - condition: state
             entity_id: !input printer_status
-            state: Offline
+            state: offline
             alias: Printer is off
         alias: And Lidar is NOT on
     then:
@@ -91,16 +91,16 @@ action:
                 conditions:
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Paused due to filament runout
+                    state: paused_filament_runout
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Pause of front cover falling
+                    state: paused_front_cover_falling
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Paused due to nozzle temperature malfunction
+                    state: paused_nozzle_temperature_malfunction
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Paused due to heat bed temperature malfunction
+                    state: paused_heat_bed_temperature_malfunction
             sequence:
               - service: light.turn_on
                 data:
@@ -121,13 +121,13 @@ action:
                 conditions:
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Idle
+                    state: idle
                   - condition: state
                     entity_id: !input printer_status
-                    state: Finish
+                    state: finish
                   - condition: state
                     entity_id: !input printer_status
-                    state: Offline
+                    state: offline
             sequence:
               - service: light.turn_on
                 data:
@@ -148,7 +148,7 @@ action:
                 conditions:
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Auto Bed Leveling
+                    state: auto_bed_leveling
             sequence:
               - service: light.turn_on
                 data:
@@ -169,10 +169,10 @@ action:
                 conditions:
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Heatbed Preheating
+                    state: heatbed_preheating
                   - condition: state
                     entity_id: !input printer_stage
-                    state: Heating Hotend
+                    state: heating_hotend
             sequence:
               - service: light.turn_on
                 data:
