@@ -28,7 +28,6 @@ async def async_setup_entry(
 class BambuLabChamberLight(BambuLabEntity, LightEntity):
     """ Defined the Chamber Light """
 
-    _attr_translation_key = "chamber_light"
     _attr_icon = "mdi:led-strip-variant"
 
     def __init__(
@@ -37,7 +36,14 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
             config_entry: ConfigEntry
     ) -> None:
         """Initialize the sensor."""
-        self._attr_unique_id = f"{config_entry.data['serial']}_chamber_light"
+
+        if config_entry.data['device_type'] == "A1 Mini":
+            self._attr_unique_id = f"{config_entry.data['serial']}_camera_light"
+            self._attr_translation_key = "camera_light"
+        else:
+            self._attr_unique_id = f"{config_entry.data['serial']}_chamber_light"
+            self._attr_translation_key = "chamber_light"
+
         super().__init__(coordinator=coordinator)
 
     @property

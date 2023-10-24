@@ -119,6 +119,9 @@
     "light": {
       "chamber_light": {
         "name": "Chamber light"
+      },
+      "camera_light": {
+        "name": "Camera light"
       }
     },
     "select": {

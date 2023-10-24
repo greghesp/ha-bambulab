@@ -110,6 +110,9 @@
     "light": {
       "chamber_light": {
         "name": "Lumière de la chambre"
+      },
+      "camera_light": {
+        "name": "Lumière de la caméra"
       }
     },
     "select": {
