@@ -18,8 +18,7 @@ class Features(Enum):
     START_TIME = 10,
     AMS_TEMPERATURE = 11,
     CAMERA_RTSP = 13,
-    START_TIME_GENERATED = 14,
-    AMS_LITE = 15
+    START_TIME_GENERATED = 14
 
 
 class FansEnum(Enum):
