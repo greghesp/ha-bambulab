@@ -781,8 +781,7 @@ class HMSList:
             hmsList = data.get('hms', [])
             self.count = len(hmsList)
             errors = {}
-            if self.count != 0:
-                errors["Count"] = self.count
+            errors["Count"] = self.count
 
             index: int = 0
             for hms in hmsList:
