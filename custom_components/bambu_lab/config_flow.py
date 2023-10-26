@@ -37,7 +37,7 @@ SUPPORTED_PRINTERS = [
     SelectOptionDict(value="P1S", label="P1S"),
     SelectOptionDict(value="X1", label="X1"),
     SelectOptionDict(value="X1C", label="X1C"),
-    SelectOptionDict(value="A1 Mini", label="A1 Mini"),
+    SelectOptionDict(value="A1Mini", label="A1 Mini"),
 ]
 PRINTER_SELECTOR = SelectSelector(
     SelectSelectorConfig(
