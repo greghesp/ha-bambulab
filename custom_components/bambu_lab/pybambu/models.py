@@ -79,11 +79,11 @@ class Device:
             case Features.EXTERNAL_SPOOL:
                 return True
             case Features.K_VALUE:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
             case Features.START_TIME:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.START_TIME_GENERATED:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
             case Features.AMS_TEMPERATURE:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CAMERA_RTSP:
