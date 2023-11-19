@@ -5,13 +5,17 @@ import queue
 import ssl
 import time
 import threading
+import struct
+import sys
+import socket
+
 
 from dataclasses import dataclass
 from typing import Any
 
 import paho.mqtt.client as mqtt
 
-from .const import LOGGER
+from .const import LOGGER, Features
 from .models import Device
 from .commands import (
     GET_VERSION,
@@ -56,7 +60,73 @@ class WatchdogThread(threading.Thread):
         LOGGER.debug("Watchdog thread exited.")
 
 
-def listen_thread(self):
+class P1PCameraThread(threading.Thread):
+    def __init__(self, client):
+        self._client = client
+        self._stop_event = threading.Event()
+        super().__init__()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def run(self):
+        LOGGER.debug("P1P Camera thread started.")
+
+        d = bytearray()
+
+        username = 'bblp'
+        access_code = '30148925'
+        hostname = '10.10.10.81'
+        port = 6000
+
+        d += struct.pack("IIL", 0x40, 0x3000, 0x0)
+        for i in range(0, len(username)):
+            d += struct.pack("<c", username[i].encode('ascii'))
+        for i in range(0, 32-len(username)):
+            d += struct.pack("<x")
+        for i in range(0, len(access_code)):
+            d += struct.pack("<c", access_code[i].encode('ascii'))
+        for i in range(0, 32-len(access_code)):
+            d += struct.pack("<x")
+
+        ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+        jpeg_start = "ff d8 ff e0"
+        jpeg_end = "ff d9"
+
+        read_chunk_size = 1024
+
+        with socket.create_connection((hostname, port)) as sock:
+            with ctx.wrap_socket(sock, server_hostname=hostname) as ssock:
+                ssock.write(d)
+                buf = bytearray()
+                start = False
+                while not self._stop_event.is_set():
+                    dr = ssock.recv(read_chunk_size);
+                    if not dr:
+                        break
+
+                    buf += dr
+
+                    if not start:
+                        i = buf.find(bytearray.fromhex(jpeg_start))
+                        if i >= 0:
+                            start = True
+                            buf = buf[i:]
+                        continue
+
+                    i = buf.find(bytearray.fromhex(jpeg_end))
+                    if i >= 0:
+                        img = buf[:i+len(jpeg_end)]
+                        buf = buf[i+len(jpeg_end):]
+                        start = False
+
+                        #self._attr_image_last_updated = dt_util.utcnow()
+                        self._client.on_jpeg_received(img)
+
+def mqtt_listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
     exceptionSeen = ""
     while True:
@@ -99,6 +169,7 @@ def listen_thread(self):
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
     _watchdog = None
+    _camera = None
 
     def __init__(self, device_type: str, serial: str, host: str, username: str, access_code: str):
         self.host = host
@@ -131,8 +202,9 @@ class BambuClient:
         self.client.username_pw_set(self._username, password=self._access_code)
 
         LOGGER.debug("Starting MQTT listener thread")
-        thread = threading.Thread(target=listen_thread, args=(self,))
+        thread = threading.Thread(target=mqtt_listen_thread, args=(self,))
         thread.start()
+
         return
 
     def subscribe_and_request_info(self):
@@ -158,6 +230,12 @@ class BambuClient:
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
 
+        if self._device.supports_feature(Features.CAMERA_IMAGE):
+            LOGGER.debug("Starting P1P camera thread")
+            self._camera = P1PCameraThread(self)
+            self._camera.start()
+
+
     def on_disconnect(self,
                       client_: mqtt.Client,
                       userdata: None,
@@ -169,11 +247,18 @@ class BambuClient:
         if self._watchdog is not None:
             self._watchdog.stop()
             self._watchdog.join()
+        if self._camera is not None:
+            self._camera.stop()
+            self._camera.join()
 
     def on_watchdog_fired(self):
         LOGGER.debug("Watch dog fired")
         self._device.info.set_online(False)
         self.publish(START_PUSH)
+
+    def on_jpeg_received(self, bytes):
+        LOGGER.debug("JPEG received")
+        self._device.p1p_camera.on_jpeg_received(bytes)
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""

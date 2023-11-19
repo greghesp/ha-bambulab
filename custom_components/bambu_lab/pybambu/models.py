@@ -35,6 +35,8 @@ class Device:
         self._active_tray = None
         self.push_all_data = None
         self.get_version_data = None
+        if self.supports_feature(Features.CAMERA_IMAGE):
+            self.p1p_camera = P1PCamera(client)
 
     def print_update(self, data):
         """Update from dict"""
@@ -88,6 +90,8 @@ class Device:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            case Features.CAMERA_IMAGE:
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
         return False
     
     def get_active_tray(self):
@@ -786,3 +790,17 @@ class HMSList:
                 self.errors = errors
                 if self.client.callback is not None:
                     self.client.callback("event_hms_errors")
+
+@dataclass
+class P1PCamera:
+    """Returns the latest jpeg date from the P1P camera"""
+    def __init__(self, client):
+        self.client = client
+        self._bytes = bytearray()
+
+    def on_jpeg_received(self, bytes):
+        self._bytes = bytes
+        self.client.callback("p1p_jpeg_received")
+    
+    def get_jpeg(self) -> bytearray:
+        return self._bytes

@@ -77,6 +77,11 @@
     }
   },
   "entity": {
+    "image": {
+      "p1p_camera": {
+        "name": "Camera"
+      }
+    },
     "binary_sensor": {
       "timelapse": {
         "name": "Recording timelapse"
