@@ -75,8 +75,8 @@ class P1PCameraThread(threading.Thread):
         d = bytearray()
 
         username = 'bblp'
-        access_code = '30148925'
-        hostname = '10.10.10.81'
+        access_code = ''
+        hostname = ''
         port = 6000
 
         d += struct.pack("IIL", 0x40, 0x3000, 0x0)
