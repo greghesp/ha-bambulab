@@ -91,7 +91,7 @@ class Device:
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CAMERA_IMAGE:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
         return False
     
     def get_active_tray(self):
