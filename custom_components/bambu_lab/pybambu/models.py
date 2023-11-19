@@ -91,7 +91,7 @@ class Device:
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CAMERA_IMAGE:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
+                return (self.client.host != "us.mqtt.bambulab.com") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini")
         return False
     
     def get_active_tray(self):
@@ -100,10 +100,9 @@ class Device:
                 return None
             if self.ams.tray_now == 254:
                 return self.external_spool
-            for ams in self.ams.data:
-                active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
-                active_tray = self.ams.tray_now % 4
-                return active_ams.tray[active_tray]
+            active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
+            active_tray = self.ams.tray_now % 4
+            return active_ams.tray[active_tray]
         else:
             return self.external_spool
 
