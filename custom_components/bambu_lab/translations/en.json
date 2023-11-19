@@ -77,11 +77,6 @@
     }
   },
   "entity": {
-    "image": {
-      "p1p_camera": {
-        "name": "Camera"
-      }
-    },
     "binary_sensor": {
       "timelapse": {
         "name": "Recording timelapse"
@@ -119,6 +114,11 @@
       },
       "chamber_fan": {
         "name": "Chamber fan"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Camera"
       }
     },
     "light": {

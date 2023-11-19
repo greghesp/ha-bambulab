@@ -107,6 +107,11 @@
         "name": "Ventilateur de la chambre"
       }
     },
+    "image": {
+      "p1p_camera": {
+        "name": "Caméra"
+      }
+    },
     "light": {
       "chamber_light": {
         "name": "Lumière de la chambre"
