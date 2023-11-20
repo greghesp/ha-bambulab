@@ -78,7 +78,6 @@ class P1PCameraThread(threading.Thread):
         access_code = self._client._access_code
         hostname = self._client.host
         port = 6000
-        LOGGER.debug(f"{hostname} {access_code}")
 
         d += struct.pack("IIL", 0x40, 0x3000, 0x0)
         for i in range(0, len(username)):
