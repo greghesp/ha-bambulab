@@ -137,14 +137,11 @@ This currently exposes the following Diagnostic Sensors:
 
 ### Cameras
 
-Camera functionality is currently only supported for the X1C.
+| Camera  | X1C                | X1                 | P1P                | P1S                | A1 Mini            |
+|---------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Chamber | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-If you want to see this changed, please comment and vote
-on [this BambuStudio issue](https://github.com/bambulab/BambuStudio/issues/1536).
-
-| Camera  | X1C                | X1                 | P1P | P1S | A1 Mini |
-|---------|--------------------|--------------------|-----|-----|---------|
-| Chamber | :white_check_mark: | :white_check_mark: | :x: | :x: | :x:     |
+P1P/P1S/A1 Mini only support the chamber camera when connected by the local LAN connection mode.
 
 ### Automation device triggers
 

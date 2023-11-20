@@ -116,6 +116,11 @@
         "name": "Chamber fan"
       }
     },
+    "image": {
+      "p1p_camera": {
+        "name": "Camera"
+      }
+    },
     "light": {
       "chamber_light": {
         "name": "Chamber light"

@@ -549,3 +549,11 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.K_VALUE)
     ),
 )
+
+P1P_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+        key="p1p_camera",
+        translation_key="p1p_camera",
+        value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE),
+    )
+

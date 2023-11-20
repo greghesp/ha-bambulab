@@ -1,3 +1,6 @@
+### V1.9.0
+- Added support for P1P Camera
+
 ### V1.8.0
 - Added support for A1 Mini
 
