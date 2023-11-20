@@ -733,16 +733,22 @@ class Speed:
 class StageAction:
     """Return Stage Action information"""
     _id: int
+    _print_type: str
     description: str
 
     def __init__(self):
         """Load from dict"""
         self._id = 99
+        self._print_type = ""
         self.description = get_stage_action(self._id)
 
     def print_update(self, data):
         """Update from dict"""
+        self._print_type = data.get("print_type", self._print_type)
         self._id = int(data.get("stg_cur", self._id))
+        if (self._print_type == "idle") and (self._id == 0):
+            # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
+            self._id = 255
         self.description = get_stage_action(self._id)
 
 

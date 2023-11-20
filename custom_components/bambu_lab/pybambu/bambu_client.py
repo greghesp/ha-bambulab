@@ -100,32 +100,38 @@ class P1PCameraThread(threading.Thread):
         read_chunk_size = 1024
 
         with socket.create_connection((hostname, port)) as sock:
-            with ctx.wrap_socket(sock, server_hostname=hostname) as ssock:
-                ssock.write(d)
-                buf = bytearray()
-                start = False
-                while not self._stop_event.is_set():
-                    dr = ssock.recv(read_chunk_size);
-                    if not dr:
-                        break
+            sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
+            sslSock.write(d)
+            buf = bytearray()
+            start = False
 
-                    buf += dr
+            sslSock.setblocking(False)
+            while not self._stop_event.is_set():
+                try:
+                    dr = sslSock.recv(read_chunk_size)
+                except ssl.SSLWantReadError:
+                    time.sleep(1)
+                    continue
 
-                    if not start:
-                        i = buf.find(bytearray.fromhex(jpeg_start))
-                        if i >= 0:
-                            start = True
-                            buf = buf[i:]
-                        continue
+                buf += dr
 
-                    i = buf.find(bytearray.fromhex(jpeg_end))
+                if not start:
+                    i = buf.find(bytearray.fromhex(jpeg_start))
                     if i >= 0:
-                        img = buf[:i+len(jpeg_end)]
-                        buf = buf[i+len(jpeg_end):]
-                        start = False
+                        start = True
+                        buf = buf[i:]
+                    continue
 
-                        #self._attr_image_last_updated = dt_util.utcnow()
-                        self._client.on_jpeg_received(img)
+                i = buf.find(bytearray.fromhex(jpeg_end))
+                if i >= 0:
+                    img = buf[:i+len(jpeg_end)]
+                    buf = buf[i+len(jpeg_end):]
+                    start = False
+
+                    self._client.on_jpeg_received(img)
+
+        LOGGER.debug("P1P Camera thread exited.")
+
 
 def mqtt_listen_thread(self):
     LOGGER.debug("MQTT listener thread started.")
