@@ -69,7 +69,7 @@ class Device:
             case Features.CHAMBER_LIGHT:
                 return True
             case Features.CHAMBER_FAN:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1S"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.CHAMBER_TEMPERATURE:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CURRENT_STAGE:
