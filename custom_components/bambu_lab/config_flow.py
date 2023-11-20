@@ -33,11 +33,11 @@ BOOLEAN_SELECTOR = BooleanSelector()
 TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
 PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
 SUPPORTED_PRINTERS = [
+    SelectOptionDict(value="A1Mini", label="A1 Mini"),
     SelectOptionDict(value="P1P", label="P1P"),
     SelectOptionDict(value="P1S", label="P1S"),
     SelectOptionDict(value="X1", label="X1"),
     SelectOptionDict(value="X1C", label="X1C"),
-    SelectOptionDict(value="A1Mini", label="A1 Mini"),
 ]
 PRINTER_SELECTOR = SelectSelector(
     SelectSelectorConfig(
@@ -46,8 +46,8 @@ PRINTER_SELECTOR = SelectSelector(
     )
 )
 SUPPORTED_MODES = [
-    SelectOptionDict(value="Bambu", label="Bambu Cloud MQTT Connection"),
     SelectOptionDict(value="Lan", label="Local MQTT Connection"),
+    SelectOptionDict(value="Bambu", label="Bambu Cloud MQTT Connection"),
 ]
 MODE_SELECTOR = SelectSelector(
     SelectSelectorConfig(
