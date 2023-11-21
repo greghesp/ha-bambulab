@@ -35,6 +35,8 @@ class Device:
         self._active_tray = None
         self.push_all_data = None
         self.get_version_data = None
+        if self.supports_feature(Features.CAMERA_IMAGE):
+            self.p1p_camera = P1PCamera(client)
 
     def print_update(self, data):
         """Update from dict"""
@@ -67,7 +69,7 @@ class Device:
             case Features.CHAMBER_LIGHT:
                 return True
             case Features.CHAMBER_FAN:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1S"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.CHAMBER_TEMPERATURE:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CURRENT_STAGE:
@@ -79,15 +81,17 @@ class Device:
             case Features.EXTERNAL_SPOOL:
                 return True
             case Features.K_VALUE:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
             case Features.START_TIME:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.START_TIME_GENERATED:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S"
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
             case Features.AMS_TEMPERATURE:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
+            case Features.CAMERA_IMAGE:
+                return (self.client.host != "us.mqtt.bambulab.com") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini")
         return False
     
     def get_active_tray(self):
@@ -96,10 +100,9 @@ class Device:
                 return None
             if self.ams.tray_now == 254:
                 return self.external_spool
-            for ams in self.ams.data:
-                active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
-                active_tray = self.ams.tray_now % 4
-                return active_ams.tray[active_tray]
+            active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
+            active_tray = self.ams.tray_now % 4
+            return active_ams.tray[active_tray]
         else:
             return self.external_spool
 
@@ -730,16 +733,22 @@ class Speed:
 class StageAction:
     """Return Stage Action information"""
     _id: int
+    _print_type: str
     description: str
 
     def __init__(self):
         """Load from dict"""
         self._id = 99
+        self._print_type = ""
         self.description = get_stage_action(self._id)
 
     def print_update(self, data):
         """Update from dict"""
+        self._print_type = data.get("print_type", self._print_type)
         self._id = int(data.get("stg_cur", self._id))
+        if (self._print_type == "idle") and (self._id == 0):
+            # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
+            self._id = 255
         self.description = get_stage_action(self._id)
 
 
@@ -770,8 +779,7 @@ class HMSList:
             hmsList = data.get('hms', [])
             self.count = len(hmsList)
             errors = {}
-            if self.count != 0:
-                errors["Count"] = self.count
+            errors["Count"] = self.count
 
             index: int = 0
             for hms in hmsList:
@@ -787,3 +795,17 @@ class HMSList:
                 self.errors = errors
                 if self.client.callback is not None:
                     self.client.callback("event_hms_errors")
+
+@dataclass
+class P1PCamera:
+    """Returns the latest jpeg date from the P1P camera"""
+    def __init__(self, client):
+        self.client = client
+        self._bytes = bytearray()
+
+    def on_jpeg_received(self, bytes):
+        self._bytes = bytes
+        self.client.callback("p1p_jpeg_received")
+    
+    def get_jpeg(self) -> bytearray:
+        return self._bytes

@@ -1,3 +1,12 @@
+### V1.9.0
+- Added support for P1P Camera
+
+### V1.8.0
+- Added support for A1 Mini
+
+### V1.7.1
+- Minor fixes
+
 ### V1.7.0
 - Added a set of device triggers to make common automations easier
 

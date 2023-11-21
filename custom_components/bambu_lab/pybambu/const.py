@@ -18,7 +18,8 @@ class Features(Enum):
     START_TIME = 10,
     AMS_TEMPERATURE = 11,
     CAMERA_RTSP = 13,
-    START_TIME_GENERATED = 14
+    START_TIME_GENERATED = 14,
+    CAMERA_IMAGE = 15
 
 
 class FansEnum(Enum):
@@ -225,7 +226,7 @@ HMS_ERRORS = {
     "0700_4000_0002_0004": "The filament buffer signal is abnormal,the spring may be stuck.",
     "0700_4500_0002_0001": "The filament cutter sensor is malfunctioning.The sensor may be disconnected or damaged.",
     "0700_4500_0002_0002": "The filament cutter's cutting distance is too large.The XY motor may lose steps.",
-    "0700_4500_0002_0003": "The filament cutter handle has not released.The handle or blade ay be stuck.",
+    "0700_4500_0002_0003": "The filament cutter handle has not released.The handle or blade may be stuck.",
     "0700_5100_0003_0001": "The AMS is disabled; please load filament from spool holder.",
     "0700_6000_0002_0001": "The AMS1 slot1 is overloaded. The filament may be tangled or the spool may be stuck.",
     "07FF_2000_0002_0001": "External filament has run out; please load a new filament.",

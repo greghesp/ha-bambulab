@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER, FansEnum
 from .commands import SEND_GCODE_TEMPLATE
 
+
 def search(lst, predicate, default={}):
     """Search an array for a string"""
     for item in lst:
@@ -74,6 +75,9 @@ def get_printer_type(modules, default):
         if esp32.get("hw_ver") == "AP04":
             LOGGER.debug("Device is P1P/S")
             return "P1P"
+        if esp32.get("hw_ver") == "AP05":
+            LOGGER.debug("Device is A1 Mini")
+            return "A1 Mini"
     elif len(rv1126.keys()) > 1:
         if rv1126.get("hw_ver") == "AP05":
             LOGGER.debug("Device is X1/C")
@@ -86,7 +90,7 @@ def get_hw_version(modules, default):
     esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
     rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
     if len(esp32.keys()) > 1:
-        if esp32.get("hw_ver") == "AP04":
+        if esp32.get("hw_ver") == "AP04" or esp32.get("hw_ver") == "AP05":
             return esp32.get("hw_ver")
     elif len(rv1126.keys()) > 1:
         if rv1126.get("hw_ver") == "AP05":

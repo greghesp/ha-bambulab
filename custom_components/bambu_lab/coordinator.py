@@ -43,6 +43,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._updatedDevice = False
         self.data = self.get_model()
         self._lock = threading.Lock()
+        self.P1PCamera = None
         super().__init__(
             hass,
             LOGGER,
@@ -95,6 +96,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_print_started":
                     self.PublishDeviceTriggerEvent(event)
 
+                case "p1p_jpeg_received":
+                    self._p1p_camera_jpeg_updated()
+
 
         async def listen():
             await self.client.connect(callback=event_handler)
@@ -142,6 +146,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 event_data["url"] = device.hms.errors[f"{index+1}-Wiki"]
                 LOGGER.debug(f"EVENT: HMS errors: {event_data}")
                 self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
+
+    def _p1p_camera_jpeg_updated(self):
+        self.P1PCamera.jpeg_updated()
 
     def _update_device_info(self):
         if not self._updatedDevice:

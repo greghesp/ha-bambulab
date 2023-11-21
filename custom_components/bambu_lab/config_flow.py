@@ -33,6 +33,7 @@ BOOLEAN_SELECTOR = BooleanSelector()
 TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
 PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
 SUPPORTED_PRINTERS = [
+    SelectOptionDict(value="A1Mini", label="A1 Mini"),
     SelectOptionDict(value="P1P", label="P1P"),
     SelectOptionDict(value="P1S", label="P1S"),
     SelectOptionDict(value="X1", label="X1"),
@@ -45,8 +46,8 @@ PRINTER_SELECTOR = SelectSelector(
     )
 )
 SUPPORTED_MODES = [
-    SelectOptionDict(value="Bambu", label="Bambu Cloud MQTT Connection"),
     SelectOptionDict(value="Lan", label="Local MQTT Connection"),
+    SelectOptionDict(value="Bambu", label="Bambu Cloud MQTT Connection"),
 ]
 MODE_SELECTOR = SelectSelector(
     SelectSelectorConfig(
@@ -58,8 +59,8 @@ MODE_SELECTOR = SelectSelector(
 
 def get_authentication_token(username: str, password: str) -> dict:
     LOGGER.debug("Config Flow: Getting accessToken from Bambu Cloud")
-    url='https://api.bambulab.com/v1/user-service/user/login'
-    data = { 'account':username, 'password':password }
+    url = 'https://api.bambulab.com/v1/user-service/user/login'
+    data = {'account': username, 'password': password}
     response = requests.post(url, json=data, timeout=10)
     if not response.ok:
         LOGGER.debug(f"Received error: {response.status_code}")
@@ -69,7 +70,6 @@ def get_authentication_token(username: str, password: str) -> dict:
 
 
 def get_username_from_authentication_token(authToken: str) -> str:
-
     # User name is in 2nd portion of the auth token (delimited with periods)
     b64_string = authToken.split(".")[1]
     # String must be multiples of 4 chars in length. For decode pad with = character
@@ -89,11 +89,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(
-        config_entry: config_entries.ConfigEntry,
+            config_entry: config_entries.ConfigEntry,
     ) -> BambuOptionsFlowHandler:
         """Get the options flow for this handler."""
         return BambuOptionsFlowHandler(config_entry)
-
 
     async def async_step_user(
             self, user_input: dict[str, Any] | None = None
@@ -143,11 +142,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 authToken = result['accessToken']
                 username = get_username_from_authentication_token(authToken)
 
-                bambu = BambuClient(device_type = self.config_data["device_type"],
-                                    serial = self.config_data["serial"],
-                                    host = "us.mqtt.bambulab.com",
-                                    username = username,
-                                    access_code = authToken)
+                bambu = BambuClient(device_type=self.config_data["device_type"],
+                                    serial=self.config_data["serial"],
+                                    host="us.mqtt.bambulab.com",
+                                    username=username,
+                                    access_code=authToken)
                 success = await bambu.try_connection()
 
                 if success:
@@ -184,11 +183,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             LOGGER.debug("Config Flow: Trying Lan Mode Connection")
-            bambu = BambuClient(device_type = self.config_data["device_type"],
-                                serial = self.config_data["serial"],
-                                host = user_input["host"],
-                                username = "bblp",
-                                access_code = user_input["access_code"])
+            bambu = BambuClient(device_type=self.config_data["device_type"],
+                                serial=self.config_data["serial"],
+                                host=user_input["host"],
+                                username="bblp",
+                                access_code=user_input["access_code"])
             success = await bambu.try_connection()
 
             if success:
@@ -219,12 +218,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_ssdp(
-        self, discovery_info: ssdp.SsdpServiceInfo
+            self, discovery_info: ssdp.SsdpServiceInfo
     ) -> FlowResult:
         """Handle ssdp discovery flow."""
 
         LOGGER.debug("async_step_ssdp");
         return await self.async_step_user()
+
 
 class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle Bambu options."""
@@ -283,11 +283,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 authToken = result['accessToken']
                 username = get_username_from_authentication_token(authToken)
 
-                bambu = BambuClient(device_type = self.config_data["device_type"],
-                                    serial = self.config_data["serial"],
-                                    host = "us.mqtt.bambulab.com",
-                                    username = username,
-                                    access_code = authToken)
+                bambu = BambuClient(device_type=self.config_data["device_type"],
+                                    serial=self.config_data["serial"],
+                                    host="us.mqtt.bambulab.com",
+                                    username=username,
+                                    access_code=authToken)
                 success = await bambu.try_connection()
 
                 if success:
@@ -327,11 +327,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         if user_input is not None:
             LOGGER.debug("Config Flow: Trying Lan Mode Connection")
-            bambu = BambuClient(device_type = self.config_data["device_type"],
-                                serial = self.config_data["serial"],
-                                host = user_input["host"],
-                                username = "bblp",
-                                access_code = user_input["access_code"])
+            bambu = BambuClient(device_type=self.config_data["device_type"],
+                                serial=self.config_data["serial"],
+                                host=user_input["host"],
+                                username="bblp",
+                                access_code=user_input["access_code"])
             success = await bambu.try_connection()
 
             if success:

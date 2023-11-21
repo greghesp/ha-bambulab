@@ -74,7 +74,7 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         translation_key="hms_errors",
         device_class=BinarySensorDeviceClass.PROBLEM,
         entity_category=EntityCategory.DIAGNOSTIC,
-        is_on_fn=lambda self: len(self.coordinator.get_model().hms.errors) != 0,
+        is_on_fn=lambda self: self.coordinator.get_model().hms.count != 0,
         extra_attributes=lambda self: self.coordinator.get_model().hms.errors
     ),
     BambuLabBinarySensorEntityDescription(
@@ -549,3 +549,11 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.K_VALUE)
     ),
 )
+
+P1P_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+        key="p1p_camera",
+        translation_key="p1p_camera",
+        value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE),
+    )
+
