@@ -328,6 +328,9 @@
           },
           "remain": {
             "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       },
@@ -360,6 +363,9 @@
           },
           "remain": {
             "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       },
@@ -392,6 +398,9 @@
           },
           "remain": {
             "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       },
@@ -424,6 +433,9 @@
           },
           "remain": {
             "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       }
