@@ -325,6 +325,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
           }
         }
       },
@@ -354,6 +357,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
           }
         }
       },
@@ -383,6 +389,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
           }
         }
       },
@@ -412,6 +421,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
           }
         }
       }

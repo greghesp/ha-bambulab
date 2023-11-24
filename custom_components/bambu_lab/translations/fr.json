@@ -309,6 +309,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Filament restant"
           }
         }
       },
@@ -338,6 +341,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Filament restant"
           }
         }
       },
@@ -367,6 +373,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Filament restant"
           }
         }
       },
@@ -396,6 +405,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Filament restant"
           }
         }
       }

@@ -554,6 +554,7 @@ class AMSList:
         #                     "bed_temp": "0",
         #                     "nozzle_temp_max": "240",
         #                     "nozzle_temp_min": "190",
+        #                     "remain": 100,
         #                     "xcam_info": "000000000000000000000000",
         #                     "tray_uuid": "00000000000000000000000000000000"
         #                 },
@@ -622,6 +623,7 @@ class AMSTray:
         self.color = "00000000"  # RRGGBBAA
         self.nozzle_temp_min = 0
         self.nozzle_temp_max = 0
+        self.remain = 0
         self.k = 0
 
     def print_update(self, data):
@@ -635,6 +637,7 @@ class AMSTray:
             self.color = "00000000"  # RRGGBBAA
             self.nozzle_temp_min = 0
             self.nozzle_temp_max = 0
+            self.remain = 0
             self.k = 0
         else:
             self.empty = False
@@ -645,6 +648,7 @@ class AMSTray:
             self.color = data.get('tray_color', self.color)
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
             self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+            self.remain = data.get('remain', self.remain)
             self.k = data.get('k', self.k)
 
 
@@ -676,6 +680,7 @@ class ExternalSpool(AMSTray):
         #     "bed_temp": "0",
         #     "nozzle_temp_max": "280",
         #     "nozzle_temp_min": "240",
+        #     "remain": 100,
         #     "xcam_info": "000000000000000000000000",
         #     "tray_uuid": "00000000000000000000000000000000",
         #     "remain": 0,
