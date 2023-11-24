@@ -488,7 +488,7 @@ class AMSList:
         # what devices to add to humidity_index assistant and add all the sensors as entities. And then then json payload data
         # to populate the values for all those entities.
 
-        # The module entries are of this form:
+        # The module entries are of this form (P1/X1):
         # {
         #     "name": "ams/0",
         #     "project_name": "",
@@ -498,13 +498,28 @@ class AMSList:
         #     "hw_ver": "AMS08",
         #     "sn": "<SERIAL>"
         # }
+        # AMS Lite of the form:
+        # {
+        #   "name": "ams_f1/0",
+        #   "project_name": "",
+        #   "sw_ver": "00.00.07.89",
+        #   "loader_ver": "00.00.00.00",
+        #   "ota_ver": "00.00.00.00",
+        #   "hw_ver": "AMS_F102",
+        #   "sn": "**REDACTED**"
+        # }
 
         received_ams_info = False
         module_list = data.get("module", [])
         for module in module_list:
             name = module["name"]
+            index = -1
             if name.startswith("ams/"):
                 index = int(name[4])
+            elif name.startswith("ams_f1/"):
+                index = int(name[7])
+            
+            if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
                 # requires as part of the home assistant device identity.
                 if not module['sn'] == '':

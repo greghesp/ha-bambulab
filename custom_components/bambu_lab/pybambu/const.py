@@ -196,30 +196,30 @@ HMS_ERRORS = {
     "0500_0400_0001_0004": "The print file is unauthorized.",
     "0500_0400_0001_0006": "Failed to resume previous print.",
     "0500_0400_0002_0007": "The bed temperature exceeds the filament's vitrification temperature, which may cause a nozzle clog.",
-    "0700_0100_0001_0001": "The AMS assist motor has slipped.The extrusion wheel may be worn down, or the filament may be too thin.",
-    "0700_0100_0001_0003": "The AMS assist motor torque control is malfunctioning. The current sensor may be faulty.",
-    "0700_0100_0001_0004": "The AMS assist motor speed control is malfunctioning.The speed sensor may be faulty.",
-    "0700_0100_0002_0002": "The AMS assist motor is overloaded.The filament may be tangled or stuck.",
-    "0700_0200_0001_0001": "AMS filament speed and length error.The filament odometry may be faulty.",
     "0700_4000_0002_0001": "The filament buffer signal lost, the cable or position sensor may be malfunctioning.",
     "0700_4000_0002_0002": "The filament buffer position signal error, the position sensor may be malfunctioning.",
     "0700_4000_0002_0003": "The AMS Hub communication is abnormal, the cable may be not well connected.",
     "0700_4000_0002_0004": "The filament buffer signal is abnormal, the spring may be stuck.",
-    "0700_4500_0002_0001": "The filament cutter sensor is malfunctioning.The sensor may be disconnected or damaged.",
-    "0700_4500_0002_0002": "The filament cutter's cutting distance is too large.The XY motor may lose steps.",
-    "0700_4500_0002_0003": "The filament cutter handle has not released.The handle or blade may be stuck.",
-    "0700_5100_0003_0001": "The AMS is disabled, please load filament from spool holder.",
+    "0700_4500_0002_0001": "The filament cutter sensor is malfunctioning. The sensor may be disconnected or damaged.",
+    "0700_4500_0002_0002": "The filament cutter's cutting distance is too large. The XY motor may lose steps.",
+    "0700_4500_0002_0003": "The filament cutter handle has not released. The handle or blade may be stuck.",
+    "0700_5100_0003_0001": "AMS is disabled, please load filament from spool holder.",
     "07FF_2000_0002_0001": "External filament has run out, please load a new filament.",
     "07FF_2000_0002_0002": "External filament is missing, please load a new filament.",
     "07FF_2000_0002_0004": "External filament is missing, please load a new filament.",
 }
 
-# These errors cover those that are AMS/slot specific
-# 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
+# These errors cover those that are AMS and/or slot specific.
+# 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error.
 HMS_AMS_ERRORS = {
+    "0700_0100_0001_0001": "AMS1 assist motor has slipped. The extrusion wheel may be worn down, or the filament may be too thin.",
+    "0700_0100_0001_0003": "AMS1 assist motor torque control is malfunctioning. The current sensor may be faulty.",
+    "0700_0100_0001_0004": "AMS1 assist motor speed control is malfunctioning. The speed sensor may be faulty.",
+    "0700_0100_0002_0002": "AMS1 assist motor is overloaded. The filament may be tangled or stuck.",
+    "0700_0200_0001_0001": "AMS1 filament speed and length error. The filament odometry may be faulty.",
     "0700_1000_0001_0001": "AMS1 slot 1 motor has slipped. The extrusion wheel may be malfunctioning, or the filament may be too thin.",
-    "0700_1000_0001_0003": "AMS1 slot 1 motor torque control is malfunctioning.The current sensor may be faulty.",
-    "0700_1000_0002_0002": "AMS1 slot 1 motor is overloaded.The filament may be tangled or stuck.",
+    "0700_1000_0001_0003": "AMS1 slot 1 motor torque control is malfunctioning. The current sensor may be faulty.",
+    "0700_1000_0002_0002": "AMS1 slot 1 motor is overloaded. The filament may be tangled or stuck.",
     "0700_2000_0002_0001": "AMS1 slot 1 filament has been ran out.",
     "0700_2000_0002_0002": "AMS1 slot 1 is empty.",
     "0700_2000_0002_0003": "AMS1 slot 1 filament may be broken in AMS.",
