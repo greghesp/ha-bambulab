@@ -19,7 +19,7 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
-    LOGGER.debug("Select::async_setup_entry")
+    LOGGER.debug("SELECT::async_setup_entry")
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     async_add_entities(
