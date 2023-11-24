@@ -148,7 +148,7 @@
         "name": "热床温度"
       },
       "target_bed_temp": {
-        "name": "目标热床温度"
+        "name": "热床目标温度"
       },
       "chamber_temp": {
         "name": "打印仓温度"
@@ -204,7 +204,7 @@
           "calibrating_micro_lidar": "校准微型激光雷达",
           "homing_toolhead": "归位工具头",
           "cleaning_nozzle_tip": "清洁喷嘴尖",
-          "checking_extruder_temperature": "检查挤出器温度",
+          "checking_extruder_temperature": "检查挤出机温度",
           "paused_user": "用户暂停打印",
           "paused_front_cover_falling": "由于前盖掉落而暂停",
           "calibrating_extrusion_flow": "校准挤出流量",
