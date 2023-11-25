@@ -145,7 +145,7 @@
         "name": "Wi-Fi-Signal"
       },
       "bed_temp": {
-        "name": "Temperatur im Bett"
+        "name": "Betttemperatur"
       },
       "target_bed_temp": {
         "name": "Zielwert Betttemperatur"
