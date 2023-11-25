@@ -325,6 +325,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       },
@@ -354,6 +360,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       },
@@ -383,6 +395,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       },
@@ -412,6 +430,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Remaining filament"
+          },
+          "tag_uid": {
+            "name": "Serial number of filament"
           }
         }
       }
