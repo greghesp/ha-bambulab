@@ -192,7 +192,7 @@
           "printing": "打印中",
           "auto_bed_leveling": "自动调平热床",
           "heatbed_preheating": "加热热床中",
-          "sweeping_xy_mech_mode": "XY 机械模式扫描",
+          "sweeping_xy_mech_mode": "XY 共振频率扫描",
           "changing_filament": "更换丝料",
           "m400_pause": "M400 暂停",
           "paused_filament_runout": "由于丝料耗尽而暂停",
