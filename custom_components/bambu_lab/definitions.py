@@ -277,7 +277,6 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().info.current_layer,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.PRINT_LAYERS),
-        native_unit_of_measurement="layers",
     ),
     BambuLabSensorEntityDescription(
         key="total_layers",
@@ -285,7 +284,6 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().info.total_layers,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.PRINT_LAYERS),
-        native_unit_of_measurement="layers",
     ),
     BambuLabSensorEntityDescription(
         key="tray_now",

@@ -214,11 +214,11 @@ class BambuClient:
         return
 
     def subscribe_and_request_info(self):
-        LOGGER.debug("Now Subscribing...")
+        LOGGER.debug("Now subscribing...")
         self.subscribe()
-        LOGGER.debug("On Connect: Getting Version Info")
+        LOGGER.debug("On Connect: Getting version info")
         self.publish(GET_VERSION)
-        LOGGER.debug("On Connect: Request Push All")
+        LOGGER.debug("On Connect: Request push all")
         self.publish(PUSH_ALL)
 
     def on_connect(self,
@@ -241,6 +241,21 @@ class BambuClient:
             self._camera = P1PCameraThread(self)
             self._camera.start()
 
+
+    def try_on_connect(self,
+                   client_: mqtt.Client,
+                   userdata: None,
+                   flags: dict[str, Any],
+                   result_code: int,
+                   properties: mqtt.Properties | None = None, ):
+        """Handle connection"""
+        LOGGER.info("On Connect: Connected to Broker")
+        self._connected = True
+        LOGGER.debug("Now test subscribing...")
+        self.subscribe()
+        # For the initial configuration connection attempt, we just need version info.
+        LOGGER.debug("On Connect: Getting version ynfo")
+        self.publish(GET_VERSION)
 
     def on_disconnect(self,
                       client_: mqtt.Client,
@@ -340,7 +355,7 @@ class BambuClient:
                 self._device.info_update(data=json_data.get("info"))
                 result.put(True)
 
-        self.client.on_connect = self.on_connect
+        self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
 

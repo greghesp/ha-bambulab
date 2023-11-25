@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timedelta
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, LOGGER, FansEnum
+from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, HMS_AMS_ERRORS, LOGGER, FansEnum
 from .commands import SEND_GCODE_TEMPLATE
 
 
@@ -62,9 +62,28 @@ def get_stage_action(_id):
     return ACTION_IDS.get(_id, "unknown")
 
 
-def get_HMS_error_text(_id):
+def get_HMS_error_text(hms_code: str):
     """Return the human-readable description for an HMS error"""
-    return HMS_ERRORS.get(_id, "unknown")
+
+    ams_code = get_generic_AMS_HMS_error_code(hms_code)
+    ams_error = HMS_AMS_ERRORS.get(ams_code, "")
+    if ams_error != "":
+        # 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
+        ams_index = int(hms_code[3:4], 16) + 1
+        ams_slot = int(hms_code[6:7], 16) + 1
+        ams_error = ams_error.replace('AMS1', f"AMS{ams_index}")
+        ams_error = ams_error.replace('slot 1', f"slot {ams_slot}")
+        return ams_error
+
+    return HMS_ERRORS.get(hms_code, "unknown")
+
+def get_generic_AMS_HMS_error_code(hms_code: str):
+    code1 = int(hms_code[0:4], 16)
+    code2 = int(hms_code[5:9], 16)
+    code3 = int(hms_code[10:14], 16)
+    code4 = int(hms_code[15:19], 16)
+    # 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
+    return f"{code1 & 0xFFF8:0>4X}_{code2 & 0xF8FF:0>4X}_{code3:0>4X}_{code4:0>4X}"
 
 
 def get_printer_type(modules, default):
