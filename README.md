@@ -97,7 +97,7 @@ This currently exposes the following Buttons:
 | Active           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Color            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Empty            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| K Value          | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :question:         |
+| K Value          | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Max Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Min Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Name             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -111,7 +111,7 @@ This currently exposes the following Buttons:
 | Attributes:     |                    |                    |                    |                    |                    |
 | Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Color           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| K Value         | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :question:         |
+| K Value         | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Max Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Min Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Name            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
