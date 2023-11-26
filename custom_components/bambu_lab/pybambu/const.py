@@ -52,6 +52,9 @@ ACTION_IDS = {
     19: "calibrating_extrusion_flow",
     20: "paused_nozzle_temperature_malfunction",
     21: "paused_heat_bed_temperature_malfunction",
+    # X1 returns -1 for idle
+    -1: "idle",
+    # P1 returns 255 for idle
     255: "idle"
 }
 
