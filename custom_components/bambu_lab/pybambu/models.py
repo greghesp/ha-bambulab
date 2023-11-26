@@ -523,10 +523,11 @@ class AMSList:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
                 # requires as part of the home assistant device identity.
                 if not module['sn'] == '':
-                    # May get data before info so create entry if necessary
-                    if len(self.data) <= index:
+                    # May get data before info so create entries if necessary
+                    while len(self.data) <= index:
                         received_ams_info = True
                         self.data.append(AMSInstance())
+
                     if self.data[index].serial != module['sn']:
                         received_ams_info = True
                         self.data[index].serial = module['sn']
@@ -611,8 +612,9 @@ class AMSList:
                 received_ams_data = True
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
-                if len(self.data) <= index:
+                while len(self.data) <= index:
                     self.data.append(AMSInstance())
+
                 self.data[index].humidity_index = int(ams['humidity'])
                 self.data[index].temperature = float(ams['temp'])
 
@@ -755,7 +757,7 @@ class StageAction:
 
     def __init__(self):
         """Load from dict"""
-        self._id = 99
+        self._id = 255
         self._print_type = ""
         self.description = get_stage_action(self._id)
 
