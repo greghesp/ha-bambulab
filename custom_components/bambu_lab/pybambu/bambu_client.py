@@ -40,7 +40,7 @@ class WatchdogThread(threading.Thread):
         self._last_received_data = time.time()
 
     def run(self):
-        LOGGER.debug("Watchdog thread started.")
+        LOGGER.info("Watchdog thread started.")
         WATCHDOG_TIMER = 20
         while True:
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
@@ -57,7 +57,7 @@ class WatchdogThread(threading.Thread):
             elif interval < WATCHDOG_TIMER:
                 self._watchdog_fired = False
 
-        LOGGER.debug("Watchdog thread exited.")
+        LOGGER.info("Watchdog thread exited.")
 
 
 class P1PCameraThread(threading.Thread):
@@ -129,11 +129,11 @@ class P1PCameraThread(threading.Thread):
 
                     self._client.on_jpeg_received(img)
 
-        LOGGER.debug("P1P Camera thread exited.")
+        LOGGER.info("P1P Camera thread exited.")
 
 
 def mqtt_listen_thread(self):
-    LOGGER.debug("MQTT listener thread started.")
+    LOGGER.info("MQTT listener thread started.")
     exceptionSeen = ""
     while True:
         try:
@@ -170,6 +170,7 @@ def mqtt_listen_thread(self):
             time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         self.client.disconnect()
 
+    LOGGER.info("MQTT listener thread exited.")
 
 @dataclass
 class BambuClient:
@@ -254,7 +255,7 @@ class BambuClient:
         LOGGER.debug("Now test subscribing...")
         self.subscribe()
         # For the initial configuration connection attempt, we just need version info.
-        LOGGER.debug("On Connect: Getting version ynfo")
+        LOGGER.debug("On Connect: Getting version info")
         self.publish(GET_VERSION)
 
     def on_disconnect(self,
@@ -273,7 +274,7 @@ class BambuClient:
             self._camera.join()
 
     def on_watchdog_fired(self):
-        LOGGER.debug("Watch dog fired")
+        LOGGER.info("Watch dog fired")
         self._device.info.set_online(False)
         self.publish(START_PUSH)
 
@@ -284,7 +285,7 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            LOGGER.debug(f"On Message: Received Message: {message.payload}")
+            LOGGER.debug(f"Message: {self._device.info.device_type}: {message.payload}")
             json_data = json.loads(message.payload)
             if json_data.get("event"):
                 if json_data.get("event").get("event") == "client.connected":
@@ -301,7 +302,7 @@ class BambuClient:
                 if json_data.get("print"):
                     self._device.print_update(data=json_data.get("print"))
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
-                    LOGGER.debug("Got Version Command Data")
+                    LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
         except Exception as e:
             LOGGER.error("An exception occurred processing a message:")
