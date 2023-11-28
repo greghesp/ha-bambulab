@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import json
 import queue
-import ssl
-import time
-import threading
-import struct
-import sys
+import json
+import re
 import socket
+import ssl
+import struct
+import threading
+import time
 
 
 from dataclasses import dataclass
@@ -285,7 +285,9 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
-            LOGGER.debug(f"Message: {self._device.info.device_type}: {message.payload}")
+            # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
+            clean_msg = re.sub(r"\\n *", "", str(message.payload))
+            LOGGER.debug(f"Message: {self._device.info.device_type}: {clean_msg}")
             json_data = json.loads(message.payload)
             if json_data.get("event"):
                 if json_data.get("event").get("event") == "client.connected":
