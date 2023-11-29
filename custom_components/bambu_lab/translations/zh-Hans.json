@@ -136,7 +136,7 @@
           "silent": "静音模式",
           "standard": "标准模式",
           "sport": "运动模式",
-          "ludicrous": "疯狂模式"
+          "ludicrous": "狂暴模式"
         }
       }
     },
@@ -177,7 +177,7 @@
           "silent": "静音模式",
           "standard": "标准模式",
           "sport": "运动模式",
-          "ludicrous": "疯狂模式"
+          "ludicrous": "狂暴模式"
         },
         "state_attributes": {
           "modifier": {
@@ -190,10 +190,10 @@
         "state": {
           "offline": "离线",
           "printing": "打印中",
-          "auto_bed_leveling": "调平热床",
-          "heatbed_preheating": "加热热床中",
-          "sweeping_xy_mech_mode": "XY 共振频率扫描",
-          "changing_filament": "更换丝料",
+          "auto_bed_leveling": "自动调平热床",
+          "heatbed_preheating": "预加热热床",
+          "sweeping_xy_mech_mode": "扫描XY轴机械模态",
+          "changing_filament": "换料",
           "m400_pause": "M400 暂停",
           "paused_filament_runout": "由于丝料耗尽而暂停",
           "heating_hotend": "加热喷嘴中",
@@ -203,7 +203,7 @@
           "identifying_build_plate_type": "识别构建板类型",
           "calibrating_micro_lidar": "校准微型激光雷达",
           "homing_toolhead": "归位工具头",
-          "cleaning_nozzle_tip": "清洁喷嘴头",
+          "cleaning_nozzle_tip": "清理喷嘴头",
           "checking_extruder_temperature": "检查挤出机温度",
           "paused_user": "用户暂停打印",
           "paused_front_cover_falling": "由于前盖掉落而暂停",
