@@ -523,10 +523,11 @@ class AMSList:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
                 # requires as part of the home assistant device identity.
                 if not module['sn'] == '':
-                    # May get data before info so create entry if necessary
-                    if len(self.data) <= index:
+                    # May get data before info so create entries if necessary
+                    while len(self.data) <= index:
                         received_ams_info = True
                         self.data.append(AMSInstance())
+
                     if self.data[index].serial != module['sn']:
                         received_ams_info = True
                         self.data[index].serial = module['sn']
@@ -571,6 +572,7 @@ class AMSList:
         #                     "bed_temp": "0",
         #                     "nozzle_temp_max": "240",
         #                     "nozzle_temp_min": "190",
+        #                     "remain": 100,
         #                     "xcam_info": "000000000000000000000000",
         #                     "tray_uuid": "00000000000000000000000000000000"
         #                 },
@@ -611,8 +613,9 @@ class AMSList:
                 received_ams_data = True
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
-                if len(self.data) <= index:
+                while len(self.data) <= index:
                     self.data.append(AMSInstance())
+
                 self.data[index].humidity_index = int(ams['humidity'])
                 self.data[index].temperature = float(ams['temp'])
 
@@ -639,7 +642,9 @@ class AMSTray:
         self.color = "00000000"  # RRGGBBAA
         self.nozzle_temp_min = 0
         self.nozzle_temp_max = 0
+        self.remain = 0
         self.k = 0
+        self.tag_uid = "0000000000000000"
 
     def print_update(self, data):
         if len(data) == 1:
@@ -652,6 +657,8 @@ class AMSTray:
             self.color = "00000000"  # RRGGBBAA
             self.nozzle_temp_min = 0
             self.nozzle_temp_max = 0
+            self.remain = 0
+            self.tag_uid = "0000000000000000"
             self.k = 0
         else:
             self.empty = False
@@ -662,6 +669,8 @@ class AMSTray:
             self.color = data.get('tray_color', self.color)
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
             self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+            self.remain = data.get('remain', self.remain)
+            self.tag_uid = data.get('tag_uid', self.tag_uid)
             self.k = data.get('k', self.k)
 
 
@@ -693,6 +702,7 @@ class ExternalSpool(AMSTray):
         #     "bed_temp": "0",
         #     "nozzle_temp_max": "280",
         #     "nozzle_temp_min": "240",
+        #     "remain": 100,
         #     "xcam_info": "000000000000000000000000",
         #     "tray_uuid": "00000000000000000000000000000000",
         #     "remain": 0,
@@ -755,7 +765,7 @@ class StageAction:
 
     def __init__(self):
         """Load from dict"""
-        self._id = 99
+        self._id = 255
         self._print_type = ""
         self.description = get_stage_action(self._id)
 
