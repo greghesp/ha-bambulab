@@ -68,8 +68,8 @@ class BambuLabCamera(BambuLabEntity, Camera):
 
             parsed_url = urlparse(self.coordinator.get_model().camera.rtsp_url)
             if self.coordinator.get_model().info.mqtt_mode == "local":
-                # For unknown reasons the returns rtsp URL sometimes has a completely incorrect IP address in it for the host.
-                # Since we know the correct IP (in local mqtt connection mode), rewrite the URL to have that.
+                # For unknown reasons the returned rtsp URL sometimes has a completely incorrect IP address in it for the host.
+                # Since we know the correct IP (but only in local mqtt connection mode), rewrite the URL to have that.
                 url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{self._host}/{parsed_url.path}"
             else:
                 url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{parsed_url.netloc}{parsed_url.path}"
