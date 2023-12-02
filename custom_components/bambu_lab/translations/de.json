@@ -259,10 +259,10 @@
         "name": "Gesamtzahl der Schichten"
       },
       "active_tray": {
-        "name": "Aktives Fach"
+        "name": "Aktiver Slot"
       },
       "active_tray_index": {
-        "name": "Aktiver Fachindex"
+        "name": "Aktiver Slotindex"
       },
       "humidity_index": {
         "name": "Index der Luftfeuchtigkeit"
@@ -300,7 +300,7 @@
         }
       },
       "tray_1": {
-        "name": "Fach 1",
+        "name": "Slot 1",
         "state_attributes": {
           "active": {
             "name": "Aktiv"
@@ -335,7 +335,7 @@
         }
       },
       "tray_2": {
-        "name": "Fach 2",
+        "name": "Slot 2",
         "state_attributes": {
           "active": {
             "name": "Aktiv"
@@ -370,7 +370,7 @@
         }
       },
       "tray_3": {
-        "name": "Fach 3",
+        "name": "Slot 3",
         "state_attributes": {
           "active": {
             "name": "Aktiv"
@@ -405,7 +405,7 @@
         }
       },
       "tray_4": {
-        "name": "Fach 4",
+        "name": "Slot 4",
         "state_attributes": {
           "active": {
             "name": "Aktiv"
