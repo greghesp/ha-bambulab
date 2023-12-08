@@ -33,6 +33,7 @@ BOOLEAN_SELECTOR = BooleanSelector()
 TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
 PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
 SUPPORTED_PRINTERS = [
+    SelectOptionDict(value="A1", label="A1"),
     SelectOptionDict(value="A1Mini", label="A1 Mini"),
     SelectOptionDict(value="P1P", label="P1P"),
     SelectOptionDict(value="P1S", label="P1S"),
