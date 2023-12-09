@@ -97,6 +97,9 @@ def get_printer_type(modules, default):
         if esp32.get("hw_ver") == "AP05":
             LOGGER.debug("Device is A1 Mini")
             return "A1 Mini"
+        if esp32.get("hw_ver") == "AP06":
+            LOGGER.debug("Device is A1")
+            return "A1"
     elif len(rv1126.keys()) > 1:
         if rv1126.get("hw_ver") == "AP05":
             LOGGER.debug("Device is X1/C")
