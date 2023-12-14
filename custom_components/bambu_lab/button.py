@@ -6,6 +6,7 @@ from homeassistant.helpers.entity import EntityCategory
 from .const import DOMAIN, LOGGER
 from .models import BambuLabEntity
 from .pybambu.commands import PAUSE, RESUME, STOP
+from .pybambu.const import Features
 
 from homeassistant.components.button import (
     ButtonEntity,
@@ -38,6 +39,12 @@ FORCE_REFRESH_BUTTON_DESCRIPTION = ButtonEntityDescription(
     translation_key="refresh",
     entity_category=EntityCategory.DIAGNOSTIC,
 )
+MANUAL_REFRESH_MODE_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="manual",
+    icon="mdi:refresh-auto",
+    translation_key="manual",
+    entity_category=EntityCategory.CONFIG,
+)
 
 
 async def async_setup_entry(
@@ -48,12 +55,17 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"BUTTON::async_setup_entry")
 
-    async_add_entities([
+    buttons = [
         BambuLabPauseButton(coordinator, entry),
         BambuLabResumeButton(coordinator, entry),
         BambuLabStopButton(coordinator, entry),
         BambuLabRefreshButton(coordinator, entry)
-    ])
+    ]
+
+    if coordinator.get_model().supports_feature(Features.MANUAL_MODE):
+        buttons.append(BambuLabManualModeButton(coordinator, entry))
+
+    async_add_entities(buttons)
 
 
 class BambuLabButton(BambuLabEntity, ButtonEntity):
@@ -133,4 +145,21 @@ class BambuLabRefreshButton(BambuLabButton):
 
     async def async_press(self) -> None:
         """ Force refresh MQTT info"""
-        self.coordinator.client.refresh()
+        await self.coordinator.client.refresh()
+
+class BambuLabManualModeButton(BambuLabButton):
+    """BambuLab Refresh data Button"""
+
+    entity_description = MANUAL_REFRESH_MODE_BUTTON_DESCRIPTION
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    async def async_press(self) -> None:
+        """ Toggle polling mode """
+        if self.coordinator.client.manual_refresh_mode:
+            self.entity_description.icon = "mdi:refresh-auto"
+        else:
+            self.entity_description.icon = "mdi:pause-octagon-outline"
+        await self.coordinator.client.toggle_manual_refresh_mode()

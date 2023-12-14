@@ -188,11 +188,27 @@ class BambuClient:
         self.callback = None
         self._device = Device(self, device_type, serial)
         self._port = 1883
+        self._manual_refresh_mode = False
 
     @property
     def connected(self):
         """Return if connected to server"""
         return self._connected
+
+    @property
+    def manual_refresh_mode(self):
+        """Return if the integration is running in poll mode"""
+        return self._manual_refresh_mode
+
+    async def toggle_manual_refresh_mode(self):
+        self._manual_refresh_mode = not self._manual_refresh_mode
+        if self._manual_refresh_mode:
+            # Disconnect from the server. User must manually hit the refresh button to connect to refresh and then it will immediately disconnect.
+            self.disconnect()
+        else:
+            # Reconnect normally
+            self.client = mqtt.Client()
+            await self.connect(self.callback)
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
@@ -211,8 +227,6 @@ class BambuClient:
         LOGGER.debug("Starting MQTT listener thread")
         thread = threading.Thread(target=mqtt_listen_thread, args=(self,))
         thread.start()
-
-        return
 
     def subscribe_and_request_info(self):
         LOGGER.debug("Now subscribing...")
@@ -303,6 +317,9 @@ class BambuClient:
                 self._watchdog.received_data()
                 if json_data.get("print"):
                     self._device.print_update(data=json_data.get("print"))
+                    # Once we receive data, if in manual refresh mode, we disconnect again.
+                    if self._manual_refresh_mode:
+                        self.disconnect()
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
@@ -327,13 +344,17 @@ class BambuClient:
         LOGGER.error(f"Failed to send message to topic device/{self._serial}/request")
         return False
 
-    def refresh(self):
+    async def refresh(self):
         """Force refresh data"""
-        LOGGER.debug("Force Refresh: Getting Version Info")
-        self.publish(GET_VERSION)
-        LOGGER.debug("Force Refresh: Request Push All")
-        self.publish(PUSH_ALL)
-        return
+
+        if self._manual_refresh_mode:
+            self.client = mqtt.Client()
+            await self.connect(self.callback)
+        else:
+            LOGGER.debug("Force Refresh: Getting Version Info")
+            self.publish(GET_VERSION)
+            LOGGER.debug("Force Refresh: Request Push All")
+            self.publish(PUSH_ALL)
 
     def get_device(self):
         """Return device"""

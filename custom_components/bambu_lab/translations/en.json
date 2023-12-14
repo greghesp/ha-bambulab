@@ -103,6 +103,9 @@
       },
       "refresh": {
         "name": "Force Refresh Data"
+      },
+      "manual": {
+        "name": "Manual refresh mode"
       }
     },
     "fan": {
