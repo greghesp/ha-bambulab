@@ -103,9 +103,6 @@
       },
       "refresh": {
         "name": "Force Refresh Data"
-      },
-      "manual": {
-        "name": "Manual refresh mode"
       }
     },
     "fan": {
@@ -446,6 +443,11 @@
     "camera": {
       "camera": {
         "name": "Camera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Manual refresh mode"
       }
     }
   }

@@ -200,8 +200,8 @@ class BambuClient:
         """Return if the integration is running in poll mode"""
         return self._manual_refresh_mode
 
-    async def toggle_manual_refresh_mode(self):
-        self._manual_refresh_mode = not self._manual_refresh_mode
+    async def set_manual_refresh_mode(self, on):
+        self._manual_refresh_mode = on
         if self._manual_refresh_mode:
             # Disconnect from the server. User must manually hit the refresh button to connect to refresh and then it will immediately disconnect.
             self.disconnect()

@@ -39,12 +39,6 @@ FORCE_REFRESH_BUTTON_DESCRIPTION = ButtonEntityDescription(
     translation_key="refresh",
     entity_category=EntityCategory.DIAGNOSTIC,
 )
-MANUAL_REFRESH_MODE_BUTTON_DESCRIPTION = ButtonEntityDescription(
-    key="manual",
-    icon="mdi:refresh-auto",
-    translation_key="manual",
-    entity_category=EntityCategory.CONFIG,
-)
 
 
 async def async_setup_entry(
@@ -61,9 +55,6 @@ async def async_setup_entry(
         BambuLabStopButton(coordinator, entry),
         BambuLabRefreshButton(coordinator, entry)
     ]
-
-    if coordinator.get_model().supports_feature(Features.MANUAL_MODE):
-        buttons.append(BambuLabManualModeButton(coordinator, entry))
 
     async_add_entities(buttons)
 
@@ -146,20 +137,3 @@ class BambuLabRefreshButton(BambuLabButton):
     async def async_press(self) -> None:
         """ Force refresh MQTT info"""
         await self.coordinator.client.refresh()
-
-class BambuLabManualModeButton(BambuLabButton):
-    """BambuLab Refresh data Button"""
-
-    entity_description = MANUAL_REFRESH_MODE_BUTTON_DESCRIPTION
-
-    @property
-    def available(self) -> bool:
-        return True
-
-    async def async_press(self) -> None:
-        """ Toggle polling mode """
-        if self.coordinator.client.manual_refresh_mode:
-            self.entity_description.icon = "mdi:refresh-auto"
-        else:
-            self.entity_description.icon = "mdi:pause-octagon-outline"
-        await self.coordinator.client.toggle_manual_refresh_mode()
