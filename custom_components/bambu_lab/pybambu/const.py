@@ -115,6 +115,10 @@ FILAMENT_NAMES = {
     "GFL03": "eSUN PLA+",
     "GFSL99_01": "Generic PLA Silk",
     "GFSL99_12": "Generic PLA Silk",
+    "GFA12": "Bambu PLA Glow",
+    "GFT97": "Generic PPS",
+    "GFT98": "Generic PPS-CF",
+    "GFU00": "Bambu TPU 95A HF",
 }
 
 HMS_ERRORS = {
