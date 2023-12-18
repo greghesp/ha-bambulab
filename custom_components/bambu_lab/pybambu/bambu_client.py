@@ -180,7 +180,6 @@ class BambuClient:
 
     def __init__(self, device_type: str, serial: str, host: str, username: str, access_code: str):
         self.host = host
-        self.client = mqtt.Client()
         self._serial = serial
         self._access_code = access_code
         self._username = username
@@ -207,11 +206,11 @@ class BambuClient:
             self.disconnect()
         else:
             # Reconnect normally
-            self.client = mqtt.Client()
             await self.connect(self.callback)
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
+        self.client = mqtt.Client()
         self.callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
@@ -348,7 +347,6 @@ class BambuClient:
         """Force refresh data"""
 
         if self._manual_refresh_mode:
-            self.client = mqtt.Client()
             await self.connect(self.callback)
         else:
             LOGGER.debug("Force Refresh: Getting Version Info")
@@ -364,6 +362,7 @@ class BambuClient:
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
         self.client.disconnect()
+        self.client = None
 
     async def try_connection(self):
         """Test if we can connect to an MQTT broker."""
@@ -379,6 +378,7 @@ class BambuClient:
                 self._device.info_update(data=json_data.get("info"))
                 result.put(True)
 
+        self.client = mqtt.Client()
         self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message

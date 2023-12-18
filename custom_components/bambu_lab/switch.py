@@ -33,8 +33,8 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"SWITCH::async_setup_entry")
 
-    #if coordinator.get_model().supports_feature(Features.MANUAL_MODE):
-    async_add_entities([BambuLabManualModeSwitch(coordinator, entry)])
+    if coordinator.get_model().supports_feature(Features.MANUAL_MODE):
+        async_add_entities([BambuLabManualModeSwitch(coordinator, entry)])
 
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
