@@ -139,8 +139,6 @@ This currently exposes the following Diagnostic Sensors:
 |---------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
 | Chamber | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-P1P/P1S/A1/A1 Mini only support the chamber camera when connected by the local LAN connection mode.
-
 ### Automation device triggers
 
 This integration implements a handful of device triggers to make some common automation scenarios a little easier.
