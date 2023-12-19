@@ -19,27 +19,36 @@
     },
     "step": {
       "user": {
-        "description": "Please select your printer and provide it's serial number.\n\nNote that the latest P1P firmware (1.0.4.0) only correctly supports a single local connection. If you need a second (e.g. for P1Touch), you can use Bambu Cloud in this integration.\n\nUse local in all other cases.",
+        "description": "Configuration via Bambu Cloud is simpler but will not work for printers set to Lan mode.",
         "data": {
-          "device_type": "Printer Model:",
-          "serial": "Serial Number",
-          "printer_mode": "Printer MQTT connection mode:"
+          "printer_mode": "Printer configuration mode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT Connection",
-        "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+        "title": "Bambu Cloud Connection",
+        "description": "Please provide your Bambu Lab credentials:",
         "data": {
           "username": "Email Address",
           "password": "Password"
         }
       },
-      "Lan": {
-        "title": "Local MQTT Connection",
-        "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+      "Bambu_Choose_Device": {
+        "title": "Printer Selection",
+        "description": "Choose which printer you want to add. If you provide the local IP address you can also set the connection to the printer to be by local mqtt.",
         "data": {
-          "host": "Host IP",
-          "access_code": "Access Code"
+          "printer": "Choose Printer To Add:",
+          "host": "Local Printer IP Address:",
+          "local_mqtt": "Local MQTT connection:"
+        }
+      },
+      "Lan": {
+        "title": "Lan Mode Connection",
+        "description": "Please provide your local printer type, IP address, serial and access code. The access code can be found on the printer screen in the network settings. The serial number can be found in the device settings.",
+        "data": {
+          "device_type": "Printer Model:",
+          "serial": "Serial Number:",
+          "host": "Host IP Address:",
+          "access_code": "Access Code:"
         }
       }
     }
@@ -51,27 +60,37 @@
       "unknown": "Unexpected error"
     },
     "step": {
-      "init": {
-        "title": "Adjust connection settings",
-        "description": "Choose the new connection settings for this printer.\n\nNote that the latest P1P firmware (1.0.4.0) only correctly supports a single local connection. If you need a second (e.g. for P1Touch), you can use Bambu Cloud in this integration.\n\nUse local in all other cases.",
+      "user": {
+        "description": "Configuration via Bambu Cloud is simpler but will not work for printers set to Lan mode.",
         "data": {
-          "printer_mode": "Printer MQTT Connection Mode:"
+          "printer_mode": "Printer configuration mode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT Connection",
-        "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+        "title": "Bambu Cloud Connection",
+        "description": "Please provide your Bambu Lab credentials:",
         "data": {
           "username": "Email Address",
           "password": "Password"
         }
       },
+      "Bambu_Choose_Device": {
+        "title": "Printer Selection",
+        "description": "Choose which printer you want to add. If you provide the local IP address you can also set the connection to the printer to be by local mqtt.",
+        "data": {
+          "printer": "Choose Printer To Add:",
+          "host": "Local Printer IP Address:",
+          "local_mqtt": "Local MQTT connection:"
+        }
+      },
       "Lan": {
-        "title": "Local MQTT Connection",
+        "title": "Lan Mode Connection",
         "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
         "data": {
-          "host": "Host IP",
-          "access_code": "Access Code"
+          "device_type": "Printer Model:",
+          "serial": "Serial Number:",
+          "host": "Host IP Address:",
+          "access_code": "Access Code:"
         }
       }
     }

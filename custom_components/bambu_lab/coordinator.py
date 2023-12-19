@@ -34,11 +34,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._hass = hass
         self._entry = entry
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
-        self.client = BambuClient(device_type = entry.data.get("device_type", "X1C"),
+        LOGGER.debug(f"ConfigEntry.Version: {entry.version}")
+
+        LOGGER.debug(f"Entry: {entry}")
+        self.client = BambuClient(device_type = entry.data["device_type"],
                                   serial = entry.data["serial"],
-                                  host = entry.data["host"],
-                                  username = entry.data.get("username", "bblp"),
-                                  access_code = entry.data["access_code"])
+                                  host = entry.options.get("host", ""),
+                                  local_mqtt = entry.options["local_mqtt"],
+                                  username = entry.options.get("username", ""),
+                                  auth_token = entry.options.get("auth_token", ""),
+                                  access_code = entry.options.get("access_code", ""))
 
         self._updatedDevice = False
         self.data = self.get_model()
@@ -161,22 +166,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 dev_reg = device_registry.async_get(self._hass)
                 hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
-
-                # Fix up missing or incorrect device_type now that we know what the printer model is.
-                device_type = self.get_model().info.device_type
-                if self._entry.data.get("device_type", "") != device_type:
-                    LOGGER.debug(f"Force updating device type: {device_type}")
-                    self._hass.config_entries.async_update_entry(
-                        self._entry,
-                        title=self._entry.data["serial"],
-                        data={
-                            "device_type": device_type,
-                            "serial": self._entry.data["serial"],
-                            "host": self._entry.data["host"],
-                            "username": self._entry.data.get("username", "bblp"),
-                            "access_code": self._entry.data["access_code"]
-                        }
-                    )
                 self._updatedDevice = True
                 self._lock.release()
 
