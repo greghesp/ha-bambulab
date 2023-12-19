@@ -1,4 +1,20 @@
+### V2.0.0
+- Reworked the initial setup to get almost all printer data from Bambu Cloud for easier setup.
+- Enables use of P1 camera when in cloud mqtt mode
+
+### V1.9.3
+- Switch to turn off the connection to the printer to workaround P1 firmware bug.
+
+### V1.9.2
+- Added remaining filament to AMS tray attributes
+- Improved localization
+
+### V1.9.1
+- Fix AMS Lite support for A1 Mini
+- Improved localization
+
 ### V1.9.0
+- Added support for A1 Mini
 - Added support for P1P Camera
 
 ### V1.8.0

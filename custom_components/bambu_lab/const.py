@@ -13,10 +13,11 @@ SCAN_INTERVAL = timedelta(seconds=60)
 PLATFORMS = (
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
+    Platform.CAMERA,
     Platform.FAN,
     Platform.IMAGE,
     Platform.LIGHT,
     Platform.SELECT,
     Platform.SENSOR,
-    Platform.CAMERA
+    Platform.SWITCH
 )

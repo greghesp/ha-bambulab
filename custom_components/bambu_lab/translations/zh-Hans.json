@@ -14,31 +14,41 @@
     },
     "error": {
       "cannot_connect": "连接失败",
+      "no_printers": "在帐户中未找到未配置的打印机",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误"
     },
     "step": {
       "user": {
-        "description": "请选择您的打印机并提供其序列号。\n\n请注意，最新的 P1P 固件 (1.0.4.0) 仅正确支持单个本地连接。如果需要第二个连接（例如用于 P1Touch），可以在此集成中使用 Bambu Cloud。\n\n在所有其他情况下，请使用本地连接。",
+        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为 LAN 模式的打印机。",
         "data": {
-          "device_type": "打印机型号：",
-          "serial": "序列号",
-          "printer_mode": "打印机 MQTT 连接模式："
+          "printer_mode": "打印机配置模式："
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT 连接",
-        "description": "请提供您的 Bambu Lab 凭据以生成身份验证令牌。只保存令牌，不保存您的 Bambu 凭据。",
+        "title": "Bambu 云连接",
+        "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
           "username": "电子邮件地址",
           "password": "密码"
         }
       },
-      "Lan": {
-        "title": "本地 MQTT 连接",
-        "description": "请提供本地打印机的 IP 地址和访问码。访问码可以在打印机屏幕的网络设置中找到。",
+      "Bambu_Choose_Device": {
+        "title": "打印机选择",
+        "description": "选择要添加的打印机。如果提供本地 IP 地址，还可以将与打印机的连接设置为通过本地 mqtt。",
         "data": {
-          "host": "主机 IP",
+          "printer": "选择要添加的打印机：",
+          "host": "本地打印机 IP 地址：",
+          "local_mqtt": "本地MQTT连接："
+        }
+      },
+      "Lan": {
+        "title": "LAN模式连接",
+        "description": "请提供您当地的打印机类型、IP 地址、序列号和访问代码。访问代码可在网络设置的打印机屏幕上找到。序列号可以在设备设置中找到。",
+        "data": {
+          "device_type": "打印机型号：",
+          "serial": "序号：",
+          "host": "本地打印机 IP 地址：",
           "access_code": "访问码"
         }
       }
@@ -53,24 +63,33 @@
     "step": {
       "init": {
         "title": "调整连接设置",
-        "description": "选择此打印机的新连接设置。\n\n请注意，最新的 P1P 固件 (1.0.4.0) 仅正确支持单个本地连接。如果需要第二个连接（例如用于 P1Touch），可以在此集成中使用 Bambu Cloud。\n\n在所有其他情况下，请使用本地连接。",
+        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为 LAN 模式的打印机。",
         "data": {
-          "printer_mode": "打印机 MQTT 连接模式："
+          "printer_mode": "打印机配置模式："
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT 连接",
-        "description": "请提供您的 Bambu Lab 凭据以生成身份验证令牌。只保存令牌，不保存您的 Bambu 凭据。",
+        "title": "Bambu 云连接",
+        "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
           "username": "电子邮件地址",
           "password": "密码"
         }
       },
-      "Lan": {
-        "title": "本地 MQTT 连接",
-        "description": "请提供本地打印机的 IP 地址和访问码。访问码可以在打印机屏幕的网络设置中找到。",
+      "Bambu_Choose_Device": {
+        "title": "打印机选择",
+        "description": "调整本打印机的设置：",
         "data": {
-          "host": "主机 IP",
+          "printer": "选择要添加的打印机：",
+          "host": "本地打印机 IP 地址：",
+          "local_mqtt": "本地MQTT连接："
+        }
+      },
+      "Lan": {
+        "title": "LAN模式连接",
+        "description": "请提供您当地的打印机 IP 地址和访问代码。访问代码可在网络设置的打印机屏幕上找到。",
+        "data": {
+          "host": "本地打印机 IP 地址：",
           "access_code": "访问码"
         }
       }
@@ -419,6 +438,11 @@
     "camera": {
       "camera": {
         "name": "摄像头"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "手动刷新模式"
       }
     }
   }

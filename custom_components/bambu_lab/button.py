@@ -6,6 +6,7 @@ from homeassistant.helpers.entity import EntityCategory
 from .const import DOMAIN, LOGGER
 from .models import BambuLabEntity
 from .pybambu.commands import PAUSE, RESUME, STOP
+from .pybambu.const import Features
 
 from homeassistant.components.button import (
     ButtonEntity,
@@ -48,12 +49,14 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     LOGGER.debug(f"BUTTON::async_setup_entry")
 
-    async_add_entities([
+    buttons = [
         BambuLabPauseButton(coordinator, entry),
         BambuLabResumeButton(coordinator, entry),
         BambuLabStopButton(coordinator, entry),
         BambuLabRefreshButton(coordinator, entry)
-    ])
+    ]
+
+    async_add_entities(buttons)
 
 
 class BambuLabButton(BambuLabEntity, ButtonEntity):
@@ -133,4 +136,4 @@ class BambuLabRefreshButton(BambuLabButton):
 
     async def async_press(self) -> None:
         """ Force refresh MQTT info"""
-        self.coordinator.client.refresh()
+        await self.coordinator.client.refresh()

@@ -94,6 +94,9 @@ class Device:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C"
             case Features.CAMERA_IMAGE:
                 return (self.client.host != "us.mqtt.bambulab.com") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
+            case Features.MANUAL_MODE:
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
+
         return False
     
     def get_active_tray(self):
@@ -287,7 +290,7 @@ class Info:
         self.current_layer = 0
         self.total_layers = 0
         self.online = False
-        self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
+        self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
         self.new_version_state = 0
         self.print_error = 0
 
@@ -814,12 +817,13 @@ class HMSList:
                 attr = hms['attr']
                 code = hms['code']
                 hms_error = f'{int(attr / 0x10000):0>4X}_{attr & 0xFFFF:0>4X}_{int(code / 0x10000):0>4X}_{code & 0xFFFF:0>4X}'  # 0300_0100_0001_0007
-                LOGGER.warning(f"HMS ERROR: HMS_{hms_error} : {get_HMS_error_text(hms_error)}")
                 errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
                 errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(hms_error)}"
 
             if self.errors != errors:
                 self.errors = errors
+                if self.count != 0:
+                    LOGGER.warning(f"HMS ERRORS: {errors}")
                 if self.client.callback is not None:
                     self.client.callback("event_hms_errors")
 

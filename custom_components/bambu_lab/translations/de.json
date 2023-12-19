@@ -19,58 +19,77 @@
     },
     "step": {
       "user": {
-        "description": "Bitte wählen Sie Ihr Druckermodell aus und geben Sie dessen Seriennummer an.\n\nBeachten Sie, dass die neueste P1-Firmware (1.0.4.0) nur eine einzige lokale Verbindung zulässt. Wenn Sie eine weitere Verbindung benötigen (z.B. für xtouch), verwenden Sie die Bambu Cloud MQTT-Verbindung.\n\nIn allen anderen Fällen verwenden Sie die Lokale MQTT-Verbindung.",
+        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den LAN-Modus eingestellt sind.",
         "data": {
-          "device_type": "Druckermodell:",
-          "serial": "Seriennummer",
-          "printer_mode": "MQTT-Verbindungsmodus:"
+          "printer_mode": "Drucker-Konfigurationsmodus:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT-Verbindung",
-        "description": "Bitte geben Sie Ihre Bambu-Lab-Anmeldedaten an, damit ein Authentifizierungs-Token generiert werden kann. Nur das Token wird gespeichert, Ihre Bambu-Anmeldedaten nicht.",
+        "title": "Bambu Cloud-Verbindung",
+        "description": "Bitte geben Sie Ihre Bambu Lab-Zugangsdaten an:",
         "data": {
           "username": "E-Mail Adresse",
           "password": "Passwort"
         }
       },
-      "Lan": {
-        "title": "Lokale MQTT-Verbindung",
-        "Beschreibung": "Bitte geben Sie Ihre lokale Drucker-IP-Adresse und den Zugangscode an. Den Zugangscode finden Sie auf dem Bildschirm des Druckers in den Netzwerkeinstellungen.",
+      "Bambu_Choose_Device": {
+        "title": "Drucker-Auswahl",
+        "description": "Wählen Sie den Drucker aus, den Sie hinzufügen möchten. Wenn Sie die lokale IP-Adresse angeben, können Sie die Verbindung zum Drucker auch auf lokales mqtt einstellen.",
         "data": {
-          "host": "Drucker-IP",
-          "access_code": "Zugangscode"
+          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:",
+          "host": "IP-Adresse des lokalen Druckers:",
+          "local_mqtt": "Lokale MQTT-Verbindung:"
         }
+      },      
+      "Lan": {
+        "title": "LAN-Modus-Verbindung",
+        "Beschreibung": "Bitte geben Sie Ihren lokalen Druckertyp, Ihre IP-Adresse, die Seriennummer und den Zugangscode an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen. Die Seriennummer finden Sie in den Geräteeinstellungen.",
+        "data": {
+          "device_type": "Drucker-Modell:",
+          "serial": "Seriennummer:",
+          "host": "IP-Adresse des lokalen Druckers:",
+          "access_code": "Zugangscode"
+        }        
       }
     }
   },
   "options": {
     "error": {
       "cannot_connect": "Verbindung fehlgeschlagen",
+      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "invalid_auth": "Authentifizierung fehlgeschlagen",
       "unbekannt": "Unerwarteter Fehler"
     },
     "step": {
       "init": {
         "title": "Verbindungseinstellungen anpassen",
-        "description": "Wählen Sie die neuen Verbindungseinstellungen für diesen Drucker.\n\nBeachten Sie, dass die neueste P1-Firmware (1.0.4.0) nur eine einzige lokale Verbindung zulässt. Wenn Sie eine weitere Verbindung benötigen (z.B. für xtouch), verwenden Sie die Bambu Cloud MQTT-Verbindung.\n\nIn allen anderen Fällen verwenden Sie die Lokale MQTT-Verbindung.",
+        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den LAN-Modus eingestellt sind.",
         "data": {
-          "printer_mode": "MQTT-Verbindungsmodus:"
+          "printer_mode": "Drucker-Konfigurationsmodus:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT-Verbindung",
-        "description": "Bitte geben Sie Ihre Bambu-Lab-Anmeldedaten an, damit ein Authentifizierungs-Token generiert werden kann. Nur das Token wird gespeichert, Ihre Bambu-Anmeldedaten nicht.",
+        "title": "Bambu Cloud-Verbindung",
+        "description": "Bitte geben Sie Ihre Bambu Lab-Zugangsdaten an:",
         "data": {
           "username": "E-Mail Adresse",
           "password": "Passwort"
         }
       },
-      "Lan": {
-        "title": "Lokale MQTT-Verbindung",
-        "Beschreibung": "Bitte geben Sie Ihre lokale Drucker-IP-Adresse und den Zugangscode an. Den Zugangscode finden Sie auf dem Bildschirm des Druckers in den Netzwerkeinstellungen.",
+      "Bambu_Choose_Device": {
+        "title": "Drucker-Auswahl",
+        "description": "Anpassen der Einstellungen für diesen Drucker:",
         "data": {
-          "host": "Drucker-IP",
+          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:",
+          "host": "IP-Adresse des lokalen Druckers:",
+          "local_mqtt": "Lokale MQTT-Verbindung:"
+        }
+      },
+      "Lan": {
+        "title": "LAN-Modus-Verbindung",
+        "Beschreibung": "Bitte geben Sie die IP-Adresse und den Zugangscode Ihres lokalen Druckers an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen.",
+        "data": {
+          "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode"
         }
       }
@@ -443,6 +462,11 @@
     "camera": {
       "camera": {
         "name": "Kamera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Manueller Aktualisierungsmodus"
       }
     }
   }

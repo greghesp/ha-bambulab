@@ -49,7 +49,7 @@ class P1PImage(ImageEntity, BambuLabEntity):
     def image(self) -> bytes | None:
         """Return bytes of image."""
 
-        LOGGER.debug("P1PImage::async_image")
+        #LOGGER.debug("P1PImage::async_image")
         return self.coordinator.get_model().p1p_camera.get_jpeg()
 
     def jpeg_updated(self):
