@@ -56,6 +56,7 @@
   "options": {
     "error": {
       "cannot_connect": "Verbindung fehlgeschlagen",
+      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "invalid_auth": "Authentifizierung fehlgeschlagen",
       "unbekannt": "Unerwarteter Fehler"
     },
