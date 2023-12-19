@@ -60,7 +60,7 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
 
     @property
     def available(self) -> bool:
-        return True
+        return self.coordinator.get_model().info.mqtt_mode == "local"
 
     @property
     def icon(self) -> str:
