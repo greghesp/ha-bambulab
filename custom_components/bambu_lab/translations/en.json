@@ -20,7 +20,7 @@
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Cloud is simpler but will not work for printers set to Lan mode.",
+        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -62,7 +62,7 @@
     },
     "step": {
       "init": {
-        "description": "Configuration via Bambu Cloud is simpler but will not work for printers set to Lan mode.",
+        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
