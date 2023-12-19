@@ -377,8 +377,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         if user_input is not None:
             LOGGER.debug("Options Flow: Trying Lan Mode Connection")
-            bambu = BambuClient(device_type=user_input['device_type'],
-                                serial=user_input['serial'],
+            bambu = BambuClient(device_type=self.config_entry.data['device_type'],
+                                serial=self.config_entry.data['serial'],
                                 host=user_input['host'],
                                 local_mqtt=True,
                                 username="",
@@ -389,8 +389,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             if success:
                 LOGGER.debug("Options Flow: Writing entry")
                 data = {
-                        "device_type": user_input['device_type'],
-                        "serial": user_input['serial']
+                        "device_type": self.config_entry.data['device_type'],
+                        "serial": self.config_entry.data['serial']
                 }
                 options = {
                         "username": "",
@@ -401,7 +401,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "access_code": user_input['access_code']
                 }
 
-                title = user_input['serial']
+                title = self.config_entry.data['serial']
                 self.hass.config_entries.async_update_entry(
                     entry=self.config_entry,
                     title=title,
@@ -415,8 +415,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("device_type")] = PRINTER_SELECTOR
-        fields[vol.Required("serial")] = TEXT_SELECTOR
         fields[vol.Required("host")] = TEXT_SELECTOR
         fields[vol.Required("access_code")] = PASSWORD_SELECTOR
 
