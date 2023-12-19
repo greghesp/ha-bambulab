@@ -412,7 +412,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "serial": self.config_entry.data['serial']
                 }
                 options = {
-                        "email": self.config_entry.data['email'],
+                        "email": self.config_entry.options.get('email', ''),
                         "username": "",
                         "name": "",
                         "host": user_input['host'],

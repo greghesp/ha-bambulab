@@ -182,17 +182,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
         for index in range (0, len(device.ams.data)):
-            LOGGER.debug(f"Initialize AMS {index+1}")
-            hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
-                                                   identifiers={(DOMAIN, device.ams.data[index].serial)})
-            serial = self._entry.data["serial"]
-            device_type = self._entry.data["device_type"]
-            dev_reg.async_update_device(hadevice.id,
-                                        name=f"{device_type}_{serial}_AMS_{index+1}",
-                                        model="AMS",
-                                        manufacturer=BRAND,
-                                        sw_version=device.ams.data[index].sw_version,
-                                        hw_version=device.ams.data[index].hw_version)
+            if device.ams.data[index] is not None:
+                LOGGER.debug(f"Initialize AMS {index+1}")
+                hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
+                                                    identifiers={(DOMAIN, device.ams.data[index].serial)})
+                serial = self._entry.data["serial"]
+                device_type = self._entry.data["device_type"]
+                dev_reg.async_update_device(hadevice.id,
+                                            name=f"{device_type}_{serial}_AMS_{index+1}",
+                                            model="AMS",
+                                            manufacturer=BRAND,
+                                            sw_version=device.ams.data[index].sw_version,
+                                            hw_version=device.ams.data[index].hw_version)
 
         self._lock.release()
         self.hass.async_create_task(self._reinitialize_sensors())
