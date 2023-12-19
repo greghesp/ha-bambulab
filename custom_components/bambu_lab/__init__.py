@@ -4,7 +4,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from .const import DOMAIN, LOGGER, PLATFORMS
 from .coordinator import BambuDataUpdateCoordinator
-from .config_flow import VERSION
+from .config_flow import CONFIG_VERSION
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
@@ -53,18 +53,19 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 async def async_migrate_entry(hass, config_entry: ConfigEntry):
     """Migrate old entry."""
-
-    if config_entry.version > VERSION:
+    LOGGER.debug(f"--------------------------- async_migrate_entry {config_entry.version}")
+    if config_entry.version > CONFIG_VERSION:
         # This means the user has downgraded from a future version
         return False
     
-    if config_entry.version == VERSION:
+    if config_entry.version == CONFIG_VERSION:
         # This means the major version still matches. We don't currently use minor versions.
         return True
 
     LOGGER.debug("config_entry migration from version %s", config_entry.version)
     if config_entry.version == 1:
         old_data = {**config_entry.data}
+        LOGGER.debug(f"OLD DATA: {old_data}")
 
         # v1 data had just these entries:
         # "device_type": self.config_data["device_type"],
@@ -74,20 +75,19 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
         # "access_code": authToken / access_code depending if local mqtt or not
         
         data = {
-                "device_type": old_data.device_type,
-                "serial": old_data.serial
+                "device_type": old_data['device_type'],
+                "serial": old_data['serial']
         }
         options = {
-                "username": old_data.username if (old_data.username != "bblp") else "",
-                "name": old_data.device_type,
+                "username": old_data['username'] if (old_data['username'] != "bblp") else "",
+                "name": old_data['device_type'],
                 "host": old_data['host'] if (old_data['host'] != "us.mqtt.bambulab.com") else "",
                 "local_mqtt": (old_data['host'] != "us.mqtt.bambulab.com"),
                 "auth_token": old_data['access_code'] if (old_data['host'] == "us.mqtt.bambulab.com") else "",
                 "access_code": old_data['access_code'] if (old_data['host'] != "us.mqtt.bambulab.com") else ""
         }
 
-        config_entry.version = VERSION
-        config_entry.minor_version = 0
+        config_entry.version = CONFIG_VERSION
         hass.config_entries.async_update_entry(config_entry, data=data, options=options)
 
         LOGGER.debug("Migration to version %s successful", config_entry.version)

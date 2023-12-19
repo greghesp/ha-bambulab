@@ -36,15 +36,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
         LOGGER.debug(f"ConfigEntry.Version: {entry.version}")
 
-        LOGGER.debug(f"Entry: {entry}")
+        LOGGER.debug(f"Entry: {entry.as_dict()}")
         self.client = BambuClient(device_type = entry.data["device_type"],
                                   serial = entry.data["serial"],
-                                  host = entry.options.get("host", ""),
-                                  local_mqtt = entry.options["local_mqtt"],
-                                  username = entry.options.get("username", ""),
-                                  auth_token = entry.options.get("auth_token", ""),
-                                  access_code = entry.options.get("access_code", ""))
-
+                                  host = entry.options['host'],
+                                  local_mqtt = entry.options['local_mqtt'],
+                                  username = entry.options['username'],
+                                  auth_token = entry.options['auth_token'],
+                                  access_code = entry.options['access_code'])
+            
         self._updatedDevice = False
         self.data = self.get_model()
         self._lock = threading.Lock()

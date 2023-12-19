@@ -28,7 +28,7 @@ from homeassistant.helpers.selector import (
 from .const import DOMAIN, LOGGER
 from .pybambu import BambuClient, BambuCloud
 
-VERSION = 2
+CONFIG_VERSION = 2
 
 BOOLEAN_SELECTOR = BooleanSelector()
 TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
@@ -63,7 +63,7 @@ MODE_SELECTOR = SelectSelector(
 class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle Bambu Lab config flow."""
 
-    config_data: dict[str, Any] = {}
+    VERSION = CONFIG_VERSION
     _bambu_cloud: None
 
     @staticmethod
@@ -256,7 +256,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize MQTT options flow."""
         self.config_entry = config_entry
-        self.config_data: dict[str, Any] = {}
 
         LOGGER.debug(self.config_entry)
 
@@ -265,9 +264,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            self.config_data = user_input
-            self.config_data['device_type'] = self.config_entry.data['device_type']
-            self.config_data['serial'] = self.config_entry.data['serial']
             if user_input["printer_mode"] == "Lan":
                 return await self.async_step_Lan(None)
             if user_input["printer_mode"] == "Bambu":
