@@ -1,5 +1,6 @@
 ### V2.0.0
 - Reworked the initial setup to get almost all printer data from Bambu Cloud for easier setup.
+- Enables use of P1 camera when in cloud mqtt mode
 
 ### V1.9.3
 - Switch to turn off the connection to the printer to workaround P1 firmware bug.
