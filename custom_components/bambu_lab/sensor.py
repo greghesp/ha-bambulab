@@ -30,7 +30,8 @@ async def async_setup_entry(
     for sensor in AMS_SENSORS:
         if sensor.exists_fn(coordinator):
             for index in range (0, len(coordinator.get_model().ams.data)):
-                async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
+                if coordinator.get_model().ams.data[index] is not None:
+                    async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
 
     for sensor in PRINTER_SENSORS:    
         if sensor.exists_fn(coordinator):

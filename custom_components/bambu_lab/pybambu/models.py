@@ -34,7 +34,6 @@ class Device:
         self.external_spool = ExternalSpool(client)
         self.hms = HMSList(client)
         self.camera = Camera()
-        self._active_tray = None
         self.push_all_data = None
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
@@ -107,7 +106,7 @@ class Device:
                 return self.external_spool
             active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
             active_tray = self.ams.tray_now % 4
-            return active_ams.tray[active_tray]
+            return None if active_ams is None else active_ams.tray[active_tray]
         else:
             return self.external_spool
 
@@ -482,7 +481,7 @@ class AMSList:
     def __init__(self, client):
         self.client = client
         self.tray_now = 0
-        self.data = []
+        self.data = [None] * 4
 
     def info_update(self, data):
         """Update from dict"""
@@ -527,9 +526,8 @@ class AMSList:
                 # requires as part of the home assistant device identity.
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
-                    while len(self.data) <= index:
-                        received_ams_info = True
-                        self.data.append(AMSInstance())
+                    if self.data[index] is None:
+                        self.data[index] = AMSInstance()
 
                     if self.data[index].serial != module['sn']:
                         received_ams_info = True
@@ -616,8 +614,8 @@ class AMSList:
                 received_ams_data = True
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
-                while len(self.data) <= index:
-                    self.data.append(AMSInstance())
+                if self.data[index] is None:
+                    self.data[index] = AMSInstance()
 
                 self.data[index].humidity_index = int(ams['humidity'])
                 self.data[index].temperature = float(ams['temp'])
