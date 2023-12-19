@@ -462,6 +462,11 @@
       "camera": {
         "name": "Camera"
       }
+    },
+    "switch": {
+      "manual": {
+        "name": "Manual refresh mode"
+      }
     }
   }
 }
