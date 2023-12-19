@@ -81,9 +81,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            if user_input["printer_mode"] == "Lan":
+            if user_input['printer_mode'] == "Lan":
                 return await self.async_step_Lan(None)
-            if user_input["printer_mode"] == "Bambu":
+            if user_input['printer_mode'] == "Bambu":
                 return await self.async_step_Bambu(None)
 
         # Build form
@@ -116,7 +116,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
 
-            errors["base"] = "cannot_connect"
+            errors['base'] = "cannot_connect"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -145,7 +145,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
                     data = {
                             "device_type": self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
-                            "serial": device["dev_id"]
+                            "serial": device['dev_id']
                         }
                     options = {
                             "username": self._bambu_cloud.username,
@@ -155,15 +155,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             "auth_token": self._bambu_cloud.auth_token,
                             "access_code": device['dev_access_code']
                     }
-                    title = device['name']
-                    entry = self.async_create_entry(
+                    title = device['dev_id']
+                    return self.async_create_entry(
                         title=title,
                         data=data,
                         options=options
                     )
-                    LOGGER.debug("Done")
-
-                    return entry
             
         printer_list = []
         for device in device_list:
@@ -195,20 +192,20 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             LOGGER.debug("Config Flow: Trying Lan Mode Connection")
-            bambu = BambuClient(device_type=user_input["device_type"],
-                                serial=user_input["serial"],
-                                host=user_input["host"],
+            bambu = BambuClient(device_type=user_input['device_type'],
+                                serial=user_input['serial'],
+                                host=user_input['host'],
                                 local_mqtt=True,
                                 username="",
                                 auth_token="",
-                                access_code=user_input["access_code"])
+                                access_code=user_input['access_code'])
             success = await bambu.try_connection()
 
             if success:
                 LOGGER.debug("Config Flow: Writing entry")
                 data = {
-                        "device_type": user_input["device_type"],
-                        "serial": user_input["serial"]
+                        "device_type": user_input['device_type'],
+                        "serial": user_input['serial']
                 }
                 options = {
                         "username": "",
@@ -216,16 +213,17 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "host": user_input['host'],
                         "local_mqtt": True,
                         "auth_token": "",
-                        "access_code": user_input["access_code"]
+                        "access_code": user_input['access_code']
                 }
 
+                title = user_input['serial']
                 return self.async_create_entry(
-                    title=user_input["serial"],
+                    title=title,
                     data=data,
                     options=options
                 )
 
-            errors["base"] = "cannot_connect"
+            errors['base'] = "cannot_connect"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -264,9 +262,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            if user_input["printer_mode"] == "Lan":
+            if user_input['printer_mode'] == "Lan":
                 return await self.async_step_Lan(None)
-            if user_input["printer_mode"] == "Bambu":
+            if user_input['printer_mode'] == "Bambu":
                 return await self.async_step_Bambu(None)
 
         # Build form
@@ -299,7 +297,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
 
-            errors["base"] = "cannot_connect"
+            errors['base'] = "cannot_connect"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -325,11 +323,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
             for device in device_list:
                 if device['dev_id'] == user_input['serial']:
-                    LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
+                    LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
                     data = {
                             "device_type": self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
-                            "serial": device["dev_id"]
-                        }
+                            "serial": device['dev_id']
+                    }
                     options = {
                             "username": self._bambu_cloud.username,
                             "name": device['name'],
@@ -338,19 +336,20 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             "auth_token": self._bambu_cloud.auth_token,
                             "access_code": device['dev_access_code']
                     }
-                    title = device['name']
-                    entry = self.async_create_entry(
+                    title = device['dev_id']
+                    self.hass.config_entries.async_update_entry(
+                        entry=self.config_entry,
                         title=title,
                         data=data,
                         options=options
                     )
-                    LOGGER.debug("Done")
-
-                    return entry
+                    await self.hass.config_entries.async_reload(self.config_entry.entry_id)
+                    return self.async_create_entry(title="", data=None)
 
         printer_list = []
         for device in device_list:
-            printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
+            if device['dev_id'] == self.config_entry.data['serial']:
+                printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
 
         printer_selector = SelectSelector(
             SelectSelectorConfig(
@@ -377,21 +376,21 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            LOGGER.debug("Config Flow: Trying Lan Mode Connection")
-            bambu = BambuClient(device_type=user_input["device_type"],
-                                serial=user_input["serial"],
-                                host=user_input["host"],
+            LOGGER.debug("Options Flow: Trying Lan Mode Connection")
+            bambu = BambuClient(device_type=user_input['device_type'],
+                                serial=user_input['serial'],
+                                host=user_input['host'],
                                 local_mqtt=True,
                                 username="",
                                 auth_token="",
-                                access_code=user_input["access_code"])
+                                access_code=user_input['access_code'])
             success = await bambu.try_connection()
 
             if success:
-                LOGGER.debug("Config Flow: Writing entry")
+                LOGGER.debug("Options Flow: Writing entry")
                 data = {
-                        "device_type": user_input["device_type"],
-                        "serial": user_input["serial"]
+                        "device_type": user_input['device_type'],
+                        "serial": user_input['serial']
                 }
                 options = {
                         "username": "",
@@ -399,16 +398,20 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "host": user_input['host'],
                         "local_mqtt": True,
                         "auth_token": "",
-                        "access_code": user_input["access_code"]
+                        "access_code": user_input['access_code']
                 }
 
-                return self.async_create_entry(
-                    title=user_input["serial"],
+                title = user_input['serial']
+                self.hass.config_entries.async_update_entry(
+                    entry=self.config_entry,
+                    title=title,
                     data=data,
                     options=options
                 )
+                await self.hass.config_entries.async_reload(self.config_entry.entry_id)
+                return self.async_create_entry(title="", data=None)
 
-            errors["base"] = "cannot_connect"
+            errors['base'] = "cannot_connect"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()

@@ -82,9 +82,8 @@ class BambuCloud:
         self._username = self._get_username_from_authentication_token()
 
     def GetDeviceList(self) -> dict:
-        LOGGER.debug("Config Flow: Getting device list from Bambu Cloud")
+        LOGGER.debug("Getting device list from Bambu Cloud")
         url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
-        LOGGER.debug(f"TRYING: {url}")
         headers = {'Authorization': 'Bearer ' + self._auth_token}
         response = requests.get(url, headers=headers, timeout=10)
         if not response.ok:

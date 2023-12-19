@@ -60,7 +60,7 @@
       "unknown": "Unexpected error"
     },
     "step": {
-      "user": {
+      "init": {
         "description": "Configuration via Bambu Cloud is simpler but will not work for printers set to Lan mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
@@ -76,7 +76,7 @@
       },
       "Bambu_Choose_Device": {
         "title": "Printer Selection",
-        "description": "Choose which printer you want to add. If you provide the local IP address you can also set the connection to the printer to be by local mqtt.",
+        "description": "Adjusting settings for this printer:",
         "data": {
           "printer": "Choose Printer To Add:",
           "host": "Local Printer IP Address:",

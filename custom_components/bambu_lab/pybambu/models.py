@@ -287,7 +287,7 @@ class Info:
         self.current_layer = 0
         self.total_layers = 0
         self.online = False
-        self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
+        self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
         self.new_version_state = 0
         self.print_error = 0
 
