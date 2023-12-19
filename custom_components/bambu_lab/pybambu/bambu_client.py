@@ -367,8 +367,9 @@ class BambuClient:
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
-        self.client.disconnect()
-        self.client = None
+        if self.client is not None:
+            self.client.disconnect()
+            self.client = None
 
     async def try_connection(self):
         """Test if we can connect to an MQTT broker."""
