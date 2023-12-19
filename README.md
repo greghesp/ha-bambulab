@@ -25,8 +25,8 @@ For configuration, you'll ideally use your Bambu Credentials for the simplest se
 
 However the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to lan mode. If you fall into any of these, select the lan mode connection option. You will need to provide:
 - The printer type
-- Printer Serial Number - ccan be found in the printer settings or in Bambu Studio 
-- Local printer IP address - ccan be found in the printer network settings
+- Printer Serial Number - can be found in the printer settings or in Bambu Studio 
+- Local printer IP address - can be found in the printer network settings
 - LAN Access Code - can be found in the Printer settings
 
 ### Setup using Bambu Cloud w/ OAuth
