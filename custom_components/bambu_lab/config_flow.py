@@ -14,6 +14,7 @@ from homeassistant import config_entries
 from homeassistant.components import ssdp
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers import device_registry
 from homeassistant.helpers.selector import (
     BooleanSelector,
     SelectOptionDict,
@@ -164,7 +165,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             
         printer_list = []
         for device in device_list:
-            printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
+            dev_reg = device_registry.async_get(self.hass)
+            hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, device['dev_id'])})
+            if hadevice is None:
+                printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
 
         printer_selector = SelectSelector(
             SelectSelectorConfig(
@@ -172,17 +176,22 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 mode=SelectSelectorMode.LIST)
         )
 
+        LOGGER.debug(f"Printer count = {printer_list.count}")
+        if len(printer_list) == 0:
+            errors['base'] = "no_printers"
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('serial')] = printer_selector
-        fields[vol.Optional("host")] = TEXT_SELECTOR
-        fields[vol.Optional("local_mqtt")] = BOOLEAN_SELECTOR
+        if len(printer_list) != 0:
+            fields[vol.Required('serial')] = printer_selector
+            fields[vol.Optional("host")] = TEXT_SELECTOR
+            fields[vol.Optional("local_mqtt")] = BOOLEAN_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu_Choose_Device",
             data_schema=vol.Schema(fields),
             errors=errors or {},
-            last_step=False,
+            last_step=(len(printer_list) == 0)
         )
 
     async def async_step_Lan(
@@ -325,8 +334,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 if device['dev_id'] == user_input['serial']:
                     LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
                     data = {
-                            "device_type": self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
-                            "serial": device['dev_id']
+                            "device_type": self.config_entry.data['device_type'],
+                            "serial": self.config_entry.data['serial']
                     }
                     options = {
                             "username": self._bambu_cloud.username,

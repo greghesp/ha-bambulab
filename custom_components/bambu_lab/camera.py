@@ -44,8 +44,8 @@ class BambuLabCamera(BambuLabEntity, Camera):
         """Initialize the sensor."""
 
         self._attr_unique_id = f"{config_entry.data['serial']}_camera"
-        self._access_code = config_entry.data['access_code']
-        self._host = config_entry.data['host']
+        self._access_code = config_entry.options['access_code']
+        self._host = config_entry.options['host']
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
