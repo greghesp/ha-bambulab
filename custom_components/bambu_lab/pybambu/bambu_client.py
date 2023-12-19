@@ -39,7 +39,7 @@ class WatchdogThread(threading.Thread):
     def received_data(self):
         self._last_received_data = time.time()
 
-    def run(self):
+    async def run(self):
         LOGGER.info("Watchdog thread started.")
         WATCHDOG_TIMER = 20
         while True:
@@ -53,7 +53,7 @@ class WatchdogThread(threading.Thread):
             if not self._watchdog_fired and (interval > WATCHDOG_TIMER):
                 LOGGER.debug(f"Watchdog fired. No data received for {interval} seconds.")
                 self._watchdog_fired = True
-                self._client.on_watchdog_fired()
+                await self._client.on_watchdog_fired()
             elif interval < WATCHDOG_TIMER:
                 self._watchdog_fired = False
 
@@ -292,10 +292,12 @@ class BambuClient:
             self._camera.stop()
             self._camera.join()
 
-    def on_watchdog_fired(self):
+    async def on_watchdog_fired(self):
         LOGGER.info("Watch dog fired")
-        self._device.info.set_online(False)
-        self.publish(START_PUSH)
+        # We can simply disconnect - the mqtt listener thread will detect this and immediately try to reconnect.
+        self.disconnect()
+        # Reconnect
+        await self.connect(self.callback)
 
     def on_jpeg_received(self, bytes):
         #LOGGER.debug("JPEG received")
@@ -398,13 +400,14 @@ class BambuClient:
             self.client.username_pw_set(self._username, password=self._auth_token)
         self._port = 8883
 
-        LOGGER.debug("Try Connection: Connecting to %s for connection test", self.host)
-        self.client.connect(self.host, self._port)
-        self.client.loop_start()
-
+        LOGGER.debug("Test connection: Connecting to %s", self.host)
         try:
+            self.client.connect(self.host, self._port)
+            self.client.loop_start()
             if result.get(timeout=10):
                 return True
+        except OSError as e:
+            return False
         except queue.Empty:
             return False
         finally:

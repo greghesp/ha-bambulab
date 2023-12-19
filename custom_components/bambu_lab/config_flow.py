@@ -143,28 +143,43 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             self._bambu_cloud.GetDeviceList)
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
-            for device in device_list:
-                if device['dev_id'] == user_input['serial']:
-                    LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
-                    data = {
-                            "device_type": self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
-                            "serial": device['dev_id']
+            success = True
+            if user_input.get('host', "") != "":
+                LOGGER.debug("Config Flow: Testing local mqtt connection")
+                bambu = BambuClient(device_type=self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
+                                    serial=device['dev_id'],
+                                    host=user_input['host'],
+                                    local_mqtt=True,
+                                    username="",
+                                    auth_token="",
+                                    access_code=device['dev_access_code'])
+                success = await bambu.try_connection()
+                if not success:
+                    errors['base'] = "cannot_connect"
+
+            if success:
+                for device in device_list:
+                    if device['dev_id'] == user_input['serial']:
+                        LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
+                        data = {
+                                "device_type": self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
+                                "serial": device['dev_id']
+                            }
+                        options = {
+                                "email": self.email,
+                                "username": self._bambu_cloud.username,
+                                "name": device['name'],
+                                "host": user_input['host'],
+                                "local_mqtt": user_input.get('local_mqtt', False),
+                                "auth_token": self._bambu_cloud.auth_token,
+                                "access_code": device['dev_access_code']
                         }
-                    options = {
-                            "email": self.email,
-                            "username": self._bambu_cloud.username,
-                            "name": device['name'],
-                            "host": user_input['host'],
-                            "local_mqtt": user_input.get('local_mqtt', False),
-                            "auth_token": self._bambu_cloud.auth_token,
-                            "access_code": device['dev_access_code']
-                    }
-                    title = device['dev_id']
-                    return self.async_create_entry(
-                        title=title,
-                        data=data,
-                        options=options
-                    )
+                        title = device['dev_id']
+                        return self.async_create_entry(
+                            title=title,
+                            data=data,
+                            options=options
+                        )
             
         printer_list = []
         for device in device_list:
@@ -203,7 +218,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            LOGGER.debug("Config Flow: Trying Lan Mode Connection")
+            LOGGER.debug("Config Flow: Testing local mqtt connection")
             bambu = BambuClient(device_type=user_input['device_type'],
                                 serial=user_input['serial'],
                                 host=user_input['host'],
@@ -341,29 +356,44 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
             for device in device_list:
                 if device['dev_id'] == user_input['serial']:
-                    LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
-                    data = {
-                            "device_type": self.config_entry.data['device_type'],
-                            "serial": self.config_entry.data['serial']
-                    }
-                    options = {
-                            "email": self.email,
-                            "username": self._bambu_cloud.username,
-                            "name": device['name'],
-                            "host": user_input['host'],
-                            "local_mqtt": user_input.get('local_mqtt', False),
-                            "auth_token": self._bambu_cloud.auth_token,
-                            "access_code": device['dev_access_code']
-                    }
-                    title = device['dev_id']
-                    self.hass.config_entries.async_update_entry(
-                        entry=self.config_entry,
-                        title=title,
-                        data=data,
-                        options=options
-                    )
-                    await self.hass.config_entries.async_reload(self.config_entry.entry_id)
-                    return self.async_create_entry(title="", data=None)
+                    success = True
+                    if user_input.get('host', "") != "":
+                        LOGGER.debug("Options Flow: Testing local mqtt connection")
+                        bambu = BambuClient(device_type=self.config_entry.data['device_type'],
+                                            serial=self.config_entry.data['serial'],
+                                            host=user_input['host'],
+                                            local_mqtt=True,
+                                            username="",
+                                            auth_token="",
+                                            access_code=device['dev_access_code'])
+                        success = await bambu.try_connection()
+                        if not success:
+                            errors['base'] = "cannot_connect"
+                
+                    if success:
+                        LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
+                        data = {
+                                "device_type": self.config_entry.data['device_type'],
+                                "serial": self.config_entry.data['serial']
+                        }
+                        options = {
+                                "email": self.email,
+                                "username": self._bambu_cloud.username,
+                                "name": device['name'],
+                                "host": user_input['host'],
+                                "local_mqtt": user_input.get('local_mqtt', False),
+                                "auth_token": self._bambu_cloud.auth_token,
+                                "access_code": device['dev_access_code']
+                        }
+                        title = device['dev_id']
+                        self.hass.config_entries.async_update_entry(
+                            entry=self.config_entry,
+                            title=title,
+                            data=data,
+                            options=options
+                        )
+                        await self.hass.config_entries.async_reload(self.config_entry.entry_id)
+                        return self.async_create_entry(title="", data=None)
 
         printer_list = []
         for device in device_list:
@@ -395,7 +425,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            LOGGER.debug("Options Flow: Trying Lan Mode Connection")
+            LOGGER.debug("Options Flow: Testing local mqtt Connection")
             bambu = BambuClient(device_type=self.config_entry.data['device_type'],
                                 serial=self.config_entry.data['serial'],
                                 host=user_input['host'],
