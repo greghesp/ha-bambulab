@@ -19,13 +19,15 @@ Want to contribute to ha-bambulab? Great!  We have a few small asks though!
 
 To install, add this Github Repo to the HACS Custom Repositories, or click the badge above.
 
-For now, you will need the following information:
+For configuration, you'll ideally use your Bambu Credentials for the simplest setup. You can then optionally provide the printer IP address to enable local direct to printer connection and to enable the P1/A1 camera support. 
 
-- Printer IP
-- LAN Access Code (Can be found on the Printer settings)
-- Serial Number (Can be found in the printer settings or in Bambu Studio)
+However the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to lan mode. If you fall into any of these, select the lan mode connection option. You will need to provide:
+- The printer type
+- Printer Serial Number - ccan be found in the printer settings or in Bambu Studio 
+- Local printer IP address - ccan be found in the printer network settings
+- LAN Access Code - can be found in the Printer settings
 
-### Setup using OAuth
+### Setup using Bambu Cloud w/ OAuth
 
 If you signed up using any OAuth method, you need to set a password for your Bambu Cloud account:
 
