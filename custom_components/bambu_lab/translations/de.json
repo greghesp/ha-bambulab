@@ -47,7 +47,7 @@
         "data": {
           "device_type": "Drucker-Modell:",
           "serial": "Seriennummer:",
-          "host": "Host-IP-Adresse:",
+          "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode"
         }        
       }
@@ -88,7 +88,7 @@
         "title": "LAN-Modus-Verbindung",
         "Beschreibung": "Bitte geben Sie die IP-Adresse und den Zugangscode Ihres lokalen Druckers an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen.",
         "data": {
-          "host": "Host-IP-Adresse:",
+          "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode"
         }
       }
