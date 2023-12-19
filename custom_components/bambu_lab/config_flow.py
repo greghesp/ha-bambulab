@@ -66,6 +66,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = CONFIG_VERSION
     _bambu_cloud: None
+    email: str = ""
 
     @staticmethod
     @callback
@@ -89,7 +90,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("printer_mode")] = MODE_SELECTOR
+        fields[vol.Required('printer_mode')] = MODE_SELECTOR
 
         return self.async_show_form(
             step_id="user",
@@ -112,6 +113,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     user_input['username'],
                     user_input['password'])
 
+                self.email = user_input['username']
                 return await self.async_step_Bambu_Choose_Device(None)
 
             except Exception as e:
@@ -121,8 +123,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("username")] = EMAIL_SELECTOR
-        fields[vol.Required("password")] = PASSWORD_SELECTOR
+        fields[vol.Required('username')] = EMAIL_SELECTOR
+        fields[vol.Required('password')] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
@@ -149,6 +151,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             "serial": device['dev_id']
                         }
                     options = {
+                            "email": self.email,
                             "username": self._bambu_cloud.username,
                             "name": device['name'],
                             "host": user_input['host'],
@@ -184,8 +187,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         if len(printer_list) != 0:
             fields[vol.Required('serial')] = printer_selector
-            fields[vol.Optional("host")] = TEXT_SELECTOR
-            fields[vol.Optional("local_mqtt")] = BOOLEAN_SELECTOR
+            fields[vol.Optional('host')] = TEXT_SELECTOR
+            fields[vol.Optional('local_mqtt')] = BOOLEAN_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu_Choose_Device",
@@ -217,6 +220,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "serial": user_input['serial']
                 }
                 options = {
+                        "email": "",
                         "username": "",
                         "name": "",
                         "host": user_input['host'],
@@ -236,10 +240,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("device_type")] = PRINTER_SELECTOR
-        fields[vol.Required("serial")] = TEXT_SELECTOR
-        fields[vol.Required("host")] = TEXT_SELECTOR
-        fields[vol.Required("access_code")] = PASSWORD_SELECTOR
+        fields[vol.Required('device_type')] = PRINTER_SELECTOR
+        fields[vol.Required('serial')] = TEXT_SELECTOR
+        fields[vol.Required('host')] = TEXT_SELECTOR
+        fields[vol.Required('access_code')] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",
@@ -260,9 +264,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle Bambu options."""
 
+    email: str = ""
+
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize MQTT options flow."""
         self.config_entry = config_entry
+        self.email = self.config_entry.options.get('email', '')
 
         LOGGER.debug(self.config_entry)
 
@@ -278,7 +285,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("printer_mode")] = MODE_SELECTOR
+        fields[vol.Required('printer_mode')] = MODE_SELECTOR
 
         return self.async_show_form(
             step_id="init",
@@ -300,6 +307,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     self._bambu_cloud.Login,
                     user_input['username'],
                     user_input['password'])
+                
+                self.email = user_input['username']
 
                 return await self.async_step_Bambu_Choose_Device(None)
 
@@ -310,8 +319,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("username")] = EMAIL_SELECTOR
-        fields[vol.Required("password")] = PASSWORD_SELECTOR
+        fields[vol.Required('username', default=self.email)] = EMAIL_SELECTOR
+        fields[vol.Required('password')] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
@@ -338,6 +347,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             "serial": self.config_entry.data['serial']
                     }
                     options = {
+                            "email": self.email,
                             "username": self._bambu_cloud.username,
                             "name": device['name'],
                             "host": user_input['host'],
@@ -368,9 +378,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('serial')] = printer_selector
-        fields[vol.Optional("host")] = TEXT_SELECTOR
-        fields[vol.Optional("local_mqtt")] = BOOLEAN_SELECTOR
+        fields[vol.Required('serial', default=self.config_entry.options.get('serial', ''))] = printer_selector
+        fields[vol.Optional('host', default=self.config_entry.options.get('host', ''))] = TEXT_SELECTOR
+        fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu_Choose_Device",
@@ -402,6 +412,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         "serial": self.config_entry.data['serial']
                 }
                 options = {
+                        "email": self.config_entry.data['email'],
                         "username": "",
                         "name": "",
                         "host": user_input['host'],
@@ -424,8 +435,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("host")] = TEXT_SELECTOR
-        fields[vol.Required("access_code")] = PASSWORD_SELECTOR
+        fields[vol.Required('host', default=self.config_entry.options.get('host', ''))] = TEXT_SELECTOR
+        fields[vol.Required('access_code', default=self.config_entry.options.get('access_code', ''))] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",

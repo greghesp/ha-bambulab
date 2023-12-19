@@ -13,6 +13,8 @@ Want to contribute to ha-bambulab? Great!  We have a few small asks though!
   code.
 - Please name your commits accordingly, and add some context as to what you have added.
 
+If you feel this integration was valuable, you can make a donation at https://Ko-fi.com/adriangarside
+
 ## Setup
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab&category=Integration)
