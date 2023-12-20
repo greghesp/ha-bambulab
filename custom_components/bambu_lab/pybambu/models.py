@@ -114,12 +114,14 @@ class Device:
 class Lights:
     """Return all light related info"""
     chamber_light: str
+    chamber_light_override: str
     work_light: str
 
     def __init__(self, client):
         self.client = client
         self.chamber_light = "unknown"
         self.work_light = "unknown"
+        self.chamber_light_override = ""
 
     def print_update(self, data):
         """Update from dict"""
@@ -135,21 +137,28 @@ class Lights:
         #     }
         # ],
 
-        self.chamber_light = \
+        chamber_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light",
                    {"mode": self.chamber_light}).get("mode")
+        if self.chamber_light_override != "":
+            if self.chamber_light_override == chamber_light:
+                self.chamber_light_override = ""
+        else:
+            self.chamber_light = chamber_light
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
 
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
+        self.chamber_light_override = "on"
         if self.client.callback is not None:
             self.client.callback("event_light_update")
         self.client.publish(CHAMBER_LIGHT_ON)
 
     def TurnChamberLightOff(self):
         self.chamber_light = "off"
+        self.chamber_light_override = "off"
         if self.client.callback is not None:
             self.client.callback("event_light_update")
         self.client.publish(CHAMBER_LIGHT_OFF)
