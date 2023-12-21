@@ -296,7 +296,7 @@ class BambuClient:
         LOGGER.info("Watch dog fired")
         self._device.info.set_online(False)
         self.publish(START_PUSH)
-
+        
     def on_jpeg_received(self, bytes):
         #LOGGER.debug("JPEG received")
         self._device.p1p_camera.on_jpeg_received(bytes)
