@@ -45,7 +45,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             
         self._updatedDevice = False
         self.data = self.get_model()
-        self._lock = threading.Lock()
         self.P1PCamera = None
         super().__init__(
             hass,
@@ -104,7 +103,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
 
         async def listen():
-            await self.client.connect(callback=event_handler)
+            self.client.connect(callback=event_handler)
 
         asyncio.create_task(listen())
 
@@ -121,10 +120,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return device
     
     def _update_data(self):
-        self._lock.acquire()
         device = self.get_model()
         self.async_set_updated_data(device)
-        self._lock.release()
 
     def _update_hms(self):
         dev_reg = device_registry.async_get(self._hass)
@@ -160,25 +157,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             new_hw_ver = device.info.hw_ver
             LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
             if (new_sw_ver != "unknown"):
-                self._lock.acquire()
                 dev_reg = device_registry.async_get(self._hass)
                 hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
                 self._updatedDevice = True
-                self._lock.release()
 
     async def _reinitialize_sensors(self):
         LOGGER.debug("_reinitialize_sensors START")
-        if self._lock.acquire(False):
-            LOGGER.debug("async_forward_entry_unload")
-            await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
-            LOGGER.debug("async_forward_entry_setup")
-            await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
-            self._lock.release()
+        LOGGER.debug("async_forward_entry_unload")
+        await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
+        LOGGER.debug("async_forward_entry_setup")
+        await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
         LOGGER.debug("_reinitialize_sensors DONE")
 
     def _update_ams_info(self):
-        self._lock.acquire()
         device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
         for index in range (0, len(device.ams.data)):
@@ -195,11 +187,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                             sw_version=device.ams.data[index].sw_version,
                                             hw_version=device.ams.data[index].hw_version)
 
-        self._lock.release()
         self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_external_spool_info(self):
-        self._lock.acquire()
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
                                                identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")})
@@ -212,7 +202,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                     sw_version="",
                                     hw_version="")
         
-        self._lock.release()
         # self.hass.async_create_task(self._reinitialize_sensors())
 
     def PublishDeviceTriggerEvent(self, event: str):
