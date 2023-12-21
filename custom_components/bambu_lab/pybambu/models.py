@@ -70,9 +70,9 @@ class Device:
             case Features.CHAMBER_LIGHT:
                 return True
             case Features.CHAMBER_FAN:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.CHAMBER_TEMPERATURE:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CURRENT_STAGE:
                 return True
             case Features.PRINT_LAYERS:
@@ -84,13 +84,13 @@ class Device:
             case Features.K_VALUE:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
             case Features.START_TIME:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.START_TIME_GENERATED:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
             case Features.AMS_TEMPERATURE:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CAMERA_RTSP:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CAMERA_IMAGE:
                 return (self.client.host != "us.mqtt.bambulab.com") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
             case Features.MANUAL_MODE:
