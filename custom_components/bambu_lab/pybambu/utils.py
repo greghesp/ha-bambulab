@@ -105,8 +105,8 @@ def get_printer_type(modules, default):
             LOGGER.debug("Device is X1/C")
             return "X1C"
         if rv1126.get("hw_ver") == "AP07":
-            LOGGER.debug("Device is X1/C")
-            return "X1C"
+            LOGGER.debug("Device is X1E")
+            return "X1E"
     return default
 
 
