@@ -74,6 +74,26 @@ class BambuCloud:
     #     ]
     # }
 
+    def _test_authentication_token(self) -> dict:
+        LOGGER.debug("Getting accessToken from Bambu Cloud")
+        url = 'https://api.bambulab.com/v1/user-service/user/login'
+        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        response = requests.get(url, headers=headers, timeout=10)
+        if not response.ok:
+            LOGGER.debug(f"Received error: {response.status_code}")
+            raise ValueError(response.status_code)
+        LOGGER.debug(f"Success: {response.json()}")
+
+    def TestAuthentication(self, email: str, username: str, auth_token: str) -> bool:
+        self._email = email
+        self._username = username
+        self._auth_token = auth_token
+        try:
+            self.GetDeviceList()
+        except:
+            return False
+        return True
+
     def Login(self, email: str, password: str):
         self._email = email
         self._password = password
@@ -90,11 +110,32 @@ class BambuCloud:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
         LOGGER.debug(f"Success: {response.json()}")
-        LOGGER.debug(f"{response.json()['devices']}")
         return response.json()['devices']
+
+    def GetTaskList(self) -> dict:
+        LOGGER.debug("Getting task list from Bambu Cloud")
+        url = 'https://api.bambulab.com/v1/user-service/my/tasks'
+        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        response = requests.get(url, headers=headers, timeout=10)
+        if not response.ok:
+            LOGGER.debug(f"Received error: {response.status_code}")
+            raise ValueError(response.status_code)
+        #LOGGER.debug(f"Success: {response.json()}")
+        return response.json()
+    
+    def GetTaskListForPrinter(self, deviceId: str) -> dict:
+        LOGGER.debug(f"Getting task list from Bambu Cloud for Printer: {deviceId}")
+        data = self.GetTaskList()
+        for task in data['hits']:
+            if task['deviceId'] == deviceId:
+                LOGGER.debug(f"TASK: {task}")
+                return task
+        return {}
 
     def GetDeviceTypeFromDeviceProductName(self, device_product_name: str):
         match device_product_name:
+            case "X1E":
+                return "X1E"
             case "X1 Carbon":
                 return "X1C"
             case "X1":

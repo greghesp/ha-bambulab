@@ -143,7 +143,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.GetDeviceList)
 
-        if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
+        if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', "") == False)):
             success = True
             if user_input.get('host', "") != "":
                 LOGGER.debug("Config Flow: Testing local mqtt connection")
@@ -210,7 +210,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="Bambu_Choose_Device",
             data_schema=vol.Schema(fields),
             errors=errors or {},
-            last_step=(len(printer_list) == 0)
+            last_step=True
         )
 
     async def async_step_Lan(
@@ -265,7 +265,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="Lan",
             data_schema=vol.Schema(fields),
             errors=errors or {},
-            last_step=False,
+            last_step=True,
         )
 
     async def async_step_ssdp(
@@ -315,10 +315,19 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     ) -> FlowResult:
         errors = {}
 
+        self._bambu_cloud = BambuCloud()
+
+        credentialsGood = False
+        if user_input is None:
+            if self.config_entry.options.get('email', '') != '' and self.config_entry.options.get('username', '') != '' and self.config_entry.options.get('auth_token', '') != '':
+                credentialsGood = await self.hass.async_add_executor_job(
+                    self._bambu_cloud.TestAuthentication,
+                    self.config_entry.options['email'],
+                    self.config_entry.options['username'],
+                    self.config_entry.options['auth_token'])
+
         if user_input is not None:
             try:
-                self._bambu_cloud = BambuCloud()
-
                 await self.hass.async_add_executor_job(
                     self._bambu_cloud.Login,
                     user_input['username'],
@@ -332,6 +341,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 LOGGER.error(f"Failed to connect with error code {e.args}")
 
             errors['base'] = "cannot_connect"
+        elif credentialsGood:
+            self.email = self.config_entry.options['email']
+            return await self.async_step_Bambu_Choose_Device(None)
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -357,6 +369,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
             for device in device_list:
                 if device['dev_id'] == user_input['serial']:
+
                     success = True
                     if user_input.get('host', "") != "":
                         LOGGER.debug("Options Flow: Testing local mqtt connection")
@@ -417,7 +430,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             step_id="Bambu_Choose_Device",
             data_schema=vol.Schema(fields),
             errors=errors or {},
-            last_step=False,
+            last_step=True,
         )
     
     async def async_step_Lan(
@@ -473,5 +486,5 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             step_id="Lan",
             data_schema=vol.Schema(fields),
             errors=errors or {},
-            last_step=False,
+            last_step=True,
         )
