@@ -294,10 +294,8 @@ class BambuClient:
 
     def on_watchdog_fired(self):
         LOGGER.info("Watch dog fired")
-        # We can simply disconnect - the mqtt listener thread will detect this and immediately try to reconnect.
-        self.disconnect()
-        # Reconnect
-        self.connect(self.callback)
+        self._device.info.set_online(False)
+        self.publish(START_PUSH)
 
     def on_jpeg_received(self, bytes):
         #LOGGER.debug("JPEG received")
