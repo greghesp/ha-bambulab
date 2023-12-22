@@ -15,6 +15,7 @@ from typing import Any
 
 import paho.mqtt.client as mqtt
 
+from .bambu_cloud import BambuCloud
 from .const import LOGGER, Features
 from .models import Device
 from .commands import (
@@ -22,7 +23,6 @@ from .commands import (
     PUSH_ALL,
     START_PUSH,
 )
-
 
 class WatchdogThread(threading.Thread):
 
@@ -53,7 +53,7 @@ class WatchdogThread(threading.Thread):
             if not self._watchdog_fired and (interval > WATCHDOG_TIMER):
                 LOGGER.debug(f"Watchdog fired. No data received for {interval} seconds.")
                 self._watchdog_fired = True
-                self._client.on_watchdog_fired()
+                self._client._on_watchdog_fired()
             elif interval < WATCHDOG_TIMER:
                 self._watchdog_fired = False
 
@@ -179,7 +179,7 @@ class BambuClient:
     _watchdog = None
     _camera = None
 
-    def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, username: str, auth_token: str, access_code: str):
+    def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, email: str, username: str, auth_token: str, access_code: str):
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
@@ -191,6 +191,7 @@ class BambuClient:
         self._device = Device(self, device_type, serial)
         self._port = 1883
         self._manual_refresh_mode = False
+        self.bambu_cloud = BambuCloud(email, username, auth_token)
 
     @property
     def connected(self):
@@ -292,14 +293,14 @@ class BambuClient:
             self._camera.stop()
             self._camera.join()
 
-    def on_watchdog_fired(self):
+    def _on_watchdog_fired(self):
         LOGGER.info("Watch dog fired")
         self._device.info.set_online(False)
         self.publish(START_PUSH)
         
     def on_jpeg_received(self, bytes):
         #LOGGER.debug("JPEG received")
-        self._device.p1p_camera.on_jpeg_received(bytes)
+        self._device.p1p_camera.set_jpeg(bytes)
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
