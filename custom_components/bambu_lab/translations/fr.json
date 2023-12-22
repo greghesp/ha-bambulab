@@ -37,7 +37,6 @@
         "title": "Connexion en mode LAN",
         "description": "Veuillez fournir votre type d’imprimante locale, votre adresse IP, votre numéro de série et votre code d’accès. Le code d’accès se trouve sur l’écran de l’imprimante dans les paramètres réseau. Le numéro de série se trouve dans les paramètres de l’appareil.",
         "data": {
-          "device_type": "Modèle d’imprimante :",
           "serial": "Numéro de série",
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès"
@@ -129,6 +128,9 @@
     "image": {
       "p1p_camera": {
         "name": "Caméra"
+      },
+      "cover_image": {
+        "name": "Image de couverture"
       }
     },
     "light": {

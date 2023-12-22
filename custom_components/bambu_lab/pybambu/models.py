@@ -8,6 +8,7 @@ from .utils import \
     fan_percentage, \
     fan_percentage_to_gcode, \
     get_filament_name, \
+    get_printer_type, \
     get_speed_name, \
     get_stage_action, \
     get_hw_version, \
@@ -20,13 +21,12 @@ from .utils import \
 from .const import LOGGER, Features, FansEnum, SPEED_PROFILE
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
-
 class Device:
     def __init__(self, client, device_type, serial):
         self.client = client
         self.temperature = Temperature()
         self.lights = Lights(client)
-        self.info = Info(client, device_type, serial)
+        self.info = Info(client = client, device = self, device_type = device_type, serial = serial)
         self.fans = Fans(client)
         self.speed = Speed(client)
         self.stage = StageAction()
@@ -38,6 +38,7 @@ class Device:
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
             self.p1p_camera = P1PCamera(client)
+        self.cover_image = CoverImage(client)
 
     def print_update(self, data):
         """Update from dict"""
@@ -280,9 +281,11 @@ class Info:
     online: bool
     new_version_state: int
     print_error: int
+    _cover_url: str
 
-    def __init__(self, client, device_type, serial):
+    def __init__(self, device, client, device_type, serial):
         self.client = client
+        self.device = device
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = device_type
@@ -301,6 +304,7 @@ class Info:
         self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
         self.new_version_state = 0
         self.print_error = 0
+        self._cover_url = ""
 
     def set_online(self, online):
         if self.online != online:
@@ -331,9 +335,10 @@ class Info:
         #         "hw_ver": "AP04",
         #         "sn": "..."
         #     },
-
-        self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
-        self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
+        modules = data.get("module", [])
+        self.device_type = get_printer_type(modules, self.device_type)
+        self.hw_ver = get_hw_version(modules, self.hw_ver)
+        self.sw_ver = get_sw_version(modules, self.sw_ver)
         if self.client.callback is not None:
             self.client.callback("event_printer_info_update")
 
@@ -381,6 +386,10 @@ class Info:
         if data.get("gcode_start_time") is not None:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
+        # Initialize task data at startup.
+        if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
+            self._update_task_data()
+
         # Handle print start
         if previous_gcode_state != "PREPARE" and self.gcode_state == "PREPARE":
             if self.client.callback is not None:
@@ -391,6 +400,9 @@ class Info:
             if device.supports_feature(Features.START_TIME_GENERATED):
                 # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                 self.start_time = get_end_time(0)
+
+            # Update task data if bambu cloud connected
+            self._update_task_data()
 
         # Handle print failed
         if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
@@ -415,7 +427,7 @@ class Info:
         self.print_error = data.get("print_error", self.print_error)
 
         # Version data is provided differently for X1 and P1
-        # P!P example:
+        # P1P example:
         # "upgrade_state": {
         #   "sequence_id": 0,
         #   "progress": "",
@@ -465,6 +477,18 @@ class Info:
         # in separate string properties.
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
+    def _update_task_data(self):
+        if self.has_bambu_cloud_connection:
+            LOGGER.debug("Updating cloud task data")
+            self._task_data = self.client.bambu_cloud.get_tasklist_for_printer(self.serial)
+            url = self._task_data.get('cover', '')
+            if url != "":
+                data = self.client.bambu_cloud.download(url)
+                self.device.cover_image.set_jpeg(data)
+
+    @property
+    def has_bambu_cloud_connection(self) -> bool:
+        return self.client.bambu_cloud.auth_token != ""
 
 @dataclass
 class AMSInstance:
@@ -836,14 +860,29 @@ class HMSList:
 
 @dataclass
 class P1PCamera:
-    """Returns the latest jpeg date from the P1P camera"""
+    """Returns the latest jpeg data from the P1P camera"""
     def __init__(self, client):
         self.client = client
         self._bytes = bytearray()
 
-    def on_jpeg_received(self, bytes):
+    def set_jpeg(self, bytes):
         self._bytes = bytes
         self.client.callback("p1p_jpeg_received")
+    
+    def get_jpeg(self) -> bytearray:
+        return self._bytes
+    
+@dataclass
+class CoverImage:
+    """Returns the cover image from the Bambu API"""
+
+    def __init__(self, client):
+        self.client = client
+        self._bytes = bytearray()
+
+    def set_jpeg(self, bytes):
+        self._bytes = bytes
+        #self.client.callback("p1p_jpeg_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes

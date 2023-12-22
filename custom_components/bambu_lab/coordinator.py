@@ -39,6 +39,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                   serial = entry.data["serial"],
                                   host = entry.options['host'],
                                   local_mqtt = entry.options['local_mqtt'],
+                                  email = entry.options['email'],
                                   username = entry.options['username'],
                                   auth_token = entry.options['auth_token'],
                                   access_code = entry.options['access_code'])

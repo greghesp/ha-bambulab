@@ -575,3 +575,9 @@ P1P_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE),
     )
 
+COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+        key="cover_image",
+        translation_key="cover_image",
+        value_fn=lambda self: self.coordinator.get_model().info.get_cover_image(),
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    )

@@ -11,8 +11,10 @@ from .const import LOGGER
 @dataclass
 class BambuCloud:
   
-    def __init__(self):
-        self._email = ""    
+    def __init__(self, email:str, username: str, auth_token: str):
+        self._email = email
+        self._username = username
+        self._auth_token = auth_token
 
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
@@ -74,34 +76,24 @@ class BambuCloud:
     #     ]
     # }
 
-    def _test_authentication_token(self) -> dict:
-        LOGGER.debug("Getting accessToken from Bambu Cloud")
-        url = 'https://api.bambulab.com/v1/user-service/user/login'
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
-        response = requests.get(url, headers=headers, timeout=10)
-        if not response.ok:
-            LOGGER.debug(f"Received error: {response.status_code}")
-            raise ValueError(response.status_code)
-        LOGGER.debug(f"Success: {response.json()}")
-
-    def TestAuthentication(self, email: str, username: str, auth_token: str) -> bool:
+    def test_authentication(self, email: str, username: str, auth_token: str) -> bool:
         self._email = email
         self._username = username
         self._auth_token = auth_token
         try:
-            self.GetDeviceList()
+            self.get_device_list()
         except:
             return False
         return True
 
-    def Login(self, email: str, password: str):
+    def login(self, email: str, password: str):
         self._email = email
         self._password = password
 
         self._auth_token = self._get_authentication_token()
         self._username = self._get_username_from_authentication_token()
 
-    def GetDeviceList(self) -> dict:
+    def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
         url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
@@ -112,7 +104,49 @@ class BambuCloud:
         LOGGER.debug(f"Success: {response.json()}")
         return response.json()['devices']
 
-    def GetTaskList(self) -> dict:
+    # The task list is of the following form with a 'hits' array with typical 20 entries.
+    #
+    # "total": 531,
+    # "hits": [
+    #     {
+    #     "id": 35237965,
+    #     "designId": 0,
+    #     "designTitle": "",
+    #     "instanceId": 0,
+    #     "modelId": "REDACTED",
+    #     "title": "REDACTED",
+    #     "cover": "REDACTED",
+    #     "status": 4,
+    #     "feedbackStatus": 0,
+    #     "startTime": "2023-12-21T19:02:16Z",
+    #     "endTime": "2023-12-21T19:02:35Z",
+    #     "weight": 34.62,
+    #     "length": 1161,
+    #     "costTime": 10346,
+    #     "profileId": 35276233,
+    #     "plateIndex": 1,
+    #     "plateName": "",
+    #     "deviceId": "REDACTED",
+    #     "amsDetailMapping": [
+    #         {
+    #         "ams": 4,
+    #         "sourceColor": "F4D976FF",
+    #         "targetColor": "F4D976FF",
+    #         "filamentId": "GFL99",
+    #         "filamentType": "PLA",
+    #         "targetFilamentType": "",
+    #         "weight": 34.62
+    #         }
+    #     ],
+    #     "mode": "cloud_file",
+    #     "isPublicProfile": false,
+    #     "isPrintable": true,
+    #     "deviceModel": "P1P",
+    #     "deviceName": "Bambu P1P",
+    #     "bedType": "textured_plate"
+    #     },
+
+    def get_tasklist(self) -> dict:
         LOGGER.debug("Getting task list from Bambu Cloud")
         url = 'https://api.bambulab.com/v1/user-service/my/tasks'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
@@ -120,36 +154,26 @@ class BambuCloud:
         if not response.ok:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        #LOGGER.debug(f"Success: {response.json()}")
         return response.json()
     
-    def GetTaskListForPrinter(self, deviceId: str) -> dict:
+    def get_tasklist_for_printer(self, deviceId: str) -> dict:
         LOGGER.debug(f"Getting task list from Bambu Cloud for Printer: {deviceId}")
-        data = self.GetTaskList()
+        data = self.get_tasklist()
         for task in data['hits']:
             if task['deviceId'] == deviceId:
-                LOGGER.debug(f"TASK: {task}")
                 return task
         return {}
 
-    def GetDeviceTypeFromDeviceProductName(self, device_product_name: str):
-        match device_product_name:
-            case "X1E":
-                return "X1E"
-            case "X1 Carbon":
-                return "X1C"
-            case "X1":
-                return "X1"
-            case "P1P":
-                return "P1P"
-            case "P1S":
-                return "P1S"
-            case "A1":
-                return "A1"
-            case "A1 Mini":
-                return "A1Mini"
-            case _:
-                return "New"
+    def get_device_type_from_device_product_name(self, device_product_name: str):
+        return device_product_name.replace(" ", "")
+
+    def download(self, url: str) -> bytearray:
+        LOGGER.debug(f"Downloading cover image: {url}")
+        response = requests.get(url,  timeout=10)
+        if not response.ok:
+            LOGGER.debug(f"Received error: {response.status_code}")
+            raise ValueError(response.status_code)
+        return response.content
 
     @property
     def username(self):

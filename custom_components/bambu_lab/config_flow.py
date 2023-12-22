@@ -44,12 +44,6 @@ SUPPORTED_PRINTERS = [
     SelectOptionDict(value="X1C", label="X1C"),
     SelectOptionDict(value="X1E", label="X1E"),
 ]
-PRINTER_SELECTOR = SelectSelector(
-    SelectSelectorConfig(
-        options=SUPPORTED_PRINTERS,
-        mode=SelectSelectorMode.LIST,
-    )
-)
 SUPPORTED_MODES = [
     SelectOptionDict(value="Bambu", label="Bambu Cloud Configuration"),
     SelectOptionDict(value="Lan", label="Lan Mode Configuration")
@@ -107,10 +101,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             try:
-                self._bambu_cloud = BambuCloud()
+                self._bambu_cloud = BambuCloud("", "", "")
 
                 await self.hass.async_add_executor_job(
-                    self._bambu_cloud.Login,
+                    self._bambu_cloud.login,
                     user_input['username'],
                     user_input['password'])
 
@@ -141,29 +135,31 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         LOGGER.debug("async_step_Bambu_Choose_Device")
 
         device_list = await self.hass.async_add_executor_job(
-            self._bambu_cloud.GetDeviceList)
+            self._bambu_cloud.get_device_list)
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', "") == False)):
             success = True
-            if user_input.get('host', "") != "":
-                LOGGER.debug("Config Flow: Testing local mqtt connection")
-                bambu = BambuClient(device_type=self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
-                                    serial=device['dev_id'],
-                                    host=user_input['host'],
-                                    local_mqtt=True,
-                                    username="",
-                                    auth_token="",
-                                    access_code=device['dev_access_code'])
-                success = await bambu.try_connection()
-                if not success:
-                    errors['base'] = "cannot_connect"
+            for device in device_list:
+                if device['dev_id'] == user_input['serial']:
+                    device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
+                    if user_input.get('host', "") != "":
+                        LOGGER.debug("Config Flow: Testing local mqtt connection")
+                        bambu = BambuClient(device_type=device_type,
+                                            serial=device['dev_id'],
+                                            host=user_input['host'],
+                                            local_mqtt=True,
+                                            email="",
+                                            username="",
+                                            auth_token="",
+                                            access_code=device['dev_access_code'])
+                        success = await bambu.try_connection()
+                        if not success:
+                            errors['base'] = "cannot_connect"
 
-            if success:
-                for device in device_list:
-                    if device['dev_id'] == user_input['serial']:
+                    if success:
                         LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
                         data = {
-                                "device_type": self._bambu_cloud.GetDeviceTypeFromDeviceProductName(device['dev_product_name']),
+                                "device_type": device_type,
                                 "serial": device['dev_id']
                             }
                         options = {
@@ -220,10 +216,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             LOGGER.debug("Config Flow: Testing local mqtt connection")
-            bambu = BambuClient(device_type=user_input['device_type'],
+            bambu = BambuClient(device_type="unknown",
                                 serial=user_input['serial'],
                                 host=user_input['host'],
                                 local_mqtt=True,
+                                email="",
                                 username="",
                                 auth_token="",
                                 access_code=user_input['access_code'])
@@ -232,7 +229,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             if success:
                 LOGGER.debug("Config Flow: Writing entry")
                 data = {
-                        "device_type": user_input['device_type'],
+                        "device_type": bambu.get_device().info.device_type,
                         "serial": user_input['serial']
                 }
                 options = {
@@ -256,7 +253,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('device_type')] = PRINTER_SELECTOR
         fields[vol.Required('serial')] = TEXT_SELECTOR
         fields[vol.Required('host')] = TEXT_SELECTOR
         fields[vol.Required('access_code')] = PASSWORD_SELECTOR
@@ -315,13 +311,13 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     ) -> FlowResult:
         errors = {}
 
-        self._bambu_cloud = BambuCloud()
+        self._bambu_cloud = BambuCloud("", "", "")
 
         credentialsGood = False
         if user_input is None:
             if self.config_entry.options.get('email', '') != '' and self.config_entry.options.get('username', '') != '' and self.config_entry.options.get('auth_token', '') != '':
                 credentialsGood = await self.hass.async_add_executor_job(
-                    self._bambu_cloud.TestAuthentication,
+                    self._bambu_cloud.test_authentication,
                     self.config_entry.options['email'],
                     self.config_entry.options['username'],
                     self.config_entry.options['auth_token'])
@@ -329,7 +325,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             try:
                 await self.hass.async_add_executor_job(
-                    self._bambu_cloud.Login,
+                    self._bambu_cloud.login,
                     user_input['username'],
                     user_input['password'])
                 
@@ -364,7 +360,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         LOGGER.debug("async_step_Bambu_Choose_Device")
 
         device_list = await self.hass.async_add_executor_job(
-            self._bambu_cloud.GetDeviceList)
+            self._bambu_cloud.get_device_list)
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
             for device in device_list:
@@ -377,6 +373,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                                             serial=self.config_entry.data['serial'],
                                             host=user_input['host'],
                                             local_mqtt=True,
+                                            email="",
                                             username="",
                                             auth_token="",
                                             access_code=device['dev_access_code'])
@@ -444,6 +441,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                                 serial=self.config_entry.data['serial'],
                                 host=user_input['host'],
                                 local_mqtt=True,
+                                email="",
                                 username="",
                                 auth_token="",
                                 access_code=user_input['access_code'])
@@ -457,11 +455,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 }
                 options = {
                         "email": self.config_entry.options.get('email', ''),
-                        "username": "",
-                        "name": "",
+                        "username": self.config_entry.options.get('username', ''),
+                        "name": self.config_entry.options.get('name', ''),
                         "host": user_input['host'],
                         "local_mqtt": True,
-                        "auth_token": "",
+                        "auth_token": self.config_entry.options.get('auth_token', ''),
                         "access_code": user_input['access_code']
                 }
 

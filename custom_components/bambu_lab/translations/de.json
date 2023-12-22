@@ -45,7 +45,6 @@
         "title": "LAN-Modus-Verbindung",
         "Beschreibung": "Bitte geben Sie Ihren lokalen Druckertyp, Ihre IP-Adresse, die Seriennummer und den Zugangscode an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen. Die Seriennummer finden Sie in den Geräteeinstellungen.",
         "data": {
-          "device_type": "Drucker-Modell:",
           "serial": "Seriennummer:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode"
@@ -138,6 +137,9 @@
     "image": {
       "p1p_camera": {
         "name": "Kamera"
+      },
+      "cover_image": {
+        "name": "Titelbild"
       }
     },
     "light": {
