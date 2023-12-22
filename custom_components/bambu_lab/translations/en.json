@@ -261,6 +261,15 @@
       "gcode_file": {
         "name": "Gcode filename"
       },
+      "print_bed_type": {
+        "name": "Print bed type"
+      },
+      "print_length": {
+        "name": "Print length"
+      },
+      "print_weight": {
+        "name": "Print weight"
+      },
       "subtask_name": {
         "name": "Task name"
       },
