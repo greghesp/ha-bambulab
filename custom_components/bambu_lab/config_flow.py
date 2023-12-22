@@ -139,24 +139,24 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', "") == False)):
             success = True
-            device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
-            if user_input.get('host', "") != "":
-                LOGGER.debug("Config Flow: Testing local mqtt connection")
-                bambu = BambuClient(device_type=device_type,
-                                    serial=device['dev_id'],
-                                    host=user_input['host'],
-                                    local_mqtt=True,
-                                    email="",
-                                    username="",
-                                    auth_token="",
-                                    access_code=device['dev_access_code'])
-                success = await bambu.try_connection()
-                if not success:
-                    errors['base'] = "cannot_connect"
+            for device in device_list:
+                if device['dev_id'] == user_input['serial']:
+                    device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
+                    if user_input.get('host', "") != "":
+                        LOGGER.debug("Config Flow: Testing local mqtt connection")
+                        bambu = BambuClient(device_type=device_type,
+                                            serial=device['dev_id'],
+                                            host=user_input['host'],
+                                            local_mqtt=True,
+                                            email="",
+                                            username="",
+                                            auth_token="",
+                                            access_code=device['dev_access_code'])
+                        success = await bambu.try_connection()
+                        if not success:
+                            errors['base'] = "cannot_connect"
 
-            if success:
-                for device in device_list:
-                    if device['dev_id'] == user_input['serial']:
+                    if success:
                         LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
                         data = {
                                 "device_type": device_type,
