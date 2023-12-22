@@ -165,23 +165,7 @@ class BambuCloud:
         return {}
 
     def GetDeviceTypeFromDeviceProductName(self, device_product_name: str):
-        match device_product_name:
-            case "X1E":
-                return "X1E"
-            case "X1 Carbon":
-                return "X1C"
-            case "X1":
-                return "X1"
-            case "P1P":
-                return "P1P"
-            case "P1S":
-                return "P1S"
-            case "A1":
-                return "A1"
-            case "A1 Mini":
-                return "A1Mini"
-            case _:
-                return "New"
+        return device_product_name.replace(" ", "")
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")
