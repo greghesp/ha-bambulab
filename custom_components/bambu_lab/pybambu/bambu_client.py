@@ -331,7 +331,7 @@ class BambuClient:
         except Exception as e:
             LOGGER.error("An exception occurred processing a message:")
             LOGGER.error(f"Exception type: {type(e)}")
-            LOGGER.error(f"Exception args: {e.args}")
+            LOGGER.error(f"Exception data: {e}")
 
     def subscribe(self):
         """Subscribe to report topic"""

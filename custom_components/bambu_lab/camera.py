@@ -1,8 +1,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
-from yarl import URL
-from urllib.parse import urlparse, urlunparse, quote
+from urllib.parse import urlparse
 
 from homeassistant.components import ffmpeg
 

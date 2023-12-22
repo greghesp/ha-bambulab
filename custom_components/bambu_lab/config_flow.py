@@ -137,7 +137,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
 
-        if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', "") == False)):
+        if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
             success = True
             for device in device_list:
                 if device['dev_id'] == user_input['serial']:
@@ -161,12 +161,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         data = {
                                 "device_type": device_type,
                                 "serial": device['dev_id']
-                            }
+                        }
                         options = {
                                 "email": self.email,
                                 "username": self._bambu_cloud.username,
                                 "name": device['name'],
-                                "host": user_input['host'],
+                                "host": user_input.get('host', ""),
                                 "local_mqtt": user_input.get('local_mqtt', False),
                                 "auth_token": self._bambu_cloud.auth_token,
                                 "access_code": device['dev_access_code']
