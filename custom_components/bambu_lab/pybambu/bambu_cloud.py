@@ -13,13 +13,6 @@ class BambuCloud:
   
     def __init__(self):
         self._email = ""    
-        self._auth_token = ""
-        self._username = ""
-
-    def __init__(self, email:str, username: str, auth_token: str):
-        self._email = email
-        self._username = username
-        self._auth_token = auth_token
 
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
@@ -81,6 +74,16 @@ class BambuCloud:
     #     ]
     # }
 
+    def _test_authentication_token(self) -> dict:
+        LOGGER.debug("Getting accessToken from Bambu Cloud")
+        url = 'https://api.bambulab.com/v1/user-service/user/login'
+        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        response = requests.get(url, headers=headers, timeout=10)
+        if not response.ok:
+            LOGGER.debug(f"Received error: {response.status_code}")
+            raise ValueError(response.status_code)
+        LOGGER.debug(f"Success: {response.json()}")
+
     def TestAuthentication(self, email: str, username: str, auth_token: str) -> bool:
         self._email = email
         self._username = username
@@ -109,49 +112,7 @@ class BambuCloud:
         LOGGER.debug(f"Success: {response.json()}")
         return response.json()['devices']
 
-    # The task list is of the following form with a 'hits' array with typical 20 entries.
-    #
-    # "total": 531,
-    # "hits": [
-    #     {
-    #     "id": 35237965,
-    #     "designId": 0,
-    #     "designTitle": "",
-    #     "instanceId": 0,
-    #     "modelId": "REDACTED",
-    #     "title": "REDACTED",
-    #     "cover": "REDACTED",
-    #     "status": 4,
-    #     "feedbackStatus": 0,
-    #     "startTime": "2023-12-21T19:02:16Z",
-    #     "endTime": "2023-12-21T19:02:35Z",
-    #     "weight": 34.62,
-    #     "length": 1161,
-    #     "costTime": 10346,
-    #     "profileId": 35276233,
-    #     "plateIndex": 1,
-    #     "plateName": "",
-    #     "deviceId": "REDACTED",
-    #     "amsDetailMapping": [
-    #         {
-    #         "ams": 4,
-    #         "sourceColor": "F4D976FF",
-    #         "targetColor": "F4D976FF",
-    #         "filamentId": "GFL99",
-    #         "filamentType": "PLA",
-    #         "targetFilamentType": "",
-    #         "weight": 34.62
-    #         }
-    #     ],
-    #     "mode": "cloud_file",
-    #     "isPublicProfile": false,
-    #     "isPrintable": true,
-    #     "deviceModel": "P1P",
-    #     "deviceName": "Bambu P1P",
-    #     "bedType": "textured_plate"
-    #     },
-
-    def get_tasklist(self) -> dict:
+    def GetTaskList(self) -> dict:
         LOGGER.debug("Getting task list from Bambu Cloud")
         url = 'https://api.bambulab.com/v1/user-service/my/tasks'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
@@ -162,11 +123,12 @@ class BambuCloud:
         #LOGGER.debug(f"Success: {response.json()}")
         return response.json()
     
-    def get_tasklist_for_printer(self, deviceId: str) -> dict:
+    def GetTaskListForPrinter(self, deviceId: str) -> dict:
         LOGGER.debug(f"Getting task list from Bambu Cloud for Printer: {deviceId}")
-        data = self.get_tasklist()
+        data = self.GetTaskList()
         for task in data['hits']:
             if task['deviceId'] == deviceId:
+                LOGGER.debug(f"TASK: {task}")
                 return task
         return {}
 
@@ -188,16 +150,6 @@ class BambuCloud:
                 return "A1Mini"
             case _:
                 return "New"
-
-    def download(self, url: str):
-        LOGGER.debug(f"Downloading cover image: {url}")
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
-        response = requests.get(url, headers=headers, timeout=10)
-        if not response.ok:
-            LOGGER.debug(f"Received error: {response.status_code}")
-            raise ValueError(response.status_code)
-        LOGGER.debug(f"Success: {response.content}")
-        return response.content()
 
     @property
     def username(self):
