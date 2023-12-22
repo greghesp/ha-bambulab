@@ -37,7 +37,7 @@ class Device:
         self.push_all_data = None
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
-            self.p1p_camera = P1PCamera(client)
+            self.chamber_image = ChamberImage(client)
         self.cover_image = CoverImage(client)
 
     def print_update(self, data):
@@ -305,6 +305,9 @@ class Info:
         self.new_version_state = 0
         self.print_error = 0
         self._cover_url = ""
+        self.print_weight = 0
+        self.print_length = 0
+        self.print_bed_type = "unknown"
 
     def set_online(self, online):
         if self.online != online:
@@ -475,7 +478,50 @@ class Info:
         # And the P1P lists it's versions in new_ver_list as a structured set of data with old
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
+
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
+
+    # The task list is of the following form with a 'hits' array with typical 20 entries.
+    #
+    # "total": 531,
+    # "hits": [
+    #     {
+    #     "id": 35237965,
+    #     "designId": 0,
+    #     "designTitle": "",
+    #     "instanceId": 0,
+    #     "modelId": "REDACTED",
+    #     "title": "REDACTED",
+    #     "cover": "REDACTED",
+    #     "status": 4,
+    #     "feedbackStatus": 0,
+    #     "startTime": "2023-12-21T19:02:16Z",
+    #     "endTime": "2023-12-21T19:02:35Z",
+    #     "weight": 34.62,
+    #     "length": 1161,
+    #     "costTime": 10346,
+    #     "profileId": 35276233,
+    #     "plateIndex": 1,
+    #     "plateName": "",
+    #     "deviceId": "REDACTED",
+    #     "amsDetailMapping": [
+    #         {
+    #         "ams": 4,
+    #         "sourceColor": "F4D976FF",
+    #         "targetColor": "F4D976FF",
+    #         "filamentId": "GFL99",
+    #         "filamentType": "PLA",
+    #         "targetFilamentType": "",
+    #         "weight": 34.62
+    #         }
+    #     ],
+    #     "mode": "cloud_file",
+    #     "isPublicProfile": false,
+    #     "isPrintable": true,
+    #     "deviceModel": "P1P",
+    #     "deviceName": "Bambu P1P",
+    #     "bedType": "textured_plate"
+    #     },
 
     def _update_task_data(self):
         if self.has_bambu_cloud_connection:
@@ -485,6 +531,10 @@ class Info:
             if url != "":
                 data = self.client.bambu_cloud.download(url)
                 self.device.cover_image.set_jpeg(data)
+
+            self.print_weight = self._task_data.get('weight', self.print_weight)
+            self.print_length = self._task_data.get('length', self.print_length)
+            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
 
     @property
     def has_bambu_cloud_connection(self) -> bool:
@@ -859,7 +909,7 @@ class HMSList:
                     self.client.callback("event_hms_errors")
 
 @dataclass
-class P1PCamera:
+class ChamberImage:
     """Returns the latest jpeg data from the P1P camera"""
     def __init__(self, client):
         self.client = client
@@ -867,7 +917,7 @@ class P1PCamera:
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        self.client.callback("p1p_jpeg_received")
+        self.client.callback("camera_jpeg_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
@@ -882,7 +932,7 @@ class CoverImage:
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        #self.client.callback("p1p_jpeg_received")
+        #self.client.callback("cover_image_jpeg_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes

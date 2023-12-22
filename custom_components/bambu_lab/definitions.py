@@ -8,9 +8,10 @@ from dataclasses import dataclass
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
     PERCENTAGE,
-    TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
+    UnitOfMass,
+    UnitOfLength,
     TIME_MINUTES
 )
 
@@ -309,6 +310,33 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().info.subtask_name
     ),
     BambuLabSensorEntityDescription(
+        key="print_length",
+        translation_key="print_length",
+        native_unit_of_measurement=UnitOfLength.METERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:file",
+        value_fn=lambda self: self.coordinator.get_model().info.print_length / 100,
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_bed_type",
+        translation_key="print_bed_type",
+        icon="mdi:file",
+        value_fn=lambda self: self.coordinator.get_model().info.print_bed_type,
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_weight",
+        translation_key="print_weight",
+        native_unit_of_measurement=UnitOfMass.GRAMS,
+        device_class=SensorDeviceClass.WEIGHT,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:file",
+        value_fn=lambda self: self.coordinator.get_model().info.print_weight,
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    ),
+    BambuLabSensorEntityDescription(
         key="active_tray",
         translation_key="active_tray",
         icon="mdi:printer-3d-nozzle",
@@ -568,7 +596,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     ),
 )
 
-P1P_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+CHAMBER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
         translation_key="p1p_camera",
         value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
