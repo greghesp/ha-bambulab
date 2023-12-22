@@ -164,7 +164,7 @@ class BambuCloud:
                 return task
         return {}
 
-    def GetDeviceTypeFromDeviceProductName(self, device_product_name: str):
+    def get_device_type_from_device_product_name(self, device_product_name: str):
         return device_product_name.replace(" ", "")
 
     def download(self, url: str) -> bytearray:
