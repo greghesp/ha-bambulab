@@ -37,7 +37,7 @@ class Device:
         self.push_all_data = None
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
-            self.p1p_camera = P1PCamera(client)
+            self.chamber_image = ChamberImage(client)
         self.cover_image = CoverImage(client)
 
     def print_update(self, data):
@@ -475,6 +475,7 @@ class Info:
         # And the P1P lists it's versions in new_ver_list as a structured set of data with old
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
+
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
     def _update_task_data(self):
@@ -859,7 +860,7 @@ class HMSList:
                     self.client.callback("event_hms_errors")
 
 @dataclass
-class P1PCamera:
+class ChamberImage:
     """Returns the latest jpeg data from the P1P camera"""
     def __init__(self, client):
         self.client = client
@@ -867,7 +868,7 @@ class P1PCamera:
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        self.client.callback("p1p_jpeg_received")
+        self.client.callback("camera_jpeg_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
@@ -882,7 +883,7 @@ class CoverImage:
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        #self.client.callback("p1p_jpeg_received")
+        #self.client.callback("cover_image_jpeg_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes

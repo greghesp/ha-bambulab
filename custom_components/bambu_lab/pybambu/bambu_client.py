@@ -60,7 +60,7 @@ class WatchdogThread(threading.Thread):
         LOGGER.info("Watchdog thread exited.")
 
 
-class P1PCameraThread(threading.Thread):
+class ImageCameraThread(threading.Thread):
     def __init__(self, client):
         self._client = client
         self._stop_event = threading.Event()
@@ -70,7 +70,7 @@ class P1PCameraThread(threading.Thread):
         self._stop_event.set()
 
     def run(self):
-        LOGGER.debug("P1P Camera thread started.")
+        LOGGER.debug("Image Camera thread started.")
 
         d = bytearray()
 
@@ -129,7 +129,7 @@ class P1PCameraThread(threading.Thread):
 
                     self._client.on_jpeg_received(img)
 
-        LOGGER.info("P1P Camera thread exited.")
+        LOGGER.info("Image Camera thread exited.")
 
 
 def mqtt_listen_thread(self):
@@ -258,8 +258,8 @@ class BambuClient:
         self._watchdog.start()
 
         if self._device.supports_feature(Features.CAMERA_IMAGE) and self.host != "":
-            LOGGER.debug("Starting P1P camera thread")
-            self._camera = P1PCameraThread(self)
+            LOGGER.debug("Starting Image Camera thread")
+            self._camera = ImageCameraThread(self)
             self._camera.start()
 
 
@@ -299,7 +299,7 @@ class BambuClient:
         self.publish(START_PUSH)
         
     def on_jpeg_received(self, bytes):
-        self._device.p1p_camera.set_jpeg(bytes)
+        self._device.chamber_image.set_jpeg(bytes)
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""

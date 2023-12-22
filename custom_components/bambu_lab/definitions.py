@@ -568,7 +568,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     ),
 )
 
-P1P_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+CHAMBER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
         translation_key="p1p_camera",
         value_fn=lambda self: self.coordinator.get_model().get_camera_image(),

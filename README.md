@@ -78,6 +78,7 @@ instead of OAuth.
 | Current Stage |                   |
 | Print Status  |                   |
 | Cover Image   |                   |
+| Print Weight  |                   |
 
 ### Miscellaneous
 
