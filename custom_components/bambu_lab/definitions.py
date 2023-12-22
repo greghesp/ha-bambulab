@@ -579,7 +579,5 @@ COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="cover_image",
         translation_key="cover_image",
         value_fn=lambda self: self.coordinator.get_model().info.get_cover_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().info.mqtt_mode == "bambu_cloud"
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
     )
-
-# BUGBUG - not mqtt_mode, but whether we have working bambu auth token

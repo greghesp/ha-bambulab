@@ -385,7 +385,7 @@ class Info:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Initialize task data at startup.
-        if (self.mqtt_mode == "bambu_cloud") and (previous_gcode_state == "unknown" and self.gcode_state != "unknown"):
+        if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
             self._update_task_data()
 
         # Handle print start
@@ -400,8 +400,7 @@ class Info:
                 self.start_time = get_end_time(0)
 
             # Update task data if bambu cloud connected
-            if self.mqtt_mode == "bambu_cloud":
-                self._update_task_data()
+            self._update_task_data()
 
         # Handle print failed
         if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
@@ -477,12 +476,17 @@ class Info:
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
     def _update_task_data(self):
-        LOGGER.debug("Updating cloud task data")
-        self._task_data = self.client.bambu_cloud.get_tasklist_for_printer(self.serial)
-        url = self._task_data.get('cover', '')
-        if url != "":
-            bytes = self.client.bambu_cloud.download(url)
-            self.device.cover_imaget.set_jpeg(bytes)
+        if self.has_bambu_cloud_connection:
+            LOGGER.debug("Updating cloud task data")
+            self._task_data = self.client.bambu_cloud.get_tasklist_for_printer(self.serial)
+            url = self._task_data.get('cover', '')
+            if url != "":
+                data = self.client.bambu_cloud.download(url)
+                self.device.cover_image.set_jpeg(data)
+
+    @property
+    def has_bambu_cloud_connection(self) -> bool:
+        return self.client.bambu_cloud.auth_token != ""
 
 @dataclass
 class AMSInstance:

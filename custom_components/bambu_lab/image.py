@@ -30,7 +30,7 @@ async def async_setup_entry(
     if COVER_IMAGE_SENSOR.exists_fn(coordinator):
         cover_image = CoverImage(hass, coordinator, COVER_IMAGE_SENSOR)
         async_add_entities([cover_image])
-        coordinator.CoverImage = cover_image
+        #coordinator.CoverImage = cover_image
 
 
 class P1PImage(ImageEntity, BambuLabEntity):

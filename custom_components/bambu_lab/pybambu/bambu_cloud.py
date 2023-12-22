@@ -189,15 +189,15 @@ class BambuCloud:
             case _:
                 return "New"
 
-    def download(self, url: str):
+    def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")
         headers = {'Authorization': 'Bearer ' + self._auth_token}
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url,  timeout=10) # headers=headers,
         if not response.ok:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        LOGGER.debug(f"Success: {response.content}")
-        return response.content()
+        LOGGER.debug("Success")
+        return response.content
 
     @property
     def username(self):
