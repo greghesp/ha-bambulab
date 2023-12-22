@@ -299,7 +299,6 @@ class BambuClient:
         self.publish(START_PUSH)
         
     def on_jpeg_received(self, bytes):
-        #LOGGER.debug("JPEG received")
         self._device.p1p_camera.set_jpeg(bytes)
 
     def on_message(self, client, userdata, message):
