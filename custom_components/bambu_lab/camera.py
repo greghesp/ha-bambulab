@@ -52,9 +52,7 @@ class BambuLabCamera(BambuLabEntity, Camera):
 
     @property
     def is_streaming(self) -> bool:
-        if self.coordinator.get_model().camera.rtsp_url == "disable" or None:
-            return False
-        return True
+        return self.available
 
     @property
     def is_recording(self) -> bool:
@@ -62,8 +60,12 @@ class BambuLabCamera(BambuLabEntity, Camera):
             return True
         return False
 
+    @property
+    def available(self) -> bool:
+        return self.coordinator.get_model().camera.rtsp_url is not None or "disable"
+
     async def stream_source(self) -> str | None:
-        if self.coordinator.get_model().camera.rtsp_url is not None:
+        if self.available:
             # rtsps://192.168.1.1/streaming/live/1
 
             parsed_url = urlparse(self.coordinator.get_model().camera.rtsp_url)
