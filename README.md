@@ -62,14 +62,17 @@ instead of OAuth.
 
 ### Print Progress
 
-| Sensor            | Notes                |
-|-------------------|----------------------|
-| Current Layer     |                      |
-| Total Layer Count |                      |
-| Print Progress    |                      |
-| Start Time        | Simulated on P1*/A1* |
-| Remainining Time  |                      |
-| End Time          |                      |
+| Sensor            | Notes                    |
+|-------------------|--------------------------|
+| Current Layer     |                          |
+| Total Layer Count |                          |
+| Print Progress    |                          |
+| Print Weight      |                          |
+| Print Length      |                          |
+| Print Bed Type    | Not the current bed type |
+| Start Time        | Simulated on P1*/A1*     |
+| Remainining Time  |                          |
+| End Time          |                          |
 
 ### Status
 
