@@ -137,6 +137,9 @@
     "image": {
       "p1p_camera": {
         "name": "摄像头"
+      },
+      "cover_image": {
+        "name": "封面图片"
       }
     },
     "light": {

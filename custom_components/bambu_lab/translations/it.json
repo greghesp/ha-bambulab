@@ -137,6 +137,9 @@
     "image": {
       "p1p_camera": {
         "name": "Camera"
+      },
+      "cover_image": {
+        "name": "Immagine di copertina"
       }
     },
     "light": {
