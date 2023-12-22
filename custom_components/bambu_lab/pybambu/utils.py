@@ -92,20 +92,28 @@ def get_printer_type(modules, default):
     rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
     if len(esp32.keys()) > 1:
         if esp32.get("hw_ver") == "AP04":
-            LOGGER.debug("Device is P1P/S")
-            return "P1P"
+            if esp32.get("project_name") == "C11":
+                LOGGER.debug("Device is P1P")
+                return "P1P"
+            elif esp32.get("project_name") == "C12":
+                LOGGER.debug("Device is P1S")
+                return "P1S"
         if esp32.get("hw_ver") == "AP05":
-            LOGGER.debug("Device is A1 Mini")
-            return "A1 Mini"
+            if esp32.get("project_name") == "N1":
+                LOGGER.debug("Device is A1 Mini")
+                return "A1Mini"
+            elif esp32.get("project_name") == "N2S":
+                LOGGER.debug("Device is A1")
+                return "A1"
         if esp32.get("hw_ver") == "AP06":
             LOGGER.debug("Device is A1")
             return "A1"
     elif len(rv1126.keys()) > 1:
         if rv1126.get("hw_ver") == "AP05":
-            LOGGER.debug("Device is X1/C")
+            LOGGER.debug("Device is X1C")
             return "X1C"
-        if rv1126.get("hw_ver") == "AP06":
-            LOGGER.debug("Device is X1E")
+        else:
+            LOGGER.debug("Device is X1E?")
             return "X1E"
     return default
 
@@ -115,11 +123,9 @@ def get_hw_version(modules, default):
     esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
     rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
     if len(esp32.keys()) > 1:
-        if esp32.get("hw_ver") == "AP04" or esp32.get("hw_ver") == "AP05":
-            return esp32.get("hw_ver")
+        return esp32.get("hw_ver")
     elif len(rv1126.keys()) > 1:
-        if rv1126.get("hw_ver") == "AP05":
-            return rv1126.get("hw_ver")
+        return rv1126.get("hw_ver")
     return default
 
 

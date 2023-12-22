@@ -8,6 +8,7 @@ from .utils import \
     fan_percentage, \
     fan_percentage_to_gcode, \
     get_filament_name, \
+    get_printer_type, \
     get_speed_name, \
     get_stage_action, \
     get_hw_version, \
@@ -334,9 +335,10 @@ class Info:
         #         "hw_ver": "AP04",
         #         "sn": "..."
         #     },
-
-        self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
-        self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
+        modules = data.get("module", [])
+        self.device_type = get_printer_type(modules, self.device_type)
+        self.hw_ver = get_hw_version(modules, self.hw_ver)
+        self.sw_ver = get_sw_version(modules, self.sw_ver)
         if self.client.callback is not None:
             self.client.callback("event_printer_info_update")
 

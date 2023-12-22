@@ -11,11 +11,6 @@ from .const import LOGGER
 @dataclass
 class BambuCloud:
   
-    def __init__(self):
-        self._email = ""    
-        self._auth_token = ""
-        self._username = ""
-
     def __init__(self, email:str, username: str, auth_token: str):
         self._email = email
         self._username = username
@@ -81,24 +76,24 @@ class BambuCloud:
     #     ]
     # }
 
-    def TestAuthentication(self, email: str, username: str, auth_token: str) -> bool:
+    def test_authentication(self, email: str, username: str, auth_token: str) -> bool:
         self._email = email
         self._username = username
         self._auth_token = auth_token
         try:
-            self.GetDeviceList()
+            self.get_device_list()
         except:
             return False
         return True
 
-    def Login(self, email: str, password: str):
+    def login(self, email: str, password: str):
         self._email = email
         self._password = password
 
         self._auth_token = self._get_authentication_token()
         self._username = self._get_username_from_authentication_token()
 
-    def GetDeviceList(self) -> dict:
+    def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
         url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
@@ -159,7 +154,6 @@ class BambuCloud:
         if not response.ok:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        #LOGGER.debug(f"Success: {response.json()}")
         return response.json()
     
     def get_tasklist_for_printer(self, deviceId: str) -> dict:
@@ -191,12 +185,10 @@ class BambuCloud:
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
-        response = requests.get(url,  timeout=10) # headers=headers,
+        response = requests.get(url,  timeout=10)
         if not response.ok:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        LOGGER.debug("Success")
         return response.content
 
     @property
