@@ -77,6 +77,7 @@ instead of OAuth.
 |---------------|-------------------|
 | Current Stage |                   |
 | Print Status  |                   |
+| Cover Image   |                   |
 
 ### Miscellaneous
 
@@ -92,13 +93,15 @@ instead of OAuth.
 | Active tray       | If AMS present    |
 | Active tray index | If AMS present    |
 
-### Lights
+### Controls
 
-Chamber Light
-
-### Buttons
-
-Pause, Resume Stop
+| Lights              | Notes                                              |
+|---------------------|----------------------------------------------------|
+| Chamber Light       |                                                    |
+| Pause               |                                                    |
+| Resume              |                                                    |
+| Stop                |                                                    |
+| Manual Refresh Mode | P1*/A1* only and only available in local mqtt mode |
 
 ### AMS
 
@@ -120,7 +123,6 @@ Pause, Resume Stop
 | Name              |                   |
 | Type              |                   |
 
-
 ### External Spool
 
 | Sensor            | Notes             |
@@ -138,17 +140,14 @@ Pause, Resume Stop
 
 ### Diagnostics
 
-| Sensor            | Notes             |
-|-------------------|-------------------|
-| Wifi Signal       |                   |
-| HMS Errors        |                   |
-|  Attributes:      |                   |
-|   Count           |                   |
-|   1-Error         |                   |
-|   1-Wiki          |                   |
-|   2-Error         |                   |
-|   2-Wiki          |                   |
-|   etc.            |                   |
+| Sensor                    | Notes                                                       |
+|------------------=--------|-------------------------------------------------------------|
+| Firmware Update Available |                                                             |
+| Force Refresh             |                                                             |
+| HMS Errors                | Attributes contain the error code, description and wiki URL |
+| MQTT connection mode      | Bambu Cloud or Local                                        |
+| Online                    |                                                             |
+| Wifi Signal               |                                                             |
 
 ### Cameras
 
