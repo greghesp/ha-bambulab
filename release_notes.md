@@ -1,3 +1,6 @@
+### V2.0.2
+- Fix mishandling of optional 'email' field when upgrading or if early 2.0 dev build was used.
+
 ### V2.0.1
 - Fix P1/A1 chamber image not updating
 - Missed localization of new strings
