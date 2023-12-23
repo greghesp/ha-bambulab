@@ -56,7 +56,7 @@ instead of OAuth.
 |---------------|-------------------|
 | Bed           |                   |
 | Target Bed    |                   |
-| Chamber       | X1* only          |
+| Chamber       | X1 only           |
 | Nozzle        |                   |
 | Target Nozzle |                   |
 
@@ -70,7 +70,7 @@ instead of OAuth.
 | Print Weight      |                             |
 | Print Length      |                             |
 | Print Bed Type    | Bed choice in the print job |
-| Start Time        | Simulated on P1*/A1*        |
+| Start Time        | Simulated on P1/A1          |
 | Remainining Time  |                             |
 | End Time          |                             |
 
@@ -99,20 +99,20 @@ instead of OAuth.
 
 ### Controls
 
-| Lights              | Notes                                              |
-|---------------------|----------------------------------------------------|
-| Chamber Light       |                                                    |
-| Pause               |                                                    |
-| Resume              |                                                    |
-| Stop                |                                                    |
-| Manual Refresh Mode | P1*/A1* only and only available in local mqtt mode |
+| Lights              | Notes                                            |
+|---------------------|--------------------------------------------------|
+| Chamber Light       |                                                  |
+| Pause               |                                                  |
+| Resume              |                                                  |
+| Stop                |                                                  |
+| Manual Refresh Mode | P1/A1 only and only available in local mqtt mode |
 
 ### AMS
 
 | Sensor            | Notes             |
 |-------------------|-------------------|
 | Humidity Index    |                   |
-| Temperature       | X1* only          |
+| Temperature       | X1 only           |
 | Tray 1            |                   |
 | Tray 2            |                   |
 | Tray 3            |                   |
@@ -121,7 +121,7 @@ instead of OAuth.
 | Tray attributes:  |                   |
 | Color             |                   |
 | Empty             |                   |
-| K Value           | P1*/A1* only      |
+| K Value           | P1/A1   only      |
 | Max Nozzle Temp   |                   |
 | Min Nozzle TEmp   |                   |
 | Name              |                   |
@@ -136,7 +136,7 @@ instead of OAuth.
 | Tray attributes:  |                   |
 | Color             |                   |
 | Empty             |                   |
-| K Value           | P1*/A1* only      |
+| K Value           | P1/A1 only        |
 | Max Nozzle Temp   |                   |
 | Min Nozzle TEmp   |                   |
 | Name              |                   |
@@ -155,9 +155,9 @@ instead of OAuth.
 
 ### Cameras
 
-| Sensor            | Notes             |
-|-------------------|-------------------|
-| Chamber           |                   |
+| Sensor            | Notes                            |
+|-------------------|----------------------------------|
+| Chamber           | P1/A1 need the host IP providing |
 
 ### Automation device triggers
 
