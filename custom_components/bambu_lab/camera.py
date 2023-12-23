@@ -1,8 +1,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
-from yarl import URL
-from urllib.parse import urlparse, urlunparse, quote
+from urllib.parse import urlparse
 
 from homeassistant.components import ffmpeg
 
@@ -44,17 +43,15 @@ class BambuLabCamera(BambuLabEntity, Camera):
         """Initialize the sensor."""
 
         self._attr_unique_id = f"{config_entry.data['serial']}_camera"
-        self._access_code = config_entry.data['access_code']
-        self._host = config_entry.data['host']
+        self._access_code = config_entry.options['access_code']
+        self._host = config_entry.options['host']
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
 
     @property
     def is_streaming(self) -> bool:
-        if self.coordinator.get_model().camera.rtsp_url == "disable" or None:
-            return False
-        return True
+        return self.available
 
     @property
     def is_recording(self) -> bool:
@@ -62,12 +59,21 @@ class BambuLabCamera(BambuLabEntity, Camera):
             return True
         return False
 
+    @property
+    def available(self) -> bool:
+        return self.coordinator.get_model().camera.rtsp_url is not None or "disable"
+
     async def stream_source(self) -> str | None:
-        if self.coordinator.get_model().camera.rtsp_url is not None:
+        if self.available:
             # rtsps://192.168.1.1/streaming/live/1
 
             parsed_url = urlparse(self.coordinator.get_model().camera.rtsp_url)
-            url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{parsed_url.netloc}{parsed_url.path}"
+            if self.coordinator.get_model().info.mqtt_mode == "local":
+                # For unknown reasons the returned rtsp URL sometimes has a completely incorrect IP address in it for the host.
+                # Since we know the correct IP (but only in local mqtt connection mode), rewrite the URL to have that.
+                url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{self._host}{parsed_url.path}"
+            else:
+                url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{parsed_url.netloc}{parsed_url.path}"
 
             LOGGER.debug(f"Camera RTSP Feed is {url}")
             return str(url)

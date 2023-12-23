@@ -13,19 +13,23 @@ Want to contribute to ha-bambulab? Great!  We have a few small asks though!
   code.
 - Please name your commits accordingly, and add some context as to what you have added.
 
+If you feel this integration was valuable and want to support it in other ways, you can buy me a coffee at https://Ko-fi.com/adriangarside
+
 ## Setup
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab&category=Integration)
 
 To install, add this Github Repo to the HACS Custom Repositories, or click the badge above.
 
-For now, you will need the following information:
+For configuration, you'll ideally use your Bambu Credentials for the simplest setup. You can then optionally provide the printer IP address to enable local direct to printer connection and to enable the P1/A1 camera support. 
 
-- Printer IP
-- LAN Access Code (Can be found on the Printer settings)
-- Serial Number (Can be found in the printer settings or in Bambu Studio)
+However the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to lan mode. If you fall into any of these, select the lan mode connection option. You will need to provide:
+- The printer type
+- Printer Serial Number - can be found in the printer settings or in Bambu Studio 
+- Local printer IP address - can be found in the printer network settings
+- LAN Access Code - can be found in the Printer settings
 
-### Setup using OAuth
+### Setup using Bambu Cloud w/ OAuth
 
 If you signed up using any OAuth method, you need to set a password for your Bambu Cloud account:
 
@@ -38,108 +42,122 @@ instead of OAuth.
 
 ## Features
 
-### Sensors
+### Fans
 
-| Sensor                    | X1C                | X1                 | P1P                | P1S                | A1 Mini            | 
-|---------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Aux Fan Speed             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Bed Temperature           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Chamber Fan Speed         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:                |
-| Chamber Temperature       | :white_check_mark: | :white_check_mark: | :x:                | :x:                | :x:                |
-| Cooling Fan Speed         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Current Layer             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Current Stage             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| End Time                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Heatbreak Fan Speed       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Nozzle Target Temperature | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Nozzle Temperature        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Print Progress            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Print Status              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Remaining Time            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Speed Profile             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Start Time                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Target Bed Temperature    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Total Layer Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Timelapse Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Sensor        | Notes             |
+|---------------|-------------------|
+| Aux           |                   |
+| Chamber       | Not on A1/A1 Mini |
+| Cooling       |                   |
 
-Notes:
+### Temperatures
 
-- If AMS(s) are present, additional 'Active tray index' and 'Active tray' sensors are present on the Printer device.
-- Start time on the P1P/S is simulated since the printer itself doesn't track that so the integration must be running
-  when the print starts.
+| Sensor        | Notes             |
+|---------------|-------------------|
+| Bed           |                   |
+| Target Bed    |                   |
+| Chamber       | X1 only           |
+| Nozzle        |                   |
+| Target Nozzle |                   |
 
-### Lights
+### Print Progress
 
-| Light         | X1C                | X1                 | P1P                | P1S                | A1 Mini            |    
-|---------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Chamber Light | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Sensor            | Notes                       |
+|-------------------|-----------------------------|
+| Current Layer     |                             |
+| Total Layer Count |                             |
+| Print Progress    |                             |
+| Print Weight      |                             |
+| Print Length      |                             |
+| Print Bed Type    | Bed choice in the print job |
+| Start Time        | Simulated on P1/A1          |
+| Remainining Time  |                             |
+| End Time          |                             |
 
-### Buttons
+### Status
 
-This currently exposes the following Buttons:
+| Sensor        | Notes             |
+|---------------|-------------------|
+| Current Stage |                   |
+| Print Status  |                   |
+| Cover Image   |                   |
+| Print Weight  |                   |
 
-| Button | X1C                | X1                 | P1P                | P1S                | A1 Mini            |
-|--------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Pause  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Resume | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Stop   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+### Miscellaneous
+
+| Sensor            | Notes             |
+|-------------------|-------------------|
+| Speed Profile     |                   |
+| Timelapse Active  |                   |
 
 ### AMS
 
-| Sensor           | X1C                | X1                 | P1P                | P1S                | A1 Mini            |
-|------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Humidity Index   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 1           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 2           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 3           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray 4           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tray Attributes: |                    |                    |                    |                    |                    |
-| Active           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Color            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Empty            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| K Value          | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Max Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Min Nozzle Temp  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Name             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Type             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Sensor            | Notes             |
+|-------------------|-------------------|
+| Active tray       | If AMS present    |
+| Active tray index | If AMS present    |
+
+### Controls
+
+| Lights              | Notes                                            |
+|---------------------|--------------------------------------------------|
+| Chamber Light       |                                                  |
+| Pause               |                                                  |
+| Resume              |                                                  |
+| Stop                |                                                  |
+| Manual Refresh Mode | P1/A1 only and only available in local mqtt mode |
+
+### AMS
+
+| Sensor            | Notes             |
+|-------------------|-------------------|
+| Humidity Index    |                   |
+| Temperature       | X1 only           |
+| Tray 1            |                   |
+| Tray 2            |                   |
+| Tray 3            |                   |
+| Tray 4            |                   |
+|                   |                   |
+| Tray attributes:  |                   |
+| Color             |                   |
+| Empty             |                   |
+| K Value           | P1/A1   only      |
+| Max Nozzle Temp   |                   |
+| Min Nozzle TEmp   |                   |
+| Name              |                   |
+| Type              |                   |
 
 ### External Spool
 
-| Sensor          | X1C                | X1                 | P1P                | P1S                | A1 Mini            |
-|-----------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| External Spool  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Attributes:     |                    |                    |                    |                    |                    |
-| Active          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Color           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| K Value         | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Max Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Min Nozzle Temp | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Name            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Type            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Sensor            | Notes             |
+|-------------------|-------------------|
+| External Spool    |                   |
+|                   |                   |
+| Tray attributes:  |                   |
+| Color             |                   |
+| Empty             |                   |
+| K Value           | P1/A1 only        |
+| Max Nozzle Temp   |                   |
+| Min Nozzle TEmp   |                   |
+| Name              |                   |
+| Type              |                   |
 
 ### Diagnostics
 
-This currently exposes the following Diagnostic Sensors:
-
-| Sensor        | X1C                | X1                 | P1P                | P1S                | A1 Mini            |
-|---------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Wifi Signal   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| HMS Errors    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Attributes:   |                    |                    |                    |                    |                    |
-| Count         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 1-Error       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 1-Wiki        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2-Error       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2-Wiki        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| ... and so on |                    |                    |                    |                    |                    |
+| Sensor                    | Notes                                                          |
+|---------------------------|----------------------------------------------------------------|
+| Firmware Update Available |                                                                |
+| Force Refresh             |                                                                |
+| HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
+| MQTT connection mode      | Bambu Cloud or Local                                           |
+| Online                    |                                                                |
+| Wifi Signal               |                                                                |
 
 ### Cameras
 
-| Camera  | X1C                | X1                 | P1P                | P1S                | A1 Mini            |
-|---------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Chamber | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-
-P1P/P1S/A1 Mini only support the chamber camera when connected by the local LAN connection mode.
+| Sensor            | Notes                            |
+|-------------------|----------------------------------|
+| Chamber           | P1/A1 need the host IP providing |
 
 ### Automation device triggers
 

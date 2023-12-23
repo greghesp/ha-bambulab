@@ -8,6 +8,7 @@ from .utils import \
     fan_percentage, \
     fan_percentage_to_gcode, \
     get_filament_name, \
+    get_printer_type, \
     get_speed_name, \
     get_stage_action, \
     get_hw_version, \
@@ -20,13 +21,12 @@ from .utils import \
 from .const import LOGGER, Features, FansEnum, SPEED_PROFILE
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
-
 class Device:
     def __init__(self, client, device_type, serial):
         self.client = client
         self.temperature = Temperature()
         self.lights = Lights(client)
-        self.info = Info(client, device_type, serial)
+        self.info = Info(client = client, device = self, device_type = device_type, serial = serial)
         self.fans = Fans(client)
         self.speed = Speed(client)
         self.stage = StageAction()
@@ -34,11 +34,11 @@ class Device:
         self.external_spool = ExternalSpool(client)
         self.hms = HMSList(client)
         self.camera = Camera()
-        self._active_tray = None
         self.push_all_data = None
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
-            self.p1p_camera = P1PCamera(client)
+            self.chamber_image = ChamberImage(client)
+        self.cover_image = CoverImage(client)
 
     def print_update(self, data):
         """Update from dict"""
@@ -71,9 +71,9 @@ class Device:
             case Features.CHAMBER_LIGHT:
                 return True
             case Features.CHAMBER_FAN:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
             case Features.CHAMBER_TEMPERATURE:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CURRENT_STAGE:
                 return True
             case Features.PRINT_LAYERS:
@@ -83,17 +83,20 @@ class Device:
             case Features.EXTERNAL_SPOOL:
                 return True
             case Features.K_VALUE:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
             case Features.START_TIME:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.START_TIME_GENERATED:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini"
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
             case Features.AMS_TEMPERATURE:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CAMERA_RTSP:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C"
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CAMERA_IMAGE:
-                return (self.client.host != "us.mqtt.bambulab.com") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1Mini")
+                return (self.client.host != "us.mqtt.bambulab.com") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
+            case Features.MANUAL_MODE:
+                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
+
         return False
     
     def get_active_tray(self):
@@ -104,7 +107,7 @@ class Device:
                 return self.external_spool
             active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
             active_tray = self.ams.tray_now % 4
-            return active_ams.tray[active_tray]
+            return None if active_ams is None else active_ams.tray[active_tray]
         else:
             return self.external_spool
 
@@ -112,12 +115,14 @@ class Device:
 class Lights:
     """Return all light related info"""
     chamber_light: str
+    chamber_light_override: str
     work_light: str
 
     def __init__(self, client):
         self.client = client
         self.chamber_light = "unknown"
         self.work_light = "unknown"
+        self.chamber_light_override = ""
 
     def print_update(self, data):
         """Update from dict"""
@@ -133,21 +138,28 @@ class Lights:
         #     }
         # ],
 
-        self.chamber_light = \
+        chamber_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light",
                    {"mode": self.chamber_light}).get("mode")
+        if self.chamber_light_override != "":
+            if self.chamber_light_override == chamber_light:
+                self.chamber_light_override = ""
+        else:
+            self.chamber_light = chamber_light
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
 
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
+        self.chamber_light_override = "on"
         if self.client.callback is not None:
             self.client.callback("event_light_update")
         self.client.publish(CHAMBER_LIGHT_ON)
 
     def TurnChamberLightOff(self):
         self.chamber_light = "off"
+        self.chamber_light_override = "off"
         if self.client.callback is not None:
             self.client.callback("event_light_update")
         self.client.publish(CHAMBER_LIGHT_OFF)
@@ -269,9 +281,11 @@ class Info:
     online: bool
     new_version_state: int
     print_error: int
+    _cover_url: str
 
-    def __init__(self, client, device_type, serial):
+    def __init__(self, device, client, device_type, serial):
         self.client = client
+        self.device = device
         self.wifi_signal = 0
         self.print_percentage = 0
         self.device_type = device_type
@@ -287,9 +301,13 @@ class Info:
         self.current_layer = 0
         self.total_layers = 0
         self.online = False
-        self.mqtt_mode = "local" if self.client._username == "bblp" else "bambu_cloud"
+        self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
         self.new_version_state = 0
         self.print_error = 0
+        self._cover_url = ""
+        self.print_weight = 0
+        self.print_length = 0
+        self.print_bed_type = "unknown"
 
     def set_online(self, online):
         if self.online != online:
@@ -320,9 +338,10 @@ class Info:
         #         "hw_ver": "AP04",
         #         "sn": "..."
         #     },
-
-        self.hw_ver = get_hw_version(data.get("module", []), self.hw_ver)
-        self.sw_ver = get_sw_version(data.get("module", []), self.sw_ver)
+        modules = data.get("module", [])
+        self.device_type = get_printer_type(modules, self.device_type)
+        self.hw_ver = get_hw_version(modules, self.hw_ver)
+        self.sw_ver = get_sw_version(modules, self.sw_ver)
         if self.client.callback is not None:
             self.client.callback("event_printer_info_update")
 
@@ -370,6 +389,10 @@ class Info:
         if data.get("gcode_start_time") is not None:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
+        # Initialize task data at startup.
+        if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
+            self._update_task_data()
+
         # Handle print start
         if previous_gcode_state != "PREPARE" and self.gcode_state == "PREPARE":
             if self.client.callback is not None:
@@ -380,6 +403,9 @@ class Info:
             if device.supports_feature(Features.START_TIME_GENERATED):
                 # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                 self.start_time = get_end_time(0)
+
+            # Update task data if bambu cloud connected
+            self._update_task_data()
 
         # Handle print failed
         if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
@@ -404,7 +430,7 @@ class Info:
         self.print_error = data.get("print_error", self.print_error)
 
         # Version data is provided differently for X1 and P1
-        # P!P example:
+        # P1P example:
         # "upgrade_state": {
         #   "sequence_id": 0,
         #   "progress": "",
@@ -452,8 +478,67 @@ class Info:
         # And the P1P lists it's versions in new_ver_list as a structured set of data with old
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
+
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
+    # The task list is of the following form with a 'hits' array with typical 20 entries.
+    #
+    # "total": 531,
+    # "hits": [
+    #     {
+    #     "id": 35237965,
+    #     "designId": 0,
+    #     "designTitle": "",
+    #     "instanceId": 0,
+    #     "modelId": "REDACTED",
+    #     "title": "REDACTED",
+    #     "cover": "REDACTED",
+    #     "status": 4,
+    #     "feedbackStatus": 0,
+    #     "startTime": "2023-12-21T19:02:16Z",
+    #     "endTime": "2023-12-21T19:02:35Z",
+    #     "weight": 34.62,
+    #     "length": 1161,
+    #     "costTime": 10346,
+    #     "profileId": 35276233,
+    #     "plateIndex": 1,
+    #     "plateName": "",
+    #     "deviceId": "REDACTED",
+    #     "amsDetailMapping": [
+    #         {
+    #         "ams": 4,
+    #         "sourceColor": "F4D976FF",
+    #         "targetColor": "F4D976FF",
+    #         "filamentId": "GFL99",
+    #         "filamentType": "PLA",
+    #         "targetFilamentType": "",
+    #         "weight": 34.62
+    #         }
+    #     ],
+    #     "mode": "cloud_file",
+    #     "isPublicProfile": false,
+    #     "isPrintable": true,
+    #     "deviceModel": "P1P",
+    #     "deviceName": "Bambu P1P",
+    #     "bedType": "textured_plate"
+    #     },
+
+    def _update_task_data(self):
+        if self.has_bambu_cloud_connection:
+            LOGGER.debug("Updating cloud task data")
+            self._task_data = self.client.bambu_cloud.get_tasklist_for_printer(self.serial)
+            url = self._task_data.get('cover', '')
+            if url != "":
+                data = self.client.bambu_cloud.download(url)
+                self.device.cover_image.set_jpeg(data)
+
+            self.print_weight = self._task_data.get('weight', self.print_weight)
+            self.print_length = self._task_data.get('length', self.print_length)
+            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+
+    @property
+    def has_bambu_cloud_connection(self) -> bool:
+        return self.client.bambu_cloud.auth_token != ""
 
 @dataclass
 class AMSInstance:
@@ -479,7 +564,7 @@ class AMSList:
     def __init__(self, client):
         self.client = client
         self.tray_now = 0
-        self.data = []
+        self.data = [None] * 4
 
     def info_update(self, data):
         """Update from dict"""
@@ -524,9 +609,8 @@ class AMSList:
                 # requires as part of the home assistant device identity.
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
-                    while len(self.data) <= index:
-                        received_ams_info = True
-                        self.data.append(AMSInstance())
+                    if self.data[index] is None:
+                        self.data[index] = AMSInstance()
 
                     if self.data[index].serial != module['sn']:
                         received_ams_info = True
@@ -613,8 +697,8 @@ class AMSList:
                 received_ams_data = True
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
-                while len(self.data) <= index:
-                    self.data.append(AMSInstance())
+                if self.data[index] is None:
+                    self.data[index] = AMSInstance()
 
                 self.data[index].humidity_index = int(ams['humidity'])
                 self.data[index].temperature = float(ams['temp'])
@@ -814,25 +898,41 @@ class HMSList:
                 attr = hms['attr']
                 code = hms['code']
                 hms_error = f'{int(attr / 0x10000):0>4X}_{attr & 0xFFFF:0>4X}_{int(code / 0x10000):0>4X}_{code & 0xFFFF:0>4X}'  # 0300_0100_0001_0007
-                LOGGER.warning(f"HMS ERROR: HMS_{hms_error} : {get_HMS_error_text(hms_error)}")
                 errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
                 errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(hms_error)}"
 
             if self.errors != errors:
                 self.errors = errors
+                if self.count != 0:
+                    LOGGER.warning(f"HMS ERRORS: {errors}")
                 if self.client.callback is not None:
                     self.client.callback("event_hms_errors")
 
 @dataclass
-class P1PCamera:
-    """Returns the latest jpeg date from the P1P camera"""
+class ChamberImage:
+    """Returns the latest jpeg data from the P1P camera"""
     def __init__(self, client):
         self.client = client
         self._bytes = bytearray()
 
-    def on_jpeg_received(self, bytes):
+    def set_jpeg(self, bytes):
         self._bytes = bytes
-        self.client.callback("p1p_jpeg_received")
+        self.client.callback("camera_jpeg_received")
+    
+    def get_jpeg(self) -> bytearray:
+        return self._bytes
+    
+@dataclass
+class CoverImage:
+    """Returns the cover image from the Bambu API"""
+
+    def __init__(self, client):
+        self.client = client
+        self._bytes = bytearray()
+
+    def set_jpeg(self, bytes):
+        self._bytes = bytes
+        #self.client.callback("cover_image_jpeg_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes

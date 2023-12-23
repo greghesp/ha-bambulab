@@ -34,16 +34,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._hass = hass
         self._entry = entry
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
-        self.client = BambuClient(device_type = entry.data.get("device_type", "X1C"),
-                                  serial = entry.data["serial"],
-                                  host = entry.data["host"],
-                                  username = entry.data.get("username", "bblp"),
-                                  access_code = entry.data["access_code"])
 
+        self.client = BambuClient(device_type = entry.data["device_type"],
+                                  serial = entry.data["serial"],
+                                  host = entry.options['host'],
+                                  local_mqtt = entry.options['local_mqtt'],
+                                  region = entry.options.get('region', ''),
+                                  email = entry.options['email'],
+                                  username = entry.options['username'],
+                                  auth_token = entry.options['auth_token'],
+                                  access_code = entry.options['access_code'])
+            
         self._updatedDevice = False
         self.data = self.get_model()
-        self._lock = threading.Lock()
-        self.P1PCamera = None
+        self.ChamberImage = None
         super().__init__(
             hass,
             LOGGER,
@@ -96,12 +100,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_print_started":
                     self.PublishDeviceTriggerEvent(event)
 
-                case "p1p_jpeg_received":
-                    self._p1p_camera_jpeg_updated()
+                case "chamber_image_received":
+                    self._chamber_image_updated()
 
 
         async def listen():
-            await self.client.connect(callback=event_handler)
+            self.client.connect(callback=event_handler)
 
         asyncio.create_task(listen())
 
@@ -118,10 +122,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return device
     
     def _update_data(self):
-        self._lock.acquire()
         device = self.get_model()
         self.async_set_updated_data(device)
-        self._lock.release()
 
     def _update_hms(self):
         dev_reg = device_registry.async_get(self._hass)
@@ -147,8 +149,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 LOGGER.debug(f"EVENT: HMS errors: {event_data}")
                 self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
-    def _p1p_camera_jpeg_updated(self):
-        self.P1PCamera.jpeg_updated()
+    def _chamber_image_updated(self):
+        self.ChamberImage.image_updated()
 
     def _update_device_info(self):
         if not self._updatedDevice:
@@ -157,61 +159,39 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             new_hw_ver = device.info.hw_ver
             LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
             if (new_sw_ver != "unknown"):
-                self._lock.acquire()
                 dev_reg = device_registry.async_get(self._hass)
                 hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver)
-
-                # Fix up missing or incorrect device_type now that we know what the printer model is.
-                device_type = self.get_model().info.device_type
-                if self._entry.data.get("device_type", "") != device_type:
-                    LOGGER.debug(f"Force updating device type: {device_type}")
-                    self._hass.config_entries.async_update_entry(
-                        self._entry,
-                        title=self._entry.data["serial"],
-                        data={
-                            "device_type": device_type,
-                            "serial": self._entry.data["serial"],
-                            "host": self._entry.data["host"],
-                            "username": self._entry.data.get("username", "bblp"),
-                            "access_code": self._entry.data["access_code"]
-                        }
-                    )
                 self._updatedDevice = True
-                self._lock.release()
 
     async def _reinitialize_sensors(self):
         LOGGER.debug("_reinitialize_sensors START")
-        if self._lock.acquire(False):
-            LOGGER.debug("async_forward_entry_unload")
-            await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
-            LOGGER.debug("async_forward_entry_setup")
-            await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
-            self._lock.release()
+        LOGGER.debug("async_forward_entry_unload")
+        await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
+        LOGGER.debug("async_forward_entry_setup")
+        await self.hass.config_entries.async_forward_entry_setup(self.config_entry, Platform.SENSOR)
         LOGGER.debug("_reinitialize_sensors DONE")
 
     def _update_ams_info(self):
-        self._lock.acquire()
         device = self.get_model()
         dev_reg = device_registry.async_get(self._hass)
         for index in range (0, len(device.ams.data)):
-            LOGGER.debug(f"Initialize AMS {index+1}")
-            hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
-                                                   identifiers={(DOMAIN, device.ams.data[index].serial)})
-            serial = self._entry.data["serial"]
-            device_type = self._entry.data["device_type"]
-            dev_reg.async_update_device(hadevice.id,
-                                        name=f"{device_type}_{serial}_AMS_{index+1}",
-                                        model="AMS",
-                                        manufacturer=BRAND,
-                                        sw_version=device.ams.data[index].sw_version,
-                                        hw_version=device.ams.data[index].hw_version)
+            if device.ams.data[index] is not None:
+                LOGGER.debug(f"Initialize AMS {index+1}")
+                hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
+                                                    identifiers={(DOMAIN, device.ams.data[index].serial)})
+                serial = self._entry.data["serial"]
+                device_type = self._entry.data["device_type"]
+                dev_reg.async_update_device(hadevice.id,
+                                            name=f"{device_type}_{serial}_AMS_{index+1}",
+                                            model="AMS",
+                                            manufacturer=BRAND,
+                                            sw_version=device.ams.data[index].sw_version,
+                                            hw_version=device.ams.data[index].hw_version)
 
-        self._lock.release()
         self.hass.async_create_task(self._reinitialize_sensors())
 
     def _update_external_spool_info(self):
-        self._lock.acquire()
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
                                                identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")})
@@ -224,7 +204,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                     sw_version="",
                                     hw_version="")
         
-        self._lock.release()
         # self.hass.async_create_task(self._reinitialize_sensors())
 
     def PublishDeviceTriggerEvent(self, event: str):

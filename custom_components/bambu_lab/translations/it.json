@@ -13,32 +13,43 @@
       "already_configured": "Il dispositivo è già configurato"
     },
     "error": {
-      "cannot_connect": "Connessione fallita",
-      "invalid_auth": "Autenticazione non valida",
-      "unknown": "Errore inaspettato"
+      "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
+      "cannot_connect_local": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "no_printers": "Nessuna stampante non configurata trovata nell'account.",
+      "invalid_auth": "Autenticazione non valida.",
+      "unknown": "Errore inaspettato."
     },
     "step": {
       "user": {
-        "description": "Seleziona la tua stampante e fornisci il suo numero di serie.\n\nNota che l'ultimo firmware P1P (1.0.4.0) supporta correttamente solo una singola connessione locale. Se hai bisogno di un secondo (ad esempio per P1Touch), puoi utilizzare Bambu Cloud in questa integrazione.\n\nUtilizza locale in tutti gli altri casi.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account di social media senza password. E non funzionerà per le stampanti impostate attivamente in modalità Lan.",
         "data": {
-          "device_type": "Modello della stampante:",
-          "serial": "Numero di serie",
-          "printer_mode": "Modalità connessione MQTT della stampante:"
+          "printer_mode": "Modalità di configurazione della stampante:"
         }
       },
       "Bambu": {
-        "title": "Connessione Bambu Cloud MQTT",
-        "description": "Fornisci le credenziali Bambu Lab per consentire la generazione di un token di autenticazione.Verrà salvato solo il token, le tue credenziali Bambu non saranno salvate.",
+        "title": "Connessione al cloud Bambu",
+        "description": "Fornisci le tue credenziali Bambu Lab:",
         "data": {
-          "username": "Indirizzo e-mail",
+          "region": "Printer region",
+          "email": "Indirizzo e-mail",
           "password": "Password"
         }
       },
-      "Lan": {
-        "title": "Connessione MQTT locale",
-        "description": "Fornire l'indirizzo IP e il codice di accesso alla stampante locale.Il codice di accesso è disponibile nella schermata della stampante nelle impostazioni di rete.",
+      "Bambu_Choose_Device": {
+        "title": "Selezione della stampante",
+        "description": "Scegli la stampante che desideri aggiungere. Se si fornisce l'indirizzo IP locale, è anche possibile impostare la connessione alla stampante in modo che avvenga tramite mqtt locale.",
         "data": {
-          "host": "IP host",
+          "printer": "Scegli la stampante da aggiungere:",
+          "host": "Indirizzo IP della stampante locale:",
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
+        }
+      },
+      "Lan": {
+        "title": "Connessione in modalità Lan",
+        "description": "Fornire il tipo di stampante locale, l'indirizzo IP, il numero di serie e il codice di accesso. Il codice di accesso si trova sullo schermo della stampante nelle impostazioni di rete. Il numero di serie si trova nelle impostazioni del dispositivo.",
+        "data": {
+          "serial": "Numero di serie",
+          "host": "Indirizzo IP della stampante locale:",
           "access_code": "Codice d'accesso"
         }
       }
@@ -46,31 +57,42 @@
   },
   "options": {
     "error": {
-      "cannot_connect": "Connessione fallita",
-      "invalid_auth": "Autenticazione non valida",
-      "unknown": "Errore inaspettato"
+      "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
+      "cannot_connect_local": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "invalid_auth": "Autenticazione non valida.",
+      "unknown": "Errore inaspettato."
     },
     "step": {
       "init": {
         "title": "Regolare le impostazioni di connessione",
-        "description": "Scegli le nuove impostazioni di connessione per questa stampante.\n\nNota che l'ultimo firmware P1P (1.0.4.0) supporta correttamente solo una singola connessione locale. Se hai bisogno di un secondo (ad esempio per P1Touch), puoi utilizzare Bambu Cloud in questa integrazione.\n\nUtilizza locale in tutti gli altri casi.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account di social media senza password. E non funzionerà per le stampanti impostate attivamente in modalità Lan.",
         "data": {
-          "printer_mode": "Modalità connessione MQTT della stampante:"
+          "printer_mode": "Modalità di configurazione della stampante:"
         }
       },
       "Bambu": {
-        "title": "Connessione Bambu Cloud MQTT",
-        "description": "Fornire l'indirizzo IP e il codice di accesso alla stampante locale.Il codice di accesso è disponibile nella schermata della stampante nelle impostazioni di rete.",
+        "title": "Connessione al cloud Bambu",
+        "description": "Fornisci le tue credenziali Bambu Lab:",
         "data": {
-          "username": "Indirizzo e-mail",
+          "region": "Printer region",
+          "email": "Indirizzo e-mail",
           "password": "Password"
         }
       },
-      "Lan": {
-        "title": "Connessione MQTT locale",
-        "description": "Fornire l'indirizzo IP e il codice di accesso alla stampante locale.Il codice di accesso è disponibile nella schermata della stampante nelle impostazioni di rete.",
+      "Bambu_Choose_Device": {
+        "title": "Selezione della stampante",
+        "description": "Regolazione delle impostazioni per questa stampante:",
         "data": {
-          "host": "IP host",
+          "printer": "Scegli la stampante da aggiungere:",
+          "host": "Indirizzo IP della stampante locale:",
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
+        }
+      },
+      "Lan": {
+        "title": "Connessione in modalità Lan",
+        "description": "Fornire l'indirizzo IP e il codice di accesso della stampante locale. Il codice di accesso si trova sullo schermo della stampante nelle impostazioni di rete.",
+        "data": {
+          "host": "Indirizzo IP della stampante locale:",
           "access_code": "Codice d'accesso"
         }
       }
@@ -119,6 +141,9 @@
     "image": {
       "p1p_camera": {
         "name": "Camera"
+      },
+      "cover_image": {
+        "name": "Immagine di copertina"
       }
     },
     "light": {
@@ -239,6 +264,15 @@
       },
       "gcode_file": {
         "name": "Nome del file Gcode"
+      },
+      "print_bed_type": {
+        "name": "Tipo di piano di stampa"
+      },
+      "print_length": {
+        "name": "Lunghezza di stampa"
+      },
+      "print_weight": {
+        "name": "Grammatura di stampa"
       },
       "subtask_name": {
         "name": "Nome dell'attività"
@@ -443,6 +477,11 @@
     "camera": {
       "camera": {
         "name": "Camera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Modalità di aggiornamento manuale"
       }
     }
   }

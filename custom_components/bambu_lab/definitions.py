@@ -8,9 +8,10 @@ from dataclasses import dataclass
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
     PERCENTAGE,
-    TEMPERATURE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
+    UnitOfMass,
+    UnitOfLength,
     TIME_MINUTES
 )
 
@@ -82,7 +83,7 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         translation_key="online",
         device_class=BinarySensorDeviceClass.RUNNING,
         entity_category=EntityCategory.DIAGNOSTIC,
-        is_on_fn=lambda self: self.coordinator.get_model().info.online
+        is_on_fn=lambda self: self.coordinator.get_model().info.online or self.coordinator.client.manual_refresh_mode
     ),
     BambuLabBinarySensorEntityDescription(
         key="firmware_update",
@@ -201,7 +202,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="stage",
         icon="mdi:file-tree",
         value_fn=lambda
-            self: "offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().stage.description,
+            self: "offline" if (not self.coordinator.get_model().info.online and not self.coordinator.client.manual_refresh_mode) else self.coordinator.get_model().stage.description,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CURRENT_STAGE),
         device_class=SensorDeviceClass.ENUM,
         options=[
@@ -244,7 +245,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="print_status",
         icon="mdi:list-status",
         value_fn=lambda
-            self: "offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().info.gcode_state.lower(),
+            self: "offline" if (not self.coordinator.get_model().info.online and not self.coordinator.client.manual_refresh_mode) else self.coordinator.get_model().info.gcode_state.lower(),
         device_class=SensorDeviceClass.ENUM,
         options=["failed", "finish", "idle", "init", "offline", "pause","prepare", "running", "slicing", "unknown"],
     ),
@@ -307,6 +308,33 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:file",
         available_fn=lambda self: self.coordinator.get_model().info.subtask_name != "",
         value_fn=lambda self: self.coordinator.get_model().info.subtask_name
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_length",
+        translation_key="print_length",
+        native_unit_of_measurement=UnitOfLength.METERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:file",
+        value_fn=lambda self: self.coordinator.get_model().info.print_length / 100,
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_bed_type",
+        translation_key="print_bed_type",
+        icon="mdi:file",
+        value_fn=lambda self: self.coordinator.get_model().info.print_bed_type,
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_weight",
+        translation_key="print_weight",
+        native_unit_of_measurement=UnitOfMass.GRAMS,
+        device_class=SensorDeviceClass.WEIGHT,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:file",
+        value_fn=lambda self: self.coordinator.get_model().info.print_weight,
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
     ),
     BambuLabSensorEntityDescription(
         key="active_tray",
@@ -568,10 +596,16 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     ),
 )
 
-P1P_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+CHAMBER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
         translation_key="p1p_camera",
         value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE),
     )
 
+COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+        key="cover_image",
+        translation_key="cover_image",
+        value_fn=lambda self: self.coordinator.get_model().info.get_cover_image(),
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    )

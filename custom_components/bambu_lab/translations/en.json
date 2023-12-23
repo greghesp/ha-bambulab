@@ -13,33 +13,44 @@
       "already_configured": "Device is already configured"
     },
     "error": {
-      "cannot_connect": "Failed to connect",
-      "invalid_auth": "Invalid authentication",
-      "unknown": "Unexpected error"
+      "cannot_connect": "Failed to connect. Check credentials.",
+      "cannot_connect_local": "Failed to connect. Check provided IP address.",
+      "no_printers": "No unconfigured printers found in the account.",
+      "invalid_auth": "Invalid authentication.",
+      "unknown": "Unexpected error."
     },
     "step": {
       "user": {
-        "description": "Please select your printer and provide it's serial number.\n\nNote that the latest P1P firmware (1.0.4.0) only correctly supports a single local connection. If you need a second (e.g. for P1Touch), you can use Bambu Cloud in this integration.\n\nUse local in all other cases.",
+        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan mode.",
         "data": {
-          "device_type": "Printer Model:",
-          "serial": "Serial Number",
-          "printer_mode": "Printer MQTT connection mode:"
+          "printer_mode": "Printer configuration mode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT Connection",
-        "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+        "title": "Bambu Cloud Connection",
+        "description": "Please provide your Bambu Lab credentials:",
         "data": {
-          "username": "Email Address",
+          "region": "Printer region",
+          "email": "Email Address",
           "password": "Password"
         }
       },
-      "Lan": {
-        "title": "Local MQTT Connection",
-        "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
+      "Bambu_Choose_Device": {
+        "title": "Printer Selection",
+        "description": "Choose which printer you want to add. If you provide the local IP address you can also set the connection to the printer to be by local mqtt.",
         "data": {
-          "host": "Host IP",
-          "access_code": "Access Code"
+          "printer": "Choose Printer To Add:",
+          "host": "Local Printer IP Address:",
+          "local_mqtt": "Connect directly to printer instead of by Bambu Cloud:"
+        }
+      },
+      "Lan": {
+        "title": "Lan Mode Connection",
+        "description": "Please provide your local printer type, IP address, serial and access code. The access code can be found on the printer screen in the network settings. The serial number can be found in the device settings.",
+        "data": {
+          "serial": "Serial Number:",
+          "host": "Local Printer IP Address:",
+          "access_code": "Access Code:"
         }
       }
     }
@@ -47,31 +58,42 @@
   "options": {
     "error": {
       "cannot_connect": "Failed to connect",
-      "invalid_auth": "Invalid authentication",
-      "unknown": "Unexpected error"
+      "cannot_connect_local": "Failed to connect. Check provided IP address.",
+      "invalid_auth": "Invalid authentication.",
+      "unknown": "Unexpected error."
     },
     "step": {
       "init": {
         "title": "Adjust connection settings",
-        "description": "Choose the new connection settings for this printer.\n\nNote that the latest P1P firmware (1.0.4.0) only correctly supports a single local connection. If you need a second (e.g. for P1Touch), you can use Bambu Cloud in this integration.\n\nUse local in all other cases.",
+        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan mode.",
         "data": {
-          "printer_mode": "Printer MQTT Connection Mode:"
+          "printer_mode": "Printer configuration mode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud MQTT Connection",
-        "description": "Please provide your Bambu Lab credentials to allow generation of an authentication token. Only the token will be saved, your Bambu credentials will not.",
+        "title": "Bambu Cloud Connection",
+        "description": "Please provide your Bambu Lab credentials:",
         "data": {
-          "username": "Email Address",
+          "region": "Account region",
+          "email": "Email Address",
           "password": "Password"
         }
       },
+      "Bambu_Choose_Device": {
+        "title": "Printer Selection",
+        "description": "Adjusting settings for this printer:",
+        "data": {
+          "printer": "Choose Printer To Add:",
+          "host": "Local Printer IP Address:",
+          "local_mqtt": "Connect directly to printer instead of by Bambu Cloud:"
+        }
+      },
       "Lan": {
-        "title": "Local MQTT Connection",
+        "title": "Lan Mode Connection",
         "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings.",
         "data": {
-          "host": "Host IP",
-          "access_code": "Access Code"
+          "host": "Local Printer IP Address:",
+          "access_code": "Access Code:"
         }
       }
     }
@@ -119,6 +141,9 @@
     "image": {
       "p1p_camera": {
         "name": "Camera"
+      },
+      "cover_image": {
+        "name": "Cover Image"
       }
     },
     "light": {
@@ -239,6 +264,15 @@
       },
       "gcode_file": {
         "name": "Gcode filename"
+      },
+      "print_bed_type": {
+        "name": "Print bed type"
+      },
+      "print_length": {
+        "name": "Print length"
+      },
+      "print_weight": {
+        "name": "Print weight"
       },
       "subtask_name": {
         "name": "Task name"
@@ -443,6 +477,11 @@
     "camera": {
       "camera": {
         "name": "Camera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Manual refresh mode"
       }
     }
   }
