@@ -16,9 +16,13 @@ body:
     attributes:
       label: What device is this for?
       options:
-        - X1C
-        - P1P
+        - A1
         - A1 Mini
+        - P1P
+        - P1S
+        - X1
+        - X1C
+        - X1E
         - AMS
         - AMS Lite
     validations:
