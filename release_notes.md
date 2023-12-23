@@ -1,6 +1,14 @@
 ### V2.0.0
 - Reworked the initial setup to get almost all printer data from Bambu Cloud for easier setup.
 - Enables use of P1 camera when in cloud mqtt mode
+- Adds cover image sensor to show the 3mf thumbnail of current or last print.
+- Adds print weight, length and bed choice of current or last print.
+- Adds A1 printer support.
+- Adds best guess X1E printer support.
+- Fixes potential mqtt thread hang made common with latest X1 firmware.
+- Fixes mishandling of AMS removal from a printer leaving a gap in indices.
+- Miscellaneous fixes.
+- Localization improvements.
 
 ### V1.9.3
 - Switch to turn off the connection to the printer to workaround P1 firmware bug.
