@@ -79,6 +79,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
                 "serial": old_data['serial']
         }
         options = {
+                "email": "",
                 "username": old_data['username'] if (old_data.get('username', 'bblp') != "bblp") else "",
                 "name": old_data['device_type'],
                 "host": old_data['host'] if (old_data['host'] != "us.mqtt.bambulab.com") else "",

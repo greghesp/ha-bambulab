@@ -143,7 +143,7 @@ def mqtt_listen_thread(self):
 
             LOGGER.debug("Starting listen loop")
             self.client.loop_forever()
-            LOGGER.debug("MQTT listener thread exited.")
+            LOGGER.debug("Ended listen loop.")
             break
         except TimeoutError as e:
             if exceptionSeen != "TimeoutError":
