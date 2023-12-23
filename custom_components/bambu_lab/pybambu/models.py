@@ -871,7 +871,8 @@ class HMSList:
         self.client = client
         self.count = 0
         self.errors = {}
-
+        self.errors["Count"] = 0
+        
     def print_update(self, data):
         """Update from dict"""
 

@@ -187,8 +187,6 @@ You can find an amazing web configurator to easily create a Dashboard for your B
 at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/.
 
 ![image](docs/images/ExampleIntegration.png)
-![image](docs/images/ExampleDevice1.png)
-![image](docs/images/ExampleDevice2.png)
 
 ## Issues
 
