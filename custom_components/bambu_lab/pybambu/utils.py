@@ -138,13 +138,20 @@ def get_start_time(timestamp):
     """Return start time of a print"""
     if timestamp == 0:
         return ""
-    return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
+    start_time = datetime.fromtimestamp(timestamp)
+    if start_time.day == datetime.now().day:
+        return datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+    else:
+        return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
 
 
 def get_end_time(remaining_time):
     """Calculate the end time of a print"""
-    endtime = datetime.now() + timedelta(minutes=remaining_time)
-    return round_minute(endtime).strftime('%d %B %Y %H:%M:%S')
+    end_time = round_minute(datetime.now() + timedelta(minutes=remaining_time))
+    if end_time.day == datetime.now().day:
+        return end_time.strftime('%H:%M:%S')
+    else:
+        return end_time.strftime('%d %B %Y %H:%M:%S')
 
 
 def round_minute(date: datetime = None, round_to: int = 1):
