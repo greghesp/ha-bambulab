@@ -917,7 +917,7 @@ class ChamberImage:
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        self.client.callback("camera_jpeg_received")
+        self.client.callback("chamber_image_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes

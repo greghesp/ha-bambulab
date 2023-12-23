@@ -30,7 +30,7 @@
         "title": "Bambu 云连接",
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
-          "region": "Printer region",
+          "region": "帐户区域：",
           "email": "电子邮件地址",
           "password": "密码"
         }
@@ -74,7 +74,7 @@
         "title": "Bambu 云连接",
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
-          "region": "Printer region",
+          "region": "帐户区域：",
           "email": "电子邮件地址",
           "password": "密码"
         }

@@ -29,7 +29,7 @@
         "title": "Bambu Cloud-Verbindung",
         "description": "Bitte geben Sie Ihre Bambu Lab-Zugangsdaten an:",
         "data": {
-          "region": "Printer region",
+          "region": "Konto-Region:",
           "email": "E-Mail Adresse",
           "password": "Passwort"
         }
@@ -74,7 +74,7 @@
         "title": "Bambu Cloud-Verbindung",
         "description": "Bitte geben Sie Ihre Bambu Lab-Zugangsdaten an:",
         "data": {
-          "region": "Printer region",
+          "region": "Konto-Region:",
           "email": "E-Mail Adresse",
           "password": "Passwort"
         }

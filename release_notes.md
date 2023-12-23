@@ -1,3 +1,7 @@
+### V2.0.1
+- Fix P1/A1 chamber image not updating
+- Missed localization of new strings
+
 ### V2.0.0
 - Reworked the initial setup to get almost all printer data from Bambu Cloud for easier setup.
 - Enables use of P1 camera when in cloud mqtt mode
