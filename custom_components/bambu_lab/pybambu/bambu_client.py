@@ -305,8 +305,9 @@ class BambuClient:
         """Return the payload when received"""
         try:
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
-            clean_msg = re.sub(r"\\n *", "", str(message.payload))
-            LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
+            #clean_msg = re.sub(r"\\n *", "", str(message.payload))
+            #LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
+            LOGGER.debug(f"Received data from: {self._device.info.device_type}")
             json_data = json.loads(message.payload)
             if json_data.get("event"):
                 if json_data.get("event").get("event") == "client.connected":
