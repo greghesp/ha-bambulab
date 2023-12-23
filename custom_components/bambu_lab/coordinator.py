@@ -40,7 +40,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                   host = entry.options['host'],
                                   local_mqtt = entry.options['local_mqtt'],
                                   region = entry.options.get('region', ''),
-                                  email = entry.options['email'],
+                                  email = entry.options.get('email', ''),
                                   username = entry.options['username'],
                                   auth_token = entry.options['auth_token'],
                                   access_code = entry.options['access_code'])
