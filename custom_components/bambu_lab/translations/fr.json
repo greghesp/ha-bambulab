@@ -245,6 +245,15 @@
       "gcode_file": {
         "name": "Ficher G-code"
       },
+      "print_bed_type": {
+        "name": "Type de lit d’impression"
+      },
+      "print_length": {
+        "name": "Longueur d’impression"
+      },
+      "print_weight": {
+        "name": "Grammage de l’impression"
+      },
       "subtask_name": {
         "name": "Nom de la tâche"
       },

@@ -261,6 +261,15 @@
       "gcode_file": {
         "name": "Nome del file Gcode"
       },
+      "print_bed_type": {
+        "name": "Tipo di piano di stampa"
+      },
+      "print_length": {
+        "name": "Lunghezza di stampa"
+      },
+      "print_weight": {
+        "name": "Grammatura di stampa"
+      },
       "subtask_name": {
         "name": "Nome dell'attività"
       },
