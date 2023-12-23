@@ -13,7 +13,7 @@ Want to contribute to ha-bambulab? Great!  We have a few small asks though!
   code.
 - Please name your commits accordingly, and add some context as to what you have added.
 
-If you feel this integration was valuable and want to support it in other ways, you can make buy me a coffee at https://Ko-fi.com/adriangarside
+If you feel this integration was valuable and want to support it in other ways, you can buy me a coffee at https://Ko-fi.com/adriangarside
 
 ## Setup
 
