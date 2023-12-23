@@ -9,7 +9,6 @@ import struct
 import threading
 import time
 
-
 from dataclasses import dataclass
 from typing import Any
 
@@ -23,6 +22,7 @@ from .commands import (
     PUSH_ALL,
     START_PUSH,
 )
+
 
 class WatchdogThread(threading.Thread):
 
@@ -82,11 +82,11 @@ class ImageCameraThread(threading.Thread):
         d += struct.pack("IIL", 0x40, 0x3000, 0x0)
         for i in range(0, len(username)):
             d += struct.pack("<c", username[i].encode('ascii'))
-        for i in range(0, 32-len(username)):
+        for i in range(0, 32 - len(username)):
             d += struct.pack("<x")
         for i in range(0, len(access_code)):
             d += struct.pack("<c", access_code[i].encode('ascii'))
-        for i in range(0, 32-len(access_code)):
+        for i in range(0, 32 - len(access_code)):
             d += struct.pack("<x")
 
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
@@ -123,8 +123,8 @@ class ImageCameraThread(threading.Thread):
 
                 i = buf.find(bytearray.fromhex(jpeg_end))
                 if i >= 0:
-                    img = buf[:i+len(jpeg_end)]
-                    buf = buf[i+len(jpeg_end):]
+                    img = buf[:i + len(jpeg_end)]
+                    buf = buf[i + len(jpeg_end):]
                     start = False
 
                     self._client.on_jpeg_received(img)
@@ -173,13 +173,15 @@ def mqtt_listen_thread(self):
 
     LOGGER.info("MQTT listener thread exited.")
 
+
 @dataclass
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
     _watchdog = None
     _camera = None
 
-    def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str, username: str, auth_token: str, access_code: str):
+    def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
+                 username: str, auth_token: str, access_code: str):
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
@@ -190,6 +192,7 @@ class BambuClient:
         self._connected = False
         self._device = Device(self, device_type, serial)
         self._port = 1883
+        self._refreshed = False
         self._manual_refresh_mode = False
         self.bambu_cloud = BambuCloud(region, email, username, auth_token)
 
@@ -262,13 +265,12 @@ class BambuClient:
             self._camera = ImageCameraThread(self)
             self._camera.start()
 
-
     def try_on_connect(self,
-                   client_: mqtt.Client,
-                   userdata: None,
-                   flags: dict[str, Any],
-                   result_code: int,
-                   properties: mqtt.Properties | None = None, ):
+                       client_: mqtt.Client,
+                       userdata: None,
+                       flags: dict[str, Any],
+                       result_code: int,
+                       properties: mqtt.Properties | None = None, ):
         """Handle connection"""
         LOGGER.info("On Connect: Connected to Broker")
         self._connected = True
@@ -297,7 +299,7 @@ class BambuClient:
         LOGGER.info("Watch dog fired")
         self._device.info.set_online(False)
         self.publish(START_PUSH)
-        
+
     def on_jpeg_received(self, bytes):
         self._device.chamber_image.set_jpeg(bytes)
 
@@ -306,7 +308,12 @@ class BambuClient:
         try:
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
             clean_msg = re.sub(r"\\n *", "", str(message.payload))
-            LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
+            if self._refreshed:
+                LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
+                self._refreshed = False
+            else:
+                LOGGER.debug(f"Received data from: {self._device.info.device_type}")
+
             json_data = json.loads(message.payload)
             if json_data.get("event"):
                 if json_data.get("event").get("event") == "client.connected":
@@ -356,8 +363,10 @@ class BambuClient:
             await self.connect(self.callback)
         else:
             LOGGER.debug("Force Refresh: Getting Version Info")
+            self._refreshed = True
             self.publish(GET_VERSION)
             LOGGER.debug("Force Refresh: Request Push All")
+            self._refreshed = True
             self.publish(PUSH_ALL)
 
     def get_device(self):
