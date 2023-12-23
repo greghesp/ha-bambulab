@@ -41,7 +41,7 @@
         "data": {
           "printer": "Choose Printer To Add:",
           "host": "Local Printer IP Address:",
-          "local_mqtt": "Local MQTT connection:"
+          "local_mqtt": "Connect directly to printer instead of by Bambu Cloud:"
         }
       },
       "Lan": {
@@ -85,7 +85,7 @@
         "data": {
           "printer": "Choose Printer To Add:",
           "host": "Local Printer IP Address:",
-          "local_mqtt": "Local MQTT connection:"
+          "local_mqtt": "Connect directly to printer instead of by Bambu Cloud:"
         }
       },
       "Lan": {

@@ -65,8 +65,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = CONFIG_VERSION
     _bambu_cloud: None
-    email: str = ""
     region: str = ""
+    email: str = ""
 
     @staticmethod
     @callback
@@ -114,8 +114,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     user_input['email'],
                     user_input['password'])
 
-                self.email = user_input['email']
                 self.region = user_input['region']
+                self.email = user_input['email']
                 return await self.async_step_Bambu_Choose_Device(None)
 
             except Exception as e:
@@ -210,7 +210,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if len(printer_list) != 0:
             fields[vol.Required('serial')] = printer_selector
             fields[vol.Optional('host')] = TEXT_SELECTOR
-            fields[vol.Optional('local_mqtt')] = BOOLEAN_SELECTOR
+            fields[vol.Optional('local_mqtt', default=False)] = BOOLEAN_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu_Choose_Device",
@@ -288,11 +288,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle Bambu options."""
 
+    region: str = ""
     email: str = ""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize MQTT options flow."""
         self.config_entry = config_entry
+        self.region = self.config_entry.options.get('region', '')
         self.email = self.config_entry.options.get('email', '')
 
         LOGGER.debug(self.config_entry)
@@ -327,10 +329,10 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         credentialsGood = False
         if user_input is None:
-            if self.config_entry.options.get('email', '') != '' and self.config_entry.options.get('username', '') != '' and self.config_entry.options.get('auth_token', '') != '':
+            if self.config_entry.options.get('region', '') != '' and self.config_entry.options.get('email', '') != '' and self.config_entry.options.get('username', '') != '' and self.config_entry.options.get('auth_token', '') != '':
                 credentialsGood = await self.hass.async_add_executor_job(
                     self._bambu_cloud.test_authentication,
-                    self.config_entry.options.get('region', ''),
+                    self.config_entry.options['region'],
                     self.config_entry.options['email'],
                     self.config_entry.options['username'],
                     self.config_entry.options['auth_token'])
@@ -343,6 +345,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     user_input['email'],
                     user_input['password'])
                 
+                self.region = user_input['region']
                 self.email = user_input['email']
 
                 return await self.async_step_Bambu_Choose_Device(None)
@@ -352,6 +355,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             errors['base'] = "cannot_connect"
         elif credentialsGood:
+            self.region = self.config_entry.options['region']
             self.email = self.config_entry.options['email']
             return await self.async_step_Bambu_Choose_Device(None)
 

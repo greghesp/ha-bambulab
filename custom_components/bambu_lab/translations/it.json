@@ -41,7 +41,7 @@
         "data": {
           "printer": "Scegli la stampante da aggiungere:",
           "host": "Indirizzo IP della stampante locale:",
-          "local_mqtt": "Connessione MQTT locale:"
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
         }
       },
       "Lan": {
@@ -85,7 +85,7 @@
         "data": {
           "printer": "Scegli la stampante da aggiungere:",
           "host": "Indirizzo IP della stampante locale:",
-          "local_mqtt": "Connessione MQTT locale:"
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
         }
       },
       "Lan": {
