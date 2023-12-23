@@ -11,14 +11,18 @@ from .const import LOGGER
 @dataclass
 class BambuCloud:
   
-    def __init__(self, email:str, username: str, auth_token: str):
+    def __init__(self, region: str, email: str, username: str, auth_token: str):
+        self._region = region
         self._email = email
         self._username = username
         self._auth_token = auth_token
 
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
-        url = 'https://api.bambulab.com/v1/user-service/user/login'
+        if self._region == "China":
+            url = 'https://api.bambulab.cn/v1/user-service/user/login'
+        else:
+            url = 'https://api.bambulab.com/v1/user-service/user/login'
         data = {'account': self._email, 'password': self._password}
         LOGGER.debug(f"Data = {data}")
         response = requests.post(url, json=data, timeout=10)
@@ -76,7 +80,8 @@ class BambuCloud:
     #     ]
     # }
 
-    def test_authentication(self, email: str, username: str, auth_token: str) -> bool:
+    def test_authentication(self, region: str, email: str, username: str, auth_token: str) -> bool:
+        self._region = region
         self._email = email
         self._username = username
         self._auth_token = auth_token
@@ -86,7 +91,8 @@ class BambuCloud:
             return False
         return True
 
-    def login(self, email: str, password: str):
+    def login(self, region: str, email: str, password: str):
+        self._region = region
         self._email = email
         self._password = password
 
@@ -95,7 +101,10 @@ class BambuCloud:
 
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
-        url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
+        if self._region == "China":
+            url = 'https://api.bambulab.cn/v1/iot-service/api/user/bind'
+        else:
+            url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
         response = requests.get(url, headers=headers, timeout=10)
         if not response.ok:
@@ -148,7 +157,10 @@ class BambuCloud:
 
     def get_tasklist(self) -> dict:
         LOGGER.debug("Getting task list from Bambu Cloud")
-        url = 'https://api.bambulab.com/v1/user-service/my/tasks'
+        if self._region == "China":
+            url = 'https://api.bambulab.cn/v1/user-service/my/tasks'
+        else:
+            url = 'https://api.bambulab.com/v1/user-service/my/tasks'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
         response = requests.get(url, headers=headers, timeout=10)
         if not response.ok:

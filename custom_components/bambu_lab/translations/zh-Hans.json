@@ -13,7 +13,8 @@
       "already_configured": "设备已配置"
     },
     "error": {
-      "cannot_connect": "连接失败",
+      "cannot_connect": "连接失败。检查凭据。",
+      "cannot_connect_local": "连接失败。检查提供的 IP 地址。",
       "no_printers": "在帐户中未找到未配置的打印机",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误"
@@ -29,7 +30,8 @@
         "title": "Bambu 云连接",
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
-          "username": "电子邮件地址",
+          "region": "Printer region",
+          "email": "电子邮件地址",
           "password": "密码"
         }
       },
@@ -39,7 +41,7 @@
         "data": {
           "printer": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",
-          "local_mqtt": "本地MQTT连接："
+          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud："
         }
       },
       "Lan": {
@@ -55,7 +57,8 @@
   },
   "options": {
     "error": {
-      "cannot_connect": "连接失败",
+      "cannot_connect": "连接失败。检查凭据。",
+      "cannot_connect_local": "连接失败。检查提供的 IP 地址。",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误"
     },
@@ -71,7 +74,8 @@
         "title": "Bambu 云连接",
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
-          "username": "电子邮件地址",
+          "region": "Printer region",
+          "email": "电子邮件地址",
           "password": "密码"
         }
       },
@@ -81,7 +85,7 @@
         "data": {
           "printer": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",
-          "local_mqtt": "本地MQTT连接："
+          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud："
         }
       },
       "Lan": {

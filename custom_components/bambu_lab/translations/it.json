@@ -13,10 +13,11 @@
       "already_configured": "Il dispositivo è già configurato"
     },
     "error": {
-      "cannot_connect": "Connessione fallita",
-      "no_printers": "Nessuna stampante non configurata trovata nell'account",
-      "invalid_auth": "Autenticazione non valida",
-      "unknown": "Errore inaspettato"
+      "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
+      "cannot_connect_local": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "no_printers": "Nessuna stampante non configurata trovata nell'account.",
+      "invalid_auth": "Autenticazione non valida.",
+      "unknown": "Errore inaspettato."
     },
     "step": {
       "user": {
@@ -29,7 +30,8 @@
         "title": "Connessione al cloud Bambu",
         "description": "Fornisci le tue credenziali Bambu Lab:",
         "data": {
-          "username": "Indirizzo e-mail",
+          "region": "Printer region",
+          "email": "Indirizzo e-mail",
           "password": "Password"
         }
       },
@@ -39,7 +41,7 @@
         "data": {
           "printer": "Scegli la stampante da aggiungere:",
           "host": "Indirizzo IP della stampante locale:",
-          "local_mqtt": "Connessione MQTT locale:"
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
         }
       },
       "Lan": {
@@ -55,9 +57,10 @@
   },
   "options": {
     "error": {
-      "cannot_connect": "Connessione fallita",
-      "invalid_auth": "Autenticazione non valida",
-      "unknown": "Errore inaspettato"
+      "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
+      "cannot_connect_local": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "invalid_auth": "Autenticazione non valida.",
+      "unknown": "Errore inaspettato."
     },
     "step": {
       "init": {
@@ -71,7 +74,8 @@
         "title": "Connessione al cloud Bambu",
         "description": "Fornisci le tue credenziali Bambu Lab:",
         "data": {
-          "username": "Indirizzo e-mail",
+          "region": "Printer region",
+          "email": "Indirizzo e-mail",
           "password": "Password"
         }
       },
@@ -81,7 +85,7 @@
         "data": {
           "printer": "Scegli la stampante da aggiungere:",
           "host": "Indirizzo IP della stampante locale:",
-          "local_mqtt": "Connessione MQTT locale:"
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
         }
       },
       "Lan": {
