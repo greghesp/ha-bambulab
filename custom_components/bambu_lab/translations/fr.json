@@ -4,10 +4,11 @@
       "already_configured": "L'appareil est déjà configuré"
     },
     "error": {
-      "cannot_connect": "Échec de la connexion",
-      "no_printers": "Aucune imprimante non configurée n’a été trouvée dans le compte",
-      "invalid_auth": "Authentification invalide",
-      "unknown": "Erreur inattendue"
+      "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
+      "cannot_connect_local": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "no_printers": "Aucune imprimante non configurée n’a été trouvée dans le compte.",
+      "invalid_auth": "Authentification invalide.",
+      "unknown": "Erreur inattendue."
     },
     "step": {
       "user": {
@@ -20,7 +21,8 @@
         "title": "Connexion au cloud Bambu",
         "description": "Veuillez fournir vos informations d’identification Bambu Lab :",
         "data": {
-          "username": "Adresse e-mail",
+          "region": "Printer region",
+          "email": "Adresse e-mail",
           "password": "Mot de passe"
         }
       },
@@ -46,9 +48,10 @@
   },
   "options": {
     "error": {
-      "cannot_connect": "Échec de la connexion",
-      "invalid_auth": "Authentification invalide",
-      "unknown": "Erreur inattendue"
+      "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
+      "cannot_connect_local": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "invalid_auth": "Authentification invalide.",
+      "unknown": "Erreur inattendue."
     },
     "step": {
       "init": {
@@ -62,7 +65,8 @@
         "title": "Connexion au cloud Bambu",
         "description": "Veuillez fournir vos informations d’identification Bambu Lab :",
         "data": {
-          "username": "Adresse e-mail",
+          "region": "Printer region",
+          "email": "Adresse e-mail",
           "password": "Mot de passe"
         }
       },
