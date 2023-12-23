@@ -626,7 +626,7 @@ class AMSList:
             if self.client.callback is not None:
                 self.client.callback("event_ams_info_update")
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
 
         # AMS json payload is of the form:
@@ -694,24 +694,28 @@ class AMSList:
 
             ams_list = ams_data.get("ams", [])
             for ams in ams_list:
-                received_ams_data = True
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
                 if self.data[index] is None:
                     self.data[index] = AMSInstance()
 
-                self.data[index].humidity_index = int(ams['humidity'])
-                self.data[index].temperature = float(ams['temp'])
+                if self.data[index].humidity_index != int(ams['humidity']):
+                    received_ams_data = True
+                    self.data[index].humidity_index = int(ams['humidity'])
+                if self.data[index].temperature != float(ams['temp']):
+                    received_ams_data = True
+                    self.data[index].temperature = float(ams['temp'])
 
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
-                    self.data[index].tray[tray_id].print_update(tray)
+                    received_ams_data = received_ams_data | self.data[index].tray[tray_id].print_update(tray)
 
         if received_ams_data:
             if self.client.callback is not None:
                 self.client.callback("event_ams_data_update")
 
+        return received_ams_data
 
 @dataclass
 class AMSTray:
@@ -730,32 +734,66 @@ class AMSTray:
         self.k = 0
         self.tag_uid = "0000000000000000"
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
+        data = {
+            "empty": self.empty,
+            "idx": self.idx,
+            "name": self.name,
+            "type": self.type,
+            "sub_brands": self.sub_brands,
+            "color": self.color,
+            "nozzle_temp_min": self.nozzle_temp_min,
+            "nozzle_temp_max": self.nozzle_temp_max,
+            "remain": self.remain,
+            "k": self.k,
+            "tag_uid": self.tag_uid
+        }
+
         if len(data) == 1:
             # If the data is exactly one entry then it's just the ID and the tray is empty.
-            self.empty = True
-            self.idx = ""
-            self.name = "Empty"
-            self.type = "Empty"
-            self.sub_brands = ""
-            self.color = "00000000"  # RRGGBBAA
-            self.nozzle_temp_min = 0
-            self.nozzle_temp_max = 0
-            self.remain = 0
-            self.tag_uid = "0000000000000000"
-            self.k = 0
+            new_data = {
+                "empty": True,
+                "idx": "",
+                "name": "Empty",
+                "type": "Empty",
+                "sub_brands": "",
+                "color": "00000000",  # RRGGBBAA
+                "nozzle_temp_min": 0,
+                "nozzle_temp_max": 0,
+                "remain": 0,
+                "k": 0,
+                "tag_uid": "0000000000000000"
+            }
         else:
-            self.empty = False
-            self.idx = data.get('tray_info_idx', self.idx)
-            self.name = get_filament_name(self.idx)
-            self.type = data.get('tray_type', self.type)
-            self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
-            self.color = data.get('tray_color', self.color)
-            self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
-            self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
-            self.remain = data.get('remain', self.remain)
-            self.tag_uid = data.get('tag_uid', self.tag_uid)
-            self.k = data.get('k', self.k)
+            new_data = {
+                "empty": False,
+                "idx": data.get('tray_info_idx', self.idx),
+                "name": get_filament_name(self.idx),
+                "type": data.get('tray_type', self.type),
+                "sub_brands": data.get('tray_sub_brands', self.sub_brands),
+                "color": data.get('tray_color', self.color),
+                "nozzle_temp_min": data.get('nozzle_temp_min', self.nozzle_temp_min),
+                "nozzle_temp_max": data.get('nozzle_temp_max', self.nozzle_temp_max),
+                "remain": data.get('remain', self.remain),
+                "k": data.get('k', self.k),
+                "tag_uid": data.get('tag_uid', self.tag_uid)
+            }
+        
+        if data != new_data:
+            self.empty = new_data['empty']
+            self.idx = new_data['idx']
+            self.name = new_data['name']
+            self.type = new_data['type']
+            self.sub_brands = new_data['sub_brands']
+            self.color = new_data['color']
+            self.nozzle_temp_min = new_data['nozzle_temp_min']
+            self.nozzle_temp_max = new_data['nozzle_temp_max']
+            self.remain = new_data['remain']
+            self.k = new_data['k']
+            self.tag_uid = new_data['tag_uid']
+            return True
+        
+        return False
 
 
 @dataclass
@@ -800,8 +838,7 @@ class ExternalSpool(AMSTray):
         received_virtual_tray_data = False
         tray_data = data.get("vt_tray", {})
         if len(tray_data) != 0:
-            received_virtual_tray_data = True
-            super().print_update(tray_data)
+            received_virtual_tray_data = super().print_update(tray_data)
 
         if received_virtual_tray_data:
             if self.client.callback is not None:

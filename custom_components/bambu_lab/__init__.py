@@ -53,7 +53,7 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 async def async_migrate_entry(hass, config_entry: ConfigEntry):
     """Migrate old entry."""
-    LOGGER.debug(f"--------------------------- async_migrate_entry {config_entry.version}")
+    LOGGER.debug(f"async_migrate_entry {config_entry.version}")
     if config_entry.version > CONFIG_VERSION:
         # This means the user has downgraded from a future version
         return False
