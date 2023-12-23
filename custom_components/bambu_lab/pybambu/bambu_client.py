@@ -310,12 +310,13 @@ class BambuClient:
             clean_msg = re.sub(r"\\n *", "", str(message.payload))
             if self._refreshed:
                 LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
-                self._refreshed = False
             else:
                 LOGGER.debug(f"Received data from: {self._device.info.device_type}")
 
             json_data = json.loads(message.payload)
             if json_data.get("event"):
+                # These are events from the bambu cloud mqtt feed and allow us to detect when a local
+                # device has connected/disconnected (e.g. turned on/off)
                 if json_data.get("event").get("event") == "client.connected":
                     LOGGER.debug("Client connected event received.")
                     self._device.info.set_online(True)
@@ -332,6 +333,8 @@ class BambuClient:
                     # Once we receive data, if in manual refresh mode, we disconnect again.
                     if self._manual_refresh_mode:
                         self.disconnect()
+                    if json_data.get("print").get("msg", 0) == 0:
+                        self._refreshed= False
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
