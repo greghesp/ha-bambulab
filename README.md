@@ -62,17 +62,17 @@ instead of OAuth.
 
 ### Print Progress
 
-| Sensor            | Notes                    |
-|-------------------|--------------------------|
-| Current Layer     |                          |
-| Total Layer Count |                          |
-| Print Progress    |                          |
-| Print Weight      |                          |
-| Print Length      |                          |
-| Print Bed Type    | Not the current bed type |
-| Start Time        | Simulated on P1*/A1*     |
-| Remainining Time  |                          |
-| End Time          |                          |
+| Sensor            | Notes                       |
+|-------------------|-----------------------------|
+| Current Layer     |                             |
+| Total Layer Count |                             |
+| Print Progress    |                             |
+| Print Weight      |                             |
+| Print Length      |                             |
+| Print Bed Type    | Bed choice in the print job |
+| Start Time        | Simulated on P1*/A1*        |
+| Remainining Time  |                             |
+| End Time          |                             |
 
 ### Status
 
@@ -144,14 +144,14 @@ instead of OAuth.
 
 ### Diagnostics
 
-| Sensor                    | Notes                                                       |
-|------------------=--------|-------------------------------------------------------------|
-| Firmware Update Available |                                                             |
-| Force Refresh             |                                                             |
-| HMS Errors                | Attributes contain the error code, description and wiki URL |
-| MQTT connection mode      | Bambu Cloud or Local                                        |
-| Online                    |                                                             |
-| Wifi Signal               |                                                             |
+| Sensor                    | Notes                                                          |
+|---------------------------|----------------------------------------------------------------|
+| Firmware Update Available |                                                                |
+| Force Refresh             |                                                                |
+| HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
+| MQTT connection mode      | Bambu Cloud or Local                                           |
+| Online                    |                                                                |
+| Wifi Signal               |                                                                |
 
 ### Cameras
 
