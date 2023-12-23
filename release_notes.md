@@ -1,3 +1,8 @@
+### V2.0.3
+- Reduce work for X1 full payloads to only one HA update instead of three.
+- Only log the payloads when the refresh button has been pressed.
+- Simplify the start and end times to just times when they are for today.
+
 ### V2.0.2
 - Fix mishandling of optional 'email' field when upgrading or if early 2.0 dev build was used.
 
