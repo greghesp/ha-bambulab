@@ -947,13 +947,17 @@ class ChamberImage:
     def __init__(self, client):
         self.client = client
         self._bytes = bytearray()
+        self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        self.client.callback("chamber_image_received")
+        self._image_last_updated = datetime.now()
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
+    
+    def get_last_update_time(self) -> datetime:
+        return self._image_last_updated
     
 @dataclass
 class CoverImage:
@@ -962,10 +966,14 @@ class CoverImage:
     def __init__(self, client):
         self.client = client
         self._bytes = bytearray()
+        self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        self.client.callback("cover_image_jpeg_received")
+        self._image_last_updated = datetime.now()
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
+
+    def get_last_update_time(self) -> datetime:
+        return self._image_last_updated
