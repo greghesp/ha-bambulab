@@ -199,4 +199,4 @@ class BambuCloud:
     
     @property
     def cloud_mqtt_host(self):
-        return "us.mqtt.bambulab.com" if self.region != "China" else "cn.mqtt.bambulab.com"
+        return "us.mqtt.bambulab.com" if self._region != "China" else "cn.mqtt.bambulab.com"

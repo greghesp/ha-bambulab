@@ -137,7 +137,7 @@ def mqtt_listen_thread(self):
     exceptionSeen = ""
     while True:
         try:
-            host = self.host if self._local_mqtt else self.client.bambu_cloud.get_mqtt_host()
+            host = self.host if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
             LOGGER.debug(f"Connect: Attempting Connection to {host}")
             self.client.connect(host, self._port, keepalive=5)
 
