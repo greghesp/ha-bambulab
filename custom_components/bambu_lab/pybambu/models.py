@@ -735,7 +735,7 @@ class AMSTray:
         self.tag_uid = "0000000000000000"
 
     def print_update(self, data) -> bool:
-        data = {
+        old_data = {
             "empty": self.empty,
             "idx": self.idx,
             "name": self.name,
@@ -779,7 +779,7 @@ class AMSTray:
                 "tag_uid": data.get('tag_uid', self.tag_uid)
             }
         
-        if data != new_data:
+        if old_data != new_data:
             self.empty = new_data['empty']
             self.idx = new_data['idx']
             self.name = new_data['name']
