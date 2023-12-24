@@ -937,6 +937,7 @@ class HMSList:
                     LOGGER.warning(f"HMS ERRORS: {errors}")
                 if self.client.callback is not None:
                     self.client.callback("event_hms_errors")
+                return True
         
         return False
 
