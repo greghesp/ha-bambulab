@@ -1,6 +1,8 @@
 """Image platform."""
 from __future__ import annotations
 
+from datetime import datetime
+
 from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -48,15 +50,15 @@ class ChamberImage(ImageEntity, BambuLabEntity):
         self.entity_description = description
         printer = self.coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
-        coordinator.ChamberImage = self
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
-
         return self.coordinator.get_model().chamber_image.get_jpeg()
 
-    def image_updated(self):
-        self._attr_image_last_updated = dt_util.utcnow()
+    @property
+    def image_last_updated(self) -> datetime | None:
+        """The time when the image was last updated."""
+        return self.coordinator.get_model().chamber_image.get_last_update_time()
 
 class CoverImage(ImageEntity, BambuLabEntity):
     """Representation of an image entity."""
@@ -75,12 +77,12 @@ class CoverImage(ImageEntity, BambuLabEntity):
         self.entity_description = description
         printer = self.coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
-        coordinator.CoverImage = self
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
-
         return self.coordinator.get_model().cover_image.get_jpeg()
 
-    def image_updated(self):
-        self._attr_image_last_updated = dt_util.utcnow()
+    @property
+    def image_last_updated(self) -> datetime | None:
+        """The time when the image was last updated."""
+        return self.coordinator.get_model().cover_image.get_last_update_time()
