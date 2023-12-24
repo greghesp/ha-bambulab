@@ -970,7 +970,7 @@ class CoverImage:
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        #self.client.callback("cover_image_jpeg_received")
+        self.client.callback("cover_image_jpeg_received")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes

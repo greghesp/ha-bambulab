@@ -41,7 +41,7 @@ class WatchdogThread(threading.Thread):
 
     def run(self):
         LOGGER.info("Watchdog thread started.")
-        WATCHDOG_TIMER = 20
+        WATCHDOG_TIMER = 30
         while True:
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
             interval = time.time() - self._last_received_data

@@ -48,6 +48,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._updatedDevice = False
         self.data = self.get_model()
         self.ChamberImage = None
+        self.CoverImage = None
         super().__init__(
             hass,
             LOGGER,
@@ -103,6 +104,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "chamber_image_received":
                     self._chamber_image_updated()
 
+                case "cover_image_received":
+                    self._cover_image_updated()
+
 
         async def listen():
             self.client.connect(callback=event_handler)
@@ -151,6 +155,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _chamber_image_updated(self):
         self.ChamberImage.image_updated()
+
+    def _cover_image_updated(self):
+        self.CoverImage.image_updated()
 
     def _update_device_info(self):
         if not self._updatedDevice:

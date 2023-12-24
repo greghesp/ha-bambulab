@@ -25,12 +25,10 @@ async def async_setup_entry(
     if CHAMBER_IMAGE_SENSOR.exists_fn(coordinator):
         chamber_image = ChamberImage(hass, coordinator, CHAMBER_IMAGE_SENSOR)
         async_add_entities([chamber_image])
-        coordinator.ChamberImage = chamber_image
 
     if COVER_IMAGE_SENSOR.exists_fn(coordinator):
         cover_image = CoverImage(hass, coordinator, COVER_IMAGE_SENSOR)
         async_add_entities([cover_image])
-        #coordinator.CoverImage = cover_image
 
 
 class ChamberImage(ImageEntity, BambuLabEntity):
@@ -50,6 +48,7 @@ class ChamberImage(ImageEntity, BambuLabEntity):
         self.entity_description = description
         printer = self.coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
+        coordinator.ChamberImage = self
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
@@ -76,6 +75,7 @@ class CoverImage(ImageEntity, BambuLabEntity):
         self.entity_description = description
         printer = self.coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
+        coordinator.CoverImage = self
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
