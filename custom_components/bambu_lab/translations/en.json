@@ -14,7 +14,8 @@
     },
     "error": {
       "cannot_connect": "Failed to connect. Check credentials.",
-      "cannot_connect_local": "Failed to connect. Check provided IP address.",
+      "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
+      "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "no_printers": "No unconfigured printers found in the account.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error."
@@ -58,7 +59,8 @@
   "options": {
     "error": {
       "cannot_connect": "Failed to connect",
-      "cannot_connect_local": "Failed to connect. Check provided IP address.",
+      "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
+      "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error."
     },

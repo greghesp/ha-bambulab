@@ -163,7 +163,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                                             access_code=device['dev_access_code'])
                         success = await bambu.try_connection()
                         if not success:
-                            errors['base'] = "cannot_connect_local"
+                            errors['base'] = "cannot_connect_local_ip"
 
                     if success:
                         LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
@@ -261,7 +261,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     options=options
                 )
 
-            errors['base'] = "cannot_connect_local"
+            errors['base'] = "cannot_connect_local_all"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -399,7 +399,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                                             access_code=device['dev_access_code'])
                         success = await bambu.try_connection()
                         if not success:
-                            errors['base'] = "cannot_connect_local"
+                            errors['base'] = "cannot_connect_local_ip"
                 
                     if success:
                         LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
@@ -496,7 +496,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 await self.hass.config_entries.async_reload(self.config_entry.entry_id)
                 return self.async_create_entry(title="", data=None)
 
-            errors['base'] = "cannot_connect_local"
+            errors['base'] = "cannot_connect_local_all"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
