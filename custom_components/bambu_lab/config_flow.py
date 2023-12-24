@@ -125,9 +125,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("region")] = REGION_SELECTOR
-        fields[vol.Required('email')] = EMAIL_SELECTOR
-        fields[vol.Required('password')] = PASSWORD_SELECTOR
+        default_region = '' if user_input is None else user_input.get('region', '')
+        fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
+        default_email = '' if user_input is None else user_input.get('email', '')
+        fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
+        default_password = '' if user_input is None else user_input.get('password', '')
+        fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
@@ -265,9 +268,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('serial')] = TEXT_SELECTOR
-        fields[vol.Required('host')] = TEXT_SELECTOR
-        fields[vol.Required('access_code')] = PASSWORD_SELECTOR
+        fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
+        fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
+        fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",
@@ -311,7 +314,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('printer_mode')] = MODE_SELECTOR
+        fields[vol.Required('printer_mode', default='Bambu' if self.config_entry.options['auth_token'] != "" else 'Lan')] = MODE_SELECTOR
 
         return self.async_show_form(
             step_id="init",
@@ -361,9 +364,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required("region")] = REGION_SELECTOR
-        fields[vol.Required('email', default=self.email)] = EMAIL_SELECTOR
-        fields[vol.Required('password')] = PASSWORD_SELECTOR
+        default_region = self.config_entry.get('region', '') if user_input is None else user_input.get('region', '')
+        fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
+        default_email = self.config_entry.get('email','') if user_input is None else user_input.get('email', '')
+        fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
+        default_password = '' if user_input is None else user_input.get('password', '')
+        fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
@@ -440,8 +446,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('serial', default=self.config_entry.options.get('serial', ''))] = printer_selector
-        fields[vol.Optional('host', default=self.config_entry.options.get('host', ''))] = TEXT_SELECTOR
+        fields[vol.Required('serial', default=self.config_entry.data['serial'])] = printer_selector
+        default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
+        fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
 
         return self.async_show_form(
@@ -500,8 +507,10 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('host', default=self.config_entry.options.get('host', ''))] = TEXT_SELECTOR
-        fields[vol.Required('access_code', default=self.config_entry.options.get('access_code', ''))] = PASSWORD_SELECTOR
+        default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
+        default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
+        fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
+        fields[vol.Required('access_code', default=default_access_code)] = PASSWORD_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",
