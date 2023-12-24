@@ -70,7 +70,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
         # v1 data had just these entries:
         # "device_type": self.config_data["device_type"],
         # "serial": self.config_data["serial"],
-        # "host": "us.mqtt.bambulab.com" / Local IP address
+        # "host": "us.mqtt.bambulab.com" or "cn.mqtt.bambulab.com" / Local IP address
         # "username": username,
         # "access_code": authToken / access_code depending if local mqtt or not
         
@@ -83,10 +83,10 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
                 "email": "",
                 "username": old_data['username'] if (old_data.get('username', 'bblp') != "bblp") else "",
                 "name": "", # Device name
-                "host": old_data['host'] if (old_data['host'] != "us.mqtt.bambulab.com") else "",
-                "local_mqtt": (old_data['host'] != "us.mqtt.bambulab.com"),
-                "auth_token": old_data['access_code'] if (old_data['host'] == "us.mqtt.bambulab.com") else "",
-                "access_code": old_data['access_code'] if (old_data['host'] != "us.mqtt.bambulab.com") else ""
+                "host": old_data['host'] if (old_data['host'] != "us.mqtt.bambulab.com" or old_data['host'] != "cn.mqtt.bambulab.com") else "",
+                "local_mqtt": (old_data['host'] != "us.mqtt.bambulab.com" or old_data['host'] != "cn.mqtt.bambulab.com"),
+                "auth_token": old_data['access_code'] if (old_data['host'] == "us.mqtt.bambulab.com" or old_data['host'] == "cn.mqtt.bambulab.com") else "",
+                "access_code": old_data['access_code'] if (old_data['host'] != "us.mqtt.bambulab.com" or old_data['host'] != "cn.mqtt.bambulab.com") else ""
         }
 
         config_entry.version = CONFIG_VERSION
