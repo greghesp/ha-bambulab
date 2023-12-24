@@ -137,7 +137,7 @@ def mqtt_listen_thread(self):
     exceptionSeen = ""
     while True:
         try:
-            host = self.host if self._local_mqtt else "us.mqtt.bambulab.com"
+            host = self.host if self._local_mqtt else self._region_mqtt 
             LOGGER.debug(f"Connect: Attempting Connection to {host}")
             self.client.connect(host, self._port, keepalive=5)
 
@@ -183,6 +183,7 @@ class BambuClient:
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
+        self._region_mqtt = "cn.mqtt.bambulab.com" if region == "China" else "us.mqtt.bambulab.com"
         self._serial = serial
         self._auth_token = auth_token
         self._access_code = access_code
@@ -305,9 +306,8 @@ class BambuClient:
         """Return the payload when received"""
         try:
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
-            #clean_msg = re.sub(r"\\n *", "", str(message.payload))
-            #LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
-            LOGGER.debug(f"Received data from: {self._device.info.device_type}")
+            clean_msg = re.sub(r"\\n *", "", str(message.payload))
+            LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
             json_data = json.loads(message.payload)
             if json_data.get("event"):
                 if json_data.get("event").get("event") == "client.connected":
