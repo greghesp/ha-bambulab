@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import queue
 import json
+import math
 import re
 import socket
 import ssl
@@ -51,7 +52,7 @@ class WatchdogThread(threading.Thread):
                 break
             interval = time.time() - self._last_received_data
             if not self._watchdog_fired and (interval > WATCHDOG_TIMER):
-                LOGGER.debug(f"Watchdog fired. No data received for {interval} seconds.")
+                LOGGER.debug(f"Watchdog fired. No data received for {math.floor(interval)} seconds for {self._client._device.info.device_type}/{self._client._serial}.")
                 self._watchdog_fired = True
                 self._client._on_watchdog_fired()
             elif interval < WATCHDOG_TIMER:

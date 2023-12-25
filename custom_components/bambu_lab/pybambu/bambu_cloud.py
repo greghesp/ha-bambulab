@@ -156,7 +156,6 @@ class BambuCloud:
     #     },
 
     def get_tasklist(self) -> dict:
-        LOGGER.debug("Getting task list from Bambu Cloud")
         if self._region == "China":
             url = 'https://api.bambulab.cn/v1/user-service/my/tasks'
         else:

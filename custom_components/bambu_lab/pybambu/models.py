@@ -424,16 +424,6 @@ class Info:
             # Update task data if bambu cloud connected
             self._update_task_data()
 
-        # Handle print failed
-        if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
-            if self.client.callback is not None:
-               self.client.callback("event_print_failed")
-
-        # Handle print finish
-        if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
-            if self.client.callback is not None:
-               self.client.callback("event_print_finished")
-
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -441,10 +431,23 @@ class Info:
         #         "print_error": 50348044,
         #     }
         # }
+        isCanceledPrint = False
         if data.get("print_error") == 50348044 and self.print_error == 0:
+            isCanceledPrint = True
             if self.client.callback is not None:
                self.client.callback("event_print_canceled")
         self.print_error = data.get("print_error", self.print_error)
+
+        # Handle print failed
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
+            if not isCanceledPrint:
+                if self.client.callback is not None:
+                   self.client.callback("event_print_failed")
+
+        # Handle print finish
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
+            if self.client.callback is not None:
+               self.client.callback("event_print_finished")
 
         # Version data is provided differently for X1 and P1
         # P1P example:
