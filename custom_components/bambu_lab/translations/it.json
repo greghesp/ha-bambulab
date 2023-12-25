@@ -14,14 +14,15 @@
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
-      "cannot_connect_local": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "cannot_connect_local_ip": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "no_printers": "Nessuna stampante non configurata trovata nell'account.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato."
     },
     "step": {
       "user": {
-        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account di social media senza password. E non funzionerà per le stampanti impostate attivamente in modalità Lan.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account di social media senza password. E non funzionerà per le stampanti impostate attivamente in modalità Solo Lan.",
         "data": {
           "printer_mode": "Modalità di configurazione della stampante:"
         }
@@ -58,14 +59,15 @@
   "options": {
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
-      "cannot_connect_local": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "cannot_connect_local_ip": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
+      "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato."
     },
     "step": {
       "init": {
         "title": "Regolare le impostazioni di connessione",
-        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account di social media senza password. E non funzionerà per le stampanti impostate attivamente in modalità Lan.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account di social media senza password. E non funzionerà per le stampanti impostate attivamente in modalità Solo Lan.",
         "data": {
           "printer_mode": "Modalità di configurazione della stampante:"
         }

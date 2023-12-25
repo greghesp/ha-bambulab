@@ -2,6 +2,10 @@
 - Reduce work for X1 full payloads to only one HA update instead of three.
 - Only log the payloads when the refresh button has been pressed.
 - Simplify the start and end times to just times when they are for today.
+- Don't throw away user input on error cases during setup/re-configure.
+- Fix cover image to update automatically on new print.
+- Simplify image update plumbing.
+- Various copy editing to UI/README.
 
 ### V2.0.2
 - Fix mishandling of optional 'email' field when upgrading or if early 2.0 dev build was used.

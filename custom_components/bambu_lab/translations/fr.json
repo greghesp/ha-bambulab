@@ -5,14 +5,15 @@
     },
     "error": {
       "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
-      "cannot_connect_local": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_ip": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "no_printers": "Aucune imprimante non configurée n’a été trouvée dans le compte.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue."
     },
     "step": {
       "user": {
-        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN uniquement.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
@@ -49,14 +50,15 @@
   "options": {
     "error": {
       "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
-      "cannot_connect_local": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_ip": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue."
     },
     "step": {
       "init": {
         "title": "Ajuster les paramètres de connexion",
-        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN uniquement.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
