@@ -87,6 +87,7 @@
         "data": {
           "printer": "Wählen Sie den hinzuzufügenden Drucker aus:",
           "host": "IP-Adresse des lokalen Druckers:",
+          "access_code": "Zugangscode",
           "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:"
         }
       },
