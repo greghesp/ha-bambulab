@@ -270,7 +270,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
-        fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = PASSWORD_SELECTOR
+        fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",
@@ -393,7 +393,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
                     success = True
                     if user_input.get('host', "") != "":
-                        LOGGER.debug("Options Flow: Testing local mqtt connection")
+                        LOGGER.debug(f"Options Flow: Testing local mqtt connection to {user_input.get('host')}")
                         bambu = BambuClient(device_type=self.config_entry.data['device_type'],
                                             serial=self.config_entry.data['serial'],
                                             host=user_input['host'],
@@ -402,7 +402,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                                             email="",
                                             username="",
                                             auth_token="",
-                                            access_code=device['dev_access_code'])
+                                            access_code=user_input['access_code'])
                         success = await bambu.try_connection()
                         if not success:
                             errors['base'] = "cannot_connect_local_ip"
@@ -421,7 +421,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                                 "host": user_input['host'],
                                 "local_mqtt": user_input.get('local_mqtt', False),
                                 "auth_token": self._bambu_cloud.auth_token,
-                                "access_code": device['dev_access_code']
+                                "access_code": user_input['access_code']
                         }
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
@@ -434,9 +434,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         return self.async_create_entry(title="", data=None)
 
         printer_list = []
+        access_code = ''
         for device in device_list:
             if device['dev_id'] == self.config_entry.data['serial']:
                 printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
+                access_code = device['dev_access_code']
 
         printer_selector = SelectSelector(
             SelectSelectorConfig(
@@ -447,8 +449,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required('serial', default=self.config_entry.data['serial'])] = printer_selector
-        default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
-        fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
+        fields[vol.Optional('host')] = TEXT_SELECTOR
+        fields[vol.Optional('access_code', default=self.config_entry.options.get('access_code', access_code))] = TEXT_SELECTOR
         fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
 
         return self.async_show_form(
@@ -510,7 +512,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
         default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
-        fields[vol.Required('access_code', default=default_access_code)] = PASSWORD_SELECTOR
+        fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",
