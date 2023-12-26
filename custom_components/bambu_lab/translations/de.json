@@ -213,6 +213,9 @@
           }
         }
       },
+      "printer_name": {
+        "name": "Name des Druckers"
+      },
       "stage": {
         "name": "Aktuelle Schicht",
         "state": {

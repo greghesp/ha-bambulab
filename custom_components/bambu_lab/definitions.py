@@ -310,6 +310,12 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().info.subtask_name
     ),
     BambuLabSensorEntityDescription(
+        key="name",
+        translation_key="printer_name",
+        value_fn=lambda self: self.coordinator.config_entry.options.get('name', ''),
+        exists_fn=lambda coordinator: coordinator.config_entry.options.get('name', '') != ''
+    ),
+    BambuLabSensorEntityDescription(
         key="print_length",
         translation_key="print_length",
         native_unit_of_measurement=UnitOfLength.METERS,

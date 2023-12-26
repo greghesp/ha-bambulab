@@ -449,7 +449,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required('serial', default=self.config_entry.data['serial'])] = printer_selector
-        fields[vol.Optional('host')] = TEXT_SELECTOR
+        default_host = self.config_entry.options.get('host', '') if user_input is None else user_input['host']
+        fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('access_code', default=self.config_entry.options.get('access_code', access_code))] = TEXT_SELECTOR
         fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
 

@@ -204,6 +204,9 @@
           }
         }
       },
+      "printer_name": {
+        "name": "Nom de l’imprimante"
+      },
       "stage": {
         "name": "Étape actuelle",
         "state": {

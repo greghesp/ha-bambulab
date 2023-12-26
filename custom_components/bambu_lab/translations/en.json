@@ -213,6 +213,9 @@
           }
         }
       },
+      "printer_name": {
+        "name": "Printer name"
+      },
       "stage": {
         "name": "Current stage",
         "state": {

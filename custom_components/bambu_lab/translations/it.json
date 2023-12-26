@@ -213,6 +213,9 @@
           }
         }
       },
+      "printer_name": {
+        "name": "Nome della stampante"
+      },
       "stage": {
         "name": "Fase corrente",
         "state": {
