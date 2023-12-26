@@ -213,6 +213,9 @@
           }
         }
       },
+      "printer_name": {
+        "name": "打印机名称"
+      },
       "stage": {
         "name": "当前阶段",
         "state": {

@@ -110,6 +110,7 @@ class BambuCloud:
         if not response.ok:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
+        LOGGER.debug(f"DEVICE LIST: {response.json()}")
         return response.json()['devices']
 
     # The task list is of the following form with a 'hits' array with typical 20 entries.
