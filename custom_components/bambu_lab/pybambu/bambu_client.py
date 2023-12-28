@@ -61,7 +61,7 @@ class WatchdogThread(threading.Thread):
         LOGGER.info("Watchdog thread exited.")
 
 
-class ImageCameraThread(threading.Thread):
+class ChamberImageThread(threading.Thread):
     def __init__(self, client):
         self._client = client
         self._stop_event = threading.Event()
@@ -71,7 +71,7 @@ class ImageCameraThread(threading.Thread):
         self._stop_event.set()
 
     def run(self):
-        LOGGER.debug("Image Camera thread started.")
+        LOGGER.debug("Chamber image thread started.")
 
         d = bytearray()
 
@@ -112,7 +112,10 @@ class ImageCameraThread(threading.Thread):
                 except ssl.SSLWantReadError:
                     time.sleep(1)
                     continue
-
+                except Exception as e:
+                    LOGGER.error("A Chamber Image thread exception occurred:")
+                    LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
                 buf += dr
 
                 if not start:
@@ -130,7 +133,7 @@ class ImageCameraThread(threading.Thread):
 
                     self._client.on_jpeg_received(img)
 
-        LOGGER.info("Image Camera thread exited.")
+        LOGGER.info("Chamber image thread exited.")
 
 
 def mqtt_listen_thread(self):
@@ -148,27 +151,27 @@ def mqtt_listen_thread(self):
             break
         except TimeoutError as e:
             if exceptionSeen != "TimeoutError":
-                LOGGER.debug(f"TimeoutError: {e.args}.")
+                LOGGER.debug(f"TimeoutError: {e}.")
             exceptionSeen = "TimeoutError"
             time.sleep(5)
         except ConnectionError as e:
             if exceptionSeen != "ConnectionError":
-                LOGGER.debug(f"ConnectionError: {e.args}.")
+                LOGGER.debug(f"ConnectionError: {e}.")
             exceptionSeen = "ConnectionError"
             time.sleep(5)
         except OSError as e:
             if e.errno == 113:
                 if exceptionSeen != "OSError113":
-                    LOGGER.debug(f"OSError: {e.args}.")
+                    LOGGER.debug(f"OSError: {e}.")
                 exceptionSeen = "OSError113"
                 time.sleep(5)
             else:
                 LOGGER.error("A listener loop thread exception occurred:")
-                LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         except Exception as e:
             LOGGER.error("A listener loop thread exception occurred:")
-            LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
+            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
             time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         self.client.disconnect()
 
@@ -262,8 +265,8 @@ class BambuClient:
         self._watchdog.start()
 
         if self._device.supports_feature(Features.CAMERA_IMAGE) and self.host != "":
-            LOGGER.debug("Starting Image Camera thread")
-            self._camera = ImageCameraThread(self)
+            LOGGER.debug("Starting Chamber Image thread")
+            self._camera = ChamberImageThread(self)
             self._camera.start()
 
     def try_on_connect(self,
