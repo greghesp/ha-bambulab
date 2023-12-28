@@ -411,7 +411,10 @@ class Info:
             self._update_task_data()
 
         # Handle print start
-        if previous_gcode_state != "PREPARE" and self.gcode_state == "PREPARE":
+        previously_idle = previous_gcode_state == "IDLE" or previous_gcode_state == "FAILED" or previous_gcode_state == "FINISH"
+        currently_idle = self.gcode_state == "IDLE" or self.gcode_state == "FAILED" or self.gcode_state == "FINISH"
+
+        if previously_idle and not currently_idle:
             if self.client.callback is not None:
                self.client.callback("event_print_started")
 
@@ -953,6 +956,7 @@ class ChamberImage:
         self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
+        LOGGER.debug(f"JPEG RECEIVED: {self.client._device.info.device_type}")
         self._bytes = bytes
         self._image_last_updated = datetime.now()
     
