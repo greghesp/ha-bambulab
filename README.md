@@ -2,32 +2,31 @@
 
 # Bambu Lab
 
-A Home Assistant Integration for Bambu Lab printers
+A Home Assistant Integration for Bambu Lab printers.
 
 ## Contribution
 
 Want to contribute to ha-bambulab? Great!  We have a few small asks though!
 
-- Please do not fork and PR against the `main` branch
+- Please do not fork and PR against the `main` branch.
 - Use the `develop` branch, this is our working area. Anything in the `main` branch should be considered live, released
   code.
 - Please name your commits accordingly, and add some context as to what you have added.
 
-If you feel this integration was valuable and want to support it in other ways, you can buy me a coffee at https://Ko-fi.com/adriangarside
+If you feel this integration was valuable and want to support it in other ways, you can [buy me a coffee](https://Ko-fi.com/adriangarside).
 
 ## Setup
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab&category=Integration)
 
-To install, add this Github Repo to the HACS Custom Repositories, or click the badge above.
+To install this integration, add this GitHub Repo to the HACS Custom Repositories, or click the badge above.
 
-For configuration, you'll ideally use your Bambu Credentials for the simplest setup. You can then optionally provide the printer IP address to enable local direct to printer connection and to enable the P1/A1 camera support. 
+For configuration, you'll ideally use your Bambu Credentials for the simplest setup. You can then optionally provide the printers local IP address to enable local direct to printer connection and to enable the P1/A1 camera support. 
 
-However the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to lan mode. If you fall into any of these, select the lan mode connection option. You will need to provide:
-- The printer type
-- Printer Serial Number - can be found in the printer settings or in Bambu Studio 
-- Local printer IP address - can be found in the printer network settings
-- LAN Access Code - can be found in the Printer settings
+However, the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode. If you fall into any of these, select the Lan Mode Configuration connection option. You will need to provide:
+- Printer Serial Number - can be found in the printer settings or in Bambu Studio.
+- Local printer IP address - can be found in the printer network settings (LAN).
+- Access Code - can be found in the Printer settings.
 
 ### Setup using Bambu Cloud w/ OAuth
 
@@ -35,7 +34,7 @@ If you signed up using any OAuth method, you need to set a password for your Bam
 
 - Login to the Bambu mobile app using OAuth.
 - Tap the person icon at the bottom right.
-- Tap Account Security > Change Password
+- Tap Account Security > Change Password.
 
 This will allow you to set a password. Now you can login to the HA integration using your Bambu username and password
 instead of OAuth.
@@ -105,7 +104,7 @@ instead of OAuth.
 | Pause               |                                                  |
 | Resume              |                                                  |
 | Stop                |                                                  |
-| Manual Refresh Mode | P1/A1 only and only available in local mqtt mode |
+| Manual Refresh Mode | P1/A1 only and only available in local MQTT mode |
 
 ### AMS
 
@@ -121,7 +120,7 @@ instead of OAuth.
 | Tray attributes:  |                   |
 | Color             |                   |
 | Empty             |                   |
-| K Value           | P1/A1   only      |
+| K Value           | P1/A1 only        |
 | Max Nozzle Temp   |                   |
 | Min Nozzle TEmp   |                   |
 | Name              |                   |
@@ -166,7 +165,7 @@ See [device triggers](docs/DeviceTrigger.md).
 
 ### WLED Lights
 
-Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
+Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/) project.
 
 - Requires the [WLED Home Assistant Integration](https://www.home-assistant.io/integrations/wled/) and the requisite LED
   lights and ESP device.
@@ -176,10 +175,10 @@ Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/).
 
 #### WLED Features
 
-- LED lights automatically turn off when Bambu Lida is in use so as to not interfere
-- LED lights turn red when there is an error in the printer
-- LED lights turn blue when bed is auto leveling
-- LED lights turn green when print is finished
+- LED lights automatically turn off when Bambu Lida is in use, so as to not interfere.
+- LED lights turn red when there is an error in the printer.
+- LED lights turn blue when the bed is auto leveling.
+- LED lights turn green when printing is finished.
 
 ## Example dashboard
 
@@ -198,13 +197,13 @@ To grab the latest information, hit the "Force Refresh Data" button under the Di
 ![image](docs/images/force-refresh.png)
 
 Then on the device info page for the printer entity, you will see a "Download Diagnostics" button.
-Make sure you upload this to your Bug ticket
+Make sure you upload this to your Bug ticket/GitHub issue.
 
 ![img.png](docs/images/diagnostics.png)
 
 ### Debug Logging
 
 When logging a bug, always ensure you send us the debug logs. These can be enabled from the Integration page itself.
-The debug logs will appear in the standard Home Assistant logs
+The debug logs will appear in the standard Home Assistant logs.
 
 ![img.png](docs/images/debugging.png)

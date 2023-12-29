@@ -47,7 +47,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             
         self._updatedDevice = False
         self.data = self.get_model()
-        self.ChamberImage = None
         super().__init__(
             hass,
             LOGGER,
@@ -79,12 +78,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_printer_data_update":
                     self._update_data()
 
-                case "event_ams_data_update":
-                    self._update_data()
-
-                case "event_virtual_tray_data_update":
-                    self._update_data()
-
                 case "event_hms_errors":
                     self._update_hms()
 
@@ -99,9 +92,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
                 case "event_print_started":
                     self.PublishDeviceTriggerEvent(event)
-
-                case "chamber_image_received":
-                    self._chamber_image_updated()
 
 
         async def listen():
@@ -148,9 +138,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 event_data["url"] = device.hms.errors[f"{index+1}-Wiki"]
                 LOGGER.debug(f"EVENT: HMS errors: {event_data}")
                 self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
-
-    def _chamber_image_updated(self):
-        self.ChamberImage.image_updated()
 
     def _update_device_info(self):
         if not self._updatedDevice:

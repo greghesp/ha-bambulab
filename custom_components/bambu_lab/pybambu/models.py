@@ -40,21 +40,25 @@ class Device:
             self.chamber_image = ChamberImage(client)
         self.cover_image = CoverImage(client)
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
-        self.info.print_update(self, data)
-        self.temperature.print_update(data)
-        self.lights.print_update(data)
-        self.fans.print_update(data)
-        self.speed.print_update(data)
-        self.stage.print_update(data)
-        self.ams.print_update(data)
-        self.external_spool.print_update(data)
-        self.hms.print_update(data)
-        self.camera.print_update(data)
-        if self.client.callback is not None:
+
+        send_event = False
+        send_event = send_event | self.info.print_update(self, data)
+        send_event = send_event | self.temperature.print_update(data)
+        send_event = send_event | self.lights.print_update(data)
+        send_event = send_event | self.fans.print_update(data)
+        send_event = send_event | self.speed.print_update(data)
+        send_event = send_event | self.stage.print_update(data)
+        send_event = send_event | self.ams.print_update(data)
+        send_event = send_event | self.external_spool.print_update(data)
+        send_event = send_event | self.hms.print_update(data)
+        send_event = send_event | self.camera.print_update(data)
+
+        if send_event and self.client.callback is not None:
             self.client.callback("event_printer_data_update")
-        if data.get("msg") == 0:
+
+        if data.get("msg", 0) == 0:
             self.push_all_data = data
 
     def info_update(self, data):
@@ -124,8 +128,9 @@ class Lights:
         self.work_light = "unknown"
         self.chamber_light_override = ""
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
 
         # "lights_report": [
         #     {
@@ -149,6 +154,8 @@ class Lights:
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
+        
+        return (old_data != f"{self.__dict__}")
 
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
@@ -179,8 +186,10 @@ class Camera:
         self.rtsp_url = None
         self.timelapse = ''
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
+
         # "ipcam": {
         #   "ipcam_dev": "1",
         #   "ipcam_record": "enable",
@@ -195,7 +204,8 @@ class Camera:
         self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
         self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
         self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
-
+        
+        return (old_data != f"{self.__dict__}")
 
 @dataclass
 class Temperature:
@@ -213,15 +223,17 @@ class Temperature:
         self.nozzle_temp = 0
         self.target_nozzle_temp = 0
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
 
         self.bed_temp = round(data.get("bed_temper", self.bed_temp))
         self.target_bed_temp = round(data.get("bed_target_temper", self.target_bed_temp))
         self.chamber_temp = round(data.get("chamber_temper", self.chamber_temp))
         self.nozzle_temp = round(data.get("nozzle_temper", self.nozzle_temp))
         self.target_nozzle_temp = round(data.get("nozzle_target_temper", self.target_nozzle_temp))
-
+        
+        return (old_data != f"{self.__dict__}")
 
 @dataclass
 class Fans:
@@ -246,8 +258,10 @@ class Fans:
         self.heatbreak_fan_speed = 0
         self._heatbreak_fan_speed = 0
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
+
         self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
         self.aux_fan_speed = fan_percentage(self._aux_fan_speed)
         self._chamber_fan_speed = data.get("big_fan2_speed", self._chamber_fan_speed)
@@ -256,6 +270,8 @@ class Fans:
         self.cooling_fan_speed = fan_percentage(self._cooling_fan_speed)
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self.heatbreak_fan_speed = fan_percentage(self._heatbreak_fan_speed)
+        
+        return (old_data != f"{self.__dict__}")
 
     def SetFanSpeed(self, fan: FansEnum, percentage: int):
         """Set fan speed"""
@@ -345,8 +361,9 @@ class Info:
         if self.client.callback is not None:
             self.client.callback("event_printer_info_update")
 
-    def print_update(self, device, data):
+    def print_update(self, device, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
 
         # Example payload:
         # {
@@ -394,7 +411,10 @@ class Info:
             self._update_task_data()
 
         # Handle print start
-        if previous_gcode_state != "PREPARE" and self.gcode_state == "PREPARE":
+        previously_idle = previous_gcode_state == "IDLE" or previous_gcode_state == "FAILED" or previous_gcode_state == "FINISH"
+        currently_idle = self.gcode_state == "IDLE" or self.gcode_state == "FAILED" or self.gcode_state == "FINISH"
+
+        if previously_idle and not currently_idle:
             if self.client.callback is not None:
                self.client.callback("event_print_started")
 
@@ -407,16 +427,6 @@ class Info:
             # Update task data if bambu cloud connected
             self._update_task_data()
 
-        # Handle print failed
-        if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
-            if self.client.callback is not None:
-               self.client.callback("event_print_failed")
-
-        # Handle print finish
-        if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
-            if self.client.callback is not None:
-               self.client.callback("event_print_finished")
-
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -424,10 +434,23 @@ class Info:
         #         "print_error": 50348044,
         #     }
         # }
+        isCanceledPrint = False
         if data.get("print_error") == 50348044 and self.print_error == 0:
+            isCanceledPrint = True
             if self.client.callback is not None:
                self.client.callback("event_print_canceled")
         self.print_error = data.get("print_error", self.print_error)
+
+        # Handle print failed
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
+            if not isCanceledPrint:
+                if self.client.callback is not None:
+                   self.client.callback("event_print_failed")
+
+        # Handle print finish
+        if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
+            if self.client.callback is not None:
+               self.client.callback("event_print_finished")
 
         # Version data is provided differently for X1 and P1
         # P1P example:
@@ -480,6 +503,8 @@ class Info:
         # in separate string properties.
 
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
+        
+        return (old_data != f"{self.__dict__}")
 
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #
@@ -628,6 +653,7 @@ class AMSList:
 
     def print_update(self, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
 
         # AMS json payload is of the form:
         # "ams": {
@@ -711,10 +737,6 @@ class AMSList:
                     tray_id = int(tray['id'])
                     received_ams_data = received_ams_data | self.data[index].tray[tray_id].print_update(tray)
 
-        if received_ams_data:
-            if self.client.callback is not None:
-                self.client.callback("event_ams_data_update")
-
         return received_ams_data
 
 @dataclass
@@ -735,65 +757,36 @@ class AMSTray:
         self.tag_uid = "0000000000000000"
 
     def print_update(self, data) -> bool:
-        data = {
-            "empty": self.empty,
-            "idx": self.idx,
-            "name": self.name,
-            "type": self.type,
-            "sub_brands": self.sub_brands,
-            "color": self.color,
-            "nozzle_temp_min": self.nozzle_temp_min,
-            "nozzle_temp_max": self.nozzle_temp_max,
-            "remain": self.remain,
-            "k": self.k,
-            "tag_uid": self.tag_uid
-        }
+        """Update from dict"""
+        old_data = f"{self.__dict__}"
 
         if len(data) == 1:
             # If the data is exactly one entry then it's just the ID and the tray is empty.
-            new_data = {
-                "empty": True,
-                "idx": "",
-                "name": "Empty",
-                "type": "Empty",
-                "sub_brands": "",
-                "color": "00000000",  # RRGGBBAA
-                "nozzle_temp_min": 0,
-                "nozzle_temp_max": 0,
-                "remain": 0,
-                "k": 0,
-                "tag_uid": "0000000000000000"
-            }
+            self.empty = True
+            self.idx = ""
+            self.name = "Empty"
+            self.type = "Empty"
+            self.sub_brands = ""
+            self.color = "00000000"  # RRGGBBAA
+            self.nozzle_temp_min = 0
+            self.nozzle_temp_max = 0
+            self.remain = 0
+            self.tag_uid = "0000000000000000"
+            self.k = 0
         else:
-            new_data = {
-                "empty": False,
-                "idx": data.get('tray_info_idx', self.idx),
-                "name": get_filament_name(self.idx),
-                "type": data.get('tray_type', self.type),
-                "sub_brands": data.get('tray_sub_brands', self.sub_brands),
-                "color": data.get('tray_color', self.color),
-                "nozzle_temp_min": data.get('nozzle_temp_min', self.nozzle_temp_min),
-                "nozzle_temp_max": data.get('nozzle_temp_max', self.nozzle_temp_max),
-                "remain": data.get('remain', self.remain),
-                "k": data.get('k', self.k),
-                "tag_uid": data.get('tag_uid', self.tag_uid)
-            }
+            self.empty = False
+            self.idx = data.get('tray_info_idx', self.idx)
+            self.name = get_filament_name(self.idx)
+            self.type = data.get('tray_type', self.type)
+            self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+            self.color = data.get('tray_color', self.color)
+            self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
+            self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+            self.remain = data.get('remain', self.remain)
+            self.tag_uid = data.get('tag_uid', self.tag_uid)
+            self.k = data.get('k', self.k)
         
-        if data != new_data:
-            self.empty = new_data['empty']
-            self.idx = new_data['idx']
-            self.name = new_data['name']
-            self.type = new_data['type']
-            self.sub_brands = new_data['sub_brands']
-            self.color = new_data['color']
-            self.nozzle_temp_min = new_data['nozzle_temp_min']
-            self.nozzle_temp_max = new_data['nozzle_temp_max']
-            self.remain = new_data['remain']
-            self.k = new_data['k']
-            self.tag_uid = new_data['tag_uid']
-            return True
-        
-        return False
+        return (old_data != f"{self.__dict__}")
 
 
 @dataclass
@@ -804,7 +797,7 @@ class ExternalSpool(AMSTray):
         super().__init__()
         self.client = client
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
 
         # P1P virtual tray example
@@ -840,9 +833,7 @@ class ExternalSpool(AMSTray):
         if len(tray_data) != 0:
             received_virtual_tray_data = super().print_update(tray_data)
 
-        if received_virtual_tray_data:
-            if self.client.callback is not None:
-                self.client.callback("event_virtual_tray_data_update")
+        return received_virtual_tray_data
 
 
 @dataclass
@@ -859,11 +850,15 @@ class Speed:
         self.name = get_speed_name(2)
         self.modifier = 100
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
+
         self._id = int(data.get("spd_lvl", self._id))
         self.name = get_speed_name(self._id)
         self.modifier = int(data.get("spd_mag", self.modifier))
+        
+        return (old_data != f"{self.__dict__}")
 
     def SetSpeed(self, option: str):
         for id, speed in SPEED_PROFILE.items():
@@ -890,8 +885,10 @@ class StageAction:
         self._print_type = ""
         self.description = get_stage_action(self._id)
 
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
+        old_data = f"{self.__dict__}"
+
         self._print_type = data.get("print_type", self._print_type)
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
@@ -899,6 +896,7 @@ class StageAction:
             self._id = 255
         self.description = get_stage_action(self._id)
 
+        return (old_data != f"{self.__dict__}")
 
 @dataclass
 class HMSList:
@@ -910,7 +908,7 @@ class HMSList:
         self.errors = {}
         self.errors["Count"] = 0
         
-    def print_update(self, data):
+    def print_update(self, data) -> bool:
         """Update from dict"""
 
         # Example payload:
@@ -945,6 +943,9 @@ class HMSList:
                     LOGGER.warning(f"HMS ERRORS: {errors}")
                 if self.client.callback is not None:
                     self.client.callback("event_hms_errors")
+                return True
+        
+        return False
 
 @dataclass
 class ChamberImage:
@@ -952,13 +953,18 @@ class ChamberImage:
     def __init__(self, client):
         self.client = client
         self._bytes = bytearray()
+        self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
+        LOGGER.debug(f"JPEG RECEIVED: {self.client._device.info.device_type}")
         self._bytes = bytes
-        self.client.callback("chamber_image_received")
+        self._image_last_updated = datetime.now()
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
+    
+    def get_last_update_time(self) -> datetime:
+        return self._image_last_updated
     
 @dataclass
 class CoverImage:
@@ -967,10 +973,14 @@ class CoverImage:
     def __init__(self, client):
         self.client = client
         self._bytes = bytearray()
+        self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-        #self.client.callback("cover_image_jpeg_received")
+        self._image_last_updated = datetime.now()
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
+
+    def get_last_update_time(self) -> datetime:
+        return self._image_last_updated

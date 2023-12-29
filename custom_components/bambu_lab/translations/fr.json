@@ -5,14 +5,15 @@
     },
     "error": {
       "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
-      "cannot_connect_local": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_ip": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "no_printers": "Aucune imprimante non configurée n’a été trouvée dans le compte.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue."
     },
     "step": {
       "user": {
-        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN uniquement.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
@@ -28,11 +29,18 @@
       },
       "Bambu_Choose_Device": {
         "title": "Sélection de l’imprimante",
-        "description": "Choisissez l’imprimante que vous souhaitez ajouter. Si vous fournissez l’adresse IP locale, vous pouvez également définir la connexion à l’imprimante pour qu’elle se fasse par mqtt local.",
+        "description": "Choisissez l’imprimante que vous souhaitez ajouter.",
         "data": {
-          "printer": "Choisissez l’imprimante à ajouter :",
+          "printer": "Choisissez l’imprimante à ajouter :"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Configurer la connexion locale",
+        "description": "Vous pouvez éventuellement fournir l’adresse IP de l’imprimante locale. Cette option est recommandée car elle permet l’accès à la caméra sur les imprimantes P1/A1 et est généralement plus fiable.",
+        "data": {
+          "local_mqtt": "Connectez-vous directement à l’imprimante au lieu de passer par Bambu Cloud :",
           "host": "Adresse IP de l’imprimante locale :",
-          "local_mqtt": "Connectez-vous directement à l’imprimante au lieu de passer par Bambu Cloud :"
+          "access_code": "Code d'accès"
         }
       },
       "Lan": {
@@ -49,14 +57,15 @@
   "options": {
     "error": {
       "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
-      "cannot_connect_local": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_ip": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
+      "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue."
     },
     "step": {
       "init": {
         "title": "Ajuster les paramètres de connexion",
-        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Mais ne prend pas en charge l’authentification à 2 facteurs ou les comptes de médias sociaux sans mot de passe. Et cela ne fonctionnera pas pour les imprimantes actives en mode LAN uniquement.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
@@ -200,6 +209,9 @@
             "name": "Modificateur"
           }
         }
+      },
+      "printer_name": {
+        "name": "Nom de l’imprimante"
       },
       "stage": {
         "name": "Étape actuelle",

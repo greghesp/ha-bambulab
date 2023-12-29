@@ -1,6 +1,8 @@
 """Image platform."""
 from __future__ import annotations
 
+from datetime import datetime
+
 from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -25,12 +27,10 @@ async def async_setup_entry(
     if CHAMBER_IMAGE_SENSOR.exists_fn(coordinator):
         chamber_image = ChamberImage(hass, coordinator, CHAMBER_IMAGE_SENSOR)
         async_add_entities([chamber_image])
-        coordinator.ChamberImage = chamber_image
 
     if COVER_IMAGE_SENSOR.exists_fn(coordinator):
         cover_image = CoverImage(hass, coordinator, COVER_IMAGE_SENSOR)
         async_add_entities([cover_image])
-        #coordinator.CoverImage = cover_image
 
 
 class ChamberImage(ImageEntity, BambuLabEntity):
@@ -53,11 +53,12 @@ class ChamberImage(ImageEntity, BambuLabEntity):
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
-
         return self.coordinator.get_model().chamber_image.get_jpeg()
 
-    def image_updated(self):
-        self._attr_image_last_updated = dt_util.utcnow()
+    @property
+    def image_last_updated(self) -> datetime | None:
+        """The time when the image was last updated."""
+        return self.coordinator.get_model().chamber_image.get_last_update_time()
 
 class CoverImage(ImageEntity, BambuLabEntity):
     """Representation of an image entity."""
@@ -79,8 +80,9 @@ class CoverImage(ImageEntity, BambuLabEntity):
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
-
         return self.coordinator.get_model().cover_image.get_jpeg()
 
-    def image_updated(self):
-        self._attr_image_last_updated = dt_util.utcnow()
+    @property
+    def image_last_updated(self) -> datetime | None:
+        """The time when the image was last updated."""
+        return self.coordinator.get_model().cover_image.get_last_update_time()

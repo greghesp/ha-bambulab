@@ -29,7 +29,6 @@ class BambuCloud:
         if not response.ok:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        LOGGER.debug(f"Success: {response.json()}")
         return response.json()['accessToken']
 
     def _get_username_from_authentication_token(self) -> str:
@@ -110,7 +109,7 @@ class BambuCloud:
         if not response.ok:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        LOGGER.debug(f"Success: {response.json()}")
+        LOGGER.debug(f"DEVICE LIST: {response.json()}")
         return response.json()['devices']
 
     # The task list is of the following form with a 'hits' array with typical 20 entries.
@@ -156,7 +155,6 @@ class BambuCloud:
     #     },
 
     def get_tasklist(self) -> dict:
-        LOGGER.debug("Getting task list from Bambu Cloud")
         if self._region == "China":
             url = 'https://api.bambulab.cn/v1/user-service/my/tasks'
         else:
@@ -196,3 +194,7 @@ class BambuCloud:
     @property
     def auth_token(self):
         return self._auth_token
+    
+    @property
+    def cloud_mqtt_host(self):
+        return "cn.mqtt.bambulab.com" if self._region == "China" else "us.mqtt.bambulab.com"

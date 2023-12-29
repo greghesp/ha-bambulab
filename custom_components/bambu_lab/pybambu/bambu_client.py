@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import queue
 import json
+import math
 import re
 import socket
 import ssl
 import struct
 import threading
 import time
-
 
 from dataclasses import dataclass
 from typing import Any
@@ -23,6 +23,7 @@ from .commands import (
     PUSH_ALL,
     START_PUSH,
 )
+
 
 class WatchdogThread(threading.Thread):
 
@@ -41,7 +42,7 @@ class WatchdogThread(threading.Thread):
 
     def run(self):
         LOGGER.info("Watchdog thread started.")
-        WATCHDOG_TIMER = 20
+        WATCHDOG_TIMER = 30
         while True:
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
             interval = time.time() - self._last_received_data
@@ -51,7 +52,7 @@ class WatchdogThread(threading.Thread):
                 break
             interval = time.time() - self._last_received_data
             if not self._watchdog_fired and (interval > WATCHDOG_TIMER):
-                LOGGER.debug(f"Watchdog fired. No data received for {interval} seconds.")
+                LOGGER.debug(f"Watchdog fired. No data received for {math.floor(interval)} seconds for {self._client._device.info.device_type}/{self._client._serial}.")
                 self._watchdog_fired = True
                 self._client._on_watchdog_fired()
             elif interval < WATCHDOG_TIMER:
@@ -60,7 +61,7 @@ class WatchdogThread(threading.Thread):
         LOGGER.info("Watchdog thread exited.")
 
 
-class ImageCameraThread(threading.Thread):
+class ChamberImageThread(threading.Thread):
     def __init__(self, client):
         self._client = client
         self._stop_event = threading.Event()
@@ -70,7 +71,7 @@ class ImageCameraThread(threading.Thread):
         self._stop_event.set()
 
     def run(self):
-        LOGGER.debug("Image Camera thread started.")
+        LOGGER.debug("Chamber image thread started.")
 
         d = bytearray()
 
@@ -82,11 +83,11 @@ class ImageCameraThread(threading.Thread):
         d += struct.pack("IIL", 0x40, 0x3000, 0x0)
         for i in range(0, len(username)):
             d += struct.pack("<c", username[i].encode('ascii'))
-        for i in range(0, 32-len(username)):
+        for i in range(0, 32 - len(username)):
             d += struct.pack("<x")
         for i in range(0, len(access_code)):
             d += struct.pack("<c", access_code[i].encode('ascii'))
-        for i in range(0, 32-len(access_code)):
+        for i in range(0, 32 - len(access_code)):
             d += struct.pack("<x")
 
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
@@ -98,38 +99,48 @@ class ImageCameraThread(threading.Thread):
 
         read_chunk_size = 1024
 
-        with socket.create_connection((hostname, port)) as sock:
-            sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
-            sslSock.write(d)
-            buf = bytearray()
-            start = False
-
-            sslSock.setblocking(False)
-            while not self._stop_event.is_set():
-                try:
-                    dr = sslSock.recv(read_chunk_size)
-                except ssl.SSLWantReadError:
-                    time.sleep(1)
-                    continue
-
-                buf += dr
-
-                if not start:
-                    i = buf.find(bytearray.fromhex(jpeg_start))
-                    if i >= 0:
-                        start = True
-                        buf = buf[i:]
-                    continue
-
-                i = buf.find(bytearray.fromhex(jpeg_end))
-                if i >= 0:
-                    img = buf[:i+len(jpeg_end)]
-                    buf = buf[i+len(jpeg_end):]
+        while not self._stop_event.is_set():
+            try:
+                with socket.create_connection((hostname, port)) as sock:
+                    sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
+                    sslSock.write(d)
+                    buf = bytearray()
                     start = False
 
-                    self._client.on_jpeg_received(img)
+                    sslSock.setblocking(False)
+                    while not self._stop_event.is_set():
+                        try:
+                            dr = sslSock.recv(read_chunk_size)
+                        except ssl.SSLWantReadError:
+                            time.sleep(1)
+                            continue
+                        except Exception as e:
+                            LOGGER.error("A Chamber Image thread inner exception occurred:")
+                            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                            time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+                        buf += dr
 
-        LOGGER.info("Image Camera thread exited.")
+                        if not start:
+                            i = buf.find(bytearray.fromhex(jpeg_start))
+                            if i >= 0:
+                                start = True
+                                buf = buf[i:]
+                            continue
+
+                        i = buf.find(bytearray.fromhex(jpeg_end))
+                        if i >= 0:
+                            img = buf[:i + len(jpeg_end)]
+                            buf = buf[i + len(jpeg_end):]
+                            start = False
+
+                            self._client.on_jpeg_received(img)
+            except Exception as e:
+                LOGGER.error("A Chamber Image thread outer exception occurred:")
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                if not self._stop_event.is_set():
+                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+
+        LOGGER.info("Chamber image thread exited.")
 
 
 def mqtt_listen_thread(self):
@@ -137,7 +148,7 @@ def mqtt_listen_thread(self):
     exceptionSeen = ""
     while True:
         try:
-            host = self.host if self._local_mqtt else "us.mqtt.bambulab.com"
+            host = self.host if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
             LOGGER.debug(f"Connect: Attempting Connection to {host}")
             self.client.connect(host, self._port, keepalive=5)
 
@@ -147,31 +158,32 @@ def mqtt_listen_thread(self):
             break
         except TimeoutError as e:
             if exceptionSeen != "TimeoutError":
-                LOGGER.debug(f"TimeoutError: {e.args}.")
+                LOGGER.debug(f"TimeoutError: {e}.")
             exceptionSeen = "TimeoutError"
             time.sleep(5)
         except ConnectionError as e:
             if exceptionSeen != "ConnectionError":
-                LOGGER.debug(f"ConnectionError: {e.args}.")
+                LOGGER.debug(f"ConnectionError: {e}.")
             exceptionSeen = "ConnectionError"
             time.sleep(5)
         except OSError as e:
             if e.errno == 113:
                 if exceptionSeen != "OSError113":
-                    LOGGER.debug(f"OSError: {e.args}.")
+                    LOGGER.debug(f"OSError: {e}.")
                 exceptionSeen = "OSError113"
                 time.sleep(5)
             else:
                 LOGGER.error("A listener loop thread exception occurred:")
-                LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         except Exception as e:
             LOGGER.error("A listener loop thread exception occurred:")
-            LOGGER.error(f"Exception. Type: {type(e)} Args: {e.args}")
+            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
             time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         self.client.disconnect()
 
     LOGGER.info("MQTT listener thread exited.")
+
 
 @dataclass
 class BambuClient:
@@ -179,7 +191,8 @@ class BambuClient:
     _watchdog = None
     _camera = None
 
-    def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str, username: str, auth_token: str, access_code: str):
+    def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
+                 username: str, auth_token: str, access_code: str):
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
@@ -190,6 +203,7 @@ class BambuClient:
         self._connected = False
         self._device = Device(self, device_type, serial)
         self._port = 1883
+        self._refreshed = False
         self._manual_refresh_mode = False
         self.bambu_cloud = BambuCloud(region, email, username, auth_token)
 
@@ -258,17 +272,16 @@ class BambuClient:
         self._watchdog.start()
 
         if self._device.supports_feature(Features.CAMERA_IMAGE) and self.host != "":
-            LOGGER.debug("Starting Image Camera thread")
-            self._camera = ImageCameraThread(self)
+            LOGGER.debug("Starting Chamber Image thread")
+            self._camera = ChamberImageThread(self)
             self._camera.start()
 
-
     def try_on_connect(self,
-                   client_: mqtt.Client,
-                   userdata: None,
-                   flags: dict[str, Any],
-                   result_code: int,
-                   properties: mqtt.Properties | None = None, ):
+                       client_: mqtt.Client,
+                       userdata: None,
+                       flags: dict[str, Any],
+                       result_code: int,
+                       properties: mqtt.Properties | None = None, ):
         """Handle connection"""
         LOGGER.info("On Connect: Connected to Broker")
         self._connected = True
@@ -297,7 +310,7 @@ class BambuClient:
         LOGGER.info("Watch dog fired")
         self._device.info.set_online(False)
         self.publish(START_PUSH)
-        
+
     def on_jpeg_received(self, bytes):
         self._device.chamber_image.set_jpeg(bytes)
 
@@ -305,11 +318,16 @@ class BambuClient:
         """Return the payload when received"""
         try:
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
-            #clean_msg = re.sub(r"\\n *", "", str(message.payload))
-            #LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
-            LOGGER.debug(f"Received data from: {self._device.info.device_type}")
+            clean_msg = re.sub(r"\\n *", "", str(message.payload))
+            if self._refreshed:
+                LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
+            else:
+                LOGGER.debug(f"Received data from: {self._device.info.device_type}")
+
             json_data = json.loads(message.payload)
             if json_data.get("event"):
+                # These are events from the bambu cloud mqtt feed and allow us to detect when a local
+                # device has connected/disconnected (e.g. turned on/off)
                 if json_data.get("event").get("event") == "client.connected":
                     LOGGER.debug("Client connected event received.")
                     self._device.info.set_online(True)
@@ -326,6 +344,8 @@ class BambuClient:
                     # Once we receive data, if in manual refresh mode, we disconnect again.
                     if self._manual_refresh_mode:
                         self.disconnect()
+                    if json_data.get("print").get("msg", 0) == 0:
+                        self._refreshed= False
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
@@ -357,8 +377,10 @@ class BambuClient:
             await self.connect(self.callback)
         else:
             LOGGER.debug("Force Refresh: Getting Version Info")
+            self._refreshed = True
             self.publish(GET_VERSION)
             LOGGER.debug("Force Refresh: Request Push All")
+            self._refreshed = True
             self.publish(PUSH_ALL)
 
     def get_device(self):

@@ -14,14 +14,15 @@
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
-      "cannot_connect_local": "连接失败。检查提供的 IP 地址。",
+      "cannot_connect_local_ip": "连接失败。检查提供的 IP 地址。",
+      "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "no_printers": "在帐户中未找到未配置的打印机",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误"
     },
     "step": {
       "user": {
-        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为 LAN 模式的打印机。",
+        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为仅局域网模式的打印机。",
         "data": {
           "printer_mode": "打印机配置模式："
         }
@@ -37,11 +38,18 @@
       },
       "Bambu_Choose_Device": {
         "title": "打印机选择",
-        "description": "选择要添加的打印机。如果提供本地 IP 地址，还可以将与打印机的连接设置为通过本地 mqtt。",
+        "description": "选择要添加的打印机。",
         "data": {
-          "printer": "选择要添加的打印机：",
+          "printer": "选择要添加的打印机："
+        }
+      },
+      "Bambu_Lan": {
+        "title": "设置本地连接",
+        "description": "您可以选择提供本地打印机 IP 地址。建议这样做，因为它可以在 P1/A1 打印机上访问相机，并且通常更可靠。",
+        "data": {
+          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
           "host": "本地打印机 IP 地址：",
-          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud："
+          "access_code": "访问码"
         }
       },
       "Lan": {
@@ -58,14 +66,15 @@
   "options": {
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
-      "cannot_connect_local": "连接失败。检查提供的 IP 地址。",
+      "cannot_connect_local_ip": "连接失败。检查提供的 IP 地址。",
+      "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误"
     },
     "step": {
       "init": {
         "title": "调整连接设置",
-        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为 LAN 模式的打印机。",
+        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为仅局域网模式的打印机。",
         "data": {
           "printer_mode": "打印机配置模式："
         }
@@ -85,6 +94,7 @@
         "data": {
           "printer": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",
+          "access_code": "访问码",
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud："
         }
       },
@@ -209,6 +219,9 @@
             "name": "修饰符"
           }
         }
+      },
+      "printer_name": {
+        "name": "打印机名称"
       },
       "stage": {
         "name": "当前阶段",
