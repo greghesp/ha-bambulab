@@ -37,13 +37,20 @@
       },
       "Bambu_Choose_Device": {
         "title": "Drucker-Auswahl",
-        "description": "Wählen Sie den Drucker aus, den Sie hinzufügen möchten. Wenn Sie die lokale IP-Adresse angeben, können Sie die Verbindung zum Drucker auch auf lokales mqtt einstellen.",
+        "description": "Wählen Sie den Drucker aus, den Sie hinzufügen möchten.",
         "data": {
-          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:",
-          "host": "IP-Adresse des lokalen Druckers:",
-          "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:"
+          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:"
         }
-      },      
+      },
+      "Bambu_Lan": {
+        "title": "Lokale Verbindung einrichten",
+        "description": "Optional können Sie die IP-Adresse des lokalen Druckers angeben. Dies wird empfohlen, da es den Kamerazugriff auf den P1/A1-Druckern ermöglicht und im Allgemeinen zuverlässiger ist.",
+        "data": {
+          "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
+          "host": "IP-Adresse des lokalen Druckers:",
+          "access_code": "Zugangscode"
+        }
+      },
       "Lan": {
         "title": "LAN-Modus-Verbindung",
         "Beschreibung": "Bitte geben Sie Ihren lokalen Druckertyp, Ihre IP-Adresse, die Seriennummer und den Zugangscode an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen. Die Seriennummer finden Sie in den Geräteeinstellungen.",

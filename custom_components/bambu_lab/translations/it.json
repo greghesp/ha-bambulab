@@ -38,12 +38,18 @@
       },
       "Bambu_Choose_Device": {
         "title": "Selezione della stampante",
-        "description": "Scegli la stampante che desideri aggiungere. Se si fornisce l'indirizzo IP locale, è anche possibile impostare la connessione alla stampante in modo che avvenga tramite mqtt locale.",
+        "description": "Scegli la stampante che desideri aggiungere.",
         "data": {
-          "printer": "Scegli la stampante da aggiungere:",
+          "printer": "Scegli la stampante da aggiungere:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Configurare la connessione locale",
+        "description": "Facoltativamente, è possibile specificare l'indirizzo IP della stampante locale. Questa operazione è consigliata in quanto consente l'accesso alla fotocamera sulle stampanti P1/A1 ed è generalmente più affidabile.",
+        "data": {
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:",
           "host": "Indirizzo IP della stampante locale:",
-          "access_code": "Codice d'accesso",
-          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
+          "access_code": "Codice d'accesso"
         }
       },
       "Lan": {
