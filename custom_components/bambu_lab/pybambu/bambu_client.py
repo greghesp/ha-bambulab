@@ -99,39 +99,46 @@ class ChamberImageThread(threading.Thread):
 
         read_chunk_size = 1024
 
-        with socket.create_connection((hostname, port)) as sock:
-            sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
-            sslSock.write(d)
-            buf = bytearray()
-            start = False
-
-            sslSock.setblocking(False)
-            while not self._stop_event.is_set():
-                try:
-                    dr = sslSock.recv(read_chunk_size)
-                except ssl.SSLWantReadError:
-                    time.sleep(1)
-                    continue
-                except Exception as e:
-                    LOGGER.error("A Chamber Image thread exception occurred:")
-                    LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
-                buf += dr
-
-                if not start:
-                    i = buf.find(bytearray.fromhex(jpeg_start))
-                    if i >= 0:
-                        start = True
-                        buf = buf[i:]
-                    continue
-
-                i = buf.find(bytearray.fromhex(jpeg_end))
-                if i >= 0:
-                    img = buf[:i + len(jpeg_end)]
-                    buf = buf[i + len(jpeg_end):]
+        while not self._stop_event.is_set():
+            try:
+                with socket.create_connection((hostname, port)) as sock:
+                    sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
+                    sslSock.write(d)
+                    buf = bytearray()
                     start = False
 
-                    self._client.on_jpeg_received(img)
+                    sslSock.setblocking(False)
+                    while not self._stop_event.is_set():
+                        try:
+                            dr = sslSock.recv(read_chunk_size)
+                        except ssl.SSLWantReadError:
+                            time.sleep(1)
+                            continue
+                        except Exception as e:
+                            LOGGER.error("A Chamber Image thread inner exception occurred:")
+                            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                            time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+                        buf += dr
+
+                        if not start:
+                            i = buf.find(bytearray.fromhex(jpeg_start))
+                            if i >= 0:
+                                start = True
+                                buf = buf[i:]
+                            continue
+
+                        i = buf.find(bytearray.fromhex(jpeg_end))
+                        if i >= 0:
+                            img = buf[:i + len(jpeg_end)]
+                            buf = buf[i + len(jpeg_end):]
+                            start = False
+
+                            self._client.on_jpeg_received(img)
+            except Exception as e:
+                LOGGER.error("A Chamber Image thread outer exception occurred:")
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                if not self._stop_event.is_set():
+                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
         LOGGER.info("Chamber image thread exited.")
 
