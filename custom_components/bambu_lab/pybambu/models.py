@@ -291,7 +291,7 @@ class Info:
     gcode_state: str
     remaining_time: int
     start_time: str
-    end_time: str
+    end_time: datetime
     current_layer: int
     total_layers: int
     online: bool
@@ -312,7 +312,7 @@ class Info:
         self.subtask_name = ""
         self.serial = serial
         self.remaining_time = -1
-        self.end_time = ""
+        self.end_time = None
         self.start_time = ""
         self.current_layer = 0
         self.total_layers = 0

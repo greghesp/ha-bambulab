@@ -137,21 +137,14 @@ def get_sw_version(modules, default):
 def get_start_time(timestamp):
     """Return start time of a print"""
     if timestamp == 0:
-        return ""
-    start_time = datetime.fromtimestamp(timestamp)
-    if start_time.day == datetime.now().day:
-        return datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-    else:
-        return datetime.fromtimestamp(timestamp).strftime('%d %B %Y %H:%M:%S')
+        return None
+    return datetime.fromtimestamp(timestamp)
 
 
 def get_end_time(remaining_time):
     """Calculate the end time of a print"""
     end_time = round_minute(datetime.now() + timedelta(minutes=remaining_time))
-    if end_time.day == datetime.now().day:
-        return end_time.strftime('%H:%M:%S')
-    else:
-        return end_time.strftime('%d %B %Y %H:%M:%S')
+    return end_time
 
 
 def round_minute(date: datetime = None, round_to: int = 1):
