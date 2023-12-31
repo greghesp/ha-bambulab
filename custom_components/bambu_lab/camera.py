@@ -60,6 +60,10 @@ class BambuLabCamera(BambuLabEntity, Camera):
         return False
 
     @property
+    def use_stream_for_stills(self) -> bool:
+        return True
+    
+    @property
     def available(self) -> bool:
         return self.coordinator.get_model().camera.rtsp_url is not None or "disable"
 
@@ -79,18 +83,3 @@ class BambuLabCamera(BambuLabEntity, Camera):
             return str(url)
         LOGGER.debug("No RTSP Feed available")
         return None
-
-    # TODO: async camera image doesn't work for some reason
-    async def async_camera_image(
-            self, width: int | None = None, height: int | None = None
-    ) -> bytes | None:
-        """Return a still image response from the camera."""
-        stream_source = await self.stream_source()
-        if not stream_source:
-            return None
-        return await ffmpeg.async_get_image(
-            self.hass,
-            stream_source,
-            width=width,
-            height=height,
-        )
