@@ -269,7 +269,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="end_time",
         translation_key="end_time",
         icon="mdi:clock",
-        available_fn=lambda self: self.coordinator.get_model().info.end_time != "",
+        available_fn=lambda self: self.coordinator.get_model().info.end_time != None,
         value_fn=lambda self: self.coordinator.get_model().info.end_time,
     ),
     BambuLabSensorEntityDescription(

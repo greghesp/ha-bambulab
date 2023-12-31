@@ -290,7 +290,7 @@ class Info:
     sw_ver: str
     gcode_state: str
     remaining_time: int
-    start_time: str
+    start_time: datetime
     end_time: datetime
     current_layer: int
     total_layers: int
@@ -313,7 +313,7 @@ class Info:
         self.serial = serial
         self.remaining_time = -1
         self.end_time = None
-        self.start_time = ""
+        self.start_time = None
         self.current_layer = 0
         self.total_layers = 0
         self.online = False
