@@ -1,3 +1,7 @@
+### V2.0.4
+- Change start/end time to datetime object and revert the date removal change.
+- Fix typos breaking LAN->Cloud config transition.
+
 ### V2.0.3
 - Reduce work for X1 full payloads to only one HA update instead of three.
 - Only log the payloads when the refresh button has been pressed.
