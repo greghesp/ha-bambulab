@@ -4,6 +4,7 @@
 - Simplify the start and end times to just times when they are for today.
 - Don't throw away user input on error cases during setup/re-configure.
 - Fix cover image to update automatically on new print.
+- Fix cover image + print weight sensor updating to be more reliable on print start / printer reboot.
 - Simplify image update plumbing.
 - Various copy editing to UI/README.
 

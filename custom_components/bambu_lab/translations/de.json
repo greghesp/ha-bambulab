@@ -224,7 +224,7 @@
         "name": "Name des Druckers"
       },
       "stage": {
-        "name": "Aktuelle Schicht",
+        "name": "Aktueller Arbeitsschritt",
         "state": {
           "offline": "Offline",
           "printing": "Drucken",

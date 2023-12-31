@@ -253,7 +253,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="start_time",
         translation_key="start_time",
         icon="mdi:clock",
-        available_fn=lambda self: self.coordinator.get_model().info.start_time != "",
+        available_fn=lambda self: self.coordinator.get_model().info.start_time != None,
         value_fn=lambda self: self.coordinator.get_model().info.start_time,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME) or coordinator.get_model().supports_feature(Features.START_TIME_GENERATED),
     ),
@@ -269,7 +269,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="end_time",
         translation_key="end_time",
         icon="mdi:clock",
-        available_fn=lambda self: self.coordinator.get_model().info.end_time != "",
+        available_fn=lambda self: self.coordinator.get_model().info.end_time != None,
         value_fn=lambda self: self.coordinator.get_model().info.end_time,
     ),
     BambuLabSensorEntityDescription(
