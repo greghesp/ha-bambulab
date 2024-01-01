@@ -177,7 +177,7 @@ HMS_ERRORS = {
     "0C00_0300_0002_0004": "First layer inspection not supported for current print.",
     "0C00_0300_0002_0005": "First layer inspection timeout.",
     "0C00_0300_0003_0006": "Purged filaments may have piled up.",
-    "0C00_0300_0003_0007": "Possible first layer were defected.",
+    "0C00_0300_0003_0007": "Possible first layer defects.",
     "0C00_0300_0003_0008": "Possible spaghetti defects were detected.",
     "0C00_0300_0001_0009": "The first layer inspection module rebooted abnormally.",
     "0C00_0300_0003_000B": "Inspecting first layer.",
@@ -214,7 +214,7 @@ HMS_ERRORS = {
     "0700_5100_0003_0001": "AMS is disabled, please load filament from spool holder.",
     "07FF_2000_0002_0001": "External filament has run out, please load a new filament.",
     "07FF_2000_0002_0002": "External filament is missing, please load a new filament.",
-    "07FF_2000_0002_0004": "External filament is missing, please load a new filament.",
+    "07FF_2000_0002_0004": "Please pull out the filament on the spool holder from the extruder.",
 }
 
 # These errors cover those that are AMS and/or slot specific.
