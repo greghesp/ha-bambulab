@@ -101,13 +101,15 @@ class ChamberImageThread(threading.Thread):
 
         # Payload format for each image is:
         # 16 byte header:
-        # Bytes 0:3 = little endian payload size for the jpeg image (does not include this header).
-        # Bytes 4:15 = 0x00000000, 0x00000001, 0x00000000
-        # Bytes 16:19 = jpeg_start
-        #
+        #   Bytes 0:3   = little endian payload size for the jpeg image (does not include this header).
+        #   Bytes 4:7   = 0x00000000
+        #   Bytes 8:11  = 0x00000001
+        #   Bytes 12:15 = 0x00000000
         # These first 16 bytes are always delivered by themselves.
         #
-        # Bytes 19...payload_size-2 = jpeg_end
+        # Bytes 16:19 = jpeg_start
+        # Bytes 19...payload_size-2 = the jpeg image bytes
+        # Bytes payload_size-2:... = jpeg_end
         #
         # Further attempts to receive data will get SSLWantReadError until a new image is ready (1-2 seconds later)
         while not self._stop_event.is_set():
