@@ -1,3 +1,6 @@
+### V2.0.5
+- Rework P1/A1 chamber image handling to be a lot more efficient and maybe fix broken tight loop bug
+
 ### V2.0.4
 - Change start/end time to datetime object and revert the date removal change.
 - Fix typos breaking LAN->Cloud config transition.
