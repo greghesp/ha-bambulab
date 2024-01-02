@@ -107,9 +107,9 @@ class ChamberImageThread(threading.Thread):
         #   Bytes 12:15 = 0x00000000
         # These first 16 bytes are always delivered by themselves.
         #
-        # Bytes 16:19 = jpeg_start
-        # Bytes 19...payload_size-2 = the jpeg image bytes
-        # Bytes payload_size-2:... = jpeg_end
+        # Bytes 16:19                       = jpeg_start magic bytes
+        # Bytes 20:payload_size-2           = jpeg image bytes
+        # Bytes payload_size-2:payload_size = jpeg_end magic bytes
         #
         # Further attempts to receive data will get SSLWantReadError until a new image is ready (1-2 seconds later)
         while not self._stop_event.is_set():
