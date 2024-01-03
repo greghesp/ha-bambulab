@@ -1,5 +1,7 @@
 ### V2.0.5
 - Rework P1/A1 chamber image handling to be a lot more efficient and maybe fix broken tight loop bug
+- Make bambu cloud setup clearer w/ regards to camera and local connection.
+- Make P1/A1 camera unavailable if either host IP or access code has not been provided.
 
 ### V2.0.4
 - Change start/end time to datetime object and revert the date removal change.

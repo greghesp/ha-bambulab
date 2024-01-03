@@ -97,7 +97,7 @@ class Device:
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CAMERA_IMAGE:
-                return (self.client.host != "us.mqtt.bambulab.com") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
+                return (self.client.host != "") and (self.client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
             case Features.MANUAL_MODE:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
 
