@@ -124,10 +124,10 @@ class ChamberImageThread(threading.Thread):
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
-                            #LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
+                            LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
-                            #LOGGER.error(f"{self._client._device.info.device_type}: SSLWantReadError")
+                            LOGGER.error(f"{self._client._device.info.device_type}: SSLWantReadError")
                             time.sleep(1)
                             continue
 
@@ -307,7 +307,7 @@ class BambuClient:
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
 
-        if self._device.supports_feature(Features.CAMERA_IMAGE) and self.host != "":
+        if self._device.supports_feature(Features.CAMERA_IMAGE):
             LOGGER.debug("Starting Chamber Image thread")
             self._camera = ChamberImageThread(self)
             self._camera.start()

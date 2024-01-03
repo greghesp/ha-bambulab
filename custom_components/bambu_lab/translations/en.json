@@ -45,7 +45,7 @@
       },
       "Bambu_Lan": {
         "title": "Setup Local Connection",
-        "description": "You can optionally provide the local printer IP address. This is recommended as it enables camera access on the P1/A1 printers and is generally more reliable.",
+        "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Cloud.",
         "data": {
           "local_mqtt": "Connect locally to the printer:",
           "host": "Local Printer IP Address:",
@@ -88,9 +88,9 @@
           "password": "Password"
         }
       },
-      "Bambu_Choose_Device": {
-        "title": "Printer Selection",
-        "description": "Adjusting settings for this printer:",
+      "Bambu_Lan": {
+        "title": "Adjust Printer Configuration",
+        "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Cloud.",
         "data": {
           "printer": "Choose Printer To Add:",
           "host": "Local Printer IP Address:",

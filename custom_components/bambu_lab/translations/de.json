@@ -44,7 +44,7 @@
       },
       "Bambu_Lan": {
         "title": "Lokale Verbindung einrichten",
-        "description": "Optional können Sie die IP-Adresse des lokalen Druckers angeben. Dies wird empfohlen, da es den Kamerazugriff auf den P1/A1-Druckern ermöglicht und im Allgemeinen zuverlässiger ist.",
+        "description": "Sie können optional die IP-Adresse und den Zugriffscode des lokalen Druckers angeben. Dies ist für den Kamerazugriff auf die P1/A1 erforderlich. Oder um sich direkt mit dem Drucker verbinden zu können, anstatt über die Bambu Cloud.",
         "data": {
           "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
           "host": "IP-Adresse des lokalen Druckers:",
@@ -88,9 +88,9 @@
           "password": "Passwort"
         }
       },
-      "Bambu_Choose_Device": {
-        "title": "Drucker-Auswahl",
-        "description": "Anpassen der Einstellungen für diesen Drucker:",
+      "Bambu_Lan": {
+        "title": "Anpassen der Druckerkonfiguration",
+        "description": "Sie können optional die IP-Adresse und den Zugriffscode des lokalen Druckers angeben. Dies ist für den Kamerazugriff auf die P1/A1 erforderlich. Oder um sich direkt mit dem Drucker verbinden zu können, anstatt über die Bambu Cloud.",
         "data": {
           "printer": "Wählen Sie den hinzuzufügenden Drucker aus:",
           "host": "IP-Adresse des lokalen Druckers:",
