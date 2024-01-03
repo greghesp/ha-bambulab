@@ -228,7 +228,7 @@ HMS_AMS_ERRORS = {
     "0700_1000_0001_0001": "AMS1 slot 1 motor has slipped. The extrusion wheel may be malfunctioning, or the filament may be too thin.",
     "0700_1000_0001_0003": "AMS1 slot 1 motor torque control is malfunctioning. The current sensor may be faulty.",
     "0700_1000_0002_0002": "AMS1 slot 1 motor is overloaded. The filament may be tangled or stuck.",
-    "0700_2000_0002_0001": "AMS1 slot 1 filament has been ran out.",
+    "0700_2000_0002_0001": "AMS1 slot 1 filament has ran out.",
     "0700_2000_0002_0002": "AMS1 slot 1 is empty.",
     "0700_2000_0002_0003": "AMS1 slot 1 filament may be broken in AMS.",
     "0700_2000_0002_0004": "AMS1 slot 1 filament may be broken in the tool head.",
