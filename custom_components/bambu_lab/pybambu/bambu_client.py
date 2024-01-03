@@ -124,8 +124,10 @@ class ChamberImageThread(threading.Thread):
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
+                            #LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
+                            #LOGGER.error(f"{self._client._device.info.device_type}: SSLWantReadError")
                             time.sleep(1)
                             continue
 
@@ -162,6 +164,11 @@ class ChamberImageThread(threading.Thread):
                             # We got the header bytes. Get the expected payload size from it and create the image buffer bytearray.
                             img = bytearray()
                             payload_size = int.from_bytes(dr[0:3], byteorder='little')
+
+                        else:
+                            LOGGER.error(f"{self._client._device.info.device_type}: UNEXPECTED DATA RECEIVED: {len(dr)}")
+                            time.sleep(1)
+                            continue
 
             except Exception as e:
                 LOGGER.error("A Chamber Image thread outer exception occurred:")

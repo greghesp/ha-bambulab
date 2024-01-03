@@ -238,24 +238,36 @@ class Temperature:
 @dataclass
 class Fans:
     """Return all fan related info"""
-    aux_fan_speed: int
+    _aux_fan_speed_percentage: int
     _aux_fan_speed: int
-    chamber_fan_speed: int
+    _aux_fan_speed_override: int
+    _aux_fan_speed_override_time: datetime
+    _chamber_fan_speed_percentage: int
     _chamber_fan_speed: int
-    cooling_fan_speed: int
+    _chamber_fan_speed_override: int
+    _chamber_fan_speed_override_time: datetime
+    _cooling_fan_speed_percentage: int
     _cooling_fan_speed: int
-    heatbreak_fan_speed: int
+    _cooling_fan_speed_override: int
+    _cooling_fan_speed_override_time: datetime
+    _heatbreak_fan_speed_percentage: int
     _heatbreak_fan_speed: int
 
     def __init__(self, client):
         self.client = client
-        self.aux_fan_speed = 0
+        self._aux_fan_speed_percentage = 0
         self._aux_fan_speed = 0
-        self.chamber_fan_speed = 0
+        self._aux_fan_speed_override = 0
+        self._aux_fan_speed_override_time = None
+        self._chamber_fan_speed_percentage = 0
         self._chamber_fan_speed = 0
-        self.cooling_fan_speed = 0
+        self._chamber_fan_speed_override = 0
+        self._chamber_fan_speed_override_time = None
+        self._cooling_fan_speed_percentage = 0
         self._cooling_fan_speed = 0
-        self.heatbreak_fan_speed = 0
+        self._cooling_fan_speed_override = 0
+        self._cooling_fan_speed_override_time = None
+        self._heatbreak_fan_speed_percentage = 0
         self._heatbreak_fan_speed = 0
 
     def print_update(self, data) -> bool:
@@ -263,22 +275,69 @@ class Fans:
         old_data = f"{self.__dict__}"
 
         self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
-        self.aux_fan_speed = fan_percentage(self._aux_fan_speed)
+        self._aux_fan_speed_percentage = fan_percentage(self._aux_fan_speed)
+        if self._aux_fan_speed_override_time is not None:
+            delta = datetime.now() - self._aux_fan_speed_override_time
+            if delta.seconds > 5:
+                self._aux_fan_speed_override_time = None
         self._chamber_fan_speed = data.get("big_fan2_speed", self._chamber_fan_speed)
-        self.chamber_fan_speed = fan_percentage(self._chamber_fan_speed)
+        self._chamber_fan_speed_percentage = fan_percentage(self._chamber_fan_speed)
+        if self._chamber_fan_speed_override_time is not None:
+            delta = datetime.now() - self._chamber_fan_speed_override_time
+            if delta.seconds > 5:
+                self._chamber_fan_speed_override_time = None
         self._cooling_fan_speed = data.get("cooling_fan_speed", self._cooling_fan_speed)
-        self.cooling_fan_speed = fan_percentage(self._cooling_fan_speed)
+        self._cooling_fan_speed_percentage = fan_percentage(self._cooling_fan_speed)
+        if self._cooling_fan_speed_override_time is not None:
+            delta = datetime.now() - self._cooling_fan_speed_override_time
+            if delta.seconds > 5:
+                self._cooling_fan_speed_override_time = None
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
-        self.heatbreak_fan_speed = fan_percentage(self._heatbreak_fan_speed)
+        self._heatbreak_fan_speed_percentage = fan_percentage(self._heatbreak_fan_speed)
         
         return (old_data != f"{self.__dict__}")
 
-    def SetFanSpeed(self, fan: FansEnum, percentage: int):
+    def set_fan_speed(self, fan: FansEnum, percentage: int):
         """Set fan speed"""
+        percentage = round(percentage / 10) * 10
         command = fan_percentage_to_gcode(fan, percentage)
+
+        match fan:
+            case FansEnum.PART_COOLING:
+                self._cooling_fan_speed = percentage
+                self._cooling_fan_speed_override_time = datetime.now()
+            case FansEnum.AUXILIARY:
+                self._aux_fan_speed_override = percentage
+                self._aux_fan_speed_override_time = datetime.now()
+            case FansEnum.CHAMBER:
+                self._chamber_fan_speed_override = percentage
+                self._chamber_fan_speed_override_time = datetime.now()
+
         LOGGER.debug(command)
         self.client.publish(command)
 
+        if self.client.callback is not None:
+            self.client.callback("event_printer_data_update")
+
+    def get_fan_speed(self, fan: FansEnum) -> int:
+        match fan:
+            case FansEnum.PART_COOLING:
+                if self._cooling_fan_speed_override_time is not None:
+                    return self._cooling_fan_speed_override
+                else:
+                    return self._cooling_fan_speed_percentage
+            case FansEnum.AUXILIARY:
+                if self._aux_fan_speed_override_time is not None:
+                    return self._aux_fan_speed_override
+                else:
+                    return self._aux_fan_speed_percentage
+            case FansEnum.CHAMBER:
+                if self._chamber_fan_speed_override_time is not None:
+                    return self._chamber_fan_speed_override
+                else:
+                    return self._chamber_fan_speed_percentage
+            case FansEnum.HEATBREAK:
+                return self._heatbreak_fan_speed_percentage
 
 @dataclass
 class Info:
