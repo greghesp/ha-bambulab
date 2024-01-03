@@ -27,6 +27,7 @@ class FansEnum(Enum):
     PART_COOLING = 1,
     AUXILIARY = 2,
     CHAMBER = 3,
+    HEATBREAK = 4,
 
 
 ACTION_IDS = {

@@ -18,7 +18,7 @@ def fan_percentage(speed):
     if not speed:
         return 0
     percentage = (int(speed) / 15) * 100
-    return math.ceil(percentage / 10) * 10
+    return round(percentage / 10) * 10
 
 
 def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
@@ -31,7 +31,7 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
         case FansEnum.CHAMBER:
             fanString = "P3"
 
-    percentage = math.ceil(percentage / 10) * 10
+    percentage = round(percentage / 10) * 10
     speed = math.ceil(255 * percentage / 100)
     command = SEND_GCODE_TEMPLATE
     command['print']['param'] = f"M106 {fanString} S{speed}\n"

@@ -27,7 +27,7 @@ from homeassistant.components.binary_sensor import (
 )
 
 from .const import LOGGER
-from .pybambu.const import SPEED_PROFILE, Features
+from .pybambu.const import SPEED_PROFILE, Features, FansEnum
 
 
 def fan_to_percent(speed):
@@ -161,7 +161,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
-        value_fn=lambda self: self.coordinator.get_model().fans.aux_fan_speed
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.AUXILIARY)
     ),
     BambuLabSensorEntityDescription(
         key="chamber_fan_speed",
@@ -169,7 +169,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
-        value_fn=lambda self: self.coordinator.get_model().fans.chamber_fan_speed,
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.CHAMBER),
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
     ),
     BambuLabSensorEntityDescription(
@@ -178,7 +178,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
-        value_fn=lambda self: self.coordinator.get_model().fans.cooling_fan_speed
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.PART_COOLING)
     ),
     BambuLabSensorEntityDescription(
         key="heatbreak_fan_speed",
@@ -186,7 +186,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
-        value_fn=lambda self: self.coordinator.get_model().fans.heatbreak_fan_speed
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.HEATBREAK)
     ),
     BambuLabSensorEntityDescription(
         key="speed_profile",
