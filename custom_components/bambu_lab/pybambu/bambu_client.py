@@ -137,7 +137,7 @@ class ChamberImageThread(threading.Thread):
                             time.sleep(1)
                             continue
 
-                        if img is not None:
+                        if img is not None and len(dr) > 0:
                             img += dr
                             if len(img) > payload_size:
                                 # We got more data than we expected.

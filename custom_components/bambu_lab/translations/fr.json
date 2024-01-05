@@ -80,7 +80,7 @@
         }
       },
       "Bambu_Lan": {
-        "title": "Adjust Printer Configuration",
+        "title": "Ajuster la configuration de l’imprimante",
         "description": "Vous pouvez éventuellement fournir l’adresse IP et le code d’accès de l’imprimante locale. Ceci est nécessaire pour l’accès à la caméra sur le P1/A1. Ou de pouvoir se connecter directement à l’imprimante plutôt que via Bambu Cloud.",
         "data": {
           "printer": "Choisissez l’imprimante à ajouter :",
