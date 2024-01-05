@@ -142,23 +142,23 @@ class ChamberImageThread(threading.Thread):
                             if len(img) > payload_size:
                                 # We got more data than we expected.
                                 LOGGER.error(f"Unexpected image payload received: {len(img)} > {payload_size}")
+                                # Reset buffer
+                                img = None
                             elif len(img) == payload_size:
-                                # We have the full image now.
+                                # We should have the full image now.
                                 if img[:4] != jpeg_start:
                                     LOGGER.error("JPEG start magic bytes missing.")
                                 elif img[-2:] != jpeg_end:
                                     LOGGER.error("JPEG end magic bytes missing.")
                                 else:
-                                    # Content is as expected.
+                                    # Content is as expected. Send it.
                                     self._client.on_jpeg_received(img)
-                            else:
-                                # Otherwise we need to continue looping without reseting the buffer to receive the remaining data.
-                                continue
 
-                            # Reset buffer
-                            img = None
-                            time.sleep(1)
-                            continue
+                                # Reset buffer
+                                img = None
+                            # else:     
+                            # Otherwise we need to continue looping without reseting the buffer to receive the remaining data
+                            # and without delaying.
 
                         elif len(dr) == 16:
                             # We got the header bytes. Get the expected payload size from it and create the image buffer bytearray.
@@ -174,7 +174,6 @@ class ChamberImageThread(threading.Thread):
                         else:
                             LOGGER.error(f"{self._client._device.info.device_type}: UNEXPECTED DATA RECEIVED: {len(dr)}")
                             time.sleep(1)
-                            continue
 
             except Exception as e:
                 LOGGER.error("A Chamber Image thread outer exception occurred:")

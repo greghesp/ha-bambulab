@@ -257,6 +257,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
+            # Serial must be upper case to work
+            user_input['serial'] = user_input['serial'].upper()
+
             LOGGER.debug("Config Flow: Testing local mqtt connection")
             bambu = BambuClient(device_type="unknown",
                                 serial=user_input['serial'],
@@ -297,8 +300,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
+        fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
 
         return self.async_show_form(
