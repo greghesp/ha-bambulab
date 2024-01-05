@@ -127,7 +127,7 @@ class ChamberImageThread(threading.Thread):
                             LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
-                            LOGGER.error(f"{self._client._device.info.device_type}: SSLWantReadError")
+                            LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
                             time.sleep(1)
                             continue
 
