@@ -1018,6 +1018,8 @@ class ChamberImage:
         LOGGER.debug(f"JPEG RECEIVED: {self.client._device.info.device_type}")
         self._bytes = bytes
         self._image_last_updated = datetime.now()
+        if self.client.callback is not None:
+            self.client.callback("event_printer_chamber_image_update")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
@@ -1033,6 +1035,8 @@ class CoverImage:
         self.client = client
         self._bytes = bytearray()
         self._image_last_updated = datetime.now()
+        if self.client.callback is not None:
+            self.client.callback("event_printer_cover_image_update")
 
     def set_jpeg(self, bytes):
         self._bytes = bytes

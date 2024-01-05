@@ -165,6 +165,12 @@ class ChamberImageThread(threading.Thread):
                             img = bytearray()
                             payload_size = int.from_bytes(dr[0:3], byteorder='little')
 
+                        elif len(dr) == 0:
+                            # This occurs if the wrong access code was provided.
+                            LOGGER.error("Chamber image connection rejected by the printer. Check provided access code and IP address.")
+                            LOGGER.info("Chamber image thread exited.")
+                            return
+
                         else:
                             LOGGER.error(f"{self._client._device.info.device_type}: UNEXPECTED DATA RECEIVED: {len(dr)}")
                             time.sleep(1)
