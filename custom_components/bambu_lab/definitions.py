@@ -379,6 +379,18 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         available_fn=lambda self: self.coordinator.get_model().get_active_tray() is not None,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS) and coordinator.get_model().supports_feature(Features.K_VALUE)
     ),
+    BambuLabSensorEntityDescription(
+        key="nozzle_diameter",
+        translation_key="nozzle_diameter",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().info.nozzle_diameter
+    ),
+    BambuLabSensorEntityDescription(
+        key="nozzle_type",
+        translation_key="nozzle_type",
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().info.nozzle_type
+    ),
 )
 
 VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (

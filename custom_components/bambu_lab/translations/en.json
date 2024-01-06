@@ -311,6 +311,16 @@
       "active_tray_index": {
         "name": "Active tray index"
       },
+      "nozzle_diameter": {
+        "name": "Nozzle size"
+      },
+      "nozzle_type": {
+        "name": "Nozzle type",
+        "state": {
+          "hardened_steel": "Hardened steel",
+          "stainless_steel": "Stainless steel"
+        }
+      },
       "humidity_index": {
         "name": "Humidity index"
       },

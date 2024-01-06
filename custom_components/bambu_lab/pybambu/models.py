@@ -28,6 +28,7 @@ class Device:
         self.temperature = Temperature()
         self.lights = Lights(client)
         self.info = Info(client = client, device = self, device_type = device_type, serial = serial)
+        self.print_job = PrintJob(client)
         self.fans = Fans(client)
         self.speed = Speed(client)
         self.stage = StageAction()
@@ -46,6 +47,7 @@ class Device:
 
         send_event = False
         send_event = send_event | self.info.print_update(self, data)
+        send_event = send_event | self.print_job.print_update(data)
         send_event = send_event | self.temperature.print_update(data)
         send_event = send_event | self.lights.print_update(data)
         send_event = send_event | self.fans.print_update(data)
@@ -341,8 +343,19 @@ class Fans:
                 return self._heatbreak_fan_speed_percentage
 
 @dataclass
-class Info:
+class PrintJob:
     """Return all information related content"""
+
+    def __init__(self, client):
+        self._client = client
+
+    def print_update(self, data) -> bool:
+        """Update from dict"""
+        return False
+    
+@dataclass
+class Info:
+    """Return all device related content"""
 
     # Device state
     serial: str
@@ -353,6 +366,8 @@ class Info:
     online: bool
     new_version_state: int
     mqtt_mode: str
+    nozzle_diameter: str
+    nozzle_type: str
 
     # Current/last print job status
     print_percentage: int
@@ -382,6 +397,8 @@ class Info:
         self.online = False
         self.new_version_state = 0
         self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
+        self.nozzle_diameter = "unknown"
+        self.nozzle_type = "unknown"
 
         self.print_percentage = 0
         self.gcode_state = "unknown"
@@ -480,9 +497,7 @@ class Info:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Initialize task data at startup.
-        LOGGER.debug(f"PREV: {previous_gcode_state} CURRENT: {self.gcode_state}")
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
-            LOGGER.debug("UPDATING TASK")
             self._update_task_data()
 
         # Handle print start
@@ -578,7 +593,12 @@ class Info:
         # in separate string properties.
 
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
-        
+
+        # "nozzle_diameter": "0.4",
+        # "nozzle_type": "hardened_steel",
+        self.nozzle_diameter = data.get("nozzle_diameter", self.nozzle_diameter)
+        self.nozzle_type = data.get("nozzle_type", self.nozzle_type)
+
         return (old_data != f"{self.__dict__}")
 
     # The task list is of the following form with a 'hits' array with typical 20 entries.
