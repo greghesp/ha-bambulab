@@ -1,3 +1,6 @@
+### V2.0.6
+- ???
+
 ### V2.0.5
 - Rework P1/A1 chamber image handling to be a lot more efficient and maybe fix broken tight loop bug
 - Make bambu cloud setup clearer w/ regards to camera and local connection.
