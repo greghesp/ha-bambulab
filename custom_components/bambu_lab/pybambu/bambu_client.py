@@ -80,7 +80,10 @@ class ChamberImageThread(threading.Thread):
         hostname = self._client.host
         port = 6000
 
-        d += struct.pack("IIL", 0x40, 0x3000, 0x0)
+        d += struct.pack("<I", 0x40)   # '@'\0\0\0
+        d += struct.pack("<I", 0x3000) # \0'0'\0\0
+        d += struct.pack("<I", 0)      # \0\0\0\0
+        d += struct.pack("<I", 0)      # \0\0\0\0
         for i in range(0, len(username)):
             d += struct.pack("<c", username[i].encode('ascii'))
         for i in range(0, 32 - len(username)):
@@ -115,19 +118,27 @@ class ChamberImageThread(threading.Thread):
         while not self._stop_event.is_set():
             try:
                 with socket.create_connection((hostname, port)) as sock:
-                    sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
-                    sslSock.write(d)
-                    img = None
-                    payload_size = 0
+                    try:
+                        sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
+                        sslSock.write(d)
+                        img = None
+                        payload_size = 0
+
+                        status = sslSock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
+                        LOGGER.debug(f"STATUS: {status}")
+                        if status != 0:
+                            LOGGER.error("Socket error: {}".format(status))
+                    except socket.error as e:
+                        LOGGER.error("Socket error: {}".format(e))
 
                     sslSock.setblocking(False)
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
-                            #LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
+                            LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
-                            #LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
+                            LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
                             time.sleep(1)
                             continue
 

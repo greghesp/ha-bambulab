@@ -2,6 +2,7 @@ import math
 
 from dataclasses import dataclass
 from datetime import datetime
+from dateutil import parser, tz
 
 from .utils import \
     search, \
@@ -342,44 +343,57 @@ class Fans:
 @dataclass
 class Info:
     """Return all information related content"""
+
+    # Device state
+    serial: str
     wifi_signal: int
-    print_percentage: int
     device_type: str
     hw_ver: str
     sw_ver: str
-    gcode_state: str
-    remaining_time: int
-    start_time: datetime
-    end_time: datetime
-    current_layer: int
-    total_layers: int
     online: bool
     new_version_state: int
+    mqtt_mode: str
+
+    # Current/last print job status
+    print_percentage: int
+    gcode_state: str
+    gcode_file: str
+    subtask_name: str
+    _cloud_start_time: int
+    start_time: datetime
+    end_time: datetime
+    remaining_time: int
+    current_layer: int
+    total_layers: int
     print_error: int
-    _cover_url: str
+    print_weight: int
+    print_length: int
+    print_bed_type: str
 
     def __init__(self, device, client, device_type, serial):
         self.client = client
+        self.serial = serial
+
         self.device = device
         self.wifi_signal = 0
-        self.print_percentage = 0
         self.device_type = device_type
         self.hw_ver = "unknown"
         self.sw_ver = "unknown"
+        self.online = False
+        self.new_version_state = 0
+        self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
+
+        self.print_percentage = 0
         self.gcode_state = "unknown"
         self.gcode_file = ""
         self.subtask_name = ""
-        self.serial = serial
-        self.remaining_time = -1
         self.end_time = None
+        self._cloud_start_time = None
         self.start_time = None
+        self.remaining_time = -1
         self.current_layer = 0
         self.total_layers = 0
-        self.online = False
-        self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
-        self.new_version_state = 0
         self.print_error = 0
-        self._cover_url = ""
         self.print_weight = 0
         self.print_length = 0
         self.print_bed_type = "unknown"
@@ -466,7 +480,9 @@ class Info:
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Initialize task data at startup.
+        LOGGER.debug(f"PREV: {previous_gcode_state} CURRENT: {self.gcode_state}")
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
+            LOGGER.debug("UPDATING TASK")
             self._update_task_data()
 
         # Handle print start
@@ -619,6 +635,15 @@ class Info:
             self.print_weight = self._task_data.get('weight', self.print_weight)
             self.print_length = self._task_data.get('length', self.print_length)
             self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+
+            # "startTime": "2023-12-21T19:02:16Z"
+            cloud_start_time_str = self._task_data.get('startTime', "")
+            if cloud_start_time_str != "" and self.start_time == None:
+                cloud_start_time = parser.parse(cloud_start_time_str)
+                local_dt = cloud_start_time.astimezone(tz.tzlocal())
+                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
+                local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                self.start_time = local_dt
 
     @property
     def has_bambu_cloud_connection(self) -> bool:
