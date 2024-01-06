@@ -125,7 +125,7 @@ class ChamberImageThread(threading.Thread):
                         payload_size = 0
 
                         status = sslSock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
-                        LOGGER.debug(f"STATUS: {status}")
+                        LOGGER.debug(f"SOCKET STATUS: {status}")
                         if status != 0:
                             LOGGER.error("Socket error: {}".format(status))
                     except socket.error as e:
