@@ -94,46 +94,87 @@ class ChamberImageThread(threading.Thread):
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
 
-        jpeg_start = "ff d8 ff e0"
-        jpeg_end = "ff d9"
+        jpeg_start = bytearray([0xff, 0xd8, 0xff, 0xe0])
+        jpeg_end = bytearray([0xff, 0xd9])
 
-        read_chunk_size = 1024
+        read_chunk_size = 4096 # 4096 is the max we'll get even if we increase this.
 
+        # Payload format for each image is:
+        # 16 byte header:
+        #   Bytes 0:3   = little endian payload size for the jpeg image (does not include this header).
+        #   Bytes 4:7   = 0x00000000
+        #   Bytes 8:11  = 0x00000001
+        #   Bytes 12:15 = 0x00000000
+        # These first 16 bytes are always delivered by themselves.
+        #
+        # Bytes 16:19                       = jpeg_start magic bytes
+        # Bytes 20:payload_size-2           = jpeg image bytes
+        # Bytes payload_size-2:payload_size = jpeg_end magic bytes
+        #
+        # Further attempts to receive data will get SSLWantReadError until a new image is ready (1-2 seconds later)
         while not self._stop_event.is_set():
             try:
                 with socket.create_connection((hostname, port)) as sock:
                     sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
                     sslSock.write(d)
-                    buf = bytearray()
-                    start = False
+                    img = None
+                    payload_size = 0
 
                     sslSock.setblocking(False)
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
+                            #LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
+
                         except ssl.SSLWantReadError:
+                            #LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
                             time.sleep(1)
                             continue
+
                         except Exception as e:
                             LOGGER.error("A Chamber Image thread inner exception occurred:")
                             LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-                            time.sleep(1)  # Avoid a tight loop if this is a persistent error.
-                        buf += dr
-
-                        if not start:
-                            i = buf.find(bytearray.fromhex(jpeg_start))
-                            if i >= 0:
-                                start = True
-                                buf = buf[i:]
+                            time.sleep(1)
                             continue
 
-                        i = buf.find(bytearray.fromhex(jpeg_end))
-                        if i >= 0:
-                            img = buf[:i + len(jpeg_end)]
-                            buf = buf[i + len(jpeg_end):]
-                            start = False
+                        if img is not None and len(dr) > 0:
+                            img += dr
+                            if len(img) > payload_size:
+                                # We got more data than we expected.
+                                LOGGER.error(f"Unexpected image payload received: {len(img)} > {payload_size}")
+                                # Reset buffer
+                                img = None
+                            elif len(img) == payload_size:
+                                # We should have the full image now.
+                                if img[:4] != jpeg_start:
+                                    LOGGER.error("JPEG start magic bytes missing.")
+                                elif img[-2:] != jpeg_end:
+                                    LOGGER.error("JPEG end magic bytes missing.")
+                                else:
+                                    # Content is as expected. Send it.
+                                    self._client.on_jpeg_received(img)
 
-                            self._client.on_jpeg_received(img)
+                                # Reset buffer
+                                img = None
+                            # else:     
+                            # Otherwise we need to continue looping without reseting the buffer to receive the remaining data
+                            # and without delaying.
+
+                        elif len(dr) == 16:
+                            # We got the header bytes. Get the expected payload size from it and create the image buffer bytearray.
+                            img = bytearray()
+                            payload_size = int.from_bytes(dr[0:3], byteorder='little')
+
+                        elif len(dr) == 0:
+                            # This occurs if the wrong access code was provided.
+                            LOGGER.error("Chamber image connection rejected by the printer. Check provided access code and IP address.")
+                            LOGGER.info("Chamber image thread exited.")
+                            return
+
+                        else:
+                            LOGGER.error(f"{self._client._device.info.device_type}: UNEXPECTED DATA RECEIVED: {len(dr)}")
+                            time.sleep(1)
+
             except Exception as e:
                 LOGGER.error("A Chamber Image thread outer exception occurred:")
                 LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
@@ -271,7 +312,7 @@ class BambuClient:
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
 
-        if self._device.supports_feature(Features.CAMERA_IMAGE) and self.host != "":
+        if self._device.supports_feature(Features.CAMERA_IMAGE):
             LOGGER.debug("Starting Chamber Image thread")
             self._camera = ChamberImageThread(self)
             self._camera.start()

@@ -45,7 +45,7 @@
       },
       "Bambu_Lan": {
         "title": "设置本地连接",
-        "description": "您可以选择提供本地打印机 IP 地址。建议这样做，因为它可以在 P1/A1 打印机上访问相机，并且通常更可靠。",
+        "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是在 P1/A1 上访问相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Cloud。",
         "data": {
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
           "host": "本地打印机 IP 地址：",
@@ -88,9 +88,9 @@
           "password": "密码"
         }
       },
-      "Bambu_Choose_Device": {
-        "title": "打印机选择",
-        "description": "调整本打印机的设置：",
+      "Bambu_Lan": {
+        "title": "调整打印机配置",
+        "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是在 P1/A1 上访问相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Cloud。",
         "data": {
           "printer": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",

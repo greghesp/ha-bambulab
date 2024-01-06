@@ -186,7 +186,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         errors = {}
-        LOGGER.debug("async_step_Bambu_Choose_Device")
+        LOGGER.debug("async_step_Bambu_Lan")
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
@@ -257,6 +257,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
+            # Serial must be upper case to work
+            user_input['serial'] = user_input['serial'].upper()
+
             LOGGER.debug("Config Flow: Testing local mqtt connection")
             bambu = BambuClient(device_type="unknown",
                                 serial=user_input['serial'],
@@ -297,8 +300,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
+        fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
 
         return self.async_show_form(
@@ -380,7 +383,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 self.region = user_input['region']
                 self.email = user_input['email']
 
-                return await self.async_step_Bambu_Choose_Device(None)
+                return await self.async_step_Bambu_Lan(None)
 
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
@@ -389,7 +392,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         elif credentialsGood:
             self.region = self.config_entry.options['region']
             self.email = self.config_entry.options['email']
-            return await self.async_step_Bambu_Choose_Device(None)
+            return await self.async_step_Bambu_Lan(None)
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -407,11 +410,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             last_step=False,
         )
 
-    async def async_step_Bambu_Choose_Device(
+    async def async_step_Bambu_Lan(
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         errors = {}
-        LOGGER.debug("async_step_Bambu_Choose_Device")
+        LOGGER.debug("async_step_Bambu_Lan")
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
@@ -484,7 +487,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
 
         return self.async_show_form(
-            step_id="Bambu_Choose_Device",
+            step_id="Bambu_Lan",
             data_schema=vol.Schema(fields),
             errors=errors or {},
             last_step=True,

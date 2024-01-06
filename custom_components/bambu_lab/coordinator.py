@@ -93,6 +93,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 case "event_print_started":
                     self.PublishDeviceTriggerEvent(event)
 
+                case "event_printer_chamber_image_update":
+                    self._update_data()
+
+                case "event_printer_cover_image_update":
+                    self._update_data()
+
 
         async def listen():
             self.client.connect(callback=event_handler)
