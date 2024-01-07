@@ -135,16 +135,16 @@ class ChamberImageThread(threading.Thread):
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
-                            LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
+                            #LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
-                            LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
+                            #LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
                             time.sleep(1)
                             continue
 
                         except Exception as e:
                             LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread inner exception occurred:")
-                            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                            LOGGER.error(f"{self._client._device.info.device_type}: Exception. Type: {type(e)} Args: {e}")
                             time.sleep(1)
                             continue
 

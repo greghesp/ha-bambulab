@@ -20,7 +20,7 @@ from .utils import \
     get_HMS_error_text, \
     get_generic_AMS_HMS_error_code
     
-from .const import LOGGER, Features, FansEnum, SPEED_PROFILE
+from .const import LOGGER, Features, FansEnum, Home_Flag_Values, SdcardState, SPEED_PROFILE
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
 class Device:
@@ -105,6 +105,8 @@ class Device:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CAMERA_IMAGE:
                 return (self._client.host != "") and (self._client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
+            case Features.DOOR_SENSOR:
+                return self.home_flag.door is not None
             case Features.MANUAL_MODE:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
 
@@ -1081,7 +1083,7 @@ class ChamberImage:
         self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
-        LOGGER.debug(f"JPEG RECEIVED: {self._client._device.info.device_type}")
+        #LOGGER.debug(f"JPEG RECEIVED: {self._client._device.info.device_type}")
         self._bytes = bytes
         self._image_last_updated = datetime.now()
         if self._client.callback is not None:
@@ -1117,15 +1119,16 @@ class CoverImage:
 
 @dataclass
 class HomeFlag:
-    """Contains parsed values from the homeflag sensor"""
-    value: int
+    """Contains parsed _values from the homeflag sensor"""
+    _value: int
     _sw_ver: str
     _device_type: str 
 
     def __init__(self, client):
-        self.value = 0
-        self.client = client
-        self._sw_ver = "unknown"
+        self._value = 0
+        self._client = client
+        self._sw_ver = ""
+        self._device_type = ""
 
     def info_update(self, data):
         modules = data.get("module", [])
@@ -1134,78 +1137,81 @@ class HomeFlag:
 
     def print_update(self, data: dict) -> bool:
         old_data = f"{self.__dict__}"
-        self.value = int(data.get("homeflag", self.value))
+        self._value = int(data.get("homeflag", self._value))
         return (old_data != f"{self.__dict__}")
 
     @property
-    def door(self):
+    def door_open(self) -> bool or None:
         if not self._device_type.startswith("X1"):
             # P1S does not have a door sensor.
-            return "none"
+            return None
+        
+        # X1E has different firmware versioning than X1/X1C so just ignore assume it has the sensor exposed in the firmware for now.
+        elif (self._device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00")):
+            return None
 
-        elif (self._sw_ver == "unknown" or
-                # X1E has different firmware versioning than X1/X1C
-              (self._device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00"))):
-            return "unknown"
-
-        return "open" if ((self.value >> 23) & 0x1) == 1 else "closed"
-
-    @property
-    def x_axis(self):
-        return "homed" if (self.value & 0x01) == 1 else "not homed"
+        return (self._value & Home_Flag_Values.DOOR_OPEN) != 0
 
     @property
-    def y_axis(self):
-        return "homed" if ((self.value >> 1) & 0x01) == 1 else "not homed"
+    def x_axis_homed(self) -> bool:
+        return (self._value & Home_Flag_Values.X_AXIS) != 0
+    
+    @property
+    def y_axis_homed(self) -> bool:
+        return (self._value & Home_Flag_Values.Y_AXIS) != 0
 
     @property
-    def z_axis(self):
-        return "homed" if ((self.value >> 2) & 0x01) == 1 else "not homed"
+    def z_axis_homed(self) -> bool:
+        return (self._value & Home_Flag_Values.Z_AXIS) != 0
 
     @property
-    def homed(self):
-        return self.x_axis == "homed" and self.y_axis == "homed" and self.z_axis == "homed"
+    def homed(self) -> bool:
+        return self.x_axis_homed and self.y_axis_homed and self.z_axis_homed
 
     @property
-    def voltage_setting(self):
-        return "220v" if ((self.value >> 3) & 0x01) == 1 else "110v"
+    def is_220V(self) -> bool:
+        return (self._value & Home_Flag_Values.VOLTAGE220) != 0
 
     @property
-    def xcam_autorecovery_steploss(self):
-        return "enabled" if ((self.value >> 4) & 0x01) == 1 else "disabled"
+    def xcam_autorecovery_steploss(self) -> bool:
+        return (self._value & Home_Flag_Values.XCAM_AUTO_RECOVERY_STEP_LOSS) != 0
 
     @property
-    def camera_recording(self):
-        return "enabled" if ((self.value >> 5) & 0x01) == 1 else "disabled"
+    def camera_recording(self) -> bool:
+        return (self._value & Home_Flag_Values.CAMERA_RECORDING) != 0
 
     @property
-    def ams_calibrate_remaining(self):
-        return "enabled" if ((self.value >> 7) & 0x01) == 1 else "disabled"
+    def ams_calibrate_remaining(self) -> bool:
+        return (self._value & Home_Flag_Values.AMS_CALIBRATE_REMAINING) != 0
 
     @property
-    def sdcard_state(self):
-        value = (self.value >> 8) & 0x01
-        if value == 0:
-            return "none"
-        elif value == 1:
-            return "present"
-        elif value == 2:
-            return "abnormal"
-        else:
-            return "other"
+    def sdcard_present(self) -> bool:
+        return (self._value & Home_Flag_Values.SD_CARD_STATE) != SdcardState.NO_SDCARD
 
     @property
-    def ams_auto_switch_filament(self):
-        return "enabled" if ((self.value >> 10) & 0x01) == 1 else "disabled"
+    def sdcard_normal(self) -> bool:
+        return self.sdcard_present and (self._value & Home_Flag_Values.HAS_SDCARD_ABNORMAL) != SdcardState.HAS_SDCARD_ABNORMAL
+    
+    @property
+    def ams_auto_switch_filament(self) -> bool:
+        return (self._value & Home_Flag_Values.AMS_AUTO_SWITCH) != 0
 
     @property
-    def network_connection(self):
-        return "wired" if ((self.value >> 18) & 0x01) == 1 else "wireless"
+    def wired_network_connection(self):
+        return (self._value & Home_Flag_Values.WIRED_NETWORK) != 0
 
     @property
-    def xcam_prompt_sound(self):
-        return "enabled" if ((self.value >> 17) & 0x01) == 1 else "disabled"
+    def xcam_prompt_sound(self) -> bool:
+        return (self._value & Home_Flag_Values.XCAM_ALLOW_PROMPT_SOUND) != 0
 
     @property
-    def supports_motor_noise_calibration(self):
-        return ((self.value >> 21) & 0x01) == 1
+    def supports_motor_noise_calibration(self) -> bool:
+        return (self._value & Home_Flag_Values.SUPPORTS_MOTOR_CALIBRATION) != 0
+    
+    @property
+    def p1s_upgrade_supported(self) -> bool:
+        return (self._value & Home_Flag_Values.SUPPORTED_PLUS) !=  0
+    
+    @property
+    def p1s_upgrade_installed(self) -> bool:
+        return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0

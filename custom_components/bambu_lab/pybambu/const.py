@@ -20,7 +20,8 @@ class Features(Enum):
     CAMERA_RTSP = 13,
     START_TIME_GENERATED = 14,
     CAMERA_IMAGE = 15,
-    MANUAL_MODE = 16
+    DOOR_SENSOR = 16,
+    MANUAL_MODE = 17,
 
 
 class FansEnum(Enum):
@@ -253,17 +254,33 @@ HMS_AMS_ERRORS = {
     "0700_6000_0002_0001": "AMS1 slot 1 is overloaded. The filament may be tangled or the spool may be stuck.",
 }
 
+class SdcardState(Enum):
+    NO_SDCARD                           = 0x00000000,
+    HAS_SDCARD_NORMAL                   = 0x00000100,
+    HAS_SDCARD_ABNORMAL                 = 0x00000200,
+    SDCARD_STATE_NUM                    = 0x00000300,
+
 class Home_Flag_Values(Enum):
-    X_AXIS                      = 0x00000001,
-    Y_AXIS                      = 0x00000002,
-    Z_AXIS                      = 0x00000004,
-    VOLTAGE                     = 0x00000008,
-    STEP_RECOVERY               = 0x00000010,
-    CAMERA_RECORDING            = 0x00000020,
-    AMS_REMAINING               = 0x00000080,
-    SD_CARD_STATE               = 0x00000300, # 2 bits?
-    AMS_AUTO_SWITCH             = 0x00000400,
-    PROMPT_SOUND                = 0x00020000,
-    WIRED_NETWORK               = 0x00040000,
-    SUPPORTS_MOTOR_CALIBRATION  = 0x00200000,
-    DOOR                        = 0x00800000
+    X_AXIS                              = 0x00000001,
+    Y_AXIS                              = 0x00000002,
+    Z_AXIS                              = 0x00000004,
+    VOLTAGE220                          = 0x00000008,
+    XCAM_AUTO_RECOVERY_STEP_LOSS        = 0x00000010,
+    CAMERA_RECORDING                    = 0x00000020,
+    # Gap
+    AMS_CALIBRATE_REMAINING             = 0x00000080,
+    SD_CARD_PRESENT                     = 0x00000100,
+    SD_CARD_ABNORMAL                    = 0x00000200,
+    AMS_AUTO_SWITCH                     = 0x00000400,
+    # Gap
+    XCAM_ALLOW_PROMPT_SOUND             = 0x00020000,
+    WIRED_NETWORK                       = 0x00040000,
+    FILAMENT_TANGLE_DETECT_SUPPORTED    = 0x00080000,
+    FILAMENT_TANGLE_DETECTED            = 0x00100000,
+    SUPPORTS_MOTOR_CALIBRATION          = 0x00200000,
+    # Gap
+    DOOR_OPEN                           = 0x00800000,
+    # Gap
+    INSTALLED_PLUS                      = 0x04000000,
+    SUPPORTED_PLUS                      = 0x08000000,
+    # Gap
