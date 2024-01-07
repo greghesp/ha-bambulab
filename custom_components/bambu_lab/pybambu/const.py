@@ -1,6 +1,6 @@
 import logging
 
-from enum import Enum
+from enum import Enum, IntEnum
 
 LOGGER = logging.getLogger(__package__)
 
@@ -260,7 +260,7 @@ class SdcardState(Enum):
     HAS_SDCARD_ABNORMAL                 = 0x00000200,
     SDCARD_STATE_NUM                    = 0x00000300,
 
-class Home_Flag_Values(Enum):
+class Home_Flag_Values(IntEnum):
     X_AXIS                              = 0x00000001,
     Y_AXIS                              = 0x00000002,
     Z_AXIS                              = 0x00000004,

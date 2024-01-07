@@ -106,7 +106,7 @@ class Device:
             case Features.CAMERA_IMAGE:
                 return (self._client.host != "") and (self._client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
             case Features.DOOR_SENSOR:
-                return self.home_flag.door is not None
+                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.MANUAL_MODE:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
 
@@ -1142,12 +1142,7 @@ class HomeFlag:
 
     @property
     def door_open(self) -> bool or None:
-        if not self._device_type.startswith("X1"):
-            # P1S does not have a door sensor.
-            return None
-        
-        # X1E has different firmware versioning than X1/X1C so just ignore assume it has the sensor exposed in the firmware for now.
-        elif (self._device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00")):
+        if not self._client._device.supports_feature(Features.DOOR_SENSOR):
             return None
 
         return (self._value & Home_Flag_Values.DOOR_OPEN) != 0

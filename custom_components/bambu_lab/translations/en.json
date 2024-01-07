@@ -110,6 +110,9 @@
   },
   "entity": {
     "binary_sensor": {
+      "door_open": {
+        "name": "Door open"
+      },
       "timelapse": {
         "name": "Recording timelapse"
       },
