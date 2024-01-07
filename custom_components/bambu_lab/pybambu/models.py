@@ -537,6 +537,7 @@ class Info:
 
     # Device state
     serial: str
+    device_type: str
     wifi_signal: int
     device_type: str
     hw_ver: str
