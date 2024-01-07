@@ -71,7 +71,7 @@ class ChamberImageThread(threading.Thread):
         self._stop_event.set()
 
     def run(self):
-        LOGGER.debug("Chamber image thread started.")
+        LOGGER.debug("{self._client._device.info.device_type}: Chamber image thread started.")
 
         d = bytearray()
 
@@ -80,7 +80,10 @@ class ChamberImageThread(threading.Thread):
         hostname = self._client.host
         port = 6000
 
-        d += struct.pack("IIL", 0x40, 0x3000, 0x0)
+        d += struct.pack("<I", 0x40)   # '@'\0\0\0
+        d += struct.pack("<I", 0x3000) # \0'0'\0\0
+        d += struct.pack("<I", 0)      # \0\0\0\0
+        d += struct.pack("<I", 0)      # \0\0\0\0
         for i in range(0, len(username)):
             d += struct.pack("<c", username[i].encode('ascii'))
         for i in range(0, 32 - len(username)):
@@ -115,24 +118,32 @@ class ChamberImageThread(threading.Thread):
         while not self._stop_event.is_set():
             try:
                 with socket.create_connection((hostname, port)) as sock:
-                    sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
-                    sslSock.write(d)
-                    img = None
-                    payload_size = 0
+                    try:
+                        sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
+                        sslSock.write(d)
+                        img = None
+                        payload_size = 0
+
+                        status = sslSock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
+                        LOGGER.debug(f"{self._client._device.info.device_type}: SOCKET STATUS: {status}")
+                        if status != 0:
+                            LOGGER.error(f"{self._client._device.info.device_type}: Socket error: {status}")
+                    except socket.error as e:
+                        LOGGER.error(f"{self._client._device.info.device_type}: Socket error: {e}")
 
                     sslSock.setblocking(False)
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
-                            #LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
+                            LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
-                            #LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
+                            LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
                             time.sleep(1)
                             continue
 
                         except Exception as e:
-                            LOGGER.error("A Chamber Image thread inner exception occurred:")
+                            LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread inner exception occurred:")
                             LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                             time.sleep(1)
                             continue
@@ -167,8 +178,8 @@ class ChamberImageThread(threading.Thread):
 
                         elif len(dr) == 0:
                             # This occurs if the wrong access code was provided.
-                            LOGGER.error("Chamber image connection rejected by the printer. Check provided access code and IP address.")
-                            LOGGER.info("Chamber image thread exited.")
+                            LOGGER.error(f"{self._client._device.info.device_type}: Chamber image connection rejected by the printer. Check provided access code and IP address.")
+                            LOGGER.info(f"{self._client._device.info.device_type}: Chamber image thread exited.")
                             return
 
                         else:
@@ -176,12 +187,12 @@ class ChamberImageThread(threading.Thread):
                             time.sleep(1)
 
             except Exception as e:
-                LOGGER.error("A Chamber Image thread outer exception occurred:")
-                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread outer exception occurred:")
+                LOGGER.error(f"{self._client._device.info.device_type}: Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
-        LOGGER.info("Chamber image thread exited.")
+        LOGGER.info(f"{self._client._device.info.device_type}: Chamber image thread exited.")
 
 
 def mqtt_listen_thread(self):
@@ -242,7 +253,8 @@ class BambuClient:
         self._access_code = access_code
         self._username = username
         self._connected = False
-        self._device = Device(self, device_type, serial)
+        self._device_type = device_type
+        self._device = Device(self)
         self._port = 1883
         self._refreshed = False
         self._manual_refresh_mode = False

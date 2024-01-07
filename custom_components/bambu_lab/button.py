@@ -82,7 +82,7 @@ class BambuLabPauseButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        if self.coordinator.data.info.gcode_state == "RUNNING":
+        if self.coordinator.data.print_job.gcode_state == "RUNNING":
             return True
         return False
 
@@ -99,7 +99,7 @@ class BambuLabResumeButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        if self.coordinator.data.info.gcode_state == "PAUSE":
+        if self.coordinator.data.print_job.gcode_state == "PAUSE":
             return True
         return False
 
@@ -116,7 +116,7 @@ class BambuLabStopButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        if self.coordinator.data.info.gcode_state == "RUNNING" or self.coordinator.data.info.gcode_state == "PAUSE":
+        if self.coordinator.data.print_job.gcode_state == "RUNNING" or self.coordinator.data.print_job.gcode_state == "PAUSE":
             return True
         return False
 
