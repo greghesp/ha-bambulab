@@ -26,37 +26,39 @@ class Device:
     def __init__(self, client):
         self._client = client
         self.temperature = Temperature()
-        self.lights = Lights(client)
-        self.info = Info(client)
-        self.print_job = PrintJob(client)
-        self.fans = Fans(client)
-        self.speed = Speed(client)
+        self.lights = Lights(client = client)
+        self.info = Info(client = client)
+        self.print_job = PrintJob(client = client)
+        self.fans = Fans(client = client)
+        self.speed = Speed(client = client)
         self.stage = StageAction()
-        self.ams = AMSList(client)
-        self.external_spool = ExternalSpool(client)
-        self.hms = HMSList(client)
+        self.ams = AMSList(client = client)
+        self.external_spool = ExternalSpool(client = client)
+        self.hms = HMSList(client = client)
         self.camera = Camera()
+        self.home_flag = HomeFlag(client=client)
         self.push_all_data = None
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
-            self.chamber_image = ChamberImage(client)
-        self.cover_image = CoverImage(client)
+            self.chamber_image = ChamberImage(client = client)
+        self.cover_image = CoverImage(client = client)
 
     def print_update(self, data) -> bool:
         """Update from dict"""
 
         send_event = False
-        send_event = send_event | self.info.print_update(data)
-        send_event = send_event | self.print_job.print_update(data)
-        send_event = send_event | self.temperature.print_update(data)
-        send_event = send_event | self.lights.print_update(data)
-        send_event = send_event | self.fans.print_update(data)
-        send_event = send_event | self.speed.print_update(data)
-        send_event = send_event | self.stage.print_update(data)
-        send_event = send_event | self.ams.print_update(data)
-        send_event = send_event | self.external_spool.print_update(data)
-        send_event = send_event | self.hms.print_update(data)
-        send_event = send_event | self.camera.print_update(data)
+        send_event = send_event | self.info.print_update(data = data)
+        send_event = send_event | self.print_job.print_update(data = data)
+        send_event = send_event | self.temperature.print_update(data = data)
+        send_event = send_event | self.lights.print_update(data = data)
+        send_event = send_event | self.fans.print_update(data = data)
+        send_event = send_event | self.speed.print_update(data = data)
+        send_event = send_event | self.stage.print_update(data = data)
+        send_event = send_event | self.ams.print_update(data = data)
+        send_event = send_event | self.external_spool.print_update(data = data)
+        send_event = send_event | self.hms.print_update(data = data)
+        send_event = send_event | self.camera.print_update(data = data)
+        send_event = send_event | self.home_flag.print_update(data = data)
 
         if send_event and self._client.callback is not None:
             self._client.callback("event_printer_data_update")
@@ -66,8 +68,9 @@ class Device:
 
     def info_update(self, data):
         """Update from dict"""
-        self.info.info_update(data)
-        self.ams.info_update(data)
+        self.info.info_update(data = data)
+        self.home_flag.info_update(data = data)
+        self.ams.info_update(data = data)
         if data.get("command") == "get_version":
             self.get_version_data = data
 
@@ -1109,3 +1112,98 @@ class CoverImage:
 
     def get_last_update_time(self) -> datetime:
         return self._image_last_updated
+
+
+@dataclass
+class HomeFlag:
+    """Contains parsed values from the homeflag sensor"""
+    value: int
+    _sw_ver: str
+
+    def __init__(self, client):
+        self.value = 0
+        self.client = client
+        self._sw_ver = "unknown"
+
+    def info_update(self, data):
+        modules = data.get("module", [])
+        self._device_type = get_printer_type(modules, self._device_type)
+        self._sw_ver = get_sw_version(modules, self._sw_ver)
+
+    def print_update(self, data: dict) -> bool:
+        old_data = f"{self.__dict__}"
+        self.value = int(data.get("homeflag", self.value))
+        return (old_data != f"{self.__dict__}")
+
+    @property
+    def door(self):
+        if not self.device_type.startswith("X1"):
+            # we do not know if P1S has the sensor
+            return "none"
+
+        elif (self._sw_ver == "unknown" or
+                # X1E has different firmware versioning than X1/X1C
+              (self.device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00"))):
+            return "unknown"
+
+        return "open" if ((self.value >> 23) & 0x1) == 1 else "closed"
+
+    @property
+    def x_axis(self):
+        return "homed" if (self.value & 0x01) == 1 else "not homed"
+
+    @property
+    def y_axis(self):
+        return "homed" if ((self.value >> 1) & 0x01) == 1 else "not homed"
+
+    @property
+    def z_axis(self):
+        return "homed" if ((self.value >> 2) & 0x01) == 1 else "not homed"
+
+    @property
+    def homed(self):
+        return self.x_axis == "homed" and self.y_axis == "homed" and self.z_axis == "homed"
+
+    @property
+    def voltage_setting(self):
+        return "220v" if ((self.value >> 3) & 0x01) == 1 else "110v"
+
+    @property
+    def xcam_autorecovery_steploss(self):
+        return "enabled" if ((self.value >> 4) & 0x01) == 1 else "disabled"
+
+    @property
+    def camera_recording(self):
+        return "enabled" if ((self.value >> 5) & 0x01) == 1 else "disabled"
+
+    @property
+    def ams_calibrate_remaining(self):
+        return "enabled" if ((self.value >> 7) & 0x01) == 1 else "disabled"
+
+    @property
+    def sdcard_state(self):
+        value = (self.value >> 8) & 0x01
+        if value == 0:
+            return "none"
+        elif value == 1:
+            return "present"
+        elif value == 2:
+            return "abnormal"
+        else:
+            return "other"
+
+    @property
+    def ams_auto_switch_filament(self):
+        return "enabled" if ((self.value >> 10) & 0x01) == 1 else "disabled"
+
+    @property
+    def network_connection(self):
+        return "wired" if ((self.value >> 18) & 0x01) == 1 else "wireless"
+
+    @property
+    def xcam_prompt_sound(self):
+        return "enabled" if ((self.value >> 17) & 0x01) == 1 else "disabled"
+
+    @property
+    def supports_motor_noise_calibration(self):
+        return ((self.value >> 21) & 0x01) == 1

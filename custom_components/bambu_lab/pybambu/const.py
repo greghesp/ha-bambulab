@@ -54,6 +54,20 @@ ACTION_IDS = {
     19: "calibrating_extrusion_flow",
     20: "paused_nozzle_temperature_malfunction",
     21: "paused_heat_bed_temperature_malfunction",
+    22: "filament unloading",
+    23: "paused_skipped_step",
+    24: "filament_loading",
+    25: "calibrating_motor_noise",
+    26: "paused_ams_lost",
+    27: "paused_low_fan_speed_heat_break",
+    28: "paused_chamber_temperature_control_error",
+    29: "cooling_chamber",
+    30: "paused_user_gcode",
+    31: "motor_noise_showoff",
+    32: "paused_nozzle_filament_covered_detected",
+    33: "paused_cutter_error",
+    34: "paused_first_layer_error",
+    35: "paused_nozzle_clog",
     # X1 returns -1 for idle
     -1: "idle",
     # P1 returns 255 for idle
@@ -238,3 +252,18 @@ HMS_AMS_ERRORS = {
     "0700_2000_0003_0002": "AMS1 slot 1 filament has run out and automatically switched to the slot with the same filament.",
     "0700_6000_0002_0001": "AMS1 slot 1 is overloaded. The filament may be tangled or the spool may be stuck.",
 }
+
+class Home_Flag(Enum):
+    X_AXIS                      = 0x00000001,
+    Y_AXIS                      = 0x00000002,
+    Z_AXIS                      = 0x00000004,
+    VOLTAGE                     = 0x00000008,
+    STEP_RECOVERY               = 0x00000010,
+    CAMERA_RECORDING            = 0x00000020,
+    AMS_REMAINING               = 0x00000080,
+    SD_CARD_STATE               = 0x00000300, # 2 bits?
+    AMS_AUTO_SWITCH             = 0x00000400,
+    PROMPT_SOUND                = 0x00020000,
+    WIRED_NETWORK               = 0x00040000,
+    SUPPORTS_MOTOR_CALIBRATION  = 0x00200000,
+    DOOR                        = 0x00800000
