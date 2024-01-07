@@ -251,7 +251,7 @@
           "calibrating_extrusion_flow": "Calibrating extrusion flow",
           "paused_nozzle_temperature_malfunction": "Paused due to nozzle temperature malfunction",
           "paused_heat_bed_temperature_malfunction": "Paused due to heat bed temperature malfunction",
-          "filament unloading": "Filament unloading",
+          "filament_unloading": "Filament unloading",
           "paused_skipped_step": "Paused due to skipped steps",
           "filament_loading": "Filament loading",
           "calibrating_motor_noise": "Calibrating motor noise",

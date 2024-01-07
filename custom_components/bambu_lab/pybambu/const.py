@@ -55,7 +55,7 @@ ACTION_IDS = {
     19: "calibrating_extrusion_flow",
     20: "paused_nozzle_temperature_malfunction",
     21: "paused_heat_bed_temperature_malfunction",
-    22: "filament unloading",
+    22: "filament_unloading",
     23: "paused_skipped_step",
     24: "filament_loading",
     25: "calibrating_motor_noise",
