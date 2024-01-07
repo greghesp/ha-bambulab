@@ -253,7 +253,8 @@ class BambuClient:
         self._access_code = access_code
         self._username = username
         self._connected = False
-        self._device = Device(self, device_type, serial)
+        self._device_type = device_type
+        self._device = Device(self)
         self._port = 1883
         self._refreshed = False
         self._manual_refresh_mode = False

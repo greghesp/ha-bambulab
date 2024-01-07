@@ -23,11 +23,11 @@ from .const import LOGGER, Features, FansEnum, SPEED_PROFILE
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
 class Device:
-    def __init__(self, client, device_type, serial):
-        self.client = client
+    def __init__(self, client):
+        self._client = client
         self.temperature = Temperature()
         self.lights = Lights(client)
-        self.info = Info(client = client, device = self, device_type = device_type, serial = serial)
+        self.info = Info(client)
         self.print_job = PrintJob(client)
         self.fans = Fans(client)
         self.speed = Speed(client)
@@ -46,7 +46,7 @@ class Device:
         """Update from dict"""
 
         send_event = False
-        send_event = send_event | self.info.print_update(self, data)
+        send_event = send_event | self.info.print_update(data)
         send_event = send_event | self.print_job.print_update(data)
         send_event = send_event | self.temperature.print_update(data)
         send_event = send_event | self.lights.print_update(data)
@@ -58,8 +58,8 @@ class Device:
         send_event = send_event | self.hms.print_update(data)
         send_event = send_event | self.camera.print_update(data)
 
-        if send_event and self.client.callback is not None:
-            self.client.callback("event_printer_data_update")
+        if send_event and self._client.callback is not None:
+            self._client.callback("event_printer_data_update")
 
         if data.get("msg", 0) == 0:
             self.push_all_data = data
@@ -100,7 +100,7 @@ class Device:
             case Features.CAMERA_RTSP:
                 return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
             case Features.CAMERA_IMAGE:
-                return (self.client.host != "") and (self.client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
+                return (self._client.host != "") and (self._client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
             case Features.MANUAL_MODE:
                 return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
 
@@ -126,7 +126,7 @@ class Lights:
     work_light: str
 
     def __init__(self, client):
-        self.client = client
+        self._client = client
         self.chamber_light = "unknown"
         self.work_light = "unknown"
         self.chamber_light_override = ""
@@ -163,16 +163,16 @@ class Lights:
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
         self.chamber_light_override = "on"
-        if self.client.callback is not None:
-            self.client.callback("event_light_update")
-        self.client.publish(CHAMBER_LIGHT_ON)
+        if self._client.callback is not None:
+            self._client.callback("event_light_update")
+        self._client.publish(CHAMBER_LIGHT_ON)
 
     def TurnChamberLightOff(self):
         self.chamber_light = "off"
         self.chamber_light_override = "off"
-        if self.client.callback is not None:
-            self.client.callback("event_light_update")
-        self.client.publish(CHAMBER_LIGHT_OFF)
+        if self._client.callback is not None:
+            self._client.callback("event_light_update")
+        self._client.publish(CHAMBER_LIGHT_OFF)
 
 
 @dataclass
@@ -257,7 +257,7 @@ class Fans:
     _heatbreak_fan_speed: int
 
     def __init__(self, client):
-        self.client = client
+        self._client = client
         self._aux_fan_speed_percentage = 0
         self._aux_fan_speed = 0
         self._aux_fan_speed_override = 0
@@ -317,10 +317,10 @@ class Fans:
                 self._chamber_fan_speed_override_time = datetime.now()
 
         LOGGER.debug(command)
-        self.client.publish(command)
+        self._client.publish(command)
 
-        if self.client.callback is not None:
-            self.client.callback("event_printer_data_update")
+        if self._client.callback is not None:
+            self._client.callback("event_printer_data_update")
 
     def get_fan_speed(self, fan: FansEnum) -> int:
         match fan:
@@ -346,35 +346,10 @@ class Fans:
 class PrintJob:
     """Return all information related content"""
 
-    def __init__(self, client):
-        self._client = client
-
-    def print_update(self, data) -> bool:
-        """Update from dict"""
-        return False
-    
-@dataclass
-class Info:
-    """Return all device related content"""
-
-    # Device state
-    serial: str
-    wifi_signal: int
-    device_type: str
-    hw_ver: str
-    sw_ver: str
-    online: bool
-    new_version_state: int
-    mqtt_mode: str
-    nozzle_diameter: str
-    nozzle_type: str
-
-    # Current/last print job status
     print_percentage: int
     gcode_state: str
     gcode_file: str
     subtask_name: str
-    _cloud_start_time: int
     start_time: datetime
     end_time: datetime
     remaining_time: int
@@ -385,27 +360,13 @@ class Info:
     print_length: int
     print_bed_type: str
 
-    def __init__(self, device, client, device_type, serial):
-        self.client = client
-        self.serial = serial
-
-        self.device = device
-        self.wifi_signal = 0
-        self.device_type = device_type
-        self.hw_ver = "unknown"
-        self.sw_ver = "unknown"
-        self.online = False
-        self.new_version_state = 0
-        self.mqtt_mode = "local" if self.client._local_mqtt else "bambu_cloud"
-        self.nozzle_diameter = "unknown"
-        self.nozzle_type = "unknown"
-
+    def __init__(self, client):
+        self._client = client
         self.print_percentage = 0
         self.gcode_state = "unknown"
         self.gcode_file = ""
         self.subtask_name = ""
         self.end_time = None
-        self._cloud_start_time = None
         self.start_time = None
         self.remaining_time = -1
         self.current_layer = 0
@@ -415,43 +376,7 @@ class Info:
         self.print_length = 0
         self.print_bed_type = "unknown"
 
-    def set_online(self, online):
-        if self.online != online:
-            self.online = online
-            if self.client.callback is not None:
-                self.client.callback("event_printer_data_update")
-
-    def info_update(self, data):
-        """Update from dict"""
-
-        # Example payload:
-        # {
-        # "info": {
-        #     "command": "get_version",
-        #     "sequence_id": "20004",
-        #     "module": [
-        #     {
-        #         "name": "ota",
-        #         "project_name": "C11",
-        #         "sw_ver": "01.02.03.00",
-        #         "hw_ver": "OTA",
-        #         "sn": "..."
-        #     },
-        #     {
-        #         "name": "esp32",
-        #         "project_name": "C11",
-        #         "sw_ver": "00.03.12.31",
-        #         "hw_ver": "AP04",
-        #         "sn": "..."
-        #     },
-        modules = data.get("module", [])
-        self.device_type = get_printer_type(modules, self.device_type)
-        self.hw_ver = get_hw_version(modules, self.hw_ver)
-        self.sw_ver = get_sw_version(modules, self.sw_ver)
-        if self.client.callback is not None:
-            self.client.callback("event_printer_info_update")
-
-    def print_update(self, device, data) -> bool:
+    def print_update(self, data) -> bool:
         """Update from dict"""
         old_data = f"{self.__dict__}"
 
@@ -474,7 +399,6 @@ class Info:
         #         "layer_num": 0,
         #         "total_layer_num": 0,
 
-        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
@@ -505,12 +429,12 @@ class Info:
         currently_idle = self.gcode_state == "IDLE" or self.gcode_state == "FAILED" or self.gcode_state == "FINISH"
 
         if previously_idle and not currently_idle:
-            if self.client.callback is not None:
-               self.client.callback("event_print_started")
+            if self._client.callback is not None:
+               self._client.callback("event_print_started")
 
             # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
             # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
-            if device.supports_feature(Features.START_TIME_GENERATED):
+            if self._client._device.supports_feature(Features.START_TIME_GENERATED):
                 # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                 self.start_time = get_end_time(0)
 
@@ -527,20 +451,177 @@ class Info:
         isCanceledPrint = False
         if data.get("print_error") == 50348044 and self.print_error == 0:
             isCanceledPrint = True
-            if self.client.callback is not None:
-               self.client.callback("event_print_canceled")
+            if self._client.callback is not None:
+               self._client.callback("event_print_canceled")
         self.print_error = data.get("print_error", self.print_error)
 
         # Handle print failed
         if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
             if not isCanceledPrint:
-                if self.client.callback is not None:
-                   self.client.callback("event_print_failed")
+                if self._client.callback is not None:
+                   self._client.callback("event_print_failed")
 
         # Handle print finish
         if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
-            if self.client.callback is not None:
-               self.client.callback("event_print_finished")
+            if self._client.callback is not None:
+               self._client.callback("event_print_finished")
+
+        return (old_data != f"{self.__dict__}")
+
+    # The task list is of the following form with a 'hits' array with typical 20 entries.
+    #
+    # "total": 531,
+    # "hits": [
+    #     {
+    #     "id": 35237965,
+    #     "designId": 0,
+    #     "designTitle": "",
+    #     "instanceId": 0,
+    #     "modelId": "REDACTED",
+    #     "title": "REDACTED",
+    #     "cover": "REDACTED",
+    #     "status": 4,
+    #     "feedbackStatus": 0,
+    #     "startTime": "2023-12-21T19:02:16Z",
+    #     "endTime": "2023-12-21T19:02:35Z",
+    #     "weight": 34.62,
+    #     "length": 1161,
+    #     "costTime": 10346,
+    #     "profileId": 35276233,
+    #     "plateIndex": 1,
+    #     "plateName": "",
+    #     "deviceId": "REDACTED",
+    #     "amsDetailMapping": [
+    #         {
+    #         "ams": 4,
+    #         "sourceColor": "F4D976FF",
+    #         "targetColor": "F4D976FF",
+    #         "filamentId": "GFL99",
+    #         "filamentType": "PLA",
+    #         "targetFilamentType": "",
+    #         "weight": 34.62
+    #         }
+    #     ],
+    #     "mode": "cloud_file",
+    #     "isPublicProfile": false,
+    #     "isPrintable": true,
+    #     "deviceModel": "P1P",
+    #     "deviceName": "Bambu P1P",
+    #     "bedType": "textured_plate"
+    #     },
+
+    def _update_task_data(self):
+        if self._client.bambu_cloud.auth_token != "":
+            self._task_data = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)
+            url = self._task_data.get('cover', '')
+            if url != "":
+                data = self._client.bambu_cloud.download(url)
+                self._client._device.cover_image.set_jpeg(data)
+
+            self.print_weight = self._task_data.get('weight', self.print_weight)
+            self.print_length = self._task_data.get('length', self.print_length)
+            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+
+            # "startTime": "2023-12-21T19:02:16Z"
+            cloud_start_time_str = self._task_data.get('startTime', "")
+            if cloud_start_time_str != "" and self.start_time == None:
+                local_dt = parser.parse(cloud_start_time_str).astimezone(tz.tzlocal())
+                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
+                local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                self.start_time = local_dt
+
+    
+@dataclass
+class Info:
+    """Return all device related content"""
+
+    # Device state
+    serial: str
+    wifi_signal: int
+    device_type: str
+    hw_ver: str
+    sw_ver: str
+    online: bool
+    new_version_state: int
+    mqtt_mode: str
+    nozzle_diameter: str
+    nozzle_type: str
+
+    def __init__(self, client):
+        self._client = client
+
+        self.serial = self._client._serial
+        self.device_type = self._client._device_type
+        self.wifi_signal = 0
+        self.device_type = self._client._device_type
+        self.hw_ver = "unknown"
+        self.sw_ver = "unknown"
+        self.online = False
+        self.new_version_state = 0
+        self.mqtt_mode = "local" if self._client._local_mqtt else "bambu_cloud"
+        self.nozzle_diameter = "unknown"
+        self.nozzle_type = "unknown"
+
+    def set_online(self, online):
+        if self.online != online:
+            self.online = online
+            if self._client.callback is not None:
+                self._client.callback("event_printer_data_update")
+
+    def info_update(self, data):
+        """Update from dict"""
+
+        # Example payload:
+        # {
+        # "info": {
+        #     "command": "get_version",
+        #     "sequence_id": "20004",
+        #     "module": [
+        #     {
+        #         "name": "ota",
+        #         "project_name": "C11",
+        #         "sw_ver": "01.02.03.00",
+        #         "hw_ver": "OTA",
+        #         "sn": "..."
+        #     },
+        #     {
+        #         "name": "esp32",
+        #         "project_name": "C11",
+        #         "sw_ver": "00.03.12.31",
+        #         "hw_ver": "AP04",
+        #         "sn": "..."
+        #     },
+        modules = data.get("module", [])
+        self.device_type = get_printer_type(modules, self.device_type)
+        self.hw_ver = get_hw_version(modules, self.hw_ver)
+        self.sw_ver = get_sw_version(modules, self.sw_ver)
+        if self._client.callback is not None:
+            self._client.callback("event_printer_info_update")
+
+    def print_update(self, data) -> bool:
+        """Update from dict"""
+        old_data = f"{self.__dict__}"
+
+        # Example payload:
+        # {
+        #     "print": {
+        #         "gcode_start_time": "1681479206",
+        #         "gcode_state": "IDLE",
+        #         "mc_print_stage": "1",
+        #         "mc_percent": 100,
+        #         "mc_remaining_time": 0,
+        #         "wifi_signal": "-53dBm",
+        #         "print_type": "idle",
+        #         "ipcam": {
+        #             "ipcam_dev": "1",
+        #             "ipcam_record": "enable"
+        #             "resolution": "1080p",        # X1 only
+        #             "timelapse": "disable"
+        #         },
+        #         "layer_num": 0,
+        #         "total_layer_num": 0,
+
+        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
 
         # Version data is provided differently for X1 and P1
         # P1P example:
@@ -601,73 +682,9 @@ class Info:
 
         return (old_data != f"{self.__dict__}")
 
-    # The task list is of the following form with a 'hits' array with typical 20 entries.
-    #
-    # "total": 531,
-    # "hits": [
-    #     {
-    #     "id": 35237965,
-    #     "designId": 0,
-    #     "designTitle": "",
-    #     "instanceId": 0,
-    #     "modelId": "REDACTED",
-    #     "title": "REDACTED",
-    #     "cover": "REDACTED",
-    #     "status": 4,
-    #     "feedbackStatus": 0,
-    #     "startTime": "2023-12-21T19:02:16Z",
-    #     "endTime": "2023-12-21T19:02:35Z",
-    #     "weight": 34.62,
-    #     "length": 1161,
-    #     "costTime": 10346,
-    #     "profileId": 35276233,
-    #     "plateIndex": 1,
-    #     "plateName": "",
-    #     "deviceId": "REDACTED",
-    #     "amsDetailMapping": [
-    #         {
-    #         "ams": 4,
-    #         "sourceColor": "F4D976FF",
-    #         "targetColor": "F4D976FF",
-    #         "filamentId": "GFL99",
-    #         "filamentType": "PLA",
-    #         "targetFilamentType": "",
-    #         "weight": 34.62
-    #         }
-    #     ],
-    #     "mode": "cloud_file",
-    #     "isPublicProfile": false,
-    #     "isPrintable": true,
-    #     "deviceModel": "P1P",
-    #     "deviceName": "Bambu P1P",
-    #     "bedType": "textured_plate"
-    #     },
-
-    def _update_task_data(self):
-        if self.has_bambu_cloud_connection:
-            LOGGER.debug("Updating cloud task data")
-            self._task_data = self.client.bambu_cloud.get_tasklist_for_printer(self.serial)
-            url = self._task_data.get('cover', '')
-            if url != "":
-                data = self.client.bambu_cloud.download(url)
-                self.device.cover_image.set_jpeg(data)
-
-            self.print_weight = self._task_data.get('weight', self.print_weight)
-            self.print_length = self._task_data.get('length', self.print_length)
-            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
-
-            # "startTime": "2023-12-21T19:02:16Z"
-            cloud_start_time_str = self._task_data.get('startTime', "")
-            if cloud_start_time_str != "" and self.start_time == None:
-                cloud_start_time = parser.parse(cloud_start_time_str)
-                local_dt = cloud_start_time.astimezone(tz.tzlocal())
-                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
-                local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                self.start_time = local_dt
-
     @property
     def has_bambu_cloud_connection(self) -> bool:
-        return self.client.bambu_cloud.auth_token != ""
+        return self._client.bambu_cloud.auth_token != ""
 
 @dataclass
 class AMSInstance:
@@ -691,7 +708,7 @@ class AMSList:
     """Return all AMS related info"""
 
     def __init__(self, client):
-        self.client = client
+        self._client = client
         self.tray_now = 0
         self.data = [None] * 4
 
@@ -752,8 +769,8 @@ class AMSList:
                         self.data[index].hw_version = module['hw_ver']
 
         if received_ams_info:
-            if self.client.callback is not None:
-                self.client.callback("event_ams_info_update")
+            if self._client.callback is not None:
+                self._client.callback("event_ams_info_update")
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -899,7 +916,7 @@ class ExternalSpool(AMSTray):
 
     def __init__(self, client):
         super().__init__()
-        self.client = client
+        self._client = client
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -949,7 +966,7 @@ class Speed:
 
     def __init__(self, client):
         """Load from dict"""
-        self.client = client
+        self._client = client
         self._id = 2
         self.name = get_speed_name(2)
         self.modifier = 100
@@ -971,9 +988,9 @@ class Speed:
                 self.name = speed
                 command = SPEED_PROFILE_TEMPLATE
                 command['print']['param'] = f"{id}"
-                self.client.publish(command)
-                if self.client.callback is not None:
-                    self.client.callback("event_speed_update")
+                self._client.publish(command)
+                if self._client.callback is not None:
+                    self._client.callback("event_speed_update")
 
 
 @dataclass
@@ -1007,7 +1024,7 @@ class HMSList:
     """Return all HMS related info"""
 
     def __init__(self, client):
-        self.client = client
+        self._client = client
         self.count = 0
         self.errors = {}
         self.errors["Count"] = 0
@@ -1045,8 +1062,8 @@ class HMSList:
                 self.errors = errors
                 if self.count != 0:
                     LOGGER.warning(f"HMS ERRORS: {errors}")
-                if self.client.callback is not None:
-                    self.client.callback("event_hms_errors")
+                if self._client.callback is not None:
+                    self._client.callback("event_hms_errors")
                 return True
         
         return False
@@ -1055,16 +1072,16 @@ class HMSList:
 class ChamberImage:
     """Returns the latest jpeg data from the P1P camera"""
     def __init__(self, client):
-        self.client = client
+        self._client = client
         self._bytes = bytearray()
         self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
-        LOGGER.debug(f"JPEG RECEIVED: {self.client._device.info.device_type}")
+        LOGGER.debug(f"JPEG RECEIVED: {self._client._device.info.device_type}")
         self._bytes = bytes
         self._image_last_updated = datetime.now()
-        if self.client.callback is not None:
-            self.client.callback("event_printer_chamber_image_update")
+        if self._client.callback is not None:
+            self._client.callback("event_printer_chamber_image_update")
     
     def get_jpeg(self) -> bytearray:
         return self._bytes
@@ -1077,11 +1094,11 @@ class CoverImage:
     """Returns the cover image from the Bambu API"""
 
     def __init__(self, client):
-        self.client = client
+        self._client = client
         self._bytes = bytearray()
         self._image_last_updated = datetime.now()
-        if self.client.callback is not None:
-            self.client.callback("event_printer_cover_image_update")
+        if self._client.callback is not None:
+            self._client.callback("event_printer_cover_image_update")
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
