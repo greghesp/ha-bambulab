@@ -1137,7 +1137,7 @@ class HomeFlag:
 
     def print_update(self, data: dict) -> bool:
         old_data = f"{self.__dict__}"
-        self._value = int(data.get("homeflag", self._value))
+        self._value = int(data.get("home_flag", str(self._value)))
         return (old_data != f"{self.__dict__}")
 
     @property
