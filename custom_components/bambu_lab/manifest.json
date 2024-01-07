@@ -7,8 +7,8 @@
   "config_flow": true,
   "dependencies": [
     "device_automation",
-    "mqtt",
-    "ffmpeg"
+    "ffmpeg",
+    "mqtt"
   ],
   "documentation": "https://github.com/greghesp/ha-bambulab",
   "iot_class": "local_push",

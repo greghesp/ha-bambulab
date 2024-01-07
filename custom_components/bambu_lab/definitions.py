@@ -58,6 +58,7 @@ class BambuLabBinarySensorEntityDescriptionMixIn:
 @dataclass
 class BambuLabBinarySensorEntityDescription(BinarySensorEntityDescription, BambuLabBinarySensorEntityDescriptionMixIn):
     """Sensor entity description for Bambu Lab."""
+    available_fn: Callable[..., bool] = lambda _: True
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
 
@@ -97,8 +98,9 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         translation_key="door_open",
         device_class=BinarySensorDeviceClass.DOOR,
         entity_category=EntityCategory.DIAGNOSTIC,
+        available_fn=lambda self: self.coordinator.get_model().home_flag.door_open_available,
         is_on_fn=lambda self: self.coordinator.get_model().home_flag.door_open,
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DOOR_SENSOR)
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DOOR_SENSOR),
     ),
 )
 

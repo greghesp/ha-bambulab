@@ -1142,10 +1142,20 @@ class HomeFlag:
 
     @property
     def door_open(self) -> bool or None:
-        if not self._client._device.supports_feature(Features.DOOR_SENSOR):
+        if not self.door_open_available:
             return None
 
         return (self._value & Home_Flag_Values.DOOR_OPEN) != 0
+
+    @property
+    def door_open_available(self) -> bool:
+        if not self._client._device.supports_feature(Features.DOOR_SENSOR):
+            return False
+        
+        if (self._device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00")):
+            return False
+
+        return True
 
     @property
     def x_axis_homed(self) -> bool:
