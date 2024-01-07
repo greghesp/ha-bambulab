@@ -554,7 +554,6 @@ class Info:
         self.serial = self._client._serial
         self.device_type = self._client._device_type
         self.wifi_signal = 0
-        self.device_type = self._client._device_type
         self.hw_ver = "unknown"
         self.sw_ver = "unknown"
         self.online = False
