@@ -73,25 +73,27 @@ class ChamberImageThread(threading.Thread):
     def run(self):
         LOGGER.debug("{self._client._device.info.device_type}: Chamber image thread started.")
 
-        d = bytearray()
+        auth_data = bytearray()
 
         username = 'bblp'
         access_code = self._client._access_code
         hostname = self._client.host
         port = 6000
+        MAX_CONNECT_ATTEMPTS = 12
+        connect_attempts = 0
 
-        d += struct.pack("<I", 0x40)   # '@'\0\0\0
-        d += struct.pack("<I", 0x3000) # \0'0'\0\0
-        d += struct.pack("<I", 0)      # \0\0\0\0
-        d += struct.pack("<I", 0)      # \0\0\0\0
+        auth_data += struct.pack("<I", 0x40)   # '@'\0\0\0
+        auth_data += struct.pack("<I", 0x3000) # \0'0'\0\0
+        auth_data += struct.pack("<I", 0)      # \0\0\0\0
+        auth_data += struct.pack("<I", 0)      # \0\0\0\0
         for i in range(0, len(username)):
-            d += struct.pack("<c", username[i].encode('ascii'))
+            auth_data += struct.pack("<c", username[i].encode('ascii'))
         for i in range(0, 32 - len(username)):
-            d += struct.pack("<x")
+            auth_data += struct.pack("<x")
         for i in range(0, len(access_code)):
-            d += struct.pack("<c", access_code[i].encode('ascii'))
+            auth_data += struct.pack("<c", access_code[i].encode('ascii'))
         for i in range(0, 32 - len(access_code)):
-            d += struct.pack("<x")
+            auth_data += struct.pack("<x")
 
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         ctx.check_hostname = False
@@ -115,12 +117,13 @@ class ChamberImageThread(threading.Thread):
         # Bytes payload_size-2:payload_size = jpeg_end magic bytes
         #
         # Further attempts to receive data will get SSLWantReadError until a new image is ready (1-2 seconds later)
-        while not self._stop_event.is_set():
+        while connect_attempts < MAX_CONNECT_ATTEMPTS and not self._stop_event.is_set():
             try:
                 with socket.create_connection((hostname, port)) as sock:
                     try:
+                        connect_attempts += 1
                         sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
-                        sslSock.write(d)
+                        sslSock.write(auth_data)
                         img = None
                         payload_size = 0
 
@@ -173,14 +176,17 @@ class ChamberImageThread(threading.Thread):
 
                         elif len(dr) == 16:
                             # We got the header bytes. Get the expected payload size from it and create the image buffer bytearray.
+                            # Reset connect_attempts now we know the connect was successful.
+                            connect_attempts = 0
                             img = bytearray()
                             payload_size = int.from_bytes(dr[0:3], byteorder='little')
 
                         elif len(dr) == 0:
                             # This occurs if the wrong access code was provided.
                             LOGGER.error(f"{self._client._device.info.device_type}: Chamber image connection rejected by the printer. Check provided access code and IP address.")
-                            LOGGER.info(f"{self._client._device.info.device_type}: Chamber image thread exited.")
-                            return
+                            # Sleep for a short while and then re-attempt the connection.
+                            time.sleep(5)
+                            break
 
                         else:
                             LOGGER.error(f"{self._client._device.info.device_type}: UNEXPECTED DATA RECEIVED: {len(dr)}")
