@@ -279,7 +279,10 @@
         "name": "Gcode filename"
       },
       "print_bed_type": {
-        "name": "Print bed type"
+        "name": "Print bed type",
+        "state": {
+          "textured_plate": "Textured plate"
+        }
       },
       "print_length": {
         "name": "Print length"
