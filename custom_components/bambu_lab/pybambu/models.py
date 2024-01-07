@@ -3,6 +3,7 @@ import math
 from dataclasses import dataclass
 from datetime import datetime
 from dateutil import parser, tz
+from packaging import version
 
 from .utils import \
     search, \
@@ -1119,6 +1120,7 @@ class HomeFlag:
     """Contains parsed values from the homeflag sensor"""
     value: int
     _sw_ver: str
+    _device_type: str 
 
     def __init__(self, client):
         self.value = 0
@@ -1137,13 +1139,13 @@ class HomeFlag:
 
     @property
     def door(self):
-        if not self.device_type.startswith("X1"):
-            # we do not know if P1S has the sensor
+        if not self._device_type.startswith("X1"):
+            # P1S does not have a door sensor.
             return "none"
 
         elif (self._sw_ver == "unknown" or
                 # X1E has different firmware versioning than X1/X1C
-              (self.device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00"))):
+              (self._device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00"))):
             return "unknown"
 
         return "open" if ((self.value >> 23) & 0x1) == 1 else "closed"

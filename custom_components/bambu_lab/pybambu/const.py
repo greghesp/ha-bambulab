@@ -253,7 +253,7 @@ HMS_AMS_ERRORS = {
     "0700_6000_0002_0001": "AMS1 slot 1 is overloaded. The filament may be tangled or the spool may be stuck.",
 }
 
-class Home_Flag(Enum):
+class Home_Flag_Values(Enum):
     X_AXIS                      = 0x00000001,
     Y_AXIS                      = 0x00000002,
     Z_AXIS                      = 0x00000004,
