@@ -76,39 +76,38 @@ class Device:
             self.get_version_data = data
 
     def supports_feature(self, feature):
-        match feature:
-            case Features.AUX_FAN:
-                return True
-            case Features.CHAMBER_LIGHT:
-                return True
-            case Features.CHAMBER_FAN:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
-            case Features.CHAMBER_TEMPERATURE:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
-            case Features.CURRENT_STAGE:
-                return True
-            case Features.PRINT_LAYERS:
-                return True
-            case Features.AMS:
-                return len(self.ams.data) != 0
-            case Features.EXTERNAL_SPOOL:
-                return True
-            case Features.K_VALUE:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
-            case Features.START_TIME:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
-            case Features.START_TIME_GENERATED:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
-            case Features.AMS_TEMPERATURE:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
-            case Features.CAMERA_RTSP:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
-            case Features.CAMERA_IMAGE:
-                return (self._client.host != "") and (self._client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
-            case Features.DOOR_SENSOR:
-                return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
-            case Features.MANUAL_MODE:
-                return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
+        if feature == Features.AUX_FAN:
+            return True
+        elif feature == Features.CHAMBER_LIGHT:
+            return True
+        elif feature == Features.CHAMBER_FAN:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
+        elif feature == Features.CHAMBER_TEMPERATURE:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+        elif feature == Features.CURRENT_STAGE:
+            return True
+        elif feature == Features.PRINT_LAYERS:
+            return True
+        elif feature == Features.AMS:
+            return len(self.ams.data) != 0
+        elif feature == Features.EXTERNAL_SPOOL:
+            return True
+        elif feature == Features.K_VALUE:
+            return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
+        elif feature == Features.START_TIME:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+        elif feature == Features.START_TIME_GENERATED:
+            return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
+        elif feature == Features.AMS_TEMPERATURE:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+        elif feature == Features.CAMERA_RTSP:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+        elif feature == Features.CAMERA_IMAGE:
+            return (self._client.host != "") and (self._client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini")
+        elif feature == Features.DOOR_SENSOR:
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+        elif feature == Features.MANUAL_MODE:
+            return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1Mini"
 
         return False
     
@@ -311,16 +310,15 @@ class Fans:
         percentage = round(percentage / 10) * 10
         command = fan_percentage_to_gcode(fan, percentage)
 
-        match fan:
-            case FansEnum.PART_COOLING:
-                self._cooling_fan_speed = percentage
-                self._cooling_fan_speed_override_time = datetime.now()
-            case FansEnum.AUXILIARY:
-                self._aux_fan_speed_override = percentage
-                self._aux_fan_speed_override_time = datetime.now()
-            case FansEnum.CHAMBER:
-                self._chamber_fan_speed_override = percentage
-                self._chamber_fan_speed_override_time = datetime.now()
+        if fan == FansEnum.PART_COOLING:
+            self._cooling_fan_speed = percentage
+            self._cooling_fan_speed_override_time = datetime.now()
+        elif fan == FansEnum.AUXILIARY:
+            self._aux_fan_speed_override = percentage
+            self._aux_fan_speed_override_time = datetime.now()
+        elif fan == FansEnum.CHAMBER:
+            self._chamber_fan_speed_override = percentage
+            self._chamber_fan_speed_override_time = datetime.now()
 
         LOGGER.debug(command)
         self._client.publish(command)
@@ -329,24 +327,23 @@ class Fans:
             self._client.callback("event_printer_data_update")
 
     def get_fan_speed(self, fan: FansEnum) -> int:
-        match fan:
-            case FansEnum.PART_COOLING:
-                if self._cooling_fan_speed_override_time is not None:
-                    return self._cooling_fan_speed_override
-                else:
-                    return self._cooling_fan_speed_percentage
-            case FansEnum.AUXILIARY:
-                if self._aux_fan_speed_override_time is not None:
-                    return self._aux_fan_speed_override
-                else:
-                    return self._aux_fan_speed_percentage
-            case FansEnum.CHAMBER:
-                if self._chamber_fan_speed_override_time is not None:
-                    return self._chamber_fan_speed_override
-                else:
-                    return self._chamber_fan_speed_percentage
-            case FansEnum.HEATBREAK:
-                return self._heatbreak_fan_speed_percentage
+        if fan == FansEnum.PART_COOLING:
+            if self._cooling_fan_speed_override_time is not None:
+                return self._cooling_fan_speed_override
+            else:
+                return self._cooling_fan_speed_percentage
+        elif fan == FansEnum.AUXILIARY:
+            if self._aux_fan_speed_override_time is not None:
+                return self._aux_fan_speed_override
+            else:
+                return self._aux_fan_speed_percentage
+        elif fan == FansEnum.CHAMBER:
+            if self._chamber_fan_speed_override_time is not None:
+                return self._chamber_fan_speed_override
+            else:
+                return self._chamber_fan_speed_percentage
+        elif fan == FansEnum.HEATBREAK:
+            return self._heatbreak_fan_speed_percentage
 
 @dataclass
 class PrintJob:

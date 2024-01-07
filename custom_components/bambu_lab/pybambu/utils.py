@@ -23,13 +23,12 @@ def fan_percentage(speed):
 
 def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
     """Converts a fan speed percentage to the gcode command to set that"""
-    match fan:
-        case FansEnum.PART_COOLING:
-            fanString = "P1"
-        case FansEnum.AUXILIARY:
-            fanString = "P2"
-        case FansEnum.CHAMBER:
-            fanString = "P3"
+    if fan == FansEnum.PART_COOLING:
+        fanString = "P1"
+    elif fan == FansEnum.AUXILIARY:
+        fanString = "P2"
+    elif fan == FansEnum.CHAMBER:
+        fanString = "P3"
 
     percentage = round(percentage / 10) * 10
     speed = math.ceil(255 * percentage / 100)

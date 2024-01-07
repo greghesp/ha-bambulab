@@ -98,13 +98,12 @@ class BambuLabFan(BambuLabEntity, FanEntity):
 
     def _set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
-        match self.entity_description.key:
-            case "cooling_fan":
-                self.coordinator.get_model().fans.set_fan_speed(FansEnum.PART_COOLING, percentage)
-            case "aux_fan":
-                self.coordinator.get_model().fans.set_fan_speed(FansEnum.AUXILIARY, percentage)
-            case "chamber_fan":
-                self.coordinator.get_model().fans.set_fan_speed(FansEnum.CHAMBER, percentage)
+        if self.entity_description.key == "cooling_fan":
+            self.coordinator.get_model().fans.set_fan_speed(FansEnum.PART_COOLING, percentage)
+        elif self.entity_description.key == "aux_fan":
+            self.coordinator.get_model().fans.set_fan_speed(FansEnum.AUXILIARY, percentage)
+        elif self.entity_description.key == "chamber_fan":
+            self.coordinator.get_model().fans.set_fan_speed(FansEnum.CHAMBER, percentage)
 
     def set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
