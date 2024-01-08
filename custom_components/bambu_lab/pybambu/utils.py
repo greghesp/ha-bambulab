@@ -81,8 +81,14 @@ def get_generic_AMS_HMS_error_code(hms_code: str):
     code2 = int(hms_code[5:9], 16)
     code3 = int(hms_code[10:14], 16)
     code4 = int(hms_code[15:19], 16)
+
+    ams_code = f"{code1 & 0xFFF8:0>4X}_{code2 & 0xF8FF:0>4X}_{code3:0>4X}_{code4:0>4X}"
+    ams_error = HMS_AMS_ERRORS.get(ams_code, "")
+    if ams_error != "":
+        return ams_code
+
     # 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
-    return f"{code1 & 0xFFF8:0>4X}_{code2 & 0xF8FF:0>4X}_{code3:0>4X}_{code4:0>4X}"
+    return f"{code1:0>4X}_{code2:0>4X}_{code3:0>4X}_{code4:0>4X}"
 
 
 def get_printer_type(modules, default):
