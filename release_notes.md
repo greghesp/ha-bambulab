@@ -1,8 +1,9 @@
 ### V2.0.7
 - Add nozzle type & diameter sensors
-- Get correct start time on integration start with P1/A1 from Bambu Cloud
+- Get correct start time on integration start with P1/A1 from Bambu Cloud and fix incorrect end time in some cases.
 - Expose X1 enclosure door state as a diagnostic sensor
 - Reconnect to printer for chamber image if connection drops
+- Fixes
 
 ### V2.0.5
 - Rework P1/A1 chamber image handling to be a lot more efficient and maybe fix broken tight loop bug
