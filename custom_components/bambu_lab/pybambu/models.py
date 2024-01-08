@@ -559,7 +559,7 @@ class Info:
     online: bool
     new_version_state: int
     mqtt_mode: str
-    nozzle_diameter: str
+    nozzle_diameter: float
     nozzle_type: str
 
     def __init__(self, client):
@@ -573,7 +573,7 @@ class Info:
         self.online = False
         self.new_version_state = 0
         self.mqtt_mode = "local" if self._client._local_mqtt else "bambu_cloud"
-        self.nozzle_diameter = "unknown"
+        self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
 
     def set_online(self, online):
@@ -691,7 +691,7 @@ class Info:
 
         # "nozzle_diameter": "0.4",
         # "nozzle_type": "hardened_steel",
-        self.nozzle_diameter = data.get("nozzle_diameter", self.nozzle_diameter)
+        self.nozzle_diameter = float(data.get("nozzle_diameter", self.nozzle_diameter))
         self.nozzle_type = data.get("nozzle_type", self.nozzle_type)
 
         return (old_data != f"{self.__dict__}")
