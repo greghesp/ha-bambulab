@@ -392,6 +392,8 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="nozzle_diameter",
         translation_key="nozzle_diameter",
+        native_unit_of_measurement=UnitOfLength.MILLIMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().info.nozzle_diameter
     ),
