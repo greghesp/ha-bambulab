@@ -369,9 +369,9 @@ class PrintJob:
         self.gcode_state = "unknown"
         self.gcode_file = ""
         self.subtask_name = ""
-        self.end_time = None
         self.start_time = None
-        self.remaining_time = -1
+        self.end_time = None
+        self.remaining_time = 0
         self.current_layer = 0
         self.total_layers = 0
         self.print_error = 0
@@ -410,22 +410,25 @@ class PrintJob:
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
 
-        if data.get("mc_remaining_time") is not None:
-            existing_remaining_time = self.remaining_time
-            self.remaining_time = data.get("mc_remaining_time")
-            if existing_remaining_time != self.remaining_time:
-                self.end_time = get_end_time(self.remaining_time)
-
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-
-        # Generate the end_time from the remaining_time mqtt payload value if present.
-        if data.get("gcode_start_time") is not None:
-            self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Initialize task data at startup.
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
             self._update_task_data()
+
+        # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
+        if data.get("gcode_start_time") is not None:
+            self.start_time = get_start_time(int(data.get("gcode_start_time")))
+
+        # Generate the end_time from the remaining_time mqtt payload value if present.
+        if data.get("mc_remaining_time") is not None:
+            existing_remaining_time = self.remaining_time
+            self.remaining_time = data.get("mc_remaining_time")
+            if self.start_time is None:
+                self.end_time = None
+            elif existing_remaining_time != self.remaining_time:
+                self.end_time = get_end_time(self.remaining_time)
 
         # Handle print start
         previously_idle = previous_gcode_state == "IDLE" or previous_gcode_state == "FAILED" or previous_gcode_state == "FINISH"
@@ -443,6 +446,7 @@ class PrintJob:
 
             # Update task data if bambu cloud connected
             self._update_task_data()
+
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
@@ -526,13 +530,20 @@ class PrintJob:
             self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
 
             # "startTime": "2023-12-21T19:02:16Z"
-            cloud_start_time_str = self._task_data.get('startTime', "")
-            if cloud_start_time_str != "" and self.start_time == None:
-                local_dt = parser.parse(cloud_start_time_str).astimezone(tz.tzlocal())
+            cloud_time_str = self._task_data.get('startTime', "")
+            if cloud_time_str != "" and self.start_time == None:
+                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
                 # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
                 local_dt = datetime.fromtimestamp(local_dt.timestamp())
                 self.start_time = local_dt
 
+            # "endTime": "2023-12-21T19:02:35Z"
+            cloud_time_str = self._task_data.get('endTime', "")
+            if cloud_time_str != "" and self.end_time == None:
+                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
+                local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                self.end_time = local_dt
     
 @dataclass
 class Info:
