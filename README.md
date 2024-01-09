@@ -112,30 +112,36 @@ instead of OAuth.
 | Tray 2            |                   |
 | Tray 3            |                   |
 | Tray 4            |                   |
-|                   |                   |
-| Tray attributes:  |                   |
-| Color             |                   |
-| Empty             |                   |
-| K Value           | P1/A1 only        |
-| Max Nozzle Temp   |                   |
-| Min Nozzle TEmp   |                   |
-| Name              |                   |
-| Type              |                   |
+
+| Tray attributes:    | Notes             |
+|---------------------|-------------------|
+| Color               |                   |
+| Empty               |                   |
+| K Value             | P1/A1 only        |
+| Name                |                   |
+| Nozzle max temp     |                   |
+| Nozzle min temp     |                   |
+| Remaining Filament  |                   |
+| Spool serial number |                   |
+| Type                |                   |
 
 ### External Spool
 
 | Sensor            | Notes             |
 |-------------------|-------------------|
 | External Spool    |                   |
-|                   |                   |
-| Tray attributes:  |                   |
-| Color             |                   |
-| Empty             |                   |
-| K Value           | P1/A1 only        |
-| Max Nozzle Temp   |                   |
-| Min Nozzle TEmp   |                   |
-| Name              |                   |
-| Type              |                   |
+
+| Tray attributes:    | Notes             |
+|---------------------|-------------------|
+| Color               |                   |
+| Empty               |                   |
+| K Value             | P1/A1 only        |
+| Name                |                   |
+| Nozzle max temp     |                   |
+| Nozzle min temp     |                   |
+| Remaining Filament  |                   |
+| Spool serial number |                   |
+| Type                |                   |
 
 ### Diagnostics
 
