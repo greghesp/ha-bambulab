@@ -1,5 +1,5 @@
 ### V2.0.8
-- ???
+- Fix missing chamber image on A1 Mini
 
 ### V2.0.7
 - Add nozzle type & diameter sensors
