@@ -7,8 +7,8 @@
   "config_flow": true,
   "dependencies": [
     "device_automation",
-    "mqtt",
-    "ffmpeg"
+    "ffmpeg",
+    "mqtt"
   ],
   "documentation": "https://github.com/greghesp/ha-bambulab",
   "iot_class": "local_push",
@@ -18,6 +18,6 @@
       "st": "urn:bambulab-com:device:3dprinter:1"
     }
   ],
-  "version": "2.0.5"
+  "version": "2.0.7"
 }
 

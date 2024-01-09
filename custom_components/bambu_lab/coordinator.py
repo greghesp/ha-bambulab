@@ -60,44 +60,43 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug("Starting MQTT")
 
         def event_handler(event):
-            match event:
-                case "event_printer_info_update":
-                    self._update_device_info()
-                    if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
-                        self._update_external_spool_info()
+            if event == "event_printer_info_update":
+                self._update_device_info()
+                if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
+                    self._update_external_spool_info()
 
-                case "event_ams_info_update":
-                    self._update_ams_info()
+            elif event == "event_ams_info_update":
+                self._update_ams_info()
 
-                case "event_light_update":
-                    self._update_data()
+            elif event == "event_light_update":
+                self._update_data()
 
-                case "event_speed_update":
-                    self._update_data()
+            elif event == "event_speed_update":
+                self._update_data()
 
-                case "event_printer_data_update":
-                    self._update_data()
+            elif event == "event_printer_data_update":
+                self._update_data()
 
-                case "event_hms_errors":
-                    self._update_hms()
+            elif event == "event_hms_errors":
+                self._update_hms()
 
-                case "event_print_canceled":
-                    self.PublishDeviceTriggerEvent(event)
+            elif event == "event_print_canceled":
+                self.PublishDeviceTriggerEvent(event)
 
-                case "event_print_failed":
-                    self.PublishDeviceTriggerEvent(event)
+            elif event == "event_print_failed":
+                self.PublishDeviceTriggerEvent(event)
 
-                case "event_print_finished":
-                    self.PublishDeviceTriggerEvent(event)
+            elif event == "event_print_finished":
+                self.PublishDeviceTriggerEvent(event)
 
-                case "event_print_started":
-                    self.PublishDeviceTriggerEvent(event)
+            elif event == "event_print_started":
+                self.PublishDeviceTriggerEvent(event)
 
-                case "event_printer_chamber_image_update":
-                    self._update_data()
+            elif event == "event_printer_chamber_image_update":
+                self._update_data()
 
-                case "event_printer_cover_image_update":
-                    self._update_data()
+            elif event == "event_printer_cover_image_update":
+                self._update_data()
 
 
         async def listen():

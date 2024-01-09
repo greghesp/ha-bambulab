@@ -59,7 +59,7 @@ instead of OAuth.
 | Nozzle        |                   |
 | Target Nozzle |                   |
 
-### Print Progress
+### Print Data and Progress 
 
 | Sensor            | Notes                       |
 |-------------------|-----------------------------|
@@ -72,20 +72,16 @@ instead of OAuth.
 | Start Time        | Simulated on P1/A1          |
 | Remainining Time  |                             |
 | End Time          |                             |
-
-### Status
-
-| Sensor        | Notes             |
-|---------------|-------------------|
-| Current Stage |                   |
-| Print Status  |                   |
-| Cover Image   |                   |
-| Print Weight  |                   |
+| Current Stage     |                             |
+| Print Status      |                             |
+| Cover Image       |                             |
 
 ### Miscellaneous
 
 | Sensor            | Notes             |
 |-------------------|-------------------|
+| Nozzle Diameters  |                   |
+| Nozzle Type       |                   |
 | Speed Profile     |                   |
 | Timelapse Active  |                   |
 
@@ -145,6 +141,7 @@ instead of OAuth.
 
 | Sensor                    | Notes                                                          |
 |---------------------------|----------------------------------------------------------------|
+| Enclosure Door            | X1 only                                                        |
 | Firmware Update Available |                                                                |
 | Force Refresh             |                                                                |
 | HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
