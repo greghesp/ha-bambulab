@@ -61,20 +61,20 @@ instead of OAuth.
 
 ### Print Data and Progress 
 
-| Sensor            | Notes                       |
-|-------------------|-----------------------------|
-| Current Layer     |                             |
-| Total Layer Count |                             |
-| Print Progress    |                             |
-| Print Weight      |                             |
-| Print Length      |                             |
-| Print Bed Type    | Bed choice in the print job |
-| Start Time        | Simulated on P1/A1          |
-| Remainining Time  |                             |
-| End Time          |                             |
-| Current Stage     |                             |
-| Print Status      |                             |
-| Cover Image       | Bambu Cloud Only            |
+| Sensor            | Notes                                                    |
+|-------------------|----------------------------------------------------------|
+| Current Layer     |                                                          |
+| Total Layer Count |                                                          |
+| Print Progress    |                                                          |
+| Print Weight      | With Bambu credentials                                   |
+| Print Length      | With Bambu credentials                                   |
+| Print Bed Type    | Bed choice in the print job                              |
+| Start Time        | Simulated on P1/A1. More accurate with Bambu credentials |
+| Remainining Time  |                                                          |
+| End Time          |                                                          |
+| Current Stage     |                                                          |
+| Print Status      |                                                          |
+| Cover Image       | With Bambu credentials                                   |
 
 ### Miscellaneous
 
