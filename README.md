@@ -21,9 +21,9 @@ If you feel this integration was valuable and want to support it in other ways, 
 
 To install this integration, add this GitHub Repo to the HACS Custom Repositories, or click the badge above.
 
-For configuration, you'll ideally use your Bambu Credentials for the simplest setup. You can then optionally provide the printers local IP address to enable local direct to printer connection and to enable the P1/A1 camera support. 
+For configuration, you'll ideally use your Bambu Credentials for the simplest setup and the most features as some sensors are supported by data from your Bambu cloud account print history. You can also, optionally, provide the printer's local IP address to enable the more efficient and reliable direct to printer connection for the printer sensor data and to enable the P1/A1 chamber image support.
 
-However, the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode. If you fall into any of these, select the Lan Mode Configuration connection option. You will need to provide:
+However, the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode. If you fall into any of these categories, select the Lan Mode Configuration connection option. You will need to manually provide:
 - Printer Serial Number - can be found in the printer settings or in Bambu Studio.
 - Local printer IP address - can be found in the printer network settings (LAN).
 - Access Code - can be found in the Printer settings.
