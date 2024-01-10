@@ -1,3 +1,6 @@
+### V2.0.9
+- Fix mishandling of printer power off/on when connected to bambu cloud mqtt.
+
 ### V2.0.8
 - Fix missing chamber image on A1 Mini
 

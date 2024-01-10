@@ -133,6 +133,9 @@ class ChamberImageThread(threading.Thread):
                             LOGGER.error(f"{self._client._device.info.device_type}: Socket error: {status}")
                     except socket.error as e:
                         LOGGER.error(f"{self._client._device.info.device_type}: Socket error: {e}")
+                        # Sleep to allow printer to stabilize during boot when it may fail these connection attempts repeatedly.
+                        time.sleep(1)
+                        continue
 
                     sslSock.setblocking(False)
                     while not self._stop_event.is_set():
@@ -323,6 +326,9 @@ class BambuClient:
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
         LOGGER.info("On Connect: Connected to Broker")
+        self._on_connect()
+
+    def _on_connect(self):
         self._connected = True
         self.subscribe_and_request_info()
 
@@ -356,6 +362,9 @@ class BambuClient:
                       result_code: int):
         """Called when MQTT Disconnects"""
         LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
+        self._on_disconnect()
+    
+    def _on_disconnect(self):
         self._connected = False
         self._device.info.set_online(False)
         if self._watchdog is not None:
@@ -387,14 +396,14 @@ class BambuClient:
             if json_data.get("event"):
                 # These are events from the bambu cloud mqtt feed and allow us to detect when a local
                 # device has connected/disconnected (e.g. turned on/off)
+                LOGGER.debug(f"EVENT DATA: {message}")
                 if json_data.get("event").get("event") == "client.connected":
                     LOGGER.debug("Client connected event received.")
-                    self._device.info.set_online(True)
-                    self.subscribe_and_request_info()
-                    self._watchdog.received_data()
+                    self._on_disconnect() # We aren't guaranteed to recieve a client.disconnected event.
+                    self._on_connect()
                 elif json_data.get("event").get("event") == "client.disconnected":
                     LOGGER.debug("Client disconnected event received.")
-                    self._device.info.set_online(False)
+                    self._on_disconnect()
             else:
                 self._device.info.set_online(True)
                 self._watchdog.received_data()
