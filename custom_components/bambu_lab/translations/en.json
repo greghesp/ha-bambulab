@@ -400,14 +400,14 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Remaining filament"
           },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       },

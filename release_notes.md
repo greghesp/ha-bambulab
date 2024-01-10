@@ -1,3 +1,6 @@
+### V2.0.8
+- Fix missing chamber image on A1 Mini
+
 ### V2.0.7
 - Add nozzle type & diameter sensors
 - Get correct start time on integration start with P1/A1 from Bambu Cloud and fix incorrect end time in some cases.

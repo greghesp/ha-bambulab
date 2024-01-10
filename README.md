@@ -21,9 +21,9 @@ If you feel this integration was valuable and want to support it in other ways, 
 
 To install this integration, add this GitHub Repo to the HACS Custom Repositories, or click the badge above.
 
-For configuration, you'll ideally use your Bambu Credentials for the simplest setup. You can then optionally provide the printers local IP address to enable local direct to printer connection and to enable the P1/A1 camera support. 
+For configuration, you'll ideally use your Bambu Credentials for the simplest setup and the most features as some sensors are supported by data from your Bambu cloud account print history. You can also, optionally, provide the printer's local IP address to enable the more efficient and reliable direct to printer connection for the printer sensor data and to enable the P1/A1 chamber image support.
 
-However, the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode. If you fall into any of these, select the Lan Mode Configuration connection option. You will need to provide:
+However, the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode. If you fall into any of these categories, select the Lan Mode Configuration connection option. You will need to manually provide:
 - Printer Serial Number - can be found in the printer settings or in Bambu Studio.
 - Local printer IP address - can be found in the printer network settings (LAN).
 - Access Code - can be found in the Printer settings.
@@ -61,20 +61,20 @@ instead of OAuth.
 
 ### Print Data and Progress 
 
-| Sensor            | Notes                       |
-|-------------------|-----------------------------|
-| Current Layer     |                             |
-| Total Layer Count |                             |
-| Print Progress    |                             |
-| Print Weight      |                             |
-| Print Length      |                             |
-| Print Bed Type    | Bed choice in the print job |
-| Start Time        | Simulated on P1/A1          |
-| Remainining Time  |                             |
-| End Time          |                             |
-| Current Stage     |                             |
-| Print Status      |                             |
-| Cover Image       |                             |
+| Sensor            | Notes                                                    |
+|-------------------|----------------------------------------------------------|
+| Current Layer     |                                                          |
+| Total Layer Count |                                                          |
+| Print Progress    |                                                          |
+| Print Weight      | With Bambu credentials                                   |
+| Print Length      | With Bambu credentials                                   |
+| Print Bed Type    | Bed choice in the print job                              |
+| Start Time        | Simulated on P1/A1. More accurate with Bambu credentials |
+| Remainining Time  |                                                          |
+| End Time          |                                                          |
+| Current Stage     |                                                          |
+| Print Status      |                                                          |
+| Cover Image       | With Bambu credentials                                   |
 
 ### Miscellaneous
 
@@ -112,30 +112,36 @@ instead of OAuth.
 | Tray 2            |                   |
 | Tray 3            |                   |
 | Tray 4            |                   |
-|                   |                   |
-| Tray attributes:  |                   |
-| Color             |                   |
-| Empty             |                   |
-| K Value           | P1/A1 only        |
-| Max Nozzle Temp   |                   |
-| Min Nozzle TEmp   |                   |
-| Name              |                   |
-| Type              |                   |
+
+| Tray attributes:    | Notes             |
+|---------------------|-------------------|
+| Color               |                   |
+| Empty               |                   |
+| K Value             | P1/A1 only        |
+| Name                |                   |
+| Nozzle max temp     |                   |
+| Nozzle min temp     |                   |
+| Remaining Filament  |                   |
+| Spool serial number |                   |
+| Type                |                   |
 
 ### External Spool
 
 | Sensor            | Notes             |
 |-------------------|-------------------|
 | External Spool    |                   |
-|                   |                   |
-| Tray attributes:  |                   |
-| Color             |                   |
-| Empty             |                   |
-| K Value           | P1/A1 only        |
-| Max Nozzle Temp   |                   |
-| Min Nozzle TEmp   |                   |
-| Name              |                   |
-| Type              |                   |
+
+| Tray attributes:    | Notes             |
+|---------------------|-------------------|
+| Color               |                   |
+| Empty               |                   |
+| K Value             | P1/A1 only        |
+| Name                |                   |
+| Nozzle max temp     |                   |
+| Nozzle min temp     |                   |
+| Remaining Filament  |                   |
+| Spool serial number |                   |
+| Type                |                   |
 
 ### Diagnostics
 
