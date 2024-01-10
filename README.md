@@ -74,7 +74,7 @@ instead of OAuth.
 | End Time          |                             |
 | Current Stage     |                             |
 | Print Status      |                             |
-| Cover Image       |                             |
+| Cover Image       | Bambu Cloud Only            |
 
 ### Miscellaneous
 
