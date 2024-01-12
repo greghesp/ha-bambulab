@@ -106,7 +106,7 @@ def get_printer_type(modules, default):
         if esp32.get("hw_ver") == "AP05":
             if esp32.get("project_name") == "N1":
                 LOGGER.debug("Device is A1 Mini")
-                return "A1Mini"
+                return "A1MINI"
             elif esp32.get("project_name") == "N2S":
                 LOGGER.debug("Device is A1")
                 return "A1"
