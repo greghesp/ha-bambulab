@@ -1,5 +1,5 @@
 ### V2.0.11
-- ???
+- Fix mishandled new current stage values
 
 ### V2.0.10
 - Fix A1 Mini still missing chamber image
