@@ -396,7 +396,6 @@ class BambuClient:
             if json_data.get("event"):
                 # These are events from the bambu cloud mqtt feed and allow us to detect when a local
                 # device has connected/disconnected (e.g. turned on/off)
-                LOGGER.debug(f"EVENT DATA: {message}")
                 if json_data.get("event").get("event") == "client.connected":
                     LOGGER.debug("Client connected event received.")
                     self._on_disconnect() # We aren't guaranteed to recieve a client.disconnected event.
