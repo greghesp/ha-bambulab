@@ -9,10 +9,10 @@ from .utils import \
     search, \
     fan_percentage, \
     fan_percentage_to_gcode, \
+    get_current_stage, \
     get_filament_name, \
     get_printer_type, \
     get_speed_name, \
-    get_stage_action, \
     get_hw_version, \
     get_sw_version, \
     get_start_time, \
@@ -20,7 +20,7 @@ from .utils import \
     get_HMS_error_text, \
     get_generic_AMS_HMS_error_code
     
-from .const import LOGGER, Features, FansEnum, Home_Flag_Values, SdcardState, SPEED_PROFILE
+from .const import LOGGER, Features, FansEnum, Home_Flag_Values, SdcardState, SPEED_PROFILE, GCODE_STATE_OPTIONS
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
 
 class Device:
@@ -405,7 +405,7 @@ class PrintJob:
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
-        if self.gcode_state == "":
+        if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
             self.gcode_state = "unknown"
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
@@ -519,7 +519,7 @@ class PrintJob:
 
     def _update_task_data(self):
         if self._client.bambu_cloud.auth_token != "":
-            self._task_data = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)
+            self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
             url = self._task_data.get('cover', '')
             if url != "":
                 data = self._client.bambu_cloud.download(url)
@@ -544,6 +544,19 @@ class PrintJob:
                 # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
                 local_dt = datetime.fromtimestamp(local_dt.timestamp())
                 self.end_time = local_dt
+
+            # tasks = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)
+            # last_seen_id: int = 39749292
+            # new_hours: float = 0
+            # for task in tasks:
+            #     LOGGER.debug(f"{task['id']}")
+            #     if task['id'] == last_seen_id:
+            #         break
+            #     start_time = parser.parse(task['startTime'])
+            #     end_time = parser.parse(task['endTime'])
+            #     duration = end_time - start_time
+            #     new_hours += duration.seconds / 60 / 60
+            # LOGGER.debug(f"HISTORY HOURS: {new_hours}")
     
 @dataclass
 class Info:
@@ -1018,7 +1031,7 @@ class StageAction:
         """Load from dict"""
         self._id = 255
         self._print_type = ""
-        self.description = get_stage_action(self._id)
+        self.description = get_current_stage(self._id)
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -1029,7 +1042,7 @@ class StageAction:
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
             self._id = 255
-        self.description = get_stage_action(self._id)
+        self.description = get_current_stage(self._id)
 
         return (old_data != f"{self.__dict__}")
 

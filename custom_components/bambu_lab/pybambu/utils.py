@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timedelta
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, HMS_AMS_ERRORS, LOGGER, FansEnum
+from .const import CURRENT_STAGE_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, HMS_AMS_ERRORS, LOGGER, FansEnum
 from .commands import SEND_GCODE_TEMPLATE
 
 
@@ -51,14 +51,14 @@ def get_filament_name(idx):
     return result
 
 
-def get_speed_name(_id):
+def get_speed_name(id):
     """Return the human-readable name for a speed id"""
-    return SPEED_PROFILE.get(int(_id), "standard")
+    return SPEED_PROFILE.get(int(id), "standard")
 
 
-def get_stage_action(_id):
+def get_current_stage(id) -> str:
     """Return the human-readable description for a stage action"""
-    return ACTION_IDS.get(_id, "unknown")
+    return CURRENT_STAGE_IDS.get(int(id), "unknown")
 
 
 def get_HMS_error_text(hms_code: str):
@@ -75,6 +75,7 @@ def get_HMS_error_text(hms_code: str):
         return ams_error
 
     return HMS_ERRORS.get(hms_code, "unknown")
+
 
 def get_generic_AMS_HMS_error_code(hms_code: str):
     code1 = int(hms_code[0:4], 16)
