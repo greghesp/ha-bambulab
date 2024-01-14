@@ -319,6 +319,9 @@
       "end_time": {
         "name": "End time"
       },
+      "total_usage_hours": {
+        "name": "Total usage hours"
+      },
       "current_layer": {
         "name": "Current layer"
       },

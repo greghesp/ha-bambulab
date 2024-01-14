@@ -253,7 +253,7 @@ class BambuClient:
     _camera = None
 
     def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
-                 username: str, auth_token: str, access_code: str):
+                 username: str, auth_token: str, access_code: str, estimated_usage_hours: float = 0):
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
@@ -263,10 +263,11 @@ class BambuClient:
         self._username = username
         self._connected = False
         self._device_type = device_type
-        self._device = Device(self)
+        self._estimated_usage_hours = estimated_usage_hours
         self._port = 1883
         self._refreshed = False
         self._manual_refresh_mode = False
+        self._device = Device(self)
         self.bambu_cloud = BambuCloud(region, email, username, auth_token)
 
     @property

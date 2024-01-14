@@ -362,6 +362,7 @@ class PrintJob:
     print_weight: int
     print_length: int
     print_bed_type: str
+    estimated_usage_hours: float
 
     def __init__(self, client):
         self._client = client
@@ -378,6 +379,7 @@ class PrintJob:
         self.print_weight = 0
         self.print_length = 0
         self.print_bed_type = "unknown"
+        self.estimated_usage_hours = client._estimated_usage_hours
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -447,7 +449,6 @@ class PrintJob:
             # Update task data if bambu cloud connected
             self._update_task_data()
 
-
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -472,6 +473,14 @@ class PrintJob:
         if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
             if self._client.callback is not None:
                self._client.callback("event_print_finished")
+
+        if currently_idle and not previously_idle:
+            if self._client.callback is not None:
+                if self.start_time != None:
+                    duration = self.end_time - self.start_time
+                    new_hours = duration.seconds / 60 / 60
+                    LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
+                    self.estimated_usage_hours += new_hours
 
         return (old_data != f"{self.__dict__}")
 
@@ -519,7 +528,7 @@ class PrintJob:
 
     def _update_task_data(self):
         if self._client.bambu_cloud.auth_token != "":
-            self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
+            self._task_data = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)[0]
             url = self._task_data.get('cover', '')
             if url != "":
                 data = self._client.bambu_cloud.download(url)
@@ -545,19 +554,13 @@ class PrintJob:
                 local_dt = datetime.fromtimestamp(local_dt.timestamp())
                 self.end_time = local_dt
 
-            # tasks = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)
-            # last_seen_id: int = 39749292
-            # new_hours: float = 0
-            # for task in tasks:
-            #     LOGGER.debug(f"{task['id']}")
-            #     if task['id'] == last_seen_id:
-            #         break
-            #     start_time = parser.parse(task['startTime'])
-            #     end_time = parser.parse(task['endTime'])
-            #     duration = end_time - start_time
-            #     new_hours += duration.seconds / 60 / 60
-            # LOGGER.debug(f"HISTORY HOURS: {new_hours}")
-    
+            new_hours: float = 0
+            start_time = parser.parse(self._task_data['startTime'])
+            end_time = parser.parse(self._task_data['endTime'])
+            duration = end_time - start_time
+            new_hours += duration.seconds / 60 / 60
+            LOGGER.debug(f"LATEST TASK USAGE HOURS: {new_hours}")    
+
 @dataclass
 class Info:
     """Return all device related content"""
