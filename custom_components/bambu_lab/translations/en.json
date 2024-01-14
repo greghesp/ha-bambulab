@@ -324,7 +324,7 @@
         "name": "End time"
       },
       "total_usage_hours": {
-        "name": "Total usage hours"
+        "name": "Total usage"
       },
       "current_layer": {
         "name": "Current layer"

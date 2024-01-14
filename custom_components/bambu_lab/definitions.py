@@ -261,6 +261,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="total_usage_hours",
         translation_key="total_usage_hours",
         icon="mdi:clock",
+        native_unit_of_measurement=UnitOfTime.HOURS,
         available_fn=lambda self: self.coordinator.get_model().print_job.estimated_usage_hours is not None,
         value_fn=lambda self: self.coordinator.get_model().print_job.estimated_usage_hours,
     ),
