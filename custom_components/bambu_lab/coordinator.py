@@ -43,7 +43,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                   email = entry.options.get('email', ''),
                                   username = entry.options['username'],
                                   auth_token = entry.options['auth_token'],
-                                  access_code = entry.options['access_code'])
+                                  access_code = entry.options['access_code'],
+                                  estimated_usage_hours = float(entry.options.get('usage_hours', 0)))
             
         self._updatedDevice = False
         self.data = self.get_model()

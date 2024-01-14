@@ -474,7 +474,7 @@ class PrintJob:
             if self._client.callback is not None:
                self._client.callback("event_print_finished")
 
-        if currently_idle and not previously_idle:
+        if currently_idle and not previously_idle and previous_gcode_state != "unknown":
             if self._client.callback is not None:
                 if self.start_time != None:
                     duration = self.end_time - self.start_time

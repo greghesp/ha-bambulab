@@ -251,6 +251,7 @@ class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
     _watchdog = None
     _camera = None
+    _estimated_usage_hours: float
 
     def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
                  username: str, auth_token: str, access_code: str, estimated_usage_hours: float = 0):
