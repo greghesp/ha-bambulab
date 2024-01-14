@@ -42,7 +42,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                   username = entry.options['username'],
                                   auth_token = entry.options['auth_token'],
                                   access_code = entry.options['access_code'],
-                                  estimated_usage_hours = float(entry.options.get('usage_hours', 0)))
+                                  usage_hours = float(entry.options.get('usage_hours', 0)))
             
         self._updatedDevice = False
         self.data = self.get_model()
@@ -77,14 +77,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._update_data()
 
                 # Check is usage hours change and persist to config entry if it did.
-                latest_usage_hours = self.get_model().print_job.estimated_usage_hours
+                latest_usage_hours = self.get_model().info.usage_hours
                 if latest_usage_hours != float(self.config_entry.options.get('usage_hours', 0)):
-                    self.config_entry.options['usage_hours'] = latest_usage_hours
+                    options = dict(self.config_entry.options)
+                    options['usage_hours'] = latest_usage_hours
                     self._hass.config_entries.async_update_entry(
                         entry=self.config_entry,
                         title=self.get_model().info.serial,
                         data=self.config_entry.data,
-                        options=self.config_entry.options)
+                        options=options)
 
             elif event == "event_hms_errors":
                 self._update_hms()

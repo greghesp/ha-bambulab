@@ -245,7 +245,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         default_access_code = device['dev_access_code'] if user_input is None else user_input['access_code']
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
-        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
@@ -308,7 +308,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
         fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
-        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(

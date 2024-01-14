@@ -362,7 +362,6 @@ class PrintJob:
     print_weight: int
     print_length: int
     print_bed_type: str
-    estimated_usage_hours: float
 
     def __init__(self, client):
         self._client = client
@@ -379,7 +378,6 @@ class PrintJob:
         self.print_weight = 0
         self.print_length = 0
         self.print_bed_type = "unknown"
-        self.estimated_usage_hours = client._estimated_usage_hours
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -479,7 +477,7 @@ class PrintJob:
                 duration = self.end_time - self.start_time
                 new_hours = duration.seconds / 60 / 60
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
-                self.estimated_usage_hours += new_hours
+                self._client._device.info.usage_hours += new_hours
 
         return (old_data != f"{self.__dict__}")
 
@@ -570,6 +568,7 @@ class Info:
     mqtt_mode: str
     nozzle_diameter: float
     nozzle_type: str
+    usage_hours: float
 
     def __init__(self, client):
         self._client = client
@@ -584,6 +583,7 @@ class Info:
         self.mqtt_mode = "local" if self._client._local_mqtt else "bambu_cloud"
         self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
+        self.usage_hours = client._usage_hours
 
     def set_online(self, online):
         if self.online != online:
