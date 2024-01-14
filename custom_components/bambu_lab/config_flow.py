@@ -228,7 +228,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "host": user_input.get('host', ""),
                         "local_mqtt": user_input.get('local_mqtt', False),
                         "auth_token": self._bambu_cloud.auth_token,
-                        "access_code": user_input['access_code']
+                        "access_code": user_input['access_code'],
+                        "usage_hours": float(user_input['usage_hours'])
                 }
                 title = device['dev_id']
                 return self.async_create_entry(
@@ -244,6 +245,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         default_access_code = device['dev_access_code'] if user_input is None else user_input['access_code']
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
+        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu_Lan",
@@ -287,7 +290,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "host": user_input['host'],
                         "local_mqtt": True,
                         "auth_token": "",
-                        "access_code": user_input['access_code']
+                        "access_code": user_input['access_code'],
+                        "usage_hours": float(user_input['usage_hours'])
                 }
 
                 title = user_input['serial']
@@ -304,6 +308,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
         fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
+        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",

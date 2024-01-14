@@ -49,7 +49,8 @@
         "data": {
           "local_mqtt": "Connect locally to the printer:",
           "host": "Local Printer IP Address:",
-          "access_code": "Access Code:"
+          "access_code": "Access Code:",
+          "usage_hours": "Current usage hours (optional):"
         }
       },
       "Lan": {
@@ -58,7 +59,8 @@
         "data": {
           "serial": "Serial Number:",
           "host": "Local Printer IP Address:",
-          "access_code": "Access Code:"
+          "access_code": "Access Code:",
+          "usage_hours": "Current usage hours (optional):"
         }
       }
     }
