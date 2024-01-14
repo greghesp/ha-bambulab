@@ -60,6 +60,7 @@ class ChamberImage(ImageEntity, BambuLabEntity):
         """The time when the image was last updated."""
         return self.coordinator.get_model().chamber_image.get_last_update_time()
 
+
 class CoverImage(ImageEntity, BambuLabEntity):
     """Representation of an image entity."""
 

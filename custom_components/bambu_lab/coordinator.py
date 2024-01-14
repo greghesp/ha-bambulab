@@ -28,11 +28,9 @@ from .pybambu.const import Features
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
     _updatedDevice: bool
-    _entry: ConfigEntry
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._hass = hass
-        self._entry = entry
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
 
         self.client = BambuClient(device_type = entry.data["device_type"],
@@ -77,6 +75,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
             elif event == "event_printer_data_update":
                 self._update_data()
+
+                # Check is usage hours change and persist to config entry if it did.
+                latest_usage_hours = self.get_model().print_job.estimated_usage_hours
+                if latest_usage_hours != float(self.config_entry.options.get('usage_hours', 0)):
+                    self.config_entry.options['usage_hours'] = latest_usage_hours
+                    self._hass.config_entries.async_update_entry(
+                        entry=self.config_entry,
+                        title=self.get_model().info.serial,
+                        data=self.config_entry.data,
+                        options=self.config_entry.options)
 
             elif event == "event_hms_errors":
                 self._update_hms()
@@ -170,10 +178,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for index in range (0, len(device.ams.data)):
             if device.ams.data[index] is not None:
                 LOGGER.debug(f"Initialize AMS {index+1}")
-                hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
+                hadevice = dev_reg.async_get_or_create(config_entry_id=self.config_entry.entry_id,
                                                     identifiers={(DOMAIN, device.ams.data[index].serial)})
-                serial = self._entry.data["serial"]
-                device_type = self._entry.data["device_type"]
+                serial = self.config_entry.data["serial"]
+                device_type = self.config_entry.data["device_type"]
                 dev_reg.async_update_device(hadevice.id,
                                             name=f"{device_type}_{serial}_AMS_{index+1}",
                                             model="AMS",
@@ -185,10 +193,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _update_external_spool_info(self):
         dev_reg = device_registry.async_get(self._hass)
-        hadevice = dev_reg.async_get_or_create(config_entry_id=self._entry.entry_id,
+        hadevice = dev_reg.async_get_or_create(config_entry_id=self.config_entry.entry_id,
                                                identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")})
-        serial = self._entry.data["serial"]
-        device_type = self._entry.data["device_type"]
+        serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
         dev_reg.async_update_device(hadevice.id,
                                     name=f"{device_type}_{serial}_ExternalSpool",
                                     model="External Spool",
@@ -214,8 +222,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.get_device()
 
     def get_printer_device(self):
-        printer_serial = self._entry.data["serial"]
-        device_type = self._entry.data["device_type"]
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
 
         return DeviceInfo(
             identifiers={(DOMAIN, printer_serial)},
@@ -227,8 +235,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def get_ams_device(self, index):
-        printer_serial = self._entry.data["serial"]
-        device_type = self._entry.data["device_type"]
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
         device_name=f"{device_type}_{printer_serial}_AMS_{index+1}"
 
         return DeviceInfo(
@@ -242,8 +250,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def get_virtual_tray_device(self):
-        printer_serial = self._entry.data["serial"]
-        device_type = self._entry.data["device_type"]
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
         device_name=f"{device_type}_{printer_serial}_ExternalSpool"
 
         return DeviceInfo(

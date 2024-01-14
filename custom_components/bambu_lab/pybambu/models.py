@@ -475,12 +475,11 @@ class PrintJob:
                self._client.callback("event_print_finished")
 
         if currently_idle and not previously_idle and previous_gcode_state != "unknown":
-            if self._client.callback is not None:
-                if self.start_time != None:
-                    duration = self.end_time - self.start_time
-                    new_hours = duration.seconds / 60 / 60
-                    LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
-                    self.estimated_usage_hours += new_hours
+            if self.start_time != None:
+                duration = self.end_time - self.start_time
+                new_hours = duration.seconds / 60 / 60
+                LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
+                self.estimated_usage_hours += new_hours
 
         return (old_data != f"{self.__dict__}")
 
@@ -554,12 +553,6 @@ class PrintJob:
                 local_dt = datetime.fromtimestamp(local_dt.timestamp())
                 self.end_time = local_dt
 
-            new_hours: float = 0
-            start_time = parser.parse(self._task_data['startTime'])
-            end_time = parser.parse(self._task_data['endTime'])
-            duration = end_time - start_time
-            new_hours += duration.seconds / 60 / 60
-            LOGGER.debug(f"LATEST TASK USAGE HOURS: {new_hours}")    
 
 @dataclass
 class Info:
