@@ -171,7 +171,8 @@ class BambuCloud:
         data = self.get_tasklist_for_printer(deviceId)
         if len(data) != 0:
             return data[0]
-        return {}
+        LOGGER.debug("No tasks found for printer")
+        return None
 
     def get_tasklist_for_printer(self, deviceId: str) -> dict:
         LOGGER.debug(f"Getting task list from Bambu Cloud for Printer: {deviceId}")

@@ -525,31 +525,39 @@ class PrintJob:
 
     def _update_task_data(self):
         if self._client.bambu_cloud.auth_token != "":
-            self._task_data = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)[0]
-            url = self._task_data.get('cover', '')
-            if url != "":
-                data = self._client.bambu_cloud.download(url)
-                self._client._device.cover_image.set_jpeg(data)
+            self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
+            if self._task_data is None:
+                self._client._device.cover_image.set_jpeg(None)
+                self.print_weight = 0
+                self.print_length = 0
+                self.print_bed_type = "unknown"
+                self.start_time = None
+                self.end_time = None
+            else:
+                url = self._task_data.get('cover', '')
+                if url != "":
+                    data = self._client.bambu_cloud.download(url)
+                    self._client._device.cover_image.set_jpeg(data)
 
-            self.print_weight = self._task_data.get('weight', self.print_weight)
-            self.print_length = self._task_data.get('length', self.print_length)
-            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+                self.print_weight = self._task_data.get('weight', self.print_weight)
+                self.print_length = self._task_data.get('length', self.print_length)
+                self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
 
-            # "startTime": "2023-12-21T19:02:16Z"
-            cloud_time_str = self._task_data.get('startTime', "")
-            if cloud_time_str != "" and self.start_time == None:
-                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
-                local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                self.start_time = local_dt
+                # "startTime": "2023-12-21T19:02:16Z"
+                cloud_time_str = self._task_data.get('startTime', "")
+                if cloud_time_str != "" and self.start_time == None:
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.start_time = local_dt
 
-            # "endTime": "2023-12-21T19:02:35Z"
-            cloud_time_str = self._task_data.get('endTime', "")
-            if cloud_time_str != "" and self.end_time == None:
-                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
-                local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                self.end_time = local_dt
+                # "endTime": "2023-12-21T19:02:35Z"
+                cloud_time_str = self._task_data.get('endTime', "")
+                if cloud_time_str != "" and self.end_time == None:
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.end_time = local_dt
 
 
 @dataclass
