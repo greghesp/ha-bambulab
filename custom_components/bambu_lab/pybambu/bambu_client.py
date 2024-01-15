@@ -16,7 +16,10 @@ from typing import Any
 import paho.mqtt.client as mqtt
 
 from .bambu_cloud import BambuCloud
-from .const import LOGGER, Features
+from .const import (
+    LOGGER,
+    Features,
+)
 from .models import Device
 from .commands import (
     GET_VERSION,
@@ -251,9 +254,10 @@ class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
     _watchdog = None
     _camera = None
+    _usage_hours: float
 
     def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
-                 username: str, auth_token: str, access_code: str):
+                 username: str, auth_token: str, access_code: str, usage_hours: float = 0):
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
@@ -263,10 +267,11 @@ class BambuClient:
         self._username = username
         self._connected = False
         self._device_type = device_type
-        self._device = Device(self)
+        self._usage_hours = usage_hours
         self._port = 1883
         self._refreshed = False
         self._manual_refresh_mode = False
+        self._device = Device(self)
         self.bambu_cloud = BambuCloud(region, email, username, auth_token)
 
     @property
@@ -396,7 +401,6 @@ class BambuClient:
             if json_data.get("event"):
                 # These are events from the bambu cloud mqtt feed and allow us to detect when a local
                 # device has connected/disconnected (e.g. turned on/off)
-                LOGGER.debug(f"EVENT DATA: {message}")
                 if json_data.get("event").get("event") == "client.connected":
                     LOGGER.debug("Client connected event received.")
                     self._on_disconnect() # We aren't guaranteed to recieve a client.disconnected event.
@@ -469,8 +473,8 @@ class BambuClient:
         result: queue.Queue[bool] = queue.Queue(maxsize=1)
 
         def on_message(client, userdata, message):
-            LOGGER.debug(f"Try Connection: Got '{message}'")
             json_data = json.loads(message.payload)
+            LOGGER.debug(f"Try Connection: Got '{json_data}'")
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.info_update(data=json_data.get("info"))

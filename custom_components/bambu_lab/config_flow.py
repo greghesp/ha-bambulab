@@ -32,6 +32,7 @@ from .pybambu import BambuClient, BambuCloud
 CONFIG_VERSION = 2
 
 BOOLEAN_SELECTOR = BooleanSelector()
+NUMBER_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.NUMBER))
 TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
 EMAIL_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.EMAIL))
 PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
@@ -227,7 +228,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "host": user_input.get('host', ""),
                         "local_mqtt": user_input.get('local_mqtt', False),
                         "auth_token": self._bambu_cloud.auth_token,
-                        "access_code": user_input['access_code']
+                        "access_code": user_input['access_code'],
+                        "usage_hours": float(user_input['usage_hours'])
                 }
                 title = device['dev_id']
                 return self.async_create_entry(
@@ -243,6 +245,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         default_access_code = device['dev_access_code'] if user_input is None else user_input['access_code']
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
+        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu_Lan",
@@ -286,7 +290,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "host": user_input['host'],
                         "local_mqtt": True,
                         "auth_token": "",
-                        "access_code": user_input['access_code']
+                        "access_code": user_input['access_code'],
+                        "usage_hours": float(user_input['usage_hours'])
                 }
 
                 title = user_input['serial']
@@ -303,6 +308,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
         fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
+        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",
@@ -441,19 +448,17 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 
                     if success:
                         LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
-                        data = {
-                                "device_type": self.config_entry.data['device_type'],
-                                "serial": self.config_entry.data['serial']
-                        }
+                        data = dict(self.config_entry.data)
                         options = {
-                                "region": self.region,
-                                "email": self.email,
-                                "username": self._bambu_cloud.username,
-                                "name": device['name'],
-                                "host": user_input['host'],
-                                "local_mqtt": user_input.get('local_mqtt', False),
-                                "auth_token": self._bambu_cloud.auth_token,
-                                "access_code": user_input['access_code']
+                            "region": self.region,
+                            "email": self.email,
+                            "username": self._bambu_cloud.username,
+                            "name": device['name'],
+                            "host": user_input['host'],
+                            "local_mqtt": user_input.get('local_mqtt', False),
+                            "auth_token": self._bambu_cloud.auth_token,
+                            "access_code": user_input['access_code'],
+                            "usage_hours": float(user_input['usage_hours'])
                         }
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
@@ -485,6 +490,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('access_code', default=self.config_entry.options.get('access_code', access_code))] = TEXT_SELECTOR
         fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
+        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu_Lan",
@@ -513,19 +520,17 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if success:
                 LOGGER.debug("Options Flow: Writing entry")
-                data = {
-                        "device_type": self.config_entry.data['device_type'],
-                        "serial": self.config_entry.data['serial']
-                }
+                data = dict(self.config_entry.data)
                 options = {
-                        "region": self.config_entry.options.get('region', ''),
-                        "email": self.config_entry.options.get('email', ''),
-                        "username": self.config_entry.options.get('username', ''),
-                        "name": self.config_entry.options.get('name', ''),
-                        "host": user_input['host'],
-                        "local_mqtt": True,
-                        "auth_token": self.config_entry.options.get('auth_token', ''),
-                        "access_code": user_input['access_code']
+                    "region": self.config_entry.options.get('region', ''),
+                    "email": self.config_entry.options.get('email', ''),
+                    "username": self.config_entry.options.get('username', ''),
+                    "name": self.config_entry.options.get('name', ''),
+                    "host": user_input['host'],
+                    "local_mqtt": True,
+                    "auth_token": self.config_entry.options.get('auth_token', ''),
+                    "access_code": user_input['access_code'],
+                    "usage_hours": float(user_input['usage_hours'])
                 }
 
                 title = self.config_entry.data['serial']
@@ -546,6 +551,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
+        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
             step_id="Lan",

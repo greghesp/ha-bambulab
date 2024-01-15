@@ -5,23 +5,37 @@ from datetime import datetime
 from dateutil import parser, tz
 from packaging import version
 
-from .utils import \
-    search, \
-    fan_percentage, \
-    fan_percentage_to_gcode, \
-    get_filament_name, \
-    get_printer_type, \
-    get_speed_name, \
-    get_stage_action, \
-    get_hw_version, \
-    get_sw_version, \
-    get_start_time, \
-    get_end_time, \
-    get_HMS_error_text, \
-    get_generic_AMS_HMS_error_code
-    
-from .const import LOGGER, Features, FansEnum, Home_Flag_Values, SdcardState, SPEED_PROFILE
-from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
+from .utils import (
+    search,
+    fan_percentage,
+    fan_percentage_to_gcode,
+    get_current_stage,
+    get_filament_name,
+    get_printer_type,
+    get_speed_name,
+    get_hw_version,
+    get_sw_version,
+    get_start_time,
+    get_end_time,
+    get_HMS_error_text,
+    get_generic_AMS_HMS_error_code,
+    get_HMS_severity,
+    get_HMS_module,
+)
+from .const import (
+    LOGGER,
+    Features,
+    FansEnum,
+    Home_Flag_Values,
+    SdcardState,
+    SPEED_PROFILE,
+    GCODE_STATE_OPTIONS,
+)
+from .commands import (
+    CHAMBER_LIGHT_ON,
+    CHAMBER_LIGHT_OFF,
+    SPEED_PROFILE_TEMPLATE,
+)
 
 class Device:
     def __init__(self, client):
@@ -405,7 +419,7 @@ class PrintJob:
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
-        if self.gcode_state == "":
+        if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
             self.gcode_state = "unknown"
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
@@ -447,7 +461,6 @@ class PrintJob:
             # Update task data if bambu cloud connected
             self._update_task_data()
 
-
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -472,6 +485,13 @@ class PrintJob:
         if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
             if self._client.callback is not None:
                self._client.callback("event_print_finished")
+
+        if currently_idle and not previously_idle and previous_gcode_state != "unknown":
+            if self.start_time != None:
+                duration = self.end_time - self.start_time
+                new_hours = duration.seconds / 60 / 60
+                LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
+                self._client._device.info.usage_hours += new_hours
 
         return (old_data != f"{self.__dict__}")
 
@@ -519,32 +539,43 @@ class PrintJob:
 
     def _update_task_data(self):
         if self._client.bambu_cloud.auth_token != "":
-            self._task_data = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)
-            url = self._task_data.get('cover', '')
-            if url != "":
-                data = self._client.bambu_cloud.download(url)
-                self._client._device.cover_image.set_jpeg(data)
+            self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
+            if self._task_data is None:
+                LOGGER.debug("No bambu cloud task data found for printer.")
+                self._client._device.cover_image.set_jpeg(None)
+                self.print_weight = 0
+                self.print_length = 0
+                self.print_bed_type = "unknown"
+                self.start_time = None
+                self.end_time = None
+            else:
+                LOGGER.debug("Updating bambu cloud task data found for printer.")
+                url = self._task_data.get('cover', '')
+                if url != "":
+                    data = self._client.bambu_cloud.download(url)
+                    self._client._device.cover_image.set_jpeg(data)
 
-            self.print_weight = self._task_data.get('weight', self.print_weight)
-            self.print_length = self._task_data.get('length', self.print_length)
-            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+                self.print_weight = self._task_data.get('weight', self.print_weight)
+                self.print_length = self._task_data.get('length', self.print_length)
+                self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
 
-            # "startTime": "2023-12-21T19:02:16Z"
-            cloud_time_str = self._task_data.get('startTime', "")
-            if cloud_time_str != "" and self.start_time == None:
-                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
-                local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                self.start_time = local_dt
+                # "startTime": "2023-12-21T19:02:16Z"
+                cloud_time_str = self._task_data.get('startTime', "")
+                if cloud_time_str != "" and self.start_time == None:
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.start_time = local_dt
 
-            # "endTime": "2023-12-21T19:02:35Z"
-            cloud_time_str = self._task_data.get('endTime', "")
-            if cloud_time_str != "" and self.end_time == None:
-                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
-                local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                self.end_time = local_dt
-    
+                # "endTime": "2023-12-21T19:02:35Z"
+                cloud_time_str = self._task_data.get('endTime', "")
+                if cloud_time_str != "" and self.end_time == None:
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.end_time = local_dt
+
+
 @dataclass
 class Info:
     """Return all device related content"""
@@ -561,6 +592,7 @@ class Info:
     mqtt_mode: str
     nozzle_diameter: float
     nozzle_type: str
+    usage_hours: float
 
     def __init__(self, client):
         self._client = client
@@ -575,6 +607,7 @@ class Info:
         self.mqtt_mode = "local" if self._client._local_mqtt else "bambu_cloud"
         self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
+        self.usage_hours = client._usage_hours
 
     def set_online(self, online):
         if self.online != online:
@@ -1018,7 +1051,7 @@ class StageAction:
         """Load from dict"""
         self._id = 255
         self._print_type = ""
-        self.description = get_stage_action(self._id)
+        self.description = get_current_stage(self._id)
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -1029,7 +1062,7 @@ class StageAction:
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
             self._id = 255
-        self.description = get_stage_action(self._id)
+        self.description = get_current_stage(self._id)
 
         return (old_data != f"{self.__dict__}")
 
@@ -1066,11 +1099,14 @@ class HMSList:
             index: int = 0
             for hms in hmsList:
                 index = index + 1
-                attr = hms['attr']
-                code = hms['code']
-                hms_error = f'{int(attr / 0x10000):0>4X}_{attr & 0xFFFF:0>4X}_{int(code / 0x10000):0>4X}_{code & 0xFFFF:0>4X}'  # 0300_0100_0001_0007
-                errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
-                errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(hms_error)}"
+                attr = int(hms['attr'])
+                code = int(hms['code'])
+                hms_notif = HMSNotification(attr=attr, code=code)
+                errors[f"{index}-Error"] = f"HMS_{hms_notif.hms_code}: {get_HMS_error_text(hms_notif.hms_code)}"
+                errors[f"{index}-Wiki"] = hms_notif.wiki_url
+                errors[f"{index}-Severity"] = hms_notif.severity
+                LOGGER.debug(f("HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}"))
+                #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure               
 
             if self.errors != errors:
                 self.errors = errors
@@ -1081,6 +1117,36 @@ class HMSList:
                 return True
         
         return False
+
+
+@dataclass
+class HMSNotification:
+    """Return an HMS object and all associated details"""
+
+    def __init__(self, attr: int = 0, code: int = 0):
+        self.attr = attr
+        self.code = code
+
+    @property
+    def severity(self):
+        return get_HMS_severity(self.code)
+
+    @property
+    def module(self):
+        return get_HMS_module(self.attr)
+
+    @property
+    def hms_code(self):
+        if self.attr > 0 and self.code > 0:
+            return f'{int(self.attr / 0x10000):0>4X}_{self.attr & 0xFFFF:0>4X}_{int(self.code / 0x10000):0>4X}_{self.code & 0xFFFF:0>4X}' # 0300_0100_0001_0007
+        return ""
+
+    @property
+    def wiki_url(self):
+        if self.attr > 0 and self.code > 0:
+            return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(self.hms_code)}"
+        return ""
+
 
 @dataclass
 class ChamberImage:

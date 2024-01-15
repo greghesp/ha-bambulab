@@ -282,6 +282,9 @@
       "end_time": {
         "name": "Heure de fin"
       },
+      "total_usage_hours": {
+        "name": "Utilisation totale"
+      },
       "current_layer": {
         "name": "Couche actuelle"
       },

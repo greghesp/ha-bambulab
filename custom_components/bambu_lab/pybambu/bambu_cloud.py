@@ -166,13 +166,22 @@ class BambuCloud:
             raise ValueError(response.status_code)
         return response.json()
     
+    def get_latest_task_for_printer(self, deviceId: str) -> dict:
+        LOGGER.debug(f"Getting latest task from Bambu Cloud for Printer: {deviceId}")
+        data = self.get_tasklist_for_printer(deviceId)
+        if len(data) != 0:
+            return data[0]
+        LOGGER.debug("No tasks found for printer")
+        return None
+
     def get_tasklist_for_printer(self, deviceId: str) -> dict:
         LOGGER.debug(f"Getting task list from Bambu Cloud for Printer: {deviceId}")
+        tasks = []
         data = self.get_tasklist()
         for task in data['hits']:
             if task['deviceId'] == deviceId:
-                return task
-        return {}
+                tasks.append(task)
+        return tasks
 
     def get_device_type_from_device_product_name(self, device_product_name: str):
         if device_product_name == "X1 Carbon":

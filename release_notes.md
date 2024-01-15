@@ -1,3 +1,7 @@
+### V2.0.11
+- Fix mishandled new current stage values
+- Add estimated usage hours sensor
+
 ### V2.0.10
 - Fix A1 Mini still missing chamber image
 

@@ -1,6 +1,9 @@
 import logging
 
-from enum import Enum, IntEnum
+from enum import (
+    Enum,
+    IntEnum,
+)
 
 LOGGER = logging.getLogger(__package__)
 
@@ -31,7 +34,7 @@ class FansEnum(Enum):
     HEATBREAK = 4,
 
 
-ACTION_IDS = {
+CURRENT_STAGE_IDS = {
     "default": "unknown",
     0: "printing",
     1: "auto_bed_leveling",
@@ -45,13 +48,13 @@ ACTION_IDS = {
     9: "scanning_bed_surface",
     10: "inspecting_first_layer",
     11: "identifying_build_plate_type",
-    12: "calibrating_micro_lidar",
+    12: "calibrating_micro_lidar", # DUPLICATED?
     13: "homing_toolhead",
     14: "cleaning_nozzle_tip",
     15: "checking_extruder_temperature",
     16: "paused_user",
     17: "paused_front_cover_falling",
-    18: "calibrating_micro_lidar",
+    18: "calibrating_micro_lidar", # DUPLICATED?
     19: "calibrating_extrusion_flow",
     20: "paused_nozzle_temperature_malfunction",
     21: "paused_heat_bed_temperature_malfunction",
@@ -70,10 +73,25 @@ ACTION_IDS = {
     34: "paused_first_layer_error",
     35: "paused_nozzle_clog",
     # X1 returns -1 for idle
-    -1: "idle",
+    -1: "idle",  # DUPLICATED
     # P1 returns 255 for idle
-    255: "idle"
+    255: "idle", # DUPLICATED
 }
+
+CURRENT_STAGE_OPTIONS = list(set(CURRENT_STAGE_IDS.values())) # Conversion to set first removes the duplicates
+
+GCODE_STATE_OPTIONS = [
+    "failed",
+    "finish",
+    "idle",
+    "init",
+    "offline",
+    "pause",
+    "prepare",
+    "running",
+    "slicing",
+    "unknown"
+]
 
 SPEED_PROFILE = {
     1: "silent",
@@ -138,6 +156,7 @@ FILAMENT_NAMES = {
     "GFU00": "Bambu TPU 95A HF",
 }
 
+# TODO: Update error lists with data from https://e.bambulab.com/query.php?lang=en
 HMS_ERRORS = {
     "0300_1000_0002_0001": "The 1st order mechanical resonance mode of X axis is low.",
     "0300_1000_0002_0002": "The 1st order mechanical resonance mode of X axis differ much...",
@@ -254,6 +273,23 @@ HMS_AMS_ERRORS = {
     "0700_6000_0002_0001": "AMS1 slot 1 is overloaded. The filament may be tangled or the spool may be stuck.",
 }
 
+HMS_SEVERITY_LEVELS = {
+    "default": "unknown",
+    1: "fatal",
+    2: "serious",
+    3: "common",
+    4: "info"
+}
+
+HMS_MODULES = {
+    "default": "unknown",
+    0x05: "mainboard",
+    0x0C: "xcam",
+    0x07: "ams",
+    0x08: "toolhead",
+    0x03: "mc"
+}
+
 class SdcardState(Enum):
     NO_SDCARD                           = 0x00000000,
     HAS_SDCARD_NORMAL                   = 0x00000100,
@@ -284,3 +320,4 @@ class Home_Flag_Values(IntEnum):
     INSTALLED_PLUS                      = 0x04000000,
     SUPPORTED_PLUS                      = 0x08000000,
     # Gap
+

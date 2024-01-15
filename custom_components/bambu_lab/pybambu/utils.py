@@ -1,7 +1,17 @@
 import math
 from datetime import datetime, timedelta
 
-from .const import ACTION_IDS, SPEED_PROFILE, FILAMENT_NAMES, HMS_ERRORS, HMS_AMS_ERRORS, LOGGER, FansEnum
+from .const import (
+    CURRENT_STAGE_IDS,
+    SPEED_PROFILE,
+    FILAMENT_NAMES,
+    HMS_ERRORS,
+    HMS_AMS_ERRORS,
+    HMS_SEVERITY_LEVELS,
+    HMS_MODULES,
+    LOGGER,
+    FansEnum,
+)
 from .commands import SEND_GCODE_TEMPLATE
 
 
@@ -51,14 +61,14 @@ def get_filament_name(idx):
     return result
 
 
-def get_speed_name(_id):
+def get_speed_name(id):
     """Return the human-readable name for a speed id"""
-    return SPEED_PROFILE.get(int(_id), "standard")
+    return SPEED_PROFILE.get(int(id), "standard")
 
 
-def get_stage_action(_id):
+def get_current_stage(id) -> str:
     """Return the human-readable description for a stage action"""
-    return ACTION_IDS.get(_id, "unknown")
+    return CURRENT_STAGE_IDS.get(int(id), "unknown")
 
 
 def get_HMS_error_text(hms_code: str):
@@ -75,6 +85,21 @@ def get_HMS_error_text(hms_code: str):
         return ams_error
 
     return HMS_ERRORS.get(hms_code, "unknown")
+
+
+def get_HMS_severity(code: int) -> str:
+    uint_code = code >> 16
+    if code > 0 and uint_code in HMS_SEVERITY_LEVELS:
+        return HMS_SEVERITY_LEVELS[uint_code]
+    return HMS_SEVERITY_LEVELS["default"]
+
+
+def get_HMS_module(attr: int) -> str:
+    uint_attr = (attr >> 24) & 0xFF
+    if attr > 0 and uint_attr in HMS_MODULES:
+        return HMS_MODULES[uint_attr]
+    return HMS_MODULES["default"]
+
 
 def get_generic_AMS_HMS_error_code(hms_code: str):
     code1 = int(hms_code[0:4], 16)
@@ -110,13 +135,15 @@ def get_printer_type(modules, default):
             elif esp32.get("project_name") == "N2S":
                 LOGGER.debug("Device is A1")
                 return "A1"
+        LOGGER.debug(f"UNKNOWN DEVICE: esp32 = {esp32.get('hw_ver')}/'{esp32.get('project_name')}'")
     elif len(rv1126.keys()) > 1:
         if rv1126.get("hw_ver") == "AP05":
             LOGGER.debug("Device is X1C")
             return "X1C"
-        else:
-            LOGGER.debug("Device is X1E?")
+        elif rv1126.get("hw_ver") == "AP02":
+            LOGGER.debug("Device is X1E")
             return "X1E"
+        LOGGER.debug(f"UNKNOWN DEVICE: rv1126 = {rv1126.get('hw_ver')}")
     return default
 
 

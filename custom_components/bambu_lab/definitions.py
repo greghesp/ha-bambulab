@@ -27,7 +27,7 @@ from homeassistant.components.binary_sensor import (
 )
 
 from .const import LOGGER
-from .pybambu.const import SPEED_PROFILE, Features, FansEnum
+from .pybambu.const import SPEED_PROFILE, Features, FansEnum, CURRENT_STAGE_OPTIONS, GCODE_STATE_OPTIONS
 
 
 def fan_to_percent(speed):
@@ -215,32 +215,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             self: "offline" if (not self.coordinator.get_model().info.online and not self.coordinator.client.manual_refresh_mode) else self.coordinator.get_model().stage.description,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CURRENT_STAGE),
         device_class=SensorDeviceClass.ENUM,
-        options=[
-            "offline",
-            "unknown",
-            "printing",
-            "auto_bed_leveling",
-            "heatbed_preheating",
-            "sweeping_xy_mech_mode",
-            "changing_filament",
-            "m400_pause",
-            "paused_filament_runout",
-            "heating_hotend",
-            "calibrating_extrusion",
-            "scanning_bed_surface",
-            "inspecting_first_layer",
-            "identifying_build_plate_type",
-            "calibrating_micro_lidar",
-            "homing_toolhead",
-            "cleaning_nozzle_tip",
-            "checking_extruder_temperature",
-            "paused_user",
-            "paused_front_cover_falling",
-            "calibrating_extrusion_flow",
-            "paused_nozzle_temperature_malfunction",
-            "paused_heat_bed_temperature_malfunction",
-            "idle"
-        ]
+        options=CURRENT_STAGE_OPTIONS + ["offline"]
     ),
     BambuLabSensorEntityDescription(
         key="print_progress",
@@ -257,13 +232,13 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda
             self: "offline" if (not self.coordinator.get_model().info.online and not self.coordinator.client.manual_refresh_mode) else self.coordinator.get_model().print_job.gcode_state.lower(),
         device_class=SensorDeviceClass.ENUM,
-        options=["failed", "finish", "idle", "init", "offline", "pause","prepare", "running", "slicing", "unknown"],
+        options=GCODE_STATE_OPTIONS + ["offline"]
     ),
     BambuLabSensorEntityDescription(
         key="start_time",
         translation_key="start_time",
         icon="mdi:clock",
-        available_fn=lambda self: self.coordinator.get_model().print_job.start_time != None,
+        available_fn=lambda self: self.coordinator.get_model().print_job.start_time is not None,
         value_fn=lambda self: self.coordinator.get_model().print_job.start_time,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.START_TIME) or coordinator.get_model().supports_feature(Features.START_TIME_GENERATED),
     ),
@@ -279,8 +254,17 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="end_time",
         translation_key="end_time",
         icon="mdi:clock",
-        available_fn=lambda self: self.coordinator.get_model().print_job.end_time != None,
+        available_fn=lambda self: self.coordinator.get_model().print_job.end_time is not None,
         value_fn=lambda self: self.coordinator.get_model().print_job.end_time,
+    ),
+    BambuLabSensorEntityDescription(
+        key="total_usage_hours",
+        translation_key="total_usage_hours",
+        icon="mdi:clock",
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        suggested_display_precision=0,
+        available_fn=lambda self: self.coordinator.get_model().info.usage_hours is not None,
+        value_fn=lambda self: self.coordinator.get_model().info.usage_hours,
     ),
     BambuLabSensorEntityDescription(
         key="current_layer",
