@@ -77,7 +77,7 @@ instead of OAuth.
 | Cover Image       | With Bambu credentials                                   |
 | Total Usage Hours | * See Note                                               |
 
-* This is a running estimate that will be imperfect. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must generally be running when a print completes to update the value. If the integration is restarted mid-print and Bambu credentials haven't been provided or it's an SD/local only print the usage hours will not be added as the print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. If the integration is restarted mid-print and Bambu credentials haven't been provided or it's an SD/local only print the usage hours will not be added as the print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
 
 ### Miscellaneous
 
@@ -134,7 +134,7 @@ instead of OAuth.
 |-------------------|-------------------|
 | External Spool    |                   |
 
-| Tray attributes:    | Notes             |
+| Attributes:         | Notes             |
 |---------------------|-------------------|
 | Color               |                   |
 | Empty               |                   |
@@ -142,8 +142,6 @@ instead of OAuth.
 | Name                |                   |
 | Nozzle max temp     |                   |
 | Nozzle min temp     |                   |
-| Remaining Filament  |                   |
-| Spool serial number |                   |
 | Type                |                   |
 
 ### Diagnostics
