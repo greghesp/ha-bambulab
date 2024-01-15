@@ -549,7 +549,7 @@ class PrintJob:
                 cloud_time_str = self._task_data.get('startTime', "")
                 if cloud_time_str != "" and self.start_time == None:
                     local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                    # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
                     local_dt = datetime.fromtimestamp(local_dt.timestamp())
                     self.start_time = local_dt
 
@@ -557,7 +557,7 @@ class PrintJob:
                 cloud_time_str = self._task_data.get('endTime', "")
                 if cloud_time_str != "" and self.end_time == None:
                     local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                    # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
                     local_dt = datetime.fromtimestamp(local_dt.timestamp())
                     self.end_time = local_dt
 
