@@ -470,8 +470,8 @@ class BambuClient:
         result: queue.Queue[bool] = queue.Queue(maxsize=1)
 
         def on_message(client, userdata, message):
-            LOGGER.debug(f"Try Connection: Got '{message}'")
             json_data = json.loads(message.payload)
+            LOGGER.debug(f"Try Connection: Got '{json_data}'")
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.info_update(data=json_data.get("info"))

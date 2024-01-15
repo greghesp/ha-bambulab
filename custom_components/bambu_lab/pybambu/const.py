@@ -153,6 +153,7 @@ FILAMENT_NAMES = {
     "GFU00": "Bambu TPU 95A HF",
 }
 
+# TODO: Update error lists with data from https://e.bambulab.com/query.php?lang=en
 HMS_ERRORS = {
     "0300_1000_0002_0001": "The 1st order mechanical resonance mode of X axis is low.",
     "0300_1000_0002_0002": "The 1st order mechanical resonance mode of X axis differ much...",
@@ -267,6 +268,23 @@ HMS_AMS_ERRORS = {
     "0700_2000_0003_0001": "AMS1 slot 1 filament has run out. Please wait while old filament is purged.",
     "0700_2000_0003_0002": "AMS1 slot 1 filament has run out and automatically switched to the slot with the same filament.",
     "0700_6000_0002_0001": "AMS1 slot 1 is overloaded. The filament may be tangled or the spool may be stuck.",
+}
+
+HMS_SEVERITY_LEVELS = {
+    "default": "unknown",
+    1: "fatal",
+    2: "serious",
+    3: "common",
+    4: "info"
+}
+
+HMS_MODULES = {
+    "default": "unknown",
+    0x05: "mainboard",
+    0x0C: "xcam",
+    0x07: "ams",
+    0x08: "toolhead",
+    0x03: "mc"
 }
 
 class SdcardState(Enum):

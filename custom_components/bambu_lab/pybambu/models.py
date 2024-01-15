@@ -18,7 +18,9 @@ from .utils import \
     get_start_time, \
     get_end_time, \
     get_HMS_error_text, \
-    get_generic_AMS_HMS_error_code
+    get_generic_AMS_HMS_error_code, \
+    get_HMS_severity, \
+    get_HMS_module \
     
 from .const import LOGGER, Features, FansEnum, Home_Flag_Values, SdcardState, SPEED_PROFILE, GCODE_STATE_OPTIONS
 from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
@@ -1085,11 +1087,13 @@ class HMSList:
             index: int = 0
             for hms in hmsList:
                 index = index + 1
-                attr = hms['attr']
-                code = hms['code']
-                hms_error = f'{int(attr / 0x10000):0>4X}_{attr & 0xFFFF:0>4X}_{int(code / 0x10000):0>4X}_{code & 0xFFFF:0>4X}'  # 0300_0100_0001_0007
-                errors[f"{index}-Error"] = f"HMS_{hms_error}: {get_HMS_error_text(hms_error)}"
-                errors[f"{index}-Wiki"] = f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(hms_error)}"
+                attr = int(hms['attr'])
+                code = int(hms['code'])
+                hms_notif = HMSNotification(attr=attr, code=code)
+                errors[f"{index}-Error"] = f"HMS_{hms_notif.hms_code}: {get_HMS_error_text(hms_notif.hms_code)}"
+                errors[f"{index}-Wiki"] = hms_notif.wiki_url
+                errors[f"{index}-Severity"] = hms_notif.severity
+                #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure               
 
             if self.errors != errors:
                 self.errors = errors
@@ -1100,6 +1104,36 @@ class HMSList:
                 return True
         
         return False
+
+
+@dataclass
+class HMSNotification:
+    """Return an HMS object and all associated details"""
+
+    def __init__(self, attr: int = 0, code: int = 0):
+        self.attr = attr
+        self.code = code
+
+    @property
+    def severity(self):
+        return get_HMS_severity(self.code)
+
+    @property
+    def module(self):
+        return get_HMS_module(self.attr)
+
+    @property
+    def hms_code(self):
+        if self.attr > 0 and self.code > 0:
+            return f'{int(self.attr / 0x10000):0>4X}_{self.attr & 0xFFFF:0>4X}_{int(self.code / 0x10000):0>4X}_{self.code & 0xFFFF:0>4X}' # 0300_0100_0001_0007
+        return ""
+
+    @property
+    def wiki_url(self):
+        if self.attr > 0 and self.code > 0:
+            return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(self.hms_code)}"
+        return ""
+
 
 @dataclass
 class ChamberImage:
