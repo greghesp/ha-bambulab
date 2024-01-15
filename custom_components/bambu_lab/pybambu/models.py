@@ -527,6 +527,7 @@ class PrintJob:
         if self._client.bambu_cloud.auth_token != "":
             self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
             if self._task_data is None:
+                LOGGER.debug("No bambu cloud task data found for printer.")
                 self._client._device.cover_image.set_jpeg(None)
                 self.print_weight = 0
                 self.print_length = 0
@@ -534,6 +535,7 @@ class PrintJob:
                 self.start_time = None
                 self.end_time = None
             else:
+                LOGGER.debug("Updating bambu cloud task data found for printer.")
                 url = self._task_data.get('cover', '')
                 if url != "":
                     data = self._client.bambu_cloud.download(url)
