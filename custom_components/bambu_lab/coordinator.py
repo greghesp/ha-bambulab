@@ -83,7 +83,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     self.latest_usage_hours == self.get_model().info.usage_hours
                     LOGGER.debug(f"OVERWRITING USAGE_HOURS WITH : {self.latest_usage_hours}")
                     options = dict(self.config_entry.options)
-                    options['usage_hours'] = str(self.latest_usage_hours)
+                    options['usage_hours'] = self.latest_usage_hours
                     self._hass.config_entries.async_update_entry(
                         entry=self.config_entry,
                         title=self.get_model().info.serial,
