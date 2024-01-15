@@ -1,17 +1,17 @@
 import math
 from datetime import datetime, timedelta
 
-from .const import \
-    CURRENT_STAGE_IDS, \
-    SPEED_PROFILE, \
-    FILAMENT_NAMES, \
-    HMS_ERRORS, \
-    HMS_AMS_ERRORS, \
-    HMS_SEVERITY_LEVELS, \
-    HMS_MODULES, \
-    LOGGER, \
-    FansEnum \
-
+from .const import (
+    CURRENT_STAGE_IDS,
+    SPEED_PROFILE,
+    FILAMENT_NAMES,
+    HMS_ERRORS,
+    HMS_AMS_ERRORS,
+    HMS_SEVERITY_LEVELS,
+    HMS_MODULES,
+    LOGGER,
+    FansEnum,
+)
 from .commands import SEND_GCODE_TEMPLATE
 
 

@@ -1,6 +1,9 @@
 import logging
 
-from enum import Enum, IntEnum
+from enum import (
+    Enum,
+    IntEnum,
+)
 
 LOGGER = logging.getLogger(__package__)
 

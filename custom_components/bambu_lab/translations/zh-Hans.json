@@ -299,6 +299,9 @@
       "end_time": {
         "name": "结束时间"
       },
+      "total_usage_hours": {
+        "name": "总使用量"
+      },
       "current_layer": {
         "name": "当前层"
       },

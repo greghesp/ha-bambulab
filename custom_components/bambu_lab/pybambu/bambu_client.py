@@ -16,7 +16,10 @@ from typing import Any
 import paho.mqtt.client as mqtt
 
 from .bambu_cloud import BambuCloud
-from .const import LOGGER, Features
+from .const import (
+    LOGGER,
+    Features,
+)
 from .models import Device
 from .commands import (
     GET_VERSION,

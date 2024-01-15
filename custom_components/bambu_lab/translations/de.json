@@ -299,6 +299,9 @@
       "end_time": {
         "name": "Vrs. Fertigstellung"
       },
+      "total_usage_hours": {
+        "name": "Gesamtnutzung"
+      },
       "current_layer": {
         "name": "Aktuelle Schicht"
       },

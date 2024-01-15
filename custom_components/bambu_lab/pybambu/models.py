@@ -5,25 +5,37 @@ from datetime import datetime
 from dateutil import parser, tz
 from packaging import version
 
-from .utils import \
-    search, \
-    fan_percentage, \
-    fan_percentage_to_gcode, \
-    get_current_stage, \
-    get_filament_name, \
-    get_printer_type, \
-    get_speed_name, \
-    get_hw_version, \
-    get_sw_version, \
-    get_start_time, \
-    get_end_time, \
-    get_HMS_error_text, \
-    get_generic_AMS_HMS_error_code, \
-    get_HMS_severity, \
-    get_HMS_module \
-    
-from .const import LOGGER, Features, FansEnum, Home_Flag_Values, SdcardState, SPEED_PROFILE, GCODE_STATE_OPTIONS
-from .commands import CHAMBER_LIGHT_ON, CHAMBER_LIGHT_OFF, SPEED_PROFILE_TEMPLATE
+from .utils import (
+    search,
+    fan_percentage,
+    fan_percentage_to_gcode,
+    get_current_stage,
+    get_filament_name,
+    get_printer_type,
+    get_speed_name,
+    get_hw_version,
+    get_sw_version,
+    get_start_time,
+    get_end_time,
+    get_HMS_error_text,
+    get_generic_AMS_HMS_error_code,
+    get_HMS_severity,
+    get_HMS_module,
+)
+from .const import (
+    LOGGER,
+    Features,
+    FansEnum,
+    Home_Flag_Values,
+    SdcardState,
+    SPEED_PROFILE,
+    GCODE_STATE_OPTIONS,
+)
+from .commands import (
+    CHAMBER_LIGHT_ON,
+    CHAMBER_LIGHT_OFF,
+    SPEED_PROFILE_TEMPLATE,
+)
 
 class Device:
     def __init__(self, client):
@@ -1093,6 +1105,7 @@ class HMSList:
                 errors[f"{index}-Error"] = f"HMS_{hms_notif.hms_code}: {get_HMS_error_text(hms_notif.hms_code)}"
                 errors[f"{index}-Wiki"] = hms_notif.wiki_url
                 errors[f"{index}-Severity"] = hms_notif.severity
+                LOGGER.debug(f("HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}"))
                 #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure               
 
             if self.errors != errors:
