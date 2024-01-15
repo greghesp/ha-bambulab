@@ -28,11 +28,13 @@ from .pybambu.const import Features
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
     _updatedDevice: bool
+    latest_usage_hours: float
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._hass = hass
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
 
+        self.latest_usage_hours = float(entry.options.get('usage_hours', 0))
         self.client = BambuClient(device_type = entry.data["device_type"],
                                   serial = entry.data["serial"],
                                   host = entry.options['host'],
@@ -42,7 +44,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                   username = entry.options['username'],
                                   auth_token = entry.options['auth_token'],
                                   access_code = entry.options['access_code'],
-                                  usage_hours = float(entry.options.get('usage_hours', 0)))
+                                  usage_hours = self.latest_usage_hours)
             
         self._updatedDevice = False
         self.data = self.get_model()
@@ -77,10 +79,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._update_data()
 
                 # Check is usage hours change and persist to config entry if it did.
-                latest_usage_hours = self.get_model().info.usage_hours
-                if latest_usage_hours != float(self.config_entry.options.get('usage_hours', 0)):
+                if self.latest_usage_hours != self.get_model().info.usage_hours:
+                    self.latest_usage_hours == self.get_model().info.usage_hours
+                    LOGGER.debug(f"OVERWRITING USAGE_HOURS WITH : {self.latest_usage_hours}")
                     options = dict(self.config_entry.options)
-                    options['usage_hours'] = latest_usage_hours
+                    options['usage_hours'] = str(self.latest_usage_hours)
                     self._hass.config_entries.async_update_entry(
                         entry=self.config_entry,
                         title=self.get_model().info.serial,

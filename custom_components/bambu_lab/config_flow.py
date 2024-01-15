@@ -448,20 +448,17 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 
                     if success:
                         LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
-                        data = {
-                                "device_type": self.config_entry.data['device_type'],
-                                "serial": self.config_entry.data['serial']
-                        }
+                        data = dict(self.config_entry.data)
                         options = {
-                                "region": self.region,
-                                "email": self.email,
-                                "username": self._bambu_cloud.username,
-                                "name": device['name'],
-                                "host": user_input['host'],
-                                "local_mqtt": user_input.get('local_mqtt', False),
-                                "auth_token": self._bambu_cloud.auth_token,
-                                "access_code": user_input['access_code'],
-                                "usage_hours": float(user_input['usage_hours'])
+                            "region": self.region,
+                            "email": self.email,
+                            "username": self._bambu_cloud.username,
+                            "name": device['name'],
+                            "host": user_input['host'],
+                            "local_mqtt": user_input.get('local_mqtt', False),
+                            "auth_token": self._bambu_cloud.auth_token,
+                            "access_code": user_input['access_code'],
+                            "usage_hours": float(user_input['usage_hours'])
                         }
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
@@ -523,20 +520,17 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if success:
                 LOGGER.debug("Options Flow: Writing entry")
-                data = {
-                        "device_type": self.config_entry.data['device_type'],
-                        "serial": self.config_entry.data['serial']
-                }
+                data = dict(self.config_entry.data)
                 options = {
-                        "region": self.config_entry.options.get('region', ''),
-                        "email": self.config_entry.options.get('email', ''),
-                        "username": self.config_entry.options.get('username', ''),
-                        "name": self.config_entry.options.get('name', ''),
-                        "host": user_input['host'],
-                        "local_mqtt": True,
-                        "auth_token": self.config_entry.options.get('auth_token', ''),
-                        "access_code": user_input['access_code'],
-                        "usage_hours": float(user_input['usage_hours'])
+                    "region": self.config_entry.options.get('region', ''),
+                    "email": self.config_entry.options.get('email', ''),
+                    "username": self.config_entry.options.get('username', ''),
+                    "name": self.config_entry.options.get('name', ''),
+                    "host": user_input['host'],
+                    "local_mqtt": True,
+                    "auth_token": self.config_entry.options.get('auth_token', ''),
+                    "access_code": user_input['access_code'],
+                    "usage_hours": float(user_input['usage_hours'])
                 }
 
                 title = self.config_entry.data['serial']
