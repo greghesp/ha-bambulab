@@ -65,7 +65,8 @@ class BambuLabCamera(BambuLabEntity, Camera):
     
     @property
     def available(self) -> bool:
-        return self.coordinator.get_model().camera.rtsp_url is not None or "disable"
+        url = self.coordinator.get_model().camera.rtsp_url
+        return url != None and url != "disable"
 
     async def stream_source(self) -> str | None:
         if self.available:
