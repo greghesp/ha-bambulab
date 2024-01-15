@@ -447,7 +447,6 @@ class PrintJob:
             # Update task data if bambu cloud connected
             self._update_task_data()
 
-
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -472,6 +471,13 @@ class PrintJob:
         if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
             if self._client.callback is not None:
                self._client.callback("event_print_finished")
+
+        if currently_idle and not previously_idle and previous_gcode_state != "unknown":
+            if self.start_time != None:
+                duration = self.end_time - self.start_time
+                new_hours = duration.seconds / 60 / 60
+                LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
+                self._client._device.info.usage_hours += new_hours
 
         return (old_data != f"{self.__dict__}")
 
@@ -520,44 +526,42 @@ class PrintJob:
     def _update_task_data(self):
         if self._client.bambu_cloud.auth_token != "":
             self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
-            url = self._task_data.get('cover', '')
-            if url != "":
-                data = self._client.bambu_cloud.download(url)
-                self._client._device.cover_image.set_jpeg(data)
+            if self._task_data is None:
+                LOGGER.debug("No bambu cloud task data found for printer.")
+                self._client._device.cover_image.set_jpeg(None)
+                self.print_weight = 0
+                self.print_length = 0
+                self.print_bed_type = "unknown"
+                self.start_time = None
+                self.end_time = None
+            else:
+                LOGGER.debug("Updating bambu cloud task data found for printer.")
+                url = self._task_data.get('cover', '')
+                if url != "":
+                    data = self._client.bambu_cloud.download(url)
+                    self._client._device.cover_image.set_jpeg(data)
 
-            self.print_weight = self._task_data.get('weight', self.print_weight)
-            self.print_length = self._task_data.get('length', self.print_length)
-            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+                self.print_weight = self._task_data.get('weight', self.print_weight)
+                self.print_length = self._task_data.get('length', self.print_length)
+                self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
 
-            # "startTime": "2023-12-21T19:02:16Z"
-            cloud_time_str = self._task_data.get('startTime', "")
-            if cloud_time_str != "" and self.start_time == None:
-                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
-                local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                self.start_time = local_dt
+                # "startTime": "2023-12-21T19:02:16Z"
+                cloud_time_str = self._task_data.get('startTime', "")
+                if cloud_time_str != "" and self.start_time == None:
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.start_time = local_dt
 
-            # "endTime": "2023-12-21T19:02:35Z"
-            cloud_time_str = self._task_data.get('endTime', "")
-            if cloud_time_str != "" and self.end_time == None:
-                local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                # Convert it to timestamp and back to get rid of timezone in printed output to match end_time datetime objects.
-                local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                self.end_time = local_dt
+                # "endTime": "2023-12-21T19:02:35Z"
+                cloud_time_str = self._task_data.get('endTime', "")
+                if cloud_time_str != "" and self.end_time == None:
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.end_time = local_dt
 
-            # tasks = self._client.bambu_cloud.get_tasklist_for_printer(self._client._serial)
-            # last_seen_id: int = 39749292
-            # new_hours: float = 0
-            # for task in tasks:
-            #     LOGGER.debug(f"{task['id']}")
-            #     if task['id'] == last_seen_id:
-            #         break
-            #     start_time = parser.parse(task['startTime'])
-            #     end_time = parser.parse(task['endTime'])
-            #     duration = end_time - start_time
-            #     new_hours += duration.seconds / 60 / 60
-            # LOGGER.debug(f"HISTORY HOURS: {new_hours}")
-    
+
 @dataclass
 class Info:
     """Return all device related content"""
@@ -574,6 +578,7 @@ class Info:
     mqtt_mode: str
     nozzle_diameter: float
     nozzle_type: str
+    usage_hours: float
 
     def __init__(self, client):
         self._client = client
@@ -588,6 +593,7 @@ class Info:
         self.mqtt_mode = "local" if self._client._local_mqtt else "bambu_cloud"
         self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
+        self.usage_hours = client._usage_hours
 
     def set_online(self, online):
         if self.online != online:
