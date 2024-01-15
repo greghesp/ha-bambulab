@@ -80,7 +80,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
                 # Check is usage hours change and persist to config entry if it did.
                 if self.latest_usage_hours != self.get_model().info.usage_hours:
-                    self.latest_usage_hours == self.get_model().info.usage_hours
+                    self.latest_usage_hours = self.get_model().info.usage_hours
                     LOGGER.debug(f"OVERWRITING USAGE_HOURS WITH : {self.latest_usage_hours}")
                     options = dict(self.config_entry.options)
                     options['usage_hours'] = self.latest_usage_hours
