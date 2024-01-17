@@ -1,3 +1,6 @@
+### V2.0.12
+- Fix for estimated usage hours
+
 ### V2.0.11
 - Fix mishandled new current stage values
 - Add estimated usage hours sensor
