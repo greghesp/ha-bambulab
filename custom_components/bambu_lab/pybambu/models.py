@@ -419,8 +419,12 @@ class PrintJob:
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
+        if previous_gcode_state != self.gcode_state:
+            LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
             self.gcode_state = "unknown"
+        if previous_gcode_state != self.gcode_state:
+            LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
 
@@ -581,7 +585,7 @@ class PrintJob:
 
                     # "endTime": "2023-12-21T19:02:35Z"
                     cloud_time_str = self._task_data.get('endTime', "")
-                    LOGGER.debug(f"CLOUD END TIME1: {cloud_time_str}")
+                    LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
                     if cloud_time_str != "":
                         local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
                         # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
