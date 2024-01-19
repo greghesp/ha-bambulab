@@ -6,7 +6,7 @@ A Home Assistant Integration for Bambu Lab printers.
 
 ## Contribution
 
-Want to contribute to ha-bambulab? Great!  We have a few small asks though!
+Want to contribute to ha-bambulab? Great! We have a few small asks though!
 
 - Please do not fork and PR against the `main` branch.
 - Use the `develop` branch, this is our working area. Anything in the `main` branch should be considered live, released
@@ -24,6 +24,7 @@ To install this integration, add this GitHub Repo to the HACS Custom Repositorie
 For configuration, you'll ideally use your Bambu Credentials for the simplest setup and the most features as some sensors are supported by data from your Bambu cloud account print history. You can also, optionally, provide the printer's local IP address to enable the more efficient and reliable direct to printer connection for the printer sensor data and to enable the P1/A1 chamber image support.
 
 However, the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode. If you fall into any of these categories, select the Lan Mode Configuration connection option. You will need to manually provide:
+
 - Printer Serial Number - can be found in the printer settings or in Bambu Studio.
 - Local printer IP address - can be found in the printer network settings (LAN).
 - Access Code - can be found in the Printer settings.
@@ -44,25 +45,25 @@ instead of OAuth.
 ### Fans
 
 | Sensor        | Notes             |
-|---------------|-------------------|
+| ------------- | ----------------- |
 | Aux           |                   |
 | Chamber       | Not on A1/A1 Mini |
 | Cooling       |                   |
 
 ### Temperatures
 
-| Sensor        | Notes             |
-|---------------|-------------------|
-| Bed           |                   |
-| Target Bed    |                   |
-| Chamber       | X1 only           |
-| Nozzle        |                   |
-| Target Nozzle |                   |
+| Sensor        | Notes   |
+| ------------- | ------- |
+| Bed           |         |
+| Target Bed    |         |
+| Chamber       | X1 only |
+| Nozzle        |         |
+| Target Nozzle |         |
 
-### Print Data and Progress 
+### Print Data and Progress
 
 | Sensor            | Notes                                                    |
-|-------------------|----------------------------------------------------------|
+| ----------------- | -------------------------------------------------------- |
 | Current Layer     |                                                          |
 | Total Layer Count |                                                          |
 | Print Progress    |                                                          |
@@ -70,35 +71,35 @@ instead of OAuth.
 | Print Length      | With Bambu credentials                                   |
 | Print Bed Type    | Bed choice in the print job                              |
 | Start Time        | Simulated on P1/A1. More accurate with Bambu credentials |
-| Remainining Time  |                                                          |
+| Remaining Time    |                                                          |
 | End Time          |                                                          |
 | Current Stage     |                                                          |
 | Print Status      |                                                          |
 | Cover Image       | With Bambu credentials                                   |
-| Total Usage Hours | * See Note                                               |
+| Total Usage Hours | \* See Note                                              |
 
-* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. If the integration is restarted mid-print and Bambu credentials haven't been provided or it's an SD/local only print the usage hours will not be added as the print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+\* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
 
 ### Miscellaneous
 
-| Sensor            | Notes             |
-|-------------------|-------------------|
-| Nozzle Diameters  |                   |
-| Nozzle Type       |                   |
-| Speed Profile     |                   |
-| Timelapse Active  |                   |
+| Sensor           | Notes |
+| ---------------- | ----- |
+| Nozzle Diameters |       |
+| Nozzle Type      |       |
+| Speed Profile    |       |
+| Timelapse Active |       |
 
 ### AMS
 
-| Sensor            | Notes             |
-|-------------------|-------------------|
-| Active tray       | If AMS present    |
-| Active tray index | If AMS present    |
+| Sensor            | Notes          |
+| ----------------- | -------------- |
+| Active tray       | If AMS present |
+| Active tray index | If AMS present |
 
 ### Controls
 
 | Lights              | Notes                                            |
-|---------------------|--------------------------------------------------|
+| ------------------- | ------------------------------------------------ |
 | Chamber Light       |                                                  |
 | Pause               |                                                  |
 | Resume              |                                                  |
@@ -107,47 +108,47 @@ instead of OAuth.
 
 ### AMS
 
-| Sensor            | Notes             |
-|-------------------|-------------------|
-| Humidity Index    |                   |
-| Temperature       | X1 only           |
-| Tray 1            |                   |
-| Tray 2            |                   |
-| Tray 3            |                   |
-| Tray 4            |                   |
+| Sensor         | Notes   |
+| -------------- | ------- |
+| Humidity Index |         |
+| Temperature    | X1 only |
+| Tray 1         |         |
+| Tray 2         |         |
+| Tray 3         |         |
+| Tray 4         |         |
 
-| Tray attributes:    | Notes             |
-|---------------------|-------------------|
-| Color               |                   |
-| Empty               |                   |
-| K Value             | P1/A1 only        |
-| Name                |                   |
-| Nozzle max temp     |                   |
-| Nozzle min temp     |                   |
-| Remaining Filament  |                   |
-| Spool serial number |                   |
-| Type                |                   |
+| Tray attributes:    | Notes      |
+| ------------------- | ---------- |
+| Color               |            |
+| Empty               |            |
+| K Value             | P1/A1 only |
+| Name                |            |
+| Nozzle max temp     |            |
+| Nozzle min temp     |            |
+| Remaining Filament  |            |
+| Spool serial number |            |
+| Type                |            |
 
 ### External Spool
 
-| Sensor            | Notes             |
-|-------------------|-------------------|
-| External Spool    |                   |
+| Sensor         | Notes |
+| -------------- | ----- |
+| External Spool |       |
 
-| Attributes:         | Notes             |
-|---------------------|-------------------|
-| Color               |                   |
-| Empty               |                   |
-| K Value             | P1/A1 only        |
-| Name                |                   |
-| Nozzle max temp     |                   |
-| Nozzle min temp     |                   |
-| Type                |                   |
+| Attributes:     | Notes      |
+| --------------- | ---------- |
+| Color           |            |
+| Empty           |            |
+| K Value         | P1/A1 only |
+| Name            |            |
+| Nozzle max temp |            |
+| Nozzle min temp |            |
+| Type            |            |
 
 ### Diagnostics
 
 | Sensor                    | Notes                                                          |
-|---------------------------|----------------------------------------------------------------|
+| ------------------------- | -------------------------------------------------------------- |
 | Enclosure Door            | X1 only                                                        |
 | Firmware Update Available |                                                                |
 | Force Refresh             |                                                                |
@@ -158,9 +159,9 @@ instead of OAuth.
 
 ### Cameras
 
-| Sensor            | Notes                            |
-|-------------------|----------------------------------|
-| Chamber           | P1/A1 need the host IP providing |
+| Sensor  | Notes                            |
+| ------- | -------------------------------- |
+| Chamber | P1/A1 need the host IP providing |
 
 ### Automation device triggers
 
@@ -179,7 +180,7 @@ Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/) proje
 
 #### WLED Features
 
-- LED lights automatically turn off when Bambu Lida is in use, so as to not interfere.
+- LED lights automatically turn off when Bambu Lidar is in use, so as to not interfere.
 - LED lights turn red when there is an error in the printer.
 - LED lights turn blue when the bed is auto leveling.
 - LED lights turn green when printing is finished.
@@ -195,7 +196,7 @@ at https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/.
 
 ### Diagnostic File
 
-If you run into any issues, we now have built in diagnostics.  
+If you run into any issues, we now have built in diagnostics.
 To grab the latest information, hit the "Force Refresh Data" button under the Diagnostic section.
 
 ![image](docs/images/force-refresh.png)

@@ -419,8 +419,12 @@ class PrintJob:
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
+        if previous_gcode_state != self.gcode_state:
+            LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
             self.gcode_state = "unknown"
+        if previous_gcode_state != self.gcode_state:
+            LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
 
@@ -433,6 +437,8 @@ class PrintJob:
 
         # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
         if data.get("gcode_start_time") is not None:
+            if self.start_time != get_start_time(int(data.get("gcode_start_time"))):
+                LOGGER.debug(f"GCODE START TIME: {self.start_time}")
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Generate the end_time from the remaining_time mqtt payload value if present.
@@ -440,9 +446,12 @@ class PrintJob:
             existing_remaining_time = self.remaining_time
             self.remaining_time = data.get("mc_remaining_time")
             if self.start_time is None:
+                if self.start_time is not None:
+                    LOGGER.debug(f"END TIME1: None")
                 self.end_time = None
             elif existing_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
+                LOGGER.debug(f"END TIME2: {self.end_time}")
 
         # Handle print start
         previously_idle = previous_gcode_state == "IDLE" or previous_gcode_state == "FAILED" or previous_gcode_state == "FINISH"
@@ -457,6 +466,7 @@ class PrintJob:
             if self._client._device.supports_feature(Features.START_TIME_GENERATED):
                 # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                 self.start_time = get_end_time(0)
+                LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
             # Update task data if bambu cloud connected
             self._update_task_data()
@@ -559,21 +569,29 @@ class PrintJob:
                 self.print_length = self._task_data.get('length', self.print_length)
                 self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
 
-                # "startTime": "2023-12-21T19:02:16Z"
-                cloud_time_str = self._task_data.get('startTime', "")
-                if cloud_time_str != "" and self.start_time == None:
-                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                    self.start_time = local_dt
+                if self._client._device.supports_feature(Features.START_TIME_GENERATED):
+                    # If we generate the start time (not X1), then rely more heavily on the cloud task data and
+                    # do so uniformly so we always have matched start/end times.
 
-                # "endTime": "2023-12-21T19:02:35Z"
-                cloud_time_str = self._task_data.get('endTime', "")
-                if cloud_time_str != "" and self.end_time == None:
-                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                    self.end_time = local_dt
+                    # "startTime": "2023-12-21T19:02:16Z"
+                    cloud_time_str = self._task_data.get('startTime', "")
+                    LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
+                    if cloud_time_str != "":
+                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                        self.start_time = local_dt
+                        LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
+
+                    # "endTime": "2023-12-21T19:02:35Z"
+                    cloud_time_str = self._task_data.get('endTime', "")
+                    LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
+                    if cloud_time_str != "":
+                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                        self.end_time = local_dt
+                        LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
 
 @dataclass
@@ -1105,7 +1123,7 @@ class HMSList:
                 errors[f"{index}-Error"] = f"HMS_{hms_notif.hms_code}: {get_HMS_error_text(hms_notif.hms_code)}"
                 errors[f"{index}-Wiki"] = hms_notif.wiki_url
                 errors[f"{index}-Severity"] = hms_notif.severity
-                LOGGER.debug(f("HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}"))
+                LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
                 #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure               
 
             if self.errors != errors:

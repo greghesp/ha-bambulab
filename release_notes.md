@@ -1,3 +1,7 @@
+### V2.0.12
+- Fix for estimated usage hours
+- Fix Exception data: name 'f' is not defined due to typo in change copied from pybambu repo when an HMS error is active
+
 ### V2.0.11
 - Fix mishandled new current stage values
 - Add estimated usage hours sensor
