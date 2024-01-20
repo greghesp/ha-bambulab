@@ -1,3 +1,6 @@
+### V2.014
+- ???
+
 ### V2.0.13
 - Fix reconnect on lost connection to printer.
 - Fix manual connection mode
