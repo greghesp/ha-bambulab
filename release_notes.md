@@ -1,3 +1,7 @@
+### V2.0.13
+- Fix reconnect on lost connection to printer.
+- Fix manual connection mode
+
 ### V2.0.12
 - Fix for estimated usage hours
 - Fix Exception data: name 'f' is not defined due to typo in change copied from pybambu repo when an HMS error is active
