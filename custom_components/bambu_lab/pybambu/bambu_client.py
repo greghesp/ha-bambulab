@@ -291,7 +291,7 @@ class BambuClient:
             self.disconnect()
         else:
             # Reconnect normally
-            await self.connect(self.callback)
+            self.connect(self.callback)
 
     def connect(self, callback):
         """Connect to the MQTT Broker"""
@@ -446,7 +446,7 @@ class BambuClient:
         """Force refresh data"""
 
         if self._manual_refresh_mode:
-            await self.connect(self.callback)
+            self.connect(self.callback)
         else:
             LOGGER.debug("Force Refresh: Getting Version Info")
             self._refreshed = True
