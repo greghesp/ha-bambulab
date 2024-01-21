@@ -1,5 +1,5 @@
 ### V2.014
-- ???
+- Improve handling of offline/unreachable printer in chamber image thread.
 
 ### V2.0.13
 - Fix reconnect on lost connection to printer.
