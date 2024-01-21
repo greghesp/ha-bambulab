@@ -25,6 +25,7 @@ class Features(Enum):
     CAMERA_IMAGE = 15,
     DOOR_SENSOR = 16,
     MANUAL_MODE = 17,
+    PROMPT_SOUND = 18,
 
 
 class FansEnum(Enum):

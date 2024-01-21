@@ -34,6 +34,8 @@ from .const import (
 from .commands import (
     CHAMBER_LIGHT_ON,
     CHAMBER_LIGHT_OFF,
+    PROMPT_SOUND_ENABLE,
+    PROMPT_SOUND_DISABLE,
     SPEED_PROFILE_TEMPLATE,
 )
 
@@ -122,6 +124,8 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
         elif feature == Features.MANUAL_MODE:
             return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
+        elif feature == Features.PROMPT_SOUND:
+            return self.info.device_type == "A1" or self.info.device_type == "A1MINI"
 
         return False
     
@@ -458,18 +462,20 @@ class PrintJob:
         currently_idle = self.gcode_state == "IDLE" or self.gcode_state == "FAILED" or self.gcode_state == "FINISH"
 
         if previously_idle and not currently_idle:
-            if self._client.callback is not None:
-               self._client.callback("event_print_started")
-
             # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
             # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
             if self._client._device.supports_feature(Features.START_TIME_GENERATED):
                 # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                 self.start_time = get_end_time(0)
+                # Make sure we don't keep using a stale end time.
+                self.end_time = None
                 LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
             # Update task data if bambu cloud connected
             self._update_task_data()
+
+            if self._client.callback is not None:
+               self._client.callback("event_print_started")
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
@@ -572,26 +578,28 @@ class PrintJob:
                 if self._client._device.supports_feature(Features.START_TIME_GENERATED):
                     # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                     # do so uniformly so we always have matched start/end times.
+                    status = self._task_data['status']
+                    LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
+                    if status == 4: # 4 looks to be in progress while 2 is completed
+                        # "startTime": "2023-12-21T19:02:16Z"
+                        cloud_time_str = self._task_data.get('startTime', "")
+                        LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
+                        if cloud_time_str != "":
+                            local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                            # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                            local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                            self.start_time = local_dt
+                            LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
 
-                    # "startTime": "2023-12-21T19:02:16Z"
-                    cloud_time_str = self._task_data.get('startTime', "")
-                    LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
-                    if cloud_time_str != "":
-                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                        self.start_time = local_dt
-                        LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
-
-                    # "endTime": "2023-12-21T19:02:35Z"
-                    cloud_time_str = self._task_data.get('endTime', "")
-                    LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
-                    if cloud_time_str != "":
-                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                        self.end_time = local_dt
-                        LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
+                        # "endTime": "2023-12-21T19:02:35Z"
+                        cloud_time_str = self._task_data.get('endTime', "")
+                        LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
+                        if cloud_time_str != "":
+                            local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                            # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                            local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                            self.end_time = local_dt
+                            LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
 
 @dataclass
@@ -750,6 +758,13 @@ class Info:
     @property
     def has_bambu_cloud_connection(self) -> bool:
         return self._client.bambu_cloud.auth_token != ""
+    
+    def set_prompt_sound(self, enable: bool):
+        if enable:
+            self._client.publish(PROMPT_SOUND_ENABLE)
+        else:
+            self._client.publish(PROMPT_SOUND_DISABLE)
+       
 
 @dataclass
 class AMSInstance:

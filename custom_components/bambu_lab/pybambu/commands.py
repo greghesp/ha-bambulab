@@ -22,3 +22,8 @@ SEND_GCODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "gcode_line", "p
 
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}
+
+# A1 only
+PROMPT_SOUND_ENABLE  = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": True}}
+PROMPT_SOUND_DISABLE = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": False}}
+                             

@@ -498,6 +498,9 @@
     "switch": {
       "manual": {
         "name": "Manueller Aktualisierungsmodus"
+      },
+      "prompt_sound": {
+        "name": "Aufforderungston zulassen"
       }
     }
   }

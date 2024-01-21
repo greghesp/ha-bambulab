@@ -534,7 +534,10 @@
     },
     "switch": {
       "manual": {
-        "name": "Manual refresh mode"
+        "name": "Manual Refresh Mode"
+      },
+      "prompt_sound": {
+        "name": "Allow Prompt Sound"
       }
     }
   }

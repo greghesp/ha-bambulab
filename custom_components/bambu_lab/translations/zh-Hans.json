@@ -474,6 +474,9 @@
     "switch": {
       "manual": {
         "name": "手动刷新模式"
+      },
+      "prompt_sound": {
+        "name": "允许提示音"
       }
     }
   }
