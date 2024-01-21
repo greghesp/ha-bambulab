@@ -490,7 +490,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('access_code', default=self.config_entry.options.get('access_code', access_code))] = TEXT_SELECTOR
         fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
-        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
@@ -551,7 +551,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
-        default_usage_hours = self.config_entry.options.get('usage_hours', 0) if user_input is None else user_input['usage_hours']
+        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
         return self.async_show_form(
