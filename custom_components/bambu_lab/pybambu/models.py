@@ -499,7 +499,7 @@ class PrintJob:
         if currently_idle and not previously_idle and previous_gcode_state != "unknown":
             if self.start_time != None:
                 duration = self.end_time - self.start_time
-                new_hours = duration.seconds / 60 / 60
+                new_hours = int((duration.seconds / 60 / 60) * 100) / 100
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
                 self._client._device.info.usage_hours += new_hours
 
@@ -1123,8 +1123,8 @@ class HMSList:
                 errors[f"{index}-Error"] = f"HMS_{hms_notif.hms_code}: {get_HMS_error_text(hms_notif.hms_code)}"
                 errors[f"{index}-Wiki"] = hms_notif.wiki_url
                 errors[f"{index}-Severity"] = hms_notif.severity
-                LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
-                #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure               
+                #LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
+                #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure
 
             if self.errors != errors:
                 self.errors = errors

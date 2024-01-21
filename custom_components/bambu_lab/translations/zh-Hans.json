@@ -32,7 +32,7 @@
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
           "region": "帐户区域：",
-          "email": "电子邮件地址",
+          "email": "电子邮件地址或电话号码",
           "password": "密码"
         }
       },
@@ -84,7 +84,7 @@
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
           "region": "帐户区域：",
-          "email": "电子邮件地址",
+          "email": "电子邮件地址或电话号码",
           "password": "密码"
         }
       },

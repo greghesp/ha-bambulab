@@ -121,10 +121,10 @@ class ChamberImageThread(threading.Thread):
         #
         # Further attempts to receive data will get SSLWantReadError until a new image is ready (1-2 seconds later)
         while connect_attempts < MAX_CONNECT_ATTEMPTS and not self._stop_event.is_set():
+            connect_attempts += 1
             try:
                 with socket.create_connection((hostname, port)) as sock:
                     try:
-                        connect_attempts += 1
                         sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
                         sslSock.write(auth_data)
                         img = None
@@ -198,6 +198,15 @@ class ChamberImageThread(threading.Thread):
                             LOGGER.error(f"{self._client._device.info.device_type}: UNEXPECTED DATA RECEIVED: {len(dr)}")
                             time.sleep(1)
 
+            except OSError as e:
+                if e.errno == 113:
+                    LOGGER.debug(f"{self._client._device.info.device_type}: Host is unreachable")
+                else:
+                    LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread outer exception occurred:")
+                    LOGGER.error(f"{self._client._device.info.device_type}: Exception. Type: {type(e)} Args: {e}")
+                if not self._stop_event.is_set():
+                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+
             except Exception as e:
                 LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread outer exception occurred:")
                 LOGGER.error(f"{self._client._device.info.device_type}: Exception. Type: {type(e)} Args: {e}")
@@ -244,6 +253,10 @@ def mqtt_listen_thread(self):
             LOGGER.error("A listener loop thread exception occurred:")
             LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
             time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+
+        if self.client is None:
+            break
+
         self.client.disconnect()
 
     LOGGER.info("MQTT listener thread exited.")

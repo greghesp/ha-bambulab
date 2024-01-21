@@ -32,7 +32,7 @@
         "description": "Fornisci le tue credenziali Bambu Lab:",
         "data": {
           "region": "Area dell'account:",
-          "email": "Indirizzo e-mail",
+          "email": "Indirizzo e-mail o numero di telefono",
           "password": "Password"
         }
       },
@@ -84,7 +84,7 @@
         "description": "Fornisci le tue credenziali Bambu Lab:",
         "data": {
           "region": "Area dell'account:",
-          "email": "Indirizzo e-mail",
+          "email": "Indirizzo e-mail o numero di telefono",
           "password": "Password"
         }
       },
