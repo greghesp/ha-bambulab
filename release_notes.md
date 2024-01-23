@@ -1,4 +1,7 @@
-### V2.014
+### V2.0.15
+- Add lost fix for usage hours from prototype branch
+
+### V2.0.14
 - Improve handling of offline/unreachable printer in chamber image thread.
 
 ### V2.0.13
