@@ -466,6 +466,8 @@ class PrintJob:
             if self._client._device.supports_feature(Features.START_TIME_GENERATED):
                 # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                 self.start_time = get_end_time(0)
+                # Make sure we don't keep using a stale end time.
+                self.end_time = None
                 LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
             # Update task data if bambu cloud connected
@@ -569,7 +571,9 @@ class PrintJob:
                 self.print_length = self._task_data.get('length', self.print_length)
                 self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
 
-                if self._client._device.supports_feature(Features.START_TIME_GENERATED):
+                status = self._task_data['status']
+                LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
+                if self._client._device.supports_feature(Features.START_TIME_GENERATED) and (status == 4):
                     # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                     # do so uniformly so we always have matched start/end times.
 
