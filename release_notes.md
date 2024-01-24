@@ -1,11 +1,12 @@
 ### V2.0.15
 - Add lost fix for usage hours from prototype branch
+- Fix missed usage hours paused at print end if the AMS fails to retract
 
 ### V2.0.14
-- Improve handling of offline/unreachable printer in chamber image thread.
+- Improve handling of offline/unreachable printer in chamber image thread
 
 ### V2.0.13
-- Fix reconnect on lost connection to printer.
+- Fix reconnect on lost connection to printer
 - Fix manual connection mode
 
 ### V2.0.12
@@ -20,20 +21,20 @@
 - Fix A1 Mini still missing chamber image
 
 ### V2.0.9
-- Fix mishandling of printer power off/on when connected to bambu cloud mqtt.
+- Fix mishandling of printer power off/on when connected to bambu cloud mqtt
 
 ### V2.0.8
 - Fix missing chamber image on A1 Mini
 
 ### V2.0.7
 - Add nozzle type & diameter sensors
-- Get correct start time on integration start with P1/A1 from Bambu Cloud and fix incorrect end time in some cases.
+- Get correct start time on integration start with P1/A1 from Bambu Cloud and fix incorrect end time in some cases
 - Expose X1 enclosure door state as a diagnostic sensor
 - Reconnect to printer for chamber image if connection drops
 - Fixes
 
 ### V2.0.5
-- Rework P1/A1 chamber image handling to be a lot more efficient and maybe fix broken tight loop bug
+- Rework P1/A1 chamber image handling to be a lot more efficient and maybe fix broken tight loop bug.
 - Make bambu cloud setup clearer w/ regards to camera and local connection.
 - Make P1/A1 camera unavailable if either host IP or access code has not been provided.
 - Detect P1/A1 rejecting camera connnection attempt and report error in the logs.
