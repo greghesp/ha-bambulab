@@ -365,6 +365,7 @@ class PrintJob:
 
     print_percentage: int
     gcode_state: str
+    file_type_icon: str
     gcode_file: str
     subtask_name: str
     start_time: datetime
@@ -376,6 +377,7 @@ class PrintJob:
     print_weight: int
     print_length: int
     print_bed_type: str
+    print_type: str
 
     def __init__(self, client):
         self._client = client
@@ -392,6 +394,8 @@ class PrintJob:
         self.print_weight = 0
         self.print_length = 0
         self.print_bed_type = "unknown"
+        self.file_type_icon = "mdi:file"
+        self.print_type = "local"
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -426,8 +430,9 @@ class PrintJob:
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         self.gcode_file = data.get("gcode_file", self.gcode_file)
+        self.print_type = data.get("print_type", self.print_type)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
-
+        self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
 

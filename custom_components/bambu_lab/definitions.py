@@ -47,6 +47,7 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     available_fn: Callable[..., bool] = lambda _: True
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
+    icon_fn: Callable[..., str] = lambda _: None
 
 
 @dataclass
@@ -293,16 +294,16 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="gcode_file",
         translation_key="gcode_file",
-        icon="mdi:file",
         available_fn=lambda self: self.coordinator.get_model().print_job.gcode_file != "",
-        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_file
+        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_file,
+        icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
     ),
     BambuLabSensorEntityDescription(
         key="subtask_name",
         translation_key="subtask_name",
-        icon="mdi:file",
         available_fn=lambda self: self.coordinator.get_model().print_job.subtask_name != "",
-        value_fn=lambda self: self.coordinator.get_model().print_job.subtask_name
+        value_fn=lambda self: self.coordinator.get_model().print_job.subtask_name,
+        icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
     ),
     BambuLabSensorEntityDescription(
         key="name",
