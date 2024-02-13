@@ -317,6 +317,9 @@
       "subtask_name": {
         "name": "Task name"
       },
+      "print_type": {
+        "name": "Print type"
+      },
       "start_time": {
         "name": "Start time"
       },
