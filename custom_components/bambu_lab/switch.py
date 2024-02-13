@@ -58,6 +58,14 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
 
     entity_description = MANUAL_REFRESH_MODE_SWITCH_DESCRIPTION
 
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            config_entry: ConfigEntry
+    ) -> None:
+        super().__init__(coordinator, config_entry)
+        self._attr_is_on = self.coordinator.client.manual_refresh_mode
+
     @property
     def available(self) -> bool:
         return self.coordinator.get_model().info.mqtt_mode == "local"
@@ -70,9 +78,9 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable manual refresh mode."""
         self._attr_is_on = not self.coordinator.client.manual_refresh_mode
-        await self.coordinator.client.set_manual_refresh_mode(True)
+        await self.coordinator.set_manual_refresh_mode(True)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable manual refresh mode."""
         self._attr_is_on = not self.coordinator.client.manual_refresh_mode
-        await self.coordinator.client.set_manual_refresh_mode(False)
+        await self.coordinator.set_manual_refresh_mode(False)
