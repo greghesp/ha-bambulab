@@ -270,7 +270,7 @@ class BambuClient:
     _usage_hours: float
 
     def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
-                 username: str, auth_token: str, access_code: str, usage_hours: float = 0):
+                 username: str, auth_token: str, access_code: str, usage_hours: float = 0, manual_refresh_mode: bool = False):
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
@@ -283,7 +283,7 @@ class BambuClient:
         self._usage_hours = usage_hours
         self._port = 1883
         self._refreshed = False
-        self._manual_refresh_mode = False
+        self._manual_refresh_mode = manual_refresh_mode
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(region, email, username, auth_token)
 

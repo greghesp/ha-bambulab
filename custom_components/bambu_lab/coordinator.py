@@ -33,6 +33,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._hass = hass
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
+        LOGGER.debug(f"OPTIONS: {entry.options}")
 
         self.latest_usage_hours = float(entry.options.get('usage_hours', 0))
         self.client = BambuClient(device_type = entry.data["device_type"],
@@ -44,7 +45,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                   username = entry.options['username'],
                                   auth_token = entry.options['auth_token'],
                                   access_code = entry.options['access_code'],
-                                  usage_hours = self.latest_usage_hours)
+                                  usage_hours = self.latest_usage_hours,
+                                  manual_refresh_mode = entry.options.get('manual_refresh_mode', False))
             
         self._updatedDevice = False
         self.data = self.get_model()
@@ -267,3 +269,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             hw_version="",
             sw_version=""
         )
+
+    async def set_manual_refresh_mode(self, manual_refresh_mode):
+        await self.client.set_manual_refresh_mode(manual_refresh_mode)
+        options = dict(self.config_entry.options)
+        options['manual_refresh_mode'] = manual_refresh_mode
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            title=self.get_model().info.serial,
+            data=self.config_entry.data,
+            options=options)
