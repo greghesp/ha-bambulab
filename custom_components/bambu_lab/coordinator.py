@@ -33,7 +33,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._hass = hass
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
-        LOGGER.debug(f"OPTIONS: {entry.options}")
 
         self.latest_usage_hours = float(entry.options.get('usage_hours', 0))
         self.client = BambuClient(device_type = entry.data["device_type"],
