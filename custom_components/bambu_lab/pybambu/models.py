@@ -374,10 +374,19 @@ class PrintJob:
     current_layer: int
     total_layers: int
     print_error: int
-    print_weight: int
+    print_weight: float
     print_length: int
     print_bed_type: str
     print_type: str
+    _ams_print_weights: float
+
+    @property
+    def get_ams_print_weights(self) -> float:
+        values = {}
+        for i in range(16):
+            if self._ams_print_weights[i] != 0:
+                values[i] = self._ams_print_weights[i]
+        return values
 
     def __init__(self, client):
         self._client = client
@@ -392,6 +401,7 @@ class PrintJob:
         self.total_layers = 0
         self.print_error = 0
         self.print_weight = 0
+        self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.print_length = 0
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
@@ -565,6 +575,7 @@ class PrintJob:
                 LOGGER.debug("No bambu cloud task data found for printer.")
                 self._client._device.cover_image.set_jpeg(None)
                 self.print_weight = 0
+                self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 self.print_length = 0
                 self.print_bed_type = "unknown"
                 self.start_time = None
@@ -576,9 +587,15 @@ class PrintJob:
                     data = self._client.bambu_cloud.download(url)
                     self._client._device.cover_image.set_jpeg(data)
 
-                self.print_weight = self._task_data.get('weight', self.print_weight)
                 self.print_length = self._task_data.get('length', self.print_length)
                 self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+                self.print_weight = self._task_data.get('weight', self.print_weight)
+                ams_print_data = self._task_data.get('amsDetailMapping', [])
+                self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                for ams_data in ams_print_data:
+                    index = ams_data['ams']
+                    weight = ams_data['weight']
+                    self._ams_print_weights[index] = weight
 
                 status = self._task_data['status']
                 LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
