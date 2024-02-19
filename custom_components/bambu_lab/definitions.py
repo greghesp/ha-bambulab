@@ -319,6 +319,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:file",
         value_fn=lambda self: self.coordinator.get_model().print_job.print_length / 100,
+        extra_attributes=lambda self: self.coordinator.get_model().print_job.get_ams_print_lengths,
         exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
     ),
     BambuLabSensorEntityDescription(

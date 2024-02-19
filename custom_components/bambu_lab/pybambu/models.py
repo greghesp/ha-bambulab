@@ -379,6 +379,7 @@ class PrintJob:
     print_bed_type: str
     print_type: str
     _ams_print_weights: float
+    _ams_print_lengths: float
 
     @property
     def get_ams_print_weights(self) -> float:
@@ -386,6 +387,14 @@ class PrintJob:
         for i in range(16):
             if self._ams_print_weights[i] != 0:
                 values[f"AMS Slot {i}"] = self._ams_print_weights[i]
+        return values
+
+    @property
+    def get_ams_print_lengths(self) -> float:
+        values = {}
+        for i in range(16):
+            if self._ams_print_lengths[i] != 0:
+                values[f"AMS Slot {i}"] = self._ams_print_lengths[i]
         return values
 
     def __init__(self, client):
@@ -402,6 +411,7 @@ class PrintJob:
         self.print_error = 0
         self.print_weight = 0
         self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.print_length = 0
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
@@ -576,6 +586,7 @@ class PrintJob:
                 self._client._device.cover_image.set_jpeg(None)
                 self.print_weight = 0
                 self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 self.print_length = 0
                 self.print_bed_type = "unknown"
                 self.start_time = None
@@ -592,10 +603,12 @@ class PrintJob:
                 self.print_weight = self._task_data.get('weight', self.print_weight)
                 ams_print_data = self._task_data.get('amsDetailMapping', [])
                 self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 for ams_data in ams_print_data:
                     index = ams_data['ams']
                     weight = ams_data['weight']
                     self._ams_print_weights[index] = weight
+                    self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
 
                 status = self._task_data['status']
                 LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
