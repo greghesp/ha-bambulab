@@ -598,7 +598,8 @@ class PrintJob:
                     data = self._client.bambu_cloud.download(url)
                     self._client._device.cover_image.set_jpeg(data)
 
-                self.print_length = self._task_data.get('length', self.print_length)
+                LOGGER.debug(f"{data}")
+                self.print_length = self._task_data.get('length', self.print_length * 100) / 100
                 self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
                 self.print_weight = self._task_data.get('weight', self.print_weight)
                 ams_print_data = self._task_data.get('amsDetailMapping', [])
@@ -608,6 +609,7 @@ class PrintJob:
                     index = ams_data['ams']
                     weight = ams_data['weight']
                     self._ams_print_weights[index] = weight
+                    LOGGER.debug(f"AMS: {self.print_length} { weight } { self.print_weight }")
                     self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
 
                 status = self._task_data['status']
