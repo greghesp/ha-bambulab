@@ -131,7 +131,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     
     def _update_data(self):
         device = self.get_model()
-        self.async_set_updated_data(device)
+        try:
+            self.async_set_updated_data(device)
+        except Exception as e:
+            LOGGER.error("An exception occurred calling async_set_updated_data():")
+            LOGGER.error(f"Exception type: {type(e)}")
+            LOGGER.error(f"Exception data: {e}")
 
     def _update_hms(self):
         dev_reg = device_registry.async_get(self._hass)

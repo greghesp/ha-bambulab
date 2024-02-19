@@ -385,7 +385,7 @@ class PrintJob:
         values = {}
         for i in range(16):
             if self._ams_print_weights[i] != 0:
-                values[i] = self._ams_print_weights[i]
+                values[f"AMS Slot {i}"] = self._ams_print_weights[i]
         return values
 
     def __init__(self, client):
