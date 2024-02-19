@@ -518,7 +518,7 @@ class PrintJob:
                 # self.end_time isn't updated if we hit an AMS retract at print end but the printer does count that entire
                 # paused time as usage hours. So we need to use the current time instead of the last recorded end time in
                 # our calculation here.
-                duration = get_end_time(0) - self.start_time
+                duration = datetime.now() - self.start_time
                 # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
                 new_hours = round((duration.seconds / 60 / 60) * 100) / 100
                 LOGGER.debug(f"NEW USAGE HOURS: {self._client._device.info.device_type} {new_hours}")
