@@ -415,7 +415,7 @@ class PrintJob:
         self.print_length = 0
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
-        self.print_type = "local"
+        self.print_type = ""
 
     def print_update(self, data) -> bool:
         """Update from dict"""

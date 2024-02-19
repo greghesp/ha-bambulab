@@ -100,6 +100,12 @@ SPEED_PROFILE = {
     4: "ludicrous"
 }
 
+PRINT_TYPE_OPTIONS = {
+    "local",
+    "cloud",
+    "idle"
+}
+
 FILAMENT_NAMES = {
     "default": "Unknown",
     "GFB00": "Bambu ABS",

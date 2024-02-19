@@ -27,7 +27,7 @@ from homeassistant.components.binary_sensor import (
 )
 
 from .const import LOGGER
-from .pybambu.const import SPEED_PROFILE, Features, FansEnum, CURRENT_STAGE_OPTIONS, GCODE_STATE_OPTIONS
+from .pybambu.const import PRINT_TYPE_OPTIONS, SPEED_PROFILE, Features, FansEnum, CURRENT_STAGE_OPTIONS, GCODE_STATE_OPTIONS
 
 
 def fan_to_percent(speed):
@@ -304,6 +304,15 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         available_fn=lambda self: self.coordinator.get_model().print_job.subtask_name != "",
         value_fn=lambda self: self.coordinator.get_model().print_job.subtask_name,
         icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
+    ),
+    BambuLabSensorEntityDescription(
+        key="print_type",
+        translation_key="print_type",
+        available_fn=lambda self: self.coordinator.get_model().print_job.print_type != "",
+        value_fn=lambda self: self.coordinator.get_model().print_job.print_type,
+        icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon,
+        options=PRINT_TYPE_OPTIONS,
+        device_class=SensorDeviceClass.ENUM,
     ),
     BambuLabSensorEntityDescription(
         key="name",
