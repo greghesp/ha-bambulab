@@ -604,11 +604,12 @@ class PrintJob:
                 ams_print_data = self._task_data.get('amsDetailMapping', [])
                 self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                for ams_data in ams_print_data:
-                    index = ams_data['ams']
-                    weight = ams_data['weight']
-                    self._ams_print_weights[index] = weight
-                    self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
+                if self.print_weight != 0:
+                    for ams_data in ams_print_data:
+                        index = ams_data['ams']
+                        weight = ams_data['weight']
+                        self._ams_print_weights[index] = weight
+                        self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
 
                 status = self._task_data['status']
                 LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
