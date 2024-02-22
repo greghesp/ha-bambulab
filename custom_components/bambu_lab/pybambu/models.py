@@ -365,6 +365,7 @@ class PrintJob:
 
     print_percentage: int
     gcode_state: str
+    file_type_icon: str
     gcode_file: str
     subtask_name: str
     start_time: datetime
@@ -373,9 +374,28 @@ class PrintJob:
     current_layer: int
     total_layers: int
     print_error: int
-    print_weight: int
+    print_weight: float
     print_length: int
     print_bed_type: str
+    print_type: str
+    _ams_print_weights: float
+    _ams_print_lengths: float
+
+    @property
+    def get_ams_print_weights(self) -> float:
+        values = {}
+        for i in range(16):
+            if self._ams_print_weights[i] != 0:
+                values[f"AMS Slot {i}"] = self._ams_print_weights[i]
+        return values
+
+    @property
+    def get_ams_print_lengths(self) -> float:
+        values = {}
+        for i in range(16):
+            if self._ams_print_lengths[i] != 0:
+                values[f"AMS Slot {i}"] = self._ams_print_lengths[i]
+        return values
 
     def __init__(self, client):
         self._client = client
@@ -390,8 +410,12 @@ class PrintJob:
         self.total_layers = 0
         self.print_error = 0
         self.print_weight = 0
+        self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.print_length = 0
         self.print_bed_type = "unknown"
+        self.file_type_icon = "mdi:file"
+        self.print_type = ""
 
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -426,8 +450,9 @@ class PrintJob:
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         self.gcode_file = data.get("gcode_file", self.gcode_file)
+        self.print_type = data.get("print_type", self.print_type)
         self.subtask_name = data.get("subtask_name", self.subtask_name)
-
+        self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
 
@@ -438,7 +463,7 @@ class PrintJob:
         # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
         if data.get("gcode_start_time") is not None:
             if self.start_time != get_start_time(int(data.get("gcode_start_time"))):
-                LOGGER.debug(f"GCODE START TIME: {self.start_time}")
+                LOGGER.debug(f"GCODE START TIME: {self._client._device.info.device_type} {self.start_time}")
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Generate the end_time from the remaining_time mqtt payload value if present.
@@ -447,11 +472,11 @@ class PrintJob:
             self.remaining_time = data.get("mc_remaining_time")
             if self.start_time is None:
                 if self.start_time is not None:
-                    LOGGER.debug(f"END TIME1: None")
+                    LOGGER.debug(f"END TIME1: {self._client._device.info.device_type} None")
                 self.end_time = None
             elif existing_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
-                LOGGER.debug(f"END TIME2: {self.end_time}")
+                LOGGER.debug(f"END TIME2: {self._client._device.info.device_type} {self.end_time}")
 
         # Handle print start
         previously_idle = previous_gcode_state == "IDLE" or previous_gcode_state == "FAILED" or previous_gcode_state == "FINISH"
@@ -466,7 +491,9 @@ class PrintJob:
             if self._client._device.supports_feature(Features.START_TIME_GENERATED):
                 # We can use the existing get_end_time helper to format date.now() as desired by passing 0.
                 self.start_time = get_end_time(0)
-                LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
+                # Make sure we don't keep using a stale end time.
+                self.end_time = None
+                LOGGER.debug(f"GENERATED START TIME: {self._client._device.info.device_type} {self.start_time}")
 
             # Update task data if bambu cloud connected
             self._update_task_data()
@@ -498,9 +525,13 @@ class PrintJob:
 
         if currently_idle and not previously_idle and previous_gcode_state != "unknown":
             if self.start_time != None:
-                duration = self.end_time - self.start_time
-                new_hours = int((duration.seconds / 60 / 60) * 100) / 100
-                LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
+                # self.end_time isn't updated if we hit an AMS retract at print end but the printer does count that entire
+                # paused time as usage hours. So we need to use the current time instead of the last recorded end time in
+                # our calculation here.
+                duration = datetime.now() - self.start_time
+                # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
+                new_hours = round((duration.seconds / 60 / 60) * 100) / 100
+                LOGGER.debug(f"NEW USAGE HOURS: {self._client._device.info.device_type} {new_hours}")
                 self._client._device.info.usage_hours += new_hours
 
         return (old_data != f"{self.__dict__}")
@@ -554,6 +585,8 @@ class PrintJob:
                 LOGGER.debug("No bambu cloud task data found for printer.")
                 self._client._device.cover_image.set_jpeg(None)
                 self.print_weight = 0
+                self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 self.print_length = 0
                 self.print_bed_type = "unknown"
                 self.start_time = None
@@ -565,33 +598,44 @@ class PrintJob:
                     data = self._client.bambu_cloud.download(url)
                     self._client._device.cover_image.set_jpeg(data)
 
-                self.print_weight = self._task_data.get('weight', self.print_weight)
-                self.print_length = self._task_data.get('length', self.print_length)
+                self.print_length = self._task_data.get('length', self.print_length * 100) / 100
                 self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+                self.print_weight = self._task_data.get('weight', self.print_weight)
+                ams_print_data = self._task_data.get('amsDetailMapping', [])
+                self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                if self.print_weight != 0:
+                    for ams_data in ams_print_data:
+                        index = ams_data['ams']
+                        weight = ams_data['weight']
+                        self._ams_print_weights[index] = weight
+                        self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
 
-                if self._client._device.supports_feature(Features.START_TIME_GENERATED):
+                status = self._task_data['status']
+                LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
+                if self._client._device.supports_feature(Features.START_TIME_GENERATED) and (status == 4):
                     # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                     # do so uniformly so we always have matched start/end times.
 
                     # "startTime": "2023-12-21T19:02:16Z"
                     cloud_time_str = self._task_data.get('startTime', "")
-                    LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
+                    LOGGER.debug(f"CLOUD START TIME1: {self._client._device.info.device_type} {self.start_time}")
                     if cloud_time_str != "":
                         local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
                         # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
                         local_dt = datetime.fromtimestamp(local_dt.timestamp())
                         self.start_time = local_dt
-                        LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
+                        LOGGER.debug(f"CLOUD START TIME2: {self._client._device.info.device_type} {self.start_time}")
 
                     # "endTime": "2023-12-21T19:02:35Z"
                     cloud_time_str = self._task_data.get('endTime', "")
-                    LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
+                    LOGGER.debug(f"CLOUD END TIME1: {self._client._device.info.device_type} {self.end_time}")
                     if cloud_time_str != "":
                         local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
                         # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
                         local_dt = datetime.fromtimestamp(local_dt.timestamp())
                         self.end_time = local_dt
-                        LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
+                        LOGGER.debug(f"CLOUD END TIME2: {self._client._device.info.device_type} {self.end_time}")
 
 
 @dataclass

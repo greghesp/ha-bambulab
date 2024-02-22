@@ -44,7 +44,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                   username = entry.options['username'],
                                   auth_token = entry.options['auth_token'],
                                   access_code = entry.options['access_code'],
-                                  usage_hours = self.latest_usage_hours)
+                                  usage_hours = self.latest_usage_hours,
+                                  manual_refresh_mode = entry.options.get('manual_refresh_mode', False))
             
         self._updatedDevice = False
         self.data = self.get_model()
@@ -130,7 +131,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     
     def _update_data(self):
         device = self.get_model()
-        self.async_set_updated_data(device)
+        try:
+            self.async_set_updated_data(device)
+        except Exception as e:
+            LOGGER.error("An exception occurred calling async_set_updated_data():")
+            LOGGER.error(f"Exception type: {type(e)}")
+            LOGGER.error(f"Exception data: {e}")
 
     def _update_hms(self):
         dev_reg = device_registry.async_get(self._hass)
@@ -267,3 +273,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             hw_version="",
             sw_version=""
         )
+
+    async def set_manual_refresh_mode(self, manual_refresh_mode):
+        await self.client.set_manual_refresh_mode(manual_refresh_mode)
+        options = dict(self.config_entry.options)
+        options['manual_refresh_mode'] = manual_refresh_mode
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            title=self.get_model().info.serial,
+            data=self.config_entry.data,
+            options=options)

@@ -317,6 +317,14 @@
       "subtask_name": {
         "name": "Task name"
       },
+      "print_type": {
+        "name": "Print type",
+        "state": {
+          "local": "Local",
+          "cloud": "Cloud",
+          "idle": "Idle"
+        }
+      },
       "start_time": {
         "name": "Start time"
       },
