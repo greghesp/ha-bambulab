@@ -1,6 +1,10 @@
 ### V2.0.15
 - Add lost fix for usage hours from prototype branch
 - Fix missed usage hours paused at print end if the AMS fails to retract
+- Fix 24 hour jump in usage hours if print almost immediately cancelled
+- Persist manual refresh mode choice across integration restart
+- Add local/cloud print job type sensor
+- Add AMS slot length/weight as extra attributes to the global length/weight sensors
 
 ### V2.0.14
 - Improve handling of offline/unreachable printer in chamber image thread
