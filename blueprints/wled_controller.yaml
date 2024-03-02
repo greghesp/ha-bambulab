@@ -147,10 +147,10 @@ action:
                     !input wled_lights
                 alias: Turn on Wled to green
               - delay:
-                hours: 0
-                minutes: 5
-                seconds: 0
-                milliseconds: 0
+                  hours: 0
+                  minutes: 5
+                  seconds: 0
+                  milliseconds: 0
               - service: light.turn_on
                 data:
                   rgb_color:
