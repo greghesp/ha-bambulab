@@ -32,6 +32,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._hass = hass
+        self._entry = entry
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
 
         self.latest_usage_hours = float(entry.options.get('usage_hours', 0))
@@ -55,6 +56,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             name=DOMAIN,
             update_interval=SCAN_INTERVAL
         )
+
+        self.hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._async_shutdown)
+
+    @callback
+    def _async_shutdown(self, event: Event) -> None:
+        """Call when Home Assistant is stopping."""
+        LOGGER.debug(f"HOME ASSISTANT IS SHUTTING DOWN")
+        self.shutdown()
 
     @callback
     async def start_mqtt(self) -> None:
