@@ -1,5 +1,5 @@
 ### V2.0.16
-- ???
+- Handle home assistant shutdown more gracefully
 
 ### V2.0.15
 - Add lost fix for usage hours from prototype branch
