@@ -77,8 +77,8 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         translation_key="hms_errors",
         device_class=BinarySensorDeviceClass.PROBLEM,
         entity_category=EntityCategory.DIAGNOSTIC,
-        is_on_fn=lambda self: self.coordinator.get_model().hms.count != 0,
-        extra_attributes=lambda self: self.coordinator.get_model().hms.errors
+        is_on_fn=lambda self: self.coordinator.get_model().hms.get_error_count != 0,
+        extra_attributes=lambda self: self.coordinator.get_model().hms.get_errors
     ),
     BambuLabBinarySensorEntityDescription(
         key="online",

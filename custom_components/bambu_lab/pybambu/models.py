@@ -1131,12 +1131,14 @@ class StageAction:
 @dataclass
 class HMSList:
     """Return all HMS related info"""
+    _count: int
+    _errors: dict
 
     def __init__(self, client):
         self._client = client
-        self.count = 0
-        self.errors = {}
-        self.errors["Count"] = 0
+        self._count = 0
+        self._errors = {}
+        self._errors["Count"] = 0
         
     def print_update(self, data) -> bool:
         """Update from dict"""
@@ -1154,9 +1156,9 @@ class HMSList:
 
         if 'hms' in data.keys():
             hmsList = data.get('hms', [])
-            self.count = len(hmsList)
+            self._count = len(hmsList)
             errors = {}
-            errors["Count"] = self.count
+            errors["Count"] = self._count
 
             index: int = 0
             for hms in hmsList:
@@ -1170,15 +1172,25 @@ class HMSList:
                 #LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
                 #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure
 
-            if self.errors != errors:
-                self.errors = errors
-                if self.count != 0:
+            if self._errors != errors:
+                LOGGER.debug("Updating HMS error list.")
+                self._errors = errors
+                if self._count != 0:
                     LOGGER.warning(f"HMS ERRORS: {errors}")
                 if self._client.callback is not None:
                     self._client.callback("event_hms_errors")
                 return True
         
         return False
+    
+    @property
+    def get_errors(self) -> dict:
+        LOGGER.debug(f"PROPERTYCALL: get_hms_errors")
+        return self._errors
+    
+    @property
+    def get_error_count(self) -> int:
+        return self._count
 
 
 @dataclass
