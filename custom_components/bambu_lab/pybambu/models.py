@@ -59,8 +59,6 @@ class Device:
         self.cover_image = CoverImage(client = client)
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
-
         send_event = False
         send_event = send_event | self.info.print_update(data = data)
         send_event = send_event | self.print_job.print_update(data = data)
@@ -82,7 +80,6 @@ class Device:
             self.push_all_data = data
 
     def info_update(self, data):
-        """Update from dict"""
         self.info.info_update(data = data)
         self.home_flag.info_update(data = data)
         self.ams.info_update(data = data)
@@ -151,7 +148,6 @@ class Lights:
         self.chamber_light_override = ""
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         # "lights_report": [
@@ -209,7 +205,6 @@ class Camera:
         self.timelapse = ''
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         # "ipcam": {
@@ -246,7 +241,6 @@ class Temperature:
         self.target_nozzle_temp = 0
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         self.bed_temp = round(data.get("bed_temper", self.bed_temp))
@@ -293,7 +287,6 @@ class Fans:
         self._heatbreak_fan_speed = 0
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         self._aux_fan_speed = data.get("big_fan1_speed", self._aux_fan_speed)
@@ -418,7 +411,6 @@ class PrintJob:
         self.print_type = ""
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         # Example payload:
@@ -678,7 +670,6 @@ class Info:
                 self._client.callback("event_printer_data_update")
 
     def info_update(self, data):
-        """Update from dict"""
 
         # Example payload:
         # {
@@ -708,7 +699,6 @@ class Info:
             self._client.callback("event_printer_info_update")
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         # Example payload:
@@ -822,8 +812,6 @@ class AMSList:
         self.data = [None] * 4
 
     def info_update(self, data):
-        """Update from dict"""
-
         # First determine if this the version info data or the json payload data. We use the version info to determine
         # what devices to add to humidity_index assistant and add all the sensors as entities. And then then json payload data
         # to populate the values for all those entities.
@@ -882,7 +870,6 @@ class AMSList:
                 self._client.callback("event_ams_info_update")
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         # AMS json payload is of the form:
@@ -987,7 +974,6 @@ class AMSTray:
         self.tag_uid = "0000000000000000"
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         if len(data) == 1:
@@ -1028,7 +1014,6 @@ class ExternalSpool(AMSTray):
         self._client = client
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
 
         # P1P virtual tray example
         # "vt_tray": {
@@ -1074,14 +1059,12 @@ class Speed:
     modifier: int
 
     def __init__(self, client):
-        """Load from dict"""
         self._client = client
         self._id = 2
         self.name = get_speed_name(2)
         self.modifier = 100
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         self._id = int(data.get("spd_lvl", self._id))
@@ -1110,13 +1093,11 @@ class StageAction:
     description: str
 
     def __init__(self):
-        """Load from dict"""
         self._id = 255
         self._print_type = ""
         self.description = get_current_stage(self._id)
 
     def print_update(self, data) -> bool:
-        """Update from dict"""
         old_data = f"{self.__dict__}"
 
         self._print_type = data.get("print_type", self._print_type)
@@ -1141,8 +1122,6 @@ class HMSList:
         self._errors["Count"] = 0
         
     def print_update(self, data) -> bool:
-        """Update from dict"""
-
         # Example payload:
         # "hms": [
         #     {
