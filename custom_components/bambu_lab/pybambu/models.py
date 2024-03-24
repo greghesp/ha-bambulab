@@ -1184,12 +1184,12 @@ class HMSList:
         return False
     
     @property
-    def get_errors(self) -> dict:
+    def errors(self) -> dict:
         LOGGER.debug(f"PROPERTYCALL: get_hms_errors")
         return self._errors
     
     @property
-    def get_error_count(self) -> int:
+    def error_count(self) -> int:
         return self._count
 
 

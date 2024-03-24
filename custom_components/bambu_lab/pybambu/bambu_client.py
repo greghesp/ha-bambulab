@@ -44,7 +44,7 @@ class WatchdogThread(threading.Thread):
         self._last_received_data = time.time()
 
     def run(self):
-        LOGGER.info("Watchdog thread started.")
+        LOGGER.info(f"{self._client._device.info.device_type} Watchdog thread started.")
         WATCHDOG_TIMER = 30
         while True:
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
@@ -61,7 +61,7 @@ class WatchdogThread(threading.Thread):
             elif interval < WATCHDOG_TIMER:
                 self._watchdog_fired = False
 
-        LOGGER.info("Watchdog thread exited.")
+        LOGGER.info(f"{self._client._device.info.device_type} Watchdog thread exited.")
 
 
 class ChamberImageThread(threading.Thread):
@@ -222,36 +222,36 @@ def mqtt_listen_thread(self):
     while True:
         try:
             host = self.host if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
-            LOGGER.debug(f"Connect: Attempting Connection to {host}")
+            LOGGER.debug(f"{self._device.info.device_type} Connect: Attempting Connection to {host}")
             self.client.connect(host, self._port, keepalive=5)
 
-            LOGGER.debug("Starting listen loop")
+            LOGGER.debug(f"{self._device.info.device_type} Starting listen loop")
             self.client.loop_forever()
-            LOGGER.debug("Ended listen loop.")
+            LOGGER.debug(f"{self._device.info.device_type} Ended listen loop.")
             break
         except TimeoutError as e:
             if exceptionSeen != "TimeoutError":
-                LOGGER.debug(f"TimeoutError: {e}.")
+                LOGGER.debug(f"{self._device.info.device_type} TimeoutError: {e}.")
             exceptionSeen = "TimeoutError"
             time.sleep(5)
         except ConnectionError as e:
             if exceptionSeen != "ConnectionError":
-                LOGGER.debug(f"ConnectionError: {e}.")
+                LOGGER.debug(f"{self._device.info.device_type} ConnectionError: {e}.")
             exceptionSeen = "ConnectionError"
             time.sleep(5)
         except OSError as e:
             if e.errno == 113:
                 if exceptionSeen != "OSError113":
-                    LOGGER.debug(f"OSError: {e}.")
+                    LOGGER.debug(f"{self._device.info.device_type} OSError: {e}.")
                 exceptionSeen = "OSError113"
                 time.sleep(5)
             else:
-                LOGGER.error("A listener loop thread exception occurred:")
-                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                LOGGER.error(f"{self._device.info.device_type} A listener loop thread exception occurred:")
+                LOGGER.error(f"{self._device.info.device_type} Exception. Type: {type(e)} Args: {e}")
                 time.sleep(1)  # Avoid a tight loop if this is a persistent error.
         except Exception as e:
-            LOGGER.error("A listener loop thread exception occurred:")
-            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+            LOGGER.error(f"{self._device.info.device_type} A listener loop thread exception occurred:")
+            LOGGER.error(f"{self._device.info.device_type} Exception. Type: {type(e)} Args: {e}")
             time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
         if self.client is None:
@@ -259,7 +259,7 @@ def mqtt_listen_thread(self):
 
         self.client.disconnect()
 
-    LOGGER.info("MQTT listener thread exited.")
+    LOGGER.info(f"{self._device.info.device_type} MQTT listener thread exited.")
 
 
 @dataclass
@@ -379,16 +379,19 @@ class BambuClient:
                       userdata: None,
                       result_code: int):
         """Called when MQTT Disconnects"""
-        LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
+        LOGGER.warn(f"{self._device.info.device_type} On Disconnect: Disconnected from Broker: {result_code}")
         self._on_disconnect()
     
     def _on_disconnect(self):
+        LOGGER.warn(f"{self._device.info.device_type} _on_disconnect")
         self._connected = False
         self._device.info.set_online(False)
         if self._watchdog is not None:
+            LOGGER.warn(f"{self._device.info.device_type} stopping watchdog thread")
             self._watchdog.stop()
             self._watchdog.join()
         if self._camera is not None:
+            LOGGER.warn(f"{self._device.info.device_type} stopping camera thread")
             self._camera.stop()
             self._camera.join()
 
@@ -474,7 +477,7 @@ class BambuClient:
 
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
-        LOGGER.debug("Disconnect: Client Disconnecting")
+        LOGGER.debug(f"{self._device.info.device_type} Disconnect: Client Disconnecting")
         if self.client is not None:
             self.client.disconnect()
             self.client = None
