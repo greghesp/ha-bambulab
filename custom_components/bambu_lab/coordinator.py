@@ -71,6 +71,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug("Starting MQTT")
 
         def event_handler(event):
+            LOGGER.debug(f"EVENT: {event}")
             if event == "event_printer_info_update":
                 self._update_device_info()
                 if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):

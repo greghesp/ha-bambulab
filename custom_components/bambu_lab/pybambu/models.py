@@ -74,6 +74,7 @@ class Device:
         send_event = send_event | self.home_flag.print_update(data = data)
 
         if send_event and self._client.callback is not None:
+            LOGGER.debug("event_printer_data_update")
             self._client.callback("event_printer_data_update")
 
         if data.get("msg", 0) == 0:
@@ -721,6 +722,7 @@ class Info:
         #         "total_layer_num": 0,
 
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
+        LOGGER.debug(f"WIFI: {self.wifi_signal}")
 
         # Version data is provided differently for X1 and P1
         # P1P example:
@@ -812,6 +814,8 @@ class AMSList:
         self.data = [None] * 4
 
     def info_update(self, data):
+        old_data = f"{self.__dict__}"
+
         # First determine if this the version info data or the json payload data. We use the version info to determine
         # what devices to add to humidity_index assistant and add all the sensors as entities. And then then json payload data
         # to populate the values for all those entities.
@@ -864,6 +868,9 @@ class AMSList:
                     if self.data[index].hw_version != module['hw_ver']:
                         received_ams_info = True
                         self.data[index].hw_version = module['hw_ver']
+
+        data_changed = old_data != f"{self.__dict__}"
+        LOGGER.debug(f"UPDATED1: {received_ams_info} {data_changed}")
 
         if received_ams_info:
             if self._client.callback is not None:
@@ -954,6 +961,8 @@ class AMSList:
                     tray_id = int(tray['id'])
                     received_ams_data = received_ams_data | self.data[index].tray[tray_id].print_update(tray)
 
+        data_changed = (old_data != f"{self.__dict__}")
+        LOGGER.debug(f"UPDATED2: {received_ams_data} {data_changed}")
         return received_ams_data
 
 @dataclass
@@ -1210,14 +1219,18 @@ class ChamberImage:
         self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
-        #LOGGER.debug(f"JPEG RECEIVED: {self._client._device.info.device_type}")
+        LOGGER.debug(f"JPEG RECEIVED: {self._client._device.info.device_type}")
         self._bytes = bytes
         self._image_last_updated = datetime.now()
         if self._client.callback is not None:
             self._client.callback("event_printer_chamber_image_update")
+        LOGGER.debug(f"JPEG RECIEVED DONE: {self._client._device.info.device_type}")
     
     def get_jpeg(self) -> bytearray:
-        return self._bytes
+        LOGGER.debug(f"JPEG RETRIEVED: {self._client._device.info.device_type}")
+        value = self._bytes.copy()
+        LOGGER.debug(f"JPEG RETRIEVED DONE: {self._client._device.info.device_type}")
+        return value
     
     def get_last_update_time(self) -> datetime:
         return self._image_last_updated
