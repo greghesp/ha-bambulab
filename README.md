@@ -28,6 +28,7 @@ However, the Bambu cloud connection doesn't support 2FA and passwordless social 
 - Printer Serial Number - can be found in the printer settings or in Bambu Studio.
 - Local printer IP address - can be found in the printer network settings (LAN).
 - Access Code - can be found in the Printer settings.
+- (Optional) Enable "LAN Mode LiveView", found under Settings - General, to enable the camera entity.
 
 ### Setup using Bambu Cloud w/ OAuth
 
@@ -157,11 +158,12 @@ instead of OAuth.
 | Online                    |                                                                |
 | Wifi Signal               |                                                                |
 
-### Cameras
+### Camera
 
-| Sensor  | Notes                            |
-| ------- | -------------------------------- |
-| Chamber | P1/A1 need the host IP providing |
+| Sensor  | Notes                                                   |
+| ------- | ------------------------------------------------------- |
+| Chamber | P1/A1 need the host IP providing                        |
+|         | Make sure to enable "LAN Mode LiveView" on your printer |
 
 ### Automation device triggers
 
