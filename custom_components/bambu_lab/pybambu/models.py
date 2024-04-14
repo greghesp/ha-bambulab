@@ -456,7 +456,7 @@ class PrintJob:
         # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
         if data.get("gcode_start_time") is not None:
             if self.start_time != get_start_time(int(data.get("gcode_start_time"))):
-                LOGGER.debug(f"GCODE START TIME: {self._client._device.info.device_type} {self.start_time}")
+                LOGGER.debug("GCODE START TIME: {self.start_time}")
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Generate the end_time from the remaining_time mqtt payload value if present.
@@ -465,11 +465,11 @@ class PrintJob:
             self.remaining_time = data.get("mc_remaining_time")
             if self.start_time is None:
                 if self.start_time is not None:
-                    LOGGER.debug(f"END TIME1: {self._client._device.info.device_type} None")
+                    LOGGER.debug("END TIME1: None")
                 self.end_time = None
             elif existing_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
-                LOGGER.debug(f"END TIME2: {self._client._device.info.device_type} {self.end_time}")
+                LOGGER.debug(f"END TIME2: {self.end_time}")
 
         # Handle print start
         previously_idle = previous_gcode_state == "IDLE" or previous_gcode_state == "FAILED" or previous_gcode_state == "FINISH"
@@ -486,7 +486,7 @@ class PrintJob:
                 self.start_time = get_end_time(0)
                 # Make sure we don't keep using a stale end time.
                 self.end_time = None
-                LOGGER.debug(f"GENERATED START TIME: {self._client._device.info.device_type} {self.start_time}")
+                LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
             # Update task data if bambu cloud connected
             self._update_task_data()
@@ -524,7 +524,7 @@ class PrintJob:
                 duration = datetime.now() - self.start_time
                 # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
                 new_hours = round((duration.seconds / 60 / 60) * 100) / 100
-                LOGGER.debug(f"NEW USAGE HOURS: {self._client._device.info.device_type} {new_hours}")
+                LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
                 self._client._device.info.usage_hours += new_hours
 
         return (old_data != f"{self.__dict__}")
@@ -612,23 +612,23 @@ class PrintJob:
 
                     # "startTime": "2023-12-21T19:02:16Z"
                     cloud_time_str = self._task_data.get('startTime', "")
-                    LOGGER.debug(f"CLOUD START TIME1: {self._client._device.info.device_type} {self.start_time}")
+                    LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
                     if cloud_time_str != "":
                         local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
                         # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
                         local_dt = datetime.fromtimestamp(local_dt.timestamp())
                         self.start_time = local_dt
-                        LOGGER.debug(f"CLOUD START TIME2: {self._client._device.info.device_type} {self.start_time}")
+                        LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
 
                     # "endTime": "2023-12-21T19:02:35Z"
                     cloud_time_str = self._task_data.get('endTime', "")
-                    LOGGER.debug(f"CLOUD END TIME1: {self._client._device.info.device_type} {self.end_time}")
+                    LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
                     if cloud_time_str != "":
                         local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
                         # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
                         local_dt = datetime.fromtimestamp(local_dt.timestamp())
                         self.end_time = local_dt
-                        LOGGER.debug(f"CLOUD END TIME2: {self._client._device.info.device_type} {self.end_time}")
+                        LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
 
 @dataclass
@@ -722,7 +722,6 @@ class Info:
         #         "total_layer_num": 0,
 
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
-        LOGGER.debug(f"WIFI: {self.wifi_signal}")
 
         # Version data is provided differently for X1 and P1
         # P1P example:
@@ -937,7 +936,6 @@ class AMSList:
         #     "power_on_flag": false
         # },
 
-        received_ams_data = False
         ams_data = data.get("ams", [])
         if len(ams_data) != 0:
             self.tray_now = int(ams_data.get('tray_now', self.tray_now))
@@ -950,20 +948,17 @@ class AMSList:
                     self.data[index] = AMSInstance()
 
                 if self.data[index].humidity_index != int(ams['humidity']):
-                    received_ams_data = True
                     self.data[index].humidity_index = int(ams['humidity'])
                 if self.data[index].temperature != float(ams['temp']):
-                    received_ams_data = True
                     self.data[index].temperature = float(ams['temp'])
 
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
-                    received_ams_data = received_ams_data | self.data[index].tray[tray_id].print_update(tray)
+                    self.data[index].tray[tray_id].print_update(tray)
 
         data_changed = (old_data != f"{self.__dict__}")
-        LOGGER.debug(f"UPDATED2: {received_ams_data} {data_changed}")
-        return received_ams_data
+        return data_changed
 
 @dataclass
 class AMSTray:
@@ -1173,7 +1168,7 @@ class HMSList:
     
     @property
     def errors(self) -> dict:
-        LOGGER.debug(f"PROPERTYCALL: get_hms_errors")
+        #LOGGER.debug(f"PROPERTYCALL: get_hms_errors")
         return self._errors
     
     @property
@@ -1219,17 +1214,17 @@ class ChamberImage:
         self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
-        LOGGER.debug(f"JPEG RECEIVED: {self._client._device.info.device_type}")
+        #LOGGER.debug("JPEG RECEIVED")
         self._bytes = bytes
         self._image_last_updated = datetime.now()
         if self._client.callback is not None:
             self._client.callback("event_printer_chamber_image_update")
-        LOGGER.debug(f"JPEG RECIEVED DONE: {self._client._device.info.device_type}")
+        #LOGGER.debug("JPEG RECIEVED DONE")
     
     def get_jpeg(self) -> bytearray:
-        LOGGER.debug(f"JPEG RETRIEVED: {self._client._device.info.device_type}")
+        #LOGGER.debug("JPEG RETRIEVED")
         value = self._bytes.copy()
-        LOGGER.debug(f"JPEG RETRIEVED DONE: {self._client._device.info.device_type}")
+        #LOGGER.debug("JPEG RETRIEVED DONE")
         return value
     
     def get_last_update_time(self) -> datetime:

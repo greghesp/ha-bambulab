@@ -50,6 +50,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             
         self._updatedDevice = False
         self.data = self.get_model()
+        self._eventloop = asyncio.get_running_loop()
         super().__init__(
             hass,
             LOGGER,
@@ -65,67 +66,70 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"HOME ASSISTANT IS SHUTTING DOWN")
         self.shutdown()
 
-    @callback
+    def event_handler(self, event):
+        # The callback comes in on the MQTT thread. Need to jump to the HA main thread to guarantee thread safety.
+        self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
+
+    def event_handler_internal(self, event):
+        LOGGER.debug(f"EVENT: {event}")
+        if event == "event_printer_info_update":
+            self._update_device_info()
+            if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
+                self._update_external_spool_info()
+
+        elif event == "event_ams_info_update":
+            self._update_ams_info()
+
+        elif event == "event_light_update":
+            self._update_data()
+
+        elif event == "event_speed_update":
+            self._update_data()
+
+        elif event == "event_printer_data_update":
+            self._update_data()
+
+            # Check is usage hours change and persist to config entry if it did.
+            if self.latest_usage_hours != self.get_model().info.usage_hours:
+                self.latest_usage_hours = self.get_model().info.usage_hours
+                LOGGER.debug(f"OVERWRITING USAGE_HOURS WITH : {self.latest_usage_hours}")
+                options = dict(self.config_entry.options)
+                options['usage_hours'] = self.latest_usage_hours
+                self._hass.config_entries.async_update_entry(
+                    entry=self.config_entry,
+                    title=self.get_model().info.serial,
+                    data=self.config_entry.data,
+                    options=options)
+
+        elif event == "event_hms_errors":
+            self._update_hms()
+
+        elif event == "event_print_canceled":
+            self.PublishDeviceTriggerEvent(event)
+
+        elif event == "event_print_failed":
+            self.PublishDeviceTriggerEvent(event)
+
+        elif event == "event_print_finished":
+            self.PublishDeviceTriggerEvent(event)
+
+        elif event == "event_print_started":
+            self.PublishDeviceTriggerEvent(event)
+
+        elif event == "event_printer_chamber_image_update":
+            self._update_data()
+
+        elif event == "event_printer_cover_image_update":
+            self._update_data()
+
+    async def listen(self):
+        LOGGER.debug("Starting listen()")
+        self.client.connect(callback=self.event_handler)
+
     async def start_mqtt(self) -> None:
         """Use MQTT for updates."""
         LOGGER.debug("Starting MQTT")
-
-        def event_handler(event):
-            LOGGER.debug(f"EVENT: {event}")
-            if event == "event_printer_info_update":
-                self._update_device_info()
-                if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
-                    self._update_external_spool_info()
-
-            elif event == "event_ams_info_update":
-                self._update_ams_info()
-
-            elif event == "event_light_update":
-                self._update_data()
-
-            elif event == "event_speed_update":
-                self._update_data()
-
-            elif event == "event_printer_data_update":
-                self._update_data()
-
-                # Check is usage hours change and persist to config entry if it did.
-                if self.latest_usage_hours != self.get_model().info.usage_hours:
-                    self.latest_usage_hours = self.get_model().info.usage_hours
-                    LOGGER.debug(f"OVERWRITING USAGE_HOURS WITH : {self.latest_usage_hours}")
-                    options = dict(self.config_entry.options)
-                    options['usage_hours'] = self.latest_usage_hours
-                    self._hass.config_entries.async_update_entry(
-                        entry=self.config_entry,
-                        title=self.get_model().info.serial,
-                        data=self.config_entry.data,
-                        options=options)
-
-            elif event == "event_hms_errors":
-                self._update_hms()
-
-            elif event == "event_print_canceled":
-                self.PublishDeviceTriggerEvent(event)
-
-            elif event == "event_print_failed":
-                self.PublishDeviceTriggerEvent(event)
-
-            elif event == "event_print_finished":
-                self.PublishDeviceTriggerEvent(event)
-
-            elif event == "event_print_started":
-                self.PublishDeviceTriggerEvent(event)
-
-            elif event == "event_printer_chamber_image_update":
-                self._update_data()
-
-            elif event == "event_printer_cover_image_update":
-                self._update_data()
-
-        async def listen():
-            self.client.connect(callback=event_handler)
-
-        asyncio.create_task(listen())
+        asyncio.create_task(self.listen())
 
     def shutdown(self) -> None:
         """ Halt the MQTT listener thread """
