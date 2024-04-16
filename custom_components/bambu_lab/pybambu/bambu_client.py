@@ -36,6 +36,7 @@ class WatchdogThread(threading.Thread):
         self._stop_event = threading.Event()
         self._last_received_data = time.time()
         super().__init__()
+        self.setName(f"WatchdogThread-{self._client._device.info.device_type}")
 
     def stop(self):
         self._stop_event.set()
@@ -55,7 +56,7 @@ class WatchdogThread(threading.Thread):
                 break
             interval = time.time() - self._last_received_data
             if not self._watchdog_fired and (interval > WATCHDOG_TIMER):
-                LOGGER.debug(f"Watchdog fired. No data received for {math.floor(interval)} seconds for {self._client._device.info.device_type}/{self._client._serial}.")
+                LOGGER.debug(f"Watchdog fired. No data received for {math.floor(interval)} seconds for {self._client._serial}.")
                 self._watchdog_fired = True
                 self._client._on_watchdog_fired()
             elif interval < WATCHDOG_TIMER:
@@ -69,12 +70,13 @@ class ChamberImageThread(threading.Thread):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
+        self.setName(f"ChamberImageThread-{self._client._device.info.device_type}")
 
     def stop(self):
         self._stop_event.set()
 
     def run(self):
-        LOGGER.debug("{self._client._device.info.device_type}: Chamber image thread started.")
+        LOGGER.debug("Chamber image thread started.")
 
         auth_data = bytearray()
 
@@ -131,11 +133,11 @@ class ChamberImageThread(threading.Thread):
                         payload_size = 0
 
                         status = sslSock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
-                        LOGGER.debug(f"{self._client._device.info.device_type}: SOCKET STATUS: {status}")
+                        LOGGER.debug(f"SOCKET STATUS: {status}")
                         if status != 0:
-                            LOGGER.error(f"{self._client._device.info.device_type}: Socket error: {status}")
+                            LOGGER.error(f"Socket error: {status}")
                     except socket.error as e:
-                        LOGGER.error(f"{self._client._device.info.device_type}: Socket error: {e}")
+                        LOGGER.error(f"Socket error: {e}")
                         # Sleep to allow printer to stabilize during boot when it may fail these connection attempts repeatedly.
                         time.sleep(1)
                         continue
@@ -144,16 +146,16 @@ class ChamberImageThread(threading.Thread):
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
-                            #LOGGER.debug(f"{self._client._device.info.device_type}: Received {len(dr)} bytes.")
+                            #LOGGER.debug(f"Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
-                            #LOGGER.debug(f"{self._client._device.info.device_type}: SSLWantReadError")
+                            #LOGGER.debug("SSLWantReadError")
                             time.sleep(1)
                             continue
 
                         except Exception as e:
-                            LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread inner exception occurred:")
-                            LOGGER.error(f"{self._client._device.info.device_type}: Exception. Type: {type(e)} Args: {e}")
+                            LOGGER.error("A Chamber Image thread inner exception occurred:")
+                            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                             time.sleep(1)
                             continue
 
@@ -189,77 +191,87 @@ class ChamberImageThread(threading.Thread):
 
                         elif len(dr) == 0:
                             # This occurs if the wrong access code was provided.
-                            LOGGER.error(f"{self._client._device.info.device_type}: Chamber image connection rejected by the printer. Check provided access code and IP address.")
+                            LOGGER.error("Chamber image connection rejected by the printer. Check provided access code and IP address.")
                             # Sleep for a short while and then re-attempt the connection.
                             time.sleep(5)
                             break
 
                         else:
-                            LOGGER.error(f"{self._client._device.info.device_type}: UNEXPECTED DATA RECEIVED: {len(dr)}")
+                            LOGGER.error(f"UNEXPECTED DATA RECEIVED: {len(dr)}")
                             time.sleep(1)
 
             except OSError as e:
                 if e.errno == 113:
-                    LOGGER.debug(f"{self._client._device.info.device_type}: Host is unreachable")
+                    LOGGER.debug("Host is unreachable")
                 else:
-                    LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread outer exception occurred:")
-                    LOGGER.error(f"{self._client._device.info.device_type}: Exception. Type: {type(e)} Args: {e}")
+                    LOGGER.error("A Chamber Image thread outer exception occurred:")
+                    LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
             except Exception as e:
-                LOGGER.error(f"{self._client._device.info.device_type}: A Chamber Image thread outer exception occurred:")
-                LOGGER.error(f"{self._client._device.info.device_type}: Exception. Type: {type(e)} Args: {e}")
+                LOGGER.error(f"A Chamber Image thread outer exception occurred:")
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
-        LOGGER.info(f"{self._client._device.info.device_type}: Chamber image thread exited.")
+        LOGGER.info("Chamber image thread exited.")
 
 
-def mqtt_listen_thread(self):
-    LOGGER.info("MQTT listener thread started.")
-    exceptionSeen = ""
-    while True:
-        try:
-            host = self.host if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
-            LOGGER.debug(f"Connect: Attempting Connection to {host}")
-            self.client.connect(host, self._port, keepalive=5)
+class MqttThread(threading.Thread):
+    def __init__(self, client):
+        self._client = client
+        self._stop_event = threading.Event()
+        super().__init__()
+        self.setName(f"MqttThread-{self._client._device.info.device_type}")
 
-            LOGGER.debug("Starting listen loop")
-            self.client.loop_forever()
-            LOGGER.debug("Ended listen loop.")
-            break
-        except TimeoutError as e:
-            if exceptionSeen != "TimeoutError":
-                LOGGER.debug(f"TimeoutError: {e}.")
-            exceptionSeen = "TimeoutError"
-            time.sleep(5)
-        except ConnectionError as e:
-            if exceptionSeen != "ConnectionError":
-                LOGGER.debug(f"ConnectionError: {e}.")
-            exceptionSeen = "ConnectionError"
-            time.sleep(5)
-        except OSError as e:
-            if e.errno == 113:
-                if exceptionSeen != "OSError113":
-                    LOGGER.debug(f"OSError: {e}.")
-                exceptionSeen = "OSError113"
+    def stop(self):
+        self._stop_event.set()
+
+    def run(self):
+        LOGGER.info("MQTT listener thread started.")
+        exceptionSeen = ""
+        while True:
+            try:
+                host = self._client.host if self._client._local_mqtt else self._client.bambu_cloud.cloud_mqtt_host
+                LOGGER.debug(f"Connect: Attempting Connection to {host}")
+                self._client.client.connect(host, self._client._port, keepalive=5)
+
+                LOGGER.debug("Starting listen loop")
+                self._client.client.loop_forever()
+                LOGGER.debug("Ended listen loop.")
+                break
+            except TimeoutError as e:
+                if exceptionSeen != "TimeoutError":
+                    LOGGER.debug(f"TimeoutError: {e}.")
+                exceptionSeen = "TimeoutError"
                 time.sleep(5)
-            else:
+            except ConnectionError as e:
+                if exceptionSeen != "ConnectionError":
+                    LOGGER.debug(f"ConnectionError: {e}.")
+                exceptionSeen = "ConnectionError"
+                time.sleep(5)
+            except OSError as e:
+                if e.errno == 113:
+                    if exceptionSeen != "OSError113":
+                        LOGGER.debug(f"OSError: {e}.")
+                    exceptionSeen = "OSError113"
+                    time.sleep(5)
+                else:
+                    LOGGER.error("A listener loop thread exception occurred:")
+                    LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+            except Exception as e:
                 LOGGER.error("A listener loop thread exception occurred:")
                 LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 time.sleep(1)  # Avoid a tight loop if this is a persistent error.
-        except Exception as e:
-            LOGGER.error("A listener loop thread exception occurred:")
-            LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-            time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
-        if self.client is None:
-            break
+            if self._client.client is None:
+                break
 
-        self.client.disconnect()
+            self._client.client.disconnect()
 
-    LOGGER.info("MQTT listener thread exited.")
+        LOGGER.info("MQTT listener thread exited.")
 
 
 @dataclass
@@ -325,8 +337,8 @@ class BambuClient:
             self.client.username_pw_set(self._username, password=self._auth_token)
 
         LOGGER.debug("Starting MQTT listener thread")
-        thread = threading.Thread(target=mqtt_listen_thread, args=(self,))
-        thread.start()
+        self._mqtt = MqttThread(self)
+        self._mqtt.start()
 
     def subscribe_and_request_info(self):
         LOGGER.debug("Now subscribing...")
@@ -383,12 +395,15 @@ class BambuClient:
         self._on_disconnect()
     
     def _on_disconnect(self):
+        LOGGER.warn("_on_disconnect")
         self._connected = False
         self._device.info.set_online(False)
         if self._watchdog is not None:
+            LOGGER.warn("Stopping watchdog thread")
             self._watchdog.stop()
             self._watchdog.join()
         if self._camera is not None:
+            LOGGER.warn("Stopping camera thread")
             self._camera.stop()
             self._camera.join()
 
@@ -406,9 +421,7 @@ class BambuClient:
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
             clean_msg = re.sub(r"\\n *", "", str(message.payload))
             if self._refreshed:
-                LOGGER.debug(f"Received data from: {self._device.info.device_type}: {clean_msg}")
-            else:
-                LOGGER.debug(f"Received data from: {self._device.info.device_type}")
+                LOGGER.debug(f"Received data: {clean_msg}")
 
             json_data = json.loads(message.payload)
             if json_data.get("event"):
@@ -474,7 +487,7 @@ class BambuClient:
 
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
-        LOGGER.debug("Disconnect: Client Disconnecting")
+        LOGGER.debug(" Disconnect: Client Disconnecting")
         if self.client is not None:
             self.client.disconnect()
             self.client = None
