@@ -456,7 +456,7 @@ class PrintJob:
         # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
         if data.get("gcode_start_time") is not None:
             if self.start_time != get_start_time(int(data.get("gcode_start_time"))):
-                LOGGER.debug("GCODE START TIME: {self.start_time}")
+                LOGGER.debug(f"GCODE START TIME: {self.start_time}")
             self.start_time = get_start_time(int(data.get("gcode_start_time")))
 
         # Generate the end_time from the remaining_time mqtt payload value if present.

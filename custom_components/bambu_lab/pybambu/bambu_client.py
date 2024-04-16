@@ -243,27 +243,27 @@ class MqttThread(threading.Thread):
                 break
             except TimeoutError as e:
                 if exceptionSeen != "TimeoutError":
-                    LOGGER.debug("TimeoutError: {e}.")
+                    LOGGER.debug(f"TimeoutError: {e}.")
                 exceptionSeen = "TimeoutError"
                 time.sleep(5)
             except ConnectionError as e:
                 if exceptionSeen != "ConnectionError":
-                    LOGGER.debug("ConnectionError: {e}.")
+                    LOGGER.debug(f"ConnectionError: {e}.")
                 exceptionSeen = "ConnectionError"
                 time.sleep(5)
             except OSError as e:
                 if e.errno == 113:
                     if exceptionSeen != "OSError113":
-                        LOGGER.debug("OSError: {e}.")
+                        LOGGER.debug(f"OSError: {e}.")
                     exceptionSeen = "OSError113"
                     time.sleep(5)
                 else:
                     LOGGER.error("A listener loop thread exception occurred:")
-                    LOGGER.error("Exception. Type: {type(e)} Args: {e}")
+                    LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                     time.sleep(1)  # Avoid a tight loop if this is a persistent error.
             except Exception as e:
                 LOGGER.error("A listener loop thread exception occurred:")
-                LOGGER.error("Exception. Type: {type(e)} Args: {e}")
+                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
             if self._client.client is None:
@@ -403,7 +403,7 @@ class BambuClient:
             self._watchdog.stop()
             self._watchdog.join()
         if self._camera is not None:
-            LOGGER.warn(f"Stopping camera thread")
+            LOGGER.warn("Stopping camera thread")
             self._camera.stop()
             self._camera.join()
 
