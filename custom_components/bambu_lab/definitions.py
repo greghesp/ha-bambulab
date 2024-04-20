@@ -446,7 +446,8 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="humidity_index",
         icon="mdi:water-percent",
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity_index
+        value_fn=lambda self: 6 - self.coordinator.get_model().ams.data[self.index].humidity_index
+        # We subtract from 6 to match the new Bambu Handy/Studio presentation of 1 = dry, 5 = wet while the printer sends 1 = wet, 5 = dry
     ),
     BambuLabSensorEntityDescription(
         key="temperature",
