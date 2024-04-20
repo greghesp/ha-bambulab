@@ -157,24 +157,18 @@ def get_printer_type(modules, default):
         hw_ver = apNode['hw_ver']
         project_name = apNode.get('project_name', '')
         if hw_ver == 'AP02':
-            LOGGER.debug("Device is X1E")
             return 'X1E'
         elif hw_ver == 'AP04':
             if project_name == 'C11':
-                LOGGER.debug("Device is P1P")
                 return 'P1P'
             if project_name == 'C12':
-                LOGGER.debug("Device is P1S")
                 return 'P1S'
         elif hw_ver == 'AP05':
             if project_name == 'N1':
-                LOGGER.debug("Device is A1 Mini")
                 return 'A1MINI'
             if project_name == 'N2S':
-                LOGGER.debug("Device is A1")
                 return 'A1'
             if project_name == '':
-                LOGGER.debug("Device is X1C")
                 return 'X1C'
         LOGGER.debug(f"UNKNOWN DEVICE: hw_ver='{hw_ver}' / project_name='{project_name}'")
     return default
@@ -184,7 +178,7 @@ def get_hw_version(modules, default):
     """Retrieve hardware version of printer"""
     apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
     if len(apNode.keys()) > 1:
-        return apNode.get("sw_ver")
+        return apNode.get("hw_ver")
     return default
 
 

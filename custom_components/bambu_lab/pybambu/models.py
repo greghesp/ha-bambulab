@@ -694,6 +694,7 @@ class Info:
         #     },
         modules = data.get("module", [])
         self.device_type = get_printer_type(modules, self.device_type)
+        LOGGER.debug(f"Device is {self.device_type}")
         self.hw_ver = get_hw_version(modules, self.hw_ver)
         self.sw_ver = get_sw_version(modules, self.sw_ver)
         if self._client.callback is not None:
@@ -840,7 +841,6 @@ class AMSList:
         #   "sn": "**REDACTED**"
         # }
 
-        received_ams_info = False
         module_list = data.get("module", [])
         for module in module_list:
             name = module["name"]
@@ -859,19 +859,15 @@ class AMSList:
                         self.data[index] = AMSInstance()
 
                     if self.data[index].serial != module['sn']:
-                        received_ams_info = True
                         self.data[index].serial = module['sn']
                     if self.data[index].sw_version != module['sw_ver']:
-                        received_ams_info = True
                         self.data[index].sw_version = module['sw_ver']
                     if self.data[index].hw_version != module['hw_ver']:
-                        received_ams_info = True
                         self.data[index].hw_version = module['hw_ver']
 
         data_changed = old_data != f"{self.__dict__}"
-        LOGGER.debug(f"UPDATED1: {received_ams_info} {data_changed}")
 
-        if received_ams_info:
+        if data_changed:
             if self._client.callback is not None:
                 self._client.callback("event_ams_info_update")
 
