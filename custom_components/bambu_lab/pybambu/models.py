@@ -30,6 +30,7 @@ from .const import (
     SdcardState,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
+    PRINT_TYPE_OPTIONS,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -439,11 +440,15 @@ class PrintJob:
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
+            LOGGER.debug(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
             self.gcode_state = "unknown"
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.print_type = data.get("print_type", self.print_type)
+        if self.print_type.lower() not in PRINT_TYPE_OPTIONS:
+            LOGGER.debug(f"Unknown print_type. Please log an issue : '{self.print_type}'")
+            self.print_type = "unknown"
         self.subtask_name = data.get("subtask_name", self.subtask_name)
         self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
@@ -694,6 +699,7 @@ class Info:
         #     },
         modules = data.get("module", [])
         self.device_type = get_printer_type(modules, self.device_type)
+        LOGGER.debug(f"Device is {self.device_type}")
         self.hw_ver = get_hw_version(modules, self.hw_ver)
         self.sw_ver = get_sw_version(modules, self.sw_ver)
         if self._client.callback is not None:
@@ -840,7 +846,6 @@ class AMSList:
         #   "sn": "**REDACTED**"
         # }
 
-        received_ams_info = False
         module_list = data.get("module", [])
         for module in module_list:
             name = module["name"]
@@ -859,19 +864,15 @@ class AMSList:
                         self.data[index] = AMSInstance()
 
                     if self.data[index].serial != module['sn']:
-                        received_ams_info = True
                         self.data[index].serial = module['sn']
                     if self.data[index].sw_version != module['sw_ver']:
-                        received_ams_info = True
                         self.data[index].sw_version = module['sw_ver']
                     if self.data[index].hw_version != module['hw_ver']:
-                        received_ams_info = True
                         self.data[index].hw_version = module['hw_ver']
 
         data_changed = old_data != f"{self.__dict__}"
-        LOGGER.debug(f"UPDATED1: {received_ams_info} {data_changed}")
 
-        if received_ams_info:
+        if data_changed:
             if self._client.callback is not None:
                 self._client.callback("event_ams_info_update")
 
@@ -1105,6 +1106,8 @@ class StageAction:
         old_data = f"{self.__dict__}"
 
         self._print_type = data.get("print_type", self._print_type)
+        if self._print_type.lower() not in PRINT_TYPE_OPTIONS:
+            self._print_type = "unknown"
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.

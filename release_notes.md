@@ -1,3 +1,6 @@
+### V2.0.17
+- Fix warning about light mode being required
+
 ### V2.0.16
 - Handle home assistant shutdown more gracefully
 - Fix threading bug causing severe instability for some folk on newer HA versions.

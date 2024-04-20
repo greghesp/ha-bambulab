@@ -227,8 +227,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                                     manufacturer=BRAND,
                                     sw_version="",
                                     hw_version="")
-        
-        # self.hass.async_create_task(self._reinitialize_sensors())
 
     def PublishDeviceTriggerEvent(self, event: str):
         dev_reg = device_registry.async_get(self._hass)
