@@ -101,9 +101,11 @@ SPEED_PROFILE = {
 }
 
 PRINT_TYPE_OPTIONS = {
-    "local",
     "cloud",
-    "idle"
+    "local",
+    "idle",
+    "system",
+    "unknown"
 }
 
 FILAMENT_NAMES = {

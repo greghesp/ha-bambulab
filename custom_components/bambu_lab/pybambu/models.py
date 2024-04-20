@@ -30,6 +30,7 @@ from .const import (
     SdcardState,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
+    PRINT_TYPE_OPTIONS,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -439,11 +440,15 @@ class PrintJob:
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
+            LOGGER.debug(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
             self.gcode_state = "unknown"
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.print_type = data.get("print_type", self.print_type)
+        if self.print_type.lower() not in PRINT_TYPE_OPTIONS:
+            LOGGER.debug(f"Unknown print_type. Please log an issue : '{self.print_type}'")
+            self.print_type = "unknown"
         self.subtask_name = data.get("subtask_name", self.subtask_name)
         self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
@@ -1101,6 +1106,8 @@ class StageAction:
         old_data = f"{self.__dict__}"
 
         self._print_type = data.get("print_type", self._print_type)
+        if self._print_type.lower() not in PRINT_TYPE_OPTIONS:
+            self._print_type = "unknown"
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
