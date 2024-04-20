@@ -1,5 +1,8 @@
 ### V2.0.17
 - Fix warning about light mode being required
+- Fix X1C/E printer detection after firmware change
+- Reverse AMS humidity index to match Bambu Handy/Studio UX change
+- Fix unknown 'system' print_type error when doing things like performing calibration
 
 ### V2.0.16
 - Handle home assistant shutdown more gracefully

@@ -36,7 +36,7 @@ class WatchdogThread(threading.Thread):
         self._stop_event = threading.Event()
         self._last_received_data = time.time()
         super().__init__()
-        self.setName(f"WatchdogThread-{self._client._device.info.device_type}")
+        self.setName(f"{self._client._device.info.device_type}-Watchdog-{threading.get_native_id()}")
 
     def stop(self):
         self._stop_event.set()
@@ -70,7 +70,7 @@ class ChamberImageThread(threading.Thread):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
-        self.setName(f"ChamberImageThread-{self._client._device.info.device_type}")
+        self.setName(f"{self._client._device.info.device_type}-Chamber-{threading.get_native_id()}")
 
     def stop(self):
         self._stop_event.set()
@@ -215,7 +215,7 @@ class ChamberImageThread(threading.Thread):
                 if not self._stop_event.is_set():
                     time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
-        LOGGER.info("Chamber image thread exited.")
+        LOGGER.debug("Chamber image thread exited.")
 
 
 class MqttThread(threading.Thread):
@@ -223,7 +223,7 @@ class MqttThread(threading.Thread):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
-        self.setName(f"MqttThread-{self._client._device.info.device_type}")
+        self.setName(f"{self._client._device.info.device_type}-Mqtt-{threading.get_native_id()}")
 
     def stop(self):
         self._stop_event.set()
