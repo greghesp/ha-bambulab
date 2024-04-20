@@ -215,7 +215,7 @@ class ChamberImageThread(threading.Thread):
                 if not self._stop_event.is_set():
                     time.sleep(1)  # Avoid a tight loop if this is a persistent error.
 
-        LOGGER.info("Chamber image thread exited.")
+        LOGGER.debug("Chamber image thread exited.")
 
 
 class MqttThread(threading.Thread):

@@ -846,6 +846,7 @@ class AMSList:
         #   "sn": "**REDACTED**"
         # }
 
+        data_changed = False
         module_list = data.get("module", [])
         for module in module_list:
             name = module["name"]
@@ -864,13 +865,16 @@ class AMSList:
                         self.data[index] = AMSInstance()
 
                     if self.data[index].serial != module['sn']:
+                        data_changed = True
                         self.data[index].serial = module['sn']
                     if self.data[index].sw_version != module['sw_ver']:
+                        data_changed = True
                         self.data[index].sw_version = module['sw_ver']
                     if self.data[index].hw_version != module['hw_ver']:
+                        data_changed = True
                         self.data[index].hw_version = module['hw_ver']
 
-        data_changed = old_data != f"{self.__dict__}"
+        data_changed = data_changed or (old_data != f"{self.__dict__}")
 
         if data_changed:
             if self._client.callback is not None:

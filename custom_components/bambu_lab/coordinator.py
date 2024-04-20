@@ -139,7 +139,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
-        LOGGER.debug(f"HA POLL: MQTT connected: {self.client.connected}")
+        LOGGER.debug(f"{self.config_entry.data["device_type"]} HA POLL: MQTT connected: {self.client.connected}")
         device = self.get_model()
         return device
     
@@ -236,7 +236,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             "device_id": hadevice.id,
             "type": event,
         }
-        LOGGER.debug(f"EVENT: {event}: {event_data}")
+        LOGGER.debug(f"BUS EVENT: {event}: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
         
 
