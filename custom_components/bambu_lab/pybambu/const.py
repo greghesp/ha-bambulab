@@ -128,6 +128,7 @@ FILAMENT_NAMES = {
     "GFA05": "Bambu PLA Silk",
     "GFA08": "Bambu PLA Sparkle",
     "GFA09": "Bambu PLA Tough",
+    "GFA15": "Bambu PLA Galaxy",
     "GFA50": "Bambu PLA-CF",
     "GFS03": "Bambu Support For PA/PET",
     "GFS02": "Bambu Support For PLA",
@@ -162,6 +163,7 @@ FILAMENT_NAMES = {
     "GFT97": "Generic PPS",
     "GFT98": "Generic PPS-CF",
     "GFU00": "Bambu TPU 95A HF",
+    "P42b3ffe": "ALIZ PETG"
 }
 
 # TODO: Update error lists with data from https://e.bambulab.com/query.php?lang=en
