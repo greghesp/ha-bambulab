@@ -163,7 +163,9 @@ FILAMENT_NAMES = {
     "GFT97": "Generic PPS",
     "GFT98": "Generic PPS-CF",
     "GFU00": "Bambu TPU 95A HF",
-    "P42b3ffe": "ALIZ PETG"
+    # Custom filament
+    "P42b3ffe": "ALIZ PETG 高速",
+    "P911293d": "ALIZ PETG 金属"
 }
 
 # TODO: Update error lists with data from https://e.bambulab.com/query.php?lang=en
