@@ -1,3 +1,9 @@
+### V2.0.19
+- Fix syntax error in polling fallback scenario.
+
+### V2.0.18
+- Fix regression in AMS initialization from cleanup
+
 ### V2.0.17
 - Fix warning about light mode being required
 - Fix X1C/E printer detection after firmware change
