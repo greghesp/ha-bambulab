@@ -1,3 +1,6 @@
+### V2.0.19
+- Fix syntax error in polling fallback scenario.
+
 ### V2.0.18
 - Fix regression in AMS initialization from cleanup
 
