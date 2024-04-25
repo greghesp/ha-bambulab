@@ -108,9 +108,9 @@ class Device:
         elif feature == Features.K_VALUE:
             return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
         elif feature == Features.START_TIME:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return False
         elif feature == Features.START_TIME_GENERATED:
-            return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
+            return True
         elif feature == Features.AMS_TEMPERATURE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
         elif feature == Features.CAMERA_RTSP:
@@ -469,8 +469,6 @@ class PrintJob:
             existing_remaining_time = self.remaining_time
             self.remaining_time = data.get("mc_remaining_time")
             if self.start_time is None:
-                if self.start_time is not None:
-                    LOGGER.debug("END TIME1: None")
                 self.end_time = None
             elif existing_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
