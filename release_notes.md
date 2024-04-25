@@ -1,5 +1,5 @@
 ### V2.0.20
-- Fix syntax error in redaction of RTSP URL debug logging.
+- Redact RTSP URL in debug logs.
 - Fix missing start/end time for X1 printers.
 - Add Bambu PLA Galaxy filament - thanks @meishild
 - Improve README for X1 camera notes - thanks @tubalainen
