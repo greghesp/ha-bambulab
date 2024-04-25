@@ -62,21 +62,21 @@ instead of OAuth.
 
 ### Print Data and Progress
 
-| Sensor            | Notes                                                    |
-| ----------------- | -------------------------------------------------------- |
-| Current Layer     |                                                          |
-| Total Layer Count |                                                          |
-| Print Progress    |                                                          |
-| Print Weight      | With Bambu credentials                                   |
-| Print Length      | With Bambu credentials                                   |
-| Print Bed Type    | Bed choice in the print job                              |
-| Start Time        | Simulated on P1/A1. More accurate with Bambu credentials |
-| Remaining Time    |                                                          |
-| End Time          |                                                          |
-| Current Stage     |                                                          |
-| Print Status      |                                                          |
-| Cover Image       | With Bambu credentials                                   |
-| Total Usage Hours | \* See Note                                              |
+| Sensor            | Notes                                           |
+| ----------------- | ----------------------------------------------- |
+| Current Layer     |                                                 |
+| Total Layer Count |                                                 |
+| Print Progress    |                                                 |
+| Print Weight      | With Bambu credentials                          |
+| Print Length      | With Bambu credentials                          |
+| Print Bed Type    | Bed choice in the print job                     |
+| Start Time        | Simulated. More accurate with Bambu credentials |
+| Remaining Time    |                                                 |
+| End Time          |                                                 |
+| Current Stage     |                                                 |
+| Print Status      |                                                 |
+| Cover Image       | With Bambu credentials                          |
+| Total Usage Hours | \* See Note                                     |
 
 \* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
 
@@ -159,9 +159,10 @@ instead of OAuth.
 
 ### Cameras
 
-| Sensor  | Notes                            |
-| ------- | -------------------------------- |
-| Chamber | P1/A1 need the host IP providing |
+| Sensor  | Notes                                                           |
+| ------- | --------------------------------------------------------------- |
+| Chamber | P1/A1 - need the host IP providing                              |
+|         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
 
 ### Automation device triggers
 
