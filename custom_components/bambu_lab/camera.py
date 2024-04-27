@@ -82,7 +82,7 @@ class BambuLabCamera(BambuLabEntity, Camera):
                 url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{self._host}:{port}{parsed_url.path}"
             else:
                 url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{parsed_url.netloc}{parsed_url.path}"
-            LOGGER.debug(f"Adjusted RTSP URL: {url.replace(self._access_code, "**REDACTED**")}")
+            LOGGER.debug(f"Adjusted RTSP URL: {url.replace(self._access_code, '**REDACTED**')}")
             return str(url)
         LOGGER.debug("No RTSP Feed available")
         return None
