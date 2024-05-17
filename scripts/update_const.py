@@ -65,11 +65,11 @@ def process_json(json_data):
             # Format is (including 4 spaces at the front)
             #   "WWWW_XXXX_YYYY_ZZZZ": "text",
             # Use the replace at the end because some of the fields have double quotes in them, just replace with single quotes
-            HMS_AMS_ERROR_text += "    \"" + error_entry['ecode'][slice(0,4,1)] + "_" + error_entry['ecode'][slice(4,8,1)] + "_" + error_entry['ecode'][slice(8,12,1)] + "_" + error_entry['ecode'][slice(12,16,1)] + "\": \"" + error_entry['intro'].replace('\"', '\'') + "\",\n"
+            HMS_AMS_ERROR_text += "    \"" + error_entry['ecode'][slice(0,4,1)].upper() + "_" + error_entry['ecode'][slice(4,8,1)].upper() + "_" + error_entry['ecode'][slice(8,12,1)].upper() + "_" + error_entry['ecode'][slice(12,16,1)].upper() + "\": \"" + error_entry['intro'].replace('\"', '\'') + "\",\n"
         else:
-            HMS_ERROR_text += "    \"" + error_entry['ecode'][slice(0,4,1)] + "_" + error_entry['ecode'][slice(4,8,1)] + "_" + error_entry['ecode'][slice(8,12,1)] + "_" + error_entry['ecode'][slice(12,16,1)] + "\": \"" + error_entry['intro'].replace('\"', '\'') + "\",\n"
+            HMS_ERROR_text += "    \"" + error_entry['ecode'][slice(0,4,1)].upper() + "_" + error_entry['ecode'][slice(4,8,1)].upper() + "_" + error_entry['ecode'][slice(8,12,1)].upper() + "_" + error_entry['ecode'][slice(12,16,1)].upper() + "\": \"" + error_entry['intro'].replace('\"', '\'') + "\",\n"
     for error_entry in bambu_data['data']['device_error']['en']:
-        PRINT_ERROR_text += "    \"" + error_entry['ecode'][slice(0,4,1)] + "_" + error_entry['ecode'][slice(4,8,1)] + "\": \"" + error_entry['intro'].replace('\"', '\'') + "\",\n"
+        PRINT_ERROR_text += "    \"" + error_entry['ecode'][slice(0,4,1)].upper() + "_" + error_entry['ecode'][slice(4,8,1)].upper() + "\": \"" + error_entry['intro'].replace('\"', '\'') + "\",\n"
     #print(json.dumps(error_entry, indent=4))
     #print(HMS_AMS_ERROR_text, end='')
     #print(HMS_ERROR_text, end='')
