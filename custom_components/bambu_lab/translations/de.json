@@ -116,6 +116,9 @@
       "hms_errors": {
         "name": "HMS-Fehler"
       },
+      "print_error": {
+        "name": "Druckfehler"
+      },
       "online": {
         "name": "Online"
       },

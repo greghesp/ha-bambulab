@@ -106,6 +106,9 @@
       "hms_errors": {
         "name": "Erreurs HMS"
       },
+      "print_error": {
+        "name": "Erreur d'impression"
+      },
       "online": {
         "name": "État"
       },

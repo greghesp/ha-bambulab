@@ -7,6 +7,7 @@ from .const import (
     FILAMENT_NAMES,
     HMS_ERRORS,
     HMS_AMS_ERRORS,
+    PRINT_ERROR_ERRORS,
     HMS_SEVERITY_LEVELS,
     HMS_MODULES,
     LOGGER,
@@ -85,6 +86,18 @@ def get_HMS_error_text(hms_code: str):
         return ams_error
 
     return HMS_ERRORS.get(hms_code, "unknown")
+
+
+def get_print_error_text(print_error_code: str):
+    """Return the human-readable description for a print error"""
+
+    hex_conversion = f'0{int(print_error_code):x}'
+    print_error_code = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
+    print_error = PRINT_ERROR_ERRORS.get(print_error_code, "")
+    if print_error != "":
+        return print_error
+
+    return PRINT_ERROR_ERRORS.get(print_error_code, "unknown")
 
 
 def get_HMS_severity(code: int) -> str:
