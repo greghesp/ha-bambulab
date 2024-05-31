@@ -1208,8 +1208,8 @@ class PrintErrorList:
                 self._count = 1
                 hex_conversion = f'0{int(print_error_code):x}'
                 print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
-                errors[f"Code"] = f"{print_error_code_hex}"
-                errors[f"Error"] = f"{print_error_code_hex}: {get_print_error_text(print_error_code)}"
+                errors[f"Code"] = f"{print_error_code_hex.upper()}"
+                errors[f"Error"] = f"{print_error_code_hex.upper()}: {get_print_error_text(print_error_code.upper())}"
                 self._errors = errors
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
                 if self._client.callback is not None:

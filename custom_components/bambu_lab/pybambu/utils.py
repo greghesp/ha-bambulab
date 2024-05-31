@@ -93,7 +93,7 @@ def get_print_error_text(print_error_code: str):
 
     hex_conversion = f'0{int(print_error_code):x}'
     print_error_code = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
-    print_error = PRINT_ERROR_ERRORS.get(print_error_code, "")
+    print_error = PRINT_ERROR_ERRORS.get(print_error_code.upper(), "")
     if print_error != "":
         return print_error
 
