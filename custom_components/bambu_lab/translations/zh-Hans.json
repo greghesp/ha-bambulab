@@ -116,6 +116,9 @@
       "hms_errors": {
         "name": "HMS 错误"
       },
+      "print_error": {
+        "name": "打印错误"
+      },
       "online": {
         "name": "在线"
       },
