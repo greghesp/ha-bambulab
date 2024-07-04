@@ -130,7 +130,7 @@ def get_printer_type(modules, default):
     # },
     # P1P    = AP04 / C11
     # P1S    = AP04 / C12
-    # A1Mini = AP05 / N1
+    # A1Mini = AP05 / N1 or AP04 / N1
     # A1     = AP05 / N2S
     #
     # X1C printers are of the form:
@@ -163,6 +163,8 @@ def get_printer_type(modules, default):
                 return 'P1P'
             if project_name == 'C12':
                 return 'P1S'
+            if project_name == 'N1':
+                return 'A1MINI'
         elif hw_ver == 'AP05':
             if project_name == 'N1':
                 return 'A1MINI'
