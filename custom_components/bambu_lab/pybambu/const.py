@@ -130,6 +130,7 @@ FILAMENT_NAMES = {
     "GFA09": "Bambu PLA Tough",
     "GFA15": "Bambu PLA Galaxy",
     "GFA50": "Bambu PLA-CF",
+    "GFS05": "Bambu Support for PLA/PETG",
     "GFS03": "Bambu Support For PA/PET",
     "GFS02": "Bambu Support For PLA",
     "GFS01": "Bambu Support G",
