@@ -10,7 +10,7 @@ import struct
 import threading
 import time
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 import paho.mqtt.client as mqtt
@@ -178,7 +178,7 @@ class ChamberImageThread(threading.Thread):
 
                                 # Reset buffer
                                 img = None
-                            # else:     
+                            # else:
                             # Otherwise we need to continue looping without reseting the buffer to receive the remaining data
                             # and without delaying.
 
@@ -280,6 +280,7 @@ class BambuClient:
     _watchdog = None
     _camera = None
     _usage_hours: float
+    _custom_filaments: dict = field(default_factory=dict)
 
     def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
                  username: str, auth_token: str, access_code: str, usage_hours: float = 0, manual_refresh_mode: bool = False):
@@ -341,6 +342,9 @@ class BambuClient:
         self._mqtt.start()
 
     def subscribe_and_request_info(self):
+        LOGGER.debug("Loading custom filaments")
+        self.load_custom_filaments()
+        LOGGER.debug("Got custom filaments: %s", self._custom_filaments)
         LOGGER.debug("Now subscribing...")
         self.subscribe()
         LOGGER.debug("On Connect: Getting version info")
@@ -393,7 +397,7 @@ class BambuClient:
         """Called when MQTT Disconnects"""
         LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
         self._on_disconnect()
-    
+
     def _on_disconnect(self):
         LOGGER.warn("_on_disconnect")
         self._connected = False
@@ -438,7 +442,7 @@ class BambuClient:
                 self._device.info.set_online(True)
                 self._watchdog.received_data()
                 if json_data.get("print"):
-                    self._device.print_update(data=json_data.get("print"))
+                    self._device.print_update(data=json_data.get("print"), custom_filaments=self._custom_filaments)
                     # Once we receive data, if in manual refresh mode, we disconnect again.
                     if self._manual_refresh_mode:
                         self.disconnect()
@@ -451,6 +455,15 @@ class BambuClient:
             LOGGER.error("An exception occurred processing a message:")
             LOGGER.error(f"Exception type: {type(e)}")
             LOGGER.error(f"Exception data: {e}")
+
+    def load_custom_filaments(self):
+        filaments = self.bambu_cloud.get_custom_filament_profiles()
+        self._custom_filaments = {}
+        for filament in filaments:
+            name = filament["name"]
+            if " @" in name:
+                name = name[:name.index(" @")]
+            self._custom_filaments[filament["filament_id"]] = name
 
     def subscribe(self):
         """Subscribe to report topic"""

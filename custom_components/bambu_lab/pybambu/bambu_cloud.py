@@ -10,7 +10,7 @@ from .const import LOGGER
 
 @dataclass
 class BambuCloud:
-  
+
     def __init__(self, region: str, email: str, username: str, auth_token: str):
         self._region = region
         self._email = email
@@ -112,6 +112,90 @@ class BambuCloud:
         #LOGGER.debug(f"DEVICE LIST: {response.json()}")
         return response.json()['devices']
 
+    # The slicer settings are of the following form:
+    #
+    # {
+    #     "message": "success",
+    #     "code": null,
+    #     "error": null,
+    #     "print": {
+    #         "public": [
+    #             {
+    #                 "setting_id": "GP004",
+    #                 "version": "01.09.00.15",
+    #                 "name": "0.20mm Standard @BBL X1C",
+    #                 "update_time": "2024-07-04 11:27:08",
+    #                 "nickname": null
+    #             },
+    #             ...
+    #         }
+    #         "private": []
+    #     },
+    #     "printer": {
+    #         "public": [
+    #             {
+    #                 "setting_id": "GM001",
+    #                 "version": "01.09.00.15",
+    #                 "name": "Bambu Lab X1 Carbon 0.4 nozzle",
+    #                 "update_time": "2024-07-04 11:25:07",
+    #                 "nickname": null
+    #             },
+    #             ...
+    #         ],
+    #         "private": []
+    #     },
+    #     "filament": {
+    #         "public": [
+    #             {
+    #                 "setting_id": "GFSA01",
+    #                 "version": "01.09.00.15",
+    #                 "name": "Bambu PLA Matte @BBL X1C",
+    #                 "update_time": "2024-07-04 11:29:21",
+    #                 "nickname": null,
+    #                 "filament_id": "GFA01"
+    #             },
+    #             ...
+    #         ],
+    #         "private": [
+    #             {
+    #                 "setting_id": "PFUS46ea5c221cabe5",
+    #                 "version": "1.9.0.14",
+    #                 "name": "Fillamentum PLA Extrafill @Bambu Lab X1 Carbon 0.4 nozzle",
+    #                 "update_time": "2024-07-10 06:48:17",
+    #                 "base_id": null,
+    #                 "filament_id": "Pc628b24",
+    #                 "filament_type": "PLA",
+    #                 "filament_is_support": "0",
+    #                 "nozzle_temperature": [
+    #                     190,
+    #                     240
+    #                 ],
+    #                 "nozzle_hrc": "3",
+    #                 "filament_vendor": "Fillamentum"
+    #             },
+    #             ...
+    #         ]
+    #     },
+    #     "settings": {}
+    # }
+
+    def get_slicer_settings(self) -> dict:
+        LOGGER.debug("Getting slicer settings from Bambu Cloud")
+        if self._region == "China":
+            url = 'https://api.bambulab.cn/v1/iot-service/api/slicer/setting?version=undefined'
+        else:
+            url = 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'
+        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        response = requests.get(url, headers=headers, timeout=10)
+        if not response.ok:
+            LOGGER.debug(f"Received error: {response.status_code}")
+            raise ValueError(response.status_code)
+        #LOGGER.debug(f"SLICER SETTINGS: {response.json()}")
+        return response.json()
+
+    def get_custom_filament_profiles(self) -> dict:
+        return self.get_slicer_settings()['filament']['private']
+
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #
     # "total": 531,
@@ -165,7 +249,7 @@ class BambuCloud:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
         return response.json()
-    
+
     def get_latest_task_for_printer(self, deviceId: str) -> dict:
         LOGGER.debug(f"Getting latest task from Bambu Cloud for Printer: {deviceId}")
         data = self.get_tasklist_for_printer(deviceId)
@@ -199,11 +283,11 @@ class BambuCloud:
     @property
     def username(self):
         return self._username
-    
+
     @property
     def auth_token(self):
         return self._auth_token
-    
+
     @property
     def cloud_mqtt_host(self):
         return "cn.mqtt.bambulab.com" if self._region == "China" else "us.mqtt.bambulab.com"

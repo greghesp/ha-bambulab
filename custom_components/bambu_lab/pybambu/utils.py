@@ -53,9 +53,11 @@ def to_whole(number):
     return round(number)
 
 
-def get_filament_name(idx):
+def get_filament_name(idx, custom_filaments: dict):
     """Converts a filament idx to a human-readable name"""
     result = FILAMENT_NAMES.get(idx, "unknown")
+    if result == "unknown" and idx != "":
+        result = custom_filaments.get(idx, "unknown")
     if result == "unknown" and idx != "":
         LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
     return result
@@ -118,7 +120,7 @@ def get_generic_AMS_HMS_error_code(hms_code: str):
 
 def get_printer_type(modules, default):
     # Known possible values:
-    # 
+    #
     # A1/P1 printers are of the form:
     # {
     #     "name": "esp32",

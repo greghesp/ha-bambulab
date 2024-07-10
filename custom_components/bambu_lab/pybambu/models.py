@@ -59,7 +59,7 @@ class Device:
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
 
-    def print_update(self, data) -> bool:
+    def print_update(self, data, custom_filaments) -> bool:
         send_event = False
         send_event = send_event | self.info.print_update(data = data)
         send_event = send_event | self.print_job.print_update(data = data)
@@ -68,8 +68,8 @@ class Device:
         send_event = send_event | self.fans.print_update(data = data)
         send_event = send_event | self.speed.print_update(data = data)
         send_event = send_event | self.stage.print_update(data = data)
-        send_event = send_event | self.ams.print_update(data = data)
-        send_event = send_event | self.external_spool.print_update(data = data)
+        send_event = send_event | self.ams.print_update(data = data, custom_filaments = custom_filaments)
+        send_event = send_event | self.external_spool.print_update(data = data, custom_filaments = custom_filaments)
         send_event = send_event | self.hms.print_update(data = data)
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
@@ -123,7 +123,7 @@ class Device:
             return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
 
         return False
-    
+
     def get_active_tray(self):
         if self.supports_feature(Features.AMS):
             if self.ams.tray_now == 255:
@@ -174,7 +174,7 @@ class Lights:
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
-        
+
         return (old_data != f"{self.__dict__}")
 
     def TurnChamberLightOn(self):
@@ -223,7 +223,7 @@ class Camera:
         self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
         self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
         self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
-        
+
         return (old_data != f"{self.__dict__}")
 
 @dataclass
@@ -250,7 +250,7 @@ class Temperature:
         self.chamber_temp = round(data.get("chamber_temper", self.chamber_temp))
         self.nozzle_temp = round(data.get("nozzle_temper", self.nozzle_temp))
         self.target_nozzle_temp = round(data.get("nozzle_target_temper", self.target_nozzle_temp))
-        
+
         return (old_data != f"{self.__dict__}")
 
 @dataclass
@@ -311,7 +311,7 @@ class Fans:
                 self._cooling_fan_speed_override_time = None
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self._heatbreak_fan_speed_percentage = fan_percentage(self._heatbreak_fan_speed)
-        
+
         return (old_data != f"{self.__dict__}")
 
     def set_fan_speed(self, fan: FansEnum, percentage: int):
@@ -853,7 +853,7 @@ class AMSList:
                 index = int(name[4])
             elif name.startswith("ams_f1/"):
                 index = int(name[7])
-            
+
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
                 # requires as part of the home assistant device identity.
@@ -878,7 +878,7 @@ class AMSList:
             if self._client.callback is not None:
                 self._client.callback("event_ams_info_update")
 
-    def print_update(self, data) -> bool:
+    def print_update(self, data, custom_filaments) -> bool:
         old_data = f"{self.__dict__}"
 
         # AMS json payload is of the form:
@@ -958,7 +958,7 @@ class AMSList:
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
-                    self.data[index].tray[tray_id].print_update(tray)
+                    self.data[index].tray[tray_id].print_update(tray, custom_filaments)
 
         data_changed = (old_data != f"{self.__dict__}")
         return data_changed
@@ -980,7 +980,7 @@ class AMSTray:
         self.k = 0
         self.tag_uid = "0000000000000000"
 
-    def print_update(self, data) -> bool:
+    def print_update(self, data, custom_filaments) -> bool:
         old_data = f"{self.__dict__}"
 
         if len(data) == 1:
@@ -999,7 +999,7 @@ class AMSTray:
         else:
             self.empty = False
             self.idx = data.get('tray_info_idx', self.idx)
-            self.name = get_filament_name(self.idx)
+            self.name = get_filament_name(self.idx, custom_filaments)
             self.type = data.get('tray_type', self.type)
             self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
             self.color = data.get('tray_color', self.color)
@@ -1008,7 +1008,7 @@ class AMSTray:
             self.remain = data.get('remain', self.remain)
             self.tag_uid = data.get('tag_uid', self.tag_uid)
             self.k = data.get('k', self.k)
-        
+
         return (old_data != f"{self.__dict__}")
 
 
@@ -1020,7 +1020,7 @@ class ExternalSpool(AMSTray):
         super().__init__()
         self._client = client
 
-    def print_update(self, data) -> bool:
+    def print_update(self, data, custom_filaments) -> bool:
 
         # P1P virtual tray example
         # "vt_tray": {
@@ -1053,7 +1053,7 @@ class ExternalSpool(AMSTray):
         received_virtual_tray_data = False
         tray_data = data.get("vt_tray", {})
         if len(tray_data) != 0:
-            received_virtual_tray_data = super().print_update(tray_data)
+            received_virtual_tray_data = super().print_update(tray_data, custom_filaments)
 
         return received_virtual_tray_data
 
@@ -1077,7 +1077,7 @@ class Speed:
         self._id = int(data.get("spd_lvl", self._id))
         self.name = get_speed_name(self._id)
         self.modifier = int(data.get("spd_mag", self.modifier))
-        
+
         return (old_data != f"{self.__dict__}")
 
     def SetSpeed(self, option: str):
@@ -1129,7 +1129,7 @@ class HMSList:
         self._count = 0
         self._errors = {}
         self._errors["Count"] = 0
-        
+
     def print_update(self, data) -> bool:
         # Example payload:
         # "hms": [
@@ -1168,14 +1168,14 @@ class HMSList:
                 if self._client.callback is not None:
                     self._client.callback("event_hms_errors")
                 return True
-        
+
         return False
-    
+
     @property
     def errors(self) -> dict:
         #LOGGER.debug(f"PROPERTYCALL: get_hms_errors")
         return self._errors
-    
+
     @property
     def error_count(self) -> int:
         return self._count
@@ -1225,16 +1225,16 @@ class ChamberImage:
         if self._client.callback is not None:
             self._client.callback("event_printer_chamber_image_update")
         #LOGGER.debug("JPEG RECIEVED DONE")
-    
+
     def get_jpeg(self) -> bytearray:
         #LOGGER.debug("JPEG RETRIEVED")
         value = self._bytes.copy()
         #LOGGER.debug("JPEG RETRIEVED DONE")
         return value
-    
+
     def get_last_update_time(self) -> datetime:
         return self._image_last_updated
-    
+
 @dataclass
 class CoverImage:
     """Returns the cover image from the Bambu API"""
@@ -1249,7 +1249,7 @@ class CoverImage:
     def set_jpeg(self, bytes):
         self._bytes = bytes
         self._image_last_updated = datetime.now()
-    
+
     def get_jpeg(self) -> bytearray:
         return self._bytes
 
@@ -1262,7 +1262,7 @@ class HomeFlag:
     """Contains parsed _values from the homeflag sensor"""
     _value: int
     _sw_ver: str
-    _device_type: str 
+    _device_type: str
 
     def __init__(self, client):
         self._value = 0
@@ -1291,7 +1291,7 @@ class HomeFlag:
     def door_open_available(self) -> bool:
         if not self._client._device.supports_feature(Features.DOOR_SENSOR):
             return False
-        
+
         if (self._device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00")):
             return False
 
@@ -1300,7 +1300,7 @@ class HomeFlag:
     @property
     def x_axis_homed(self) -> bool:
         return (self._value & Home_Flag_Values.X_AXIS) != 0
-    
+
     @property
     def y_axis_homed(self) -> bool:
         return (self._value & Home_Flag_Values.Y_AXIS) != 0
@@ -1336,7 +1336,7 @@ class HomeFlag:
     @property
     def sdcard_normal(self) -> bool:
         return self.sdcard_present and (self._value & Home_Flag_Values.HAS_SDCARD_ABNORMAL) != SdcardState.HAS_SDCARD_ABNORMAL
-    
+
     @property
     def ams_auto_switch_filament(self) -> bool:
         return (self._value & Home_Flag_Values.AMS_AUTO_SWITCH) != 0
@@ -1352,11 +1352,11 @@ class HomeFlag:
     @property
     def supports_motor_noise_calibration(self) -> bool:
         return (self._value & Home_Flag_Values.SUPPORTS_MOTOR_CALIBRATION) != 0
-    
+
     @property
     def p1s_upgrade_supported(self) -> bool:
         return (self._value & Home_Flag_Values.SUPPORTED_PLUS) !=  0
-    
+
     @property
     def p1s_upgrade_installed(self) -> bool:
         return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0
