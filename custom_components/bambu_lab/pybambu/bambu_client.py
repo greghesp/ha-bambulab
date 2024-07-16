@@ -20,7 +20,7 @@ from .const import (
     LOGGER,
     Features,
 )
-from .models import Device
+from .models import Device, SlicerSettings
 from .commands import (
     GET_VERSION,
     PUSH_ALL,
@@ -298,6 +298,7 @@ class BambuClient:
         self._manual_refresh_mode = manual_refresh_mode
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(region, email, username, auth_token)
+        self.slicer_settings = SlicerSettings(self)
 
     @property
     def connected(self):
@@ -341,6 +342,8 @@ class BambuClient:
         self._mqtt.start()
 
     def subscribe_and_request_info(self):
+        LOGGER.debug("Loading slicer settings...")
+        self.slicer_settings.update()
         LOGGER.debug("Now subscribing...")
         self.subscribe()
         LOGGER.debug("On Connect: Getting version info")
@@ -480,6 +483,8 @@ class BambuClient:
             LOGGER.debug("Force Refresh: Request Push All")
             self._refreshed = True
             self.publish(PUSH_ALL)
+
+        self.slicer_settings.update()
 
     def get_device(self):
         """Return device"""
