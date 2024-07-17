@@ -1,5 +1,8 @@
+### V2.0.22
+-
+
 ### V2.0.21
-- ???
+- Fix syntax error in RTSP URL redaction.
 
 ### V2.0.20
 - Redact RTSP URL in debug logs.

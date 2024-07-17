@@ -7,6 +7,7 @@ from .const import (
     FILAMENT_NAMES,
     HMS_ERRORS,
     HMS_AMS_ERRORS,
+    PRINT_ERROR_ERRORS,
     HMS_SEVERITY_LEVELS,
     HMS_MODULES,
     LOGGER,
@@ -53,9 +54,11 @@ def to_whole(number):
     return round(number)
 
 
-def get_filament_name(idx):
+def get_filament_name(idx, custom_filaments: dict):
     """Converts a filament idx to a human-readable name"""
     result = FILAMENT_NAMES.get(idx, "unknown")
+    if result == "unknown" and idx != "":
+        result = custom_filaments.get(idx, "unknown")
     if result == "unknown" and idx != "":
         LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
     return result
@@ -85,6 +88,18 @@ def get_HMS_error_text(hms_code: str):
         return ams_error
 
     return HMS_ERRORS.get(hms_code, "unknown")
+
+
+def get_print_error_text(print_error_code: str):
+    """Return the human-readable description for a print error"""
+
+    hex_conversion = f'0{int(print_error_code):x}'
+    print_error_code = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
+    print_error = PRINT_ERROR_ERRORS.get(print_error_code.upper(), "")
+    if print_error != "":
+        return print_error
+
+    return PRINT_ERROR_ERRORS.get(print_error_code, "unknown")
 
 
 def get_HMS_severity(code: int) -> str:
@@ -130,7 +145,7 @@ def get_printer_type(modules, default):
     # },
     # P1P    = AP04 / C11
     # P1S    = AP04 / C12
-    # A1Mini = AP05 / N1
+    # A1Mini = AP05 / N1 or AP04 / N1
     # A1     = AP05 / N2S
     #
     # X1C printers are of the form:
@@ -163,6 +178,8 @@ def get_printer_type(modules, default):
                 return 'P1P'
             if project_name == 'C12':
                 return 'P1S'
+            if project_name == 'N1':
+                return 'A1MINI'
         elif hw_ver == 'AP05':
             if project_name == 'N1':
                 return 'A1MINI'

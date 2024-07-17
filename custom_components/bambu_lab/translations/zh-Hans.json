@@ -116,6 +116,9 @@
       "hms_errors": {
         "name": "HMS 错误"
       },
+      "print_error": {
+        "name": "打印错误"
+      },
       "online": {
         "name": "在线"
       },
@@ -279,7 +282,13 @@
         "name": "Gcode 文件名"
       },
       "print_bed_type": {
-        "name": "打印床型"
+        "name": "打印板类型",
+        "state": {
+          "textured_plate": "纹理PEI打印版",
+          "cool_plate": "低温打印板/PLA打印板",
+          "hot_plate": "光滑PEI打印板/高温打印板",
+          "eng_plate": "工程材料打印板"
+        }
       },
       "print_length": {
         "name": "打印长度"
@@ -289,6 +298,14 @@
       },
       "subtask_name": {
         "name": "任务名称"
+      },
+      "print_type": {
+        "name": "打印类型",
+        "state": {
+          "local": "本地",
+          "cloud": "云端",
+          "idle": "无效"
+        }
       },
       "start_time": {
         "name": "开始时间"
@@ -313,6 +330,16 @@
       },
       "active_tray_index": {
         "name": "激活料盘索引"
+      },
+      "nozzle_diameter": {
+        "name": "喷嘴直径"
+      },
+      "nozzle_type": {
+        "name": "喷嘴类型",
+        "state": {
+          "hardened_steel": "硬化钢喷嘴",
+          "stainless_steel": "不锈钢喷嘴"
+        }
       },
       "humidity_index": {
         "name": "湿度指数"
