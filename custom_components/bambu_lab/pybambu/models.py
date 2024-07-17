@@ -1186,13 +1186,12 @@ class HMSList:
 @dataclass
 class PrintErrorList:
     """Return all print_error related info"""
-    _errors: dict
+    _error: dict
     _count: int
 
     def __init__(self, client):
         self._client = client
-        self._errors = {}
-        self._count = 0
+        self._error = None
         
     def print_update(self, data) -> bool:
         # Example payload:
@@ -1202,35 +1201,33 @@ class PrintErrorList:
         # 'Unable to feed filament into the extruder. This could be due to entangled filament or a stuck spool. If not, please check if the AMS PTFE tube is connected.'
 
         if 'print_error' in data.keys():
-            errors = {}
+            errors = None
             print_error_code = data.get('print_error')
             if print_error_code != 0:
-                self._count = 1
                 hex_conversion = f'0{int(print_error_code):x}'
                 print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
                 errors[f"Code"] = f"{print_error_code_hex.upper()}"
                 errors[f"Error"] = f"{print_error_code_hex.upper()}: {get_print_error_text(print_error_code.upper())}"
-                self._errors = errors
+                self._error = errors
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
-                if self._client.callback is not None:
-                    self._client.callback("event_print_error")
-                return True
             else:
-                self._errors = errors
-                self._count = 0
+                self._error = None
+
+            if self._error != errors:
+                self._error = errors
                 if self._client.callback is not None:
                     self._client.callback("event_print_error")
-                return True
-        
+
+        # We send the error event directly so always return False for the general data event.
         return False
     
     @property
-    def errors(self) -> dict:
-        return self._errors
+    def error(self) -> dict:
+        return self._error
     
     @property
     def on(self) -> int:
-        return self._count
+        return self._error != None
 
 
 @dataclass
