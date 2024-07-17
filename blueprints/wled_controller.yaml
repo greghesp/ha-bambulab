@@ -2,6 +2,7 @@ blueprint:
   name: Bambu Lab WLED Controller
   description: Control one or more WLED lights with Bambu 3d printer
   domain: automation
+  source_url: https://github.com/greghesp/ha-bambulab/blob/main/blueprints/wled_controller.yaml
   input:
     printer_status:
       name: Print Status of your Bambu Lab printer
@@ -145,6 +146,23 @@ action:
                   device_id:
                     !input wled_lights
                 alias: Turn on Wled to green
+              - delay:
+                  hours: 0
+                  minutes: 5
+                  seconds: 0
+                  milliseconds: 0
+              - service: light.turn_on
+                data:
+                  rgb_color:
+                    - 255
+                    - 255
+                    - 255
+                  brightness: 255
+                  effect: Solid
+                target:
+                  device_id: !input wled_lights
+                alias: Turn on Wled to white
+
         alias: Do we need to set color to green?
       - choose:
           - conditions:

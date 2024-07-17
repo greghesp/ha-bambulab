@@ -1424,7 +1424,8 @@ class SlicerSettings:
             name = filament["name"]
             if " @" in name:
                 name = name[:name.index(" @")]
-            self.custom_filaments[filament["filament_id"]] = name
+            if filament.get("filament_id", "") != "":
+                self.custom_filaments[filament["filament_id"]] = name
         LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
 
     def update(self):
