@@ -71,7 +71,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
 
     def event_handler_internal(self, event):
-        LOGGER.debug(f"EVENT: {event}")
+        if event != "event_printer_chamber_image_update":
+            LOGGER.debug(f"EVENT: {event}")
         if event == "event_printer_info_update":
             self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
@@ -197,10 +198,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 "device_id": hadevice.id,
                 "type": "event_printer_error",
             }
-            if 'Code' in device.print_error.errors:
-                event_data["Code"] = device.print_error.errors['Code']
-            if 'Error' in device.print_error.errors:
-                event_data["Error"] = device.print_error.errors['Error']
+            if 'Code' in device.print_error.error:
+                event_data["Code"] = device.print_error.error['Code']
+            if 'Error' in device.print_error.error:
+                event_data["Error"] = device.print_error.error['Error']
             LOGGER.debug(f"EVENT: print_error: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
