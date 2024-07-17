@@ -1,6 +1,6 @@
 import math
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from dateutil import parser, tz
 from packaging import version
@@ -797,17 +797,17 @@ class Info:
 class AMSInstance:
     """Return all AMS instance related info"""
 
-    def __init__(self):
+    def __init__(self, client):
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
         self.humidity_index = 0
         self.temperature = 0
         self.tray = [None] * 4
-        self.tray[0] = AMSTray()
-        self.tray[1] = AMSTray()
-        self.tray[2] = AMSTray()
-        self.tray[3] = AMSTray()
+        self.tray[0] = AMSTray(client)
+        self.tray[1] = AMSTray(client)
+        self.tray[2] = AMSTray(client)
+        self.tray[3] = AMSTray(client)
 
 
 @dataclass
@@ -863,7 +863,7 @@ class AMSList:
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
                     if self.data[index] is None:
-                        self.data[index] = AMSInstance()
+                        self.data[index] = AMSInstance(self._client)
 
                     if self.data[index].serial != module['sn']:
                         data_changed = True
@@ -951,7 +951,7 @@ class AMSList:
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
                 if self.data[index] is None:
-                    self.data[index] = AMSInstance()
+                    self.data[index] = AMSInstance(self._client)
 
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
@@ -970,7 +970,8 @@ class AMSList:
 class AMSTray:
     """Return all AMS tray related info"""
 
-    def __init__(self):
+    def __init__(self, client):
+        self._client = client
         self.empty = True
         self.idx = ""
         self.name = ""
@@ -1002,7 +1003,7 @@ class AMSTray:
         else:
             self.empty = False
             self.idx = data.get('tray_info_idx', self.idx)
-            self.name = get_filament_name(self.idx)
+            self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
             self.type = data.get('tray_type', self.type)
             self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
             self.color = data.get('tray_color', self.color)
@@ -1020,7 +1021,7 @@ class ExternalSpool(AMSTray):
     """Return the virtual tray related info"""
 
     def __init__(self, client):
-        super().__init__()
+        super().__init__(client)
         self._client = client
 
     def print_update(self, data) -> bool:
@@ -1409,3 +1410,24 @@ class HomeFlag:
     @property
     def p1s_upgrade_installed(self) -> bool:
         return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0
+
+
+class SlicerSettings:
+    custom_filaments: dict = field(default_factory=dict)
+
+    def __init__(self, client):
+        self._client = client
+
+    def _load_custom_filaments(self, slicer_settings: dict):
+        self.custom_filaments = {}
+        for filament in slicer_settings['filament']['private']:
+            name = filament["name"]
+            if " @" in name:
+                name = name[:name.index(" @")]
+            self.custom_filaments[filament["filament_id"]] = name
+        LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
+
+    def update(self):
+        LOGGER.debug("Loading slicer settings")
+        slicer_settings = self._client.bambu_cloud.get_slicer_settings()
+        self._load_custom_filaments(slicer_settings)
