@@ -1418,13 +1418,14 @@ class SlicerSettings:
 
     def _load_custom_filaments(self, slicer_settings: dict):
         self.custom_filaments = {}
-        for filament in slicer_settings['filament']['private']:
-            name = filament["name"]
-            if " @" in name:
-                name = name[:name.index(" @")]
-            if filament.get("filament_id", "") != "":
-                self.custom_filaments[filament["filament_id"]] = name
-        LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
+        if 'private' in slicer_settings["filament"]:
+            for filament in slicer_settings['filament']['private']:
+                name = filament["name"]
+                if " @" in name:
+                    name = name[:name.index(" @")]
+                if filament.get("filament_id", "") != "":
+                    self.custom_filaments[filament["filament_id"]] = name
+            LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
 
     def update(self):
         LOGGER.debug("Loading slicer settings")
