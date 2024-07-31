@@ -71,7 +71,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
 
     def event_handler_internal(self, event):
-        LOGGER.debug(f"EVENT: {event}")
+        if event != "event_printer_chamber_image_update":
+            LOGGER.debug(f"EVENT: {event}")
         if event == "event_printer_info_update":
             self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
@@ -103,6 +104,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         elif event == "event_hms_errors":
             self._update_hms()
+
+        elif event == "event_print_error":
+            self._update_print_error()
 
         elif event == "event_print_canceled":
             self.PublishDeviceTriggerEvent(event)
@@ -175,6 +179,31 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 event_data["url"] = device.hms.errors[f"{index+1}-Wiki"]
                 LOGGER.debug(f"EVENT: HMS errors: {event_data}")
                 self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
+
+    def _update_print_error(self):
+        dev_reg = device_registry.async_get(self._hass)
+        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+
+        device = self.get_model()
+        if device.print_error.on == 0:
+            event_data = {
+                "device_id": hadevice.id,
+                "type": "event_printer_error_cleared",
+            }
+            #LOGGER.debug(f"EVENT: print_error cleared: {event_data}")
+            if 'Code' in device.print_error.errors:
+                event_data["Code"] = device.print_error.errors['Code']
+        else:
+            event_data = {
+                "device_id": hadevice.id,
+                "type": "event_printer_error",
+            }
+            if 'Code' in device.print_error.error:
+                event_data["Code"] = device.print_error.error['Code']
+            if 'Error' in device.print_error.error:
+                event_data["Error"] = device.print_error.error['Error']
+            LOGGER.debug(f"EVENT: print_error: {event_data}")
+        self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
     def _update_device_info(self):
         if not self._updatedDevice:

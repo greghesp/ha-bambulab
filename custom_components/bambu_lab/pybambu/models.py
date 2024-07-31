@@ -1,6 +1,6 @@
 import math
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from dateutil import parser, tz
 from packaging import version
@@ -18,6 +18,7 @@ from .utils import (
     get_start_time,
     get_end_time,
     get_HMS_error_text,
+    get_print_error_text,
     get_generic_AMS_HMS_error_code,
     get_HMS_severity,
     get_HMS_module,
@@ -51,6 +52,7 @@ class Device:
         self.ams = AMSList(client = client)
         self.external_spool = ExternalSpool(client = client)
         self.hms = HMSList(client = client)
+        self.print_error = PrintErrorList(client = client)
         self.camera = Camera()
         self.home_flag = HomeFlag(client=client)
         self.push_all_data = None
@@ -71,6 +73,7 @@ class Device:
         send_event = send_event | self.ams.print_update(data = data)
         send_event = send_event | self.external_spool.print_update(data = data)
         send_event = send_event | self.hms.print_update(data = data)
+        send_event = send_event | self.print_error.print_update(data = data)
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
 
@@ -440,7 +443,7 @@ class PrintJob:
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
-            LOGGER.debug(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
+            LOGGER.error(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
             self.gcode_state = "unknown"
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
@@ -794,17 +797,17 @@ class Info:
 class AMSInstance:
     """Return all AMS instance related info"""
 
-    def __init__(self):
+    def __init__(self, client):
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
         self.humidity_index = 0
         self.temperature = 0
         self.tray = [None] * 4
-        self.tray[0] = AMSTray()
-        self.tray[1] = AMSTray()
-        self.tray[2] = AMSTray()
-        self.tray[3] = AMSTray()
+        self.tray[0] = AMSTray(client)
+        self.tray[1] = AMSTray(client)
+        self.tray[2] = AMSTray(client)
+        self.tray[3] = AMSTray(client)
 
 
 @dataclass
@@ -860,7 +863,7 @@ class AMSList:
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
                     if self.data[index] is None:
-                        self.data[index] = AMSInstance()
+                        self.data[index] = AMSInstance(self._client)
 
                     if self.data[index].serial != module['sn']:
                         data_changed = True
@@ -948,7 +951,7 @@ class AMSList:
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
                 if self.data[index] is None:
-                    self.data[index] = AMSInstance()
+                    self.data[index] = AMSInstance(self._client)
 
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
@@ -967,7 +970,8 @@ class AMSList:
 class AMSTray:
     """Return all AMS tray related info"""
 
-    def __init__(self):
+    def __init__(self, client):
+        self._client = client
         self.empty = True
         self.idx = ""
         self.name = ""
@@ -999,7 +1003,7 @@ class AMSTray:
         else:
             self.empty = False
             self.idx = data.get('tray_info_idx', self.idx)
-            self.name = get_filament_name(self.idx)
+            self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
             self.type = data.get('tray_type', self.type)
             self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
             self.color = data.get('tray_color', self.color)
@@ -1017,7 +1021,7 @@ class ExternalSpool(AMSTray):
     """Return the virtual tray related info"""
 
     def __init__(self, client):
-        super().__init__()
+        super().__init__(client)
         self._client = client
 
     def print_update(self, data) -> bool:
@@ -1179,6 +1183,50 @@ class HMSList:
     @property
     def error_count(self) -> int:
         return self._count
+
+@dataclass
+class PrintErrorList:
+    """Return all print_error related info"""
+    _error: dict
+    _count: int
+
+    def __init__(self, client):
+        self._client = client
+        self._error = None
+        
+    def print_update(self, data) -> bool:
+        # Example payload:
+        # "print_error": 117473286 
+        # So this is 07008006 which we make more human readable to 0700-8006
+        # https://e.bambulab.com/query.php?lang=en
+        # 'Unable to feed filament into the extruder. This could be due to entangled filament or a stuck spool. If not, please check if the AMS PTFE tube is connected.'
+
+        if 'print_error' in data.keys():
+            errors = None
+            print_error_code = data.get('print_error')
+            if print_error_code != 0:
+                hex_conversion = f'0{int(print_error_code):x}'
+                print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
+                errors = {}
+                errors[f"Code"] = f"{print_error_code_hex.upper()}"
+                errors[f"Error"] = f"{print_error_code_hex.upper()}: {get_print_error_text(print_error_code)}"
+                # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
+
+            if self._error != errors:
+                self._error = errors
+                if self._client.callback is not None:
+                    self._client.callback("event_print_error")
+
+        # We send the error event directly so always return False for the general data event.
+        return False
+    
+    @property
+    def error(self) -> dict:
+        return self._error
+    
+    @property
+    def on(self) -> int:
+        return self._error is not None
 
 
 @dataclass
@@ -1360,3 +1408,26 @@ class HomeFlag:
     @property
     def p1s_upgrade_installed(self) -> bool:
         return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0
+
+
+class SlicerSettings:
+    custom_filaments: dict = field(default_factory=dict)
+
+    def __init__(self, client):
+        self._client = client
+
+    def _load_custom_filaments(self, slicer_settings: dict):
+        self.custom_filaments = {}
+        if 'private' in slicer_settings["filament"]:
+            for filament in slicer_settings['filament']['private']:
+                name = filament["name"]
+                if " @" in name:
+                    name = name[:name.index(" @")]
+                if filament.get("filament_id", "") != "":
+                    self.custom_filaments[filament["filament_id"]] = name
+            LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
+
+    def update(self):
+        LOGGER.debug("Loading slicer settings")
+        slicer_settings = self._client.bambu_cloud.get_slicer_settings()
+        self._load_custom_filaments(slicer_settings)
