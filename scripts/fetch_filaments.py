@@ -1,11 +1,11 @@
+"""
+python3 scripts/fetch_filaments.py > custom_components/bambu_lab/pybambu/filaments.json
+"""
+
 from __future__ import annotations
 
 import json
 import requests
-
-"""
-python3 scripts/fetch_filaments.py > custom_components/bambu_lab/pybambu/filaments.json
-"""
 
 
 def get_filaments() -> dict:
@@ -16,13 +16,7 @@ def get_filaments() -> dict:
     return response.json()["filament"]["public"]
 
 
-def format_filament_name(name: str) -> str:
-    if " @" in name:
-        return name[:name.index(" @")]
-    return name
-
-
 filaments = get_filaments()
-data = dict(map(lambda filament: (filament["filament_id"], format_filament_name(filament["name"])), filaments))
+data = {f["filament_id"]: f["name"].split("@", 1)[0].strip() for f in get_filaments()}
 
-print(json.dumps(data, indent=4))
+print(json.dumps(data, indent=4, sort_keys=True))
