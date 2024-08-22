@@ -1,0 +1,552 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "출력 취소됨",
+      "event_print_failed": "출력 실패",
+      "event_print_finished": "출력 완료됨",
+      "event_print_started": "출력 시작됨",
+      "event_printer_error": "프린터 오류 감지됨"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "장치가 이미 구성되어 있습니다"
+    },
+    "error": {
+      "cannot_connect": "연결에 실패했습니다. 자격 증명을 확인하세요.",
+      "cannot_connect_local_ip": "연결에 실패했습니다. 제공된 IP 주소를 확인하세요.",
+      "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
+      "no_printers": "계정에서 구성되지 않은 프린터를 찾을 수 없습니다.",
+      "invalid_auth": "잘못된 인증 정보입니다.",
+      "unknown": "예기치 않은 오류입니다."
+    },
+    "step": {
+      "user": {
+        "description": "Bambu Cloud를 통해 구성하는 것이 가장 간단합니다. 그러나 2FA 또는 비밀번호가 없는 소셜 미디어 계정은 지원되지 않으며, Lan Only Mode로 설정된 프린터에는 사용할 수 없습니다.",
+        "data": {
+          "printer_mode": "프린터 구성 모드:"
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Cloud 연결",
+        "description": "Bambu Lab 자격 증명을 제공하세요:",
+        "data": {
+          "region": "계정 지역:",
+          "email": "이메일 주소 또는 전화번호",
+          "password": "비밀번호"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "프린터 선택",
+        "description": "추가할 프린터를 선택하세요.",
+        "data": {
+          "printer": "추가할 프린터 선택:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "로컬 연결 설정",
+        "description": "로컬 프린터 IP 주소와 접근 코드를 제공할 수 있습니다. 이는 P1/A1의 카메라 접근에 필요하거나, Bambu Cloud 대신 프린터에 직접 연결할 수 있도록 합니다.",
+        "data": {
+          "local_mqtt": "로컬에서 프린터에 연결:",
+          "host": "로컬 프린터 IP 주소:",
+          "access_code": "접근 코드:",
+          "usage_hours": "현재 사용 시간 (선택 사항):"
+        }
+      },
+      "Lan": {
+        "title": "Lan 모드 연결",
+        "description": "로컬 프린터 IP 주소, 시리얼 번호 및 접근 코드를 제공하세요. 접근 코드는 프린터 화면의 네트워크 설정(WLAN)에서 찾을 수 있습니다. 시리얼 번호(SN)는 장치 설정에서 확인할 수 있습니다.",
+        "data": {
+          "serial": "시리얼 번호:",
+          "host": "로컬 프린터 IP 주소:",
+          "access_code": "접근 코드:",
+          "usage_hours": "현재 사용 시간 (선택 사항):"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "cannot_connect": "연결에 실패했습니다.",
+      "cannot_connect_local_ip": "연결에 실패했습니다. 제공된 IP 주소를 확인하세요.",
+      "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
+      "invalid_auth": "잘못된 인증 정보입니다.",
+      "unknown": "예기치 않은 오류입니다."
+    },
+    "step": {
+      "init": {
+        "title": "연결 설정 조정",
+        "description": "Bambu Cloud를 통해 구성하는 것이 가장 간단합니다. 그러나 2FA 또는 비밀번호가 없는 소셜 미디어 계정은 지원되지 않으며, Lan Only Mode로 설정된 프린터에는 사용할 수 없습니다.",
+        "data": {
+          "printer_mode": "프린터 구성 모드:"
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Cloud 연결",
+        "description": "Bambu Lab 자격 증명을 제공하세요:",
+        "data": {
+          "region": "계정 지역:",
+          "email": "이메일 주소 또는 전화번호",
+          "password": "비밀번호"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "프린터 구성 조정",
+        "description": "로컬 프린터 IP 주소와 접근 코드를 제공할 수 있습니다. 이는 P1/A1의 카메라 접근에 필요하거나, Bambu Cloud 대신 프린터에 직접 연결할 수 있도록 합니다.",
+        "data": {
+          "printer": "추가할 프린터 선택:",
+          "host": "로컬 프린터 IP 주소:",
+          "access_code": "접근 코드:",
+          "local_mqtt": "Bambu Cloud 대신 프린터에 직접 연결:",
+          "usage_hours": "현재 사용 시간 (선택 사항):"
+        }
+      },
+      "Lan": {
+        "title": "Lan 모드 연결",
+        "description": "로컬 프린터 IP 주소와 접근 코드를 제공하세요. 접근 코드는 프린터 화면의 네트워크 설정(WLAN)에서 찾을 수 있습니다.",
+        "data": {
+          "host": "로컬 프린터 IP 주소:",
+          "access_code": "접근 코드:",
+          "usage_hours": "현재 사용 시간 (선택 사항):"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "인클로저 도어"
+      },
+      "timelapse": {
+        "name": "타임랩스 녹화"
+      },
+      "hms_errors": {
+        "name": "HMS 오류"
+      },
+      "print_error": {
+        "name": "출력 오류"
+      },
+      "online": {
+        "name": "온라인"
+      },
+      "firmware_update": {
+        "name": "펌웨어 업데이트"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "출력 일시정지"
+      },
+      "resume": {
+        "name": "출력 재개"
+      },
+      "stop": {
+        "name": "출력 중지"
+      },
+      "refresh": {
+        "name": "데이터 강제 새로고침"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "냉각 팬"
+      },
+      "aux_fan": {
+        "name": "보조 팬"
+      },
+      "chamber_fan": {
+        "name": "챔버 팬"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "카메라"
+      },
+      "cover_image": {
+        "name": "커버 이미지"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "챔버 라이트"
+      },
+      "camera_light": {
+        "name": "카메라 라이트"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "출력 속도",
+        "state": {
+          "silent": "조용히",
+          "standard": "표준",
+          "sport": "스포츠",
+          "ludicrous": "아주 빠름"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Wi-Fi 신호"
+      },
+      "bed_temp": {
+        "name": "베드 온도"
+      },
+      "target_bed_temp": {
+        "name": "목표 베드 온도"
+      },
+      "chamber_temp": {
+        "name": "챔버 온도"
+      },
+      "target_nozzle_temp": {
+        "name": "노즐 목표 온도"
+      },
+      "nozzle_temp": {
+        "name": "노즐 온도"
+      },
+      "aux_fan_speed": {
+        "name": "보조 팬 속도"
+      },
+      "cooling_fan_speed": {
+        "name": "냉각 팬 속도"
+      },
+      "chamber_fan_speed": {
+        "name": "챔버 팬 속도"
+      },
+      "heatbreak_fan_speed": {
+        "name": "히트브레이크 팬 속도"
+      },
+      "speed_profile": {
+        "name": "속도 프로파일",
+        "state": {
+          "silent": "조용히",
+          "standard": "표준",
+          "sport": "스포츠",
+          "ludicrous": "아주 빠름"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "수정자"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "프린터 이름"
+      },
+      "stage": {
+        "name": "현재 단계",
+        "state": {
+          "offline": "오프라인",
+          "printing": "출력 중",
+          "auto_bed_leveling": "자동 베드 레벨링",
+          "heatbed_preheating": "히트베드 예열 중",
+          "sweeping_xy_mech_mode": "XY 기계 모드 스위핑",
+          "changing_filament": "필라멘트 변경 중",
+          "m400_pause": "M400 일시정지",
+          "paused_filament_runout": "필라멘트 소진으로 일시정지",
+          "heating_hotend": "핫엔드 가열 중",
+          "calibrating_extrusion": "압출 보정 중",
+          "scanning_bed_surface": "베드 표면 스캔 중",
+          "inspecting_first_layer": "첫 번째 레이어 검사 중",
+          "identifying_build_plate_type": "빌드 플레이트 유형 식별 중",
+          "calibrating_micro_lidar": "마이크로 라이더 보정 중",
+          "homing_toolhead": "툴헤드 홈 위치 지정 중",
+          "cleaning_nozzle_tip": "노즐 팁 청소 중",
+          "checking_extruder_temperature": "익스트루더 온도 확인 중",
+          "paused_user": "사용자에 의해 출력 일시정지됨",
+          "paused_front_cover_falling": "앞 커버 낙하로 일시정지됨",
+          "calibrating_extrusion_flow": "압출 흐름 보정 중",
+          "paused_nozzle_temperature_malfunction": "노즐 온도 고장으로 일시정지됨",
+          "paused_heat_bed_temperature_malfunction": "히트베드 온도 고장으로 일시정지됨",
+          "filament_unloading": "필라멘트 하역 중",
+          "paused_skipped_step": "단계 건너뛰기로 일시정지됨",
+          "filament_loading": "필라멘트 적재 중",
+          "calibrating_motor_noise": "모터 소음 보정 중",
+          "paused_ams_lost": "AMS 분실로 일시정지됨",
+          "paused_low_fan_speed_heat_break": "저속 팬으로 히트브레이크 일시정지됨",
+          "paused_chamber_temperature_control_error": "챔버 온도 제어 오류로 일시정지됨",
+          "cooling_chamber": "챔버 냉각 중",
+          "paused_user_gcode": "사용자 추가 G코드로 일시정지됨",
+          "motor_noise_showoff": "모터 소음 시연 중",
+          "paused_nozzle_filament_covered_detected": "노즐 필라멘트 덮임 감지로 일시정지됨",
+          "paused_cutter_error": "커터 오류로 일시정지됨",
+          "paused_first_layer_error": "첫 번째 레이어 오류로 일시정지됨",
+          "paused_nozzle_clog": "노즐 막힘으로 일시정지됨",
+          "idle": "대기 중"
+        }
+      },
+      "print_progress": {
+        "name": "출력 진행 상황"
+      },
+      "print_status": {
+        "name": "출력 상태",
+        "state": {
+          "failed": "실패",
+          "finish": "완료",
+          "idle": "대기 중",
+          "offline": "오프라인",
+          "prepare": "준비 중",
+          "running": "실행 중",
+          "pause": "일시정지",
+          "slicing": "슬라이싱 중",
+          "init": "초기화 중"
+        }
+      },
+      "mqtt_mode": {
+        "name": "MQTT 연결 모드",
+        "state": {
+          "local": "로컬",
+          "bambu_cloud": "Bambu Cloud"
+        }
+      },
+      "gcode_file": {
+        "name": "Gcode 파일 이름"
+      },
+      "print_bed_type": {
+        "name": "출력 베드 유형",
+        "state": {
+          "textured_plate": "텍스처 플레이트",
+          "cool_plate": "쿨 플레이트 / PLA 플레이트",
+          "hot_plate": "부드러운 PEI 플레이트 / 고온 플레이트",
+          "eng_plate": "엔지니어링 플레이트"
+        }
+      },
+      "print_length": {
+        "name": "출력 길이"
+      },
+      "print_weight": {
+        "name": "출력 무게"
+      },
+      "subtask_name": {
+        "name": "작업 이름"
+      },
+      "print_type": {
+        "name": "출력 유형",
+        "state": {
+          "local": "로컬",
+          "cloud": "클라우드",
+          "idle": "대기 중"
+        }
+      },
+      "start_time": {
+        "name": "시작 시간"
+      },
+      "remaining_time": {
+        "name": "남은 시간"
+      },
+      "end_time": {
+        "name": "종료 시간"
+      },
+      "total_usage_hours": {
+        "name": "총 사용 시간"
+      },
+      "current_layer": {
+        "name": "현재 레이어"
+      },
+      "total_layers": {
+        "name": "총 레이어 수"
+      },
+      "active_tray": {
+        "name": "활성 트레이"
+      },
+      "active_tray_index": {
+        "name": "활성 트레이 인덱스"
+      },
+      "nozzle_diameter": {
+        "name": "노즐 직경"
+      },
+      "nozzle_type": {
+        "name": "노즐 유형",
+        "state": {
+          "hardened_steel": "경화 강철",
+          "stainless_steel": "스테인리스 강"
+        }
+      },
+      "humidity_index": {
+        "name": "습도 지수"
+      },
+      "ams_temp": {
+        "name": "AMS 온도"
+      },
+      "external_spool": {
+        "name": "외부 스풀",
+        "state_attributes": {
+          "active": {
+            "name": "활성"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "empty": {
+            "name": "빈"
+          },
+          "k_value": {
+            "name": "K 값"
+          },
+          "name": {
+            "name": "이름"
+          },
+          "nozzle_temp_min": {
+            "name": "노즐 최소 온도"
+          },
+          "nozzle_temp_max": {
+            "name": "노즐 최대 온도"
+          },
+          "type": {
+            "name": "유형"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "트레이 1",
+        "state_attributes": {
+          "active": {
+            "name": "활성"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "empty": {
+            "name": "빈"
+          },
+          "k_value": {
+            "name": "K 값"
+          },
+          "name": {
+            "name": "이름"
+          },
+          "nozzle_temp_min": {
+            "name": "노즐 최소 온도"
+          },
+          "nozzle_temp_max": {
+            "name": "노즐 최대 온도"
+          },
+          "remain": {
+            "name": "남은 필라멘트"
+          },
+          "tag_uid": {
+            "name": "스풀 시리얼 번호"
+          },
+          "type": {
+            "name": "유형"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "트레이 2",
+        "state_attributes": {
+          "active": {
+            "name": "활성"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "empty": {
+            "name": "빈"
+          },
+          "k_value": {
+            "name": "K 값"
+          },
+          "name": {
+            "name": "이름"
+          },
+          "nozzle_temp_min": {
+            "name": "노즐 최소 온도"
+          },
+          "nozzle_temp_max": {
+            "name": "노즐 최대 온도"
+          },
+          "type": {
+            "name": "유형"
+          },
+          "remain": {
+            "name": "남은 필라멘트"
+          },
+          "tag_uid": {
+            "name": "필라멘트 시리얼 번호"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "트레이 3",
+        "state_attributes": {
+          "active": {
+            "name": "활성"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "empty": {
+            "name": "빈"
+          },
+          "k_value": {
+            "name": "K 값"
+          },
+          "name": {
+            "name": "이름"
+          },
+          "nozzle_temp_min": {
+            "name": "노즐 최소 온도"
+          },
+          "nozzle_temp_max": {
+            "name": "노즐 최대 온도"
+          },
+          "type": {
+            "name": "유형"
+          },
+          "remain": {
+            "name": "남은 필라멘트"
+          },
+          "tag_uid": {
+            "name": "필라멘트 시리얼 번호"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "트레이 4",
+        "state_attributes": {
+          "active": {
+            "name": "활성"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "empty": {
+            "name": "빈"
+          },
+          "k_value": {
+            "name": "K 값"
+          },
+          "name": {
+            "name": "이름"
+          },
+          "nozzle_temp_min": {
+            "name": "노즐 최소 온도"
+          },
+          "nozzle_temp_max": {
+            "name": "노즐 최대 온도"
+          },
+          "type": {
+            "name": "유형"
+          },
+          "remain": {
+            "name": "남은 필라멘트"
+          },
+          "tag_uid": {
+            "name": "필라멘트 시리얼 번호"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "카메라"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "수동 새로 고침 모드"
+      }
+    }
+  }
+}
