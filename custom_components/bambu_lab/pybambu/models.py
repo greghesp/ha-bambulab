@@ -443,7 +443,7 @@ class PrintJob:
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
-            LOGGER.debug(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
+            LOGGER.error(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
             self.gcode_state = "unknown"
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
@@ -1207,12 +1207,10 @@ class PrintErrorList:
             if print_error_code != 0:
                 hex_conversion = f'0{int(print_error_code):x}'
                 print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
+                errors = {}
                 errors[f"Code"] = f"{print_error_code_hex.upper()}"
-                errors[f"Error"] = f"{print_error_code_hex.upper()}: {get_print_error_text(print_error_code.upper())}"
-                self._error = errors
+                errors[f"Error"] = f"{print_error_code_hex.upper()}: {get_print_error_text(print_error_code)}"
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
-            else:
-                self._error = None
 
             if self._error != errors:
                 self._error = errors
@@ -1228,7 +1226,7 @@ class PrintErrorList:
     
     @property
     def on(self) -> int:
-        return self._error != None
+        return self._error is not None
 
 
 @dataclass
@@ -1420,13 +1418,14 @@ class SlicerSettings:
 
     def _load_custom_filaments(self, slicer_settings: dict):
         self.custom_filaments = {}
-        for filament in slicer_settings['filament']['private']:
-            name = filament["name"]
-            if " @" in name:
-                name = name[:name.index(" @")]
-            if filament.get("filament_id", "") != "":
-                self.custom_filaments[filament["filament_id"]] = name
-        LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
+        if 'private' in slicer_settings["filament"]:
+            for filament in slicer_settings['filament']['private']:
+                name = filament["name"]
+                if " @" in name:
+                    name = name[:name.index(" @")]
+                if filament.get("filament_id", "") != "":
+                    self.custom_filaments[filament["filament_id"]] = name
+            LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
 
     def update(self):
         LOGGER.debug("Loading slicer settings")
