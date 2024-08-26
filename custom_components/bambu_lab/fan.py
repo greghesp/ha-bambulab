@@ -75,7 +75,10 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         """Initialize the fan."""
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
-        self._attr_supported_features = FanEntityFeature.SET_SPEED
+        self._attr_supported_features = (
+            FanEntityFeature.SET_SPEED  
+            | FanEntityFeature.TURN_ON  
+            | FanEntityFeature.TURN_OFF)
 
         super().__init__(coordinator=coordinator)
 
