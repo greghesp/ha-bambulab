@@ -3,11 +3,10 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
 from urllib.parse import urlparse
 
-from homeassistant.components import ffmpeg
-
 from .const import DOMAIN, LOGGER
 from .models import BambuLabEntity
 from .pybambu.const import Features
+from .definitions import CHAMBER_IMAGE_SENSOR
 
 from homeassistant.components.camera import Camera, CameraEntityFeature
 
@@ -23,11 +22,15 @@ async def async_setup_entry(
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     if coordinator.get_model().supports_feature(Features.CAMERA_RTSP):
-        entities_to_add: list = [BambuLabCamera(coordinator, entry)]
+        entities_to_add: list = [BambuLabRtspCamera(coordinator, entry)]
+        async_add_entities(entities_to_add)
+
+    elif CHAMBER_IMAGE_SENSOR.exists_fn(coordinator):
+        entities_to_add: list = [BambuLabImageCamera(coordinator, entry)]
         async_add_entities(entities_to_add)
 
 
-class BambuLabCamera(BambuLabEntity, Camera):
+class BambuLabRtspCamera(BambuLabEntity, Camera):
     """ Defined the Camera """
 
     _attr_translation_key = "camera"
@@ -86,3 +89,26 @@ class BambuLabCamera(BambuLabEntity, Camera):
             return str(url)
         LOGGER.debug("No RTSP Feed available")
         return None
+
+
+class BambuLabImageCamera(BambuLabEntity, Camera):
+    """Camera from chamber image"""
+
+    _attr_translation_key = "camera"
+    _attr_icon = "mdi:camera"
+    _attr_brand = "Bambu Lab"
+
+    def __init__(
+        self,
+        coordinator: BambuDataUpdateCoordinator,
+        config_entry: ConfigEntry,
+    ) -> None:
+        """Initialize the camera entity."""
+
+        self._attr_unique_id = f"{config_entry.data['serial']}_camera"
+
+        super().__init__(coordinator=coordinator)
+        Camera.__init__(self)
+
+    def camera_image(self, width: int | None = None, height: int | None = None) -> bytes | None:
+        return self.coordinator.get_model().chamber_image.get_jpeg()
