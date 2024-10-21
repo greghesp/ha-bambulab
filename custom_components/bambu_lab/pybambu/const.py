@@ -1,6 +1,7 @@
 import json
 import logging
 
+from pathlib import Path
 from enum import (
     Enum,
     IntEnum,
@@ -115,7 +116,7 @@ def load_dict(filename: str) -> dict:
         return json.load(f);
 
 
-FILAMENT_NAMES = load_dict("./filaments.json")
+FILAMENT_NAMES = load_dict(Path(__file__).with_name('filaments.json'))
 
 # TODO: Update error lists with data from https://e.bambulab.com/query.php?lang=en
 # UNIQUE_ID=dAa5VFRi
