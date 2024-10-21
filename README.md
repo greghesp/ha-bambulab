@@ -161,7 +161,7 @@ instead of OAuth.
 
 | Sensor  | Notes                                                           |
 | ------- | --------------------------------------------------------------- |
-| Chamber | P1/A1 - need the host IP providing                              |
+| Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
 
 ### Automation device triggers
