@@ -13,7 +13,7 @@
   "documentation": "https://github.com/greghesp/ha-bambulab",
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
-  "requirements": ["httpx==0.27.2"],
+  "requirements": ["httpx>=0.27.0"],
   "ssdp": [
     {
       "st": "urn:bambulab-com:device:3dprinter:1"
