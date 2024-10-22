@@ -24,7 +24,6 @@ class BambuCloud:
         else:
             url = 'https://api.bambulab.com/v1/user-service/user/login'
         data = {'account': self._email, 'password': self._password}
-        LOGGER.debug(f"Data = {data}")
         with httpx.Client(http2=True) as client:
             response = client.post(url, json=data, timeout=10)
         if response.status_code >= 400:
