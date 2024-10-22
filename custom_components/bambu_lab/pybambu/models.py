@@ -1415,9 +1415,9 @@ class SlicerSettings:
 
     def __init__(self, client):
         self._client = client
+        self.custom_filaments = {}
 
     def _load_custom_filaments(self, slicer_settings: dict):
-        self.custom_filaments = {}
         if 'private' in slicer_settings["filament"]:
             for filament in slicer_settings['filament']['private']:
                 name = filament["name"]
@@ -1428,6 +1428,9 @@ class SlicerSettings:
             LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
 
     def update(self):
-        LOGGER.debug("Loading slicer settings")
-        slicer_settings = self._client.bambu_cloud.get_slicer_settings()
-        self._load_custom_filaments(slicer_settings)
+        self.custom_filaments = {}
+        if self._client.bambu_cloud.auth_token != "":
+            LOGGER.debug("Loading slicer settings")
+            slicer_settings = self._client.bambu_cloud.get_slicer_settings()
+            if slicer_settings is not None:
+                self._load_custom_filaments(slicer_settings)
