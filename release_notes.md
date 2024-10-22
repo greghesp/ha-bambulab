@@ -1,5 +1,10 @@
+### V2.0.23
+- Fix cloud connection to meet cloudfare requirement for HTTP2.0 thanks to @TheDuffman85
+- Miscellaneous fixes
+- Bump min version of HA to 24.8.1
+
 ### V2.0.22
--
+- Miscellaneous fixes
 
 ### V2.0.21
 - Fix syntax error in RTSP URL redaction.

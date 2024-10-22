@@ -358,7 +358,7 @@ class BambuClient:
                    result_code: int,
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.info("On Connect: Connected to Broker")
+        LOGGER.info("On Connect: Connected to printer")
         self._on_connect()
 
     def _on_connect(self):
@@ -381,7 +381,7 @@ class BambuClient:
                        result_code: int,
                        properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.info("On Connect: Connected to Broker")
+        LOGGER.info("On Connect: Connected to printer")
         self._connected = True
         LOGGER.debug("Now test subscribing...")
         self.subscribe()
@@ -394,19 +394,19 @@ class BambuClient:
                       userdata: None,
                       result_code: int):
         """Called when MQTT Disconnects"""
-        LOGGER.warn(f"On Disconnect: Disconnected from Broker: {result_code}")
+        LOGGER.warn(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._on_disconnect()
     
     def _on_disconnect(self):
-        LOGGER.warn("_on_disconnect")
+        LOGGER.debug("_on_disconnect: Lost connection to the printer")
         self._connected = False
         self._device.info.set_online(False)
         if self._watchdog is not None:
-            LOGGER.warn("Stopping watchdog thread")
+            LOGGER.debug("Stopping watchdog thread")
             self._watchdog.stop()
             self._watchdog.join()
         if self._camera is not None:
-            LOGGER.warn("Stopping camera thread")
+            LOGGER.debug("Stopping camera thread")
             self._camera.stop()
             self._camera.join()
 

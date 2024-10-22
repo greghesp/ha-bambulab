@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import base64
 import json
-import requests
+import httpx
 
 from dataclasses import dataclass
 
@@ -24,9 +24,9 @@ class BambuCloud:
         else:
             url = 'https://api.bambulab.com/v1/user-service/user/login'
         data = {'account': self._email, 'password': self._password}
-        LOGGER.debug(f"Data = {data}")
-        response = requests.post(url, json=data, timeout=10)
-        if not response.ok:
+        with httpx.Client(http2=True) as client:
+            response = client.post(url, json=data, timeout=10)
+        if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
         return response.json()['accessToken']
@@ -39,7 +39,7 @@ class BambuCloud:
         jsonAuthToken = json.loads(base64.b64decode(b64_string))
         # Gives json payload with "username":"u_<digits>" within it
         return jsonAuthToken['username']
-
+    
     # Retrieves json description of devices in the form:
     # {
     #     'message': 'success',
@@ -78,7 +78,7 @@ class BambuCloud:
     #             }
     #     ]
     # }
-
+    
     def test_authentication(self, region: str, email: str, username: str, auth_token: str) -> bool:
         self._region = region
         self._email = email
@@ -105,11 +105,11 @@ class BambuCloud:
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
-        response = requests.get(url, headers=headers, timeout=10)
-        if not response.ok:
+        with httpx.Client(http2=True) as client:
+            response = client.get(url, headers=headers, timeout=10)
+        if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        #LOGGER.debug(f"DEVICE LIST: {response.json()}")
         return response.json()['devices']
 
     # The slicer settings are of the following form:
@@ -186,13 +186,13 @@ class BambuCloud:
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
-        response = requests.get(url, headers=headers, timeout=10)
-        if not response.ok:
+        with httpx.Client(http2=True) as client:
+            response = client.get(url, headers=headers, timeout=10)
+        if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
-        #LOGGER.debug(f"SLICER SETTINGS: {response.json()}")
         return response.json()
-
+        
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #
     # "total": 531,
@@ -241,8 +241,9 @@ class BambuCloud:
         else:
             url = 'https://api.bambulab.com/v1/user-service/my/tasks'
         headers = {'Authorization': 'Bearer ' + self._auth_token}
-        response = requests.get(url, headers=headers, timeout=10)
-        if not response.ok:
+        with httpx.Client(http2=True) as client:
+            response = client.get(url, headers=headers, timeout=10)
+        if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
         return response.json()
@@ -271,8 +272,9 @@ class BambuCloud:
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")
-        response = requests.get(url,  timeout=10)
-        if not response.ok:
+        with httpx.Client(http2=True) as client:
+            response = client.get(url, timeout=10)
+        if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
         return response.content
