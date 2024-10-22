@@ -1,0 +1,249 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Impressão cancelada",
+      "event_print_failed": "Impressão falhada",
+      "event_print_finished": "Impressão terminada",
+      "event_print_started": "Impressão iniciada",
+      "event_printer_error": "Erro na impressora detetado"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "O dispositivo já está configurado"
+    },
+    "error": {
+      "cannot_connect": "Falha ao ligar. Verifique as credenciais.",
+      "cannot_connect_local_ip": "Falha ao ligar. Verifique o endereço IP fornecido.",
+      "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
+      "no_printers": "Nenhuma impressora não configurada encontrada na conta.",
+      "invalid_auth": "Autenticação inválida.",
+      "unknown": "Erro inesperado."
+    },
+    "step": {
+      "user": {
+        "description": "A configuração através da Bambu Cloud é a mais simples. No entanto, não suporta autenticação 2FA ou contas de redes sociais sem palavra-passe, e não funciona para impressoras definidas como Modo Lan Apenas.",
+        "data": {
+          "printer_mode": "Modo de configuração da impressora:"
+        }
+      },
+      "Bambu": {
+        "title": "Ligação Bambu Cloud",
+        "description": "Forneça as suas credenciais da Bambu Lab:",
+        "data": {
+          "region": "Região da conta:",
+          "email": "Endereço de Email ou Número de Telefone",
+          "password": "Palavra-passe"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Seleção da Impressora",
+        "description": "Escolha a impressora que pretende adicionar.",
+        "data": {
+          "printer": "Escolha a Impressora a Adicionar:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Configurar Ligação Local",
+        "description": "Pode opcionalmente fornecer o endereço IP da impressora e o código de acesso. Isto é necessário para aceder à câmara no P1/A1 ou para ligar diretamente à impressora em vez de através da Bambu Cloud.",
+        "data": {
+          "local_mqtt": "Ligar localmente à impressora:",
+          "host": "Endereço IP Local da Impressora:",
+          "access_code": "Código de Acesso:",
+          "usage_hours": "Horas de utilização atuais (opcional):"
+        }
+      },
+      "Lan": {
+        "title": "Ligação no Modo Lan",
+        "description": "Forneça o endereço IP local, número de série e código de acesso da impressora. O código de acesso pode ser encontrado no ecrã da impressora, nas definições de rede (WLAN). O número de série (SN) encontra-se nas definições do dispositivo.",
+        "data": {
+          "serial": "Número de Série:",
+          "host": "Endereço IP Local da Impressora:",
+          "access_code": "Código de Acesso:",
+          "usage_hours": "Horas de utilização atuais (opcional):"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "cannot_connect": "Falha ao ligar",
+      "cannot_connect_local_ip": "Falha ao ligar. Verifique o endereço IP fornecido.",
+      "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
+      "invalid_auth": "Autenticação inválida.",
+      "unknown": "Erro inesperado."
+    },
+    "step": {
+      "init": {
+        "title": "Ajustar definições de ligação",
+        "description": "A configuração através da Bambu Cloud é a mais simples. No entanto, não suporta autenticação 2FA ou contas de redes sociais sem palavra-passe, e não funciona para impressoras definidas como Modo Lan Apenas.",
+        "data": {
+          "printer_mode": "Modo de configuração da impressora:"
+        }
+      },
+      "Bambu": {
+        "title": "Ligação Bambu Cloud",
+        "description": "Forneça as suas credenciais da Bambu Lab:",
+        "data": {
+          "region": "Região da conta:",
+          "email": "Endereço de Email ou Número de Telefone",
+          "password": "Palavra-passe"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Ajustar Configuração da Impressora",
+        "description": "Pode opcionalmente fornecer o endereço IP local da impressora e o código de acesso. Isto é necessário para aceder à câmara no P1/A1 ou para ligar diretamente à impressora em vez de através da Bambu Cloud.",
+        "data": {
+          "printer": "Escolha a Impressora a Adicionar:",
+          "host": "Endereço IP Local da Impressora:",
+          "access_code": "Código de Acesso:",
+          "local_mqtt": "Ligar diretamente à impressora em vez de via Bambu Cloud:",
+          "usage_hours": "Horas de utilização atuais (opcional):"
+        }
+      },
+      "Lan": {
+        "title": "Ligação no Modo Lan",
+        "description": "Forneça o endereço IP local e o código de acesso da impressora. O código de acesso pode ser encontrado no ecrã da impressora, nas definições de rede (WLAN).",
+        "data": {
+          "host": "Endereço IP Local da Impressora:",
+          "access_code": "Código de Acesso:",
+          "usage_hours": "Horas de utilização atuais (opcional):"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "Porta do compartimento"
+      },
+      "timelapse": {
+        "name": "A gravar timelapse"
+      },
+      "hms_errors": {
+        "name": "Erros HMS"
+      },
+      "print_error": {
+        "name": "Erro de impressão"
+      },
+      "online": {
+        "name": "Online"
+      },
+      "firmware_update": {
+        "name": "Atualização de firmware"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Pausar impressão"
+      },
+      "resume": {
+        "name": "Retomar impressão"
+      },
+      "stop": {
+        "name": "Parar impressão"
+      },
+      "refresh": {
+        "name": "Forçar atualização de dados"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Ventoinha de arrefecimento"
+      },
+      "aux_fan": {
+        "name": "Ventoinha auxiliar"
+      },
+      "chamber_fan": {
+        "name": "Ventoinha do compartimento"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Câmara"
+      },
+      "cover_image": {
+        "name": "Imagem de capa"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Luz do compartimento"
+      },
+      "camera_light": {
+        "name": "Luz da câmara"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Velocidade de impressão",
+        "state": {
+          "silent": "Silencioso",
+          "standard": "Padrão",
+          "sport": "Desporto",
+          "ludicrous": "Loucura"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Sinal Wi-Fi"
+      },
+      "bed_temp": {
+        "name": "Temperatura da mesa"
+      },
+      "target_bed_temp": {
+        "name": "Temperatura alvo da mesa"
+      },
+      "chamber_temp": {
+        "name": "Temperatura do compartimento"
+      },
+      "target_nozzle_temp": {
+        "name": "Temperatura alvo do bico"
+      },
+      "nozzle_temp": {
+        "name": "Temperatura do bico"
+      },
+      "aux_fan_speed": {
+        "name": "Velocidade da ventoinha auxiliar"
+      },
+      "cooling_fan_speed": {
+        "name": "Velocidade da ventoinha de arrefecimento"
+      },
+      "chamber_fan_speed": {
+        "name": "Velocidade da ventoinha do compartimento"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Velocidade da ventoinha de heatbreak"
+      },
+      "speed_profile": {
+        "name": "Perfil de velocidade",
+        "state": {
+          "silent": "Silencioso",
+          "standard": "Padrão",
+          "sport": "Desporto",
+          "ludicrous": "Loucura"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modificador"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Nome da impressora"
+      },
+      "stage": {
+        "name": "Fase atual"
+      },
+      "error": {
+        "name": "Código de erro"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "Energia"
+      }
+    }
+  }
+}
