@@ -1432,4 +1432,5 @@ class SlicerSettings:
         if self._client.bambu_cloud.auth_token != "":
             LOGGER.debug("Loading slicer settings")
             slicer_settings = self._client.bambu_cloud.get_slicer_settings()
-            self._load_custom_filaments(slicer_settings)
+            if slicer_settings is not None:
+                self._load_custom_filaments(slicer_settings)
