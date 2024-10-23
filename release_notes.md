@@ -1,3 +1,6 @@
+### V2.0.24
+- Disable slicer settings retrieval as it is getting access denied and breaking the integration.
+
 ### V2.0.23
 - Fix cloud connection to meet cloudfare requirement for HTTP2.0 thanks to @TheDuffman85
 - Miscellaneous fixes
