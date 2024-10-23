@@ -104,7 +104,7 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/iot-service/api/user/bind'
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=headers, timeout=10)
         if response.status_code >= 400:
@@ -185,7 +185,7 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/iot-service/api/slicer/setting?version=undefined'
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=headers, timeout=10)
         if response.status_code >= 400:
@@ -240,7 +240,7 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/user-service/my/tasks'
         else:
             url = 'https://api.bambulab.com/v1/user-service/my/tasks'
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=headers, timeout=10)
         if response.status_code >= 400:
