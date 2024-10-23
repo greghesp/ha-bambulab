@@ -1,3 +1,6 @@
+### V2.0.25
+- Re-enable slicer settings with fix and improved resilience to http errors
+
 ### V2.0.24
 - Disable slicer settings retrieval as it is getting access denied and breaking the integration.
 

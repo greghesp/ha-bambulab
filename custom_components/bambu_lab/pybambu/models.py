@@ -1429,8 +1429,8 @@ class SlicerSettings:
 
     def update(self):
         self.custom_filaments = {}
-        # As of late 10/22 this is now return access denied (403) and breaking the integration. Disable it for now.
-        # if self._client.bambu_cloud.auth_token != "":
-        #     LOGGER.debug("Loading slicer settings")
-        #     slicer_settings = self._client.bambu_cloud.get_slicer_settings()
-        #     self._load_custom_filaments(slicer_settings)
+        if self._client.bambu_cloud.auth_token != "":
+            LOGGER.debug("Loading slicer settings")
+            slicer_settings = self._client.bambu_cloud.get_slicer_settings()
+            if slicer_settings is not None:
+                self._load_custom_filaments(slicer_settings)

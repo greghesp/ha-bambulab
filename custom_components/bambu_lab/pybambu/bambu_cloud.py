@@ -189,8 +189,8 @@ class BambuCloud:
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=headers, timeout=10)
         if response.status_code >= 400:
-            LOGGER.debug(f"Received error: {response.status_code}")
-            raise ValueError(response.status_code)
+            LOGGER.error(f"Slicer settings load failed: {response.status_code}")
+            return None
         return response.json()
         
     # The task list is of the following form with a 'hits' array with typical 20 entries.
