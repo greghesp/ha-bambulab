@@ -23,9 +23,10 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/user-service/user/login'
         else:
             url = 'https://api.bambulab.com/v1/user-service/user/login'
+        headers = {'User-Agent' : "HA Bambulab"}
         data = {'account': self._email, 'password': self._password}
         with httpx.Client(http2=True) as client:
-            response = client.post(url, json=data, timeout=10)
+            response = client.post(url, headers=headers, json=data, timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
