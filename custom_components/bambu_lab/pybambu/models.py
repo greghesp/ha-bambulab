@@ -1192,7 +1192,7 @@ class PrintErrorList:
 
     def __init__(self, client):
         self._client = client
-        self._error = None
+        self._error = {}
         
     def print_update(self, data) -> bool:
         # Example payload:
@@ -1202,7 +1202,7 @@ class PrintErrorList:
         # 'Unable to feed filament into the extruder. This could be due to entangled filament or a stuck spool. If not, please check if the AMS PTFE tube is connected.'
 
         if 'print_error' in data.keys():
-            errors = None
+            errors = {}
             print_error_code = data.get('print_error')
             if print_error_code != 0:
                 hex_conversion = f'0{int(print_error_code):x}'
@@ -1264,24 +1264,12 @@ class ChamberImage:
     def __init__(self, client):
         self._client = client
         self._bytes = bytearray()
-        self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
-        #LOGGER.debug("JPEG RECEIVED")
         self._bytes = bytes
-        self._image_last_updated = datetime.now()
-        if self._client.callback is not None:
-            self._client.callback("event_printer_chamber_image_update")
-        #LOGGER.debug("JPEG RECIEVED DONE")
     
     def get_jpeg(self) -> bytearray:
-        #LOGGER.debug("JPEG RETRIEVED")
-        value = self._bytes.copy()
-        #LOGGER.debug("JPEG RETRIEVED DONE")
-        return value
-    
-    def get_last_update_time(self) -> datetime:
-        return self._image_last_updated
+        return self._bytes.copy()
     
 @dataclass
 class CoverImage:
