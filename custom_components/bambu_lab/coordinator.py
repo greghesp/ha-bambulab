@@ -121,7 +121,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def listen(self):
         LOGGER.debug("Starting listen()")
-        self.client.connect(callback=self.event_handler)
+        await self.client.connect(callback=self.event_handler)
 
     async def start_mqtt(self) -> None:
         """Use MQTT for updates."""

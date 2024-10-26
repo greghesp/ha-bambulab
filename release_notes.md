@@ -1,5 +1,8 @@
 ### V2.0.25
 - Re-enable slicer settings with fix and improved resilience to http errors
+- More authentication fixes
+- Fix blocking IO warning for MQTT TLS setup
+- Miscellaneous fixes
 
 ### V2.0.24
 - Disable slicer settings retrieval as it is getting access denied and breaking the integration.
