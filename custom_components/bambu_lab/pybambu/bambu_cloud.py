@@ -23,9 +23,10 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/user-service/user/login'
         else:
             url = 'https://api.bambulab.com/v1/user-service/user/login'
+        headers = {'User-Agent' : "HA Bambulab"}
         data = {'account': self._email, 'password': self._password}
         with httpx.Client(http2=True) as client:
-            response = client.post(url, json=data, timeout=10)
+            response = client.post(url, headers=headers, json=data, timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
@@ -104,7 +105,7 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/iot-service/api/user/bind'
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=headers, timeout=10)
         if response.status_code >= 400:
@@ -185,12 +186,12 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/iot-service/api/slicer/setting?version=undefined'
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=headers, timeout=10)
         if response.status_code >= 400:
-            LOGGER.debug(f"Received error: {response.status_code}")
-            raise ValueError(response.status_code)
+            LOGGER.error(f"Slicer settings load failed: {response.status_code}")
+            return None
         return response.json()
         
     # The task list is of the following form with a 'hits' array with typical 20 entries.
@@ -240,7 +241,7 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/user-service/my/tasks'
         else:
             url = 'https://api.bambulab.com/v1/user-service/my/tasks'
-        headers = {'Authorization': 'Bearer ' + self._auth_token}
+        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=headers, timeout=10)
         if response.status_code >= 400:

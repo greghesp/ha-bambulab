@@ -4,13 +4,8 @@ from .const import (
     BRAND,
     DOMAIN,
     LOGGER,
-    PLATFORMS,
-    SCAN_INTERVAL,
 )
 import asyncio
-import json
-import time
-import threading
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -54,8 +49,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(
             hass,
             LOGGER,
-            name=DOMAIN,
-            update_interval=SCAN_INTERVAL
+            name=DOMAIN
         )
 
         self.hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._async_shutdown)
@@ -71,8 +65,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
 
     def event_handler_internal(self, event):
-        if event != "event_printer_chamber_image_update":
-            LOGGER.debug(f"EVENT: {event}")
+        LOGGER.debug(f"EVENT: {event}")
         if event == "event_printer_info_update":
             self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
@@ -128,7 +121,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def listen(self):
         LOGGER.debug("Starting listen()")
-        self.client.connect(callback=self.event_handler)
+        await self.client.connect(callback=self.event_handler)
 
     async def start_mqtt(self) -> None:
         """Use MQTT for updates."""
@@ -143,7 +136,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
-        LOGGER.debug(f"{self.config_entry.data['device_type']} HA POLL: MQTT connected: {self.client.connected}")
+        LOGGER.error(f"_async_update_data() unexpectedly called")
         device = self.get_model()
         return device
     
@@ -190,9 +183,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 "device_id": hadevice.id,
                 "type": "event_printer_error_cleared",
             }
-            #LOGGER.debug(f"EVENT: print_error cleared: {event_data}")
-            if 'Code' in device.print_error.error:
-                event_data["Code"] = device.print_error.error['Code']
+            LOGGER.debug(f"EVENT: print_error cleared: {event_data}")
         else:
             event_data = {
                 "device_id": hadevice.id,
