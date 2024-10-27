@@ -1193,7 +1193,6 @@ class PrintErrorList:
     def __init__(self, client):
         self._error = None
         self._client = client
-        self._error = {}
         
     def print_update(self, data) -> bool:
         # Example payload:
