@@ -471,9 +471,7 @@ class PrintJob:
         if data.get("mc_remaining_time") is not None:
             existing_remaining_time = self.remaining_time
             self.remaining_time = data.get("mc_remaining_time")
-            if self.start_time is None:
-                self.end_time = None
-            elif existing_remaining_time != self.remaining_time:
+            if existing_remaining_time != self.remaining_time:
                 self.end_time = get_end_time(self.remaining_time)
                 LOGGER.debug(f"END TIME2: {self.end_time}")
 
