@@ -17,16 +17,21 @@ class BambuCloud:
         self._username = username
         self._auth_token = auth_token
 
+    def _get_headers(self) -> dict:
+        return {'User-Agent' : "HA Bambulab"}
+
+    def _get_headers_with_auth_token(self) -> dict:
+        return {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
+
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
         if self._region == "China":
             url = 'https://api.bambulab.cn/v1/user-service/user/login'
         else:
             url = 'https://api.bambulab.com/v1/user-service/user/login'
-        headers = {'User-Agent' : "HA Bambulab"}
         data = {'account': self._email, 'password': self._password}
         with httpx.Client(http2=True) as client:
-            response = client.post(url, headers=headers, json=data, timeout=10)
+            response = client.post(url, headers=self._get_headers(), json=data, timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
@@ -105,9 +110,8 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/iot-service/api/user/bind'
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
-        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
-            response = client.get(url, headers=headers, timeout=10)
+            response = client.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
@@ -186,9 +190,8 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/iot-service/api/slicer/setting?version=undefined'
         else:
             url = 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'
-        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
-            response = client.get(url, headers=headers, timeout=10)
+            response = client.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.error(f"Slicer settings load failed: {response.status_code}")
             return None
@@ -241,9 +244,8 @@ class BambuCloud:
             url = 'https://api.bambulab.cn/v1/user-service/my/tasks'
         else:
             url = 'https://api.bambulab.com/v1/user-service/my/tasks'
-        headers = {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
         with httpx.Client(http2=True) as client:
-            response = client.get(url, headers=headers, timeout=10)
+            response = client.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
