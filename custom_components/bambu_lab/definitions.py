@@ -180,7 +180,8 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
-        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.AUXILIARY)
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.AUXILIARY),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AUX_FAN),
     ),
     BambuLabSensorEntityDescription(
         key="chamber_fan_speed",
