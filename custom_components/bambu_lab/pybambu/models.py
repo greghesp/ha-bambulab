@@ -817,6 +817,7 @@ class AMSList:
         self._client = client
         self.tray_now = 0
         self.data = [None] * 4
+        self._first_initialization_done = False
 
     def info_update(self, data):
         old_data = f"{self.__dict__}"
@@ -858,7 +859,7 @@ class AMSList:
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
-                # requires as part of the home assistant device identity.
+                # required as part of the home assistant device identity.
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
                     if self.data[index] is None:
@@ -873,6 +874,9 @@ class AMSList:
                     if self.data[index].hw_version != module['hw_ver']:
                         data_changed = True
                         self.data[index].hw_version = module['hw_ver']
+            elif not self._first_initialization_done:
+                self._first_initialization_done = True
+                data_changed = True
 
         data_changed = data_changed or (old_data != f"{self.__dict__}")
 
