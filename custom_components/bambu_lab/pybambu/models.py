@@ -1191,6 +1191,7 @@ class PrintErrorList:
     _count: int
 
     def __init__(self, client):
+        self._error = None
         self._client = client
         self._error = {}
         
@@ -1202,7 +1203,7 @@ class PrintErrorList:
         # 'Unable to feed filament into the extruder. This could be due to entangled filament or a stuck spool. If not, please check if the AMS PTFE tube is connected.'
 
         if 'print_error' in data.keys():
-            errors = {}
+            errors = None
             print_error_code = data.get('print_error')
             if print_error_code != 0:
                 hex_conversion = f'0{int(print_error_code):x}'
