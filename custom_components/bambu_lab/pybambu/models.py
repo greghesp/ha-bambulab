@@ -450,7 +450,8 @@ class PrintJob:
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         self.print_type = data.get("print_type", self.print_type)
         if self.print_type.lower() not in PRINT_TYPE_OPTIONS:
-            LOGGER.debug(f"Unknown print_type. Please log an issue : '{self.print_type}'")
+            if self.print_type != "":
+                LOGGER.debug(f"Unknown print_type. Please log an issue : '{self.print_type}'")
             self.print_type = "unknown"
         self.subtask_name = data.get("subtask_name", self.subtask_name)
         self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
