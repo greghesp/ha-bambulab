@@ -1,0 +1,552 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Εκτύπωση ακυρώθηκε",
+      "event_print_failed": "Αποτυχία εκτύπωσης",
+      "event_print_finished": "Η εκτύπωση ολοκληρώθηκε",
+      "event_print_started": "Η εκτύπωση ξεκίνησε",
+      "event_printer_error": "Εντοπίστηκε σφάλμα στον εκτυπωτή"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "Η συσκευή είναι ήδη ρυθμισμένη"
+    },
+    "error": {
+      "cannot_connect": "Αποτυχία σύνδεσης. Ελέγξτε τα στοιχεία σύνδεσης.",
+      "cannot_connect_local_ip": "Αποτυχία σύνδεσης. Ελέγξτε τη διεύθυνση IP.",
+      "cannot_connect_local_all": "Αποτυχία σύνδεσης. Ελέγξτε τις ρυθμίσεις.",
+      "no_printers": "Δεν βρέθηκαν μη ρυθμισμένοι εκτυπωτές στον λογαριασμό.",
+      "invalid_auth": "Μη έγκυρη ταυτοποίηση.",
+      "unknown": "Απρόσμενο σφάλμα."
+    },
+    "step": {
+      "user": {
+        "description": "Η ρύθμιση μέσω Bambu Cloud είναι η απλούστερη. Δεν υποστηρίζει 2FA ή λογαριασμούς κοινωνικών δικτύων χωρίς κωδικό πρόσβασης. Επίσης δεν θα λειτουργήσει για εκτυπωτές που έχουν ρυθμιστεί σε λειτουργία Lan Only Mode.",
+        "data": {
+          "printer_mode": "Τρόπος ρύθμισης εκτυπωτή:"
+        }
+      },
+      "Bambu": {
+        "title": "Σύνδεση με Bambu Cloud",
+        "description": "Παρακαλούμε δώστε τα στοιχεία του λογαριασμού σας στο Bambu Lab:",
+        "data": {
+          "region": "Περιοχή λογαριασμού:",
+          "email": "Διεύθυνση Email ή Αριθμός Τηλεφώνου",
+          "password": "Κωδικός πρόσβασης"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Επιλογή Εκτυπωτή",
+        "description": "Επιλέξτε ποιον εκτυπωτή θέλετε να προσθέσετε.",
+        "data": {
+          "printer": "Επιλέξτε Εκτυπωτή για Προσθήκη:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Ρύθμιση Τοπικής Σύνδεσης",
+        "description": "Μπορείτε προαιρετικά να δώσετε τη διεύθυνση IP του τοπικού εκτυπωτή και τον κωδικό πρόσβασης. Αυτό απαιτείται για πρόσβαση στην κάμερα του P1/A1 ή για άμεση σύνδεση με τον εκτυπωτή αντί μέσω του Bambu Cloud.",
+        "data": {
+          "local_mqtt": "Σύνδεση τοπικά με τον εκτυπωτή:",
+          "host": "Τοπική Διεύθυνση IP του Εκτυπωτή:",
+          "access_code": "Κωδικός Πρόσβασης:",
+          "usage_hours": "Ώρες Χρήσης (προαιρετικά):"
+        }
+      },
+      "Lan": {
+        "title": "Σύνδεση σε Λειτουργία Lan",
+        "description": "Παρακαλούμε δώστε τη διεύθυνση IP του τοπικού εκτυπωτή, τον σειριακό αριθμό και τον κωδικό πρόσβασης. Ο κωδικός πρόσβασης μπορεί να βρεθεί στην οθόνη του εκτυπωτή, στις ρυθμίσεις δικτύου (WLAN). Ο σειριακός αριθμός (SN) βρίσκεται στις ρυθμίσεις της συσκευής.",
+        "data": {
+          "serial": "Σειριακός Αριθμός:",
+          "host": "Τοπική Διεύθυνση IP του Εκτυπωτή:",
+          "access_code": "Κωδικός Πρόσβασης:",
+          "usage_hours": "Ώρες Χρήσης (προαιρετικά):"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "cannot_connect": "Αποτυχία σύνδεσης",
+      "cannot_connect_local_ip": "Αποτυχία σύνδεσης. Ελέγξτε τη διεύθυνση IP.",
+      "cannot_connect_local_all": "Αποτυχία σύνδεσης. Ελέγξτε τις ρυθμίσεις.",
+      "invalid_auth": "Μη έγκυρη ταυτοποίηση.",
+      "unknown": "Απρόσμενο σφάλμα."
+    },
+    "step": {
+      "init": {
+        "title": "Προσαρμογή ρυθμίσεων σύνδεσης",
+        "description": "Η ρύθμιση μέσω Bambu Cloud είναι η απλούστερη. Δεν υποστηρίζει 2FA ή λογαριασμούς κοινωνικών δικτύων χωρίς κωδικό πρόσβασης. Επίσης δεν θα λειτουργήσει για εκτυπωτές που έχουν ρυθμιστεί σε λειτουργία Lan Only Mode.",
+        "data": {
+          "printer_mode": "Τρόπος ρύθμισης εκτυπωτή:"
+        }
+      },
+      "Bambu": {
+        "title": "Σύνδεση με Bambu Cloud",
+        "description": "Παρακαλούμε δώστε τα στοιχεία του λογαριασμού σας στο Bambu Lab:",
+        "data": {
+          "region": "Περιοχή λογαριασμού:",
+          "email": "Διεύθυνση Email ή Αριθμός Τηλεφώνου",
+          "password": "Κωδικός πρόσβασης"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Προσαρμογή Ρύθμισης Εκτυπωτή",
+        "description": "Μπορείτε προαιρετικά να δώσετε τη διεύθυνση IP του τοπικού εκτυπωτή και τον κωδικό πρόσβασης. Αυτό απαιτείται για πρόσβαση στην κάμερα του P1/A1 ή για άμεση σύνδεση με τον εκτυπωτή αντί μέσω του Bambu Cloud.",
+        "data": {
+          "printer": "Επιλέξτε Εκτυπωτή για Προσθήκη:",
+          "host": "Τοπική Διεύθυνση IP του Εκτυπωτή:",
+          "access_code": "Κωδικός Πρόσβασης:",
+          "local_mqtt": "Σύνδεση τοπικά με τον εκτυπωτή:",
+          "usage_hours": "Ώρες Χρήσης (προαιρετικά):"
+        }
+      },
+      "Lan": {
+        "title": "Σύνδεση σε Λειτουργία Lan",
+        "description": "Παρακαλούμε δώστε τη διεύθυνση IP του τοπικού εκτυπωτή και τον κωδικό πρόσβασης. Ο κωδικός πρόσβασης μπορεί να βρεθεί στην οθόνη του εκτυπωτή στις ρυθμίσεις δικτύου (WLAN).",
+        "data": {
+          "host": "Τοπική Διεύθυνση IP του Εκτυπωτή:",
+          "access_code": "Κωδικός Πρόσβασης:",
+          "usage_hours": "Ώρες Χρήσης (προαιρετικά):"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "Πόρτα περιβλήματος"
+      },
+      "timelapse": {
+        "name": "Χρονικό βίντεο"
+      },
+      "hms_errors": {
+        "name": "Σφάλματα HMS"
+      },
+      "print_error": {
+        "name": "Σφάλμα εκτύπωσης"
+      },
+      "online": {
+        "name": "Συνδεδεμένο"
+      },
+      "firmware_update": {
+        "name": "Ενημέρωση λογισμικού"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Παύση εκτύπωσης"
+      },
+      "resume": {
+        "name": "Συνέχιση εκτύπωσης"
+      },
+      "stop": {
+        "name": "Διακοπή εκτύπωσης"
+      },
+      "refresh": {
+        "name": "Αναγκαστική Ανανέωση Δεδομένων"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Ανεμιστήρας ψύξης"
+      },
+      "aux_fan": {
+        "name": "Βοηθητικός ανεμιστήρας"
+      },
+      "chamber_fan": {
+        "name": "Ανεμιστήρας θαλάμου"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Κάμερα εκτυπωτή"
+      },
+      "cover_image": {
+        "name": "Εικόνα"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Φωτισμός θαλάμου"
+      },
+      "camera_light": {
+        "name": "Φωτισμός κάμερας"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Ταχύτητα εκτύπωσης",
+        "state": {
+          "silent": "Αθόρυβη",
+          "standard": "Κανονική",
+          "sport": "Γρήγορη",
+          "ludicrous": "Υπερβολική"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Σήμα Wi-Fi"
+      },
+      "bed_temp": {
+        "name": "Θερμοκρασία βάσης"
+      },
+      "target_bed_temp": {
+        "name": "Στόχος θερμοκρασίας βάσης"
+      },
+      "chamber_temp": {
+        "name": "Θερμοκρασία θαλάμου"
+      },
+      "target_nozzle_temp": {
+        "name": "Στόχος θερμοκρασίας ακροφυσίου"
+      },
+      "nozzle_temp": {
+        "name": "Θερμοκρασία ακροφυσίου"
+      },
+      "aux_fan_speed": {
+        "name": "Ταχύτητα βοηθητικού ανεμιστήρα"
+      },
+      "cooling_fan_speed": {
+        "name": "Ταχύτητα ανεμιστήρα ψύξης"
+      },
+      "chamber_fan_speed": {
+        "name": "Ταχύτητα ανεμιστήρα θαλάμου"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Ταχύτητα ανεμιστήρα διακοπής θερμότητας"
+      },
+      "speed_profile": {
+        "name": "Προφίλ ταχύτητας",
+        "state": {
+          "silent": "Αθόρυβη",
+          "standard": "Κανονική",
+          "sport": "Γρήγορη",
+          "ludicrous": "Υπερβολική"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Διαμορφωτής"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Όνομα εκτυπωτή"
+      },
+      "stage": {
+        "name": "Τρέχον στάδιο",
+        "state": {
+          "offline": "Εκτός σύνδεσης",
+          "printing": "Εκτύπωση",
+          "auto_bed_leveling": "Αυτόματη ισοστάθμιση βάσης",
+          "heatbed_preheating": "Προθέρμανση βάσης",
+          "sweeping_xy_mech_mode": "Σάρωση μηχανικού XY",
+          "changing_filament": "Αλλαγή νήματος",
+          "m400_pause": "Παύση M400",
+          "paused_filament_runout": "Παύση λόγω έλλειψης νήματος",
+          "heating_hotend": "Προθέρμανση ακροφυσίου",
+          "calibrating_extrusion": "Βαθμονόμηση εξώθησης",
+          "scanning_bed_surface": "Σάρωση επιφάνειας βάσης",
+          "inspecting_first_layer": "Έλεγχος πρώτου στρώματος",
+          "identifying_build_plate_type": "Αναγνώριση τύπου βάσης",
+          "calibrating_micro_lidar": "Βαθμονόμηση micro lidar",
+          "homing_toolhead": "Επιστροφή κεφαλής εργαλείου",
+          "cleaning_nozzle_tip": "Καθαρισμός άκρης ακροφυσίου",
+          "checking_extruder_temperature": "Έλεγχος θερμοκρασίας εξωθητή",
+          "paused_user": "Παύση από τον χρήστη",
+          "paused_front_cover_falling": "Παύση λόγω πτώσης καλύμματος",
+          "calibrating_extrusion_flow": "Βαθμονόμηση ροής εξώθησης",
+          "paused_nozzle_temperature_malfunction": "Παύση λόγω δυσλειτουργίας θερμοκρασίας ακροφυσίου",
+          "paused_heat_bed_temperature_malfunction": "Παύση λόγω δυσλειτουργίας θερμοκρασίας βάσης",
+          "filament_unloading": "Αφαίρεση νήματος",
+          "paused_skipped_step": "Παύση λόγω παραλειπόμενων βημάτων",
+          "filament_loading": "Φόρτωση νήματος",
+          "calibrating_motor_noise": "Βαθμονόμηση θορύβου κινητήρα",
+          "paused_ams_lost": "Παύση λόγω απώλειας AMS",
+          "paused_low_fan_speed_heat_break": "Παύση λόγω χαμηλής ταχύτητας ανεμιστήρα διακοπής θερμότητας",
+          "paused_chamber_temperature_control_error": "Παύση λόγω σφάλματος ελέγχου θερμοκρασίας θαλάμου",
+          "cooling_chamber": "Ψύξη θαλάμου",
+          "paused_user_gcode": "Παύση από τον χρήστη μέσω gcode",
+          "motor_noise_showoff": "Επίδειξη θορύβου κινητήρα",
+          "paused_nozzle_filament_covered_detected": "Παύση λόγω κάλυψης νήματος στο ακροφύσιο",
+          "paused_cutter_error": "Παύση λόγω σφάλματος κόφτη",
+          "paused_first_layer_error": "Παύση λόγω σφάλματος πρώτου στρώματος",
+          "paused_nozzle_clog": "Παύση λόγω απόφραξης ακροφυσίου",
+          "idle": "Αδρανής"
+        }
+      },
+      "print_progress": {
+        "name": "Πρόοδος εκτύπωσης"
+      },
+      "print_status": {
+        "name": "Κατάσταση εκτύπωσης",
+        "state": {
+          "failed": "Αποτυχία",
+          "finish": "Ολοκληρώθηκε",
+          "idle": "Αδρανής",
+          "offline": "Εκτός σύνδεσης",
+          "prepare": "Προετοιμασία",
+          "running": "Σε λειτουργία",
+          "pause": "Παύση",
+          "slicing": "Τεμαχισμός",
+          "init": "Εκκίνηση"
+        }
+      },
+      "mqtt_mode": {
+        "name": "Τρόπος σύνδεσης MQTT",
+        "state": {
+          "local": "Τοπικό",
+          "bambu_cloud": "Bambu Cloud"
+        }
+      },
+      "gcode_file": {
+        "name": "Όνομα αρχείου Gcode"
+      },
+      "print_bed_type": {
+        "name": "Τύπος βάσης εκτύπωσης",
+        "state": {
+          "textured_plate": "Υφή βάσης",
+          "cool_plate": "Cool Plate / Base PLA",
+          "hot_plate": "Smooth PEI / High Temperature Plate",
+          "eng_plate": "Engineering Plate"
+        }
+      },
+      "print_length": {
+        "name": "Μήκος εκτύπωσης"
+      },
+      "print_weight": {
+        "name": "Βάρος εκτύπωσης"
+      },
+      "subtask_name": {
+        "name": "Όνομα εργασίας"
+      },
+      "print_type": {
+        "name": "Τύπος εκτύπωσης",
+        "state": {
+          "local": "Τοπικό",
+          "cloud": "Σύννεφο",
+          "idle": "Αδρανής"
+        }
+      },
+      "start_time": {
+        "name": "Ώρα έναρξης"
+      },
+      "remaining_time": {
+        "name": "Υπολειπόμενος χρόνος"
+      },
+      "end_time": {
+        "name": "Ώρα λήξης"
+      },
+      "total_usage_hours": {
+        "name": "Συνολική χρήση"
+      },
+      "current_layer": {
+        "name": "Τρέχον στρώμα"
+      },
+      "total_layers": {
+        "name": "Συνολικός αριθμός στρωμάτων"
+      },
+      "active_tray": {
+        "name": "Τρέχον Νήμα"
+      },
+      "active_tray_index": {
+        "name": "Ενεργή θέση AMS"
+      },
+      "nozzle_diameter": {
+        "name": "Μέγεθος ακροφυσίου"
+      },
+      "nozzle_type": {
+        "name": "Τύπος ακροφυσίου",
+        "state": {
+          "hardened_steel": "Σκληρυμένος χάλυβας",
+          "stainless_steel": "Ανοξείδωτος χάλυβας"
+        }
+      },
+      "humidity_index": {
+        "name": "Δείκτης υγρασίας"
+      },
+      "ams_temp": {
+        "name": "Θερμοκρασία AMS"
+      },
+      "external_spool": {
+        "name": "Εξωτερικό νήμα",
+        "state_attributes": {
+          "active": {
+            "name": "Ενεργό"
+          },
+          "color": {
+            "name": "Χρώμα"
+          },
+          "empty": {
+            "name": "Κενό"
+          },
+          "k_value": {
+            "name": "Τιμή K"
+          },
+          "name": {
+            "name": "Όνομα"
+          },
+          "nozzle_temp_min": {
+            "name": "Ελάχιστη θερμοκρασία ακροφυσίου"
+          },
+          "nozzle_temp_max": {
+            "name": "Μέγιστη θερμοκρασία ακροφυσίου"
+          },
+          "type": {
+            "name": "Τύπος"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Θέση 1",
+        "state_attributes": {
+          "active": {
+            "name": "Ενεργό"
+          },
+          "color": {
+            "name": "Χρώμα"
+          },
+          "empty": {
+            "name": "Κενό"
+          },
+          "k_value": {
+            "name": "Τιμή K"
+          },
+          "name": {
+            "name": "Όνομα"
+          },
+          "nozzle_temp_min": {
+            "name": "Ελάχιστη θερμοκρασία ακροφυσίου"
+          },
+          "nozzle_temp_max": {
+            "name": "Μέγιστη θερμοκρασία ακροφυσίου"
+          },
+          "remain": {
+            "name": "Υπόλοιπο νήματος"
+          },
+          "tag_uid": {
+            "name": "Σειριακός αριθμός καρουλιού"
+          },
+          "type": {
+            "name": "Τύπος"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Θέση 2",
+        "state_attributes": {
+          "active": {
+            "name": "Ενεργό"
+          },
+          "color": {
+            "name": "Χρώμα"
+          },
+          "empty": {
+            "name": "Κενό"
+          },
+          "k_value": {
+            "name": "Τιμή K"
+          },
+          "name": {
+            "name": "Όνομα"
+          },
+          "nozzle_temp_min": {
+            "name": "Ελάχιστη θερμοκρασία ακροφυσίου"
+          },
+          "nozzle_temp_max": {
+            "name": "Μέγιστη θερμοκρασία ακροφυσίου"
+          },
+          "remain": {
+            "name": "Υπόλοιπο νήματος"
+          },
+          "tag_uid": {
+            "name": "Σειριακός αριθμός νήματος"
+          },
+          "type": {
+            "name": "Τύπος"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Θέση 3",
+        "state_attributes": {
+          "active": {
+            "name": "Ενεργό"
+          },
+          "color": {
+            "name": "Χρώμα"
+          },
+          "empty": {
+            "name": "Κενό"
+          },
+          "k_value": {
+            "name": "Τιμή K"
+          },
+          "name": {
+            "name": "Όνομα"
+          },
+          "nozzle_temp_min": {
+            "name": "Ελάχιστη θερμοκρασία ακροφυσίου"
+          },
+          "nozzle_temp_max": {
+            "name": "Μέγιστη θερμοκρασία ακροφυσίου"
+          },
+          "remain": {
+            "name": "Υπόλοιπο νήματος"
+          },
+          "tag_uid": {
+            "name": "Σειριακός αριθμός νήματος"
+          },
+          "type": {
+            "name": "Τύπος"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Θέση 4",
+        "state_attributes": {
+          "active": {
+            "name": "Ενεργό"
+          },
+          "color": {
+            "name": "Χρώμα"
+          },
+          "empty": {
+            "name": "Κενό"
+          },
+          "k_value": {
+            "name": "Τιμή K"
+          },
+          "name": {
+            "name": "Όνομα"
+          },
+          "nozzle_temp_min": {
+            "name": "Ελάχιστη θερμοκρασία ακροφυσίου"
+          },
+          "nozzle_temp_max": {
+            "name": "Μέγιστη θερμοκρασία ακροφυσίου"
+          },
+          "remain": {
+            "name": "Υπόλοιπο νήματος"
+          },
+          "tag_uid": {
+            "name": "Σειριακός αριθμός νήματος"
+          },
+          "type": {
+            "name": "Τύπος"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Κάμερα"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Χειροκίνητη λειτουργία ανανέωσης"
+      }
+    }
+  }
+}

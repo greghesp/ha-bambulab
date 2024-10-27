@@ -250,7 +250,7 @@ class BambuCloud:
         return response.json()
     
     def get_latest_task_for_printer(self, deviceId: str) -> dict:
-        LOGGER.debug(f"Getting latest task from Bambu Cloud for Printer: {deviceId}")
+        LOGGER.debug(f"Getting latest task from Bambu Cloud")
         data = self.get_tasklist_for_printer(deviceId)
         if len(data) != 0:
             return data[0]
@@ -258,7 +258,7 @@ class BambuCloud:
         return None
 
     def get_tasklist_for_printer(self, deviceId: str) -> dict:
-        LOGGER.debug(f"Getting task list from Bambu Cloud for Printer: {deviceId}")
+        LOGGER.debug(f"Getting task list from Bambu Cloud")
         tasks = []
         data = self.get_tasklist()
         for task in data['hits']:
