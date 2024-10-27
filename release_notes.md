@@ -1,3 +1,6 @@
+### V2.0.27
+- Miscellaneous fixes
+
 ### V2.0.26
 - Add Greek translation
 - Fix regression in error sensor never turning off
