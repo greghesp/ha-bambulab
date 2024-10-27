@@ -1,3 +1,8 @@
+### V2.0.26
+- Add Greek translation
+- Fix regression in error sensor never turning off
+- Update contribution rules
+
 ### V2.0.25
 - Re-enable slicer settings with fix and improved resilience to http errors
 - More authentication fixes
