@@ -180,7 +180,7 @@
     },
     "sensor": {
       "wifi_signal": {
-        "name": "Wi-Fi-Signalquallität"
+        "name": "Wi-Fi-Signalqualität"
       },
       "bed_temp": {
         "name": "Druckbetttemperatur"
