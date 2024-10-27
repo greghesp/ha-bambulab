@@ -376,10 +376,13 @@ class BambuClient:
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
 
-        if self._device.supports_feature(Features.CAMERA_IMAGE):
-            LOGGER.debug("Starting Chamber Image thread")
-            self._camera = ChamberImageThread(self)
-            self._camera.start()
+        if not self._device.supports_feature(Features.CAMERA_RTSP):
+            if self._device.supports_feature(Features.CAMERA_IMAGE):
+                LOGGER.debug("Starting Chamber Image thread")
+                self._camera = ChamberImageThread(self)
+                self._camera.start()
+            elif (self._client.host == "") or (self._client._access_code == ""):
+                LOGGER.debug("Skipping camera setup as local access details not provided.")
 
     def try_on_connect(self,
                        client_: mqtt.Client,
