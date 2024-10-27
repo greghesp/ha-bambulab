@@ -136,6 +136,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     async def _async_update_data(self):
+        LOGGER.debug(f"_async_update_data() called")
         device = self.get_model()
         return device
     
