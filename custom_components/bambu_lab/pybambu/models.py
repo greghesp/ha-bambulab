@@ -93,7 +93,7 @@ class Device:
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
-            return True
+            return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
         elif feature == Features.CHAMBER_LIGHT:
             return True
         elif feature == Features.CHAMBER_FAN:
