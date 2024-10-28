@@ -985,7 +985,7 @@ class AMSTray:
         self.nozzle_temp_max = 0
         self.remain = 0
         self.k = 0
-        self.tag_uid = "0000000000000000"
+        self.tray_uuid = ""
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -1001,7 +1001,7 @@ class AMSTray:
             self.nozzle_temp_min = 0
             self.nozzle_temp_max = 0
             self.remain = 0
-            self.tag_uid = "0000000000000000"
+            self.tray_uuid = ""
             self.k = 0
         else:
             self.empty = False
@@ -1013,7 +1013,7 @@ class AMSTray:
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
             self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
             self.remain = data.get('remain', self.remain)
-            self.tag_uid = data.get('tag_uid', self.tag_uid)
+            self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
         
         return (old_data != f"{self.__dict__}")
