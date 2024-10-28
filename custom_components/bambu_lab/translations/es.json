@@ -1,0 +1,552 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Impresión cancelada",
+      "event_print_failed": "Impresión fallida",
+      "event_print_finished": "Impresión finalizada",
+      "event_print_started": "Impresión comenzada",
+      "event_printer_error": "Error de la impresora detectado"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "El dispositivo ya se encuentra configurado"
+    },
+    "error": {
+      "cannot_connect": "Falla al conectar. Revisa las credenciales.",
+      "cannot_connect_local_ip": "Falla al conectar. Revisa la dirección IP proporcionada.",
+      "cannot_connect_local_all": "Falla al conectar. Revisa la configuración proporcionada..",
+      "no_printers": "No se encontraron impresoras configuradas en la cuenta.",
+      "invalid_auth": "Autenticación inválida.",
+      "unknown": "Error inesperado."
+    },
+    "step": {
+      "user": {
+        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Lan Only Mode.",
+        "data": {
+          "printer_mode": "Modo de configuración de la impresora:"
+        }
+      },
+      "Bambu": {
+        "title": "Conexión con Bambu Cloud",
+        "description": "Por favor, proporcione sus credenciales de Bambu Lab:",
+        "data": {
+          "region": "Región de la cuenta:",
+          "email": "Dirección de Correo Electrónico o Número de Teléfono",
+          "password": "Contraseña"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Selección de Impresora",
+        "description": "Elija qué impresora quiere agregar.",
+        "data": {
+          "printer": "Elija Impresora para Agregar:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Configuración de Conexión Local",
+        "description": "Opcionalmente, puedes proporcionar la dirección de IP local de la impresora y el código de acceso. Esto es requerido para el acceso a la cámara de la P1/A1, o para poder conectarse directamente a la impresora sin utilizar Bambu Cloud.",
+        "data": {
+          "local_mqtt": "Conectar localmente a la impresora:",
+          "host": "Dirección de IP Local de la Impresora:",
+          "access_code": "Código de Acceso:",
+          "usage_hours": "Cantidad de horas de uso (opcional):"
+        }
+      },
+      "Lan": {
+        "title": "Conexión de Modo de Red Local",
+        "description": "Por favor, proporcione la dirección de IP local de la impresora, el número de serie y el código de acceso. El código de acceso puede encontrarlo en la pantalla de la impresora, en la configuración de red (WLAN). El número de serie (SN) lo puede encontrar en la configuración del dispositivo.",
+        "data": {
+          "serial": "Número de Serie:",
+          "host": "Dirección de IP local de la Impresora:",
+          "access_code": "Código de Acceso:",
+          "usage_hours": "Cantidad de horas de uso (opcional):"
+        }
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "cannot_connect": "Falla al conectar",
+      "cannot_connect_local_ip": "Falla al conectar. Revise la dirección de IP proporcionada.",
+      "cannot_connect_local_all": "Falla al conectar. Revise configuración proporcionada.",
+      "invalid_auth": "Autenticación inválida.",
+      "unknown": "Error inesperado."
+    },
+    "step": {
+      "init": {
+        "title": "Ajustar la configuración de la conexión",
+        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Lan Only Mode.",
+        "data": {
+          "printer_mode": "Modo de configuración de la impresora:"
+        }
+      },
+      "Bambu": {
+        "title": "Conexión de Bambu Cloud",
+        "description": "Por favor, proporcione sus credenciales de Bambu Lab:",
+        "data": {
+          "region": "Región de la cuenta:",
+          "email": "Dirección de Correo Electrónico o Número de Teléfono",
+          "password": "Contraseña"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Ajustar la configuración de la conexión",
+        "description": "Opcionalmente, puedes proporcionar la dirección de IP local de la impresora y el código de acceso. Esto es requerido para el acceso a la cámara de la P1/A1, o para poder conectarse directamente a la impresora sin utilizar Bambu Cloud.",
+        "data": {
+          "printer": "Elija Impresora para Agregar:",
+          "host": "Dirección de IP Local de la Impresora:",
+          "access_code": "Código de Acceso:",
+          "local_mqtt": "Conectar directamente a la impresora en vez de usar Bambu Cloud:",
+          "usage_hours": "Cantidad de horas de uso (opcional):"
+        }
+      },
+      "Lan": {
+        "title": "Conexión de Modo de Red Local",
+        "description": "Por favor, proporcione la dirección de IP local de la impresora y el código de acceso. El código de acceso puede encontrarlo en la pantalla de la impresora, en la configuración de red (WLAN).",
+        "data": {
+          "host": "Dirección de IP Local de la Impresora:",
+          "access_code": "Código de Acceso:",
+          "usage_hours": "Cantidad de horas de uso (opcional):"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "Puerta de la caja"
+      },
+      "timelapse": {
+        "name": "Grabando lapsos de tiempo"
+      },
+      "hms_errors": {
+        "name": "Errores HMS"
+      },
+      "print_error": {
+        "name": "Error de la impresión"
+      },
+      "online": {
+        "name": "En línea"
+      },
+      "firmware_update": {
+        "name": "Actualización del Firmware"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Pausar impresión"
+      },
+      "resume": {
+        "name": "Resumir impresión"
+      },
+      "stop": {
+        "name": "Detener impresión"
+      },
+      "refresh": {
+        "name": "Forzar Actualización de Datos"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Ventilador de enfriamiento"
+      },
+      "aux_fan": {
+        "name": "Ventilador auxiliar"
+      },
+      "chamber_fan": {
+        "name": "Ventilador de recámara"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Cámara"
+      },
+      "cover_image": {
+        "name": "Imagen de portada"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Luz de recámara"
+      },
+      "camera_light": {
+        "name": "Luz de cámara"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Velocidad de impresión",
+        "state": {
+          "silent": "Silencioso",
+          "standard": "Estándar",
+          "sport": "Deportivo",
+          "ludicrous": "Redículo"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Señal de Wi-Fi"
+      },
+      "bed_temp": {
+        "name": "Temperatura de cama"
+      },
+      "target_bed_temp": {
+        "name": "Temperatura de la cama objetivo"
+      },
+      "chamber_temp": {
+        "name": "Temperatura de la recámara"
+      },
+      "target_nozzle_temp": {
+        "name": "Temperatura de la boquilla objetivo"
+      },
+      "nozzle_temp": {
+        "name": "Temperatura de la boquilla"
+      },
+      "aux_fan_speed": {
+        "name": "Velocidad del ventilador auxiliar"
+      },
+      "cooling_fan_speed": {
+        "name": "Velocidad del ventilador de enfriamiento"
+      },
+      "chamber_fan_speed": {
+        "name": "Velocidad del ventilador de la recámara"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Velocidad del ventilador de Heatbreak"
+      },
+      "speed_profile": {
+        "name": "Perfil de velocidad",
+        "state": {
+          "silent": "Silencioso",
+          "standard": "Estándar",
+          "sport": "Deportivo",
+          "ludicrous": "Redículo"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modificador"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Nombre de la impresora"
+      },
+      "stage": {
+        "name": "Etapa actual",
+        "state": {
+          "offline": "Fuera de línea",
+          "printing": "Imprimiendo",
+          "auto_bed_leveling": "Nivelado de cama automático",
+          "heatbed_preheating": "Precalentando la cama",
+          "sweeping_xy_mech_mode": "Modo mecánico de barrido XY",
+          "changing_filament": "Cambiando filamento",
+          "m400_pause": "Pausa M400",
+          "paused_filament_runout": "Pausa debido a agotamiento del filamento",
+          "heating_hotend": "Calentando hotend",
+          "calibrating_extrusion": "Calibrando extrusión",
+          "scanning_bed_surface": "Escaneando la superficie de la cama",
+          "inspecting_first_layer": "Inspeccionando la primer capa",
+          "identifying_build_plate_type": "Identificando el tipo de placa",
+          "calibrating_micro_lidar": "Calibrando el lidar",
+          "homing_toolhead": "Retornando el cabezal al orígen",
+          "cleaning_nozzle_tip": "Limpiando la punta de la boquilla",
+          "checking_extruder_temperature": "Revisando la temperatura del extrusor",
+          "paused_user": "La impresión fue pausada por el usuario",
+          "paused_front_cover_falling": "Pausa de caída del cobertor",
+          "calibrating_extrusion_flow": "Calibrando el flujo de extrusión",
+          "paused_nozzle_temperature_malfunction": "Pausada debido a una falla en la temperatura de la boquilla",
+          "paused_heat_bed_temperature_malfunction": "Pausada debido a una falla en la temperatura de la cama",
+          "filament_unloading": "Descargando filamento",
+          "paused_skipped_step": "Pausada debido a salteo de pasos",
+          "filament_loading": "Cargando filamento",
+          "calibrating_motor_noise": "Calibrando el ruido de motores",
+          "paused_ams_lost": "Pausado debido a pérdida del AMS",
+          "paused_low_fan_speed_heat_break": "En pausa debido a baja velocidad del ventilador de corte de calor",
+          "paused_chamber_temperature_control_error": "Pausado debido a un error con el control de temperatura de la recámara",
+          "cooling_chamber": "Enfriamiento de la recámara",
+          "paused_user_gcode": "Pausado por una instrucción gcode agregada por el usuario",
+          "motor_noise_showoff": "Motor noise show off",
+          "paused_nozzle_filament_covered_detected": "Paused due to nozzle filament covered detected",
+          "paused_cutter_error": "Pausado debido a un error con el cortador de filamento",
+          "paused_first_layer_error": "Pausado debido a un error con la primer capa",
+          "paused_nozzle_clog": "Pausado debido a una obstrucción en la boquilla",
+          "idle": "Inactivo"
+        }
+      },
+      "print_progress": {
+        "name": "Progreso de la impresión"
+      },
+      "print_status": {
+        "name": "Estado de la Impresión",
+        "state": {
+          "failed": "Falliad",
+          "finish": "Finalizada",
+          "idle": "Inactiva",
+          "offline": "Fuera de línea",
+          "prepare": "Preparando",
+          "running": "En curso",
+          "pause": "Pausa",
+          "slicing": "Rebanando",
+          "init": "Inicializando"
+        }
+      },
+      "mqtt_mode": {
+        "name": "Modo de conexión MQTT",
+        "state": {
+          "local": "Local",
+          "bambu_cloud": "Bambu Cloud"
+        }
+      },
+      "gcode_file": {
+        "name": "Nombre del archivo Gcode"
+      },
+      "print_bed_type": {
+        "name": "Tipo de cama",
+        "state": {
+          "textured_plate": "Textured plate",
+          "cool_plate": "Cool Plate / PLA Plate",
+          "hot_plate": "Smooth PEI Plate / High Temp Plate",
+          "eng_plate": "Engineering Plate"
+        }
+      },
+      "print_length": {
+        "name": "Tamaño de impresión"
+      },
+      "print_weight": {
+        "name": "Peso de impresión"
+      },
+      "subtask_name": {
+        "name": "Nombre de la tareas"
+      },
+      "print_type": {
+        "name": "Tipo de impresión",
+        "state": {
+          "local": "Local",
+          "cloud": "Cloud",
+          "idle": "Inactiva"
+        }
+      },
+      "start_time": {
+        "name": "Tiempo de inicio"
+      },
+      "remaining_time": {
+        "name": "Tiempo restante"
+      },
+      "end_time": {
+        "name": "Tiempo de finalización"
+      },
+      "total_usage_hours": {
+        "name": "Uso total"
+      },
+      "current_layer": {
+        "name": "Capa actual"
+      },
+      "total_layers": {
+        "name": "Cantida total de capas"
+      },
+      "active_tray": {
+        "name": "Bandeja activa"
+      },
+      "active_tray_index": {
+        "name": "Índice de bandeja activa"
+      },
+      "nozzle_diameter": {
+        "name": "Tamaño de boquilla"
+      },
+      "nozzle_type": {
+        "name": "Tipo de boquilla",
+        "state": {
+          "hardened_steel": "Acero endurecido",
+          "stainless_steel": "Acero inoxidable"
+        }
+      },
+      "humidity_index": {
+        "name": "Índice de humedad"
+      },
+      "ams_temp": {
+        "name": "Temperatura del AMS"
+      },
+      "external_spool": {
+        "name": "Rollo externo",
+        "state_attributes": {
+          "active": {
+            "name": "Activo"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Vacío"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nombre"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima de la boquilla"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura máxima de la boquilla"
+          },
+          "type": {
+            "name": "Tipo"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Bandeja 1",
+        "state_attributes": {
+          "active": {
+            "name": "Activo"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Vacío"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nombre"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima de la boquilla"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura máxima de la boquilla"
+          },
+          "remain": {
+            "name": "Filamento restante"
+          },
+          "tag_uid": {
+            "name": "Número de serie del rollo"
+          },
+          "type": {
+            "name": "Tipo"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Tray 2",
+        "state_attributes": {
+          "active": {
+            "name": "Activo"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Vacío"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nombre"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima de la boquilla"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura máxima de la boquilla"
+          },
+          "remain": {
+            "name": "Filamento restante"
+          },
+          "tag_uid": {
+            "name": "Número de serie del rollo"
+          },
+          "type": {
+            "name": "Tipo"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Tray 3",
+        "state_attributes": {
+          "active": {
+            "name": "Activo"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Vacío"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nombre"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima de la boquilla"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura máxima de la boquilla"
+          },
+          "remain": {
+            "name": "Filamento restante"
+          },
+          "tag_uid": {
+            "name": "Número de serie del rollo"
+          },
+          "type": {
+            "name": "Tipo"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Tray 4",
+        "state_attributes": {
+          "active": {
+            "name": "Activo"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Vacío"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nombre"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima de la boquilla"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura máxima de la boquilla"
+          },
+          "remain": {
+            "name": "Filamento restante"
+          },
+          "tag_uid": {
+            "name": "Número de serie del rollo"
+          },
+          "type": {
+            "name": "Tipo"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Cámara"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Modo de refresco manual"
+      }
+    }
+  }
+}
