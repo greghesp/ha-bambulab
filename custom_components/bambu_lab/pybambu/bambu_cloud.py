@@ -18,10 +18,28 @@ class BambuCloud:
         self._auth_token = auth_token
 
     def _get_headers(self) -> dict:
-        return {'User-Agent' : "HA Bambulab"}
+        return {
+            'User-Agent': 'bambu_network_agent/01.09.05.01',
+            'X-BBL-Client-Name': 'OrcaSlicer',
+            'X-BBL-Client-Type': 'slicer',
+            'X-BBL-Client-Version': '01.09.05.51',
+            'X-BBL-Language': 'en-US',
+            'X-BBL-OS-Type': 'linux',
+            'X-BBL-OS-Version': '6.2.0',
+            'X-BBL-Agent-Version': '01.09.05.01',
+            'X-BBL-Executable-info': '{}',
+            'X-BBL-Agent-OS-Type': 'linux',
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        # Orca/Bambu Studio also add this - need to work out what an appropriate ID is to put here:
+        # 'X-BBL-Device-ID': BBL_AUTH_UUID,
+        # Example: X-BBL-Device-ID: 370f9f43-c6fe-47d7-aec9-5fe5ef7e7673
 
     def _get_headers_with_auth_token(self) -> dict:
-        return {'Authorization': 'Bearer ' + self._auth_token, 'User-Agent' : "HA Bambulab"}
+        headers = self._get_headers()
+        headers['Authorization'] = f"Bearer {self._auth_token}"
+        return headers
 
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
