@@ -124,6 +124,9 @@ class Device:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
         elif feature == Features.MANUAL_MODE:
             return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
+        elif feature == Features.AMS_FILAMENT_REMAINING:
+            # Technically this is not the AMS Lite but that's currently tied to only these printer types.
+            return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
 
         return False
     
