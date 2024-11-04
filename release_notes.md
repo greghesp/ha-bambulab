@@ -1,5 +1,14 @@
 ### V2.0.27
-- Miscellaneous fixes
+- Fix disconnect from printer at end of print.
+- Suppress remaining filament attribute on AMS Lite as it doesn't get reported.
+- Switch to tray_uuid to match Bambu Studio (to come - add back tag_uuid to match Bambu Handy)
+- Cleanly handle AMS being removed and/or added after integation is set up.
+- Add German localization
+- Fix HA complaint about blocking SSL lookup
+- Improve header generation on REST calls
+- Hide aux fan on A1 printers since they don't have it
+- Don't tie end time availability to whether we have a start time available to us.
+- Miscellaneous minor fixes
 
 ### V2.0.26
 - Add Greek translation
