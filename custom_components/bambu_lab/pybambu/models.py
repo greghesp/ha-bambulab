@@ -21,7 +21,7 @@ from .utils import (
     get_print_error_text,
     get_generic_AMS_HMS_error_code,
     get_HMS_severity,
-    get_HMS_module,
+    get_HMS_module, set_temperature_to_gcode,
 )
 from .const import (
     LOGGER,
@@ -31,7 +31,7 @@ from .const import (
     SdcardState,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
-    PRINT_TYPE_OPTIONS,
+    PRINT_TYPE_OPTIONS, TempEnum,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -42,7 +42,7 @@ from .commands import (
 class Device:
     def __init__(self, client):
         self._client = client
-        self.temperature = Temperature()
+        self.temperature = Temperature(client = client)
         self.lights = Lights(client = client)
         self.info = Info(client = client)
         self.print_job = PrintJob(client = client)
@@ -89,6 +89,13 @@ class Device:
         self.ams.info_update(data = data)
         if data.get("command") == "get_version":
             self.get_version_data = data
+
+    def must_wait_for_temp(self):
+        if self.info.mqtt_mode == "bambu_cloud":
+            return False
+        if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E":
+            return False
+        return True
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -244,7 +251,8 @@ class Temperature:
     nozzle_temp: int
     target_nozzle_temp: int
 
-    def __init__(self):
+    def __init__(self, client):
+        self._client = client
         self.bed_temp = 0
         self.target_bed_temp = 0
         self.chamber_temp = 0
@@ -261,6 +269,21 @@ class Temperature:
         self.target_nozzle_temp = round(data.get("nozzle_target_temper", self.target_nozzle_temp))
         
         return (old_data != f"{self.__dict__}")
+
+    def set_target_temp(self, temp: TempEnum, temperature: int):
+        command = set_temperature_to_gcode(temp, temperature, self._client.get_device().must_wait_for_temp())
+
+        # if type == TempEnum.HEATBED:
+        #     self.bed_temp = temperature
+        # elif type == TempEnum.NOZZLE:
+        #     self.nozzle_temp = temperature
+
+        LOGGER.debug(command)
+        self._client.publish(command)
+
+        if self._client.callback is not None:
+            self._client.callback("event_printer_data_update")
+
 
 @dataclass
 class Fans:

@@ -186,6 +186,14 @@
         "name": "Φωτισμός κάμερας"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Στόχος θερμοκρασίας βάσης"
+      },
+      "target_nozzle_temperature": {
+        "name": "Στόχος θερμοκρασίας ακροφυσίου"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "Ταχύτητα εκτύπωσης",
