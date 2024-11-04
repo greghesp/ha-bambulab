@@ -1,3 +1,6 @@
+### V2.0.28
+- Awesomeness
+
 ### V2.0.27
 - Fix disconnect from printer at end of print.
 - Suppress remaining filament attribute on AMS Lite as it doesn't get reported.
