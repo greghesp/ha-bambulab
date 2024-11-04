@@ -166,6 +166,14 @@
         "name": "Luce della fotocamera"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Temperatura target del letto"
+      },
+      "target_nozzle_temperature": {
+        "name": "Temperatura target dell'ugello"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "Velocità di stampa",

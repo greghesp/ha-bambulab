@@ -37,6 +37,11 @@ class FansEnum(Enum):
     HEATBREAK = 4,
 
 
+class TempEnum(Enum):
+    HEATBED = 1,
+    NOZZLE = 2
+
+
 CURRENT_STAGE_IDS = {
     "default": "unknown",
     0: "printing",

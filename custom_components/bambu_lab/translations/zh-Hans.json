@@ -167,6 +167,14 @@
         "name": "摄像头灯"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "热床目标温度"
+      },
+      "target_nozzle_temperature": {
+        "name": "喷嘴目标温度"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "打印速度",

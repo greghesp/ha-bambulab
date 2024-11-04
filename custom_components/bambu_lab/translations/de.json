@@ -167,6 +167,14 @@
         "name": "Kamerabeleuchtung"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Zieltemperatur des Druckbett"
+      },
+      "target_nozzle_temperature": {
+        "name": "Zieltemperatur der Düse"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "Druckgeschwindigkeit",

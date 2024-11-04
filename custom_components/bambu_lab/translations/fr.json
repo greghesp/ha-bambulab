@@ -157,6 +157,14 @@
         "name": "Lumière de la caméra"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Température cible du lit"
+      },
+      "target_nozzle_temperature": {
+        "name": "Température cible de la buse"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "Vitesse d'impression",

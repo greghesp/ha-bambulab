@@ -11,7 +11,7 @@ from .const import (
     HMS_SEVERITY_LEVELS,
     HMS_MODULES,
     LOGGER,
-    FansEnum,
+    FansEnum, TempEnum,
 )
 from .commands import SEND_GCODE_TEMPLATE
 
@@ -45,6 +45,22 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
     speed = math.ceil(255 * percentage / 100)
     command = SEND_GCODE_TEMPLATE
     command['print']['param'] = f"M106 {fanString} S{speed}\n"
+    return command
+
+
+def set_temperature_to_gcode(temp: TempEnum, temperature: int, wait: bool):
+    """Converts a temperature to the gcode command to set that"""
+    if temp == TempEnum.NOZZLE:
+        tempCommand = "M109" if wait else "M104"
+    elif temp == TempEnum.HEATBED:
+        tempCommand = "M190" if wait else "M140"
+
+    # TODO: Evaluate possible side effects of M108 and consider it
+    # second_command = "M108\n" if wait else ""
+    second_command = ""
+
+    command = SEND_GCODE_TEMPLATE
+    command['print']['param'] = f"{tempCommand} S{temperature}\n{second_command}"
     return command
 
 

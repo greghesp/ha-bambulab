@@ -166,6 +166,14 @@
         "name": "Cover Image"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Target Bed temperature"
+      },
+      "target_nozzle_temperature": {
+        "name": "Nozzle target temperature"
+      }
+    },
     "light": {
       "chamber_light": {
         "name": "Chamber light"
