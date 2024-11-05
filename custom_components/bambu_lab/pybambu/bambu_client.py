@@ -461,9 +461,7 @@ class BambuClient:
                     LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
         except Exception as e:
-            LOGGER.error("An exception occurred processing a message:")
-            LOGGER.error(f"Exception type: {type(e)}")
-            LOGGER.error(f"Exception data: {e}")
+            LOGGER.error("An exception occurred processing a message:", exc_info=e)
 
     def subscribe(self):
         """Subscribe to report topic"""
