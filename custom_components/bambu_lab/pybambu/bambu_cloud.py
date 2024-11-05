@@ -370,6 +370,7 @@ class BambuCloud:
             response = client.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
+            LOGGER.debug(f"Received error: {response.text}")
             raise ValueError(response.status_code)
         return response.json()
     
