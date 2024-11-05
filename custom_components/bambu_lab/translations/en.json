@@ -36,7 +36,7 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
-          "verifyCode": "Verification Code",
+          "verifyCode": "Email verification Code",
           "tfaCode": "Two Factor Authentication Code"
         }
       },
@@ -75,7 +75,9 @@
       "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
-      "unknown": "Unexpected error."
+      "unknown": "Unexpected error.",
+      "verifyCode": "Verification code is required. Check your email.",
+      "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "init": {
@@ -91,8 +93,9 @@
         "data": {
           "region": "Account region:",
           "email": "Email Address or Phone Number",
-          "password": "Password"
-        }
+          "password": "Password",
+          "verifyCode": "Email verification Code",
+          "tfaCode": "Two Factor Authentication Code"        }
       },
       "Bambu_Lan": {
         "title": "Adjust Printer Configuration",

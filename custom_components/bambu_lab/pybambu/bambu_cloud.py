@@ -104,6 +104,7 @@ class BambuCloud:
             "account": self._email,
             "code": code
         }
+        LOGGER.debug(f"data = {data}")
 
         response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
         LOGGER.debug(f"response: {response.status_code}")
