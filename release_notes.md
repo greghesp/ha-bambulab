@@ -1,5 +1,11 @@
-### V2.0.28
+### V2.0.29
 - Awesomeness
+
+### V2.0.28
+- Adds 2FA and email code
+- Added back tag_uuid
+- Corrected greek localization file naming
+- Fix blocking error if the printer is running in pure Bambu cloud mode
 
 ### V2.0.27
 - Fix disconnect from printer at end of print.
