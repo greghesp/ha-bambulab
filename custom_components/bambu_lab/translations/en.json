@@ -36,8 +36,8 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
-          "verifyCode": "Email verification Code",
-          "tfaCode": "Two Factor Authentication Code"
+          "verifyCode": "Email verification code",
+          "tfaCode": "Two factor authentication code"
         }
       },
       "Bambu_Choose_Device": {
@@ -94,8 +94,8 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
-          "verifyCode": "Email verification Code",
-          "tfaCode": "Two Factor Authentication Code"        }
+          "verifyCode": "Email verification code",
+          "tfaCode": "Two factor authentication code"
       },
       "Bambu_Lan": {
         "title": "Adjust Printer Configuration",
