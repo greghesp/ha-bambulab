@@ -20,7 +20,7 @@
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
       "verifyCode": "Verification code is required. Check your email.",
-      "tfaKey": "2FA code is required. Please enter it now."
+      "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "user": {
@@ -37,7 +37,7 @@
           "email": "Email Address or Phone Number",
           "password": "Password",
           "verifyCode": "Verification Code",
-          "tfaKey": "Two Factor Authentication Code"
+          "tfaCode": "Two Factor Authentication Code"
         }
       },
       "Bambu_Choose_Device": {

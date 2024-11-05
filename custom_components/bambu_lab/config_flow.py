@@ -121,6 +121,15 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         return await self.async_step_Bambu_Choose_Device(None)
                     else:
                         errors['base'] = "cannot_connect"
+                elif user_input.get('tfaCode', None) is not None:
+                    result = await self.hass.async_add_executor_job(
+                        self._bambu_cloud.login_with_2fa_code,
+                        user_input['tfaCode'])
+                    LOGGER.debug(f"RESULT = {result}")
+                    if result == 'success':
+                        return await self.async_step_Bambu_Choose_Device(None)
+                    else:
+                        errors['base'] = "cannot_connect"
                 else:
                     self.region = user_input['region']
                     self.email = user_input['email']
@@ -139,8 +148,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         # Fall through to form generation to ask for verification code
                     elif result == 'tfaKey':
                         # User needs to provide their 2FA code
-                        authentication_type = 'tfaKey'
-                        errors['base'] = 'tfaKey'
+                        authentication_type = 'tfaCode'
+                        errors['base'] = 'tfaCode'
                         # Fall through to form generation to ask for verification code
 
             except Exception as e:
@@ -158,8 +167,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
         if authentication_type == 'verifyCode':
             fields[vol.Required('verifyCode', default='')] = TEXT_SELECTOR
-        if authentication_type == 'tfaKey':
-            fields[vol.Required('tfaKey', default='')] = TEXT_SELECTOR
+        if authentication_type == 'tfaCode':
+            fields[vol.Required('tfaCode', default='')] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
