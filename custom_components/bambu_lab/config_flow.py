@@ -84,6 +84,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle a flow initiated by the user."""
         errors = {}
 
+        self._bambu_cloud = BambuCloud("", "", "", "")
+
         if user_input is not None:
             if user_input['printer_mode'] == "Lan":
                 return await self.async_step_Lan(None)
@@ -106,24 +108,55 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         errors = {}
 
+        authentication_type = None
         if user_input is not None:
             try:
-                self._bambu_cloud = BambuCloud("", "", "", "")
-
-                await self.hass.async_add_executor_job(
-                    self._bambu_cloud.login,
-                    user_input['region'],
-                    user_input['email'],
-                    user_input['password'])
-
-                self.region = user_input['region']
-                self.email = user_input['email']
-                return await self.async_step_Bambu_Choose_Device(None)
+                if user_input.get('verifyCode', None) is not None:
+                    result = await self.hass.async_add_executor_job(
+                        self._bambu_cloud.login_with_verification_code,
+                        user_input['verifyCode'])
+                    LOGGER.debug(f"RESULT = {result}")
+                    if result == 'success':
+                        return await self.async_step_Bambu_Choose_Device(None)
+                    else:
+                        errors['base'] = "cannot_connect"
+                elif user_input.get('tfaCode', None) is not None:
+                    result = await self.hass.async_add_executor_job(
+                        self._bambu_cloud.login_with_2fa_code,
+                        user_input['tfaCode'])
+                    LOGGER.debug(f"RESULT = {result}")
+                    if result == 'success':
+                        return await self.async_step_Bambu_Choose_Device(None)
+                    else:
+                        errors['base'] = "cannot_connect"
+                else:
+                    self.region = user_input['region']
+                    self.email = user_input['email']
+                    result = await self.hass.async_add_executor_job(
+                        self._bambu_cloud.login,
+                        user_input['region'],
+                        user_input['email'],
+                        user_input['password'])
+                    LOGGER.debug(f"RESULT = {result}")
+                    if result == 'success':
+                        return await self.async_step_Bambu_Choose_Device(None)
+                    elif result == 'verifyCode':
+                        # User needs to provide the verification code sent to them
+                        authentication_type = 'verifyCode'
+                        errors['base'] = 'verifyCode'
+                        # Fall through to form generation to ask for verification code
+                    elif result == 'tfaKey':
+                        # User needs to provide their 2FA code
+                        authentication_type = 'tfaCode'
+                        errors['base'] = 'tfaCode'
+                        # Fall through to form generation to ask for verification code
+                    else:
+                        errors['base'] = "cannot_connect"
 
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
+                errors['base'] = "cannot_connect"
 
-            errors['base'] = "cannot_connect"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -133,6 +166,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
         default_password = '' if user_input is None else user_input.get('password', '')
         fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+        if authentication_type == 'verifyCode':
+            fields[vol.Required('verifyCode', default='')] = TEXT_SELECTOR
+        if authentication_type == 'tfaCode':
+            fields[vol.Required('tfaCode', default='')] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
@@ -159,7 +196,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             dev_reg = device_registry.async_get(self.hass)
             hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, device['dev_id'])})
             if hadevice is None:
+                LOGGER.debug(f"Printer {device['dev_id']} found.")
                 printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
+            else:
+                LOGGER.debug(f"Printer {device['dev_id']} already registered with HA. Ignoring it.")
 
         printer_selector = SelectSelector(
             SelectSelectorConfig(
@@ -167,7 +207,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 mode=SelectSelectorMode.LIST)
         )
 
-        LOGGER.debug(f"Printer count = {printer_list.count}")
+        LOGGER.debug(f"Printer count = {len(printer_list)}")
         if len(printer_list) == 0:
             errors['base'] = "no_printers"
 
@@ -339,6 +379,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         self.region = self.config_entry.options.get('region', '')
         self.email = self.config_entry.options.get('email', '')
 
+        self._bambu_cloud = BambuCloud("", "", "", "")
+
         LOGGER.debug(self.config_entry)
 
     async def async_step_init(self, user_input: None = None) -> FlowResult:
@@ -367,8 +409,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     ) -> FlowResult:
         errors = {}
 
-        self._bambu_cloud = BambuCloud("", "", "", "")
-
         credentialsGood = False
         if user_input is None:
             if self.config_entry.options.get('region', '') != '' and self.config_entry.options.get('email', '') != '' and self.config_entry.options.get('username', '') != '' and self.config_entry.options.get('auth_token', '') != '':
@@ -379,23 +419,55 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     self.config_entry.options['username'],
                     self.config_entry.options['auth_token'])
 
+        authentication_type = None
         if user_input is not None:
             try:
-                await self.hass.async_add_executor_job(
-                    self._bambu_cloud.login,
-                    user_input['region'],
-                    user_input['email'],
-                    user_input['password'])
-                
-                self.region = user_input['region']
-                self.email = user_input['email']
-
-                return await self.async_step_Bambu_Lan(None)
+                if user_input.get('verifyCode', None) is not None:
+                    result = await self.hass.async_add_executor_job(
+                        self._bambu_cloud.login_with_verification_code,
+                        user_input['verifyCode'])
+                    LOGGER.debug(f"RESULT = {result}")
+                    if result == 'success':
+                        return await self.async_step_Bambu_Lan(None)
+                    else:
+                        errors['base'] = "cannot_connect"
+                elif user_input.get('tfaCode', None) is not None:
+                    result = await self.hass.async_add_executor_job(
+                        self._bambu_cloud.login_with_2fa_code,
+                        user_input['tfaCode'])
+                    LOGGER.debug(f"RESULT = {result}")
+                    if result == 'success':
+                        return await self.async_step_Bambu_Lan(None)
+                    else:
+                        errors['base'] = "cannot_connect"
+                else:
+                    self.region = user_input['region']
+                    self.email = user_input['email']
+                    result = await self.hass.async_add_executor_job(
+                        self._bambu_cloud.login,
+                        user_input['region'],
+                        user_input['email'],
+                        user_input['password'])
+                    LOGGER.debug(f"RESULT = {result}")
+                    if result == 'success':
+                        return await self.async_step_Bambu_Lan(None)
+                    elif result == 'verifyCode':
+                        # User needs to provide the verification code sent to them
+                        authentication_type = 'verifyCode'
+                        errors['base'] = 'verifyCode'
+                        # Fall through to form generation to ask for verification code
+                    elif result == 'tfaKey':
+                        # User needs to provide their 2FA code
+                        authentication_type = 'tfaCode'
+                        errors['base'] = 'tfaCode'
+                        # Fall through to form generation to ask for verification code
+                    else:
+                        errors['base'] = "cannot_connect"
 
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
+                errors['base'] = "cannot_connect"
 
-            errors['base'] = "cannot_connect"
         elif credentialsGood:
             self.region = self.config_entry.options['region']
             self.email = self.config_entry.options['email']
@@ -409,6 +481,10 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
         default_password = '' if user_input is None else user_input.get('password', '')
         fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+        if authentication_type == 'verifyCode':
+            fields[vol.Required('verifyCode', default='')] = TEXT_SELECTOR
+        if authentication_type == 'tfaCode':
+            fields[vol.Required('tfaCode', default='')] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
