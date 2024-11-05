@@ -77,23 +77,7 @@ class BambuCloud:
             return ""
 
         LOGGER.debug(f"Requested loginType: {auth_json["loginType"]}")
-        if loginType == 'verifyCode':
-            # Send the verification code request
-            data = {
-                "email": self._email,
-                "type": "codeLogin"
-            }
-
-            LOGGER.debug("Requesting verification code")
-            response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/sendemail/code'), headers=headers, json=data)
-            
-            if response.status_code == 200:
-                LOGGER.debug("Verification code sent successfully.")
-            else:
-                LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
-                LOGGER.debug(f"Response: {response.text}")
-                raise ValueError(response.status_code)
-        elif loginType == 'tfa':
+        if loginType == 'tfa':
             # Store the tfaKey for later use
             self._tfaKey = auth_json.get("tfaKey")
 
