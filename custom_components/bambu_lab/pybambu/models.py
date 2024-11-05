@@ -798,6 +798,12 @@ class Info:
 @dataclass
 class AMSInstance:
     """Return all AMS instance related info"""
+    serial: str
+    sw_version: str
+    hw_version: str
+    humidity_index: int
+    temperature: int
+    tray: list["AMSTray"]
 
     def __init__(self, client):
         self.serial = ""
@@ -815,6 +821,8 @@ class AMSInstance:
 @dataclass
 class AMSList:
     """Return all AMS related info"""
+    tray_now: int
+    data: list[AMSInstance]
 
     def __init__(self, client):
         self._client = client
@@ -975,6 +983,19 @@ class AMSList:
 @dataclass
 class AMSTray:
     """Return all AMS tray related info"""
+    empty: bool
+    idx: int
+    name: str
+    type: str
+    sub_brands: str
+    color: str
+    nozzle_temp_min: int
+    nozzle_temp_max: int
+    remain: int
+    k: float
+    tag_uuid: str
+    tray_uuid: str
+
 
     def __init__(self, client):
         self._client = client
@@ -1201,6 +1222,7 @@ class PrintErrorList:
 
     def __init__(self, client):
         self._error = None
+        self._count = 0
         self._client = client
         
     def print_update(self, data) -> bool:
@@ -1241,6 +1263,8 @@ class PrintErrorList:
 @dataclass
 class HMSNotification:
     """Return an HMS object and all associated details"""
+    attr: int
+    code: int
 
     def __init__(self, attr: int = 0, code: int = 0):
         self.attr = attr
