@@ -65,7 +65,6 @@ class BambuCloud:
             LOGGER.debug(f"Response: {response.text}")
             raise ValueError(response.status_code)
 
-        LOGGER.debug(f"Response: {response.text}") # Delete once stabilized
         auth_json = response.json()
         if auth_json.get("success"):
             # We got immediate success.
@@ -108,7 +107,6 @@ class BambuCloud:
 
         response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
         LOGGER.debug(f"response: {response.status_code}")
-        LOGGER.debug(f"response: {response.text}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
         else:
@@ -129,7 +127,6 @@ class BambuCloud:
 
         response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
         LOGGER.debug(f"response: {response.status_code}")
-        LOGGER.debug(f"response: {response.text}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
         else:
