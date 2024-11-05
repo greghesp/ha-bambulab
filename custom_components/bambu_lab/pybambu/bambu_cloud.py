@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import base64
-import json
 import httpx
+import json
+import requests
 
 from dataclasses import dataclass
 
@@ -16,6 +17,7 @@ class BambuCloud:
         self._email = email
         self._username = username
         self._auth_token = auth_token
+        self._tfaKey = None
 
     def _get_headers(self) -> dict:
         return {
@@ -40,21 +42,108 @@ class BambuCloud:
         headers = self._get_headers()
         headers['Authorization'] = f"Bearer {self._auth_token}"
         return headers
+    
+    def _get_rest_url(self, url) -> str:
+        if self._region == "China":
+            url = url.replace('.com', '.cn')
+        return url
 
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
-        if self._region == "China":
-            url = 'https://api.bambulab.cn/v1/user-service/user/login'
-        else:
-            url = 'https://api.bambulab.com/v1/user-service/user/login'
-        data = {'account': self._email, 'password': self._password}
-        with httpx.Client(http2=True) as client:
-            response = client.post(url, headers=self._get_headers(), json=data, timeout=10)
+
+        # First we need to find out how Bambu wants us to login.
+        headers=self._get_headers()
+        data = {
+            "account": self._email,
+            "password": self._password,
+            "apiError": ""
+        }
+
+        response = requests.post(self._get_rest_url('https://bambulab.com/api/sign-in/form'), headers=headers, json=data)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
+            LOGGER.debug(f"Response: {response.text}")
             raise ValueError(response.status_code)
-        return response.json()['accessToken']
 
+        auth_json = response.json()
+        LOGGER.debug(f"auth_json: {auth_json}")
+        if auth_json.get("success"):
+            # We got immediate success.
+            return response.json()['accessToken']
+        
+        loginType = auth_json.get("loginType", None)
+        if loginType is None:
+            LOGGER.error(f"Response not understood: {response.text}")
+            return ""
+
+        LOGGER.debug(f"Requested loginType: {auth_json["loginType"]}")
+        if loginType == 'verifyCode':
+            # Send the verification code request
+            data = {
+                "email": self._email,
+                "type": "codeLogin"
+            }
+
+            LOGGER.debug("Requesting verification code")
+            response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/sendemail/code'), headers=headers, json=data)
+            
+            if response.status_code == 200:
+                LOGGER.debug("Verification code sent successfully.")
+            else:
+                LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
+                LOGGER.debug(f"Response: {response.text}")
+                raise ValueError(response.status_code)
+        elif loginType == 'tfa':
+            # Store the tfaKey for later use
+            self._tfaKey = auth_json.get("tfaKey")
+
+        return loginType
+
+    def _get_authentication_token_with_verification_code(self, code) -> dict:
+        LOGGER.debug("Attempting to connect with provided verification code.")
+        headers=self._get_headers()
+        data = {
+            "account": self._email,
+            "code": code
+        }
+
+        response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
+        LOGGER.debug(f"response: {response.status_code}")
+        LOGGER.debug(f"response: {response.text}")
+        if response.status_code == 200:
+            LOGGER.debug("Authentication successful.")
+        else:
+            LOGGER.error(f"Received error trying to authenticate with verification code: {response.status_code}")
+            LOGGER.debug(f"Response: {response.text}")
+            raise ValueError(response.status_code)
+
+        return response.json()['accessToken']
+    
+    def _get_authentication_token_with_2fa_code(self, code: str) -> dict:
+        LOGGER.debug("Attempting to connect with provided 2FA code.")
+
+        headers=self._get_headers()
+        data = {
+            "tfaKey": self._tfaKey,
+            "tfaCode": code
+        }
+
+        response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
+        LOGGER.debug(f"response: {response.status_code}")
+        LOGGER.debug(f"response: {response.text}")
+        if response.status_code == 200:
+            LOGGER.debug("Authentication successful.")
+        else:
+            LOGGER.error(f"Received error trying to authenticate with verification code: {response.status_code}")
+            LOGGER.debug(f"Response: {response.text}")
+            raise ValueError(response.status_code)
+
+        cookies = response.cookies.get_dict()
+        token_from_tfa = cookies.get("token")
+        LOGGER.debug(f"token_from_tfa: {token_from_tfa}")
+
+        return token_from_tfa
+    
     def _get_username_from_authentication_token(self) -> str:
         # User name is in 2nd portion of the auth token (delimited with periods)
         b64_string = self._auth_token.split(".")[1]
@@ -114,22 +203,45 @@ class BambuCloud:
             return False
         return True
 
-    def login(self, region: str, email: str, password: str):
+    def login(self, region: str, email: str, password: str) -> str:
+        LOGGER.debug("login()")
         self._region = region
         self._email = email
         self._password = password
 
-        self._auth_token = self._get_authentication_token()
+        result = self._get_authentication_token()
+        if result == 'verifyCode':
+            return result
+        elif result == 'tfa':
+            return result
+        elif result is None:
+            LOGGER.error("Unable to authenticate.")
+            return None
+        else:
+            self._auth_token = result
+            self._username = self._get_username_from_authentication_token()
+            return 'success'
+        
+    def login_with_verification_code(self, code: str):
+        LOGGER.debug("login_with_verification_code()")
+
+        result = self._get_authentication_token_with_verification_code(code)
+        self._auth_token = result
         self._username = self._get_username_from_authentication_token()
+        return 'success'
+
+    def login_with_2fa_code(self, code: str):
+        LOGGER.debug("login_with_2fa_code()")
+
+        result = self._get_authentication_token_with_2fa_code(code)
+        self._auth_token = result
+        self._username = self._get_username_from_authentication_token()
+        return 'success'
 
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
-        if self._region == "China":
-            url = 'https://api.bambulab.cn/v1/iot-service/api/user/bind'
-        else:
-            url = 'https://api.bambulab.com/v1/iot-service/api/user/bind'
         with httpx.Client(http2=True) as client:
-            response = client.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
+            response = client.get(self._get_rest_url('https://api.bambulab.com/v1/iot-service/api/user/bind'), headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
@@ -203,17 +315,14 @@ class BambuCloud:
     # }
 
     def get_slicer_settings(self) -> dict:
-        LOGGER.debug("Getting slicer settings from Bambu Cloud")
-        if self._region == "China":
-            url = 'https://api.bambulab.cn/v1/iot-service/api/slicer/setting?version=undefined'
-        else:
-            url = 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'
-        with httpx.Client(http2=True) as client:
-            response = client.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
-        if response.status_code >= 400:
-            LOGGER.error(f"Slicer settings load failed: {response.status_code}")
-            return None
-        return response.json()
+        return None
+        # LOGGER.debug("Getting slicer settings from Bambu Cloud")
+        # with httpx.Client(http2=True) as client:
+        #     response = client.get(self._get_rest_url('https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'), headers=self._get_headers_with_auth_token(), timeout=10)
+        # if response.status_code >= 400:
+        #     LOGGER.error(f"Slicer settings load failed: {response.status_code}")
+        #     return None
+        # return response.json()
         
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #

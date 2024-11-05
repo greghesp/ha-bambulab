@@ -18,7 +18,9 @@
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "no_printers": "No unconfigured printers found in the account.",
       "invalid_auth": "Invalid authentication.",
-      "unknown": "Unexpected error."
+      "unknown": "Unexpected error.",
+      "verifyCode": "Verification code is required. Check your email.",
+      "tfaKey": "2FA code is required. Please enter it now."
     },
     "step": {
       "user": {
@@ -33,7 +35,9 @@
         "data": {
           "region": "Account region:",
           "email": "Email Address or Phone Number",
-          "password": "Password"
+          "password": "Password",
+          "verifyCode": "Verification Code",
+          "tfaKey": "Two Factor Authentication Code"
         }
       },
       "Bambu_Choose_Device": {
