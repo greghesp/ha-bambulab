@@ -59,14 +59,14 @@ class BambuCloud:
             "apiError": ""
         }
 
-        response = requests.post(self._get_rest_url('https://bambulab.com/api/sign-in/form'), headers=headers, json=data)
+        response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
         if response.status_code >= 400:
-            LOGGER.debug(f"Received error: {response.status_code}")
+            LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
             LOGGER.debug(f"Response: {response.text}")
             raise ValueError(response.status_code)
 
+        LOGGER.debug(f"Response: {response.text}") # Delete once stabilized
         auth_json = response.json()
-        LOGGER.debug(f"auth_json: {auth_json}")
         if auth_json.get("success"):
             # We got immediate success.
             return response.json()['accessToken']
@@ -74,13 +74,28 @@ class BambuCloud:
         loginType = auth_json.get("loginType", None)
         if loginType is None:
             LOGGER.error(f"Response not understood: {response.text}")
-            return ""
+            return None
+        elif loginType == 'verifyCode':
+            # Send the verification code request
+            data = {
+                "email": self._email,
+                "type": "codeLogin"
+            }
 
-        LOGGER.debug(f"Requested loginType: {auth_json["loginType"]}")
-        if loginType == 'tfa':
+            LOGGER.debug("Requesting verification code")
+            response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/sendemail/code'), headers=headers, json=data)
+            
+            if response.status_code == 200:
+                LOGGER.debug("Verification code sent successfully.")
+            else:
+                LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
+                LOGGER.debug(f"Response: {response.text}")
+                raise ValueError(response.status_code)
+        elif loginType == 'tfa':
             # Store the tfaKey for later use
             self._tfaKey = auth_json.get("tfaKey")
 
+        LOGGER.debug(f"Requested loginType: {auth_json["loginType"]}")
         return loginType
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
