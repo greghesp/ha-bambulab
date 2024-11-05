@@ -96,6 +96,7 @@
           "password": "Password",
           "verifyCode": "Email verification code",
           "tfaCode": "Two factor authentication code"
+        }
       },
       "Bambu_Lan": {
         "title": "Adjust Printer Configuration",
