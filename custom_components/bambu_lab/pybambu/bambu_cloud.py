@@ -311,14 +311,13 @@ class BambuCloud:
     # }
 
     def get_slicer_settings(self) -> dict:
-        return None
-        # LOGGER.debug("Getting slicer settings from Bambu Cloud")
-        # with httpx.Client(http2=True) as client:
-        #     response = client.get(self._get_rest_url('https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'), headers=self._get_headers_with_auth_token(), timeout=10)
-        # if response.status_code >= 400:
-        #     LOGGER.error(f"Slicer settings load failed: {response.status_code}")
-        #     return None
-        # return response.json()
+        LOGGER.debug("Getting slicer settings from Bambu Cloud")
+        response = requests.get(self._get_rest_url('https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'), headers=self._get_headers_with_auth_token(), timeout=10)
+        if response.status_code >= 400:
+            LOGGER.error(f"Slicer settings load failed: {response.status_code}")
+            LOGGER.error(f"Slicer settings load failed: {response.text}")
+            return None
+        return response.json()
         
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #
