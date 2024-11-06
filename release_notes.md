@@ -1,5 +1,8 @@
-### V2.0.29
+### V2.0.30
 - Awesomeness
+
+### V2.0.29
+- Fix 2FA bug
 
 ### V2.0.28
 - Adds 2FA and email code
