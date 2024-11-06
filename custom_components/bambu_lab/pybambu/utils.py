@@ -12,6 +12,7 @@ from .const import (
     HMS_MODULES,
     LOGGER,
     FansEnum,
+    BAMBU_URL
 )
 from .commands import SEND_GCODE_TEMPLATE
 
@@ -225,3 +226,10 @@ def round_minute(date: datetime = None, round_to: int = 1):
     date = date.replace(second=0, microsecond=0)
     delta = date.minute % round_to
     return date.replace(minute=date.minute - delta)
+
+
+def get_Url(url: str, region: str):
+    urlstr = BAMBU_URL[url]
+    if region == "China":
+        urlstr = urlstr.replace('.com', '.cn')
+    return urlstr

@@ -7,7 +7,13 @@ import requests
 
 from dataclasses import dataclass
 
-from .const import LOGGER
+from .const import (
+     LOGGER,
+     BambuUrl
+)
+
+
+from .utils import get_Url
 
 @dataclass
 class BambuCloud:
@@ -43,11 +49,6 @@ class BambuCloud:
         headers['Authorization'] = f"Bearer {self._auth_token}"
         return headers
     
-    def _get_rest_url(self, url) -> str:
-        if self._region == "China":
-            url = url.replace('.com', '.cn')
-        return url
-
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
 
@@ -59,7 +60,7 @@ class BambuCloud:
             "apiError": ""
         }
 
-        response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
+        response = requests.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
         if response.status_code >= 400:
             LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
             LOGGER.debug(f"Response: {response.text}")
@@ -82,7 +83,7 @@ class BambuCloud:
             }
 
             LOGGER.debug("Requesting verification code")
-            response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/sendemail/code'), headers=headers, json=data)
+            response = requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), headers=headers, json=data)
             
             if response.status_code == 200:
                 LOGGER.debug("Verification code sent successfully.")
@@ -106,7 +107,7 @@ class BambuCloud:
         }
         LOGGER.debug(f"data = {data}")
 
-        response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
+        response = requests.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
         LOGGER.debug(f"response: {response.status_code}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
@@ -126,7 +127,7 @@ class BambuCloud:
             "tfaCode": code
         }
 
-        response = requests.post(self._get_rest_url('https://api.bambulab.com/v1/user-service/user/login'), headers=headers, json=data)
+        response = requests.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
         LOGGER.debug(f"response: {response.status_code}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
@@ -238,7 +239,7 @@ class BambuCloud:
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
         with httpx.Client(http2=True) as client:
-            response = client.get(self._get_rest_url('https://api.bambulab.com/v1/iot-service/api/user/bind'), headers=self._get_headers_with_auth_token(), timeout=10)
+            response = client.get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
@@ -313,7 +314,7 @@ class BambuCloud:
 
     def get_slicer_settings(self) -> dict:
         LOGGER.debug("Getting slicer settings from Bambu Cloud")
-        response = requests.get(self._get_rest_url('https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined'), headers=self._get_headers_with_auth_token(), timeout=10)
+        response = requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.error(f"Slicer settings load failed: {response.status_code}")
             LOGGER.error(f"Slicer settings load failed: {response.text}")
@@ -363,10 +364,7 @@ class BambuCloud:
     #     },
 
     def get_tasklist(self) -> dict:
-        if self._region == "China":
-            url = 'https://api.bambulab.cn/v1/user-service/my/tasks'
-        else:
-            url = 'https://api.bambulab.com/v1/user-service/my/tasks'
+        url = get_Url(BambuUrl.TASKS, self._region)
         with httpx.Client(http2=True) as client:
             response = client.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
