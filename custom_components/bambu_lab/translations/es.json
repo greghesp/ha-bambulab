@@ -40,7 +40,7 @@
         "title": "Selección de Impresora",
         "description": "Elija qué impresora quiere agregar.",
         "data": {
-          "printer": "Elija Impresora para Agregar:"
+          "serial": "Elija Impresora para Agregar:"
         }
       },
       "Bambu_Lan": {
@@ -94,7 +94,7 @@
         "title": "Ajustar la configuración de la conexión",
         "description": "Opcionalmente, puedes proporcionar la dirección de IP local de la impresora y el código de acceso. Esto es requerido para el acceso a la cámara de la P1/A1, o para poder conectarse directamente a la impresora sin utilizar Bambu Cloud.",
         "data": {
-          "printer": "Elija Impresora para Agregar:",
+          "serial": "Elija Impresora para Agregar:",
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
           "local_mqtt": "Conectar directamente a la impresora en vez de usar Bambu Cloud:",

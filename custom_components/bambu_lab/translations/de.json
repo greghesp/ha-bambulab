@@ -39,7 +39,7 @@
         "title": "Drucker-Auswahl",
         "description": "Wählen Sie den Drucker aus, den Sie hinzufügen möchten.",
         "data": {
-          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:"
+          "serial": "Wählen Sie den hinzuzufügenden Drucker aus:"
         }
       },
       "Bambu_Lan": {
@@ -92,7 +92,7 @@
         "title": "Anpassen der Druckerkonfiguration",
         "description": "Sie können optional die IP-Adresse und den Zugriffscode des lokalen Druckers angeben. Dies ist für den Kamerazugriff auf die P1/A1 erforderlich. Oder um sich direkt mit dem Drucker verbinden zu können, anstatt über die Bambu Cloud.",
         "data": {
-          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:",
+          "serial": "Wählen Sie den hinzuzufügenden Drucker aus:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
           "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:"

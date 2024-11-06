@@ -44,7 +44,7 @@
         "title": "Printer Selection",
         "description": "Choose which printer you want to add.",
         "data": {
-          "printer": "Choose Printer To Add:"
+          "serial": "Choose Printer To Add:"
         }
       },
       "Bambu_Lan": {
@@ -102,7 +102,7 @@
         "title": "Adjust Printer Configuration",
         "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Cloud.",
         "data": {
-          "printer": "Choose Printer To Add:",
+          "serial": "Choose Printer To Add:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "local_mqtt": "Connect directly to printer instead of by Bambu Cloud:",
