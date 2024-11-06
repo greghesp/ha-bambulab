@@ -69,34 +69,39 @@ class BambuCloud:
         auth_json = response.json()
         if auth_json.get("success"):
             # We got immediate success.
-            return response.json()['accessToken']
+            return auth_json['accessToken']
         
         loginType = auth_json.get("loginType", None)
         if loginType is None:
             LOGGER.error(f"Response not understood: {response.text}")
             return None
-        # This does not appear to be necessary and is resulting in receiving two emails each time.
-        # elif loginType == 'verifyCode':
-        #     # Send the verification code request
-        #     data = {
-        #         "email": self._email,
-        #         "type": "codeLogin"
-        #     }
+        elif loginType == 'verifyCode':
+            LOGGER.debug(f"Received verifyCode response")
+            # # This does not appear to be necessary and is resulting in receiving two emails each time.
+            # # Send the verification code request
+            # data = {
+            #     "email": self._email,
+            #     "type": "codeLogin"
+            # }
 
-        #     LOGGER.debug("Requesting verification code")
-        #     response = requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), headers=headers, json=data)
+            # LOGGER.debug("Requesting verification code")
+            # response = requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), headers=headers, json=data)
             
-        #     if response.status_code == 200:
-        #         LOGGER.debug("Verification code sent successfully.")
-        #     else:
-        #         LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
-        #         LOGGER.debug(f"Response: {response.text}")
-        #         raise ValueError(response.status_code)
+            # if response.status_code == 200:
+            #     LOGGER.debug("Verification code sent successfully.")
+            # else:
+            #     LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
+            #     LOGGER.debug(f"Response: {response.text}")
+            #     raise ValueError(response.status_code)
         elif loginType == 'tfa':
             # Store the tfaKey for later use
+            LOGGER.debug(f"Received tfa response")
             self._tfaKey = auth_json.get("tfaKey")
+        else:
+            LOGGER.debug(f"Did not understand json.")
+            LOGGER.error(f"Response not understood: {response.json}")
 
-        LOGGER.debug(f"Requested loginType: {auth_json["loginType"]}")
+        LOGGER.debug(f"Requested loginType: '{auth_json["loginType"]}'")
         return loginType
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
