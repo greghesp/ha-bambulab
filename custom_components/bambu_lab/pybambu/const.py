@@ -1221,3 +1221,17 @@ class Home_Flag_Values(IntEnum):
     SUPPORTED_PLUS                      = 0x08000000,
     # Gap
 
+class BambuUrl(Enum):
+    LOGIN = 1,
+    EMAIL_CODE = 2,
+    BIND = 3,
+    SLICER_SETTINGS = 4,
+    TASKS = 5,
+
+BAMBU_URL = {
+    BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
+    BambuUrl.EMAIL_CODE: 'https://api.bambulab.com/v1/user-service/user/sendemail/code',
+    BambuUrl.BIND: 'https://api.bambulab.com/v1/iot-service/api/user/bind',
+    BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined',
+    BambuUrl.TASKS: 'https://api.bambulab.com/v1/user-service/my/tasks',
+}
