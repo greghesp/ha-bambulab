@@ -40,7 +40,7 @@
         "title": "打印机选择",
         "description": "选择要添加的打印机。",
         "data": {
-          "printer": "选择要添加的打印机："
+          "serial": "选择要添加的打印机："
         }
       },
       "Bambu_Lan": {
@@ -92,7 +92,7 @@
         "title": "调整打印机配置",
         "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是在 P1/A1 上访问相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Cloud。",
         "data": {
-          "printer": "选择要添加的打印机：",
+          "serial": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud："

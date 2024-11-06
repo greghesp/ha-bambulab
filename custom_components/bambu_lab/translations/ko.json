@@ -40,7 +40,7 @@
         "title": "프린터 선택",
         "description": "추가할 프린터를 선택하세요.",
         "data": {
-          "printer": "추가할 프린터 선택:"
+          "serial": "추가할 프린터 선택:"
         }
       },
       "Bambu_Lan": {
@@ -94,7 +94,7 @@
         "title": "프린터 구성 조정",
         "description": "로컬 프린터 IP 주소와 접근 코드를 제공할 수 있습니다. 이는 P1/A1의 카메라 접근에 필요하거나, Bambu Cloud 대신 프린터에 직접 연결할 수 있도록 합니다.",
         "data": {
-          "printer": "추가할 프린터 선택:",
+          "serial": "추가할 프린터 선택:",
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
           "local_mqtt": "Bambu Cloud 대신 프린터에 직접 연결:",
