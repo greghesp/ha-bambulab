@@ -75,22 +75,23 @@ class BambuCloud:
         if loginType is None:
             LOGGER.error(f"Response not understood: {response.text}")
             return None
-        elif loginType == 'verifyCode':
-            # Send the verification code request
-            data = {
-                "email": self._email,
-                "type": "codeLogin"
-            }
+        # This does not appear to be necessary and is resulting in receiving two emails each time.
+        # elif loginType == 'verifyCode':
+        #     # Send the verification code request
+        #     data = {
+        #         "email": self._email,
+        #         "type": "codeLogin"
+        #     }
 
-            LOGGER.debug("Requesting verification code")
-            response = requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), headers=headers, json=data)
+        #     LOGGER.debug("Requesting verification code")
+        #     response = requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), headers=headers, json=data)
             
-            if response.status_code == 200:
-                LOGGER.debug("Verification code sent successfully.")
-            else:
-                LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
-                LOGGER.debug(f"Response: {response.text}")
-                raise ValueError(response.status_code)
+        #     if response.status_code == 200:
+        #         LOGGER.debug("Verification code sent successfully.")
+        #     else:
+        #         LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
+        #         LOGGER.debug(f"Response: {response.text}")
+        #         raise ValueError(response.status_code)
         elif loginType == 'tfa':
             # Store the tfaKey for later use
             self._tfaKey = auth_json.get("tfaKey")
