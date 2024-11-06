@@ -145,7 +145,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         authentication_type = 'verifyCode'
                         errors['base'] = 'verifyCode'
                         # Fall through to form generation to ask for verification code
-                    elif result == 'tfaKey':
+                    elif result == 'tfa':
                         # User needs to provide their 2FA code
                         authentication_type = 'tfaCode'
                         errors['base'] = 'tfaCode'
@@ -456,7 +456,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         authentication_type = 'verifyCode'
                         errors['base'] = 'verifyCode'
                         # Fall through to form generation to ask for verification code
-                    elif result == 'tfaKey':
+                    elif result == 'tfa':
                         # User needs to provide their 2FA code
                         authentication_type = 'tfaCode'
                         errors['base'] = 'tfaCode'
