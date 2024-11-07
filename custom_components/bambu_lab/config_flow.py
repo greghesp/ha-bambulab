@@ -1,10 +1,6 @@
 """Config flow to configure Bambu Lab."""
 from __future__ import annotations
 
-import base64
-import json
-import queue
-import requests
 import voluptuous as vol
 
 from typing import Any
