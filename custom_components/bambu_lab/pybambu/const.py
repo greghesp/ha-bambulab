@@ -1223,13 +1223,15 @@ class Home_Flag_Values(IntEnum):
 
 class BambuUrl(Enum):
     LOGIN = 1,
-    EMAIL_CODE = 2,
-    BIND = 3,
-    SLICER_SETTINGS = 4,
-    TASKS = 5,
+    TFA_LOGIN = 2,
+    EMAIL_CODE = 3,
+    BIND = 4,
+    SLICER_SETTINGS = 5,
+    TASKS = 6,
 
 BAMBU_URL = {
     BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
+    BambuUrl.TFA_LOGIN: 'https://bambulab.com/api/sign-in/tfa',
     BambuUrl.EMAIL_CODE: 'https://api.bambulab.com/v1/user-service/user/sendemail/code',
     BambuUrl.BIND: 'https://api.bambulab.com/v1/iot-service/api/user/bind',
     BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined',

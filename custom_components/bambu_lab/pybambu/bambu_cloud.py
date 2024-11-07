@@ -58,8 +58,6 @@ class BambuCloud:
             "password": self._password,
             "apiError": ""
         }
-        LOGGER.debug(f"header = {headers}")
-        LOGGER.debug(f"data = {data}")
 
         scraper = cloudscraper.create_scraper()
         response = scraper.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
@@ -104,7 +102,7 @@ class BambuCloud:
             LOGGER.debug(f"Did not understand json.")
             LOGGER.error(f"Response not understood: {response.json}")
 
-        LOGGER.debug(f"Requested loginType: {auth_json['loginType']}")
+        LOGGER.debug(f"Requested loginType: {loginType}")
         return loginType
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
@@ -114,7 +112,6 @@ class BambuCloud:
             "account": self._email,
             "code": code
         }
-        LOGGER.debug(f"data = {data}")
 
         scraper = cloudscraper.create_scraper()
         response = scraper.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
@@ -138,7 +135,7 @@ class BambuCloud:
         }
 
         scraper = cloudscraper.create_scraper()
-        response = scraper.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
+        response = scraper.post(get_Url(BambuUrl.TFA_LOGIN, self._region), headers=headers, json=data)
         LOGGER.debug(f"response: {response.status_code}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
