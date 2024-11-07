@@ -386,7 +386,7 @@ class BambuClient:
                     LOGGER.debug("Starting Chamber Image thread")
                     self._camera = ChamberImageThread(self)
                     self._camera.start()
-            elif (self.client.host == "") or (self.client._access_code == ""):
+            elif (self.host == "") or (self._access_code == ""):
                 LOGGER.debug("Skipping camera setup as local access details not provided.")
 
     def try_on_connect(self,
