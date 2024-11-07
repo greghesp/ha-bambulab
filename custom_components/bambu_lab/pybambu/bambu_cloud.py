@@ -63,17 +63,21 @@ class BambuCloud:
         response = scraper.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
         if response.status_code >= 400:
             LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
-            LOGGER.debug(f"Response: {response.text}")
+            LOGGER.debug(f"Response: '{response.text}'")
             raise ValueError(response.status_code)
 
+        LOGGER.debug(f"Response: '{response.text}'")
+
         auth_json = response.json()
-        if auth_json.get("success"):
-            # We got immediate success.
-            return auth_json['accessToken']
+        accessToken = auth_json.get('accessToken', '')
+        if accessToken != '':
+            # We were provided the accessToken directly.
+            return accessToken
         
         loginType = auth_json.get("loginType", None)
         if loginType is None:
-            LOGGER.error(f"Response not understood: {response.text}")
+            LOGGER.error(f"loginType not present")
+            LOGGER.error(f"Response not understood: '{response.text}'")
             return None
         elif loginType == 'verifyCode':
             LOGGER.debug(f"Received verifyCode response")
@@ -92,17 +96,17 @@ class BambuCloud:
             #     LOGGER.debug("Verification code sent successfully.")
             # else:
             #     LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
-            #     LOGGER.debug(f"Response: {response.text}")
+            #     LOGGER.debug(f"Response: '{response.text}'")
             #     raise ValueError(response.status_code)
         elif loginType == 'tfa':
             # Store the tfaKey for later use
             LOGGER.debug(f"Received tfa response")
             self._tfaKey = auth_json.get("tfaKey")
         else:
-            LOGGER.debug(f"Did not understand json.")
-            LOGGER.error(f"Response not understood: {response.json}")
+            LOGGER.debug(f"Did not understand json. loginType = '{loginType}'")
+            LOGGER.error(f"Response not understood: '{response.text}'")
 
-        LOGGER.debug(f"Requested loginType: {loginType}")
+        LOGGER.debug(f"Requested loginType: '{loginType}'")
         return loginType
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
@@ -120,7 +124,7 @@ class BambuCloud:
             LOGGER.debug("Authentication successful.")
         else:
             LOGGER.error(f"Received error trying to authenticate with verification code: {response.status_code}")
-            LOGGER.debug(f"Response: {response.text}")
+            LOGGER.debug(f"Response: '{response.text}'")
             raise ValueError(response.status_code)
 
         return response.json()['accessToken']
@@ -141,7 +145,7 @@ class BambuCloud:
             LOGGER.debug("Authentication successful.")
         else:
             LOGGER.error(f"Received error trying to authenticate with verification code: {response.status_code}")
-            LOGGER.debug(f"Response: {response.text}")
+            LOGGER.debug(f"Response: '{response.text}'")
             raise ValueError(response.status_code)
 
         cookies = response.cookies.get_dict()
@@ -326,7 +330,7 @@ class BambuCloud:
         response = scraper.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.error(f"Slicer settings load failed: {response.status_code}")
-            LOGGER.error(f"Slicer settings load failed: {response.text}")
+            LOGGER.error(f"Slicer settings load failed: '{response.text}'")
             return None
         return response.json()
         
@@ -378,7 +382,7 @@ class BambuCloud:
         response = scraper.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
-            LOGGER.debug(f"Received error: {response.text}")
+            LOGGER.debug(f"Received error: '{response.text}'")
             raise ValueError(response.status_code)
         return response.json()
     
