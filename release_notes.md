@@ -1,3 +1,6 @@
+### V2.0.31
+- ?
+
 ### V2.0.30
 - Switch to cloudscraper to address cloudflare issues
 - Fix another 2FA bug.
