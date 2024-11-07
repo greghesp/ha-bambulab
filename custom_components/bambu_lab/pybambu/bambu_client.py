@@ -37,6 +37,7 @@ class WatchdogThread(threading.Thread):
         self._stop_event = threading.Event()
         self._last_received_data = time.time()
         super().__init__()
+        self.daemon = True
         self.setName(f"{self._client._device.info.device_type}-Watchdog-{threading.get_native_id()}")
 
     def stop(self):
@@ -71,6 +72,7 @@ class ChamberImageThread(threading.Thread):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
+        self.daemon = True
         self.setName(f"{self._client._device.info.device_type}-Chamber-{threading.get_native_id()}")
 
     def stop(self):
@@ -224,6 +226,7 @@ class MqttThread(threading.Thread):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
+        self.daemon = True
         self.setName(f"{self._client._device.info.device_type}-Mqtt-{threading.get_native_id()}")
 
     def stop(self):
