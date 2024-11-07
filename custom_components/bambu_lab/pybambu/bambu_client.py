@@ -37,6 +37,7 @@ class WatchdogThread(threading.Thread):
         self._stop_event = threading.Event()
         self._last_received_data = time.time()
         super().__init__()
+        self.daemon = True
         self.setName(f"{self._client._device.info.device_type}-Watchdog-{threading.get_native_id()}")
 
     def stop(self):
@@ -71,6 +72,7 @@ class ChamberImageThread(threading.Thread):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
+        self.daemon = True
         self.setName(f"{self._client._device.info.device_type}-Chamber-{threading.get_native_id()}")
 
     def stop(self):
@@ -224,6 +226,7 @@ class MqttThread(threading.Thread):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
+        self.daemon = True
         self.setName(f"{self._client._device.info.device_type}-Mqtt-{threading.get_native_id()}")
 
     def stop(self):
@@ -283,7 +286,7 @@ class BambuClient:
     _usage_hours: float
 
     def __init__(self, device_type: str, serial: str, host: str, local_mqtt: bool, region: str, email: str,
-                 username: str, auth_token: str, access_code: str, usage_hours: float = 0, manual_refresh_mode: bool = False):
+                 username: str, auth_token: str, access_code: str, usage_hours: float = 0, manual_refresh_mode: bool = False, chamber_image: bool = True):
         self.callback = None
         self.host = host
         self._local_mqtt = local_mqtt
@@ -300,6 +303,7 @@ class BambuClient:
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(region, email, username, auth_token)
         self.slicer_settings = SlicerSettings(self)
+        self.use_chamber_image = chamber_image
 
     @property
     def connected(self):
@@ -378,9 +382,10 @@ class BambuClient:
 
         if not self._device.supports_feature(Features.CAMERA_RTSP):
             if self._device.supports_feature(Features.CAMERA_IMAGE):
-                LOGGER.debug("Starting Chamber Image thread")
-                self._camera = ChamberImageThread(self)
-                self._camera.start()
+                if self.use_chamber_image:
+                    LOGGER.debug("Starting Chamber Image thread")
+                    self._camera = ChamberImageThread(self)
+                    self._camera.start()
             elif (self.client.host == "") or (self.client._access_code == ""):
                 LOGGER.debug("Skipping camera setup as local access details not provided.")
 

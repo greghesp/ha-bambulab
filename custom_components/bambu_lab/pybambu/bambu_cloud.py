@@ -104,7 +104,7 @@ class BambuCloud:
             LOGGER.debug(f"Did not understand json.")
             LOGGER.error(f"Response not understood: {response.json}")
 
-        LOGGER.debug(f"Requested loginType: '{auth_json["loginType"]}'")
+        LOGGER.debug(f"Requested loginType: {auth_json['loginType']}")
         return loginType
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
