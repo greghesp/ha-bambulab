@@ -66,6 +66,7 @@ class BambuCloud:
             LOGGER.debug(f"Response: '{response.text}'")
             raise ValueError(response.status_code)
 
+        LOGGER.debug(f"response: {response.status_code}")
         LOGGER.debug(f"Response: '{response.text}'")
 
         auth_json = response.json()
@@ -119,7 +120,10 @@ class BambuCloud:
 
         scraper = cloudscraper.create_scraper()
         response = scraper.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
+
         LOGGER.debug(f"response: {response.status_code}")
+        LOGGER.debug(f"Response: '{response.text}'")
+
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
         else:

@@ -1,5 +1,8 @@
+### V2.0.32
+- Fix error when printer IP address isn't provided due to incorrect logging addition
+
 ### V2.0.31
-- ?
+- Fix China phone login
 
 ### V2.0.30
 - Switch to cloudscraper to address cloudflare issues
