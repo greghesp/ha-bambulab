@@ -1,5 +1,8 @@
 ### V2.0.30
-- Awesomeness
+- Switch to cloudscraper to address cloudflare issues
+- Fix another 2FA bug.
+- Fix tag_uid
+- Miscellaneous improvements
 
 ### V2.0.29
 - Fix 2FA bug
