@@ -1,4 +1,4 @@
-{
+﻿{
   "device_automation": {
     "trigger_type": {
       "event_print_canceled": "Impresión cancelada",
@@ -18,7 +18,11 @@
       "cannot_connect_local_all": "Falla al conectar. Revisa la configuración proporcionada..",
       "no_printers": "No se encontraron impresoras configuradas en la cuenta.",
       "invalid_auth": "Autenticación inválida.",
-      "unknown": "Error inesperado."
+      "unknown": "Error inesperado.",
+      "verifyCode": "Se requiere código de verificación. ",
+      "code_expired": "El código de verificación expiró. ",
+      "code_incorrect": "El código de verificación era incorrecto. ",
+      "tfaCode": "Se requiere código 2FA. "
     },
     "step": {
       "user": {
@@ -33,7 +37,9 @@
         "data": {
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
-          "password": "Contraseña"
+          "password": "Contraseña",
+          "verifyCode": "Código de verificación de correo electrónico",
+          "tfaCode": "Código de autenticación de dos factores"
         }
       },
       "Bambu_Choose_Device": {
@@ -71,7 +77,11 @@
       "cannot_connect_local_ip": "Falla al conectar. Revise la dirección de IP proporcionada.",
       "cannot_connect_local_all": "Falla al conectar. Revise configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
-      "unknown": "Error inesperado."
+      "unknown": "Error inesperado.",
+      "verifyCode": "Se requiere código de verificación. ",
+      "code_expired": "El código de verificación expiró. ",
+      "code_incorrect": "El código de verificación era incorrecto. ",
+      "tfaCode": "Se requiere código 2FA. "
     },
     "step": {
       "init": {
@@ -87,7 +97,9 @@
         "data": {
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
-          "password": "Contraseña"
+          "password": "Contraseña",
+          "verifyCode": "Código de verificación de correo electrónico",
+          "tfaCode": "Código de autenticación de dos factores"
         }
       },
       "Bambu_Lan": {

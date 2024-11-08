@@ -1,4 +1,4 @@
-{
+﻿{
   "device_automation": {
     "trigger_type": {
       "event_print_canceled": "출력 취소됨",
@@ -18,7 +18,11 @@
       "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
       "no_printers": "계정에서 구성되지 않은 프린터를 찾을 수 없습니다.",
       "invalid_auth": "잘못된 인증 정보입니다.",
-      "unknown": "예기치 않은 오류입니다."
+      "unknown": "예기치 않은 오류입니다.",
+      "verifyCode": "인증코드가 필요합니다. ",
+      "code_expired": "인증 코드가 만료되었습니다. ",
+      "code_incorrect": "인증코드가 올바르지 않습니다. ",
+      "tfaCode": "2FA 코드가 필요합니다. "
     },
     "step": {
       "user": {
@@ -33,7 +37,9 @@
         "data": {
           "region": "계정 지역:",
           "email": "이메일 주소 또는 전화번호",
-          "password": "비밀번호"
+          "password": "비밀번호",
+          "verifyCode": "이메일 인증 코드",
+          "tfaCode": "2단계 인증 코드"
         }
       },
       "Bambu_Choose_Device": {
@@ -71,7 +77,11 @@
       "cannot_connect_local_ip": "연결에 실패했습니다. 제공된 IP 주소를 확인하세요.",
       "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
       "invalid_auth": "잘못된 인증 정보입니다.",
-      "unknown": "예기치 않은 오류입니다."
+      "unknown": "예기치 않은 오류입니다.",
+      "verifyCode": "인증코드가 필요합니다. ",
+      "code_expired": "인증 코드가 만료되었습니다. ",
+      "code_incorrect": "인증코드가 올바르지 않습니다. ",
+      "tfaCode": "2FA 코드가 필요합니다. "
     },
     "step": {
       "init": {
@@ -87,7 +97,9 @@
         "data": {
           "region": "계정 지역:",
           "email": "이메일 주소 또는 전화번호",
-          "password": "비밀번호"
+          "password": "비밀번호",
+          "verifyCode": "이메일 인증 코드",
+          "tfaCode": "2단계 인증 코드"
         }
       },
       "Bambu_Lan": {
@@ -456,14 +468,14 @@
           "nozzle_temp_max": {
             "name": "노즐 최대 온도"
           },
-          "type": {
-            "name": "유형"
-          },
           "remain": {
             "name": "남은 필라멘트"
           },
           "tag_uid": {
             "name": "필라멘트 시리얼 번호"
+          },
+          "type": {
+            "name": "유형"
           }
         }
       },
@@ -491,14 +503,14 @@
           "nozzle_temp_max": {
             "name": "노즐 최대 온도"
           },
-          "type": {
-            "name": "유형"
-          },
           "remain": {
             "name": "남은 필라멘트"
           },
           "tag_uid": {
             "name": "필라멘트 시리얼 번호"
+          },
+          "type": {
+            "name": "유형"
           }
         }
       },
@@ -526,14 +538,14 @@
           "nozzle_temp_max": {
             "name": "노즐 최대 온도"
           },
-          "type": {
-            "name": "유형"
-          },
           "remain": {
             "name": "남은 필라멘트"
           },
           "tag_uid": {
             "name": "필라멘트 시리얼 번호"
+          },
+          "type": {
+            "name": "유형"
           }
         }
       }

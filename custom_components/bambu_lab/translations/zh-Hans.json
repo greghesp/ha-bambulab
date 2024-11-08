@@ -1,4 +1,4 @@
-{
+﻿{
   "device_automation": {
     "trigger_type": {
       "event_print_canceled": "取消打印",
@@ -18,7 +18,11 @@
       "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "no_printers": "在帐户中未找到未配置的打印机",
       "invalid_auth": "无效的身份验证",
-      "unknown": "意外错误"
+      "unknown": "意外错误",
+      "verifyCode": "需要验证码。",
+      "code_expired": "验证码已过期。",
+      "code_incorrect": "验证码不正确。",
+      "tfaCode": "需要 2FA 代码。"
     },
     "step": {
       "user": {
@@ -33,7 +37,9 @@
         "data": {
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
-          "password": "密码"
+          "password": "密码",
+          "verifyCode": "邮箱验证码",
+          "tfaCode": "二因素验证码"
         }
       },
       "Bambu_Choose_Device": {
@@ -49,7 +55,8 @@
         "data": {
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
           "host": "本地打印机 IP 地址：",
-          "access_code": "访问码"
+          "access_code": "访问码",
+          "usage_hours": "当前使用时间（可选）："
         }
       },
       "Lan": {
@@ -58,7 +65,8 @@
         "data": {
           "serial": "序号：",
           "host": "本地打印机 IP 地址：",
-          "access_code": "访问码"
+          "access_code": "访问码",
+          "usage_hours": "当前使用时间（可选）："
         }
       }
     }
@@ -69,7 +77,11 @@
       "cannot_connect_local_ip": "连接失败。检查提供的 IP 地址。",
       "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "invalid_auth": "无效的身份验证",
-      "unknown": "意外错误"
+      "unknown": "意外错误",
+      "verifyCode": "需要验证码。",
+      "code_expired": "验证码已过期。",
+      "code_incorrect": "验证码不正确。",
+      "tfaCode": "需要 2FA 代码。"
     },
     "step": {
       "init": {
@@ -85,7 +97,9 @@
         "data": {
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
-          "password": "密码"
+          "password": "密码",
+          "verifyCode": "邮箱验证码",
+          "tfaCode": "二因素验证码"
         }
       },
       "Bambu_Lan": {
@@ -95,7 +109,8 @@
           "serial": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud："
+          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
+          "usage_hours": "当前使用时间（可选）："
         }
       },
       "Lan": {
@@ -103,13 +118,17 @@
         "description": "请提供您当地的打印机 IP 地址和访问代码。访问代码可在网络设置的打印机屏幕上找到。",
         "data": {
           "host": "本地打印机 IP 地址：",
-          "access_code": "访问码"
+          "access_code": "访问码",
+          "usage_hours": "当前使用时间（可选）："
         }
       }
     }
   },
   "entity": {
     "binary_sensor": {
+      "door_open": {
+        "name": "外壳门"
+      },
       "timelapse": {
         "name": "录制延时摄影"
       },
@@ -251,6 +270,20 @@
           "calibrating_extrusion_flow": "校准挤出流量",
           "paused_nozzle_temperature_malfunction": "由于喷嘴温度故障而暂停",
           "paused_heat_bed_temperature_malfunction": "由于床温故障而暂停",
+          "filament_unloading": "耗材卸料",
+          "paused_skipped_step": "由于跳过步骤而暂停",
+          "filament_loading": "灯丝加载",
+          "calibrating_motor_noise": "校准电机噪音",
+          "paused_ams_lost": "由于 AMS 丢失而暂停",
+          "paused_low_fan_speed_heat_break": "由于散热风扇速度低而暂停",
+          "paused_chamber_temperature_control_error": "由于腔室温度控制错误而暂停",
+          "cooling_chamber": "冷却室",
+          "paused_user_gcode": "由用户添加的 gcode 暂停指令暂停",
+          "motor_noise_showoff": "电机噪音炫耀",
+          "paused_nozzle_filament_covered_detected": "由于检测到喷嘴灯丝被覆盖而暂停",
+          "paused_cutter_error": "由于切刀错误而暂停",
+          "paused_first_layer_error": "由于第一层错误而暂停",
+          "paused_nozzle_clog": "因喷嘴堵塞而暂停",
           "idle": "空闲"
         }
       },
@@ -400,6 +433,12 @@
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
           },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "线轴序列号"
+          },
           "type": {
             "name": "类型"
           }
@@ -428,6 +467,12 @@
           },
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
+          },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "灯丝序列号"
           },
           "type": {
             "name": "类型"
@@ -458,6 +503,12 @@
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
           },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "灯丝序列号"
+          },
           "type": {
             "name": "类型"
           }
@@ -486,6 +537,12 @@
           },
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
+          },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "灯丝序列号"
           },
           "type": {
             "name": "类型"

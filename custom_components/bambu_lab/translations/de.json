@@ -1,4 +1,4 @@
-{
+﻿{
   "device_automation": {
     "trigger_type": {
       "event_print_canceled": "Druckauftrag abgebrochen",
@@ -16,8 +16,13 @@
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
       "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
+      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "invalid_auth": "Authentifizierung fehlgeschlagen.",
-      "unbekannt": "Unerwarteter Fehler."
+      "unknown": "Unerwarteter Fehler.",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. ",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. ",
+      "code_incorrect": "Der Bestätigungscode war falsch. ",
+      "tfaCode": "2FA-Code ist erforderlich. "
     },
     "step": {
       "user": {
@@ -32,7 +37,9 @@
         "data": {
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
-          "password": "Passwort"
+          "password": "Passwort",
+          "verifyCode": "E-Mail-Bestätigungscode",
+          "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },
       "Bambu_Choose_Device": {
@@ -48,17 +55,19 @@
         "data": {
           "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
           "host": "IP-Adresse des lokalen Druckers:",
-          "access_code": "Zugangscode"
+          "access_code": "Zugangscode",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         }
       },
       "Lan": {
         "title": "LAN-Modus-Verbindung",
-        "Beschreibung": "Bitte geben Sie Ihren lokalen Druckertyp, Ihre IP-Adresse, die Seriennummer und den Zugangscode an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen. Die Seriennummer finden Sie in den Geräteeinstellungen.",
+        "description": "Bitte geben Sie Ihren lokalen Druckertyp, Ihre IP-Adresse, die Seriennummer und den Zugangscode an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen. Die Seriennummer finden Sie in den Geräteeinstellungen.",
         "data": {
           "serial": "Seriennummer:",
           "host": "IP-Adresse des lokalen Druckers:",
-          "access_code": "Zugangscode"
-        }        
+          "access_code": "Zugangscode",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+        }
       }
     }
   },
@@ -67,9 +76,12 @@
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
       "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
-      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "invalid_auth": "Authentifizierung fehlgeschlagen",
-      "unbekannt": "Unerwarteter Fehler"
+      "unknown": "Unerwarteter Fehler",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. ",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. ",
+      "code_incorrect": "Der Bestätigungscode war falsch. ",
+      "tfaCode": "2FA-Code ist erforderlich. "
     },
     "step": {
       "init": {
@@ -85,7 +97,9 @@
         "data": {
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
-          "password": "Passwort"
+          "password": "Passwort",
+          "verifyCode": "E-Mail-Bestätigungscode",
+          "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },
       "Bambu_Lan": {
@@ -95,21 +109,26 @@
           "serial": "Wählen Sie den hinzuzufügenden Drucker aus:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:"
+          "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         }
       },
       "Lan": {
         "title": "LAN-Modus-Verbindung",
-        "Beschreibung": "Bitte geben Sie die IP-Adresse und den Zugangscode Ihres lokalen Druckers an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen.",
+        "description": "Bitte geben Sie die IP-Adresse und den Zugangscode Ihres lokalen Druckers an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen.",
         "data": {
           "host": "IP-Adresse des lokalen Druckers:",
-          "access_code": "Zugangscode"
+          "access_code": "Zugangscode",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         }
       }
     }
   },
   "entity": {
     "binary_sensor": {
+      "door_open": {
+        "name": "Gehäusetür"
+      },
       "timelapse": {
         "name": "Aufnahme von Zeitraffern"
       },
@@ -251,6 +270,20 @@
           "calibrating_extrusion_flow": "Kalibrierung des Extrusionsflusses",
           "paused_nozzle_temperature_malfunction": "Pausiert aufgrund einer Störung der Düsentemperatur",
           "paused_heat_bed_temperature_malfunction": "Pausiert aufgrund einer Störung der Wärmebetttemperatur",
+          "filament_unloading": "Entladen des Filaments",
+          "paused_skipped_step": "Wegen übersprungener Schritte angehalten",
+          "filament_loading": "Filamentbeladung",
+          "calibrating_motor_noise": "Motorgeräusch kalibrieren",
+          "paused_ams_lost": "Pausiert wegen AMS-Verlust",
+          "paused_low_fan_speed_heat_break": "Pausiert aufgrund der niedrigen Lüftergeschwindigkeit der Hitzepause",
+          "paused_chamber_temperature_control_error": "Aufgrund eines Fehlers bei der Kammertemperaturregelung angehalten",
+          "cooling_chamber": "Kühlkammer",
+          "paused_user_gcode": "Angehalten durch vom Benutzer hinzugefügte Gcode-Pauseanweisung",
+          "motor_noise_showoff": "Motorgeräusche kommen zur Geltung",
+          "paused_nozzle_filament_covered_detected": "Pausiert",
+          "paused_cutter_error": "Aufgrund eines Schneidefehlers angehalten",
+          "paused_first_layer_error": "Aufgrund eines Fehlers auf der ersten Ebene pausiert",
+          "paused_nozzle_clog": "Wegen verstopfter Düse unterbrochen",
           "idle": "Leerlauf"
         }
       },
@@ -282,7 +315,13 @@
         "name": "Gcode Dateiname"
       },
       "print_bed_type": {
-        "name": "Druckbett Typ"
+        "name": "Druckbett Typ",
+        "state": {
+          "textured_plate": "Strukturierte Platte",
+          "cool_plate": "Kühlplatte / PLA-Platte",
+          "hot_plate": "Glatte PEI-Platte/Hochtemperaturplatte",
+          "eng_plate": "Technische Platte"
+        }
       },
       "print_length": {
         "name": "Drucklänge"
@@ -292,6 +331,14 @@
       },
       "subtask_name": {
         "name": "Name der Aufgabe"
+      },
+      "print_type": {
+        "name": "Drucktyp",
+        "state": {
+          "local": "Lokal",
+          "cloud": "Wolke",
+          "idle": "Leerlauf"
+        }
       },
       "start_time": {
         "name": "Startzeit"
@@ -316,6 +363,16 @@
       },
       "active_tray_index": {
         "name": "Aktiver Slotindex"
+      },
+      "nozzle_diameter": {
+        "name": "Düsengröße"
+      },
+      "nozzle_type": {
+        "name": "Düsentyp",
+        "state": {
+          "hardened_steel": "Gehärteter Stahl",
+          "stainless_steel": "Edelstahl"
+        }
       },
       "humidity_index": {
         "name": "Index der Luftfeuchtigkeit"
@@ -376,14 +433,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       },
@@ -411,14 +468,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       },
@@ -446,14 +503,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       },
@@ -481,14 +538,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       }

@@ -1,3 +1,6 @@
+### V2.0.34
+- Update translations for new strings
+
 ### V2.0.33
 - Switch to curl_cffi to get past cloudflare
 - Fix greek localization filename
