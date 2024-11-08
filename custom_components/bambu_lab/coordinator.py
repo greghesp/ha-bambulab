@@ -65,7 +65,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
 
     def event_handler_internal(self, event):
-        LOGGER.debug(f"EVENT: {event}")
+        #LOGGER.debug(f"EVENT: {event}")
         if event == "event_printer_info_update":
             self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):

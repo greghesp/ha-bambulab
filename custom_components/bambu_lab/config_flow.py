@@ -111,16 +111,22 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     result = await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_verification_code,
                         user_input['verifyCode'])
-                    LOGGER.debug(f"RESULT = {result}")
                     if result == 'success':
                         return await self.async_step_Bambu_Choose_Device(None)
+                    elif result == 'codeExpired':
+                        authentication_type = 'verifyCode'
+                        errors['base'] = "code_expired"
+                        # Fall through to form generation to ask for verification code
+                    elif result == 'codeIncorrect':
+                        authentication_type = 'verifyCode'
+                        errors['base'] = "code_incorrect"
+                        # Fall through to form generation to ask for verification code
                     else:
                         errors['base'] = "cannot_connect"
                 elif user_input.get('tfaCode', None) is not None:
                     result = await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_2fa_code,
                         user_input['tfaCode'])
-                    LOGGER.debug(f"RESULT = {result}")
                     if result == 'success':
                         return await self.async_step_Bambu_Choose_Device(None)
                     else:
@@ -133,7 +139,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         user_input['region'],
                         user_input['email'],
                         user_input['password'])
-                    LOGGER.debug(f"RESULT = {result}")
                     if result == 'success':
                         return await self.async_step_Bambu_Choose_Device(None)
                     elif result == 'verifyCode':
@@ -422,16 +427,22 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     result = await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_verification_code,
                         user_input['verifyCode'])
-                    LOGGER.debug(f"RESULT = {result}")
                     if result == 'success':
                         return await self.async_step_Bambu_Lan(None)
+                    elif result == 'codeExpired':
+                        authentication_type = 'verifyCode'
+                        errors['base'] = "code_expired"
+                        # Fall through to form generation to ask for verification code
+                    elif result == 'codeIncorrect':
+                        authentication_type = 'verifyCode'
+                        errors['base'] = "code_incorrect"
+                        # Fall through to form generation to ask for verification code
                     else:
                         errors['base'] = "cannot_connect"
                 elif user_input.get('tfaCode', None) is not None:
                     result = await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_2fa_code,
                         user_input['tfaCode'])
-                    LOGGER.debug(f"RESULT = {result}")
                     if result == 'success':
                         return await self.async_step_Bambu_Lan(None)
                     else:
@@ -444,7 +455,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         user_input['region'],
                         user_input['email'],
                         user_input['password'])
-                    LOGGER.debug(f"RESULT = {result}")
                     if result == 'success':
                         return await self.async_step_Bambu_Lan(None)
                     elif result == 'verifyCode':

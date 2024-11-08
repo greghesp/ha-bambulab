@@ -20,6 +20,8 @@
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
       "verifyCode": "Verification code is required. Check your email.",
+      "code_expired": "Verification code expired. New code requested. Check your email.",
+      "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
@@ -77,6 +79,8 @@
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
       "verifyCode": "Verification code is required. Check your email.",
+      "code_expired": "Verification code expired. New code requested. Check your email.",
+      "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {

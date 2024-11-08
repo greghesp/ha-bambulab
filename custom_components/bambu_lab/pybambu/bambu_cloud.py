@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import base64
-import cloudscraper
 import json
+
+from curl_cffi import requests
 
 from dataclasses import dataclass
 
@@ -24,27 +25,8 @@ class BambuCloud:
         self._auth_token = auth_token
         self._tfaKey = None
 
-    def _get_headers(self) -> dict:
-        return {
-            'User-Agent': 'bambu_network_agent/01.09.05.01',
-            'X-BBL-Client-Name': 'OrcaSlicer',
-            'X-BBL-Client-Type': 'slicer',
-            'X-BBL-Client-Version': '01.09.05.51',
-            'X-BBL-Language': 'en-US',
-            'X-BBL-OS-Type': 'linux',
-            'X-BBL-OS-Version': '6.2.0',
-            'X-BBL-Agent-Version': '01.09.05.01',
-            'X-BBL-Executable-info': '{}',
-            'X-BBL-Agent-OS-Type': 'linux',
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-        # Orca/Bambu Studio also add this - need to work out what an appropriate ID is to put here:
-        # 'X-BBL-Device-ID': BBL_AUTH_UUID,
-        # Example: X-BBL-Device-ID: 370f9f43-c6fe-47d7-aec9-5fe5ef7e7673
-
     def _get_headers_with_auth_token(self) -> dict:
-        headers = self._get_headers()
+        headers = {}
         headers['Authorization'] = f"Bearer {self._auth_token}"
         return headers
     
@@ -52,22 +34,19 @@ class BambuCloud:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
 
         # First we need to find out how Bambu wants us to login.
-        headers=self._get_headers()
         data = {
             "account": self._email,
             "password": self._password,
             "apiError": ""
         }
 
-        scraper = cloudscraper.create_scraper()
-        response = scraper.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
+        response = requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data)
         if response.status_code >= 400:
             LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
             LOGGER.debug(f"Response: '{response.text}'")
             raise ValueError(response.status_code)
 
-        LOGGER.debug(f"response: {response.status_code}")
-        LOGGER.debug(f"Response: '{response.text}'")
+        LOGGER.debug(f"Response: {response.status_code}")
 
         auth_json = response.json()
         accessToken = auth_json.get('accessToken', '')
@@ -82,23 +61,6 @@ class BambuCloud:
             return None
         elif loginType == 'verifyCode':
             LOGGER.debug(f"Received verifyCode response")
-            # # This does not appear to be necessary and is resulting in receiving two emails each time.
-            # # Send the verification code request
-            # data = {
-            #     "email": self._email,
-            #     "type": "codeLogin"
-            # }
-
-            # LOGGER.debug("Requesting verification code")
-            # scraper = cloudscraper.create_scraper()
-            # response = scraper.post(get_Url(BambuUrl.EMAIL_CODE, self._region), headers=headers, json=data)
-            
-            # if response.status_code == 200:
-            #     LOGGER.debug("Verification code sent successfully.")
-            # else:
-            #     LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
-            #     LOGGER.debug(f"Response: '{response.text}'")
-            #     raise ValueError(response.status_code)
         elif loginType == 'tfa':
             # Store the tfaKey for later use
             LOGGER.debug(f"Received tfa response")
@@ -107,25 +69,49 @@ class BambuCloud:
             LOGGER.debug(f"Did not understand json. loginType = '{loginType}'")
             LOGGER.error(f"Response not understood: '{response.text}'")
 
-        LOGGER.debug(f"Requested loginType: '{loginType}'")
         return loginType
+    
+    def _get_email_verification_code(self):
+        # Send the verification code request
+        data = {
+            "email": self._email,
+            "type": "codeLogin"
+        }
+
+        LOGGER.debug("Requesting verification code")
+        response = requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), json=data)
+        
+        if response.status_code == 200:
+            LOGGER.debug("Verification code requested successfully.")
+        else:
+            LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
+            LOGGER.debug(f"Response: '{response.text}'")
+            raise ValueError(response.status_code)
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
         LOGGER.debug("Attempting to connect with provided verification code.")
-        headers=self._get_headers()
         data = {
             "account": self._email,
             "code": code
         }
 
-        scraper = cloudscraper.create_scraper()
-        response = scraper.post(get_Url(BambuUrl.LOGIN, self._region), headers=headers, json=data)
+        response = requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data)
 
-        LOGGER.debug(f"response: {response.status_code}")
-        LOGGER.debug(f"Response: '{response.text}'")
-
+        LOGGER.debug(f"Response: {response.status_code}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
+        elif response.status_code == 400:
+            LOGGER.debug(f"Response: '{response.json()}'")
+            if response.json()['code'] == 1:
+                # Code has expired. Request a new one.
+                self._get_email_verification_code()
+                return 'codeExpired'
+            elif response.json()['code'] == 2:
+                # Code was incorrect. Let the user try again.
+                return 'codeIncorrect'
+            else:
+                LOGGER.error(f"Response not understood: '{response.json()}'")
+                raise ValueError(response.json()['code'])
         else:
             LOGGER.error(f"Received error trying to authenticate with verification code: {response.status_code}")
             LOGGER.debug(f"Response: '{response.text}'")
@@ -136,15 +122,14 @@ class BambuCloud:
     def _get_authentication_token_with_2fa_code(self, code: str) -> dict:
         LOGGER.debug("Attempting to connect with provided 2FA code.")
 
-        headers=self._get_headers()
         data = {
             "tfaKey": self._tfaKey,
             "tfaCode": code
         }
 
-        scraper = cloudscraper.create_scraper()
-        response = scraper.post(get_Url(BambuUrl.TFA_LOGIN, self._region), headers=headers, json=data)
-        LOGGER.debug(f"response: {response.status_code}")
+        response = requests.post(get_Url(BambuUrl.TFA_LOGIN, self._region), json=data)
+
+        LOGGER.debug(f"Response: {response.status_code}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
         else:
@@ -218,7 +203,6 @@ class BambuCloud:
         return True
 
     def login(self, region: str, email: str, password: str) -> str:
-        LOGGER.debug("login()")
         self._region = region
         self._email = email
         self._password = password
@@ -237,16 +221,14 @@ class BambuCloud:
             return 'success'
         
     def login_with_verification_code(self, code: str):
-        LOGGER.debug("login_with_verification_code()")
-
         result = self._get_authentication_token_with_verification_code(code)
+        if result == 'codeExpired' or result == 'codeIncorrect':
+            return result
         self._auth_token = result
         self._username = self._get_username_from_authentication_token()
         return 'success'
 
     def login_with_2fa_code(self, code: str):
-        LOGGER.debug("login_with_2fa_code()")
-
         result = self._get_authentication_token_with_2fa_code(code)
         self._auth_token = result
         self._username = self._get_username_from_authentication_token()
@@ -254,8 +236,7 @@ class BambuCloud:
 
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
-        scraper = cloudscraper.create_scraper()
-        response = scraper.get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token(), timeout=10)
+        response = requests.get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
@@ -330,8 +311,7 @@ class BambuCloud:
 
     def get_slicer_settings(self) -> dict:
         LOGGER.debug("Getting slicer settings from Bambu Cloud")
-        scraper = cloudscraper.create_scraper()
-        response = scraper.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10)
+        response = requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.error(f"Slicer settings load failed: {response.status_code}")
             LOGGER.error(f"Slicer settings load failed: '{response.text}'")
@@ -382,8 +362,7 @@ class BambuCloud:
 
     def get_tasklist(self) -> dict:
         url = get_Url(BambuUrl.TASKS, self._region)
-        scraper = cloudscraper.create_scraper()
-        response = scraper.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
+        response = requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             LOGGER.debug(f"Received error: '{response.text}'")
@@ -414,8 +393,7 @@ class BambuCloud:
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")
-        scraper = cloudscraper.create_scraper()
-        response = scraper.get(url, timeout=10)
+        response = requests.get(url, timeout=10)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
