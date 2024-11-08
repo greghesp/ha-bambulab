@@ -1,4 +1,4 @@
-﻿{
+{
   "device_automation": {
     "trigger_type": {
       "event_print_canceled": "Druckauftrag abgebrochen",
