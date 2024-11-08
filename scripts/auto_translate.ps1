@@ -75,6 +75,7 @@ function Convert-File
       {
         $targetKey = $matches[2]
         $targetContent = $matches[3]
+        Write-Host "Comparing $($sourceKey):$i to $($targetKey):$targetIndex"
         if ($sourceKey -eq $targetKey)
         {
           # TODO - Determine if source has changed.
@@ -93,6 +94,7 @@ function Convert-File
       }
 
       # Target does not have this line. Print out a translation.
+      Write-Host "Translating $sourceKey"
       $translation = Get-GoogleTranslation -To $language -Content $content
       $newLine = $whiteSpace + '"' + $sourceKey + '": "' + $translation + '"'
       if ($source[$i] -match '.*,')
@@ -113,7 +115,7 @@ function Convert-File
   }
 }
 
-$sourceDir = "\\wsl.localhost\Debian\home\adrian\repo\tuya-local\custom_components\tuya_local\translations"
+$sourceDir = "\\wsl.localhost\Debian\home\adrian\repo\ha-bambulab\custom_components\bambu_lab\translations"
 
 $english = Get-Content -Encoding UTF8 -Path "$sourceDir\en.json"
 
@@ -136,7 +138,7 @@ foreach ($file in $languageFiles)
     $language = 'cs'
   }
 
-  Write-Host "Converting to $language."
+  Write-Host "`nConverting to $language.`n"
 
   $langFile = Get-Content -Encoding UTF8 -Path $file
 

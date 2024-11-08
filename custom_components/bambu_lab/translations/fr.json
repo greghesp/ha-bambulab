@@ -1,4 +1,13 @@
 {
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Impression annulée",
+      "event_print_failed": "Échec de l'impression",
+      "event_print_finished": "Impression terminée",
+      "event_print_started": "L'impression a commencé",
+      "event_printer_error": "Erreur d'imprimante détectée"
+    }
+  },
   "config": {
     "abort": {
       "already_configured": "L'appareil est déjà configuré"
@@ -9,7 +18,11 @@
       "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "no_printers": "Aucune imprimante non configurée n’a été trouvée dans le compte.",
       "invalid_auth": "Authentification invalide.",
-      "unknown": "Erreur inattendue."
+      "unknown": "Erreur inattendue.",
+      "verifyCode": "Un code de vérification est requis. ",
+      "code_expired": "Le code de vérification a expiré. ",
+      "code_incorrect": "Le code de vérification était incorrect. ",
+      "tfaCode": "Le code 2FA est requis. "
     },
     "step": {
       "user": {
@@ -24,7 +37,9 @@
         "data": {
           "region": "Région du compte :",
           "email": "Adresse e-mail ou numéro de téléphone",
-          "password": "Mot de passe"
+          "password": "Mot de passe",
+          "verifyCode": "Code de vérification de l'e-mail",
+          "tfaCode": "Code d'authentification à deux facteurs"
         }
       },
       "Bambu_Choose_Device": {
@@ -40,7 +55,8 @@
         "data": {
           "local_mqtt": "Connectez-vous directement à l’imprimante au lieu de passer par Bambu Cloud :",
           "host": "Adresse IP de l’imprimante locale :",
-          "access_code": "Code d'accès"
+          "access_code": "Code d'accès",
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
         }
       },
       "Lan": {
@@ -49,7 +65,8 @@
         "data": {
           "serial": "Numéro de série",
           "host": "Adresse IP de l’imprimante locale :",
-          "access_code": "Code d'accès"
+          "access_code": "Code d'accès",
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
         }
       }
     }
@@ -60,7 +77,11 @@
       "cannot_connect_local_ip": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
       "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "invalid_auth": "Authentification invalide.",
-      "unknown": "Erreur inattendue."
+      "unknown": "Erreur inattendue.",
+      "verifyCode": "Un code de vérification est requis. ",
+      "code_expired": "Le code de vérification a expiré. ",
+      "code_incorrect": "Le code de vérification était incorrect. ",
+      "tfaCode": "Le code 2FA est requis. "
     },
     "step": {
       "init": {
@@ -76,7 +97,9 @@
         "data": {
           "region": "Région du compte :",
           "email": "Adresse e-mail ou numéro de téléphone",
-          "password": "Mot de passe"
+          "password": "Mot de passe",
+          "verifyCode": "Code de vérification de l'e-mail",
+          "tfaCode": "Code d'authentification à deux facteurs"
         }
       },
       "Bambu_Lan": {
@@ -85,7 +108,9 @@
         "data": {
           "serial": "Choisissez l’imprimante à ajouter :",
           "host": "Adresse IP de l’imprimante locale :",
-          "local_mqtt": "Connectez-vous directement à l’imprimante au lieu de passer par Bambu Cloud :"
+          "access_code": "Code d'accès :",
+          "local_mqtt": "Connectez-vous directement à l’imprimante au lieu de passer par Bambu Cloud :",
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
         }
       },
       "Lan": {
@@ -93,13 +118,17 @@
         "description": "Veuillez fournir l’adresse IP et le code d’accès de votre imprimante locale. Le code d’accès se trouve sur l’écran de l’imprimante dans les paramètres réseau.",
         "data": {
           "host": "Adresse IP de l’imprimante locale :",
-          "access_code": "Code d'accès"
+          "access_code": "Code d'accès",
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
         }
       }
     }
   },
   "entity": {
     "binary_sensor": {
+      "door_open": {
+        "name": "Porte d'enceinte"
+      },
       "timelapse": {
         "name": "Timelapse"
       },
@@ -241,6 +270,20 @@
           "calibrating_extrusion_flow": "Calibration du débit de l'extrusion",
           "paused_nozzle_temperature_malfunction": "Pause en raison d'un dysfonctionnement de la température de la buse",
           "paused_heat_bed_temperature_malfunction": "Pause en raison d'un dysfonctionnement de la température du lit",
+          "filament_unloading": "Déchargement de filaments",
+          "paused_skipped_step": "Suspendu en raison d'étapes sautées",
+          "filament_loading": "Chargement des filaments",
+          "calibrating_motor_noise": "Calibrage du bruit du moteur",
+          "paused_ams_lost": "Suspendu en raison de la perte d'AMS",
+          "paused_low_fan_speed_heat_break": "En pause en raison d'une faible vitesse du ventilateur de coupure thermique",
+          "paused_chamber_temperature_control_error": "En pause en raison d'une erreur de contrôle de la température de la chambre",
+          "cooling_chamber": "Chambre de refroidissement",
+          "paused_user_gcode": "Suspendu par l'utilisateur qui a ajouté l'instruction de pause Gcode",
+          "motor_noise_showoff": "Le bruit du moteur s'exhibe",
+          "paused_nozzle_filament_covered_detected": "En pause en raison d'un filament de buse recouvert détecté",
+          "paused_cutter_error": "En pause en raison d'une erreur de coupe",
+          "paused_first_layer_error": "Suspendu en raison d'une erreur de première couche",
+          "paused_nozzle_clog": "En pause en raison d'une buse obstruée",
           "idle": "Inactif"
         }
       },
@@ -261,11 +304,24 @@
           "init": "Initialisation"
         }
       },
+      "mqtt_mode": {
+        "name": "Mode de connexion MQTT",
+        "state": {
+          "local": "Locale",
+          "bambu_cloud": "Nuage de bambou"
+        }
+      },
       "gcode_file": {
         "name": "Ficher G-code"
       },
       "print_bed_type": {
-        "name": "Type de lit d’impression"
+        "name": "Type de lit d’impression",
+        "state": {
+          "textured_plate": "Plaque texturée",
+          "cool_plate": "Plaque froide / Plaque PLA",
+          "hot_plate": "Plaque PEI lisse / Plaque haute température",
+          "eng_plate": "Plaque d'ingénierie"
+        }
       },
       "print_length": {
         "name": "Longueur d’impression"
@@ -275,6 +331,14 @@
       },
       "subtask_name": {
         "name": "Nom de la tâche"
+      },
+      "print_type": {
+        "name": "Type d'impression",
+        "state": {
+          "local": "Locale",
+          "cloud": "Nuage",
+          "idle": "Inactif"
+        }
       },
       "start_time": {
         "name": "Heure de début"
@@ -299,6 +363,16 @@
       },
       "active_tray_index": {
         "name": "Emplacement actif (index)"
+      },
+      "nozzle_diameter": {
+        "name": "Taille de la buse"
+      },
+      "nozzle_type": {
+        "name": "Type de buse",
+        "state": {
+          "hardened_steel": "Acier trempé",
+          "stainless_steel": "Acier inoxydable"
+        }
       },
       "humidity_index": {
         "name": "Indice d'humidité"
@@ -359,14 +433,14 @@
           "nozzle_temp_max": {
             "name": "Température maximale de la buse"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Filament restant"
           },
           "tag_uid": {
             "name": "Numéro de série du filament"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       },
@@ -394,14 +468,14 @@
           "nozzle_temp_max": {
             "name": "Température maximale de la buse"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Filament restant"
           },
           "tag_uid": {
             "name": "Numéro de série du filament"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       },
@@ -429,14 +503,14 @@
           "nozzle_temp_max": {
             "name": "Température maximale de la buse"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Filament restant"
           },
           "tag_uid": {
             "name": "Numéro de série du filament"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       },
@@ -464,14 +538,14 @@
           "nozzle_temp_max": {
             "name": "Température maximale de la buse"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Filament restant"
           },
           "tag_uid": {
             "name": "Numéro de série du filament"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       }

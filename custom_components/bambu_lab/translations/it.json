@@ -18,7 +18,11 @@
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "no_printers": "Nessuna stampante non configurata trovata nell'account.",
       "invalid_auth": "Autenticazione non valida.",
-      "unknown": "Errore inaspettato."
+      "unknown": "Errore inaspettato.",
+      "verifyCode": "È richiesto il codice di verifica. ",
+      "code_expired": "Il codice di verifica è scaduto. ",
+      "code_incorrect": "Il codice di verifica non era corretto. ",
+      "tfaCode": "È richiesto il codice 2FA. "
     },
     "step": {
       "user": {
@@ -33,7 +37,9 @@
         "data": {
           "region": "Area dell'account:",
           "email": "Indirizzo e-mail o numero di telefono",
-          "password": "Password"
+          "password": "Password",
+          "verifyCode": "Codice di verifica e-mail",
+          "tfaCode": "Codice di autenticazione a due fattori"
         }
       },
       "Bambu_Choose_Device": {
@@ -49,7 +55,8 @@
         "data": {
           "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:",
           "host": "Indirizzo IP della stampante locale:",
-          "access_code": "Codice d'accesso"
+          "access_code": "Codice d'accesso",
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
         }
       },
       "Lan": {
@@ -58,7 +65,8 @@
         "data": {
           "serial": "Numero di serie",
           "host": "Indirizzo IP della stampante locale:",
-          "access_code": "Codice d'accesso"
+          "access_code": "Codice d'accesso",
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
         }
       }
     }
@@ -69,7 +77,11 @@
       "cannot_connect_local_ip": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
-      "unknown": "Errore inaspettato."
+      "unknown": "Errore inaspettato.",
+      "verifyCode": "È richiesto il codice di verifica. ",
+      "code_expired": "Il codice di verifica è scaduto. ",
+      "code_incorrect": "Il codice di verifica non era corretto. ",
+      "tfaCode": "È richiesto il codice 2FA. "
     },
     "step": {
       "init": {
@@ -85,7 +97,9 @@
         "data": {
           "region": "Area dell'account:",
           "email": "Indirizzo e-mail o numero di telefono",
-          "password": "Password"
+          "password": "Password",
+          "verifyCode": "Codice di verifica e-mail",
+          "tfaCode": "Codice di autenticazione a due fattori"
         }
       },
       "Bambu_Lan": {
@@ -94,7 +108,9 @@
         "data": {
           "serial": "Scegli la stampante da aggiungere:",
           "host": "Indirizzo IP della stampante locale:",
-          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:"
+          "access_code": "Codice di accesso:",
+          "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:",
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
         }
       },
       "Lan": {
@@ -102,13 +118,17 @@
         "description": "Fornire l'indirizzo IP e il codice di accesso della stampante locale. Il codice di accesso si trova sullo schermo della stampante nelle impostazioni di rete.",
         "data": {
           "host": "Indirizzo IP della stampante locale:",
-          "access_code": "Codice d'accesso"
+          "access_code": "Codice d'accesso",
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
         }
       }
     }
   },
   "entity": {
     "binary_sensor": {
+      "door_open": {
+        "name": "Porta della custodia"
+      },
       "timelapse": {
         "name": "Registra timelapse"
       },
@@ -250,6 +270,20 @@
           "calibrating_extrusion_flow": "Calibrando il lusso di estrusione",
           "paused_nozzle_temperature_malfunction": "In pausa a causa di un malfunzionamento della temperatura del ugello ",
           "paused_heat_bed_temperature_malfunction": "In pausa a causa del malfunzionamento della temperatura del piatto ",
+          "filament_unloading": "Scarico del filamento",
+          "paused_skipped_step": "In pausa a causa di passaggi saltati",
+          "filament_loading": "Caricamento del filamento",
+          "calibrating_motor_noise": "Calibrazione del rumore del motore",
+          "paused_ams_lost": "In pausa a causa della perdita di AMS",
+          "paused_low_fan_speed_heat_break": "In pausa a causa della bassa velocità della ventola del blocco termico",
+          "paused_chamber_temperature_control_error": "In pausa a causa di un errore di controllo della temperatura della camera",
+          "cooling_chamber": "Camera di raffreddamento",
+          "paused_user_gcode": "In pausa dall'istruzione di pausa gcode aggiunta dall'utente",
+          "motor_noise_showoff": "Il rumore del motore si mette in mostra",
+          "paused_nozzle_filament_covered_detected": "In pausa a causa del rilevamento del filamento dell'ugello coperto",
+          "paused_cutter_error": "In pausa a causa di un errore della taglierina",
+          "paused_first_layer_error": "In pausa a causa di un errore del primo livello",
+          "paused_nozzle_clog": "In pausa a causa dell'ostruzione dell'ugello",
           "idle": "Attesa"
         }
       },
@@ -281,7 +315,13 @@
         "name": "Nome del file Gcode"
       },
       "print_bed_type": {
-        "name": "Tipo di piano di stampa"
+        "name": "Tipo di piano di stampa",
+        "state": {
+          "textured_plate": "Piatto strutturato",
+          "cool_plate": "Piastra fredda/piastra PLA",
+          "hot_plate": "Piastra PEI liscia/piastra per alte temperature",
+          "eng_plate": "Piastra di ingegneria"
+        }
       },
       "print_length": {
         "name": "Lunghezza di stampa"
@@ -291,6 +331,14 @@
       },
       "subtask_name": {
         "name": "Nome dell'attività"
+      },
+      "print_type": {
+        "name": "Tipo di stampa",
+        "state": {
+          "local": "Locale",
+          "cloud": "Nuvola",
+          "idle": "Oziare"
+        }
       },
       "start_time": {
         "name": "Ora di inizio"
@@ -315,6 +363,16 @@
       },
       "active_tray_index": {
         "name": "Active tray index"
+      },
+      "nozzle_diameter": {
+        "name": "Dimensione dell'ugello"
+      },
+      "nozzle_type": {
+        "name": "Tipo di ugello",
+        "state": {
+          "hardened_steel": "Acciaio temprato",
+          "stainless_steel": "Acciaio inossidabile"
+        }
       },
       "humidity_index": {
         "name": "Indice di umidità"
@@ -375,14 +433,14 @@
           "nozzle_temp_max": {
             "name": "Temperatura massima dell'ugello"
           },
-          "type": {
-            "name": "Tipo"
-          },
           "remain": {
             "name": "Filamento rimanente"
           },
           "tag_uid": {
             "name": "Numero di serie del filamento"
+          },
+          "type": {
+            "name": "Tipo"
           }
         }
       },
@@ -410,14 +468,14 @@
           "nozzle_temp_max": {
             "name": "Temperatura massima dell'ugello"
           },
-          "type": {
-            "name": "Tipo"
-          },
           "remain": {
             "name": "Filamento rimanente"
           },
           "tag_uid": {
             "name": "Numero di serie del filamento"
+          },
+          "type": {
+            "name": "Tipo"
           }
         }
       },
@@ -445,14 +503,14 @@
           "nozzle_temp_max": {
             "name": "Temperatura massima dell'ugello"
           },
-          "type": {
-            "name": "Tipo"
-          },
           "remain": {
             "name": "Filamento rimanente"
           },
           "tag_uid": {
             "name": "Numero di serie del filamento"
+          },
+          "type": {
+            "name": "Tipo"
           }
         }
       },
@@ -480,14 +538,14 @@
           "nozzle_temp_max": {
             "name": "Temperatura massima dell'ugello"
           },
-          "type": {
-            "name": "Tipo"
-          },
           "remain": {
             "name": "Filamento rimanente"
           },
           "tag_uid": {
             "name": "Numero di serie del filamento"
+          },
+          "type": {
+            "name": "Tipo"
           }
         }
       }
