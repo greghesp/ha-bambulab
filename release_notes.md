@@ -1,5 +1,6 @@
 ### V2.0.34
 - Update translations for new strings
+- Fix off by one error in print weight attributes
 
 ### V2.0.33
 - Switch to curl_cffi to get past cloudflare
