@@ -78,7 +78,6 @@ class Device:
         send_event = send_event | self.home_flag.print_update(data = data)
 
         if send_event and self._client.callback is not None:
-            LOGGER.debug("event_printer_data_update")
             self._client.callback("event_printer_data_update")
 
         if data.get("msg", 0) == 0:

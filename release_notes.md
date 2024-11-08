@@ -1,3 +1,7 @@
+### V2.0.33
+- Switch to curl_cffi to get past cloudflare
+- Fix greek localization filename
+
 ### V2.0.32
 - Fix error when printer IP address isn't provided due to incorrect logging addition
 
