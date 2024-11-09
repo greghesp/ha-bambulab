@@ -3,7 +3,11 @@ from __future__ import annotations
 import base64
 import json
 
-from curl_cffi import requests
+curl_available = True
+try:
+    from curl_cffi import requests as curl_requests
+except ImportError:
+    curl_available = False
 
 from dataclasses import dataclass
 
@@ -34,6 +38,9 @@ class BambuCloud:
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
 
+        if not curl_available:
+            return 'curlUnavailable'
+
         # First we need to find out how Bambu wants us to login.
         data = {
             "account": self._email,
@@ -41,7 +48,14 @@ class BambuCloud:
             "apiError": ""
         }
 
-        response = requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
+        response = curl_requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
+
+        # Check specifically for cloudflare block
+        if response.status_code == 403:
+            if 'cloudflare' in response.text:
+                LOGGER.error('CloudFlare blocked connection attempt')
+                return 'cloudFlare'
+            
         if response.status_code >= 400:
             LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
             LOGGER.debug(f"Response: '{response.text}'")
@@ -80,7 +94,7 @@ class BambuCloud:
         }
 
         LOGGER.debug("Requesting verification code")
-        response = requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
+        response = curl_requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
         
         if response.status_code == 200:
             LOGGER.debug("Verification code requested successfully.")
@@ -96,7 +110,7 @@ class BambuCloud:
             "code": code
         }
 
-        response = requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
+        response = curl_requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
 
         LOGGER.debug(f"Response: {response.status_code}")
         if response.status_code == 200:
@@ -128,7 +142,7 @@ class BambuCloud:
             "tfaCode": code
         }
 
-        response = requests.post(get_Url(BambuUrl.TFA_LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
+        response = curl_requests.post(get_Url(BambuUrl.TFA_LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
 
         LOGGER.debug(f"Response: {response.status_code}")
         if response.status_code == 200:
@@ -237,10 +251,16 @@ class BambuCloud:
 
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
-        response = requests.get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+        if not curl_available:
+            LOGGER.debug(f"Curl library is unavailable.")
+            raise None
+        
+        response = curl_requests.get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
+        
         return response.json()['devices']
 
     # The slicer settings are of the following form:
@@ -312,12 +332,20 @@ class BambuCloud:
 
     def get_slicer_settings(self) -> dict:
         LOGGER.debug("Getting slicer settings from Bambu Cloud")
-        response = requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
-        if response.status_code >= 400:
-            LOGGER.error(f"Slicer settings load failed: {response.status_code}")
-            LOGGER.error(f"Slicer settings load failed: '{response.text}'")
-            return None
-        return response.json()
+        if curl_available:
+            response = curl_requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+            if response.status_code == 403:
+                if 'cloudflare' in response.text:
+                    LOGGER.error(f"Cloudflare blocked slicer settings lookup.")
+                    return None
+                
+            if response.status_code >= 400:
+                LOGGER.error(f"Slicer settings load failed: {response.status_code}")
+                LOGGER.error(f"Slicer settings load failed: '{response.text}'")
+                return None
+            
+            return response.json()
+        return None
         
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #
@@ -363,11 +391,16 @@ class BambuCloud:
 
     def get_tasklist(self) -> dict:
         url = get_Url(BambuUrl.TASKS, self._region)
-        response = requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+        response = curl_requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+        if not curl_available:
+            LOGGER.debug(f"Curl library is unavailable.")
+            raise None
+
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             LOGGER.debug(f"Received error: '{response.text}'")
-            raise ValueError(response.status_code)
+            raise None
+        
         return response.json()
     
     def get_latest_task_for_printer(self, deviceId: str) -> dict:
@@ -394,10 +427,15 @@ class BambuCloud:
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")
-        response = requests.get(url, timeout=10, impersonate=IMPERSONATE_BROWSER)
+        if not curl_available:
+            LOGGER.debug(f"Curl library is unavailable.")
+            return None
+
+        response = curl_requests.get(url, timeout=10, impersonate=IMPERSONATE_BROWSER)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             raise ValueError(response.status_code)
+        
         return response.content
 
     @property
