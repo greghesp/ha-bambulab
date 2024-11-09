@@ -33,6 +33,8 @@ headers = {
     'Upgrade-Insecure-Requests': '1'
 }
 
+IMPERSONATE_BROWSER='chrome'
+
 # Prompt the user for their Bambu Lab username and password if not provided on the command line
 if username is None:
     bambuUsername = input("Enter your Bambu Lab username: ")
@@ -57,7 +59,7 @@ httpx_requests = httpx.Client(http2=True)
 if type == 'curl':
     auth_response = curl_requests.post(
         "https://api.bambulab.com/v1/user-service/user/login",
-        impersonate='chrome',
+        impersonate=IMPERSONATE_BROWSER,
         json=auth_payload
     )
 elif type == 'cloudscraper':
@@ -85,19 +87,20 @@ else:
 
 if auth_response.status_code == 200:
     print('Succeeded!')
+    print('')
 elif auth_response.status_code == 403:
     if 'cloudflare' in auth_response.text:
         print('Denied 403 by cloudflare')
     else:
         print('Denied 403')
         print(auth_response.text)
+    print('')
     exit(1)
 else:
     print(f"Unexpected response code: {auth_response.status_code}")
     print(auth_response.text)
+    print('')
     exit(1)
-
-print('')
 
 exit(0)
 

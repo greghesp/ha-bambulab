@@ -141,6 +141,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         user_input['password'])
                     if result == 'success':
                         return await self.async_step_Bambu_Choose_Device(None)
+
+                    # Handle possible failure cases
+                    if result == 'cloudflare':
+                        errors['base'] = 'cloudflare'
+                    elif result == 'curlUnavailable':
+                        errors['base'] = 'curl_unavailable'
                     elif result == 'verifyCode':
                         # User needs to provide the verification code sent to them
                         authentication_type = 'verifyCode'
@@ -457,6 +463,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         user_input['password'])
                     if result == 'success':
                         return await self.async_step_Bambu_Lan(None)
+                    
+                    # Handle possible failure cases
+                    if result == 'cloudflare':
+                        errors['base'] = 'cloudflare'
+                    elif result == 'curlUnavailable':
+                        errors['base'] = 'curl_unavailable'
                     elif result == 'verifyCode':
                         # User needs to provide the verification code sent to them
                         authentication_type = 'verifyCode'
