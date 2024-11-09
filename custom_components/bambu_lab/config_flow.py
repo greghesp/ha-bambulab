@@ -248,15 +248,15 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
             if user_input.get('host', "") != "":
                 LOGGER.debug("Config Flow: Testing local mqtt connection")
-                bambu = BambuClient(device_type=device_type,
-                                    serial=device['dev_id'],
-                                    host=user_input['host'],
-                                    local_mqtt=True,
-                                    region=self.region,
-                                    email="",
-                                    username="",
-                                    auth_token="",
-                                    access_code=user_input['access_code'])
+                config = {
+                    'access_code': user_input['access_code'],
+                    'device_type': device_type,
+                    'host': user_input['host'],
+                    'local_mqtt': True,
+                    'region': self.region,
+                    'serial': device['dev_id'],
+                }
+                bambu = BambuClient(config)
                 success = await bambu.try_connection()
                 if not success:
                     errors['base'] = "cannot_connect_local_all"
@@ -312,15 +312,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             user_input['serial'] = user_input['serial'].upper()
 
             LOGGER.debug("Config Flow: Testing local mqtt connection")
-            bambu = BambuClient(device_type="unknown",
-                                serial=user_input['serial'],
-                                host=user_input['host'],
-                                local_mqtt=True,
-                                region="",
-                                email="",
-                                username="",
-                                auth_token="",
-                                access_code=user_input['access_code'])
+            config = {
+                'access_code': user_input['access_code'],
+                'serial': user_input['serial'],
+                'host': user_input['host'],
+                'local_mqtt': True,
+            }
+            bambu = BambuClient(config)
             success = await bambu.try_connection()
 
             if success:
@@ -527,15 +525,14 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     success = True
                     if user_input.get('host', "") != "":
                         LOGGER.debug(f"Options Flow: Testing local mqtt connection to {user_input.get('host')}")
-                        bambu = BambuClient(device_type=self.config_entry.data['device_type'],
-                                            serial=self.config_entry.data['serial'],
-                                            host=user_input['host'],
-                                            local_mqtt=True,
-                                            region="",
-                                            email="",
-                                            username="",
-                                            auth_token="",
-                                            access_code=user_input['access_code'])
+                        config = {
+                            'access_code': user_input['access_code'],
+                            'device_type': self.config_entry.data['device_type'],
+                            'host': user_input['host'],
+                            'local_mqtt': True,
+                            'serial': self.config_entry.data['serial'],
+                        }
+                        bambu = BambuClient(config)
                         success = await bambu.try_connection()
                         if not success:
                             errors['base'] = "cannot_connect_local_ip"
@@ -601,15 +598,14 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         if user_input is not None:
             LOGGER.debug("Options Flow: Testing local mqtt Connection")
-            bambu = BambuClient(device_type=self.config_entry.data['device_type'],
-                                serial=self.config_entry.data['serial'],
-                                host=user_input['host'],
-                                local_mqtt=True,
-                                region="",
-                                email="",
-                                username="",
-                                auth_token="",
-                                access_code=user_input['access_code'])
+            config = {
+                'access_code': user_input['access_code'],
+                'device_type': self.config_entry.data['device_type'],
+                'host': user_input['host'],
+                'local_mqtt': True,
+                'serial': self.config_entry.data['serial'],
+            }
+            bambu = BambuClient(config)
             success = await bambu.try_connection()
 
             if success:

@@ -434,6 +434,7 @@ class BambuCloud:
         response = curl_requests.get(url, timeout=10, impersonate=IMPERSONATE_BROWSER)
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
+            LOGGER.debug(f"Received error: {response.text}")
             raise ValueError(response.status_code)
         
         return response.content
