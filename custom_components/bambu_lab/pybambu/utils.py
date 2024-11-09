@@ -60,8 +60,8 @@ def get_filament_name(idx, custom_filaments: dict):
     result = FILAMENT_NAMES.get(idx, "unknown")
     if result == "unknown" and idx != "":
         result = custom_filaments.get(idx, "unknown")
-    if result == "unknown" and idx != "":
-        LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
+    # if result == "unknown" and idx != "":
+    #     LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
     return result
 
 
