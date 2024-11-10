@@ -103,6 +103,35 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         errors = {}
+        default_region = ''
+        default_email = ''
+
+        if user_input is None:
+            # Iterate over all existing entries and try any existing credentials to see if they work
+            config_entries = self.hass.config_entries.async_entries(DOMAIN)
+            LOGGER.debug(f"Found {len(config_entries)} existing config entries for the integration.")
+            for config_entry in config_entries:
+                if config_entry.options.get('region', '') != '' and config_entry.options.get('email', '') != '' and config_entry.options.get('username', '') != '' and config_entry.options.get('auth_token', '') != '':
+                    LOGGER.debug(f"Testing credentials from existing entry id: {config_entry.entry_id}")
+                    default_region = config_entry.options['region']
+                    default_email = config_entry.options['email']
+                    username = config_entry.options['username']
+                    auth_token = config_entry.options['auth_token']
+                    if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
+                                                              default_region,
+                                                              default_email,
+                                                              username,
+                                                              auth_token):
+                        LOGGER.debug("Found working credentials.")
+                        self.region = default_region
+                        self.email = default_email
+                        self.bambu_cloud = BambuCloud(
+                            default_region,
+                            default_email,
+                            username,
+                            auth_token
+                        )
+                        return await self.async_step_Bambu_Choose_Device(None)
 
         authentication_type = None
         if user_input is not None:
@@ -167,9 +196,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        default_region = '' if user_input is None else user_input.get('region', '')
+        default_region = default_region if user_input is None else user_input.get('region', '')
         fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
-        default_email = '' if user_input is None else user_input.get('email', '')
+        default_email = default_email if user_input is None else user_input.get('email', '')
         fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
         default_password = '' if user_input is None else user_input.get('password', '')
         fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
@@ -414,16 +443,33 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     ) -> FlowResult:
         errors = {}
 
-        credentialsGood = False
         if user_input is None:
-            if self.config_entry.options.get('region', '') != '' and self.config_entry.options.get('email', '') != '' and self.config_entry.options.get('username', '') != '' and self.config_entry.options.get('auth_token', '') != '':
-                credentialsGood = await self.hass.async_add_executor_job(
-                    self._bambu_cloud.test_authentication,
-                    self.config_entry.options['region'],
-                    self.config_entry.options['email'],
-                    self.config_entry.options['username'],
-                    self.config_entry.options['auth_token'])
-
+            # Iterate over all existing entries and try any existing credentials to see if they work
+            config_entries = self.hass.config_entries.async_entries(DOMAIN)
+            LOGGER.debug(f"Found {len(config_entries)} existing config entries for the integration.")
+            for config_entry in config_entries:
+                if config_entry.options.get('region', '') != '' and config_entry.options.get('email', '') != '' and config_entry.options.get('username', '') != '' and config_entry.options.get('auth_token', '') != '':
+                    LOGGER.debug(f"Testing credentials from existing entry id: {config_entry.entry_id}")
+                    region = config_entry.options['region']
+                    email = config_entry.options['email']
+                    username = config_entry.options['username']
+                    auth_token = config_entry.options['auth_token']
+                    if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
+                                                              region,
+                                                              email,
+                                                              username,
+                                                              auth_token):
+                        LOGGER.debug("Found working credentials.")
+                        self.region = region
+                        self.email = email
+                        self.bambu_cloud = BambuCloud(
+                            region,
+                            email,
+                            username,
+                            auth_token
+                        )
+                        return await self.async_step_Bambu_Lan(None)
+                    
         authentication_type = None
         if user_input is not None:
             try:
@@ -483,11 +529,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
                 errors['base'] = "cannot_connect"
-
-        elif credentialsGood:
-            self.region = self.config_entry.options['region']
-            self.email = self.config_entry.options['email']
-            return await self.async_step_Bambu_Lan(None)
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
