@@ -104,7 +104,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         errors = {}
 
-        credentialsGood = False
         if user_input is None:
             # Iterate over all existing entries and try any existing credentials to see if they work
             config_entries = self.hass.config_entries.async_entries(DOMAIN)
@@ -116,13 +115,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     default_email = config_entry.options['email']
                     username = config_entry.options['username']
                     auth_token = config_entry.options['auth_token']
-                    credentialsGood = await self.hass.async_add_executor_job(
-                        self._bambu_cloud.test_authentication,
-                        default_region,
-                        default_email,
-                        username,
-                        auth_token)
-                    if credentialsGood:
+                    if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
+                                                              default_region,
+                                                              default_email,
+                                                              username,
+                                                              auth_token):
                         LOGGER.debug("Found working credentials.")
                         self.region = default_region
                         self.email = default_email
@@ -444,7 +441,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     ) -> FlowResult:
         errors = {}
 
-        credentialsGood = False
         if user_input is None:
             # Iterate over all existing entries and try any existing credentials to see if they work
             config_entries = self.hass.config_entries.async_entries(DOMAIN)
@@ -456,13 +452,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     default_email = config_entry.options['email']
                     username = config_entry.options['username']
                     auth_token = config_entry.options['auth_token']
-                    credentialsGood = await self.hass.async_add_executor_job(
-                        self._bambu_cloud.test_authentication,
-                        default_region,
-                        default_email,
-                        username,
-                        auth_token)
-                    if credentialsGood:
+                    if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
+                                                              default_region,
+                                                              default_email,
+                                                              username,
+                                                              auth_token):
                         LOGGER.debug("Found working credentials.")
                         self.region = default_region
                         self.email = default_email
