@@ -1,10 +1,12 @@
 ### V2.0.35
 - Switch to dictionary for initialization settings.
 - Allow cameras to be turned off.
+- Use working credentials from other integration instances if present
 
 ### V2.0.34
 - Update translations for new strings
 - Fix off by one error in print weight attributes
+- Set curl_cffi to impersonate Chrome
 
 ### V2.0.33
 - Switch to curl_cffi to get past cloudflare
