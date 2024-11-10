@@ -448,21 +448,21 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             for config_entry in config_entries:
                 if config_entry.options.get('region', '') != '' and config_entry.options.get('email', '') != '' and config_entry.options.get('username', '') != '' and config_entry.options.get('auth_token', '') != '':
                     LOGGER.debug(f"Testing credentials from existing entry id: {config_entry.entry_id}")
-                    default_region = config_entry.options['region']
-                    default_email = config_entry.options['email']
+                    region = config_entry.options['region']
+                    email = config_entry.options['email']
                     username = config_entry.options['username']
                     auth_token = config_entry.options['auth_token']
                     if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
-                                                              default_region,
-                                                              default_email,
+                                                              region,
+                                                              email,
                                                               username,
                                                               auth_token):
                         LOGGER.debug("Found working credentials.")
-                        self.region = default_region
-                        self.email = default_email
+                        self.region = region
+                        self.email = email
                         self.bambu_cloud = BambuCloud(
-                            default_region,
-                            default_email,
+                            region,
+                            email,
                             username,
                             auth_token
                         )
