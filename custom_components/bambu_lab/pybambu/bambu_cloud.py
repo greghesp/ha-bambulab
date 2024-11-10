@@ -390,19 +390,19 @@ class BambuCloud:
     #     },
 
     def get_tasklist(self) -> dict:
-        url = get_Url(BambuUrl.TASKS, self._region)
-        response = curl_requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
         if not curl_available:
             LOGGER.debug(f"Curl library is unavailable.")
             raise None
+        url = get_Url(BambuUrl.TASKS, self._region)
+        response = curl_requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
 
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             LOGGER.debug(f"Received error: '{response.text}'")
             raise None
-        
+
         return response.json()
-    
+
     def get_latest_task_for_printer(self, deviceId: str) -> dict:
         LOGGER.debug(f"Getting latest task from Bambu Cloud")
         data = self.get_tasklist_for_printer(deviceId)
