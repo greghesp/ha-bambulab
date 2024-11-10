@@ -184,7 +184,7 @@
     },
     "number": {
       "target_bed_temperature": {
-        "name": "Target Bed temperature"
+        "name": "Bed target temperature"
       },
       "target_nozzle_temperature": {
         "name": "Nozzle target temperature"
@@ -217,7 +217,7 @@
         "name": "Bed temperature"
       },
       "target_bed_temp": {
-        "name": "Target Bed temperature"
+        "name": "Bed target temperature"
       },
       "chamber_temp": {
         "name": "Chamber temperature"
