@@ -31,17 +31,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
 
         self.latest_usage_hours = float(entry.options.get('usage_hours', 0))
-        self.client = BambuClient(device_type = entry.data["device_type"],
-                                  serial = entry.data["serial"],
-                                  host = entry.options['host'],
-                                  local_mqtt = entry.options['local_mqtt'],
-                                  region = entry.options.get('region', ''),
-                                  email = entry.options.get('email', ''),
-                                  username = entry.options['username'],
-                                  auth_token = entry.options['auth_token'],
-                                  access_code = entry.options['access_code'],
-                                  usage_hours = self.latest_usage_hours,
-                                  manual_refresh_mode = entry.options.get('manual_refresh_mode', False))
+        config = entry.data.copy()
+        config.update(entry.options.items())
+        self.client = BambuClient(config)
             
         self._updatedDevice = False
         self.data = self.get_model()
@@ -326,6 +318,17 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         await self.client.set_manual_refresh_mode(manual_refresh_mode)
         options = dict(self.config_entry.options)
         options['manual_refresh_mode'] = manual_refresh_mode
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            title=self.get_model().info.serial,
+            data=self.config_entry.data,
+            options=options)
+
+    async def enable_camera(self, enable):
+        LOGGER.debug(f"Setting camera enabled to {enable}")
+        self.client.enable_camera(enable)
+        options = dict(self.config_entry.options)
+        options['enable_camera'] = enable
         self._hass.config_entries.async_update_entry(
             entry=self.config_entry,
             title=self.get_model().info.serial,
