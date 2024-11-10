@@ -24,6 +24,12 @@ MANUAL_REFRESH_MODE_SWITCH_DESCRIPTION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
+CAMERA_SWITCH_DESCRIPION = SwitchEntityDescription(
+    key="camera",
+    icon="mdi:refresh-auto",
+    translation_key="camera",
+    entity_category=EntityCategory.CONFIG,
+)
 
 async def async_setup_entry(
         hass: HomeAssistant,
@@ -35,6 +41,8 @@ async def async_setup_entry(
 
     if coordinator.get_model().supports_feature(Features.MANUAL_MODE):
         async_add_entities([BambuLabManualModeSwitch(coordinator, entry)])
+
+    async_add_entities([BambuLabCameraSwitch(coordinator, entry)])
 
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
@@ -84,3 +92,35 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
         """Disable manual refresh mode."""
         self._attr_is_on = not self.coordinator.client.manual_refresh_mode
         await self.coordinator.set_manual_refresh_mode(False)
+
+class BambuLabCameraSwitch(BambuLabSwitch):
+    """BambuLab Refresh data Switch"""
+
+    entity_description = CAMERA_SWITCH_DESCRIPION
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            config_entry: ConfigEntry
+    ) -> None:
+        super().__init__(coordinator, config_entry)
+        self._attr_is_on = self.coordinator.client.camera_enabled
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    @property
+    def icon(self) -> str:
+        """Return the icon for the switch."""
+        return "mdi:video" if self.is_on else "mdi:video-off"
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Enable manual refresh mode."""
+        self._attr_is_on = not self.coordinator.client.camera_enabled
+        await self.coordinator.enable_camera(self._attr_is_on)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Disable manual refresh mode."""
+        self._attr_is_on = not self.coordinator.client.camera_enabled
+        await self.coordinator.enable_camera(self._attr_is_on)

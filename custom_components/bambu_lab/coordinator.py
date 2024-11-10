@@ -323,3 +323,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             title=self.get_model().info.serial,
             data=self.config_entry.data,
             options=options)
+
+    async def enable_camera(self, enable):
+        LOGGER.debug(f"Setting camera enabled to {enable}")
+        self.client.enable_camera(enable)
+        options = dict(self.config_entry.options)
+        options['enable_camera'] = enable
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            title=self.get_model().info.serial,
+            data=self.config_entry.data,
+            options=options)

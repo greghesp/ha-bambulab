@@ -297,7 +297,7 @@ class BambuClient:
         self._serial = config.get('serial', '')
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
-        self._disable_camera = config.get('disable_camera', False)
+        self._enable_camera = config.get('enable_camera', True)
 
         self._connected = False
         self._port = 1883
@@ -330,6 +330,17 @@ class BambuClient:
         else:
             # Reconnect normally
             self.connect(self.callback)
+
+    @property
+    def camera_enabled(self):
+        return self._enable_camera
+
+    def enable_camera(self, enable):
+        self._enable_camera = enable
+        if self._enable_camera:
+            self._start_camera()
+        else:
+            self._stop_camera()
 
     def setup_tls(self):
         self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
@@ -379,6 +390,22 @@ class BambuClient:
         LOGGER.info("On Connect: Connected to printer")
         self._on_connect()
 
+    def _start_camera(self):
+        if not self._device.supports_feature(Features.CAMERA_RTSP):
+            if self._device.supports_feature(Features.CAMERA_IMAGE):
+                if self._enable_camera:
+                    LOGGER.debug("Starting Chamber Image thread")
+                    self._camera = ChamberImageThread(self)
+                    self._camera.start()
+            elif (self.host == "") or (self._access_code == ""):
+                LOGGER.debug("Skipping camera setup as local access details not provided.")
+
+    def _stop_camera(self):
+        if self._camera is not None:
+            LOGGER.debug("Stopping camera thread")
+            self._camera.stop()
+            self._camera.join()
+
     def _on_connect(self):
         self._connected = True
         self.subscribe_and_request_info()
@@ -387,14 +414,7 @@ class BambuClient:
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
 
-        if not self._device.supports_feature(Features.CAMERA_RTSP):
-            if self._device.supports_feature(Features.CAMERA_IMAGE):
-                if not self._disable_camera:
-                    LOGGER.debug("Starting Chamber Image thread")
-                    self._camera = ChamberImageThread(self)
-                    self._camera.start()
-            elif (self.host == "") or (self._access_code == ""):
-                LOGGER.debug("Skipping camera setup as local access details not provided.")
+        self._start_camera()
 
     def try_on_connect(self,
                        client_: mqtt.Client,
@@ -427,10 +447,7 @@ class BambuClient:
             LOGGER.debug("Stopping watchdog thread")
             self._watchdog.stop()
             self._watchdog.join()
-        if self._camera is not None:
-            LOGGER.debug("Stopping camera thread")
-            self._camera.stop()
-            self._camera.join()
+        self._stop_camera()
 
     def _on_watchdog_fired(self):
         LOGGER.info("Watch dog fired")

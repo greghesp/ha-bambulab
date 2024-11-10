@@ -228,10 +228,10 @@ class Camera:
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
         self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
         self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
-        if self._client._disable_camera:
-            self.rtsp_url = None
-        else:
+        if self._client._enable_camera:
             self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
+        else:
+            self.rtsp_url = None
         
         return (old_data != f"{self.__dict__}")
 
@@ -1309,7 +1309,7 @@ class ChamberImage:
     
     @property
     def available(self):
-        return not self._client._disable_camera 
+        return self._client._enable_camera 
     
 @dataclass
 class CoverImage:
