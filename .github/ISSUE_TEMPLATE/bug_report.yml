@@ -4,6 +4,20 @@ title: "[Bug] <Replace this part>"
 labels:
   - bug
 body:
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home Assistant Version
+      description: The version of Home Assistant
+    validations:
+      required: true
+  - type: input
+    id: habl-version
+    attributes:
+      label: Bambu Lab Integration Version
+      description: The version of this integration you're using
+    validations:
+      required: true
   - type: textarea
     id: description
     attributes:
