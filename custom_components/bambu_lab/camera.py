@@ -35,7 +35,7 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
     _attr_translation_key = "camera"
     _attr_icon = "mdi:camera"
-    _attr_supported_features = CameraEntityFeature.STREAM
+    _attr_supported_features = CameraEntityFeature.STREAM | CameraEntityFeature.ON_OFF
     _attr_brand = "Bambu Lab"
 
     def __init__(
@@ -58,14 +58,12 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
     @property
     def is_recording(self) -> bool:
-        if self.coordinator.get_model().camera.recording == "enable":
-            return True
         return False
 
     @property
     def use_stream_for_stills(self) -> bool:
         return True
-    
+
     @property
     def available(self) -> bool:
         url = self.coordinator.get_model().camera.rtsp_url
@@ -112,3 +110,15 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
 
     def camera_image(self, width: int | None = None, height: int | None = None) -> bytes | None:
         return self.coordinator.get_model().chamber_image.get_jpeg()
+
+    @property
+    def is_streaming(self) -> bool:
+        return self.available
+    
+    @property
+    def is_recording(self) -> bool:
+        return False
+    
+    @property
+    def available(self) -> bool:
+        return self.coordinator.get_model().chamber_image.available

@@ -297,7 +297,7 @@ class BambuClient:
         self._serial = config.get('serial', '')
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
-        self._use_chamber_image = config.get('chamber_image', False)
+        self._disable_camera = config.get('disable_camera', False)
 
         self._connected = False
         self._port = 1883
@@ -389,7 +389,7 @@ class BambuClient:
 
         if not self._device.supports_feature(Features.CAMERA_RTSP):
             if self._device.supports_feature(Features.CAMERA_IMAGE):
-                if self._use_chamber_image:
+                if not self._disable_camera:
                     LOGGER.debug("Starting Chamber Image thread")
                     self._camera = ChamberImageThread(self)
                     self._camera.start()

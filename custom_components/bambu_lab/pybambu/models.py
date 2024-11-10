@@ -53,7 +53,7 @@ class Device:
         self.external_spool = ExternalSpool(client = client)
         self.hms = HMSList(client = client)
         self.print_error = PrintErrorList(client = client)
-        self.camera = Camera()
+        self.camera = Camera(client = client)
         self.home_flag = HomeFlag(client=client)
         self.push_all_data = None
         self.get_version_data = None
@@ -205,7 +205,8 @@ class Camera:
     rtsp_url: str
     timelapse: str
 
-    def __init__(self):
+    def __init__(self, client):
+        self._client = client
         self.recording = ''
         self.resolution = ''
         self.rtsp_url = None
@@ -227,7 +228,10 @@ class Camera:
         self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
         self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
         self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
-        self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
+        if self._client._disable_camera:
+            self.rtsp_url = None
+        else:
+            self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
         
         return (old_data != f"{self.__dict__}")
 
@@ -1302,6 +1306,10 @@ class ChamberImage:
     
     def get_jpeg(self) -> bytearray:
         return self._bytes.copy()
+    
+    @property
+    def available(self):
+        return not self._client._disable_camera 
     
 @dataclass
 class CoverImage:
