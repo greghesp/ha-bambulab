@@ -186,6 +186,14 @@
         "name": "카메라 라이트"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "목표 베드 온도"
+      },
+      "target_nozzle_temperature": {
+        "name": "노즐 목표 온도"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "출력 속도",

@@ -22,6 +22,7 @@ from .utils import (
     get_generic_AMS_HMS_error_code,
     get_HMS_severity,
     get_HMS_module,
+    set_temperature_to_gcode,
 )
 from .const import (
     LOGGER,
@@ -32,6 +33,7 @@ from .const import (
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
+    TempEnum,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -42,7 +44,7 @@ from .commands import (
 class Device:
     def __init__(self, client):
         self._client = client
-        self.temperature = Temperature()
+        self.temperature = Temperature(client = client)
         self.lights = Lights(client = client)
         self.info = Info(client = client)
         self.print_job = PrintJob(client = client)
@@ -90,6 +92,16 @@ class Device:
         if data.get("command") == "get_version":
             self.get_version_data = data
 
+    def _supports_temperature_set(self):
+        # When talking to the Bambu cloud mqtt, setting the temperatures is allowed.
+        if self.info.mqtt_mode == "bambu_cloud":
+            return True
+        # X1* have not yet blocked setting the temperatures when in nybrid connection mode.
+        if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E":
+            return True
+        # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
+        return not self._client.bambu_cloud.bambu_connected
+
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
             return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
@@ -126,6 +138,8 @@ class Device:
         elif feature == Features.AMS_FILAMENT_REMAINING:
             # Technically this is not the AMS Lite but that's currently tied to only these printer types.
             return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
+        elif feature == Features.SET_TEMPERATURE:
+            return self._supports_temperature_set()
 
         return False
     
@@ -244,7 +258,8 @@ class Temperature:
     nozzle_temp: int
     target_nozzle_temp: int
 
-    def __init__(self):
+    def __init__(self, client):
+        self._client = client
         self.bed_temp = 0
         self.target_bed_temp = 0
         self.chamber_temp = 0
@@ -261,6 +276,21 @@ class Temperature:
         self.target_nozzle_temp = round(data.get("nozzle_target_temper", self.target_nozzle_temp))
         
         return (old_data != f"{self.__dict__}")
+
+    def set_target_temp(self, temp: TempEnum, temperature: int):
+        command = set_temperature_to_gcode(temp, temperature)
+
+        # if type == TempEnum.HEATBED:
+        #     self.bed_temp = temperature
+        # elif type == TempEnum.NOZZLE:
+        #     self.nozzle_temp = temperature
+
+        LOGGER.debug(command)
+        self._client.publish(command)
+
+        if self._client.callback is not None:
+            self._client.callback("event_printer_data_update")
+
 
 @dataclass
 class Fans:

@@ -28,6 +28,7 @@ class Features(Enum):
     DOOR_SENSOR = 16,
     MANUAL_MODE = 17,
     AMS_FILAMENT_REMAINING = 18,
+    SET_TEMPERATURE = 19,
 
 
 class FansEnum(Enum):
@@ -35,6 +36,11 @@ class FansEnum(Enum):
     AUXILIARY = 2,
     CHAMBER = 3,
     HEATBREAK = 4,
+
+
+class TempEnum(Enum):
+    HEATBED = 1,
+    NOZZLE = 2
 
 
 CURRENT_STAGE_IDS = {
