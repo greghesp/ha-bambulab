@@ -35,7 +35,7 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
     _attr_translation_key = "camera"
     _attr_icon = "mdi:camera"
-    _attr_supported_features = CameraEntityFeature.STREAM | CameraEntityFeature.ON_OFF
+    _attr_supported_features = CameraEntityFeature.STREAM
     _attr_brand = "Bambu Lab"
 
     def __init__(
