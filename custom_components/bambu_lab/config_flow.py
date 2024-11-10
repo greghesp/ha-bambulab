@@ -530,9 +530,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        default_region = default_region if user_input is None else user_input.get('region', '')
+        default_region = self.config_entry.options.get('region', '') if user_input is None else user_input.get('region', '')
         fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
-        default_email = default_email if user_input is None else user_input.get('email', '')
+        default_email = self.config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
         fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
         default_password = '' if user_input is None else user_input.get('password', '')
         fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
