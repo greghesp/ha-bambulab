@@ -1,3 +1,7 @@
+### V2.0.35
+- Switch to dictionary for initialization settings.
+- Allow cameras to be turned off.
+
 ### V2.0.34
 - Update translations for new strings
 - Fix off by one error in print weight attributes
