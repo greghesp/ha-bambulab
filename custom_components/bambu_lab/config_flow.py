@@ -103,6 +103,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         errors = {}
+        default_region = ''
+        default_email = ''
 
         if user_input is None:
             # Iterate over all existing entries and try any existing credentials to see if they work
@@ -194,9 +196,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        default_region = '' if user_input is None else user_input.get('region', '')
+        default_region = default_region if user_input is None else user_input.get('region', '')
         fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
-        default_email = '' if user_input is None else user_input.get('email', '')
+        default_email = default_email if user_input is None else user_input.get('email', '')
         fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
         default_password = '' if user_input is None else user_input.get('password', '')
         fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
