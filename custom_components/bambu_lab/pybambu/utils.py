@@ -50,19 +50,15 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
     return command
 
 
-def set_temperature_to_gcode(temp: TempEnum, temperature: int, wait: bool):
+def set_temperature_to_gcode(temp: TempEnum, temperature: int):
     """Converts a temperature to the gcode command to set that"""
     if temp == TempEnum.NOZZLE:
-        tempCommand = "M109" if wait else "M104"
+        tempCommand = "M104"
     elif temp == TempEnum.HEATBED:
-        tempCommand = "M190" if wait else "M140"
-
-    # TODO: Evaluate possible side effects of M108 and consider it
-    # second_command = "M108\n" if wait else ""
-    second_command = ""
+        tempCommand = "M140"
 
     command = SEND_GCODE_TEMPLATE
-    command['print']['param'] = f"{tempCommand} S{temperature}\n{second_command}"
+    command['print']['param'] = f"{tempCommand} S{temperature}\n"
     return command
 
 

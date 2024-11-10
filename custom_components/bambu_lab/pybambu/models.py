@@ -21,7 +21,8 @@ from .utils import (
     get_print_error_text,
     get_generic_AMS_HMS_error_code,
     get_HMS_severity,
-    get_HMS_module, set_temperature_to_gcode,
+    get_HMS_module,
+    set_temperature_to_gcode,
 )
 from .const import (
     LOGGER,
@@ -31,7 +32,8 @@ from .const import (
     SdcardState,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
-    PRINT_TYPE_OPTIONS, TempEnum,
+    PRINT_TYPE_OPTIONS,
+    TempEnum,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -90,12 +92,15 @@ class Device:
         if data.get("command") == "get_version":
             self.get_version_data = data
 
-    def must_wait_for_temp(self):
+    def _supports_temperature_set(self):
+        # When talking to the Bambu cloud mqtt, setting the temperatures is allowed.
         if self.info.mqtt_mode == "bambu_cloud":
-            return False
+            return True
+        # X1* have not yet blocked setting the temperatures when in nybrid connection mode.
         if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E":
-            return False
-        return True
+            return True
+        # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
+        return not self._client.bambu_cloud.bambu_connected
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -133,6 +138,8 @@ class Device:
         elif feature == Features.AMS_FILAMENT_REMAINING:
             # Technically this is not the AMS Lite but that's currently tied to only these printer types.
             return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
+        elif feature == Features.SET_TEMPERATURE:
+            return self._supports_temperature_set()
 
         return False
     
@@ -271,7 +278,7 @@ class Temperature:
         return (old_data != f"{self.__dict__}")
 
     def set_target_temp(self, temp: TempEnum, temperature: int):
-        command = set_temperature_to_gcode(temp, temperature, self._client.get_device().must_wait_for_temp())
+        command = set_temperature_to_gcode(temp, temperature)
 
         # if type == TempEnum.HEATBED:
         #     self.bed_temp = temperature

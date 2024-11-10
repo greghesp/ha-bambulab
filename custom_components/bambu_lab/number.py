@@ -30,9 +30,6 @@ class BambuLabNumberEntityDescription(NumberEntityDescription, BambuLabTemperatu
 
 
 NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
-    # TODO: Maybe hide for devices that must wait for temp? (P1*, A1*)
-    # On the one hand, it kinda works, on the other hand, it may freeze print and possibly cause side effects
-    # (especially if interrupt is attempted with M108)
     BambuLabNumberEntityDescription(
         key="target_nozzle_temperature",
         translation_key="target_nozzle_temperature",
@@ -45,7 +42,7 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_step=1,
         value_fn=lambda device: device.temperature.target_nozzle_temp,
         set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.NOZZLE, value),
-        exists_fn=lambda device: True  # not device.must_wait_for_temp()
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
     ),
     BambuLabNumberEntityDescription(
         key="target_bed_temperature",
@@ -58,7 +55,7 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_step=1,
         value_fn=lambda device: device.temperature.target_bed_temp,
         set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.HEATBED, value),
-        exists_fn=lambda device: True  # not device.must_wait_for_temp()
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
     ),
 )
 

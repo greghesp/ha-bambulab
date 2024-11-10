@@ -28,6 +28,7 @@ class Features(Enum):
     DOOR_SENSOR = 16,
     MANUAL_MODE = 17,
     AMS_FILAMENT_REMAINING = 18,
+    SET_TEMPERATURE = 19,
 
 
 class FansEnum(Enum):

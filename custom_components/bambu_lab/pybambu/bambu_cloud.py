@@ -456,5 +456,9 @@ class BambuCloud:
         return self._auth_token
     
     @property
+    def bambu_connected(self) -> bool:
+        return self._auth_token != "" and self._auth_token != None
+    
+    @property
     def cloud_mqtt_host(self):
         return "cn.mqtt.bambulab.com" if self._region == "China" else "us.mqtt.bambulab.com"
