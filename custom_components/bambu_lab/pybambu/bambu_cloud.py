@@ -37,8 +37,8 @@ class BambuCloud:
     
     def _get_authentication_token(self) -> dict:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
-
         if not curl_available:
+            LOGGER.debug(f"Curl library is unavailable.")
             return 'curlUnavailable'
 
         # First we need to find out how Bambu wants us to login.
@@ -223,7 +223,9 @@ class BambuCloud:
         self._password = password
 
         result = self._get_authentication_token()
-        if result == 'verifyCode':
+        if result == 'curlUnavailable':
+            return result
+        elif result == 'verifyCode':
             return result
         elif result == 'tfa':
             return result
@@ -393,6 +395,7 @@ class BambuCloud:
         if not curl_available:
             LOGGER.debug(f"Curl library is unavailable.")
             raise None
+        
         url = get_Url(BambuUrl.TASKS, self._region)
         response = curl_requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
 
@@ -405,10 +408,15 @@ class BambuCloud:
 
     def get_latest_task_for_printer(self, deviceId: str) -> dict:
         LOGGER.debug(f"Getting latest task from Bambu Cloud")
-        data = self.get_tasklist_for_printer(deviceId)
-        if len(data) != 0:
-            return data[0]
-        LOGGER.debug("No tasks found for printer")
+        try:
+            data = self.get_tasklist_for_printer(deviceId)
+            if len(data) != 0:
+                return data[0]
+            LOGGER.debug("No tasks found for printer")
+        except:
+            LOGGER.debug("Unable to make call")
+            return None
+            
         return None
 
     def get_tasklist_for_printer(self, deviceId: str) -> dict:
