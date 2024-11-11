@@ -572,7 +572,10 @@
         "name": "Manual refresh mode"
       },
       "camera": {
-        "name": "Camera"
+        "name": "Enable camera"
+      },
+      "imagecamera": {
+        "name": "Use image sensor camera"
       }
     }
   }

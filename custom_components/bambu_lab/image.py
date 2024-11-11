@@ -11,7 +11,23 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
-from .definitions import COVER_IMAGE_SENSOR, BambuLabSensorEntityDescription
+from .definitions import BambuLabSensorEntityDescription
+from .pybambu.const import Features
+
+CHAMBER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+        key="p1p_camera",
+        translation_key="p1p_camera",
+        value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and coordinator.camera_as_image_sensor,
+    )
+
+COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
+        key="cover_image",
+        translation_key="cover_image",
+        value_fn=lambda self: self.coordinator.get_model().print_job.get_cover_image(),
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+    )
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -26,6 +42,10 @@ async def async_setup_entry(
     if COVER_IMAGE_SENSOR.exists_fn(coordinator):
         cover_image = CoverImage(hass, coordinator, COVER_IMAGE_SENSOR)
         async_add_entities([cover_image])
+
+    if CHAMBER_IMAGE_SENSOR.exists_fn(coordinator):
+        chamber_image = ChamberImage(hass, coordinator, CHAMBER_IMAGE_SENSOR)
+        async_add_entities([chamber_image])
 
 
 class CoverImage(ImageEntity, BambuLabEntity):
@@ -54,3 +74,34 @@ class CoverImage(ImageEntity, BambuLabEntity):
     def image_last_updated(self) -> datetime | None:
         """The time when the image was last updated."""
         return self.coordinator.get_model().cover_image.get_last_update_time()
+
+
+class ChamberImage(ImageEntity, BambuLabEntity):
+    """Representation of an image entity."""
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        coordinator: BambuDataUpdateCoordinator,
+        description: BambuLabSensorEntityDescription
+    ) -> None:
+        """Initialize the image entity."""
+        super().__init__(hass=hass)
+        super(BambuLabEntity, self).__init__(coordinator=coordinator)
+        self._attr_content_type = "image/jpeg"
+        self._image_filename = None
+        self.entity_description = description
+        printer = self.coordinator.get_model().info
+        self._attr_unique_id = f"{printer.serial}_{description.key}"
+
+    def image(self) -> bytes | None:
+        """Return bytes of image."""
+        return self.coordinator.get_model().chamber_image.get_jpeg()
+    
+    @property
+    def image_last_updated(self) -> datetime | None:
+        """The time when the image was last updated."""
+        return self.coordinator.get_model().chamber_image.get_last_update_time()
+    
+    @property
+    def available(self) -> bool:
+        return self.coordinator.get_model().chamber_image.available and self.coordinator.camera_enabled
