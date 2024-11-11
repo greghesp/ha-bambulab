@@ -57,7 +57,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
 
     def event_handler_internal(self, event):
-        #LOGGER.debug(f"EVENT: {event}")
+        # if event != "event_printer_chamber_image_update":
+        #     LOGGER.debug(f"EVENT: {event}")
+
         if event == "event_printer_info_update":
             self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
@@ -106,7 +108,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self.PublishDeviceTriggerEvent(event)
 
         elif event == "event_printer_chamber_image_update":
-            self._update_data()
+            if self.camera_as_image_sensor:
+                self._update_data()
 
         elif event == "event_printer_cover_image_update":
             self._update_data()
@@ -324,9 +327,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             data=self.config_entry.data,
             options=options)
 
-    async def enable_camera(self, enable):
+    @property
+    def camera_enabled(self):
+        options = dict(self.config_entry.options)
+        return options.get('enable_camera', True)
+
+    async def set_camera_enabled(self, enable):
         LOGGER.debug(f"Setting camera enabled to {enable}")
-        self.client.enable_camera(enable)
         options = dict(self.config_entry.options)
         options['enable_camera'] = enable
         self._hass.config_entries.async_update_entry(
@@ -334,3 +341,22 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             title=self.get_model().info.serial,
             data=self.config_entry.data,
             options=options)
+        # Force reload of sensors.
+        return await self.hass.config_entries.async_reload(self._entry.entry_id)
+
+    @property
+    def camera_as_image_sensor(self):
+        options = dict(self.config_entry.options)
+        return options.get('camera_as_image_sensor', False)
+
+    async def set_camera_as_image_sensor(self, enable):
+        LOGGER.debug(f"Setting camera_as_image_sensor to {enable}")
+        options = dict(self.config_entry.options)
+        options['camera_as_image_sensor'] = enable
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            title=self.get_model().info.serial,
+            data=self.config_entry.data,
+            options=options)
+        # Force reload of sensors.
+        return await self.hass.config_entries.async_reload(self._entry.entry_id)

@@ -335,7 +335,7 @@ class BambuClient:
     def camera_enabled(self):
         return self._enable_camera
 
-    def enable_camera(self, enable):
+    def set_camera_enabled(self, enable):
         self._enable_camera = enable
         if self._enable_camera:
             self._start_camera()

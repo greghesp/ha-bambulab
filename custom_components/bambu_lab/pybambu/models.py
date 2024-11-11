@@ -1330,12 +1330,19 @@ class ChamberImage:
     def __init__(self, client):
         self._client = client
         self._bytes = bytearray()
+        self._image_last_updated = datetime.now()
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
-    
+        self._image_last_updated = datetime.now()
+        if self._client.callback is not None:
+            self._client.callback("event_printer_chamber_image_update")
+
     def get_jpeg(self) -> bytearray:
         return self._bytes.copy()
+    
+    def get_last_update_time(self) -> datetime:
+        return self._image_last_updated
     
     @property
     def available(self):

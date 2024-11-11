@@ -31,6 +31,13 @@ CAMERA_SWITCH_DESCRIPION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
+CAMERA_IMAGE_SENSOR_DESCRIPION = SwitchEntityDescription(
+    key="imagecamera",
+    icon="mdi:refresh-auto",
+    translation_key="imagecamera",
+    entity_category=EntityCategory.CONFIG,
+)
+
 async def async_setup_entry(
         hass: HomeAssistant,
         entry: ConfigEntry,
@@ -42,7 +49,11 @@ async def async_setup_entry(
     if coordinator.get_model().supports_feature(Features.MANUAL_MODE):
         async_add_entities([BambuLabManualModeSwitch(coordinator, entry)])
 
+    # A camera is always present so the switch to turn it on and off should be always present.
     async_add_entities([BambuLabCameraSwitch(coordinator, entry)])
+
+    if coordinator.get_model().supports_feature(Features.CAMERA_IMAGE):
+        async_add_entities([BambuLabCameraImageSwitch(coordinator, entry)])
 
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
@@ -104,7 +115,7 @@ class BambuLabCameraSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.client.camera_enabled
+        self._attr_is_on = self.coordinator.camera_enabled
 
     @property
     def available(self) -> bool:
@@ -116,11 +127,44 @@ class BambuLabCameraSwitch(BambuLabSwitch):
         return "mdi:video" if self.is_on else "mdi:video-off"
 
     async def async_turn_on(self, **kwargs: Any) -> None:
-        """Enable manual refresh mode."""
-        self._attr_is_on = not self.coordinator.client.camera_enabled
-        await self.coordinator.enable_camera(self._attr_is_on)
+        """Enable the camera."""
+        self._attr_is_on = True
+        await self.coordinator.set_camera_enabled(self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
-        """Disable manual refresh mode."""
-        self._attr_is_on = not self.coordinator.client.camera_enabled
-        await self.coordinator.enable_camera(self._attr_is_on)
+        """Disable the camera."""
+        self._attr_is_on = False
+        await self.coordinator.set_camera_enabled(self._attr_is_on)
+
+
+class BambuLabCameraImageSwitch(BambuLabSwitch):
+    """BambuLab Refresh data Switch"""
+
+    entity_description = CAMERA_IMAGE_SENSOR_DESCRIPION
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            config_entry: ConfigEntry
+    ) -> None:
+        super().__init__(coordinator, config_entry)
+        self._attr_is_on = self.coordinator.camera_as_image_sensor
+
+    @property
+    def available(self) -> bool:
+        return self.coordinator.camera_enabled
+
+    @property
+    def icon(self) -> str:
+        """Return the icon for the switch."""
+        return "mdi:image" if self.is_on else "mdi:video"
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Enable the camera."""
+        self._attr_is_on = True
+        await self.coordinator.set_camera_as_image_sensor(self._attr_is_on)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Disable the camera."""
+        self._attr_is_on = False
+        await self.coordinator.set_camera_as_image_sensor(self._attr_is_on)

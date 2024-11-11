@@ -519,17 +519,3 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         },
     ),
 )
-
-CHAMBER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
-        key="p1p_camera",
-        translation_key="p1p_camera",
-        value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE),
-    )
-
-COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
-        key="cover_image",
-        translation_key="cover_image",
-        value_fn=lambda self: self.coordinator.get_model().print_job.get_cover_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
-    )
