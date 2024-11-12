@@ -223,15 +223,11 @@ class BambuCloud:
         self._password = password
 
         result = self._get_authentication_token()
-        if result == 'curlUnavailable':
-            return result
-        elif result == 'verifyCode':
-            return result
-        elif result == 'tfa':
-            return result
-        elif result is None:
+        if result is None:
             LOGGER.error("Unable to authenticate.")
             return None
+        elif len(result) < 20:
+            return result
         else:
             self._auth_token = result
             self._username = self._get_username_from_authentication_token()
@@ -239,7 +235,7 @@ class BambuCloud:
         
     def login_with_verification_code(self, code: str):
         result = self._get_authentication_token_with_verification_code(code)
-        if result == 'codeExpired' or result == 'codeIncorrect':
+        if len(result) < 20:
             return result
         self._auth_token = result
         self._username = self._get_username_from_authentication_token()
@@ -247,6 +243,8 @@ class BambuCloud:
 
     def login_with_2fa_code(self, code: str):
         result = self._get_authentication_token_with_2fa_code(code)
+        if len(result) < 20:
+            return result
         self._auth_token = result
         self._username = self._get_username_from_authentication_token()
         return 'success'
@@ -258,9 +256,14 @@ class BambuCloud:
             raise None
         
         response = curl_requests.get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+        if response.status_code == 403:
+            if 'cloudflare' in response.text:
+                LOGGER.error('CloudFlare blocked connection attempt')
+            raise ValueError(response.status_code)
 
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
+            LOGGER.error(f"Received error: '{response.text}'")
             raise ValueError(response.status_code)
         
         return response.json()['devices']
@@ -398,6 +401,10 @@ class BambuCloud:
         
         url = get_Url(BambuUrl.TASKS, self._region)
         response = curl_requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+        if response.status_code == 403:
+            if 'cloudflare' in response.text:
+                LOGGER.error('CloudFlare blocked connection attempt')
+                return None
 
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
@@ -440,6 +447,11 @@ class BambuCloud:
             return None
 
         response = curl_requests.get(url, timeout=10, impersonate=IMPERSONATE_BROWSER)
+        if response.status_code == 403:
+            if 'cloudflare' in response.text:
+                LOGGER.error('CloudFlare blocked connection attempt')
+                raise ValueError(response.status_code)
+
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
             LOGGER.debug(f"Received error: {response.text}")
