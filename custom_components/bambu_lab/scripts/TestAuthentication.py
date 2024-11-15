@@ -33,7 +33,7 @@ headers = {
     'Upgrade-Insecure-Requests': '1'
 }
 
-IMPERSONATE_BROWSER='safari15_3'
+IMPERSONATE_BROWSER='chrome'
 
 # Prompt the user for their Bambu Lab username and password if not provided on the command line
 if username is None:

@@ -1,3 +1,10 @@
+### V2.0.36
+- Switch curl to emulate different browser
+- Reuse credentials from other instances to streamline multiple printer setup
+- Disable custom filament retrieval in case it's contributing to cloudflare woes
+- Add image camera back with switch to use that
+- Add switch to disable camera
+
 ### V2.0.35
 - Switch to dictionary for initialization settings.
 - Allow cameras to be turned off.
