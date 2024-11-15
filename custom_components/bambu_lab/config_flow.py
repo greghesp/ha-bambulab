@@ -220,12 +220,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
         LOGGER.debug("async_step_Bambu_Choose_Device")
 
-        device_list = await self.hass.async_add_executor_job(
-            self._bambu_cloud.get_device_list)
-
         if user_input is not None:
             self.serial = user_input['serial']
             return await self.async_step_Bambu_Lan(None)
+            
+        device_list = await self.hass.async_add_executor_job(
+            self._bambu_cloud.get_device_list)
             
         printer_list = []
         for device in device_list:
@@ -245,12 +245,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         LOGGER.debug(f"Printer count = {len(printer_list)}")
         if len(printer_list) == 0:
-            errors['base'] = "no_printers"
+            return self.async_abort(reason='no_printers')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        if len(printer_list) != 0:
-            fields[vol.Required('serial')] = printer_selector
+        fields[vol.Required('serial')] = printer_selector
 
         return self.async_show_form(
             step_id="Bambu_Choose_Device",

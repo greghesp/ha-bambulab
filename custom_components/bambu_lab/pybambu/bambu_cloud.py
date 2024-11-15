@@ -18,7 +18,7 @@ from .const import (
 
 from .utils import get_Url
 
-IMPERSONATE_BROWSER='chrome'
+IMPERSONATE_BROWSER='safari15_3'
 
 @dataclass
 class BambuCloud:
@@ -333,20 +333,22 @@ class BambuCloud:
     # }
 
     def get_slicer_settings(self) -> dict:
-        LOGGER.debug("Getting slicer settings from Bambu Cloud")
-        if curl_available:
-            response = curl_requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
-            if response.status_code == 403:
-                if 'cloudflare' in response.text:
-                    LOGGER.error(f"Cloudflare blocked slicer settings lookup.")
-                    return None
+        LOGGER.debug("DISABLED: Getting slicer settings from Bambu Cloud")
+        # Disabled for now since it may be contributing to cloudflare detection speed.
+        # 
+        # if curl_available:
+        #     response = curl_requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+        #     if response.status_code == 403:
+        #         if 'cloudflare' in response.text:
+        #             LOGGER.error(f"Cloudflare blocked slicer settings lookup.")
+        #             return None
                 
-            if response.status_code >= 400:
-                LOGGER.error(f"Slicer settings load failed: {response.status_code}")
-                LOGGER.error(f"Slicer settings load failed: '{response.text}'")
-                return None
+        #     if response.status_code >= 400:
+        #         LOGGER.error(f"Slicer settings load failed: {response.status_code}")
+        #         LOGGER.error(f"Slicer settings load failed: '{response.text}'")
+        #         return None
             
-            return response.json()
+        #     return response.json()
         return None
         
     # The task list is of the following form with a 'hits' array with typical 20 entries.
@@ -392,12 +394,19 @@ class BambuCloud:
     #     },
 
     def get_tasklist(self) -> dict:
+        LOGGER.debug("Getting full task list from Bambu Cloud")
         if not curl_available:
             LOGGER.debug(f"Curl library is unavailable.")
             raise None
         
         url = get_Url(BambuUrl.TASKS, self._region)
         response = curl_requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
+
+        # Check specifically for cloudflare block
+        if response.status_code == 403:
+            if 'cloudflare' in response.text:
+                LOGGER.error('CloudFlare blocked connection attempt')
+                return None
 
         if response.status_code >= 400:
             LOGGER.debug(f"Received error: {response.status_code}")
@@ -407,7 +416,7 @@ class BambuCloud:
         return response.json()
 
     def get_latest_task_for_printer(self, deviceId: str) -> dict:
-        LOGGER.debug(f"Getting latest task from Bambu Cloud")
+        LOGGER.debug(f"Getting latest task for printer from Bambu Cloud")
         try:
             data = self.get_tasklist_for_printer(deviceId)
             if len(data) != 0:
@@ -420,7 +429,7 @@ class BambuCloud:
         return None
 
     def get_tasklist_for_printer(self, deviceId: str) -> dict:
-        LOGGER.debug(f"Getting task list from Bambu Cloud")
+        LOGGER.debug(f"Getting full task list for printer from Bambu Cloud")
         tasks = []
         data = self.get_tasklist()
         for task in data['hits']:

@@ -10,7 +10,8 @@
   },
   "config": {
     "abort": {
-      "already_configured": "Device is already configured"
+      "already_configured": "Device is already configured",
+      "no_printers": "No unconfigured printers found in the account."
     },
     "error": {
       "cannot_connect": "Failed to connect. Check credentials.",
