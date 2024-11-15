@@ -189,7 +189,7 @@ class BambuCloud:
                 raise EmailCodeExpiredError()
             elif response.json()['code'] == 2:
                 # Code was incorrect. Let the user try again.
-                return EmailCodeIncorrectError()
+                raise EmailCodeIncorrectError()
             else:
                 LOGGER.error(f"Response not understood: '{response.json()}'")
                 raise ValueError(response.json()['code'])
