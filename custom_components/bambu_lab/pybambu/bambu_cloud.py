@@ -1,4 +1,7 @@
 from __future__ import annotations
+from enum import (
+    Enum,
+)
 
 import base64
 import json
@@ -9,7 +12,7 @@ try:
     from curl_cffi import requests as curl_requests
 except ImportError:
     curl_available = False
-#import cloudscraper as curl_requests
+import cloudscraper
 
 from dataclasses import dataclass
 
@@ -21,6 +24,12 @@ from .const import (
 from .utils import get_Url
 
 IMPERSONATE_BROWSER='chrome'
+
+class ConnectionMechanismEnum(Enum):
+    CLOUDSCRAPER = 1,
+    CURL_CFFI = 2
+
+CONNECTION_MECHANISM = ConnectionMechanismEnum.CLOUDSCRAPER
 
 class CloudflareError(Exception):
     def __init__(self):
@@ -71,6 +80,25 @@ class CurlUnavailableError(Exception):
     def __str__(self):
         return self.strerror
 
+def _get_headers():
+    return {
+        'User-Agent': 'bambu_network_agent/01.09.05.01',
+        'X-BBL-Client-Name': 'OrcaSlicer',
+        'X-BBL-Client-Type': 'slicer',
+        'X-BBL-Client-Version': '01.09.05.51',
+        'X-BBL-Language': 'en-US',
+        'X-BBL-OS-Type': 'linux',
+        'X-BBL-OS-Version': '6.2.0',
+        'X-BBL-Agent-Version': '01.09.05.01',
+        'X-BBL-Executable-info': '{}',
+        'X-BBL-Agent-OS-Type': 'linux',
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    # Orca/Bambu Studio also add this - need to work out what an appropriate ID is to put here:
+    # 'X-BBL-Device-ID': BBL_AUTH_UUID,
+    # Example: X-BBL-Device-ID: 370f9f43-c6fe-47d7-aec9-5fe5ef7e7673
+
 def _test_response(response):
     # Check specifically for cloudflare block
     if response.status_code == 403 and 'cloudflare' in response.text:
@@ -84,12 +112,24 @@ def _test_response(response):
     LOGGER.debug(f"Response: {response.status_code}")
 
 def get(url: str, headers={}):
-    response = curl_requests.get(url, headers=headers, timeout=10, impersonate=IMPERSONATE_BROWSER)
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+        if len(headers) == 0:
+            headers = _get_headers()
+        scraper = cloudscraper.create_scraper()
+        response = scraper.get(url, headers=headers, timeout=10)
+    else:
+        response = curl_requests.get(url, headers=headers, timeout=10, impersonate=IMPERSONATE_BROWSER)
     return response
 
 
 def post(url: str, json: str, headers={}):
-    response = curl_requests.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+        if len(headers) == 0:
+            headers = _get_headers()
+        scraper = cloudscraper.create_scraper()
+        response = scraper.post(url, headers=headers, json=json)
+    else:
+        response = curl_requests.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
     _test_response(response)
     if response.status_code == 400:
         LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
@@ -99,7 +139,13 @@ def post(url: str, json: str, headers={}):
 
 
 def post_return400(url: str, json: str, headers={}):
-    response = curl_requests.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+        if len(headers) == 0:
+            headers = _get_headers()
+        scraper = cloudscraper.create_scraper()
+        response = scraper.post(url, headers=headers, json=json)
+    else:
+        response = scraper.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
     _test_response(response)
     return response
 
@@ -116,7 +162,7 @@ class BambuCloud:
         self._tfaKey = None
 
     def _get_headers_with_auth_token(self) -> dict:
-        headers = {}
+        headers = _get_headers()
         headers['Authorization'] = f"Bearer {self._auth_token}"
         return headers
     
