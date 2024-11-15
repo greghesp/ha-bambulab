@@ -18,7 +18,7 @@ from .const import (
 
 from .utils import get_Url
 
-IMPERSONATE_BROWSER='safari15_3'
+IMPERSONATE_BROWSER='chrome'
 
 @dataclass
 class BambuCloud:
