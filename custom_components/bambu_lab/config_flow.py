@@ -24,6 +24,14 @@ from homeassistant.helpers.selector import (
 
 from .const import DOMAIN, LOGGER
 from .pybambu import BambuClient, BambuCloud
+from .pybambu.bambu_cloud import (
+    CloudflareError,
+    CurlUnavailableError,
+    EmailCodeRequiredError,
+    EmailCodeExpiredError,
+    EmailCodeIncorrectError,
+    TfaCodeRequiredError
+)
 
 CONFIG_VERSION = 2
 
@@ -137,62 +145,47 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 if user_input.get('verifyCode', None) is not None:
-                    result = await self.hass.async_add_executor_job(
+                    await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_verification_code,
                         user_input['verifyCode'])
-                    if result == 'success':
-                        return await self.async_step_Bambu_Choose_Device(None)
-                    elif result == 'codeExpired':
-                        authentication_type = 'verifyCode'
-                        errors['base'] = "code_expired"
-                        # Fall through to form generation to ask for verification code
-                    elif result == 'codeIncorrect':
-                        authentication_type = 'verifyCode'
-                        errors['base'] = "code_incorrect"
-                        # Fall through to form generation to ask for verification code
-                    else:
-                        errors['base'] = "cannot_connect"
                 elif user_input.get('tfaCode', None) is not None:
-                    result = await self.hass.async_add_executor_job(
+                    await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_2fa_code,
                         user_input['tfaCode'])
-                    if result == 'success':
-                        return await self.async_step_Bambu_Choose_Device(None)
-                    else:
-                        errors['base'] = "cannot_connect"
                 else:
                     self.region = user_input['region']
                     self.email = user_input['email']
-                    result = await self.hass.async_add_executor_job(
+                    await self.hass.async_add_executor_job(
                         self._bambu_cloud.login,
                         user_input['region'],
                         user_input['email'],
                         user_input['password'])
-                    if result == 'success':
-                        return await self.async_step_Bambu_Choose_Device(None)
+                return await self.async_step_Bambu_Choose_Device(None)
 
-                    # Handle possible failure cases
-                    if result == 'cloudflare':
-                        errors['base'] = 'cloudflare'
-                    elif result == 'curlUnavailable':
-                        errors['base'] = 'curl_unavailable'
-                    elif result == 'verifyCode':
-                        # User needs to provide the verification code sent to them
-                        authentication_type = 'verifyCode'
-                        errors['base'] = 'verifyCode'
-                        # Fall through to form generation to ask for verification code
-                    elif result == 'tfa':
-                        # User needs to provide their 2FA code
-                        authentication_type = 'tfaCode'
-                        errors['base'] = 'tfaCode'
-                        # Fall through to form generation to ask for verification code
-                    else:
-                        errors['base'] = "cannot_connect"
-
+            # Handle possible failure cases
+            except CloudflareError:
+                errors['base'] = 'cloudflare'
+            except CurlUnavailableError:
+                errors['base'] = 'curl_unavailable'
+            except EmailCodeRequiredError:
+                authentication_type = 'verifyCode'
+                errors['base'] = 'verifyCode'
+                # Fall through to form generation to ask for verification code
+            except EmailCodeExpiredError:
+                authentication_type = 'verifyCode'
+                errors['base'] = 'code_expired'
+                # Fall through to form generation to ask for verification code
+            except EmailCodeIncorrectError:
+                authentication_type = 'verifyCode'
+                errors['base'] = 'code_incorrect'
+                # Fall through to form generation to ask for verification code
+            except TfaCodeRequiredError:
+                authentication_type = 'tfaCode'
+                errors['base'] = 'tfaCode'
+                # Fall through to form generation to ask for verification code
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
                 errors['base'] = "cannot_connect"
-
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -473,58 +466,56 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             try:
                 if user_input.get('verifyCode', None) is not None:
-                    result = await self.hass.async_add_executor_job(
+                    await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_verification_code,
                         user_input['verifyCode'])
-                    if result == 'success':
-                        return await self.async_step_Bambu_Lan(None)
-                    elif result == 'codeExpired':
-                        authentication_type = 'verifyCode'
-                        errors['base'] = "code_expired"
-                        # Fall through to form generation to ask for verification code
-                    elif result == 'codeIncorrect':
-                        authentication_type = 'verifyCode'
-                        errors['base'] = "code_incorrect"
-                        # Fall through to form generation to ask for verification code
-                    else:
-                        errors['base'] = "cannot_connect"
+                    return await self.async_step_Bambu_Lan(None)
+
                 elif user_input.get('tfaCode', None) is not None:
-                    result = await self.hass.async_add_executor_job(
+                    await self.hass.async_add_executor_job(
                         self._bambu_cloud.login_with_2fa_code,
                         user_input['tfaCode'])
-                    if result == 'success':
-                        return await self.async_step_Bambu_Lan(None)
-                    else:
-                        errors['base'] = "cannot_connect"
+                    return await self.async_step_Bambu_Lan(None)
+
                 else:
                     self.region = user_input['region']
                     self.email = user_input['email']
-                    result = await self.hass.async_add_executor_job(
+                    await self.hass.async_add_executor_job(
                         self._bambu_cloud.login,
                         user_input['region'],
                         user_input['email'],
                         user_input['password'])
-                    if result == 'success':
-                        return await self.async_step_Bambu_Lan(None)
-                    
-                    # Handle possible failure cases
-                    if result == 'cloudflare':
-                        errors['base'] = 'cloudflare'
-                    elif result == 'curlUnavailable':
-                        errors['base'] = 'curl_unavailable'
-                    elif result == 'verifyCode':
-                        # User needs to provide the verification code sent to them
-                        authentication_type = 'verifyCode'
-                        errors['base'] = 'verifyCode'
-                        # Fall through to form generation to ask for verification code
-                    elif result == 'tfa':
-                        # User needs to provide their 2FA code
-                        authentication_type = 'tfaCode'
-                        errors['base'] = 'tfaCode'
-                        # Fall through to form generation to ask for verification code
-                    else:
-                        errors['base'] = "cannot_connect"
+                    return await self.async_step_Bambu_Lan(None)
 
+            # Handle possible failure cases
+            except EmailCodeExpiredError:
+                authentication_type = 'verifyCode'
+                errors['base'] = "code_expired"
+                # Fall through to form generation to ask for verification code
+            except EmailCodeIncorrectError:
+                authentication_type = 'verifyCode'
+                errors['base'] = "code_incorrect"
+                # Fall through to form generation to ask for verification code
+            except CloudflareError:
+                errors['base'] = 'cloudflare'
+            except CurlUnavailableError:
+                errors['base'] = 'curl_unavailable'
+            except EmailCodeRequiredError:
+                authentication_type = 'verifyCode'
+                errors['base'] = 'verifyCode'
+                # Fall through to form generation to ask for verification code
+            except EmailCodeExpiredError:
+                authentication_type = 'verifyCode'
+                errors['base'] = 'code_expired'
+                # Fall through to form generation to ask for verification code
+            except EmailCodeIncorrectError:
+                authentication_type = 'verifyCode'
+                errors['base'] = 'code_incorrect'
+                # Fall through to form generation to ask for verification code
+            except TfaCodeRequiredError:
+                authentication_type = 'tfaCode'
+                errors['base'] = 'tfaCode'
+                # Fall through to form generation to ask for verification code
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
                 errors['base'] = "cannot_connect"

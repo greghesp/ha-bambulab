@@ -1,13 +1,18 @@
 from __future__ import annotations
+from enum import (
+    Enum,
+)
 
 import base64
 import json
+import requests
 
 curl_available = True
 try:
     from curl_cffi import requests as curl_requests
 except ImportError:
     curl_available = False
+import cloudscraper
 
 from dataclasses import dataclass
 
@@ -20,6 +25,132 @@ from .utils import get_Url
 
 IMPERSONATE_BROWSER='chrome'
 
+class ConnectionMechanismEnum(Enum):
+    CLOUDSCRAPER = 1,
+    CURL_CFFI = 2
+
+CONNECTION_MECHANISM = ConnectionMechanismEnum.CLOUDSCRAPER
+
+class CloudflareError(Exception):
+    def __init__(self):
+        LOGGER.error('CloudFlare blocked connection attempt')
+        super().__init__("Blocked by Cloudflare")
+        self.error_code = 403
+    
+    def __str__(self):
+        return self.strerror
+
+class EmailCodeRequiredError(Exception):
+    def __init__(self):
+        super().__init__("Email code required")
+        self.error_code = 400
+    
+    def __str__(self):
+        return self.strerror
+
+class EmailCodeExpiredError(Exception):
+    def __init__(self):
+        super().__init__("Email code expired")
+        self.error_code = 400
+    
+    def __str__(self):
+        return self.strerror
+
+class EmailCodeIncorrectError(Exception):
+    def __init__(self):
+        super().__init__("Email code incorrect")
+        self.error_code = 400
+    
+    def __str__(self):
+        return self.strerror
+
+class TfaCodeRequiredError(Exception):
+    def __init__(self):
+        super().__init__("Two factor authentication code required")
+        self.error_code = 400
+    
+    def __str__(self):
+        return self.strerror
+
+class CurlUnavailableError(Exception):
+    def __init__(self):
+        super().__init__("Two factor authentication code required")
+        self.error_code = 400
+    
+    def __str__(self):
+        return self.strerror
+
+def _get_headers():
+    return {
+        'User-Agent': 'bambu_network_agent/01.09.05.01',
+        'X-BBL-Client-Name': 'OrcaSlicer',
+        'X-BBL-Client-Type': 'slicer',
+        'X-BBL-Client-Version': '01.09.05.51',
+        'X-BBL-Language': 'en-US',
+        'X-BBL-OS-Type': 'linux',
+        'X-BBL-OS-Version': '6.2.0',
+        'X-BBL-Agent-Version': '01.09.05.01',
+        'X-BBL-Executable-info': '{}',
+        'X-BBL-Agent-OS-Type': 'linux',
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    # Orca/Bambu Studio also add this - need to work out what an appropriate ID is to put here:
+    # 'X-BBL-Device-ID': BBL_AUTH_UUID,
+    # Example: X-BBL-Device-ID: 370f9f43-c6fe-47d7-aec9-5fe5ef7e7673
+
+def _test_response(response):
+    # Check specifically for cloudflare block
+    if response.status_code == 403 and 'cloudflare' in response.text:
+        raise CloudflareError()
+        
+    if response.status_code > 400:
+        LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
+        LOGGER.debug(f"Response: '{response.text}'")
+        raise PermissionError(response.status_code, response.text)
+
+    LOGGER.debug(f"Response: {response.status_code}")
+
+def get(url: str, headers={}):
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+        if len(headers) == 0:
+            headers = _get_headers()
+        scraper = cloudscraper.create_scraper()
+        response = scraper.get(url, headers=headers, timeout=10)
+    else:
+        response = curl_requests.get(url, headers=headers, timeout=10, impersonate=IMPERSONATE_BROWSER)
+    return response
+
+
+def post(url: str, json: str, headers={}):
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+        if len(headers) == 0:
+            headers = _get_headers()
+        scraper = cloudscraper.create_scraper()
+        response = scraper.post(url, headers=headers, json=json)
+    else:
+        response = curl_requests.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
+    _test_response(response)
+    if response.status_code == 400:
+        LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
+        LOGGER.debug(f"Response: '{response.text}'")
+        raise PermissionError(response.status_code, response.text)
+    return response
+
+
+def post_return400(url: str, json: str, headers={}):
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+        if len(headers) == 0:
+            headers = _get_headers()
+        scraper = cloudscraper.create_scraper()
+        response = scraper.post(url, headers=headers, json=json)
+    else:
+        response = scraper.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
+    _test_response(response)
+    return response
+
+
+
 @dataclass
 class BambuCloud:
   
@@ -31,15 +162,15 @@ class BambuCloud:
         self._tfaKey = None
 
     def _get_headers_with_auth_token(self) -> dict:
-        headers = {}
+        headers = _get_headers()
         headers['Authorization'] = f"Bearer {self._auth_token}"
         return headers
     
-    def _get_authentication_token(self) -> dict:
+    def _get_authentication_token(self) -> str:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
         if not curl_available:
             LOGGER.debug(f"Curl library is unavailable.")
-            return 'curlUnavailable'
+            raise CurlUnavailableError()
 
         # First we need to find out how Bambu wants us to login.
         data = {
@@ -48,20 +179,7 @@ class BambuCloud:
             "apiError": ""
         }
 
-        response = curl_requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
-
-        # Check specifically for cloudflare block
-        if response.status_code == 403:
-            if 'cloudflare' in response.text:
-                LOGGER.error('CloudFlare blocked connection attempt')
-                return 'cloudFlare'
-            
-        if response.status_code >= 400:
-            LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
-            LOGGER.debug(f"Response: '{response.text}'")
-            raise ValueError(response.status_code)
-
-        LOGGER.debug(f"Response: {response.status_code}")
+        response = post(get_Url(BambuUrl.LOGIN, self._region), json=data)
 
         auth_json = response.json()
         accessToken = auth_json.get('accessToken', '')
@@ -73,18 +191,19 @@ class BambuCloud:
         if loginType is None:
             LOGGER.error(f"loginType not present")
             LOGGER.error(f"Response not understood: '{response.text}'")
-            return None
+            return ValueError(0) # FIXME
         elif loginType == 'verifyCode':
             LOGGER.debug(f"Received verifyCode response")
+            raise EmailCodeRequiredError()
         elif loginType == 'tfa':
             # Store the tfaKey for later use
             LOGGER.debug(f"Received tfa response")
             self._tfaKey = auth_json.get("tfaKey")
+            raise TfaCodeRequiredError()
         else:
             LOGGER.debug(f"Did not understand json. loginType = '{loginType}'")
             LOGGER.error(f"Response not understood: '{response.text}'")
-
-        return loginType
+            return ValueError(1) # FIXME
     
     def _get_email_verification_code(self):
         # Send the verification code request
@@ -94,14 +213,8 @@ class BambuCloud:
         }
 
         LOGGER.debug("Requesting verification code")
-        response = curl_requests.post(get_Url(BambuUrl.EMAIL_CODE, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
-        
-        if response.status_code == 200:
-            LOGGER.debug("Verification code requested successfully.")
-        else:
-            LOGGER.error(f"Received error trying to send verification code: {response.status_code}")
-            LOGGER.debug(f"Response: '{response.text}'")
-            raise ValueError(response.status_code)
+        response = post(get_Url(BambuUrl.EMAIL_CODE, self._region), json=data)
+        LOGGER.debug("Verification code requested successfully.")
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
         LOGGER.debug("Attempting to connect with provided verification code.")
@@ -110,27 +223,22 @@ class BambuCloud:
             "code": code
         }
 
-        response = curl_requests.post(get_Url(BambuUrl.LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
+        response = post_return400(get_Url(BambuUrl.LOGIN, self._region), json=data)
+        status_code = response.status_code
 
-        LOGGER.debug(f"Response: {response.status_code}")
-        if response.status_code == 200:
+        if status_code == 200:
             LOGGER.debug("Authentication successful.")
-        elif response.status_code == 400:
-            LOGGER.debug(f"Response: '{response.json()}'")
+        elif status_code == 400:           
             if response.json()['code'] == 1:
                 # Code has expired. Request a new one.
                 self._get_email_verification_code()
-                return 'codeExpired'
+                raise EmailCodeExpiredError()
             elif response.json()['code'] == 2:
                 # Code was incorrect. Let the user try again.
-                return 'codeIncorrect'
+                raise EmailCodeIncorrectError()
             else:
                 LOGGER.error(f"Response not understood: '{response.json()}'")
                 raise ValueError(response.json()['code'])
-        else:
-            LOGGER.error(f"Received error trying to authenticate with verification code: {response.status_code}")
-            LOGGER.debug(f"Response: '{response.text}'")
-            raise ValueError(response.status_code)
 
         return response.json()['accessToken']
     
@@ -142,15 +250,11 @@ class BambuCloud:
             "tfaCode": code
         }
 
-        response = curl_requests.post(get_Url(BambuUrl.TFA_LOGIN, self._region), json=data, impersonate=IMPERSONATE_BROWSER)
+        response = post(get_Url(BambuUrl.TFA_LOGIN, self._region), json=data)
 
         LOGGER.debug(f"Response: {response.status_code}")
         if response.status_code == 200:
             LOGGER.debug("Authentication successful.")
-        else:
-            LOGGER.error(f"Received error trying to authenticate with verification code: {response.status_code}")
-            LOGGER.debug(f"Response: '{response.text}'")
-            raise ValueError(response.status_code)
 
         cookies = response.cookies.get_dict()
         token_from_tfa = cookies.get("token")
@@ -223,49 +327,26 @@ class BambuCloud:
         self._password = password
 
         result = self._get_authentication_token()
-        if result is None:
-            LOGGER.error("Unable to authenticate.")
-            return None
-        elif len(result) < 20:
-            return result
-        else:
-            self._auth_token = result
-            self._username = self._get_username_from_authentication_token()
-            return 'success'
+        self._auth_token = result
+        self._username = self._get_username_from_authentication_token()
         
     def login_with_verification_code(self, code: str):
         result = self._get_authentication_token_with_verification_code(code)
-        if len(result) < 20:
-            return result
         self._auth_token = result
         self._username = self._get_username_from_authentication_token()
-        return 'success'
 
     def login_with_2fa_code(self, code: str):
         result = self._get_authentication_token_with_2fa_code(code)
-        if len(result) < 20:
-            return result
         self._auth_token = result
         self._username = self._get_username_from_authentication_token()
-        return 'success'
 
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
         if not curl_available:
             LOGGER.debug(f"Curl library is unavailable.")
-            raise None
-        
-        response = curl_requests.get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
-        if response.status_code == 403:
-            if 'cloudflare' in response.text:
-                LOGGER.error('CloudFlare blocked connection attempt')
-            raise ValueError(response.status_code)
-
-        if response.status_code >= 400:
-            LOGGER.debug(f"Received error: {response.status_code}")
-            LOGGER.error(f"Received error: '{response.text}'")
-            raise ValueError(response.status_code)
-        
+            return None
+       
+        response = get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token())
         return response.json()['devices']
 
     # The slicer settings are of the following form:
@@ -340,17 +421,7 @@ class BambuCloud:
         # Disabled for now since it may be contributing to cloudflare detection speed.
         # 
         # if curl_available:
-        #     response = curl_requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
-        #     if response.status_code == 403:
-        #         if 'cloudflare' in response.text:
-        #             LOGGER.error(f"Cloudflare blocked slicer settings lookup.")
-        #             return None
-                
-        #     if response.status_code >= 400:
-        #         LOGGER.error(f"Slicer settings load failed: {response.status_code}")
-        #         LOGGER.error(f"Slicer settings load failed: '{response.text}'")
-        #         return None
-            
+        #     response = curl_requests.get(get_Url(BambuUrl.SLICER_SETTINGS, self._region), headers=self._get_headers_with_auth_token())
         #     return response.json()
         return None
         
@@ -403,22 +474,7 @@ class BambuCloud:
             raise None
         
         url = get_Url(BambuUrl.TASKS, self._region)
-        response = curl_requests.get(url, headers=self._get_headers_with_auth_token(), timeout=10, impersonate=IMPERSONATE_BROWSER)
-        if response.status_code == 403:
-            if 'cloudflare' in response.text:
-                LOGGER.error('CloudFlare blocked connection attempt')
-                return None
-
-        # Check specifically for cloudflare block
-        if response.status_code == 403:
-            if 'cloudflare' in response.text:
-                LOGGER.error('CloudFlare blocked connection attempt')
-                return None
-
-        if response.status_code >= 400:
-            LOGGER.debug(f"Received error: {response.status_code}")
-            LOGGER.debug(f"Received error: '{response.text}'")
-            raise None
+        response = get(url, headers=self._get_headers_with_auth_token())
 
         return response.json()
 
@@ -455,17 +511,7 @@ class BambuCloud:
             LOGGER.debug(f"Curl library is unavailable.")
             return None
 
-        response = curl_requests.get(url, timeout=10, impersonate=IMPERSONATE_BROWSER)
-        if response.status_code == 403:
-            if 'cloudflare' in response.text:
-                LOGGER.error('CloudFlare blocked connection attempt')
-                raise ValueError(response.status_code)
-
-        if response.status_code >= 400:
-            LOGGER.debug(f"Received error: {response.status_code}")
-            LOGGER.debug(f"Received error: {response.text}")
-            raise ValueError(response.status_code)
-        
+        response = get(url)
         return response.content
 
     @property
