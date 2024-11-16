@@ -1,4 +1,4 @@
-{
+﻿{
   "device_automation": {
     "trigger_type": {
       "event_print_canceled": "Impresión cancelada",
@@ -10,13 +10,15 @@
   },
   "config": {
     "abort": {
-      "already_configured": "El dispositivo ya se encuentra configurado"
+      "already_configured": "El dispositivo ya se encuentra configurado",
+      "no_printers": "No se encontraron impresoras configuradas en la cuenta.",
+      "cloudflare": "Clouldflare ha bloqueado el intento de conexión.",
+      "curl_unavailable": "La biblioteca curl_cffi no está disponible."
     },
     "error": {
       "cannot_connect": "Falla al conectar. Revisa las credenciales.",
       "cannot_connect_local_ip": "Falla al conectar. Revisa la dirección IP proporcionada.",
       "cannot_connect_local_all": "Falla al conectar. Revisa la configuración proporcionada..",
-      "no_printers": "No se encontraron impresoras configuradas en la cuenta.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
       "verifyCode": "Se requiere código de verificación. ",
@@ -72,6 +74,10 @@
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Clouldflare ha bloqueado el intento de conexión.",
+      "curl_unavailable": "La biblioteca curl_cffi no está disponible."
+    },
     "error": {
       "cannot_connect": "Falla al conectar",
       "cannot_connect_local_ip": "Falla al conectar. Revise la dirección de IP proporcionada.",
@@ -566,6 +572,12 @@
     "switch": {
       "manual": {
         "name": "Modo de refresco manual"
+      },
+      "camera": {
+        "name": "Habilitar cámara"
+      },
+      "imagecamera": {
+        "name": "Usar cámara con sensor de imagen"
       }
     }
   }

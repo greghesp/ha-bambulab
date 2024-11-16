@@ -11,17 +11,16 @@
   "config": {
     "abort": {
       "already_configured": "Device is already configured",
-      "no_printers": "No unconfigured printers found in the account."
+      "no_printers": "No unconfigured printers found in the account.",
+      "cloudflare": "Clouldflare has blocked the connection attempt.",
+      "curl_unavailable": "curl_cffi library is not available."
     },
     "error": {
       "cannot_connect": "Failed to connect. Check credentials.",
       "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
-      "no_printers": "No unconfigured printers found in the account.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
-      "cloudflare": "Cloudflare blocked connection.",
-      "curl_unavailable": "curl_cffi library unavailable.",
       "verifyCode": "Verification code is required. Check your email.",
       "code_expired": "Verification code expired. New code requested. Check your email.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
@@ -75,14 +74,16 @@
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Clouldflare has blocked the connection attempt.",
+      "curl_unavailable": "curl_cffi library is not available."
+    },
     "error": {
       "cannot_connect": "Failed to connect",
       "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
-      "cloudflare": "Cloudflare blocked connection.",
-      "curl_unavailable": "curl_cffi library unavailable.",
       "verifyCode": "Verification code is required. Check your email.",
       "code_expired": "Verification code expired. New code requested. Check your email.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
@@ -183,20 +184,20 @@
         "name": "Cover Image"
       }
     },
-    "number": {
-      "target_bed_temperature": {
-        "name": "Bed target temperature"
-      },
-      "target_nozzle_temperature": {
-        "name": "Nozzle target temperature"
-      }
-    },
     "light": {
       "chamber_light": {
         "name": "Chamber light"
       },
       "camera_light": {
         "name": "Camera light"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Bed target temperature"
+      },
+      "target_nozzle_temperature": {
+        "name": "Nozzle target temperature"
       }
     },
     "select": {

@@ -164,9 +164,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             # Handle possible failure cases
             except CloudflareError:
-                errors['base'] = 'cloudflare'
+                return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
-                errors['base'] = 'curl_unavailable'
+                return self.async_abort(reason='curl_unavailable')
             except EmailCodeRequiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
@@ -497,9 +497,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 errors['base'] = "code_incorrect"
                 # Fall through to form generation to ask for verification code
             except CloudflareError:
-                errors['base'] = 'cloudflare'
+                return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
-                errors['base'] = 'curl_unavailable'
+                return self.async_abort(reason='curl_unavailable')
             except EmailCodeRequiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'

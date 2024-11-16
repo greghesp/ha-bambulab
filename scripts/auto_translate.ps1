@@ -115,7 +115,7 @@ function Convert-File
   }
 }
 
-$sourceDir = "\\wsl.localhost\Debian\home\adrian\repo\ha-bambulab\custom_components\bambu_lab\translations"
+$sourceDir = "$PSScriptRoot\..\custom_components\bambu_lab\translations"
 
 $english = Get-Content -Encoding UTF8 -Path "$sourceDir\en.json"
 
