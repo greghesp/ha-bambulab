@@ -38,7 +38,7 @@ function Get-GoogleTranslation
     -Method Get `
     -ContentType 'application/json'
 
-  $result = ($Translator.Content.TrimStart('[').TrimEnd(']') -split ',' | select -First 1).TrimStart('"').TrimEnd('"')
+  $result = ($Translator.Content.TrimStart('[').TrimEnd(']') -split ',' | select-object -First 1).TrimStart('"').TrimEnd('"')
   $result = $result.Replace("\\n", "\n")
   $result = $result.Replace("\u003e", ">")
 
@@ -74,7 +74,6 @@ function Convert-File
       if ($isString)
       {
         $targetKey = $matches[2]
-        $targetContent = $matches[3]
         Write-Host "Comparing $($sourceKey):$i to $($targetKey):$targetIndex"
         if ($sourceKey -eq $targetKey)
         {
@@ -121,7 +120,6 @@ $english = Get-Content -Encoding UTF8 -Path "$sourceDir\en.json"
 
 $languageFiles = Get-ChildItem "$sourceDir\*.json"
 
-$node = $english
 foreach ($file in $languageFiles)
 {
   $language = $file.BaseName
