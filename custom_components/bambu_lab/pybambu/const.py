@@ -1240,6 +1240,6 @@ BAMBU_URL = {
     BambuUrl.TFA_LOGIN: 'https://bambulab.com/api/sign-in/tfa',
     BambuUrl.EMAIL_CODE: 'https://api.bambulab.com/v1/user-service/user/sendemail/code',
     BambuUrl.BIND: 'https://api.bambulab.com/v1/iot-service/api/user/bind',
-    BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=undefined',
+    BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=1.10.0.89',
     BambuUrl.TASKS: 'https://api.bambulab.com/v1/user-service/my/tasks',
 }
