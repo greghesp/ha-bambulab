@@ -1,5 +1,6 @@
 ### V2.0.37
 - Switch back to cloudscraper from curl_cffi as Bambu cloudflare has stopped blocking it
+- Re-enable custom filament retrieval
 - Cleanup all the rapid login flow changes to be exception based and more maintainable
 - Update translations
 
