@@ -8,6 +8,7 @@ DOMAIN = "bambu_lab"
 BRAND = "Bambu Lab"
 
 LOGGER = logging.getLogger(__package__)
+LOGGERFORHA = logging.getLogger(f"{DOMAIN}_HA")
 
 PLATFORMS = (
     Platform.BINARY_SENSOR,

@@ -4,6 +4,7 @@ from .const import (
     BRAND,
     DOMAIN,
     LOGGER,
+    LOGGERFORHA
 )
 import asyncio
 from typing import Any
@@ -12,8 +13,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import device_registry
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from homeassistant.core import CALLBACK_TYPE, Event, HomeAssistant, callback
-from homeassistant.const import CONF_HOST, EVENT_HOMEASSISTANT_STOP, Platform
+from homeassistant.core import Event, HomeAssistant, callback
+from homeassistant.const import EVENT_HOMEASSISTANT_STOP, Platform
 
 import paho.mqtt.client as mqtt
 
@@ -38,9 +39,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._updatedDevice = False
         self.data = self.get_model()
         self._eventloop = asyncio.get_running_loop()
+        # Pass LOGGERFORHA logger into HA as otherwise it generates a debug output line every single time we tell it we have an update
+        # which fills the logs and makes the useful logging data less accessible.
         super().__init__(
             hass,
-            LOGGER,
+            LOGGERFORHA,
             name=DOMAIN
         )
 
