@@ -4,15 +4,24 @@ from enum import (
 )
 
 import base64
+import cloudscraper
 import json
 import requests
 
-curl_available = True
-try:
-    from curl_cffi import requests as curl_requests
-except ImportError:
-    curl_available = False
-import cloudscraper
+class ConnectionMechanismEnum(Enum):
+    CLOUDSCRAPER = 1,
+    CURL_CFFI = 2,
+    REQUESTS = 3
+
+CONNECTION_MECHANISM = ConnectionMechanismEnum.CLOUDSCRAPER
+
+curl_available = False
+if CONNECTION_MECHANISM == ConnectionMechanismEnum.CURL_CFFI:
+    try:
+        from curl_cffi import requests as curl_requests
+        curl_available = True
+    except ImportError:
+        curl_available = False
 
 from dataclasses import dataclass
 
@@ -24,12 +33,6 @@ from .const import (
 from .utils import get_Url
 
 IMPERSONATE_BROWSER='chrome'
-
-class ConnectionMechanismEnum(Enum):
-    CLOUDSCRAPER = 1,
-    CURL_CFFI = 2
-
-CONNECTION_MECHANISM = ConnectionMechanismEnum.CLOUDSCRAPER
 
 class CloudflareError(Exception):
     def __init__(self):
@@ -74,7 +77,7 @@ class TfaCodeRequiredError(Exception):
 
 class CurlUnavailableError(Exception):
     def __init__(self):
-        super().__init__("Two factor authentication code required")
+        super().__init__("curl library unavailable")
         self.error_code = 400
     
     def __str__(self):
@@ -99,56 +102,64 @@ def _get_headers():
     # 'X-BBL-Device-ID': BBL_AUTH_UUID,
     # Example: X-BBL-Device-ID: 370f9f43-c6fe-47d7-aec9-5fe5ef7e7673
 
-def _test_response(response):
+def _test_response(response, return400=False):
     # Check specifically for cloudflare block
     if response.status_code == 403 and 'cloudflare' in response.text:
         raise CloudflareError()
-        
+
+    if response.status_code == 400 and not return400:
+        LOGGER.error(f"Connection failed with error code: {response.status_code}")
+        LOGGER.debug(f"Response: '{response.text}'")
+        raise PermissionError(response.status_code, response.text)
+
     if response.status_code > 400:
-        LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
+        LOGGER.error(f"Connection failed with error code: {response.status_code}")
         LOGGER.debug(f"Response: '{response.text}'")
         raise PermissionError(response.status_code, response.text)
 
     LOGGER.debug(f"Response: {response.status_code}")
 
 def get(url: str, headers={}):
-    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CURL_CFFI:
+        if not curl_available:
+            LOGGER.debug(f"Curl library is unavailable.")
+            raise CurlUnavailableError()
+        response = curl_requests.get(url, headers=headers, timeout=10, impersonate=IMPERSONATE_BROWSER)
+    elif CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
         if len(headers) == 0:
             headers = _get_headers()
         scraper = cloudscraper.create_scraper()
         response = scraper.get(url, headers=headers, timeout=10)
+    elif CONNECTION_MECHANISM == ConnectionMechanismEnum.REQUESTS:
+        if len(headers) == 0:
+            headers = _get_headers()
+        response = requests.get(url, headers=headers, timeout=10)
     else:
-        response = curl_requests.get(url, headers=headers, timeout=10, impersonate=IMPERSONATE_BROWSER)
+        raise NotImplementedError()
     return response
 
 
-def post(url: str, json: str, headers={}):
-    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
-        if len(headers) == 0:
-            headers = _get_headers()
-        scraper = cloudscraper.create_scraper()
-        response = scraper.post(url, headers=headers, json=json)
-    else:
+def post(url: str, json: str, headers={}, return400=False):
+    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CURL_CFFI:
+        if not curl_available:
+            LOGGER.debug(f"Curl library is unavailable.")
+            raise CurlUnavailableError()
         response = curl_requests.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
-    _test_response(response)
-    if response.status_code == 400:
-        LOGGER.error(f"Login attempt failed with error code: {response.status_code}")
-        LOGGER.debug(f"Response: '{response.text}'")
-        raise PermissionError(response.status_code, response.text)
-    return response
-
-
-def post_return400(url: str, json: str, headers={}):
-    if CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+    elif CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
         if len(headers) == 0:
             headers = _get_headers()
         scraper = cloudscraper.create_scraper()
         response = scraper.post(url, headers=headers, json=json)
+    elif CONNECTION_MECHANISM == ConnectionMechanismEnum.REQUESTS:
+        if len(headers) == 0:
+            headers = _get_headers()
+        response = requests.post(url, headers=headers, json=json)
     else:
-        response = scraper.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
-    _test_response(response)
-    return response
+        raise NotImplementedError()
 
+    _test_response(response, return400)
+    
+    return response
 
 
 @dataclass
@@ -162,15 +173,15 @@ class BambuCloud:
         self._tfaKey = None
 
     def _get_headers_with_auth_token(self) -> dict:
-        headers = _get_headers()
+        if CONNECTION_MECHANISM == ConnectionMechanismEnum.CURL_CFFI:
+            headers = {}
+        else:
+            headers = _get_headers()
         headers['Authorization'] = f"Bearer {self._auth_token}"
         return headers
     
     def _get_authentication_token(self) -> str:
         LOGGER.debug("Getting accessToken from Bambu Cloud")
-        if not curl_available:
-            LOGGER.debug(f"Curl library is unavailable.")
-            raise CurlUnavailableError()
 
         # First we need to find out how Bambu wants us to login.
         data = {
@@ -223,7 +234,7 @@ class BambuCloud:
             "code": code
         }
 
-        response = post_return400(get_Url(BambuUrl.LOGIN, self._region), json=data)
+        response = post(get_Url(BambuUrl.LOGIN, self._region), json=data, return400=True)
         status_code = response.status_code
 
         if status_code == 200:
@@ -342,11 +353,10 @@ class BambuCloud:
 
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
-        if not curl_available:
-            LOGGER.debug(f"Curl library is unavailable.")
+        try:
+            response = get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token())
+        except CurlUnavailableError:
             return None
-       
-        response = get(get_Url(BambuUrl.BIND, self._region), headers=self._get_headers_with_auth_token())
         return response.json()['devices']
 
     # The slicer settings are of the following form:
@@ -469,13 +479,11 @@ class BambuCloud:
 
     def get_tasklist(self) -> dict:
         LOGGER.debug("Getting full task list from Bambu Cloud")
-        if not curl_available:
-            LOGGER.debug(f"Curl library is unavailable.")
-            raise None
-        
         url = get_Url(BambuUrl.TASKS, self._region)
-        response = get(url, headers=self._get_headers_with_auth_token())
-
+        try:
+            response = get(url, headers=self._get_headers_with_auth_token())
+        except CurlUnavailableError:
+            return None
         return response.json()
 
     def get_latest_task_for_printer(self, deviceId: str) -> dict:
@@ -507,11 +515,10 @@ class BambuCloud:
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")
-        if not curl_available:
-            LOGGER.debug(f"Curl library is unavailable.")
+        try:
+            response = get(url)
+        except CurlUnavailableError:
             return None
-
-        response = get(url)
         return response.content
 
     @property

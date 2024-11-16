@@ -209,7 +209,18 @@ Make sure you upload this to your Bug ticket/GitHub issue.
 
 ### Debug Logging
 
-When logging a bug, always ensure you send us the debug logs. These can be enabled from the Integration page itself.
-The debug logs will appear in the standard Home Assistant logs.
+When logging a bug, always ensure you send us the debug logs. 
+
+If you are hitting issues during initial integration setup, you will need to enable logs in your configuration.yaml file by adding the following and restarting Home Assistant:
+```
+logger:
+  default: info
+  logs:
+    custom_components.bambu_lab: debug
+```
+
+If you have previously successfully installed the integration, debug logs can be enabled from the integration page within Home Assistant:
 
 ![img.png](docs/images/debugging.png)
+
+The debug logs will appear in the standard Home Assistant logs.
