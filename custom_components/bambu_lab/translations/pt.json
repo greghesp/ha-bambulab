@@ -10,13 +10,15 @@
   },
   "config": {
     "abort": {
-      "already_configured": "O dispositivo já está configurado"
+      "already_configured": "O dispositivo já está configurado",
+      "no_printers": "Nenhuma impressora não configurada encontrada na conta.",
+      "cloudflare": "Clouldflare bloqueou a tentativa de conexão.",
+      "curl_unavailable": "A biblioteca curl_cffi não está disponível."
     },
     "error": {
       "cannot_connect": "Falha ao ligar. Verifique as credenciais.",
       "cannot_connect_local_ip": "Falha ao ligar. Verifique o endereço IP fornecido.",
       "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
-      "no_printers": "Nenhuma impressora não configurada encontrada na conta.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
       "verifyCode": "O código de verificação é obrigatório. ",
@@ -72,6 +74,10 @@
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Clouldflare bloqueou a tentativa de conexão.",
+      "curl_unavailable": "A biblioteca curl_cffi não está disponível."
+    },
     "error": {
       "cannot_connect": "Falha ao ligar",
       "cannot_connect_local_ip": "Falha ao ligar. Verifique o endereço IP fornecido.",
@@ -566,6 +572,12 @@
     "switch": {
       "manual": {
         "name": "Modo de atualização manual"
+      },
+      "camera": {
+        "name": "Ativar câmera"
+      },
+      "imagecamera": {
+        "name": "Use câmera com sensor de imagem"
       }
     }
   }

@@ -239,7 +239,8 @@ class BambuCloud:
 
         if status_code == 200:
             LOGGER.debug("Authentication successful.")
-        elif status_code == 400:           
+        elif status_code == 400:
+            LOGGER.debug(f"Received response: {response.json()}")           
             if response.json()['code'] == 1:
                 # Code has expired. Request a new one.
                 self._get_email_verification_code()

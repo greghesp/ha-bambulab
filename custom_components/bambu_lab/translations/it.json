@@ -10,13 +10,15 @@
   },
   "config": {
     "abort": {
-      "already_configured": "Il dispositivo è già configurato"
+      "already_configured": "Il dispositivo è già configurato",
+      "no_printers": "Nessuna stampante non configurata trovata nell'account.",
+      "cloudflare": "Clouldflare ha bloccato il tentativo di connessione.",
+      "curl_unavailable": "La libreria curl_cffi non è disponibile."
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
       "cannot_connect_local_ip": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
-      "no_printers": "Nessuna stampante non configurata trovata nell'account.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
       "verifyCode": "È richiesto il codice di verifica. ",
@@ -72,6 +74,10 @@
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Clouldflare ha bloccato il tentativo di connessione.",
+      "curl_unavailable": "La libreria curl_cffi non è disponibile."
+    },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
       "cannot_connect_local_ip": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
@@ -566,6 +572,12 @@
     "switch": {
       "manual": {
         "name": "Modalità di aggiornamento manuale"
+      },
+      "camera": {
+        "name": "Abilita fotocamera"
+      },
+      "imagecamera": {
+        "name": "Utilizzare la fotocamera con sensore di immagine"
       }
     }
   }

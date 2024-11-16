@@ -10,13 +10,15 @@
   },
   "config": {
     "abort": {
-      "already_configured": "Das Gerät ist bereits eingerichtet"
+      "already_configured": "Das Gerät ist bereits eingerichtet",
+      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
+      "cloudflare": "Clouldflare hat den Verbindungsversuch blockiert.",
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
       "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
-      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "invalid_auth": "Authentifizierung fehlgeschlagen.",
       "unknown": "Unerwarteter Fehler.",
       "verifyCode": "Ein Bestätigungscode ist erforderlich. ",
@@ -72,6 +74,10 @@
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Clouldflare hat den Verbindungsversuch blockiert.",
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
+    },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
       "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
@@ -566,6 +572,12 @@
     "switch": {
       "manual": {
         "name": "Manueller Aktualisierungsmodus"
+      },
+      "camera": {
+        "name": "Kamera aktivieren"
+      },
+      "imagecamera": {
+        "name": "Verwenden Sie eine Bildsensorkamera"
       }
     }
   }
