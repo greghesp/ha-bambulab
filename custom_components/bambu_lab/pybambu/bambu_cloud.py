@@ -226,6 +226,7 @@ class BambuCloud:
 
         if status_code == 200:
             LOGGER.debug("Authentication successful.")
+            LOGGER.debug(f"Response = '{response.json()}'")
         elif status_code == 400:
             LOGGER.debug(f"Received response: {response.json()}")           
             if response.json()['code'] == 1:
@@ -262,22 +263,13 @@ class BambuCloud:
         return token_from_tfa
     
     def _get_username_from_authentication_token(self) -> str:
+        LOGGER.debug("Trying to get username from authentication token.")
         # User name is in 2nd portion of the auth token (delimited with periods)
-        b64_string = self._auth_token.split(".")[1]
-        # String must be multiples of 4 chars in length. For decode pad with = character
-        b64_string += "=" * ((4 - len(b64_string) % 4) % 4)
         username = None
-        try:
-            jsonAuthToken = json.loads(base64.b64decode(b64_string))
-            # Gives json payload with "username":"u_<digits>" within it
-            username = jsonAuthToken.get('username', None)
-            if username is None:
-                LOGGER.debug(f"Unable to decode authToken to retrieve username. Json = {jsonAuthToken}")
-        except:
-            LOGGER.debug("Unable to decode authToken to json to retrieve username.")
-
-        if username is None:
-            LOGGER.debug("Trying to use project API to retrieve username")
+        tokens = self._auth_token.split(".")
+        if len(tokens) != 3:
+            LOGGER.debug("Received authToken is not a JWT.")
+            LOGGER.debug("Trying to use project API to retrieve username instead")
             response = self.get_projects();
             if response is not None:
                 projectsnode = response.get('projects', None)
@@ -293,6 +285,20 @@ class BambuCloud:
                         else:
                             username = f"u_{project['user_id']}"
                             LOGGER.debug(f"Found user_id of {username}")
+        else:
+            LOGGER.debug("Authentication token looks to be a JWT")
+            b64_string = self._auth_token.split(".")[1]
+            # String must be multiples of 4 chars in length. For decode pad with = character
+            b64_string += "=" * ((4 - len(b64_string) % 4) % 4)
+            try:
+                jsonAuthToken = json.loads(base64.b64decode(b64_string))
+                # Gives json payload with "username":"u_<digits>" within it
+                username = jsonAuthToken.get('username', None)
+                if username is None:
+                    LOGGER.debug(f"Unable to decode authToken to retrieve username. Json = {jsonAuthToken}")
+            except:
+                LOGGER.debug("Unable to decode authToken to json to retrieve username.")
+
 
         return username
     
