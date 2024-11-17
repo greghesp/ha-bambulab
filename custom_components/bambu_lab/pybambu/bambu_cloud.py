@@ -317,7 +317,7 @@ class BambuCloud:
     #             'dev_product_name': 'P1S',
     #             'dev_access_code': 'REDACTED',
     #             'nozzle_diameter': 0.4
-    #             },
+    #         },
     #         {
     #             'dev_id': 'REDACTED',
     #             'name': 'Bambu P1P',
@@ -327,7 +327,7 @@ class BambuCloud:
     #             'dev_product_name': 'P1P',
     #             'dev_access_code': 'REDACTED',
     #             'nozzle_diameter': 0.4
-    #             },
+    #         },
     #         {
     #             'dev_id': 'REDACTED',
     #             'name': 'Bambu X1C',
@@ -337,7 +337,7 @@ class BambuCloud:
     #             'dev_product_name': 'X1 Carbon',
     #             'dev_access_code': 'REDACTED',
     #             'nozzle_diameter': 0.4
-    #             }
+    #         }
     #     ]
     # }
     
