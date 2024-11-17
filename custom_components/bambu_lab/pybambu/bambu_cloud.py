@@ -266,9 +266,35 @@ class BambuCloud:
         b64_string = self._auth_token.split(".")[1]
         # String must be multiples of 4 chars in length. For decode pad with = character
         b64_string += "=" * ((4 - len(b64_string) % 4) % 4)
-        jsonAuthToken = json.loads(base64.b64decode(b64_string))
-        # Gives json payload with "username":"u_<digits>" within it
-        return jsonAuthToken['username']
+        username = None
+        try:
+            jsonAuthToken = json.loads(base64.b64decode(b64_string))
+            # Gives json payload with "username":"u_<digits>" within it
+            username = jsonAuthToken.get('username', None)
+            if username is None:
+                LOGGER.debug(f"Unable to decode authToken to retrieve username. Json = {jsonAuthToken}")
+        except:
+            LOGGER.debug("Unable to decode authToken to json to retrieve username.")
+
+        if username is None:
+            LOGGER.debug("Trying to use project API to retrieve username")
+            response = self.get_projects();
+            if response is not None:
+                projectsnode = response.get('projects', None)
+                if projectsnode is None:
+                    LOGGER.debug("Failed to find projects node")
+                else:
+                    if len(projectsnode) == 0:
+                        LOGGER.debug("No projects node in response")
+                    else:
+                        project=projectsnode[0]
+                        if project.get('user_id', None) is None:
+                            LOGGER.debug("No user_id entry")
+                        else:
+                            username = f"u_{project['user_id']}"
+                            LOGGER.debug(f"Found user_id of {username}")
+
+        return username
     
     # Retrieves json description of devices in the form:
     # {
@@ -469,6 +495,33 @@ class BambuCloud:
         LOGGER.debug("Getting full task list from Bambu Cloud")
         try:
             response = self._get(BambuUrl.TASKS)
+        except:
+            return None
+        return response.json()
+
+    # Returns a list of projects for the account.
+    #
+    # {
+    # "message": "success",
+    # "code": null,
+    # "error": null,
+    # "projects": [
+    #     {
+    #     "project_id": "164995388",
+    #     "user_id": "1688388450",
+    #     "model_id": "US48e2103d939bf8",
+    #     "status": "ACTIVE",
+    #     "name": "Alcohol_Marker_Storage_for_Copic,_Ohuhu_and_the_like",
+    #     "content": "{'printed_plates': [{'plate': 1}]}",
+    #     "create_time": "2024-11-17 06:12:33",
+    #     "update_time": "2024-11-17 06:12:40"
+    #     },
+    #     ...
+    #
+    def get_projects(self) -> dict:
+        LOGGER.debug("Getting projects list from Bambu Cloud")
+        try:
+            response = self._get(BambuUrl.PROJECTS)
         except:
             return None
         return response.json()
