@@ -4,51 +4,51 @@
       "event_print_canceled": "Impresión cancelada",
       "event_print_failed": "Impresión fallida",
       "event_print_finished": "Impresión finalizada",
-      "event_print_started": "Impresión comenzada",
+      "event_print_started": "Impresión iniciada",
       "event_printer_error": "Error de la impresora detectado"
     }
   },
   "config": {
     "abort": {
-      "already_configured": "El dispositivo ya se encuentra configurado",
+      "already_configured": "El dispositivo ya estaba configurado",
       "no_printers": "No se encontraron impresoras configuradas en la cuenta.",
-      "cloudflare": "Clouldflare ha bloqueado el intento de conexión.",
-      "curl_unavailable": "La biblioteca curl_cffi no está disponible."
+      "cloudflare": "Cloudflare ha bloqueado el intento de conexión.",
+      "curl_unavailable": "La librería curl_cffi no está disponible."
     },
     "error": {
-      "cannot_connect": "Falla al conectar. Revisa las credenciales.",
-      "cannot_connect_local_ip": "Falla al conectar. Revisa la dirección IP proporcionada.",
-      "cannot_connect_local_all": "Falla al conectar. Revisa la configuración proporcionada..",
+      "cannot_connect": "Error al conectar. Revisa las credenciales.",
+      "cannot_connect_local_ip": "Error al conectar. Revisa la dirección IP proporcionada.",
+      "cannot_connect_local_all": "Error al conectar. Revisa la configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
-      "verifyCode": "Se requiere código de verificación. ",
-      "code_expired": "El código de verificación expiró. ",
-      "code_incorrect": "El código de verificación era incorrecto. ",
-      "tfaCode": "Se requiere código 2FA. "
+      "verifyCode": "Se requiere código de verificación. Revisa tu correo electrónico.",
+      "code_expired": "El código de verificación ha caducado. Se ha solicidado un nuevo código. Revisa tu correo electrónico.",
+      "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
+      "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo."
     },
     "step": {
       "user": {
-        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Lan Only Mode.",
+        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Solo LAN.",
         "data": {
           "printer_mode": "Modo de configuración de la impresora:"
         }
       },
       "Bambu": {
         "title": "Conexión con Bambu Cloud",
-        "description": "Por favor, proporcione sus credenciales de Bambu Lab:",
+        "description": "Por favor, proporciona tus credenciales de Bambu Lab:",
         "data": {
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
           "password": "Contraseña",
-          "verifyCode": "Código de verificación de correo electrónico",
+          "verifyCode": "Código de verificación por correo electrónico",
           "tfaCode": "Código de autenticación de dos factores"
         }
       },
       "Bambu_Choose_Device": {
         "title": "Selección de Impresora",
-        "description": "Elija qué impresora quiere agregar.",
+        "description": "Elije qué impresora quieres añadir.",
         "data": {
-          "serial": "Elija Impresora para Agregar:"
+          "serial": "Elige la impresora para añadirla:"
         }
       },
       "Bambu_Lan": {
@@ -63,10 +63,10 @@
       },
       "Lan": {
         "title": "Conexión de Modo de Red Local",
-        "description": "Por favor, proporcione la dirección de IP local de la impresora, el número de serie y el código de acceso. El código de acceso puede encontrarlo en la pantalla de la impresora, en la configuración de red (WLAN). El número de serie (SN) lo puede encontrar en la configuración del dispositivo.",
+        "description": "Por favor, proporciona la dirección de IP local de la impresora, el número de serie y el código de acceso. El código de acceso lo puedes encontrar en la pantalla de la impresora, en la configuración de red (WLAN). El número de serie (SN) lo puedes encontrar en la configuración del dispositivo.",
         "data": {
           "serial": "Número de Serie:",
-          "host": "Dirección de IP local de la Impresora:",
+          "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
           "usage_hours": "Cantidad de horas de uso (opcional):"
         }
@@ -75,31 +75,31 @@
   },
   "options": {
     "abort": {
-      "cloudflare": "Clouldflare ha bloqueado el intento de conexión.",
-      "curl_unavailable": "La biblioteca curl_cffi no está disponible."
+      "cloudflare": "Cloudflare ha bloqueado el intento de conexión.",
+      "curl_unavailable": "La librería curl_cffi no está disponible."
     },
     "error": {
-      "cannot_connect": "Falla al conectar",
-      "cannot_connect_local_ip": "Falla al conectar. Revise la dirección de IP proporcionada.",
-      "cannot_connect_local_all": "Falla al conectar. Revise configuración proporcionada.",
+      "cannot_connect": "Error al conectar",
+      "cannot_connect_local_ip": "Error al conectar. Revisa la dirección de IP proporcionada.",
+      "cannot_connect_local_all": "Error al conectar. Revisa configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
-      "verifyCode": "Se requiere código de verificación. ",
-      "code_expired": "El código de verificación expiró. ",
-      "code_incorrect": "El código de verificación era incorrecto. ",
-      "tfaCode": "Se requiere código 2FA. "
+      "verifyCode": "Se requiere código de verificación. Revisa tu correo electrónico.",
+      "code_expired": "El código de verificación ha caducado. Se ha solicidado un nuevo código. Revisa tu correo electrónico.",
+      "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
+      "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo."
     },
     "step": {
       "init": {
-        "title": "Ajustar la configuración de la conexión",
-        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Lan Only Mode.",
+        "title": "Ajusta la configuración de conexión",
+        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Solo LAN.",
         "data": {
           "printer_mode": "Modo de configuración de la impresora:"
         }
       },
       "Bambu": {
-        "title": "Conexión de Bambu Cloud",
-        "description": "Por favor, proporcione sus credenciales de Bambu Lab:",
+        "title": "Conexión con Bambu Cloud",
+        "description": "Por favor, proporciona tus credenciales de Bambu Lab:",
         "data": {
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
@@ -109,19 +109,19 @@
         }
       },
       "Bambu_Lan": {
-        "title": "Ajustar la configuración de la conexión",
+        "title": "Ajusta la configuración de conexión",
         "description": "Opcionalmente, puedes proporcionar la dirección de IP local de la impresora y el código de acceso. Esto es requerido para el acceso a la cámara de la P1/A1, o para poder conectarse directamente a la impresora sin utilizar Bambu Cloud.",
         "data": {
-          "serial": "Elija Impresora para Agregar:",
-          "host": "Dirección de IP Local de la Impresora:",
+          "serial": "Elije la Impresora para Añadirla:",
+          "host": "Dirección IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
           "local_mqtt": "Conectar directamente a la impresora en vez de usar Bambu Cloud:",
           "usage_hours": "Cantidad de horas de uso (opcional):"
         }
       },
       "Lan": {
-        "title": "Conexión de Modo de Red Local",
-        "description": "Por favor, proporcione la dirección de IP local de la impresora y el código de acceso. El código de acceso puede encontrarlo en la pantalla de la impresora, en la configuración de red (WLAN).",
+        "title": "Conexión en Modo LAN",
+        "description": "Por favor, introduce la dirección de IP local de la impresora y el código de acceso. El código de acceso puedes encontrarlo en la pantalla de la impresora, en la configuración de red (WLAN).",
         "data": {
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
@@ -133,10 +133,10 @@
   "entity": {
     "binary_sensor": {
       "door_open": {
-        "name": "Puerta de la caja"
+        "name": "Puerta de la carcasa"
       },
       "timelapse": {
-        "name": "Grabando lapsos de tiempo"
+        "name": "Grabando lapso de tiempo"
       },
       "hms_errors": {
         "name": "Errores HMS"
@@ -148,21 +148,21 @@
         "name": "En línea"
       },
       "firmware_update": {
-        "name": "Actualización del Firmware"
+        "name": "Actualización de Firmware"
       }
     },
     "button": {
       "pause": {
-        "name": "Pausar impresión"
+        "name": "Pausar la impresión"
       },
       "resume": {
-        "name": "Resumir impresión"
+        "name": "Continuar la impresión"
       },
       "stop": {
-        "name": "Detener impresión"
+        "name": "Detener la impresión"
       },
       "refresh": {
-        "name": "Forzar Actualización de Datos"
+        "name": "Forzar Actualización de los Datos"
       }
     },
     "fan": {
@@ -173,7 +173,7 @@
         "name": "Ventilador auxiliar"
       },
       "chamber_fan": {
-        "name": "Ventilador de recámara"
+        "name": "Ventilador de la carcasa"
       }
     },
     "image": {
@@ -186,7 +186,7 @@
     },
     "light": {
       "chamber_light": {
-        "name": "Luz de recámara"
+        "name": "Luz de la carcasa"
       },
       "camera_light": {
         "name": "Luz de cámara"
@@ -194,10 +194,10 @@
     },
     "number": {
       "target_bed_temperature": {
-        "name": "Temperatura de la cama objetivo"
+        "name": "Temperatura objetivo de la cama"
       },
       "target_nozzle_temperature": {
-        "name": "Temperatura de la boquilla objetivo"
+        "name": "Temperatura objetivo de la boquilla"
       }
     },
     "select": {
@@ -207,25 +207,25 @@
           "silent": "Silencioso",
           "standard": "Estándar",
           "sport": "Deportivo",
-          "ludicrous": "Redículo"
+          "ludicrous": "Ridículo"
         }
       }
     },
     "sensor": {
       "wifi_signal": {
-        "name": "Señal de Wi-Fi"
+        "name": "Señal Wi-Fi"
       },
       "bed_temp": {
-        "name": "Temperatura de cama"
+        "name": "Temperatura de la cama"
       },
       "target_bed_temp": {
-        "name": "Temperatura de la cama objetivo"
+        "name": "Temperatura objetivo de la cama"
       },
       "chamber_temp": {
-        "name": "Temperatura de la recámara"
+        "name": "Temperatura de la carcasa"
       },
       "target_nozzle_temp": {
-        "name": "Temperatura de la boquilla objetivo"
+        "name": "Temperatura objetivo de la boquilla"
       },
       "nozzle_temp": {
         "name": "Temperatura de la boquilla"
@@ -237,10 +237,10 @@
         "name": "Velocidad del ventilador de enfriamiento"
       },
       "chamber_fan_speed": {
-        "name": "Velocidad del ventilador de la recámara"
+        "name": "Velocidad del ventilador de la carcasa"
       },
       "heatbreak_fan_speed": {
-        "name": "Velocidad del ventilador de Heatbreak"
+        "name": "Velocidad del ventilador del disipador de calor"
       },
       "speed_profile": {
         "name": "Perfil de velocidad",
@@ -248,7 +248,7 @@
           "silent": "Silencioso",
           "standard": "Estándar",
           "sport": "Deportivo",
-          "ludicrous": "Redículo"
+          "ludicrous": "Ridículo"
         },
         "state_attributes": {
           "modifier": {
@@ -260,7 +260,7 @@
         "name": "Nombre de la impresora"
       },
       "stage": {
-        "name": "Etapa actual",
+        "name": "Estado actual",
         "state": {
           "offline": "Fuera de línea",
           "printing": "Imprimiendo",
@@ -269,35 +269,35 @@
           "sweeping_xy_mech_mode": "Modo mecánico de barrido XY",
           "changing_filament": "Cambiando filamento",
           "m400_pause": "Pausa M400",
-          "paused_filament_runout": "Pausa debido a agotamiento del filamento",
-          "heating_hotend": "Calentando hotend",
+          "paused_filament_runout": "En pausa debido a que se ha terminado del filamento",
+          "heating_hotend": "Calentando la boquilla",
           "calibrating_extrusion": "Calibrando extrusión",
           "scanning_bed_surface": "Escaneando la superficie de la cama",
-          "inspecting_first_layer": "Inspeccionando la primer capa",
+          "inspecting_first_layer": "Inspeccionando la primera capa",
           "identifying_build_plate_type": "Identificando el tipo de placa",
-          "calibrating_micro_lidar": "Calibrando el lidar",
+          "calibrating_micro_lidar": "Calibrando el micro lidar",
           "homing_toolhead": "Retornando el cabezal al orígen",
           "cleaning_nozzle_tip": "Limpiando la punta de la boquilla",
           "checking_extruder_temperature": "Revisando la temperatura del extrusor",
-          "paused_user": "La impresión fue pausada por el usuario",
-          "paused_front_cover_falling": "Pausa de caída del cobertor",
+          "paused_user": "La impresión ha sido pausada por el usuario",
+          "paused_front_cover_falling": "En pausa debido a la caída de la cubierta frontal",
           "calibrating_extrusion_flow": "Calibrando el flujo de extrusión",
-          "paused_nozzle_temperature_malfunction": "Pausada debido a una falla en la temperatura de la boquilla",
-          "paused_heat_bed_temperature_malfunction": "Pausada debido a una falla en la temperatura de la cama",
-          "filament_unloading": "Descargando filamento",
-          "paused_skipped_step": "Pausada debido a salteo de pasos",
-          "filament_loading": "Cargando filamento",
-          "calibrating_motor_noise": "Calibrando el ruido de motores",
-          "paused_ams_lost": "Pausado debido a pérdida del AMS",
-          "paused_low_fan_speed_heat_break": "En pausa debido a baja velocidad del ventilador de corte de calor",
-          "paused_chamber_temperature_control_error": "Pausado debido a un error con el control de temperatura de la recámara",
-          "cooling_chamber": "Enfriamiento de la recámara",
-          "paused_user_gcode": "Pausado por una instrucción gcode agregada por el usuario",
-          "motor_noise_showoff": "Motor noise show off",
-          "paused_nozzle_filament_covered_detected": "Paused due to nozzle filament covered detected",
-          "paused_cutter_error": "Pausado debido a un error con el cortador de filamento",
-          "paused_first_layer_error": "Pausado debido a un error con la primer capa",
-          "paused_nozzle_clog": "Pausado debido a una obstrucción en la boquilla",
+          "paused_nozzle_temperature_malfunction": "En pausa debido a un fallo con la temperatura de la boquilla",
+          "paused_heat_bed_temperature_malfunction": "En pausa debido a un fallo en la temperatura de la cama",
+          "filament_unloading": "Descargando el filamento",
+          "paused_skipped_step": "En pausa debido a la producción de salto de pasos",
+          "filament_loading": "Cargando el filamento",
+          "calibrating_motor_noise": "Calibrando el ruido de los motores",
+          "paused_ams_lost": "En pausa debido a la desconexión del AMS",
+          "paused_low_fan_speed_heat_break": "En pausa debido a la baja velocidad del ventilador del bloque",
+          "paused_chamber_temperature_control_error": "En pausa debido a un error con el control de temperatura de la carcasa",
+          "cooling_chamber": "Enfriamiento de la carcasa",
+          "paused_user_gcode": "En pausa por una instrucción gcode agregada por el usuario",
+          "motor_noise_showoff": "Desactivar el ruido del motor",
+          "paused_nozzle_filament_covered_detected": "En pausa debido a la detección de filamento cubriendo la boquilla",
+          "paused_cutter_error": "En pausa debido a un error con el cortador de filamento",
+          "paused_first_layer_error": "En pausa debido a un error con la primera capa",
+          "paused_nozzle_clog": "En pausa debido a una obstrucción en la boquilla",
           "idle": "Inactivo"
         }
       },
@@ -307,7 +307,7 @@
       "print_status": {
         "name": "Estado de la Impresión",
         "state": {
-          "failed": "Falliad",
+          "failed": "Fallida",
           "finish": "Finalizada",
           "idle": "Inactiva",
           "offline": "Fuera de línea",
@@ -326,25 +326,25 @@
         }
       },
       "gcode_file": {
-        "name": "Nombre del archivo Gcode"
+        "name": "Nombre del Gcode"
       },
       "print_bed_type": {
         "name": "Tipo de cama",
         "state": {
-          "textured_plate": "Textured plate",
-          "cool_plate": "Cool Plate / PLA Plate",
-          "hot_plate": "Smooth PEI Plate / High Temp Plate",
-          "eng_plate": "Engineering Plate"
+          "textured_plate": "Placa Texturizada",
+          "cool_plate": "Placa Fría / Placa PLA",
+          "hot_plate": "Placa PEI Lisa / Placa de Alta Temperatura",
+          "eng_plate": "Placa de Ingeniería"
         }
       },
       "print_length": {
-        "name": "Tamaño de impresión"
+        "name": "Tamaño de la impresión"
       },
       "print_weight": {
-        "name": "Peso de impresión"
+        "name": "Peso de la impresión"
       },
       "subtask_name": {
-        "name": "Nombre de la tareas"
+        "name": "Nombre de la tarea"
       },
       "print_type": {
         "name": "Tipo de impresión",
@@ -370,7 +370,7 @@
         "name": "Capa actual"
       },
       "total_layers": {
-        "name": "Cantida total de capas"
+        "name": "Cantidad total de capas"
       },
       "active_tray": {
         "name": "Bandeja activa"
@@ -395,16 +395,16 @@
         "name": "Temperatura del AMS"
       },
       "external_spool": {
-        "name": "Rollo externo",
+        "name": "Bobina externa",
         "state_attributes": {
           "active": {
-            "name": "Activo"
+            "name": "Activa"
           },
           "color": {
             "name": "Color"
           },
           "empty": {
-            "name": "Vacío"
+            "name": "Vacía"
           },
           "k_value": {
             "name": "Valor K"
@@ -427,13 +427,13 @@
         "name": "Bandeja 1",
         "state_attributes": {
           "active": {
-            "name": "Activo"
+            "name": "Activa"
           },
           "color": {
             "name": "Color"
           },
           "empty": {
-            "name": "Vacío"
+            "name": "Vacía"
           },
           "k_value": {
             "name": "Valor K"
@@ -459,16 +459,16 @@
         }
       },
       "tray_2": {
-        "name": "Tray 2",
+        "name": "Bandeja 2",
         "state_attributes": {
           "active": {
-            "name": "Activo"
+            "name": "Activa"
           },
           "color": {
             "name": "Color"
           },
           "empty": {
-            "name": "Vacío"
+            "name": "Vacía"
           },
           "k_value": {
             "name": "Valor K"
@@ -494,16 +494,16 @@
         }
       },
       "tray_3": {
-        "name": "Tray 3",
+        "name": "Bandeja 3",
         "state_attributes": {
           "active": {
-            "name": "Activo"
+            "name": "Activa"
           },
           "color": {
             "name": "Color"
           },
           "empty": {
-            "name": "Vacío"
+            "name": "Vacía"
           },
           "k_value": {
             "name": "Valor K"
@@ -529,16 +529,16 @@
         }
       },
       "tray_4": {
-        "name": "Tray 4",
+        "name": "Bandeja 4",
         "state_attributes": {
           "active": {
-            "name": "Activo"
+            "name": "Activa"
           },
           "color": {
             "name": "Color"
           },
           "empty": {
-            "name": "Vacío"
+            "name": "Vacía"
           },
           "k_value": {
             "name": "Valor K"
@@ -571,7 +571,7 @@
     },
     "switch": {
       "manual": {
-        "name": "Modo de refresco manual"
+        "name": "Modo de actualización manual"
       },
       "camera": {
         "name": "Habilitar cámara"
