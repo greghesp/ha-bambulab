@@ -100,6 +100,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._update_data()
 
         elif event == "event_printer_error":
+            self._update_printer_error()
+
+        elif event == "event_print_error":
             self._update_print_error()
 
         # event_print_started
@@ -139,6 +142,30 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error(f"Exception type: {type(e)}")
             LOGGER.error(f"Exception data: {e}")
 
+    def _update_printer_error(self):
+        dev_reg = device_registry.async_get(self._hass)
+        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        device = self.get_model()
+        if device.hms.error_count == 0:
+            event_data = {
+                "device_id": hadevice.id,
+                "name": self.config_entry.options.get('name', ''),
+                "type": "event_printer_error_cleared",
+            }
+            LOGGER.debug(f"EVENT: HMS errors cleared: {event_data}")
+            self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
+        else:
+            event_data = {
+                "device_id": hadevice.id,
+                "name": self.config_entry.options.get('name', ''),
+                "type": "event_printer_error",
+            }
+            event_data["code"] = device.hms.errors[f"1-Code"]
+            event_data["error"] = device.hms.errors[f"1-Error"]
+            event_data["url"] = device.hms.errors[f"1-Wiki"]
+            LOGGER.debug(f"EVENT: HMS errors: {event_data}")
+            self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
+
     def _update_print_error(self):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
@@ -148,14 +175,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             event_data = {
                 "device_id": hadevice.id,
                 "name": self.config_entry.options.get('name', ''),
-                "type": "event_printer_error_cleared",
+                "type": "event_print_error_cleared",
             }
             LOGGER.debug(f"EVENT: print_error cleared: {event_data}")
         else:
             event_data = {
                 "device_id": hadevice.id,
                 "name": self.config_entry.options.get('name', ''),
-                "type": "event_printer_error",
+                "type": "event_print_error",
             }
             event_data["code"] = device.print_error.error['code']
             event_data["error"] = device.print_error.error['error']
