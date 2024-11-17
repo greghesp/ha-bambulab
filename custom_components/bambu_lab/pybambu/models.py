@@ -1236,11 +1236,9 @@ class HMSList:
 class PrintErrorList:
     """Return all print_error related info"""
     _error: dict
-    _count: int
 
     def __init__(self, client):
         self._error = None
-        self._count = 0
         self._client = client
         
     def print_update(self, data) -> bool:
@@ -1257,8 +1255,8 @@ class PrintErrorList:
                 hex_conversion = f'0{int(print_error_code):x}'
                 print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
                 errors = {}
-                errors[f"code"] = f"{print_error_code_hex.upper()}"
-                errors[f"error"] = f"{print_error_code_hex.upper()}: {get_print_error_text(print_error_code)}"
+                errors[f"code"] = print_error_code_hex.upper()
+                errors[f"error"] = get_print_error_text(print_error_code)
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
 
             if self._error != errors:
