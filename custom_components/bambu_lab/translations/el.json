@@ -12,7 +12,7 @@
     "abort": {
       "already_configured": "Η συσκευή είναι ήδη ρυθμισμένη",
       "no_printers": "Δεν βρέθηκαν μη ρυθμισμένοι εκτυπωτές στον λογαριασμό.",
-      "cloudflare": "Το Clouldflare έχει μπλοκάρει την προσπάθεια σύνδεσης.",
+      "cloudflare": "Το Cloudflare έχει μπλοκάρει την προσπάθεια σύνδεσης.",
       "curl_unavailable": "Η βιβλιοθήκη curl_cffi δεν είναι διαθέσιμη."
     },
     "error": {
@@ -75,7 +75,7 @@
   },
   "options": {
     "abort": {
-      "cloudflare": "Το Clouldflare έχει μπλοκάρει την προσπάθεια σύνδεσης.",
+      "cloudflare": "Το Cloudflare έχει μπλοκάρει την προσπάθεια σύνδεσης.",
       "curl_unavailable": "Η βιβλιοθήκη curl_cffi δεν είναι διαθέσιμη."
     },
     "error": {
