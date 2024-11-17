@@ -99,7 +99,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif event == "event_printer_cover_image_update":
             self._update_data()
 
-        elif event == "event_print_error":
+        elif event == "event_printer_error":
             self._update_print_error()
 
         # event_print_started

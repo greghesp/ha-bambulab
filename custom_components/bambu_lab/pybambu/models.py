@@ -1263,7 +1263,7 @@ class PrintErrorList:
 
             if self._error != errors:
                 self._error = errors
-                self._client.callback("event_print_error")
+                self._client.callback("event_printer_error")
 
         # We send the error event directly so always return False for the general data event.
         return False
