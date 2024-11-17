@@ -287,9 +287,9 @@ class BambuCloud:
                             LOGGER.debug(f"Found user_id of {username}")
         else:
             LOGGER.debug("Authentication token looks to be a JWT")
-            # String must be multiples of 4 chars in length. For decode pad with = character
             try:
                 b64_string = self._auth_token.split(".")[1]
+                # String must be multiples of 4 chars in length. For decode pad with = character
                 b64_string += "=" * ((4 - len(b64_string) % 4) % 4)
                 jsonAuthToken = json.loads(base64.b64decode(b64_string))
                 # Gives json payload with "username":"u_<digits>" within it
@@ -298,7 +298,7 @@ class BambuCloud:
                 LOGGER.debug("Unable to decode authToken to json to retrieve username.")
 
         if username is None:
-            LOGGER.debug(f"Unable to decode authToken to retrieve username. Json = {jsonAuthToken}")
+            LOGGER.debug(f"Unable to decode authToken to retrieve username. AuthToken = {self._auth_token}")
 
         return username
     
