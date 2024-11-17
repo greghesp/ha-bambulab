@@ -55,9 +55,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"HOME ASSISTANT IS SHUTTING DOWN")
         self.shutdown()
 
-    def event_handler(self, eventname: str):
+    def event_handler(self, event: str):
         # The callback comes in on the MQTT thread. Need to jump to the HA main thread to guarantee thread safety.
-        self._eventloop.call_soon_threadsafe(self.event_handler_internal, eventname)
+        self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
 
     def event_handler_internal(self, event: str):
         # if event != "event_printer_chamber_image_update":
