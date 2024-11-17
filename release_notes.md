@@ -1,3 +1,7 @@
+### V2.0.38
+- Improved Spanish translations
+- Backup way to get user_id for mqtt cloud connection
+
 ### V2.0.37
 - Switch back to cloudscraper from curl_cffi as Bambu cloudflare has stopped blocking it
 - Re-enable custom filament retrieval
