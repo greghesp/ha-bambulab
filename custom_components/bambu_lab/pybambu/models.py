@@ -79,8 +79,7 @@ class Device:
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
 
-        if send_event and self._client.callback is not None:
-            self._client.callback("event_printer_data_update")
+        self._client.callback("event_printer_data_update")
 
         if data.get("msg", 0) == 0:
             self.push_all_data = data
@@ -199,15 +198,13 @@ class Lights:
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
         self.chamber_light_override = "on"
-        if self._client.callback is not None:
-            self._client.callback("event_light_update")
+        self._client.callback("event_light_update")
         self._client.publish(CHAMBER_LIGHT_ON)
 
     def TurnChamberLightOff(self):
         self.chamber_light = "off"
         self.chamber_light_override = "off"
-        if self._client.callback is not None:
-            self._client.callback("event_light_update")
+        self._client.callback("event_light_update")
         self._client.publish(CHAMBER_LIGHT_OFF)
 
 
@@ -288,8 +285,7 @@ class Temperature:
         LOGGER.debug(command)
         self._client.publish(command)
 
-        if self._client.callback is not None:
-            self._client.callback("event_printer_data_update")
+        self._client.callback("event_printer_data_update")
 
 
 @dataclass
@@ -371,8 +367,7 @@ class Fans:
         LOGGER.debug(command)
         self._client.publish(command)
 
-        if self._client.callback is not None:
-            self._client.callback("event_printer_data_update")
+        self._client.callback("event_printer_data_update")
 
     def get_fan_speed(self, fan: FansEnum) -> int:
         if fan == FansEnum.PART_COOLING:
@@ -517,8 +512,7 @@ class PrintJob:
         currently_idle = self.gcode_state == "IDLE" or self.gcode_state == "FAILED" or self.gcode_state == "FINISH"
 
         if previously_idle and not currently_idle:
-            if self._client.callback is not None:
-               self._client.callback("event_print_started")
+            self._client.callback("event_print_started")
 
             # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
             # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
@@ -542,20 +536,17 @@ class PrintJob:
         isCanceledPrint = False
         if data.get("print_error") == 50348044 and self.print_error == 0:
             isCanceledPrint = True
-            if self._client.callback is not None:
-               self._client.callback("event_print_canceled")
+            self._client.callback("event_print_canceled")
         self.print_error = data.get("print_error", self.print_error)
 
         # Handle print failed
         if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
             if not isCanceledPrint:
-                if self._client.callback is not None:
-                   self._client.callback("event_print_failed")
+                self._client.callback("event_print_failed")
 
         # Handle print finish
         if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
-            if self._client.callback is not None:
-               self._client.callback("event_print_finished")
+            self._client.callback("event_print_finished")
 
         if currently_idle and not previously_idle and previous_gcode_state != "unknown":
             if self.start_time != None:
@@ -708,8 +699,7 @@ class Info:
     def set_online(self, online):
         if self.online != online:
             self.online = online
-            if self._client.callback is not None:
-                self._client.callback("event_printer_data_update")
+            self._client.callback("event_printer_data_update")
 
     def info_update(self, data):
 
@@ -738,8 +728,7 @@ class Info:
         LOGGER.debug(f"Device is {self.device_type}")
         self.hw_ver = get_hw_version(modules, self.hw_ver)
         self.sw_ver = get_sw_version(modules, self.sw_ver)
-        if self._client.callback is not None:
-            self._client.callback("event_printer_info_update")
+        self._client.callback("event_printer_info_update")
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -925,8 +914,7 @@ class AMSList:
         data_changed = data_changed or (old_data != f"{self.__dict__}")
 
         if data_changed:
-            if self._client.callback is not None:
-                self._client.callback("event_ams_info_update")
+            self._client.callback("event_ams_info_update")
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -1155,8 +1143,7 @@ class Speed:
                 command = SPEED_PROFILE_TEMPLATE
                 command['print']['param'] = f"{id}"
                 self._client.publish(command)
-                if self._client.callback is not None:
-                    self._client.callback("event_speed_update")
+                self._client.callback("event_speed_update")
 
 
 @dataclass
@@ -1232,8 +1219,6 @@ class HMSList:
                 self._errors = errors
                 if self._count != 0:
                     LOGGER.warning(f"HMS ERRORS: {errors}")
-                if self._client.callback is not None:
-                    self._client.callback("event_hms_errors")
                 return True
         
         return False
@@ -1251,11 +1236,9 @@ class HMSList:
 class PrintErrorList:
     """Return all print_error related info"""
     _error: dict
-    _count: int
 
     def __init__(self, client):
         self._error = None
-        self._count = 0
         self._client = client
         
     def print_update(self, data) -> bool:
@@ -1272,14 +1255,13 @@ class PrintErrorList:
                 hex_conversion = f'0{int(print_error_code):x}'
                 print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
                 errors = {}
-                errors[f"Code"] = f"{print_error_code_hex.upper()}"
-                errors[f"Error"] = f"{print_error_code_hex.upper()}: {get_print_error_text(print_error_code)}"
+                errors[f"code"] = print_error_code_hex.upper()
+                errors[f"error"] = get_print_error_text(print_error_code)
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
 
             if self._error != errors:
                 self._error = errors
-                if self._client.callback is not None:
-                    self._client.callback("event_print_error")
+                self._client.callback("event_printer_error")
 
         # We send the error event directly so always return False for the general data event.
         return False
@@ -1335,8 +1317,7 @@ class ChamberImage:
     def set_jpeg(self, bytes):
         self._bytes = bytes
         self._image_last_updated = datetime.now()
-        if self._client.callback is not None:
-            self._client.callback("event_printer_chamber_image_update")
+        self._client.callback("event_printer_chamber_image_update")
 
     def get_jpeg(self) -> bytearray:
         return self._bytes.copy()
@@ -1356,8 +1337,7 @@ class CoverImage:
         self._client = client
         self._bytes = bytearray()
         self._image_last_updated = datetime.now()
-        if self._client.callback is not None:
-            self._client.callback("event_printer_cover_image_update")
+        self._client.callback("event_printer_cover_image_update")
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
