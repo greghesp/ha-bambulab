@@ -136,7 +136,7 @@ auth_response = scraper.post(
 
 print(f"Response: {auth_response.status_code}")
 cloudFlared = 'cloudflare' in auth_response.text
-print(f"Clouldflared: {cloudFlared}")
+print(f"Cloudflared: {cloudFlared}")
 print("Response: ", auth_response.text)
 
 exit(0)
