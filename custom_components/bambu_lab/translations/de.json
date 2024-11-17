@@ -12,7 +12,7 @@
     "abort": {
       "already_configured": "Das Gerät ist bereits eingerichtet",
       "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
-      "cloudflare": "Clouldflare hat den Verbindungsversuch blockiert.",
+      "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
       "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
     },
     "error": {
@@ -75,7 +75,7 @@
   },
   "options": {
     "abort": {
-      "cloudflare": "Clouldflare hat den Verbindungsversuch blockiert.",
+      "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
       "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
     },
     "error": {
