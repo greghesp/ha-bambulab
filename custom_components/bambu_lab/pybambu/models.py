@@ -19,7 +19,6 @@ from .utils import (
     get_end_time,
     get_HMS_error_text,
     get_print_error_text,
-    get_generic_AMS_HMS_error_code,
     get_HMS_severity,
     get_HMS_module,
     set_temperature_to_gcode,
@@ -1304,7 +1303,7 @@ class HMSNotification:
     @property
     def wiki_url(self):
         if self.attr > 0 and self.code > 0:
-            return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(self.hms_code)}"
+            return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{self.hms_code}"
         return ""
 
 
