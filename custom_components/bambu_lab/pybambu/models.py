@@ -19,7 +19,6 @@ from .utils import (
     get_end_time,
     get_HMS_error_text,
     get_print_error_text,
-    get_generic_AMS_HMS_error_code,
     get_HMS_severity,
     get_HMS_module,
     set_temperature_to_gcode,
@@ -54,7 +53,7 @@ class Device:
         self.ams = AMSList(client = client)
         self.external_spool = ExternalSpool(client = client)
         self.hms = HMSList(client = client)
-        self.print_error = PrintErrorList(client = client)
+        self.print_error = PrintError(client = client)
         self.camera = Camera(client = client)
         self.home_flag = HomeFlag(client=client)
         self.push_all_data = None
@@ -1207,9 +1206,9 @@ class HMSList:
                 index = index + 1
                 attr = int(hms['attr'])
                 code = int(hms['code'])
-                hms_notif = HMSNotification(attr=attr, code=code)
+                hms_notif = HMSNotification(user_language=self._client.user_language, attr=attr, code=code)
                 errors[f"{index}-Code"] = f"HMS_{hms_notif.hms_code}"
-                errors[f"{index}-Error"] = get_HMS_error_text(hms_notif.hms_code)
+                errors[f"{index}-Error"] = hms_notif.hms_error
                 errors[f"{index}-Wiki"] = hms_notif.wiki_url
                 errors[f"{index}-Severity"] = hms_notif.severity
                 #LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
@@ -1235,7 +1234,7 @@ class HMSList:
         return self._count
 
 @dataclass
-class PrintErrorList:
+class PrintError:
     """Return all print_error related info"""
     _error: dict
 
@@ -1252,13 +1251,14 @@ class PrintErrorList:
 
         if 'print_error' in data.keys():
             errors = None
-            print_error_code = data.get('print_error')
-            if print_error_code != 0:
-                hex_conversion = f'0{int(print_error_code):x}'
-                print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
+            code = data.get('print_error')
+            if code != 0:
+                code = f'0{int(code):x}'
+                code = code[slice(0,4,1)] + "_" + code[slice(4,8,1)]
+                code = code.upper()
                 errors = {}
-                errors[f"code"] = print_error_code_hex.upper()
-                errors[f"error"] = get_print_error_text(print_error_code)
+                errors[f"code"] = code
+                errors[f"error"] = get_print_error_text(code, self._client.user_language)
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
 
             if self._error != errors:
@@ -1283,7 +1283,8 @@ class HMSNotification:
     attr: int
     code: int
 
-    def __init__(self, attr: int = 0, code: int = 0):
+    def __init__(self, user_language: str, attr: int, code: int):
+        self._user_language = user_language
         self.attr = attr
         self.code = code
 
@@ -1300,11 +1301,17 @@ class HMSNotification:
         if self.attr > 0 and self.code > 0:
             return f'{int(self.attr / 0x10000):0>4X}_{self.attr & 0xFFFF:0>4X}_{int(self.code / 0x10000):0>4X}_{self.code & 0xFFFF:0>4X}' # 0300_0100_0001_0007
         return ""
+    
+    @property
+    def hms_error(self) -> str:
+        error_text = get_HMS_error_text(code=self.hms_code, language=self._user_language)
+        return error_text
 
     @property
     def wiki_url(self):
         if self.attr > 0 and self.code > 0:
-            return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{get_generic_AMS_HMS_error_code(self.hms_code)}"
+            # Only English wiki content seems to exist
+            return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{self.hms_code}"
         return ""
 
 

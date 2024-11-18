@@ -454,7 +454,7 @@ class BambuCloud:
             return None
         LOGGER.debug("Succeeded")
         return response.json()
-        
+    
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #
     # "total": 531,

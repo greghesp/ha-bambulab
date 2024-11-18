@@ -1,13 +1,12 @@
 import math
+import requests
+
 from datetime import datetime, timedelta
 
 from .const import (
     CURRENT_STAGE_IDS,
     SPEED_PROFILE,
     FILAMENT_NAMES,
-    HMS_ERRORS,
-    HMS_AMS_ERRORS,
-    PRINT_ERROR_ERRORS,
     HMS_SEVERITY_LEVELS,
     HMS_MODULES,
     LOGGER,
@@ -16,6 +15,8 @@ from .const import (
     TempEnum
 )
 from .commands import SEND_GCODE_TEMPLATE
+from .const_hms_errors import HMS_ERRORS
+from .const_print_errors import PRINT_ERROR_ERRORS
 
 
 def search(lst, predicate, default={}):
@@ -88,32 +89,51 @@ def get_current_stage(id) -> str:
     return CURRENT_STAGE_IDS.get(int(id), "unknown")
 
 
-def get_HMS_error_text(hms_code: str):
+def get_HMS_error_text(code: str, language: str):
     """Return the human-readable description for an HMS error"""
+    try:
+        code = code.replace('_', '')
+        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=5)
+        json = response.json()
+        if json['result'] == 0:
+            # We successfuly got results.
+            data = json['data']['device_hms'][language]
+            for entry in data:
+                if entry['ecode'] == code:
+                    if "" != entry['intro']:
+                        return entry['intro']
+    except:
+        LOGGER.debug(f"ERROR: {response.text}")
 
-    ams_code = get_generic_AMS_HMS_error_code(hms_code)
-    ams_error = HMS_AMS_ERRORS.get(ams_code, "")
-    if ams_error != "":
-        # 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
-        ams_index = int(hms_code[3:4], 16) + 1
-        ams_slot = int(hms_code[6:7], 16) + 1
-        ams_error = ams_error.replace('AMS1', f"AMS{ams_index}")
-        ams_error = ams_error.replace('slot 1', f"slot {ams_slot}")
-        return ams_error
-
-    return HMS_ERRORS.get(hms_code, "unknown")
+    # Fallback to static copy
+    error = HMS_ERRORS.get(code, 'unknown')
+    if '' == error:
+        return 'unknown'
+    return error
 
 
-def get_print_error_text(print_error_code: str):
+def get_print_error_text(code: str, language: str):
     """Return the human-readable description for a print error"""
 
-    hex_conversion = f'0{int(print_error_code):x}'
-    print_error_code = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
-    print_error = PRINT_ERROR_ERRORS.get(print_error_code.upper(), "")
-    if print_error != "":
-        return print_error
+    try:
+        code = code.replace('_', '')
+        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=5)
+        json = response.json()
+        if json['result'] == 0:
+            # We successfuly got results.
+            data = json['data']['device_error'][language]
+            for entry in data:
+                if entry['ecode'] == code:
+                    if "" != entry['intro']:
+                        return entry['intro']
+    except:
+        LOGGER.debug(f"ERROR: {response.text}")
 
-    return PRINT_ERROR_ERRORS.get(print_error_code, "unknown")
+    # Fallback to static copy
+    error = PRINT_ERROR_ERRORS.get(code, 'unknown')
+    if '' == error:
+        return 'unknown'
+    return error
 
 
 def get_HMS_severity(code: int) -> str:
@@ -128,21 +148,6 @@ def get_HMS_module(attr: int) -> str:
     if attr > 0 and uint_attr in HMS_MODULES:
         return HMS_MODULES[uint_attr]
     return HMS_MODULES["default"]
-
-
-def get_generic_AMS_HMS_error_code(hms_code: str):
-    code1 = int(hms_code[0:4], 16)
-    code2 = int(hms_code[5:9], 16)
-    code3 = int(hms_code[10:14], 16)
-    code4 = int(hms_code[15:19], 16)
-
-    # 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
-    ams_code = f"{code1 & 0xFFF8:0>4X}_{code2 & 0xF8FF:0>4X}_{code3:0>4X}_{code4:0>4X}"
-    ams_error = HMS_AMS_ERRORS.get(ams_code, "")
-    if ams_error != "":
-        return ams_code
-
-    return f"{code1:0>4X}_{code2:0>4X}_{code3:0>4X}_{code4:0>4X}"
 
 
 def get_printer_type(modules, default):
