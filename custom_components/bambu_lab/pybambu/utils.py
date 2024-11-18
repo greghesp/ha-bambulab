@@ -106,7 +106,10 @@ def get_HMS_error_text(code: str, language: str):
         LOGGER.debug(f"ERROR: {response.text}")
 
     # Fallback to static copy
-    return HMS_ERRORS.get(stripped_hms_code, "unknown")
+    error = HMS_ERRORS.get(code, 'unknown')
+    if '' == error:
+        return 'unknown'
+    return error
 
 
 def get_print_error_text(code: str, language: str):
@@ -127,7 +130,10 @@ def get_print_error_text(code: str, language: str):
         LOGGER.debug(f"ERROR: {response.text}")
 
     # Fallback to static copy
-    return PRINT_ERROR_ERRORS.get(code, "unknown")
+    error = PRINT_ERROR_ERRORS.get(code, 'unknown')
+    if '' == error:
+        return 'unknown'
+    return error
 
 
 def get_HMS_severity(code: int) -> str:
