@@ -1251,13 +1251,14 @@ class PrintError:
 
         if 'print_error' in data.keys():
             errors = None
-            print_error_code = data.get('print_error')
-            if print_error_code != 0:
-                hex_conversion = f'0{int(print_error_code):x}'
-                print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
+            code = data.get('print_error')
+            if code != 0:
+                code = f'0{int(code):x}'
+                code = code[slice(0,4,1)] + "_" + code[slice(4,8,1)]
+                code = code.upper()
                 errors = {}
-                errors[f"code"] = print_error_code_hex.upper()
-                errors[f"error"] = get_print_error_text(print_error_code, self._client.user_language)
+                errors[f"code"] = code
+                errors[f"error"] = get_print_error_text(code, self._client.user_language)
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
 
             if self._error != errors:

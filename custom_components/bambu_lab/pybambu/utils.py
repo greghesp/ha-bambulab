@@ -112,16 +112,15 @@ def get_HMS_error_text(code: str, language: str):
 def get_print_error_text(code: str, language: str):
     """Return the human-readable description for a print error"""
 
-    code = f'0{int(code):x}'
-    code = code.upper()
     try:
-        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=5)
+        stripped_code = code.replace('_', '')
+        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={stripped_code}", timeout=5)
         json = response.json()
         if json['result'] == 0:
             # We successfuly got results.
             data = json['data']['device_error'][language]
             for entry in data:
-                if entry['ecode'] == code:
+                if entry['ecode'] == stripped_code:
                     if "" != entry['intro']:
                         return entry['intro']
     except:
