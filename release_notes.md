@@ -1,3 +1,6 @@
+### V2.0.39
+- 
+
 ### V2.0.38
 - Fix to handle authentication changes in China
 - Improved Spanish translations
