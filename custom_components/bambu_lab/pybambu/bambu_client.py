@@ -305,13 +305,23 @@ class BambuClient:
 
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(
-            config.get('region', ''),
-            config.get('email', ''),
-            config.get('username', ''),
-            config.get('auth_token', '')
+            region = config.get('region', ''),
+            email = config.get('email', ''),
+            username = config.get('username', ''),
+            auth_token = config.get('auth_token', '')
         )
         self.slicer_settings = SlicerSettings(self)
+        language = config.get('user_language', 'pt')
+        if 'zh' in language:
+            language = 'zh-CN'
+        else:
+            language = language[:2]
+        self._user_language = language
 
+    @property
+    def user_language(self):
+        return self._user_language
+    
     @property
     def connected(self):
         """Return if connected to server"""

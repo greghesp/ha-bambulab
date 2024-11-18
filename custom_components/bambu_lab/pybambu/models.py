@@ -1,4 +1,5 @@
 import math
+import requests
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -17,7 +18,6 @@ from .utils import (
     get_sw_version,
     get_start_time,
     get_end_time,
-    get_HMS_error_text,
     get_print_error_text,
     get_HMS_severity,
     get_HMS_module,
@@ -39,6 +39,7 @@ from .commands import (
     CHAMBER_LIGHT_OFF,
     SPEED_PROFILE_TEMPLATE,
 )
+from .const_hms_errors import HMS_ERRORS
 
 class Device:
     def __init__(self, client):
@@ -1206,9 +1207,9 @@ class HMSList:
                 index = index + 1
                 attr = int(hms['attr'])
                 code = int(hms['code'])
-                hms_notif = HMSNotification(attr=attr, code=code)
+                hms_notif = HMSNotification(user_language=self._client.user_language, attr=attr, code=code)
                 errors[f"{index}-Code"] = f"HMS_{hms_notif.hms_code}"
-                errors[f"{index}-Error"] = get_HMS_error_text(hms_notif.hms_code)
+                errors[f"{index}-Error"] = hms_notif.hms_error
                 errors[f"{index}-Wiki"] = hms_notif.wiki_url
                 errors[f"{index}-Severity"] = hms_notif.severity
                 #LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
@@ -1282,7 +1283,8 @@ class HMSNotification:
     attr: int
     code: int
 
-    def __init__(self, attr: int = 0, code: int = 0):
+    def __init__(self, user_language: str, attr: int, code: int):
+        self._user_language = user_language
         self.attr = attr
         self.code = code
 
@@ -1299,6 +1301,31 @@ class HMSNotification:
         if self.attr > 0 and self.code > 0:
             return f'{int(self.attr / 0x10000):0>4X}_{self.attr & 0xFFFF:0>4X}_{int(self.code / 0x10000):0>4X}_{self.code & 0xFFFF:0>4X}' # 0300_0100_0001_0007
         return ""
+    
+    @property
+    def hms_error(self) -> str:
+        error_text = self._get_HMS_error_text(self.hms_code)
+        return error_text
+
+    def _get_HMS_error_text(self, hms_code: str):
+        """Return the human-readable description for an HMS error"""
+        try:
+            stripped_hms_code = hms_code.replace('_', '')
+            response = requests.get(f"https://e.bambulab.com/query.php?lang={self._user_language}&e={stripped_hms_code}")
+            json = response.json()
+            if json['result'] == 0:
+                # We successfuly got results.
+                data = json['data']['device_hms'][self._user_language]
+                for entry in data:
+                    if entry['ecode'] == stripped_hms_code:
+                        LOGGER.debug("FOUND ENTRY")
+                        if "" != entry['intro']:
+                            return entry['intro']
+        except:
+            LOGGER.debug(f"ERROR: {response.text}")
+
+        LOGGER.debug("USING FALLBACK!")
+        return HMS_ERRORS.get(stripped_hms_code, "unknown")
 
     @property
     def wiki_url(self):

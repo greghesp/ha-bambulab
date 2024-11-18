@@ -34,7 +34,7 @@ def process_json(json_data):
     HMS_ERROR = {}
     PRINT_ERROR = {}
     for error_entry in bambu_data['data']['device_hms']['en']:
-        code = f"{error_entry['ecode'][slice(0,4,1)].upper()}_{error_entry['ecode'][slice(4,8,1)].upper()}_{error_entry['ecode'][slice(8,12,1)].upper()}_{error_entry['ecode'][slice(12,16,1)].upper()}"
+        code = f"{error_entry['ecode'].upper()}"
         value = error_entry['intro'].replace('\"', '\'').replace('\n', '').replace('  ', ' ')
         HMS_ERROR[code] = value
 
@@ -44,7 +44,6 @@ def process_json(json_data):
         PRINT_ERROR[code] = value
 
     return(HMS_ERROR, PRINT_ERROR)
-
 
 
 def main():

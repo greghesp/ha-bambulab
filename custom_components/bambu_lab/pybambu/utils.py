@@ -13,7 +13,6 @@ from .const import (
     TempEnum
 )
 from .commands import SEND_GCODE_TEMPLATE
-from .const_hms_errors import HMS_ERRORS
 from .const_print_errors import PRINT_ERROR_ERRORS
 
 
@@ -85,12 +84,6 @@ def get_speed_name(id):
 def get_current_stage(id) -> str:
     """Return the human-readable description for a stage action"""
     return CURRENT_STAGE_IDS.get(int(id), "unknown")
-
-
-def get_HMS_error_text(hms_code: str):
-    """Return the human-readable description for an HMS error"""
-
-    return HMS_ERRORS.get(hms_code, "unknown")
 
 
 def get_print_error_text(print_error_code: str):
