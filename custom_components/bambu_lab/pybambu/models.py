@@ -1,5 +1,4 @@
 import math
-import requests
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -18,6 +17,7 @@ from .utils import (
     get_sw_version,
     get_start_time,
     get_end_time,
+    get_HMS_error_text,
     get_print_error_text,
     get_HMS_severity,
     get_HMS_module,
@@ -39,7 +39,6 @@ from .commands import (
     CHAMBER_LIGHT_OFF,
     SPEED_PROFILE_TEMPLATE,
 )
-from .const_hms_errors import HMS_ERRORS
 
 class Device:
     def __init__(self, client):
@@ -1258,7 +1257,7 @@ class PrintError:
                 print_error_code_hex = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
                 errors = {}
                 errors[f"code"] = print_error_code_hex.upper()
-                errors[f"error"] = get_print_error_text(print_error_code)
+                errors[f"error"] = get_print_error_text(print_error_code, self._client.user_language)
                 # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
 
             if self._error != errors:
@@ -1304,28 +1303,8 @@ class HMSNotification:
     
     @property
     def hms_error(self) -> str:
-        error_text = self._get_HMS_error_text(self.hms_code)
+        error_text = get_HMS_error_text(code=self.hms_code, language=self._user_language)
         return error_text
-
-    def _get_HMS_error_text(self, hms_code: str):
-        """Return the human-readable description for an HMS error"""
-        try:
-            stripped_hms_code = hms_code.replace('_', '')
-            response = requests.get(f"https://e.bambulab.com/query.php?lang={self._user_language}&e={stripped_hms_code}")
-            json = response.json()
-            if json['result'] == 0:
-                # We successfuly got results.
-                data = json['data']['device_hms'][self._user_language]
-                for entry in data:
-                    if entry['ecode'] == stripped_hms_code:
-                        LOGGER.debug("FOUND ENTRY")
-                        if "" != entry['intro']:
-                            return entry['intro']
-        except:
-            LOGGER.debug(f"ERROR: {response.text}")
-
-        LOGGER.debug("USING FALLBACK!")
-        return HMS_ERRORS.get(stripped_hms_code, "unknown")
 
     @property
     def wiki_url(self):

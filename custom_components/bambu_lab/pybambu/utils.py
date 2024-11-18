@@ -1,4 +1,6 @@
 import math
+import requests
+
 from datetime import datetime, timedelta
 
 from .const import (
@@ -13,6 +15,7 @@ from .const import (
     TempEnum
 )
 from .commands import SEND_GCODE_TEMPLATE
+from .const_hms_errors import HMS_ERRORS
 from .const_print_errors import PRINT_ERROR_ERRORS
 
 
@@ -86,16 +89,46 @@ def get_current_stage(id) -> str:
     return CURRENT_STAGE_IDS.get(int(id), "unknown")
 
 
-def get_print_error_text(print_error_code: str):
+def get_HMS_error_text(code: str, language: str):
+    """Return the human-readable description for an HMS error"""
+    try:
+        stripped_hms_code = code.replace('_', '')
+        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={stripped_hms_code}", timeout=5)
+        json = response.json()
+        if json['result'] == 0:
+            # We successfuly got results.
+            data = json['data']['device_hms'][language]
+            for entry in data:
+                if entry['ecode'] == stripped_hms_code:
+                    if "" != entry['intro']:
+                        return entry['intro']
+    except:
+        LOGGER.debug(f"ERROR: {response.text}")
+
+    # Fallback to static copy
+    return HMS_ERRORS.get(stripped_hms_code, "unknown")
+
+
+def get_print_error_text(code: str, language: str):
     """Return the human-readable description for a print error"""
 
-    hex_conversion = f'0{int(print_error_code):x}'
-    print_error_code = hex_conversion[slice(0,4,1)] + "_" + hex_conversion[slice(4,8,1)]
-    print_error = PRINT_ERROR_ERRORS.get(print_error_code.upper(), "")
-    if print_error != "":
-        return print_error
+    code = f'0{int(code):x}'
+    code = code.upper()
+    try:
+        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=5)
+        json = response.json()
+        if json['result'] == 0:
+            # We successfuly got results.
+            data = json['data']['device_error'][language]
+            for entry in data:
+                if entry['ecode'] == code:
+                    if "" != entry['intro']:
+                        return entry['intro']
+    except:
+        LOGGER.debug(f"ERROR: {response.text}")
 
-    return PRINT_ERROR_ERRORS.get(print_error_code, "unknown")
+    # Fallback to static copy
+    return PRINT_ERROR_ERRORS.get(code, "unknown")
 
 
 def get_HMS_severity(code: int) -> str:
