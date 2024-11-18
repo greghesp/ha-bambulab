@@ -5,7 +5,10 @@
       "event_print_failed": "출력 실패",
       "event_print_finished": "출력 완료됨",
       "event_print_started": "출력 시작됨",
-      "event_printer_error": "프린터 오류 감지됨"
+      "event_print_error": "인쇄 오류",
+      "event_print_error_cleared": "인쇄 오류가 해결되었습니다.",
+      "event_printer_error": "HMS 오류",
+      "event_printer_error_cleared": "HMS 오류가 해결되었습니다."
     }
   },
   "config": {

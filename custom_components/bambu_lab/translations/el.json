@@ -5,7 +5,10 @@
       "event_print_failed": "Αποτυχία εκτύπωσης",
       "event_print_finished": "Η εκτύπωση ολοκληρώθηκε",
       "event_print_started": "Η εκτύπωση ξεκίνησε",
-      "event_printer_error": "Εντοπίστηκε σφάλμα στον εκτυπωτή"
+      "event_print_error": "Σφάλμα εκτύπωσης",
+      "event_print_error_cleared": "Το σφάλμα εκτύπωσης διαγράφηκε",
+      "event_printer_error": "Σφάλμα HMS",
+      "event_printer_error_cleared": "Το σφάλμα HMS διαγράφηκε"
     }
   },
   "config": {

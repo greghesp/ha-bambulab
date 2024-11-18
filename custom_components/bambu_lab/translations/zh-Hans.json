@@ -5,7 +5,10 @@
       "event_print_failed": "打印失败",
       "event_print_finished": "打印完成",
       "event_print_started": "开始打印",
-      "event_printer_error": "检测到打印机错误"
+      "event_print_error": "打印错误",
+      "event_print_error_cleared": "打印错误已清除",
+      "event_printer_error": "移动管理系统错误",
+      "event_printer_error_cleared": "HMS 错误已清除"
     }
   },
   "config": {
