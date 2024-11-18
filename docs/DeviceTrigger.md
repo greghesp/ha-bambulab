@@ -9,11 +9,11 @@ Available events:
 - Print finished
 - Print canceled
 - Print failed (X1 only)
-- Printer error detected. This is the HMS errors. With additional data payload:
+- HMS error detected. With additional data payload:
     - code
     - error
     - url (wiki link for error)
-- Print error detected. This is a separate set of errors that aren't surface as HMS errors. No I don't know why. With additional data payload:
+- Print error detected. This is a separate set of errors that aren't surfaced as HMS errors. No I don't know why. With additional data payload:
     - code
     - error
 
