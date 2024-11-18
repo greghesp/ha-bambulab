@@ -24,7 +24,10 @@ TRIGGER_TYPES = {
     "event_print_failed",
     "event_print_finished",
     "event_print_started",
+    "event_print_error",
+    "event_print_error_cleared",
     "event_printer_error",
+    "event_printer_error_cleared",
 }
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
