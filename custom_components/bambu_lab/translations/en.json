@@ -7,8 +7,8 @@
       "event_print_started": "Print started",
       "event_print_error": "Print error",
       "event_print_error_cleared": "Print error cleared",
-      "event_printer_error": "Printer error",
-      "event_printer_error_cleared": "Printer error cleared"
+      "event_printer_error": "HMS error",
+      "event_printer_error_cleared": "HMS error cleared"
     }
   },
   "config": {

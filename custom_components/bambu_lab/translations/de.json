@@ -5,7 +5,10 @@
       "event_print_failed": "Druckauftrag fehlgeschlagen",
       "event_print_finished": "Druckauftrag beendet",
       "event_print_started": "Druckauftrag gestartet",
-      "event_printer_error": "Druckerfehler erkannt"
+      "event_print_error": "Druckfehler",
+      "event_print_error_cleared": "Druckfehler behoben",
+      "event_printer_error": "HMS-Fehler",
+      "event_printer_error_cleared": "HMS-Fehler behoben"
     }
   },
   "config": {

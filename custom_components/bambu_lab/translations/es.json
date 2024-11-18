@@ -5,7 +5,10 @@
       "event_print_failed": "Impresión fallida",
       "event_print_finished": "Impresión finalizada",
       "event_print_started": "Impresión iniciada",
-      "event_printer_error": "Error de la impresora detectado"
+      "event_print_error": "Error de impresión",
+      "event_print_error_cleared": "Error de impresión borrado",
+      "event_printer_error": "error de HMS",
+      "event_printer_error_cleared": "Error de HMS borrado"
     }
   },
   "config": {
