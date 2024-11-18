@@ -4,7 +4,6 @@
 - Cleanup device trigger events and add print error device trigger events
 - Update filament list
 - Update errors list
-- Backup way to get user_id for mqtt cloud connection
 
 ### V2.0.37
 - Switch back to cloudscraper from curl_cffi as Bambu cloudflare has stopped blocking it
