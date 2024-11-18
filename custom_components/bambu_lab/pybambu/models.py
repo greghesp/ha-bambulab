@@ -54,7 +54,7 @@ class Device:
         self.ams = AMSList(client = client)
         self.external_spool = ExternalSpool(client = client)
         self.hms = HMSList(client = client)
-        self.print_error = PrintErrorList(client = client)
+        self.print_error = PrintError(client = client)
         self.camera = Camera(client = client)
         self.home_flag = HomeFlag(client=client)
         self.push_all_data = None
@@ -1235,7 +1235,7 @@ class HMSList:
         return self._count
 
 @dataclass
-class PrintErrorList:
+class PrintError:
     """Return all print_error related info"""
     _error: dict
 
@@ -1330,6 +1330,7 @@ class HMSNotification:
     @property
     def wiki_url(self):
         if self.attr > 0 and self.code > 0:
+            # Only English wiki content seems to exist
             return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{self.hms_code}"
         return ""
 
