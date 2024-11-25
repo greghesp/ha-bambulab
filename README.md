@@ -104,6 +104,7 @@ instead of OAuth.
 | Pause               |                                                  |
 | Resume              |                                                  |
 | Stop                |                                                  |
+| Home                | Homes all axis                                   |
 | Manual Refresh Mode | P1/A1 only and only available in local MQTT mode |
 
 ### AMS
