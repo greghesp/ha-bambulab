@@ -147,7 +147,7 @@ class BambuLabHomeButton(BambuLabButton):
     async def async_press(self) -> None:
         """ Home on button press"""
         command = SEND_GCODE_TEMPLATE
-        command['print']['param'] = f"\n"
+        command['print']['param'] = "G28\n"
         self.coordinator.client.publish(command)
 
 
