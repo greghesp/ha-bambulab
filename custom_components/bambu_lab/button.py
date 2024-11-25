@@ -5,7 +5,7 @@ from homeassistant.helpers.entity import EntityCategory
 
 from .const import DOMAIN, LOGGER
 from .models import BambuLabEntity
-from .pybambu.commands import PAUSE, RESUME, STOP
+from .pybambu.commands import PAUSE, RESUME, STOP, SEND_GCODE_TEMPLATE
 from .pybambu.const import Features
 
 from homeassistant.components.button import (
@@ -33,6 +33,12 @@ STOP_BUTTON_DESCRIPTION = ButtonEntityDescription(
     translation_key="stop",
     entity_category=EntityCategory.CONFIG,
 )
+HOME_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="home",
+    icon="mdi:home",
+    translation_key="home",
+    entity_category=EntityCategory.CONFIG,
+)
 FORCE_REFRESH_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="refresh",
     icon="mdi:refresh",
@@ -53,6 +59,7 @@ async def async_setup_entry(
         BambuLabPauseButton(coordinator, entry),
         BambuLabResumeButton(coordinator, entry),
         BambuLabStopButton(coordinator, entry),
+        BambuLabHomeButton(coordinator, entry),
         BambuLabRefreshButton(coordinator, entry)
     ]
 
@@ -123,6 +130,25 @@ class BambuLabStopButton(BambuLabButton):
     async def async_press(self) -> None:
         """ Stop the Print on button press"""
         self.coordinator.client.publish(STOP)
+
+
+class BambuLabHomeButton(BambuLabButton):
+    """BambuLab Homing Button"""
+
+    entity_description = HOME_BUTTON_DESCRIPTION
+
+    @property
+    def available(self) -> bool:
+        """Return if the button is available"""
+        if self.coordinator.data.print_job.gcode_state == "RUNNING" or self.coordinator.data.print_job.gcode_state == "PAUSE":
+            return False
+        return True
+
+    async def async_press(self) -> None:
+        """ Home on button press"""
+        command = SEND_GCODE_TEMPLATE
+        command['print']['param'] = f"\n"
+        self.coordinator.client.publish(command)
 
 
 class BambuLabRefreshButton(BambuLabButton):
