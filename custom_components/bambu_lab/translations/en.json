@@ -164,6 +164,9 @@
       "stop": {
         "name": "Stop printing"
       },
+      "home": {
+        "name": "Home all axis"
+      },
       "refresh": {
         "name": "Force Refresh Data"
       }
