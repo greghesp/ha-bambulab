@@ -171,7 +171,7 @@ See [device triggers](docs/DeviceTrigger.md).
 
 ### Actions
 
-* Send Command: Sends arbitrary GCODE to the printer. Be careful as it does not check if the printer is running a job
+* **Send Command**: Sends arbitrary GCODE to the printer. Be careful as it does not check if the printer is running a job
 or not so before invoking this action, you should check the printer state to ensure it is not running a job.
 
 ## Example dashboard
