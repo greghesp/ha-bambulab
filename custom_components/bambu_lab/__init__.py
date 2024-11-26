@@ -16,15 +16,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
-    # Set up all platforms for this device/entry.
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-    # Reload entry when its updated.
-    #entry.async_on_unload(entry.add_update_listener(async_reload_entry))
-
-    LOGGER.debug("async_setup_entry Complete")
-
-    platform = entity_platform.async_get_current_platform()
     async def send_command(call: ServiceCall):
         """Handle the service call."""
         command = SEND_GCODE_TEMPLATE
@@ -38,6 +29,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "send_command",  # Service name
         send_command    # Handler function
     )
+
+    # Set up all platforms for this device/entry.
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Reload entry when its updated.
+    #entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+
+    LOGGER.debug("async_setup_entry Complete")
 
     # Now that we've finished initialization fully, start the MQTT connection so that any necessary
     # sensor reinitialization happens entirely after the initial setup.
