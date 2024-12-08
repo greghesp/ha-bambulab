@@ -47,6 +47,13 @@
           "tfaCode": "Two factor authentication code"
         }
       },
+      "Bambu_Use_Existing": {
+        "title": "Bambu Cloud Connection",
+        "description": "Found existing login credentials:\r\n{login}",
+        "data": {
+          "useExisting": "Use these credentials?"
+        }
+      },
       "Bambu_Choose_Device": {
         "title": "Printer Selection",
         "description": "Choose which printer you want to add.",
