@@ -47,6 +47,13 @@
           "tfaCode": "Código de autenticación de dos factores"
         }
       },
+      "Bambu_Use_Existing": {
+        "title": "Conexión a la Nube de Bambú",
+        "description": "Se encontraron credenciales de inicio de sesión existentes:\\r\n{login}",
+        "data": {
+          "useExisting": "¿Usar estas credenciales?"
+        }
+      },
       "Bambu_Choose_Device": {
         "title": "Selección de Impresora",
         "description": "Elije qué impresora quieres añadir.",

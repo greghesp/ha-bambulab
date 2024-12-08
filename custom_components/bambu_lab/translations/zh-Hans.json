@@ -47,6 +47,13 @@
           "tfaCode": "二因素验证码"
         }
       },
+      "Bambu_Use_Existing": {
+        "title": "竹云连接",
+        "description": "找到现有的登录凭据:\\r\n{login}",
+        "data": {
+          "useExisting": "使用这些凭据？"
+        }
+      },
       "Bambu_Choose_Device": {
         "title": "打印机选择",
         "description": "选择要添加的打印机。",

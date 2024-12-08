@@ -111,10 +111,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         errors = {}
-        default_region = ''
-        default_email = ''
+        default_region = self.region
+        default_email = self.email
 
-        if user_input is None:
+        if user_input is None and self.region == '':
             # Iterate over all existing entries and try any existing credentials to see if they work
             config_entries = self.hass.config_entries.async_entries(DOMAIN)
             LOGGER.debug(f"Found {len(config_entries)} existing config entries for the integration.")
@@ -139,7 +139,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             username,
                             auth_token
                         )
-                        return await self.async_step_Bambu_Choose_Device(None)
+                        return await self.async_step_Bambu_Use_Existing(None)
 
         authentication_type = None
         if user_input is not None:
@@ -204,6 +204,30 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="Bambu",
             data_schema=vol.Schema(fields),
             errors=errors or {},
+            last_step=False,
+        )
+    
+    async def async_step_Bambu_Use_Existing(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        LOGGER.debug("async_step_Bambu_Use_Existing")
+
+        if user_input is not None:
+            if user_input['useExisting'] == True:
+                return await self.async_step_Bambu_Choose_Device(None)
+            else:
+                self.email = ''
+                return await self.async_step_Bambu(None)
+
+        # Build form
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Required('useExisting', default=True)] = BOOLEAN_SELECTOR
+
+        return self.async_show_form(
+            step_id="Bambu_Use_Existing",
+            data_schema=vol.Schema(fields),
+            description_placeholders={"login": self.email},
+            errors={},
             last_step=False,
         )
 
