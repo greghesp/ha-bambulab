@@ -1,5 +1,10 @@
 ### V2.0.39
-- 
+- Removed unsupported wled blueprint
+- Simplified hms errors
+- Fallback to requests if cloudscraper isn't available
+- Updated translations
+- Allow different credentials to be provided when adding a printer
+- Add service to send arbitrary gcode
 
 ### V2.0.38
 - Fix to handle authentication changes in China
