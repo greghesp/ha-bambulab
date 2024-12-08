@@ -1,10 +1,12 @@
 """The Bambu Lab component."""
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.helpers import entity_platform
 from .const import DOMAIN, LOGGER, PLATFORMS
 from .coordinator import BambuDataUpdateCoordinator
 from .config_flow import CONFIG_VERSION
+from .pybambu.commands import SEND_GCODE_TEMPLATE
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
@@ -13,6 +15,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+
+    async def send_command(call: ServiceCall):
+        """Handle the service call."""
+        command = SEND_GCODE_TEMPLATE
+        command['print']['param'] = f"{call.data.get("command")}\n"
+        coordinator.client.publish(command)
+
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "send_command",  # Service name
+        send_command    # Handler function
+    )
 
     # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

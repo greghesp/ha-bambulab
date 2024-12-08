@@ -1,0 +1,11 @@
+send_command:
+  name: Send Command
+  description: Send an arbitrary command to the 3D printer
+  fields:
+    command:
+      name: Command
+      description: The command to send to the printer
+      required: true
+      example: "M104 S200"
+      selector:
+        text:
