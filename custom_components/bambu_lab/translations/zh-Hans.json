@@ -65,7 +65,7 @@
         }
       },
       "Lan": {
-        "title": "LAN模式连接",
+        "title": "LAN 模式连接",
         "description": "请提供您当地的打印机类型、IP 地址、序列号和访问代码。访问代码可在网络设置的打印机屏幕上找到。序列号可以在设备设置中找到。",
         "data": {
           "serial": "序号：",
@@ -243,7 +243,7 @@
         "name": "打印仓风扇速度"
       },
       "heatbreak_fan_speed": {
-        "name": "热断风扇速度"
+        "name": "热端风扇速度"
       },
       "speed_profile": {
         "name": "速度配置文件",
