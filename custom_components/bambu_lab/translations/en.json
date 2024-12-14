@@ -496,7 +496,7 @@
             "name": "Remaining filament"
           },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
           },
           "type": {
             "name": "Type"
@@ -531,7 +531,7 @@
             "name": "Remaining filament"
           },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
           },
           "type": {
             "name": "Type"
@@ -566,7 +566,7 @@
             "name": "Remaining filament"
           },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
           },
           "type": {
             "name": "Type"
