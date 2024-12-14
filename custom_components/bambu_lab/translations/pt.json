@@ -496,7 +496,7 @@
             "name": "Filamento restante"
           },
           "tag_uid": {
-            "name": "Número de série do filamento"
+            "name": "Número de série do carretel"
           },
           "type": {
             "name": "Tipo"
@@ -531,7 +531,7 @@
             "name": "Filamento restante"
           },
           "tag_uid": {
-            "name": "Número de série do filamento"
+            "name": "Número de série do carretel"
           },
           "type": {
             "name": "Tipo"
@@ -566,7 +566,7 @@
             "name": "Filamento restante"
           },
           "tag_uid": {
-            "name": "Número de série do filamento"
+            "name": "Número de série do carretel"
           },
           "type": {
             "name": "Tipo"
