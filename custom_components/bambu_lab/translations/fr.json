@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "La configuration via Bambu Cloud est la plus simple mais vous pouvez configurer manuellement pour un accès local uniquement mais vous perdez certaines fonctionnalités. Ce dernier est requis pour les imprimantes configurées en mode Lan uniquement.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Vous pouvez éventuellement configurer manuellement pour un accès local uniquement, mais vous perdez certaines fonctionnalités - ceci est requis pour les imprimantes définies en mode Lan uniquement. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge pour la configuration cloud.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
@@ -102,7 +102,7 @@
     "step": {
       "init": {
         "title": "Ajuster les paramètres de connexion",
-        "description": "La configuration via Bambu Cloud est la plus simple mais vous pouvez configurer manuellement pour un accès local uniquement mais vous perdez certaines fonctionnalités. Ce dernier est requis pour les imprimantes configurées en mode Lan uniquement.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Vous pouvez éventuellement configurer manuellement pour un accès local uniquement, mais vous perdez certaines fonctionnalités - ceci est requis pour les imprimantes définies en mode Lan uniquement. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge pour la configuration cloud.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }

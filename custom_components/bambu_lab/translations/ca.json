@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "La configuració mitjançant Bambu Cloud és més senzilla, però podeu configurar manualment només per a l'accés local, però perd algunes funcions. Aquest últim és necessari per a les impressores configurades en mode Només LAN.",
+        "description": "La configuració mitjançant Bambu Cloud és més senzilla. Opcionalment, podeu configurar manualment l'accés només local, però perds algunes funcions; això és necessari per a les impressores configurades en el mode Només LAN. Els comptes de xarxes socials sense contrasenya no són compatibles amb la configuració del núvol.",
         "data": {
           "printer_mode": "Mode de configuració de la impressora:"
         }
@@ -102,7 +102,7 @@
     "step": {
       "init": {
         "title": "Ajusta la configuració de connexió",
-        "description": "La configuració mitjançant Bambu Cloud és més senzilla, però podeu configurar manualment només per a l'accés local, però perd algunes funcions. Aquest últim és necessari per a les impressores configurades en mode Només LAN.",
+        "description": "La configuració mitjançant Bambu Cloud és més senzilla. Opcionalment, podeu configurar manualment l'accés només local, però perds algunes funcions; això és necessari per a les impressores configurades en el mode Només LAN. Els comptes de xarxes socials sense contrasenya no són compatibles amb la configuració del núvol.",
         "data": {
           "printer_mode": "Mode de configuració de la impressora:"
         }

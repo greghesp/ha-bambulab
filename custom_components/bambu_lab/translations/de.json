@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "Die Konfiguration über Bambu Cloud ist am einfachsten, aber Sie können die Konfiguration manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren. Letzteres ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Optional können Sie den Zugriff nur lokal manuell konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind. Social-Media-Konten ohne Passwort unterstützen die Cloud-Konfiguration nicht.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -102,7 +102,7 @@
     "step": {
       "init": {
         "title": "Verbindungseinstellungen anpassen",
-        "description": "Die Konfiguration über Bambu Cloud ist am einfachsten, aber Sie können die Konfiguration manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren. Letzteres ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Optional können Sie den Zugriff nur lokal manuell konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind. Social-Media-Konten ohne Passwort unterstützen die Cloud-Konfiguration nicht.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
