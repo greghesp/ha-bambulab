@@ -27,9 +27,9 @@ from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
     CloudflareError,
     CurlUnavailableError,
-    EmailCodeRequiredError,
-    EmailCodeExpiredError,
-    EmailCodeIncorrectError,
+    CodeRequiredError,
+    CodeExpiredError,
+    CodeIncorrectError,
     TfaCodeRequiredError
 )
 
@@ -167,15 +167,15 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
                 return self.async_abort(reason='curl_unavailable')
-            except EmailCodeRequiredError:
+            except CodeRequiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeExpiredError:
+            except CodeExpiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_expired'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeIncorrectError:
+            except CodeIncorrectError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_incorrect'
                 # Fall through to form generation to ask for verification code
@@ -189,15 +189,16 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        default_region = default_region if user_input is None else user_input.get('region', '')
-        fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
-        default_email = default_email if user_input is None else user_input.get('email', '')
-        fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
-        default_password = '' if user_input is None else user_input.get('password', '')
-        fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
-        if authentication_type == 'verifyCode':
+        if authentication_type is None:
+            default_region = default_region if user_input is None else user_input.get('region', '')
+            fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
+            default_email = default_email if user_input is None else user_input.get('email', '')
+            fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
+            default_password = '' if user_input is None else user_input.get('password', '')
+            fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+        elif authentication_type == 'verifyCode':
             fields[vol.Required('verifyCode', default='')] = TEXT_SELECTOR
-        if authentication_type == 'tfaCode':
+        elif authentication_type == 'tfaCode':
             fields[vol.Required('tfaCode', default='')] = TEXT_SELECTOR
 
         return self.async_show_form(
@@ -512,11 +513,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     return await self.async_step_Bambu_Lan(None)
 
             # Handle possible failure cases
-            except EmailCodeExpiredError:
+            except CodeExpiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = "code_expired"
                 # Fall through to form generation to ask for verification code
-            except EmailCodeIncorrectError:
+            except CodeIncorrectError:
                 authentication_type = 'verifyCode'
                 errors['base'] = "code_incorrect"
                 # Fall through to form generation to ask for verification code
@@ -524,15 +525,15 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
                 return self.async_abort(reason='curl_unavailable')
-            except EmailCodeRequiredError:
+            except CodeRequiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeExpiredError:
+            except CodeExpiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_expired'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeIncorrectError:
+            except CodeIncorrectError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_incorrect'
                 # Fall through to form generation to ask for verification code
@@ -546,15 +547,16 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        default_region = self.config_entry.options.get('region', '') if user_input is None else user_input.get('region', '')
-        fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
-        default_email = self.config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
-        fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
-        default_password = '' if user_input is None else user_input.get('password', '')
-        fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
-        if authentication_type == 'verifyCode':
+        if authentication_type is None:
+            default_region = self.config_entry.options.get('region', '') if user_input is None else user_input.get('region', '')
+            fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
+            default_email = self.config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
+            fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
+            default_password = '' if user_input is None else user_input.get('password', '')
+            fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+        elif authentication_type == 'verifyCode':
             fields[vol.Required('verifyCode', default='')] = TEXT_SELECTOR
-        if authentication_type == 'tfaCode':
+        elif authentication_type == 'tfaCode':
             fields[vol.Required('tfaCode', default='')] = TEXT_SELECTOR
 
         return self.async_show_form(

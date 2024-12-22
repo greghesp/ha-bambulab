@@ -24,14 +24,14 @@
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
-      "verifyCode": "Verification code is required. Check your email.",
-      "code_expired": "Verification code expired. New code requested. Check your email.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan Only Mode.",
+        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode. Social media accounts without a password are not support for cloud configuration.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -43,7 +43,7 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
-          "verifyCode": "Email verification code",
+          "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
         }
       },
@@ -94,15 +94,15 @@
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
-      "verifyCode": "Verification code is required. Check your email.",
-      "code_expired": "Verification code expired. New code requested. Check your email.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "init": {
         "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan Only Mode.",
+        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode. Social media accounts without a password are not support for cloud configuration.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -114,7 +114,7 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
-          "verifyCode": "Email verification code",
+          "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
         }
       },

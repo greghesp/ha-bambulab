@@ -24,14 +24,14 @@
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
-      "verifyCode": "Codice di verifica richiesto. Controlla la tua email.",
-      "code_expired": "Il codice di verifica è scaduto. È stato richiesto un nuovo codice. Controlla la tua mail",
+      "verifyCode": "È richiesto il codice di verifica. Controlla la tua email o il tuo telefono.",
+      "code_expired": "Il codice di verifica è scaduto. Nuovo codice richiesto. Controlla la tua email o il tuo telefono.",
       "code_incorrect": "Il codice di verifica errato.",
       "tfaCode": "È richiesto il codice 2FA."
     },
     "step": {
       "user": {
-        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account social media senza password. Inoltre non funziona per le stampanti impostate in modalità Solo Lan.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Facoltativamente è possibile configurare manualmente l'accesso solo locale, ma si perdono alcune funzionalità: ciò è necessario per le stampanti impostate sulla modalità Solo Lan. Gli account di social media senza password non supportano la configurazione cloud.",
         "data": {
           "printer_mode": "Modalità di configurazione della stampante:"
         }
@@ -43,7 +43,7 @@
           "region": "Area dell'account:",
           "email": "Indirizzo e-mail o numero di telefono",
           "password": "Password",
-          "verifyCode": "Codice di verifica e-mail",
+          "verifyCode": "Codice di verifica via e-mail o telefono",
           "tfaCode": "Codice di autenticazione a due fattori"
         }
       },
@@ -94,15 +94,15 @@
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
-      "verifyCode": "Codice di verifica richiesto. Controlla la tua email.",
-      "code_expired": "Il codice di verifica è scaduto. È stato richiesto un nuovo codice. Controlla la tua mail",
+      "verifyCode": "È richiesto il codice di verifica. Controlla la tua email o il tuo telefono.",
+      "code_expired": "Il codice di verifica è scaduto. Nuovo codice richiesto. Controlla la tua email o il tuo telefono.",
       "code_incorrect": "Il codice di verifica non era corretto.",
       "tfaCode": "È richiesto il codice 2FA."
     },
     "step": {
       "init": {
         "title": "Regolare le impostazioni di connessione",
-        "description": "La configurazione tramite Bambu Cloud è la più semplice. Ma non supporta 2FA o account social media senza password. E non funzionerà per le stampanti impostate attivamente in modalità Solo Lan.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Facoltativamente è possibile configurare manualmente l'accesso solo locale, ma si perdono alcune funzionalità: ciò è necessario per le stampanti impostate sulla modalità Solo Lan. Gli account di social media senza password non supportano la configurazione cloud.",
         "data": {
           "printer_mode": "Modalità di configurazione della stampante:"
         }
@@ -114,7 +114,7 @@
           "region": "Area dell'account:",
           "email": "Indirizzo e-mail o numero di telefono",
           "password": "Password",
-          "verifyCode": "Codice di verifica e-mail",
+          "verifyCode": "Codice di verifica via e-mail o telefono",
           "tfaCode": "Codice di autenticazione a due fattori"
         }
       },

@@ -24,14 +24,14 @@
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
       "invalid_auth": "Authentifizierung fehlgeschlagen.",
       "unknown": "Unerwarteter Fehler.",
-      "verifyCode": "Ein Bestätigungscode ist erforderlich. ",
-      "code_expired": "Der Bestätigungscode ist abgelaufen. ",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_incorrect": "Der Bestätigungscode war falsch. ",
       "tfaCode": "2FA-Code ist erforderlich. "
     },
     "step": {
       "user": {
-        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Optional können Sie den Zugriff nur lokal manuell konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind. Social-Media-Konten ohne Passwort unterstützen die Cloud-Konfiguration nicht.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -43,7 +43,7 @@
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
           "password": "Passwort",
-          "verifyCode": "E-Mail-Bestätigungscode",
+          "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
           "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },
@@ -94,15 +94,15 @@
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
       "invalid_auth": "Authentifizierung fehlgeschlagen",
       "unknown": "Unerwarteter Fehler",
-      "verifyCode": "Ein Bestätigungscode ist erforderlich. ",
-      "code_expired": "Der Bestätigungscode ist abgelaufen. ",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_incorrect": "Der Bestätigungscode war falsch. ",
       "tfaCode": "2FA-Code ist erforderlich. "
     },
     "step": {
       "init": {
         "title": "Verbindungseinstellungen anpassen",
-        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Optional können Sie den Zugriff nur lokal manuell konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind. Social-Media-Konten ohne Passwort unterstützen die Cloud-Konfiguration nicht.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -114,7 +114,7 @@
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
           "password": "Passwort",
-          "verifyCode": "E-Mail-Bestätigungscode",
+          "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
           "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },

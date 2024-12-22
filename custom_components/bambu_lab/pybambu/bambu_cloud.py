@@ -47,17 +47,17 @@ class CloudflareError(Exception):
         super().__init__("Blocked by Cloudflare")
         self.error_code = 403
 
-class EmailCodeRequiredError(Exception):
+class CodeRequiredError(Exception):
     def __init__(self):
         super().__init__("Email code required")
         self.error_code = 400
 
-class EmailCodeExpiredError(Exception):
+class CodeExpiredError(Exception):
     def __init__(self):
         super().__init__("Email code expired")
         self.error_code = 400
 
-class EmailCodeIncorrectError(Exception):
+class CodeIncorrectError(Exception):
     def __init__(self):
         super().__init__("Email code incorrect")
         self.error_code = 400
@@ -200,7 +200,7 @@ class BambuCloud:
             return ValueError(0) # FIXME
         elif loginType == 'verifyCode':
             LOGGER.debug(f"Received verifyCode response")
-            raise EmailCodeRequiredError()
+            raise CodeRequiredError()
         elif loginType == 'tfa':
             # Store the tfaKey for later use
             LOGGER.debug(f"Received tfa response")
@@ -218,8 +218,19 @@ class BambuCloud:
             "type": "codeLogin"
         }
 
-        LOGGER.debug("Requesting verification code")
+        LOGGER.debug("Requesting email verification code")
         self._post(BambuUrl.EMAIL_CODE, json=data)
+        LOGGER.debug("Verification code requested successfully.")
+
+    def _get_sms_verification_code(self):
+        # Send the verification code request
+        data = {
+            "phone": self._email,
+            "type": "codeLogin"
+        }
+
+        LOGGER.debug("Requesting SMS verification code")
+        self._post(BambuUrl.SMS_CODE, json=data)
         LOGGER.debug("Verification code requested successfully.")
 
     def _get_authentication_token_with_verification_code(self, code) -> dict:
@@ -239,11 +250,14 @@ class BambuCloud:
             LOGGER.debug(f"Received response: {response.json()}")           
             if response.json()['code'] == 1:
                 # Code has expired. Request a new one.
-                self._get_email_verification_code()
-                raise EmailCodeExpiredError()
+                if '@' in self._email:
+                    self._get_email_verification_code()
+                else:
+                    self._get_sms_verification_code()
+                raise CodeExpiredError()
             elif response.json()['code'] == 2:
                 # Code was incorrect. Let the user try again.
-                raise EmailCodeIncorrectError()
+                raise CodeIncorrectError()
             else:
                 LOGGER.error(f"Response not understood: '{response.json()}'")
                 raise ValueError(response.json()['code'])

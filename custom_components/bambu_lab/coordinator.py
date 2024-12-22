@@ -20,8 +20,6 @@ from homeassistant.const import (
     Platform
 )
 
-import paho.mqtt.client as mqtt
-
 from .pybambu import BambuClient
 from .pybambu.const import Features
 

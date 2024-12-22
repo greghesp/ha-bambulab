@@ -24,14 +24,14 @@
       "cannot_connect_local_all": "Error de connexió. Revisa la configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
-      "verifyCode": "Cal el codi de verificació. Revisa el teu correu electrònic.",
-      "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Revisa el teu correu electrònic.",
+      "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
+      "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
       "code_incorrect": "El codi de verificació és incorrecte. Si us plau, introdueix-lo de nou.",
       "tfaCode": "Cal codi 2FA. Si us plau, introdueix-ho."
     },
     "step": {
       "user": {
-        "description": "La configuració mitjançant Bambu Cloud és més simple, però no té suport per 2FA o comptes de xarxes socials sense una contrasenya, i no funcionarà amb impressores activament configurades com a Només LAN.",
+        "description": "La configuració mitjançant Bambu Cloud és més senzilla. Opcionalment, podeu configurar manualment l'accés només local, però perds algunes funcions; això és necessari per a les impressores configurades en el mode Només LAN. Els comptes de xarxes socials sense contrasenya no són compatibles amb la configuració del núvol.",
         "data": {
           "printer_mode": "Mode de configuració de la impressora:"
         }
@@ -43,8 +43,15 @@
           "region": "Regió del compte:",
           "email": "Direcció de Correu Electrònic o Número de Telèfon",
           "password": "Contrasenyaa",
-          "verifyCode": "Codi de verificació per correu electrònic",
+          "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
+        }
+      },
+      "Bambu_Use_Existing": {
+        "title": "Connexió al núvol Bambu",
+        "description": "S'han trobat les credencials d'inici de sessió existents:\\r\n{inici de sessió}",
+        "data": {
+          "useExisting": "Utilitzeu aquestes credencials?"
         }
       },
       "Bambu_Choose_Device": {
@@ -87,15 +94,15 @@
       "cannot_connect_local_all": "Error de connexió. Revisa configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
-      "verifyCode": "Cal codi de verificació. Revisa el teu correu electrònic.",
-      "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Revisa el teu correu electrònic.",
+      "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
+      "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
       "code_incorrect": "El codi de verificació era incorrecte. Si us plau, introdueix-lo de nou.",
       "tfaCode": "Cal codi 2FA. Si us plau, introdueix-lo."
     },
     "step": {
       "init": {
         "title": "Ajusta la configuració de connexió",
-        "description": "La configuració mitjançant Bambu Cloud és més simple, però no té suport per 2FA o comptes de xarxes socials sense una contrasenya, i no funcionarà amb impressores activament configurades com a Solo LAN.",
+        "description": "La configuració mitjançant Bambu Cloud és més senzilla. Opcionalment, podeu configurar manualment l'accés només local, però perds algunes funcions; això és necessari per a les impressores configurades en el mode Només LAN. Els comptes de xarxes socials sense contrasenya no són compatibles amb la configuració del núvol.",
         "data": {
           "printer_mode": "Mode de configuració de la impressora:"
         }
@@ -107,7 +114,7 @@
           "region": "Regió del compte:",
           "email": "Adreça de Correu Electrònic o Número de Telèfon",
           "password": "Contrasenya",
-          "verifyCode": "Codi de verificació de correu electrònic",
+          "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
         }
       },

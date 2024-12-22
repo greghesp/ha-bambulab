@@ -38,7 +38,12 @@ function Get-GoogleTranslation
     -Method Get `
     -ContentType 'application/json'
 
-  $result = ($Translator.Content.TrimStart('[').TrimEnd(']') -split ',' | select-object -First 1).TrimStart('"').TrimEnd('"')
+  $json = $Translator.Content | ConvertFrom-Json
+  $result = ''
+  foreach ($res in $json[0])
+  {
+    $result += $res[0]
+  }
   $result = $result.Replace("\\n", "\n")
   $result = $result.Replace("\u003e", ">")
 
@@ -74,7 +79,7 @@ function Convert-File
       if ($isString)
       {
         $targetKey = $matches[2]
-        Write-Host "Comparing $($sourceKey):$i to $($targetKey):$targetIndex"
+        #Write-Host "Comparing $($sourceKey):$i to $($targetKey):$targetIndex"
         if ($sourceKey -eq $targetKey)
         {
           # TODO - Determine if source has changed.
@@ -93,8 +98,8 @@ function Convert-File
       }
 
       # Target does not have this line. Print out a translation.
-      Write-Host "Translating $sourceKey"
       $translation = Get-GoogleTranslation -To $language -Content $content
+      Write-Host "Translated $($sourceKey): '$translation'"
       $newLine = $whiteSpace + '"' + $sourceKey + '": "' + $translation + '"'
       if ($source[$i] -match '.*,')
       {

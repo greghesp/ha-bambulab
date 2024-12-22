@@ -24,14 +24,14 @@
       "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
-      "verifyCode": "O código de verificação é obrigatório. ",
-      "code_expired": "O código de verificação expirou. ",
+      "verifyCode": "O código de verificação é obrigatório. Verifique seu e-mail ou telefone.",
+      "code_expired": "O código de verificação expirou. Novo código solicitado. Verifique seu e-mail ou telefone.",
       "code_incorrect": "O código de verificação estava incorreto. ",
       "tfaCode": "O código 2FA é obrigatório. "
     },
     "step": {
       "user": {
-        "description": "A configuração através da Bambu Cloud é a mais simples. No entanto, não suporta autenticação 2FA ou contas de redes sociais sem palavra-passe, e não funciona para impressoras definidas como Modo Lan Apenas.",
+        "description": "A configuração via Bambu Cloud é mais simples. Opcionalmente, você pode configurar manualmente para acesso somente local, mas perderá alguns recursos - isso é necessário para impressoras configuradas para modo somente LAN. Contas de mídia social sem senha não são compatíveis com configuração em nuvem.",
         "data": {
           "printer_mode": "Modo de configuração da impressora:"
         }
@@ -43,7 +43,7 @@
           "region": "Região da conta:",
           "email": "Endereço de Email ou Número de Telefone",
           "password": "Palavra-passe",
-          "verifyCode": "Código de verificação de e-mail",
+          "verifyCode": "Código de verificação por e-mail ou telefone",
           "tfaCode": "Código de autenticação de dois fatores"
         }
       },
@@ -94,15 +94,15 @@
       "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
-      "verifyCode": "O código de verificação é obrigatório. ",
-      "code_expired": "O código de verificação expirou. ",
+      "verifyCode": "O código de verificação é obrigatório. Verifique seu e-mail ou telefone.",
+      "code_expired": "O código de verificação expirou. Novo código solicitado. Verifique seu e-mail ou telefone.",
       "code_incorrect": "O código de verificação estava incorreto. ",
       "tfaCode": "O código 2FA é obrigatório. "
     },
     "step": {
       "init": {
         "title": "Ajustar definições de ligação",
-        "description": "A configuração através da Bambu Cloud é a mais simples. No entanto, não suporta autenticação 2FA ou contas de redes sociais sem palavra-passe, e não funciona para impressoras definidas como Modo Lan Apenas.",
+        "description": "A configuração via Bambu Cloud é mais simples. Opcionalmente, você pode configurar manualmente para acesso somente local, mas perderá alguns recursos - isso é necessário para impressoras configuradas para modo somente LAN. Contas de mídia social sem senha não são compatíveis com configuração em nuvem.",
         "data": {
           "printer_mode": "Modo de configuração da impressora:"
         }
@@ -114,7 +114,7 @@
           "region": "Região da conta:",
           "email": "Endereço de Email ou Número de Telefone",
           "password": "Palavra-passe",
-          "verifyCode": "Código de verificação de e-mail",
+          "verifyCode": "Código de verificação por e-mail ou telefone",
           "tfaCode": "Código de autenticação de dois fatores"
         }
       },
