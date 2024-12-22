@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Solo LAN.",
+        "description": "La configuración a través de Bambu Cloud es la más simple, pero puede configurarla manualmente para acceso solo local, pero perderá algunas funciones. Esto último es necesario para las impresoras configuradas en modo solo Lan.",
         "data": {
           "printer_mode": "Modo de configuración de la impresora:"
         }
@@ -102,7 +102,7 @@
     "step": {
       "init": {
         "title": "Ajusta la configuración de conexión",
-        "description": "La configuración mediante Bambu Cloud es más simple, pero no soporta 2FA o cuentas de redes sociales sin una contraseña, y no funcionará con impresoras activamente configuradas como Solo LAN.",
+        "description": "La configuración a través de Bambu Cloud es la más simple, pero puede configurarla manualmente para acceso solo local, pero perderá algunas funciones. Esto último es necesario para las impresoras configuradas en modo solo Lan.",
         "data": {
           "printer_mode": "Modo de configuración de la impresora:"
         }

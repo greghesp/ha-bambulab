@@ -39,6 +39,7 @@ function Get-GoogleTranslation
     -ContentType 'application/json'
 
   $json = $Translator.Content | ConvertFrom-Json
+  $result = ''
   foreach ($res in $json[0])
   {
     $result += $res[0]

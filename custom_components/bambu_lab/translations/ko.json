@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "Bambu Cloud를 통해 구성하는 것이 가장 간단합니다. 그러나 2FA 또는 비밀번호가 없는 소셜 미디어 계정은 지원되지 않으며, Lan Only Mode로 설정된 프린터에는 사용할 수 없습니다.",
+        "description": "Bambu Cloud를 통한 구성은 가장 간단하지만 로컬 전용 액세스를 수동으로 구성할 수 있지만 일부 기능이 손실됩니다. 후자는 LAN 전용 모드로 설정된 프린터에 필요합니다.",
         "data": {
           "printer_mode": "프린터 구성 모드:"
         }
@@ -102,7 +102,7 @@
     "step": {
       "init": {
         "title": "연결 설정 조정",
-        "description": "Bambu Cloud를 통해 구성하는 것이 가장 간단합니다. 그러나 2FA 또는 비밀번호가 없는 소셜 미디어 계정은 지원되지 않으며, Lan Only Mode로 설정된 프린터에는 사용할 수 없습니다.",
+        "description": "Bambu Cloud를 통한 구성은 가장 간단하지만 로컬 전용 액세스를 수동으로 구성할 수 있지만 일부 기능이 손실됩니다. 후자는 LAN 전용 모드로 설정된 프린터에 필요합니다.",
         "data": {
           "printer_mode": "프린터 구성 모드:"
         }

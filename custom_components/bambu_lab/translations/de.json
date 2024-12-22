@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Die Konfiguration über Bambu Cloud ist am einfachsten, aber Sie können die Konfiguration manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren. Letzteres ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -102,7 +102,7 @@
     "step": {
       "init": {
         "title": "Verbindungseinstellungen anpassen",
-        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Die Konfiguration über Bambu Cloud ist am einfachsten, aber Sie können die Konfiguration manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren. Letzteres ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
