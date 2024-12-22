@@ -24,8 +24,8 @@
       "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
-      "verifyCode": "O código de verificação é obrigatório. ",
-      "code_expired": "O código de verificação expirou. ",
+      "verifyCode": "O código de verificação é obrigatório. Verifique seu e-mail ou telefone.",
+      "code_expired": "O código de verificação expirou. Novo código solicitado. Verifique seu e-mail ou telefone.",
       "code_incorrect": "O código de verificação estava incorreto. ",
       "tfaCode": "O código 2FA é obrigatório. "
     },
@@ -43,7 +43,7 @@
           "region": "Região da conta:",
           "email": "Endereço de Email ou Número de Telefone",
           "password": "Palavra-passe",
-          "verifyCode": "Código de verificação de e-mail",
+          "verifyCode": "Código de verificação por e-mail ou telefone",
           "tfaCode": "Código de autenticação de dois fatores"
         }
       },
@@ -94,8 +94,8 @@
       "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
-      "verifyCode": "O código de verificação é obrigatório. ",
-      "code_expired": "O código de verificação expirou. ",
+      "verifyCode": "O código de verificação é obrigatório. Verifique seu e-mail ou telefone.",
+      "code_expired": "O código de verificação expirou. Novo código solicitado. Verifique seu e-mail ou telefone.",
       "code_incorrect": "O código de verificação estava incorreto. ",
       "tfaCode": "O código 2FA é obrigatório. "
     },
@@ -114,7 +114,7 @@
           "region": "Região da conta:",
           "email": "Endereço de Email ou Número de Telefone",
           "password": "Palavra-passe",
-          "verifyCode": "Código de verificação de e-mail",
+          "verifyCode": "Código de verificação por e-mail ou telefone",
           "tfaCode": "Código de autenticação de dois fatores"
         }
       },

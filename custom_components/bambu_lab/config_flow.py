@@ -27,9 +27,9 @@ from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
     CloudflareError,
     CurlUnavailableError,
-    EmailCodeRequiredError,
-    EmailCodeExpiredError,
-    EmailCodeIncorrectError,
+    CodeRequiredError,
+    CodeExpiredError,
+    CodeIncorrectError,
     TfaCodeRequiredError
 )
 
@@ -167,15 +167,15 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
                 return self.async_abort(reason='curl_unavailable')
-            except EmailCodeRequiredError:
+            except CodeRequiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeExpiredError:
+            except CodeExpiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_expired'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeIncorrectError:
+            except CodeIncorrectError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_incorrect'
                 # Fall through to form generation to ask for verification code
@@ -512,11 +512,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     return await self.async_step_Bambu_Lan(None)
 
             # Handle possible failure cases
-            except EmailCodeExpiredError:
+            except CodeExpiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = "code_expired"
                 # Fall through to form generation to ask for verification code
-            except EmailCodeIncorrectError:
+            except CodeIncorrectError:
                 authentication_type = 'verifyCode'
                 errors['base'] = "code_incorrect"
                 # Fall through to form generation to ask for verification code
@@ -524,15 +524,15 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
                 return self.async_abort(reason='curl_unavailable')
-            except EmailCodeRequiredError:
+            except CodeRequiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeExpiredError:
+            except CodeExpiredError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_expired'
                 # Fall through to form generation to ask for verification code
-            except EmailCodeIncorrectError:
+            except CodeIncorrectError:
                 authentication_type = 'verifyCode'
                 errors['base'] = 'code_incorrect'
                 # Fall through to form generation to ask for verification code

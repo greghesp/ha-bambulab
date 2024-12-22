@@ -24,8 +24,8 @@
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
-      "verifyCode": "Codice di verifica richiesto. Controlla la tua email.",
-      "code_expired": "Il codice di verifica è scaduto. È stato richiesto un nuovo codice. Controlla la tua mail",
+      "verifyCode": "È richiesto il codice di verifica. Controlla la tua email o il tuo telefono.",
+      "code_expired": "Il codice di verifica è scaduto. Nuovo codice richiesto. Controlla la tua email o il tuo telefono.",
       "code_incorrect": "Il codice di verifica errato.",
       "tfaCode": "È richiesto il codice 2FA."
     },
@@ -43,7 +43,7 @@
           "region": "Area dell'account:",
           "email": "Indirizzo e-mail o numero di telefono",
           "password": "Password",
-          "verifyCode": "Codice di verifica e-mail",
+          "verifyCode": "Codice di verifica via e-mail o telefono",
           "tfaCode": "Codice di autenticazione a due fattori"
         }
       },
@@ -94,8 +94,8 @@
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
-      "verifyCode": "Codice di verifica richiesto. Controlla la tua email.",
-      "code_expired": "Il codice di verifica è scaduto. È stato richiesto un nuovo codice. Controlla la tua mail",
+      "verifyCode": "È richiesto il codice di verifica. Controlla la tua email o il tuo telefono.",
+      "code_expired": "Il codice di verifica è scaduto. Nuovo codice richiesto. Controlla la tua email o il tuo telefono.",
       "code_incorrect": "Il codice di verifica non era corretto.",
       "tfaCode": "È richiesto il codice 2FA."
     },
@@ -114,7 +114,7 @@
           "region": "Area dell'account:",
           "email": "Indirizzo e-mail o numero di telefono",
           "password": "Password",
-          "verifyCode": "Codice di verifica e-mail",
+          "verifyCode": "Codice di verifica via e-mail o telefono",
           "tfaCode": "Codice di autenticazione a due fattori"
         }
       },

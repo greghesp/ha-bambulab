@@ -24,8 +24,8 @@
       "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
-      "verifyCode": "需要验证码。",
-      "code_expired": "验证码已过期。",
+      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
+      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
       "code_incorrect": "验证码不正确。",
       "tfaCode": "需要 2FA 代码。"
     },
@@ -43,7 +43,7 @@
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
           "password": "密码",
-          "verifyCode": "邮箱验证码",
+          "verifyCode": "邮箱或手机验证码",
           "tfaCode": "二因素验证码"
         }
       },
@@ -94,8 +94,8 @@
       "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
-      "verifyCode": "需要验证码。",
-      "code_expired": "验证码已过期。",
+      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
+      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
       "code_incorrect": "验证码不正确。",
       "tfaCode": "需要 2FA 代码。"
     },
@@ -114,7 +114,7 @@
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
           "password": "密码",
-          "verifyCode": "邮箱验证码",
+          "verifyCode": "邮箱或手机验证码",
           "tfaCode": "二因素验证码"
         }
       },

@@ -24,8 +24,8 @@
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
       "invalid_auth": "Authentifizierung fehlgeschlagen.",
       "unknown": "Unerwarteter Fehler.",
-      "verifyCode": "Ein Bestätigungscode ist erforderlich. ",
-      "code_expired": "Der Bestätigungscode ist abgelaufen. ",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_incorrect": "Der Bestätigungscode war falsch. ",
       "tfaCode": "2FA-Code ist erforderlich. "
     },
@@ -43,7 +43,7 @@
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
           "password": "Passwort",
-          "verifyCode": "E-Mail-Bestätigungscode",
+          "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
           "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },
@@ -94,8 +94,8 @@
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
       "invalid_auth": "Authentifizierung fehlgeschlagen",
       "unknown": "Unerwarteter Fehler",
-      "verifyCode": "Ein Bestätigungscode ist erforderlich. ",
-      "code_expired": "Der Bestätigungscode ist abgelaufen. ",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_incorrect": "Der Bestätigungscode war falsch. ",
       "tfaCode": "2FA-Code ist erforderlich. "
     },
@@ -114,7 +114,7 @@
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
           "password": "Passwort",
-          "verifyCode": "E-Mail-Bestätigungscode",
+          "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
           "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },

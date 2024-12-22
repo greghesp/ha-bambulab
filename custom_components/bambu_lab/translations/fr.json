@@ -24,8 +24,8 @@
       "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
-      "verifyCode": "Un code de vérification est requis. ",
-      "code_expired": "Le code de vérification a expiré. ",
+      "verifyCode": "Un code de vérification est requis. Vérifiez votre courrier électronique ou votre téléphone.",
+      "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre courrier électronique ou votre téléphone.",
       "code_incorrect": "Le code de vérification était incorrect. ",
       "tfaCode": "Le code 2FA est requis. "
     },
@@ -43,7 +43,7 @@
           "region": "Région du compte :",
           "email": "Adresse e-mail ou numéro de téléphone",
           "password": "Mot de passe",
-          "verifyCode": "Code de vérification de l'e-mail",
+          "verifyCode": "Code de vérification par e-mail ou par téléphone",
           "tfaCode": "Code d'authentification à deux facteurs"
         }
       },
@@ -94,8 +94,8 @@
       "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
-      "verifyCode": "Un code de vérification est requis. ",
-      "code_expired": "Le code de vérification a expiré. ",
+      "verifyCode": "Un code de vérification est requis. Vérifiez votre courrier électronique ou votre téléphone.",
+      "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre courrier électronique ou votre téléphone.",
       "code_incorrect": "Le code de vérification était incorrect. ",
       "tfaCode": "Le code 2FA est requis. "
     },
@@ -114,7 +114,7 @@
           "region": "Région du compte :",
           "email": "Adresse e-mail ou numéro de téléphone",
           "password": "Mot de passe",
-          "verifyCode": "Code de vérification de l'e-mail",
+          "verifyCode": "Code de vérification par e-mail ou par téléphone",
           "tfaCode": "Code d'authentification à deux facteurs"
         }
       },

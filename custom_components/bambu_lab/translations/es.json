@@ -24,8 +24,8 @@
       "cannot_connect_local_all": "Error al conectar. Revisa la configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
-      "verifyCode": "Se requiere código de verificación. Revisa tu correo electrónico.",
-      "code_expired": "El código de verificación ha caducado. Se ha solicidado un nuevo código. Revisa tu correo electrónico.",
+      "verifyCode": "Se requiere código de verificación. Consulta tu correo electrónico o teléfono.",
+      "code_expired": "El código de verificación expiró. Nuevo código solicitado. Consulta tu correo electrónico o teléfono.",
       "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
       "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo."
     },
@@ -43,7 +43,7 @@
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
           "password": "Contraseña",
-          "verifyCode": "Código de verificación por correo electrónico",
+          "verifyCode": "Código de verificación por correo electrónico o teléfono",
           "tfaCode": "Código de autenticación de dos factores"
         }
       },
@@ -94,8 +94,8 @@
       "cannot_connect_local_all": "Error al conectar. Revisa configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
-      "verifyCode": "Se requiere código de verificación. Revisa tu correo electrónico.",
-      "code_expired": "El código de verificación ha caducado. Se ha solicidado un nuevo código. Revisa tu correo electrónico.",
+      "verifyCode": "Se requiere código de verificación. Consulta tu correo electrónico o teléfono.",
+      "code_expired": "El código de verificación expiró. Nuevo código solicitado. Consulta tu correo electrónico o teléfono.",
       "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
       "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo."
     },
@@ -114,7 +114,7 @@
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
           "password": "Contraseña",
-          "verifyCode": "Código de verificación de correo electrónico",
+          "verifyCode": "Código de verificación por correo electrónico o teléfono",
           "tfaCode": "Código de autenticación de dos factores"
         }
       },

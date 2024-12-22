@@ -24,8 +24,8 @@
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
-      "verifyCode": "Verification code is required. Check your email.",
-      "code_expired": "Verification code expired. New code requested. Check your email.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now."
     },
@@ -43,7 +43,7 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
-          "verifyCode": "Email verification code",
+          "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
         }
       },
@@ -94,8 +94,8 @@
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
-      "verifyCode": "Verification code is required. Check your email.",
-      "code_expired": "Verification code expired. New code requested. Check your email.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now."
     },
@@ -114,7 +114,7 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
-          "verifyCode": "Email verification code",
+          "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
         }
       },
