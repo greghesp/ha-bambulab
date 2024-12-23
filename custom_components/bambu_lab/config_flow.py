@@ -77,10 +77,10 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            if user_input['printer_mode'] == "Lan":
+            if user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
-            if user_input['printer_mode'] == "Bambu":
+            if user_input['printer_mode'] == "bambu":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Bambu(None)
             if user_input['printer_mode'] != '':
@@ -118,18 +118,19 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if self.email != '':
             modes = [
-                SelectOptionDict(value=self.email, label=f"Use existing Bambu Cloud login for {self.email}"),
-                SelectOptionDict(value="Bambu", label="Bambu Cloud configuration"),
-                SelectOptionDict(value="Lan", label="Lan Mode configuration")
+                SelectOptionDict(value=self.email, label=self.email),
+                SelectOptionDict(value="bambu", label=""),
+                SelectOptionDict(value="lan", label="")
             ]
         else:
             modes = [
-                SelectOptionDict(value="Bambu", label="Bambu Cloud configuration"),
-                SelectOptionDict(value="Lan", label="Lan Mode configuration")
+                SelectOptionDict(value="bambu", label=""),
+                SelectOptionDict(value="lan", label="")
             ]
         selector = SelectSelector(
             SelectSelectorConfig(
                 options=modes,
+                translation_key="configuration_type",
                 mode=SelectSelectorMode.LIST,
             )
         )
@@ -418,10 +419,10 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            if user_input['printer_mode'] == "Lan":
+            if user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
-            elif user_input['printer_mode'] == "Bambu":
+            elif user_input['printer_mode'] == "bambu":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Bambu(None)
             elif user_input['printer_mode'] != "":
@@ -459,20 +460,21 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if self.email != '':
             default_option = self.email
             modes = [
-                SelectOptionDict(value=self.email, label=f"Use existing Bambu Cloud login for {self.email}"),
-                SelectOptionDict(value="Bambu", label="Bambu Cloud configuration"),
-                SelectOptionDict(value="Lan", label="Lan Mode configuration")
+                SelectOptionDict(value=self.email, label=self.email),
+                SelectOptionDict(value="bambu", label=""),
+                SelectOptionDict(value="lan", label="")
             ]
         else:
-            default_option = 'Bambu' if self.config_entry.options['auth_token'] != "" else 'Lan'
+            default_option = 'bambu' if self.config_entry.options['auth_token'] != "" else 'lan'
             modes = [
-                SelectOptionDict(value="Bambu", label="Bambu Cloud Configuration"),
-                SelectOptionDict(value="Lan", label="Lan Mode Configuration")
+                SelectOptionDict(value="bambu", label=""),
+                SelectOptionDict(value="lan", label="")
             ]
         
         selector = SelectSelector(
             SelectSelectorConfig(
                 options=modes,
+                translation_key="configuration_type",
                 mode=SelectSelectorMode.LIST,
             )
         )

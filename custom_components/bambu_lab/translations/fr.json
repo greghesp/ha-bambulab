@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "La configuration via Bambu Cloud est la plus simple. Vous pouvez éventuellement configurer manuellement pour un accès local uniquement, mais vous perdez certaines fonctionnalités - ceci est requis pour les imprimantes définies en mode Lan uniquement. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge pour la configuration cloud.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Vous pouvez éventuellement configurer manuellement l'accès local uniquement, mais vous perdez certaines fonctionnalités. Ceci est requis pour les imprimantes définies en mode LAN uniquement.\n\rS'ils existent et fonctionnent, vous pouvez également réutiliser les informations d'authentification existantes d'autres imprimantes configurées.\n \rNotez que les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge pour la configuration cloud.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
@@ -95,7 +95,7 @@
     "step": {
       "init": {
         "title": "Ajuster les paramètres de connexion",
-        "description": "La configuration via Bambu Cloud est la plus simple. Vous pouvez éventuellement configurer manuellement pour un accès local uniquement, mais vous perdez certaines fonctionnalités - ceci est requis pour les imprimantes définies en mode Lan uniquement. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge pour la configuration cloud.",
+        "description": "La configuration via Bambu Cloud est la plus simple. Vous pouvez éventuellement configurer manuellement l'accès local uniquement, mais vous perdez certaines fonctionnalités. Ceci est requis pour les imprimantes définies en mode LAN uniquement.\n\rS'ils existent et fonctionnent, vous pouvez également réutiliser les informations d'authentification existantes d'autres imprimantes configurées.\n \rNotez que les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge pour la configuration cloud.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
@@ -581,6 +581,14 @@
       },
       "imagecamera": {
         "name": "Utiliser une caméra à capteur d'image"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Nuage de bambou",
+        "lan": "Connexion locale"
       }
     }
   }

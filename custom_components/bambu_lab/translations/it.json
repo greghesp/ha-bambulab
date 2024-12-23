@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "La configurazione tramite Bambu Cloud è la più semplice. Facoltativamente è possibile configurare manualmente l'accesso solo locale, ma si perdono alcune funzionalità: ciò è necessario per le stampanti impostate sulla modalità Solo Lan. Gli account di social media senza password non supportano la configurazione cloud.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Facoltativamente, puoi configurare manualmente l'accesso solo locale, ma perderai alcune funzionalità: è necessario per le stampanti impostate sulla modalità Solo Lan.\n\rSe esistono e funzionano, puoi anche riutilizzare le credenziali di autenticazione esistenti da altre stampanti configurate.\n \rTieni presente che gli account di social media senza password non supportano la configurazione cloud.",
         "data": {
           "printer_mode": "Modalità di configurazione della stampante:"
         }
@@ -95,7 +95,7 @@
     "step": {
       "init": {
         "title": "Regolare le impostazioni di connessione",
-        "description": "La configurazione tramite Bambu Cloud è la più semplice. Facoltativamente è possibile configurare manualmente l'accesso solo locale, ma si perdono alcune funzionalità: ciò è necessario per le stampanti impostate sulla modalità Solo Lan. Gli account di social media senza password non supportano la configurazione cloud.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice. Facoltativamente, puoi configurare manualmente l'accesso solo locale, ma perderai alcune funzionalità: è necessario per le stampanti impostate sulla modalità Solo Lan.\n\rSe esistono e funzionano, puoi anche riutilizzare le credenziali di autenticazione esistenti da altre stampanti configurate.\n \rTieni presente che gli account di social media senza password non supportano la configurazione cloud.",
         "data": {
           "printer_mode": "Modalità di configurazione della stampante:"
         }
@@ -581,6 +581,14 @@
       },
       "imagecamera": {
         "name": "Utilizza Sensore d'immagine della Fotocamera"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Nuvola di bambù",
+        "lan": "Connessione locale"
       }
     }
   }
