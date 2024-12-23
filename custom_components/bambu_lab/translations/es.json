@@ -24,6 +24,7 @@
       "cannot_connect_local_all": "Error al conectar. Revisa la configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
+      "code_needed": "Se debe proporcionar el código de verificación.",
       "verifyCode": "Se requiere código de verificación. Consulta tu correo electrónico o teléfono.",
       "code_expired": "El código de verificación expiró. Nuevo código solicitado. Consulta tu correo electrónico o teléfono.",
       "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
@@ -43,6 +44,7 @@
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
           "password": "Contraseña",
+          "newCode": "Solicitar nuevo código",
           "verifyCode": "Código de verificación por correo electrónico o teléfono",
           "tfaCode": "Código de autenticación de dos factores"
         }
@@ -87,6 +89,7 @@
       "cannot_connect_local_all": "Error al conectar. Revisa configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
+      "code_needed": "Se debe proporcionar el código de verificación.",
       "verifyCode": "Se requiere código de verificación. Consulta tu correo electrónico o teléfono.",
       "code_expired": "El código de verificación expiró. Nuevo código solicitado. Consulta tu correo electrónico o teléfono.",
       "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
@@ -107,6 +110,7 @@
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
           "password": "Contraseña",
+          "newCode": "Solicitar nuevo código",
           "verifyCode": "Código de verificación por correo electrónico o teléfono",
           "tfaCode": "Código de autenticación de dos factores"
         }

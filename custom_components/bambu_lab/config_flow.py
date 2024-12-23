@@ -60,6 +60,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     region: str = ""
     email: str = ""
     serial: str = ""
+    authentication_type: str = None
 
     @staticmethod
     @callback
@@ -150,17 +151,30 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         default_region = self.region
         default_email = self.email
 
-        authentication_type = None
         if user_input is not None:
             try:
-                if user_input.get('verifyCode', None) is not None:
+                if user_input.get('newCode', False):
                     await self.hass.async_add_executor_job(
-                        self._bambu_cloud.login_with_verification_code,
-                        user_input['verifyCode'])
-                elif user_input.get('tfaCode', None) is not None:
-                    await self.hass.async_add_executor_job(
-                        self._bambu_cloud.login_with_2fa_code,
-                        user_input['tfaCode'])
+                        self._bambu_cloud.request_new_code)
+
+                elif self.authentication_type == 'verifyCode':
+                    if user_input.get('verifyCode', '') != '':
+                        await self.hass.async_add_executor_job(
+                            self._bambu_cloud.login_with_verification_code,
+                            user_input['verifyCode'])
+                        return await self.async_step_Bambu_Choose_Device(None)
+                    else:
+                        errors['base'] = "code_needed"
+
+                elif self.authentication_type == 'tfaCode':
+                    if user_input.get('tfaCode', '') != '':
+                        await self.hass.async_add_executor_job(
+                            self._bambu_cloud.login_with_2fa_code,
+                            user_input['tfaCode'])
+                        return await self.async_step_Bambu_Choose_Device(None)
+                    else:
+                        errors['base'] = "code_needed"
+
                 else:
                     self.region = user_input['region']
                     self.email = user_input['email']
@@ -169,27 +183,25 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         user_input['region'],
                         user_input['email'],
                         user_input['password'])
-                return await self.async_step_Bambu_Choose_Device(None)
+                    return await self.async_step_Bambu_Choose_Device(None)
 
             # Handle possible failure cases
             except CloudflareError:
                 return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
                 return self.async_abort(reason='curl_unavailable')
-            except CodeRequiredError:
-                authentication_type = 'verifyCode'
-                errors['base'] = 'verifyCode'
-                # Fall through to form generation to ask for verification code
             except CodeExpiredError:
-                authentication_type = 'verifyCode'
                 errors['base'] = 'code_expired'
                 # Fall through to form generation to ask for verification code
             except CodeIncorrectError:
-                authentication_type = 'verifyCode'
                 errors['base'] = 'code_incorrect'
                 # Fall through to form generation to ask for verification code
+            except CodeRequiredError:
+                self.authentication_type = 'verifyCode'
+                errors['base'] = 'verifyCode'
+                # Fall through to form generation to ask for verification code
             except TfaCodeRequiredError:
-                authentication_type = 'tfaCode'
+                self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
                 # Fall through to form generation to ask for verification code
             except Exception as e:
@@ -198,17 +210,19 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        if authentication_type is None:
+        if self.authentication_type is None:
             default_region = default_region if user_input is None else user_input.get('region', '')
             fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
             default_email = default_email if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
             fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
-        elif authentication_type == 'verifyCode':
-            fields[vol.Required('verifyCode', default='')] = TEXT_SELECTOR
-        elif authentication_type == 'tfaCode':
-            fields[vol.Required('tfaCode', default='')] = TEXT_SELECTOR
+        elif self.authentication_type == 'verifyCode':
+            fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
+            fields[vol.Optional('verifyCode', default='')] = TEXT_SELECTOR
+        elif self.authentication_type == 'tfaCode':
+            fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
+            fields[vol.Optional('tfaCode', default='')] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",
@@ -405,6 +419,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
     region: str = ""
     email: str = ""
+    authentication_type: str = None
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         self.config_entry = config_entry
@@ -493,20 +508,29 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     ) -> FlowResult:
         errors = {}
 
-        authentication_type = None
         if user_input is not None:
             try:
-                if user_input.get('verifyCode', None) is not None:
+                if user_input.get('newCode', False):
                     await self.hass.async_add_executor_job(
-                        self._bambu_cloud.login_with_verification_code,
-                        user_input['verifyCode'])
-                    return await self.async_step_Bambu_Lan(None)
+                        self._bambu_cloud.request_new_code)
 
-                elif user_input.get('tfaCode', None) is not None:
-                    await self.hass.async_add_executor_job(
-                        self._bambu_cloud.login_with_2fa_code,
-                        user_input['tfaCode'])
-                    return await self.async_step_Bambu_Lan(None)
+                elif self.authentication_type == 'verifyCode':
+                    if user_input.get('verifyCode', '') != '':
+                        await self.hass.async_add_executor_job(
+                            self._bambu_cloud.login_with_verification_code,
+                            user_input['verifyCode'])
+                        return await self.async_step_Bambu_Lan(None)
+                    else:
+                        errors['base'] = "code_needed"
+
+                elif self.authentication_type == 'tfaCode':
+                    if user_input.get('tfaCode', '') != '':
+                        await self.hass.async_add_executor_job(
+                            self._bambu_cloud.login_with_2fa_code,
+                            user_input['tfaCode'])
+                        return await self.async_step_Bambu_Lan(None)
+                    else:
+                        errors['base'] = "code_needed"
 
                 else:
                     self.region = user_input['region']
@@ -519,32 +543,22 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     return await self.async_step_Bambu_Lan(None)
 
             # Handle possible failure cases
-            except CodeExpiredError:
-                authentication_type = 'verifyCode'
-                errors['base'] = "code_expired"
-                # Fall through to form generation to ask for verification code
-            except CodeIncorrectError:
-                authentication_type = 'verifyCode'
-                errors['base'] = "code_incorrect"
-                # Fall through to form generation to ask for verification code
             except CloudflareError:
                 return self.async_abort(reason='cloudflare')
             except CurlUnavailableError:
                 return self.async_abort(reason='curl_unavailable')
-            except CodeRequiredError:
-                authentication_type = 'verifyCode'
-                errors['base'] = 'verifyCode'
-                # Fall through to form generation to ask for verification code
             except CodeExpiredError:
-                authentication_type = 'verifyCode'
-                errors['base'] = 'code_expired'
+                errors['base'] = "code_expired"
                 # Fall through to form generation to ask for verification code
             except CodeIncorrectError:
-                authentication_type = 'verifyCode'
-                errors['base'] = 'code_incorrect'
+                errors['base'] = "code_incorrect"
+                # Fall through to form generation to ask for verification code
+            except CodeRequiredError:
+                self.authentication_type = 'verifyCode'
+                errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
             except TfaCodeRequiredError:
-                authentication_type = 'tfaCode'
+                self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
                 # Fall through to form generation to ask for verification code
             except Exception as e:
@@ -553,17 +567,19 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        if authentication_type is None:
+        if self.authentication_type is None:
             default_region = self.config_entry.options.get('region', '') if user_input is None else user_input.get('region', '')
             fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
             default_email = self.config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
             fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
-        elif authentication_type == 'verifyCode':
-            fields[vol.Required('verifyCode', default='')] = TEXT_SELECTOR
-        elif authentication_type == 'tfaCode':
-            fields[vol.Required('tfaCode', default='')] = TEXT_SELECTOR
+        elif self.authentication_type == 'verifyCode':
+            fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
+            fields[vol.Optional('verifyCode', default='')] = TEXT_SELECTOR
+        elif self.authentication_type == 'tfaCode':
+            fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
+            fields[vol.Optional('tfaCode', default='')] = TEXT_SELECTOR
 
         return self.async_show_form(
             step_id="Bambu",

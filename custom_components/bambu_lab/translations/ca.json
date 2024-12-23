@@ -24,6 +24,7 @@
       "cannot_connect_local_all": "Error de connexió. Revisa la configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
+      "code_needed": "S'ha de proporcionar el codi de verificació.",
       "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
       "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
       "code_incorrect": "El codi de verificació és incorrecte. Si us plau, introdueix-lo de nou.",
@@ -43,6 +44,7 @@
           "region": "Regió del compte:",
           "email": "Direcció de Correu Electrònic o Número de Telèfon",
           "password": "Contrasenyaa",
+          "newCode": "Sol·licita un codi nou",
           "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
         }
@@ -87,6 +89,7 @@
       "cannot_connect_local_all": "Error de connexió. Revisa configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
+      "code_needed": "S'ha de proporcionar el codi de verificació.",
       "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
       "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
       "code_incorrect": "El codi de verificació era incorrecte. Si us plau, introdueix-lo de nou.",
@@ -107,6 +110,7 @@
           "region": "Regió del compte:",
           "email": "Adreça de Correu Electrònic o Número de Telèfon",
           "password": "Contrasenya",
+          "newCode": "Sol·licita un codi nou",
           "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
         }

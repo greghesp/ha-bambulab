@@ -210,6 +210,12 @@ class BambuCloud:
             LOGGER.debug(f"Did not understand json. loginType = '{loginType}'")
             LOGGER.error(f"Response not understood: '{response.text}'")
             return ValueError(1) # FIXME
+        
+    def _get_new_code(self):
+        if '@' in self._email:
+            self._get_email_verification_code()
+        else:
+            self._get_sms_verification_code()
     
     def _get_email_verification_code(self):
         # Send the verification code request
@@ -250,10 +256,7 @@ class BambuCloud:
             LOGGER.debug(f"Received response: {response.json()}")           
             if response.json()['code'] == 1:
                 # Code has expired. Request a new one.
-                if '@' in self._email:
-                    self._get_email_verification_code()
-                else:
-                    self._get_sms_verification_code()
+                self._get_new_code()
                 raise CodeExpiredError()
             elif response.json()['code'] == 2:
                 # Code was incorrect. Let the user try again.
@@ -392,6 +395,9 @@ class BambuCloud:
         result = self._get_authentication_token_with_2fa_code(code)
         self._auth_token = result
         self._username = self._get_username_from_authentication_token()
+
+    def request_new_code(self):
+        self._get_new_code()
 
     def get_device_list(self) -> dict:
         LOGGER.debug("Getting device list from Bambu Cloud")
