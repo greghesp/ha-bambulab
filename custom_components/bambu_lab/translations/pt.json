@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "A configuração via Bambu Cloud é mais simples. Opcionalmente, você pode configurar manualmente para acesso somente local, mas perderá alguns recursos - isso é necessário para impressoras configuradas para modo somente LAN. Contas de mídia social sem senha não são compatíveis com configuração em nuvem.",
+        "description": "A configuração via Bambu Cloud é mais simples. Opcionalmente, você pode configurar manualmente o acesso somente local, mas perderá alguns recursos. Isso é necessário para impressoras configuradas no modo somente LAN.\n\rSe elas existirem e estiverem funcionando, você também poderá reutilizar as credenciais de autenticação existentes de outras impressoras configuradas.\n \rObserve que contas de mídia social sem senha não são compatíveis com configuração em nuvem.",
         "data": {
           "printer_mode": "Modo de configuração da impressora:"
         }
@@ -95,7 +95,7 @@
     "step": {
       "init": {
         "title": "Ajustar definições de ligação",
-        "description": "A configuração via Bambu Cloud é mais simples. Opcionalmente, você pode configurar manualmente para acesso somente local, mas perderá alguns recursos - isso é necessário para impressoras configuradas para modo somente LAN. Contas de mídia social sem senha não são compatíveis com configuração em nuvem.",
+        "description": "A configuração via Bambu Cloud é mais simples. Opcionalmente, você pode configurar manualmente o acesso somente local, mas perderá alguns recursos. Isso é necessário para impressoras configuradas no modo somente LAN.\n\rSe elas existirem e estiverem funcionando, você também poderá reutilizar as credenciais de autenticação existentes de outras impressoras configuradas.\n \rObserve que contas de mídia social sem senha não são compatíveis com configuração em nuvem.",
         "data": {
           "printer_mode": "Modo de configuração da impressora:"
         }
@@ -581,6 +581,14 @@
       },
       "imagecamera": {
         "name": "Use câmera com sensor de imagem"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Nuvem de bambu",
+        "lan": "Conexão Local"
       }
     }
   }

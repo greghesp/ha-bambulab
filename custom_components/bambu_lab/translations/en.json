@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode. Social media accounts without a password are not support for cloud configuration.",
+        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode.\n\rIf they exist and are working, you may also reuse existing authentication credentials from other configured printers.\n\rNote that social media accounts without a password are not support for cloud configuration.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -95,7 +95,7 @@
     "step": {
       "init": {
         "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode. Social media accounts without a password are not support for cloud configuration.",
+        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode.\n\rIf they exist and are working, you may also reuse existing authentication credentials from other configured printers.\n\rNote that social media accounts without a password are not support for cloud configuration.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -581,6 +581,14 @@
       },
       "imagecamera": {
         "name": "Use image sensor camera"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Cloud",
+        "lan": "Local Connection"
       }
     }
   }

@@ -31,7 +31,7 @@
     },
     "step": {
       "user": {
-        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Optional können Sie den Zugriff nur lokal manuell konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind. Social-Media-Konten ohne Passwort unterstützen die Cloud-Konfiguration nicht.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Sie können den Zugriff optional manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.\n\rWenn sie vorhanden sind und funktionieren, können Sie auch vorhandene Authentifizierungsdaten von anderen konfigurierten Druckern wiederverwenden.\n \rBeachten Sie, dass Social-Media-Konten ohne Passwort die Cloud-Konfiguration nicht unterstützen.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -95,7 +95,7 @@
     "step": {
       "init": {
         "title": "Verbindungseinstellungen anpassen",
-        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Optional können Sie den Zugriff nur lokal manuell konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind. Social-Media-Konten ohne Passwort unterstützen die Cloud-Konfiguration nicht.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Sie können den Zugriff optional manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.\n\rWenn sie vorhanden sind und funktionieren, können Sie auch vorhandene Authentifizierungsdaten von anderen konfigurierten Druckern wiederverwenden.\n \rBeachten Sie, dass Social-Media-Konten ohne Passwort die Cloud-Konfiguration nicht unterstützen.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -581,6 +581,14 @@
       },
       "imagecamera": {
         "name": "Verwenden Sie eine Bildsensorkamera"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambuswolke",
+        "lan": "Lokale Verbindung"
       }
     }
   }
