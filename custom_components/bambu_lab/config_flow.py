@@ -86,7 +86,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             if user_input['printer_mode'] != '':
                 return await self.async_step_Bambu_Choose_Device(None)
 
-        LOGGER.debug(f"LANGUAGE: {self.hass.config.language}")
         if user_input is None:
             # Iterate over all existing entries and try any existing credentials to see if they work
             config_entries = self.hass.config_entries.async_entries(DOMAIN)
