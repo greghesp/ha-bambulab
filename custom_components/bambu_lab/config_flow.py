@@ -163,6 +163,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             self._bambu_cloud.login_with_verification_code,
                             user_input['verifyCode'])
                         return await self.async_step_Bambu_Choose_Device(None)
+                    else:
+                        errors['base'] = "code_needed"
 
                 elif self.authentication_type == 'tfaCode':
                     if user_input.get('tfaCode', '') != '':
@@ -170,6 +172,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             self._bambu_cloud.login_with_2fa_code,
                             user_input['tfaCode'])
                         return await self.async_step_Bambu_Choose_Device(None)
+                    else:
+                        errors['base'] = "code_needed"
 
                 else:
                     self.region = user_input['region']
@@ -516,6 +520,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             self._bambu_cloud.login_with_verification_code,
                             user_input['verifyCode'])
                         return await self.async_step_Bambu_Lan(None)
+                    else:
+                        errors['base'] = "code_needed"
 
                 elif self.authentication_type == 'tfaCode':
                     if user_input.get('tfaCode', '') != '':
@@ -523,6 +529,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             self._bambu_cloud.login_with_2fa_code,
                             user_input['tfaCode'])
                         return await self.async_step_Bambu_Lan(None)
+                    else:
+                        errors['base'] = "code_needed"
 
                 else:
                     self.region = user_input['region']
