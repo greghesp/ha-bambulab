@@ -43,6 +43,7 @@
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
           "password": "密码",
+          "newCode": "请求新代码",
           "verifyCode": "邮箱或手机验证码",
           "tfaCode": "二因素验证码"
         }
@@ -107,6 +108,7 @@
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
           "password": "密码",
+          "newCode": "请求新代码",
           "verifyCode": "邮箱或手机验证码",
           "tfaCode": "二因素验证码"
         }

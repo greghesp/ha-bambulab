@@ -43,6 +43,7 @@
           "region": "Regió del compte:",
           "email": "Direcció de Correu Electrònic o Número de Telèfon",
           "password": "Contrasenyaa",
+          "newCode": "Sol·licita un codi nou",
           "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
         }
@@ -107,6 +108,7 @@
           "region": "Regió del compte:",
           "email": "Adreça de Correu Electrònic o Número de Telèfon",
           "password": "Contrasenya",
+          "newCode": "Sol·licita un codi nou",
           "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
         }

@@ -43,6 +43,7 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
+          "newCode": "Request new code",
           "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
         }
@@ -107,6 +108,7 @@
           "region": "Account region:",
           "email": "Email Address or Phone Number",
           "password": "Password",
+          "newCode": "Request new code",
           "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
         }

@@ -43,6 +43,7 @@
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
           "password": "Contraseña",
+          "newCode": "Solicitar nuevo código",
           "verifyCode": "Código de verificación por correo electrónico o teléfono",
           "tfaCode": "Código de autenticación de dos factores"
         }
@@ -107,6 +108,7 @@
           "region": "Región de la cuenta:",
           "email": "Dirección de Correo Electrónico o Número de Teléfono",
           "password": "Contraseña",
+          "newCode": "Solicitar nuevo código",
           "verifyCode": "Código de verificación por correo electrónico o teléfono",
           "tfaCode": "Código de autenticación de dos factores"
         }

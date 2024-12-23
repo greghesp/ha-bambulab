@@ -43,6 +43,7 @@
           "region": "계정 지역:",
           "email": "이메일 주소 또는 전화번호",
           "password": "비밀번호",
+          "newCode": "새 코드 요청",
           "verifyCode": "이메일 또는 전화 인증 코드",
           "tfaCode": "2단계 인증 코드"
         }
@@ -107,6 +108,7 @@
           "region": "계정 지역:",
           "email": "이메일 주소 또는 전화번호",
           "password": "비밀번호",
+          "newCode": "새 코드 요청",
           "verifyCode": "이메일 또는 전화 인증 코드",
           "tfaCode": "2단계 인증 코드"
         }
