@@ -9,10 +9,7 @@ from homeassistant import config_entries
 from homeassistant.components import ssdp
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers import (
-    device_registry,
-    translation
-)
+from homeassistant.helpers import device_registry
 from homeassistant.helpers.selector import (
     BooleanSelector,
     SelectOptionDict,
