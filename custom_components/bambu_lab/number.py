@@ -21,7 +21,6 @@ class BambuLabTemperatureEntityDescriptionMixin:
     """Mixin for required keys."""
     value_fn: Callable[..., any]
     set_value_fn: Callable[..., None]
-    exists_fn: Callable[..., bool]
 
 
 @dataclass
@@ -41,8 +40,7 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_max_value=320, # TODO: Determine by actual printer model
         native_step=1,
         value_fn=lambda device: device.temperature.target_nozzle_temp,
-        set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.NOZZLE, value),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
+        set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.NOZZLE, value)
     ),
     BambuLabNumberEntityDescription(
         key="target_bed_temperature",
@@ -54,8 +52,7 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_max_value=120,  # TODO: Determine by actual printer model and voltage
         native_step=1,
         value_fn=lambda device: device.temperature.target_bed_temp,
-        set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.HEATBED, value),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
+        set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.HEATBED, value)
     ),
 )
 
@@ -69,8 +66,7 @@ async def async_setup_entry(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     for description in NUMBERS:
-        if description.exists_fn(coordinator):
-            async_add_entities([BambuLabNumber(coordinator, description, entry)])
+        async_add_entities([BambuLabNumber(coordinator, description, entry)])
 
     LOGGER.debug("NUMBER::async_setup_entry DONE")
 
@@ -95,8 +91,8 @@ class BambuLabNumber(BambuLabEntity, NumberEntity):
     @property
     def available(self) -> bool:
         """Is the number available"""
-        return True
-
+        return self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
+    
     @property
     def native_value(self) -> float | None:
         """Return the value reported by the number."""
