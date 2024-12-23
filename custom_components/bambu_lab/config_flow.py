@@ -119,7 +119,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if self.email != '':
             modes = [
                 SelectOptionDict(value=self.email, label=self.email),
-                SelectOptionDict(value="bambu", label="" ),
+                SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
             ]
         else:
@@ -461,13 +461,13 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             default_option = self.email
             modes = [
                 SelectOptionDict(value=self.email, label=self.email),
-                SelectOptionDict(value="bambu", label="" ),
+                SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
             ]
         else:
             default_option = 'bambu' if self.config_entry.options['auth_token'] != "" else 'lan'
             modes = [
-                SelectOptionDict(value="bambu", label="" ),
+                SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
             ]
         
