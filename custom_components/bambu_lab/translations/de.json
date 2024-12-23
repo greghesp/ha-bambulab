@@ -47,13 +47,6 @@
           "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },
-      "Bambu_Use_Existing": {
-        "title": "Bambu Cloud-Verbindung",
-        "description": "Vorhandene Anmeldeinformationen gefunden:\\r\n{login}",
-        "data": {
-          "useExisting": "Diese Anmeldeinformationen verwenden?"
-        }
-      },
       "Bambu_Choose_Device": {
         "title": "Drucker-Auswahl",
         "description": "Wählen Sie den Drucker aus, den Sie hinzufügen möchten.",

@@ -1,4 +1,3 @@
-"""Config flow to configure Bambu Lab."""
 from __future__ import annotations
 
 import voluptuous as vol
@@ -53,21 +52,9 @@ REGION_SELECTOR = SelectSelector(
         mode=SelectSelectorMode.LIST,
     )
 )
-SUPPORTED_MODES = [
-    SelectOptionDict(value="Bambu", label="Bambu Cloud Configuration"),
-    SelectOptionDict(value="Lan", label="Lan Mode Configuration")
-]
-MODE_SELECTOR = SelectSelector(
-    SelectSelectorConfig(
-        options=SUPPORTED_MODES,
-        mode=SelectSelectorMode.LIST,
-    )
-)
 
 
 class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle Bambu Lab config flow."""
-
     VERSION = CONFIG_VERSION
     _bambu_cloud: None
     region: str = ""
@@ -79,42 +66,27 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     def async_get_options_flow(
             config_entry: config_entries.ConfigEntry,
     ) -> BambuOptionsFlowHandler:
-        """Get the options flow for this handler."""
         return BambuOptionsFlowHandler(config_entry)
 
+    def __init__(self) -> None:
+        self._bambu_cloud = BambuCloud("", "", "", "")
+        
     async def async_step_user(
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Handle a flow initiated by the user."""
         errors = {}
-
-        self._bambu_cloud = BambuCloud("", "", "", "")
 
         if user_input is not None:
             if user_input['printer_mode'] == "Lan":
+                self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
             if user_input['printer_mode'] == "Bambu":
+                self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Bambu(None)
+            if user_input['printer_mode'] != '':
+                return await self.async_step_Bambu_Choose_Device(None)
 
-        # Build form
-        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('printer_mode')] = MODE_SELECTOR
-
-        return self.async_show_form(
-            step_id="user",
-            data_schema=vol.Schema(fields),
-            errors=errors or {},
-            last_step=False,
-        )
-
-    async def async_step_Bambu(
-            self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        errors = {}
-        default_region = self.region
-        default_email = self.email
-
-        if user_input is None and self.region == '':
+        if user_input is None:
             # Iterate over all existing entries and try any existing credentials to see if they work
             config_entries = self.hass.config_entries.async_entries(DOMAIN)
             LOGGER.debug(f"Found {len(config_entries)} existing config entries for the integration.")
@@ -139,7 +111,43 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             username,
                             auth_token
                         )
-                        return await self.async_step_Bambu_Use_Existing(None)
+                        break
+                    
+        # Build form
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+
+        if self.email != '':
+            modes = [
+                SelectOptionDict(value=self.email, label=f"Use existing Bambu Cloud login for {self.email}"),
+                SelectOptionDict(value="Bambu", label="Bambu Cloud configuration"),
+                SelectOptionDict(value="Lan", label="Lan Mode configuration")
+            ]
+        else:
+            modes = [
+                SelectOptionDict(value="Bambu", label="Bambu Cloud configuration"),
+                SelectOptionDict(value="Lan", label="Lan Mode configuration")
+            ]
+        selector = SelectSelector(
+            SelectSelectorConfig(
+                options=modes,
+                mode=SelectSelectorMode.LIST,
+            )
+        )
+        fields[vol.Required('printer_mode')] = selector
+
+        return self.async_show_form(
+            step_id="user",
+            data_schema=vol.Schema(fields),
+            errors=errors or {},
+            last_step=False,
+        )
+
+    async def async_step_Bambu(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        errors = {}
+        default_region = self.region
+        default_email = self.email
 
         authentication_type = None
         if user_input is not None:
@@ -208,30 +216,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             last_step=False,
         )
     
-    async def async_step_Bambu_Use_Existing(
-            self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        LOGGER.debug("async_step_Bambu_Use_Existing")
-
-        if user_input is not None:
-            if user_input['useExisting'] == True:
-                return await self.async_step_Bambu_Choose_Device(None)
-            else:
-                self.email = ''
-                return await self.async_step_Bambu(None)
-
-        # Build form
-        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('useExisting', default=True)] = BOOLEAN_SELECTOR
-
-        return self.async_show_form(
-            step_id="Bambu_Use_Existing",
-            data_schema=vol.Schema(fields),
-            description_placeholders={"login": self.email},
-            errors={},
-            last_step=False,
-        )
-
     async def async_step_Bambu_Choose_Device(
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
@@ -412,20 +396,16 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_ssdp(
             self, discovery_info: ssdp.SsdpServiceInfo
     ) -> FlowResult:
-        """Handle ssdp discovery flow."""
-
         LOGGER.debug("async_step_ssdp");
         return await self.async_step_user()
 
 
 class BambuOptionsFlowHandler(config_entries.OptionsFlow):
-    """Handle Bambu options."""
 
     region: str = ""
     email: str = ""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize MQTT options flow."""
         self.config_entry = config_entry
         self.region = self.config_entry.options.get('region', '')
         self.email = self.config_entry.options.get('email', '')
@@ -435,30 +415,17 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         LOGGER.debug(self.config_entry)
 
     async def async_step_init(self, user_input: None = None) -> FlowResult:
-        """Manage the MQTT options."""
         errors = {}
 
         if user_input is not None:
             if user_input['printer_mode'] == "Lan":
+                self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
-            if user_input['printer_mode'] == "Bambu":
+            elif user_input['printer_mode'] == "Bambu":
+                self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Bambu(None)
-
-        # Build form
-        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('printer_mode', default='Bambu' if self.config_entry.options['auth_token'] != "" else 'Lan')] = MODE_SELECTOR
-
-        return self.async_show_form(
-            step_id="init",
-            data_schema=vol.Schema(fields),
-            errors=errors or {},
-            last_step=False,
-        )
-
-    async def async_step_Bambu(
-            self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        errors = {}
+            elif user_input['printer_mode'] != "":
+                return await self.async_step_Bambu_Lan(None)
 
         if user_input is None:
             # Iterate over all existing entries and try any existing credentials to see if they work
@@ -485,8 +452,45 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             username,
                             auth_token
                         )
-                        return await self.async_step_Bambu_Lan(None)
-                    
+                        break
+
+        # Build form
+        default_option = ''
+        if self.email != '':
+            default_option = self.email
+            modes = [
+                SelectOptionDict(value=self.email, label=f"Use existing Bambu Cloud login for {self.email}"),
+                SelectOptionDict(value="Bambu", label="Bambu Cloud configuration"),
+                SelectOptionDict(value="Lan", label="Lan Mode configuration")
+            ]
+        else:
+            default_option = 'Bambu' if self.config_entry.options['auth_token'] != "" else 'Lan'
+            modes = [
+                SelectOptionDict(value="Bambu", label="Bambu Cloud Configuration"),
+                SelectOptionDict(value="Lan", label="Lan Mode Configuration")
+            ]
+        
+        selector = SelectSelector(
+            SelectSelectorConfig(
+                options=modes,
+                mode=SelectSelectorMode.LIST,
+            )
+        )
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Required('printer_mode', default=default_option)] = selector
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(fields),
+            errors=errors or {},
+            last_step=False,
+        )
+
+    async def async_step_Bambu(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        errors = {}
+
         authentication_type = None
         if user_input is not None:
             try:

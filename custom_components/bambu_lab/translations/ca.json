@@ -47,13 +47,6 @@
           "tfaCode": "Codi d'autenticació de dos factors"
         }
       },
-      "Bambu_Use_Existing": {
-        "title": "Connexió al núvol Bambu",
-        "description": "S'han trobat les credencials d'inici de sessió existents:\\r\n{inici de sessió}",
-        "data": {
-          "useExisting": "Utilitzeu aquestes credencials?"
-        }
-      },
       "Bambu_Choose_Device": {
         "title": "Selecció d'Impresora",
         "description": "Escull quina impressora vols afegir.",
