@@ -47,13 +47,6 @@
           "tfaCode": "2단계 인증 코드"
         }
       },
-      "Bambu_Use_Existing": {
-        "title": "Bambu 클라우드 연결",
-        "description": "기존 로그인 자격 증명을 찾았습니다.\\r\n{login}",
-        "data": {
-          "useExisting": "이 자격 증명을 사용하시겠습니까?"
-        }
-      },
       "Bambu_Choose_Device": {
         "title": "프린터 선택",
         "description": "추가할 프린터를 선택하세요.",
