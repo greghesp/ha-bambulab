@@ -1,3 +1,6 @@
+### V2.0.40
+- ???
+
 ### V2.0.39
 - Removed unsupported wled blueprint
 - Simplified hms errors
