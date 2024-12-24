@@ -1,3 +1,6 @@
+### V2.0.40
+- ???
+
 ### V2.0.39
 - Removed unsupported wled blueprint
 - Simplified hms errors
@@ -5,6 +8,8 @@
 - Updated translations
 - Allow different credentials to be provided when adding a printer
 - Add service to send arbitrary gcode
+- Improvements email and sms code handling
+- Misc fixes
 
 ### V2.0.38
 - Fix to handle authentication changes in China
