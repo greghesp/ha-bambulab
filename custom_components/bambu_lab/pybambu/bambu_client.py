@@ -359,7 +359,6 @@ class BambuClient:
 
     def setup_tls(self):
         if not self._local_mqtt:
-            LOGGER.debug("********************* SETTING SSL CERT")
             script_path = os.path.abspath(__file__)
             directory_path = os.path.dirname(script_path)
             certfile = directory_path + "/bambu.cert"
