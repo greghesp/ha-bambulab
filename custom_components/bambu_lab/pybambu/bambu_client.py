@@ -358,7 +358,6 @@ class BambuClient:
             self._stop_camera()
 
     def setup_tls(self):
-        LOGGER.debug("*****************************************")
         script_path = os.path.abspath(__file__)
         directory_path = os.path.dirname(script_path)
         certfile = directory_path + "/bambu.cert"
