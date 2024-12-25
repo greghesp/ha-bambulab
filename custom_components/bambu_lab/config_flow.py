@@ -37,7 +37,6 @@ CONFIG_VERSION = 2
 BOOLEAN_SELECTOR = BooleanSelector()
 NUMBER_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.NUMBER))
 TEXT_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT))
-EMAIL_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.EMAIL))
 PASSWORD_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))
 REGION_LIST = [
     SelectOptionDict(value="AsiaPacific", label="Asia Pacific"),
@@ -214,7 +213,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             default_region = default_region if user_input is None else user_input.get('region', '')
             fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
             default_email = default_email if user_input is None else user_input.get('email', '')
-            fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
+            fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
             fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
@@ -571,7 +570,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             default_region = self.config_entry.options.get('region', '') if user_input is None else user_input.get('region', '')
             fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
             default_email = self.config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
-            fields[vol.Required('email', default=default_email)] = EMAIL_SELECTOR
+            fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
             fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
