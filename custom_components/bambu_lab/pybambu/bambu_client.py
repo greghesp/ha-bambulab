@@ -311,6 +311,7 @@ class BambuClient:
             username = config.get('username', ''),
             auth_token = config.get('auth_token', '')
         )
+        self._loaded_slicer_settings = False
         self.slicer_settings = SlicerSettings(self)
         language = config.get('user_language', 'pt')
         if 'zh' in language:
@@ -460,6 +461,7 @@ class BambuClient:
     
     def _on_disconnect(self):
         LOGGER.debug("_on_disconnect: Lost connection to the printer")
+        self._loaded_slicer_settings = False
         self._connected = False
         self._device.info.set_online(False)
         if self._watchdog is not None:
@@ -479,6 +481,11 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
+            if not self._loaded_slicer_settings:
+                # Only update slicer settings once per successful connection to the printer.
+                self._loaded_slicer_settings = True
+                self.slicer_settings.update()
+
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
             clean_msg = re.sub(r"\\n *", "", str(message.payload))
             if self._refreshed:
@@ -508,8 +515,6 @@ class BambuClient:
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
-                    # Only update slicer settings on a successful connection to the printer.
-                    self.slicer_settings.update()
 
         except Exception as e:
             LOGGER.error("An exception occurred processing a message:", exc_info=e)
