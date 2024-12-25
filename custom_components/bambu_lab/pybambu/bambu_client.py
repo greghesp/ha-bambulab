@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import asyncio
-import queue
 import json
 import math
+import os
+import queue
 import re
 import socket
 import ssl
@@ -357,8 +358,17 @@ class BambuClient:
             self._stop_camera()
 
     def setup_tls(self):
-        self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
-        self.client.tls_insecure_set(True)
+        if not self._local_mqtt:
+            LOGGER.debug("********************* SETTING SSL CERT")
+            script_path = os.path.abspath(__file__)
+            directory_path = os.path.dirname(script_path)
+            certfile = directory_path + "/bambu.cert"
+            context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+            context.load_verify_locations(cafile=certfile)
+            self.client.tls_set_context(context)
+        else:
+            self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
+            self.client.tls_insecure_set(True)
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
