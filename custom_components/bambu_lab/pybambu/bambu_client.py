@@ -359,14 +359,19 @@ class BambuClient:
             self._stop_camera()
 
     def setup_tls(self):
-        script_path = os.path.abspath(__file__)
-        directory_path = os.path.dirname(script_path)
-        certfile = directory_path + "/bambu.cert"
-        context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
-        context.verify_mode = ssl.CERT_REQUIRED
-        context.load_verify_locations(cafile=certfile)
-        context.check_hostname = not self._local_mqtt
-        self.client.tls_set_context(context)
+        # Some people got this error with this change so disabled for now:
+        # Exception. Type: <class 'ssl.SSLCertVerificationError'> Args: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: CA cert does not include key usage extension (_ssl.c:1020)
+        #
+        # script_path = os.path.abspath(__file__)
+        # directory_path = os.path.dirname(script_path)
+        # certfile = directory_path + "/bambu.cert"
+        # context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+        # context.verify_mode = ssl.CERT_REQUIRED
+        # context.load_verify_locations(cafile=certfile)
+        # context.check_hostname = not self._local_mqtt
+        # self.client.tls_set_context(context)
+        self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
+        self.client.tls_insecure_set(True)
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""

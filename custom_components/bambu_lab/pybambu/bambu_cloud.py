@@ -114,13 +114,14 @@ class BambuCloud:
         if response.status_code == 403 and 'cloudflare' in response.text:
             LOGGER.error("BLOCKED BY CLOUDFLARE")
             raise CloudflareError()
-
-        if response.status_code == 400 and not return400:
+        elif response.status_code == 429 and 'cloudflare' in response.text:
+            LOGGER.error("TEMPORARY 429 BLOCK BY CLOUDFLARE")
+            raise CloudflareError(response.status_code, response.text)
+        elif response.status_code == 400 and not return400:
             LOGGER.error(f"Connection failed with error code: {response.status_code}")
             LOGGER.debug(f"Response: '{response.text}'")
             raise PermissionError(response.status_code, response.text)
-
-        if response.status_code > 400:
+        elif response.status_code > 400:
             LOGGER.error(f"Connection failed with error code: {response.status_code}")
             LOGGER.debug(f"Response: '{response.text}'")
             raise PermissionError(response.status_code, response.text)
@@ -480,7 +481,6 @@ class BambuCloud:
             response = self._get(BambuUrl.SLICER_SETTINGS)
         except:
             return None
-        LOGGER.debug("Succeeded")
         return response.json()
     
     # The task list is of the following form with a 'hits' array with typical 20 entries.

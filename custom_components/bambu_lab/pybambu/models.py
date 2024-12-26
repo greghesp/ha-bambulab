@@ -503,8 +503,10 @@ class PrintJob:
             existing_remaining_time = self.remaining_time
             self.remaining_time = data.get("mc_remaining_time")
             if existing_remaining_time != self.remaining_time:
-                self.end_time = get_end_time(self.remaining_time)
-                LOGGER.debug(f"END TIME2: {self.end_time}")
+                end_time = get_end_time(self.remaining_time)
+                if end_time != self.end_time:
+                    self.end_time = end_time
+                    LOGGER.debug(f"END TIME2: {self.end_time}")
 
         # Handle print start
         previously_idle = previous_gcode_state == "IDLE" or previous_gcode_state == "FAILED" or previous_gcode_state == "FINISH"
