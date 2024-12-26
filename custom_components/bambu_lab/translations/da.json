@@ -1,0 +1,599 @@
+{
+    "device_automation": {
+        "trigger_type": {
+            "event_print_canceled": "Print annulleret",
+            "event_print_failed": "Print mislykkedes",
+            "event_print_finished": "Print færdiggjort",
+            "event_print_started": "Print startet",
+            "event_print_error": "Print fejl",
+            "event_print_error_cleared": "Print fejl ryddet",
+            "event_printer_error": "HMS fejl",
+            "event_printer_error_cleared": "HMS fejl ryddet"
+        }
+    },
+    "config": {
+        "abort": {
+            "already_configured": "Enhed er allerede konfigureret",
+            "no_printers": "Ingen ukonfigurerede printere fundet på kontoen.",
+            "cloudflare": "Cloudflare har blokeret forbindelsesforsøget.",
+            "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt."
+        },
+        "error": {
+            "cannot_connect": "Forbindelse mislykkedes. Tjek legitimationsoplysninger.",
+            "cannot_connect_local_ip": "Forbindelse mislykkedes. Tjek den angivne IP-adresse.",
+            "cannot_connect_local_all": "Forbindelse mislykkedes. Tjek de angivne indstillinger.",
+            "invalid_auth": "Ugyldig autentifikation.",
+            "unknown": "Uventet fejl.",
+            "code_needed": "Bekræftelseskode skal angives.",
+            "verifyCode": "Bekræftelseskode kræves. Tjek din e-mail eller telefon.",
+            "code_expired": "Bekræftelseskode udløbet. Ny kode anmodet. Tjek din e-mail eller telefon.",
+            "code_incorrect": "Bekræftelseskoden var forkert. Indtast venligst igen.",
+            "tfaCode": "2FA-kode kræves. Indtast den nu."
+        },
+        "step": {
+            "user": {
+                "description": "Konfiguration via Bambu Cloud er den enkleste metode. Du kan vælge at konfigurere manuelt til kun lokal adgang, men det medfører tab af visse funktioner - dette kræves for printere indstillet til Kun Lan Mode.\n\rHvis de allerede eksisterer og fungerer, kan du også genbruge eksisterende autentifikationsoplysninger fra andre konfigurerede printere.\n\rBemærk, at sociale mediekonti uden en adgangskode ikke understøttes til cloud-konfiguration.",
+                "data": {
+                    "printer_mode": "Printerkonfigurationsmetode:"
+                }
+            },
+            "Bambu": {
+                "title": "Bambu Cloud-forbindelse",
+                "description": "Indtast dine Bambu Lab-legitimationsoplysninger:",
+                "data": {
+                    "region": "Kontoregion:",
+                    "email": "E-mailadresse eller telefonnummer",
+                    "password": "Adgangskode",
+                    "newCode": "Anmod om ny kode",
+                    "verifyCode": "E-mail eller telefonbekræftelseskode",
+                    "tfaCode": "To-faktor autentifikationskode"
+                }
+            },
+            "Bambu_Choose_Device": {
+                "title": "Printervalg",
+                "description": "Vælg hvilken printer, du vil tilføje.",
+                "data": {
+                    "serial": "Vælg printer der skal tilføjes:"
+                }
+            },
+            "Bambu_Lan": {
+                "title": "Opsæt lokal forbindelse",
+                "description": "Du kan vælge at angive den lokale printer-IP-adresse og adgangskode. Dette kræves for kameraadgang på P1/A1 eller for at kunne forbinde direkte til printeren i stedet for via Bambu Cloud.",
+                "data": {
+                    "local_mqtt": "Forbind lokalt til printeren:",
+                    "host": "Lokal printer-IP-adresse:",
+                    "access_code": "Adgangskode:",
+                    "usage_hours": "Aktuelle brugstimer (valgfrit):"
+                }
+            },
+            "Lan": {
+                "title": "Lan Mode-forbindelse",
+                "description": "Angiv din lokale printer-IP-adresse, serienummer og adgangskode. Adgangskoden kan findes på printerskærmen i netværksindstillingerne (WLAN). Serienummeret (SN) findes i enhedsindstillingerne.",
+                "data": {
+                    "serial": "Serienummer:",
+                    "host": "Lokal printer-IP-adresse:",
+                    "access_code": "Adgangskode:",
+                    "usage_hours": "Aktuelle brugstimer (valgfrit):"
+                }
+            }
+        }
+    },
+    "options": {
+        "abort": {
+            "cloudflare": "Cloudflare har blokeret forbindelsesforsøget.",
+            "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt."
+        },
+        "error": {
+            "cannot_connect": "Forbindelse mislykkedes",
+            "cannot_connect_local_ip": "Forbindelse mislykkedes. Tjek den angivne IP-adresse.",
+            "cannot_connect_local_all": "Forbindelse mislykkedes. Tjek de angivne indstillinger.",
+            "invalid_auth": "Ugyldig autentifikation.",
+            "unknown": "Uventet fejl.",
+            "code_needed": "Bekræftelseskode skal angives.",
+            "verifyCode": "Bekræftelseskode kræves. Tjek din e-mail eller telefon.",
+            "code_expired": "Bekræftelseskode udløbet. Ny kode anmodet. Tjek din e-mail eller telefon.",
+            "code_incorrect": "Bekræftelseskoden var forkert. Indtast venligst igen.",
+            "tfaCode": "2FA-kode kræves. Indtast den nu."
+        },
+        "step": {
+            "init": {
+                "title": "Juster forbindelsesindstillinger",
+                "description": "Konfiguration via Bambu Cloud er den enkleste metode. Du kan vælge at konfigurere manuelt til kun lokal adgang, men det medfører tab af visse funktioner - dette kræves for printere indstillet til Kun Lan Mode.\n\rHvis de allerede eksisterer og fungerer, kan du også genbruge eksisterende autentifikationsoplysninger fra andre konfigurerede printere.\n\rBemærk, at sociale mediekonti uden en adgangskode ikke understøttes til cloud-konfiguration.",
+                "data": {
+                    "printer_mode": "Printerkonfigurationsmetode:"
+                }
+            },
+            "Bambu": {
+                "title": "Bambu Cloud-forbindelse",
+                "description": "Indtast dine Bambu Lab-legitimationsoplysninger:",
+                "data": {
+                    "region": "Kontoregion:",
+                    "email": "E-mailadresse eller telefonnummer",
+                    "password": "Adgangskode",
+                    "newCode": "Anmod om ny kode",
+                    "verifyCode": "E-mail eller telefonbekræftelseskode",
+                    "tfaCode": "To-faktor autentifikationskode"
+                }
+            },
+            "Bambu_Lan": {
+                "title": "Juster printerkonfiguration",
+                "description": "Du kan vælge at angive den lokale printer-IP-adresse og adgangskode. Dette kræves for kameraadgang på P1/A1 eller for at kunne forbinde direkte til printeren i stedet for via Bambu Cloud.",
+                "data": {
+                    "serial": "Vælg printer der skal tilføjes:",
+                    "host": "Lokal printer-IP-adresse:",
+                    "access_code": "Adgangskode:",
+                    "local_mqtt": "Forbind direkte til printeren i stedet for via Bambu Cloud:",
+                    "usage_hours": "Aktuelle brugstimer (valgfrit):"
+                }
+            },
+            "Lan": {
+                "title": "Lan Mode-forbindelse",
+                "description": "Angiv din lokale printer-IP-adresse og adgangskode. Adgangskoden kan findes på printerskærmen i netværksindstillingerne (WLAN).",
+                "data": {
+                    "host": "Lokal printer-IP-adresse:",
+                    "access_code": "Adgangskode:",
+                    "usage_hours": "Aktuelle brugstimer (valgfrit):"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "door_open": {
+                "name": "Kabinedør"
+            },
+            "timelapse": {
+                "name": "Optager timelapse"
+            },
+            "hms_errors": {
+                "name": "HMS fejl"
+            },
+            "print_error": {
+                "name": "Print fejl"
+            },
+            "online": {
+                "name": "Online"
+            },
+            "firmware_update": {
+                "name": "Firmware opdatering"
+            }
+        },
+        "button": {
+            "pause": {
+                "name": "Pause print"
+            },
+            "resume": {
+                "name": "Genoptag print"
+            },
+            "stop": {
+                "name": "Stop print"
+            },
+            "refresh": {
+                "name": "Tving opdatering af data"
+            }
+        },
+        "fan": {
+            "cooling_fan": {
+                "name": "Køleblæser"
+            },
+            "aux_fan": {
+                "name": "Hjælpeblæser"
+            },
+            "chamber_fan": {
+                "name": "Kabineblæser"
+            }
+        },
+        "image": {
+            "p1p_camera": {
+                "name": "Kamera"
+            },
+            "cover_image": {
+                "name": "Forsidebillede"
+            }
+        },
+        "light": {
+            "chamber_light": {
+                "name": "Kabinelys"
+            },
+            "camera_light": {
+                "name": "Kameralys"
+            }
+        },
+        "number": {
+            "target_bed_temperature": {
+                "name": "Måletemperatur for bed"
+            },
+            "target_nozzle_temperature": {
+                "name": "Måletemperatur for dyse"
+            }
+        },
+        "select": {
+            "printing_speed": {
+                "name": "Print hastighed",
+                "state": {
+                    "silent": "Stille",
+                    "standard": "Standard",
+                    "sport": "Sport",
+                    "ludicrous": "Ekstrem"
+                }
+            }
+        },
+        "sensor": {
+            "wifi_signal": {
+                "name": "Wi-Fi signal"
+            },
+            "bed_temp": {
+                "name": "Bed temperatur"
+            },
+            "target_bed_temp": {
+                "name": "Måletemperatur for bed"
+            },
+            "chamber_temp": {
+                "name": "Kabinetemperatur"
+            },
+            "target_nozzle_temp": {
+                "name": "Måletemperatur for dyse"
+            },
+            "nozzle_temp": {
+                "name": "Dysetemperatur"
+            },
+            "aux_fan_speed": {
+                "name": "Hjælpeblæser hastighed"
+            },
+            "cooling_fan_speed": {
+                "name": "Køleblæser hastighed"
+            },
+            "chamber_fan_speed": {
+                "name": "Kabineblæser hastighed"
+            },
+            "heatbreak_fan_speed": {
+                "name": "Varmeafbrud blæserhastighed"
+            },
+            "speed_profile": {
+                "name": "Hastighedsprofil",
+                "state": {
+                    "silent": "Stille",
+                    "standard": "Standard",
+                    "sport": "Sport",
+                    "ludicrous": "Ekstrem"
+                },
+                "state_attributes": {
+                    "modifier": {
+                        "name": "Modifier"
+                    }
+                }
+            },
+            "printer_name": {
+                "name": "Printer navn"
+            },
+            "stage": {
+                "name": "Nuværende trin",
+                "state": {
+                    "offline": "Offline",
+                    "printing": "Printer",
+                    "auto_bed_leveling": "Auto bed nivellering",
+                    "heatbed_preheating": "Opvarmer heatbed",
+                    "sweeping_xy_mech_mode": "Sweeping XY mekanisk tilstand",
+                    "changing_filament": "Skifter filament",
+                    "m400_pause": "M400 pause",
+                    "paused_filament_runout": "Pause på grund af filamentmangel",
+                    "heating_hotend": "Opvarmer hotend",
+                    "calibrating_extrusion": "Kalibrerer ekstrudering",
+                    "scanning_bed_surface": "Scanner bed overflade",
+                    "inspecting_first_layer": "Inspektion af første lag",
+                    "identifying_build_plate_type": "Identificerer byggepladetype",
+                    "calibrating_micro_lidar": "Kalibrerer mikro-lidar",
+                    "homing_toolhead": "Nulstiller værktøjshoved",
+                    "cleaning_nozzle_tip": "Renser dysetip",
+                    "checking_extruder_temperature": "Tjekker ekstrudertemperatur",
+                    "paused_user": "Print blev pauseret af bruger",
+                    "paused_front_cover_falling": "Pause på grund af forsidefald",
+                    "calibrating_extrusion_flow": "Kalibrerer ekstruderingsflow",
+                    "paused_nozzle_temperature_malfunction": "Pause på grund af dysens temperaturfejl",
+                    "paused_heat_bed_temperature_malfunction": "Pause på grund af varmebedets temperaturfejl",
+                    "filament_unloading": "Aflader filament",
+                    "paused_skipped_step": "Pause på grund af springede trin",
+                    "filament_loading": "Indlæser filament",
+                    "calibrating_motor_noise": "Kalibrerer motorstøj",
+                    "paused_ams_lost": "Pause på grund af AMS tab",
+                    "paused_low_fan_speed_heat_break": "Pause på grund af lav varmeafbryder blæserhastighed",
+                    "paused_chamber_temperature_control_error": "Pause på grund af fejl i kabinetemperaturkontrol",
+                    "cooling_chamber": "Køler kabinet",
+                    "paused_user_gcode": "Pause fra bruger-tilføjet gcode instruktion",
+                    "motor_noise_showoff": "Motorstøj demonstration",
+                    "paused_nozzle_filament_covered_detected": "Pause på grund af dækket dyse-filament",
+                    "paused_cutter_error": "Pause på grund af cutter fejl",
+                    "paused_first_layer_error": "Pause på grund af fejl i første lag",
+                    "paused_nozzle_clog": "Pause på grund af tilstoppet dyse",
+                    "idle": "Inaktiv"
+                }
+            },
+            "print_progress": {
+                "name": "Print fremskridt"
+            },
+            "print_status": {
+                "name": "Print status",
+                "state": {
+                    "failed": "Mislykkedes",
+                    "finish": "Færdig",
+                    "idle": "Inaktiv",
+                    "offline": "Offline",
+                    "prepare": "Forbereder",
+                    "running": "Kører",
+                    "pause": "Pause",
+                    "slicing": "Skiver",
+                    "init": "Initialiserer"
+                }
+            },
+            "mqtt_mode": {
+                "name": "MQTT forbindelsestilstand",
+                "state": {
+                    "local": "Lokal",
+                    "bambu_cloud": "Bambu Cloud"
+                }
+            },
+            "gcode_file": {
+                "name": "Gcode filnavn"
+            },
+            "print_bed_type": {
+                "name": "Printbedtype",
+                "state": {
+                    "textured_plate": "Tekstureret plade",
+                    "cool_plate": "Køleplade / PLA plade",
+                    "hot_plate": "Glat PEI plade / Højtemperatur plade",
+                    "eng_plate": "Ingeniørplade"
+                }
+            },
+            "print_length": {
+                "name": "Printlængde"
+            },
+            "print_weight": {
+                "name": "Printvægt"
+            },
+            "subtask_name": {
+                "name": "Opgavenavn"
+            },
+            "print_type": {
+                "name": "Printtype",
+                "state": {
+                    "local": "Lokal",
+                    "cloud": "Cloud",
+                    "idle": "Inaktiv"
+                }
+            },
+            "start_time": {
+                "name": "Starttidspunkt"
+            },
+            "remaining_time": {
+                "name": "Resterende tid"
+            },
+            "end_time": {
+                "name": "Sluttidspunkt"
+            },
+            "total_usage_hours": {
+                "name": "Samlet brugstid"
+            },
+            "current_layer": {
+                "name": "Aktuelt lag"
+            },
+            "total_layers": {
+                "name": "Samlet antal lag"
+            },
+            "active_tray": {
+                "name": "Aktiv bakke"
+            },
+            "active_tray_index": {
+                "name": "Indeks for aktiv bakke"
+            },
+            "nozzle_diameter": {
+                "name": "Dyse størrelse"
+            },
+            "nozzle_type": {
+                "name": "Dysens type",
+                "state": {
+                    "hardened_steel": "Hærdet stål",
+                    "stainless_steel": "Rustfrit stål"
+                }
+            },
+            "humidity_index": {
+                "name": "Fugtighedsindeks"
+            },
+            "ams_temp": {
+                "name": "AMS temperatur"
+            },
+            "external_spool": {
+                "name": "Ekstern spole",
+                "state_attributes": {
+                    "active": {
+                        "name": "Aktiv"
+                    },
+                    "color": {
+                        "name": "Farve"
+                    },
+                    "empty": {
+                        "name": "Tom"
+                    },
+                    "k_value": {
+                        "name": "K værdi"
+                    },
+                    "name": {
+                        "name": "Navn"
+                    },
+                    "nozzle_temp_min": {
+                        "name": "Dysens minimumstemperatur"
+                    },
+                    "nozzle_temp_max": {
+                        "name": "Dysens maksimumstemperatur"
+                    },
+                    "type": {
+                        "name": "Type"
+                    }
+                }
+            },
+            "tray_1": {
+                "name": "Bakke 1",
+                "state_attributes": {
+                    "active": {
+                        "name": "Aktiv"
+                    },
+                    "color": {
+                        "name": "Farve"
+                    },
+                    "empty": {
+                        "name": "Tom"
+                    },
+                    "k_value": {
+                        "name": "K værdi"
+                    },
+                    "name": {
+                        "name": "Navn"
+                    },
+                    "nozzle_temp_min": {
+                        "name": "Dysens minimumstemperatur"
+                    },
+                    "nozzle_temp_max": {
+                        "name": "Dysens maksimumstemperatur"
+                    },
+                    "remain": {
+                        "name": "Resterende filament"
+                    },
+                    "tag_uid": {
+                        "name": "Spolens serienummer"
+                    },
+                    "type": {
+                        "name": "Type"
+                    }
+                }
+            },
+            "tray_2": {
+                "name": "Bakke 2",
+                "state_attributes": {
+                    "active": {
+                        "name": "Aktiv"
+                    },
+                    "color": {
+                        "name": "Farve"
+                    },
+                    "empty": {
+                        "name": "Tom"
+                    },
+                    "k_value": {
+                        "name": "K værdi"
+                    },
+                    "name": {
+                        "name": "Navn"
+                    },
+                    "nozzle_temp_min": {
+                        "name": "Dysens minimumstemperatur"
+                    },
+                    "nozzle_temp_max": {
+                        "name": "Dysens maksimumstemperatur"
+                    },
+                    "remain": {
+                        "name": "Resterende filament"
+                    },
+                    "tag_uid": {
+                        "name": "Spolens serienummer"
+                    },
+                    "type": {
+                        "name": "Type"
+                    }
+                }
+            },
+            "tray_3": {
+                "name": "Bakke 3",
+                "state_attributes": {
+                    "active": {
+                        "name": "Aktiv"
+                    },
+                    "color": {
+                        "name": "Farve"
+                    },
+                    "empty": {
+                        "name": "Tom"
+                    },
+                    "k_value": {
+                        "name": "K værdi"
+                    },
+                    "name": {
+                        "name": "Navn"
+                    },
+                    "nozzle_temp_min": {
+                        "name": "Dysens minimumstemperatur"
+                    },
+                    "nozzle_temp_max": {
+                        "name": "Dysens maksimumstemperatur"
+                    },
+                    "remain": {
+                        "name": "Resterende filament"
+                    },
+                    "tag_uid": {
+                        "name": "Spolens serienummer"
+                    },
+                    "type": {
+                        "name": "Type"
+                    }
+                }
+            },
+            "tray_4": {
+                "name": "Bakke 4",
+                "state_attributes": {
+                    "active": {
+                        "name": "Aktiv"
+                    },
+                    "color": {
+                        "name": "Farve"
+                    },
+                    "empty": {
+                        "name": "Tom"
+                    },
+                    "k_value": {
+                        "name": "K værdi"
+                    },
+                    "name": {
+                        "name": "Navn"
+                    },
+                    "nozzle_temp_min": {
+                        "name": "Dysens minimumstemperatur"
+                    },
+                    "nozzle_temp_max": {
+                        "name": "Dysens maksimumstemperatur"
+                    },
+                    "remain": {
+                        "name": "Resterende filament"
+                    },
+                    "tag_uid": {
+                        "name": "Spolens serienummer"
+                    },
+                    "type": {
+                        "name": "Type"
+                    }
+                }
+            }
+        },
+        "camera": {
+            "camera": {
+                "name": "Kamera"
+            }
+        },
+        "switch": {
+            "manual": {
+                "name": "Manuel opdateringstilstand"
+            },
+            "camera": {
+                "name": "Aktiver kamera"
+            },
+            "imagecamera": {
+                "name": "Brug billedsensor kamera"
+            }
+        }
+    },
+    "selector": {
+        "configuration_type": {
+            "options": {
+                "bambu": "Bambu Cloud",
+                "lan": "Lokal forbindelse"
+            }
+        }
+    }
+}
