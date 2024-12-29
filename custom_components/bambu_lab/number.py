@@ -43,8 +43,8 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.NOZZLE, value)
     ),
     BambuLabNumberEntityDescription(
-        key="target_bed_temperature",
-        translation_key="target_bed_temperature",
+        key="bed_target_temperature",
+        translation_key="bed_target_temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=NumberDeviceClass.TEMPERATURE,
         mode=NumberMode.BOX,
