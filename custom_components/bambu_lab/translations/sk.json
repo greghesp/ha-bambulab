@@ -1,0 +1,599 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Tlač zrušená",
+      "event_print_failed": "Tlač neúspešná",
+      "event_print_finished": "Tlač dokončená",
+      "event_print_started": "Tlač spustená",
+      "event_print_error": "Chyba tlače",
+      "event_print_error_cleared": "Odstránená chyba tlače",
+      "event_printer_error": "Chyba HMS",
+      "event_printer_error_cleared": "Chyba HMS odstránená"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "Zariadenie je už nakonfigurované",
+      "no_printers": "Žiadna nenastavená tlačiareň nenájdená pod účtom.",
+      "cloudflare": "Cloudflare zablokoval pokus o pripojenie.",
+      "curl_unavailable": "curl_cffi knižnica nie je k dispozícii."
+    },
+    "error": {
+      "cannot_connect": "Nepodarilo sa pripojiť. Skontrolujte poverenia.",
+      "cannot_connect_local_ip": "Nepodarilo sa pripojiť. Skontrolujte zadanú IP adresu.",
+      "cannot_connect_local_all": "Nepodarilo sa pripojiť. Skontrolujte zadané nastavenia.",
+      "invalid_auth": "Neplatné overenie.",
+      "unknown": "Neočakávaná chyba.",
+      "code_needed": "Je potrebné zadať overovací kód.",
+      "verifyCode": "Vyžaduje sa overovací kód. Skontrolujte e-mail alebo telefón.",
+      "code_expired": "Platnosť overovacieho kódu vypršala. Požadovaný nový kód. Skontrolujte  e-mail alebo telefón.",
+      "code_incorrect": "Overovací kód bol nesprávny. Prosím zadajte ho znova.",
+      "tfaCode": "2FA kód je požadovaný. Prosím zadajte ho teraz."
+    },
+    "step": {
+      "user": {
+        "description": "Nastavenie cez Bambu Cloud je najjednoduchšie. Voliteľne môžete manuálne nakonfigurovať len pre lokálny prístup, ale stratíte niektoré funkcie – toto je potrebné pre tlačiarne nastavené na režim Len LAN.\n\rAk existujú a fungujú, môžete tiež znova použiť existujúce overovacie poverenia z iných nakonfigurovaných tlačiarní.\n\rUpozorňujeme, že účty sociálnych médií bez hesla nie sú podporované pre cloudové nastavenie.",
+        "data": {
+          "printer_mode": "Režim konfigurácie tlačiarne:"
+        }
+      },
+      "Bambu": {
+        "title": "Pripojenie Bambu Cloud",
+        "description": "Zadajte prosím svoje poverenia Bambu Lab:",
+        "data": {
+          "region": "Krajina účtu:",
+          "email": "E-mailová adresa alebo telefónne číslo",
+          "password": "Heslo",
+          "newCode": "Požiadať o nový kód",
+          "verifyCode": "E-mailový alebo telefónny overovací kód",
+          "tfaCode": "Dvoj-faktorový overovací kód"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Výber tlačiarne",
+        "description": "Vyberte tlačiareň, ktorú chcete pridať.",
+        "data": {
+          "serial": "Vyberte tlačiareň na pridanie:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Nastavenie lokálneho pripojenia",
+        "description": "Voliteľne môžete zadať IP adresu lokálnej tlačiarne a prístupový kód. Toto je potrebné pre prístup ku kamere na P1/A1. Alebo možnosť pripojiť sa priamo k tlačiarni namiesto cez Bambu Cloud.",
+        "data": {
+          "local_mqtt": "Pripojenie lokálne na tlačiareň:",
+          "host": "Lokálna IP adresa tlačiarne:",
+          "access_code": "Prístupový kód:",
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        }
+      },
+      "Lan": {
+        "title": "Pripojenie v režime LAN",
+        "description": "Zadajte lokálnu IP adresu tlačiarne, sériové číslo a prístupový kód. Prístupový kód nájdete na obrazovke tlačiarne v nastaveniach siete (WLAN). Sériové číslo (SN) nájdete v nastaveniach zariadenia.",
+        "data": {
+          "serial": "Sériové čislo:",
+          "host": "Lokálna IP adresa tlačiarne:",
+          "access_code": "Prístupový kód:",
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cloudflare": "Cloudflare zablokoval pokus o pripojenie.",
+      "curl_unavailable": "curl_cffi knižnica nie je k dispozícii."
+    },
+    "error": {
+      "cannot_connect": "Nepodarilo sa pripojiť",
+      "cannot_connect_local_ip": "Nepodarilo sa pripojiť. Skontrolujte zadanú IP adresu.",
+      "cannot_connect_local_all": "Nepodarilo sa pripojiť. Skontrolujte zadané nastavenia.",
+      "invalid_auth": "Neplatné overenie.",
+      "unknown": "Neočakávaná chyba.",
+      "code_needed": "Je potrebné zadať overovací kód.",
+      "verifyCode": "Vyžaduje sa overovací kód. Skontrolujte e-mail alebo telefón.",
+      "code_expired": "Platnosť overovacieho kódu vypršala. Požadovaný nový kód. Skontrolujte  e-mail alebo telefón.",
+      "code_incorrect": "Overovací kód bol nesprávny. Prosím zadajte ho znova.",
+      "tfaCode": "2FA kód je požadovaný. Prosím zadajte ho teraz."
+    },
+    "step": {
+      "init": {
+        "title": "Úprava nastavenia pripojenia",
+        "description": "Nastavenie cez Bambu Cloud je najjednoduchšie. Voliteľne môžete manuálne nakonfigurovať len pre lokálny prístup, ale stratíte niektoré funkcie – toto je potrebné pre tlačiarne nastavené na režim Len LAN.\n\rAk existujú a fungujú, môžete tiež znova použiť existujúce overovacie poverenia z iných nakonfigurovaných tlačiarní.\n\rUpozorňujeme, že účty sociálnych médií bez hesla nie sú podporované pre cloudové nastavenie.",
+        "data": {
+          "printer_mode": "Režim konfigurácie tlačiarne:"
+        }
+      },
+      "Bambu": {
+        "title": "Pripojenie Bambu Cloud",
+        "description": "Zadajte prosím svoje poverenia Bambu Lab:",
+        "data": {
+          "region": "Krajina účtu:",
+          "email": "E-mailová adresa alebo telefónne číslo",
+          "password": "Heslo",
+          "newCode": "Požiadať o nový kód",
+          "verifyCode": "E-mailový alebo telefónny overovací kód",
+          "tfaCode": "Dvoj-faktorový overovací kód"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Úprava nastavenia tlačiarne",
+        "description": "Voliteľne môžete zadať IP adresu lokálnej tlačiarne a prístupový kód. Toto je potrebné pre prístup ku kamere na P1/A1. Alebo možnosť pripojiť sa priamo k tlačiarni namiesto cez Bambu Cloud.",
+        "data": {
+          "serial": "Vyberte tlačiareň na pridanie:",
+          "host": "Lokálna IP adresa tlačiarne:",
+          "access_code": "Prístupový kód:",
+          "local_mqtt": "Pripojenie priamo na tlačiareň namiesto cez Bambu Cloud:",
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        }
+      },
+      "Lan": {
+        "title": "Režim pripojenia LAN",
+        "description": "Prosím zadajte lokálnu IP adresu a prístupový kód. Prístupový kód nájdete na obrazovke tlačiarne v nastaveniach siete (WLAN).",
+        "data": {
+          "host": "Lokálna IP adresa tlačiarne:",
+          "access_code": "Prístupový kód:",
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "Dvere krytu"
+      },
+      "timelapse": {
+        "name": "Časozberný záznam"
+      },
+      "hms_errors": {
+        "name": "HMS chyba"
+      },
+      "print_error": {
+        "name": "Chyba tlače"
+      },
+      "online": {
+        "name": "Pripojené"
+      },
+      "firmware_update": {
+        "name": "Aktualizácia firmvéru"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Pozastaviť tlač"
+      },
+      "resume": {
+        "name": "Resume printing"
+      },
+      "stop": {
+        "name": "Obnoviť tlač"
+      },
+      "refresh": {
+        "name": "Vynútiť obnovenie údajov"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Chladiaci ventilátor"
+      },
+      "aux_fan": {
+        "name": "Aux ventilátor"
+      },
+      "chamber_fan": {
+        "name": "Ventilátor komory"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Kamera"
+      },
+      "cover_image": {
+        "name": "Titulný obrázok"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Svetlo komory"
+      },
+      "camera_light": {
+        "name": "Svetlo kamery"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Cieľová teplota podložky"
+      },
+      "target_nozzle_temperature": {
+        "name": "Cieľová teplota trysky"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Rýchlosť tlače",
+        "state": {
+          "silent": "Tichý",
+          "standard": "Štandard",
+          "sport": "Šport",
+          "ludicrous": "Smiešny"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Wi-Fi signál"
+      },
+      "bed_temp": {
+        "name": "Teplota podložky"
+      },
+      "target_bed_temp": {
+        "name": "Cieľová teplota podložky"
+      },
+      "chamber_temp": {
+        "name": "Teplota komory"
+      },
+      "target_nozzle_temp": {
+        "name": "Cieľová teplota trysky"
+      },
+      "nozzle_temp": {
+        "name": "Teplota trysky"
+      },
+      "aux_fan_speed": {
+        "name": "Rýchlosť Aux Ventilátora"
+      },
+      "cooling_fan_speed": {
+        "name": "Rýchlosť chladiaceho ventilátora"
+      },
+      "chamber_fan_speed": {
+        "name": "Rýchlosť ventilátora komory"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Rýchlosť ventilátora tepelného prechodu"
+      },
+      "speed_profile": {
+        "name": "Profil rýchlosti",
+        "state": {
+          "silent": "Tichý",
+          "standard": "Štandard",
+          "sport": "Šport",
+          "ludicrous": "Smiešny"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modifikátor"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Názov tlačiarne"
+      },
+      "stage": {
+        "name": "Aktuálny stav",
+        "state": {
+          "offline": "Nepripojená",
+          "printing": "Tlač",
+          "auto_bed_leveling": "Auto vyrovnanie podložky",
+          "heatbed_preheating": "Predohrev podložky",
+          "sweeping_xy_mech_mode": "Režim zametania XY mech",
+          "changing_filament": "Výmena filamentu",
+          "m400_pause": "M400 pauza",
+          "paused_filament_runout": "Pozastavené z dôvodu konca filamentu",
+          "heating_hotend": "Ohrev hotendu",
+          "calibrating_extrusion": "Kalibrácia vytláčania",
+          "scanning_bed_surface": "Skenovanie povrchu podložky",
+          "inspecting_first_layer": "Kontrola prvej vrstvy",
+          "identifying_build_plate_type": "Zisťovanie typu podložky",
+          "calibrating_micro_lidar": "Kalibrácia mikro lidaru",
+          "homing_toolhead": "Návrat tlačovej hlavy domov",
+          "cleaning_nozzle_tip": "Čistenie špičky trysky",
+          "checking_extruder_temperature": "Kontrola teploty extrúdera",
+          "paused_user": "Tlač pozastavená užívateľom",
+          "paused_front_cover_falling": "Pozastavené pre padnutý predný kryt",
+          "calibrating_extrusion_flow": "Kalibrácia prietoku vytláčania",
+          "paused_nozzle_temperature_malfunction": "Pozastavené pre poruchu teploty trysky",
+          "paused_heat_bed_temperature_malfunction": "Pozastavené pre poruchu teploty podložky",
+          "filament_unloading": "Vysunutie filamentu",
+          "paused_skipped_step": "Pozastavené kvôli preskočeným krokom",
+          "filament_loading": "Zasunutie filamentu",
+          "calibrating_motor_noise": "Kalibrácia hluku motora",
+          "paused_ams_lost": "Pozastavené z dôvodu straty AMS",
+          "paused_low_fan_speed_heat_break": "Pozastavené kvôli nízkej rýchlosti ventilátora tepelného prechodu",
+          "paused_chamber_temperature_control_error": "Pozastavené kvôli chybe regulácie teploty komory",
+          "cooling_chamber": "Chladenie komory",
+          "paused_user_gcode": "Pozastavené používateľom pridanou pauzou v gkóde",
+          "motor_noise_showoff": "Prejavenie hluku motora",
+          "paused_nozzle_filament_covered_detected": "Pozastavené, pretože bolo zistené zakrytie trysky",
+          "paused_cutter_error": "Pozastavené kvôli chybe strihania",
+          "paused_first_layer_error": "Pozastavené pre chybu prvej vrstvy",
+          "paused_nozzle_clog": "Pozastavené z dôvodu upchatia trysky",
+          "idle": "Nečinná"
+        }
+      },
+      "print_progress": {
+        "name": "Priebeh tlače"
+      },
+      "print_status": {
+        "name": "Stav tlače",
+        "state": {
+          "failed": "Neuspešné",
+          "finish": "Dokončené",
+          "idle": "Nečinnosť",
+          "offline": "Nepripojená",
+          "prepare": "Príprava",
+          "running": "Beží",
+          "pause": "Pauza",
+          "slicing": "Slicovanie",
+          "init": "Inicializácia"
+        }
+      },
+      "mqtt_mode": {
+        "name": "Režim pripojenia MQTT",
+        "state": {
+          "local": "Miestny",
+          "bambu_cloud": "Bambu Cloud"
+        }
+      },
+      "gcode_file": {
+        "name": "Názov súboru Gcode"
+      },
+      "print_bed_type": {
+        "name": "Typ tlačovej podložky",
+        "state": {
+          "textured_plate": "Textúrovaná podložka",
+          "cool_plate": "Cool Plate / PLA Plate",
+          "hot_plate": "Smooth PEI Plate / High Temp Plate",
+          "eng_plate": "Engineering Plate"
+        }
+      },
+      "print_length": {
+        "name": "Dĺžka tlače"
+      },
+      "print_weight": {
+        "name": "Váha tlače"
+      },
+      "subtask_name": {
+        "name": "Názov úlohy"
+      },
+      "print_type": {
+        "name": "Typ tlače",
+        "state": {
+          "local": "Lokálna",
+          "cloud": "Cloudová",
+          "idle": "Nečinná"
+        }
+      },
+      "start_time": {
+        "name": "Počiatočný čas"
+      },
+      "remaining_time": {
+        "name": "Ostávajúci čas"
+      },
+      "end_time": {
+        "name": "Konečný čas"
+      },
+      "total_usage_hours": {
+        "name": "Celková spotreba"
+      },
+      "current_layer": {
+        "name": "Aktuálna vrstva"
+      },
+      "total_layers": {
+        "name": "Celkový počet vrstiev"
+      },
+      "active_tray": {
+        "name": "Aktívny zásobník"
+      },
+      "active_tray_index": {
+        "name": "Index aktívneho zásobníka"
+      },
+      "nozzle_diameter": {
+        "name": "Priemer trysky"
+      },
+      "nozzle_type": {
+        "name": "Typ trysky",
+        "state": {
+          "hardened_steel": "Tvrdená oceľ",
+          "stainless_steel": "Nerezová oceľ"
+        }
+      },
+      "humidity_index": {
+        "name": "Index vlhkosti"
+      },
+      "ams_temp": {
+        "name": "Teplota AMS"
+      },
+      "external_spool": {
+        "name": "Vonkajšia cievka",
+        "state_attributes": {
+          "active": {
+            "name": "Aktívna"
+          },
+          "color": {
+            "name": "Farba"
+          },
+          "empty": {
+            "name": "Prázdna"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Názov"
+          },
+          "nozzle_temp_min": {
+            "name": "Min teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max teplota trysky"
+          },
+          "type": {
+            "name": "Typ"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Zásobník 1",
+        "state_attributes": {
+          "active": {
+            "name": "Aktívny"
+          },
+          "color": {
+            "name": "Farba"
+          },
+          "empty": {
+            "name": "Prázdny"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Názov"
+          },
+          "nozzle_temp_min": {
+            "name": "Min teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max teplota trysky"
+          },
+          "remain": {
+            "name": "Zostávajúci filament"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cievky"
+          },
+          "type": {
+            "name": "Typ"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Zásobník 2",
+        "state_attributes": {
+          "active": {
+            "name": "Aktívny"
+          },
+          "color": {
+            "name": "Farba"
+          },
+          "empty": {
+            "name": "Prázdny"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Názov"
+          },
+          "nozzle_temp_min": {
+            "name": "Min teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max teplota trysky"
+          },
+          "remain": {
+            "name": "Zostávajúci filament"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cievky"
+          },
+          "type": {
+            "name": "Typ"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Zásobník 3",
+        "state_attributes": {
+          "active": {
+            "name": "Aktívny"
+          },
+          "color": {
+            "name": "Farba"
+          },
+          "empty": {
+            "name": "Prázdny"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Názov"
+          },
+          "nozzle_temp_min": {
+            "name": "Min teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max teplota trysky"
+          },
+          "remain": {
+            "name": "Zostávajúci filament"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cievky"
+          },
+          "type": {
+            "name": "Typ"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Zásobník 4",
+        "state_attributes": {
+          "active": {
+            "name": "Aktívny"
+          },
+          "color": {
+            "name": "Farba"
+          },
+          "empty": {
+            "name": "Prázdny"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Názov"
+          },
+          "nozzle_temp_min": {
+            "name": "Min teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max teplota trysky"
+          },
+          "remain": {
+            "name": "Zostávajúci filament"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cievky"
+          },
+          "type": {
+            "name": "Typ"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Kamera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Režim manuálneho obnovenia"
+      },
+      "camera": {
+        "name": "Povoliť kameru"
+      },
+      "imagecamera": {
+        "name": "Použite kameru so snímačom obrazu"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Cloud",
+        "lan": "Lokálne pripojenie"
+      }
+    }
+  }
+}
