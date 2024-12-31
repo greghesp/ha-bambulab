@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Allow Prompt Sound"
       }
+    }
   },
   "selector": {
     "configuration_type": {
