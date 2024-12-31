@@ -647,6 +647,7 @@ class PrintJob:
                     # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                     # do so uniformly so we always have matched start/end times.
                     # "startTime": "2023-12-21T19:02:16Z"
+                    
                     cloud_time_str = self._task_data.get('startTime', "")
                     LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
                     if cloud_time_str != "":
