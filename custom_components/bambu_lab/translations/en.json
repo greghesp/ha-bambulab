@@ -5,24 +5,34 @@
       "event_print_failed": "Print failed",
       "event_print_finished": "Print finished",
       "event_print_started": "Print started",
-      "event_printer_error": "Printer error detected"
+      "event_print_error": "Print error",
+      "event_print_error_cleared": "Print error cleared",
+      "event_printer_error": "HMS error",
+      "event_printer_error_cleared": "HMS error cleared"
     }
   },
   "config": {
     "abort": {
-      "already_configured": "Device is already configured"
+      "already_configured": "Device is already configured",
+      "no_printers": "No unconfigured printers found in the account.",
+      "cloudflare": "Cloudflare has blocked the connection attempt.",
+      "curl_unavailable": "curl_cffi library is not available."
     },
     "error": {
       "cannot_connect": "Failed to connect. Check credentials.",
       "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
-      "no_printers": "No unconfigured printers found in the account.",
       "invalid_auth": "Invalid authentication.",
-      "unknown": "Unexpected error."
+      "unknown": "Unexpected error.",
+      "code_needed": "Verification code must be provided.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
+      "code_incorrect": "Verification code was incorrect. Please re-enter.",
+      "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan Only Mode.",
+        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode.\n\rIf they exist and are working, you may also reuse existing authentication credentials from other configured printers.\n\rNote that social media accounts without a password are not support for cloud configuration.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -33,14 +43,17 @@
         "data": {
           "region": "Account region:",
           "email": "Email Address or Phone Number",
-          "password": "Password"
+          "password": "Password",
+          "newCode": "Request new code",
+          "verifyCode": "Email or phone verification code",
+          "tfaCode": "Two factor authentication code"
         }
       },
       "Bambu_Choose_Device": {
         "title": "Printer Selection",
         "description": "Choose which printer you want to add.",
         "data": {
-          "printer": "Choose Printer To Add:"
+          "serial": "Choose Printer To Add:"
         }
       },
       "Bambu_Lan": {
@@ -66,17 +79,26 @@
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Cloudflare has blocked the connection attempt.",
+      "curl_unavailable": "curl_cffi library is not available."
+    },
     "error": {
       "cannot_connect": "Failed to connect",
       "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
-      "unknown": "Unexpected error."
+      "unknown": "Unexpected error.",
+      "code_needed": "Verification code must be provided.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
+      "code_incorrect": "Verification code was incorrect. Please re-enter.",
+      "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "init": {
         "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan Only Mode.",
+        "description": "Configuration via Bambu Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode.\n\rIf they exist and are working, you may also reuse existing authentication credentials from other configured printers.\n\rNote that social media accounts without a password are not support for cloud configuration.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -87,14 +109,17 @@
         "data": {
           "region": "Account region:",
           "email": "Email Address or Phone Number",
-          "password": "Password"
+          "password": "Password",
+          "newCode": "Request new code",
+          "verifyCode": "Email or phone verification code",
+          "tfaCode": "Two factor authentication code"
         }
       },
       "Bambu_Lan": {
         "title": "Adjust Printer Configuration",
         "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Cloud.",
         "data": {
-          "printer": "Choose Printer To Add:",
+          "serial": "Choose Printer To Add:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "local_mqtt": "Connect directly to printer instead of by Bambu Cloud:",
@@ -122,6 +147,9 @@
       },
       "hms_errors": {
         "name": "HMS errors"
+      },
+      "print_error": {
+        "name": "Print error"
       },
       "online": {
         "name": "Online"
@@ -171,6 +199,14 @@
         "name": "Camera light"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Bed target temperature"
+      },
+      "target_nozzle_temperature": {
+        "name": "Nozzle target temperature"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "Printing speed",
@@ -190,7 +226,7 @@
         "name": "Bed temperature"
       },
       "target_bed_temp": {
-        "name": "Target Bed temperature"
+        "name": "Bed target temperature"
       },
       "chamber_temp": {
         "name": "Chamber temperature"
@@ -316,6 +352,14 @@
       },
       "subtask_name": {
         "name": "Task name"
+      },
+      "print_type": {
+        "name": "Print type",
+        "state": {
+          "local": "Local",
+          "cloud": "Cloud",
+          "idle": "Idle"
+        }
       },
       "start_time": {
         "name": "Start time"
@@ -445,14 +489,14 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Remaining filament"
           },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       },
@@ -480,14 +524,14 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Remaining filament"
           },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       },
@@ -515,14 +559,14 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Remaining filament"
           },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
+          },
+          "type": {
+            "name": "Type"
           }
         }
       }
@@ -534,10 +578,21 @@
     },
     "switch": {
       "manual": {
-        "name": "Manual Refresh Mode"
+        "name": "Manual refresh mode"
       },
-      "prompt_sound": {
-        "name": "Allow Prompt Sound"
+      "camera": {
+        "name": "Enable camera"
+      },
+      "imagecamera": {
+        "name": "Use image sensor camera"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Cloud",
+        "lan": "Local Connection"
       }
     }
   }

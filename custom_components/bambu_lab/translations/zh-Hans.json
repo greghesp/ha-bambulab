@@ -5,24 +5,34 @@
       "event_print_failed": "打印失败",
       "event_print_finished": "打印完成",
       "event_print_started": "开始打印",
-      "event_printer_error": "检测到打印机错误"
+      "event_print_error": "打印错误",
+      "event_print_error_cleared": "打印错误已清除",
+      "event_printer_error": "移动管理系统错误",
+      "event_printer_error_cleared": "HMS 错误已清除"
     }
   },
   "config": {
     "abort": {
-      "already_configured": "设备已配置"
+      "already_configured": "设备已配置",
+      "no_printers": "在帐户中未找到未配置的打印机",
+      "cloudflare": "Cloudflare 已阻止连接尝试。",
+      "curl_unavailable": "curl_cffi 库不可用。"
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
       "cannot_connect_local_ip": "连接失败。检查提供的 IP 地址。",
       "cannot_connect_local_all": "连接失败。检查提供的设置。",
-      "no_printers": "在帐户中未找到未配置的打印机",
       "invalid_auth": "无效的身份验证",
-      "unknown": "意外错误"
+      "unknown": "意外错误",
+      "code_needed": "必须提供验证码。",
+      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
+      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
+      "code_incorrect": "验证码不正确。",
+      "tfaCode": "需要 2FA 代码。"
     },
     "step": {
       "user": {
-        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为仅局域网模式的打印机。",
+        "description": "通过 Bambu Cloud 进行配置是最简单的。您可以选择手动配置为仅本地访问，但会丢失一些功能 - 这对于设置为仅 LAN 模式的打印机来说是必需的。\n\r如果它们存在并且正在工作，您还可以重复使用其他配置的打印机的现有身份验证凭据。\n \r请注意，没有密码的社交媒体帐户不支持云配置。",
         "data": {
           "printer_mode": "打印机配置模式："
         }
@@ -33,14 +43,17 @@
         "data": {
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
-          "password": "密码"
+          "password": "密码",
+          "newCode": "请求新代码",
+          "verifyCode": "邮箱或手机验证码",
+          "tfaCode": "二因素验证码"
         }
       },
       "Bambu_Choose_Device": {
         "title": "打印机选择",
         "description": "选择要添加的打印机。",
         "data": {
-          "printer": "选择要添加的打印机："
+          "serial": "选择要添加的打印机："
         }
       },
       "Bambu_Lan": {
@@ -49,32 +62,43 @@
         "data": {
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
           "host": "本地打印机 IP 地址：",
-          "access_code": "访问码"
+          "access_code": "访问码",
+          "usage_hours": "当前使用时间（可选）："
         }
       },
       "Lan": {
-        "title": "LAN模式连接",
+        "title": "LAN 模式连接",
         "description": "请提供您当地的打印机类型、IP 地址、序列号和访问代码。访问代码可在网络设置的打印机屏幕上找到。序列号可以在设备设置中找到。",
         "data": {
           "serial": "序号：",
           "host": "本地打印机 IP 地址：",
-          "access_code": "访问码"
+          "access_code": "访问码",
+          "usage_hours": "当前使用时间（可选）："
         }
       }
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Cloudflare 已阻止连接尝试。",
+      "curl_unavailable": "curl_cffi 库不可用。"
+    },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
       "cannot_connect_local_ip": "连接失败。检查提供的 IP 地址。",
       "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "invalid_auth": "无效的身份验证",
-      "unknown": "意外错误"
+      "unknown": "意外错误",
+      "code_needed": "必须提供验证码。",
+      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
+      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
+      "code_incorrect": "验证码不正确。",
+      "tfaCode": "需要 2FA 代码。"
     },
     "step": {
       "init": {
         "title": "调整连接设置",
-        "description": "通过 Bambu Cloud 进行配置是最简单的。但不支持没有密码的 2FA 或社交媒体帐户。它不适用于主动设置为仅局域网模式的打印机。",
+        "description": "通过 Bambu Cloud 进行配置是最简单的。您可以选择手动配置为仅本地访问，但会丢失一些功能 - 这对于设置为仅 LAN 模式的打印机来说是必需的。\n\r如果它们存在并且正在工作，您还可以重复使用其他配置的打印机的现有身份验证凭据。\n \r请注意，没有密码的社交媒体帐户不支持云配置。",
         "data": {
           "printer_mode": "打印机配置模式："
         }
@@ -85,17 +109,21 @@
         "data": {
           "region": "帐户区域：",
           "email": "电子邮件地址或电话号码",
-          "password": "密码"
+          "password": "密码",
+          "newCode": "请求新代码",
+          "verifyCode": "邮箱或手机验证码",
+          "tfaCode": "二因素验证码"
         }
       },
       "Bambu_Lan": {
         "title": "调整打印机配置",
         "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是在 P1/A1 上访问相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Cloud。",
         "data": {
-          "printer": "选择要添加的打印机：",
+          "serial": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud："
+          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
+          "usage_hours": "当前使用时间（可选）："
         }
       },
       "Lan": {
@@ -103,18 +131,25 @@
         "description": "请提供您当地的打印机 IP 地址和访问代码。访问代码可在网络设置的打印机屏幕上找到。",
         "data": {
           "host": "本地打印机 IP 地址：",
-          "access_code": "访问码"
+          "access_code": "访问码",
+          "usage_hours": "当前使用时间（可选）："
         }
       }
     }
   },
   "entity": {
     "binary_sensor": {
+      "door_open": {
+        "name": "外壳门"
+      },
       "timelapse": {
         "name": "录制延时摄影"
       },
       "hms_errors": {
         "name": "HMS 错误"
+      },
+      "print_error": {
+        "name": "打印错误"
       },
       "online": {
         "name": "在线"
@@ -164,6 +199,14 @@
         "name": "摄像头灯"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "热床目标温度"
+      },
+      "target_nozzle_temperature": {
+        "name": "喷嘴目标温度"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "打印速度",
@@ -204,7 +247,7 @@
         "name": "打印仓风扇速度"
       },
       "heatbreak_fan_speed": {
-        "name": "热断风扇速度"
+        "name": "热端风扇速度"
       },
       "speed_profile": {
         "name": "速度配置文件",
@@ -248,6 +291,20 @@
           "calibrating_extrusion_flow": "校准挤出流量",
           "paused_nozzle_temperature_malfunction": "由于喷嘴温度故障而暂停",
           "paused_heat_bed_temperature_malfunction": "由于床温故障而暂停",
+          "filament_unloading": "耗材卸料",
+          "paused_skipped_step": "由于跳过步骤而暂停",
+          "filament_loading": "灯丝加载",
+          "calibrating_motor_noise": "校准电机噪音",
+          "paused_ams_lost": "由于 AMS 丢失而暂停",
+          "paused_low_fan_speed_heat_break": "由于散热风扇速度低而暂停",
+          "paused_chamber_temperature_control_error": "由于腔室温度控制错误而暂停",
+          "cooling_chamber": "冷却室",
+          "paused_user_gcode": "由用户添加的 gcode 暂停指令暂停",
+          "motor_noise_showoff": "电机噪音炫耀",
+          "paused_nozzle_filament_covered_detected": "由于检测到喷嘴灯丝被覆盖而暂停",
+          "paused_cutter_error": "由于切刀错误而暂停",
+          "paused_first_layer_error": "由于第一层错误而暂停",
+          "paused_nozzle_clog": "因喷嘴堵塞而暂停",
           "idle": "空闲"
         }
       },
@@ -279,7 +336,13 @@
         "name": "Gcode 文件名"
       },
       "print_bed_type": {
-        "name": "打印床型"
+        "name": "打印板类型",
+        "state": {
+          "textured_plate": "纹理PEI打印版",
+          "cool_plate": "低温打印板/PLA打印板",
+          "hot_plate": "光滑PEI打印板/高温打印板",
+          "eng_plate": "工程材料打印板"
+        }
       },
       "print_length": {
         "name": "打印长度"
@@ -289,6 +352,14 @@
       },
       "subtask_name": {
         "name": "任务名称"
+      },
+      "print_type": {
+        "name": "打印类型",
+        "state": {
+          "local": "本地",
+          "cloud": "云端",
+          "idle": "无效"
+        }
       },
       "start_time": {
         "name": "开始时间"
@@ -313,6 +384,16 @@
       },
       "active_tray_index": {
         "name": "激活料盘索引"
+      },
+      "nozzle_diameter": {
+        "name": "喷嘴直径"
+      },
+      "nozzle_type": {
+        "name": "喷嘴类型",
+        "state": {
+          "hardened_steel": "硬化钢喷嘴",
+          "stainless_steel": "不锈钢喷嘴"
+        }
       },
       "humidity_index": {
         "name": "湿度指数"
@@ -373,6 +454,12 @@
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
           },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "灯丝序列号"
+          },
           "type": {
             "name": "类型"
           }
@@ -401,6 +488,12 @@
           },
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
+          },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "灯丝序列号"
           },
           "type": {
             "name": "类型"
@@ -431,6 +524,12 @@
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
           },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "灯丝序列号"
+          },
           "type": {
             "name": "类型"
           }
@@ -460,6 +559,12 @@
           "nozzle_temp_max": {
             "name": "喷嘴最高温度"
           },
+          "remain": {
+            "name": "剩余灯丝"
+          },
+          "tag_uid": {
+            "name": "灯丝序列号"
+          },
           "type": {
             "name": "类型"
           }
@@ -475,8 +580,19 @@
       "manual": {
         "name": "手动刷新模式"
       },
-      "prompt_sound": {
-        "name": "允许提示音"
+      "camera": {
+        "name": "启用相机"
+      },
+      "imagecamera": {
+        "name": "使用图像传感器相机"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "竹云",
+        "lan": "本地连接"
       }
     }
   }

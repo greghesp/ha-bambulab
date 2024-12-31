@@ -8,10 +8,8 @@ A Home Assistant Integration for Bambu Lab printers.
 
 Want to contribute to ha-bambulab? Great! We have a few small asks though!
 
-- Please do not fork and PR against the `main` branch.
-- Use the `develop` branch, this is our working area. Anything in the `main` branch should be considered live, released
-  code.
-- Please name your commits accordingly, and add some context as to what you have added.
+- Please create your patch pull requests against the `main` branch.
+- Please be verbose in your description of your changes in your pull requests.
 
 If you feel this integration was valuable and want to support it in other ways, you can [buy me a coffee](https://Ko-fi.com/adriangarside).
 
@@ -62,21 +60,21 @@ instead of OAuth.
 
 ### Print Data and Progress
 
-| Sensor            | Notes                                                    |
-| ----------------- | -------------------------------------------------------- |
-| Current Layer     |                                                          |
-| Total Layer Count |                                                          |
-| Print Progress    |                                                          |
-| Print Weight      | With Bambu credentials                                   |
-| Print Length      | With Bambu credentials                                   |
-| Print Bed Type    | Bed choice in the print job                              |
-| Start Time        | Simulated on P1/A1. More accurate with Bambu credentials |
-| Remaining Time    |                                                          |
-| End Time          |                                                          |
-| Current Stage     |                                                          |
-| Print Status      |                                                          |
-| Cover Image       | With Bambu credentials                                   |
-| Total Usage Hours | \* See Note                                              |
+| Sensor            | Notes                                           |
+| ----------------- | ----------------------------------------------- |
+| Current Layer     |                                                 |
+| Total Layer Count |                                                 |
+| Print Progress    |                                                 |
+| Print Weight      | With Bambu credentials                          |
+| Print Length      | With Bambu credentials                          |
+| Print Bed Type    | Bed choice in the print job                     |
+| Start Time        | Simulated. More accurate with Bambu credentials |
+| Remaining Time    |                                                 |
+| End Time          |                                                 |
+| Current Stage     |                                                 |
+| Print Status      |                                                 |
+| Cover Image       | With Bambu credentials                          |
+| Total Usage Hours | \* See Note                                     |
 
 \* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
 
@@ -98,13 +96,17 @@ instead of OAuth.
 
 ### Controls
 
-| Lights              | Notes                                            |
-| ------------------- | ------------------------------------------------ |
-| Chamber Light       |                                                  |
-| Pause               |                                                  |
-| Resume              |                                                  |
-| Stop                |                                                  |
-| Manual Refresh Mode | P1/A1 only and only available in local MQTT mode |
+| Lights              | Notes                                                      |
+| ------------------- | ---------------------------------------------------------- |
+| Chamber Light       |                                                            |
+| Pause               |                                                            |
+| Resume              |                                                            |
+| Stop                |                                                            |
+| Manual Refresh Mode | P1/A1 only and only available in local MQTT mode           |
+| Bed temperature     | On P1/A1 this is not available in hybrid connection mode\* |
+| Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
+\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.
+
 
 ### AMS
 
@@ -159,31 +161,20 @@ instead of OAuth.
 
 ### Cameras
 
-| Sensor  | Notes                            |
-| ------- | -------------------------------- |
-| Chamber | P1/A1 need the host IP providing |
+| Sensor  | Notes                                                           |
+| ------- | --------------------------------------------------------------- |
+| Chamber | P1/A1/A1Mini - need the host IP providing                       |
+|         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
 
 ### Automation device triggers
 
 This integration implements a handful of device triggers to make some common automation scenarios a little easier.
 See [device triggers](docs/DeviceTrigger.md).
 
-### WLED Lights
+### Actions
 
-Support for adding LED chamber lights via the [WLED](https://kno.wled.ge/) project.
-
-- Requires the [WLED Home Assistant Integration](https://www.home-assistant.io/integrations/wled/) and the requisite LED
-  lights and ESP device.
-- Clink the link below to import the WLED blueprint
-
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fgreghesp%2Fha-bambulab%2Fblob%2Fmain%2Fblueprints%2Fwled_controller.yaml)
-
-#### WLED Features
-
-- LED lights automatically turn off when Bambu Lidar is in use, so as to not interfere.
-- LED lights turn red when there is an error in the printer.
-- LED lights turn blue when the bed is auto leveling.
-- LED lights turn green when printing is finished.
+* **Send Command**: Sends arbitrary GCODE to the printer. Be careful as it does not check if the printer is running a job
+or not so before invoking this action, you should check the printer state to ensure it is not running a job.
 
 ## Example dashboard
 
@@ -208,7 +199,18 @@ Make sure you upload this to your Bug ticket/GitHub issue.
 
 ### Debug Logging
 
-When logging a bug, always ensure you send us the debug logs. These can be enabled from the Integration page itself.
-The debug logs will appear in the standard Home Assistant logs.
+When logging a bug, always ensure you send us the debug logs. 
+
+If you are hitting issues during initial integration setup, you will need to enable logs in your configuration.yaml file by adding the following and restarting Home Assistant:
+```
+logger:
+  default: info
+  logs:
+    custom_components.bambu_lab: debug
+```
+
+If you have previously successfully installed the integration, debug logs can be enabled from the integration page within Home Assistant:
 
 ![img.png](docs/images/debugging.png)
+
+The debug logs will appear in the standard Home Assistant logs.

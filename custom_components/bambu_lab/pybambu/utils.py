@@ -1,18 +1,22 @@
 import math
+import requests
+
 from datetime import datetime, timedelta
 
 from .const import (
     CURRENT_STAGE_IDS,
     SPEED_PROFILE,
     FILAMENT_NAMES,
-    HMS_ERRORS,
-    HMS_AMS_ERRORS,
     HMS_SEVERITY_LEVELS,
     HMS_MODULES,
     LOGGER,
+    BAMBU_URL,
     FansEnum,
+    TempEnum
 )
 from .commands import SEND_GCODE_TEMPLATE
+from .const_hms_errors import HMS_ERRORS
+from .const_print_errors import PRINT_ERROR_ERRORS
 
 
 def search(lst, predicate, default={}):
@@ -47,17 +51,31 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
     return command
 
 
+def set_temperature_to_gcode(temp: TempEnum, temperature: int):
+    """Converts a temperature to the gcode command to set that"""
+    if temp == TempEnum.NOZZLE:
+        tempCommand = "M104"
+    elif temp == TempEnum.HEATBED:
+        tempCommand = "M140"
+
+    command = SEND_GCODE_TEMPLATE
+    command['print']['param'] = f"{tempCommand} S{temperature}\n"
+    return command
+
+
 def to_whole(number):
     if not number:
         return 0
     return round(number)
 
 
-def get_filament_name(idx):
+def get_filament_name(idx, custom_filaments: dict):
     """Converts a filament idx to a human-readable name"""
     result = FILAMENT_NAMES.get(idx, "unknown")
     if result == "unknown" and idx != "":
-        LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
+        result = custom_filaments.get(idx, "unknown")
+    # if result == "unknown" and idx != "":
+    #     LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
     return result
 
 
@@ -71,20 +89,51 @@ def get_current_stage(id) -> str:
     return CURRENT_STAGE_IDS.get(int(id), "unknown")
 
 
-def get_HMS_error_text(hms_code: str):
+def get_HMS_error_text(code: str, language: str):
     """Return the human-readable description for an HMS error"""
+    try:
+        code = code.replace('_', '')
+        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=5)
+        json = response.json()
+        if json['result'] == 0:
+            # We successfuly got results.
+            data = json['data']['device_hms'][language]
+            for entry in data:
+                if entry['ecode'] == code:
+                    if "" != entry['intro']:
+                        return entry['intro']
+    except:
+        LOGGER.debug(f"ERROR: {response.text}")
 
-    ams_code = get_generic_AMS_HMS_error_code(hms_code)
-    ams_error = HMS_AMS_ERRORS.get(ams_code, "")
-    if ams_error != "":
-        # 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
-        ams_index = int(hms_code[3:4], 16) + 1
-        ams_slot = int(hms_code[6:7], 16) + 1
-        ams_error = ams_error.replace('AMS1', f"AMS{ams_index}")
-        ams_error = ams_error.replace('slot 1', f"slot {ams_slot}")
-        return ams_error
+    # Fallback to static copy
+    error = HMS_ERRORS.get(code, 'unknown')
+    if '' == error:
+        return 'unknown'
+    return error
 
-    return HMS_ERRORS.get(hms_code, "unknown")
+
+def get_print_error_text(code: str, language: str):
+    """Return the human-readable description for a print error"""
+
+    try:
+        code = code.replace('_', '')
+        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=5)
+        json = response.json()
+        if json['result'] == 0:
+            # We successfuly got results.
+            data = json['data']['device_error'][language]
+            for entry in data:
+                if entry['ecode'] == code:
+                    if "" != entry['intro']:
+                        return entry['intro']
+    except:
+        LOGGER.debug(f"ERROR: {response.text}")
+
+    # Fallback to static copy
+    error = PRINT_ERROR_ERRORS.get(code, 'unknown')
+    if '' == error:
+        return 'unknown'
+    return error
 
 
 def get_HMS_severity(code: int) -> str:
@@ -101,60 +150,69 @@ def get_HMS_module(attr: int) -> str:
     return HMS_MODULES["default"]
 
 
-def get_generic_AMS_HMS_error_code(hms_code: str):
-    code1 = int(hms_code[0:4], 16)
-    code2 = int(hms_code[5:9], 16)
-    code3 = int(hms_code[10:14], 16)
-    code4 = int(hms_code[15:19], 16)
-
-    # 070X_xYxx_xxxx_xxxx = AMS X (0 based index) Slot Y (0 based index) has the error
-    ams_code = f"{code1 & 0xFFF8:0>4X}_{code2 & 0xF8FF:0>4X}_{code3:0>4X}_{code4:0>4X}"
-    ams_error = HMS_AMS_ERRORS.get(ams_code, "")
-    if ams_error != "":
-        return ams_code
-
-    return f"{code1:0>4X}_{code2:0>4X}_{code3:0>4X}_{code4:0>4X}"
-
-
 def get_printer_type(modules, default):
-    """Retrieve printer type"""
-    esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
-    rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
-    if len(esp32.keys()) > 1:
-        if esp32.get("hw_ver") == "AP04":
-            if esp32.get("project_name") == "C11":
-                LOGGER.debug("Device is P1P")
-                return "P1P"
-            elif esp32.get("project_name") == "C12":
-                LOGGER.debug("Device is P1S")
-                return "P1S"
-        if esp32.get("hw_ver") == "AP05":
-            if esp32.get("project_name") == "N1":
-                LOGGER.debug("Device is A1 Mini")
-                return "A1MINI"
-            elif esp32.get("project_name") == "N2S":
-                LOGGER.debug("Device is A1")
-                return "A1"
-        LOGGER.debug(f"UNKNOWN DEVICE: esp32 = {esp32.get('hw_ver')}/'{esp32.get('project_name')}'")
-    elif len(rv1126.keys()) > 1:
-        if rv1126.get("hw_ver") == "AP05":
-            LOGGER.debug("Device is X1C")
-            return "X1C"
-        elif rv1126.get("hw_ver") == "AP02":
-            LOGGER.debug("Device is X1E")
-            return "X1E"
-        LOGGER.debug(f"UNKNOWN DEVICE: rv1126 = {rv1126.get('hw_ver')}")
+    # Known possible values:
+    # 
+    # A1/P1 printers are of the form:
+    # {
+    #     "name": "esp32",
+    #     "project_name": "C11",
+    #     "sw_ver": "01.07.23.47",
+    #     "hw_ver": "AP04",
+    #     "sn": "**REDACTED**",
+    #     "flag": 0
+    # },
+    # P1P    = AP04 / C11
+    # P1S    = AP04 / C12
+    # A1Mini = AP05 / N1 or AP04 / N1 or AP07 / N1
+    # A1     = AP05 / N2S
+    #
+    # X1C printers are of the form:
+    # {
+    #     "hw_ver": "AP05",
+    #     "name": "rv1126",
+    #     "sn": "**REDACTED**",
+    #     "sw_ver": "00.00.28.55"
+    # },
+    # X1C = AP05
+    #
+    # X1E printers are of the form:
+    # {
+    #     "flag": 0,
+    #     "hw_ver": "AP02",
+    #     "name": "ap",
+    #     "sn": "**REDACTED**",
+    #     "sw_ver": "00.00.32.14"
+    # }
+    # X1E = AP02
+
+    apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
+    if len(apNode.keys()) > 1:
+        hw_ver = apNode['hw_ver']
+        project_name = apNode.get('project_name', '')
+        if hw_ver == 'AP02':
+            return 'X1E'
+        elif project_name == 'N1':
+            return 'A1MINI'
+        elif hw_ver == 'AP04':
+            if project_name == 'C11':
+                return 'P1P'
+            if project_name == 'C12':
+                return 'P1S'
+        elif hw_ver == 'AP05':
+            if project_name == 'N2S':
+                return 'A1'
+            if project_name == '':
+                return 'X1C'
+        LOGGER.debug(f"UNKNOWN DEVICE: hw_ver='{hw_ver}' / project_name='{project_name}'")
     return default
 
 
 def get_hw_version(modules, default):
     """Retrieve hardware version of printer"""
-    esp32 = search(modules, lambda x: x.get('name', "") == "esp32")
-    rv1126 = search(modules, lambda x: x.get('name', "") == "rv1126")
-    if len(esp32.keys()) > 1:
-        return esp32.get("hw_ver")
-    elif len(rv1126.keys()) > 1:
-        return rv1126.get("hw_ver")
+    apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
+    if len(apNode.keys()) > 1:
+        return apNode.get("hw_ver")
     return default
 
 
@@ -186,3 +244,10 @@ def round_minute(date: datetime = None, round_to: int = 1):
     date = date.replace(second=0, microsecond=0)
     delta = date.minute % round_to
     return date.replace(minute=date.minute - delta)
+
+
+def get_Url(url: str, region: str):
+    urlstr = BAMBU_URL[url]
+    if region == "China":
+        urlstr = urlstr.replace('.com', '.cn')
+    return urlstr

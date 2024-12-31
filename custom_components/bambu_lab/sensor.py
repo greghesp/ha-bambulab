@@ -68,6 +68,11 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     def available(self) -> bool:
         """Return if entity is available."""
         return self.entity_description.available_fn(self)
+
+    @property
+    def icon(self) -> str | None:
+        """Return a dynamic icon if needed"""
+        return self.entity_description.icon_fn(self) if self.entity_description.icon_fn else self.entity_description.icon
     
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):

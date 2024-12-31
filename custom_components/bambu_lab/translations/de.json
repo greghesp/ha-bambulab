@@ -5,23 +5,34 @@
       "event_print_failed": "Druckauftrag fehlgeschlagen",
       "event_print_finished": "Druckauftrag beendet",
       "event_print_started": "Druckauftrag gestartet",
-      "event_printer_error": "Druckerfehler erkannt"
+      "event_print_error": "Druckfehler",
+      "event_print_error_cleared": "Druckfehler behoben",
+      "event_printer_error": "HMS-Fehler",
+      "event_printer_error_cleared": "HMS-Fehler behoben"
     }
   },
   "config": {
     "abort": {
-      "already_configured": "Das Gerät ist bereits eingerichtet"
+      "already_configured": "Das Gerät ist bereits eingerichtet",
+      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
+      "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
       "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
       "invalid_auth": "Authentifizierung fehlgeschlagen.",
-      "unbekannt": "Unerwarteter Fehler."
+      "unknown": "Unerwarteter Fehler.",
+      "code_needed": "Es muss ein Bestätigungscode angegeben werden.",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_incorrect": "Der Bestätigungscode war falsch. ",
+      "tfaCode": "2FA-Code ist erforderlich. "
     },
     "step": {
       "user": {
-        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Sie können den Zugriff optional manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.\n\rWenn sie vorhanden sind und funktionieren, können Sie auch vorhandene Authentifizierungsdaten von anderen konfigurierten Druckern wiederverwenden.\n \rBeachten Sie, dass Social-Media-Konten ohne Passwort die Cloud-Konfiguration nicht unterstützen.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -32,14 +43,17 @@
         "data": {
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
-          "password": "Passwort"
+          "password": "Passwort",
+          "newCode": "Fordern Sie einen neuen Code an",
+          "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
+          "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },
       "Bambu_Choose_Device": {
         "title": "Drucker-Auswahl",
         "description": "Wählen Sie den Drucker aus, den Sie hinzufügen möchten.",
         "data": {
-          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:"
+          "serial": "Wählen Sie den hinzuzufügenden Drucker aus:"
         }
       },
       "Bambu_Lan": {
@@ -48,33 +62,43 @@
         "data": {
           "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
           "host": "IP-Adresse des lokalen Druckers:",
-          "access_code": "Zugangscode"
+          "access_code": "Zugangscode",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         }
       },
       "Lan": {
         "title": "LAN-Modus-Verbindung",
-        "Beschreibung": "Bitte geben Sie Ihren lokalen Druckertyp, Ihre IP-Adresse, die Seriennummer und den Zugangscode an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen. Die Seriennummer finden Sie in den Geräteeinstellungen.",
+        "description": "Bitte geben Sie Ihren lokalen Druckertyp, Ihre IP-Adresse, die Seriennummer und den Zugangscode an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen. Die Seriennummer finden Sie in den Geräteeinstellungen.",
         "data": {
           "serial": "Seriennummer:",
           "host": "IP-Adresse des lokalen Druckers:",
-          "access_code": "Zugangscode"
-        }        
+          "access_code": "Zugangscode",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+        }
       }
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
+    },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
       "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
-      "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "invalid_auth": "Authentifizierung fehlgeschlagen",
-      "unbekannt": "Unerwarteter Fehler"
+      "unknown": "Unerwarteter Fehler",
+      "code_needed": "Es muss ein Bestätigungscode angegeben werden.",
+      "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
+      "code_incorrect": "Der Bestätigungscode war falsch. ",
+      "tfaCode": "2FA-Code ist erforderlich. "
     },
     "step": {
       "init": {
         "title": "Verbindungseinstellungen anpassen",
-        "description": "Die Konfiguration über die Bambu Cloud ist am einfachsten. Unterstützt jedoch keine 2FA- oder Social-Media-Konten ohne Passwort. Und es funktioniert nicht für Drucker, die aktiv auf den Nur-LAN-Modus eingestellt sind.",
+        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Sie können den Zugriff optional manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.\n\rWenn sie vorhanden sind und funktionieren, können Sie auch vorhandene Authentifizierungsdaten von anderen konfigurierten Druckern wiederverwenden.\n \rBeachten Sie, dass Social-Media-Konten ohne Passwort die Cloud-Konfiguration nicht unterstützen.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -85,36 +109,47 @@
         "data": {
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
-          "password": "Passwort"
+          "password": "Passwort",
+          "newCode": "Fordern Sie einen neuen Code an",
+          "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
+          "tfaCode": "Zwei-Faktor-Authentifizierungscode"
         }
       },
       "Bambu_Lan": {
         "title": "Anpassen der Druckerkonfiguration",
         "description": "Sie können optional die IP-Adresse und den Zugriffscode des lokalen Druckers angeben. Dies ist für den Kamerazugriff auf die P1/A1 erforderlich. Oder um sich direkt mit dem Drucker verbinden zu können, anstatt über die Bambu Cloud.",
         "data": {
-          "printer": "Wählen Sie den hinzuzufügenden Drucker aus:",
+          "serial": "Wählen Sie den hinzuzufügenden Drucker aus:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:"
+          "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         }
       },
       "Lan": {
         "title": "LAN-Modus-Verbindung",
-        "Beschreibung": "Bitte geben Sie die IP-Adresse und den Zugangscode Ihres lokalen Druckers an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen.",
+        "description": "Bitte geben Sie die IP-Adresse und den Zugangscode Ihres lokalen Druckers an. Den Zugangscode finden Sie auf dem Druckerbildschirm in den Netzwerkeinstellungen.",
         "data": {
           "host": "IP-Adresse des lokalen Druckers:",
-          "access_code": "Zugangscode"
+          "access_code": "Zugangscode",
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         }
       }
     }
   },
   "entity": {
     "binary_sensor": {
+      "door_open": {
+        "name": "Gehäusetür"
+      },
       "timelapse": {
         "name": "Aufnahme von Zeitraffern"
       },
       "hms_errors": {
         "name": "HMS-Fehler"
+      },
+      "print_error": {
+        "name": "Druckfehler"
       },
       "online": {
         "name": "Online"
@@ -164,6 +199,14 @@
         "name": "Kamerabeleuchtung"
       }
     },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Zieltemperatur des Druckbett"
+      },
+      "target_nozzle_temperature": {
+        "name": "Zieltemperatur der Düse"
+      }
+    },
     "select": {
       "printing_speed": {
         "name": "Druckgeschwindigkeit",
@@ -177,7 +220,7 @@
     },
     "sensor": {
       "wifi_signal": {
-        "name": "Wi-Fi-Signalquallität"
+        "name": "Wi-Fi-Signalqualität"
       },
       "bed_temp": {
         "name": "Druckbetttemperatur"
@@ -248,6 +291,20 @@
           "calibrating_extrusion_flow": "Kalibrierung des Extrusionsflusses",
           "paused_nozzle_temperature_malfunction": "Pausiert aufgrund einer Störung der Düsentemperatur",
           "paused_heat_bed_temperature_malfunction": "Pausiert aufgrund einer Störung der Wärmebetttemperatur",
+          "filament_unloading": "Entladen des Filaments",
+          "paused_skipped_step": "Wegen übersprungener Schritte angehalten",
+          "filament_loading": "Filamentbeladung",
+          "calibrating_motor_noise": "Motorgeräusch kalibrieren",
+          "paused_ams_lost": "Pausiert wegen AMS-Verlust",
+          "paused_low_fan_speed_heat_break": "Pausiert aufgrund der niedrigen Lüftergeschwindigkeit der Hitzepause",
+          "paused_chamber_temperature_control_error": "Aufgrund eines Fehlers bei der Kammertemperaturregelung angehalten",
+          "cooling_chamber": "Kühlkammer",
+          "paused_user_gcode": "Angehalten durch vom Benutzer hinzugefügte Gcode-Pauseanweisung",
+          "motor_noise_showoff": "Motorgeräusche kommen zur Geltung",
+          "paused_nozzle_filament_covered_detected": "Pausiert",
+          "paused_cutter_error": "Aufgrund eines Schneidefehlers angehalten",
+          "paused_first_layer_error": "Aufgrund eines Fehlers auf der ersten Ebene pausiert",
+          "paused_nozzle_clog": "Wegen verstopfter Düse unterbrochen",
           "idle": "Leerlauf"
         }
       },
@@ -279,7 +336,13 @@
         "name": "Gcode Dateiname"
       },
       "print_bed_type": {
-        "name": "Druckbett Typ"
+        "name": "Druckbett Typ",
+        "state": {
+          "textured_plate": "Strukturierte Platte",
+          "cool_plate": "Kühlplatte / PLA-Platte",
+          "hot_plate": "Glatte PEI-Platte/Hochtemperaturplatte",
+          "eng_plate": "Technische Platte"
+        }
       },
       "print_length": {
         "name": "Drucklänge"
@@ -289,6 +352,14 @@
       },
       "subtask_name": {
         "name": "Name der Aufgabe"
+      },
+      "print_type": {
+        "name": "Drucktyp",
+        "state": {
+          "local": "Lokal",
+          "cloud": "Wolke",
+          "idle": "Leerlauf"
+        }
       },
       "start_time": {
         "name": "Startzeit"
@@ -313,6 +384,16 @@
       },
       "active_tray_index": {
         "name": "Aktiver Slotindex"
+      },
+      "nozzle_diameter": {
+        "name": "Düsengröße"
+      },
+      "nozzle_type": {
+        "name": "Düsentyp",
+        "state": {
+          "hardened_steel": "Gehärteter Stahl",
+          "stainless_steel": "Edelstahl"
+        }
       },
       "humidity_index": {
         "name": "Index der Luftfeuchtigkeit"
@@ -373,14 +454,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       },
@@ -408,14 +489,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       },
@@ -443,14 +524,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       },
@@ -478,14 +559,14 @@
           "nozzle_temp_max": {
             "name": "Düse Maximaltemperatur"
           },
-          "type": {
-            "name": "Typ"
-          },
           "remain": {
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
             "name": "Seriennummer des Filaments"
+          },
+          "type": {
+            "name": "Typ"
           }
         }
       }
@@ -499,9 +580,20 @@
       "manual": {
         "name": "Manueller Aktualisierungsmodus"
       },
-      "prompt_sound": {
-        "name": "Aufforderungston zulassen"
+      "camera": {
+        "name": "Kamera aktivieren"
+      },
+      "imagecamera": {
+        "name": "Verwenden Sie eine Bildsensorkamera"
       }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambuswolke",
+        "lan": "Lokale Verbindung"
+      },
     }
   }
 }

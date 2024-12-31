@@ -4,6 +4,22 @@ title: "[Bug] <Replace this part>"
 labels:
   - bug
 body:
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home Assistant Version
+      description: The version of Home Assistant
+      placeholder: 2024.11.1
+    validations:
+      required: true
+  - type: input
+    id: habl-version
+    attributes:
+      label: Bambu Lab Integration Version
+      description: The version of this integration you're using
+      placeholder: v2.0.33
+    validations:
+      required: true
   - type: textarea
     id: description
     attributes:
@@ -51,6 +67,7 @@ body:
     id: diagnostic
     attributes:
       label: Diagnostic Output
+      placeholder: Go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics and drag it here
       description: |
         Add your Diagnostics file download.  To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics
   

@@ -1,0 +1,599 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Impressió cancel·lada",
+      "event_print_failed": "Impressió fallida",
+      "event_print_finished": "Impressió finalitzada",
+      "event_print_started": "Impressió iniciada",
+      "event_print_error": "Error d'impressió",
+      "event_print_error_cleared": "Error d'impressió esborrat",
+      "event_printer_error": "Error d'HMS",
+      "event_printer_error_cleared": "Error d'HMS esborrat"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "El dispositiu ja estava configurat",
+      "no_printers": "No s'han trobat impressores configurades al compte.",
+      "cloudflare": "Cloudflare ha bloquejat l'intent de connexió.",
+      "curl_unavailable": "La llibreria curl_cffi no està disponible."
+    },
+    "error": {
+      "cannot_connect": "Error de connexió. Revisa les credencials.",
+      "cannot_connect_local_ip": "Error de connexió. Revisa l'adreça IP proporcionada.",
+      "cannot_connect_local_all": "Error de connexió. Revisa la configuració proporcionada.",
+      "invalid_auth": "Autenticació invàlida.",
+      "unknown": "Error inesperat.",
+      "code_needed": "S'ha de proporcionar el codi de verificació.",
+      "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
+      "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
+      "code_incorrect": "El codi de verificació és incorrecte. Si us plau, introdueix-lo de nou.",
+      "tfaCode": "Cal codi 2FA. Si us plau, introdueix-ho."
+    },
+    "step": {
+      "user": {
+        "description": "La configuració mitjançant Bambu Cloud és més senzilla. Opcionalment, podeu configurar manualment l'accés només local, però perd algunes funcions; això és necessari per a les impressores configurades en mode Només LAN.\n\rSi existeixen i funcionen, també podeu reutilitzar les credencials d'autenticació existents d'altres impressores configurades.\n \rTingueu en compte que els comptes de xarxes socials sense contrasenya no són compatibles amb la configuració del núvol.",
+        "data": {
+          "printer_mode": "Mode de configuració de la impressora:"
+        }
+      },
+      "Bambu": {
+        "title": "Connexió amb Bambu Cloud",
+        "description": "Si us plau, proporciona les teves credencials de Bambu Lab:",
+        "data": {
+          "region": "Regió del compte:",
+          "email": "Direcció de Correu Electrònic o Número de Telèfon",
+          "password": "Contrasenyaa",
+          "newCode": "Sol·licita un codi nou",
+          "verifyCode": "Codi de verificació per correu electrònic o telèfon",
+          "tfaCode": "Codi d'autenticació de dos factors"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Selecció d'Impresora",
+        "description": "Escull quina impressora vols afegir.",
+        "data": {
+          "serial": "Escull la impressora per afegir-la:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Configuració de Connexió Local",
+        "description": "Opcionalment, pots proporcionar l'adreça IP local de la impressora i el codi d'accés. Això es necessari per accedir a la càmera de la P1/A1, o per poder connectar-se directament a la impressora sense utilitzar Bambu Cloud.",
+        "data": {
+          "local_mqtt": "Connectar localmente a la impresora:",
+          "host": "Adreça IP Local de la Impressora:",
+          "access_code": "Codi d'accés:",
+          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+        }
+      },
+      "Lan": {
+        "title": "Quantitat d'hores d'ús (opcional)",
+        "description": "Si us plau, proporciona l'adreça IP local de la impressora, el número de sèrie i el codi d'accés. El codi d'accés el pots trobar a la pantalla de la impressora, a la configuració de xarxa (WLAN). El número de sèrie (SN) el pots trobar a la configuració del dispositiu.",
+        "data": {
+          "serial": "Número de Serie:",
+          "host": "Adreça IP Local de la Impressora:",
+          "access_code": "Codi d'accés:",
+          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cloudflare": "Cloudflare ha bloquejat l'intent de connexió.",
+      "curl_unavailable": "La llibreria curl_cffi no està disponible."
+    },
+    "error": {
+      "cannot_connect": "Error de connexió.",
+      "cannot_connect_local_ip": "Error de connexió. Revisa l'adreça IP proporcionada.",
+      "cannot_connect_local_all": "Error de connexió. Revisa configuració proporcionada.",
+      "invalid_auth": "Autenticació invàlida.",
+      "unknown": "Error inesperat.",
+      "code_needed": "S'ha de proporcionar el codi de verificació.",
+      "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
+      "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
+      "code_incorrect": "El codi de verificació era incorrecte. Si us plau, introdueix-lo de nou.",
+      "tfaCode": "Cal codi 2FA. Si us plau, introdueix-lo."
+    },
+    "step": {
+      "init": {
+        "title": "Ajusta la configuració de connexió",
+        "description": "La configuració mitjançant Bambu Cloud és més senzilla. Opcionalment, podeu configurar manualment l'accés només local, però perd algunes funcions; això és necessari per a les impressores configurades en mode Només LAN.\n\rSi existeixen i funcionen, també podeu reutilitzar les credencials d'autenticació existents d'altres impressores configurades.\n \rTingueu en compte que els comptes de xarxes socials sense contrasenya no són compatibles amb la configuració del núvol.",
+        "data": {
+          "printer_mode": "Mode de configuració de la impressora:"
+        }
+      },
+      "Bambu": {
+        "title": "Connexió amb Bambu Cloud",
+        "description": "Si us plau, proporciona les teves credencials de Bambu Lab:",
+        "data": {
+          "region": "Regió del compte:",
+          "email": "Adreça de Correu Electrònic o Número de Telèfon",
+          "password": "Contrasenya",
+          "newCode": "Sol·licita un codi nou",
+          "verifyCode": "Codi de verificació per correu electrònic o telèfon",
+          "tfaCode": "Codi d'autenticació de dos factors"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Ajusta la configuració de connexió",
+        "description": "Opcionalment, podeu proporcionar l'adreça IP local de la impressora i el codi d'accés. Això es requereix per accedir a la càmera de la P1/A1, o per poder connectar-se directament a la impressora sense utilitzar Bambu Cloud.",
+        "data": {
+          "serial": "Escull la Impressora per Afegir-la:",
+          "host": "Adreça IP Local de la Impressora:",
+          "access_code": "Codi d'accés:",
+          "local_mqtt": "Connectar directament a la impressora en comptes de fer servir Bambu Cloud:",
+          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+        }
+      },
+      "Lan": {
+        "title": "Connexió a Mode LAN",
+        "description": "Introdueix l'adreça IP local de la impressora i el codi d'accés. El codi d'accés el podeu trobar a la pantalla de la impressora, a la configuració de xarxa (WLAN).",
+        "data": {
+          "host": "Adreça IP Local de la Impressora:",
+          "access_code": "Codi d'accés:",
+          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "Porta de la carcassa"
+      },
+      "timelapse": {
+        "name": "Gravant timelapse"
+      },
+      "hms_errors": {
+        "name": "Errors HMS"
+      },
+      "print_error": {
+        "name": "Error d'impressió"
+      },
+      "online": {
+        "name": "En línia"
+      },
+      "firmware_update": {
+        "name": "Actualització de Firmware"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Pausar la impressió"
+      },
+      "resume": {
+        "name": "Continuar la impressió"
+      },
+      "stop": {
+        "name": "Aturar la impressió"
+      },
+      "refresh": {
+        "name": "Forçar l'Actualització de les Dades"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Ventilador de refrigeració"
+      },
+      "aux_fan": {
+        "name": "Ventilador auxiliar"
+      },
+      "chamber_fan": {
+        "name": "Ventilador de la carcassa"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Cáàmara"
+      },
+      "cover_image": {
+        "name": "Imatge de portada"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Llum de la carcassa"
+      },
+      "camera_light": {
+        "name": "Llum de la càmera"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Temperatura objectiu del llit"
+      },
+      "target_nozzle_temperature": {
+        "name": "Temperatura objectiu del broquet"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Velocitat d'impressió",
+        "state": {
+          "silent": "silenciós",
+          "standard": "Estàndar",
+          "sport": "Sport",
+          "ludicrous": "Ludicrous"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Senyal Wi-Fi"
+      },
+      "bed_temp": {
+        "name": "Temperatura del llit"
+      },
+      "target_bed_temp": {
+        "name": "Temperatura objectiu del llit"
+      },
+      "chamber_temp": {
+        "name": "Temperatura de la carcassa"
+      },
+      "target_nozzle_temp": {
+        "name": "Temperatura objectiu del broquet"
+      },
+      "nozzle_temp": {
+        "name": "Temperatura del broquet"
+      },
+      "aux_fan_speed": {
+        "name": "Velocidad del ventilador auxiliar"
+      },
+      "cooling_fan_speed": {
+        "name": "Velocitat del ventilador de refredament"
+      },
+      "chamber_fan_speed": {
+        "name": "Velocitat del ventilador de la carcassa"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Velocitat del ventilador del dissipador de calor"
+      },
+      "speed_profile": {
+        "name": "Perfil de velocitat",
+        "state": {
+          "silent": "silenciós",
+          "standard": "Estàndar",
+          "sport": "Sport",
+          "ludicrous": "Ludicrous"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modificador"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Nom de la impressora"
+      },
+      "stage": {
+        "name": "Estat actual",
+        "state": {
+          "offline": "Fora de línia",
+          "printing": "Imprimint",
+          "auto_bed_leveling": "Anivellat de llit automàtic",
+          "heatbed_preheating": "Preescalfant del llit",
+          "sweeping_xy_mech_mode": "Mode mecànic d'escombrat XY",
+          "changing_filament": "Canvi de filament",
+          "m400_pause": "Pausa M400",
+          "paused_filament_runout": "Pausa a causa d'esgotament del filament",
+          "heating_hotend": "Escalfant el broquet",
+          "calibrating_extrusion": "Calibració de l'extrusió",
+          "scanning_bed_surface": "Escaneig de la superfície del llit",
+          "inspecting_first_layer": "Inspecció de la primera capa",
+          "identifying_build_plate_type": "Identificació del tipus de placa de construcció",
+          "calibrating_micro_lidar": "Calibrating micro lidar",
+          "homing_toolhead": "Retornant el capçal a l'origen",
+          "cleaning_nozzle_tip": "Netejant la punta del broquet",
+          "checking_extruder_temperature": "Comprovació de la temperatura de l'extrusora",
+          "paused_user": "Impressió pausada per l'usuari",
+          "paused_front_cover_falling": "Pausat deguta a la caiguda de la coberta frontal",
+          "calibrating_extrusion_flow": "Calibrar el flux d'extrusió",
+          "paused_nozzle_temperature_malfunction": "Pausat degut a una fallada amb la temperatura del broquet",
+          "paused_heat_bed_temperature_malfunction": "Pausat degut a una fallada amb la temperatura del llit",
+          "filament_unloading": "Descarregant el filament",
+          "paused_skipped_step": "Pausat degut a passos saltats",
+          "filament_loading": "Carregant el filament",
+          "calibrating_motor_noise": "Calibrant el soroll dels motors",
+          "paused_ams_lost": "Pausat degut a la desconnexió de l'AMS",
+          "paused_low_fan_speed_heat_break": "Pausat degut a la baixa velocitat del ventilador del bloc",
+          "paused_chamber_temperature_control_error": "Pausat degut a un error amb el control de temperatura de la carcassa",
+          "cooling_chamber": "Refredament de la carcassa",
+          "paused_user_gcode": "Pausat per una instrucció gcode agregada per l'usuari",
+          "motor_noise_showoff": "Desactivar el soroll del motor",
+          "paused_nozzle_filament_covered_detected": "Pausat degut a la detecció de filament cobrint el broquet",
+          "paused_cutter_error": "Pausat degut a un error amb el tallador de filament",
+          "paused_first_layer_error": "Pausat degut a un error amb la primera capa",
+          "paused_nozzle_clog": "Pausat degut a una obstrucció al broquet",
+          "idle": "Inactiu"
+        }
+      },
+      "print_progress": {
+        "name": "Progrés de la impressió"
+      },
+      "print_status": {
+        "name": "Estat de la Impressió",
+        "state": {
+          "failed": "Fallida",
+          "finish": "Finalitzada",
+          "idle": "Inactiva",
+          "offline": "Fora de línia",
+          "prepare": "Preparant",
+          "running": "En curso",
+          "pause": "Pausa",
+          "slicing": "Tallant",
+          "init": "Inicialitzant"
+        }
+      },
+      "mqtt_mode": {
+        "name": "Mode de connexió MQTT",
+        "state": {
+          "local": "Local",
+          "bambu_cloud": "Bambu Cloud"
+        }
+      },
+      "gcode_file": {
+        "name": "Nom del Gcode"
+      },
+      "print_bed_type": {
+        "name": "Tipus de llit",
+        "state": {
+          "textured_plate": "Placa Texturitzada",
+          "cool_plate": "Placa Freda / Placa PLA",
+          "hot_plate": "Placa PEI llisa / Placa d'alta temperatura",
+          "eng_plate": "Placa d'Enginyeria"
+        }
+      },
+      "print_length": {
+        "name": "Grandària de la impressió"
+      },
+      "print_weight": {
+        "name": "Pes de la impressió"
+      },
+      "subtask_name": {
+        "name": "Nom de la tasca"
+      },
+      "print_type": {
+        "name": "Tipus d'impressió",
+        "state": {
+          "local": "Local",
+          "cloud": "Cloud",
+          "idle": "Inactiva"
+        }
+      },
+      "start_time": {
+        "name": "Temps d'inici"
+      },
+      "remaining_time": {
+        "name": "Temps restant"
+      },
+      "end_time": {
+        "name": "Temps de finalització"
+      },
+      "total_usage_hours": {
+        "name": "Temps de finalització"
+      },
+      "current_layer": {
+        "name": "Capa actual"
+      },
+      "total_layers": {
+        "name": "Quantitat total de capes"
+      },
+      "active_tray": {
+        "name": "Safata activa"
+      },
+      "active_tray_index": {
+        "name": "Índex de safata activa"
+      },
+      "nozzle_diameter": {
+        "name": "Grandària del broquet"
+      },
+      "nozzle_type": {
+        "name": "Tipus de broquet",
+        "state": {
+          "hardened_steel": "Acer endurit",
+          "stainless_steel": "Acer inoxidable"
+        }
+      },
+      "humidity_index": {
+        "name": "Índex d'humitat"
+      },
+      "ams_temp": {
+        "name": "Temperatura de l'AMS"
+      },
+      "external_spool": {
+        "name": "Bobina externa",
+        "state_attributes": {
+          "active": {
+            "name": "Activa"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Buida"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima del broquet"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura màxima del broquet"
+          },
+          "type": {
+            "name": "Tipus"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Safata 1",
+        "state_attributes": {
+          "active": {
+            "name": "Activa"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Buida"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima del broquet"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura màxima del broquet"
+          },
+          "remain": {
+            "name": "Filament restant"
+          },
+          "tag_uid": {
+            "name": "Número de sèrie de la bobina"
+          },
+          "type": {
+            "name": "Tipus"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Safata 2",
+        "state_attributes": {
+          "active": {
+            "name": "Activa"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Buida"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima del broquet"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura màxima del broquet"
+          },
+          "remain": {
+            "name": "Filament restant"
+          },
+          "tag_uid": {
+            "name": "Número de sèrie de la bobina"
+          },
+          "type": {
+            "name": "Tipus"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Safata 3",
+        "state_attributes": {
+          "active": {
+            "name": "Activa"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Buida"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima del broquet"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura màxima del broquet"
+          },
+          "remain": {
+            "name": "Filament restant"
+          },
+          "tag_uid": {
+            "name": "Número de sèrie de la bobina"
+          },
+          "type": {
+            "name": "Tipus"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Safata 4",
+        "state_attributes": {
+          "active": {
+            "name": "Activa"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "empty": {
+            "name": "Buida"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nom"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima del broquet"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura màxima del broquet"
+          },
+          "remain": {
+            "name": "Filament restant"
+          },
+          "tag_uid": {
+            "name": "Número de sèrie de la bobina"
+          },
+          "type": {
+            "name": "Tipus"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Càmera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Mode d'actualització manual"
+      },
+      "camera": {
+        "name": "Habilitar càmera"
+      },
+      "imagecamera": {
+        "name": "Usar càmera amb sensor d'imatge"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Núvol Bambu",
+        "lan": "Connexió local"
+      }
+    }
+  }
+}

@@ -13,10 +13,13 @@
   "documentation": "https://github.com/greghesp/ha-bambulab",
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
+  "requirements": [
+    "cloudscraper"
+  ],
   "ssdp": [
     {
       "st": "urn:bambulab-com:device:3dprinter:1"
     }
-  ],
-  "version": "2.0.14"
+  ],  
+  "version": "2.0.40"
 }
