@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Tillad promptlyd"
       }
+    }
   },
   "selector": {
     "configuration_type": {

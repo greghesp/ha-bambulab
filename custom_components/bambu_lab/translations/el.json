@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Να επιτρέπεται ο ήχος προτροπής"
       }
+    }
   },
   "selector": {
     "configuration_type": {

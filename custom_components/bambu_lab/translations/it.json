@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Consenti suono rapido"
       }
+    }
   },
   "selector": {
     "configuration_type": {

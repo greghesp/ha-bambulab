@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Permitir sonido rápido"
       }
+    }
   },
   "selector": {
     "configuration_type": {

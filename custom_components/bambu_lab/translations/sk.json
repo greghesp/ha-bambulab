@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Povoliť zvuk výzvy"
       }
+    }
   },
   "selector": {
     "configuration_type": {

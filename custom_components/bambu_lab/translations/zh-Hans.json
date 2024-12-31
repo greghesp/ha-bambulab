@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "允许提示音"
       }
+    }
   },
   "selector": {
     "configuration_type": {

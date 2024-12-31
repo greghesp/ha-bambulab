@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Permitir som de aviso"
       }
+    }
   },
   "selector": {
     "configuration_type": {

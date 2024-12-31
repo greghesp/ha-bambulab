@@ -589,6 +589,7 @@
       "prompt_sound": {
         "name": "Autoriser le son d'invite"
       }
+    }
   },
   "selector": {
     "configuration_type": {
