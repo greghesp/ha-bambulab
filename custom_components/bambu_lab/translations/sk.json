@@ -585,8 +585,10 @@
       },
       "imagecamera": {
         "name": "Použite kameru so snímačom obrazu"
+      },
+      "prompt_sound": {
+        "name": "Povoliť zvuk výzvy"
       }
-    }
   },
   "selector": {
     "configuration_type": {

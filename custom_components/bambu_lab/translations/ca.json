@@ -585,8 +585,10 @@
       },
       "imagecamera": {
         "name": "Usar càmera amb sensor d'imatge"
+      },
+      "prompt_sound": {
+        "name": "Permet el so ràpid"
       }
-    }
   },
   "selector": {
     "configuration_type": {

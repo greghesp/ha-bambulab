@@ -585,8 +585,10 @@
       },
       "imagecamera": {
         "name": "Χρησιμοποιήστε κάμερα αισθητήρα εικόνας"
+      },
+      "prompt_sound": {
+        "name": "Να επιτρέπεται ο ήχος προτροπής"
       }
-    }
   },
   "selector": {
     "configuration_type": {

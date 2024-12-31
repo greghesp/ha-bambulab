@@ -585,8 +585,10 @@
       },
       "imagecamera": {
         "name": "使用图像传感器相机"
+      },
+      "prompt_sound": {
+        "name": "允许提示音"
       }
-    }
   },
   "selector": {
     "configuration_type": {

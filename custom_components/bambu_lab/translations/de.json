@@ -585,8 +585,10 @@
       },
       "imagecamera": {
         "name": "Verwenden Sie eine Bildsensorkamera"
+      },
+      "prompt_sound": {
+        "name": "Aufforderungston zulassen"
       }
-    }
   },
   "selector": {
     "configuration_type": {

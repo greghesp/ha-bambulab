@@ -585,14 +585,16 @@
       },
       "imagecamera": {
         "name": "Usar cámara con sensor de imagen"
+      },
+      "prompt_sound": {
+        "name": "Permitir sonido rápido"
       }
-    }
   },
   "selector": {
     "configuration_type": {
       "options": {
         "bambu": "Nube de bambú",
-        "lan": "Conexión Local"
+        "lan": "Conexión local"
       }
     }
   }

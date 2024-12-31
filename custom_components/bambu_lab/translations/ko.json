@@ -585,8 +585,10 @@
       },
       "imagecamera": {
         "name": "이미지 센서 카메라 사용"
+      },
+      "prompt_sound": {
+        "name": "프롬프트 소리 허용"
       }
-    }
   },
   "selector": {
     "configuration_type": {
