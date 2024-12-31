@@ -531,9 +531,6 @@ class PrintJob:
             # Update task data if bambu cloud connected
             self._update_task_data()
 
-            if self._client.callback is not None:
-               self._client.callback("event_print_started")
-
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -649,29 +646,25 @@ class PrintJob:
                 if self._client._device.supports_feature(Features.START_TIME_GENERATED) and (status == 4):
                     # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                     # do so uniformly so we always have matched start/end times.
-                    status = self._task_data['status']
-                    LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
-                    if status == 4: # 4 looks to be in progress while 2 is completed
-                        # "startTime": "2023-12-21T19:02:16Z"
-                        cloud_time_str = self._task_data.get('startTime', "")
-                        LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
-                        if cloud_time_str != "":
-                            local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                            # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                            local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                            self.start_time = local_dt
-                            LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
+                    # "startTime": "2023-12-21T19:02:16Z"
+                    cloud_time_str = self._task_data.get('startTime', "")
+                    LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
+                    if cloud_time_str != "":
+                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                        self.start_time = local_dt
+                        LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
 
-                        # "endTime": "2023-12-21T19:02:35Z"
-                        cloud_time_str = self._task_data.get('endTime', "")
-                        LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
-                        if cloud_time_str != "":
-                            local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                            # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                            local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                            self.end_time = local_dt
-                            LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
-
+                    # "endTime": "2023-12-21T19:02:35Z"
+                    cloud_time_str = self._task_data.get('endTime', "")
+                    LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
+                    if cloud_time_str != "":
+                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                        self.end_time = local_dt
+                        LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
 @dataclass
 class Info:

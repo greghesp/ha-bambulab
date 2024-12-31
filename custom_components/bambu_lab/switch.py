@@ -185,7 +185,6 @@ class BambuLabCameraImageSwitch(BambuLabSwitch):
         """Disable the camera."""
         self._attr_is_on = False
         await self.coordinator.set_camera_as_image_sensor(self._attr_is_on)
-        await self.coordinator.client.set_manual_refresh_mode(False)
 
 
 class BambuLabPromptSoundSwitch(BambuLabSwitch):
