@@ -585,6 +585,9 @@
       },
       "imagecamera": {
         "name": "Use image sensor camera"
+      },
+      "prompt_sound": {
+        "name": "Allow Prompt Sound"
       }
     }
   },

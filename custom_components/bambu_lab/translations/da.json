@@ -585,6 +585,9 @@
       },
       "imagecamera": {
         "name": "Brug billedsensor kamera"
+      },
+      "prompt_sound": {
+        "name": "Tillad promptlyd"
       }
     }
   },

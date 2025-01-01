@@ -585,6 +585,9 @@
       },
       "imagecamera": {
         "name": "Use câmera com sensor de imagem"
+      },
+      "prompt_sound": {
+        "name": "Permitir som de aviso"
       }
     }
   },
@@ -592,7 +595,7 @@
     "configuration_type": {
       "options": {
         "bambu": "Nuvem de bambu",
-        "lan": "Conexão Local"
+        "lan": "Conexão local"
       }
     }
   }
