@@ -689,7 +689,7 @@ class Info:
         self._client = client
 
         self.serial = self._client._serial
-        self.device_type = self._client._device_type.upper()
+        self.device_type = self._client._device_type
         self.wifi_signal = 0
         self.hw_ver = "unknown"
         self.sw_ver = "unknown"
