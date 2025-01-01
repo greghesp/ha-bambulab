@@ -31,13 +31,6 @@ PROMPT_SOUND_SWITCH_DESCRIPTION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
-PROMPT_SOUND_SWITCH_DESCRIPTION = SwitchEntityDescription(
-    key="prompt_sound",
-    icon="mdi:audio",
-    translation_key="prompt_sound",
-    entity_category=EntityCategory.CONFIG,
-)
-
 CAMERA_SWITCH_DESCRIPION = SwitchEntityDescription(
     key="camera",
     icon="mdi:refresh-auto",
