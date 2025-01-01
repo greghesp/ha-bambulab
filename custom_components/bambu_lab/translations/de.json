@@ -38,8 +38,8 @@
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud-Verbindung",
-        "description": "Bitte geben Sie Ihre Bambu Lab-Zugangsdaten an:",
+        "title": "BambuLab Cloud-Verbindung",
+        "description": "Bitte geben Sie Ihre BambuLab-Zugangsdaten an:",
         "data": {
           "region": "Konto-Region:",
           "email": "E-Mail-Adresse oder Telefonnummer",
@@ -357,7 +357,7 @@
         "name": "Drucktyp",
         "state": {
           "local": "Lokal",
-          "cloud": "Wolke",
+          "cloud": "Cloud",
           "idle": "Leerlauf"
         }
       },
@@ -591,8 +591,8 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Bambuswolke",
-        "lan": "Lokale Verbindung"
+        "bambu": "BambuLab-Cloud",
+        "lan": "LAN-Mode (lokal)"
       }
     }
   }
