@@ -585,6 +585,9 @@
       },
       "imagecamera": {
         "name": "Utilizza Sensore d'immagine della Fotocamera"
+      },
+      "prompt_sound": {
+        "name": "Consenti suono rapido"
       }
     }
   },

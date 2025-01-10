@@ -585,6 +585,9 @@
       },
       "imagecamera": {
         "name": "Utiliser une caméra à capteur d'image"
+      },
+      "prompt_sound": {
+        "name": "Autoriser le son d'invite"
       }
     }
   },

@@ -583,7 +583,7 @@ class BambuCloud:
     def get_device_type_from_device_product_name(self, device_product_name: str):
         if device_product_name == "X1 Carbon":
             return "X1C"
-        return device_product_name.replace(" ", "")
+        return device_product_name.replace(" ", "").upper()
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")

@@ -292,7 +292,7 @@ class BambuClient:
 
         self._access_code = config.get('access_code', '')
         self._auth_token = config.get('auth_token', '')
-        self._device_type = config.get('device_type', 'unknown')
+        self._device_type = config.get('device_type', 'unknown').upper()
         self._local_mqtt = config.get('local_mqtt', False)
         self._manual_refresh_mode = config.get('manual_refresh_mode', False)
         self._serial = config.get('serial', '')
