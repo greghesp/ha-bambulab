@@ -1,4 +1,5 @@
 PRINT_ERROR_ERRORS = {
+    "012FF800": "Check nozzle. Click “Done” if filament was extruded.",
     "03004000": "Printing stopped because homing Z axis failed.",
     "03004001": "The printer timed out waiting for the nozzle to cool down before homing.",
     "03004002": "Printing Stopped because Auto Bed Leveling failed.",
