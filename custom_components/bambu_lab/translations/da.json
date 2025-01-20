@@ -32,13 +32,13 @@
     },
     "step": {
       "user": {
-        "description": "Konfiguration via Bambu Cloud er enklest og hurtigst. Konti på sociale medier uden adgangskode understøttes ikke.\n\rDu kan også genbruge fungerende godkendelsesoplysninger fra andre printere. Hvis de findes, vil disse blive angivet af e-mailadressen.\n\rEller du kan oprette forbindelse ved manuelt at angive printerens lokale forbindelsesoplysninger. Dette er påkrævet for en printer i Lan-tilstand.",
+        "description": "Konfiguration via Bambu Lab Cloud er enklest og hurtigst. Konti på sociale medier uden adgangskode understøttes ikke.\n\rDu kan også genbruge fungerende godkendelsesoplysninger fra andre printere. Hvis de findes, vil disse blive angivet af e-mailadressen.\n\rEller du kan oprette forbindelse ved manuelt at angive printerens lokale forbindelsesoplysninger. Dette er påkrævet for en printer i Lan-tilstand.",
         "data": {
           "printer_mode": "Printerkonfigurationsmetode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud-forbindelse",
+        "title": "Bambu Lab Cloud Connection",
         "description": "Indtast dine Bambu Lab-legitimationsoplysninger:",
         "data": {
           "region": "Kontoregion:",
@@ -58,7 +58,7 @@
       },
       "Bambu_Lan": {
         "title": "Opsæt lokal forbindelse",
-        "description": "Du kan vælge at angive den lokale printer-IP-adresse og adgangskode. Dette kræves for kameraadgang på P1/A1 eller for at kunne forbinde direkte til printeren i stedet for via Bambu Cloud.",
+        "description": "Du kan valgfrit angive den lokale printers IP-adresse og adgangskode. Dette er nødvendigt for kameraadgang på P1/A1. Eller for at kunne oprette forbindelse direkte til printeren i stedet for via Bambu Lab Cloud.",
         "data": {
           "local_mqtt": "Forbind lokalt til printeren:",
           "host": "Lokal printer-IP-adresse:",
@@ -98,13 +98,13 @@
     "step": {
       "init": {
         "title": "Juster forbindelsesindstillinger",
-        "description": "Konfiguration via Bambu Cloud er den enkleste metode. Du kan vælge at konfigurere manuelt til kun lokal adgang, men det medfører tab af visse funktioner - dette kræves for printere indstillet til Kun Lan Mode.\n\rHvis de allerede eksisterer og fungerer, kan du også genbruge eksisterende autentifikationsoplysninger fra andre konfigurerede printere.\n\rBemærk, at sociale mediekonti uden en adgangskode ikke understøttes til cloud-konfiguration.",
+        "description": "Konfiguration via Bambu Lab Cloud er enklest. Du kan valgfrit manuelt konfigurere til kun lokal adgang, men du mister nogle funktioner - dette er påkrævet for printere indstillet til kun LAN-tilstand.\n\rHvis de findes og fungerer, kan du også genbruge eksisterende godkendelsesoplysninger fra andre konfigurerede printere.\n\rBemærk, at sociale mediekonti uden adgangskode ikke understøtter cloud-konfiguration.",
         "data": {
           "printer_mode": "Printerkonfigurationsmetode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud-forbindelse",
+        "title": "Bambu Lab Cloud Connection",
         "description": "Indtast dine Bambu Lab-legitimationsoplysninger:",
         "data": {
           "region": "Kontoregion:",
@@ -117,12 +117,12 @@
       },
       "Bambu_Lan": {
         "title": "Juster printerkonfiguration",
-        "description": "Du kan vælge at angive den lokale printer-IP-adresse og adgangskode. Dette kræves for kameraadgang på P1/A1 eller for at kunne forbinde direkte til printeren i stedet for via Bambu Cloud.",
+        "description": "Du kan valgfrit angive den lokale printers IP-adresse og adgangskode. Dette er nødvendigt for kameraadgang på P1/A1. Eller for at kunne oprette forbindelse direkte til printeren i stedet for via Bambu Lab Cloud.",
         "data": {
           "serial": "Vælg printer der skal tilføjes:",
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "local_mqtt": "Forbind direkte til printeren i stedet for via Bambu Cloud:",
+          "local_mqtt": "Tilslut direkte til printeren i stedet for med Bambu Lab Cloud:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):"
         }
       },
@@ -329,7 +329,7 @@
         "name": "MQTT forbindelsestilstand",
         "state": {
           "local": "Lokal",
-          "bambu_cloud": "Bambu Cloud"
+          "bambu_cloud": "Bambu Lab Cloud"
         }
       },
       "gcode_file": {
@@ -594,7 +594,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Bambu Cloud",
+        "bambu": "Bambu Lab Cloud",
         "lan": "Lan-tilstand"
       }
     }

@@ -32,13 +32,13 @@
     },
     "step": {
       "user": {
-        "description": "La configuración a través de Bambu Cloud es la más sencilla y rápida. No se admiten cuentas de redes sociales sin contraseña.\n\rTambién puede reutilizar las credenciales de autenticación que funcionan de otras impresoras. Si los encuentra, se enumerarán junto a la dirección de correo electrónico.\n\rO puede conectarse proporcionando manualmente los detalles de conexión local de la impresora. Esto es necesario para una impresora en modo Lan.",
+        "description": "La configuración a través de Bambu Lab Cloud es la más sencilla y rápida. No se admiten cuentas de redes sociales sin contraseña.\n\rTambién puede reutilizar las credenciales de autenticación que funcionan de otras impresoras. Si los encuentra, se enumerarán junto a la dirección de correo electrónico.\n\rO puede conectarse proporcionando manualmente los detalles de conexión local de la impresora. Esto es necesario para una impresora en modo Lan.",
         "data": {
           "printer_mode": "Modo de configuración de la impresora:"
         }
       },
       "Bambu": {
-        "title": "Conexión con Bambu Cloud",
+        "title": "Conexión a la nube de Bambu Lab",
         "description": "Por favor, proporciona tus credenciales de Bambu Lab:",
         "data": {
           "region": "Región de la cuenta:",
@@ -58,7 +58,7 @@
       },
       "Bambu_Lan": {
         "title": "Configuración de Conexión Local",
-        "description": "Opcionalmente, puedes proporcionar la dirección de IP local de la impresora y el código de acceso. Esto es requerido para el acceso a la cámara de la P1/A1, o para poder conectarse directamente a la impresora sin utilizar Bambu Cloud.",
+        "description": "Opcionalmente, puede proporcionar la dirección IP de la impresora local y el código de acceso. Esto es necesario para acceder a la cámara en el P1/A1. O poder conectarse directamente a la impresora en lugar de a través de Bambu Lab Cloud.",
         "data": {
           "local_mqtt": "Conectar localmente a la impresora:",
           "host": "Dirección de IP Local de la Impresora:",
@@ -98,13 +98,13 @@
     "step": {
       "init": {
         "title": "Ajusta la configuración de conexión",
-        "description": "La configuración a través de Bambu Cloud es la más sencilla. Opcionalmente, puede configurar manualmente el acceso solo local, pero perderá algunas funciones; esto es necesario para las impresoras configuradas en modo solo Lan.\n\rSi existen y funcionan, también puede reutilizar las credenciales de autenticación existentes de otras impresoras configuradas.\n \rTenga en cuenta que las cuentas de redes sociales sin contraseña no son compatibles con la configuración en la nube.",
+        "description": "La configuración a través de Bambu Lab Cloud es la más sencilla. Opcionalmente, puede configurar manualmente el acceso solo local, pero perderá algunas funciones; esto es necesario para las impresoras configuradas en el modo Lan Only.\n\rSi existen y funcionan, también puede reutilizar las credenciales de autenticación existentes de otras impresoras configuradas.\n\rTenga en cuenta que las cuentas de redes sociales sin contraseña no son compatibles con la configuración en la nube.",
         "data": {
           "printer_mode": "Modo de configuración de la impresora:"
         }
       },
       "Bambu": {
-        "title": "Conexión con Bambu Cloud",
+        "title": "Conexión a la nube de Bambu Lab",
         "description": "Por favor, proporciona tus credenciales de Bambu Lab:",
         "data": {
           "region": "Región de la cuenta:",
@@ -117,12 +117,12 @@
       },
       "Bambu_Lan": {
         "title": "Ajusta la configuración de conexión",
-        "description": "Opcionalmente, puedes proporcionar la dirección de IP local de la impresora y el código de acceso. Esto es requerido para el acceso a la cámara de la P1/A1, o para poder conectarse directamente a la impresora sin utilizar Bambu Cloud.",
+        "description": "Opcionalmente, puede proporcionar la dirección IP de la impresora local y el código de acceso. Esto es necesario para acceder a la cámara en el P1/A1. O poder conectarse directamente a la impresora en lugar de a través de Bambu Lab Cloud.",
         "data": {
           "serial": "Elije la Impresora para Añadirla:",
           "host": "Dirección IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
-          "local_mqtt": "Conectar directamente a la impresora en vez de usar Bambu Cloud:",
+          "local_mqtt": "Conéctese directamente a la impresora en lugar de hacerlo mediante Bambu Lab Cloud:",
           "usage_hours": "Cantidad de horas de uso (opcional):"
         }
       },
@@ -329,7 +329,7 @@
         "name": "Modo de conexión MQTT",
         "state": {
           "local": "Local",
-          "bambu_cloud": "Bambu Cloud"
+          "bambu_cloud": "Nube de laboratorio de bambú"
         }
       },
       "gcode_file": {
@@ -594,7 +594,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Nube de bambú",
+        "bambu": "Nube de laboratorio de bambú",
         "lan": "Modo LAN"
       }
     }

@@ -32,13 +32,13 @@
     },
     "step": {
       "user": {
-        "description": "通过 Bambu Cloud 进行配置是最简单、最快的。不支持没有密码的社交媒体帐户。\n\r您还可以重复使用其他打印机的工作身份验证凭据。如果找到这些将通过电子邮件地址列出。\n\r或者，您可以通过手动提供打印机本地连接详细信息来进行连接。这是 LAN 模式下打印机所必需的。",
+        "description": "通过 Bambu Lab Cloud 进行配置是最简单、最快的。不支持没有密码的社交媒体帐户。\n\r您还可以重复使用其他打印机的工作身份验证凭据。如果找到这些将通过电子邮件地址列出。\n\r或者，您可以通过手动提供打印机本地连接详细信息来进行连接。这是 LAN 模式下打印机所必需的。",
         "data": {
           "printer_mode": "打印机配置模式："
         }
       },
       "Bambu": {
-        "title": "Bambu 云连接",
+        "title": "Bambu Lab 云连接",
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
           "region": "帐户区域：",
@@ -58,7 +58,7 @@
       },
       "Bambu_Lan": {
         "title": "设置本地连接",
-        "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是在 P1/A1 上访问相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Cloud。",
+        "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是访问 P1/A1 上的相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Lab Cloud。",
         "data": {
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
           "host": "本地打印机 IP 地址：",
@@ -98,13 +98,13 @@
     "step": {
       "init": {
         "title": "调整连接设置",
-        "description": "通过 Bambu Cloud 进行配置是最简单的。您可以选择手动配置为仅本地访问，但会丢失一些功能 - 这对于设置为仅 LAN 模式的打印机来说是必需的。\n\r如果它们存在并且正在工作，您还可以重复使用其他配置的打印机的现有身份验证凭据。\n \r请注意，没有密码的社交媒体帐户不支持云配置。",
+        "description": "通过 Bambu Lab Cloud 进行配置是最简单的。您可以选择手动配置为仅本地访问，但会丢失一些功能 - 这对于设置为仅 LAN 模式的打印机是必需的。\n\r如果它们存在并且正在工作，您还可以重复使用其他已配置打印机的现有身份验证凭据。\n\r请注意，没有密码的社交媒体帐户不支持云配置。",
         "data": {
           "printer_mode": "打印机配置模式："
         }
       },
       "Bambu": {
-        "title": "Bambu 云连接",
+        "title": "Bambu Lab 云连接",
         "description": "请提供您的 Bambu Lab 凭据：",
         "data": {
           "region": "帐户区域：",
@@ -117,12 +117,12 @@
       },
       "Bambu_Lan": {
         "title": "调整打印机配置",
-        "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是在 P1/A1 上访问相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Cloud。",
+        "description": "您可以选择提供本地打印机 IP 地址和访问代码。这是访问 P1/A1 上的相机所必需的。或者能够直接连接到打印机，而不是通过 Bambu Lab Cloud。",
         "data": {
           "serial": "选择要添加的打印机：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Cloud：",
+          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Lab Cloud：",
           "usage_hours": "当前使用时间（可选）："
         }
       },
@@ -329,7 +329,7 @@
         "name": "MQTT 连接模式",
         "state": {
           "local": "本地",
-          "bambu_cloud": "Bambu Cloud"
+          "bambu_cloud": "Bambu实验室云"
         }
       },
       "gcode_file": {
@@ -594,7 +594,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "竹云",
+        "bambu": "Bambu实验室云",
         "lan": "局域网模式"
       }
     }
