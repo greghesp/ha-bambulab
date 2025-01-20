@@ -372,11 +372,8 @@ class BambuCloud:
         self._email = email
         self._username = username
         self._auth_token = auth_token
-        try:
-            self.get_device_list()
-        except:
-            return False
-        return True
+        result = self.get_device_list()
+        return False if result is None else True
 
     def login(self, region: str, email: str, password: str) -> str:
         self._region = region
