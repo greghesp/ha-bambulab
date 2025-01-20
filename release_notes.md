@@ -1,5 +1,6 @@
 ### V2.0.41
-- ???
+- Updated config/options cloud flows to get printer IP address from the cloud mqtt payload
+- Converted auto translation script to python and updated it to delete removed strings and re-localized changed English strings.
 
 ### V2.0.40
 - Allow phone numbers with the home assistant form complaining

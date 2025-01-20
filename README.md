@@ -155,6 +155,7 @@ instead of OAuth.
 | Firmware Update Available |                                                                |
 | Force Refresh             |                                                                |
 | HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
+| IP Address                |                                                                |
 | MQTT connection mode      | Bambu Cloud or Local                                           |
 | Online                    |                                                                |
 | Wifi Signal               |                                                                |
