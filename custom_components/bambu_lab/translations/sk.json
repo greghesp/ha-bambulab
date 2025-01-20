@@ -32,7 +32,7 @@
     },
     "step": {
       "user": {
-        "description": "Nastavenie cez Bambu Cloud je najjednoduchšie. Voliteľne môžete manuálne nakonfigurovať len pre lokálny prístup, ale stratíte niektoré funkcie – toto je potrebné pre tlačiarne nastavené na režim Len LAN.\n\rAk existujú a fungujú, môžete tiež znova použiť existujúce overovacie poverenia z iných nakonfigurovaných tlačiarní.\n\rUpozorňujeme, že účty sociálnych médií bez hesla nie sú podporované pre cloudové nastavenie.",
+        "description": "Konfigurácia cez Bambu Cloud je najjednoduchšia a najrýchlejšia. Účty sociálnych médií bez hesla nie sú podporované.\n\rMôžete tiež znova použiť funkčné overovacie poverenia z iných tlačiarní. Ak sa nájdu, budú uvedené podľa e-mailovej adresy.\n\rAlebo sa môžete pripojiť manuálnym zadaním podrobností o lokálnom pripojení tlačiarne. Vyžaduje sa to pre tlačiareň v režime LAN.",
         "data": {
           "printer_mode": "Režim konfigurácie tlačiarne:"
         }
@@ -595,7 +595,7 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Cloud",
-        "lan": "Lokálne pripojenie"
+        "lan": "Režim LAN"
       }
     }
   }
