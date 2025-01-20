@@ -1,5 +1,6 @@
 import math
 import requests
+import socket
 
 from datetime import datetime, timedelta
 
@@ -77,6 +78,11 @@ def get_filament_name(idx, custom_filaments: dict):
     # if result == "unknown" and idx != "":
     #     LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
     return result
+
+
+def get_ip_address_from_int(ip_int: int):
+    packed_ip = ip_int.to_bytes(4, 'little')
+    return socket.inet_ntoa(packed_ip)
 
 
 def get_speed_name(id):

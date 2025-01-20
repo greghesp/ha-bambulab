@@ -32,7 +32,7 @@
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Lab Cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -51,14 +51,13 @@
       },
       "Bambu_Choose_Device": {
         "title": "Printer Selection",
-        "description": "Choose which printer you want to add.",
         "data": {
-          "serial": "Choose Printer To Add:"
+          "serial": "Choose printer to add:"
         }
       },
       "Bambu_Lan": {
         "title": "Setup Local Connection",
-        "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Lab Cloud.",
+        "description": "You can choose to connect directly to the printer for status updates instead of by Bambu Lab cloud. This gives you resilience to Bambu Lab cloud outages but Bambu Lab has restricted control of the printer when in this hybrid mode so some controls will be unavailable.",
         "data": {
           "local_mqtt": "Connect locally to the printer:",
           "host": "Local Printer IP Address:",
@@ -98,7 +97,7 @@
     "step": {
       "init": {
         "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Lab Cloud is simplest. You can optionally manually configure for local only access but you lose some features - this is required for printers set to Lan Only Mode.\n\rIf they exist and are working, you may also reuse existing authentication credentials from other configured printers.\n\rNote that social media accounts without a password are not support for cloud configuration.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -117,12 +116,12 @@
       },
       "Bambu_Lan": {
         "title": "Adjust Printer Configuration",
-        "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Lab Cloud.",
+        "description": "You can choose to connect directly to the printer for status updates instead of by Bambu Lab cloud. This gives you resilience to Bambu Lab cloud outages but Bambu Lab has restricted control of the printer when in this hybrid mode so some controls will be unavailable.",
         "data": {
-          "serial": "Choose Printer To Add:",
+          "serial": "Adjust settings for:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
-          "local_mqtt": "Connect directly to printer instead of by Bambu Lab Cloud:",
+          "local_mqtt": "Connect directly to printer instead of by Bambu Lab cloud:",
           "usage_hours": "Current usage hours (optional):"
         }
       },
@@ -329,7 +328,7 @@
         "name": "MQTT connection mode",
         "state": {
           "local": "Local",
-          "bambu_cloud": "Bambu Lab Cloud"
+          "bambu_cloud": "Bambu Lab cloud"
         }
       },
       "gcode_file": {
@@ -394,6 +393,9 @@
           "hardened_steel": "Hardened steel",
           "stainless_steel": "Stainless steel"
         }
+      },
+      "ip_address": {
+        "name": "IP address"
       },
       "humidity_index": {
         "name": "Humidity index"
@@ -594,7 +596,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Bambu Lab Cloud",
+        "bambu": "Bambu Lab cloud",
         "lan": "Lan Mode"
       }
     }

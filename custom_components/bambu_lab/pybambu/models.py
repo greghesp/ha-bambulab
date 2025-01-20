@@ -11,6 +11,7 @@ from .utils import (
     fan_percentage_to_gcode,
     get_current_stage,
     get_filament_name,
+    get_ip_address_from_int,
     get_printer_type,
     get_speed_name,
     get_hw_version,
@@ -682,6 +683,7 @@ class Info:
     nozzle_diameter: float
     nozzle_type: str
     usage_hours: float
+    _ip_address: str
 
     def __init__(self, client):
         self._client = client
@@ -697,6 +699,7 @@ class Info:
         self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
         self.usage_hours = client._usage_hours
+        self._ip_address = ""
 
     def set_online(self, online):
         if self.online != online:
@@ -756,6 +759,28 @@ class Info:
 
         self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
 
+        # "print": {
+        #   "net": {
+        #     "conf": 16,
+        #     "info": [
+        #       {
+        #         "ip": 1594493450,
+        #         "mask": 16777215
+        #       },
+        #       {
+        #         "ip": 0,
+        #         "mask": 0
+        #       }
+        #     ]
+        #   },
+
+        info = data.get('net', {}).get('info', [])
+        for net in info:
+            ip_int = net.get("ip", 0)
+            if net.get("ip", 0) != 0:
+                self._ip_address = get_ip_address_from_int(ip_int)
+                break
+
         # Version data is provided differently for X1 and P1
         # P1P example:
         # "upgrade_state": {
@@ -813,11 +838,17 @@ class Info:
         self.nozzle_diameter = float(data.get("nozzle_diameter", self.nozzle_diameter))
         self.nozzle_type = data.get("nozzle_type", self.nozzle_type)
 
+        #
+
         return (old_data != f"{self.__dict__}")
 
     @property
     def has_bambu_cloud_connection(self) -> bool:
         return self._client.bambu_cloud.auth_token != ""
+    
+    @property
+    def ip_address(self) -> str:
+        return self._ip_address
     
     def set_prompt_sound(self, enable: bool):
         if enable:

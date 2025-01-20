@@ -32,7 +32,7 @@
     },
     "step": {
       "user": {
-        "description": "La configuració mitjançant Bambu Lab Cloud és la més senzilla i ràpida. Els comptes de xarxes socials sense contrasenya no són compatibles.\n\rTambé podeu reutilitzar les credencials d'autenticació que funcionen d'altres impressores. En cas de trobar-los, es mostraran a l'adreça de correu electrònic.\n\rO podeu connectar-vos proporcionant manualment els detalls de connexió local de la impressora. Això és necessari per a una impressora en mode Lan.",
+        "description": "La configuració a través del núvol Bambu Lab és la més senzilla i ràpida. Els comptes de xarxes socials sense contrasenya no són compatibles.\n\rTambé podeu reutilitzar les credencials d'autenticació que funcionen d'altres impressores. En cas de trobar-los, es mostraran a l'adreça de correu electrònic.\n\rO podeu connectar-vos proporcionant manualment els detalls de connexió local de la impressora. Això és necessari per a una impressora en mode Lan.",
         "data": {
           "printer_mode": "Mode de configuració de la impressora:"
         }
@@ -51,14 +51,13 @@
       },
       "Bambu_Choose_Device": {
         "title": "Selecció d'Impresora",
-        "description": "Escull quina impressora vols afegir.",
         "data": {
-          "serial": "Escull la impressora per afegir-la:"
+          "serial": "Trieu la impressora per afegir:"
         }
       },
       "Bambu_Lan": {
         "title": "Configuració de Connexió Local",
-        "description": "Opcionalment, podeu proporcionar l'adreça IP de la impressora local i el codi d'accés. Això és necessari per accedir a la càmera al P1/A1. O per poder connectar-se directament a la impressora en lloc de fer-ho mitjançant Bambu Lab Cloud.",
+        "description": "Podeu triar connectar-vos directament a la impressora per obtenir actualitzacions d'estat en comptes de fer-ho mitjançant el núvol de Bambu Lab. Això us ofereix resiliència a les interrupcions del núvol de Bambu Lab, però Bambu Lab ha restringit el control de la impressora quan esteu en aquest mode híbrid, de manera que alguns controls no estaran disponibles.",
         "data": {
           "local_mqtt": "Connectar localmente a la impresora:",
           "host": "Adreça IP Local de la Impressora:",
@@ -98,7 +97,7 @@
     "step": {
       "init": {
         "title": "Ajusta la configuració de connexió",
-        "description": "La configuració mitjançant Bambu Lab Cloud és més senzilla. Opcionalment, podeu configurar manualment l'accés només local, però perd algunes funcions; això és necessari per a les impressores configurades en el mode Només LAN.\n\rSi existeixen i funcionen, també podeu reutilitzar les credencials d'autenticació existents d'altres impressores configurades.\n\rTingueu en compte que els comptes de xarxes socials sense contrasenya no són compatibles amb la configuració del núvol.",
+        "description": "La configuració a través del núvol Bambu Lab és la més senzilla i ràpida. Els comptes de xarxes socials sense contrasenya no són compatibles.\n\rTambé podeu reutilitzar les credencials d'autenticació que funcionen d'altres impressores. En cas de trobar-los, es mostraran a l'adreça de correu electrònic.\n\rO podeu connectar-vos proporcionant manualment els detalls de connexió local de la impressora. Això és necessari per a una impressora en mode Lan.",
         "data": {
           "printer_mode": "Mode de configuració de la impressora:"
         }
@@ -117,12 +116,12 @@
       },
       "Bambu_Lan": {
         "title": "Ajusta la configuració de connexió",
-        "description": "Opcionalment, podeu proporcionar l'adreça IP de la impressora local i el codi d'accés. Això és necessari per accedir a la càmera al P1/A1. O per poder connectar-se directament a la impressora en lloc de fer-ho mitjançant Bambu Lab Cloud.",
+        "description": "Podeu triar connectar-vos directament a la impressora per obtenir actualitzacions d'estat en comptes de fer-ho mitjançant el núvol de Bambu Lab. Això us ofereix resiliència a les interrupcions del núvol de Bambu Lab, però Bambu Lab ha restringit el control de la impressora quan esteu en aquest mode híbrid, de manera que alguns controls no estaran disponibles.",
         "data": {
-          "serial": "Escull la Impressora per Afegir-la:",
+          "serial": "Ajusteu la configuració per a:",
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "local_mqtt": "Connecteu-vos directament a la impressora en lloc de fer-ho amb Bambu Lab Cloud:",
+          "local_mqtt": "Connecteu-vos directament a la impressora en lloc del núvol de Bambu Lab:",
           "usage_hours": "Quantitat d'hores d'ús (opcional):"
         }
       },
@@ -329,7 +328,7 @@
         "name": "Mode de connexió MQTT",
         "state": {
           "local": "Local",
-          "bambu_cloud": "Bambu Lab Cloud"
+          "bambu_cloud": "Núvol Bambu Lab"
         }
       },
       "gcode_file": {
@@ -569,6 +568,9 @@
             "name": "Tipus"
           }
         }
+      },
+      "ip_address": {
+        "name": "adreça IP"
       }
     },
     "camera": {
@@ -594,7 +596,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Bambu Lab Cloud",
+        "bambu": "Núvol Bambu Lab",
         "lan": "Mode Lan"
       }
     }
