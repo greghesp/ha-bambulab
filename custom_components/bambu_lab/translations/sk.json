@@ -32,7 +32,7 @@
     },
     "step": {
       "user": {
-        "description": "Konfigurácia cez Bambu Lab Cloud je najjednoduchšia a najrýchlejšia. Účty sociálnych médií bez hesla nie sú podporované.\n\rMôžete tiež znova použiť funkčné overovacie poverenia z iných tlačiarní. Ak sa nájdu, budú uvedené podľa e-mailovej adresy.\n\rAlebo sa môžete pripojiť manuálnym zadaním podrobností o lokálnom pripojení tlačiarne. Vyžaduje sa to pre tlačiareň v režime LAN.",
+        "description": "Konfigurácia cez cloud Bambu Lab je najjednoduchšia a najrýchlejšia. Účty sociálnych médií bez hesla nie sú podporované.\n\rMôžete tiež znova použiť funkčné overovacie poverenia z iných tlačiarní. Ak sa nájdu, budú uvedené podľa e-mailovej adresy.\n\rAlebo sa môžete pripojiť manuálnym zadaním podrobností o lokálnom pripojení tlačiarne. Vyžaduje sa to pre tlačiareň v režime LAN.",
         "data": {
           "printer_mode": "Režim konfigurácie tlačiarne:"
         }
@@ -51,14 +51,13 @@
       },
       "Bambu_Choose_Device": {
         "title": "Výber tlačiarne",
-        "description": "Vyberte tlačiareň, ktorú chcete pridať.",
         "data": {
-          "serial": "Vyberte tlačiareň na pridanie:"
+          "serial": "Vyberte tlačiareň, ktorú chcete pridať:"
         }
       },
       "Bambu_Lan": {
         "title": "Nastavenie lokálneho pripojenia",
-        "description": "Voliteľne môžete zadať IP adresu lokálnej tlačiarne a prístupový kód. Toto je potrebné pre prístup ku kamere na P1/A1. Alebo možnosť pripojiť sa priamo k tlačiarni namiesto cez Bambu Lab Cloud.",
+        "description": "Môžete sa rozhodnúť pripojiť priamo k tlačiarni pre aktualizácie stavu namiesto cloudu Bambu Lab. To vám dáva odolnosť voči výpadkom cloudu Bambu Lab, ale Bambu Lab má obmedzené ovládanie tlačiarne v tomto hybridnom režime, takže niektoré ovládacie prvky budú nedostupné.",
         "data": {
           "local_mqtt": "Pripojenie lokálne na tlačiareň:",
           "host": "Lokálna IP adresa tlačiarne:",
@@ -98,7 +97,7 @@
     "step": {
       "init": {
         "title": "Úprava nastavenia pripojenia",
-        "description": "Konfigurácia cez Bambu Lab Cloud je najjednoduchšia. Voliteľne môžete manuálne nakonfigurovať iba lokálny prístup, ale stratíte niektoré funkcie – to sa vyžaduje pre tlačiarne nastavené na režim Len LAN.\n\rAk existujú a fungujú, môžete tiež znova použiť existujúce overovacie poverenia z iných nakonfigurovaných tlačiarní.\n\rUpozorňujeme, že účty sociálnych médií bez hesla nepodporujú konfiguráciu cloudu.",
+        "description": "Konfigurácia cez cloud Bambu Lab je najjednoduchšia a najrýchlejšia. Účty sociálnych médií bez hesla nie sú podporované.\n\rMôžete tiež znova použiť funkčné overovacie poverenia z iných tlačiarní. Ak sa nájdu, budú uvedené podľa e-mailovej adresy.\n\rAlebo sa môžete pripojiť manuálnym zadaním podrobností o lokálnom pripojení tlačiarne. Vyžaduje sa to pre tlačiareň v režime LAN.",
         "data": {
           "printer_mode": "Režim konfigurácie tlačiarne:"
         }
@@ -117,12 +116,12 @@
       },
       "Bambu_Lan": {
         "title": "Úprava nastavenia tlačiarne",
-        "description": "Voliteľne môžete zadať IP adresu lokálnej tlačiarne a prístupový kód. Toto je potrebné pre prístup ku kamere na P1/A1. Alebo možnosť pripojiť sa priamo k tlačiarni namiesto cez Bambu Lab Cloud.",
+        "description": "Môžete sa rozhodnúť pripojiť priamo k tlačiarni pre aktualizácie stavu namiesto cloudu Bambu Lab. To vám dáva odolnosť voči výpadkom cloudu Bambu Lab, ale Bambu Lab má obmedzené ovládanie tlačiarne v tomto hybridnom režime, takže niektoré ovládacie prvky budú nedostupné.",
         "data": {
-          "serial": "Vyberte tlačiareň na pridanie:",
+          "serial": "Upravte nastavenia pre:",
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
-          "local_mqtt": "Pripojte sa priamo k tlačiarni namiesto Bambu Lab Cloud:",
+          "local_mqtt": "Pripojte sa priamo k tlačiarni namiesto cloudu Bambu Lab:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):"
         }
       },
@@ -329,7 +328,7 @@
         "name": "Režim pripojenia MQTT",
         "state": {
           "local": "Miestny",
-          "bambu_cloud": "Bambu Lab Cloud"
+          "bambu_cloud": "Bambu Lab cloud"
         }
       },
       "gcode_file": {
@@ -569,6 +568,9 @@
             "name": "Typ"
           }
         }
+      },
+      "ip_address": {
+        "name": "IP adresa"
       }
     },
     "camera": {
@@ -594,7 +596,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Bambu Lab Cloud",
+        "bambu": "Bambu Lab cloud",
         "lan": "Režim LAN"
       }
     }

@@ -448,13 +448,15 @@ class BambuClient:
                        result_code: int,
                        properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.info("On Connect: Connected to printer")
+        LOGGER.debug("try_on_connect: Connected to printer")
         self._connected = True
         LOGGER.debug("Now test subscribing...")
         self.subscribe()
-        # For the initial configuration connection attempt, we just need version info.
-        LOGGER.debug("On Connect: Getting version info")
+        # For the initial configuration connection attempt, we need version info and the IP address.
+        LOGGER.debug("try_on_connect: Getting version info")
         self.publish(GET_VERSION)
+        LOGGER.debug("try_on_connect: Request push all")
+        self.publish(PUSH_ALL)
 
     def on_disconnect(self,
                       client_: mqtt.Client,
@@ -576,6 +578,8 @@ class BambuClient:
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.info_update(data=json_data.get("info"))
+            if json_data.get("print") and json_data.get("print").get("net"):
+                self._device.print_update(data=json_data.get("print"))
                 result.put(True)
 
         self.client = mqtt.Client()
@@ -586,16 +590,17 @@ class BambuClient:
         # Run the blocking tls_set method in a separate thread
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(None, self.setup_tls)
-        
+
+        host = self.host if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host        
         if self._local_mqtt:
             self.client.username_pw_set("bblp", password=self._access_code)
         else:
             self.client.username_pw_set(self._username, password=self._auth_token)
         self._port = 8883
 
-        LOGGER.debug("Test connection: Connecting to %s", self.host)
+        LOGGER.debug("Test connection: Connecting to %s", host)
         try:
-            self.client.connect(self.host, self._port)
+            self.client.connect(host, self._port)
             self.client.loop_start()
             if result.get(timeout=10):
                 return True

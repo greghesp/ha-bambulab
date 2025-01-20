@@ -32,7 +32,7 @@ def convert(old_source, new_source, target, language):
       if not entry in target:
         # Target doesn't have this node yet. Add an empty one.
         target[entry] = {}
-      convert(old_source[entry], new_source[entry], target[entry], language)
+      convert(old_source.get(entry, {}), new_source[entry], target[entry], language)
     else:
       # We have a string.
       if (not entry in target) or (old_source[entry] != new_source[entry]):
@@ -41,7 +41,7 @@ def convert(old_source, new_source, target, language):
         print(f"{entry} = '{new_source[entry]}' -> '{translation}'")
         target[entry] = translation
 
-  for entry in target:
+  for entry in target.copy():
     if not entry in new_source:
       print(f"Deleting: '{entry}'")
       del target[entry]

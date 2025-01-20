@@ -287,9 +287,26 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             if device['dev_id'] == self.serial:
                 break
 
+        device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
+        default_host = ""
+        if user_input is None:
+            LOGGER.debug("Config Flow: Testing cloud mqtt connection to get printer IP address")
+            config = {
+                "region": self.region,
+                "email": self.email,
+                "username": self._bambu_cloud.username,
+                "host": "",
+                "local_mqtt": False,
+                "auth_token": self._bambu_cloud.auth_token,
+                'device_type': device_type,
+                'serial': device['dev_id'],
+            }
+            bambu = BambuClient(config)
+            success = await bambu.try_connection()
+            default_host = bambu.get_device().info.ip_address if success else ""
+
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
             success = True
-            device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
             if user_input.get('host', "") != "":
                 LOGGER.debug("Config Flow: Testing local mqtt connection")
                 config = {
@@ -332,7 +349,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Optional('local_mqtt', default = False)] = BOOLEAN_SELECTOR
-        default_host = "" if user_input is None else user_input['host']
+        default_host = default_host if user_input is None else user_input['host']
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         default_access_code = device['dev_access_code'] if user_input is None else user_input['access_code']
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
@@ -595,6 +612,23 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        
+        default_host = ""
+        if user_input is None:
+            LOGGER.debug("Options Flow: Testing cloud mqtt connection to get printer IP address")
+            config = {
+                "region": self.region,
+                "email": self.email,
+                "username": self._bambu_cloud.username,
+                "host": "",
+                "local_mqtt": False,
+                "auth_token": self._bambu_cloud.auth_token,
+                'device_type': self.config_entry.data['device_type'],
+                'serial': self.config_entry.data['serial'],
+            }
+            bambu = BambuClient(config)
+            success = await bambu.try_connection()
+            default_host = bambu.get_device().info.ip_address if success else ""
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
             for device in device_list:
@@ -655,10 +689,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required('serial', default=self.config_entry.data['serial'])] = printer_selector
-        default_host = self.config_entry.options.get('host', '') if user_input is None else user_input['host']
+        fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', False))] = BOOLEAN_SELECTOR
+        if user_input is not None:
+            default_host = user_input['host']
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('access_code', default=self.config_entry.options.get('access_code', access_code))] = TEXT_SELECTOR
-        fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', True))] = BOOLEAN_SELECTOR
         default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
 
