@@ -32,7 +32,7 @@
     },
     "step": {
       "user": {
-        "description": "La configurazione tramite Bambu Cloud è la più semplice. Facoltativamente, puoi configurare manualmente l'accesso solo locale, ma perderai alcune funzionalità: è necessario per le stampanti impostate sulla modalità Solo Lan.\n\rSe esistono e funzionano, puoi anche riutilizzare le credenziali di autenticazione esistenti da altre stampanti configurate.\n \rTieni presente che gli account di social media senza password non supportano la configurazione cloud.",
+        "description": "La configurazione tramite Bambu Cloud è la più semplice e veloce. Gli account di social media senza password non sono supportati.\n\rÈ inoltre possibile riutilizzare le credenziali di autenticazione funzionanti di altre stampanti. Se trovati, verranno elencati in base all'indirizzo e-mail.\n\rOppure è possibile connettersi fornendo manualmente i dettagli della connessione locale della stampante. Ciò è necessario per una stampante in modalità Lan.",
         "data": {
           "printer_mode": "Modalità di configurazione della stampante:"
         }
@@ -595,7 +595,7 @@
     "configuration_type": {
       "options": {
         "bambu": "Nuvola di bambù",
-        "lan": "Connessione locale"
+        "lan": "Modalità Lan"
       }
     }
   }

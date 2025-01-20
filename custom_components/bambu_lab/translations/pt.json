@@ -32,7 +32,7 @@
     },
     "step": {
       "user": {
-        "description": "A configuração via Bambu Cloud é mais simples. Opcionalmente, você pode configurar manualmente o acesso somente local, mas perderá alguns recursos. Isso é necessário para impressoras configuradas no modo somente LAN.\n\rSe elas existirem e estiverem funcionando, você também poderá reutilizar as credenciais de autenticação existentes de outras impressoras configuradas.\n \rObserve que contas de mídia social sem senha não são compatíveis com configuração em nuvem.",
+        "description": "A configuração via Bambu Cloud é mais simples e rápida. Contas de redes sociais sem senha não são suportadas.\n\rVocê também pode reutilizar credenciais de autenticação funcionais de outras impressoras. Se encontrados, eles serão listados pelo endereço de e-mail.\n\rOu você pode conectar-se fornecendo manualmente os detalhes da conexão local da impressora. Isso é necessário para uma impressora no modo Lan.",
         "data": {
           "printer_mode": "Modo de configuração da impressora:"
         }
@@ -595,7 +595,7 @@
     "configuration_type": {
       "options": {
         "bambu": "Nuvem de bambu",
-        "lan": "Conexão local"
+        "lan": "Modo LAN"
       }
     }
   }

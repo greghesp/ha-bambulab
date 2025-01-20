@@ -1,5 +1,13 @@
-### V2.0.40
+### V2.0.41
 - ???
+
+### V2.0.40
+- Allow phone numbers with the home assistant form complaining
+- Only do slicer setting retrieval on successful printer connection to reduce triggering cloudflare throttling.
+- Addition of Danish, Slovak and Portuguese
+- Add control for A1 prompt sound
+- Fix detection of reusable credentials
+- Addition of A1 specific "check nozzle" 'error' when loading a filament.
 
 ### V2.0.39
 - Removed unsupported wled blueprint
