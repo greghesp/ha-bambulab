@@ -118,8 +118,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if self.email != '':
             modes = [
-                SelectOptionDict(value=self.email, label=self.email),
                 SelectOptionDict(value="bambu", label=""),
+                SelectOptionDict(value=self.email, label=self.email),
                 SelectOptionDict(value="lan", label="")
             ]
         else:
@@ -474,8 +474,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if self.email != '':
             default_option = self.email
             modes = [
-                SelectOptionDict(value=self.email, label=self.email),
                 SelectOptionDict(value="bambu", label=""),
+                SelectOptionDict(value=self.email, label=self.email),
                 SelectOptionDict(value="lan", label="")
             ]
         else:
@@ -691,12 +691,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 data = dict(self.config_entry.data)
                 options = {
                     "region": self.config_entry.options.get('region', ''),
-                    "email": self.config_entry.options.get('email', ''),
-                    "username": self.config_entry.options.get('username', ''),
+                    "email": '',
+                    "username": '',
                     "name": self.config_entry.options.get('name', ''),
                     "host": user_input['host'],
                     "local_mqtt": True,
-                    "auth_token": self.config_entry.options.get('auth_token', ''),
+                    "auth_token": '',
                     "access_code": user_input['access_code'],
                     "usage_hours": float(user_input['usage_hours'])
                 }

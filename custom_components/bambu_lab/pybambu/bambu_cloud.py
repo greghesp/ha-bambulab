@@ -372,11 +372,8 @@ class BambuCloud:
         self._email = email
         self._username = username
         self._auth_token = auth_token
-        try:
-            self.get_device_list()
-        except:
-            return False
-        return True
+        result = self.get_device_list()
+        return False if result is None else True
 
     def login(self, region: str, email: str, password: str) -> str:
         self._region = region
@@ -583,7 +580,7 @@ class BambuCloud:
     def get_device_type_from_device_product_name(self, device_product_name: str):
         if device_product_name == "X1 Carbon":
             return "X1C"
-        return device_product_name.replace(" ", "")
+        return device_product_name.replace(" ", "").upper()
 
     def download(self, url: str) -> bytearray:
         LOGGER.debug(f"Downloading cover image: {url}")

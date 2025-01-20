@@ -32,7 +32,7 @@
     },
     "step": {
       "user": {
-        "description": "Am einfachsten ist die Konfiguration über Bambu Cloud. Sie können den Zugriff optional manuell nur für den lokalen Zugriff konfigurieren, dabei gehen jedoch einige Funktionen verloren – dies ist für Drucker erforderlich, die auf den Nur-LAN-Modus eingestellt sind.\n\rWenn sie vorhanden sind und funktionieren, können Sie auch vorhandene Authentifizierungsdaten von anderen konfigurierten Druckern wiederverwenden.\n \rBeachten Sie, dass Social-Media-Konten ohne Passwort die Cloud-Konfiguration nicht unterstützen.",
+        "description": "Die Konfiguration über Bambu Cloud ist am einfachsten und schnellsten. Social-Media-Konten ohne Passwort werden nicht unterstützt.\n\rSie können auch funktionierende Authentifizierungsdaten von anderen Druckern wiederverwenden. Wenn diese gefunden werden, werden sie nach der E-Mail-Adresse aufgelistet.\n\rAlternativ können Sie eine Verbindung herstellen, indem Sie die lokalen Verbindungsdetails des Druckers manuell angeben. Dies ist für einen Drucker im Lan-Modus erforderlich.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -585,6 +585,9 @@
       },
       "imagecamera": {
         "name": "Verwenden Sie eine Bildsensorkamera"
+      },
+      "prompt_sound": {
+        "name": "Aufforderungston zulassen"
       }
     }
   },
@@ -592,7 +595,7 @@
     "configuration_type": {
       "options": {
         "bambu": "BambuLab-Cloud",
-        "lan": "LAN-Mode (lokal)"
+        "lan": "LAN-Mode"
       }
     }
   }

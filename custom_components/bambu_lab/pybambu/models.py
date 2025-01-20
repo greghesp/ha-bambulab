@@ -37,6 +37,8 @@ from .const import (
 from .commands import (
     CHAMBER_LIGHT_ON,
     CHAMBER_LIGHT_OFF,
+    PROMPT_SOUND_ENABLE,
+    PROMPT_SOUND_DISABLE,
     SPEED_PROFILE_TEMPLATE,
 )
 
@@ -138,6 +140,8 @@ class Device:
             return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
         elif feature == Features.SET_TEMPERATURE:
             return self._supports_temperature_set()
+        elif feature == Features.PROMPT_SOUND:
+            return self.info.device_type == "A1" or self.info.device_type == "A1MINI"
 
         return False
     
@@ -470,8 +474,6 @@ class PrintJob:
         self.print_percentage = data.get("mc_percent", self.print_percentage)
         previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
-        if previous_gcode_state != self.gcode_state:
-            LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
             LOGGER.error(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
             self.gcode_state = "unknown"
@@ -642,8 +644,8 @@ class PrintJob:
                 if self._client._device.supports_feature(Features.START_TIME_GENERATED) and (status == 4):
                     # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                     # do so uniformly so we always have matched start/end times.
-
                     # "startTime": "2023-12-21T19:02:16Z"
+                    
                     cloud_time_str = self._task_data.get('startTime', "")
                     LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
                     if cloud_time_str != "":
@@ -662,7 +664,6 @@ class PrintJob:
                         local_dt = datetime.fromtimestamp(local_dt.timestamp())
                         self.end_time = local_dt
                         LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
-
 
 @dataclass
 class Info:
@@ -686,7 +687,7 @@ class Info:
         self._client = client
 
         self.serial = self._client._serial
-        self.device_type = self._client._device_type.upper()
+        self.device_type = self._client._device_type
         self.wifi_signal = 0
         self.hw_ver = "unknown"
         self.sw_ver = "unknown"
@@ -817,6 +818,13 @@ class Info:
     @property
     def has_bambu_cloud_connection(self) -> bool:
         return self._client.bambu_cloud.auth_token != ""
+    
+    def set_prompt_sound(self, enable: bool):
+        if enable:
+            self._client.publish(PROMPT_SOUND_ENABLE)
+        else:
+            self._client.publish(PROMPT_SOUND_DISABLE)
+       
 
 @dataclass
 class AMSInstance:
