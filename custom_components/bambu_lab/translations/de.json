@@ -168,7 +168,7 @@
         "name": "Druckvorgang beenden"
       },
       "refresh": {
-        "name": "Aktualisierung erzwingen"
+        "name": "Aktualisierung der Daten erzwingen"
       }
     },
     "fan": {

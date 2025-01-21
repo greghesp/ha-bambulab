@@ -168,7 +168,7 @@
         "name": "Stop printing"
       },
       "refresh": {
-        "name": "Force Refresh Data"
+        "name": "Force refresh data"
       }
     },
     "fan": {
