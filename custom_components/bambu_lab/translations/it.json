@@ -258,7 +258,7 @@
         },
         "state_attributes": {
           "modifier": {
-            "name": "Modificatrice"
+            "name": "Modificatore"
           }
         }
       },
@@ -299,7 +299,7 @@
           "paused_chamber_temperature_control_error": "In pausa a causa di un errore di controllo della temperatura della camera",
           "cooling_chamber": "Camera di raffreddamento",
           "paused_user_gcode": "In pausa dall'istruzione di pausa gcode aggiunta dall'utente",
-          "motor_noise_showoff": "Il rumore del motore si mette in mostra",
+          "motor_noise_showoff": "Ruomore motore in evidenza",
           "paused_nozzle_filament_covered_detected": "In pausa, rilevato ugello coperto di filamento",
           "paused_cutter_error": "In pausa a causa di un errore della taglierina",
           "paused_first_layer_error": "In pausa a causa di un errore del primo livello",
@@ -321,14 +321,14 @@
           "running": "Lavorando",
           "pause": "Pausa",
           "slicing": "Slicing",
-          "init": "Dentro"
+          "init": "Inizializzazione"
         }
       },
       "mqtt_mode": {
         "name": "Modalità di Connessione MQTT",
         "state": {
           "local": "Locale",
-          "bambu_cloud": "La nuvola di Bambu Lab"
+          "bambu_cloud": "Bambu Cloud"
         }
       },
       "gcode_file": {
@@ -337,7 +337,7 @@
       "print_bed_type": {
         "name": "Tipo Piano di Stampa",
         "state": {
-          "textured_plate": "Piatto Texutrizzato",
+          "textured_plate": "Piatto PEI Texturizzato",
           "cool_plate": "Piatto Freddo/Piatto PLA",
           "hot_plate": "Piatto PEI Liscia/Piatto Alte Temperature",
           "eng_plate": "Piatto d'Ingegneria"
@@ -596,7 +596,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "La nuvola di Bambu Lab",
+        "bambu": "Bambu Cloud",
         "lan": "Modalità Lan"
       }
     }
