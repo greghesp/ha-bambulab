@@ -19,6 +19,7 @@ PUSH_ALL = {"pushing": {"sequence_id": "0", "command": "pushall"}}
 START_PUSH = { "pushing": {"sequence_id": "0", "command": "start"}}
 
 SEND_GCODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "gcode_line", "param": ""}} # param = GCODE_EACH_LINE_SEPARATED_BY_\n
+PRINT_GCODE_FILE_TEMPLATE = {"print": {"sequence_id": "0", "command": "gcode_file", "param": ""}}
 
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}

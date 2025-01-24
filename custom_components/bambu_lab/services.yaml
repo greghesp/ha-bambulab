@@ -9,3 +9,15 @@ send_command:
       example: "M104 S200"
       selector:
         text:
+
+print_gcode_file:
+  name: Print gcode file
+  description: Print gcode file by providing absolute path from SD card
+  fields:
+    filepath:
+      name: File path
+      description: Absolute file path on SD card
+      required: true
+      example: "models/3D_Benchy.gcode"
+      selector:
+        text:
