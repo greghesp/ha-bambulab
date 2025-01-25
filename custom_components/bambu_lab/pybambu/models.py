@@ -158,6 +158,16 @@ class Device:
         else:
             return self.external_spool
 
+    @property
+    def is_external_spool_active(self) -> bool:
+        if self.supports_feature(Features.AMS):
+            if self.ams.tray_now == 254:
+                return True
+        else:
+            return True
+        return False
+
+
 @dataclass
 class Lights:
     """Return all light related info"""
@@ -415,19 +425,29 @@ class PrintJob:
     _ams_print_lengths: float
 
     @property
-    def get_ams_print_weights(self) -> float:
+    def get_print_weights(self) -> dict:
         values = {}
-        for i in range(16):
-            if self._ams_print_weights[i] != 0:
-                values[f"AMS Slot {i+1}"] = self._ams_print_weights[i]
+        if self._client._device.is_external_spool_active:
+            values["External Spool"] = self.print_weight
+        else:
+            for i in range(16):
+                if self._ams_print_weights[i] != 0:
+                    ams_index = (i // 4) + 1
+                    ams_tray = (i % 4) + 1
+                    values[f"AMS {ams_index} Tray {ams_tray}"] = self._ams_print_weights[i]
         return values
 
     @property
-    def get_ams_print_lengths(self) -> float:
+    def get_print_lengths(self) -> dict:
         values = {}
-        for i in range(16):
-            if self._ams_print_lengths[i] != 0:
-                values[f"AMS Slot {i+1}"] = self._ams_print_lengths[i]
+        if self._client._device.is_external_spool_active:
+            values["External Spool"] = self.print_length
+        else:
+            for i in range(16):
+                if self._ams_print_lengths[i] != 0:
+                    ams_index = (i // 4) + 1
+                    ams_tray = (i % 4) + 1
+                    values[f"AMS {ams_index} Tray {ams_tray}"] = self._ams_print_lengths[i]
         return values
 
     def __init__(self, client):
