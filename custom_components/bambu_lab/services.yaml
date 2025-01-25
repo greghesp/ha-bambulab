@@ -11,8 +11,8 @@ send_command:
         text:
 
 print_project_file:
-  name: Print sliced 3MF file
-  description: Print 3MF file stored on the SD card
+  name: Print 3MF project file
+  description: Print sliced 3MF file stored on the SD card
   fields:
     filepath:
       name: File path
@@ -24,8 +24,7 @@ print_project_file:
     plate:
       name: Plate number
       description: Plate number to print
-      required: false
-      example: "filename.3mf"
+      required: true
       default: 1
       selector:
         number:
