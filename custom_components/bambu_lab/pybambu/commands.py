@@ -19,6 +19,26 @@ PUSH_ALL = {"pushing": {"sequence_id": "0", "command": "pushall"}}
 START_PUSH = { "pushing": {"sequence_id": "0", "command": "start"}}
 
 SEND_GCODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "gcode_line", "param": ""}} # param = GCODE_EACH_LINE_SEPARATED_BY_\n
+PRINT_PROJECT_FILE_TEMPLATE = {
+                "print": {
+                    "sequence_id": 0,
+                    "command": "project_file",
+                    "param": "", # param = f"Metadata/plate_1.gcode"
+                    "url": "", # url = f"ftp://{file}"
+                    "subtask_name": "",
+                    "bed_type": "auto",
+                    "timelapse": False,
+                    "bed_leveling": True,
+                    "flow_cali": False,
+                    "vibration_cali": True,
+                    "layer_inspect": False,
+                    "use_ams": False,
+                    "profile_id": "0",
+                    "project_id": "0",
+                    "subtask_id": "0",
+                    "task_id": "0",
+                }
+            }
 
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}
