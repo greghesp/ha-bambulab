@@ -6,7 +6,7 @@ from homeassistant.helpers import entity_platform
 from .const import DOMAIN, LOGGER, PLATFORMS
 from .coordinator import BambuDataUpdateCoordinator
 from .config_flow import CONFIG_VERSION
-from .pybambu.commands import SEND_GCODE_TEMPLATE, PRINT_GCODE_FILE_TEMPLATE
+from .pybambu.commands import SEND_GCODE_TEMPLATE, PRINT_PROJECT_FILE_TEMPLATE
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
@@ -30,17 +30,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         send_command    # Handler function
     )
 
-    async def print_gcode_file(call: ServiceCall):
+    async def print_project_file(call: ServiceCall):
         """Handle the service call."""
-        command = PRINT_GCODE_FILE_TEMPLATE
-        command['print']['param'] = call.data.get("filepath")
+        command = PRINT_PROJECT_FILE_TEMPLATE
+        file = call.data.get("filepath")
+        plate = call.data.get("plate")
+
+        command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
+        command["print"]["url"] = f"ftp://{file}"
+
         coordinator.client.publish(command)
 
     # Register the service with Home Assistant
     hass.services.async_register(
         DOMAIN,
-        "print_gcode_file",  # Service name
-        print_gcode_file  # Handler function
+        "print_project_file",  # Service name
+        print_project_file  # Handler function
     )
 
     # Set up all platforms for this device/entry.
