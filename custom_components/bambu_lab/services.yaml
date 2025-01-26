@@ -28,4 +28,6 @@ print_project_file:
       default: 1
       selector:
         number:
+          mode: box
           min: 1
+          max: 100
