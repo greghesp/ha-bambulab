@@ -9,3 +9,25 @@ send_command:
       example: "M104 S200"
       selector:
         text:
+
+print_project_file:
+  name: Print 3MF project file
+  description: Print sliced 3MF file stored on the SD card
+  fields:
+    filepath:
+      name: File path
+      description: Filename on SD card
+      required: true
+      example: "filename.3mf"
+      selector:
+        text:
+    plate:
+      name: Plate number
+      description: Plate number to print
+      required: true
+      default: 1
+      selector:
+        number:
+          mode: box
+          min: 1
+          max: 100
