@@ -86,7 +86,7 @@ class ChamberImageThread(threading.Thread):
 
         username = 'bblp'
         access_code = self._client._access_code
-        hostname = self._client.host
+        hostname = self._client._device.info.ip_address
         port = 6000
         MAX_CONNECT_ATTEMPTS = 12
         connect_attempts = 0
@@ -354,9 +354,9 @@ class BambuClient:
     def set_camera_enabled(self, enable):
         self._enable_camera = enable
         if self._enable_camera:
-            self._start_camera()
+            self.start_camera()
         else:
-            self._stop_camera()
+            self.stop_camera()
 
     def setup_tls(self):
         # Some people got this error with this change so disabled for now:
@@ -415,17 +415,18 @@ class BambuClient:
         LOGGER.info("On Connect: Connected to printer")
         self._on_connect()
 
-    def _start_camera(self):
+    def start_camera(self):
         if not self._device.supports_feature(Features.CAMERA_RTSP):
             if self._device.supports_feature(Features.CAMERA_IMAGE):
                 if self._enable_camera:
-                    LOGGER.debug("Starting Chamber Image thread")
-                    self._camera = ChamberImageThread(self)
-                    self._camera.start()
-            elif (self.host == "") or (self._access_code == ""):
-                LOGGER.debug("Skipping camera setup as local access details not provided.")
+                    if self._access_code != "":
+                        LOGGER.debug("Starting Chamber Image thread")
+                        self._camera = ChamberImageThread(self)
+                        self._camera.start()
+                    else:
+                        LOGGER.debug("Skipping camera setup as local access details not provided.")
 
-    def _stop_camera(self):
+    def stop_camera(self):
         if self._camera is not None:
             LOGGER.debug("Stopping camera thread")
             self._camera.stop()
@@ -438,8 +439,6 @@ class BambuClient:
         LOGGER.debug("Starting watchdog thread")
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
-
-        self._start_camera()
 
     def try_on_connect(self,
                        client_: mqtt.Client,
@@ -475,7 +474,7 @@ class BambuClient:
             LOGGER.debug("Stopping watchdog thread")
             self._watchdog.stop()
             self._watchdog.join()
-        self._stop_camera()
+        self.stop_camera()
 
     def _on_watchdog_fired(self):
         LOGGER.info("Watch dog fired")

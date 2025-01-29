@@ -131,7 +131,7 @@ class Device:
         elif feature == Features.CAMERA_RTSP:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
         elif feature == Features.CAMERA_IMAGE:
-            return (self._client.host != "") and (self._client._access_code != "") and (self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI")
+            return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
         elif feature == Features.DOOR_SENSOR:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
         elif feature == Features.MANUAL_MODE:
@@ -798,7 +798,12 @@ class Info:
         for net in info:
             ip_int = net.get("ip", 0)
             if net.get("ip", 0) != 0:
+                prev_ip_address = self._ip_address
                 self._ip_address = get_ip_address_from_int(ip_int)
+                if self._ip_address != prev_ip_address:
+                    # IP address was retrieved from the initial mqtt payload or has changed.
+                    self._client.stop_camera()
+                    self._client.start_camera()                    
                 break
 
         # Version data is provided differently for X1 and P1
