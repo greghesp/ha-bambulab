@@ -362,3 +362,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             options=options)
         # Force reload of sensors.
         return await self.hass.config_entries.async_reload(self._entry.entry_id)
+
+    @property
+    def ftp_enabled(self):
+        options = dict(self.config_entry.options)
+        return options.get('enable_ftp', False)
+
+    async def set_ftp_enabled(self, enable):
+        LOGGER.debug(f"Setting FTP enabled to {enable}")
+        options = dict(self.config_entry.options)
+        options['enable_ftp'] = enable
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            title=self.get_model().info.serial,
+            data=self.config_entry.data,
+            options=options)
+        # Force reload of sensors.
+        return await self.hass.config_entries.async_reload(self._entry.entry_id)

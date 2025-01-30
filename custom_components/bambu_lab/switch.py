@@ -45,6 +45,13 @@ CAMERA_IMAGE_SENSOR_DESCRIPION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
+FTP_SWITCH_DESCRIPTION = SwitchEntityDescription(
+    key="ftp",
+    icon="mdi:folder-network",
+    translation_key="ftp",
+    entity_category=EntityCategory.CONFIG,
+)
+
 async def async_setup_entry(
         hass: HomeAssistant,
         entry: ConfigEntry,
@@ -64,6 +71,9 @@ async def async_setup_entry(
 
     if coordinator.get_model().supports_feature(Features.PROMPT_SOUND):
         async_add_entities([BambuLabPromptSoundSwitch(coordinator, entry)])
+
+    if coordinator.get_model().supports_feature(Features.FTP):
+        async_add_entities([BambuLabFtpSwitch(coordinator, entry)])
 
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
@@ -178,6 +188,39 @@ class BambuLabCameraImageSwitch(BambuLabSwitch):
         """Disable the camera."""
         self._attr_is_on = False
         await self.coordinator.set_camera_as_image_sensor(self._attr_is_on)
+
+
+class BambuLabFtpSwitch(BambuLabSwitch):
+    """BambuLab FTP Switch"""
+
+    entity_description = FTP_SWITCH_DESCRIPTION
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            config_entry: ConfigEntry
+    ) -> None:
+        super().__init__(coordinator, config_entry)
+        self._attr_is_on = self.coordinator.ftp_enabled
+
+    @property
+    def available(self) -> bool:
+        return self.coordinator.get_model().info.mqtt_mode == "local"
+
+    @property
+    def icon(self) -> str:
+        """Return the icon for the switch."""
+        return "mdi:folder-network" if self.is_on else "mdi:folder-hidden"
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Enable FTP."""
+        self._attr_is_on = True
+        await self.coordinator.set_ftp_enabled(self._attr_is_on)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Disable FTP."""
+        self._attr_is_on = False
+        await self.coordinator.set_ftp_enabled(self._attr_is_on)
 
 
 class BambuLabPromptSoundSwitch(BambuLabSwitch):

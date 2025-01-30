@@ -30,6 +30,7 @@ class Features(Enum):
     AMS_FILAMENT_REMAINING = 18,
     SET_TEMPERATURE = 19,
     PROMPT_SOUND = 20,
+    FTP = 21,
 
 
 class FansEnum(Enum):

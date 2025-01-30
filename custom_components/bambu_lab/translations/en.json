@@ -588,6 +588,9 @@
       "imagecamera": {
         "name": "Use image sensor camera"
       },
+      "ftp": {
+        "name": "Use FTP"
+      },
       "prompt_sound": {
         "name": "Allow Prompt Sound"
       }
