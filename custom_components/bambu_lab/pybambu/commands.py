@@ -23,16 +23,19 @@ PRINT_PROJECT_FILE_TEMPLATE = {
                 "print": {
                     "sequence_id": 0,
                     "command": "project_file",
+
                     "param": "", # param = f"Metadata/plate_1.gcode"
                     "url": "", # url = f"ftp://{file}"
-                    "subtask_name": "",
                     "bed_type": "auto",
                     "timelapse": False,
                     "bed_leveling": True,
-                    "flow_cali": False,
+                    "flow_cali": True,
                     "vibration_cali": True,
-                    "layer_inspect": False,
+                    "layer_inspect": True,
                     "use_ams": False,
+                    "ams_mapping": [0],
+
+                    "subtask_name": "",
                     "profile_id": "0",
                     "project_id": "0",
                     "subtask_id": "0",

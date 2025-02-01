@@ -35,9 +35,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         command = PRINT_PROJECT_FILE_TEMPLATE
         file = call.data.get("filepath")
         plate = call.data.get("plate")
+        timelapse = call.data.get("timelapse")
+        bed_leveling = call.data.get("bed_leveling")
+        flow_cali = call.data.get("flow_cali")
+        vibration_cali = call.data.get("vibration_cali")
+        layer_inspect = call.data.get("layer_inspect")
+        use_ams = call.data.get("use_ams")
+        ams_mapping = call.data.get("ams_mapping")
 
         command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
         command["print"]["url"] = f"ftp://{file}"
+        command["print"]["timelapse"] = timelapse
+        command["print"]["bed_leveling"] = bed_leveling
+        command["print"]["flow_cali"] = flow_cali
+        command["print"]["vibration_cali"] = vibration_cali
+        command["print"]["layer_inspect"] = layer_inspect
+        command["print"]["use_ams"] = use_ams
+        command["print"]["ams_mapping"] = ams_mapping
 
         coordinator.client.publish(command)
 
