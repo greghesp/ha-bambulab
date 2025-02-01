@@ -703,13 +703,13 @@ class PrintJob:
                     path_contents = ftp.nlst(f"{search_path}")
                     if self.gcode_file in path_contents:
                         model_path = f"{search_path}/{self.gcode_file}"
-                        print(f"Found model {model_path}")
+                        LOGGER.debug(f"Found model {model_path}")
                         break;
                 except:
                     pass
 
             if model_path is None:
-                print(f"Model {self.gcode_file} count not be found in any known directories")
+                LOGGER.debug(f"Model {self.gcode_file} count not be found in any known directories")
                 return
 
             # Create a temporary file we can download the 3mf into

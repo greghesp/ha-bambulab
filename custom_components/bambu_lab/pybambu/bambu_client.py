@@ -318,7 +318,6 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
                                             session=session)
         return conn, size
 
-
 @dataclass
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
