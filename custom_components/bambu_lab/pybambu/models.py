@@ -696,10 +696,26 @@ class PrintJob:
             # Open the FTP connection
             ftp = self._client.ftp_connection()
 
+            # Attempt to find the model in one of many known directories
+            model_path = None
+            for search_path in ['/', '/cache', '/models', '/sdcard']:
+                try:
+                    path_contents = ftp.nlst(f"{search_path}")
+                    if self.gcode_file in path_contents:
+                        model_path = f"{search_path}/{self.gcode_file}"
+                        print(f"Found model {model_path}")
+                        break;
+                except:
+                    pass
+
+            if model_path is None:
+                print(f"Model {self.gcode_file} count not be found in any known directories")
+                return
+
             # Create a temporary file we can download the 3mf into
             with tempfile.NamedTemporaryFile(delete=True) as f:
                 # Fetch the 3mf from FTP and close the connection
-                ftp.retrbinary(f'RETR {self.gcode_file}', f.write)
+                ftp.retrbinary(f'RETR {model_path}', f.write)
                 f.flush()
                 ftp.quit()
 
