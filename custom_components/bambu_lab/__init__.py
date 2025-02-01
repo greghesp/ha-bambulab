@@ -51,7 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         command["print"]["vibration_cali"] = vibration_cali
         command["print"]["layer_inspect"] = layer_inspect
         command["print"]["use_ams"] = use_ams
-        command["print"]["ams_mapping"] = ams_mapping
+        command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
 
         coordinator.client.publish(command)
 

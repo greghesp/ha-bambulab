@@ -76,8 +76,8 @@ print_project_file:
     ams_mapping:
       name: AMS Slots Mapping
       description: https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738
-      default: "[0]"
-      example: "[2,-1,0]"
+      default: "0"
+      example: "2,-1,0"
       required: true
       selector:
         text:
