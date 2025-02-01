@@ -4,6 +4,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from dateutil import parser, tz
 from packaging import version
+from zipfile import ZipFile
+import tempfile
+import xml.etree.ElementTree as ElementTree
 
 from .utils import (
     search,
@@ -143,6 +146,8 @@ class Device:
             return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
             return self.info.device_type == "A1" or self.info.device_type == "A1MINI"
+        elif feature == Features.FTP:
+            return True
 
         return False
     
@@ -685,6 +690,91 @@ class PrintJob:
                         local_dt = datetime.fromtimestamp(local_dt.timestamp())
                         self.end_time = local_dt
                         LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
+        elif self._client.ftp_enabled and self.gcode_file.endswith('3mf'):
+            LOGGER.debug(f"Updating task data via FTP")
+
+            # Open the FTP connection
+            ftp = self._client.ftp_connection()
+
+            # Attempt to find the model in one of many known directories
+            model_path = None
+            for search_path in ['/', '/cache', '/models', '/sdcard']:
+                try:
+                    path_contents = ftp.nlst(f"{search_path}")
+                    if self.gcode_file in path_contents:
+                        model_path = f"{search_path}/{self.gcode_file}"
+                        LOGGER.debug(f"Found model {model_path}")
+                        break;
+                except:
+                    pass
+
+            if model_path is None:
+                LOGGER.debug(f"Model {self.gcode_file} count not be found in any known directories")
+                return
+
+            # Create a temporary file we can download the 3mf into
+            with tempfile.NamedTemporaryFile(delete=True) as f:
+                # Fetch the 3mf from FTP and close the connection
+                ftp.retrbinary(f'RETR {model_path}', f.write)
+                f.flush()
+                ftp.quit()
+
+                # Open the 3mf zip archive
+                with ZipFile(f) as archive:
+                    # Extract the slicer XML config and parse the plate tree
+                    plate = ElementTree.fromstring(archive.read('Metadata/slice_info.config')).find('plate')
+                    
+                    # Iterate through each config element and extract the data
+                    # Example contents:
+                    # {'key': 'index', 'value': '2'}
+                    # {'key': 'printer_model_id', 'value': 'C12'}
+                    # {'key': 'nozzle_diameters', 'value': '0.4'}
+                    # {'key': 'timelapse_type', 'value': '0'}
+                    # {'key': 'prediction', 'value': '5935'}
+                    # {'key': 'weight', 'value': '20.91'}
+                    # {'key': 'outside', 'value': 'false'}
+                    # {'key': 'support_used', 'value': 'false'}
+                    # {'key': 'label_object_enabled', 'value': 'true'}
+                    # {'identify_id': '123', 'name': 'ModelObjectOne.stl', 'skipped': 'false'}
+                    # {'identify_id': '394', 'name': 'ModelObjectTwo.stl', 'skipped': 'false'}
+                    # {'id': '1', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#000000', 'used_m': '5.45', 'used_g': '17.32'}
+                    # {'id': '2', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#8D8C8F', 'used_m': '0.84', 'used_g': '2.66'}
+                    # {'id': '3', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#FFFFFF', 'used_m': '0.29', 'used_g': '0.93'}
+                    
+                    # Start a total print length count to be compiled from each filament
+                    print_length = 0
+                    for metadata in plate:
+                        if (metadata.get('key') == 'index'):
+                            # Index is the plate number being printed
+                            plate = metadata.get('value')
+                            LOGGER.debug(f"Plate: {plate}")
+                            
+                            # Now we have the plate number, extract the cover image from the archive
+                            self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate}.png"))
+                            LOGGER.debug(f"Cover image: Metadata/plate_{plate}.png")
+                        elif (metadata.get('key') == 'weight'):
+                            LOGGER.debug(f"Weight: {metadata.get('value')}")
+                            self.print_weight = metadata.get('value')
+                        elif (metadata.get('key') == 'prediction'):
+                            # Estimated print length in seconds
+                            LOGGER.debug(f"Print time: {metadata.get('value')}s")
+                        elif (metadata.tag == 'filament'):
+                            # Filament used for the current print job. The plate info does not distinguish
+                            # between AMS and External Spool, both AMS Tray 1 and External Spool have
+                            # an ID of 1
+                            LOGGER.debug(f"AMS Tray {metadata.get('id')}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
+                            
+                            # Print weights and lengths expect zero-indexed allocation, reduce the ID by 1
+                            ams_index = int(metadata.get('id')) - 1
+                            self._ams_print_weights[ams_index] = metadata.get('used_g')
+                            self._ams_print_lengths[ams_index] = metadata.get('used_m')
+                            
+                            # Increase the total print length
+                            print_length += float(metadata.get('used_m'))
+                    
+                    self.print_length = print_length
+
+                archive.close()
 
 @dataclass
 class Info:
@@ -1406,7 +1496,7 @@ class ChamberImage:
     
 @dataclass
 class CoverImage:
-    """Returns the cover image from the Bambu API"""
+    """Returns the cover image from the Bambu API or FTP"""
 
     def __init__(self, client):
         self._client = client

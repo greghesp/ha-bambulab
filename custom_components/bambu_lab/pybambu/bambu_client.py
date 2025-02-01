@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import ftplib
 import json
 import math
 import os
@@ -9,8 +10,11 @@ import re
 import socket
 import ssl
 import struct
+import tempfile
 import threading
 import time
+from zipfile import ZipFile
+import xml.etree.ElementTree as ElementTree
 
 from dataclasses import dataclass
 from typing import Any
@@ -278,6 +282,41 @@ class MqttThread(threading.Thread):
 
         LOGGER.info("MQTT listener thread exited.")
 
+class ImplicitFTP_TLS(ftplib.FTP_TLS):
+    """
+    FTP_TLS subclass that automatically wraps sockets in SSL to support implicit FTPS.
+    see https://stackoverflow.com/a/36049814
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._sock = None
+
+    @property
+    def sock(self):
+        """Return the socket."""
+        return self._sock
+
+    @sock.setter
+    def sock(self, value):
+        """When modifying the socket, ensure that it is ssl wrapped."""
+        if value is not None and not isinstance(value, ssl.SSLSocket):
+            value = self.context.wrap_socket(value)
+        self._sock = value
+
+    """
+    Increases relability with some printers
+    Courtesy @WolfwithSword
+    """
+    def ntransfercmd(self, cmd, rest=None):
+        conn, size = ftplib.FTP.ntransfercmd(self, cmd, rest)
+        if self._prot_p:
+            session = self.sock.session
+            if isinstance(self.sock, ssl.SSLSocket):
+                    session = self.sock.session
+            conn = self.context.wrap_socket(conn,
+                                            server_hostname=self.host,
+                                            session=session)
+        return conn, size
 
 @dataclass
 class BambuClient:
@@ -299,6 +338,7 @@ class BambuClient:
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
+        self._enable_ftp = config.get('enable_ftp', False)
 
         self._connected = False
         self._port = 1883
@@ -357,6 +397,13 @@ class BambuClient:
             self.start_camera()
         else:
             self.stop_camera()
+
+    @property
+    def ftp_enabled(self):
+        return self._enable_ftp
+
+    def set_ftp_enabled(self, enable):
+        self._enable_ftp = enable
 
     def setup_tls(self):
         # Some people got this error with this change so disabled for now:
@@ -565,6 +612,15 @@ class BambuClient:
         if self.client is not None:
             self.client.disconnect()
             self.client = None
+
+
+    def ftp_connection(self) -> ImplicitFTP_TLS | None:
+        if self.ftp_enabled:
+            ftp = ImplicitFTP_TLS()
+            ftp.connect(host=self.host, port=990, timeout=5)
+            ftp.login(user='bblp', passwd=self._access_code)
+            ftp.prot_p()
+            return ftp
 
     async def try_connection(self):
         """Test if we can connect to an MQTT broker."""

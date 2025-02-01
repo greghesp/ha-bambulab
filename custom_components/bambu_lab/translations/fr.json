@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "Autoriser le son d'invite"
+      },
+      "ftp": {
+        "name": "Utilisez FTP"
       }
     }
   },
