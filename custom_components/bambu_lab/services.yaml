@@ -31,3 +31,53 @@ print_project_file:
           mode: box
           min: 1
           max: 100
+    timelapse:
+      name: Timelapse
+      description: Record timelapse of the print
+      default: false
+      required: true
+      selector:
+        boolean:
+    bed_leveling:
+      name: Bed Leveling
+      description: Perform bed leveling before print
+      default: true
+      required: true
+      selector:
+        boolean:
+    flow_cali:
+      name: Flow Calibration
+      description: Perform flow calibration before print
+      default: true
+      required: true
+      selector:
+        boolean:
+    vibration_cali:
+      name: Vibration Calibration
+      description: Perform vibration calibration (aka XY Mech Sweep) before print
+      default: true
+      required: true
+      selector:
+        boolean:
+    layer_inspect:
+      name: First Layer Inspection
+      description: Perform first layer inspection during print
+      default: true
+      required: true
+      selector:
+        boolean:
+    use_ams:
+      name: Use AMS
+      description: Use AMS for print. Uses external spool otherwise
+      default: false
+      required: true
+      selector:
+        boolean:
+    ams_mapping:
+      name: AMS Slots Mapping
+      description: https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738
+      default: "0"
+      example: "2,-1,0"
+      required: true
+      selector:
+        text:
