@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "允许提示音"
+      },
+      "ftp": {
+        "name": "使用FTP"
       }
     }
   },

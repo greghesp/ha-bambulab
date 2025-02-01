@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "Permitir som de aviso"
+      },
+      "ftp": {
+        "name": "Use FTP"
       }
     }
   },

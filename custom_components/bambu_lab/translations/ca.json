@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "Permet el so ràpid"
+      },
+      "ftp": {
+        "name": "Utilitzeu FTP"
       }
     }
   },

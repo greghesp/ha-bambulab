@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "Tillad promptlyd"
+      },
+      "ftp": {
+        "name": "Brug FTP"
       }
     }
   },

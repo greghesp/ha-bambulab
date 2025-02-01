@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "Povoliť zvuk výzvy"
+      },
+      "ftp": {
+        "name": "Použite FTP"
       }
     }
   },

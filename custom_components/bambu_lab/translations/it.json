@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "Consenti suono rapido"
+      },
+      "ftp": {
+        "name": "Usa FTP"
       }
     }
   },

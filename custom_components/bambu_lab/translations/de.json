@@ -590,6 +590,9 @@
       },
       "prompt_sound": {
         "name": "Aufforderungston zulassen"
+      },
+      "ftp": {
+        "name": "Verwenden Sie FTP"
       }
     }
   },
