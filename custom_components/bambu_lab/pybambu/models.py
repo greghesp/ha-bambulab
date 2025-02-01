@@ -432,6 +432,7 @@ class PrintJob:
     print_length: int
     print_bed_type: str
     print_type: str
+    printable_objects: dict
     _ams_print_weights: float
     _ams_print_lengths: float
 
@@ -480,6 +481,7 @@ class PrintJob:
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
         self.print_type = ""
+        self.printable_objects = {}
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
