@@ -303,6 +303,21 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
             value = self.context.wrap_socket(value)
         self._sock = value
 
+    """
+    Increases relability with some printers
+    Courtesy @WolfwithSword
+    """
+    def ntransfercmd(self, cmd, rest=None):
+        conn, size = ftplib.FTP.ntransfercmd(self, cmd, rest)
+        if self._prot_p:
+            session = self.sock.session
+            if isinstance(self.sock, ssl.SSLSocket):
+                    session = self.sock.session
+            conn = self.context.wrap_socket(conn,
+                                            server_hostname=self.host,
+                                            session=session)
+        return conn, size
+
 
 @dataclass
 class BambuClient:
