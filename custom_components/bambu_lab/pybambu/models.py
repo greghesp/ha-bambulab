@@ -658,15 +658,23 @@ class PrintJob:
                 match = re.match(pattern_with_time_no_year, line)
                 if match:
                     timestamp_str, filename = match.groups()
-                    timestamp = datetime.strptime(timestamp_str, '%b %d %H:%M')
-                    timestamp = timestamp.replace(year=datetime.now().year)
-                    return timestamp, filename
+                    if filename.endswith('.3mf'):
+                        timestamp = datetime.strptime(timestamp_str, '%b %d %H:%M')
+                        timestamp = timestamp.replace(year=datetime.now().year)
+                        if timestamp > datetime.now():
+                            timestamp = timestamp.replace(year=datetime.now().year - 1)
+                        return timestamp, filename
+                    else:
+                        return None
 
                 match = re.match(pattern_without_time_just_year, line)
                 if match:
                     timestamp_str, filename = match.groups()
-                    timestamp = datetime.strptime(timestamp_str, '%b %d %Y')
-                    return timestamp, filename
+                    if filename.endswith('.3mf'):
+                        timestamp = datetime.strptime(timestamp_str, '%b %d %Y')
+                        return timestamp, filename
+                    else:
+                        return None
                 
                 LOGGER.debug(f"UNEXPECTED LIST LINE FORMAT: '{line}'")
                 return None
