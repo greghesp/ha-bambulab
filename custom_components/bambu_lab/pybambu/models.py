@@ -829,15 +829,16 @@ class PrintJob:
                 
                 # Start a total print length count to be compiled from each filament
                 print_length = 0
+                plate_number = None
                 for metadata in plate:
                     if (metadata.get('key') == 'index'):
                         # Index is the plate number being printed
-                        plate = metadata.get('value')
-                        LOGGER.debug(f"Plate: {plate}")
+                        plate_number = metadata.get('value')
+                        LOGGER.debug(f"Plate: {plate_number}")
                         
                         # Now we have the plate number, extract the cover image from the archive
-                        self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate}.png"))
-                        LOGGER.debug(f"Cover image: Metadata/plate_{plate}.png")
+                        self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate_number}.png"))
+                        LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
                     elif (metadata.get('key') == 'weight'):
                         LOGGER.debug(f"Weight: {metadata.get('value')}")
                         self.print_weight = metadata.get('value')
