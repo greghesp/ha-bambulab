@@ -592,7 +592,7 @@
         "name": "Permitir som de aviso"
       },
       "ftp": {
-        "name": "Use FTP"
+        "name": "Carregar dados do modelo de impressora"
       }
     }
   },

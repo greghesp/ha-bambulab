@@ -589,7 +589,7 @@
         "name": "Use image sensor camera"
       },
       "ftp": {
-        "name": "Use FTP"
+        "name": "Load model data from printer"
       },
       "prompt_sound": {
         "name": "Allow Prompt Sound"

@@ -592,7 +592,7 @@
         "name": "Consenti suono rapido"
       },
       "ftp": {
-        "name": "Usa FTP"
+        "name": "Carica i dati del modello dalla stampante"
       }
     }
   },

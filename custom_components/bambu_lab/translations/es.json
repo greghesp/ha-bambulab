@@ -592,7 +592,7 @@
         "name": "Permitir sonido rápido"
       },
       "ftp": {
-        "name": "Usar FTP"
+        "name": "Cargar datos del modelo de la impresora"
       }
     }
   },

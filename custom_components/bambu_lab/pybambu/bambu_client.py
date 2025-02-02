@@ -312,7 +312,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
         if self._prot_p:
             session = self.sock.session
             if isinstance(self.sock, ssl.SSLSocket):
-                    session = self.sock.session
+                session = self.sock.session
             conn = self.context.wrap_socket(conn,
                                             server_hostname=self.host,
                                             session=session)
@@ -338,7 +338,7 @@ class BambuClient:
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
-        self._enable_ftp = config.get('enable_ftp', False)
+        self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
 
         self._connected = False
         self._port = 1883
@@ -617,7 +617,7 @@ class BambuClient:
     def ftp_connection(self) -> ImplicitFTP_TLS | None:
         if self.ftp_enabled:
             ftp = ImplicitFTP_TLS()
-            ftp.connect(host=self.host, port=990, timeout=5)
+            ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
             ftp.login(user='bblp', passwd=self._access_code)
             ftp.prot_p()
             return ftp
