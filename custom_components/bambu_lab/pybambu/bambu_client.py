@@ -324,10 +324,12 @@ class BambuClient:
     _watchdog = None
     _camera = None
     _usage_hours: float
+    _test_mode = bool
 
     def __init__(self, config):
         self.host = config['host']
         self._callback = None
+        self._test_mode = False
 
         self._access_code = config.get('access_code', '')
         self._auth_token = config.get('auth_token', '')
@@ -444,9 +446,6 @@ class BambuClient:
         self._mqtt = MqttThread(self)
         self._mqtt.start()
 
-        # Start camera if enabled
-        self.start_camera()
-
     def subscribe_and_request_info(self):
         LOGGER.debug("Now subscribing...")
         self.subscribe()
@@ -468,7 +467,7 @@ class BambuClient:
     def start_camera(self):
         if not self._device.supports_feature(Features.CAMERA_RTSP):
             if self._device.supports_feature(Features.CAMERA_IMAGE):
-                if self._enable_camera:
+                if self._enable_camera and not self._test_mode:
                     if self._access_code != "":
                         LOGGER.debug("Starting Chamber Image thread")
                         self._camera = ChamberImageThread(self)
@@ -490,6 +489,9 @@ class BambuClient:
         LOGGER.debug("Starting watchdog thread")
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
+
+        # Start camera if enabled
+        self.start_camera()
 
     def try_on_connect(self,
                        client_: mqtt.Client,
@@ -642,6 +644,7 @@ class BambuClient:
                 self._device.print_update(data=json_data.get("print"))
                 result.put(True)
 
+        self._test_mode = True
         self.client = mqtt.Client()
         self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
