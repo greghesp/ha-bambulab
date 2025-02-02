@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import ftplib
+import functools
 import json
 import math
 import os
@@ -109,7 +110,7 @@ class ChamberImageThread(threading.Thread):
         for i in range(0, 32 - len(access_code)):
             auth_data += struct.pack("<x")
 
-        ctx = self._client.create_local_ssl_context()
+        ctx = create_local_ssl_context()
 
         jpeg_start = bytearray([0xff, 0xd8, 0xff, 0xe0])
         jpeg_end = bytearray([0xff, 0xd9])
@@ -433,20 +434,9 @@ class BambuClient:
     def set_timelapse_enabled(self, enable):
         self._enable_timelapse = enable
 
-    def create_local_ssl_context(self):
-        """This context validates the certificate for TLS connections to local printers."""
-        script_path = os.path.abspath(__file__)
-        directory_path = os.path.dirname(script_path)
-        certfile = directory_path + "/bambu.cert"
-        context = ssl.create_default_context(cafile=certfile)
-        # https://docs.python.org/3/library/ssl.html#ssl.create_default_context
-        # Ignore "CA cert does not include key usage extension" since python 3.13
-        context.verify_flags &= ~ssl.VERIFY_X509_STRICT
-        return context
-
     def setup_tls(self):
         if self._local_mqtt:
-            self.client.tls_set_context(self.create_local_ssl_context())
+            self.client.tls_set_context(create_local_ssl_context())
         else:
             self.client.tls_set()
 
@@ -656,7 +646,7 @@ class BambuClient:
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS:
-        ftp = ImplicitFTP_TLS(server_name=self._serial, context=self.create_local_ssl_context())
+        ftp = ImplicitFTP_TLS(server_name=self._serial, context=create_local_ssl_context())
         ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
         ftp.login(user='bblp', passwd=self._access_code)
         ftp.prot_p()
@@ -731,3 +721,15 @@ class BambuClient:
             _exc_info: Exec type.
         """
         self.disconnect()
+
+@functools.lru_cache(maxsize=1)
+def create_local_ssl_context():
+    """This context validates the certificate for TLS connections to local printers."""
+    script_path = os.path.abspath(__file__)
+    directory_path = os.path.dirname(script_path)
+    certfile = directory_path + "/bambu.cert"
+    context = ssl.create_default_context(cafile=certfile)
+    # https://docs.python.org/3/library/ssl.html#ssl.create_default_context
+    # Ignore "CA cert does not include key usage extension" since python 3.13
+    context.verify_flags &= ~ssl.VERIFY_X509_STRICT
+    return context
