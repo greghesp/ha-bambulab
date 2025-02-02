@@ -442,7 +442,8 @@ class BambuClient:
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
-        self.client = MQTTSClient(server_name=self._serial)
+        server_name = self._serial if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
+        self.client = MQTTSClient(server_name=server_name)
         self._callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
@@ -676,7 +677,8 @@ class BambuClient:
                 result.put(True)
 
         self._test_mode = True
-        self.client = MQTTSClient(server_name=self._serial)
+        server_name = self._serial if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
+        self.client = MQTTSClient(server_name=server_name)
         self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
