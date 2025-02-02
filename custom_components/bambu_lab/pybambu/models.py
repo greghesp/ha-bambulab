@@ -520,7 +520,7 @@ class PrintJob:
 
         # Initialize task data at startup.
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
-            self._update_task_data(True)
+            self._update_task_data()
 
         # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
         if data.get("gcode_start_time") is not None:
@@ -693,6 +693,16 @@ class PrintJob:
         LOGGER.debug(f"Model '{self.gcode_file}' count not be found in any known directories")
         return None
 
+    def _update_task_data(self):
+        # If we are running in connection test mode, skipp updating the last print task data.
+        if self._client._test_mode:
+            return
+        
+        if self._client.ftp_enabled:
+            self._download_task_data_from_printer()
+        else:
+            self._download_task_data_from_cloud()
+
     def _download_task_data_from_printer(self):
         LOGGER.debug(f"Updating task data via FTP: {datetime.now()}")
 
@@ -767,66 +777,68 @@ class PrintJob:
 
         LOGGER.debug(f"Done updating task data via FTP: {datetime.now()}")
 
-    def _update_task_data(self, boot = False):
-        if not boot and self._client.ftp_enabled:
-            self._download_task_data_from_printer()
-        elif self._client.bambu_cloud.auth_token != "":
-            self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
-            if self._task_data is None:
-                LOGGER.debug("No bambu cloud task data found for printer.")
-                self._client._device.cover_image.set_jpeg(None)
-                self.print_weight = 0
-                self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                self.print_length = 0
-                self.print_bed_type = "unknown"
-                self.start_time = None
-                self.end_time = None
-            else:
-                LOGGER.debug("Updating bambu cloud task data found for printer.")
-                url = self._task_data.get('cover', '')
-                if url != "":
-                    data = self._client.bambu_cloud.download(url)
-                    self._client._device.cover_image.set_jpeg(data)
+    def _download_task_data_from_cloud(self):
+        # Must have an auth token for this to be possible
+        if self._client.bambu_cloud.auth_token == "":
+            return
 
-                self.print_length = self._task_data.get('length', self.print_length * 100) / 100
-                self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
-                self.print_weight = self._task_data.get('weight', self.print_weight)
-                ams_print_data = self._task_data.get('amsDetailMapping', [])
-                self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                if self.print_weight != 0:
-                    for ams_data in ams_print_data:
-                        index = ams_data['ams']
-                        weight = ams_data['weight']
-                        self._ams_print_weights[index] = weight
-                        self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
+        self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
+        if self._task_data is None:
+            LOGGER.debug("No bambu cloud task data found for printer.")
+            self._client._device.cover_image.set_jpeg(None)
+            self.print_weight = 0
+            self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            self.print_length = 0
+            self.print_bed_type = "unknown"
+            self.start_time = None
+            self.end_time = None
+        else:
+            LOGGER.debug("Updating bambu cloud task data found for printer.")
+            url = self._task_data.get('cover', '')
+            if url != "":
+                data = self._client.bambu_cloud.download(url)
+                self._client._device.cover_image.set_jpeg(data)
 
-                status = self._task_data['status']
-                LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
-                if self._client._device.supports_feature(Features.START_TIME_GENERATED) and (status == 4):
-                    # If we generate the start time (not X1), then rely more heavily on the cloud task data and
-                    # do so uniformly so we always have matched start/end times.
-                    # "startTime": "2023-12-21T19:02:16Z"
-                    
-                    cloud_time_str = self._task_data.get('startTime', "")
-                    LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
-                    if cloud_time_str != "":
-                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                        self.start_time = local_dt
-                        LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
+            self.print_length = self._task_data.get('length', self.print_length * 100) / 100
+            self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
+            self.print_weight = self._task_data.get('weight', self.print_weight)
+            ams_print_data = self._task_data.get('amsDetailMapping', [])
+            self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            if self.print_weight != 0:
+                for ams_data in ams_print_data:
+                    index = ams_data['ams']
+                    weight = ams_data['weight']
+                    self._ams_print_weights[index] = weight
+                    self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
 
-                    # "endTime": "2023-12-21T19:02:35Z"
-                    cloud_time_str = self._task_data.get('endTime', "")
-                    LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
-                    if cloud_time_str != "":
-                        local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                        # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                        local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                        self.end_time = local_dt
-                        LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
+            status = self._task_data['status']
+            LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
+            if self._client._device.supports_feature(Features.START_TIME_GENERATED) and (status == 4):
+                # If we generate the start time (not X1), then rely more heavily on the cloud task data and
+                # do so uniformly so we always have matched start/end times.
+                # "startTime": "2023-12-21T19:02:16Z"
+                
+                cloud_time_str = self._task_data.get('startTime', "")
+                LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
+                if cloud_time_str != "":
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.start_time = local_dt
+                    LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
+
+                # "endTime": "2023-12-21T19:02:35Z"
+                cloud_time_str = self._task_data.get('endTime', "")
+                LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
+                if cloud_time_str != "":
+                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
+                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
+                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
+                    self.end_time = local_dt
+                    LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
+
 
 @dataclass
 class Info:
