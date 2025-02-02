@@ -686,7 +686,7 @@ class BambuClient:
                 result.put(True)
 
         self._test_mode = True
-        self.client = MQTTSClient()
+        self.client = MQTTSClient(server_name=self._serial)
         self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
