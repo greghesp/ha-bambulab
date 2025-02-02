@@ -444,6 +444,9 @@ class BambuClient:
         self._mqtt = MqttThread(self)
         self._mqtt.start()
 
+        # Start camera if enabled
+        self.start_camera()
+
     def subscribe_and_request_info(self):
         LOGGER.debug("Now subscribing...")
         self.subscribe()
@@ -478,6 +481,7 @@ class BambuClient:
             LOGGER.debug("Stopping camera thread")
             self._camera.stop()
             self._camera.join()
+            self._camera = None
 
     def _on_connect(self):
         self._connected = True
