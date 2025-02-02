@@ -109,9 +109,7 @@ class ChamberImageThread(threading.Thread):
         for i in range(0, 32 - len(access_code)):
             auth_data += struct.pack("<x")
 
-        ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
+        ctx = self._client.create_local_ssl_context()
 
         jpeg_start = bytearray([0xff, 0xd8, 0xff, 0xe0])
         jpeg_end = bytearray([0xff, 0xd9])
@@ -136,7 +134,7 @@ class ChamberImageThread(threading.Thread):
             try:
                 with socket.create_connection((hostname, port)) as sock:
                     try:
-                        sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
+                        sslSock = ctx.wrap_socket(sock, server_hostname=self._client._serial)
                         sslSock.write(auth_data)
                         img = None
                         payload_size = 0
@@ -289,9 +287,10 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
     FTP_TLS subclass that automatically wraps sockets in SSL to support implicit FTPS.
     see https://stackoverflow.com/a/36049814
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, server_name=None, **kwargs):
         super().__init__(*args, **kwargs)
         self._sock = None
+        self.server_name = server_name
 
     @property
     def sock(self):
@@ -302,7 +301,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
     def sock(self, value):
         """When modifying the socket, ensure that it is ssl wrapped."""
         if value is not None and not isinstance(value, ssl.SSLSocket):
-            value = self.context.wrap_socket(value)
+            value = self.context.wrap_socket(value, server_hostname=self.server_name)
         self._sock = value
 
     """
@@ -316,7 +315,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
             if isinstance(self.sock, ssl.SSLSocket):
                 session = self.sock.session
             conn = self.context.wrap_socket(conn,
-                                            server_hostname=self.host,
+                                            server_hostname=self.server_name,
                                             session=session)
         return conn, size
 
@@ -325,7 +324,9 @@ class MQTTSClient(mqtt.Client):
     MQTT Client that supports custom certificate SNI validation for TLS.
     see https://github.com/eclipse-paho/paho.mqtt.python/issues/734#issuecomment-2256633060
     """
-    server_name = None
+    def __init__(self, *args, server_name=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.server_name = server_name
 
     def _ssl_wrap_socket(self, tcp_sock: socket.socket) -> ssl.SSLSocket:
         orig_host = self._host
@@ -432,23 +433,26 @@ class BambuClient:
     def set_timelapse_enabled(self, enable):
         self._enable_timelapse = enable
 
+    def create_local_ssl_context(self):
+        """This context validates the certificate for TLS connections to local printers."""
+        script_path = os.path.abspath(__file__)
+        directory_path = os.path.dirname(script_path)
+        certfile = directory_path + "/bambu.cert"
+        context = ssl.create_default_context(cafile=certfile)
+        # https://docs.python.org/3/library/ssl.html#ssl.create_default_context
+        # Ignore "CA cert does not include key usage extension" since python 3.13
+        context.verify_flags &= ~ssl.VERIFY_X509_STRICT
+        return context
+
     def setup_tls(self):
         if self._local_mqtt:
-            script_path = os.path.abspath(__file__)
-            directory_path = os.path.dirname(script_path)
-            certfile = directory_path + "/bambu.cert"
-            context = ssl.create_default_context(cafile=certfile)
-            # https://docs.python.org/3/library/ssl.html#ssl.create_default_context
-            # Ignore "CA cert does not include key usage extension" since python 3.13
-            context.verify_flags &= ~ssl.VERIFY_X509_STRICT
-            self.client.server_name = self._serial
-            self.client.tls_set_context(context)
+            self.client.tls_set_context(self.create_local_ssl_context())
         else:
             self.client.tls_set()
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
-        self.client = MQTTSClient()
+        self.client = MQTTSClient(server_name=self._serial)
         self._callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
@@ -652,7 +656,7 @@ class BambuClient:
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS:
-        ftp = ImplicitFTP_TLS()
+        ftp = ImplicitFTP_TLS(server_name=self._serial, context=self.create_local_ssl_context())
         ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
         ftp.login(user='bblp', passwd=self._access_code)
         ftp.prot_p()
