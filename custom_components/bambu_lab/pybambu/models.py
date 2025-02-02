@@ -149,7 +149,7 @@ class Device:
         elif feature == Features.PROMPT_SOUND:
             return self.info.device_type == "A1" or self.info.device_type == "A1MINI"
         elif feature == Features.FTP:
-            return True
+            return False
 
         return False
     
@@ -520,7 +520,7 @@ class PrintJob:
 
         # Initialize task data at startup.
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
-            self._update_task_data()
+            self._update_task_data(True)
 
         # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
         if data.get("gcode_start_time") is not None:
@@ -767,8 +767,8 @@ class PrintJob:
 
         LOGGER.debug(f"Done updating task data via FTP: {datetime.now()}")
 
-    def _update_task_data(self):
-        if self._client.ftp_enabled:
+    def _update_task_data(self, boot = False):
+        if not boot and self._client.ftp_enabled:
             self._download_task_data_from_printer()
         elif self._client.bambu_cloud.auth_token != "":
             self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
@@ -861,7 +861,7 @@ class Info:
         self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
         self.usage_hours = client._usage_hours
-        self._ip_address = ""
+        self._ip_address = client.host
 
     def set_online(self, online):
         if self.online != online:
@@ -939,7 +939,7 @@ class Info:
         info = data.get('net', {}).get('info', [])
         for net in info:
             ip_int = net.get("ip", 0)
-            if net.get("ip", 0) != 0:
+            if ip_int != 0:
                 prev_ip_address = self._ip_address
                 self._ip_address = get_ip_address_from_int(ip_int)
                 if self._ip_address != prev_ip_address:
