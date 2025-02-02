@@ -322,7 +322,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
 
 class MQTTSClient(mqtt.Client):
     """
-    MQTT Client that supports custom certificate SNI validation for TLS.
+    MQTT Client that supports custom certificate Server Name Indication (SNI) for TLS.
     see https://github.com/eclipse-paho/paho.mqtt.python/issues/734#issuecomment-2256633060
     """
     def __init__(self, *args, server_name=None, **kwargs):
@@ -726,12 +726,16 @@ class BambuClient:
 
 @functools.lru_cache(maxsize=1)
 def create_local_ssl_context():
-    """This context validates the certificate for TLS connections to local printers."""
+    """
+    This context validates the certificate for TLS connections to local printers.
+    It additionally requires calling `context.wrap_socket(sock, servername=printer_serial_number)`
+    for the Server Name Indication (SNI).
+    """
     script_path = os.path.abspath(__file__)
     directory_path = os.path.dirname(script_path)
     certfile = directory_path + "/bambu.cert"
     context = ssl.create_default_context(cafile=certfile)
-    # https://docs.python.org/3/library/ssl.html#ssl.create_default_context
-    # Ignore "CA cert does not include key usage extension" since python 3.13
+    # Ignore "CA cert does not include key usage extension" error since python 3.13
+    # See note in https://docs.python.org/3/library/ssl.html#ssl.create_default_context
     context.verify_flags &= ~ssl.VERIFY_X509_STRICT
     return context
