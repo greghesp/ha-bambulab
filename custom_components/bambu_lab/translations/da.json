@@ -592,7 +592,7 @@
         "name": "Tillad promptlyd"
       },
       "ftp": {
-        "name": "Brug FTP"
+        "name": "Indlæsningsmodeldata fra printer"
       }
     }
   },

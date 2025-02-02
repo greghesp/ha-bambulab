@@ -205,7 +205,7 @@ class BambuLabFtpSwitch(BambuLabSwitch):
 
     @property
     def available(self) -> bool:
-        return self.coordinator.get_model().info.mqtt_mode == "local"
+        return True
 
     @property
     def icon(self) -> str:
