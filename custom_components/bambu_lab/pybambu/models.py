@@ -149,7 +149,7 @@ class Device:
         elif feature == Features.PROMPT_SOUND:
             return self.info.device_type == "A1" or self.info.device_type == "A1MINI"
         elif feature == Features.FTP:
-            return False
+            return True
 
         return False
     
