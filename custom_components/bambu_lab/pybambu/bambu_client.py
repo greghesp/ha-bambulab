@@ -320,6 +320,21 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
                                             session=session)
         return conn, size
 
+class MQTTSClient(mqtt.Client):
+    """
+    MQTT Client that supports custom certificate SNI validation for TLS.
+    see https://github.com/eclipse-paho/paho.mqtt.python/issues/734#issuecomment-2256633060
+    """
+    server_name = None
+
+    def _ssl_wrap_socket(self, tcp_sock: socket.socket) -> ssl.SSLSocket:
+        orig_host = self._host
+        if self.server_name:
+            self._host = self.server_name
+        res = super()._ssl_wrap_socket(tcp_sock)
+        self._host = orig_host
+        return res
+
 @dataclass
 class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
@@ -418,23 +433,22 @@ class BambuClient:
         self._enable_timelapse = enable
 
     def setup_tls(self):
-        # Some people got this error with this change so disabled for now:
-        # Exception. Type: <class 'ssl.SSLCertVerificationError'> Args: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: CA cert does not include key usage extension (_ssl.c:1020)
-        #
-        # script_path = os.path.abspath(__file__)
-        # directory_path = os.path.dirname(script_path)
-        # certfile = directory_path + "/bambu.cert"
-        # context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
-        # context.verify_mode = ssl.CERT_REQUIRED
-        # context.load_verify_locations(cafile=certfile)
-        # context.check_hostname = not self._local_mqtt
-        # self.client.tls_set_context(context)
-        self.client.tls_set(tls_version=ssl.PROTOCOL_TLS, cert_reqs=ssl.CERT_NONE)
-        self.client.tls_insecure_set(True)
+        if self._local_mqtt:
+            script_path = os.path.abspath(__file__)
+            directory_path = os.path.dirname(script_path)
+            certfile = directory_path + "/bambu.cert"
+            context = ssl.create_default_context(cafile=certfile)
+            # https://docs.python.org/3/library/ssl.html#ssl.create_default_context
+            # Ignore "CA cert does not include key usage extension" since python 3.13
+            context.verify_flags &= ~ssl.VERIFY_X509_STRICT
+            self.client.server_name = self._serial
+            self.client.tls_set_context(context)
+        else:
+            self.client.tls_set()
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
-        self.client = mqtt.Client()
+        self.client = MQTTSClient()
         self._callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
@@ -668,7 +682,7 @@ class BambuClient:
                 result.put(True)
 
         self._test_mode = True
-        self.client = mqtt.Client()
+        self.client = MQTTSClient()
         self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
