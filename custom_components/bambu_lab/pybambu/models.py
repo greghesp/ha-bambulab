@@ -659,6 +659,8 @@ class PrintJob:
                 if match:
                     timestamp_str, filename = match.groups()
                     if filename.endswith('.3mf'):
+                        # Since these dates don't have the year we have to work it out. If the date is earlier in 
+                        # the year than now then it's this year. If it's later it's last year.
                         timestamp = datetime.strptime(timestamp_str, '%b %d %H:%M')
                         timestamp = timestamp.replace(year=datetime.now().year)
                         if timestamp > datetime.now():
