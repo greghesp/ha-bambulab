@@ -291,7 +291,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
     def __init__(self, *args, server_name=None, **kwargs):
         super().__init__(*args, **kwargs)
         self._sock = None
-        self.server_name = server_name
+        self._server_name = server_name
 
     @property
     def sock(self):
@@ -302,7 +302,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
     def sock(self, value):
         """When modifying the socket, ensure that it is ssl wrapped."""
         if value is not None and not isinstance(value, ssl.SSLSocket):
-            value = self.context.wrap_socket(value, server_hostname=self.server_name)
+            value = self.context.wrap_socket(value, server_hostname=self._server_name)
         self._sock = value
 
     """
@@ -316,7 +316,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
             if isinstance(self.sock, ssl.SSLSocket):
                 session = self.sock.session
             conn = self.context.wrap_socket(conn,
-                                            server_hostname=self.server_name,
+                                            server_hostname=self._server_name,
                                             session=session)
         return conn, size
 
@@ -327,12 +327,12 @@ class MQTTSClient(mqtt.Client):
     """
     def __init__(self, *args, server_name=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.server_name = server_name
+        self._server_name = server_name
 
     def _ssl_wrap_socket(self, tcp_sock: socket.socket) -> ssl.SSLSocket:
         orig_host = self._host
-        if self.server_name:
-            self._host = self.server_name
+        if self._server_name:
+            self._host = self._server_name
         res = super()._ssl_wrap_socket(tcp_sock)
         self._host = orig_host
         return res
