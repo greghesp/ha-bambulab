@@ -711,7 +711,8 @@ class PrintJob:
     def _async_download_task_data_from_printer(self):
         current_thread = threading.current_thread()
         current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
-        LOGGER.debug(f"Updating task data via FTP: {datetime.now()}")
+        start_time = datetime.now()
+        LOGGER.debug(f"Updating task data via FTP")
 
         # Open the FTP connection
         ftp = self._client.ftp_connection()
@@ -782,7 +783,8 @@ class PrintJob:
 
             archive.close()
 
-        LOGGER.debug(f"Done updating task data via FTP: {datetime.now()}") 
+        end_time = datetime.now()
+        LOGGER.debug(f"Done updating task data via FTP. Elapsed time = {(end_time-start_time).seconds}s") 
         self._client.callback("event_printer_data_update")
 
     def _download_task_data_from_cloud(self):
