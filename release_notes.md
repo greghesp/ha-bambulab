@@ -1,5 +1,8 @@
-### V2.0.43
+### V2.0.44
 - (Reenable) Model data retrieval from printer via ftp
+
+### V2.0.43
+- Fix for camera take 2
 
 ### V2.0.42
 - Fix for ip address not present in mqtt payload with older firmwares
