@@ -1,6 +1,7 @@
 import asyncio
 import math
 import re
+import threading
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -704,6 +705,12 @@ class PrintJob:
             self._download_task_data_from_cloud()
 
     def _download_task_data_from_printer(self):
+        thread = threading.Thread(target=self._async_download_task_data_from_printer)
+        thread.start()
+
+    def _async_download_task_data_from_printer(self):
+        current_thread = threading.current_thread()
+        current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
         LOGGER.debug(f"Updating task data via FTP: {datetime.now()}")
 
         # Open the FTP connection
@@ -775,7 +782,8 @@ class PrintJob:
 
             archive.close()
 
-        LOGGER.debug(f"Done updating task data via FTP: {datetime.now()}")
+        LOGGER.debug(f"Done updating task data via FTP: {datetime.now()}") 
+        self._client.callback("event_printer_data_update")
 
     def _download_task_data_from_cloud(self):
         # Must have an auth token for this to be possible

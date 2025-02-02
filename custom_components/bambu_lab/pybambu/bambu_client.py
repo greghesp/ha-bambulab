@@ -43,7 +43,6 @@ class WatchdogThread(threading.Thread):
         self._last_received_data = time.time()
         super().__init__()
         self.daemon = True
-        self.setName(f"{self._client._device.info.device_type}-Watchdog-{threading.get_native_id()}")
 
     def stop(self):
         self._stop_event.set()
@@ -52,7 +51,9 @@ class WatchdogThread(threading.Thread):
         self._last_received_data = time.time()
 
     def run(self):
-        LOGGER.info("Watchdog thread started.")
+        self.setName(f"{self._client._device.info.device_type}-Watchdog-{threading.get_native_id()}")
+        LOGGER.debug("Watchdog thread started.")
+
         WATCHDOG_TIMER = 30
         while True:
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
@@ -78,12 +79,12 @@ class ChamberImageThread(threading.Thread):
         self._stop_event = threading.Event()
         super().__init__()
         self.daemon = True
-        self.setName(f"{self._client._device.info.device_type}-Chamber-{threading.get_native_id()}")
 
     def stop(self):
         self._stop_event.set()
 
     def run(self):
+        self.setName(f"{self._client._device.info.device_type}-Chamber-{threading.get_native_id()}")
         LOGGER.debug("Chamber image thread started.")
 
         auth_data = bytearray()
@@ -232,13 +233,14 @@ class MqttThread(threading.Thread):
         self._stop_event = threading.Event()
         super().__init__()
         self.daemon = True
-        self.setName(f"{self._client._device.info.device_type}-Mqtt-{threading.get_native_id()}")
 
     def stop(self):
         self._stop_event.set()
 
     def run(self):
-        LOGGER.info("MQTT listener thread started.")
+        self.setName(f"{self._client._device.info.device_type}-Mqtt-{threading.get_native_id()}")
+        LOGGER.debug("MQTT listener thread started.")
+
         exceptionSeen = ""
         while True:
             try:
@@ -461,7 +463,7 @@ class BambuClient:
                    result_code: int,
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.info("On Connect: Connected to printer")
+        LOGGER.debug("On Connect: Connected to printer")
         self._on_connect()
 
     def start_camera(self):
