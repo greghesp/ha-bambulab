@@ -653,7 +653,7 @@ class PrintJob:
     def _find_model_path(self, ftp):
         if self.gcode_file != '':
             # Attempt to find the model in one of many known directories
-            for search_path in ['/', '/cache', '/models', '/sdcard']:
+            for search_path in ['', '/cache', '/models', '/sdcard']:
                 try:
                     path_contents = ftp.nlst(f"{search_path}")
                     if self.gcode_file in path_contents:
