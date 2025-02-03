@@ -344,6 +344,7 @@ class BambuClient:
         self._enable_camera = config.get('enable_camera', True)
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
         self._enable_timelapse = config.get('enable_timelapse', False)
+        self._label_pick_image = config.get('label_pick_image', self._enable_ftp)
 
         self._connected = False
         self._port = 1883
@@ -416,6 +417,12 @@ class BambuClient:
 
     def set_timelapse_enabled(self, enable):
         self._enable_timelapse = enable
+
+    def label_pick_image_enabled(self):
+        return self._label_pick_image
+
+    def set_label_pick_image_enabled(self, enable):
+        self._label_pick_image = enable
 
     def setup_tls(self):
         # Some people got this error with this change so disabled for now:

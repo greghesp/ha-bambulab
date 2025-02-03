@@ -59,6 +59,13 @@ TIMELAPSE_SWITCH_DESCRIPTION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
+LABEL_PICK_IMAGE_DESCRIPTION = SwitchEntityDescription(
+    key="label_pick_image",
+    icon="mdi:image-marker",
+    translation_key="label_pick_image",
+    entity_category=EntityCategory.CONFIG,
+)
+
 async def async_setup_entry(
         hass: HomeAssistant,
         entry: ConfigEntry,
@@ -81,6 +88,7 @@ async def async_setup_entry(
 
     if coordinator.get_model().supports_feature(Features.FTP):
         async_add_entities([BambuLabFtpSwitch(coordinator, entry)])
+        async_add_entities([BambuLabLabelPickImageSwitch(coordinator, entry)])
 
     if coordinator.get_model().supports_feature(Features.TIMELAPSE):
         async_add_entities([BambuLabTimelapseSwitch(coordinator, entry)])
@@ -287,3 +295,39 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable manual refresh mode."""
         self.coordinator.get_model().info.set_prompt_sound(False)
+
+class BambuLabLabelPickImageSwitch(BambuLabSwitch):
+    """BambuLab Label pick image Switch"""
+
+    entity_description = LABEL_PICK_IMAGE_DESCRIPTION
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            config_entry: ConfigEntry
+    ) -> None:
+        super().__init__(coordinator, config_entry)
+        self._attr_is_on = self.coordinator.label_pick_image_enabled
+
+    @property
+    def available(self) -> bool:
+        return self.coordinator.ftp_enabled
+
+    @property
+    def icon(self) -> str:
+        """Return the icon for the switch."""
+        if self.available:
+            return "mdi:image-marker" if self.is_on else "mdi:image"
+        return "mdi:image-off"
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Enable labelling pick image."""
+        self._attr_is_on = True
+        await self.coordinator.set_label_pick_image_enabled(self._attr_is_on)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Disable labelling pick image."""
+        self._attr_is_on = False
+        await self.coordinator.set_label_pick_image_enabled(self._attr_is_on)
+
+
