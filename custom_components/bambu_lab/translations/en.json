@@ -593,6 +593,9 @@
       },
       "prompt_sound": {
         "name": "Allow Prompt Sound"
+      },
+      "timelapse": {
+        "name": "Load latest timelapse from printer"
       }
     }
   },

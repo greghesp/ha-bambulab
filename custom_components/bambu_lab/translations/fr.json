@@ -593,6 +593,9 @@
       },
       "ftp": {
         "name": "Charge des données du modèle de l'imprimante"
+      },
+      "timelapse": {
+        "name": "Chargez le dernier timelapse de l'imprimante"
       }
     }
   },

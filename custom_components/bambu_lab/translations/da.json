@@ -593,6 +593,9 @@
       },
       "ftp": {
         "name": "Indlæsningsmodeldata fra printer"
+      },
+      "timelapse": {
+        "name": "Indlæs den seneste tidslap fra printer"
       }
     }
   },
