@@ -593,6 +593,9 @@
       },
       "ftp": {
         "name": "Carregueu les dades del model de la impressora"
+      },
+      "timelapse": {
+        "name": "Carregueu el Timelapse més recent de la impressora"
       }
     }
   },

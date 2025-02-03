@@ -593,6 +593,9 @@
       },
       "ftp": {
         "name": "Carica i dati del modello dalla stampante"
+      },
+      "timelapse": {
+        "name": "Carica l'ultimo timelapse dalla stampante"
       }
     }
   },

@@ -593,6 +593,9 @@
       },
       "ftp": {
         "name": "Laden Sie Modelldaten aus dem Drucker laden"
+      },
+      "timelapse": {
+        "name": "Laden Sie den neuesten Zeitplan aus dem Drucker"
       }
     }
   },

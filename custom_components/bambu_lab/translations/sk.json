@@ -593,6 +593,9 @@
       },
       "ftp": {
         "name": "Načítať údaje o modeli z tlačiarne"
+      },
+      "timelapse": {
+        "name": "Načítať najnovší časový čas z tlačiarne"
       }
     }
   },

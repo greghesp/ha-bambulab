@@ -343,6 +343,7 @@ class BambuClient:
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
+        self._enable_timelapse = config.get('enable_timelapse', False)
 
         self._connected = False
         self._port = 1883
@@ -408,6 +409,13 @@ class BambuClient:
 
     def set_ftp_enabled(self, enable):
         self._enable_ftp = enable
+
+    @property
+    def timelapse_enabled(self):
+        return self._enable_timelapse
+
+    def set_timelapse_enabled(self, enable):
+        self._enable_timelapse = enable
 
     def setup_tls(self):
         # Some people got this error with this change so disabled for now:

@@ -31,6 +31,7 @@ class Features(Enum):
     SET_TEMPERATURE = 19,
     PROMPT_SOUND = 20,
     FTP = 21,
+    TIMELAPSE = 22
 
 
 class FansEnum(Enum):

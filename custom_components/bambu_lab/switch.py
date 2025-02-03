@@ -52,6 +52,13 @@ FTP_SWITCH_DESCRIPTION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
+TIMELAPSE_SWITCH_DESCRIPTION = SwitchEntityDescription(
+    key="timelapse",
+    icon="mdi:folder-network",
+    translation_key="timelapse",
+    entity_category=EntityCategory.CONFIG,
+)
+
 async def async_setup_entry(
         hass: HomeAssistant,
         entry: ConfigEntry,
@@ -75,6 +82,8 @@ async def async_setup_entry(
     if coordinator.get_model().supports_feature(Features.FTP):
         async_add_entities([BambuLabFtpSwitch(coordinator, entry)])
 
+    if coordinator.get_model().supports_feature(Features.TIMELAPSE):
+        async_add_entities([BambuLabTimelapseSwitch(coordinator, entry)])
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
     """Base BambuLab Switch"""
@@ -221,6 +230,39 @@ class BambuLabFtpSwitch(BambuLabSwitch):
         """Disable FTP."""
         self._attr_is_on = False
         await self.coordinator.set_ftp_enabled(self._attr_is_on)
+
+
+class BambuLabTimelapseSwitch(BambuLabSwitch):
+    """BambuLab FTP Switch"""
+
+    entity_description = TIMELAPSE_SWITCH_DESCRIPTION
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            config_entry: ConfigEntry
+    ) -> None:
+        super().__init__(coordinator, config_entry)
+        self._attr_is_on = self.coordinator.timelapse_enabled
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    @property
+    def icon(self) -> str:
+        """Return the icon for the switch."""
+        return "mdi:folder-network" if self.is_on else "mdi:folder-hidden"
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Enable Timelapse Download."""
+        self._attr_is_on = True
+        await self.coordinator.set_timelapse_enabled(self._attr_is_on)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Disable Timelapse Download."""
+        self._attr_is_on = False
+        await self.coordinator.set_timelapse_enabled(self._attr_is_on)
 
 
 class BambuLabPromptSoundSwitch(BambuLabSwitch):
