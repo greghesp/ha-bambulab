@@ -723,19 +723,33 @@ class PrintJob:
 
         # Open the FTP connection
         ftp = self._client.ftp_connection()
-        timelapse_path = self._find_latest_file(ftp, '/timelapse', '.mp4')
-        if timelapse_path is not None:
+        file_path = self._find_latest_file(ftp, '/timelapse', '.mp4')
+        if file_path is not None:
             # timelapse_path is of form '/timelapse/foo.mp4'
-            local_timelapse_path = f"/config/www/media/ha-bambulab{timelapse_path}"
-            directory_path = os.path.dirname(local_timelapse_path)
+            local_file_path = os.path.join("/config/www/media/ha-bambulab", file_path.lstrip('/'))
+            directory_path = os.path.dirname(local_file_path)
             os.makedirs(directory_path, exist_ok=True)
 
-            with open(local_timelapse_path, 'wb') as f:
+            with open(local_file_path, 'wb') as f:
                 # Fetch the video from FTP and close the connection
-                LOGGER.info(f"Downloading '{timelapse_path}'")
-                ftp.retrbinary(f"RETR {timelapse_path}", f.write)
+                LOGGER.info(f"Downloading '{file_path}'")
+                ftp.retrbinary(f"RETR {file_path}", f.write)
                 f.flush()
-                ftp.quit()
+
+            # Convert to the thumbnail path.
+            directory = os.path.dirname(file_path)
+            filename = os.path.basename(file_path)
+            filename_without_extension, extension = os.path.splitext(filename)
+            filename = f"{filename_without_extension}.jpg"
+            file_path = os.path.join(directory, 'thumbnail', filename)
+            local_file_path = os.path.join("/config/www/media/ha-bambulab/timelapse", filename)
+            with open(local_file_path, 'wb') as f:
+                # Fetch the video from FTP and close the connection
+                LOGGER.info(f"Downloading '{file_path}' to '{local_file_path}")
+                ftp.retrbinary(f"RETR {file_path}", f.write)
+                f.flush()
+
+        ftp.quit()
 
         end_time = datetime.now()
         LOGGER.info(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
