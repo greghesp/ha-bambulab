@@ -153,8 +153,7 @@ class Device:
         elif feature == Features.FTP:
             return True
         elif feature == Features.TIMELAPSE:
-            # Start with more performance X1 for initial testing
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return False
 
         return False
     
@@ -570,9 +569,12 @@ class PrintJob:
         #         "print_error": 50348044,
         #     }
         # }
+        timelapseDownloaded = False
         isCanceledPrint = False
         if data.get("print_error") == 50348044 and self.print_error == 0:
             isCanceledPrint = True
+            self._download_timelapse()
+            timelapseDownloaded = True
             self._client.callback("event_print_canceled")
         self.print_error = data.get("print_error", self.print_error)
 
@@ -580,9 +582,15 @@ class PrintJob:
         if previous_gcode_state != "unknown" and previous_gcode_state != "FAILED" and self.gcode_state == "FAILED":
             if not isCanceledPrint:
                 self._client.callback("event_print_failed")
+                if not timelapseDownloaded:
+                    self._download_timelapse()
+                    timelapseDownloaded = True
 
         # Handle print finish
         if previous_gcode_state != "unknown" and previous_gcode_state != "FINISH" and self.gcode_state == "FINISH":
+            if not timelapseDownloaded:
+                self._download_timelapse()
+                timelapseDownloaded = True
             self._client.callback("event_print_finished")
 
         if currently_idle and not previously_idle and previous_gcode_state != "unknown":
@@ -653,16 +661,16 @@ class PrintJob:
                 except:
                     pass
         else:
-            model_path = self._find_latest_file(ftp, '/Cache', '.3mf')
+            model_path = self._find_latest_file(ftp, '/Cache', ['.3mf'])
             if model_path is not None:
                 return model_path
 
         LOGGER.debug(f"Model '{self.gcode_file}' count not be found in any known directories")
         return None
     
-    def _find_latest_file(self, ftp, path, extension):
+    def _find_latest_file(self, ftp, path, extensions: list):
         # Look for the newest file with extension in directory.
-        LOGGER.debug(f"Looking for latest {extension} file in {path}")
+        LOGGER.debug(f"Looking for latest {extensions} file in {path}")
         file_list = []
         def parse_line(line):
             # Match the line format: '-rw-rw-rw- 1 user group 1234 Jan 01 12:34 filename'
@@ -672,7 +680,8 @@ class PrintJob:
             match = re.match(pattern_with_time_no_year, line)
             if match:
                 timestamp_str, filename = match.groups()
-                if filename.endswith(extension):
+                _, extension = os.path.splitext(filename)
+                if extension in extensions:
                     # Since these dates don't have the year we have to work it out. If the date is earlier in 
                     # the year than now then it's this year. If it's later it's last year.
                     timestamp = datetime.strptime(timestamp_str, '%b %d %H:%M')
@@ -686,7 +695,8 @@ class PrintJob:
             match = re.match(pattern_without_time_just_year, line)
             if match:
                 timestamp_str, filename = match.groups()
-                if filename.endswith(extension):
+                _, extension = os.path.splitext(filename)
+                if extension in extensions:
                     timestamp = datetime.strptime(timestamp_str, '%b %d %Y')
                     return timestamp, filename
                 else:
@@ -699,7 +709,8 @@ class PrintJob:
         ftp.retrlines(f"LIST {path}", lambda line: file_list.append(file) if (file := parse_line(line)) is not None else None)
         files = sorted(file_list, key=lambda file: file[0], reverse=True)
         for file in files:
-            if file[1].endswith(extension):
+            _, extension = os.path.splitext(file[1])
+            if extension in extensions:
                 file_path = f"{path}/{file[1]}"
                 LOGGER.debug(f"Found file {file_path}")
                 return file_path
@@ -707,7 +718,7 @@ class PrintJob:
         return None
     
     def _download_timelapse(self):
-        # If we are running in connection test mode, skipp updating the last print task data.
+        # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
         if not self._client.timelapse_enabled:
@@ -723,31 +734,37 @@ class PrintJob:
 
         # Open the FTP connection
         ftp = self._client.ftp_connection()
-        file_path = self._find_latest_file(ftp, '/timelapse', '.mp4')
+        file_path = self._find_latest_file(ftp, '/timelapse', ['.mp4','.avi'])
         if file_path is not None:
             # timelapse_path is of form '/timelapse/foo.mp4'
-            local_file_path = os.path.join("/config/www/media/ha-bambulab", file_path.lstrip('/'))
+            local_file_path = os.path.join(f"/config/www/media/ha-bambulab/{self._client._serial}", file_path.lstrip('/'))
             directory_path = os.path.dirname(local_file_path)
             os.makedirs(directory_path, exist_ok=True)
 
-            with open(local_file_path, 'wb') as f:
-                # Fetch the video from FTP and close the connection
-                LOGGER.info(f"Downloading '{file_path}'")
-                ftp.retrbinary(f"RETR {file_path}", f.write)
-                f.flush()
+            if os.path.exists(local_file_path):
+                LOGGER.debug("Timelapse already downloaded.")
+            else:
+                with open(local_file_path, 'wb') as f:
+                    # Fetch the video from FTP and close the connection
+                    LOGGER.info(f"Downloading '{file_path}'")
+                    ftp.retrbinary(f"RETR {file_path}", f.write)
+                    f.flush()
 
             # Convert to the thumbnail path.
             directory = os.path.dirname(file_path)
             filename = os.path.basename(file_path)
-            filename_without_extension, extension = os.path.splitext(filename)
+            filename_without_extension, _ = os.path.splitext(filename)
             filename = f"{filename_without_extension}.jpg"
             file_path = os.path.join(directory, 'thumbnail', filename)
-            local_file_path = os.path.join("/config/www/media/ha-bambulab/timelapse", filename)
-            with open(local_file_path, 'wb') as f:
-                # Fetch the video from FTP and close the connection
-                LOGGER.info(f"Downloading '{file_path}' to '{local_file_path}")
-                ftp.retrbinary(f"RETR {file_path}", f.write)
-                f.flush()
+            local_file_path = os.path.join(f"/config/www/media/ha-bambulab/{self._client._serial}/timelapse", filename)
+            if os.path.exists(local_file_path):
+                LOGGER.debug("Thumbnail already downloaded.")
+            else:
+                with open(local_file_path, 'wb') as f:
+                    # Fetch the video from FTP and close the connection
+                    LOGGER.info(f"Downloading '{file_path}'")
+                    ftp.retrbinary(f"RETR {file_path}", f.write)
+                    f.flush()
 
         ftp.quit()
 
