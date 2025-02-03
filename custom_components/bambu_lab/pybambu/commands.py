@@ -43,6 +43,8 @@ PRINT_PROJECT_FILE_TEMPLATE = {
                 }
             }
 
+SKIP_OBJECTS_TEMPLATE = {"print": {"sequence_id": "0", "command": "skip_objects", "obj_list": []}}
+  
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}
 
