@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Forza l'aggiornamento dei dati"
+      },
+      "dev": {
+        "name": "Debug"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Immagine Modello"
+      },
+      "pick_image": {
+        "name": "Scegli l'immagine"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "Indirizzo IP"
+      },
+      "printable_objects": {
+        "name": "Oggetti stampabili"
       }
     },
     "camera": {
@@ -596,6 +605,9 @@
       },
       "timelapse": {
         "name": "Carica l'ultimo timelapse dalla stampante"
+      },
+      "label_pick_image": {
+        "name": "Etichetta Pick Image"
       }
     }
   },

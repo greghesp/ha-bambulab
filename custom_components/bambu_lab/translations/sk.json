@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Vynútiť obnovenie údajov"
+      },
+      "dev": {
+        "name": "Ladiť"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Titulný obrázok"
+      },
+      "pick_image": {
+        "name": "Vyberať obrázok"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "IP adresa"
+      },
+      "printable_objects": {
+        "name": "Tlačiteľné objekty"
       }
     },
     "camera": {
@@ -596,6 +605,9 @@
       },
       "timelapse": {
         "name": "Načítať najnovší časový čas z tlačiarne"
+      },
+      "label_pick_image": {
+        "name": "Vyberať obrázok"
       }
     }
   },
