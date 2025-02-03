@@ -188,6 +188,9 @@
       },
       "cover_image": {
         "name": "Cover Image"
+      },
+      "pick_image": {
+        "name": "Pick image"
       }
     },
     "light": {

@@ -71,6 +71,7 @@ class Device:
         if self.supports_feature(Features.CAMERA_IMAGE):
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
+        self.pick_image = PickImage(client = client)
 
     def print_update(self, data) -> bool:
         send_event = False
@@ -1663,6 +1664,27 @@ class CoverImage:
         self._image_last_updated = datetime.now()
     
     def get_jpeg(self) -> bytearray:
+        return self._bytes
+
+    def get_last_update_time(self) -> datetime:
+        return self._image_last_updated
+
+    
+@dataclass
+class PickImage:
+    """Returns the object pick image from the FTP"""
+
+    def __init__(self, client):
+        self._client = client
+        self._bytes = bytearray()
+        self._image_last_updated = datetime.now()
+        self._client.callback("event_printer_pick_image_update")
+
+    def set_image(self, bytes):
+        self._bytes = bytes
+        self._image_last_updated = datetime.now()
+    
+    def get_image(self) -> bytearray:
         return self._bytes
 
     def get_last_update_time(self) -> datetime:
