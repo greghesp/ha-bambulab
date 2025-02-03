@@ -648,25 +648,43 @@ class PrintJob:
     #     "bedType": "textured_plate"
     #     },
 
+    def _file_in_known_directory(self, filename: str, ftp):
+        # Attempt to find the model in one of many known directories
+        for search_path in ['', '/cache', '/models', '/sdcard']:
+            try:
+                path_contents = ftp.nlst(f"{search_path}")
+                if filename in path_contents:
+                    return f"{search_path}/{filename}"
+            except:
+                pass
+        
+        return None
+
     def _find_model_path(self, ftp):
         if self.gcode_file != '':
-            # Attempt to find the model in one of many known directories
-            for search_path in ['/', '/cache', '/models', '/sdcard']:
-                try:
-                    path_contents = ftp.nlst(f"{search_path}")
-                    if self.gcode_file in path_contents:
-                        model_path = f"{search_path}/{self.gcode_file}"
-                        LOGGER.debug(f"Found model {model_path}")
-                        return model_path
-                except:
-                    pass
-        else:
-            model_path = self._find_latest_file(ftp, '/Cache', ['.3mf'])
+            model_path = self._file_in_known_directory(self.gcode_file, ftp)
             if model_path is not None:
+                LOGGER.debug(f"Found model {model_path}")
                 return model_path
+        else:
+            model_path = self._find_latest_file(ftp, '/cache', ['.gcode', '.3mf'])
 
-        LOGGER.debug(f"Model '{self.gcode_file}' count not be found in any known directories")
-        return None
+            # If the latest model path has the suffix "_plate_n.gcode" it is likely
+            # the inflated gcode from a 3mf. Search for the original 3mf in
+            # known directories.
+            if model_path is not None and re.search("_plate_\d+.gcode$", model_path) is not None:
+                model_path = re.sub("_plate_\d+.gcode$", ".gcode.3mf", os.path.basename(model_path))
+                LOGGER.debug(f"Looking for original 3mf: {model_path}")
+                model_path = self._file_in_known_directory(model_path, ftp)
+
+                if model_path is not None:
+                    LOGGER.debug(f"Found original gcode 3mf: {model_path}")
+                    return model_path
+                else:
+                    # Original 3mf wasn't found, re-search /cache for 3mf files only
+                    model_path = self._find_latest_file(ftp, '/cache', ['.3mf'])
+                
+            return model_path
     
     def _find_latest_file(self, ftp, path, extensions: list):
         # Look for the newest file with extension in directory.
@@ -712,7 +730,7 @@ class PrintJob:
             _, extension = os.path.splitext(file[1])
             if extension in extensions:
                 file_path = f"{path}/{file[1]}"
-                LOGGER.debug(f"Found file {file_path}")
+                LOGGER.debug(f"Found latest file {file_path}")
                 return file_path
 
         return None
