@@ -627,7 +627,7 @@ class BambuClient:
 
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
-        LOGGER.debug(" Disconnect: Client Disconnecting")
+        LOGGER.debug("Disconnect: Client Disconnecting")
         if self.client is not None:
             self.client.disconnect()
             self.client = None
@@ -652,10 +652,9 @@ class BambuClient:
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.info_update(data=json_data.get("info"))
-            if json_data.get("print") and json_data.get("print").get("net"):
+            if (json_data.get('print', {}).get('command', '') == 'push_status') and (json_data.get('print', {}).get('msg', '') == 0):
                 self._device.print_update(data=json_data.get("print"))
-                if (json_data.get('print').get('command', '') == 'push_status') and (json_data.get('print').get('msg', '') == 0):
-                    result.put(True)
+                result.put(True)
 
         self._test_mode = True
         self.client = mqtt.Client()
