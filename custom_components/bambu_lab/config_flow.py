@@ -308,7 +308,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
             success = True
             if user_input.get('host', "") != "":
-                LOGGER.debug("Config Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
+                LOGGER.debug(f"Config Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                 config = {
                     'access_code': user_input['access_code'],
                     'device_type': device_type,
@@ -372,7 +372,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             # Serial must be upper case to work
             user_input['serial'] = user_input['serial'].upper()
 
-            LOGGER.debug("Config Flow async_step_Lan: Testing local mqtt to '{user_input.get('host','')}'")
+            LOGGER.debug(f"Config Flow async_step_Lan: Testing local mqtt to '{user_input.get('host','')}'")
             config = {
                 'access_code': user_input['access_code'],
                 'serial': user_input['serial'],

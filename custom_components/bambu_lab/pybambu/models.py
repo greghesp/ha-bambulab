@@ -559,7 +559,7 @@ class PrintJob:
                 self.end_time = None
                 LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
-            # Update task data if bambu cloud connected
+            # Update task data
             self._update_task_data()
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
