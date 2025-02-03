@@ -151,7 +151,7 @@ class Device:
         elif feature == Features.PROMPT_SOUND:
             return self.info.device_type == "A1" or self.info.device_type == "A1MINI"
         elif feature == Features.FTP:
-            return True
+            return False
         elif feature == Features.TIMELAPSE:
             return False
 
@@ -772,7 +772,7 @@ class PrintJob:
         LOGGER.info(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
 
     def _update_task_data(self):
-        # If we are running in connection test mode, skipp updating the last print task data.
+        # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
         
