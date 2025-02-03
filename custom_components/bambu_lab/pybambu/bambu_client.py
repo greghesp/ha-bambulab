@@ -342,7 +342,7 @@ class BambuClient:
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
-        self._enable_ftp = self._device.supports_feature(Features.FTP) and config.get('enable_ftp', self._local_mqtt)
+        self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
         self._enable_timelapse = config.get('enable_timelapse', False)
 
         self._connected = False
@@ -405,14 +405,14 @@ class BambuClient:
 
     @property
     def ftp_enabled(self):
-        return self._enable_ftp
+        return self._device.supports_feature(Features.FTP) and self._enable_ftp
 
     def set_ftp_enabled(self, enable):
         self._enable_ftp = enable
 
     @property
     def timelapse_enabled(self):
-        return self._enable_timelapse
+        return self._device.supports_feature(Features.TIMELAPSE) and self._enable_timelapse
 
     def set_timelapse_enabled(self, enable):
         self._enable_timelapse = enable
@@ -631,12 +631,11 @@ class BambuClient:
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS | None:
-        if self.ftp_enabled:
-            ftp = ImplicitFTP_TLS()
-            ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
-            ftp.login(user='bblp', passwd=self._access_code)
-            ftp.prot_p()
-            return ftp
+        ftp = ImplicitFTP_TLS()
+        ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
+        ftp.login(user='bblp', passwd=self._access_code)
+        ftp.prot_p()
+        return ftp
 
     async def try_connection(self):
         """Test if we can connect to an MQTT broker."""
