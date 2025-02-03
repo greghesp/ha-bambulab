@@ -525,7 +525,10 @@ class BambuClient:
                       userdata: None,
                       result_code: int):
         """Called when MQTT Disconnects"""
-        LOGGER.warn(f"On Disconnect: Printer disconnected with error code: {result_code}")
+        if (result_code == 0):
+            LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
+        else:
+            LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._on_disconnect()
     
     def _on_disconnect(self):
@@ -651,7 +654,8 @@ class BambuClient:
                 self._device.info_update(data=json_data.get("info"))
             if json_data.get("print") and json_data.get("print").get("net"):
                 self._device.print_update(data=json_data.get("print"))
-                result.put(True)
+                if (json_data.get('print').get('command', '') == 'push_status') and (json_data.get('print').get('msg', '') == 0):
+                    result.put(True)
 
         self._test_mode = True
         self.client = mqtt.Client()
@@ -675,10 +679,13 @@ class BambuClient:
             self.client.connect(host, self._port)
             self.client.loop_start()
             if result.get(timeout=10):
+                LOGGER.debug("Connection test was successful")
                 return True
         except OSError as e:
+            LOGGER.error(f"Connection test failed with exception {type(e)} Args: {e}")
             return False
         except queue.Empty:
+            LOGGER.error(f"Connection test failed with timeout")
             return False
         finally:
             self.disconnect()

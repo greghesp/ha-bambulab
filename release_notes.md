@@ -1,5 +1,9 @@
+### V2.0.45
+- Fix integration setup failures with older printer firmwares
+
 ### V2.0.44
-- (Reenable) Model data retrieval from printer via ftp
+- Fix for model FTP download being active when it shouldn't be yet (not fully ready)
+- Add start of timelapse download support (disabled)
 
 ### V2.0.43
 - Fix for camera take 2
