@@ -1,0 +1,26 @@
+# AMS card
+
+## Description
+
+The AMS Card shows the information about your AMS devices
+
+## Configuration
+
+All configuration should be done via the dashboard card editor. The configuration options available are:
+
+- Card Header
+- Subtitle
+- AMS Selection
+- Card Style
+
+## Vector Card
+
+![Vector ams card](../images/vector-ams-card.png)
+
+- Shows dynamic spool volume remaining if enabled in the slicer, and is a Bambu Filament
+  - The there is an MQTT issue where the filament remaining value is not reported correctly, the card will show a full spool
+- Active spool can be identified by the highlighted border and animation
+
+## Graphic Card
+
+![Graphic ams card](../images/graphic-ams-card.png)
