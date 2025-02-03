@@ -795,6 +795,9 @@ class PrintJob:
         ftp = self._client.ftp_connection()
         model_path = self._find_model_path(ftp)
 
+        if model_path is None:
+            return
+
         # Create a temporary file we can download the 3mf into
         with tempfile.NamedTemporaryFile(delete=True) as f:
             # Fetch the 3mf from FTP and close the connection
