@@ -45,15 +45,18 @@
             "pages": [
                 {
                     "title": "Entities",
-                    "href": "entities"
+                    "href": "entities",
+                    "icon": "sitemap"
                 },
                 {
                     "title": "Device Triggers",
-                    "href": "device-triggers"
+                    "href": "device-triggers",
+                    "icon": "terminal"
                 },
                 {
                     "title": "Actions",
-                    "href": "actions"
+                    "href": "actions",
+                    "icon": "microchip"
                 }
             ]
         },
@@ -63,7 +66,8 @@
             "pages": [
                 {
                     "title": "Overview",
-                    "href": "/frontend"
+                    "href": "/frontend",
+                    "icon": "book"
                 }
             ]
         },
@@ -73,7 +77,8 @@
             "pages": [
                 {
                     "title": "AMS Card",
-                    "href": "/frontend/cards/ams-card"
+                    "href": "/frontend/cards/ams-card",
+                    "icon": "palette"
                 }
             ]
         },
