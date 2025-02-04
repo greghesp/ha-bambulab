@@ -252,7 +252,6 @@ class BambuCloud:
 
         if status_code == 200:
             LOGGER.debug("Authentication successful.")
-            LOGGER.debug(f"Response = '{response.json()}'")
         elif status_code == 400:
             LOGGER.debug(f"Received response: {response.json()}")           
             if response.json()['code'] == 1:
@@ -310,7 +309,7 @@ class BambuCloud:
                             LOGGER.debug("No user_id entry")
                         else:
                             username = f"u_{project['user_id']}"
-                            LOGGER.debug(f"Found user_id of {username}")
+                            LOGGER.debug(f"Found user_id of {username[:7]}xxxxx")
         else:
             LOGGER.debug("Authentication token looks to be a JWT")
             try:
