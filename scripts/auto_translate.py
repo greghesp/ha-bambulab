@@ -1,6 +1,7 @@
 import glob
 import json
 import os
+import sys
 import requests
 import subprocess
 
@@ -47,6 +48,43 @@ def convert(old_source, new_source, target, language):
       del target[entry]
 
 
+def get_last_release_content():
+    # Check if running in GitHub Actions
+    if not os.getenv('GITHUB_TOKEN'):
+        # Fallback to local git if not in GitHub Actions
+        result = subprocess.run(['git', 'show', "HEAD:../custom_components/bambu_lab/translations/en.json"], 
+                              capture_output=True, text=True)
+        return result.stdout if result.returncode == 0 else '{}'
+
+    # Get repository information from environment
+    repo = os.getenv('GITHUB_REPOSITORY', '')
+    headers = {
+        'Authorization': f"token {os.getenv('GITHUB_TOKEN')}",
+        'Accept': 'application/vnd.github.v3+json'
+    }
+
+    # Try to get the latest release first
+    releases_url = f"https://api.github.com/repos/{repo}/releases/latest"
+    response = requests.get(releases_url, headers=headers)
+    if response.status_code == 200:
+        # Release exists, get file from release tag
+        tag_name = response.json()['tag_name']
+        ref = tag_name
+    else:
+        # No release found, use default branch
+        print("No release found, falling back to default branch")
+        ref = 'main'
+
+    # Get the file content
+    content_url = f"https://api.github.com/repos/{repo}/contents/custom_components/bambu_lab/translations/en.json?ref={ref}"
+    response = requests.get(content_url, headers=headers)
+    if response.status_code != 200:
+        print("Error: Could not fetch translation file")
+        sys.exit(1)
+
+    import base64
+    return base64.b64decode(response.json()['content']).decode('utf-8')
+
 # Get the path to the current script file
 script_path = os.path.abspath(__file__)
 script_path = os.path.dirname(script_path)
@@ -56,8 +94,7 @@ englishFile = f"{sourceDir}/en.json"
 with open(englishFile, 'r') as file:
   new_english = json.load(file)
 
-result = subprocess.run(['git', 'show', "HEAD:../custom_components/bambu_lab/translations/en.json"], capture_output=True, text=True)
-old_english = json.loads(result.stdout)
+old_english = json.loads(get_last_release_content())
 
 files = glob.glob(f"{sourceDir}/*.json")
 for filepath in files:

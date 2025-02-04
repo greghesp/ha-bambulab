@@ -6,6 +6,7 @@ from homeassistant.const import Platform
 # Integration domain
 DOMAIN = "bambu_lab"
 BRAND = "Bambu Lab"
+URL_BASE = "/bambu_lab"
 
 LOGGER = logging.getLogger(__package__)
 LOGGERFORHA = logging.getLogger(f"{__package__}_HA")
@@ -22,3 +23,11 @@ PLATFORMS = (
     Platform.SENSOR,
     Platform.SWITCH
 )
+
+BAMBU_LAB_CARDS = [
+    {
+        "name": "Bambu Lab Cards",
+        "filename": "ha-bambulab-cards.js",
+        "version": "1.0.0"
+    }
+]
