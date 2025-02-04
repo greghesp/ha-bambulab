@@ -1,3 +1,6 @@
+### V2.0.47
+- ???
+
 ### V2.0.46
 - Fix integration setup failures with older printer firmwares take 2
 
