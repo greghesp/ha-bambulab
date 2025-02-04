@@ -559,7 +559,7 @@ class PrintJob:
                 self.end_time = None
                 LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
-            # Update task data if bambu cloud connected
+            # Update task data
             self._update_task_data()
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
@@ -772,7 +772,7 @@ class PrintJob:
         LOGGER.info(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
 
     def _update_task_data(self):
-        # If we are running in connection test mode, skipp updating the last print task data.
+        # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
         

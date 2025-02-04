@@ -1,0 +1,7 @@
+node_modules
+dist
+
+# Mac OS
+.DS_Store
+.vscode/settings.json
+.idea

@@ -366,7 +366,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     @property
     def ftp_enabled(self):
         options = dict(self.config_entry.options)
-        return options.get('enable_ftp', options.get('local_mqtt', False))
+        return options.get('enable_ftp', False)
 
     async def set_ftp_enabled(self, enable):
         LOGGER.debug(f"Setting FTP enabled to {enable}")

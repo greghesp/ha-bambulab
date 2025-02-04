@@ -290,7 +290,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
         default_host = ""
         if user_input is None:
-            LOGGER.debug("Config Flow: Testing cloud mqtt connection to get printer IP address")
+            LOGGER.debug("Config Flow async_step_Bambu_Lan: Testing cloud mqtt to get printer IP address")
             config = {
                 "region": self.region,
                 "email": self.email,
@@ -308,7 +308,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
             success = True
             if user_input.get('host', "") != "":
-                LOGGER.debug("Config Flow: Testing local mqtt connection")
+                LOGGER.debug(f"Config Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                 config = {
                     'access_code': user_input['access_code'],
                     'device_type': device_type,
@@ -372,7 +372,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             # Serial must be upper case to work
             user_input['serial'] = user_input['serial'].upper()
 
-            LOGGER.debug("Config Flow: Testing local mqtt connection")
+            LOGGER.debug(f"Config Flow async_step_Lan: Testing local mqtt to '{user_input.get('host','')}'")
             config = {
                 'access_code': user_input['access_code'],
                 'serial': user_input['serial'],
@@ -615,7 +615,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         
         default_host = ""
         if user_input is None:
-            LOGGER.debug("Options Flow: Testing cloud mqtt connection to get printer IP address")
+            LOGGER.debug("Options Flow async_step_Bambu_Lan: Testing cloud mqtt to get printer IP address")
             config = {
                 "region": self.region,
                 "email": self.email,
@@ -636,7 +636,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
                     success = True
                     if user_input.get('host', "") != "":
-                        LOGGER.debug(f"Options Flow: Testing local mqtt connection to {user_input.get('host')}")
+                        LOGGER.debug(f"Options Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                         config = {
                             'access_code': user_input['access_code'],
                             'device_type': self.config_entry.data['device_type'],
@@ -652,17 +652,16 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     if success:
                         LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
                         data = dict(self.config_entry.data)
-                        options = {
-                            "region": self.region,
-                            "email": self.email,
-                            "username": self._bambu_cloud.username,
-                            "name": device['name'],
-                            "host": user_input['host'],
-                            "local_mqtt": user_input.get('local_mqtt', False),
-                            "auth_token": self._bambu_cloud.auth_token,
-                            "access_code": user_input['access_code'],
-                            "usage_hours": float(user_input['usage_hours'])
-                        }
+                        options = dict(self.config_entry.options)
+                        options["region"] = self.region
+                        options["email"] = self.email
+                        options["username"] = self._bambu_cloud.username
+                        options["name"] = device['name']
+                        options["host"] = user_input['host']
+                        options["local_mqtt"] = user_input.get('local_mqtt', False)
+                        options["auth_token"] = self._bambu_cloud.auth_token
+                        options["access_code"] = user_input['access_code']
+                        options["usage_hours"] = float(user_input['usage_hours'])
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
                             entry=self.config_entry,
@@ -710,7 +709,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            LOGGER.debug("Options Flow: Testing local mqtt Connection")
+            LOGGER.debug(f"Options Flow async_step_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
             config = {
                 'access_code': user_input['access_code'],
                 'device_type': self.config_entry.data['device_type'],
@@ -724,17 +723,16 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             if success:
                 LOGGER.debug("Options Flow: Writing entry")
                 data = dict(self.config_entry.data)
-                options = {
-                    "region": self.config_entry.options.get('region', ''),
-                    "email": '',
-                    "username": '',
-                    "name": self.config_entry.options.get('name', ''),
-                    "host": user_input['host'],
-                    "local_mqtt": True,
-                    "auth_token": '',
-                    "access_code": user_input['access_code'],
-                    "usage_hours": float(user_input['usage_hours'])
-                }
+                options = dict(self.config_entry.options)
+                options["region"] = self.config_entry.options.get('region', '')
+                options["email"] = ''
+                options["username"] = ''
+                options["name"] = self.config_entry.options.get('name', '')
+                options["host"] = user_input['host']
+                options["local_mqtt"] = True
+                options["auth_token"] = ''
+                options["access_code"] = user_input['access_code']
+                options["usage_hours"] = float(user_input['usage_hours'])
 
                 title = self.config_entry.data['serial']
                 self.hass.config_entries.async_update_entry(
