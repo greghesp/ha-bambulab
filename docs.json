@@ -24,32 +24,46 @@
             "pages": [
                 {
                     "title": "Overview",
-                    "href": "/"
+                    "href": "/",
+                    "icon": "book"
                 },
                 {
                     "title": "Installation",
-                    "href": "installation"
+                    "href": "installation",
+                    "icon": "rocket"
                 },
                 {
                     "title": "Setup",
-                    "href": "setup"
+                    "href": "setup",
+                    "icon": "cog"
+                }
+            ]
+        },
+        {
+            "group": "Features",
+            "tab": "root",
+            "pages": [
+                {
+                    "title": "Entities",
+                    "href": "entities"
                 },
                 {
-                    "group": "Features",
-                    "pages": [
-                        {
-                            "title": "Entities",
-                            "href": "entities"
-                        },
-                        {
-                            "title": "Device Triggers",
-                            "href": "device-triggers"
-                        },
-                        {
-                            "title": "Actions",
-                            "href": "actions"
-                        }
-                    ]
+                    "title": "Device Triggers",
+                    "href": "device-triggers"
+                },
+                {
+                    "title": "Actions",
+                    "href": "actions"
+                }
+            ]
+        },
+        {
+            "group": "Getting Started",
+            "tab": "frontend",
+            "pages": [
+                {
+                    "title": "Overview",
+                    "href": "/frontend"
                 }
             ]
         },
