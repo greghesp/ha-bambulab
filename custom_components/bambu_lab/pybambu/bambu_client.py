@@ -135,7 +135,7 @@ class ChamberImageThread(threading.Thread):
             try:
                 with socket.create_connection((hostname, port)) as sock:
                     try:
-                        sslSock = ctx.wrap_socket(sock, server_hostname=self._client._serial)
+                        sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
                         sslSock.write(auth_data)
                         img = None
                         payload_size = 0
@@ -288,10 +288,9 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
     FTP_TLS subclass that automatically wraps sockets in SSL to support implicit FTPS.
     see https://stackoverflow.com/a/36049814
     """
-    def __init__(self, *args, server_name=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._sock = None
-        self._server_name = server_name
 
     @property
     def sock(self):
@@ -302,7 +301,7 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
     def sock(self, value):
         """When modifying the socket, ensure that it is ssl wrapped."""
         if value is not None and not isinstance(value, ssl.SSLSocket):
-            value = self.context.wrap_socket(value, server_hostname=self._server_name)
+            value = self.context.wrap_socket(value)
         self._sock = value
 
     """
@@ -316,26 +315,9 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
             if isinstance(self.sock, ssl.SSLSocket):
                 session = self.sock.session
             conn = self.context.wrap_socket(conn,
-                                            server_hostname=self._server_name,
+                                            server_hostname=self.host,
                                             session=session)
         return conn, size
-
-class MQTTSClient(mqtt.Client):
-    """
-    MQTT Client that supports custom certificate Server Name Indication (SNI) for TLS.
-    see https://github.com/eclipse-paho/paho.mqtt.python/issues/734#issuecomment-2256633060
-    """
-    def __init__(self, *args, server_name=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._server_name = server_name
-
-    def _ssl_wrap_socket(self, tcp_sock: socket.socket) -> ssl.SSLSocket:
-        orig_host = self._host
-        if self._server_name:
-            self._host = self._server_name
-        res = super()._ssl_wrap_socket(tcp_sock)
-        self._host = orig_host
-        return res
 
 @dataclass
 class BambuClient:
@@ -442,8 +424,7 @@ class BambuClient:
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
-        server_name = self._serial if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
-        self.client = MQTTSClient(server_name=server_name)
+        self.client = mqtt.Client()
         self._callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
@@ -647,7 +628,7 @@ class BambuClient:
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS:
-        ftp = ImplicitFTP_TLS(server_name=self._serial, context=create_local_ssl_context())
+        ftp = ImplicitFTP_TLS(context=create_local_ssl_context())
         ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
         ftp.login(user='bblp', passwd=self._access_code)
         ftp.prot_p()
@@ -677,8 +658,7 @@ class BambuClient:
                 result.put(True)
 
         self._test_mode = True
-        server_name = self._serial if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
-        self.client = MQTTSClient(server_name=server_name)
+        self.client = mqtt.Client()
         self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
@@ -728,8 +708,6 @@ class BambuClient:
 def create_local_ssl_context():
     """
     This context validates the certificate for TLS connections to local printers.
-    It additionally requires calling `context.wrap_socket(sock, servername=printer_serial_number)`
-    for the Server Name Indication (SNI).
     """
     script_path = os.path.abspath(__file__)
     directory_path = os.path.dirname(script_path)
@@ -738,4 +716,6 @@ def create_local_ssl_context():
     # Ignore "CA cert does not include key usage extension" error since python 3.13
     # See note in https://docs.python.org/3/library/ssl.html#ssl.create_default_context
     context.verify_flags &= ~ssl.VERIFY_X509_STRICT
+    # Workaround because some users get this error despite SNI: "certificate verify failed: IP address mismatch"
+    context.check_hostname = False
     return context
