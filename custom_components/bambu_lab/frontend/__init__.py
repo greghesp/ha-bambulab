@@ -74,10 +74,10 @@ class BambuLabCardRegistration:
                         # Remove old gzipped files
                         await self.async_remove_gzipe_files()
                     else:
-                        _LOGGER.debug("%s already registered as version %s"), card.get("name"), card.get("version")
+                        _LOGGER.debug("%s already registered as version %s", card.get("name"), card.get("version"))
 
             if not card_registered:
-                _LOGGER.debug("Registereding %s as versoin %s", card.get("name"), card.get("version"))
+                _LOGGER.debug("Registering %s as version %s", card.get("name"), card.get("version"))
                 await self.hass.data["lovelace"]["resources"].async_create_item({
                     "res_type":"module",
                     "url":url + "?v=" + card.get("version")
