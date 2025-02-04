@@ -405,14 +405,14 @@ class BambuClient:
 
     @property
     def ftp_enabled(self):
-        return self._enable_ftp
+        return self._device.supports_feature(Features.FTP) and self._enable_ftp
 
     def set_ftp_enabled(self, enable):
         self._enable_ftp = enable
 
     @property
     def timelapse_enabled(self):
-        return self._enable_timelapse
+        return self._device.supports_feature(Features.TIMELAPSE) and self._enable_timelapse
 
     def set_timelapse_enabled(self, enable):
         self._enable_timelapse = enable
@@ -525,7 +525,10 @@ class BambuClient:
                       userdata: None,
                       result_code: int):
         """Called when MQTT Disconnects"""
-        LOGGER.warn(f"On Disconnect: Printer disconnected with error code: {result_code}")
+        if (result_code == 0):
+            LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
+        else:
+            LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._on_disconnect()
     
     def _on_disconnect(self):
@@ -555,9 +558,13 @@ class BambuClient:
                 self._loaded_slicer_settings = True
                 self.slicer_settings.update()
 
-            # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
-            clean_msg = re.sub(r"\\n *", "", str(message.payload))
             if self._refreshed:
+                # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
+                clean_msg = re.sub(r"\\n *", "", str(message.payload))
+                # And adjust all payload to be meet proper json syntax instead of being pythonized so I can feed it directly into an online json prettifier
+                clean_msg = re.sub(r"\'", "\"", str(clean_msg))
+                clean_msg = re.sub(r"True", "true", str(clean_msg))
+                clean_msg = re.sub(r"False", "false", str(clean_msg))
                 LOGGER.debug(f"Received data: {clean_msg}")
 
             json_data = json.loads(message.payload)
@@ -624,19 +631,18 @@ class BambuClient:
 
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
-        LOGGER.debug(" Disconnect: Client Disconnecting")
+        LOGGER.debug("Disconnect: Client Disconnecting")
         if self.client is not None:
             self.client.disconnect()
             self.client = None
 
 
-    def ftp_connection(self) -> ImplicitFTP_TLS | None:
-        if self.ftp_enabled:
-            ftp = ImplicitFTP_TLS()
-            ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
-            ftp.login(user='bblp', passwd=self._access_code)
-            ftp.prot_p()
-            return ftp
+    def ftp_connection(self) -> ImplicitFTP_TLS:
+        ftp = ImplicitFTP_TLS()
+        ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
+        ftp.login(user='bblp', passwd=self._access_code)
+        ftp.prot_p()
+        return ftp
 
     async def try_connection(self):
         """Test if we can connect to an MQTT broker."""
@@ -646,11 +652,18 @@ class BambuClient:
 
         def on_message(client, userdata, message):
             json_data = json.loads(message.payload)
-            LOGGER.debug(f"Try Connection: Got '{json_data}'")
+            # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
+            clean_msg = re.sub(r"\\n *", "", str(message.payload))
+            # And adjust all payload to be meet proper json syntax instead of being pythonized so I can feed it directly into an online json prettifier
+            clean_msg = re.sub(r"\'", "\"", str(clean_msg))
+            clean_msg = re.sub(r"True", "true", str(clean_msg))
+            clean_msg = re.sub(r"False", "false", str(clean_msg))
+
+            LOGGER.debug(f"Try Connection: Got '{clean_msg}'")
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.info_update(data=json_data.get("info"))
-            if json_data.get("print") and json_data.get("print").get("net"):
+            if (json_data.get('print', {}).get('command', '') == 'push_status') and (json_data.get('print', {}).get('msg', 0) == 0):
                 self._device.print_update(data=json_data.get("print"))
                 result.put(True)
 
@@ -676,10 +689,13 @@ class BambuClient:
             self.client.connect(host, self._port)
             self.client.loop_start()
             if result.get(timeout=10):
+                LOGGER.debug("Connection test was successful")
                 return True
         except OSError as e:
+            LOGGER.error(f"Connection test failed with exception {type(e)} Args: {e}")
             return False
         except queue.Empty:
+            LOGGER.error(f"Connection test failed with timeout")
             return False
         finally:
             self.disconnect()
