@@ -1,0 +1,40 @@
+{
+    "name": "ha-bambulab",
+    "description": "Documentation for the ha-bambulab integration to Home Assistant",
+    "theme": {
+        "primary": "#ab47bc"
+      },
+      "sidebar": [
+        {
+            "group": "Getting Started",
+            "pages": [
+                {
+                    "title": "Overview",
+                    "href": "/"
+                },
+                {
+                    "title": "Installation",
+                    "href": "installation"
+                },
+                {
+                    "title": "Setup",
+                    "href": "setup"
+                },
+                {
+                    "title": "Features",
+                    "href": "features"
+                }
+            ]
+        },
+         {
+            "group": "Misc",
+            "pages": [
+                {
+                    "title": "Contributing",
+                    "href": "/misc/contributing",
+                    "icon": "heart"
+                }
+            ]
+         }
+      ]
+  }
