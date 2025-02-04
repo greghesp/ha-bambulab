@@ -558,9 +558,13 @@ class BambuClient:
                 self._loaded_slicer_settings = True
                 self.slicer_settings.update()
 
-            # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
-            clean_msg = re.sub(r"\\n *", "", str(message.payload))
             if self._refreshed:
+                # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
+                clean_msg = re.sub(r"\\n *", "", str(message.payload))
+                # And adjust all payload to be meet proper json syntax instead of being pythonized so I can feed it directly into an online json prettifier
+                clean_msg = re.sub(r"\'", "\"", str(clean_msg))
+                clean_msg = re.sub(r"True", "true", str(clean_msg))
+                clean_msg = re.sub(r"False", "false", str(clean_msg))
                 LOGGER.debug(f"Received data: {clean_msg}")
 
             json_data = json.loads(message.payload)
@@ -648,11 +652,18 @@ class BambuClient:
 
         def on_message(client, userdata, message):
             json_data = json.loads(message.payload)
-            LOGGER.debug(f"Try Connection: Got '{json_data}'")
+            # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
+            clean_msg = re.sub(r"\\n *", "", str(message.payload))
+            # And adjust all payload to be meet proper json syntax instead of being pythonized so I can feed it directly into an online json prettifier
+            clean_msg = re.sub(r"\'", "\"", str(clean_msg))
+            clean_msg = re.sub(r"True", "true", str(clean_msg))
+            clean_msg = re.sub(r"False", "false", str(clean_msg))
+
+            LOGGER.debug(f"Try Connection: Got '{clean_msg}'")
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.info_update(data=json_data.get("info"))
-            if (json_data.get('print', {}).get('command', '') == 'push_status') and (json_data.get('print', {}).get('msg', '') == 0):
+            if (json_data.get('print', {}).get('command', '') == 'push_status') and (json_data.get('print', {}).get('msg', 0) == 0):
                 self._device.print_update(data=json_data.get("print"))
                 result.put(True)
 
