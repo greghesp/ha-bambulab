@@ -342,7 +342,7 @@ class BambuClient:
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
-        self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
+        self._enable_ftp = config.get('enable_ftp', False)
         self._enable_timelapse = config.get('enable_timelapse', False)
 
         self._connected = False
