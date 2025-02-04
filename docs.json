@@ -4,9 +4,23 @@
     "theme": {
         "primary": "#ab47bc"
       },
-      "sidebar": [
+    "tabs": [
+        {
+            "id": "root",
+            "title": "Integration",
+            "href": "/"
+        },
+        {
+            "id": "frontend",
+            "title": "Frontend",
+            "href": "/frontend"
+        }
+      ],
+
+    "sidebar": [
         {
             "group": "Getting Started",
+            "tab": "root",
             "pages": [
                 {
                     "title": "Overview",
@@ -21,12 +35,35 @@
                     "href": "setup"
                 },
                 {
-                    "title": "Features",
-                    "href": "features"
+                    "group": "Features",
+                    "pages": [
+                        {
+                            "title": "Entities",
+                            "href": "entities"
+                        },
+                        {
+                            "title": "Device Triggers",
+                            "href": "device-triggers"
+                        },
+                        {
+                            "title": "Actions",
+                            "href": "actions"
+                        }
+                    ]
                 }
             ]
         },
-         {
+        {
+            "group": "Custom Cards",
+            "tab": "frontend",
+            "pages": [
+                {
+                    "title": "AMS Card",
+                    "href": "/frontend/cards/ams-card"
+                }
+            ]
+        },
+        {
             "group": "Misc",
             "pages": [
                 {

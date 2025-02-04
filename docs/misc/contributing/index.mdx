@@ -8,3 +8,35 @@ Want to contribute to ha-bambulab? Great! We have a few small asks though!
 
 - Please create your patch pull requests against the `main` branch.
 - Please be verbose in your description of your changes in your pull requests.
+
+# Frontend Development
+
+## Setup
+
+1. Clone this repo
+2. Setup a local instance of Home Assistant, I prefer to use Docker for this
+3. Install the [Bambu Lab Integration](https://github.com/greghesp/ha-bambulab)
+4. Setup a docker-compose.yml file with the correct volume binds. My file as an example:
+
+```yml
+version: "3.3"
+services:
+  hass:
+    image: homeassistant/home-assistant:beta
+    container_name: homeassistant
+    restart: unless-stopped # To reboot the container when the host comes back up from restarts.
+    ports:
+      - 8123:8123
+    volumes:
+      - type: bind
+        source: ../this_repo/custom_components/bambu_lab # Path to this folder within this repo
+        target: /config/www/community/ha-bambulab-cards
+      - ./hass_dev:/config
+```
+
+## Development
+
+1. Navigate to the frontend directory
+2. `npm install` to install dependecies
+3. `npm start` to start the development server
+3. If your work is complete, run `npm build` to generate the `dist/ha-bambulab-cards.js` before committing
