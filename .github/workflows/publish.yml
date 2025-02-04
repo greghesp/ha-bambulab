@@ -9,7 +9,6 @@ jobs:
   release_zip_file:
     name: Run automations to build latest release
     runs-on: ubuntu-latest
-    needs: [run_custom_scripts]
     permissions:
       contents: write
     steps:
@@ -29,22 +28,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python '${{ github.workspace }}/scripts/fetch_filaments.py'
-          python '${{ github.workspace }}/scripts/update_const.py'
-#         python '${{ github.workspace }}/scripts/auto_translate.py'
-
-      # - name: 📖 Set up Node 
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: '20'
-      #     cache: 'npm'
-      #     cache-dependency-path: '${{ github.workspace }}/frontend/package-lock.json'
-
-      # - name: 💿 Install Node dependencies
-      #   working-directory: '${{ github.workspace }}/frontend'
-      #   run: |
-      #     npm ci
-      #     npm run build
+            python '${{ github.workspace }}/scripts/fetch_filaments.py'
+            python '${{ github.workspace }}/scripts/update_const.py'
+            python '${{ github.workspace }}/scripts/auto_translate.py'
 
       - name: 🤐 Copy and Zip
         if: ${{ github.event_name == 'release' }}

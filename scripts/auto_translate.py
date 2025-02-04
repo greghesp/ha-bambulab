@@ -4,6 +4,8 @@ import os
 import sys
 import requests
 import subprocess
+import base64
+
 
 def get_google_translation(to, content):
   sourceLang = 'en'
@@ -50,16 +52,15 @@ def convert(old_source, new_source, target, language):
 
 def get_last_release_content():
     # Check if running in GitHub Actions
-    if not os.getenv('GITHUB_TOKEN'):
-        # Fallback to local git if not in GitHub Actions
-        result = subprocess.run(['git', 'show', "HEAD:../custom_components/bambu_lab/translations/en.json"], 
-                              capture_output=True, text=True)
-        return result.stdout if result.returncode == 0 else '{}'
+    # if not os.getenv('GITHUB_TOKEN'):
+    #     # Fallback to local git if not in GitHub Actions
+    #     result = subprocess.run(['git', 'show', "HEAD:../custom_components/bambu_lab/translations/en.json"], 
+    #                           capture_output=True, text=True)
+    #     return result.stdout if result.returncode == 0 else '{}'
 
     # Get repository information from environment
-    repo = os.getenv('GITHUB_REPOSITORY', '')
+    repo = os.getenv('GITHUB_REPOSITORY', 'greghesp/ha-bambulab')
     headers = {
-        'Authorization': f"token {os.getenv('GITHUB_TOKEN')}",
         'Accept': 'application/vnd.github.v3+json'
     }
 
@@ -82,14 +83,12 @@ def get_last_release_content():
         print("Error: Could not fetch translation file")
         sys.exit(1)
 
-    import base64
     return base64.b64decode(response.json()['content']).decode('utf-8')
 
-# Get the path to the current script file
-script_path = os.path.abspath(__file__)
-script_path = os.path.dirname(script_path)
-sourceDir = os.path.abspath(f"{script_path}/../custom_components/bambu_lab/translations")
-englishFile = f"{sourceDir}/en.json"
+# Get the workspace directory from GitHub environment, fallback to script directory if not available
+workspace_dir = os.getenv('GITHUB_WORKSPACE', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sourceDir = os.path.normpath(os.path.join(workspace_dir, 'custom_components', 'bambu_lab', 'translations'))
+englishFile = os.path.join(sourceDir, 'en.json')
 
 with open(englishFile, 'r') as file:
   new_english = json.load(file)
@@ -108,10 +107,10 @@ for filepath in files:
   elif language == 'cz':
     language = 'cs'
 
-  with open(filepath, 'r') as file:
+  with open(filepath, 'r', encoding='utf-8') as file:
     other_language = json.load(file)
 
   convert(old_english, new_english, other_language, language)
 
-  with open(filepath, 'w') as file:
+  with open(filepath, 'w', encoding='utf-8') as file:
     json.dump(other_language, file, ensure_ascii=False, indent=2)
