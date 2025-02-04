@@ -1,10 +1,11 @@
 ---
-title: Features
+title: Entities
+description: All entities exposed to Home Assistant
 ---
 
-## Entities
 
-### Fans
+
+## Fans
 
 | Sensor        | Notes             |
 | ------------- | ----------------- |
@@ -12,7 +13,7 @@ title: Features
 | Chamber       | Not on A1/A1 Mini |
 | Cooling       |                   |
 
-### Temperatures
+## Temperatures
 
 | Sensor        | Notes   |
 | ------------- | ------- |
@@ -22,7 +23,7 @@ title: Features
 | Nozzle        |         |
 | Target Nozzle |         |
 
-### Print Data and Progress
+## Print Data and Progress
 
 | Sensor            | Notes                                              |
 | ----------------- | -------------------------------------------------- |
@@ -40,9 +41,11 @@ title: Features
 | Cover Image       | With Bambu credentials or when loaded from printer |
 | Total Usage Hours | \* See Note                                        |
 
+<Info>
 \* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+</Info>
 
-### Miscellaneous
+## Miscellaneous
 
 | Sensor           | Notes |
 | ---------------- | ----- |
@@ -51,14 +54,14 @@ title: Features
 | Speed Profile    |       |
 | Timelapse Active |       |
 
-### AMS
+## AMS
 
 | Sensor            | Notes          |
 | ----------------- | -------------- |
 | Active tray       | If AMS present |
 | Active tray index | If AMS present |
 
-### Controls
+## Controls
 
 | Lights              | Notes                                                      |
 | ------------------- | ---------------------------------------------------------- |
@@ -69,10 +72,11 @@ title: Features
 | Manual Refresh Mode | P1/A1 only and only available in local MQTT mode           |
 | Bed temperature     | On P1/A1 this is not available in hybrid connection mode\* |
 | Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
-\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.
+
+<Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
 
 
-### AMS
+## AMS
 
 | Sensor         | Notes   |
 | -------------- | ------- |
@@ -95,7 +99,7 @@ title: Features
 | Spool serial number |            |
 | Type                |            |
 
-### External Spool
+## External Spool
 
 | Sensor         | Notes |
 | -------------- | ----- |
@@ -111,7 +115,7 @@ title: Features
 | Nozzle min temp |            |
 | Type            |            |
 
-### Diagnostics
+## Diagnostics
 
 | Sensor                    | Notes                                                          |
 | ------------------------- | -------------------------------------------------------------- |
@@ -124,7 +128,7 @@ title: Features
 | Online                    |                                                                |
 | Wifi Signal               |                                                                |
 
-### Cameras
+## Cameras
 
 | Sensor  | Notes                                                           |
 | ------- | --------------------------------------------------------------- |
