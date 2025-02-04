@@ -52,11 +52,11 @@ def convert(old_source, new_source, target, language):
 
 def get_last_release_content():
     # Check if running in GitHub Actions
-    # if not os.getenv('GITHUB_TOKEN'):
-    #     # Fallback to local git if not in GitHub Actions
-    #     result = subprocess.run(['git', 'show', "HEAD:../custom_components/bambu_lab/translations/en.json"], 
-    #                           capture_output=True, text=True)
-    #     return result.stdout if result.returncode == 0 else '{}'
+    if not os.getenv('GITHUB_TOKEN'):
+        # Fallback to local git if not in GitHub Actions
+        result = subprocess.run(['git', 'show', "HEAD:../custom_components/bambu_lab/translations/en.json"], 
+                              capture_output=True, text=True)
+        return result.stdout if result.returncode == 0 else '{}'
 
     # Get repository information from environment
     repo = os.getenv('GITHUB_REPOSITORY', 'greghesp/ha-bambulab')
