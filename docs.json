@@ -19,6 +19,11 @@
             "id": "frontend",
             "title": "Frontend",
             "href": "/frontend"
+        },
+        {
+            "id": "issues",
+            "title": "Issues",
+            "href": "/issues"
         }
       ],
 
@@ -88,7 +93,30 @@
             ]
         },
         {
+            "group": "Issues",
+            "tab": "issues",
+            "pages": [
+                {
+                    "title": "Overview",
+                    "href": "/issues",
+                    "icon": "book"
+                }
+            ]
+        },
+        {
             "group": "Misc",
+            "tab": "frontend",
+            "pages": [
+                {
+                    "title": "Contributing",
+                    "href": "/misc/contributing",
+                    "icon": "heart"
+                }
+            ]
+         },
+         {
+            "group": "Misc",
+            "tab": "root",
             "pages": [
                 {
                     "title": "Contributing",
