@@ -882,7 +882,11 @@ class PrintJob:
                     
                     # Filter the printable objects from slice_info.config, removing
                     # any that weren't detected in the pick image
-                    self.printable_objects = {k: printable_objects[k] for k in identify_ids if k in printable_objects}
+                    printable_objects = {k: printable_objects[k] for k in identify_ids if k in printable_objects}
+                    self.printable_objects = {
+                        "identify_ids": list(printable_objects.keys()),
+                        "object_names": list(printable_objects.values())
+                    }
                     
                     # Save the labelled pick image
                     if self._client.label_pick_image_enabled:
