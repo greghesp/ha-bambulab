@@ -114,7 +114,7 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.client.manual_refresh_mode
+        self._attr_is_on = self.coordinator.get_option_enabled(Options.MANUALREFRESH)
 
     @property
     def available(self) -> bool:
@@ -127,12 +127,12 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable manual refresh mode."""
-        self._attr_is_on = not self.coordinator.client.manual_refresh_mode
+        self._attr_is_on = True
         await self.coordinator.set_option_enabled(Options.MANUALREFRESH, True)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable manual refresh mode."""
-        self._attr_is_on = not self.coordinator.client.manual_refresh_mode
+        self._attr_is_on = False
         await self.coordinator.set_option_enabled(Options.MANUALREFRESH, False)
 
 
@@ -161,12 +161,12 @@ class BambuLabCameraSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable the camera."""
         self._attr_is_on = True
-        await self.coordinator.set_option_enabled(Options.CAMERA, self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.CAMERA, True)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable the camera."""
         self._attr_is_on = False
-        await self.coordinator.set_option_enabled(Options.CAMERA, self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.CAMERA, False)
 
 
 class BambuLabCameraImageSwitch(BambuLabSwitch):

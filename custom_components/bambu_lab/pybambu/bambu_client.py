@@ -336,7 +336,7 @@ class BambuClient:
         self._auth_token = config.get('auth_token', '')
         self._device_type = config.get('device_type', 'unknown').upper()
         self._local_mqtt = config.get('local_mqtt', False)
-        self._manual_refresh_mode = config.get('manual_refresh_mode', False)
+        self._manual_refresh_mode = False #config.get('manual_refresh_mode', False)
         self._serial = config.get('serial', '')
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
@@ -386,7 +386,7 @@ class BambuClient:
             self.disconnect()
         else:
             # Reconnect normally
-            self.connect(self._callback)
+            await self.connect(self._callback)
 
     @property
     def camera_enabled(self):
@@ -613,7 +613,7 @@ class BambuClient:
         """Force refresh data"""
 
         if self._manual_refresh_mode:
-            self.connect(self._callback)
+            await self.connect(self._callback)
         else:
             LOGGER.debug("Force Refresh: Getting Version Info")
             self._refreshed = True
