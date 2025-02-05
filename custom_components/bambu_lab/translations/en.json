@@ -605,9 +605,6 @@
       },
       "timelapse": {
         "name": "Load latest timelapse from printer"
-      },
-      "label_pick_image": {
-        "name": "Label pick image"
       }
     }
   },

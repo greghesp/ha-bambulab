@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, LOGGER, Options
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
 from .definitions import BambuLabSensorEntityDescription
@@ -18,21 +18,21 @@ CHAMBER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
         translation_key="p1p_camera",
         value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and coordinator.camera_as_image_sensor,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and coordinator.get_option_enabled(Options.IMAGECAMERA),
     )
 
 COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="cover_image",
         translation_key="cover_image",
         value_fn=lambda self: self.coordinator.get_model().print_job.get_cover_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled('ftp')
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled(Options.FTP)
     )
 
 PICK_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="pick_image",
         translation_key="pick_image",
         value_fn=lambda self: self.coordinator.get_model().print_job.get_pick_image(),
-        exists_fn=lambda coordinator: coordinator.get_option_enabled('ftp')
+        exists_fn=lambda coordinator: coordinator.get_option_enabled(Options.FTP)
     )
 
 
@@ -115,7 +115,7 @@ class ChamberImage(ImageEntity, BambuLabEntity):
     
     @property
     def available(self) -> bool:
-        return self.coordinator.get_model().chamber_image.available and self.coordinator.get_option_enabled('camera')
+        return self.coordinator.get_model().chamber_image.available and self.coordinator.get_option_enabled(Options.CAMERA)
 
 
 class PickImage(ImageEntity, BambuLabEntity):
