@@ -321,8 +321,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             sw_version=""
         )
 
-    def get_option_enabled(self, option: Options, default = False):
+    def get_option_enabled(self, option: Options):
         options = dict(self.config_entry.options)
+
+        default = False
+        match option:
+            case Options.CAMERA:
+                default = True
+
         return options.get(OPTION_NAME[option], default)
         
     async def set_option_enabled(self, option: Options, enable: bool):
