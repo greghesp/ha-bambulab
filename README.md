@@ -1,5 +1,15 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
-[![downloads](https://shields.io/github/downloads/greghesp/ha-bambulab/latest/total?style=for-the-badge)](https://github.com/greghesp/ha-bambulab)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/greghesp/ha-bambulab/publish.yml?style=for-the-badge)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/greghesp/ha-bambulab/total?style=for-the-badge)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/greghesp/ha-bambulab?style=for-the-badge)
+
+
+![GitHub Release Date](https://img.shields.io/github/release-date-pre/greghesp/ha-bambulab?style=for-the-badge&label=Latest%20Beta%20Release) ![GitHub Release](https://img.shields.io/github/v/release/greghesp/ha-bambulab?include_prereleases&style=for-the-badge)
+
+![GitHub Release Date](https://img.shields.io/github/release-date/greghesp/ha-bambulab?style=for-the-badge&label=Latest%20Release) ![GitHub Release](https://img.shields.io/github/v/release/greghesp/ha-bambulab?style=for-the-badge)
+
+
+
 
 
 # Bambu Lab
