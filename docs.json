@@ -1,9 +1,14 @@
 {
     "name": "ha-bambulab",
     "description": "Documentation for the ha-bambulab integration to Home Assistant",
-    "theme": {
-        "primary": "#ab47bc"
-      },
+    "logo": {
+        "light": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/icon@2x.png",
+        "dark": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/dark_icon@2x.png"
+    },
+    "favicon": {
+        "light": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/icon@2x.png",
+        "dark": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/dark_icon@2x.png"
+    },
     "tabs": [
         {
             "id": "root",
@@ -24,32 +29,50 @@
             "pages": [
                 {
                     "title": "Overview",
-                    "href": "/"
+                    "href": "/",
+                    "icon": "book"
                 },
                 {
                     "title": "Installation",
-                    "href": "installation"
+                    "href": "installation",
+                    "icon": "rocket"
                 },
                 {
                     "title": "Setup",
-                    "href": "setup"
+                    "href": "setup",
+                    "icon": "cog"
+                }
+            ]
+        },
+        {
+            "group": "Features",
+            "tab": "root",
+            "pages": [
+                {
+                    "title": "Entities",
+                    "href": "entities",
+                    "icon": "sitemap"
                 },
                 {
-                    "group": "Features",
-                    "pages": [
-                        {
-                            "title": "Entities",
-                            "href": "entities"
-                        },
-                        {
-                            "title": "Device Triggers",
-                            "href": "device-triggers"
-                        },
-                        {
-                            "title": "Actions",
-                            "href": "actions"
-                        }
-                    ]
+                    "title": "Device Triggers",
+                    "href": "device-triggers",
+                    "icon": "terminal"
+                },
+                {
+                    "title": "Actions",
+                    "href": "actions",
+                    "icon": "microchip"
+                }
+            ]
+        },
+        {
+            "group": "Getting Started",
+            "tab": "frontend",
+            "pages": [
+                {
+                    "title": "Overview",
+                    "href": "/frontend",
+                    "icon": "book"
                 }
             ]
         },
@@ -59,7 +82,8 @@
             "pages": [
                 {
                     "title": "AMS Card",
-                    "href": "/frontend/cards/ams-card"
+                    "href": "/frontend/cards/ams-card",
+                    "icon": "palette"
                 }
             ]
         },

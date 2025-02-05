@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Force refresh data"
+      },
+      "dev": {
+        "name": "Debug"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Cover Image"
+      },
+      "pick_image": {
+        "name": "Pick image"
       }
     },
     "light": {
@@ -323,6 +329,9 @@
           "slicing": "Slicing",
           "init": "Init"
         }
+      },
+      "printable_objects": {
+        "name": "Printable objects"
       },
       "mqtt_mode": {
         "name": "MQTT connection mode",
@@ -596,6 +605,9 @@
       },
       "timelapse": {
         "name": "Load latest timelapse from printer"
+      },
+      "label_pick_image": {
+        "name": "Label pick image"
       }
     }
   },
