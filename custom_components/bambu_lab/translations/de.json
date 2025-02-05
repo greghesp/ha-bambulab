@@ -605,9 +605,6 @@
       },
       "timelapse": {
         "name": "Laden Sie den neuesten Zeitplan aus dem Drucker"
-      },
-      "label_pick_image": {
-        "name": "Etikett picken Bild"
       }
     }
   },

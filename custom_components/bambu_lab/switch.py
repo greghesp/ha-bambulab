@@ -5,7 +5,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, LOGGER, Options
 from .models import BambuLabEntity
 from .pybambu.const import Features
 
@@ -59,12 +59,6 @@ TIMELAPSE_SWITCH_DESCRIPTION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
-LABEL_PICK_IMAGE_DESCRIPTION = SwitchEntityDescription(
-    key="label_pick_image",
-    icon="mdi:image-marker",
-    translation_key="label_pick_image",
-    entity_category=EntityCategory.CONFIG,
-)
 
 async def async_setup_entry(
         hass: HomeAssistant,
@@ -88,10 +82,10 @@ async def async_setup_entry(
 
     if coordinator.get_model().supports_feature(Features.FTP):
         async_add_entities([BambuLabFtpSwitch(coordinator, entry)])
-        async_add_entities([BambuLabLabelPickImageSwitch(coordinator, entry)])
 
     if coordinator.get_model().supports_feature(Features.TIMELAPSE):
         async_add_entities([BambuLabTimelapseSwitch(coordinator, entry)])
+
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
     """Base BambuLab Switch"""
@@ -134,12 +128,13 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable manual refresh mode."""
         self._attr_is_on = not self.coordinator.client.manual_refresh_mode
-        await self.coordinator.set_manual_refresh_mode(True)
+        await self.coordinator.set_option_enabled(Options.MANUALREFRESH, True)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable manual refresh mode."""
         self._attr_is_on = not self.coordinator.client.manual_refresh_mode
-        await self.coordinator.set_manual_refresh_mode(False)
+        await self.coordinator.set_option_enabled(Options.MANUALREFRESH, False)
+
 
 class BambuLabCameraSwitch(BambuLabSwitch):
     """BambuLab Refresh data Switch"""
@@ -152,7 +147,7 @@ class BambuLabCameraSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.camera_enabled
+        self._attr_is_on = self.coordinator.get_option_enabled(Options.CAMERA)
 
     @property
     def available(self) -> bool:
@@ -166,12 +161,12 @@ class BambuLabCameraSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable the camera."""
         self._attr_is_on = True
-        await self.coordinator.set_camera_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.CAMERA, self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable the camera."""
         self._attr_is_on = False
-        await self.coordinator.set_camera_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.CAMERA, self._attr_is_on)
 
 
 class BambuLabCameraImageSwitch(BambuLabSwitch):
@@ -185,11 +180,11 @@ class BambuLabCameraImageSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.camera_as_image_sensor
+        self._attr_is_on = self.coordinator.get_option_enabled(Options.IMAGECAMERA)
 
     @property
     def available(self) -> bool:
-        return self.coordinator.camera_enabled
+        return self.coordinator.get_option_enabled(Options.CAMERA)
 
     @property
     def icon(self) -> str:
@@ -199,12 +194,12 @@ class BambuLabCameraImageSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable the camera."""
         self._attr_is_on = True
-        await self.coordinator.set_camera_as_image_sensor(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.IMAGECAMERA, self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable the camera."""
         self._attr_is_on = False
-        await self.coordinator.set_camera_as_image_sensor(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.IMAGECAMERA, self._attr_is_on)
 
 
 class BambuLabFtpSwitch(BambuLabSwitch):
@@ -218,7 +213,7 @@ class BambuLabFtpSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.ftp_enabled
+        self._attr_is_on = self.coordinator.get_option_enabled(Options.FTP)
 
     @property
     def available(self) -> bool:
@@ -232,12 +227,12 @@ class BambuLabFtpSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable FTP."""
         self._attr_is_on = True
-        await self.coordinator.set_ftp_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.FTP, self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable FTP."""
         self._attr_is_on = False
-        await self.coordinator.set_ftp_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.FTP, self._attr_is_on)
 
 
 class BambuLabTimelapseSwitch(BambuLabSwitch):
@@ -251,7 +246,7 @@ class BambuLabTimelapseSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.timelapse_enabled
+        self._attr_is_on = self.coordinator.get_option_enabled(Options.TIMELAPSE)
 
     @property
     def available(self) -> bool:
@@ -265,12 +260,12 @@ class BambuLabTimelapseSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable Timelapse Download."""
         self._attr_is_on = True
-        await self.coordinator.set_timelapse_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.TIMELAPSE, self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable Timelapse Download."""
         self._attr_is_on = False
-        await self.coordinator.set_timelapse_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled(Options.TIMELAPSE, self._attr_is_on)
 
 
 class BambuLabPromptSoundSwitch(BambuLabSwitch):
@@ -295,39 +290,3 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable manual refresh mode."""
         self.coordinator.get_model().info.set_prompt_sound(False)
-
-class BambuLabLabelPickImageSwitch(BambuLabSwitch):
-    """BambuLab Label pick image Switch"""
-
-    entity_description = LABEL_PICK_IMAGE_DESCRIPTION
-
-    def __init__(
-            self,
-            coordinator: BambuDataUpdateCoordinator,
-            config_entry: ConfigEntry
-    ) -> None:
-        super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.label_pick_image_enabled
-
-    @property
-    def available(self) -> bool:
-        return self.coordinator.ftp_enabled
-
-    @property
-    def icon(self) -> str:
-        """Return the icon for the switch."""
-        if self.available:
-            return "mdi:image-marker" if self.is_on else "mdi:image"
-        return "mdi:image-off"
-
-    async def async_turn_on(self, **kwargs: Any) -> None:
-        """Enable labelling pick image."""
-        self._attr_is_on = True
-        await self.coordinator.set_label_pick_image_enabled(self._attr_is_on)
-
-    async def async_turn_off(self, **kwargs: Any) -> None:
-        """Disable labelling pick image."""
-        self._attr_is_on = False
-        await self.coordinator.set_label_pick_image_enabled(self._attr_is_on)
-
-

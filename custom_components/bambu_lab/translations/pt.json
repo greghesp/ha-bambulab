@@ -605,9 +605,6 @@
       },
       "timelapse": {
         "name": "Carregue o mais recente timelapse da impressora"
-      },
-      "label_pick_image": {
-        "name": "Imagem de seleção de etiqueta"
       }
     }
   },

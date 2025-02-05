@@ -605,9 +605,6 @@
       },
       "timelapse": {
         "name": "Indlæs den seneste tidslap fra printer"
-      },
-      "label_pick_image": {
-        "name": "Label Pick Image"
       }
     }
   },

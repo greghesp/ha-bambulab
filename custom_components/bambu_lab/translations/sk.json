@@ -605,9 +605,6 @@
       },
       "timelapse": {
         "name": "Načítať najnovší časový čas z tlačiarne"
-      },
-      "label_pick_image": {
-        "name": "Vyberať obrázok"
       }
     }
   },
