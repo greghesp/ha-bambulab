@@ -1,0 +1,11 @@
+---
+title: Actions
+previous: /device-triggers
+previousTitle: Device Triggers
+next: /misc/contributing
+nextTitle: Misc
+---
+
+* **Send Command**: Sends arbitrary GCODE to the printer. Be careful as it does not check if the printer is running a job
+or not so before invoking this action, you should check the printer state to ensure it is not running a job.
+* **Print 3MF project file**: Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and it must contain gcode (e.g., "Export sliced file" from slicer)

@@ -3,7 +3,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
 from urllib.parse import urlparse
 
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, LOGGER, Options
 from .models import BambuLabEntity
 from .pybambu.const import Features
 from .definitions import BambuLabSensorEntityDescription
@@ -16,7 +16,7 @@ CHAMBER_CAMERA_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
         translation_key="p1p_camera",
         value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and not coordinator.camera_as_image_sensor,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and not coordinator.get_option_enabled(Options.IMAGECAMERA),
     )
 
 async def async_setup_entry(
@@ -127,4 +127,4 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
     
     @property
     def available(self) -> bool:
-        return self.coordinator.get_model().chamber_image.available and self.coordinator.camera_enabled
+        return self.coordinator.get_model().chamber_image.available and self.coordinator.get_option_enabled(Options.CAMERA)

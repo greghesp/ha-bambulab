@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Forçar atualização de dados"
+      },
+      "dev": {
+        "name": "Depurar"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Imagem de capa"
+      },
+      "pick_image": {
+        "name": "Escolha a imagem"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "Endereço IP"
+      },
+      "printable_objects": {
+        "name": "Objetos imprimíveis"
       }
     },
     "camera": {

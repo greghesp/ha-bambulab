@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Força l'actualització de les dades"
+      },
+      "dev": {
+        "name": "Anterioritat"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Imatge de portada"
+      },
+      "pick_image": {
+        "name": "Trieu la imatge"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "adreça IP"
+      },
+      "printable_objects": {
+        "name": "Objectes imprimibles"
       }
     },
     "camera": {

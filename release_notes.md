@@ -1,3 +1,8 @@
+### V2.1.0
+- Add the new cards frontend into this repo and install as part of this integration instead of separately.
+- Fix mishandling of X1C/E causing setup failure
+- Enable ability to load model data from printer via FTP
+
 ### V2.0.46
 - Fix integration setup failures with older printer firmwares take 2
 

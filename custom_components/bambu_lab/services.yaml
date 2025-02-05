@@ -81,3 +81,15 @@ print_project_file:
       required: true
       selector:
         text:
+
+skip_objects:
+  name: Skip objects
+  description: Skip objects currently being printed
+  fields:
+    objects:
+      name: Object IDs
+      description: Object IDs are available from printable objects entity attributes
+      required: true
+      example: "409,1463"
+      selector:
+        text:

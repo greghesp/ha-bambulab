@@ -1,0 +1,141 @@
+---
+title: Entities
+description: All entities exposed to Home Assistant
+previous: /setup
+previousTitle: Setup
+next: /device-triggers
+nextTitle: Device Triggers
+---
+
+
+
+## Fans
+
+| Sensor        | Notes             |
+| ------------- | ----------------- |
+| Aux           |                   |
+| Chamber       | Not on A1/A1 Mini |
+| Cooling       |                   |
+
+## Temperatures
+
+| Sensor        | Notes   |
+| ------------- | ------- |
+| Bed           |         |
+| Target Bed    |         |
+| Chamber       | X1 only |
+| Nozzle        |         |
+| Target Nozzle |         |
+
+## Print Data and Progress
+
+| Sensor            | Notes                                              |
+| ----------------- | -------------------------------------------------- |
+| Current Layer     |                                                    |
+| Total Layer Count |                                                    |
+| Print Progress    |                                                    |
+| Print Weight      | With Bambu credentials or when loaded from printer |
+| Print Length      | With Bambu credentials or when loaded from printer |
+| Print Bed Type    | Bed choice in the print job                        |
+| Start Time        | Simulated - more accurate with Bambu credentials   |
+| Remaining Time    |                                                    |
+| End Time          |                                                    |
+| Current Stage     |                                                    |
+| Print Status      |                                                    |
+| Cover Image       | With Bambu credentials or when loaded from printer |
+| Total Usage Hours | \* See Note                                        |
+
+<Info>
+\* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+</Info>
+
+## Miscellaneous
+
+| Sensor           | Notes |
+| ---------------- | ----- |
+| Nozzle Diameters |       |
+| Nozzle Type      |       |
+| Speed Profile    |       |
+| Timelapse Active |       |
+
+
+## Controls
+
+| Lights              | Notes                                                      |
+| ------------------- | ---------------------------------------------------------- |
+| Chamber Light       |                                                            |
+| Pause               |                                                            |
+| Resume              |                                                            |
+| Stop                |                                                            |
+| Manual Refresh Mode | P1/A1 only and only available in local MQTT mode           |
+| Bed temperature     | On P1/A1 this is not available in hybrid connection mode\* |
+| Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
+
+<Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
+<Warning>If you are running the latest X1 firmware with Bambu Authorisation, the only functional control is the Chamber Light</Warning>
+
+
+## AMS
+
+| Sensor            | Notes          |
+| ----------------- | -------------- |
+| Active tray       | If AMS present |
+| Active tray index | If AMS present |
+
+
+| Sensor         | Notes   |
+| -------------- | ------- |
+| Humidity Index |         |
+| Temperature    | X1 only |
+| Tray 1         |         |
+| Tray 2         |         |
+| Tray 3         |         |
+| Tray 4         |         |
+
+| Tray attributes:    | Notes      |
+| ------------------- | ---------- |
+| Color               |            |
+| Empty               |            |
+| K Value             | P1/A1 only |
+| Name                |            |
+| Nozzle max temp     |            |
+| Nozzle min temp     |            |
+| Remaining Filament  |            |
+| Spool serial number |            |
+| Type                |            |
+
+## External Spool
+
+| Sensor         | Notes |
+| -------------- | ----- |
+| External Spool |       |
+
+| Attributes:     | Notes      |
+| --------------- | ---------- |
+| Color           |            |
+| Empty           |            |
+| K Value         | P1/A1 only |
+| Name            |            |
+| Nozzle max temp |            |
+| Nozzle min temp |            |
+| Type            |            |
+
+## Diagnostics
+
+| Sensor                    | Notes                                                          |
+| ------------------------- | -------------------------------------------------------------- |
+| Enclosure Door            | X1 only                                                        |
+| Firmware Update Available |                                                                |
+| Force Refresh             |                                                                |
+| HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
+| IP Address                |                                                                |
+| MQTT connection mode      | Bambu Cloud or Local                                           |
+| Online                    |                                                                |
+| Wifi Signal               |                                                                |
+
+## Cameras
+
+| Sensor  | Notes                                                           |
+| ------- | --------------------------------------------------------------- |
+| Chamber | P1/A1/A1Mini - need the host IP providing                       |
+|         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |

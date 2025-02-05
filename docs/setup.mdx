@@ -1,0 +1,32 @@
+---
+title: Setup
+description: Setting up the Integration
+previous: /installation
+previousTitle: Installation
+next: /entities
+nextTitle: Features
+---
+
+For configuration, you'll ideally use your Bambu Credentials for the simplest setup and the most features as some sensors are supported by data from your Bambu cloud account print history. 
+You can also, optionally, provide the printer's local IP address to enable the more efficient and reliable direct to printer connection for the printer sensor data and to enable the P1/A1 chamber image support.
+
+However, the Bambu cloud connection doesn't support 2FA and passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode.
+
+### LAN Mode Setup
+
+ If you fall into any of these categories, select the Lan Mode Configuration connection option. You will need to manually provide:
+
+- Printer Serial Number - can be found in the printer settings or in Bambu Studio.
+- Local printer IP address - can be found in the printer network settings (LAN).
+- Access Code - can be found in the Printer settings.
+
+### Setup using Bambu Cloud w/ OAuth
+
+If you signed up using any OAuth method, you need to set a password for your Bambu Cloud account:
+
+- Login to the Bambu mobile app using OAuth.
+- Tap the person icon at the bottom right.
+- Tap Account Security > Change Password.
+
+This will allow you to set a password. Now you can login to the HA integration using your Bambu username and password
+instead of OAuth.

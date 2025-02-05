@@ -5,8 +5,9 @@ from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers import entity_platform
 from .const import DOMAIN, LOGGER, PLATFORMS
 from .coordinator import BambuDataUpdateCoordinator
+from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
-from .pybambu.commands import SEND_GCODE_TEMPLATE, PRINT_PROJECT_FILE_TEMPLATE
+from .pybambu.commands import SEND_GCODE_TEMPLATE, PRINT_PROJECT_FILE_TEMPLATE, SKIP_OBJECTS_TEMPLATE
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
@@ -62,6 +63,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         print_project_file  # Handler function
     )
 
+
+    async def skip_objects(call: ServiceCall):
+        """Handle the service call."""
+        command = SKIP_OBJECTS_TEMPLATE
+        object_ids = call.data.get("objects")
+        
+        command["print"]["obj_list"] = [int(x) for x in object_ids.split(',')]
+
+        coordinator.client.publish(command)
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "skip_objects",  # Service name
+        skip_objects  # Handler function
+    )
+
     # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
@@ -73,7 +91,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Now that we've finished initialization fully, start the MQTT connection so that any necessary
     # sensor reinitialization happens entirely after the initial setup.
     await coordinator.start_mqtt()
-    
+
+    cards = BambuLabCardRegistration(hass)
+    await cards.async_register()
+
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -90,6 +111,10 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
+
+
+    cards = BambuLabCardRegistration(hass)
+    await cards.async_unregister()
 
     LOGGER.debug("Async Setup Unload Done")
     return True

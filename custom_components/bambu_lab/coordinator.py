@@ -4,7 +4,9 @@ from .const import (
     BRAND,
     DOMAIN,
     LOGGER,
-    LOGGERFORHA
+    LOGGERFORHA,
+    Options,
+    OPTION_NAME
 )
 import asyncio
 from typing import Any
@@ -96,7 +98,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     options=options)
 
         elif event == "event_printer_chamber_image_update":
-            if self.camera_as_image_sensor:
+            if self.get_option_enabled(Options.IMAGECAMERA):
                 self._update_data()
 
         elif event == "event_printer_cover_image_update":
@@ -319,80 +321,34 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             sw_version=""
         )
 
-    async def set_manual_refresh_mode(self, manual_refresh_mode):
-        await self.client.set_manual_refresh_mode(manual_refresh_mode)
+    def get_option_enabled(self, option: Options, default = False):
         options = dict(self.config_entry.options)
-        options['manual_refresh_mode'] = manual_refresh_mode
+        return options.get(OPTION_NAME[option], default)
+        
+    async def set_option_enabled(self, option: Options, enable: bool):
+        LOGGER.debug(f"Setting {OPTION_NAME[option]} to {enable}")
+        options = dict(self.config_entry.options)
+        options[OPTION_NAME[option]] = enable
         self._hass.config_entries.async_update_entry(
             entry=self.config_entry,
             title=self.get_model().info.serial,
             data=self.config_entry.data,
             options=options)
+        
+        if option == Options.MANUALREFRESH:
+            await self.client.set_manual_refresh_mode(enable)
+        
+        force_reload = False
+        match option:
+            case Options.CAMERA:
+                force_reload = True
+            case Options.IMAGECAMERA:
+                force_reload = True
+            case Options.FTP:
+                force_reload = True
+            case Options.TIMELAPSE:
+                force_reload = True
 
-    @property
-    def camera_enabled(self):
-        options = dict(self.config_entry.options)
-        return options.get('enable_camera', True)
-
-    async def set_camera_enabled(self, enable):
-        LOGGER.debug(f"Setting camera enabled to {enable}")
-        options = dict(self.config_entry.options)
-        options['enable_camera'] = enable
-        self._hass.config_entries.async_update_entry(
-            entry=self.config_entry,
-            title=self.get_model().info.serial,
-            data=self.config_entry.data,
-            options=options)
-        # Force reload of sensors.
-        return await self.hass.config_entries.async_reload(self._entry.entry_id)
-
-    @property
-    def camera_as_image_sensor(self):
-        options = dict(self.config_entry.options)
-        return options.get('camera_as_image_sensor', False)
-
-    async def set_camera_as_image_sensor(self, enable):
-        LOGGER.debug(f"Setting camera_as_image_sensor to {enable}")
-        options = dict(self.config_entry.options)
-        options['camera_as_image_sensor'] = enable
-        self._hass.config_entries.async_update_entry(
-            entry=self.config_entry,
-            title=self.get_model().info.serial,
-            data=self.config_entry.data,
-            options=options)
-        # Force reload of sensors.
-        return await self.hass.config_entries.async_reload(self._entry.entry_id)
-
-    @property
-    def ftp_enabled(self):
-        options = dict(self.config_entry.options)
-        return options.get('enable_ftp', options.get('local_mqtt', False))
-
-    async def set_ftp_enabled(self, enable):
-        LOGGER.debug(f"Setting FTP enabled to {enable}")
-        options = dict(self.config_entry.options)
-        options['enable_ftp'] = enable
-        self._hass.config_entries.async_update_entry(
-            entry=self.config_entry,
-            title=self.get_model().info.serial,
-            data=self.config_entry.data,
-            options=options)
-        # Force reload of sensors.
-        return await self.hass.config_entries.async_reload(self._entry.entry_id)
-
-    @property
-    def timelapse_enabled(self):
-        options = dict(self.config_entry.options)
-        return options.get('enable_timelapse', False)
-
-    async def set_timelapse_enabled(self, enable):
-        LOGGER.debug(f"Setting Timelapse download enabled to {enable}")
-        options = dict(self.config_entry.options)
-        options['enable_timelapse'] = enable
-        self._hass.config_entries.async_update_entry(
-            entry=self.config_entry,
-            title=self.get_model().info.serial,
-            data=self.config_entry.data,
-            options=options)
-        # Force reload of sensors.
-        return await self.hass.config_entries.async_reload(self._entry.entry_id)
+        if force_reload:
+            # Force reload of sensors.
+            return await self.hass.config_entries.async_reload(self._entry.entry_id)
