@@ -321,22 +321,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             sw_version=""
         )
 
-    async def set_manual_refresh_mode(self, manual_refresh_mode):
-        await self.client.set_manual_refresh_mode(manual_refresh_mode)
-        options = dict(self.config_entry.options)
-        options['manual_refresh_mode'] = manual_refresh_mode
-        self._hass.config_entries.async_update_entry(
-            entry=self.config_entry,
-            title=self.get_model().info.serial,
-            data=self.config_entry.data,
-            options=options)
-        
     def get_option_enabled(self, option: Options, default = False):
         options = dict(self.config_entry.options)
         return options.get(OPTION_NAME[option], default)
         
     async def set_option_enabled(self, option: Options, enable: bool):
-        LOGGER.debug(f"Setting {option} enabled to {enable}")
+        LOGGER.debug(f"Setting {OPTION_NAME[option]} to {enable}")
         options = dict(self.config_entry.options)
         options[OPTION_NAME[option]] = enable
         self._hass.config_entries.async_update_entry(
@@ -344,6 +334,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             title=self.get_model().info.serial,
             data=self.config_entry.data,
             options=options)
+        
+        if option == Options.MANUALREFRESH:
+            await self.client.set_manual_refresh_mode(enable)
         
         force_reload = False
         match option:

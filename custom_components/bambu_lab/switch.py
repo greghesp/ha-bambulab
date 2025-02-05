@@ -128,12 +128,12 @@ class BambuLabManualModeSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable manual refresh mode."""
         self._attr_is_on = not self.coordinator.client.manual_refresh_mode
-        await self.coordinator.set_manual_refresh_mode(True)
+        await self.coordinator.set_option_enabled(Options.MANUALREFRESH, True)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable manual refresh mode."""
         self._attr_is_on = not self.coordinator.client.manual_refresh_mode
-        await self.coordinator.set_manual_refresh_mode(False)
+        await self.coordinator.set_option_enabled(Options.MANUALREFRESH, False)
 
 
 class BambuLabCameraSwitch(BambuLabSwitch):
