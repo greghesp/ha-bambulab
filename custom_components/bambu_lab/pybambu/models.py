@@ -8,7 +8,6 @@ import ftplib
 from dataclasses import dataclass, field
 from datetime import datetime
 from dateutil import parser, tz
-from custom_components.bambu_lab.frontend import _LOGGER
 from packaging import version
 from zipfile import ZipFile
 import io
