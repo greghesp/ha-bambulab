@@ -76,3 +76,15 @@ Want to contribute to ha-bambulab? Great! We have a few small asks though!
     ```
   </Step>
 </Steps>
+
+## Adding Cards
+
+<Warning>Please do not edit the `example-card`</Warning>
+
+To develop a new card, copy the `example-card` folder and rename the folder, files to match, and the variables within `const.ts`
+
+To include your card into the integration, open `ha-bambulab-cards.ts` and import your card:
+
+```js
+import "./cards/my-new-card/my-new-card";
+```
