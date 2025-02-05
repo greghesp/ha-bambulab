@@ -25,7 +25,7 @@ COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="cover_image",
         translation_key="cover_image",
         value_fn=lambda self: self.coordinator.get_model().print_job.get_cover_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.client.ftp_enabled
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled('ftp')
     )
 
 
@@ -104,4 +104,4 @@ class ChamberImage(ImageEntity, BambuLabEntity):
     
     @property
     def available(self) -> bool:
-        return self.coordinator.get_model().chamber_image.available and self.coordinator.camera_enabled
+        return self.coordinator.get_model().chamber_image.available and self.coordinator.get_option_enabled('camera')

@@ -127,4 +127,4 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
     
     @property
     def available(self) -> bool:
-        return self.coordinator.get_model().chamber_image.available and self.coordinator.camera_enabled
+        return self.coordinator.get_model().chamber_image.available and self.coordinator.get_option_enabled('camera')

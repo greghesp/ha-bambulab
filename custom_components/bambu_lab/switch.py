@@ -144,7 +144,7 @@ class BambuLabCameraSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.camera_enabled
+        self._attr_is_on = self.coordinator.get_option_enabled('camera')
 
     @property
     def available(self) -> bool:
@@ -158,12 +158,12 @@ class BambuLabCameraSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable the camera."""
         self._attr_is_on = True
-        await self.coordinator.set_camera_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled('camera', self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable the camera."""
         self._attr_is_on = False
-        await self.coordinator.set_camera_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled('camera', self._attr_is_on)
 
 
 class BambuLabCameraImageSwitch(BambuLabSwitch):
@@ -181,7 +181,7 @@ class BambuLabCameraImageSwitch(BambuLabSwitch):
 
     @property
     def available(self) -> bool:
-        return self.coordinator.camera_enabled
+        return self.coordinator.get_option_enabled('camera')
 
     @property
     def icon(self) -> str:
@@ -210,7 +210,7 @@ class BambuLabFtpSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.ftp_enabled
+        self._attr_is_on = self.coordinator.get_option_enabled('ftp')
 
     @property
     def available(self) -> bool:
@@ -224,12 +224,12 @@ class BambuLabFtpSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable FTP."""
         self._attr_is_on = True
-        await self.coordinator.set_ftp_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled('ftp', self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable FTP."""
         self._attr_is_on = False
-        await self.coordinator.set_ftp_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled('ftp', self._attr_is_on)
 
 
 class BambuLabTimelapseSwitch(BambuLabSwitch):
@@ -243,7 +243,7 @@ class BambuLabTimelapseSwitch(BambuLabSwitch):
             config_entry: ConfigEntry
     ) -> None:
         super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.timelapse_enabled
+        self._attr_is_on = self.coordinator.get_option_enabled('timelapse')
 
     @property
     def available(self) -> bool:
@@ -257,12 +257,12 @@ class BambuLabTimelapseSwitch(BambuLabSwitch):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Enable Timelapse Download."""
         self._attr_is_on = True
-        await self.coordinator.set_timelapse_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled('timelapse', self._attr_is_on)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable Timelapse Download."""
         self._attr_is_on = False
-        await self.coordinator.set_timelapse_enabled(self._attr_is_on)
+        await self.coordinator.set_option_enabled('timelapse', self._attr_is_on)
 
 
 class BambuLabPromptSoundSwitch(BambuLabSwitch):

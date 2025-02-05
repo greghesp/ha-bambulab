@@ -340,7 +340,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:file",
         value_fn=lambda self: self.coordinator.get_model().print_job.print_length,
         extra_attributes=lambda self: self.coordinator.get_model().print_job.get_print_lengths,
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.client.ftp_enabled
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled('ftp')
     ),
     BambuLabSensorEntityDescription(
         key="print_bed_type",
@@ -358,7 +358,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:file",
         value_fn=lambda self: self.coordinator.get_model().print_job.print_weight,
         extra_attributes=lambda self: self.coordinator.get_model().print_job.get_print_weights,
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.client.ftp_enabled
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled('ftp')
     ),
     BambuLabSensorEntityDescription(
         key="active_tray",
