@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Tving opdatering af data"
+      },
+      "dev": {
+        "name": "Debug"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Forsidebillede"
+      },
+      "pick_image": {
+        "name": "Vælg billede"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "IP-adresse"
+      },
+      "printable_objects": {
+        "name": "Udskrivbare objekter"
       }
     },
     "camera": {
@@ -596,6 +605,9 @@
       },
       "timelapse": {
         "name": "Indlæs den seneste tidslap fra printer"
+      },
+      "label_pick_image": {
+        "name": "Label Pick Image"
       }
     }
   },

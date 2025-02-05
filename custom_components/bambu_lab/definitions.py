@@ -245,6 +245,14 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         options=GCODE_STATE_OPTIONS + ["offline"]
     ),
     BambuLabSensorEntityDescription(
+        key="printable_objects",
+        translation_key="printable_objects",
+        icon="mdi:cube-unfolded",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: len(self.coordinator.get_model().print_job.printable_objects),
+        extra_attributes=lambda self: self.coordinator.get_model().print_job.printable_objects,
+    ),
+    BambuLabSensorEntityDescription(
         key="start_time",
         translation_key="start_time",
         icon="mdi:clock",

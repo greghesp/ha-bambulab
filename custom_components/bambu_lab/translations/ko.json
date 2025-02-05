@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "데이터 강제 새로 고침"
+      },
+      "dev": {
+        "name": "디버그"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "커버 이미지"
+      },
+      "pick_image": {
+        "name": "이미지를 선택하십시오"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "IP 주소"
+      },
+      "printable_objects": {
+        "name": "인쇄 가능한 물체"
       }
     },
     "camera": {
@@ -596,6 +605,9 @@
       },
       "timelapse": {
         "name": "프린터에서 최신 타임 랩스를로드하십시오"
+      },
+      "label_pick_image": {
+        "name": "라벨 선택 이미지"
       }
     }
   },

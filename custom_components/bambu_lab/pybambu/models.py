@@ -9,8 +9,10 @@ from datetime import datetime
 from dateutil import parser, tz
 from packaging import version
 from zipfile import ZipFile
+import io
 import tempfile
 import xml.etree.ElementTree as ElementTree
+from PIL import Image, ImageDraw, ImageFont
 
 from .utils import (
     search,
@@ -71,6 +73,7 @@ class Device:
         if self.supports_feature(Features.CAMERA_IMAGE):
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
+        self.pick_image = PickImage(client = client)
 
     def print_update(self, data) -> bool:
         send_event = False
@@ -432,6 +435,7 @@ class PrintJob:
     print_length: int
     print_bed_type: str
     print_type: str
+    printable_objects: dict
     _ams_print_weights: float
     _ams_print_lengths: float
 
@@ -480,6 +484,7 @@ class PrintJob:
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
         self.print_type = ""
+        self.printable_objects = {}
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -651,7 +656,7 @@ class PrintJob:
     def _find_model_path(self, ftp):
         if self.gcode_file != '':
             # Attempt to find the model in one of many known directories
-            for search_path in ['/', '/cache', '/models', '/sdcard']:
+            for search_path in ['', '/cache', '/models', '/sdcard']:
                 try:
                     path_contents = ftp.nlst(f"{search_path}")
                     if self.gcode_file in path_contents:
@@ -827,21 +832,28 @@ class PrintJob:
                 
                 # Start a total print length count to be compiled from each filament
                 print_length = 0
+                plate_number = None
+                printable_objects = {}
                 for metadata in plate:
                     if (metadata.get('key') == 'index'):
                         # Index is the plate number being printed
-                        plate = metadata.get('value')
-                        LOGGER.debug(f"Plate: {plate}")
+                        plate_number = metadata.get('value')
+                        LOGGER.debug(f"Plate: {plate_number}")
                         
                         # Now we have the plate number, extract the cover image from the archive
-                        self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate}.png"))
-                        LOGGER.debug(f"Cover image: Metadata/plate_{plate}.png")
+                        self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate_number}.png"))
+                        LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
                     elif (metadata.get('key') == 'weight'):
                         LOGGER.debug(f"Weight: {metadata.get('value')}")
                         self.print_weight = metadata.get('value')
                     elif (metadata.get('key') == 'prediction'):
                         # Estimated print length in seconds
                         LOGGER.debug(f"Print time: {metadata.get('value')}s")
+                    elif (metadata.tag == 'object'):
+                        # Get the list of printable objects present on the plate before slicing.
+                        # This includes hidden objects which need to be filtered out later.
+                        if metadata.get('skipped') == f"false":
+                            printable_objects[metadata.get('identify_id')] = metadata.get('name')
                     elif (metadata.tag == 'filament'):
                         # Filament used for the current print job. The plate info does not distinguish
                         # between AMS and External Spool, both AMS Tray 1 and External Spool have
@@ -857,6 +869,30 @@ class PrintJob:
                         print_length += float(metadata.get('used_m'))
                 
                 self.print_length = print_length
+
+                if plate_number is not None:
+                    # If user does not want pick image to be labelled with the
+                    # object identification IDs, save the provided image
+                    if self._client.label_pick_image_enabled is False:
+                        self._client._device.pick_image.set_image(archive.read(f"Metadata/pick_{plate_number}.png"))
+
+                    # Process the pick image for objects
+                    pick_image = Image.open(archive.open(f"Metadata/pick_{plate_number}.png"))
+                    identify_ids = self._identify_objects_in_pick_image(image=pick_image)
+                    
+                    # Filter the printable objects from slice_info.config, removing
+                    # any that weren't detected in the pick image
+                    printable_objects = {k: printable_objects[k] for k in identify_ids if k in printable_objects}
+                    self.printable_objects = {
+                        "identify_ids": list(printable_objects.keys()),
+                        "object_names": list(printable_objects.values())
+                    }
+                    
+                    # Save the labelled pick image
+                    if self._client.label_pick_image_enabled:
+                        buffer = io.BytesIO()
+                        pick_image.save(buffer, format="PNG", quality="web_very_high")
+                        self._client._device.pick_image.set_image(buffer.getvalue())
 
             archive.close()
 
@@ -926,6 +962,44 @@ class PrintJob:
                     self.end_time = local_dt
                     LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
+    def _identify_objects_in_pick_image(self, image: Image) -> set:
+        LOGGER.debug(f"Processing the pick image for objects")
+        # Open the pick image so we can detect objects present
+        image_width, image_height = image.size
+        draw = ImageDraw.Draw(image)
+        font = ImageFont.load_default(size=18)
+        
+        seen_colors = set()
+        seen_identify_ids = set()
+
+        # Clone the image if it's to be labelled, otherwise the labels
+        # are detected as objects
+        pixels = image.copy().load() if self._client.label_pick_image_enabled else image.load()
+
+        # Loop through every pixel and label the first occurrence of each unique color
+        for y in range(image_height):
+            for x in range(image_width):
+                current_color = pixels[x, y]
+                r, g, b, a = current_color
+
+                # Skip this pixel if it's transparent or already identified
+                if r == 0 or current_color in seen_colors:
+                    continue
+
+                # Convert the colour to the decimal representation of its hex value
+                identify_id = int(f"0x{b:02X}{g:02X}{r:02X}", 16)
+                seen_colors.add(current_color)
+                seen_identify_ids.add(str(identify_id))
+
+                # Label the image with the identifier
+                if self._client.label_pick_image_enabled:
+                    left, top, right, bottom = draw.textbbox((x+4, y-2), str(identify_id), font=font)
+                    draw.rectangle((left-4, top-4, right+4, bottom+4), fill=current_color, outline="white", width=1)
+                    draw.text((x+4, y-2), str(identify_id), fill="white", font=font)
+        
+        object_count = len(seen_identify_ids)
+        LOGGER.debug(f"Finished proccessing pick image, found {object_count} object{'s'[:object_count^1]}")
+        return seen_identify_ids
 
 @dataclass
 class Info:
@@ -1660,6 +1734,27 @@ class CoverImage:
         self._image_last_updated = datetime.now()
     
     def get_jpeg(self) -> bytearray:
+        return self._bytes
+
+    def get_last_update_time(self) -> datetime:
+        return self._image_last_updated
+
+    
+@dataclass
+class PickImage:
+    """Returns the object pick image from the FTP"""
+
+    def __init__(self, client):
+        self._client = client
+        self._bytes = bytearray()
+        self._image_last_updated = datetime.now()
+        self._client.callback("event_printer_pick_image_update")
+
+    def set_image(self, bytes):
+        self._bytes = bytes
+        self._image_last_updated = datetime.now()
+    
+    def get_image(self) -> bytearray:
         return self._bytes
 
     def get_last_update_time(self) -> datetime:

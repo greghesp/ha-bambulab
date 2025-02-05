@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Forcer l'actualisation des données"
+      },
+      "dev": {
+        "name": "Déboguer"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Image de couverture"
+      },
+      "pick_image": {
+        "name": "Choisir l'image"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "Adresse IP"
+      },
+      "printable_objects": {
+        "name": "Objets imprimables"
       }
     },
     "camera": {
@@ -596,6 +605,9 @@
       },
       "timelapse": {
         "name": "Chargez le dernier timelapse de l'imprimante"
+      },
+      "label_pick_image": {
+        "name": "Image de choix d'étiquette"
       }
     }
   },

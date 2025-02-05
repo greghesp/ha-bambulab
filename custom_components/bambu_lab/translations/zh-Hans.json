@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "强制刷新数据"
+      },
+      "dev": {
+        "name": "调试"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "封面图片"
+      },
+      "pick_image": {
+        "name": "选择图像"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "IP地址"
+      },
+      "printable_objects": {
+        "name": "可打印对象"
       }
     },
     "camera": {
@@ -596,6 +605,9 @@
       },
       "timelapse": {
         "name": "从打印机加载最新的时间段"
+      },
+      "label_pick_image": {
+        "name": "标签选择图像"
       }
     }
   },
