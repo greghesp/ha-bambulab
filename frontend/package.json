@@ -1,6 +1,6 @@
 {
   "name": "ha-bambulab-cards",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Home Assistant Bambu Lab Cards",
   "main": "index.js",
   "scripts": {
