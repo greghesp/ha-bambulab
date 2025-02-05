@@ -9,6 +9,7 @@ from datetime import datetime
 from dateutil import parser, tz
 from packaging import version
 from zipfile import ZipFile
+from typing import Union
 import io
 import tempfile
 import xml.etree.ElementTree as ElementTree
@@ -653,42 +654,42 @@ class PrintJob:
     #     "bedType": "textured_plate"
     #     },
 
-    def _file_in_known_directory(self, filename: str, ftp):
-        # Attempt to find the model in one of many known directories
-        for search_path in ['', '/cache', '/models', '/sdcard']:
+    def _file_in_known_directory(self, filename: Union[str, callable], ftp, search_paths: list=None) -> Union[str, None]:
+        # Attempt to find a file in one of many known directories
+        for search_path in (['', '/cache'] if search_paths is None else search_paths):
             try:
                 path_contents = ftp.nlst(f"{search_path}")
+
+                # If a method was provided instead of a filename pass it the
+                # file contents to let it perform its own match
+                if callable(filename):
+                    file_match = filename(path_contents, search_path)
+                    if file_match is not None:
+                        return f"{file_match}"
+                    continue
+
+                # Otherwise, perform a simple match on the path's contents
                 if filename in path_contents:
                     return f"{search_path}/{filename}"
             except:
                 pass
-        
-        return None
 
-    def _find_model_path(self, ftp):
-        if self.gcode_file != '':
-            model_path = self._file_in_known_directory(self.gcode_file, ftp)
-            if model_path is not None:
-                LOGGER.debug(f"Found model {model_path}")
-                return model_path
-        else:
-            model_path = self._find_latest_file(ftp, '/cache', ['.gcode', '.3mf'])
+    def _find_model_path(self, ftp) -> Union[str, None]:
+        # Bail if there's neither gcode or subtask to search for
+        if self.gcode_file == '' and self.subtask_name == '':
+            return
 
-            # If the latest model path has the suffix "_plate_n.gcode" it is likely
-            # the inflated gcode from a 3mf. Search for the original 3mf in
-            # known directories.
-            if model_path is not None and re.search("_plate_\d+.gcode$", model_path) is not None:
-                model_path = re.sub("_plate_\d+.gcode$", ".gcode.3mf", os.path.basename(model_path))
-                LOGGER.debug(f"Looking for original 3mf: {model_path}")
-                model_path = self._file_in_known_directory(model_path, ftp)
+        # The subtask_name is stripped of its file ext, so use a filter when
+        # matching against a *.3mf files
+        def match_subtask_file(filename) -> bool:
+            return filename.endswith(".3mf") and filename.startswith(self.subtask_name)
 
-                if model_path is not None:
-                    LOGGER.debug(f"Found original gcode 3mf: {model_path}")
-                    return model_path
-                else:
-                    # Original 3mf wasn't found, re-search /cache for 3mf files only
-                    model_path = self._find_latest_file(ftp, '/cache', ['.3mf'])
-                
+        # Use the gcode filename if provided otherwise fall back to the subtask
+        model_name = self.gcode_file if self.gcode_file != '' else match_subtask_file
+        model_path = self._file_in_known_directory(filename=model_name, ftp=ftp)
+
+        if model_path is not None:
+            LOGGER.debug(f"Found model {model_path}")
             return model_path
     
     def _find_latest_file(self, ftp, path, extensions: list):
