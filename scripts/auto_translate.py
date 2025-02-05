@@ -38,7 +38,7 @@ def convert(old_source, new_source, target, language):
       convert(old_source.get(entry, {}), new_source[entry], target[entry], language)
     else:
       # We have a string.
-      if (not entry in target) or (old_source[entry] != new_source[entry]):
+      if (not entry in target) or (not entry in old_source) or (old_source[entry] != new_source[entry]):
         # String doesn't exist in the target. Translate it and insert it.
         translation = get_google_translation(language, new_source[entry])
         print(f"{entry} = '{new_source[entry]}' -> '{translation}'")
