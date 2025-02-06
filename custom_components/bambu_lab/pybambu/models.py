@@ -688,6 +688,10 @@ class PrintJob:
         # Bail if there's neither gcode nor subtask to search for. If there's
         # gcode, but it isn't a 3mf we can't use it.
         if self.gcode_file == '' and self.subtask_name == '':
+            # Attempt to find the latest file by date stamps
+            model_path = self._find_latest_file(ftp, '/cache', ['.3mf'])
+            if model_path is not None:
+                return model_path
             return
         elif self.gcode_file != '' and not self.gcode_file.endswith('.3mf'):
             return
@@ -713,10 +717,6 @@ class PrintJob:
         model_path = self._file_in_known_directory(filename=model_name, ftp=ftp, use_cache=False)
         if model_path is not None:
             LOGGER.debug(f"Found model {model_path}")
-            return model_path
-        
-        model_path = self._find_latest_file(ftp, '/cache', ['.3mf'])
-        if model_path is not None:
             return model_path
     
     def _find_latest_file(self, ftp, path, extensions: list):
