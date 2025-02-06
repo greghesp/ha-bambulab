@@ -32,7 +32,7 @@ export class SKIPOBJECT_CARD extends LitElement {
   @state() private _states;
   @state() private _deviceId: any;
   @state() private _entities: any;
-  
+
   static get properties() {
     return {
       hass: {},
@@ -67,7 +67,49 @@ export class SKIPOBJECT_CARD extends LitElement {
     this.filterBambuDevices();
   }
 
-  _pick_image() {
+  _updateCanvas() {
+    const canvas = this.shadowRoot!.getElementById('canvas') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d')!;
+
+    const image = new Image();
+    image.src = this._get_pick_image_url();
+    image.onload = function() {
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.drawImage(image, 0, 0)
+    
+      // Create an ImageData object
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const data = imageData.data;
+    
+      // Replace the target RGB value with red
+      const targetRgb = { r: 5, g: 3, b: 0 }; // Example RGB value to replace
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        if (r === targetRgb.r && g === targetRgb.g && b === targetRgb.b) {
+          data[i]     = 255; // Red
+          data[i + 1] = 0;   // Green
+          data[i + 2] = 0;   // Blue
+          data[i + 3] = 255; // Alpha (opacity)
+        }
+        else if (r != 0 || g != 0 || b != 0)
+        {
+          data[i]     = 0;   // Red
+          data[i + 1] = 255; // Green
+          data[i + 2] = 0;   // Blue
+          data[i + 3] = 255; // Alpha (opacity)
+        }
+      }
+    
+      // Put the image data on the canvas
+      ctx.putImageData(imageData, 0, 0);
+    }
+  }
+
+  _get_pick_image_url() {
     if (this._entities.pick_image) {
       const entity = this._entities.pick_image;
       const timestamp = this._states[entity.entity_id].state;
@@ -75,7 +117,7 @@ export class SKIPOBJECT_CARD extends LitElement {
       const imageUrl = `/api/image_proxy/${entity.entity_id}?token=${accessToken}&time=${timestamp}`;
       return imageUrl;
     }
-    return nothing;
+    return '';
   }
 
   // Style for the card and popup
@@ -138,7 +180,7 @@ export class SKIPOBJECT_CARD extends LitElement {
               <div class="popup">
                 <div class="popup-header">Skip Objects</div>
                 <div class="popup-content">
-                  <img src="${this._pick_image()}" />
+                  <canvas id="canvas" width="512" height="512"/>
                   <p>Click the object(s) you want to skip printing and then the confirm button once done.</p>
                   <button @click="${this._togglePopup}">Confirm</button>
                 </div>
@@ -149,8 +191,14 @@ export class SKIPOBJECT_CARD extends LitElement {
     `;
   }
 
+  updated(changedProperties) {
+    if (changedProperties.has('_popupVisible') && this._popupVisible) {
+      this._updateCanvas();
+    }
+  }
+
   // State to track popup visibility
-  @property({ type: Boolean }) private _popupVisible = false
+  @property({ type: Boolean }) _popupVisible = false
 
   // Function to toggle popup visibility
   private _togglePopup() {
