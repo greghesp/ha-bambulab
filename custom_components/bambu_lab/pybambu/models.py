@@ -666,7 +666,7 @@ class PrintJob:
     def _file_in_known_directory(self, filename: Union[str, callable], ftp, search_paths: list=None, use_cache=True) -> Union[str, None]:
         # Attempt to find a file in one of many known directories
         for search_path in (['', '/cache'] if search_paths is None else search_paths):
-            if use_cache is False:
+            if use_cache is False or search_path not in self._client._device.ftp_cache:
                 self._cache_ftp_path(path=search_path, ftp=ftp)
 
             path_contents = self._client._device.ftp_cache.get(search_path) or []
@@ -708,7 +708,7 @@ class PrintJob:
             LOGGER.debug(f"Found model {model_path}")
             return model_path
         else:
-            print(f"FTP cache exhausted, retrying without")
+            LOGGER.debug(f"FTP cache exhausted, retrying without")
             return self._file_in_known_directory(filename=model_name, ftp=ftp, use_cache=False)
     
     def _find_latest_file(self, ftp, path, extensions: list):
