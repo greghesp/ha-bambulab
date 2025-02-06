@@ -73,7 +73,12 @@ export class SKIPOBJECT_CARD extends LitElement {
 
     const image = new Image();
     image.src = this._get_pick_image_url();
-    image.onload = function() {
+    image.onload = function () {
+  
+      function rgbaToInt(r, g, b, a) {
+        return r | (g << 8) | (b << 16) | (a << 24);
+      }
+      
       const width = canvas.width;
       const height = canvas.height;
       ctx.drawImage(image, 0, 0)
@@ -83,24 +88,22 @@ export class SKIPOBJECT_CARD extends LitElement {
       const data = imageData.data;
     
       // Replace the target RGB value with red
-      const targetRgb = { r: 5, g: 3, b: 0 }; // Example RGB value to replace
+      const targetRgb = rgbaToInt(5, 3, 0, 255);
+      const clear = rgbaToInt(0, 0, 0, 255);
+      const red = rgbaToInt(255, 0, 0, 255);
+      const green = rgbaToInt(0, 255, 0, 255);
+      const blue = rgbaToInt(0, 0, 255, 255);
 
       for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        if (r === targetRgb.r && g === targetRgb.g && b === targetRgb.b) {
-          data[i]     = 255; // Red
-          data[i + 1] = 0;   // Green
-          data[i + 2] = 0;   // Blue
-          data[i + 3] = 255; // Alpha (opacity)
+        const pixelColor = rgbaToInt(data[i], data[i + 1], data[i + 2], 255);
+        
+        if (pixelColor == targetRgb) {
+          const dataView = new DataView(data.buffer);
+          dataView.setUint32(i, red, true);
         }
-        else if (r != 0 || g != 0 || b != 0)
-        {
-          data[i]     = 0;   // Red
-          data[i + 1] = 255; // Green
-          data[i + 2] = 0;   // Blue
-          data[i + 3] = 255; // Alpha (opacity)
+        else if (pixelColor != clear) {
+          const dataView = new DataView(data.buffer);
+          dataView.setUint32(i, green, true);
         }
       }
     
