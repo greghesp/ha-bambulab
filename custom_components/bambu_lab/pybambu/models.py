@@ -873,16 +873,12 @@ class PrintJob:
                             if metadata.get('skipped') == f"false":
                                 printable_objects[metadata.get('identify_id')] = metadata.get('name')
                         elif (metadata.tag == 'filament'):
-                            # Filament used for the current print job. The plate info does not distinguish
-                            # between AMS and External Spool, both AMS Tray 1 and External Spool have
-                            # an ID of 1
-                            LOGGER.debug(f"AMS Tray {metadata.get('id')}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
-                            
-                            # Print weights and lengths expect zero-indexed allocation, reduce the ID by 1
-                            ams_index = int(metadata.get('id')) - 1
-                            self._ams_print_weights[ams_index] = metadata.get('used_g')
-                            self._ams_print_lengths[ams_index] = metadata.get('used_m')
-                            
+                            # Filament used for the current print job. The plate info does not contain
+                            # enough data to map it to an AMS tray or external spool. Only the brand
+                            # ID and type are included, the color is whatever was set in the slicer
+                            # and not what is reported by the AMS.
+                            LOGGER.debug(f"Filament 1: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
+
                             # Increase the total print length
                             print_length += float(metadata.get('used_m'))
                     
