@@ -6,7 +6,7 @@ import threading
 import ftplib
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from dateutil import parser, tz
 from packaging import version
 from zipfile import ZipFile
@@ -657,7 +657,7 @@ class PrintJob:
     def _find_model_path(self, ftp):
         if self.gcode_file != '':
             # Attempt to find the model in one of many known directories
-            for search_path in ['', '/cache', '/models', '/sdcard']:
+            for search_path in ['', '/cache']:
                 try:
                     path_contents = ftp.nlst(f"{search_path}")
                     if self.gcode_file in path_contents:
@@ -665,13 +665,26 @@ class PrintJob:
                         LOGGER.debug(f"Found model {model_path}")
                         return model_path
                 except:
+                    LOGGER.debug(f"Model '{self.gcode_file}' could not be found in any known directories")
                     pass
-        else:
-            model_path = self._find_latest_file(ftp, '/Cache', ['.3mf'])
-            if model_path is not None:
-                return model_path
+        elif self.subtask_name != '':
+            # Attempt to find the model in one of many known directories
+            for search_path in ['', '/cache']:
+                try:
+                    path_contents = ftp.nlst(f"{search_path}")
+                    if self.gcode_file in path_contents:
+                        model_path = f"{search_path}/{self.subtask_name}.3mf"
+                        LOGGER.debug(f"Found model {model_path}")
+                        return model_path
+                except:
+                    LOGGER.debug(f"Model '{self.subtask_name}.3mf' could not be found in any known directories")
+                    pass
 
-        LOGGER.debug(f"Model '{self.gcode_file}' count not be found in any known directories")
+        model_path = self._find_latest_file(ftp, '/Cache', ['.3mf'])
+        if model_path is not None:
+            return model_path
+
+        LOGGER.debug(f"No model files found.")
         return None
     
     def _find_latest_file(self, ftp, path, extensions: list):
@@ -691,8 +704,10 @@ class PrintJob:
                     # Since these dates don't have the year we have to work it out. If the date is earlier in 
                     # the year than now then it's this year. If it's later it's last year.
                     timestamp = datetime.strptime(timestamp_str, '%b %d %H:%M')
-                    timestamp = timestamp.replace(year=datetime.now().year)
-                    if timestamp > datetime.now():
+                    timestamp = timestamp.replace(tzinfo=timezone.utc)
+                    utc_time_now = datetime.now().astimezone(timezone.utc)
+                    timestamp = timestamp.replace(year=utc_time_now.year)
+                    if timestamp > utc_time_now:
                         timestamp = timestamp.replace(year=datetime.now().year - 1)
                     return timestamp, filename
                 else:
@@ -704,6 +719,7 @@ class PrintJob:
                 _, extension = os.path.splitext(filename)
                 if extension in extensions:
                     timestamp = datetime.strptime(timestamp_str, '%b %d %Y')
+                    timestamp = timestamp.replace(tzinfo=timezone.utc)
                     return timestamp, filename
                 else:
                     return None
