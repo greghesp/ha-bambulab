@@ -1,7 +1,8 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![Static Badge](https://img.shields.io/badge/HACS-Custom-41BDF5?style=for-the-badge&logo=homeassistantcommunitystore&logoColor=white)](https://github.com/hacs/integration) 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/greghesp/ha-bambulab/frontend-build-test.yml?style=for-the-badge)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/greghesp/ha-bambulab/total?style=for-the-badge)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/greghesp/ha-bambulab?style=for-the-badge)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/greghesp/ha-bambulab?style=for-the-badge) [![Discord](https://img.shields.io/discord/1337028866643857429?style=for-the-badge&logo=discord&logoColor=white&label=Discord&color=7289da)](https://discord.gg/rsUHAW3DKz)
+
 
 
 ![GitHub Release Date](https://img.shields.io/github/release-date-pre/greghesp/ha-bambulab?style=for-the-badge&label=Latest%20Beta%20Release) ![GitHub Release](https://img.shields.io/github/v/release/greghesp/ha-bambulab?include_prereleases&style=for-the-badge)
@@ -17,6 +18,8 @@
 A Home Assistant Integration for Bambu Lab printers.
 
 Full documentation for the integration can [be found here](https://docs.page/greghesp/ha-bambulab)
+
+Join us on [Discord](https://discord.gg/rsUHAW3DKz)
 
 ## Contribution
 
