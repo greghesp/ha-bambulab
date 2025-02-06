@@ -1002,10 +1002,10 @@ class PrintJob:
                 seen_identify_ids.add(str(identify_id))
 
                 # Label the image with the identifier
-                if self._client.label_pick_image_enabled:
-                    left, top, right, bottom = draw.textbbox((x+4, y-2), str(identify_id), font=font)
-                    draw.rectangle((left-4, top-4, right+4, bottom+4), fill=current_color, outline="white", width=1)
-                    draw.text((x+4, y-2), str(identify_id), fill="white", font=font)
+                # if self._client.label_pick_image_enabled:
+                #     left, top, right, bottom = draw.textbbox((x+4, y-2), str(identify_id), font=font)
+                #     draw.rectangle((left-4, top-4, right+4, bottom+4), fill=current_color, outline="white", width=1)
+                #     draw.text((x+4, y-2), str(identify_id), fill="white", font=font)
         
         object_count = len(seen_identify_ids)
         LOGGER.debug(f"Finished proccessing pick image, found {object_count} object{'s'[:object_count^1]}")
