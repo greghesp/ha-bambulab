@@ -681,11 +681,15 @@ class PrintJob:
 
         # The subtask_name is stripped of its file ext, so use a filter when
         # matching against a *.3mf files
-        def match_subtask_file(filename) -> bool:
-            return filename.endswith(".3mf") and filename.startswith(self.subtask_name)
+        def find_subtask_file(path_contents, search_path) -> Union[str, None]:
+            def match_subtask_file(filename) -> bool:
+                return filename.endswith(".3mf") and filename.startswith(self.subtask_name)
+            matches = list(filter(match_subtask_file, path_contents))
+            if len(matches):
+                return f"{search_path}/{matches[0]}"
 
         # Use the gcode filename if provided otherwise fall back to the subtask
-        model_name = self.gcode_file if self.gcode_file != '' else match_subtask_file
+        model_name = self.gcode_file if self.gcode_file != '' else find_subtask_file
         model_path = self._file_in_known_directory(filename=model_name, ftp=ftp)
 
         if model_path is not None:
