@@ -125,5 +125,9 @@
                 }
             ]
          }
-      ]
+      ],
+      "social": {
+        "discord": "rsUHAW3DKz",
+        "github": "greghesp/ha-bambulab"
+      }
   }
