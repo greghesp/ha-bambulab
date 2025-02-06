@@ -75,6 +75,7 @@ class Device:
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
+        self.ftp_cache = {}
 
     def print_update(self, data) -> bool:
         send_event = False
@@ -654,29 +655,40 @@ class PrintJob:
     #     "bedType": "textured_plate"
     #     },
 
-    def _file_in_known_directory(self, filename: Union[str, callable], ftp, search_paths: list=None) -> Union[str, None]:
+    def _cache_ftp_path(self, path: str, ftp):
+        try:
+            LOGGER.debug(f"Running FTP nlst for {path or '/'}")
+            self._client._device.ftp_cache[path] = ftp.nlst(path)
+        except Exception as e:
+            LOGGER.error(f"FTP nlst Exception. Type: {type(e)} Args: {e}")
+            pass
+
+    def _file_in_known_directory(self, filename: Union[str, callable], ftp, search_paths: list=None, use_cache=True) -> Union[str, None]:
         # Attempt to find a file in one of many known directories
         for search_path in (['', '/cache'] if search_paths is None else search_paths):
-            try:
-                path_contents = ftp.nlst(f"{search_path}")
+            if use_cache is False:
+                self._cache_ftp_path(path=search_path, ftp=ftp)
 
-                # If a method was provided instead of a filename pass it the
-                # file contents to let it perform its own match
-                if callable(filename):
-                    file_match = filename(path_contents, search_path)
-                    if file_match is not None:
-                        return f"{file_match}"
-                    continue
+            path_contents = self._client._device.ftp_cache.get(search_path) or []
 
-                # Otherwise, perform a simple match on the path's contents
-                if filename in path_contents:
-                    return f"{search_path}/{filename}"
-            except:
-                pass
+            # If a method was provided instead of a filename pass it the
+            # file contents to let it perform its own match
+            if callable(filename):
+                file_match = filename(path_contents, search_path)
+                if file_match is not None:
+                    return f"{file_match}"
+                continue
+
+            # Otherwise, perform a simple match on the path's contents
+            if filename in path_contents:
+                return f"{search_path}/{filename}"
 
     def _find_model_path(self, ftp) -> Union[str, None]:
-        # Bail if there's neither gcode or subtask to search for
+        # Bail if there's neither gcode nor subtask to search for. If there's
+        # gcode, but it isn't a 3mf we can't use it.
         if self.gcode_file == '' and self.subtask_name == '':
+            return
+        elif self.gcode_file != '' and not self.gcode_file.endswith('.3mf'):
             return
 
         # The subtask_name is stripped of its file ext, so use a filter when
@@ -688,13 +700,16 @@ class PrintJob:
             if len(matches):
                 return f"{search_path}/{matches[0]}"
 
-        # Use the gcode filename if provided otherwise fall back to the subtask
+        # Use the gcode 3mf if available otherwise fall back to subtask_name
         model_name = self.gcode_file if self.gcode_file != '' else find_subtask_file
-        model_path = self._file_in_known_directory(filename=model_name, ftp=ftp)
+        model_path = self._file_in_known_directory(filename=model_name, ftp=ftp, use_cache=True)
 
         if model_path is not None:
             LOGGER.debug(f"Found model {model_path}")
             return model_path
+        else:
+            print(f"FTP cache exhausted, retrying without")
+            return self._file_in_known_directory(filename=model_name, ftp=ftp, use_cache=False)
     
     def _find_latest_file(self, ftp, path, extensions: list):
         # Look for the newest file with extension in directory.
