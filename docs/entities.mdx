@@ -1,6 +1,10 @@
 ---
 title: Entities
 description: All entities exposed to Home Assistant
+previous: /setup
+previousTitle: Setup
+next: /device-triggers
+nextTitle: Device Triggers
 ---
 
 
@@ -54,12 +58,6 @@ description: All entities exposed to Home Assistant
 | Speed Profile    |       |
 | Timelapse Active |       |
 
-## AMS
-
-| Sensor            | Notes          |
-| ----------------- | -------------- |
-| Active tray       | If AMS present |
-| Active tray index | If AMS present |
 
 ## Controls
 
@@ -74,9 +72,16 @@ description: All entities exposed to Home Assistant
 | Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
 
 <Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
+<Warning>If you are running the latest X1 firmware with Bambu Authorisation, the only functional control is the Chamber Light</Warning>
 
 
 ## AMS
+
+| Sensor            | Notes          |
+| ----------------- | -------------- |
+| Active tray       | If AMS present |
+| Active tray index | If AMS present |
+
 
 | Sensor         | Notes   |
 | -------------- | ------- |

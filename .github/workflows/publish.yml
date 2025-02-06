@@ -32,6 +32,19 @@ jobs:
             python '${{ github.workspace }}/scripts/update_const.py'
             python '${{ github.workspace }}/scripts/auto_translate.py'
 
+      - name: 📖 Set up Node 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: '${{ github.workspace }}/frontend/package-lock.json'
+
+      - name: 💿 Install Node dependencies
+        working-directory: '${{ github.workspace }}/frontend'
+        run: |
+          npm ci
+          npm run build
+
       - name: 🤐 Copy and Zip
         if: ${{ github.event_name == 'release' }}
         run: |

@@ -1,5 +1,8 @@
 import logging
 from datetime import timedelta
+from enum import (
+    IntEnum,
+)
 
 from homeassistant.const import Platform
 
@@ -31,3 +34,18 @@ BAMBU_LAB_CARDS = [
         "version": "1.0.0"
     }
 ]
+
+class Options(IntEnum):
+    CAMERA = 1,
+    IMAGECAMERA = 2,
+    FTP = 3,
+    TIMELAPSE = 4,
+    MANUALREFRESH = 5,
+
+OPTION_NAME = {
+    Options.CAMERA:         "enable_camera",
+    Options.IMAGECAMERA:    "camera_as_image_sensor",
+    Options.FTP:            "enable_ftp",
+    Options.TIMELAPSE:      "enable_timelapse",
+    Options.MANUALREFRESH:  "manual_refresh_mode"
+}

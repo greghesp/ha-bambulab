@@ -7,7 +7,7 @@ from .const import DOMAIN, LOGGER, PLATFORMS
 from .coordinator import BambuDataUpdateCoordinator
 from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
-from .pybambu.commands import SEND_GCODE_TEMPLATE, PRINT_PROJECT_FILE_TEMPLATE
+from .pybambu.commands import SEND_GCODE_TEMPLATE, PRINT_PROJECT_FILE_TEMPLATE, SKIP_OBJECTS_TEMPLATE
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
@@ -61,6 +61,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         DOMAIN,
         "print_project_file",  # Service name
         print_project_file  # Handler function
+    )
+
+
+    async def skip_objects(call: ServiceCall):
+        """Handle the service call."""
+        command = SKIP_OBJECTS_TEMPLATE
+        object_ids = call.data.get("objects")
+        
+        command["print"]["obj_list"] = [int(x) for x in object_ids.split(',')]
+
+        coordinator.client.publish(command)
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "skip_objects",  # Service name
+        skip_objects  # Handler function
     )
 
     # Set up all platforms for this device/entry.

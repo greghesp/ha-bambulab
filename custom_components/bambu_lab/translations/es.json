@@ -169,6 +169,9 @@
       },
       "refresh": {
         "name": "Forzar actualización de datos"
+      },
+      "dev": {
+        "name": "Depurar"
       }
     },
     "fan": {
@@ -188,6 +191,9 @@
       },
       "cover_image": {
         "name": "Imagen de portada"
+      },
+      "pick_image": {
+        "name": "Seleccionar imagen"
       }
     },
     "light": {
@@ -571,6 +577,9 @@
       },
       "ip_address": {
         "name": "dirección IP"
+      },
+      "printable_objects": {
+        "name": "Objetos imprimibles"
       }
     },
     "camera": {

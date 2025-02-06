@@ -5,6 +5,8 @@ import math
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from .const import Options
+
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import (
     PERCENTAGE,
@@ -245,6 +247,14 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         options=GCODE_STATE_OPTIONS + ["offline"]
     ),
     BambuLabSensorEntityDescription(
+        key="printable_objects",
+        translation_key="printable_objects",
+        icon="mdi:cube-unfolded",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: len(self.coordinator.get_model().print_job.printable_objects),
+        extra_attributes=lambda self: self.coordinator.get_model().print_job.printable_objects,
+    ),
+    BambuLabSensorEntityDescription(
         key="start_time",
         translation_key="start_time",
         icon="mdi:clock",
@@ -340,7 +350,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:file",
         value_fn=lambda self: self.coordinator.get_model().print_job.print_length,
         extra_attributes=lambda self: self.coordinator.get_model().print_job.get_print_lengths,
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.client.ftp_enabled
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled(Options.FTP)
     ),
     BambuLabSensorEntityDescription(
         key="print_bed_type",
@@ -358,7 +368,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:file",
         value_fn=lambda self: self.coordinator.get_model().print_job.print_weight,
         extra_attributes=lambda self: self.coordinator.get_model().print_job.get_print_weights,
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.client.ftp_enabled
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled(Options.FTP)
     ),
     BambuLabSensorEntityDescription(
         key="active_tray",
