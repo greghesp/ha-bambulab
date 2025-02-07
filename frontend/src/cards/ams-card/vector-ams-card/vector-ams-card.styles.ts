@@ -6,6 +6,10 @@ export default css`
     --light-reflection-color-high: rgba(255, 255, 255, 0.2);
   }
 
+  .v-wrapper {
+    padding-top: 5px;
+  }
+
   .v-extra-info {
     display: flex;
     flex-wrap: nowrap;
@@ -23,11 +27,9 @@ export default css`
   }
 
   .v-ams-container {
-    border-radius: 5px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-evenly;
-    padding: 0% 2% 5% 2%;
   }
 
   .v-spool-holder {

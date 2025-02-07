@@ -44,6 +44,15 @@ export class AMS_CARD extends LitElement {
 
   static styles = styles;
 
+  public getLayoutOptions() {
+    return {
+      grid_rows: 3,
+      grid_columns: 4,
+      grid_min_rows: 3,
+      grid_min_columns: 4,
+    };
+  }
+
   setConfig(config) {
     this._header = config.header === "" ? nothing : config.header;
     this._subtitle = config.subtitle === "" ? nothing : config.subtitle;

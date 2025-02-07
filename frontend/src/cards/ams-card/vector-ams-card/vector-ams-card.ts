@@ -38,39 +38,37 @@ export class VectorAmsCard extends LitElement {
 
   render() {
     return html`
-      <ha-card header="${this.header}">
-        <div class="v-wrapper">
-          ${this.showInfoBar
-            ? html` <info-bar
-                subtitle="${this.subtitle}"
-                humidity="${this.humidity()}"
-                .temperature="${this.temperature()}"
-              ></info-bar>`
-            : nothing}
-          <div class="v-ams-container">
-            ${this.entities?.spools.map(
-              (spool) => html`
-                <div
-                  class="v-spool-holder"
-                  style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes)
-                    ? this.states[spool.entity_id]?.attributes.color
-                    : "#808080"}"
-                >
-                  ${this.states[spool.entity_id]?.attributes.type !== "Empty"
-                    ? html` <bl-spool
-                        ?active=${this.isActive(this.states[spool.entity_id]?.attributes)}
-                        .color="${this.states[spool.entity_id]?.attributes.color}"
-                        .remaining="${this.states[spool.entity_id]?.attributes.remain}"
-                        .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"
-                      ></bl-spool>`
-                    : nothing}
-                  <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.type}</div>
-                </div>
-              `
-            )}
-          </div>
+      <div class="v-wrapper">
+        ${this.showInfoBar
+          ? html` <info-bar
+              subtitle="${this.subtitle}"
+              humidity="${this.humidity()}"
+              .temperature="${this.temperature()}"
+            ></info-bar>`
+          : nothing}
+        <div class="v-ams-container">
+          ${this.entities?.spools.map(
+            (spool) => html`
+              <div
+                class="v-spool-holder"
+                style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes)
+                  ? this.states[spool.entity_id]?.attributes.color
+                  : "#808080"}"
+              >
+                ${this.states[spool.entity_id]?.attributes.type !== "Empty"
+                  ? html` <bl-spool
+                      ?active=${this.isActive(this.states[spool.entity_id]?.attributes)}
+                      .color="${this.states[spool.entity_id]?.attributes.color}"
+                      .remaining="${this.states[spool.entity_id]?.attributes.remain}"
+                      .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"
+                    ></bl-spool>`
+                  : nothing}
+                <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.type}</div>
+              </div>
+            `
+          )}
         </div>
-      </ha-card>
+      </div>
     `;
   }
 }
