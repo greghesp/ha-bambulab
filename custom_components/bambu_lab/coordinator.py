@@ -24,6 +24,7 @@ from homeassistant.const import (
 
 from .pybambu import BambuClient
 from .pybambu.const import Features
+from .pybambu.commands import SKIP_OBJECTS_TEMPLATE
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
@@ -53,6 +54,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
         self.hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._async_shutdown)
+        self.hass.bus.async_listen('bambu_lab_skip_objects', self._skip_objects)
 
     @callback
     def _async_shutdown(self, event: Event) -> None:
@@ -132,6 +134,22 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _publish(self, msg):
         return self.client.publish(msg)
+
+    def _skip_objects(self, event: Event):
+        data = event.data
+
+        dev_reg = device_registry.async_get(self._hass)
+        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        device_id = data.get('device_id', [])
+        if len(device_id) != 1:
+            LOGGER.debug("Invalid skip objects data payload: {data}")
+
+        if device_id[0] == hadevice.id:
+            LOGGER.debug(f"_skip_objects bus event: {data}")
+            command = SKIP_OBJECTS_TEMPLATE
+            object_ids = data.get("objects")
+            command["print"]["obj_list"] = [int(x) for x in object_ids.split(',')]
+            self.client.publish(command)
 
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data() called")
@@ -272,7 +290,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         }
         LOGGER.debug(f"BUS EVENT: {event}: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
-        
 
     def get_model(self):
         return self.client.get_device()
