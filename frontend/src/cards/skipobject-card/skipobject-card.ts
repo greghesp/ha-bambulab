@@ -267,9 +267,15 @@ export class SKIPOBJECT_CARD extends LitElement {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.id = key;
+      checkbox.checked = this._new_object_array.includes(Number(key))
       const label = document.createElement('label');
       label.htmlFor = key;
-      label.textContent = value;
+      if (this._object_array.includes(Number(key))) {
+        label.textContent = `value (already skipped)`;
+      }
+      else {
+        label.textContent = value;
+      }
       listItem.appendChild(checkbox);
       listItem.appendChild(label);
       checkboxList.appendChild(listItem);
