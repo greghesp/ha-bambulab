@@ -1,4 +1,4 @@
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { registerCustomCard } from "../../utils/custom-cards";
 import { EXAMPLE_CARD_EDITOR_NAME, EXAMPLE_CARD_NAME } from "./const";
 import { html, LitElement, nothing } from "lit";
@@ -11,15 +11,8 @@ registerCustomCard({
 
 @customElement(EXAMPLE_CARD_NAME)
 export class EXAMPLE_CARD extends LitElement {
-  // private property
-  _hass;
-
-  static get properties() {
-    return {
-      hass: {},
-      config: {},
-    };
-  }
+  @state() private _config?;
+  @state() private _hass: any;
 
   public static async getConfigElement() {
     await import("./example-card-editor");
@@ -27,13 +20,14 @@ export class EXAMPLE_CARD extends LitElement {
   }
 
   static getStubConfig() {
-    return { entity: "sun.sun" };
+    return { header: "Header Text", subtitle: "Subtitle Text", show_header: true };
   }
 
-  setConfig() {
+  setConfig(config) {
     if (this._hass) {
       this.hass = this._hass;
     }
+    this._config = config;
   }
 
   set hass(hass) {
@@ -43,7 +37,10 @@ export class EXAMPLE_CARD extends LitElement {
   render() {
     return html`
       <ha-card>
-        <div class="card-content">Example Content</div>
+        <div class="card-content">
+          ${this._config?.show_header ? html`<h1>${this._config.header}</h1>` : nothing}
+          <p>Subtitle: ${this._config?.subtitle}</p>
+        </div>
       </ha-card>
     `;
   }

@@ -37,10 +37,6 @@ export class ExampleCardEditor extends LitElement {
 
   render() {
     const schema = this._schema(this._config.show_header);
-    const data = {
-      show_header: this._config!.header !== undefined,
-      ...this._config,
-    };
 
     return html`
       <div>
@@ -57,7 +53,6 @@ export class ExampleCardEditor extends LitElement {
 
   private _valueChange(ev: CustomEvent): void {
     let config = ev.detail.value;
-    console.log(config);
 
     const event = new Event("config-changed", {
       bubbles: true,
