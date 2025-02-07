@@ -32,23 +32,17 @@ jobs:
             python '${{ github.workspace }}/scripts/update_const.py'
             python '${{ github.workspace }}/scripts/auto_translate.py'
 
-      - name: 📖 Set up Node 
-        uses: actions/setup-node@v3
+      - name:  ⬇️ Download latest frontend release
+        uses: robinraju/release-downloader@v1.8
         with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: '${{ github.workspace }}/frontend/package-lock.json'
-
-      - name: 💿 Install Node dependencies
-        working-directory: '${{ github.workspace }}/frontend'
-        run: |
-          npm ci
-          npm run build
+          repository: "greghesp/ha-bambulab-cards"
+          latest: true
+          fileName: "ha-bambulab-cards.js"
 
       - name: 🤐 Copy and Zip
         if: ${{ github.event_name == 'release' }}
         run: |
-          cp -r '${{ github.workspace }}/frontend/dist/ha-bambulab-cards.js' '${{ github.workspace }}/custom_components/bambu_lab/frontend/ha-bambulab-cards.js'
+          cp ha-bambulab-cards.js '${{ github.workspace }}/custom_components/bambu_lab/frontend/ha-bambulab-cards.js'
           cd '${{ github.workspace }}/custom_components/bambu_lab'
           zip bambu_lab.zip -r ./
 
