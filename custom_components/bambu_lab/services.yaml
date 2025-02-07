@@ -1,6 +1,9 @@
 send_command:
   name: Send Command
   description: Send an arbitrary command to the 3D printer
+  target:
+    entity:
+      integration: bambu_lab
   fields:
     command:
       name: Command
@@ -13,6 +16,9 @@ send_command:
 print_project_file:
   name: Print 3MF project file
   description: Print sliced 3MF file stored on the SD card
+  target:
+    entity:
+      integration: bambu_lab
   fields:
     filepath:
       name: File path
@@ -85,6 +91,9 @@ print_project_file:
 skip_objects:
   name: Skip objects
   description: Skip objects currently being printed
+  target:
+    entity:
+      integration: bambu_lab
   fields:
     objects:
       name: Object IDs
