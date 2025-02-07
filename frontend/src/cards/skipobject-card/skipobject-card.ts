@@ -21,6 +21,7 @@ interface Sensor {
 
 interface Result {
   pick_image: Sensor | null;
+  skipped_objects: Sensor | null;
 }
 
 @customElement(SKIPOBJECT_CARD_NAME)
@@ -46,14 +47,16 @@ export class SKIPOBJECT_CARD extends LitElement {
   _visibleCanvas;
   _visibleCtx;
   _object_array;
+  _new_object_array;
  
   constructor() {
     super()
     this._hiddenCanvas = document.createElement('canvas');
     this._hiddenCanvas.width = 512;
     this._hiddenCanvas.height = 512;
-    this._hiddenCtx = this._hiddenCanvas.getContext('2d');
+    this._hiddenCtx = this._hiddenCanvas.getContext('2d', { willReadFrequently: true });
     this._object_array = new Array();
+    this._new_object_array = new Array();
   }
 
   public static async getConfigElement() {
@@ -90,7 +93,7 @@ export class SKIPOBJECT_CARD extends LitElement {
   _updateCanvas() {
     // Now find the visible canvas.
     const canvas = this.shadowRoot!.getElementById('canvas') as HTMLCanvasElement;
-    this._visibleCtx = canvas.getContext('2d')!;
+    this._visibleCtx = canvas.getContext('2d', { willReadFrequently: true })!;
 
     // Add the click event listener to it that looks up the clicked pixel color and toggles any found object on or off.
     canvas.addEventListener('click', (event) => {
@@ -100,15 +103,20 @@ export class SKIPOBJECT_CARD extends LitElement {
       const imageData = this._hiddenCtx.getImageData(x, y, 1, 1).data;
       const [r, g, b, a] = imageData;
 
-      const pixelColor = this.rgbaToInt(r, g, b, 255)
+      const pixelColor = this.rgbaToInt(r, g, b, 0) // For integer comparisons we set the alpha to 0.
       const index = this._object_array.indexOf(pixelColor)
-      if (index != -1)
+      const new_index = this._new_object_array.indexOf(pixelColor)
+      // Cannot toggle objects in the completed skipped objects list
+      if (index == -1)
       {
-        this._object_array.splice(index, 1);
-      }
-      else
-      {
-        this._object_array.push(pixelColor);
+        if (new_index != -1)
+        {
+          this._new_object_array.splice(index, 1);
+        }
+        else
+        {
+          this._new_object_array.push(pixelColor);
+        }
       }
       this._colorizeCanvas();
     });
@@ -135,34 +143,42 @@ export class SKIPOBJECT_CARD extends LitElement {
     return '';
   }
 
+  _get_skipped_objects() {
+    if (this._entities.skipped_objects) {
+      const entity = this._entities.skipped_objects;
+      const value = this._states[entity.entity_id].state;
+      return JSON.parse(value)
+    }
+  }
+
   _colorizeCanvas() {
-      // Now we colorize the image based on the list of skipped objects.
-      this._visibleCtx.drawImage(this._pick_image, 0, 0)
+    // Now we colorize the image based on the list of skipped objects.
+    this._visibleCtx.drawImage(this._pick_image, 0, 0)
 
-      // Create an ImageData object
-      const imageData = this._visibleCtx.getImageData(0, 0, 512, 512);
-      const data = imageData.data;
-    
-      // Replace the target RGB value with red
-      const clear = this.rgbaToInt(0, 0, 0, 255);
-      const red = this.rgbaToInt(255, 0, 0, 255);
-      const green = this.rgbaToInt(0, 255, 0, 255);
+    // Create an ImageData object
+    const imageData = this._visibleCtx.getImageData(0, 0, 512, 512);
+    const data = imageData.data;
+  
+    // Replace the target RGB value with red
+    const clear = this.rgbaToInt(0, 0, 0, 0);     // For integer comparisons we set the alpha to 0.
+    const red = this.rgbaToInt(255, 0, 0, 255);   // For writes we set it to 255 (fully opaque).
+    const green = this.rgbaToInt(0, 255, 0, 255); // For writes we set it to 255 (fully opaque).
 
-      for (let i = 0; i < data.length; i += 4) {
-        const pixelColor = this.rgbaToInt(data[i], data[i + 1], data[i + 2], 255);
-        
-        if (this._object_array.includes(pixelColor)) {
-          const dataView = new DataView(data.buffer);
-          dataView.setUint32(i, red, true);
-        }
-        else if (pixelColor != clear) {
-          const dataView = new DataView(data.buffer);
-          dataView.setUint32(i, green, true);
-        }
+    for (let i = 0; i < data.length; i += 4) {
+      const pixelColor = this.rgbaToInt(data[i], data[i + 1], data[i + 2], 0); // For integer comparisons we set the alpha to 0.
+      
+      if (this._new_object_array.includes(pixelColor)) {
+        const dataView = new DataView(data.buffer);
+        dataView.setUint32(i, red, true);
       }
+      else if (pixelColor != clear) {
+        const dataView = new DataView(data.buffer);
+        dataView.setUint32(i, green, true);
+      }
+    }
 
-      // Put the modified image data back into the canvas
-      this._visibleCtx.putImageData(imageData, 0, 0);  
+    // Put the modified image data back into the canvas
+    this._visibleCtx.putImageData(imageData, 0, 0);  
   }
 
   // Style for the card and popup
@@ -248,6 +264,10 @@ export class SKIPOBJECT_CARD extends LitElement {
   // Function to toggle popup visibility
   private _togglePopup() {
     this._popupVisible = !this._popupVisible;
+    if (this._popupVisible) {
+      this._object_array = this._get_skipped_objects();
+      this._new_object_array = this._get_skipped_objects();
+    }
   }
 
   private async getEntity(entity_id) {
@@ -260,6 +280,7 @@ export class SKIPOBJECT_CARD extends LitElement {
   private async filterBambuDevices() {
     const result: Result = {
       pick_image: null,
+      skipped_objects: null
     };
     // Loop through all hass entities, and find those that belong to the selected device
     for (let key in this._hass.entities) {
@@ -268,6 +289,9 @@ export class SKIPOBJECT_CARD extends LitElement {
         const r = await this.getEntity(value.entity_id);
         if (r.unique_id.includes("pick_image")) {
           result.pick_image = value;
+        }
+        else if (r.unique_id.includes("skipped_objects")) {
+          result.skipped_objects = value;
         }
       }
     }
