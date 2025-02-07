@@ -46,9 +46,11 @@ export class AMS_CARD extends LitElement {
 
   public getLayoutOptions() {
     return {
-      grid_rows: this._showInfoBar ? 4 : 3,
+      grid_rows:
+        this._style === "graphic" ? (this._showInfoBar ? 5 : 4) : this._showInfoBar ? 4 : 3,
       grid_columns: 4,
-      grid_min_rows: this._showInfoBar ? 4 : 3,
+      grid_min_rows:
+        this._style === "graphic" ? (this._showInfoBar ? 5 : 4) : this._showInfoBar ? 4 : 3,
       grid_min_columns: 4,
     };
   }
