@@ -580,6 +580,9 @@
       },
       "printable_objects": {
         "name": "Objetos imprimibles"
+      },
+      "skipped_objects": {
+        "name": "Objetos omitidos"
       }
     },
     "camera": {

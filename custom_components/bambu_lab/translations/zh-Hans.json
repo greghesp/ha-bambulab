@@ -580,6 +580,9 @@
       },
       "printable_objects": {
         "name": "可打印对象"
+      },
+      "skipped_objects": {
+        "name": "跳过对象"
       }
     },
     "camera": {

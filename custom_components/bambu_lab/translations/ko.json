@@ -580,6 +580,9 @@
       },
       "printable_objects": {
         "name": "인쇄 가능한 물체"
+      },
+      "skipped_objects": {
+        "name": "건너 뛰는 물체"
       }
     },
     "camera": {

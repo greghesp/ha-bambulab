@@ -1,9 +1,9 @@
-import asyncio
+import ftplib
+import json
 import math
 import os
 import re
 import threading
-import ftplib
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -439,7 +439,12 @@ class PrintJob:
     printable_objects: dict
     _ams_print_weights: float
     _ams_print_lengths: float
+    _skipped_objects: list
 
+    @property
+    def get_skipped_objects(self) -> str:
+        return json.dumps(self._skipped_objects)
+    
     @property
     def get_print_weights(self) -> dict:
         values = {}
@@ -486,6 +491,7 @@ class PrintJob:
         self.file_type_icon = "mdi:file"
         self.print_type = ""
         self.printable_objects = {}
+        self._skipped_objects = []
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -527,6 +533,7 @@ class PrintJob:
         self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
+        self._skipped_objects = data.get("s_obj", self._skipped_objects)
 
         # Initialize task data at startup.
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":

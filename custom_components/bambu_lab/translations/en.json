@@ -333,6 +333,9 @@
       "printable_objects": {
         "name": "Printable objects"
       },
+      "skipped_objects": {
+        "name": "Skipped objects"
+      },
       "mqtt_mode": {
         "name": "MQTT connection mode",
         "state": {

@@ -580,6 +580,9 @@
       },
       "printable_objects": {
         "name": "Tlačiteľné objekty"
+      },
+      "skipped_objects": {
+        "name": "Preskočené predmety"
       }
     },
     "camera": {
