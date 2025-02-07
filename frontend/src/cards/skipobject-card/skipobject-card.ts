@@ -108,21 +108,24 @@ export class SKIPOBJECT_CARD extends LitElement {
       const [r, g, b, a] = imageData;
 
       const pixelColor = this.rgbaToInt(r, g, b, 0); // For integer comparisons we set the alpha to 0.
-      const index = this._object_array.indexOf(pixelColor);
-      const new_index = this._new_object_array.indexOf(pixelColor);
-      // Cannot toggle objects in the completed skipped objects list
-      if (index == -1)
+      if (pixelColor != 0)
       {
-        if (new_index != -1)
+        const index = this._object_array.indexOf(pixelColor);
+        const new_index = this._new_object_array.indexOf(pixelColor);
+        // Cannot toggle objects in the completed skipped objects list
+        if (index == -1)
         {
-          this._new_object_array.splice(index, 1);
+          if (new_index != -1)
+          {
+            this._new_object_array.splice(index, 1);
+          }
+          else
+          {
+            this._new_object_array.push(pixelColor);
+          }
         }
-        else
-        {
-          this._new_object_array.push(pixelColor);
-        }
+        this._colorizeCanvas();
       }
-      this._colorizeCanvas();
     });
 
     // Now create a the image to load the pick image into from home assistant.
@@ -221,7 +224,7 @@ export class SKIPOBJECT_CARD extends LitElement {
   }
 
   _skipObjects() {
-    const data = { "objects": this._new_object_array.join(',') }
+    const data = { "device_id": [this._deviceId], "objects": this._new_object_array.join(',') }
     this._hass.callService("bambu_lab", "skip_objects", data).then(() => {
       console.log(`Service called successfully`);
     }).catch((error) => {
