@@ -20,12 +20,6 @@ export class AmsCardEditor extends LitElement {
   }
 
   private _schema = memoizeOne((showInfoBar: boolean) => [
-    {
-      name: "header",
-      label: "Card Header",
-      selector: { text: {} },
-      required: false,
-    },
     { name: "show_info_bar", label: "Show Info Bar", selector: { boolean: true } },
     ...(showInfoBar
       ? [

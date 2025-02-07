@@ -5,7 +5,6 @@ import AMSImage from "../../../images/ams.png";
 import "../components/info-bar/info-bar";
 @customElement("graphic-ams-card")
 export class GraphicAmsCard extends LitElement {
-  @property() public header;
   @property() public subtitle;
   @property() public showInfoBar;
   @property({ type: Object }) public entities;

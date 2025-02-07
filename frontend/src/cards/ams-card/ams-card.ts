@@ -33,7 +33,6 @@ interface Result {
 export class AMS_CARD extends LitElement {
   // private property
   @state() private _hass?;
-  @state() private _header;
   @state() private _subtitle;
   @state() private _entity;
   @state() private _deviceId: any;
@@ -56,7 +55,6 @@ export class AMS_CARD extends LitElement {
   }
 
   setConfig(config) {
-    this._header = config.header === "" ? nothing : config.header;
     this._subtitle = config.subtitle === "" ? nothing : config.subtitle;
     this._entities = config._entities;
     this._deviceId = config.ams;
@@ -82,7 +80,6 @@ export class AMS_CARD extends LitElement {
     if (this._style == "graphic") {
       return html`
         <graphic-ams-card
-          .header="${this._header}"
           .subtitle="${this._subtitle}"
           .entities="${this._entities}"
           .states="${this._states}"
@@ -92,7 +89,6 @@ export class AMS_CARD extends LitElement {
     } else {
       return html`
         <vector-ams-card
-          .header="${this._header}"
           .subtitle="${this._subtitle}"
           .entities="${this._entities}"
           .states="${this._states}"

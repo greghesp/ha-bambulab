@@ -5,7 +5,6 @@ import "../components/info-bar/info-bar";
 
 @customElement("vector-ams-card")
 export class VectorAmsCard extends LitElement {
-  @property() public header;
   @property() public subtitle;
   @property() public showInfoBar;
   @property({ type: Object }) public entities;
