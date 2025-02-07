@@ -52,6 +52,7 @@ export class SKIPOBJECT_CARD extends LitElement {
   _visibleCtx;
   _object_array;
   _new_object_array;
+  _hoveredObject;
  
   constructor() {
     super()
@@ -61,6 +62,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     this._hiddenCtx = this._hiddenCanvas.getContext('2d', { willReadFrequently: true });
     this._object_array = new Array();
     this._new_object_array = new Array();
+    this._hoveredObject = 0;
   }
 
   public static async getConfigElement() {
@@ -117,10 +119,12 @@ export class SKIPOBJECT_CARD extends LitElement {
         {
           if (new_index != -1)
           {
-            this._new_object_array.splice(index, 1);
+            // Remove the element at 'new_index' from the array
+            this._new_object_array.splice(new_index, 1);
           }
           else
           {
+            // Add the element to the array
             this._new_object_array.push(pixelColor);
           }
         }
@@ -180,11 +184,16 @@ export class SKIPOBJECT_CARD extends LitElement {
     const clear = this.rgbaToInt(0, 0, 0, 0);     // For integer comparisons we set the alpha to 0.
     const red = this.rgbaToInt(255, 0, 0, 255);   // For writes we set it to 255 (fully opaque).
     const green = this.rgbaToInt(0, 255, 0, 255); // For writes we set it to 255 (fully opaque).
+    const blue = this.rgbaToInt(0, 0, 255, 255);  // For writes we set it to 255 (fully opaque).
 
     for (let i = 0; i < data.length; i += 4) {
       const pixelColor = this.rgbaToInt(data[i], data[i + 1], data[i + 2], 0); // For integer comparisons we set the alpha to 0.
       
-      if (this._new_object_array.includes(pixelColor)) {
+      if ((pixelColor != 0) && (this._hoveredObject == pixelColor)) {
+        const dataView = new DataView(data.buffer);
+        dataView.setUint32(i, blue, true);
+      }
+      else if (this._new_object_array.includes(pixelColor)) {
         const dataView = new DataView(data.buffer);
         dataView.setUint32(i, red, true);
       }
@@ -247,8 +256,55 @@ export class SKIPOBJECT_CARD extends LitElement {
     this._popupVisible = !this._popupVisible;
     if (this._popupVisible) {
       this._object_array = this._get_skipped_objects();
-      this._new_object_array = this._object_array;
+      this._new_object_array = this._object_array.slice();
     }
+  }
+
+  // Function to handle hover
+  handleHover = (event) => {
+    let id = event.target.htmlFor
+    if (id == null) {
+      id = event.target.id
+    }
+    this._hoveredObject = id;
+    this._colorizeCanvas();
+  };
+
+  // Function to handle mouse out
+  handleMouseOut = (event) => {
+    let id = event.target.htmlFor
+    if (id == null) {
+      id = Number(event.target.id)
+    }
+    if (this._hoveredObject = id) {
+      this._hoveredObject = 0;
+    }
+    this._colorizeCanvas();
+  };
+
+  // Function to handle mouse out
+  handleChange = (event) => {
+    const id = Number(event.target.id)
+    const checked = event.target.checked
+    if (this._object_array.includes(id))
+    {
+      // Already skipped objects must remain skipped
+      event.target.checked = true
+    }
+    else if (checked)
+    {
+      this._new_object_array.push(id)
+      // Clear hover visual so the change can be observed.
+      this._hoveredObject = 0
+    }
+    else
+    {
+      const index = this._new_object_array.indexOf(id);
+      this._new_object_array.splice(index, 1);
+      // Clear hover visual so the change can be observed.
+      this._hoveredObject = 0
+    }
+    this._colorizeCanvas();
   }
 
   // Function to populate the list of checkboxes
@@ -262,7 +318,6 @@ export class SKIPOBJECT_CARD extends LitElement {
     const list = this._get_printable_objects();
     Object.keys(list).forEach(key => {
       const value = list[key];
-      console.log(`Key: ${key}, Value: ${value}`);
       const listItem = document.createElement('li');
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
@@ -271,13 +326,21 @@ export class SKIPOBJECT_CARD extends LitElement {
       const label = document.createElement('label');
       label.htmlFor = key;
       if (this._object_array.includes(Number(key))) {
-        label.textContent = `value (already skipped)`;
+        label.textContent = `${value} (already skipped)`;
       }
       else {
         label.textContent = value;
       }
       listItem.appendChild(checkbox);
       listItem.appendChild(label);
+      // Add event listener to the checkbox and label for hover
+      checkbox.addEventListener('mouseover', this.handleHover);
+      label.addEventListener('mouseover', this.handleHover);
+      // Add event listener to the checkbox and label for mouse out
+      checkbox.addEventListener('mouseout', this.handleMouseOut);
+      label.addEventListener('mouseout', this.handleMouseOut);
+      // Add event listener to the checkbox for check state change
+      checkbox.addEventListener('change', this.handleChange);
       checkboxList.appendChild(listItem);
     });
   }
