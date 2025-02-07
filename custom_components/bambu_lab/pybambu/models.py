@@ -443,11 +443,11 @@ class PrintJob:
 
     @property
     def get_printable_objects(self) -> json:
-        return json.dumps(self._printable_objects)
+        return self._printable_objects
 
     @property
     def get_skipped_objects(self) -> str:
-        return json.dumps(self._skipped_objects)
+        return self._skipped_objects
     
     @property
     def get_print_weights(self) -> dict:

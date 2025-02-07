@@ -153,8 +153,8 @@ export class SKIPOBJECT_CARD extends LitElement {
   _get_skipped_objects() {
     if (this._entities.skipped_objects) {
       const entity = this._entities.skipped_objects;
-      const value = this._states[entity.entity_id].state;
-      return JSON.parse(value)
+      const value = this._states[entity.entity_id].attributes['objects'];
+      return value
     }
     return null;
   }
@@ -162,8 +162,8 @@ export class SKIPOBJECT_CARD extends LitElement {
   _get_printable_objects() {
     if (this._entities.printable_objects) {
       const entity = this._entities.printable_objects;
-      const value = this._states[entity.entity_id].state;
-      return JSON.parse(value)
+      const value = this._states[entity.entity_id].attributes['objects'];
+      return value
     }
     return null;
   }
@@ -247,7 +247,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     this._popupVisible = !this._popupVisible;
     if (this._popupVisible) {
       this._object_array = this._get_skipped_objects();
-      this._new_object_array = this._get_skipped_objects();
+      this._new_object_array = this._object_array;
     }
   }
 

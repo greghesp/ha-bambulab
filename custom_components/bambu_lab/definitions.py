@@ -250,13 +250,15 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="printable_objects",
         translation_key="printable_objects",
         icon="mdi:cube-unfolded",
-        value_fn=lambda self: self.coordinator.get_model().print_job.get_printable_objects,
+        value_fn=lambda self: len(self.coordinator.get_model().print_job.get_printable_objects),
+        extra_attributes=lambda self: {"objects": self.coordinator.get_model().print_job.get_printable_objects},
     ),
     BambuLabSensorEntityDescription(
         key="skipped_objects",
         translation_key="skipped_objects",
         icon="mdi:cube-unfolded",
-        value_fn=lambda self: self.coordinator.get_model().print_job.get_skipped_objects,
+        value_fn=lambda self: len(self.coordinator.get_model().print_job.get_skipped_objects),
+        extra_attributes=lambda self: {"objects": self.coordinator.get_model().print_job.get_skipped_objects},
     ),
     BambuLabSensorEntityDescription(
         key="start_time",
