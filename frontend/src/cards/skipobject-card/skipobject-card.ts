@@ -211,13 +211,22 @@ export class SKIPOBJECT_CARD extends LitElement {
                   <ul id="checkboxList"></ul>
                   <p>Select the object(s) you want to skip printing.</p>
                   <button id="cancel" @click="${this._togglePopup}">Cancel</button>
-                  <button id="skip" @click="${this._togglePopup}">Skip</button>
+                  <button id="skip" @click="${this._skipObjects}">Skip</button>
                 </div>
               </div>
             `
           : ''}
       </ha-card>
     `;
+  }
+
+  _skipObjects() {
+    const data = { "objects": this._new_object_array.join(',') }
+    this._hass.callService("bambu_lab", "skip_objects", data).then(() => {
+      console.log(`Service called successfully`);
+    }).catch((error) => {
+      console.error(`Error calling service:`, error);
+    });
   }
 
   updated(changedProperties) {
@@ -249,8 +258,8 @@ export class SKIPOBJECT_CARD extends LitElement {
     // Create and append list items dynamically
     const list = this._get_printable_objects();
     Object.keys(list).forEach(key => {
-      console.log(`Key: ${key}, Value: ${value}`);
       const value = list[key];
+      console.log(`Key: ${key}, Value: ${value}`);
       const listItem = document.createElement('li');
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
