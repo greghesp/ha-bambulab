@@ -2,6 +2,7 @@ import { AMS_CARD_EDITOR_NAME, AMS_MODELS } from "./const";
 import { INTEGRATION_DOMAIN, MANUFACTURER } from "../../const";
 import { customElement, state } from "lit/decorators.js";
 import { LitElement, html, nothing } from "lit";
+import memoizeOne from "memoize-one";
 
 // https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
 const filterCombinations = AMS_MODELS.map((model) => ({
@@ -9,64 +10,69 @@ const filterCombinations = AMS_MODELS.map((model) => ({
   model: model,
 }));
 
-const NEW_SCHEMA = [
-  { name: "header", label: "Card Header", selector: { text: {} } },
-  { name: "subtitle", label: "Subtitle", selector: { text: {} } },
-  {
-    name: "ams",
-    label: "AMS",
-    selector: { device: { filter: filterCombinations } },
-  },
-  {
-    name: "style",
-    label: "Card Style",
-    selector: {
-      select: {
-        options: [
-          { label: "Vector", value: "vector" },
-          { label: "Graphic", value: "graphic" },
-        ],
-      },
-    },
-  },
-];
-
 @customElement(AMS_CARD_EDITOR_NAME)
 export class AmsCardEditor extends LitElement {
   @state() private _config?;
   @state() private hass: any;
 
-  static get properties() {
-    return {
-      hass: {},
-      _config: { state: true },
-    };
-  }
-
   public setConfig(config): void {
     this._config = config;
   }
 
-  _handleValueChanged(ev) {
-    const messageEvent = new CustomEvent("config-changed", {
-      detail: { config: ev.detail.value },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(messageEvent);
-  }
+  private _schema = memoizeOne((showInfoBar: boolean) => [
+    { name: "show_info_bar", label: "Show Info Bar", selector: { boolean: true } },
+    ...(showInfoBar
+      ? [
+          {
+            name: "subtitle",
+            label: "Subtitle",
+            selector: { text: {} },
+          },
+        ]
+      : ""),
+    {
+      name: "ams",
+      label: "AMS",
+      selector: { device: { filter: filterCombinations } },
+    },
+    {
+      name: "style",
+      label: "Card Style",
+      selector: {
+        select: {
+          options: [
+            { label: "Vector", value: "vector" },
+            { label: "Graphic", value: "graphic" },
+          ],
+        },
+      },
+    },
+  ]);
 
   render() {
+    const schema = this._schema(this._config.show_info_bar);
+
     return html`
       <div>
         <ha-form
           .hass=${this.hass}
           .data=${this._config}
-          .schema=${NEW_SCHEMA}
-          .computeLabel=${(schema) => schema.label}
-          @value-changed=${this._handleValueChanged}
+          .schema=${schema}
+          .computeLabel=${(s) => s.label}
+          @value-changed=${this._valueChange}
         ></ha-form>
       </div>
     `;
+  }
+
+  private _valueChange(ev: CustomEvent): void {
+    let config = ev.detail.value;
+
+    const event = new Event("config-changed", {
+      bubbles: true,
+      composed: true,
+    });
+    event["detail"] = { config };
+    this.dispatchEvent(event);
   }
 }

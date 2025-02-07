@@ -488,6 +488,7 @@ class PrintJob:
         self.total_layers = 0
         self.print_error = 0
         self.print_weight = 0
+        self.ams_mapping = []
         self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.print_length = 0
@@ -537,6 +538,7 @@ class PrintJob:
         self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
+        self.ams_mapping = data.get("ams_mapping", self.ams_mapping)
         self._skipped_objects = data.get("s_obj", self._skipped_objects)
 
         # Initialize task data at startup.
@@ -863,6 +865,8 @@ class PrintJob:
                     print_length = 0
                     plate_number = None
                     _printable_objects = {}
+                    filament_count = len(self.ams_mapping)
+                    plate_filament_count = len(plate.findall('filament'))
                     for metadata in plate:
                         if (metadata.get('key') == 'index'):
                             # Index is the plate number being printed
@@ -884,16 +888,27 @@ class PrintJob:
                             if metadata.get('skipped') == f"false":
                                 _printable_objects[metadata.get('identify_id')] = metadata.get('name')
                         elif (metadata.tag == 'filament'):
-                            # Filament used for the current print job. The plate info does not distinguish
-                            # between AMS and External Spool, both AMS Tray 1 and External Spool have
-                            # an ID of 1
-                            LOGGER.debug(f"AMS Tray {metadata.get('id')}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
+                            # Filament used for the current print job. The plate info contains filaments
+                            # identified in the order they appear in the slicer. These IDs must be
+                            # mapped to the AMS tray mappings provided by MQTT print.ams_mapping
+
+                            # Zero-index the filament ID
+                            filament_index = int(metadata.get('id')) - 1
+                            log_label = f"External spool"
                             
-                            # Print weights and lengths expect zero-indexed allocation, reduce the ID by 1
-                            ams_index = int(metadata.get('id')) - 1
-                            self._ams_print_weights[ams_index] = metadata.get('used_g')
-                            self._ams_print_lengths[ams_index] = metadata.get('used_m')
-                            
+                            # Filament count should be greater than the zero-indexed filament ID
+                            if filament_count > filament_index:
+                                ams_index = self.ams_mapping[filament_index]
+                                self._ams_print_weights[ams_index] = metadata.get('used_g')
+                                self._ams_print_lengths[ams_index] = metadata.get('used_m')
+                                log_label = f"AMS Tray {ams_index + 1}"
+                            elif plate_filament_count > 1:
+                                # Multi filament print but the AMS mapping is unknown
+                                # This can happen when loading an old print after restart
+                                log_label = f"AMS Tray unknown"
+
+                            LOGGER.debug(f"{log_label}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
+
                             # Increase the total print length
                             print_length += float(metadata.get('used_m'))
                     

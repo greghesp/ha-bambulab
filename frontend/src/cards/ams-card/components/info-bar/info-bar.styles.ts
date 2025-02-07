@@ -7,7 +7,8 @@ export default css`
     justify-content: center;
     align-items: center;
     column-gap: 10px;
-    padding: 2% 4%;
+    padding: 0px 8px;
+    height: 56px;
   }
 
   .subtitle {
