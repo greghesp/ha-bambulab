@@ -7,6 +7,7 @@ import "../components/info-bar/info-bar";
 export class GraphicAmsCard extends LitElement {
   @property() public header;
   @property() public subtitle;
+  @property() public showInfoBar;
   @property({ type: Object }) public entities;
   @property({ type: Object }) public states;
 
@@ -30,11 +31,13 @@ export class GraphicAmsCard extends LitElement {
 
   render() {
     return html` <ha-card header="${this.header}">
-      <info-bar
-        subtitle="${this.subtitle}"
-        humidity="${this.humidity()}"
-        .temperature="${this.temperature()}"
-      ></info-bar>
+      ${this.showInfoBar
+        ? html` <info-bar
+            subtitle="${this.subtitle}"
+            humidity="${this.humidity()}"
+            .temperature="${this.temperature()}"
+          ></info-bar>`
+        : nothing}
       <div class="ams-container">
         <img src=${AMSImage} alt="" />
         ${this.entities?.spools.map(

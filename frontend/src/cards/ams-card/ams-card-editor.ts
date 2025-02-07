@@ -19,15 +19,15 @@ export class AmsCardEditor extends LitElement {
     this._config = config;
   }
 
-  private _schema = memoizeOne((showHeader: boolean) => [
+  private _schema = memoizeOne((showInfoBar: boolean) => [
     {
       name: "header",
       label: "Card Header",
       selector: { text: {} },
       required: false,
     },
-    { name: "show_header", label: "Show Header", selector: { boolean: false } },
-    ...(showHeader
+    { name: "show_info_bar", label: "Show Info Bar", selector: { boolean: true } },
+    ...(showInfoBar
       ? [
           {
             name: "subtitle",
@@ -55,21 +55,9 @@ export class AmsCardEditor extends LitElement {
     },
   ]);
 
-  _handleValueChanged(ev) {
-    const messageEvent = new CustomEvent("config-changed", {
-      detail: { config: ev.detail.value },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(messageEvent);
-  }
-
   render() {
-    const schema = this._schema(this._config!.header !== undefined);
-    const data = {
-      show_header: this._config!.header !== undefined,
-      ...this._config,
-    };
+    const schema = this._schema(this._config.show_info_bar);
+
     return html`
       <div>
         <ha-form
@@ -77,9 +65,20 @@ export class AmsCardEditor extends LitElement {
           .data=${this._config}
           .schema=${schema}
           .computeLabel=${(s) => s.label}
-          @value-changed=${this._handleValueChanged}
+          @value-changed=${this._valueChange}
         ></ha-form>
       </div>
     `;
+  }
+
+  private _valueChange(ev: CustomEvent): void {
+    let config = ev.detail.value;
+
+    const event = new Event("config-changed", {
+      bubbles: true,
+      composed: true,
+    });
+    event["detail"] = { config };
+    this.dispatchEvent(event);
   }
 }
