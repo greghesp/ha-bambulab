@@ -1,5 +1,6 @@
 import { customElement, state, property } from "lit/decorators.js";
-import { css, html, LitElement, nothing } from "lit";
+import { html, LitElement, nothing } from "lit";
+import styles from "./card.styles";
 
 import { registerCustomCard } from "../../utils/custom-cards";
 import { SKIPOBJECT_CARD_EDITOR_NAME, SKIPOBJECT_CARD_NAME } from "./const";
@@ -22,11 +23,14 @@ interface Sensor {
 interface Result {
   pick_image: Sensor | null;
   skipped_objects: Sensor | null;
+  printable_objects: Sensor | null;
 }
 
 @customElement(SKIPOBJECT_CARD_NAME)
 export class SKIPOBJECT_CARD extends LitElement {
   
+  static styles = styles;
+
   // private property
   _hass;
 
@@ -103,9 +107,9 @@ export class SKIPOBJECT_CARD extends LitElement {
       const imageData = this._hiddenCtx.getImageData(x, y, 1, 1).data;
       const [r, g, b, a] = imageData;
 
-      const pixelColor = this.rgbaToInt(r, g, b, 0) // For integer comparisons we set the alpha to 0.
-      const index = this._object_array.indexOf(pixelColor)
-      const new_index = this._new_object_array.indexOf(pixelColor)
+      const pixelColor = this.rgbaToInt(r, g, b, 0); // For integer comparisons we set the alpha to 0.
+      const index = this._object_array.indexOf(pixelColor);
+      const new_index = this._new_object_array.indexOf(pixelColor);
       // Cannot toggle objects in the completed skipped objects list
       if (index == -1)
       {
@@ -151,6 +155,14 @@ export class SKIPOBJECT_CARD extends LitElement {
     }
   }
 
+  _get_printable_objects() {
+    if (this._entities.printable_objects) {
+      const entity = this._entities.printable_objects;
+      const value = this._states[entity.entity_id].state;
+      return JSON.parse(value)
+    }
+  }
+
   _colorizeCanvas() {
     // Now we colorize the image based on the list of skipped objects.
     this._visibleCtx.drawImage(this._pick_image, 0, 0)
@@ -180,54 +192,6 @@ export class SKIPOBJECT_CARD extends LitElement {
     // Put the modified image data back into the canvas
     this._visibleCtx.putImageData(imageData, 0, 0);  
   }
-
-  // Style for the card and popup
-  static styles = css`
-    .card {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 16px;
-      background: var(--card-background-color);
-    }
-    .button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .popup {
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      padding: 20px;
-      border: 1px solid #ccc;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
-    .popup-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-    .popup-header {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: black; /* Ensure the header text is black */
-    }
-    .popup-content {
-      font-size: 14px;
-      color: black; /* Ensure the content text is black */
-    }
-  `;
 
   render() {
     return html`
@@ -280,7 +244,8 @@ export class SKIPOBJECT_CARD extends LitElement {
   private async filterBambuDevices() {
     const result: Result = {
       pick_image: null,
-      skipped_objects: null
+      skipped_objects: null,
+      printable_objects: null,
     };
     // Loop through all hass entities, and find those that belong to the selected device
     for (let key in this._hass.entities) {
@@ -292,6 +257,9 @@ export class SKIPOBJECT_CARD extends LitElement {
         }
         else if (r.unique_id.includes("skipped_objects")) {
           result.skipped_objects = value;
+        }
+        else if (r.unique_id.includes("printable_objects")) {
+          result.printable_objects = value;
         }
       }
     }

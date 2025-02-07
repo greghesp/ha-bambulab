@@ -436,10 +436,10 @@ class PrintJob:
     print_length: int
     print_bed_type: str
     print_type: str
-    _printable_objects: dict
     _ams_print_weights: float
     _ams_print_lengths: float
     _skipped_objects: list
+    _printable_objects: dict
 
     @property
     def get_printable_objects(self) -> json:
@@ -494,7 +494,7 @@ class PrintJob:
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
         self.print_type = ""
-        self.printable_objects = {}
+        self._printable_objects = {}
         self._skipped_objects = []
 
     def print_update(self, data) -> bool:
