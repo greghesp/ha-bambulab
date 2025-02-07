@@ -436,10 +436,14 @@ class PrintJob:
     print_length: int
     print_bed_type: str
     print_type: str
-    printable_objects: dict
+    _printable_objects: dict
     _ams_print_weights: float
     _ams_print_lengths: float
     _skipped_objects: list
+
+    @property
+    def get_printable_objects(self) -> json:
+        return json.dumps(self._printable_objects)
 
     @property
     def get_skipped_objects(self) -> str:
@@ -858,7 +862,7 @@ class PrintJob:
                     # Start a total print length count to be compiled from each filament
                     print_length = 0
                     plate_number = None
-                    printable_objects = {}
+                    _printable_objects = {}
                     for metadata in plate:
                         if (metadata.get('key') == 'index'):
                             # Index is the plate number being printed
@@ -878,7 +882,7 @@ class PrintJob:
                             # Get the list of printable objects present on the plate before slicing.
                             # This includes hidden objects which need to be filtered out later.
                             if metadata.get('skipped') == f"false":
-                                printable_objects[metadata.get('identify_id')] = metadata.get('name')
+                                _printable_objects[metadata.get('identify_id')] = metadata.get('name')
                         elif (metadata.tag == 'filament'):
                             # Filament used for the current print job. The plate info does not distinguish
                             # between AMS and External Spool, both AMS Tray 1 and External Spool have
@@ -907,11 +911,7 @@ class PrintJob:
                         
                         # Filter the printable objects from slice_info.config, removing
                         # any that weren't detected in the pick image
-                        printable_objects = {k: printable_objects[k] for k in identify_ids if k in printable_objects}
-                        self.printable_objects = {
-                            "identify_ids": list(printable_objects.keys()),
-                            "object_names": list(printable_objects.values())
-                        }
+                        self._printable_objects = {k: _printable_objects[k] for k in identify_ids if k in _printable_objects}
                         
                         # Save the labelled pick image
                         if self._client.label_pick_image_enabled:
