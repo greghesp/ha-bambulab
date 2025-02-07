@@ -153,6 +153,7 @@ export class SKIPOBJECT_CARD extends LitElement {
       const value = this._states[entity.entity_id].state;
       return JSON.parse(value)
     }
+    return null;
   }
 
   _get_printable_objects() {
@@ -161,6 +162,7 @@ export class SKIPOBJECT_CARD extends LitElement {
       const value = this._states[entity.entity_id].state;
       return JSON.parse(value)
     }
+    return null;
   }
 
   _colorizeCanvas() {
@@ -205,9 +207,11 @@ export class SKIPOBJECT_CARD extends LitElement {
               <div class="popup">
                 <div class="popup-header">Skip Objects</div>
                 <div class="popup-content">
-                  <canvas id="canvas" width="512" height="512"/>
-                  <p>Click the object(s) you want to skip printing and then the confirm button once done.</p>
-                  <button @click="${this._togglePopup}">Confirm</button>
+                  <canvas id="canvas" width="512" height="512"></canvas>
+                  <ul id="checkboxList"></ul>
+                  <p>Select the object(s) you want to skip printing.</p>
+                  <button id="cancel" @click="${this._togglePopup}">Cancel</button>
+                  <button id="skip" @click="${this._togglePopup}">Skip</button>
                 </div>
               </div>
             `
@@ -218,6 +222,7 @@ export class SKIPOBJECT_CARD extends LitElement {
 
   updated(changedProperties) {
     if (changedProperties.has('_popupVisible') && this._popupVisible) {
+      this._populateCheckboxList();
       this._updateCanvas();
     }
   }
@@ -232,6 +237,31 @@ export class SKIPOBJECT_CARD extends LitElement {
       this._object_array = this._get_skipped_objects();
       this._new_object_array = this._get_skipped_objects();
     }
+  }
+
+  // Function to populate the list of checkboxes
+  private _populateCheckboxList() {
+    const checkboxList = this.shadowRoot!.getElementById('checkboxList')!
+
+    // Clear existing list items if any
+    checkboxList.innerHTML = '';
+
+    // Create and append list items dynamically
+    const list = this._get_printable_objects();
+    Object.keys(list).forEach(key => {
+      console.log(`Key: ${key}, Value: ${value}`);
+      const value = list[key];
+      const listItem = document.createElement('li');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = key;
+      const label = document.createElement('label');
+      label.htmlFor = key;
+      label.textContent = value;
+      listItem.appendChild(checkbox);
+      listItem.appendChild(label);
+      checkboxList.appendChild(listItem);
+    });
   }
 
   private async getEntity(entity_id) {

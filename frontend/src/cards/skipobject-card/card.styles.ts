@@ -1,6 +1,9 @@
 import { css } from "lit";
 
 export default css`
+  .canvas {
+    display: block;
+  }
   .card {
     display: flex;
     justify-content: center;
@@ -44,5 +47,14 @@ export default css`
   .popup-content {
     font-size: 14px;
     color: black; /* Ensure the content text is black */
+  }
+  /* Remove bullets from the list */
+  #checkboxList {
+    list-style-type: none;
+    padding: 0;
+  }
+  /* Style the checkbox list items */
+  #checkbox li {
+    margin: 10px 0;
   }
 `;
