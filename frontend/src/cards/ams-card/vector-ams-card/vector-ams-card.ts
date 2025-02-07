@@ -5,8 +5,8 @@ import "../components/info-bar/info-bar";
 
 @customElement("vector-ams-card")
 export class VectorAmsCard extends LitElement {
-  @property() public header;
   @property() public subtitle;
+  @property() public showInfoBar;
   @property({ type: Object }) public entities;
   @property({ type: Object }) public states;
 
@@ -37,13 +37,15 @@ export class VectorAmsCard extends LitElement {
 
   render() {
     return html`
-      <ha-card header="${this.header}">
+      <ha-card class="card">
         <div class="v-wrapper">
-          <info-bar
-            subtitle="${this.subtitle}"
-            humidity="${this.humidity()}"
-            .temperature="${this.temperature()}"
-          ></info-bar>
+          ${this.showInfoBar
+            ? html` <info-bar
+                subtitle="${this.subtitle}"
+                humidity="${this.humidity()}"
+                .temperature="${this.temperature()}"
+              ></info-bar>`
+            : nothing}
           <div class="v-ams-container">
             ${this.entities?.spools.map(
               (spool) => html`

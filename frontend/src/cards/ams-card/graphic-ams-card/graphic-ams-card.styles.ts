@@ -1,6 +1,12 @@
 import { css } from "lit";
 
 export default css`
+  .card {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
   .ams-container {
     height: 100%;
     width: 100%;

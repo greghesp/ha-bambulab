@@ -15,8 +15,8 @@
   },
   "license": "ISC",
   "dependencies": {
-    "apexcharts": "^4.3.0",
-    "lit": "^3.2.1"
+    "lit": "^3.2.1",
+    "memoize-one": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

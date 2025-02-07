@@ -33,33 +33,33 @@ interface Result {
 export class AMS_CARD extends LitElement {
   // private property
   @state() private _hass?;
-  @state() private _header;
   @state() private _subtitle;
   @state() private _entity;
   @state() private _deviceId: any;
   @state() private _entities: any;
   @state() private _states;
   @state() private _style;
+  @state() private _showInfoBar!: boolean | true;
 
   static styles = styles;
 
-  static get properties() {
+  public getLayoutOptions() {
     return {
-      _header: { state: true },
-      _subtitle: { state: true },
-      _entities: { state: true },
-      _deviceId: { state: true },
-      _states: { state: true },
-      _style: { state: true },
+      grid_rows:
+        this._style === "graphic" ? (this._showInfoBar ? 5 : 4) : this._showInfoBar ? 4 : 3,
+      grid_columns: 4,
+      grid_min_rows:
+        this._style === "graphic" ? (this._showInfoBar ? 5 : 4) : this._showInfoBar ? 4 : 3,
+      grid_min_columns: 4,
     };
   }
 
   setConfig(config) {
-    this._header = config.header === "" ? nothing : config.header;
     this._subtitle = config.subtitle === "" ? nothing : config.subtitle;
     this._entities = config._entities;
     this._deviceId = config.ams;
     this._style = config.style;
+    this._showInfoBar = config.show_info_bar;
 
     if (!config.ams) {
       throw new Error("You need to select an AMS");
@@ -80,19 +80,19 @@ export class AMS_CARD extends LitElement {
     if (this._style == "graphic") {
       return html`
         <graphic-ams-card
-          .header="${this._header}"
           .subtitle="${this._subtitle}"
           .entities="${this._entities}"
           .states="${this._states}"
+          .showInfoBar=${this._showInfoBar}
         />
       `;
     } else {
       return html`
         <vector-ams-card
-          .header="${this._header}"
           .subtitle="${this._subtitle}"
           .entities="${this._entities}"
           .states="${this._states}"
+          .showInfoBar=${this._showInfoBar}
         />
       `;
     }
