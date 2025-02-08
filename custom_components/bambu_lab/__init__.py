@@ -7,7 +7,11 @@ from .const import DOMAIN, LOGGER, PLATFORMS
 from .coordinator import BambuDataUpdateCoordinator
 from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
-from .pybambu.commands import SEND_GCODE_TEMPLATE, PRINT_PROJECT_FILE_TEMPLATE
+from .pybambu.const import (
+    PRINT_PROJECT_FILE_BUS_EVENT,
+    SEND_GCODE_BUS_EVENT,
+    SKIP_OBJECTS_BUS_EVENT,
+)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
@@ -16,60 +20,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
-
-    async def send_command(call: ServiceCall):
-        """Handle the service call."""
-
-        if check_service_call_payload(call) is False:
-            return
-        
-        command = SEND_GCODE_TEMPLATE
-        command['print']['param'] = f"{call.data.get('command')}\n"
-        coordinator.client.publish(command)
-
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "send_command",  # Service name
-        send_command    # Handler function
-    )
-
-    async def print_project_file(call: ServiceCall):
-        """Handle the service call."""
-
-        if check_service_call_payload(call) is False:
-            return
-        
-        command = PRINT_PROJECT_FILE_TEMPLATE
-        file = call.data.get("filepath")
-        plate = call.data.get("plate")
-        timelapse = call.data.get("timelapse")
-        bed_leveling = call.data.get("bed_leveling")
-        flow_cali = call.data.get("flow_cali")
-        vibration_cali = call.data.get("vibration_cali")
-        layer_inspect = call.data.get("layer_inspect")
-        use_ams = call.data.get("use_ams")
-        ams_mapping = call.data.get("ams_mapping")
-
-        command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
-        command["print"]["url"] = f"ftp://{file}"
-        command["print"]["timelapse"] = timelapse
-        command["print"]["bed_leveling"] = bed_leveling
-        command["print"]["flow_cali"] = flow_cali
-        command["print"]["vibration_cali"] = vibration_cali
-        command["print"]["layer_inspect"] = layer_inspect
-        command["print"]["use_ams"] = use_ams
-        command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
-
-        coordinator.client.publish(command)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "print_project_file",  # Service name
-        print_project_file  # Handler function
-    )
 
     def check_service_call_payload(call: ServiceCall):
         LOGGER.debug(call)
@@ -95,12 +45,37 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         
         return True
 
+    async def send_command(call: ServiceCall):
+        """Handle the service call."""
+        if check_service_call_payload(call) is False:
+            return
+        hass.bus.fire(SEND_GCODE_BUS_EVENT, call.data)
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "send_command",  # Service name
+        send_command    # Handler function
+    )
+
+    async def print_project_file(call: ServiceCall):
+        """Handle the service call."""
+        if check_service_call_payload(call) is False:
+            return
+        hass.bus.fire(PRINT_PROJECT_FILE_BUS_EVENT, call.data)
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "print_project_file",  # Service name
+        print_project_file  # Handler function
+    )
 
     async def skip_objects(call: ServiceCall):
         """Handle the service call."""
         if check_service_call_payload(call) is False:
             return
-        hass.bus.fire('bambu_lab_skip_objects', call.data)
+        hass.bus.fire(SKIP_OBJECTS_BUS_EVENT, call.data)
 
     # Register the service with Home Assistant
     hass.services.async_register(
