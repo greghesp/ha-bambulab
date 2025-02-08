@@ -18,31 +18,30 @@ jobs:
       - name: 🐍 Setup Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: 💿 Install Dependencies
         run: pip install -r requirements.txt
-        working-directory: '${{ github.workspace }}/scripts'
+        working-directory: "${{ github.workspace }}/scripts"
 
       - name: 🧵 Run Python Scripts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-            python '${{ github.workspace }}/scripts/fetch_filaments.py'
-            python '${{ github.workspace }}/scripts/update_const.py'
-            python '${{ github.workspace }}/scripts/auto_translate.py'
+          python '${{ github.workspace }}/scripts/fetch_filaments.py'
+          python '${{ github.workspace }}/scripts/update_const.py'
+          python '${{ github.workspace }}/scripts/auto_translate.py'
 
-      - name:  ⬇️ Download latest frontend release
-        uses: robinraju/release-downloader@v1.8
-        with:
-          repository: "greghesp/ha-bambulab-cards"
-          latest: true
-          fileName: "ha-bambulab-cards.js"
+      # - name:  ⬇️ Download latest frontend release
+      #   uses: robinraju/release-downloader@v1.8
+      #   with:
+      #     repository: "greghesp/ha-bambulab-cards"
+      #     latest: true
+      #     fileName: "ha-bambulab-cards.js"
 
       - name: 🤐 Copy and Zip
         if: ${{ github.event_name == 'release' }}
         run: |
-          cp ha-bambulab-cards.js '${{ github.workspace }}/custom_components/bambu_lab/frontend/ha-bambulab-cards.js'
           cd '${{ github.workspace }}/custom_components/bambu_lab'
           zip bambu_lab.zip -r ./
 
@@ -50,4 +49,4 @@ jobs:
         uses: softprops/action-gh-release@v0.1.14
         if: ${{ github.event_name == 'release' }}
         with:
-          files: '${{ github.workspace }}/custom_components/bambu_lab/bambu_lab.zip'
+          files: "${{ github.workspace }}/custom_components/bambu_lab/bambu_lab.zip"
