@@ -29,9 +29,9 @@ PLATFORMS = (
 
 BAMBU_LAB_CARDS = [
     {
-        "name": "Bambu Lab Cards",
-        "filename": "ha-bambulab-cards.js",
-        "version": "1.0.0"
+        'name': 'Bambu Lab Cards',
+        'filename': 'ha-bambulab-cards.js',
+        'version': '0.2.6'
     }
 ]
 

@@ -1,0 +1,619 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Print geannuleerd",
+      "event_print_failed": "Print mislukt",
+      "event_print_finished": "Print klaar",
+      "event_print_started": "Print gestart",
+      "event_print_error": "Printfout",
+      "event_print_error_cleared": "Printfout gewist",
+      "event_printer_error": "HMS-fout",
+      "event_printer_error_cleared": "HMS-fout gewist"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "Apparaat is reeds ingesteld.",
+      "no_printers": "Geen niet-ingestelde printers gevonden in het account.",
+      "cloudflare": "Cloudflare heeft de verbindingspoging geblokkeerd.",
+      "curl_unavailable": "curl_cffi-library is niet beschikbaar."
+    },
+    "error": {
+      "cannot_connect": "Verbinding mislukt. Controleer de logingegevens.",
+      "cannot_connect_local_ip": "Verbinding mislukt. Controleer het opgegeven IP-adres.",
+      "cannot_connect_local_all": "Verbinding mislukt. Controleer opgegeven instellingen.",
+      "invalid_auth": "Ongeldige authenticatie.",
+      "unknown": "Onverwachte fout.",
+      "code_needed": "Verificatiecode moet worden opgegeven.",
+      "verifyCode": "Verificatiecode is vereist. Controleer e-mail of telefoon.",
+      "code_expired": "Vertificatiecode is verlopen. Nieuwe verificatiecode is aangevraagd. Controleer hiervoor e-mail of telefoon.",
+      "code_incorrect": "Verificatiecode is incorrect. Voer opnieuw in.",
+      "tfaCode": "Twee-factor-authenticatiecode is vereist. Voer deze in."
+    },
+    "step": {
+      "user": {
+        "description": "Configuratie via Bambu Lab Cloud is het eenvoudigst en snelst. Social media accounts zonder wachtwoord worden niet ondersteund.\n\rU kunt ook werkende authenticatiegegevens van andere printers hergebruiken. Als deze worden gevonden, worden ze weergegeven op basis van het e-mailadres.\n\rOf u kunt verbinding maken door handmatig de lokale verbindingsgegevens van de printer op te geven. Dit is vereist voor een printer in lan-modus.",
+        "data": {
+          "printer_mode": "Verbindingsmodus van printer:"
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Lab Cloud-verbinding",
+        "description": "Geef uw Bambu Lab-inloggegevens op:",
+        "data": {
+          "region": "Accountregio:",
+          "email": "E-mailadres of telefoonnummer",
+          "password": "Wachtwoord",
+          "newCode": "Vraag nieuwe code aan",
+          "verifyCode": "Verificatiecode vanuit e-mail of telefoon",
+          "tfaCode": "Twee-factor-authenticatiecode"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Printerselectie",
+        "data": {
+          "serial": "Kies een printer om toe te voegen:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Opzetten lokale verbinding",
+        "description": "U kunt ervoor kiezen om rechtstreeks verbinding te maken met de printer voor statusupdates in plaats van via Bambu Lab cloud. Hierdoor heeft u minder last van Bambu Lab Cloud-uitval, maar Bambu Lab heeft beperkte controle over de printer in deze hybride modus, dus sommige bedieningselementen zijn niet beschikbaar.",
+        "data": {
+          "local_mqtt": "Lokaal verbinden met de printer:",
+          "host": "Lokaal IP-adres van printer:",
+          "access_code": "Toegangscode:",
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+        }
+      },
+      "Lan": {
+        "title": "Lan Mode Connection",
+        "description": "Geef het IP-adres, serienummer en de toegangscode van uw lokale printer op. De toegangscode vindt u op het printerscherm, in de netwerkinstellingen (WLAN). Het serienummer (SN) vindt u in de apparaatinstellingen.",
+        "data": {
+          "serial": "Serienummer:",
+          "host": "Lokaal IP-adres van printer:",
+          "access_code": "Toegangscode:",
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cloudflare": "Cloudflare heeft de verbindingspoging geblokkeerd.",
+      "curl_unavailable": "curl_cffi-library is niet beschikbaar."
+    },
+    "error": {
+      "cannot_connect": "Verbinden mislukt",
+      "cannot_connect_local_ip": "Verbinding mislukt. Controleer het opgegeven IP-adres.",
+      "cannot_connect_local_all": "Verbinding mislukt. Controleer opgegeven instellingen.",
+      "invalid_auth": "Ongeldige authenticatie.",
+      "unknown": "Onverwachte fout.",
+      "code_needed": "Verificatiecode moet worden opgegeven.",
+      "verifyCode": "Verificatiecode is vereist. Controleer e-mail of telefoon.",
+      "code_expired": "Vertificatiecode is verlopen. Nieuwe verificatiecode is aangevraagd. Controleer hiervoor e-mail of telefoon.",
+      "code_incorrect": "Verificatiecode is incorrect. Voer opnieuw in.",
+      "tfaCode": "Twee-factor-authenticatiecode is vereist. Voer deze in."
+    },
+    "step": {
+      "init": {
+        "title": "Verbindingsinstellingen aanpassen",
+        "description": "Configuratie via Bambu Lab Cloud is het eenvoudigst en snelst. Social media accounts zonder wachtwoord worden niet ondersteund.\n\rU kunt ook werkende authenticatiegegevens van andere printers hergebruiken. Als deze worden gevonden, worden ze weergegeven op basis van het e-mailadres.\n\rOf u kunt verbinding maken door handmatig de lokale verbindingsgegevens van de printer op te geven. Dit is vereist voor een printer in lan-modus.",
+        "data": {
+          "printer_mode": "Printer configuration mode:"
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Lab Cloud-verbinding",
+        "description": "Geef uw Bambu Lab-inloggegevens op:",
+        "data": {
+          "region": "Accountregio:",
+          "email": "E-mailadres of telefoonnummer",
+          "password": "Wachtwoord",
+          "newCode": "Vraag nieuwe code aan",
+          "verifyCode": "Verificatiecode vanuit e-mail of telefoon",
+          "tfaCode": "Twee-factor-authenticatiecode"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Opzetten lokale verbinding",
+        "description": "U kunt ervoor kiezen om rechtstreeks verbinding te maken met de printer voor statusupdates in plaats van via Bambu Lab cloud. Hierdoor heeft u minder last van Bambu Lab Cloud-uitval, maar Bambu Lab heeft beperkte controle over de printer in deze hybride modus, dus sommige bedieningselementen zijn niet beschikbaar.",
+        "data": {
+          "serial": "Adjust settings for:",
+          "host": "Local Printer IP Address:",
+          "access_code": "Toegangscode:",
+         "local_mqtt": "Lokaal verbinden met de printer in plaats van via Bambu Lab Cloud:",
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+        }
+      },
+      "Lan": {
+        "title": "Verbinding via lan",
+        "description": "Geef het lokale IP-adres en de toegangscode van uw printer op. De toegangscode vindt u op het printerscherm in de netwerkinstellingen (WLAN).",
+        "data": {
+          "host": "Lokaal IP-adres van printer:",
+          "access_code": "Toegangscode:",
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "Enclosure-deur"
+      },
+      "timelapse": {
+        "name": "Timelapse aan het opnemen"
+      },
+      "hms_errors": {
+        "name": "HMS-fouten"
+      },
+      "print_error": {
+        "name": "Printfout"
+      },
+      "online": {
+        "name": "Online"
+      },
+      "firmware_update": {
+        "name": "Firmware-update"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Printen pauzeren"
+      },
+      "resume": {
+        "name": "Printen hervatten"
+      },
+      "stop": {
+        "name": "Printen stoppen"
+      },
+      "refresh": {
+        "name": "Force refresh data"
+      },
+      "dev": {
+        "name": "Debug"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Koelingsventilator"
+      },
+      "aux_fan": {
+        "name": "Aux-ventilator"
+      },
+      "chamber_fan": {
+        "name": "Kamerventilator"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Camera"
+      },
+      "cover_image": {
+        "name": "Cover-afbeelding"
+      },
+      "pick_image": {
+        "name": "Kies afbeelding"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Kamerlicht"
+      },
+      "camera_light": {
+        "name": "Cameralicht"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Doeltemperatuur bed"
+      },
+      "target_nozzle_temperature": {
+        "name": "Doeltemperatuur nozzle"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Printsnelheid",
+        "state": {
+          "silent": "Stil",
+          "standard": "Standaard",
+          "sport": "Sportief",
+          "ludicrous": "Belachelijk snel"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Wi-Fi-signaal"
+      },
+      "bed_temp": {
+        "name": "Bedtemperatuur"
+      },
+      "target_bed_temp": {
+        "name": "Doeltemperatuur bed"
+      },
+      "chamber_temp": {
+        "name": "Kamertemperatuur"
+      },
+      "target_nozzle_temp": {
+        "name": "Doeltemperatuur nozzle"
+      },
+      "nozzle_temp": {
+        "name": "Nozzle-temperatuur"
+      },
+      "aux_fan_speed": {
+        "name": "Snelheid aux-ventilator"
+      },
+      "cooling_fan_speed": {
+        "name": "Snelheid koelventilator"
+      },
+      "chamber_fan_speed": {
+        "name": "Snelheid kamerventilator"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Snelheid heatbreak-ventilator"
+      },
+      "speed_profile": {
+        "name": "Snelheidsprofiel",
+        "state": {
+          "silent": "Stil",
+          "standard": "Standaard",
+          "sport": "Sportief",
+          "ludicrous": "Belachelijk snel"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modifier"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Printernaam"
+      },
+      "stage": {
+        "name": "Huidige fase",
+        "state": {
+          "offline": "Offline",
+          "printing": "Aan het printen",
+          "auto_bed_leveling": "Automatische bed leveling",
+          "heatbed_preheating": "Heatbed aan het voorverwarmen",
+          "sweeping_xy_mech_mode": "Sweeping XY mech-modus",
+          "changing_filament": "Filament aan het wisselen",
+          "m400_pause": "M400-pauze",
+          "paused_filament_runout": "Gepauzeerd vanwege opgeraakt filament",
+          "heating_hotend": "Hotend aan het verwarmen",
+          "calibrating_extrusion": "Extrusie aan het kalibreren",
+          "scanning_bed_surface": "Bedoppervlakte aan het scannen",
+          "inspecting_first_layer": "Eerste laag aan het inspecteren",
+          "identifying_build_plate_type": "Build plate-type aan het identificeren",
+          "calibrating_micro_lidar": "Micro-lidar aan het kalibreren",
+          "homing_toolhead": "Toolhead aan het homen",
+          "cleaning_nozzle_tip": "Nozzle-punt aan het reinigen",
+          "checking_extruder_temperature": "Extruder-temperatuur aan het controleren",
+          "paused_user": "Printen gepauzeerd door gebruiker",
+          "paused_front_cover_falling": "Gepauzeerd omdat het beschermkapje van de voorkant is gevallen",
+          "calibrating_extrusion_flow": "Extrusie-flow aan het kalibreren",
+          "paused_nozzle_temperature_malfunction": "Gepauzeerd vanwege storing met de nozzle-temperatuur",
+          "paused_heat_bed_temperature_malfunction": "Gepauzeerd vanwege storing in de temperatuur van het heat bed",
+          "filament_unloading": "Ontladen van filament",
+          "paused_skipped_step": "Gepauzeerd vanwege overslaan van stappen",
+          "filament_loading": "Laden van filament",
+          "calibrating_motor_noise": "Motorlawaai aan het kalibreren",
+          "paused_ams_lost": "Gepauzeerd vanwege verloren verbinding met de AMS",
+          "paused_low_fan_speed_heat_break": "Gepauzeerd vanwege lage heat-break-ventilatorsnelheid",
+          "paused_chamber_temperature_control_error": "Gepauzeerd vanwege kamertemperatuurbedieningsfout",
+          "cooling_chamber": "Kamer aan het koelen",
+          "paused_user_gcode": "Gepauzeerd vanwege door aan de gcode toegevoegde pauzeer-instructie",
+          "motor_noise_showoff": "Motorlawaai showoff",
+          "paused_nozzle_filament_covered_detected": "Paused due to nozzle filament covered detected",
+          "paused_cutter_error": "Gepauzeerd vanwege een fout met de filamentsnijder",
+          "paused_first_layer_error": "Gepauzeerd vanwege een fout met de eerste laag",
+          "paused_nozzle_clog": "Gepauzeerd vanwege een verstopping in de nozzle",
+          "idle": "Inactief"
+        }
+      },
+      "print_progress": {
+        "name": "Printvoortgang"
+      },
+      "print_status": {
+        "name": "Printstatus",
+        "state": {
+          "failed": "Mislukt",
+          "finish": "Klaar",
+          "idle": "Inactief",
+          "offline": "Offline",
+          "prepare": "Voorbereiden",
+          "running": "Running",
+          "pause": "Gepauzeerd",
+          "slicing": "Aan het slicen",
+          "init": "Aan het initialiseren"
+        }
+      },
+      "printable_objects": {
+        "name": "Printbare objecten"
+      },
+      "mqtt_mode": {
+        "name": "MQTT-verbindingsmodus",
+        "state": {
+          "local": "Lokaal",
+          "bambu_cloud": "Bambu Lab cloud"
+        }
+      },
+      "gcode_file": {
+        "name": "Gcode-bestandsnaam"
+      },
+      "print_bed_type": {
+        "name": "Printbed-type",
+        "state": {
+          "textured_plate": "Textured plate",
+          "cool_plate": "Cool Plate / PLA Plate",
+          "hot_plate": "Smooth PEI Plate / High Temp Plate",
+          "eng_plate": "Engineering Plate"
+        }
+      },
+      "print_length": {
+        "name": "Lengte van print"
+      },
+      "print_weight": {
+        "name": "Gewicht van print"
+      },
+      "subtask_name": {
+        "name": "Taaknaam"
+      },
+      "print_type": {
+        "name": "Printtype",
+        "state": {
+          "local": "Lokaal",
+          "cloud": "via cloud",
+          "idle": "Inactief"
+        }
+      },
+      "start_time": {
+        "name": "Starttijd"
+      },
+      "remaining_time": {
+        "name": "Resterende tijd"
+      },
+      "end_time": {
+        "name": "Eindtijd"
+      },
+      "total_usage_hours": {
+        "name": "Totaalgebruik"
+      },
+      "current_layer": {
+        "name": "Huidige laag"
+      },
+      "total_layers": {
+        "name": "Hoeveelheid lagen"
+      },
+      "active_tray": {
+        "name": "Actieve tray"
+      },
+      "active_tray_index": {
+        "name": "Actieve tray-index"
+      },
+      "nozzle_diameter": {
+        "name": "Nozzle-grootte"
+      },
+      "nozzle_type": {
+        "name": "Nozzle-type",
+        "state": {
+          "hardened_steel": "Gehard staal",
+          "stainless_steel": "Roestvast staal"
+        }
+      },
+      "ip_address": {
+        "name": "IP-adres"
+      },
+      "humidity_index": {
+        "name": "Luchtvochtigheidsindex"
+      },
+      "ams_temp": {
+        "name": "AMS-temperatuur"
+      },
+      "external_spool": {
+        "name": "Externe spoel",
+        "state_attributes": {
+          "active": {
+            "name": "Actief"
+          },
+          "color": {
+            "name": "Kleur"
+          },
+          "empty": {
+            "name": "Leeg"
+          },
+          "k_value": {
+            "name": "K-waarde"
+          },
+          "name": {
+            "name": "Naam"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimumtemperatuur nozzle"
+          },
+          "nozzle_temp_max": {
+            "name": "Maximumtemperatuur nozzle"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Tray 1",
+        "state_attributes": {
+          "active": {
+            "name": "Actief"
+          },
+          "color": {
+            "name": "Kleur"
+          },
+          "empty": {
+            "name": "Leeg"
+          },
+          "k_value": {
+            "name": "K-waarde"
+          },
+          "name": {
+            "name": "Naam"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimumtemperatuur nozzle"
+          },
+          "nozzle_temp_max": {
+            "name": "Maximumtemperatuur nozzle"
+          },
+          "remain": {
+            "name": "Resterend filament"
+          },
+          "tag_uid": {
+            "name": "Serienummer van spoel"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Tray 2",
+        "state_attributes": {
+          "active": {
+            "name": "Actief"
+          },
+          "color": {
+            "name": "Kleur"
+          },
+          "empty": {
+            "name": "Leeg"
+          },
+          "k_value": {
+            "name": "K-waarde"
+          },
+          "name": {
+            "name": "Naam"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimumtemperatuur nozzle"
+          },
+          "nozzle_temp_max": {
+            "name": "Maximumtemperatuur nozzle"
+          },
+          "remain": {
+            "name": "Resterend filament"
+          },
+          "tag_uid": {
+            "name": "Serienummer van spoel"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Tray 3",
+        "state_attributes": {
+          "active": {
+            "name": "Actief"
+          },
+          "color": {
+            "name": "Kleur"
+          },
+          "empty": {
+            "name": "Leeg"
+          },
+          "k_value": {
+            "name": "K-waarde"
+          },
+          "name": {
+            "name": "Name"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimumtemperatuur nozzle"
+          },
+          "nozzle_temp_max": {
+            "name": "Maximumtemperatuur nozzle"
+          },
+          "remain": {
+            "name": "Resterend filament"
+          },
+          "tag_uid": {
+            "name": "Serienummer van spoel"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Tray 4",
+        "state_attributes": {
+          "active": {
+            "name": "Actief"
+          },
+          "color": {
+            "name": "Kleur"
+          },
+          "empty": {
+            "name": "Leeg"
+          },
+          "k_value": {
+            "name": "K-waarde"
+          },
+          "name": {
+            "name": "Naam"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimumtemperatuur nozzle"
+          },
+          "nozzle_temp_max": {
+            "name": "Maximumtemperatuur nozzle"
+          },
+          "remain": {
+            "name": "Resterend filament"
+          },
+          "tag_uid": {
+            "name": "Serienummer van spoel"
+          },
+          "type": {
+            "name": "Type"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Camera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Handmatige vernieuwingsmodus"
+      },
+      "camera": {
+        "name": "Camera inschakelen"
+      },
+      "imagecamera": {
+        "name": "Use image sensor camera"
+      },
+      "ftp": {
+        "name": "Model-data vanuit printer inladen"
+      },
+      "prompt_sound": {
+        "name": "Toestaan van bevestigingsgeluiden"
+      },
+      "timelapse": {
+        "name": "Nieuwste timelapse vanuit de printer inladen"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Lab cloud",
+        "lan": "Lan-modus"
+      }
+    }
+  }
+}
