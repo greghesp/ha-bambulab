@@ -114,11 +114,10 @@ export class SKIPOBJECT_CARD extends LitElement {
       const key = this.rgbaToInt(r, g, b, 0); // For integer comparisons we set the alpha to 0.
       if (key != 0)
       {
-        if (!this.objects.get(key)!.skipped) {
-          const value = this.objects.get(key)!
+        if (!this._objects.get(key)!.skipped) {
+          const value = this._objects.get(key)!
           value.to_skip = !value.to_skip
-          this.objects.set(key, value);
-          this._colorizeCanvas();
+          this._updateObject(key, value);
         }
       }
     });
@@ -165,50 +164,109 @@ export class SKIPOBJECT_CARD extends LitElement {
 
   private _colorizeCanvas() {
     // Now we colorize the image based on the list of skipped objects.
-    this._visibleCtx.drawImage(this._pick_image, 0, 0)
+    console.log("_colorizeCanvas")
 
     // Create an ImageData object
-    const imageData = this._visibleCtx.getImageData(0, 0, 512, 512);
-    const data = imageData.data;
+    const WIDTH = 512;
+    const HEIGHT = 512
+
+    // Read original pick image into a data buffer so we can read the pixels. BUGBUG - Can we just copy the other image data?
+    this._hiddenCtx.drawImage(this._pick_image, 0, 0)
+    const readImageData = this._hiddenCtx.getImageData(0, 0, WIDTH, HEIGHT);
+    const readData = readImageData.data;
+
+    // Overwrite the display image with the starting pick image
+    this._visibleCtx.putImageData(readImageData, 0, 0);  
+
+    // Read the data into a buffer that we'll write to to modify the pixel colors.
+    const writeImageData = this._visibleCtx.getImageData(0, 0, WIDTH, HEIGHT);
+    const writeData = writeImageData.data;
+    const writeDataView = new DataView(writeData.buffer);
   
-    // Replace the target RGB value with red
     const red = this.rgbaToInt(255, 0, 0, 255);   // For writes we set it to 255 (fully opaque).
     const green = this.rgbaToInt(0, 255, 0, 255); // For writes we set it to 255 (fully opaque).
     const blue = this.rgbaToInt(0, 0, 255, 255);  // For writes we set it to 255 (fully opaque).
 
-    for (let i = 0; i < data.length; i += 4) {
-      const key = this.rgbaToInt(data[i], data[i + 1], data[i + 2], 0); // For integer comparisons we set the alpha to 0.
-      
-      if ((key != 0) && (this._hoveredObject == key)) {
-        const dataView = new DataView(data.buffer);
-        dataView.setUint32(i, blue, true);
-      }
-      else if (this.objects.get(key)?.to_skip) {
-        const dataView = new DataView(data.buffer);
-        dataView.setUint32(i, red, true);
-      }
-      else if (key != 0) {
-        const dataView = new DataView(data.buffer);
-        dataView.setUint32(i, green, true);
+    let lastPixelWasHoveredObject = false
+    for (let y = 0; y < HEIGHT; y++) {
+      for (let x = 0; x < WIDTH; x++) {
+        const i = (y * 4 * HEIGHT) + x * 4;
+        const key = this.rgbaToInt(readData[i], readData[i + 1], readData[i + 2], 0); // For integer comparisons we set the alpha to 0.
+        
+        // If the pixel is not clear we need to change it.
+        if (key != 0) {
+          // Color the object based on it's to_skip state.
+          if (this._objects.get(key)?.to_skip) {
+            writeDataView.setUint32(i, red, true);
+          }
+          else {
+            writeDataView.setUint32(i, green, true);
+          }
+
+          if (key == this._hoveredObject) {
+            // Check to see if we need to render the left border if the pixel to the left is not the hovered object.
+            if (x != 0) {
+              const j = i - 4
+              const left = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (left != key)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+
+            // Check to see if we need to render the top border if the pixel above is not the hovered object.
+            if (y != 0) {
+              const j = i - WIDTH * 4
+              const top = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (top != key)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+
+            // Check to see if pixel to the right is not the hovered object to draw right border.
+            if (x != (WIDTH - 1)) {
+              const j = i + 4
+              const right = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (right != this._hoveredObject)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+            
+            // Check to see if pixel above was the hovered object to draw bottom border.
+            if (y != (HEIGHT - 1)) {
+              const j = i + WIDTH * 4
+              const below = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (below != this._hoveredObject)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+          }
+        }
       }
     }
 
     // Put the modified image data back into the canvas
-    this._visibleCtx.putImageData(imageData, 0, 0);  
+    this._visibleCtx.putImageData(writeImageData, 0, 0);  
   }
 
   @property({ type: Boolean }) _popupVisible = false
-  @property({ type: Map }) objects = new Map<number, PrintableObject>();
+  @property({ type: Map }) _objects = new Map<number, PrintableObject>();
   @property({ type: Number }) _hoveredObject = 0;
 
   updated(changedProperties) {
     super.updated(changedProperties);
-    console.log(changedProperties);
     if (changedProperties.has('_popupVisible') && this._popupVisible) {
       this._populateCheckboxList();
       this._updateCanvas();
     }
     if (changedProperties.has('_hoveredObject')) {
+      this._colorizeCanvas();
+    }
+    else
+    if (changedProperties.has('_objects')) {
       this._colorizeCanvas();
     }
   }
@@ -229,8 +287,8 @@ export class SKIPOBJECT_CARD extends LitElement {
                   <canvas id="canvas" width="512" height="512"></canvas>
                   <ul id="checkboxList"></ul>
                   <div class="checkbox-list">
-                    ${Array.from(this.objects.keys()).map((key) => {
-                      const item = this.objects.get(key)!;
+                    ${Array.from(this._objects.keys()).map((key) => {
+                      const item = this._objects.get(key)!;
                       return html`
                         <label
                           @mouseover="${() => this._onMouseOverCheckBox(key)}"
@@ -263,7 +321,7 @@ export class SKIPOBJECT_CARD extends LitElement {
   }
 
   private _callSkipObjectsService() {
-    const list = Array.from(this.objects.keys()).filter((key) => this.objects.get(key)!.to_skip).map((key) => key).join(',');
+    const list = Array.from(this._objects.keys()).filter((key) => this._objects.get(key)!.to_skip).map((key) => key).join(',');
     const data = { "device_id": [this._deviceId], "objects": list }
     this._hass.callService("bambu_lab", "skip_objects", data).then(() => {
       console.log(`Service called successfully`);
@@ -272,17 +330,22 @@ export class SKIPOBJECT_CARD extends LitElement {
     });
   }
 
+  private _updateObject(key: number, value: PrintableObject) {
+    this._objects.set(key, value);
+    this._objects = new Map(this._objects); // Trigger Lit reactivity
+  }
+
   // Toggle the checked state of an item when a checkbox is clicked
   private _toggleCheckbox(e: Event, key: number) {
-    const skippedBool = this.objects.get(key)?.skipped;
+    const skippedBool = this._objects.get(key)?.skipped;
     if (skippedBool) {
       // Force the checkbox to remain checked if the object has already been skipped.
       (e.target as HTMLInputElement).checked = true
     }
     else {
-      const value = this.objects.get(key)!
+      const value = this._objects.get(key)!
       value.to_skip = !value.to_skip
-      this.objects.set(key, value);
+      this._updateObject(key, value);
       this._hoveredObject = 0;
     }
   }
@@ -308,11 +371,10 @@ export class SKIPOBJECT_CARD extends LitElement {
     let objects = new Map<number, PrintableObject>();
     Object.keys(list).forEach(key => {
       const value = list[key];
-      const skippedBool = skipped.includes(Number(key));
+      const skippedBool = false; //skipped.includes(Number(key));
       objects.set(Number(key), { name: value, skipped: skippedBool, to_skip: skippedBool });
     });
-    this.objects = objects;
-    this.requestUpdate()
+    this._objects = objects;
   }
 
   private async _getEntity(entity_id) {
