@@ -116,7 +116,6 @@ export class SKIPOBJECT_CARD extends LitElement {
       if (key != 0)
       {
         if (!this.objects.get(key)!.skipped) {
-          console.log(`Toggling ${key}`)
           const value = this.objects.get(key)!
           value.to_skip = !value.to_skip
           this.objects.set(key, value);
