@@ -218,6 +218,7 @@ export class SKIPOBJECT_CARD extends LitElement {
               <div class="popup-background" @click="${this._togglePopup}"></div>
               <div class="popup">
                 <div class="popup-header">Skip Objects</div>
+                <div class="alpha-text">Alpha</div>
                 <div class="popup-content">
                   <canvas id="canvas" width="512" height="512"></canvas>
                   <ul id="checkboxList"></ul>
