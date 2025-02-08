@@ -1,4 +1,4 @@
-import { SKIPOBJECT_CARD_EDITOR_NAME, PRINTER_MODELS } from "./const";
+import { PRINT_CONTROL_CARD_EDITOR_NAME, PRINTER_MODELS } from "./const";
 import { INTEGRATION_DOMAIN, MANUFACTURER } from "../../const";
 import { customElement, state } from "lit/decorators.js";
 import { LitElement, html } from "lit";
@@ -16,8 +16,8 @@ const NEW_SCHEMA = [
   },
 ];
 
-@customElement(SKIPOBJECT_CARD_EDITOR_NAME)
-export class SkipObjectCardEditor extends LitElement {
+@customElement(PRINT_CONTROL_CARD_EDITOR_NAME)
+export class PrintControlCardEditor extends LitElement {
   @state() private _config?;
   @state() private hass: any;
 

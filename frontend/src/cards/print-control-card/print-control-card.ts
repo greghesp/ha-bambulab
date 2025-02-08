@@ -3,12 +3,12 @@ import { html, LitElement, nothing } from "lit";
 import styles from "./card.styles";
 
 import { registerCustomCard } from "../../utils/custom-cards";
-import { SKIPOBJECT_CARD_EDITOR_NAME, SKIPOBJECT_CARD_NAME } from "./const";
+import { PRINT_CONTROL_CARD_EDITOR_NAME, PRINT_CONTROL_CARD_NAME } from "./const";
 
 registerCustomCard({
-  type: SKIPOBJECT_CARD_NAME,
-  name: "Bambu Lab Skip Object Card",
-  description: "Card for Skip Object",
+  type: PRINT_CONTROL_CARD_NAME,
+  name: "Bambu Lab Print Control Card",
+  description: "Card for controlling a Bambu Lab Printer",
 });
 
 interface Sensor {
@@ -32,8 +32,8 @@ interface PrintableObject {
   to_skip: boolean;
 }
 
-@customElement(SKIPOBJECT_CARD_NAME)
-export class SKIPOBJECT_CARD extends LitElement {
+@customElement(PRINT_CONTROL_CARD_NAME)
+export class PrintControlCard extends LitElement {
   
   static styles = styles;
 
@@ -68,8 +68,8 @@ export class SKIPOBJECT_CARD extends LitElement {
   }
 
   public static async getConfigElement() {
-    await import("./skipobject-card-editor");
-    return document.createElement(SKIPOBJECT_CARD_EDITOR_NAME);
+    await import("./print-control-card-editor");
+    return document.createElement(PRINT_CONTROL_CARD_EDITOR_NAME);
   }
 
   static getStubConfig() {
