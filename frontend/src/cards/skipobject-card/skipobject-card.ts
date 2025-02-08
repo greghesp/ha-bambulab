@@ -26,6 +26,12 @@ interface Result {
   printable_objects: Sensor | null;
 }
 
+interface PrintableObject {
+  name: string;
+  skipped: boolean;
+  to_skip: boolean;
+}
+
 @customElement(SKIPOBJECT_CARD_NAME)
 export class SKIPOBJECT_CARD extends LitElement {
   
@@ -51,8 +57,6 @@ export class SKIPOBJECT_CARD extends LitElement {
   _visibleCanvas;
   _visibleCtx;
   _object_array;
-  _new_object_array;
-  _hoveredObject;
  
   constructor() {
     super()
@@ -61,7 +65,6 @@ export class SKIPOBJECT_CARD extends LitElement {
     this._hiddenCanvas.height = 512;
     this._hiddenCtx = this._hiddenCanvas.getContext('2d', { willReadFrequently: true });
     this._object_array = new Array();
-    this._new_object_array = new Array();
     this._hoveredObject = 0;
   }
 
@@ -109,24 +112,14 @@ export class SKIPOBJECT_CARD extends LitElement {
       const imageData = this._hiddenCtx.getImageData(x, y, 1, 1).data;
       const [r, g, b, a] = imageData;
 
-      const pixelColor = this.rgbaToInt(r, g, b, 0); // For integer comparisons we set the alpha to 0.
-      if (pixelColor != 0)
+      const key = this.rgbaToInt(r, g, b, 0); // For integer comparisons we set the alpha to 0.
+      if (key != 0)
       {
-        const index = this._object_array.indexOf(pixelColor);
-        const new_index = this._new_object_array.indexOf(pixelColor);
-        // Cannot toggle objects in the completed skipped objects list
-        if (index == -1)
-        {
-          if (new_index != -1)
-          {
-            // Remove the element at 'new_index' from the array
-            this._new_object_array.splice(new_index, 1);
-          }
-          else
-          {
-            // Add the element to the array
-            this._new_object_array.push(pixelColor);
-          }
+        if (!this.objects.get(key)!.skipped) {
+          console.log(`Toggling ${key}`)
+          const value = this.objects.get(key)!
+          value.to_skip = !value.to_skip
+          this.objects.set(key, value);
         }
         this._colorizeCanvas();
       }
@@ -181,23 +174,22 @@ export class SKIPOBJECT_CARD extends LitElement {
     const data = imageData.data;
   
     // Replace the target RGB value with red
-    const clear = this.rgbaToInt(0, 0, 0, 0);     // For integer comparisons we set the alpha to 0.
     const red = this.rgbaToInt(255, 0, 0, 255);   // For writes we set it to 255 (fully opaque).
     const green = this.rgbaToInt(0, 255, 0, 255); // For writes we set it to 255 (fully opaque).
     const blue = this.rgbaToInt(0, 0, 255, 255);  // For writes we set it to 255 (fully opaque).
 
     for (let i = 0; i < data.length; i += 4) {
-      const pixelColor = this.rgbaToInt(data[i], data[i + 1], data[i + 2], 0); // For integer comparisons we set the alpha to 0.
+      const key = this.rgbaToInt(data[i], data[i + 1], data[i + 2], 0); // For integer comparisons we set the alpha to 0.
       
-      if ((pixelColor != 0) && (this._hoveredObject == pixelColor)) {
+      if ((key != 0) && (this._hoveredObject == key)) {
         const dataView = new DataView(data.buffer);
         dataView.setUint32(i, blue, true);
       }
-      else if (this._new_object_array.includes(pixelColor)) {
+      else if (this.objects.get(key)?.to_skip) {
         const dataView = new DataView(data.buffer);
         dataView.setUint32(i, red, true);
       }
-      else if (pixelColor != clear) {
+      else if (key != 0) {
         const dataView = new DataView(data.buffer);
         dataView.setUint32(i, green, true);
       }
@@ -206,6 +198,9 @@ export class SKIPOBJECT_CARD extends LitElement {
     // Put the modified image data back into the canvas
     this._visibleCtx.putImageData(imageData, 0, 0);  
   }
+
+  @property({ type: Map }) objects = new Map<number, PrintableObject>();
+  @property({ type: Number }) _hoveredObject = 0;
 
   render() {
     return html`
@@ -222,19 +217,38 @@ export class SKIPOBJECT_CARD extends LitElement {
                 <div class="popup-content">
                   <canvas id="canvas" width="512" height="512"></canvas>
                   <ul id="checkboxList"></ul>
+                  <div class="checkbox-list">
+                    ${Array.from(this.objects.keys()).map((key) => {
+                      const item = this.objects.get(key)!;
+                      return html`
+                        <label
+                          @mouseover="${() => this.handleMouseOver(key)}"
+                          @mouseout="${() => this.handleMouseOut(key)}"
+                        >
+                          <input
+                              type="checkbox"
+                              .checked="${item.to_skip}"
+                              @change="${(e: Event) => this.toggleCheckbox(e, key)}"
+                          />
+                          ${item.skipped ? item.name + " (already skipped)" : item.name}
+                        </label><br />
+                      `;
+                  })}
+                  </div>
                   <p>Select the object(s) you want to skip printing.</p>
                   <button id="cancel" @click="${this._togglePopup}">Cancel</button>
                   <button id="skip" @click="${this._skipObjects}">Skip</button>
                 </div>
               </div>
             `
-          : ''}
+        : ''}
       </ha-card>
     `;
   }
 
   _skipObjects() {
-    const data = { "device_id": [this._deviceId], "objects": this._new_object_array.join(',') }
+    const list = Array.from(this.objects.keys()).filter((key) => this.objects.get(key)!.to_skip).map((key) => key).join(',');
+    const data = { "device_id": [this._deviceId], "objects": list }
     this._hass.callService("bambu_lab", "skip_objects", data).then(() => {
       console.log(`Service called successfully`);
     }).catch((error) => {
@@ -255,95 +269,52 @@ export class SKIPOBJECT_CARD extends LitElement {
   // Function to toggle popup visibility
   private _togglePopup() {
     this._popupVisible = !this._popupVisible;
-    if (this._popupVisible) {
-      this._object_array = this._get_skipped_objects();
-      this._new_object_array = this._object_array.slice();
+  }
+
+  // Toggle the checked state of an item when a checkbox is clicked
+  toggleCheckbox(e: Event, key: number) {
+    const skippedBool = this.objects.get(key)?.skipped;
+    if (skippedBool) {
+      // Force the checkbox to remain checked if the object has already been skipped.
+      (e.target as HTMLInputElement).checked = true
+    }
+    else {
+      const value = this.objects.get(key)!
+      value.to_skip = !value.to_skip
+      this.objects.set(key, value);
+      this._hoveredObject = 0;
+      this._colorizeCanvas();
     }
   }
 
   // Function to handle hover
-  handleHover = (event) => {
-    let id = event.target.htmlFor
-    if (id == null) {
-      id = event.target.id
-    }
-    this._hoveredObject = id;
+  handleMouseOver(key: number) {
+    this._hoveredObject = key
     this._colorizeCanvas();
   };
 
   // Function to handle mouse out
-  handleMouseOut = (event) => {
-    let id = event.target.htmlFor
-    if (id == null) {
-      id = Number(event.target.id)
-    }
-    if (this._hoveredObject = id) {
-      this._hoveredObject = 0;
+  handleMouseOut(key: number) {
+    if (this._hoveredObject == key) {
+      this._hoveredObject = 0
     }
     this._colorizeCanvas();
   };
-
-  // Function to handle mouse out
-  handleChange = (event) => {
-    const id = Number(event.target.id)
-    const checked = event.target.checked
-    if (this._object_array.includes(id))
-    {
-      // Already skipped objects must remain skipped
-      event.target.checked = true
-    }
-    else if (checked)
-    {
-      this._new_object_array.push(id)
-      // Clear hover visual so the change can be observed.
-      this._hoveredObject = 0
-    }
-    else
-    {
-      const index = this._new_object_array.indexOf(id);
-      this._new_object_array.splice(index, 1);
-      // Clear hover visual so the change can be observed.
-      this._hoveredObject = 0
-    }
-    this._colorizeCanvas();
-  }
 
   // Function to populate the list of checkboxes
   private _populateCheckboxList() {
-    const checkboxList = this.shadowRoot!.getElementById('checkboxList')!
-
-    // Clear existing list items if any
-    checkboxList.innerHTML = '';
-
-    // Create and append list items dynamically
+    // Populate the viewmodel
     const list = this._get_printable_objects();
+    const skipped = this._get_skipped_objects();
+
+    let objects = new Map<number, PrintableObject>();
     Object.keys(list).forEach(key => {
       const value = list[key];
-      const listItem = document.createElement('li');
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = key;
-      checkbox.checked = this._new_object_array.includes(Number(key))
-      const label = document.createElement('label');
-      label.htmlFor = key;
-      if (this._object_array.includes(Number(key))) {
-        label.textContent = `${value} (already skipped)`;
-      }
-      else {
-        label.textContent = value;
-      }
-      listItem.appendChild(checkbox);
-      listItem.appendChild(label);
-      // Add event listener to the checkbox and label for hover
-      checkbox.addEventListener('mouseover', this.handleHover);
-      label.addEventListener('mouseover', this.handleHover);
-      // Add event listener to the checkbox and label for mouse out
-      checkbox.addEventListener('mouseout', this.handleMouseOut);
-      label.addEventListener('mouseout', this.handleMouseOut);
-      // Add event listener to the checkbox for check state change
-      checkbox.addEventListener('change', this.handleChange);
-      checkboxList.appendChild(listItem);
+      const skippedBool = skipped.includes(Number(key));
+      objects.set(Number(key), { name: value, skipped: skippedBool, to_skip: skippedBool });
     });
+    this.objects = objects;
+    this.requestUpdate()
   }
 
   private async getEntity(entity_id) {
