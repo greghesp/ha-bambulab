@@ -163,15 +163,16 @@ export class SKIPOBJECT_CARD extends LitElement {
   }
 
   private _colorizeCanvas() {
-    // Now we colorize the image based on the list of skipped objects.
-    console.log("_colorizeCanvas")
+    if (this._visibleCtx == undefined) {
+      // Lit reactivity can come throw here before we're fully initialized.
+      return
+    }
 
-    // Create an ImageData object
+    // Now we colorize the image based on the list of skipped objects.
     const WIDTH = 512;
     const HEIGHT = 512
 
-    // Read original pick image into a data buffer so we can read the pixels. BUGBUG - Can we just copy the other image data?
-    this._hiddenCtx.drawImage(this._pick_image, 0, 0)
+    // Read original pick image into a data buffer so we can read the pixels.
     const readImageData = this._hiddenCtx.getImageData(0, 0, WIDTH, HEIGHT);
     const readData = readImageData.data;
 
@@ -371,7 +372,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     let objects = new Map<number, PrintableObject>();
     Object.keys(list).forEach(key => {
       const value = list[key];
-      const skippedBool = false; //skipped.includes(Number(key));
+      const skippedBool = skipped.includes(Number(key));
       objects.set(Number(key), { name: value, skipped: skippedBool, to_skip: skippedBool });
     });
     this._objects = objects;
