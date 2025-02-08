@@ -119,8 +119,8 @@ export class SKIPOBJECT_CARD extends LitElement {
           const value = this.objects.get(key)!
           value.to_skip = !value.to_skip
           this.objects.set(key, value);
+          this._colorizeCanvas();
         }
-        this._colorizeCanvas();
       }
     });
 
@@ -198,6 +198,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     this._visibleCtx.putImageData(imageData, 0, 0);  
   }
 
+  @property({ type: Boolean }) _popupVisible = false
   @property({ type: Map }) objects = new Map<number, PrintableObject>();
   @property({ type: Number }) _hoveredObject = 0;
 
@@ -256,14 +257,15 @@ export class SKIPOBJECT_CARD extends LitElement {
   }
 
   updated(changedProperties) {
+    super.updated(changedProperties);
     if (changedProperties.has('_popupVisible') && this._popupVisible) {
       this._populateCheckboxList();
       this._updateCanvas();
     }
+    if (changedProperties.has('_hoveredObject')) {
+      this._colorizeCanvas();
+    }
   }
-
-  // State to track popup visibility
-  @property({ type: Boolean }) _popupVisible = false
 
   // Function to toggle popup visibility
   private _togglePopup() {
@@ -282,14 +284,12 @@ export class SKIPOBJECT_CARD extends LitElement {
       value.to_skip = !value.to_skip
       this.objects.set(key, value);
       this._hoveredObject = 0;
-      this._colorizeCanvas();
     }
   }
 
   // Function to handle hover
   handleMouseOver(key: number) {
     this._hoveredObject = key
-    this._colorizeCanvas();
   };
 
   // Function to handle mouse out
@@ -297,7 +297,6 @@ export class SKIPOBJECT_CARD extends LitElement {
     if (this._hoveredObject == key) {
       this._hoveredObject = 0
     }
-    this._colorizeCanvas();
   };
 
   // Function to populate the list of checkboxes
