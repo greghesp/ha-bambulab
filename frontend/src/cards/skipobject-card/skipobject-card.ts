@@ -64,7 +64,6 @@ export class SKIPOBJECT_CARD extends LitElement {
     this._hiddenCanvas.width = 512;
     this._hiddenCanvas.height = 512;
     this._hiddenCtx = this._hiddenCanvas.getContext('2d', { willReadFrequently: true });
-    this._object_array = new Array();
     this._hoveredObject = 0;
   }
 
@@ -92,14 +91,14 @@ export class SKIPOBJECT_CARD extends LitElement {
   set hass(hass) {
     this._hass = hass;
     this._states = hass.states;
-    this.filterBambuDevices();
+    this._filterBambuDevices();
   }
 
-  rgbaToInt(r, g, b, a) {
+  private rgbaToInt(r, g, b, a) {
     return r | (g << 8) | (b << 16) | (a << 24);
   }
   
-  _updateCanvas() {
+  private _updateCanvas() {
     // Now find the visible canvas.
     const canvas = this.shadowRoot!.getElementById('canvas') as HTMLCanvasElement;
     this._visibleCtx = canvas.getContext('2d', { willReadFrequently: true })!;
@@ -132,10 +131,10 @@ export class SKIPOBJECT_CARD extends LitElement {
     }
 
     // Finally set the home assistant image URL into it to load the image.
-    this._pick_image.src = this._get_pick_image_url();
+    this._pick_image.src = this._getPickImageUrl();
   }
 
-  _get_pick_image_url() {
+  private _getPickImageUrl() {
     if (this._entities.pick_image) {
       const entity = this._entities.pick_image;
       const timestamp = this._states[entity.entity_id].state;
@@ -146,7 +145,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     return '';
   }
 
-  _get_skipped_objects() {
+  private _getSkippedObjects() {
     if (this._entities.skipped_objects) {
       const entity = this._entities.skipped_objects;
       const value = this._states[entity.entity_id].attributes['objects'];
@@ -155,7 +154,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     return null;
   }
 
-  _get_printable_objects() {
+  private _getPrintableObjects() {
     if (this._entities.printable_objects) {
       const entity = this._entities.printable_objects;
       const value = this._states[entity.entity_id].attributes['objects'];
@@ -164,7 +163,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     return null;
   }
 
-  _colorizeCanvas() {
+  private _colorizeCanvas() {
     // Now we colorize the image based on the list of skipped objects.
     this._visibleCtx.drawImage(this._pick_image, 0, 0)
 
@@ -202,6 +201,18 @@ export class SKIPOBJECT_CARD extends LitElement {
   @property({ type: Map }) objects = new Map<number, PrintableObject>();
   @property({ type: Number }) _hoveredObject = 0;
 
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    console.log(changedProperties);
+    if (changedProperties.has('_popupVisible') && this._popupVisible) {
+      this._populateCheckboxList();
+      this._updateCanvas();
+    }
+    if (changedProperties.has('_hoveredObject')) {
+      this._colorizeCanvas();
+    }
+  }
+
   render() {
     return html`
       <ha-card class="card">
@@ -222,13 +233,13 @@ export class SKIPOBJECT_CARD extends LitElement {
                       const item = this.objects.get(key)!;
                       return html`
                         <label
-                          @mouseover="${() => this.handleMouseOver(key)}"
-                          @mouseout="${() => this.handleMouseOut(key)}"
+                          @mouseover="${() => this._onMouseOverCheckBox(key)}"
+                          @mouseout="${() => this._onMouseOutCheckBox(key)}"
                         >
                           <input
                               type="checkbox"
                               .checked="${item.to_skip}"
-                              @change="${(e: Event) => this.toggleCheckbox(e, key)}"
+                              @change="${(e: Event) => this._toggleCheckbox(e, key)}"
                           />
                           ${item.skipped ? item.name + " (already skipped)" : item.name}
                         </label><br />
@@ -237,7 +248,7 @@ export class SKIPOBJECT_CARD extends LitElement {
                   </div>
                   <p>Select the object(s) you want to skip printing.</p>
                   <button id="cancel" @click="${this._togglePopup}">Cancel</button>
-                  <button id="skip" @click="${this._skipObjects}">Skip</button>
+                  <button id="skip" @click="${this._callSkipObjectsService}">Skip</button>
                 </div>
               </div>
             `
@@ -246,7 +257,12 @@ export class SKIPOBJECT_CARD extends LitElement {
     `;
   }
 
-  _skipObjects() {
+  // Function to toggle popup visibility
+  private _togglePopup() {
+    this._popupVisible = !this._popupVisible;
+  }
+
+  private _callSkipObjectsService() {
     const list = Array.from(this.objects.keys()).filter((key) => this.objects.get(key)!.to_skip).map((key) => key).join(',');
     const data = { "device_id": [this._deviceId], "objects": list }
     this._hass.callService("bambu_lab", "skip_objects", data).then(() => {
@@ -256,24 +272,8 @@ export class SKIPOBJECT_CARD extends LitElement {
     });
   }
 
-  updated(changedProperties) {
-    super.updated(changedProperties);
-    if (changedProperties.has('_popupVisible') && this._popupVisible) {
-      this._populateCheckboxList();
-      this._updateCanvas();
-    }
-    if (changedProperties.has('_hoveredObject')) {
-      this._colorizeCanvas();
-    }
-  }
-
-  // Function to toggle popup visibility
-  private _togglePopup() {
-    this._popupVisible = !this._popupVisible;
-  }
-
   // Toggle the checked state of an item when a checkbox is clicked
-  toggleCheckbox(e: Event, key: number) {
+  private _toggleCheckbox(e: Event, key: number) {
     const skippedBool = this.objects.get(key)?.skipped;
     if (skippedBool) {
       // Force the checkbox to remain checked if the object has already been skipped.
@@ -288,12 +288,12 @@ export class SKIPOBJECT_CARD extends LitElement {
   }
 
   // Function to handle hover
-  handleMouseOver(key: number) {
+  _onMouseOverCheckBox(key: number) {
     this._hoveredObject = key
   };
 
   // Function to handle mouse out
-  handleMouseOut(key: number) {
+  _onMouseOutCheckBox(key: number) {
     if (this._hoveredObject == key) {
       this._hoveredObject = 0
     }
@@ -302,8 +302,8 @@ export class SKIPOBJECT_CARD extends LitElement {
   // Function to populate the list of checkboxes
   private _populateCheckboxList() {
     // Populate the viewmodel
-    const list = this._get_printable_objects();
-    const skipped = this._get_skipped_objects();
+    const list = this._getPrintableObjects();
+    const skipped = this._getSkippedObjects();
 
     let objects = new Map<number, PrintableObject>();
     Object.keys(list).forEach(key => {
@@ -315,14 +315,14 @@ export class SKIPOBJECT_CARD extends LitElement {
     this.requestUpdate()
   }
 
-  private async getEntity(entity_id) {
+  private async _getEntity(entity_id) {
     return await this._hass.callWS({
       type: "config/entity_registry/get",
       entity_id: entity_id,
     });
   }
 
-  private async filterBambuDevices() {
+  private async _filterBambuDevices() {
     const result: Result = {
       pick_image: null,
       skipped_objects: null,
@@ -332,7 +332,7 @@ export class SKIPOBJECT_CARD extends LitElement {
     for (let key in this._hass.entities) {
       const value = this._hass.entities[key];
       if (value.device_id === this._deviceId) {
-        const r = await this.getEntity(value.entity_id);
+        const r = await this._getEntity(value.entity_id);
         if (r.unique_id.includes("pick_image")) {
           result.pick_image = value;
         }
