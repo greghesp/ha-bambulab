@@ -580,6 +580,9 @@
       },
       "printable_objects": {
         "name": "Εκτυπώσιμα αντικείμενα"
+      },
+      "skipped_objects": {
+        "name": "Παραλείποντα αντικείμενα"
       }
     },
     "camera": {
