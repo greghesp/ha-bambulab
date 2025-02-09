@@ -736,9 +736,6 @@ class PrintJob:
                 if model_path is not None:
                     break
 
-        if model_path is not None:
-            LOGGER.debug(f"Found model: '{model_path}'")
-
         return model_path
     
     def _find_latest_file(self, ftp, path, extensions: list):
@@ -871,7 +868,9 @@ class PrintJob:
         ftp = self._client.ftp_connection()
         model_path = self._find_model_path(ftp)
 
-        if model_path is None:
+        if model_path is not None:
+            LOGGER.debug(f"Found model: '{model_path}'")
+        else:
             LOGGER.debug("No model file found.")
             return
 
@@ -879,7 +878,6 @@ class PrintJob:
         with tempfile.NamedTemporaryFile(delete=True) as f:
             try:
                 # Fetch the 3mf from FTP and close the connection
-                LOGGER.debug(f"Downloading '{model_path}'")
                 ftp.retrbinary(f"RETR {model_path}", f.write)
                 f.flush()
                 ftp.quit()
