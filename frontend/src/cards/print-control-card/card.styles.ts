@@ -11,7 +11,7 @@ export default css`
     font-weight: bold;   /* Optional: make the text bold */
   }
   .button {
-    padding: 10px 20px;
+    padding: 4px 8px;
     font-size: 16px;
     background-color: var(--primary-color);
     color: white;

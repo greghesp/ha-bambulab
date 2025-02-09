@@ -418,7 +418,7 @@ export class PrintControlCard extends LitElement {
     let objects = new Map<number, PrintableObject>();
     Object.keys(list).forEach(key => {
       const value = list[key];
-      const skippedBool = false; //skipped.includes(Number(key));
+      const skippedBool = skipped.includes(Number(key));
       objects.set(Number(key), { name: value, skipped: skippedBool, to_skip: skippedBool });
     });
     this._objects = objects;
