@@ -10,6 +10,24 @@ export default css`
     font-size: 18px;     /* Adjust font size */
     font-weight: bold;   /* Optional: make the text bold */
   }
+  .button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  button:disabled {
+    background-color: #ccc;  /* Light grey background when disabled */
+    color: #666;  /* Dark grey text */
+    cursor: not-allowed;  /* Change cursor to indicate it's not clickable */
+  }
+  .button-container {
+    display: flex;
+    justify-content: flex-end;  /* This will align the buttons to the right */
+    gap: 10px;  /* Optional: Adds space between buttons */
+  }
   .canvas {
     display: block;
   }
@@ -19,14 +37,6 @@ export default css`
     align-items: center;
     padding: 16px;
     background: var(--card-background-color);
-  }
-  .button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
   }
   .popup {
     position: absolute;

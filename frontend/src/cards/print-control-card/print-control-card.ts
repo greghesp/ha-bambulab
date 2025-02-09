@@ -206,8 +206,16 @@ export class PrintControlCard extends LitElement {
 
           if (key == this._hoveredObject) {
             // Check to see if we need to render the left border if the pixel to the left is not the hovered object.
-            if (x != 0) {
+            if (x > 0) {
               const j = i - 4
+              const left = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (left != key)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+            if (x > 1) {
+              const j = i - 4 * 2
               const left = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (left != key)
               {
@@ -216,8 +224,16 @@ export class PrintControlCard extends LitElement {
             }
 
             // Check to see if we need to render the top border if the pixel above is not the hovered object.
-            if (y != 0) {
+            if (y > 0) {
               const j = i - WIDTH * 4
+              const top = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (top != key)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+            if (y > 1) {
+              const j = i - WIDTH * 4 * 2
               const top = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (top != key)
               {
@@ -226,8 +242,17 @@ export class PrintControlCard extends LitElement {
             }
 
             // Check to see if pixel to the right is not the hovered object to draw right border.
-            if (x != (WIDTH - 1)) {
+            if (x < (WIDTH - 1)) {
               const j = i + 4
+              const right = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (right != this._hoveredObject)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+            // And the next one over for a 2px border.
+            if (x < (WIDTH - 2)) {
+              const j = i + 4 * 2
               const right = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (right != this._hoveredObject)
               {
@@ -236,8 +261,17 @@ export class PrintControlCard extends LitElement {
             }
             
             // Check to see if pixel above was the hovered object to draw bottom border.
-            if (y != (HEIGHT - 1)) {
+            if (y < (HEIGHT - 1)) {
               const j = i + WIDTH * 4
+              const below = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              if (below != this._hoveredObject)
+              {
+                writeDataView.setUint32(i, blue, true);
+              }
+            }
+            // And the next one over for a 2px border.
+            if (y < (HEIGHT - 2)) {
+              const j = i + WIDTH * 4 * 2
               const below = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (below != this._hoveredObject)
               {
@@ -275,9 +309,7 @@ export class PrintControlCard extends LitElement {
   render() {
     return html`
       <ha-card class="card">
-        <button class="button" @click="${this._togglePopup}">
-          Skip Objects
-        </button>
+        <button class="button" @click="${this._togglePopup}">Skip Objects</button>
         ${this._popupVisible
           ? html`
               <div class="popup-background" @click="${this._togglePopup}"></div>
@@ -306,8 +338,10 @@ export class PrintControlCard extends LitElement {
                   })}
                   </div>
                   <p>Select the object(s) you want to skip printing.</p>
-                  <button id="cancel" @click="${this._togglePopup}">Cancel</button>
-                  <button id="skip" @click="${this._callSkipObjectsService}">Skip</button>
+                  <div class="button-container">
+                    <button class="button" @click="${this._togglePopup}">Cancel</button>
+                    <button class="button" @click="${this._callSkipObjectsService}" ?disabled="${this._isSkipButtonDisabled}">Skip</button>
+                  </div>
                 </div>
               </div>
             `
@@ -321,6 +355,18 @@ export class PrintControlCard extends LitElement {
     this._popupVisible = !this._popupVisible;
   }
 
+  // Method to check if the skip button should be disabled
+  get _isSkipButtonDisabled() {
+    for (const item of this._objects.values()) {
+      if (item.to_skip && !item.skipped) {
+        console.log("Enabled")
+        return false;  // Found an object that should allow skipping
+      }
+    }
+    console.log("Disabled")
+    return true;  // No items meet the criteria
+  }
+  
   private _callSkipObjectsService() {
     const list = Array.from(this._objects.keys()).filter((key) => this._objects.get(key)!.to_skip).map((key) => key).join(',');
     const data = { "device_id": [this._deviceId], "objects": list }
@@ -372,7 +418,7 @@ export class PrintControlCard extends LitElement {
     let objects = new Map<number, PrintableObject>();
     Object.keys(list).forEach(key => {
       const value = list[key];
-      const skippedBool = skipped.includes(Number(key));
+      const skippedBool = false; //skipped.includes(Number(key));
       objects.set(Number(key), { name: value, skipped: skippedBool, to_skip: skippedBool });
     });
     this._objects = objects;
