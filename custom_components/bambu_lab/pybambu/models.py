@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from dateutil import parser, tz
 from packaging import version
 from zipfile import ZipFile
+from typing import Union
 import io
 import tempfile
 import xml.etree.ElementTree as ElementTree
@@ -75,6 +76,7 @@ class Device:
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
+        self.ftp_cache = {}
 
     def print_update(self, data) -> bool:
         send_event = False
@@ -667,38 +669,68 @@ class PrintJob:
     #     "bedType": "textured_plate"
     #     },
 
-    def _find_model_path(self, ftp):
-        if self.gcode_file != '':
-            # Attempt to find the model in one of many known directories
-            for search_path in ['', '/cache']:
-                try:
-                    path_contents = ftp.nlst(f"{search_path}")
-                    if self.gcode_file in path_contents:
-                        model_path = f"{search_path}/{self.gcode_file}"
-                        LOGGER.debug(f"Found model {model_path}")
-                        return model_path
-                except:
-                    LOGGER.debug(f"Model '{self.gcode_file}' could not be found in any known directories")
-                    pass
-        elif self.subtask_name != '':
-            # Attempt to find the model in one of many known directories
-            for search_path in ['', '/cache']:
-                try:
-                    path_contents = ftp.nlst(f"{search_path}")
-                    if self.gcode_file in path_contents:
-                        model_path = f"{search_path}/{self.subtask_name}.3mf"
-                        LOGGER.debug(f"Found model {model_path}")
-                        return model_path
-                except:
-                    LOGGER.debug(f"Model '{self.subtask_name}.3mf' could not be found in any known directories")
-                    pass
+    def _cache_ftp_path(self, path: str, ftp):
+        try:
+            LOGGER.debug(f"Running FTP nlst for {path or '/'}")
+            self._client._device.ftp_cache[path] = ftp.nlst(path)
+        except Exception as e:
+            LOGGER.error(f"FTP nlst Exception. Type: {type(e)} Args: {e}")
+            pass
 
-        model_path = self._find_latest_file(ftp, '/Cache', ['.3mf'])
+    def _file_in_known_directory(self, filename: Union[str, callable], ftp, search_paths: list=None, use_cache=True) -> Union[str, None]:
+        # Attempt to find a file in one of many known directories
+        for search_path in (['', '/cache'] if search_paths is None else search_paths):
+            if use_cache is False or search_path not in self._client._device.ftp_cache:
+                self._cache_ftp_path(path=search_path, ftp=ftp)
+
+            path_contents = self._client._device.ftp_cache.get(search_path) or []
+
+            # If a method was provided instead of a filename pass it the
+            # file contents to let it perform its own match
+            if callable(filename):
+                file_match = filename(path_contents, search_path)
+                if file_match is not None:
+                    return f"{file_match}"
+                continue
+
+            # Otherwise, perform a simple match on the path's contents
+            if filename in path_contents:
+                return f"{search_path}/{filename}"
+
+    def _find_model_path(self, ftp) -> Union[str, None]:
+        # Bail if there's neither gcode nor subtask to search for. If there's
+        # gcode, but it isn't a 3mf we can't use it.
+        if self.gcode_file == '' and self.subtask_name == '':
+            # Attempt to find the latest file by date stamps
+            model_path = self._find_latest_file(ftp, '/cache', ['.3mf'])
+            if model_path is not None:
+                return model_path
+            return
+        elif self.gcode_file != '' and not self.gcode_file.endswith('.3mf'):
+            return
+
+        # The subtask_name is stripped of its file ext, so use a filter when
+        # matching against a *.3mf files
+        def find_subtask_file(path_contents, search_path) -> Union[str, None]:
+            def match_subtask_file(filename) -> bool:
+                return filename.endswith(".3mf") and filename.startswith(self.subtask_name)
+            matches = list(filter(match_subtask_file, path_contents))
+            if len(matches):
+                return f"{search_path}/{matches[0]}"
+
+        # Use the gcode 3mf if available otherwise fall back to subtask_name
+        model_name = self.gcode_file if self.gcode_file != '' else find_subtask_file
+        model_path = self._file_in_known_directory(filename=model_name, ftp=ftp, use_cache=True)
+
         if model_path is not None:
+            LOGGER.debug(f"Found model {model_path}")
             return model_path
 
-        LOGGER.debug(f"No model files found.")
-        return None
+        LOGGER.debug(f"FTP cache exhausted, retrying without")
+        model_path = self._file_in_known_directory(filename=model_name, ftp=ftp, use_cache=False)
+        if model_path is not None:
+            LOGGER.debug(f"Found model {model_path}")
+            return model_path
     
     def _find_latest_file(self, ftp, path, extensions: list):
         # Look for the newest file with extension in directory.
@@ -747,7 +779,7 @@ class PrintJob:
             _, extension = os.path.splitext(file[1])
             if extension in extensions:
                 file_path = f"{path}/{file[1]}"
-                LOGGER.debug(f"Found file {file_path}")
+                LOGGER.debug(f"Found latest file {file_path}")
                 return file_path
 
         return None
@@ -829,6 +861,9 @@ class PrintJob:
         # Open the FTP connection
         ftp = self._client.ftp_connection()
         model_path = self._find_model_path(ftp)
+
+        if model_path is None:
+            return
 
         # Create a temporary file we can download the 3mf into
         with tempfile.NamedTemporaryFile(delete=True) as f:
