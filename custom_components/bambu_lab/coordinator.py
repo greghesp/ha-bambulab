@@ -400,6 +400,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         match option:
             case Options.CAMERA:
                 default = True
+            case Options.FTP:
+                default = options.get('local_mqtt', False)
 
         return options.get(OPTION_NAME[option], default)
         
