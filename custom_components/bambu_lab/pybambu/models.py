@@ -682,10 +682,8 @@ class PrintJob:
 
     def _find_file_in_cache(self, filename: str) -> Union[str, None]:
         # Attempt to find a file in one of many known directories
-        LOGGER.debug(f"Searching for '{filename}'")
         for search_path in self.ftp_search_paths:
             cached_files = self._client._device.ftp_cache.get(search_path, [])
-            LOGGER.debug(f"In {cached_files}")
 
             # X1 includes the path in the returned files for an NLST command
             filepath = f"{search_path}{filename}"
