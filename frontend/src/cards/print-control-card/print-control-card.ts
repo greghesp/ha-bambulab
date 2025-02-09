@@ -148,7 +148,7 @@ export class PrintControlCard extends LitElement {
   }
 
   private _getSkippedObjects() {
-    if (this._entities.skipped_objects) {
+    if (this._entities?.skipped_objects) {
       const entity = this._entities.skipped_objects;
       const value = this._states[entity.entity_id].attributes['objects'];
       return value
@@ -157,7 +157,7 @@ export class PrintControlCard extends LitElement {
   }
 
   private _getPrintableObjects() {
-    if (this._entities.printable_objects) {
+    if (this._entities?.printable_objects) {
       const entity = this._entities.printable_objects;
       const value = this._states[entity.entity_id].attributes['objects'];
       return value
@@ -312,6 +312,7 @@ export class PrintControlCard extends LitElement {
       this._populateCheckboxList();
       this._updateCanvas();
     }
+    
     if (changedProperties.has('_hoveredObject')) {
       this._colorizeCanvas();
     }
@@ -440,6 +441,9 @@ export class PrintControlCard extends LitElement {
   private _populateCheckboxList() {
     // Populate the viewmodel
     const list = this._getPrintableObjects();
+    if (list == undefined) {
+      return
+    }
     const skipped = this._getSkippedObjects();
 
     let objects = new Map<number, PrintableObject>();
