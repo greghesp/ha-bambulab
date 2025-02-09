@@ -72,7 +72,7 @@ class BambuLabCardRegistration:
                         })
 
                         # Remove old gzipped files
-                        await self.async_remove_gzipe_files()
+                        await self.async_remove_gzip_files()
                     else:
                         _LOGGER.debug("%s already registered as version %s", card.get("name"), card.get("version"))
 

@@ -1,9 +1,9 @@
-import asyncio
+import ftplib
+import json
 import math
 import os
 import re
 import threading
-import ftplib
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -436,10 +436,19 @@ class PrintJob:
     print_length: int
     print_bed_type: str
     print_type: str
-    printable_objects: dict
     _ams_print_weights: float
     _ams_print_lengths: float
+    _skipped_objects: list
+    _printable_objects: dict
 
+    @property
+    def get_printable_objects(self) -> json:
+        return self._printable_objects
+
+    @property
+    def get_skipped_objects(self) -> str:
+        return self._skipped_objects
+    
     @property
     def get_print_weights(self) -> dict:
         values = {}
@@ -486,7 +495,8 @@ class PrintJob:
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
         self.print_type = ""
-        self.printable_objects = {}
+        self._printable_objects = {}
+        self._skipped_objects = []
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -529,6 +539,7 @@ class PrintJob:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.ams_mapping = data.get("ams_mapping", self.ams_mapping)
+        self._skipped_objects = data.get("s_obj", self._skipped_objects)
 
         # Initialize task data at startup.
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
@@ -853,7 +864,7 @@ class PrintJob:
                     # Start a total print length count to be compiled from each filament
                     print_length = 0
                     plate_number = None
-                    printable_objects = {}
+                    _printable_objects = {}
                     filament_count = len(self.ams_mapping)
                     plate_filament_count = len(plate.findall('filament'))
                     for metadata in plate:
@@ -875,7 +886,7 @@ class PrintJob:
                             # Get the list of printable objects present on the plate before slicing.
                             # This includes hidden objects which need to be filtered out later.
                             if metadata.get('skipped') == f"false":
-                                printable_objects[metadata.get('identify_id')] = metadata.get('name')
+                                _printable_objects[metadata.get('identify_id')] = metadata.get('name')
                         elif (metadata.tag == 'filament'):
                             # Filament used for the current print job. The plate info contains filaments
                             # identified in the order they appear in the slicer. These IDs must be
@@ -904,10 +915,7 @@ class PrintJob:
                     self.print_length = print_length
 
                     if plate_number is not None:
-                        # If user does not want pick image to be labelled with the
-                        # object identification IDs, save the provided image
-                        if self._client.label_pick_image_enabled is False:
-                            self._client._device.pick_image.set_image(archive.read(f"Metadata/pick_{plate_number}.png"))
+                        self._client._device.pick_image.set_image(archive.read(f"Metadata/pick_{plate_number}.png"))
 
                         # Process the pick image for objects
                         pick_image = Image.open(archive.open(f"Metadata/pick_{plate_number}.png"))
@@ -915,17 +923,7 @@ class PrintJob:
                         
                         # Filter the printable objects from slice_info.config, removing
                         # any that weren't detected in the pick image
-                        printable_objects = {k: printable_objects[k] for k in identify_ids if k in printable_objects}
-                        self.printable_objects = {
-                            "identify_ids": list(printable_objects.keys()),
-                            "object_names": list(printable_objects.values())
-                        }
-                        
-                        # Save the labelled pick image
-                        if self._client.label_pick_image_enabled:
-                            buffer = io.BytesIO()
-                            pick_image.save(buffer, format="PNG", quality="web_very_high")
-                            self._client._device.pick_image.set_image(buffer.getvalue())
+                        self._printable_objects = {k: _printable_objects[k] for k in identify_ids if k in _printable_objects}
 
                 archive.close()
 
@@ -1015,7 +1013,7 @@ class PrintJob:
 
         # Clone the image if it's to be labelled, otherwise the labels
         # are detected as objects
-        pixels = image.copy().load() if self._client.label_pick_image_enabled else image.load()
+        pixels = image.load()
 
         # Loop through every pixel and label the first occurrence of each unique color
         for y in range(image_height):
@@ -1031,12 +1029,6 @@ class PrintJob:
                 identify_id = int(f"0x{b:02X}{g:02X}{r:02X}", 16)
                 seen_colors.add(current_color)
                 seen_identify_ids.add(str(identify_id))
-
-                # Label the image with the identifier
-                if self._client.label_pick_image_enabled:
-                    left, top, right, bottom = draw.textbbox((x+4, y-2), str(identify_id), font=font)
-                    draw.rectangle((left-4, top-4, right+4, bottom+4), fill=current_color, outline="white", width=1)
-                    draw.text((x+4, y-2), str(identify_id), fill="white", font=font)
         
         object_count = len(seen_identify_ids)
         LOGGER.debug(f"Finished proccessing pick image, found {object_count} object{'s'[:object_count^1]}")
