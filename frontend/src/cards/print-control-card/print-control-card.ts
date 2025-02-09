@@ -166,7 +166,6 @@ export class PrintControlCard extends LitElement {
   }
 
   private _isEntityUnavailable(entity: Entity): boolean {
-    entity
     return this._states[entity?.entity_id]?.state == 'unavailable';
   }
 
@@ -174,7 +173,6 @@ export class PrintControlCard extends LitElement {
     const data = {
       entity_id: entity.entity_id
     }
-    console.log(data);
     this._hass.callService('button', 'press', data);
   }
 
@@ -306,7 +304,8 @@ export class PrintControlCard extends LitElement {
   @property({ type: Boolean }) _popupVisible = false
   @property({ type: Map }) _objects = new Map<number, PrintableObject>();
   @property({ type: Number }) _hoveredObject = 0;
-
+  @property({ type: Map }) _skipped_objects = new Map<string, Object>();
+  
   updated(changedProperties) {
     super.updated(changedProperties);
     if (changedProperties.has('_popupVisible') && this._popupVisible) {
@@ -316,9 +315,12 @@ export class PrintControlCard extends LitElement {
     if (changedProperties.has('_hoveredObject')) {
       this._colorizeCanvas();
     }
-    else
-    if (changedProperties.has('_objects')) {
+    else if (changedProperties.has('_objects')) {
       this._colorizeCanvas();
+    }
+
+    if (changedProperties.has('_skipped_objects')) {
+      this._populateCheckboxList()
     }
   }
 
@@ -492,5 +494,6 @@ export class PrintControlCard extends LitElement {
     }
 
     this._entities = result;
+    this._skipped_objects = this._states[result.skipped_objects!.entity_id].state
   }
 }
