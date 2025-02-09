@@ -11,7 +11,7 @@ registerCustomCard({
   description: "Card for controlling a Bambu Lab Printer",
 });
 
-interface Sensor {
+interface Entity {
   entity_id: string;
   device_id: string;
   labels: any[];
@@ -21,9 +21,12 @@ interface Sensor {
 }
 
 interface Result {
-  pick_image: Sensor | null;
-  skipped_objects: Sensor | null;
-  printable_objects: Sensor | null;
+  pick_image: Entity | null;
+  skipped_objects: Entity | null;
+  printable_objects: Entity | null;
+  pause: Entity | null;
+  resume: Entity | null;
+  stop: Entity | null;
 }
 
 interface PrintableObject {
@@ -162,9 +165,22 @@ export class PrintControlCard extends LitElement {
     return null;
   }
 
+  private _isEntityUnavailable(entity: Entity): boolean {
+    entity
+    return this._states[entity?.entity_id]?.state == 'unavailable';
+  }
+
+  private _clickButton(entity: Entity) {
+    const data = {
+      entity_id: entity.entity_id
+    }
+    console.log(data);
+    this._hass.callService('button', 'press', data);
+  }
+
   private _colorizeCanvas() {
     if (this._visibleCtx == undefined) {
-      // Lit reactivity can come throw here before we're fully initialized.
+      // Lit reactivity can come through here before we're fully initialized.
       return
     }
 
@@ -309,7 +325,20 @@ export class PrintControlCard extends LitElement {
   render() {
     return html`
       <ha-card class="card">
-        <button class="button" @click="${this._togglePopup}">Skip Objects</button>
+        <div class="control-container">
+          <button class="button" @click="${() => this._clickButton(this._entities?.pause)}" ?disabled="${this._isEntityUnavailable(this._entities?.pause)}">
+            Pause
+          </button>
+          <button class="button" @click="${() => this._clickButton(this._entities?.resume)}" ?disabled="${this._isEntityUnavailable(this._entities?.resume)}">
+            Resume
+          </button>
+          <button class="button" @click="${() => this._clickButton(this._entities?.stop)}" ?disabled="${this._isEntityUnavailable(this._entities?.stop)}">
+            Stop
+          </button>
+          <button class="button" @click="${this._togglePopup}">
+            Skip
+          </button>
+        </div>
         ${this._popupVisible
           ? html`
               <div class="popup-background" @click="${this._togglePopup}"></div>
@@ -323,24 +352,22 @@ export class PrintControlCard extends LitElement {
                     ${Array.from(this._objects.keys()).map((key) => {
                       const item = this._objects.get(key)!;
                       return html`
-                        <label
-                          @mouseover="${() => this._onMouseOverCheckBox(key)}"
-                          @mouseout="${() => this._onMouseOutCheckBox(key)}"
-                        >
-                          <input
-                              type="checkbox"
-                              .checked="${item.to_skip}"
-                              @change="${(e: Event) => this._toggleCheckbox(e, key)}"
-                          />
+                        <label @mouseover="${() => this._onMouseOverCheckBox(key)}" @mouseout="${() => this._onMouseOutCheckBox(key)}">
+                          <input type="checkbox" .checked="${item.to_skip}" @change="${(e: Event) => this._toggleCheckbox(e, key)}" />
                           ${item.skipped ? item.name + " (already skipped)" : item.name}
-                        </label><br />
+                        </label>
+                        <br />
                       `;
                   })}
                   </div>
                   <p>Select the object(s) you want to skip printing.</p>
                   <div class="button-container">
-                    <button class="button" @click="${this._togglePopup}">Cancel</button>
-                    <button class="button" @click="${this._callSkipObjectsService}" ?disabled="${this._isSkipButtonDisabled}">Skip</button>
+                    <button class="button" @click="${this._togglePopup}">
+                      Cancel
+                    </button>
+                    <button class="button" @click="${this._callSkipObjectsService}" ?disabled="${this._isSkipButtonDisabled}">
+                      Skip
+                    </button>
                   </div>
                 </div>
               </div>
@@ -359,11 +386,9 @@ export class PrintControlCard extends LitElement {
   get _isSkipButtonDisabled() {
     for (const item of this._objects.values()) {
       if (item.to_skip && !item.skipped) {
-        console.log("Enabled")
         return false;  // Found an object that should allow skipping
       }
     }
-    console.log("Disabled")
     return true;  // No items meet the criteria
   }
   
@@ -436,6 +461,9 @@ export class PrintControlCard extends LitElement {
       pick_image: null,
       skipped_objects: null,
       printable_objects: null,
+      pause: null,
+      resume: null,
+      stop: null,
     };
     // Loop through all hass entities, and find those that belong to the selected device
     for (let key in this._hass.entities) {
@@ -450,6 +478,15 @@ export class PrintControlCard extends LitElement {
         }
         else if (r.unique_id.includes("printable_objects")) {
           result.printable_objects = value;
+        }
+        else if (r.unique_id.includes("pause")) {
+          result.pause = value
+        }
+        else if (r.unique_id.includes("resume")) {
+          result.resume = value
+        }
+        else if (r.unique_id.includes("stop")) {
+          result.stop = value
         }
       }
     }
