@@ -708,6 +708,11 @@ class PrintJob:
     #     subtask_name = 3mf file without .3mf extensions - e.g FILENAME
     #     FILE: /cache/FILENAME.3mf
     #
+    # P1S lan mode print:
+    #   Bambu Studio 'print' of 3mf file
+    #     "gcode_file": "36mm.gcode.3mf",
+    #     "subtask_name": "36mm",
+    #     FILE: ?
 
     def _find_model_path(self, ftp) -> Union[str, None]:
         if self.gcode_file == '' and self.subtask_name == '':
@@ -726,13 +731,15 @@ class PrintJob:
 
             # First test if the subtaskname exists as a 3mf
             if self.subtask_name != '':
+                filename = self.subtask_name if self.subtask_name.endswith('.3mf') else f"{self.subtask_name}.3mf"
                 model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.3mf")
                 if model_path is not None:
                     break
 
             # If we didn't find it then try the gcode file
             if self.gcode_file != '':
-                model_path = self._find_file_in_cache(filename=f"{self.gcode_file}.3mf")
+                filename = self.gcode_file if self.gcode_file.endswith('.3mf') else f"{self.gcode_file}.3mf"
+                model_path = self._find_file_in_cache(filename=filename)
                 if model_path is not None:
                     break
 
