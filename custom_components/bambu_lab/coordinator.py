@@ -196,11 +196,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         command = SEND_GCODE_TEMPLATE
         gcode = HOME_GCODE if axis == 'HOME' else MOVE_AXIS_GCODE
+        speed = 900 if axis == 'Z' else 3000
         if axis != 'HOME':
             if axis in ['Y', 'Z'] and not self.get_model().is_core_xy:
                 LOGGER.debug(f"Non-core XY, reversing {axis} axis distance")
                 distance = -1 * distance
-            gcode = gcode.format(axis=axis, distance=distance)
+            gcode = gcode.format(axis=axis, distance=distance, speed=speed)
         
         command['print']['param'] = gcode
         self.client.publish(command)
