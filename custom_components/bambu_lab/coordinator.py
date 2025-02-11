@@ -192,6 +192,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         distance = int(data.get('distance') or 10)
 
         if axis not in ['X', 'Y', 'Z', 'HOME'] or abs(distance) > 100:
+            LOGGER.debug(f"Invalid axis '{axis}' or distance out of range '{distance}'")
             return False
         
         command = SEND_GCODE_TEMPLATE
@@ -199,7 +200,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         speed = 900 if axis == 'Z' else 3000
         if axis != 'HOME':
             if axis in ['Y', 'Z'] and not self.get_model().is_core_xy:
-                LOGGER.debug(f"Non-core XY, reversing {axis} axis distance")
+                LOGGER.debug(f"Non-core XY, reversing '{axis}' axis distance")
                 distance = -1 * distance
             gcode = gcode.format(axis=axis, distance=distance, speed=speed)
         
