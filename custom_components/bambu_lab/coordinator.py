@@ -28,11 +28,14 @@ from .pybambu.const import (
     PRINT_PROJECT_FILE_BUS_EVENT,
     SEND_GCODE_BUS_EVENT,
     SKIP_OBJECTS_BUS_EVENT,
+    MOVE_AXIS_BUS_EVENT,
 )
 from .pybambu.commands import (
     PRINT_PROJECT_FILE_TEMPLATE,
     SEND_GCODE_TEMPLATE,
     SKIP_OBJECTS_TEMPLATE,
+    MOVE_AXIS_GCODE,
+    HOME_GCODE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -66,6 +69,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.hass.bus.async_listen(PRINT_PROJECT_FILE_BUS_EVENT, self._service_call_print_project_file)
         self.hass.bus.async_listen(SEND_GCODE_BUS_EVENT, self._service_call_send_gcode)
         self.hass.bus.async_listen(SKIP_OBJECTS_BUS_EVENT, self._service_call_skip_objects)
+        self.hass.bus.async_listen(MOVE_AXIS_BUS_EVENT, self._service_call_move_axis)
 
     @callback
     def _async_shutdown(self, event: Event) -> None:
@@ -175,6 +179,30 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"_service_call_send_gcode: {data}")
         command = SEND_GCODE_TEMPLATE
         command['print']['param'] = f"{data.get('command')}\n"
+        self.client.publish(command)
+
+    def _service_call_move_axis(self, event: Event):
+        data = event.data
+        if not self._service_call_is_for_me(data):
+            return
+
+        LOGGER.debug(f"_service_call_move_axis: {data}")
+
+        axis = data.get('axis').upper()
+        distance = int(data.get('distance') or 10)
+
+        if axis not in ['X', 'Y', 'Z', 'HOME'] or abs(distance) > 100:
+            return False
+        
+        command = SEND_GCODE_TEMPLATE
+        gcode = HOME_GCODE if axis == 'HOME' else MOVE_AXIS_GCODE
+        if axis != 'HOME':
+            if axis in ['Y', 'Z'] and not self.get_model().is_core_xy:
+                LOGGER.debug(f"Non-core XY, reversing {axis} axis distance")
+                distance = -1 * distance
+            gcode = gcode.format(axis=axis, distance=distance)
+        
+        command['print']['param'] = gcode
         self.client.publish(command)
 
     def _service_call_print_project_file(self, event: Event):

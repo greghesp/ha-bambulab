@@ -11,6 +11,7 @@ from .pybambu.const import (
     PRINT_PROJECT_FILE_BUS_EVENT,
     SEND_GCODE_BUS_EVENT,
     SKIP_OBJECTS_BUS_EVENT,
+    MOVE_AXIS_BUS_EVENT,
 )
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -84,6 +85,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         skip_objects  # Handler function
     )
 
+    async def move_axis(call: ServiceCall):
+        """Handle the service call."""
+        if check_service_call_payload(call) is False:
+            return
+        hass.bus.fire(MOVE_AXIS_BUS_EVENT, call.data)
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "move_axis",  # Service name
+        move_axis  # Handler function
+    )
 
     # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
