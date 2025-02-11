@@ -112,6 +112,7 @@ extrude_retract:
   fields:
     type:
       name: Type
+      description: The type of extrude action to perform
       required: true
       example: "Extrude"
       selector:
