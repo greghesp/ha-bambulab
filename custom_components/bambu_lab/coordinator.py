@@ -191,6 +191,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         force = data.get('force')
 
         if move not in ['EXTRUDE', 'RETRACT']:
+            LOGGER.debug(f"Invalid extrusion move '{move}'")
             return False
         
         nozzle_temp = self.get_model().temperature.nozzle_temp
