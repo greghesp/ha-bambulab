@@ -1868,7 +1868,7 @@ class HomeFlag:
         return (old_data != f"{self.__dict__}")
 
     @property
-    def door_open(self) -> bool or None:
+    def door_open(self) -> bool | None:
         if not self.door_open_available:
             return None
 
