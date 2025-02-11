@@ -1,5 +1,7 @@
 ### V2.1.1
-- ???
+- Fix A1/P1 FTP download
+- AMS card improvements
+- Print control card improvements
 
 ### V2.1.0
 - Add the new cards frontends into the releases including the AMS card ingesting from the cards repo
