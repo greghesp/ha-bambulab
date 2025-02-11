@@ -102,3 +102,40 @@ skip_objects:
       example: "409,1463"
       selector:
         text:
+
+move_axis:
+  name: Move axis
+  description: Move the printhead or bed
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    axis:
+      name: Axis
+      description: >-
+        The axis to move.
+        X1 and P1 devices, X and Y move the printhead, Z moves the bed.
+        A1, Z moves the gantry, Y the bed, X the printhead.
+      required: true
+      example: "X"
+      selector:
+        select:
+          multiple: false
+          mode: dropdown
+          options:
+            - X
+            - Y
+            - Z
+            - Home
+
+    distance:
+      name: Distance
+      description: >-
+        The distance (in mm) to move the axis
+        A negative distance moves Z up, X left, Y forward.
+      example: 10
+      selector:
+        number:
+          min: -100
+          max: 100
+          step: 1
