@@ -204,7 +204,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["use_ams"] = use_ams
         command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
 
-        coordinator.client.publish(command)
+        self.coordinator.client.publish(command)
 
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data() called")
