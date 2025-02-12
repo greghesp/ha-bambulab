@@ -192,7 +192,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         distance = int(data.get('distance') or 10)
 
         if axis not in ['X', 'Y', 'Z', 'HOME'] or abs(distance) > 100:
-            LOGGER.debug(f"Invalid axis '{axis}' or distance out of range '{distance}'")
+            LOGGER.error(f"Invalid axis '{axis}' or distance out of range '{distance}'")
             return False
         
         command = SEND_GCODE_TEMPLATE
