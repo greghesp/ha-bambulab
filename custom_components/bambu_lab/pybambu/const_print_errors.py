@@ -1,5 +1,4 @@
 PRINT_ERROR_ERRORS = {
-    "012FF800": "Check nozzle. Click “Done” if filament was extruded.",
     "03004000": "Printing stopped because homing Z axis failed.",
     "03004001": "The printer timed out waiting for the nozzle to cool down before homing.",
     "03004002": "Printing Stopped because Auto Bed Leveling failed.",
@@ -85,6 +84,8 @@ PRINT_ERROR_ERRORS = {
     "0500402D": "System exception.",
     "0500402E": "The system does not support the file system currently used by the Micro SD card. Please replace the Micro SD card or format the current Micro SD card to FAT32.",
     "0500402F": "The Micro SD card sector data is damaged. Please use the SD card repair tool to repair or format it. If it still cannot be identified, please replace the Micro SD card.",
+    "05004031": "An uncertified accessory was detected, and the device cannot continue working.",
+    "05004033": "Uncertified AMS detected or AMS firmware not upgraded, the device cannot continue working.",
     "05004037": "Your sliced file is not compatible with current printer model. This file can't be printed on this printer.",
     "05004038": "The nozzle diameter in sliced file is not consistent with the current nozzle setting. This file can't be printed.",
     "0500403A": "The current temperature is too low. In order to protect you and your printer. Printing task, moving axis and other operations are disabled. Please move the printer to an environment above 10 celsius degree.",

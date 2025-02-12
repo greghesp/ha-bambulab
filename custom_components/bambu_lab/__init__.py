@@ -12,6 +12,7 @@ from .pybambu.const import (
     SEND_GCODE_BUS_EVENT,
     SKIP_OBJECTS_BUS_EVENT,
     MOVE_AXIS_BUS_EVENT,
+    EXTRUDE_RETRACT_BUS_EVENT,
 )
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -96,6 +97,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         DOMAIN,
         "move_axis",  # Service name
         move_axis  # Handler function
+    )
+
+    async def extrude_retract(call: ServiceCall):
+        """Handle the service call."""
+        if check_service_call_payload(call) is False:
+            return
+        hass.bus.fire(EXTRUDE_RETRACT_BUS_EVENT, call.data)
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "extrude_retract",  # Service name
+        extrude_retract  # Handler function
     )
 
     # Set up all platforms for this device/entry.

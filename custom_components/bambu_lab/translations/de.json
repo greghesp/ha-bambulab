@@ -216,7 +216,7 @@
       "printing_speed": {
         "name": "Druckgeschwindigkeit",
         "state": {
-          "silent": "Stumm",
+          "silent": "Leise",
           "standard": "Standard",
           "sport": "Sport",
           "ludicrous": "Verrückt"
@@ -257,7 +257,7 @@
       "speed_profile": {
         "name": "Geschwindigkeitsprofil",
         "state": {
-          "silent": "Stumm",
+          "silent": "Leise",
           "standard": "Standard",
           "sport": "Sport",
           "ludicrous": "Verrückt"
@@ -334,7 +334,7 @@
         "name": "MQTT-Verbindungsmodus",
         "state": {
           "local": "Lokal",
-          "bambu_cloud": "Bambu Lab-Wolke"
+          "bambu_cloud": "Bambu Lab-Cloud"
         }
       },
       "gcode_file": {
@@ -614,8 +614,8 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Bambu Lab-Wolke",
-        "lan": "LAN-Mode"
+        "bambu": "Bambu Lab-Cloud",
+        "lan": "LAN-Modus"
       }
     }
   }

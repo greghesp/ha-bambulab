@@ -29,6 +29,7 @@ from .pybambu.const import (
     SEND_GCODE_BUS_EVENT,
     SKIP_OBJECTS_BUS_EVENT,
     MOVE_AXIS_BUS_EVENT,
+    EXTRUDE_RETRACT_BUS_EVENT,
 )
 from .pybambu.commands import (
     PRINT_PROJECT_FILE_TEMPLATE,
@@ -36,6 +37,7 @@ from .pybambu.commands import (
     SKIP_OBJECTS_TEMPLATE,
     MOVE_AXIS_GCODE,
     HOME_GCODE,
+    EXTRUDER_GCODE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -70,6 +72,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.hass.bus.async_listen(SEND_GCODE_BUS_EVENT, self._service_call_send_gcode)
         self.hass.bus.async_listen(SKIP_OBJECTS_BUS_EVENT, self._service_call_skip_objects)
         self.hass.bus.async_listen(MOVE_AXIS_BUS_EVENT, self._service_call_move_axis)
+        self.hass.bus.async_listen(EXTRUDE_RETRACT_BUS_EVENT, self._service_call_extrude_retract)
 
     @callback
     def _async_shutdown(self, event: Event) -> None:
@@ -207,6 +210,34 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command['print']['param'] = gcode
         self.client.publish(command)
 
+    def _service_call_extrude_retract(self, event: Event):
+        data = event.data
+        if not self._service_call_is_for_me(data):
+            return
+
+        LOGGER.debug(f"_service_call_extrude_retract: {data}")
+
+        move = data.get('type').upper()
+        force = data.get('force')
+
+        if move not in ['EXTRUDE', 'RETRACT']:
+            LOGGER.error(f"Invalid extrusion move '{move}'")
+            return False
+
+        nozzle_temp = self.get_model().temperature.nozzle_temp
+        if force is not True and nozzle_temp < 170:
+            LOGGER.error(f"Nozzle temperature too low to perform extrusion: {nozzle_temp}ºC")
+            return False
+
+        command = SEND_GCODE_TEMPLATE
+        gcode = EXTRUDER_GCODE
+        distance = (1 if move == 'EXTRUDE' else -1) * 10
+
+        gcode = gcode.format(distance=distance)
+
+        command['print']['param'] = gcode
+        self.client.publish(command)
+
     def _service_call_print_project_file(self, event: Event):
         data = event.data
         if not self._service_call_is_for_me(data):
@@ -234,7 +265,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["use_ams"] = use_ams
         command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
 
-        coordinator.client.publish(command)
+        self.coordinator.client.publish(command)
 
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data() called")
