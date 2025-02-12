@@ -27,6 +27,7 @@ from .utils import (
     get_speed_name,
     get_hw_version,
     get_sw_version,
+    compare_version,
     get_start_time,
     get_end_time,
     get_HMS_error_text,
@@ -163,6 +164,9 @@ class Device:
 
         return False
     
+    def supports_sw_version(self, version: str) -> bool:
+        return compare_version(self.info.sw_ver, version) >= 0
+
     def get_active_tray(self):
         if self.supports_feature(Features.AMS):
             if self.ams.tray_now == 255:
