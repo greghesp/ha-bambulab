@@ -191,12 +191,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         force = data.get('force')
 
         if move not in ['EXTRUDE', 'RETRACT']:
-            LOGGER.debug(f"Invalid extrusion move '{move}'")
+            LOGGER.error(f"Invalid extrusion move '{move}'")
             return False
         
         nozzle_temp = self.get_model().temperature.nozzle_temp
         if force is not True and nozzle_temp < 170:
-            LOGGER.debug(f"Nozzle temperature too low to perform extrusion: {nozzle_temp}ºC")
+            LOGGER.error(f"Nozzle temperature too low to perform extrusion: {nozzle_temp}ºC")
             return False
 
         command = SEND_GCODE_TEMPLATE
