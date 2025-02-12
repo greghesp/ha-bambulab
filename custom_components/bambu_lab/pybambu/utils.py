@@ -238,6 +238,12 @@ def get_sw_version(modules, default):
         return ota.get("sw_ver")
     return default
 
+def compare_version(version_max, version_min):
+    maxver = list(map(int, version_max.split('.')))
+    minver = list(map(int, version_min.split('.')))
+
+    # Returns 1 if max > min, -1 if max < min, 0 if equal
+    return (maxver > minver) - (maxver < minver)
 
 def get_start_time(timestamp):
     """Return start time of a print"""
