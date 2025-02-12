@@ -34,7 +34,8 @@ class Features(IntEnum):
     SET_TEMPERATURE = 19,
     PROMPT_SOUND = 20,
     FTP = 21,
-    TIMELAPSE = 22
+    TIMELAPSE = 22,
+    AMS_SWITCH_COMMAND = 23,
 
 
 class FansEnum(IntEnum):

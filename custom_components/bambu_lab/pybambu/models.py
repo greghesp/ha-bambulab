@@ -161,6 +161,14 @@ class Device:
             return True
         elif feature == Features.TIMELAPSE:
             return False
+        elif feature == Features.AMS_SWITCH_COMMAND:
+            if self.info.device_type == "A1" or self.info.device_type == "A1MINI" or self.info.device_type == "X1E":
+                return True
+            elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.02.99.10"):
+                return True
+            elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.05.06.01"):
+                return True
+            return False
 
         return False
     
