@@ -29,12 +29,15 @@ from .pybambu.const import (
     SEND_GCODE_BUS_EVENT,
     SKIP_OBJECTS_BUS_EVENT,
     EXTRUDE_RETRACT_BUS_EVENT,
+    LOAD_FILAMENT_BUS_EVENT,
+    UNLOAD_FILAMENT_BUS_EVENT,
 )
 from .pybambu.commands import (
     PRINT_PROJECT_FILE_TEMPLATE,
     SEND_GCODE_TEMPLATE,
     SKIP_OBJECTS_TEMPLATE,
     EXTRUDER_GCODE,
+    SWITCH_AMS_TEMPLATE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -69,6 +72,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.hass.bus.async_listen(SEND_GCODE_BUS_EVENT, self._service_call_send_gcode)
         self.hass.bus.async_listen(SKIP_OBJECTS_BUS_EVENT, self._service_call_skip_objects)
         self.hass.bus.async_listen(EXTRUDE_RETRACT_BUS_EVENT, self._service_call_extrude_retract)
+        self.hass.bus.async_listen(LOAD_FILAMENT_BUS_EVENT, self._service_call_load_filament)
+        self.hass.bus.async_listen(UNLOAD_FILAMENT_BUS_EVENT, self._service_call_unload_filament)
 
     @callback
     def _async_shutdown(self, event: Event) -> None:
@@ -208,11 +213,76 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command['print']['param'] = gcode
         self.client.publish(command)
 
+    def _service_call_load_filament(self, event: Event):
+        data = event.data
+        if not self._service_call_is_for_me(data):
+            return
+
+        LOGGER.debug(f"_service_call_load_filament: {data}")
+
+        # Printers with older firmware require a different method to change
+        # filament. For now, only support newer firmware.
+        if not self.get_model().supports_feature(Features.AMS_SWITCH_COMMAND):
+            LOGGER.error(f"Loading filament not yet available for this device")
+            return False
+
+        tray = int(data.get('tray', 1))
+        temperature = int(data.get('temperature', 0))
+
+        if data.get('external_spool') is True:
+            tray = 254
+            # Unless a target temperature override is set, try and find the
+            # midway temperature of the filament set in the ext spool
+            ext_spool = self.get_model().external_spool
+            if data.get('temperature') is None and not ext_spool.empty:
+                temperature = (int(ext_spool.nozzle_temp_min) + int(ext_spool.nozzle_temp_min)) / 2
+        elif not self.get_model().supports_feature(Features.AMS):
+            LOGGER.error(f"AMS not available")
+            return False
+        elif data.get('tray') is not None and tray >= 1 and tray <= 16:
+            # Zero-index the tray ID and find the AMS index
+            tray = tray -1
+            ams_idx = (tray // 4)
+            
+            # Check the AMS exists and has filament
+            if not self.get_model().ams.data[ams_idx] or self.get_model().ams.data[ams_idx].tray[tray].empty:
+                LOGGER.error(f"AMS tray '{data.get('tray')}' is empty")
+                return False
+
+            # Unless a target temperature override is set, try and find the
+            # midway temperature of the filament set in the ext spool
+            if data.get('temperature') is None:
+                ams_tray = self.get_model().ams.data[ams_idx].tray[tray]
+                temperature = (int(ams_tray.nozzle_temp_min) + int(ams_tray.nozzle_temp_min)) / 2
+        else:
+            LOGGER.error(f"An AMS tray or external spool is required")
+            return False
+
+        command = SWITCH_AMS_TEMPLATE
+        command['print']['target'] = tray
+        command['print']['tar_temp'] = temperature
+        self.client.publish(command)
+
+    def _service_call_unload_filament(self, event: Event):
+        data = event.data
+        if not self._service_call_is_for_me(data):
+            return
+
+        LOGGER.debug(f"_service_call_unload_filament: {data}")
+
+        if not self.get_model().supports_feature(Features.AMS_SWITCH_COMMAND):
+            LOGGER.error(f"Loading filament not yet available for this device")
+            return
+        
+        command = SWITCH_AMS_TEMPLATE
+        command['print']['target'] = 255
+        self.client.publish(command)
+
     def _service_call_print_project_file(self, event: Event):
         data = event.data
         if not self._service_call_is_for_me(data):
             return
-        
+
         LOGGER.debug(f"_service_call_print_project_file: {data}")
         command = PRINT_PROJECT_FILE_TEMPLATE
         file = data.get("filepath")

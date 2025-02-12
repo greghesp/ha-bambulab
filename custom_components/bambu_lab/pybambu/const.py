@@ -12,6 +12,8 @@ PRINT_PROJECT_FILE_BUS_EVENT = 'bambu_lab_project_file'
 SEND_GCODE_BUS_EVENT = 'bambu_lab_send_gcode'
 SKIP_OBJECTS_BUS_EVENT = 'bambu_lab_skip_objects'
 EXTRUDE_RETRACT_BUS_EVENT = 'bambu_lab_extrude_retract'
+LOAD_FILAMENT_BUS_EVENT = 'bambu_lab_load_filament'
+UNLOAD_FILAMENT_BUS_EVENT = 'bambu_lab_unload_filament'
 
 class Features(IntEnum):
     AUX_FAN = 1,
