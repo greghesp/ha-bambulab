@@ -184,6 +184,9 @@ class Device:
             return True
         return False
 
+    @property
+    def is_core_xy(self) -> bool:
+        return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
 
 @dataclass
 class Lights:

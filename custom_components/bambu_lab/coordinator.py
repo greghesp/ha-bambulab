@@ -28,12 +28,15 @@ from .pybambu.const import (
     PRINT_PROJECT_FILE_BUS_EVENT,
     SEND_GCODE_BUS_EVENT,
     SKIP_OBJECTS_BUS_EVENT,
+    MOVE_AXIS_BUS_EVENT,
     EXTRUDE_RETRACT_BUS_EVENT,
 )
 from .pybambu.commands import (
     PRINT_PROJECT_FILE_TEMPLATE,
     SEND_GCODE_TEMPLATE,
     SKIP_OBJECTS_TEMPLATE,
+    MOVE_AXIS_GCODE,
+    HOME_GCODE,
     EXTRUDER_GCODE,
 )
 
@@ -68,6 +71,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.hass.bus.async_listen(PRINT_PROJECT_FILE_BUS_EVENT, self._service_call_print_project_file)
         self.hass.bus.async_listen(SEND_GCODE_BUS_EVENT, self._service_call_send_gcode)
         self.hass.bus.async_listen(SKIP_OBJECTS_BUS_EVENT, self._service_call_skip_objects)
+        self.hass.bus.async_listen(MOVE_AXIS_BUS_EVENT, self._service_call_move_axis)
         self.hass.bus.async_listen(EXTRUDE_RETRACT_BUS_EVENT, self._service_call_extrude_retract)
 
     @callback
@@ -180,6 +184,32 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command['print']['param'] = f"{data.get('command')}\n"
         self.client.publish(command)
 
+    def _service_call_move_axis(self, event: Event):
+        data = event.data
+        if not self._service_call_is_for_me(data):
+            return
+
+        LOGGER.debug(f"_service_call_move_axis: {data}")
+
+        axis = data.get('axis').upper()
+        distance = int(data.get('distance') or 10)
+
+        if axis not in ['X', 'Y', 'Z', 'HOME'] or abs(distance) > 100:
+            LOGGER.error(f"Invalid axis '{axis}' or distance out of range '{distance}'")
+            return False
+        
+        command = SEND_GCODE_TEMPLATE
+        gcode = HOME_GCODE if axis == 'HOME' else MOVE_AXIS_GCODE
+        speed = 900 if axis == 'Z' else 3000
+        if axis != 'HOME':
+            if axis in ['Y', 'Z'] and not self.get_model().is_core_xy:
+                LOGGER.debug(f"Non-core XY, reversing '{axis}' axis distance")
+                distance = -1 * distance
+            gcode = gcode.format(axis=axis, distance=distance, speed=speed)
+        
+        command['print']['param'] = gcode
+        self.client.publish(command)
+
     def _service_call_extrude_retract(self, event: Event):
         data = event.data
         if not self._service_call_is_for_me(data):
@@ -193,7 +223,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if move not in ['EXTRUDE', 'RETRACT']:
             LOGGER.error(f"Invalid extrusion move '{move}'")
             return False
-        
+
         nozzle_temp = self.get_model().temperature.nozzle_temp
         if force is not True and nozzle_temp < 170:
             LOGGER.error(f"Nozzle temperature too low to perform extrusion: {nozzle_temp}ºC")
@@ -202,9 +232,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command = SEND_GCODE_TEMPLATE
         gcode = EXTRUDER_GCODE
         distance = (1 if move == 'EXTRUDE' else -1) * 10
-        
+
         gcode = gcode.format(distance=distance)
-        
+
         command['print']['param'] = gcode
         self.client.publish(command)
 

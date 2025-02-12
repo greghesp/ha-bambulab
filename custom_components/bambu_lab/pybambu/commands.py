@@ -45,6 +45,8 @@ PRINT_PROJECT_FILE_TEMPLATE = {
 
 SKIP_OBJECTS_TEMPLATE = {"print": {"sequence_id": "0", "command": "skip_objects", "obj_list": []}}
 
+MOVE_AXIS_GCODE = "M211 S\nM211 X1 Y1 Z1\nM1002 push_ref_mode\nG91 \nG1 {axis}{distance}.0 F{speed}\nM1002 pop_ref_mode\nM211 R\n"
+HOME_GCODE = "G28\n"
 EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"
 
 # X1 only currently
