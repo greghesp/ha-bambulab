@@ -253,7 +253,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # Printers with older firmware require a different method to change
         # filament. For now, only support newer firmware.
         if not self.get_model().supports_feature(Features.AMS_SWITCH_COMMAND):
-            LOGGER.error(f"Loading filament not yet available for this device")
+            LOGGER.error(f"Loading filament is not available for this printer's firmware version, please update it")
             return False
 
         tray = int(data.get('tray', 1))
@@ -301,7 +301,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"_service_call_unload_filament: {data}")
 
         if not self.get_model().supports_feature(Features.AMS_SWITCH_COMMAND):
-            LOGGER.error(f"Loading filament not yet available for this device")
+            LOGGER.error(f"Loading filament is not available for this printer's firmware version, please update it")
             return
         
         command = SWITCH_AMS_TEMPLATE
