@@ -102,3 +102,30 @@ skip_objects:
       example: "409,1463"
       selector:
         text:
+
+extrude_retract:
+  name: Extrude or retract filament
+  description: Perform an extrusion or extraction of the loaded filament
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    type:
+      name: Type
+      description: The type of extrude action to perform
+      required: true
+      example: "Extrude"
+      selector:
+        select:
+          multiple: false
+          mode: dropdown
+          options:
+            - Extrude
+            - Retract
+    force:
+      name: Force
+      description: >-
+        Perform extrusion or retraction if nozzle temperature is below 170ºC.
+      example: false
+      selector:
+        boolean:

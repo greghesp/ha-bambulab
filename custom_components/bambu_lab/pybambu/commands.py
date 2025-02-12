@@ -44,7 +44,9 @@ PRINT_PROJECT_FILE_TEMPLATE = {
             }
 
 SKIP_OBJECTS_TEMPLATE = {"print": {"sequence_id": "0", "command": "skip_objects", "obj_list": []}}
-  
+
+EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"
+
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}
 
