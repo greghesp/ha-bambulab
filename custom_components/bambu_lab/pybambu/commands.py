@@ -44,6 +44,7 @@ PRINT_PROJECT_FILE_TEMPLATE = {
             }
 
 SKIP_OBJECTS_TEMPLATE = {"print": {"sequence_id": "0", "command": "skip_objects", "obj_list": []}}
+SWITCH_AMS_TEMPLATE = {"print": {"command": "ams_change_filament", "sequence_id": "0", "target": 255, "curr_temp": 0, "tar_temp": 0}}
 
 EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"
 
