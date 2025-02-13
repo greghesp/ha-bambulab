@@ -640,6 +640,9 @@ class BambuClient:
 
         result: queue.Queue[bool] = queue.Queue(maxsize=1)
 
+        self.received_info = False
+        self.received_push = False
+        
         def on_message(client, userdata, message):
             json_data = json.loads(message.payload)
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
@@ -653,8 +656,12 @@ class BambuClient:
             if json_data.get("info") and json_data.get("info").get("command") == "get_version":
                 LOGGER.debug("Got Version Command Data")
                 self._device.info_update(data=json_data.get("info"))
+                self.received_info = True
             if (json_data.get('print', {}).get('command', '') == 'push_status') and (json_data.get('print', {}).get('msg', 0) == 0):
                 self._device.print_update(data=json_data.get("print"))
+                self.received_push = True
+
+            if self.received_info and self.received_push:
                 result.put(True)
 
         self._test_mode = True
