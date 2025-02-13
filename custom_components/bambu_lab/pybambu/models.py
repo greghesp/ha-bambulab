@@ -723,20 +723,19 @@ class PrintJob:
     #     subtask_name = 3mf file without .3mf extensions - e.g FILENAME
     #     FILE: /cache/FILENAME.3mf
     #
-    # P1S lan mode print:
+    # P1 lan mode print:
     #   Bambu Studio 'print' of 3mf file
     #     "gcode_file": "36mm.gcode.3mf",
     #     "subtask_name": "36mm",
-    #     FILE: ?
+    #     FILE: /36mm.gcode.3mf
+    #
+    # P1 cloud print:
+    #   Bambu Studio 'print' of unsaved workspace
+    #     gcode_filename = Cube + Cube + Cube + Cube + Cube.3mf
+    #     subtask_name = Cube + Cube + Cube + Cube + Cube
+    #     FILE: /cache/Cube + Cube + Cube + Cube + Cube.3mf
 
     def _find_model_path(self, ftp) -> Union[str, None]:
-        if self.gcode_file == '' and self.subtask_name == '':
-            # Fall back to find the latest file by timestamp
-            model_path = self._find_latest_file(ftp, '/cache', ['.3mf'])
-            if model_path is not None:
-                return model_path
-            return None
-
         model_path = None
         for attempt in range(2):
             # If we fail to find it on the first pass, refresh the ftp file cache and try again
@@ -758,13 +757,18 @@ class PrintJob:
                 if model_path is not None:
                     break
 
+        if model_path is None:
+            # Fall back to find the latest file by timestamp
+            LOGGER.debug("Falling back to searching for latest 3mf file.")
+            model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
+
         return model_path
     
-    def _find_latest_file(self, ftp, path, extensions: list):
+    def _find_latest_file(self, ftp, search_paths, extensions: list):
         # Look for the newest file with extension in directory.
-        LOGGER.debug(f"Looking for latest {extensions} file in {path}")
+        LOGGER.debug(f"Looking for latest {extensions} file in {search_paths}")
         file_list = []
-        def parse_line(line):
+        def parse_line(path: str, line: str):
             # Match the line format: '-rw-rw-rw- 1 user group 1234 Jan 01 12:34 filename'
             pattern_with_time_no_year      = r'^\S+\s+\d+\s+\S+\s+\S+\s+\d+\s+(\S+\s+\d+\s+\d+:\d+)\s+(.+)$'
             # Match the line format: '-rw-rw-rw- 1 user group 1234 Jan 01 2024 filename'
@@ -782,7 +786,7 @@ class PrintJob:
                     timestamp = timestamp.replace(year=utc_time_now.year)
                     if timestamp > utc_time_now:
                         timestamp = timestamp.replace(year=datetime.now().year - 1)
-                    return timestamp, filename
+                    return timestamp, f"{path}{filename}"
                 else:
                     return None
 
@@ -793,7 +797,7 @@ class PrintJob:
                 if extension in extensions:
                     timestamp = datetime.strptime(timestamp_str, '%b %d %Y')
                     timestamp = timestamp.replace(tzinfo=timezone.utc)
-                    return timestamp, filename
+                    return timestamp, f"{path}{filename}"
                 else:
                     return None
             
@@ -801,14 +805,15 @@ class PrintJob:
             return None
 
         # Attempt to find the model in one of many known directories
-        ftp.retrlines(f"LIST {path}", lambda line: file_list.append(file) if (file := parse_line(line)) is not None else None)
+        for path in search_paths:
+            ftp.retrlines(f"LIST {path}", lambda line: file_list.append(file) if (file := parse_line(path, line)) is not None else None)
         files = sorted(file_list, key=lambda file: file[0], reverse=True)
         for file in files:
-            _, extension = os.path.splitext(file[1])
-            if extension in extensions:
-                file_path = f"{path}/{file[1]}"
-                LOGGER.debug(f"Found latest file {file_path}")
-                return file_path
+            for extension in extensions:
+                if file[1].endswith(extension):
+                    if extension in extensions:
+                        LOGGER.debug(f"Found latest file {file[1]}")
+                        return file[1]
 
         return None
     
