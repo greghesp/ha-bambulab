@@ -165,3 +165,46 @@ extrude_retract:
       example: false
       selector:
         boolean:
+
+unload_filament:
+  name: Unload filament
+  description: Unload the filament currently loaded into the extruder
+  target:
+    entity:
+      integration: bambu_lab
+
+load_filament:
+  name: Load filament
+  description: Load a new filament into the extruder
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    tray:
+      name: AMS tray
+      description: The AMS tray to load filament from
+      example: 1
+      selector:
+        number:
+          min: 1
+          max: 16
+          step: 1
+    external_spool:
+      name: External spool
+      description: >-
+        Load filament from the external spool. Enabling the external spool will
+        override the AMS tray value if also set.
+      example: 1
+      selector:
+        boolean:
+    temperature:
+      name: Temperature
+      description: >-
+        Target nozzle temperature once the filament is loaded. By default uses
+        the midpoint between min and max temperature of the chosen filament.
+      example: 220
+      selector:
+        number:
+          min: 0
+          max: 250
+          step: 1
