@@ -123,7 +123,7 @@ class Device:
         elif feature == Features.CHAMBER_LIGHT:
             return True
         elif feature == Features.CHAMBER_FAN:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "P1P" or self.info.device_type == "P1S"
+            return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
         elif feature == Features.CHAMBER_TEMPERATURE:
             return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
         elif feature == Features.CURRENT_STAGE:
@@ -541,7 +541,8 @@ class PrintJob:
         previous_gcode_state = self.gcode_state
         self.gcode_state = data.get("gcode_state", self.gcode_state)
         if self.gcode_state.lower() not in GCODE_STATE_OPTIONS:
-            LOGGER.error(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
+            if self.gcode_state != '':
+                LOGGER.error(f"Unknown gcode_state. Please log an issue : '{self.gcode_state}'")
             self.gcode_state = "unknown"
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
@@ -734,6 +735,19 @@ class PrintJob:
     #     gcode_filename = Cube + Cube + Cube + Cube + Cube.3mf
     #     subtask_name = Cube + Cube + Cube + Cube + Cube
     #     FILE: /cache/Cube + Cube + Cube + Cube + Cube.3mf
+    #
+    # X1 cloud print:
+    #   Makerworld print
+    #     gcode_filename = /data/metadata/plate_3.gcode
+    #     subtask_name = Lovers Valentine Day Shadowbox
+    #     FILE: /cache/Lovers Valentine Day Shadowbox.3mf
+    # 
+    # P1 cloud print:
+    #   Makerworld print
+    #     gcode_filename = Lovers Valentine Day Shadowbox.3mf
+    #     subtask_name = Lovers Valentine Day Shadowbox
+    #     FILE: /cache/Lovers Valentine Day Shadowbox.3mf
+    # 
 
     def _find_model_path(self, ftp) -> Union[str, None]:
         model_path = None
@@ -745,6 +759,7 @@ class PrintJob:
 
             # First test if the subtaskname exists as a 3mf
             if self.subtask_name != '':
+                LOGGER.debug(f"Looking for '{self.subtask_name}'")
                 filename = self.subtask_name if self.subtask_name.endswith('.3mf') else f"{self.subtask_name}.3mf"
                 model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.3mf")
                 if model_path is not None:
@@ -752,6 +767,7 @@ class PrintJob:
 
             # If we didn't find it then try the gcode file
             if self.gcode_file != '':
+                LOGGER.debug(f"Looking for '{self.gcode_file}'")
                 filename = self.gcode_file if self.gcode_file.endswith('.3mf') else f"{self.gcode_file}.3mf"
                 model_path = self._find_file_in_cache(filename=filename)
                 if model_path is not None:
@@ -985,15 +1001,19 @@ class PrintJob:
                     self.print_length = print_length
 
                     if plate_number is not None:
-                        self._client._device.pick_image.set_image(archive.read(f"Metadata/pick_{plate_number}.png"))
-
-                        # Process the pick image for objects
-                        pick_image = Image.open(archive.open(f"Metadata/pick_{plate_number}.png"))
-                        identify_ids = self._identify_objects_in_pick_image(image=pick_image)
-                        
-                        # Filter the printable objects from slice_info.config, removing
-                        # any that weren't detected in the pick image
-                        self._printable_objects = {k: _printable_objects[k] for k in identify_ids if k in _printable_objects}
+                        try:
+                            image = archive.read(f"Metadata/pick_{plate_number}.png")
+                            self._client._device.pick_image.set_image(image)
+                            # Process the pick image for objects
+                            pick_image = Image.open(archive.open(f"Metadata/pick_{plate_number}.png"))
+                            identify_ids = self._identify_objects_in_pick_image(image=pick_image)
+                            
+                            # Filter the printable objects from slice_info.config, removing
+                            # any that weren't detected in the pick image
+                            self._printable_objects = {k: _printable_objects[k] for k in identify_ids if k in _printable_objects}
+                        except:
+                            LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
+                            self._client._device.pick_image.set_image(None)
 
                 archive.close()
 
