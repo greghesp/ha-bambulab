@@ -19,6 +19,24 @@ PUSH_ALL = {"pushing": {"sequence_id": "0", "command": "pushall"}}
 START_PUSH = { "pushing": {"sequence_id": "0", "command": "start"}}
 
 SEND_GCODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "gcode_line", "param": ""}} # param = GCODE_EACH_LINE_SEPARATED_BY_\n
+FIRMWARE_UPDATE_TEMPLATE = {
+                "user_id": "0",
+                "upgrade": {
+                    "sequence_id": "0",
+                    "command": "upgrade_history",
+                    "src_id": 2,
+                    "firmware_optional": {
+                        "firmware": {
+                            "version": "",
+                            "url": "",
+                            "force_update": False,
+                            "description": "",
+                            "status": "release"
+                        },
+                        "ams": []
+                    }
+                }
+            }
 PRINT_PROJECT_FILE_TEMPLATE = {
                 "print": {
                     "sequence_id": 0,
@@ -56,17 +74,3 @@ GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", 
 # A1 only
 PROMPT_SOUND_ENABLE  = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": True}}
 PROMPT_SOUND_DISABLE = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": False}}
-
-FIRMWARE_UPDATE = {
-    "user_id": "0", "upgrade": {"sequence_id": "0", "command": "upgrade_history", "src_id": 2,
-    "firmware_optional": {
-        "firmware": {
-                "version": "{version}",
-                "url": "https://public-cdn.bblmw.com/upgrade/device/{model}/{version}/product/{hash}/{timestamp}.json.sig",
-                "force_update": False,
-                "description": "",
-                "status": "release"
-            },
-            "ams": [],
-        }
-    }}

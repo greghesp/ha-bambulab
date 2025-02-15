@@ -15,8 +15,8 @@ from .coordinator import BambuDataUpdateCoordinator
 PRINTER_FIRMWARE_UPDATE = BambuLabUpdateEntityDescription(
         key="firmware_update",
         translation_key="firmware_update",
-        latest_ver_fn=lambda self: self.coordinator.get_model().upgrade._new_version,
-        installed_ver_fn=lambda self: self.coordinator.get_model().upgrade._cur_version,
+        latest_ver_fn=lambda self: self.coordinator.get_model().upgrade.new_version,
+        installed_ver_fn=lambda self: self.coordinator.get_model().upgrade.cur_version,
     )
 
 async def async_setup_entry(
@@ -74,12 +74,12 @@ class BambuLabUpdate(BambuLabEntity, UpdateEntity):
     @property
     def in_progress(self) -> bool:
         """Return True if update is in progress."""
-        return self.coordinator.get_model().upgrade._progress > 0
+        return self.coordinator.get_model().upgrade.upgrade_progress > 0
     
     @property
     def update_percentage(self) -> int | None:
         """Return the update progress percentage."""
-        return self.coordinator.get_model().upgrade._progress
+        return self.coordinator.get_model().upgrade.upgrade_progress
     
     def install(
         self, version: str | None, backup: bool, **kwargs: Any

@@ -442,64 +442,98 @@ class Fans:
 @dataclass
 class Upgrade:
     """ Upgrade class """
-    _name: str
-    _progress: int
-    _device_type: str
-    _cur_version: str
-    _new_version: str | None
-    
+    printer_name: str
+    upgrade_progress: int
+    new_version_state: int
+    new_ver_list: list
+    cur_version: str
+    new_version: str
+
     def __init__(self, client):
         self._client = client
-        self._name = "unknown"
-        self._progress = 0
-        self._device_type = ""
-        self._cur_version = ""
-        self._new_version = None
+        self.printer_name = None
+        self.upgrade_progress = 0
+        self.new_version_state = 0
+        self.new_ver_list = []
+        self.cur_version = None
+        self.new_version = None
     
     def release_url(self) -> str:
         """Return the release url"""
-        if self._device_type in ["P1P", "P1S"]:
-            self._name = "p1"
-        elif self._device_type == "A1MINI":
-            self._name = "a1-mini"
-        elif self._device_type == "A1":
-            self._name = "a1"
-        elif self._device_type == "X1C":
-            self._name = "x1"
-        elif self._device_type == "X1E":
-            self._name = "x1e"
-        else:
-            self._name = "unknown"
-            
-        if self._name == "unknown":
+        device_mapping = {
+            "P1P": "p1",
+            "P1S": "p1",
+            "A1MINI": "a1-mini",
+            "A1": "a1",
+            "X1C": "x1",
+            "X1E": "x1e"
+        }
+        self.printer_name = device_mapping.get(
+            self._client._device.info.device_type, None
+        )
+
+        if self.printer_name is None:
             return None
-        return f"https://bambulab.com/en/support/firmware-download/{self._name}"
+        return f"https://bambulab.com/en/support/firmware-download/{self.printer_name}"
     
     def install(self):
         """Install the update"""
-        firmware_url = get_firmware_url(name=self._name)
+        if self.printer_name is None:
+            LOGGER.warning("Firmware update installation failed, printer name not initialized.")
+            return
+
+        firmware_url = get_firmware_url(self.printer_name)
         if firmware_url:
             firmware_json = create_firmware_json(firmware_url)
             if firmware_json:
                 LOGGER.debug(firmware_json)
                 self._client.publish(firmware_json)
-                
                 self._client.callback("event_printer_data_update")
                 
     def print_update(self, data) -> bool:
         """Update the upgrade state"""
         old_data = f"{self.__dict__}"
         
-        self._device_type = self._client._device.info.device_type
-        self._cur_version = self._client._device.info.sw_ver
+        # "upgrade_state": {
+        #    "sequence_id": 0,
+        #    "progress": "100",
+        #    "status": "UPGRADE_SUCCESS",
+        #    "consistency_request": false,
+        #    "dis_state": 1,
+        #    "err_code": 0,
+        #    "force_upgrade": false,
+        #    "message": "0%, 0B/s",
+        #    "module": "ota",
+        #    "new_version_state": 1,
+        #    "cur_state_code": 0,
+        #    "new_ver_list": [
+        #    {
+        #      "name": "ota",
+        #      "cur_ver": "01.06.01.02",
+        #      "new_ver": "01.07.00.00",
+        #      "cur_release_type": 3,
+        #      "new_release_type": 3
+        #    }
         
         # Verified only on P1 series. 
         # Cross-validation on the remaining series is required. 
         # Data values ​​for the upgrade_state dictionary
         state = data.get("upgrade_state", {})
-        if state.get("new_ver_list", []):
-            self._new_version = state["new_ver_list"][0]["new_ver"]
-            self._progress = int(state["progress"]) if state["progress"] else 0
+        self.upgrade_progress = int(state.get("progress", self.upgrade_progress)) \
+            if state.get("progress", self.upgrade_progress) != "" else 0
+        self.new_version_state = state.get("new_version_state", self.new_version_state)
+        self.new_ver_list = state.get("new_ver_list", self.new_ver_list)
+        self.cur_version = self._client._device.info.sw_ver
+        self.new_version = self._client._device.info.sw_ver
+        if self.new_version_state == 1:
+            ota_info = next(filter(
+                lambda x: x["name"] == "ota", self.new_ver_list
+            ), {})
+            if ota_info:
+                self.cur_version = ota_info["cur_ver"]
+                self.new_version = ota_info["new_ver"]
+            if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
+                self.upgrade_progress = 0
             
         return (old_data != f"{self.__dict__}")
     

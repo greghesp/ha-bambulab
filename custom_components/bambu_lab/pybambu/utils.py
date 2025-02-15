@@ -18,7 +18,7 @@ from .const import (
     FansEnum,
     TempEnum
 )
-from .commands import SEND_GCODE_TEMPLATE, FIRMWARE_UPDATE
+from .commands import SEND_GCODE_TEMPLATE, FIRMWARE_UPDATE_TEMPLATE
 from .const_hms_errors import HMS_ERRORS
 from .const_print_errors import PRINT_ERROR_ERRORS
 
@@ -280,7 +280,14 @@ def get_firmware_url(name: str):
     response = requests.get(f"https://bambulab.com/en/support/firmware-download/{name}")
     soup = BeautifulSoup(response.text, 'html.parser')
     selector = soup.select_one(
-        "#__next > div > div > div > div.portal-css-npiem8 > div.pageContent.MuiBox-root.portal-css-0 > div > div > div.portal-css-1v0qi56 > div.flex > div.detailContent > div > div > div.portal-css-kyyjle > div.top > div.versionContent > div > div.linkContent.pc > a:nth-child(2)"
+        "#__next > div > div > div > "
+        "div.portal-css-npiem8 > "
+        "div.pageContent.MuiBox-root.portal-css-0 > "
+        "div > div > div.portal-css-1v0qi56 > "
+        "div.flex > div.detailContent > div > "
+        "div > div.portal-css-kyyjle > div.top > "
+        "div.versionContent > div > "
+        "div.linkContent.pc > a:nth-child(2)"
     )
     if selector:
         return selector.get("href")
@@ -288,15 +295,19 @@ def get_firmware_url(name: str):
 
 def create_firmware_json(url: str) -> dict:
     """Create firmware json from url"""
-    pattern = r"offline\/([\w-]+)\/([\d\.]+)\/([\w]+)\/offline-([\w\-\.]+)\.zip"
+    pattern = (
+        r"offline\/([\w-]+)\/([\d\.]+)\/([\w]+)\/"
+        r"offline-([\w\-\.]+)\.zip"
+    )
     info = re.search(pattern, url).groups()
     if not info:
         LOGGER.warning(f"Could not parse firmware url: {url}")
         return None
-    
-    copy_firmware_update = FIRMWARE_UPDATE.copy()
-    copy_firmware_update["firmware_optional"]["firmware"]["version"].format(version=info[1])
-    copy_firmware_update["firmware_optional"]["firmware"]["url"].format(
-        model=info[0], version=info[1], hash=info[2], timestamp=info[3]
+
+    update_template = FIRMWARE_UPDATE_TEMPLATE.copy()
+    update_template["upgrade"]["firmware_optional"]["firmware"]["version"] = info[1]
+    update_template["upgrade"]["firmware_optional"]["firmware"]["url"] = (
+        f"https://public-cdn.bblmw.com/upgrade/device/"
+        f"{info[0]}/{info[1]}/product/{info[2]}/{info[3]}.json.sig"
     )
-    return copy_firmware_update
+    return update_template
