@@ -697,6 +697,7 @@ class PrintJob:
             pass
 
     def _find_file_in_cache(self, filename: str) -> Union[str, None]:
+        LOGGER.debug(f"Looking for '{filename}'")
         # Attempt to find a file in one of many known directories
         for search_path in self.ftp_search_paths:
             cached_files = self._client._device.ftp_cache.get(search_path, [])
@@ -733,7 +734,7 @@ class PrintJob:
     # X1C cloud print:
     #   Bambu Studio 'print' of unsaved workspace
     #     gcode_filename = data/metadata/plate_1.gcode (ramdisk - not accessible via ftp)
-    #     subtask_name = 3mf file without .3mf extensions - e.g FILENAME
+    #     subtask_name = FILENAME
     #     FILE: /cache/FILENAME.3mf
     #
     # P1 cloud print:
@@ -765,17 +766,25 @@ class PrintJob:
 
             # First test if the subtaskname exists as a 3mf
             if self.subtask_name != '':
-                LOGGER.debug(f"Looking for '{self.subtask_name}'")
-                filename = self.subtask_name if self.subtask_name.endswith('.3mf') else f"{self.subtask_name}.3mf"
+                model_path = self._find_file_in_cache(filename=self.subtask_name)
+                if model_path is not None:
+                    break
                 model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.3mf")
+                if model_path is not None:
+                    break
+                model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.gcode.3mf")
                 if model_path is not None:
                     break
 
             # If we didn't find it then try the gcode file
             if self.gcode_file != '':
-                LOGGER.debug(f"Looking for '{self.gcode_file}'")
-                filename = self.gcode_file if self.gcode_file.endswith('.3mf') else f"{self.gcode_file}.3mf"
-                model_path = self._find_file_in_cache(filename=filename)
+                model_path = self._find_file_in_cache(filename=self.gcode_file)
+                if model_path is not None:
+                    break
+                model_path = self._find_file_in_cache(filename=f"{self.gcode_file}.3mf")
+                if model_path is not None:
+                    break
+                model_path = self._find_file_in_cache(filename=f"{self.gcode_file}.gcode.3mf")
                 if model_path is not None:
                     break
 
