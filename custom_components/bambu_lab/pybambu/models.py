@@ -733,7 +733,7 @@ class PrintJob:
     # X1C cloud print:
     #   Bambu Studio 'print' of unsaved workspace
     #     gcode_filename = data/metadata/plate_1.gcode (ramdisk - not accessible via ftp)
-    #     subtask_name = 3mf file without .3mf extensions - e.g FILENAME
+    #     subtask_name = FILENAME
     #     FILE: /cache/FILENAME.3mf
     #
     # P1 cloud print:
@@ -766,8 +766,13 @@ class PrintJob:
             # First test if the subtaskname exists as a 3mf
             if self.subtask_name != '':
                 LOGGER.debug(f"Looking for '{self.subtask_name}'")
-                filename = self.subtask_name if self.subtask_name.endswith('.3mf') else f"{self.subtask_name}.3mf"
+                model_path = self._find_file_in_cache(filename=self.subtask_name)
+                if model_path is not None:
+                    break
                 model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.3mf")
+                if model_path is not None:
+                    break
+                model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.gcode.3mf")
                 if model_path is not None:
                     break
 
