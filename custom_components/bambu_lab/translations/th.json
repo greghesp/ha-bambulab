@@ -152,9 +152,6 @@
       },
       "online": {
         "name": "ออนไลน์"
-      },
-      "firmware_update": {
-        "name": "อัปเดตเฟิร์มแวร์"
       }
     },
     "button": {
@@ -608,6 +605,11 @@
       },
       "timelapse": {
         "name": "โหลด Timelapse ล่าสุดจากเครื่องพิมพ์"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "อัปเดตเฟิร์มแวร์"
       }
     }
   },

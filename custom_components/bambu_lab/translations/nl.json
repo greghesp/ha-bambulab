@@ -152,9 +152,6 @@
       },
       "online": {
         "name": "Online"
-      },
-      "firmware_update": {
-        "name": "Firmware-update"
       }
     },
     "button": {
@@ -608,6 +605,11 @@
       },
       "timelapse": {
         "name": "Nieuwste timelapse vanuit de printer inladen"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Firmware-update"
       }
     }
   },

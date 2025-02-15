@@ -152,9 +152,6 @@
       },
       "online": {
         "name": "État"
-      },
-      "firmware_update": {
-        "name": "Mise à jour du micrologiciel"
       }
     },
     "button": {
@@ -608,6 +605,11 @@
       },
       "timelapse": {
         "name": "Chargez le dernier timelapse de l'imprimante"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Mise à jour du micrologiciel"
       }
     }
   },

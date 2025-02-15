@@ -24,7 +24,8 @@ PLATFORMS = (
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SENSOR,
-    Platform.SWITCH
+    Platform.SWITCH,
+    Platform.UPDATE,
 )
 
 BAMBU_LAB_CARDS = [

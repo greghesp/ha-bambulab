@@ -56,4 +56,17 @@ GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", 
 # A1 only
 PROMPT_SOUND_ENABLE  = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": True}}
 PROMPT_SOUND_DISABLE = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": False}}
-                             
+
+FIRMWARE_UPDATE = {
+    "user_id": "0", "upgrade": {"sequence_id": "0", "command": "upgrade_history", "src_id": 2,
+    "firmware_optional": {
+        "firmware": {
+                "version": "{version}",
+                "url": "https://public-cdn.bblmw.com/upgrade/device/{model}/{version}/product/{hash}/{timestamp}.json.sig",
+                "force_update": False,
+                "description": "",
+                "status": "release"
+            },
+            "ams": [],
+        }
+    }}

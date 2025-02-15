@@ -1,9 +1,11 @@
 import math
 import requests
 import socket
+import re
 
 from datetime import datetime, timedelta
 from urllib3.exceptions import ReadTimeoutError
+from bs4 import BeautifulSoup
 
 from .const import (
     CURRENT_STAGE_IDS,
@@ -16,7 +18,7 @@ from .const import (
     FansEnum,
     TempEnum
 )
-from .commands import SEND_GCODE_TEMPLATE
+from .commands import SEND_GCODE_TEMPLATE, FIRMWARE_UPDATE
 from .const_hms_errors import HMS_ERRORS
 from .const_print_errors import PRINT_ERROR_ERRORS
 
@@ -272,3 +274,29 @@ def get_Url(url: str, region: str):
     if region == "China":
         urlstr = urlstr.replace('.com', '.cn')
     return urlstr
+
+def get_firmware_url(name: str):
+    """Retrieve firmware url from BambuLab website"""
+    response = requests.get(f"https://bambulab.com/en/support/firmware-download/{name}")
+    soup = BeautifulSoup(response.text, 'html.parser')
+    selector = soup.select_one(
+        "#__next > div > div > div > div.portal-css-npiem8 > div.pageContent.MuiBox-root.portal-css-0 > div > div > div.portal-css-1v0qi56 > div.flex > div.detailContent > div > div > div.portal-css-kyyjle > div.top > div.versionContent > div > div.linkContent.pc > a:nth-child(2)"
+    )
+    if selector:
+        return selector.get("href")
+    return None
+
+def create_firmware_json(url: str) -> dict:
+    """Create firmware json from url"""
+    pattern = r"offline\/([\w-]+)\/([\d\.]+)\/([\w]+)\/offline-([\w\-\.]+)\.zip"
+    info = re.search(pattern, url).groups()
+    if not info:
+        LOGGER.warning(f"Could not parse firmware url: {url}")
+        return None
+    
+    copy_firmware_update = FIRMWARE_UPDATE.copy()
+    copy_firmware_update["firmware_optional"]["firmware"]["version"].format(version=info[1])
+    copy_firmware_update["firmware_optional"]["firmware"]["url"].format(
+        model=info[0], version=info[1], hash=info[2], timestamp=info[3]
+    )
+    return copy_firmware_update

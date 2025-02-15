@@ -152,9 +152,6 @@
       },
       "online": {
         "name": "在线"
-      },
-      "firmware_update": {
-        "name": "固件更新"
       }
     },
     "button": {
@@ -608,6 +605,11 @@
       },
       "timelapse": {
         "name": "从打印机加载最新的时间段"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "固件更新"
       }
     }
   },
