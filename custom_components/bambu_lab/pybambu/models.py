@@ -769,9 +769,11 @@ class PrintJob:
                 model_path = self._find_file_in_cache(filename=self.subtask_name)
                 if model_path is not None:
                     break
+                LOGGER.debug(f"Looking for '{self.subtask_name}.3mf'")
                 model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.3mf")
                 if model_path is not None:
                     break
+                LOGGER.debug(f"Looking for '{self.subtask_name}.gcode.3mf'")
                 model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.gcode.3mf")
                 if model_path is not None:
                     break
