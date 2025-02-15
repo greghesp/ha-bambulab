@@ -718,17 +718,23 @@ class PrintJob:
     #
     # Known filepath configurations:
     # 
-    # X1C cloud print:
-    #   Bambu Studio 'print' of unsaved workspace
-    #     gcode_filename = data/metadata/plate_1.gcode (ramdisk - not accessible via ftp)
-    #     subtask_name = 3mf file without .3mf extensions - e.g FILENAME
-    #     FILE: /cache/FILENAME.3mf
+    # X1 lan mode print
+    #   Orca 2.2.0 'print' of 3mf file
+    #     "gcode_file": "/data/Metadata/plate_1.gcode",
+    #     "subtask_name": "Clamshell Parts Box",
+    #     FILE: /Clamshell Parts Box.gcode.3mf
     #
     # P1 lan mode print:
     #   Bambu Studio 'print' of 3mf file
     #     "gcode_file": "36mm.gcode.3mf",
     #     "subtask_name": "36mm",
     #     FILE: /36mm.gcode.3mf
+    #
+    # X1C cloud print:
+    #   Bambu Studio 'print' of unsaved workspace
+    #     gcode_filename = data/metadata/plate_1.gcode (ramdisk - not accessible via ftp)
+    #     subtask_name = 3mf file without .3mf extensions - e.g FILENAME
+    #     FILE: /cache/FILENAME.3mf
     #
     # P1 cloud print:
     #   Bambu Studio 'print' of unsaved workspace
