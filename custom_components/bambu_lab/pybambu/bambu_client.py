@@ -543,6 +543,10 @@ class BambuClient:
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
         try:
+            if self.client is None:
+                # We have been shut down. Drop any messages we receive late.
+                return
+
             if not self._loaded_slicer_settings:
                 # Only update slicer settings once per successful connection to the printer.
                 self._loaded_slicer_settings = True

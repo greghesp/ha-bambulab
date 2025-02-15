@@ -60,6 +60,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     email: str = ""
     serial: str = ""
     authentication_type: str = None
+    _show_existing: bool
 
     @staticmethod
     @callback
@@ -70,6 +71,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         self._bambu_cloud = BambuCloud("", "", "", "")
+        self._show_existing = False
         
     async def async_step_user(
             self, user_input: dict[str, Any] | None = None
@@ -251,7 +253,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 LOGGER.debug(f"Printer {device['dev_id']} found.")
                 printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
             else:
-                LOGGER.debug(f"Printer {device['dev_id']} already registered with HA. Ignoring it.")
+                LOGGER.debug(f"Printer {device['dev_id']} already registered with HA.")
+                if self._show_existing:
+                    printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']} (already registered)"))
 
         printer_selector = SelectSelector(
             SelectSelectorConfig(
@@ -261,7 +265,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         LOGGER.debug(f"Printer count = {len(printer_list)}")
         if len(printer_list) == 0:
-            return self.async_abort(reason='no_printers')
+            if self._show_existing:
+                return self.async_abort(reason='no_printers')
+            
+            LOGGER.debug("No unregistered printers found. Re-showing with full list.")
+            self._show_existing = True
+            return await self.async_step_Bambu_Choose_Device(None)
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -323,6 +332,20 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     errors['base'] = "cannot_connect_local_all"
 
             if success:
+                if self._show_existing:
+                    # Check to see if this device is already registered and delete it if so.
+                    dev_reg = device_registry.async_get(self.hass)
+                    hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, device['dev_id'])})
+                    if hadevice is not None:
+                        for config_entry in hadevice.config_entries:
+                            LOGGER.debug(f"Removing existing config_entry: {config_entry}")
+                            try:
+                                # Remove the config entry
+                                await self.hass.config_entries.async_remove(config_entry)
+                                LOGGER.debug("Successfully removed config entry.")
+                            except Exception as e:
+                                LOGGER.error("Failed to remove config entry: %s", e)
+
                 LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
                 data = {
                         "device_type": device_type,
