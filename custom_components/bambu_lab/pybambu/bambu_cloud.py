@@ -323,7 +323,7 @@ class BambuCloud:
                 LOGGER.debug("Unable to decode authToken to json to retrieve username.")
 
         if username is None:
-            LOGGER.debug(f"Unable to decode authToken to retrieve username. AuthToken = {self._auth_token}")
+            LOGGER.debug(f"Unable to decode authToken to retrieve username. AuthToken = {self._auth_token[:10]}xxxxx")
 
         return username
     
@@ -538,7 +538,7 @@ class BambuCloud:
     # "projects": [
     #     {
     #     "project_id": "164995388",
-    #     "user_id": "1688388450",
+    #     "user_id": "16xxxxx50",
     #     "model_id": "US48e2103d939bf8",
     #     "status": "ACTIVE",
     #     "name": "Alcohol_Marker_Storage_for_Copic,_Ohuhu_and_the_like",
