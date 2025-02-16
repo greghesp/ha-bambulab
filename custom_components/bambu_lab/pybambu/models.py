@@ -610,6 +610,8 @@ class PrintJob:
 
         old__gcode_file_prepare_percent = self._gcode_file_prepare_percent
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
+        if self.gcode_state == "PREPARE":
+            LOGGER.debug(f"DOWNLOAD PERCENTAGE: {self._gcode_file_prepare_percent}")
         if self._gcode_file_prepare_percent != old__gcode_file_prepare_percent:
             if self._gcode_file_prepare_percent == 100:
                 LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
