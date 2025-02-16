@@ -608,10 +608,14 @@ class PrintJob:
                 # We can update task data from the cloud immediately. But ftp has to wait.
                 self._update_task_data()
 
+        if self.gcode_state == "PREPARE" and previous_gcode_state != "PREPARE":
+            # Sometimes the download completes so fast we go from a prior print's 100% to 100% for the new print in one update.
+            # Make sure we catch that case too.
+            self._gcode_file_prepare_percent = 0
         old_gcode_file_prepare_percent = self._gcode_file_prepare_percent
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
         if self.gcode_state == "PREPARE":
-            LOGGER.debug(f"DOWNLOAD PERCENTAGE: {self._gcode_file_prepare_percent}")
+            LOGGER.debug(f"DOWNLOAD PERCENTAGE: {old_gcode_file_prepare_percent} -> {self._gcode_file_prepare_percent}")
         if (old_gcode_file_prepare_percent != -1) and (self._gcode_file_prepare_percent != old_gcode_file_prepare_percent):
             if self._gcode_file_prepare_percent == 100:
                 LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
@@ -720,6 +724,7 @@ class PrintJob:
         try:
             LOGGER.debug(f"Running FTP nlst for '{path}'")
             self._client._device.ftp_cache[path] = ftp.nlst(path)
+            LOGGER.debug(f"Completed FTP nlst for '{path}'")
         except Exception as e:
             LOGGER.error(f"FTP nlst Exception. Type: {type(e)} Args: {e}")
             pass
@@ -825,7 +830,6 @@ class PrintJob:
     
     def _find_latest_file(self, ftp, search_paths, extensions: list):
         # Look for the newest file with extension in directory.
-        LOGGER.debug(f"Looking for latest {extensions} file in {search_paths}")
         file_list = []
         def parse_line(path: str, line: str):
             # Match the line format: '-rw-rw-rw- 1 user group 1234 Jan 01 12:34 filename'
@@ -865,7 +869,14 @@ class PrintJob:
 
         # Attempt to find the model in one of many known directories
         for path in search_paths:
-            ftp.retrlines(f"LIST {path}", lambda line: file_list.append(file) if (file := parse_line(path, line)) is not None else None)
+            try:
+                LOGGER.debug(f"Looking for latest {extensions} file in {path}")
+                ftp.retrlines(f"LIST {path}", lambda line: file_list.append(file) if (file := parse_line(path, line)) is not None else None)
+                LOGGER.debug(f"Completed FTL list for {path}")
+            except Exception as e:
+                LOGGER.error(f"FTP list Exception. Type: {type(e)} Args: {e}")
+                pass
+
         files = sorted(file_list, key=lambda file: file[0], reverse=True)
         for file in files:
             for extension in extensions:
@@ -1156,7 +1167,7 @@ class PrintJob:
                 r, g, b, a = current_color
 
                 # Skip this pixel if it's transparent or already identified
-                if r == 0 or current_color in seen_colors:
+                if a == 0 or current_color in seen_colors:
                     continue
 
                 # Convert the colour to the decimal representation of its hex value
