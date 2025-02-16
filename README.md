@@ -24,7 +24,7 @@ Join us on [Discord](https://discord.gg/rsUHAW3DKz)
 
 [Want to contribute to ha-bambulab?](https://docs.page/greghesp/ha-bambulab/misc/contributing)
 
-If you feel this integration was valuable and want to support it in other ways, you can [buy me a coffee](https://Ko-fi.com/adriangarside).
+If you feel this integration was valuable and want to support it in other ways, you can [buy Adrian a coffee](https://Ko-fi.com/adriangarside).
 
 ## Setup
 
