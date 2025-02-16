@@ -6,7 +6,7 @@ import re
 import threading
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from dateutil import parser, tz
 from packaging import version
 from zipfile import ZipFile
@@ -457,6 +457,7 @@ class PrintJob:
     _ams_print_lengths: float
     _skipped_objects: list
     _printable_objects: dict
+    _gcode_file_prepare_percent : str
 
     @property
     def get_printable_objects(self) -> json:
@@ -514,6 +515,7 @@ class PrintJob:
         self.print_type = ""
         self._printable_objects = {}
         self._skipped_objects = []
+        self._gcode_file_prepare_percent = "0"
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -546,13 +548,19 @@ class PrintJob:
             self.gcode_state = "unknown"
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
+        old_gcode_file = self.gcode_file
         self.gcode_file = data.get("gcode_file", self.gcode_file)
+        if old_gcode_file != self.gcode_file:
+            LOGGER.debug(f"GCODE_FILE: {self.gcode_file}")
         self.print_type = data.get("print_type", self.print_type)
         if self.print_type.lower() not in PRINT_TYPE_OPTIONS:
             if self.print_type != "":
                 LOGGER.debug(f"Unknown print_type. Please log an issue : '{self.print_type}'")
             self.print_type = "unknown"
+        old_subtask_name = self.subtask_name
         self.subtask_name = data.get("subtask_name", self.subtask_name)
+        if old_subtask_name != self.subtask_name:
+            LOGGER.debug(f"SUBTASK_NAME: {self.subtask_name}")
         self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
@@ -596,8 +604,19 @@ class PrintJob:
                 self.end_time = None
                 LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
-            # Update task data
-            self._update_task_data()
+            if not self._client.ftp_enabled:
+                # We can update task data from the cloud immediately. But ftp has to wait.
+                self._update_task_data()
+
+        old__gcode_file_prepare_percent = self._gcode_file_prepare_percent
+        self._gcode_file_prepare_percent = data.get("gcode_file_prepare_percent", self._gcode_file_prepare_percent)
+        if self._gcode_file_prepare_percent != old__gcode_file_prepare_percent:
+            if self._gcode_file_prepare_percent == "100":
+                LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
+                if self._client.ftp_enabled:
+                    # Now we can update the model data by ftp. By this point the model has been successfully loaded to the printer.
+                    # and it's network stack is idle and shouldn't timeout or fail on us randomly.
+                    self._update_task_data()              
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
@@ -926,9 +945,7 @@ class PrintJob:
         ftp = self._client.ftp_connection()
         model_path = self._find_model_path(ftp)
 
-        if model_path is not None:
-            LOGGER.debug(f"Found model: '{model_path}'")
-        else:
+        if model_path is None:
             LOGGER.debug("No model file found.")
             return
 
@@ -936,9 +953,12 @@ class PrintJob:
         with tempfile.NamedTemporaryFile(delete=True) as f:
             try:
                 # Fetch the 3mf from FTP and close the connection
+                LOGGER.debug(f"Downloading model: '{model_path}'")
                 ftp.retrbinary(f"RETR {model_path}", f.write)
                 f.flush()
                 ftp.quit()
+                LOGGER.debug("Model download completed.")
+                LOGGER.debug(f"File size is {os.path.getsize(f.name)} bytes")
 
                 # Open the 3mf zip archive
                 with ZipFile(f) as archive:
@@ -1147,6 +1167,7 @@ class Info:
     serial: str
     device_type: str
     wifi_signal: int
+    wifi_sent: datetime
     device_type: str
     hw_ver: str
     sw_ver: str
@@ -1164,6 +1185,7 @@ class Info:
         self.serial = self._client._serial
         self.device_type = self._client._device_type
         self.wifi_signal = 0
+        self.wifi_sent = datetime.now()
         self.hw_ver = "unknown"
         self.sw_ver = "unknown"
         self.online = False
@@ -1229,8 +1251,6 @@ class Info:
         #         },
         #         "layer_num": 0,
         #         "total_layer_num": 0,
-
-        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
 
         # "print": {
         #   "net": {
@@ -1316,9 +1336,23 @@ class Info:
         self.nozzle_diameter = float(data.get("nozzle_diameter", self.nozzle_diameter))
         self.nozzle_type = data.get("nozzle_type", self.nozzle_type)
 
-        #
+        # Compute if there's a delta before we check the wifi_signal value.
+        changed = (old_data != f"{self.__dict__}")
 
-        return (old_data != f"{self.__dict__}")
+        # Now test the wifi signal to minimize how frequently we sent data upates to home assistant. We want
+        # these changes to be done outside the delta test above so that we don't trigger an update every 2-3s
+        # due the noise in this value on A1/P1 printers.
+        old_wifi_signal = self.wifi_signal
+        self.wifi_signal = int(data.get("wifi_signal", str(self.wifi_signal)).replace("dBm", ""))
+        if (self.wifi_signal != old_wifi_signal) :
+            if (datetime.now() - self.wifi_sent) > timedelta(seconds=60):
+                # It's been long enough. We can send this one.
+                self.wifi_sent = datetime.now()
+                changed = True
+        
+        return changed
+
+
 
     @property
     def has_bambu_cloud_connection(self) -> bool:
