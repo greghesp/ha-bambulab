@@ -622,6 +622,7 @@ class PrintJob:
             # This is a lan mode print where the gcode was pushed to the printer before the print ever started so
             # there is no download to track. If we can find a definitive way to track true lan mode vs just a pure local
             # only connection to a cloud connected printer, we can move this update to IDLE -> PREPARE instead.
+            LOGGER.debug("LAN MODE DOWNLOAD STARTED")
             self._update_task_data()
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
