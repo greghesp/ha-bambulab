@@ -16,9 +16,11 @@
 
 A Home Assistant Integration for Bambu Lab printers.
 
-Full documentation for the integration can [be found here](https://docs.page/greghesp/ha-bambulab)
-
 Join us on [Discord](https://discord.gg/rsUHAW3DKz)
+
+## Docs
+
+Full documentation for the integration can [be found here](https://docs.page/greghesp/ha-bambulab)
 
 ## Contribution
 
