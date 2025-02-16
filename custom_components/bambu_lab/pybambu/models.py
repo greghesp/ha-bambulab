@@ -457,7 +457,7 @@ class PrintJob:
     _ams_print_lengths: float
     _skipped_objects: list
     _printable_objects: dict
-    _gcode_file_prepare_percent : str
+    _gcode_file_prepare_percent : int
 
     @property
     def get_printable_objects(self) -> json:
@@ -515,7 +515,7 @@ class PrintJob:
         self.print_type = ""
         self._printable_objects = {}
         self._skipped_objects = []
-        self._gcode_file_prepare_percent = "0"
+        self._gcode_file_prepare_percent = 0
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -609,14 +609,23 @@ class PrintJob:
                 self._update_task_data()
 
         old__gcode_file_prepare_percent = self._gcode_file_prepare_percent
-        self._gcode_file_prepare_percent = data.get("gcode_file_prepare_percent", self._gcode_file_prepare_percent)
+        self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
+        if self.gcode_state == "PREPARE":
+            LOGGER.debug(f"DOWNLOAD PERCENTAGE: {self._gcode_file_prepare_percent}")
         if self._gcode_file_prepare_percent != old__gcode_file_prepare_percent:
-            if self._gcode_file_prepare_percent == "100":
+            if self._gcode_file_prepare_percent == 100:
                 LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
                 if self._client.ftp_enabled:
                     # Now we can update the model data by ftp. By this point the model has been successfully loaded to the printer.
                     # and it's network stack is idle and shouldn't timeout or fail on us randomly.
-                    self._update_task_data()              
+                    self._update_task_data()
+
+        if self.gcode_state == "RUNNING" and previous_gcode_state == "PREPARE" and self._gcode_file_prepare_percent == 0:
+            # This is a lan mode print where the gcode was pushed to the printer before the print ever started so
+            # there is no download to track. If we can find a definitive way to track true lan mode vs just a pure local
+            # only connection to a cloud connected printer, we can move this update to IDLE -> PREPARE instead.
+            LOGGER.debug("LAN MODE DOWNLOAD STARTED")
+            self._update_task_data()
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
