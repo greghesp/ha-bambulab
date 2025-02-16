@@ -515,7 +515,7 @@ class PrintJob:
         self.print_type = ""
         self._printable_objects = {}
         self._skipped_objects = []
-        self._gcode_file_prepare_percent = 0
+        self._gcode_file_prepare_percent = -1
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -608,11 +608,11 @@ class PrintJob:
                 # We can update task data from the cloud immediately. But ftp has to wait.
                 self._update_task_data()
 
-        old__gcode_file_prepare_percent = self._gcode_file_prepare_percent
+        old_gcode_file_prepare_percent = self._gcode_file_prepare_percent
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
         if self.gcode_state == "PREPARE":
             LOGGER.debug(f"DOWNLOAD PERCENTAGE: {self._gcode_file_prepare_percent}")
-        if self._gcode_file_prepare_percent != old__gcode_file_prepare_percent:
+        if (old_gcode_file_prepare_percent != -1) and (self._gcode_file_prepare_percent != old_gcode_file_prepare_percent):
             if self._gcode_file_prepare_percent == 100:
                 LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
                 if self._client.ftp_enabled:
