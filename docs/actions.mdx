@@ -6,6 +6,215 @@ next: /misc/contributing
 nextTitle: Misc
 ---
 
-* **Send Command**: Sends arbitrary GCODE to the printer. Be careful as it does not check if the printer is running a job
+## Send Command
+
+<Property name="action" type="bambu_lab.extrude_retract" required>
+Sends arbitrary GCODE to the printer. Be careful as it does not check if the printer is running a job
 or not so before invoking this action, you should check the printer state to ensure it is not running a job.
-* **Print 3MF project file**: Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and it must contain gcode (e.g., "Export sliced file" from slicer)
+
+    ```yaml
+    action: bambu_lab.send_command
+    data:
+      command: M104 S200
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="command" type="string" required>
+      The command to perform, e.g. `M104 S200`
+    </Property>
+  </Accordion>
+</Property>
+
+## Print 3MF project file
+
+<Property name="action" type="bambu_lab.print_project_file" required>
+Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and it must contain gcode (e.g., "Export sliced file" from slicer)
+
+    ```yaml
+    action: bambu_lab.print_project_file
+    data:
+      type: Extrude
+      force: false
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="filepath" type="string" required>
+     Filename on SD card (e.g. `test.3mf`)
+    </Property>
+
+    ---
+
+    <Property name="plate" type="number" optional>
+      Plate number to print
+    </Property>
+
+    ---
+
+    <Property name="timelapse" type="boolean" optional>
+      Record timelapse of the print
+    </Property>
+
+    ---
+
+    <Property name="bed_leveling" type="boolean" optional>
+      Perform bed leveling before print
+    </Property>
+
+    ---
+
+    <Property name="flow_cali" type="boolean" optional>
+      Perform flow calibration before print
+    </Property>
+
+    ---
+
+    <Property name="vibration_cali" type="boolean" optional>
+      Perform vibration calibration (aka XY Mech Sweep) before print
+    </Property>
+
+    ---
+
+    <Property name="layer_inspect" type="boolean" optional>
+      Perform first layer inspection during print
+    </Property>
+
+    ---
+
+    <Property name="use_ams" type="boolean" optional>
+      Use AMS for print. Uses external spool otherwise
+    </Property>
+
+    ---
+
+    <Property name="ams_mapping" type="boolean" optional>
+     See [https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738](https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738). ie:  `2,-1,0`
+    </Property>
+
+  </Accordion>
+</Property>
+
+## Extrude or Retract Filament
+
+<Property name="action" type="bambu_lab.extrude_retract" required>
+  Extude or retract filament.
+
+    ```yaml
+    action: bambu_lab.extrude_retract
+    data:
+      type: Extrude
+      force: false
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="type" type="string" required>
+      The type of action to perform. Can be `Extrude` or `Retract`.
+    </Property>
+
+    ---
+
+    <Property name="force" type="boolean" optional>
+      Perform extrusion or retraction if nozzle temperature is below 170ºC.
+    </Property>
+
+  </Accordion>
+</Property>
+
+## Load Filament
+
+<Property name="action" type="bambu_lab.load_filament" required>
+  Extude or retract filament.
+
+    ```yaml
+    action: bambu_lab.load_filament
+    data:
+      tray: 1
+      external_spool: 1
+      temperature: 220
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="tray" type="number" required>
+     The tray number to load filament from.
+    </Property>
+
+    ---
+
+    <Property name="external_spool" type="number" optional>
+      Load filament from the external spool. Enabling the external spool will override the AMS tray value if also set.
+    </Property>
+
+    ---
+
+    <Property name="temperature" type="number" optional>
+      Target nozzle temperature once the filament is loaded. By default uses the midpoint between min and max temperature of the chosen filament.
+    </Property>
+
+  </Accordion>
+</Property>
+
+## Unload Filament
+
+<Property name="action" type="bambu_lab.load_filament" required>
+  Unload filament from the nozzle.
+
+    ```yaml
+    action: bambu_lab.unload_filament
+    ```
+
+</Property>
+
+## Move Axis
+
+<Property name="action" type="bambu_lab.move_axis" required>
+  Move the printer axis.
+
+    ```yaml
+    action: bambu_lab.move_axis
+    data:
+      type: Extrude
+      force: false
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="type" type="string" required>
+      The type of action to perform.
+    </Property>
+
+    ---
+
+    <Property name="force" type="boolean" optional>
+      Perform extrusion or retraction if nozzle temperature is below 170ºC.
+    </Property>
+
+  </Accordion>
+</Property>
+
+## Skip Objects
+
+<Property name="action" type="bambu_lab.move_axis" required>
+  Move the printer axis.
+  
+    ```yaml
+    action: bambu_lab.skip_objects
+    data:
+      objects: 409,1463
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="objects" type="string" required>
+     Object IDs are available from printable objects entity attributes	
+    </Property>
+  </Accordion>
+</Property>
