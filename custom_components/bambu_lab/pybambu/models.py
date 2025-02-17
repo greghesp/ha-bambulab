@@ -506,8 +506,8 @@ class PrintJob:
         self.print_error = 0
         self.print_weight = 0
         self.ams_mapping = []
-        self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self._ams_print_weights = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        self._ams_print_lengths = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.print_length = 0
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
@@ -721,7 +721,7 @@ class PrintJob:
     def _attempt_ftp_download_of_file(self, ftp, file_path):
         file = tempfile.NamedTemporaryFile(delete=True)
         try:
-            LOGGER.debug(f"Attempting download from '{file_path}'")
+            LOGGER.debug(f"Attempting download of '{file_path}'")
             ftp.retrbinary(f"RETR {file_path}", file.write)
             file.flush()
             LOGGER.debug("Successfully downloaded file.")
@@ -733,6 +733,7 @@ class PrintJob:
             LOGGER.debug(f"Unexpected exception at '{file_path}': {type(e)} Args: {e}")
             # Optionally add retry logic here
             pass
+        file.close()
         return None
 
     def _attempt_ftp_download_of_file_from_search_path(self, ftp, filename):
@@ -750,26 +751,35 @@ class PrintJob:
         if self.subtask_name != '':
             if self.subtask_name.endswith('.3mf'):
                 model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.subtask_name)
+                if model_file is not None:
+                    return model_file
             else:
                 model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.3mf")
-                if model_file is None:
-                    model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.gcode.3mf")
+                if model_file is not None:
+                    return model_file
+                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.gcode.3mf")
+                if model_file is not None:
+                    return model_file
 
         # If we didn't find it then try the gcode file
-        if self.gcode_file != '':
+        if (self.gcode_file != '') and (self.subtask_name != self.gcode_file):
             if self.gcode_file.endswith('.3mf'):
                 model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.gcode_file)
+                if model_file is not None:
+                    return model_file
             else:
                 model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.3mf")
-                if model_file is None:
-                    model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.gcode.3mf")
+                if model_file is not None:
+                    return model_file
+                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.gcode.3mf")
+                if model_file is not None:
+                    return model_file
 
-        if model_file is None:
-            # Fall back to find the latest file by timestamp
-            LOGGER.debug("Falling back to searching for latest 3mf file.")
-            model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
-            if model_path is not None:
-                model_file = self._attempt_ftp_download_of_file(ftp, model_path)
+        # Fall back to find the latest file by timestamp
+        LOGGER.debug("Falling back to searching for latest 3mf file.")
+        model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
+        if model_path is not None:
+            model_file = self._attempt_ftp_download_of_file(ftp, model_path)
 
         return model_file
     
@@ -947,6 +957,11 @@ class PrintJob:
                 _printable_objects = {}
                 filament_count = len(self.ams_mapping)
                 plate_filament_count = len(plate.findall('filament'))
+
+                # Reset filament data
+                self._ams_print_weights = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                self._ams_print_lengths = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
                 for metadata in plate:
                     if (metadata.get('key') == 'index'):
                         # Index is the plate number being printed
@@ -956,6 +971,9 @@ class PrintJob:
                         # Now we have the plate number, extract the cover image from the archive
                         self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate_number}.png"))
                         LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
+
+                        # And extract the plate type from the plate json.
+                        self.print_bed_type = json.loads(archive.read(f"Metadata/plate_{plate_number}.json")).get('bed_type')
                     elif (metadata.get('key') == 'weight'):
                         LOGGER.debug(f"Weight: {metadata.get('value')}")
                         self.print_weight = metadata.get('value')
@@ -979,12 +997,14 @@ class PrintJob:
                         # Filament count should be greater than the zero-indexed filament ID
                         if filament_count > filament_index:
                             ams_index = self.ams_mapping[filament_index]
-                            self._ams_print_weights[ams_index] = metadata.get('used_g')
-                            self._ams_print_lengths[ams_index] = metadata.get('used_m')
+                            # We add the filament as you can map multiple slicer filaments to the same physical filament.
+                            self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
+                            self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
                             log_label = f"AMS Tray {ams_index + 1}"
                         elif plate_filament_count > 1:
                             # Multi filament print but the AMS mapping is unknown
-                            # This can happen when loading an old print after restart
+                            # The data is only sent in the mqtt payload once and isn't part of the 'full' data so the integration must be
+                            # live and listening to capture it.
                             log_label = f"AMS Tray unknown"
 
                         LOGGER.debug(f"{log_label}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
@@ -1008,6 +1028,7 @@ class PrintJob:
                     except:
                         LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
                         self._client._device.pick_image.set_image(None)
+                        self._printable_objects = {}
 
             archive.close()
 
@@ -1070,12 +1091,12 @@ class PrintJob:
             return
 
         self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
+        self._ams_print_weights = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        self._ams_print_lengths = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         if self._task_data is None:
             LOGGER.debug("No bambu cloud task data found for printer.")
             self._client._device.cover_image.set_jpeg(None)
             self.print_weight = 0
-            self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             self.print_length = 0
             self.print_bed_type = "unknown"
             self.start_time = None
@@ -1091,8 +1112,6 @@ class PrintJob:
             self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
             self.print_weight = self._task_data.get('weight', self.print_weight)
             ams_print_data = self._task_data.get('amsDetailMapping', [])
-            self._ams_print_weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            self._ams_print_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             if self.print_weight != 0:
                 for ams_data in ams_print_data:
                     index = ams_data['ams']
