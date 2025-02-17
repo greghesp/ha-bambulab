@@ -75,7 +75,7 @@ class WatchdogThread(threading.Thread):
 
 
 class ChamberImageThread(threading.Thread):
-    def __init__(self, client):
+    def __init__(self, client: BambuClient):
         self._client = client
         self._stop_event = threading.Event()
         super().__init__()
@@ -110,7 +110,7 @@ class ChamberImageThread(threading.Thread):
         for i in range(0, 32 - len(access_code)):
             auth_data += struct.pack("<x")
 
-        ctx = create_local_ssl_context()
+        ctx = self._client.local_tls_context
 
         jpeg_start = bytearray([0xff, 0xd8, 0xff, 0xe0])
         jpeg_end = bytearray([0xff, 0xd9])
@@ -186,7 +186,7 @@ class ChamberImageThread(threading.Thread):
 
                                 # Reset buffer
                                 img = None
-                            # else:     
+                            # else:
                             # Otherwise we need to continue looping without reseting the buffer to receive the remaining data
                             # and without delaying.
 
@@ -343,6 +343,7 @@ class BambuClient:
         self._enable_camera = config.get('enable_camera', True)
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
         self._enable_timelapse = config.get('enable_timelapse', False)
+        self._disable_ssl_verify = config.get('disable_ssl_verify', False)
 
         self._connected = False
         self._port = 1883
@@ -367,7 +368,7 @@ class BambuClient:
     @property
     def user_language(self):
         return self._user_language
-    
+
     @property
     def connected(self):
         """Return if connected to server"""
@@ -390,7 +391,7 @@ class BambuClient:
     @property
     def camera_enabled(self):
         return self._enable_camera
-    
+
     def callback(self, event: str):
         if self._callback is not None:
             self._callback(event)
@@ -413,12 +414,19 @@ class BambuClient:
     def timelapse_enabled(self):
         return self._device.supports_feature(Features.TIMELAPSE) and self._enable_timelapse
 
+    @property
+    def local_tls_context(self):
+        if self._disable_ssl_verify:
+            return create_insecure_ssl_context()
+        else:
+            return create_local_ssl_context()
+
     def set_timelapse_enabled(self, enable):
         self._enable_timelapse = enable
 
     def setup_tls(self):
         if self._local_mqtt:
-            self.client.tls_set_context(create_local_ssl_context())
+            self.client.tls_set_context(self.local_tls_context)
         else:
             self.client.tls_set()
 
@@ -520,7 +528,7 @@ class BambuClient:
         else:
             LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._on_disconnect()
-    
+
     def _on_disconnect(self):
         LOGGER.debug("_on_disconnect: Lost connection to the printer")
         self._loaded_slicer_settings = False
@@ -632,7 +640,7 @@ class BambuClient:
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS:
-        ftp = ImplicitFTP_TLS(context=create_local_ssl_context())
+        ftp = ImplicitFTP_TLS(context=self.local_tls_context)
         ftp.connect(host=self._device.info.ip_address, port=990, timeout=15)
         ftp.login(user='bblp', passwd=self._access_code)
         ftp.prot_p()
@@ -646,7 +654,7 @@ class BambuClient:
 
         self.received_info = False
         self.received_push = False
-        
+
         def on_message(client, userdata, message):
             json_data = json.loads(message.payload)
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
@@ -678,7 +686,7 @@ class BambuClient:
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(None, self.setup_tls)
 
-        host = self.host if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host        
+        host = self.host if self._local_mqtt else self.bambu_cloud.cloud_mqtt_host
         if self._local_mqtt:
             self.client.username_pw_set("bblp", password=self._access_code)
         else:
@@ -729,4 +737,11 @@ def create_local_ssl_context():
     context.verify_flags &= ~ssl.VERIFY_X509_STRICT
     # Workaround because some users get this error despite SNI: "certificate verify failed: IP address mismatch"
     context.check_hostname = False
+    return context
+
+@functools.lru_cache(maxsize=1)
+def create_insecure_ssl_context():
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
     return context
