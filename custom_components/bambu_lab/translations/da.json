@@ -73,6 +73,15 @@
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Avancerede muligheder",
+            "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
+            "data": {
+              "disable_ssl_verify": "Deaktiver SSL -verifikation"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Avancerede muligheder",
+            "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
+            "data": {
+              "disable_ssl_verify": "Deaktiver SSL -verifikation"
+            }
+          }
         }
       }
     }

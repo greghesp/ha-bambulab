@@ -1001,11 +1001,14 @@ class PrintJob:
                             self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
                             self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
                             log_label = f"AMS Tray {ams_index + 1}"
-                        elif plate_filament_count > 1:
+                        elif plate_filament_count > 0:
                             # Multi filament print but the AMS mapping is unknown
                             # The data is only sent in the mqtt payload once and isn't part of the 'full' data so the integration must be
                             # live and listening to capture it.
+                            LOGGER.debug(f"filament_index: {filament_index}")
                             log_label = f"AMS Tray unknown"
+                        else:
+                            LOGGER.debug(f"plate_filament_count: {plate_filament_count}")
 
                         LOGGER.debug(f"{log_label}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
 

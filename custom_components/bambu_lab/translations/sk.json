@@ -73,6 +73,15 @@
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
+            "data": {
+              "disable_ssl_verify": "Zakázať overenie SSL"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
+            "data": {
+              "disable_ssl_verify": "Zakázať overenie SSL"
+            }
+          }
         }
       }
     }
