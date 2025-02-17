@@ -170,9 +170,6 @@
       },
       "online": {
         "name": "Online"
-      },
-      "firmware_update": {
-        "name": "Firmware Status"
       }
     },
     "button": {
@@ -626,6 +623,11 @@
       },
       "timelapse": {
         "name": "Laden Sie den neuesten Zeitplan aus dem Drucker"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Firmware Status"
       }
     }
   },

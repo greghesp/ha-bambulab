@@ -170,9 +170,6 @@
       },
       "online": {
         "name": "Pripojené"
-      },
-      "firmware_update": {
-        "name": "Aktualizácia firmvéru"
       }
     },
     "button": {
@@ -626,6 +623,11 @@
       },
       "timelapse": {
         "name": "Načítať najnovší časový čas z tlačiarne"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Aktualizácia firmvéru"
       }
     }
   },

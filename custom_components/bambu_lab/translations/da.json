@@ -170,9 +170,6 @@
       },
       "online": {
         "name": "Online"
-      },
-      "firmware_update": {
-        "name": "Firmware opdatering"
       }
     },
     "button": {
@@ -626,6 +623,11 @@
       },
       "timelapse": {
         "name": "Indlæs den seneste tidslap fra printer"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Firmware opdatering"
       }
     }
   },

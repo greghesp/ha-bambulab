@@ -170,9 +170,6 @@
       },
       "online": {
         "name": "Online"
-      },
-      "firmware_update": {
-        "name": "Firmware update"
       }
     },
     "button": {
@@ -626,6 +623,11 @@
       },
       "timelapse": {
         "name": "Load latest timelapse from printer"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Firmware update"
       }
     }
   },

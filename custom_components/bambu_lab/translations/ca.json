@@ -170,9 +170,6 @@
       },
       "online": {
         "name": "En línia"
-      },
-      "firmware_update": {
-        "name": "Actualització de Firmware"
       }
     },
     "button": {
@@ -626,6 +623,11 @@
       },
       "timelapse": {
         "name": "Carregueu el Timelapse més recent de la impressora"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Actualització de Firmware"
       }
     }
   },

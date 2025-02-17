@@ -170,9 +170,6 @@
       },
       "online": {
         "name": "온라인"
-      },
-      "firmware_update": {
-        "name": "펌웨어 업데이트"
       }
     },
     "button": {
@@ -626,6 +623,11 @@
       },
       "timelapse": {
         "name": "프린터에서 최신 타임 랩스를로드하십시오"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "펌웨어 업데이트"
       }
     }
   },
