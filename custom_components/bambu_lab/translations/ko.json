@@ -73,6 +73,15 @@
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
           "usage_hours": "현재 사용 시간 (선택 사항):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "고급 옵션",
+            "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
+            "data": {
+              "disable_ssl_verify": "SSL 확인을 비활성화합니다"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
           "usage_hours": "현재 사용 시간 (선택 사항):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "고급 옵션",
+            "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
+            "data": {
+              "disable_ssl_verify": "SSL 확인을 비활성화합니다"
+            }
+          }
         }
       }
     }

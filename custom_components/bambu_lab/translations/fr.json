@@ -73,6 +73,15 @@
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Options avancées",
+            "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
+            "data": {
+              "disable_ssl_verify": "Désactiver la vérification SSL"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Options avancées",
+            "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
+            "data": {
+              "disable_ssl_verify": "Désactiver la vérification SSL"
+            }
+          }
         }
       }
     }

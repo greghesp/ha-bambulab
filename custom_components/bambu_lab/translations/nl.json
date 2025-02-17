@@ -73,6 +73,15 @@
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
           "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Geavanceerde opties",
+            "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
+            "data": {
+              "disable_ssl_verify": "Schakel SSL -verificatie uit"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
           "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Geavanceerde opties",
+            "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
+            "data": {
+              "disable_ssl_verify": "Schakel SSL -verificatie uit"
+            }
+          }
         }
       }
     }
