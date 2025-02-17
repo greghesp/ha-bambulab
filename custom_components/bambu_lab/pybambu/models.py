@@ -724,10 +724,10 @@ class PrintJob:
             LOGGER.debug(f"Attempting download of '{file_path}'")
             ftp.retrbinary(f"RETR {file_path}", file.write)
             file.flush()
-            LOGGER.debug("Successfully downloaded file.")
+            LOGGER.debug(f"Successfully downloaded '{file_path}'.")
             return file
         except ftplib.error_perm as e:
-             if '550' not in str(e.args): # 550 is unavailable/permissions issues.
+             if '550' not in str(e.args): # 550 is unavailable.
                  LOGGER.debug(f"Failed to download model at '{file_path}': {e}")
         except Exception as e:
             LOGGER.debug(f"Unexpected exception at '{file_path}': {type(e)} Args: {e}")
