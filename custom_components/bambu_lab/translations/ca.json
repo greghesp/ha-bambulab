@@ -73,6 +73,15 @@
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
           "usage_hours": "Quantitat d'hores d'ús (opcional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opcions avançades",
+            "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
+            "data": {
+              "disable_ssl_verify": "Desactiva la verificació SSL"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
           "usage_hours": "Quantitat d'hores d'ús (opcional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opcions avançades",
+            "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
+            "data": {
+              "disable_ssl_verify": "Desactiva la verificació SSL"
+            }
+          }
         }
       }
     }

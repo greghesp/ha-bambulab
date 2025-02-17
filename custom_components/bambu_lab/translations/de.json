@@ -73,6 +73,15 @@
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Erweiterte Optionen",
+            "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
+            "data": {
+              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Erweiterte Optionen",
+            "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
+            "data": {
+              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung"
+            }
+          }
         }
       }
     }

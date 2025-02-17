@@ -172,7 +172,6 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
 
-
     cards = BambuLabCardRegistration(hass)
     await cards.async_unregister()
 

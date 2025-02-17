@@ -60,6 +60,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client = BambuClient(config)
             
         self._updatedDevice = False
+        self._shutdown = False
         self.data = self.get_model()
         self._eventloop = asyncio.get_running_loop()
         # Pass LOGGERFORHA logger into HA as otherwise it generates a debug output line every single time we tell it we have an update
@@ -86,12 +87,17 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.shutdown()
 
     def event_handler(self, event: str):
+        if self._shutdown:
+            # Handle race conditions when the integration is being deleted by re-registering and existing device.
+            return
+        
         # The callback comes in on the MQTT thread. Need to jump to the HA main thread to guarantee thread safety.
         self._eventloop.call_soon_threadsafe(self.event_handler_internal, event)
 
     def event_handler_internal(self, event: str):
-        # if event != "event_printer_chamber_image_update":
-        #     LOGGER.debug(f"EVENT: {event}")
+        if self._shutdown:
+            # Handle race conditions when the integration is being deleted by re-registering and existing device.
+            return
 
         if event == "event_printer_info_update":
             self._update_device_info()
@@ -153,6 +159,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def shutdown(self) -> None:
         """ Halt the MQTT listener thread """
+        self._shutdown = True
         self.client.disconnect()
 
     async def _publish(self, msg):
@@ -335,7 +342,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["use_ams"] = use_ams
         command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
 
-        self.coordinator.client.publish(command)
+        self.client.publish(command)
 
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data() called")

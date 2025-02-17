@@ -1,133 +1,151 @@
 {
-    "name": "ha-bambulab",
-    "description": "Documentation for the ha-bambulab integration to Home Assistant",
-    "logo": {
-        "light": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/icon@2x.png",
-        "dark": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/dark_icon@2x.png"
+  "name": "ha-bambulab",
+  "description": "Documentation for the ha-bambulab integration to Home Assistant",
+  "logo": {
+    "light": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/icon@2x.png",
+    "dark": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/dark_icon@2x.png"
+  },
+  "favicon": {
+    "light": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/icon@2x.png",
+    "dark": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/dark_icon@2x.png"
+  },
+  "theme": {
+    "primary": "#22a041"
+  },
+  "tabs": [
+    {
+      "id": "root",
+      "title": "Integration",
+      "href": "/"
     },
-    "favicon": {
-        "light": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/icon@2x.png",
-        "dark": "https://rawcdn.githack.com/home-assistant/brands/bfecc94a4e84b3107445849311f43d85f850f63f/custom_integrations/bambu_lab/dark_icon@2x.png"
+    {
+      "id": "frontend",
+      "title": "Frontend",
+      "href": "/frontend"
     },
-    "tabs": [
-        {
-            "id": "root",
-            "title": "Integration",
-            "href": "/"
-        },
-        {
-            "id": "frontend",
-            "title": "Frontend",
-            "href": "/frontend"
-        },
-        {
-            "id": "issues",
-            "title": "Issues",
-            "href": "/issues"
-        }
-      ],
+    {
+      "id": "issues",
+      "title": "Issues",
+      "href": "/issues"
+    }
+  ],
 
-    "sidebar": [
+  "sidebar": [
+    {
+      "group": "Getting Started",
+      "tab": "root",
+      "pages": [
         {
-            "group": "Getting Started",
-            "tab": "root",
-            "pages": [
-                {
-                    "title": "Overview",
-                    "href": "/",
-                    "icon": "book"
-                },
-                {
-                    "title": "Installation",
-                    "href": "installation",
-                    "icon": "rocket"
-                },
-                {
-                    "title": "Setup",
-                    "href": "setup",
-                    "icon": "cog"
-                }
-            ]
+          "title": "Overview",
+          "href": "/",
+          "icon": "book"
         },
         {
-            "group": "Features",
-            "tab": "root",
-            "pages": [
-                {
-                    "title": "Entities",
-                    "href": "entities",
-                    "icon": "sitemap"
-                },
-                {
-                    "title": "Device Triggers",
-                    "href": "device-triggers",
-                    "icon": "terminal"
-                },
-                {
-                    "title": "Actions",
-                    "href": "actions",
-                    "icon": "microchip"
-                }
-            ]
+          "title": "Installation",
+          "href": "installation",
+          "icon": "rocket"
         },
         {
-            "group": "Getting Started",
-            "tab": "frontend",
-            "pages": [
-                {
-                    "title": "Overview",
-                    "href": "/frontend",
-                    "icon": "book"
-                }
-            ]
+          "title": "Setup",
+          "href": "setup",
+          "icon": "cog"
+        }
+      ]
+    },
+    {
+      "group": "Features",
+      "tab": "root",
+      "pages": [
+        {
+          "title": "Entities",
+          "href": "entities",
+          "icon": "sitemap"
         },
         {
-            "group": "Custom Cards",
-            "tab": "frontend",
-            "pages": [
-                {
-                    "title": "AMS Card",
-                    "href": "/frontend/cards/ams-card",
-                    "icon": "palette"
-                }
-            ]
+          "title": "Device Triggers",
+          "href": "device-triggers",
+          "icon": "terminal"
         },
         {
-            "group": "Issues",
-            "tab": "issues",
-            "pages": [
-                {
-                    "title": "Overview",
-                    "href": "/issues",
-                    "icon": "book"
-                }
-            ]
+          "title": "Actions",
+          "href": "actions",
+          "icon": "microchip"
+        }
+      ]
+    },
+    {
+      "group": "Getting Started",
+      "tab": "frontend",
+      "pages": [
+        {
+          "title": "Overview",
+          "href": "/frontend",
+          "icon": "book"
+        }
+      ]
+    },
+    {
+      "group": "Custom Cards",
+      "tab": "frontend",
+      "pages": [
+        {
+          "title": "AMS Card",
+          "href": "/frontend/cards/ams-card",
+          "icon": "palette"
         },
         {
-            "group": "Misc",
-            "tab": "frontend",
-            "pages": [
-                {
-                    "title": "Contributing",
-                    "href": "/misc/contributing",
-                    "icon": "heart"
-                }
-            ]
-         },
-         {
-            "group": "Misc",
-            "tab": "root",
-            "pages": [
-                {
-                    "title": "Contributing",
-                    "href": "/misc/contributing",
-                    "icon": "heart"
-                }
-            ]
-         }
-      ],
-      "social": {
-        "discord": "rsUHAW3DKz",
-        "github": "greghesp/ha-bambulab"
-      }
+          "title": "Spool Card",
+          "href": "/frontend/cards/spool-card",
+          "icon": "circle"
+        },
+        {
+          "title": "Print Control Card",
+          "href": "/frontend/cards/print-control-card",
+          "icon": "play"
+        },
+        {
+          "title": "Print Status Card",
+          "href": "/frontend/cards/print-status-card",
+          "icon": "chart-column"
+        }
+      ]
+    },
+    {
+      "group": "Issues",
+      "tab": "issues",
+      "pages": [
+        {
+          "title": "Overview",
+          "href": "/issues",
+          "icon": "book"
+        }
+      ]
+    },
+    {
+      "group": "Misc",
+      "tab": "frontend",
+      "pages": [
+        {
+          "title": "Contributing",
+          "href": "/misc/contributing",
+          "icon": "heart"
+        }
+      ]
+    },
+    {
+      "group": "Misc",
+      "tab": "root",
+      "pages": [
+        {
+          "title": "Contributing",
+          "href": "/misc/contributing",
+          "icon": "heart"
+        }
+      ]
+    }
+  ],
+  "social": {
+    "discord": "rsUHAW3DKz",
+    "github": "greghesp/ha-bambulab"
   }
+}

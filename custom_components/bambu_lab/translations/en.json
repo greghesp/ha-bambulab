@@ -73,6 +73,15 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These options are only needed if you have a non-standard setup.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification"
+            }
+          }
         }
       }
     }
@@ -132,6 +141,15 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These options are only needed if you have a non-standard setup.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification"
+            }
+          }
         }
       }
     }
