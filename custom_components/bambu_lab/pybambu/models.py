@@ -77,7 +77,6 @@ class Device:
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
-        self.ftp_cache = {}
 
     def print_update(self, data) -> bool:
         send_event = False
@@ -675,77 +674,6 @@ class PrintJob:
 
         return (old_data != f"{self.__dict__}")
 
-    # The task list is of the following form with a 'hits' array with typical 20 entries.
-    #
-    # "total": 531,
-    # "hits": [
-    #     {
-    #     "id": 35237965,
-    #     "designId": 0,
-    #     "designTitle": "",
-    #     "instanceId": 0,
-    #     "modelId": "REDACTED",
-    #     "title": "REDACTED",
-    #     "cover": "REDACTED",
-    #     "status": 4,
-    #     "feedbackStatus": 0,
-    #     "startTime": "2023-12-21T19:02:16Z",
-    #     "endTime": "2023-12-21T19:02:35Z",
-    #     "weight": 34.62,
-    #     "length": 1161,
-    #     "costTime": 10346,
-    #     "profileId": 35276233,
-    #     "plateIndex": 1,
-    #     "plateName": "",
-    #     "deviceId": "REDACTED",
-    #     "amsDetailMapping": [
-    #         {
-    #         "ams": 4,
-    #         "sourceColor": "F4D976FF",
-    #         "targetColor": "F4D976FF",
-    #         "filamentId": "GFL99",
-    #         "filamentType": "PLA",
-    #         "targetFilamentType": "",
-    #         "weight": 34.62
-    #         }
-    #     ],
-    #     "mode": "cloud_file",
-    #     "isPublicProfile": false,
-    #     "isPrintable": true,
-    #     "deviceModel": "P1P",
-    #     "deviceName": "Bambu P1P",
-    #     "bedType": "textured_plate"
-    #     },
-
-
-    ftp_search_paths = ['/', '/cache/']
-
-    def _cache_ftp_path(self, path: str, ftp):
-        try:
-            LOGGER.debug(f"Running FTP nlst for '{path}'")
-            self._client._device.ftp_cache[path] = ftp.nlst(path)
-            LOGGER.debug(f"Completed FTP nlst for '{path}'")
-        except Exception as e:
-            LOGGER.error(f"FTP nlst Exception. Type: {type(e)} Args: {e}")
-            pass
-
-    def _find_file_in_cache(self, filename: str) -> Union[str, None]:
-        LOGGER.debug(f"Looking for '{filename}'")
-        # Attempt to find a file in one of many known directories
-        for search_path in self.ftp_search_paths:
-            cached_files = self._client._device.ftp_cache.get(search_path, [])
-
-            # X1 includes the path in the returned files for an NLST command
-            filepath = f"{search_path}{filename}"
-            if filepath in cached_files:
-                return filepath
-            
-            # P1 does not include the path in the returned files for an NLST command
-            if filename in cached_files:
-                return filepath
-            
-        return None
-
     # FTP implementation differences between P1 and X1 printers:
     # - X1 includes the path in the returned filenames for the NLST command
     # - P1 just returns the bare filename
@@ -789,44 +717,61 @@ class PrintJob:
     #     FILE: /cache/Lovers Valentine Day Shadowbox.3mf
     # 
 
-    def _find_model_path(self, ftp) -> Union[str, None]:
-        model_path = None
-        for attempt in range(2):
-            # If we fail to find it on the first pass, refresh the ftp file cache and try again
-            if attempt == 1:
-                for search_path in self.ftp_search_paths:
-                    self._cache_ftp_path(search_path, ftp)
+    ftp_search_paths = ['/', '/cache/']
+    def _attempt_ftp_download_of_file(self, ftp, file_path):
+        file = tempfile.NamedTemporaryFile(delete=True)
+        try:
+            LOGGER.debug(f"Attempting download from '{file_path}'")
+            ftp.retrbinary(f"RETR {file_path}", file.write)
+            file.flush()
+            LOGGER.debug("Successfully downloaded file.")
+            return file
+        except ftplib.error_perm as e:
+             if '550' not in str(e.args): # 550 is unavailable/permissions issues.
+                 LOGGER.debug(f"Failed to download model at '{file_path}': {e}")
+        except Exception as e:
+            LOGGER.debug(f"Unexpected exception at '{file_path}': {type(e)} Args: {e}")
+            # Optionally add retry logic here
+            pass
+        return None
 
-            # First test if the subtaskname exists as a 3mf
-            if self.subtask_name != '':
-                model_path = self._find_file_in_cache(filename=self.subtask_name)
-                if model_path is not None:
-                    break
-                model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.3mf")
-                if model_path is not None:
-                    break
-                model_path = self._find_file_in_cache(filename=f"{self.subtask_name}.gcode.3mf")
-                if model_path is not None:
-                    break
+    def _attempt_ftp_download_of_file_from_search_path(self, ftp, filename):
+        for path in self.ftp_search_paths:
+            file_path = f"{path}{filename.lstrip('/')}"
+            file = self._attempt_ftp_download_of_file(ftp, file_path)
+            if file is not None:
+                return file
+        return None
 
-            # If we didn't find it then try the gcode file
-            if self.gcode_file != '':
-                model_path = self._find_file_in_cache(filename=self.gcode_file)
-                if model_path is not None:
-                    break
-                model_path = self._find_file_in_cache(filename=f"{self.gcode_file}.3mf")
-                if model_path is not None:
-                    break
-                model_path = self._find_file_in_cache(filename=f"{self.gcode_file}.gcode.3mf")
-                if model_path is not None:
-                    break
+    def _attempt_ftp_download(self, ftp) -> Union[str, None]:
+        model_file = None
 
-        if model_path is None:
+        # First test if the subtaskname exists as a 3mf
+        if self.subtask_name != '':
+            if self.subtask_name.endswith('.3mf'):
+                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.subtask_name)
+            else:
+                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.3mf")
+                if model_file is None:
+                    model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.gcode.3mf")
+
+        # If we didn't find it then try the gcode file
+        if self.gcode_file != '':
+            if self.gcode_file.endswith('.3mf'):
+                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.gcode_file)
+            else:
+                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.3mf")
+                if model_file is None:
+                    model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.gcode.3mf")
+
+        if model_file is None:
             # Fall back to find the latest file by timestamp
             LOGGER.debug("Falling back to searching for latest 3mf file.")
             model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
+            if model_path is not None:
+                model_file = self._attempt_ftp_download_of_file(ftp, model_path)
 
-        return model_path
+        return model_file
     
     def _find_latest_file(self, ftp, search_paths, extensions: list):
         # Look for the newest file with extension in directory.
@@ -963,126 +908,161 @@ class PrintJob:
 
         # Open the FTP connection
         ftp = self._client.ftp_connection()
-        model_path = self._find_model_path(ftp)
+        model_file = self._attempt_ftp_download(ftp)
+        ftp.quit()
 
-        if model_path is None:
+        if model_file is None:
             LOGGER.debug("No model file found.")
             return
 
-        # Create a temporary file we can download the 3mf into
-        with tempfile.NamedTemporaryFile(delete=True) as f:
-            try:
-                # Fetch the 3mf from FTP and close the connection
-                LOGGER.debug(f"Downloading model: '{model_path}'")
-                ftp.retrbinary(f"RETR {model_path}", f.write)
-                f.flush()
-                ftp.quit()
-                LOGGER.debug("Model download completed.")
-                LOGGER.debug(f"File size is {os.path.getsize(f.name)} bytes")
+        result = False
+        try:
+            LOGGER.debug(f"File size is {os.path.getsize(model_file.name)} bytes")
 
-                # Open the 3mf zip archive
-                with ZipFile(f) as archive:
-                    # Extract the slicer XML config and parse the plate tree
-                    plate = ElementTree.fromstring(archive.read('Metadata/slice_info.config')).find('plate')
-                    
-                    # Iterate through each config element and extract the data
-                    # Example contents:
-                    # {'key': 'index', 'value': '2'}
-                    # {'key': 'printer_model_id', 'value': 'C12'}
-                    # {'key': 'nozzle_diameters', 'value': '0.4'}
-                    # {'key': 'timelapse_type', 'value': '0'}
-                    # {'key': 'prediction', 'value': '5935'}
-                    # {'key': 'weight', 'value': '20.91'}
-                    # {'key': 'outside', 'value': 'false'}
-                    # {'key': 'support_used', 'value': 'false'}
-                    # {'key': 'label_object_enabled', 'value': 'true'}
-                    # {'identify_id': '123', 'name': 'ModelObjectOne.stl', 'skipped': 'false'}
-                    # {'identify_id': '394', 'name': 'ModelObjectTwo.stl', 'skipped': 'false'}
-                    # {'id': '1', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#000000', 'used_m': '5.45', 'used_g': '17.32'}
-                    # {'id': '2', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#8D8C8F', 'used_m': '0.84', 'used_g': '2.66'}
-                    # {'id': '3', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#FFFFFF', 'used_m': '0.29', 'used_g': '0.93'}
-                    
-                    # Start a total print length count to be compiled from each filament
-                    print_length = 0
-                    plate_number = None
-                    _printable_objects = {}
-                    filament_count = len(self.ams_mapping)
-                    plate_filament_count = len(plate.findall('filament'))
-                    for metadata in plate:
-                        if (metadata.get('key') == 'index'):
-                            # Index is the plate number being printed
-                            plate_number = metadata.get('value')
-                            LOGGER.debug(f"Plate: {plate_number}")
-                            
-                            # Now we have the plate number, extract the cover image from the archive
-                            self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate_number}.png"))
-                            LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
-                        elif (metadata.get('key') == 'weight'):
-                            LOGGER.debug(f"Weight: {metadata.get('value')}")
-                            self.print_weight = metadata.get('value')
-                        elif (metadata.get('key') == 'prediction'):
-                            # Estimated print length in seconds
-                            LOGGER.debug(f"Print time: {metadata.get('value')}s")
-                        elif (metadata.tag == 'object'):
-                            # Get the list of printable objects present on the plate before slicing.
-                            # This includes hidden objects which need to be filtered out later.
-                            if metadata.get('skipped') == f"false":
-                                _printable_objects[metadata.get('identify_id')] = metadata.get('name')
-                        elif (metadata.tag == 'filament'):
-                            # Filament used for the current print job. The plate info contains filaments
-                            # identified in the order they appear in the slicer. These IDs must be
-                            # mapped to the AMS tray mappings provided by MQTT print.ams_mapping
+            # Open the 3mf zip archive
+            with ZipFile(model_file) as archive:
+                # Extract the slicer XML config and parse the plate tree
+                plate = ElementTree.fromstring(archive.read('Metadata/slice_info.config')).find('plate')
+                
+                # Iterate through each config element and extract the data
+                # Example contents:
+                # {'key': 'index', 'value': '2'}
+                # {'key': 'printer_model_id', 'value': 'C12'}
+                # {'key': 'nozzle_diameters', 'value': '0.4'}
+                # {'key': 'timelapse_type', 'value': '0'}
+                # {'key': 'prediction', 'value': '5935'}
+                # {'key': 'weight', 'value': '20.91'}
+                # {'key': 'outside', 'value': 'false'}
+                # {'key': 'support_used', 'value': 'false'}
+                # {'key': 'label_object_enabled', 'value': 'true'}
+                # {'identify_id': '123', 'name': 'ModelObjectOne.stl', 'skipped': 'false'}
+                # {'identify_id': '394', 'name': 'ModelObjectTwo.stl', 'skipped': 'false'}
+                # {'id': '1', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#000000', 'used_m': '5.45', 'used_g': '17.32'}
+                # {'id': '2', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#8D8C8F', 'used_m': '0.84', 'used_g': '2.66'}
+                # {'id': '3', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#FFFFFF', 'used_m': '0.29', 'used_g': '0.93'}
+                
+                # Start a total print length count to be compiled from each filament
+                print_length = 0
+                plate_number = None
+                _printable_objects = {}
+                filament_count = len(self.ams_mapping)
+                plate_filament_count = len(plate.findall('filament'))
+                for metadata in plate:
+                    if (metadata.get('key') == 'index'):
+                        # Index is the plate number being printed
+                        plate_number = metadata.get('value')
+                        LOGGER.debug(f"Plate: {plate_number}")
+                        
+                        # Now we have the plate number, extract the cover image from the archive
+                        self._client._device.cover_image.set_jpeg(archive.read(f"Metadata/plate_{plate_number}.png"))
+                        LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
+                    elif (metadata.get('key') == 'weight'):
+                        LOGGER.debug(f"Weight: {metadata.get('value')}")
+                        self.print_weight = metadata.get('value')
+                    elif (metadata.get('key') == 'prediction'):
+                        # Estimated print length in seconds
+                        LOGGER.debug(f"Print time: {metadata.get('value')}s")
+                    elif (metadata.tag == 'object'):
+                        # Get the list of printable objects present on the plate before slicing.
+                        # This includes hidden objects which need to be filtered out later.
+                        if metadata.get('skipped') == f"false":
+                            _printable_objects[metadata.get('identify_id')] = metadata.get('name')
+                    elif (metadata.tag == 'filament'):
+                        # Filament used for the current print job. The plate info contains filaments
+                        # identified in the order they appear in the slicer. These IDs must be
+                        # mapped to the AMS tray mappings provided by MQTT print.ams_mapping
 
-                            # Zero-index the filament ID
-                            filament_index = int(metadata.get('id')) - 1
-                            log_label = f"External spool"
-                            
-                            # Filament count should be greater than the zero-indexed filament ID
-                            if filament_count > filament_index:
-                                ams_index = self.ams_mapping[filament_index]
-                                self._ams_print_weights[ams_index] = metadata.get('used_g')
-                                self._ams_print_lengths[ams_index] = metadata.get('used_m')
-                                log_label = f"AMS Tray {ams_index + 1}"
-                            elif plate_filament_count > 1:
-                                # Multi filament print but the AMS mapping is unknown
-                                # This can happen when loading an old print after restart
-                                log_label = f"AMS Tray unknown"
+                        # Zero-index the filament ID
+                        filament_index = int(metadata.get('id')) - 1
+                        log_label = f"External spool"
+                        
+                        # Filament count should be greater than the zero-indexed filament ID
+                        if filament_count > filament_index:
+                            ams_index = self.ams_mapping[filament_index]
+                            self._ams_print_weights[ams_index] = metadata.get('used_g')
+                            self._ams_print_lengths[ams_index] = metadata.get('used_m')
+                            log_label = f"AMS Tray {ams_index + 1}"
+                        elif plate_filament_count > 1:
+                            # Multi filament print but the AMS mapping is unknown
+                            # This can happen when loading an old print after restart
+                            log_label = f"AMS Tray unknown"
 
-                            LOGGER.debug(f"{log_label}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
+                        LOGGER.debug(f"{log_label}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
 
-                            # Increase the total print length
-                            print_length += float(metadata.get('used_m'))
-                    
-                    self.print_length = print_length
+                        # Increase the total print length
+                        print_length += float(metadata.get('used_m'))
+                
+                self.print_length = print_length
 
-                    if plate_number is not None:
-                        try:
-                            image = archive.read(f"Metadata/pick_{plate_number}.png")
-                            self._client._device.pick_image.set_image(image)
-                            # Process the pick image for objects
-                            pick_image = Image.open(archive.open(f"Metadata/pick_{plate_number}.png"))
-                            identify_ids = self._identify_objects_in_pick_image(image=pick_image)
-                            
-                            # Filter the printable objects from slice_info.config, removing
-                            # any that weren't detected in the pick image
-                            self._printable_objects = {k: _printable_objects[k] for k in identify_ids if k in _printable_objects}
-                        except:
-                            LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
-                            self._client._device.pick_image.set_image(None)
+                if plate_number is not None:
+                    try:
+                        image = archive.read(f"Metadata/pick_{plate_number}.png")
+                        self._client._device.pick_image.set_image(image)
+                        # Process the pick image for objects
+                        pick_image = Image.open(archive.open(f"Metadata/pick_{plate_number}.png"))
+                        identify_ids = self._identify_objects_in_pick_image(image=pick_image)
+                        
+                        # Filter the printable objects from slice_info.config, removing
+                        # any that weren't detected in the pick image
+                        self._printable_objects = {k: _printable_objects[k] for k in identify_ids if k in _printable_objects}
+                    except:
+                        LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
+                        self._client._device.pick_image.set_image(None)
 
-                archive.close()
+            archive.close()
 
-                end_time = datetime.now()
-                LOGGER.info(f"Done updating task data by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
-                self._client.callback("event_printer_data_update")
-                return True
-            except ftplib.error_perm as e:
-                LOGGER.warning(f"Failed to download model data: {e}. Model path: {model_path}")
-                # Optionally add retry logic here
-                return False
-            except Exception as e:
-                LOGGER.error(f"Unexpected error downloading model data: {e}")
-                return False
+            end_time = datetime.now()
+            LOGGER.info(f"Done updating task data by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
+            self._client.callback("event_printer_data_update")
+            result = True
+        except Exception as e:
+            LOGGER.error(f"Unexpected error parsing model data: {e}")
+        
+        # Close and delete temporary file
+        model_file.close();
+        return result
+
+    # The task list is of the following form with a 'hits' array with typical 20 entries.
+    #
+    # "total": 531,
+    # "hits": [
+    #     {
+    #     "id": 35237965,
+    #     "designId": 0,
+    #     "designTitle": "",
+    #     "instanceId": 0,
+    #     "modelId": "REDACTED",
+    #     "title": "REDACTED",
+    #     "cover": "REDACTED",
+    #     "status": 4,
+    #     "feedbackStatus": 0,
+    #     "startTime": "2023-12-21T19:02:16Z",
+    #     "endTime": "2023-12-21T19:02:35Z",
+    #     "weight": 34.62,
+    #     "length": 1161,
+    #     "costTime": 10346,
+    #     "profileId": 35276233,
+    #     "plateIndex": 1,
+    #     "plateName": "",
+    #     "deviceId": "REDACTED",
+    #     "amsDetailMapping": [
+    #         {
+    #         "ams": 4,
+    #         "sourceColor": "F4D976FF",
+    #         "targetColor": "F4D976FF",
+    #         "filamentId": "GFL99",
+    #         "filamentType": "PLA",
+    #         "targetFilamentType": "",
+    #         "weight": 34.62
+    #         }
+    #     ],
+    #     "mode": "cloud_file",
+    #     "isPublicProfile": false,
+    #     "isPrintable": true,
+    #     "deviceModel": "P1P",
+    #     "deviceName": "Bambu P1P",
+    #     "bedType": "textured_plate"
+    #     },
 
     def _download_task_data_from_cloud(self):
         # Must have an auth token for this to be possible
