@@ -365,7 +365,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="print_bed_type",
         icon="mdi:file",
         value_fn=lambda self: self.coordinator.get_model().print_job.print_bed_type,
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection
+        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled(Options.FTP)
     ),
     BambuLabSensorEntityDescription(
         key="print_weight",

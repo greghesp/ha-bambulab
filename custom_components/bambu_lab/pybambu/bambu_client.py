@@ -641,7 +641,7 @@ class BambuClient:
 
     def ftp_connection(self) -> ImplicitFTP_TLS:
         ftp = ImplicitFTP_TLS(context=self.local_tls_context)
-        ftp.connect(host=self._device.info.ip_address, port=990, timeout=5)
+        ftp.connect(host=self._device.info.ip_address, port=990, timeout=15)
         ftp.login(user='bblp', passwd=self._access_code)
         ftp.prot_p()
         return ftp

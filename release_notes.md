@@ -1,5 +1,12 @@
+### V2.1.4
+- ???
+
+### V2.1.3
+- Fix lan mode ftp download regression
+
 ### V2.1.2
-- ?
+- Lots of card improvements
+- New service actions
 
 ### V2.1.1
 - Fix A1/P1 FTP download
