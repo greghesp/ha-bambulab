@@ -563,23 +563,27 @@ class Upgrade:
         #   "status": "UPGRADE_SUCCESS"
         # },
         
-        # Verified only on P1 series. 
         # Cross-validation on the remaining series is required. 
         # Data values ​​for the upgrade_state dictionary
         state = data.get("upgrade_state", {})
         self.upgrade_progress = int(state.get("progress", self.upgrade_progress)) \
             if state.get("progress", self.upgrade_progress) != "" else 0
         self.new_version_state = state.get("new_version_state", self.new_version_state)
-        self.new_ver_list = state.get("new_ver_list", self.new_ver_list)
         self.cur_version = self._client._device.info.sw_ver
         self.new_version = self._client._device.info.sw_ver
+        self.new_ver_list = state.get("new_ver_list", self.new_ver_list)
         if self.new_version_state == 1:
-            ota_info = next(filter(
-                lambda x: x["name"] == "ota", self.new_ver_list
-            ), {})
-            if ota_info:
-                self.cur_version = ota_info["cur_ver"]
-                self.new_version = ota_info["new_ver"]
+            if len(self.new_ver_list) > 0:
+                ota_info = next(filter(
+                    lambda x: x["name"] == "ota", self.new_ver_list
+                ), {})
+                if ota_info:
+                    self.cur_version = ota_info["cur_ver"]
+                    self.new_version = ota_info["new_ver"]
+            elif state.get("ota_new_version_number", None) != None:
+                self.new_version  = state.get("ota_new_version_number")                
+            else:
+                LOGGER.error("Unable to interpret {state}")
             if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
                 self.upgrade_progress = 0
             
