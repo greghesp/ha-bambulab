@@ -18,7 +18,7 @@ from homeassistant.components.update import UpdateEntity, UpdateEntityFeature
 
 from .coordinator import BambuDataUpdateCoordinator
 
-PRINTER_FIRMWARE_UPDATE = BambuLabUpdateEntityDescription(
+FIRMWARE_UPDATE_DESCRIPTION = BambuLabUpdateEntityDescription(
         key="firmware_update",
         translation_key="firmware_update",
         latest_ver_fn=lambda self: self.coordinator.get_model().upgrade.new_version,
@@ -34,7 +34,7 @@ async def async_setup_entry(
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     if coordinator.get_option_enabled(Options.FIRMWAREUPDATE):
-        async_add_entities([BambuLabUpdate(coordinator, PRINTER_FIRMWARE_UPDATE, entry)])
+        async_add_entities([BambuLabUpdate(coordinator, FIRMWARE_UPDATE_DESCRIPTION, entry)])
 
 
 class BambuLabUpdate(BambuLabEntity, UpdateEntity):

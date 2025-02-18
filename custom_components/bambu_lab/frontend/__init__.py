@@ -18,7 +18,7 @@ class BambuLabCardRegistration:
 
     async def async_register(self):
         await self.async_register_bambu_path()
-        if self.hass.data["lovelace"]["mode"] == "storage":
+        if self.hass.data["lovelace"].mode == "storage":
             await self.async_wait_for_lovelace_resources()
 
     # install card 
@@ -35,7 +35,7 @@ class BambuLabCardRegistration:
 
     async def async_wait_for_lovelace_resources(self) -> None:
         async def check_lovelace_resources_loaded(now):
-            if self.hass.data["lovelace"]["resources"].loaded:
+            if self.hass.data["lovelace"].resources.loaded:
                 await self.async_register_bambu_cards()
             else:
                 _LOGGER.debug("Unable to install Bambu Cards because Lovelace resources not yet loaded. Trying again in 5 seconds")
@@ -49,26 +49,26 @@ class BambuLabCardRegistration:
         # Get resources already registered
         bambu_resources = [
             resource
-            for resource in self.hass.data["lovelace"]["resources"].async_items()
+            for resource in self.hass.data["lovelace"].resources.async_items()
             if resource["url"].startswith(URL_BASE)
         ]
 
         for card in BAMBU_LAB_CARDS:
-            url = f"{URL_BASE}/{card.get("filename")}"
+            url = f"{URL_BASE}/{card.get('filename')}"
 
             card_registered = False
 
             for res in bambu_resources:
                 if self.get_resource_path(res["url"]) == url:
                     card_registered = True
-                    #check version
+                    # Check version
                     if self.get_resource_version(res["url"]) != card.get("version"):
 
                         # Update card version
                         _LOGGER.debug("Updating %s to version %s", card.get("name"), card.get("version"))
-                        await self.hass.data["lovelace"]["resources"].async_update_item(res.get("id"), {
-                            "res_type":"module",
-                            "url":url + "?v=" + card.get("version")
+                        await self.hass.data["lovelace"].resources.async_update_item(res.get("id"), {
+                            "res_type": "module",
+                            "url": url + "?v=" + card.get("version")
                         })
 
                         # Remove old gzipped files
@@ -78,9 +78,9 @@ class BambuLabCardRegistration:
 
             if not card_registered:
                 _LOGGER.debug("Registering %s as version %s", card.get("name"), card.get("version"))
-                await self.hass.data["lovelace"]["resources"].async_create_item({
-                    "res_type":"module",
-                    "url":url + "?v=" + card.get("version")
+                await self.hass.data["lovelace"].resources.async_create_item({
+                    "res_type": "module",
+                    "url": url + "?v=" + card.get("version")
                 })
 
     def get_resource_path(self, url: str):
@@ -95,20 +95,20 @@ class BambuLabCardRegistration:
 
     async def async_unregister(self):
         # Unload lovelace module resource
-        if self.hass.data["lovelace"]["mode"] == "storage":
+        if self.hass.data["lovelace"].mode == "storage":
             for card in BAMBU_LAB_CARDS:
-                url = f"{URL_BASE}/{card.get("filename")}"
+                url = f"{URL_BASE}/{card.get('filename')}"
                 bambu_resources = [
                     resource
-                     for resource in self.hass.data["lovelace"]["resources"].async_items()
+                    for resource in self.hass.data["lovelace"].resources.async_items()
                     if str(resource["url"]).startswith(url)
                 ]
 
                 for resource in bambu_resources:
-                    await self.hass.data["lovelace"]["resources"].async_delete_item(resource.get("id"))
+                    await self.hass.data["lovelace"].resources.async_delete_item(resource.get("id"))
 
     async def async_remove_gzip_files(self):
-        await self.hass.async_add_executor_job(self.async_remove_gzip_files)
+        await self.hass.async_add_executor_job(self.remove_gzip_files)
 
     def remove_gzip_files(self):
         path = self.hass.config.path("custom_components/bambu_lab/frontend")
@@ -120,7 +120,7 @@ class BambuLabCardRegistration:
         for file in gzip_files:
             try:
                 if os.path.getmtime(f"{path}/{file}") < os.path.getmtime(
-                    f"{path}/{file.replace('.gz','')}"
+                    f"{path}/{file.replace('.gz', '')}"
                 ):
                     _LOGGER.debug(f"Removing older gzip file - {file}")
                     os.remove(f"{path}/{file}")

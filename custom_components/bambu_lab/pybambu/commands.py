@@ -19,22 +19,17 @@ PUSH_ALL = {"pushing": {"sequence_id": "0", "command": "pushall"}}
 START_PUSH = { "pushing": {"sequence_id": "0", "command": "start"}}
 
 SEND_GCODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "gcode_line", "param": ""}} # param = GCODE_EACH_LINE_SEPARATED_BY_\n
-FIRMWARE_UPDATE_TEMPLATE = {
-                "user_id": "0",
+UPGRADE_CONFIRM_TEMPLATE = {
                 "upgrade": {
+                    "command": "upgrade_confirm",
+                    "module": "ota",
+                    "reason": "",
+                    "result": "success",
                     "sequence_id": "0",
-                    "command": "upgrade_history",
                     "src_id": 2,
-                    "firmware_optional": {
-                        "firmware": {
-                            "version": "",
-                            "url": "",
-                            "force_update": False,
-                            "description": "",
-                            "status": "release"
-                        },
-                        "ams": []
-                    }
+                    "upgrade_type": 4,
+                    "url": "https://public-cdn.bblmw.com/upgrade/device/{model}/{version}/product/{hash}/{stamp}.json.sig",
+                    "version": "{version}",
                 }
             }
 PRINT_PROJECT_FILE_TEMPLATE = {
