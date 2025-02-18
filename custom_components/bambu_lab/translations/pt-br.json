@@ -63,6 +63,16 @@
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
           "usage_hours": "Horas de utilização atuais (opcional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opções avançadas",
+            "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
+            "data": {
+              "disable_ssl_verify": "Desative a verificação SSL",
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
+            }
+          }
         }
       },
       "Lan": {
@@ -79,7 +89,8 @@
             "name": "Opções avançadas",
             "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
             "data": {
-              "disable_ssl_verify": "Desative a verificação SSL"
+              "disable_ssl_verify": "Desative a verificação SSL",
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
             }
           }
         }
@@ -132,6 +143,16 @@
           "access_code": "Código de Acesso:",
           "local_mqtt": "Conecte-se diretamente à impressora em vez da nuvem do Bambu Lab:",
           "usage_hours": "Horas de utilização atuais (opcional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opções avançadas",
+            "description": "Essas opções avançadas são funcionalidades precoces ou arriscadas. Leia a documentação e use -os por sua conta e risco.",
+            "data": {
+              "disable_ssl_verify": "Desative a verificação SSL",
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
+            }
+          }
         }
       },
       "Lan": {
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Opções avançadas",
-            "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
+            "description": "Essas opções avançadas são funcionalidades precoces ou arriscadas. Leia a documentação e use -os por sua conta e risco.",
             "data": {
-              "disable_ssl_verify": "Desative a verificação SSL"
+              "disable_ssl_verify": "Desative a verificação SSL",
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
             }
           }
         }

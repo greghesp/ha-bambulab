@@ -4,7 +4,13 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN, LOGGER
+from .const import (
+    DOMAIN,
+    LOGGER,
+    Options,
+    OPTION_NAME,
+)
+
 from .models import BambuLabEntity
 from .definitions import BambuLabUpdateEntityDescription
 
@@ -26,8 +32,9 @@ async def async_setup_entry(
 ) -> None:
     LOGGER.debug(f"UPDATE::async_setup_entry")
 
-    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]    
-    async_add_entities([BambuLabUpdate(coordinator, PRINTER_FIRMWARE_UPDATE, entry)])
+    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if coordinator.get_option_enabled(Options.FIRMWAREUPDATE):
+        async_add_entities([BambuLabUpdate(coordinator, PRINTER_FIRMWARE_UPDATE, entry)])
 
 
 class BambuLabUpdate(BambuLabEntity, UpdateEntity):

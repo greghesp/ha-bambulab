@@ -63,6 +63,16 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These options are only needed if you have a non-standard setup.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
+            }
+          }
         }
       },
       "Lan": {
@@ -79,7 +89,8 @@
             "name": "Advanced options",
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
-              "disable_ssl_verify": "Disable SSL verification"
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -132,6 +143,16 @@
           "access_code": "Access Code:",
           "local_mqtt": "Connect directly to printer instead of by Bambu Lab cloud:",
           "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
+            }
+          }
         }
       },
       "Lan": {
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Advanced options",
-            "description": "These options are only needed if you have a non-standard setup.",
+            "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
-              "disable_ssl_verify": "Disable SSL verification"
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }

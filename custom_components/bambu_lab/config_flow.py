@@ -118,13 +118,16 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
 
+        default_option = ''
         if self.email != '':
+            default_option = self.email
             modes = [
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value=self.email, label=self.email),
                 SelectOptionDict(value="lan", label="")
             ]
         else:
+            default_option = "bambu"
             modes = [
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
@@ -136,7 +139,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 mode=SelectSelectorMode.LIST,
             )
         )
-        fields[vol.Required('printer_mode')] = selector
+        fields[vol.Required('printer_mode', default=default_option)] = selector
 
         return self.async_show_form(
             step_id="user",
@@ -360,14 +363,20 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "local_mqtt": user_input.get('local_mqtt', False),
                         "auth_token": self._bambu_cloud.auth_token,
                         "access_code": user_input['access_code'],
-                        "usage_hours": float(user_input['usage_hours'])
+                        "usage_hours": float(user_input['usage_hours']),
+                        'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
+                        'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
                 }
+
                 title = device['dev_id']
                 return self.async_create_entry(
                     title=title,
                     data=data,
                     options=options
                 )
+
+        default_disable_ssl_verify = '' if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
+        default_enable_firmware_update = '' if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -378,7 +387,14 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
         default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
-
+        fields[vol.Required('advanced')] = section(
+            vol.Schema({
+                vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
+                vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
+            }),
+            {'collapsed': True},
+        )
+        
         return self.async_show_form(
             step_id="Bambu_Lan",
             data_schema=vol.Schema(fields),
@@ -420,7 +436,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "local_mqtt": True,
                         "auth_token": "",
                         "access_code": user_input['access_code'],
-                        "usage_hours": float(user_input['usage_hours'])
+                        "usage_hours": float(user_input['usage_hours']),
+                        'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
+                        'enable_firmware_update': user_input['advanced']['enable_firmware_update']                        
                 }
 
                 title = user_input['serial']
@@ -432,6 +450,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             errors['base'] = "cannot_connect_local_all"
 
+        default_disable_ssl_verify = '' if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
+        default_enable_firmware_update = '' if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
@@ -439,6 +460,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
         default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
+        fields[vol.Required('advanced')] = section(
+            vol.Schema({
+                vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
+                vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
+            }),
+            {'collapsed': True},
+        )
 
         return self.async_show_form(
             step_id="Lan",
@@ -512,7 +540,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         # Build form
         default_option = ''
         if self.email != '':
-            default_option = self.email
+            default_option = self.email if self.config_entry.options['auth_token'] != "" else 'lan'
             modes = [
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value=self.email, label=self.email),
@@ -685,6 +713,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         options["auth_token"] = self._bambu_cloud.auth_token
                         options["access_code"] = user_input['access_code']
                         options["usage_hours"] = float(user_input['usage_hours'])
+                        options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
+                        options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                        
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
                             entry=self.config_entry,
@@ -708,6 +739,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 mode=SelectSelectorMode.LIST)
         )
 
+        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', '') if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
+        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', '') if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
+
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Required('serial', default=self.config_entry.data['serial'])] = printer_selector
@@ -718,6 +752,13 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('access_code', default=self.config_entry.options.get('access_code', access_code))] = TEXT_SELECTOR
         default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
+        fields[vol.Required('advanced')] = section(
+            vol.Schema({
+                vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
+                vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
+            }),
+            {'collapsed': True},
+        )
 
         return self.async_show_form(
             step_id="Bambu_Lan",
@@ -758,6 +799,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["access_code"] = user_input['access_code']
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
+                options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
 
                 title = self.config_entry.data['serial']
                 self.hass.config_entries.async_update_entry(
@@ -776,6 +818,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
         default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
         default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', '') if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
+        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', '') if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
@@ -784,6 +827,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
+                vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )

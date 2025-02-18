@@ -63,6 +63,16 @@
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
+            "data": {
+              "disable_ssl_verify": "Zakázať overenie SSL",
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+            }
+          }
         }
       },
       "Lan": {
@@ -79,7 +89,8 @@
             "name": "Pokročilé možnosti",
             "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
             "data": {
-              "disable_ssl_verify": "Zakázať overenie SSL"
+              "disable_ssl_verify": "Zakázať overenie SSL",
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
             }
           }
         }
@@ -132,6 +143,16 @@
           "access_code": "Prístupový kód:",
           "local_mqtt": "Pripojte sa priamo k tlačiarni namiesto cloudu Bambu Lab:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tieto pokročilé možnosti sú včasnou alebo riskantnou funkciou. Prečítajte si dokumentáciu a použite ich na svoje vlastné riziko.",
+            "data": {
+              "disable_ssl_verify": "Zakázať overenie SSL",
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+            }
+          }
         }
       },
       "Lan": {
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Pokročilé možnosti",
-            "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
+            "description": "Tieto pokročilé možnosti sú včasnou alebo riskantnou funkciou. Prečítajte si dokumentáciu a použite ich na svoje vlastné riziko.",
             "data": {
-              "disable_ssl_verify": "Zakázať overenie SSL"
+              "disable_ssl_verify": "Zakázať overenie SSL",
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
             }
           }
         }

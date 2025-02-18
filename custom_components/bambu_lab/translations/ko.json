@@ -63,6 +63,16 @@
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
           "usage_hours": "현재 사용 시간 (선택 사항):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "고급 옵션",
+            "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
+            "data": {
+              "disable_ssl_verify": "SSL 확인을 비활성화합니다",
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+            }
+          }
         }
       },
       "Lan": {
@@ -79,7 +89,8 @@
             "name": "고급 옵션",
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
-              "disable_ssl_verify": "SSL 확인을 비활성화합니다"
+              "disable_ssl_verify": "SSL 확인을 비활성화합니다",
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -132,6 +143,16 @@
           "access_code": "접근 코드:",
           "local_mqtt": "Bambu Lab 클라우드 대신 프린터에 직접 연결:",
           "usage_hours": "현재 사용 시간 (선택 사항):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "고급 옵션",
+            "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
+            "data": {
+              "disable_ssl_verify": "SSL 확인을 비활성화합니다",
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+            }
+          }
         }
       },
       "Lan": {
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "고급 옵션",
-            "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
+            "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
-              "disable_ssl_verify": "SSL 확인을 비활성화합니다"
+              "disable_ssl_verify": "SSL 확인을 비활성화합니다",
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }

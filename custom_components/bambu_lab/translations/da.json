@@ -63,6 +63,16 @@
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Avancerede muligheder",
+            "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
+            "data": {
+              "disable_ssl_verify": "Deaktiver SSL -verifikation",
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+            }
+          }
         }
       },
       "Lan": {
@@ -79,7 +89,8 @@
             "name": "Avancerede muligheder",
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
-              "disable_ssl_verify": "Deaktiver SSL -verifikation"
+              "disable_ssl_verify": "Deaktiver SSL -verifikation",
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -132,6 +143,16 @@
           "access_code": "Adgangskode:",
           "local_mqtt": "Tilslut direkte til printeren i stedet for via Bambu Lab-skyen:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Avancerede muligheder",
+            "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen, og brug dem på din egen risiko.",
+            "data": {
+              "disable_ssl_verify": "Deaktiver SSL -verifikation",
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+            }
+          }
         }
       },
       "Lan": {
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Avancerede muligheder",
-            "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
+            "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen og brug dem på din egen risiko.",
             "data": {
-              "disable_ssl_verify": "Deaktiver SSL -verifikation"
+              "disable_ssl_verify": "Deaktiver SSL -verifikation",
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
