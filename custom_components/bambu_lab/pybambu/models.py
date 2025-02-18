@@ -493,26 +493,75 @@ class Upgrade:
         """Update the upgrade state"""
         old_data = f"{self.__dict__}"
         
+        # Example payload for P1 printer
         # "upgrade_state": {
-        #    "sequence_id": 0,
-        #    "progress": "100",
-        #    "status": "UPGRADE_SUCCESS",
-        #    "consistency_request": false,
-        #    "dis_state": 1,
-        #    "err_code": 0,
-        #    "force_upgrade": false,
-        #    "message": "0%, 0B/s",
-        #    "module": "ota",
-        #    "new_version_state": 1,
-        #    "cur_state_code": 0,
-        #    "new_ver_list": [
-        #    {
-        #      "name": "ota",
-        #      "cur_ver": "01.06.01.02",
-        #      "new_ver": "01.07.00.00",
-        #      "cur_release_type": 3,
-        #      "new_release_type": 3
-        #    }
+        #   "sequence_id": 0,
+        #   "progress": "100",
+        #   "status": "UPGRADE_SUCCESS",
+        #   "consistency_request": false,
+        #   "dis_state": 1,
+        #   "err_code": 0,
+        #   "force_upgrade": false,
+        #   "message": "0%, 0B/s",
+        #   "module": "ota",
+        #   "new_version_state": 1,
+        #   "cur_state_code": 0,
+        #   "new_ver_list": [
+        #     {
+        #       "name": "ota",
+        #       "cur_ver": "01.06.01.02",
+        #       "new_ver": "01.07.00.00",
+        #       "cur_release_type": 3,
+        #       "new_release_type": 3
+        #     }
+        #   ]
+        # },
+        #
+        # Example payload for P1 printer with outstanding AMS firmware update:
+        # "upgrade_state": {
+        #   "sequence_id": 0,
+        #   "progress": "100",
+        #   "status": "UPGRADE_SUCCESS",
+        #   "consistency_request": false,
+        #   "dis_state": 1,
+        #   "err_code": 0,
+        #   "force_upgrade": false,
+        #   "message": "0%, 0B/s",
+        #   "module": "ota",
+        #   "new_version_state": 1,
+        #   "cur_state_code": 0,
+        #   "idx2": 2118490042,
+        #   "new_ver_list": [
+        #     {
+        #       "name": "ams/0",
+        #       "cur_ver": "00.00.06.44",
+        #       "new_ver": "00.00.06.49",
+        #       "cur_release_type": 0,
+        #       "new_release_type": 1
+        #      }
+        #   ]
+        # },
+        #
+        # Example payload for X1 printer
+        # "upgrade_state": {
+        #   "ahb_new_version_number": "",
+        #   "ams_new_version_number": "",
+        #   "consistency_request": false,
+        #   "dis_state": 3,
+        #   "err_code": 0,
+        #   "ext_new_version_number": "",
+        #   "force_upgrade": false,
+        #   "idx": 4,
+        #   "idx1": 3,
+        #   "message": "RK1126 start write flash success",
+        #   "module": "",
+        #   "new_version_state": 1,
+        #   "ota_new_version_number": "01.08.02.00",
+        #   "progress": "100",
+        #   "sequence_id": 0,
+        #   "sn": "**REDACTED**",
+        #   "status": "UPGRADE_SUCCESS"
+        # },
         
         # Verified only on P1 series. 
         # Cross-validation on the remaining series is required. 
