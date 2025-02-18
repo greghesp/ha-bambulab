@@ -62,7 +62,17 @@
           "local_mqtt": "Lokaal verbinden met de printer:",
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
+          "sections": {
+            "advanced": {
+              "name": "Geavanceerde opties",
+              "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
+              "data": {
+                "disable_ssl_verify": "Schakel SSL -verificatie uit",
+                "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              }
+            }
+          }
         }
       },
       "Lan": {
@@ -72,14 +82,25 @@
           "serial": "Serienummer:",
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
+          "sections": {
+            "advanced": {
+              "name": "Geavanceerde opties",
+              "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
+              "data": {
+                "disable_ssl_verify": "Schakel SSL -verificatie uit",
+                "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              }
+            }
+          }
         },
         "sections": {
           "advanced": {
             "name": "Geavanceerde opties",
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
-              "disable_ssl_verify": "Schakel SSL -verificatie uit"
+              "disable_ssl_verify": "Schakel SSL -verificatie uit",
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Geavanceerde opties",
-            "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
+            "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
-              "disable_ssl_verify": "Schakel SSL -verificatie uit"
+              "disable_ssl_verify": "Schakel SSL -verificatie uit",
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }

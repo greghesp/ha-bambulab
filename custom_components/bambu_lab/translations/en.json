@@ -62,8 +62,18 @@
           "local_mqtt": "Connect locally to the printer:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
-          "usage_hours": "Current usage hours (optional):"
-        }
+          "usage_hours": "Current usage hours (optional):",
+          "sections": {
+            "advanced": {
+              "name": "Advanced options",
+              "description": "These options are only needed if you have a non-standard setup.",
+              "data": {
+                "disable_ssl_verify": "Disable SSL verification",
+                "enable_firmware_update": "Enable firmware update support"
+              }
+            }
+          }
+          }
       },
       "Lan": {
         "title": "Lan Mode Connection",
@@ -72,14 +82,25 @@
           "serial": "Serial Number:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "sections": {
+            "advanced": {
+              "name": "Advanced options",
+              "description": "These options are only needed if you have a non-standard setup.",
+              "data": {
+                "disable_ssl_verify": "Disable SSL verification",
+                "enable_firmware_update": "Enable firmware update support"
+              }
+            }
+          }
         },
         "sections": {
           "advanced": {
             "name": "Advanced options",
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
-              "disable_ssl_verify": "Disable SSL verification"
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Advanced options",
-            "description": "These options are only needed if you have a non-standard setup.",
+            "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
-              "disable_ssl_verify": "Disable SSL verification"
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }

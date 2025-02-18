@@ -62,7 +62,17 @@
           "local_mqtt": "Connectar localmente a la impresora:",
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "sections": {
+            "advanced": {
+              "name": "Opcions avançades",
+              "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
+              "data": {
+                "disable_ssl_verify": "Desactiva la verificació SSL",
+                "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              }
+            }
+          }
         }
       },
       "Lan": {
@@ -72,14 +82,25 @@
           "serial": "Número de Serie:",
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "sections": {
+            "advanced": {
+              "name": "Opcions avançades",
+              "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
+              "data": {
+                "disable_ssl_verify": "Desactiva la verificació SSL",
+                "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              }
+            }
+          }
         },
         "sections": {
           "advanced": {
             "name": "Opcions avançades",
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
-              "disable_ssl_verify": "Desactiva la verificació SSL"
+              "disable_ssl_verify": "Desactiva la verificació SSL",
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Opcions avançades",
-            "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
+            "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
-              "disable_ssl_verify": "Desactiva la verificació SSL"
+              "disable_ssl_verify": "Desactiva la verificació SSL",
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }

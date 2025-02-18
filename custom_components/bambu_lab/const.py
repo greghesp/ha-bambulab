@@ -42,10 +42,12 @@ class Options(IntEnum):
     FTP = 3,
     TIMELAPSE = 4,
     MANUALREFRESH = 5,
+    FIRMWAREUPDATE = 6,
 
 OPTION_NAME = {
     Options.CAMERA:         "enable_camera",
     Options.IMAGECAMERA:    "camera_as_image_sensor",
+    Options.FIRMWAREUPDATE: "enable_firmware_update",
     Options.FTP:            "enable_ftp",
     Options.TIMELAPSE:      "enable_timelapse",
     Options.MANUALREFRESH:  "manual_refresh_mode"

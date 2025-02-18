@@ -62,7 +62,17 @@
           "local_mqtt": "Connectez-vous directement à l’imprimante au lieu de passer par Bambu Cloud :",
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
-          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
+          "sections": {
+            "advanced": {
+              "name": "Options avancées",
+              "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
+              "data": {
+                "disable_ssl_verify": "Désactiver la vérification SSL",
+                "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
+              }
+            }
+          }
         }
       },
       "Lan": {
@@ -72,14 +82,25 @@
           "serial": "Numéro de série",
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
-          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
+          "sections": {
+            "advanced": {
+              "name": "Options avancées",
+              "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
+              "data": {
+                "disable_ssl_verify": "Désactiver la vérification SSL",
+                "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
+              }
+            }
+          }
         },
         "sections": {
           "advanced": {
             "name": "Options avancées",
             "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
             "data": {
-              "disable_ssl_verify": "Désactiver la vérification SSL"
+              "disable_ssl_verify": "Désactiver la vérification SSL",
+              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
             }
           }
         }
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Options avancées",
-            "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
+            "description": "Ces options avancées sont des fonctionnalités précoces ou risquées. Lisez la documentation et utilisez-les à vos propres risques.",
             "data": {
-              "disable_ssl_verify": "Désactiver la vérification SSL"
+              "disable_ssl_verify": "Désactiver la vérification SSL",
+              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
             }
           }
         }

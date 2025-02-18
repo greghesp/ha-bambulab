@@ -62,7 +62,17 @@
           "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):",
+          "sections": {
+            "advanced": {
+              "name": "Erweiterte Optionen",
+              "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
+              "data": {
+                "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
+                "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
+              }
+            }
+          }
         }
       },
       "Lan": {
@@ -72,14 +82,25 @@
           "serial": "Seriennummer:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):",
+          "sections": {
+            "advanced": {
+              "name": "Erweiterte Optionen",
+              "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
+              "data": {
+                "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
+                "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
+              }
+            }
+          }
         },
         "sections": {
           "advanced": {
             "name": "Erweiterte Optionen",
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
-              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung"
+              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
+              "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
             }
           }
         }
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Erweiterte Optionen",
-            "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
+            "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
-              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung"
+              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
+              "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
             }
           }
         }

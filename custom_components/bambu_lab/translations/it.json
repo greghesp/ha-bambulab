@@ -62,7 +62,17 @@
           "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:",
           "host": "Indirizzo IP locale della stampante:",
           "access_code": "Codice d'accesso",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
+          "sections": {
+            "advanced": {
+              "name": "Opzioni avanzate",
+              "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
+              "data": {
+                "disable_ssl_verify": "Disabilita la verifica SSL",
+                "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
+              }
+            }
+          }
         }
       },
       "Lan": {
@@ -72,14 +82,25 @@
           "serial": "Numero Seriale",
           "host": "Indirizzo IP della stampante:",
           "access_code": "Codice d'accesso",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
+          "sections": {
+            "advanced": {
+              "name": "Opzioni avanzate",
+              "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
+              "data": {
+                "disable_ssl_verify": "Disabilita la verifica SSL",
+                "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
+              }
+            }
+          }
         },
         "sections": {
           "advanced": {
             "name": "Opzioni avanzate",
             "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
             "data": {
-              "disable_ssl_verify": "Disabilita la verifica SSL"
+              "disable_ssl_verify": "Disabilita la verifica SSL",
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -145,9 +166,10 @@
         "sections": {
           "advanced": {
             "name": "Opzioni avanzate",
-            "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
+            "description": "Queste opzioni avanzate sono funzionalità precoci o rischiose. Leggi la documentazione e usali a proprio rischio.",
             "data": {
-              "disable_ssl_verify": "Disabilita la verifica SSL"
+              "disable_ssl_verify": "Disabilita la verifica SSL",
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
