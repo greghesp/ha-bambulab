@@ -62,15 +62,15 @@
           "local_mqtt": "Conectar localmente à impressora:",
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
-          "usage_hours": "Horas de utilização atuais (opcional):",
-          "sections": {
-            "advanced": {
-              "name": "Opções avançadas",
-              "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
-              "data": {
-                "disable_ssl_verify": "Desative a verificação SSL",
-                "enable_firmware_update": "Ativar suporte de atualização de firmware"
-              }
+          "usage_hours": "Horas de utilização atuais (opcional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opções avançadas",
+            "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
+            "data": {
+              "disable_ssl_verify": "Desative a verificação SSL",
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
             }
           }
         }
@@ -82,17 +82,7 @@
           "serial": "Número de Série:",
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
-          "usage_hours": "Horas de utilização atuais (opcional):",
-          "sections": {
-            "advanced": {
-              "name": "Opções avançadas",
-              "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
-              "data": {
-                "disable_ssl_verify": "Desative a verificação SSL",
-                "enable_firmware_update": "Ativar suporte de atualização de firmware"
-              }
-            }
-          }
+          "usage_hours": "Horas de utilização atuais (opcional):"
         },
         "sections": {
           "advanced": {
@@ -153,6 +143,16 @@
           "access_code": "Código de Acesso:",
           "local_mqtt": "Conecte-se diretamente à impressora em vez da nuvem do Bambu Lab:",
           "usage_hours": "Horas de utilização atuais (opcional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opções avançadas",
+            "description": "Essas opções avançadas são funcionalidades precoces ou arriscadas. Leia a documentação e use -os por sua conta e risco.",
+            "data": {
+              "disable_ssl_verify": "Desative a verificação SSL",
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
+            }
+          }
         }
       },
       "Lan": {
