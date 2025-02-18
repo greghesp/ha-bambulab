@@ -118,13 +118,16 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
 
+        default_option = ''
         if self.email != '':
+            default_option = self.email
             modes = [
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value=self.email, label=self.email),
                 SelectOptionDict(value="lan", label="")
             ]
         else:
+            default_option = "bambu"
             modes = [
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
@@ -136,7 +139,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 mode=SelectSelectorMode.LIST,
             )
         )
-        fields[vol.Required('printer_mode')] = selector
+        fields[vol.Required('printer_mode', default=default_option)] = selector
 
         return self.async_show_form(
             step_id="user",
@@ -364,7 +367,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
                         'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
                 }
-                
+
                 title = device['dev_id']
                 return self.async_create_entry(
                     title=title,
@@ -372,8 +375,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     options=options
                 )
 
-        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', '') if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
-        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', '') if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
+        default_disable_ssl_verify = '' if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
+        default_enable_firmware_update = '' if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -447,8 +450,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             errors['base'] = "cannot_connect_local_all"
 
-        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', '') if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
-        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', '') if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
+        default_disable_ssl_verify = '' if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
+        default_enable_firmware_update = '' if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
