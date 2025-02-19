@@ -2055,7 +2055,7 @@ class ChamberImage:
     def __init__(self, client):
         self._client = client
         self._bytes = bytearray()
-        self._image_last_updated = datetime.now()
+        self._image_last_updated = None
 
     def set_jpeg(self, bytes):
         self._bytes = bytes
@@ -2079,7 +2079,7 @@ class CoverImage:
     def __init__(self, client):
         self._client = client
         self._bytes = bytearray()
-        self._image_last_updated = datetime.now()
+        self._image_last_updated = None
         self._client.callback("event_printer_cover_image_update")
 
     def set_jpeg(self, bytes):

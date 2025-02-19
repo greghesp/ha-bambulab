@@ -215,13 +215,13 @@ class ChamberImageThread(threading.Thread):
                     LOGGER.error("A Chamber Image thread outer exception occurred:")
                     LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
-                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+                    time.sleep(2)  # Avoid a tight loop if this is a persistent error.
 
             except Exception as e:
                 LOGGER.error(f"A Chamber Image thread outer exception occurred:")
                 LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
-                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+                    time.sleep(2)  # Avoid a tight loop if this is a persistent error.
 
         LOGGER.debug("Chamber image thread exited.")
 
