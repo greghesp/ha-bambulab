@@ -475,7 +475,7 @@ class Upgrade:
     def install(self):
         """Install the update"""
         if self.printer_name is None:
-            LOGGER.warning("Printer not supported")
+            LOGGER.error("Printer name not found for firmware update.")
             return
 
         url = get_upgrade_url(self.printer_name)
@@ -580,12 +580,14 @@ class Upgrade:
                 if ota_info:
                     self.cur_version = ota_info["cur_ver"]
                     self.new_version = ota_info["new_ver"]
+                if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
+                    self.upgrade_progress = 0
             elif state.get("ota_new_version_number", None) != None:
                 self.new_version = state.get("ota_new_version_number")
+                if self.upgrade_progress == 100 and state.get("message") == "RK1126 start write flash success":
+                    self.upgrade_progress = 0
             else:
                 LOGGER.error(f"Unable to interpret {state}")
-            if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
-                self.upgrade_progress = 0
             
         return (old_data != f"{self.__dict__}")
 
