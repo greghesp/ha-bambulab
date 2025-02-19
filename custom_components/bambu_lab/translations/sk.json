@@ -192,6 +192,9 @@
       },
       "online": {
         "name": "Pripojené"
+      },
+      "firmware_update": {
+        "name": "Aktualizácia firmvéru"
       }
     },
     "button": {

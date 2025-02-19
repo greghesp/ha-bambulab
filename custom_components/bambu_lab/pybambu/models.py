@@ -35,8 +35,8 @@ from .utils import (
     get_HMS_severity,
     get_HMS_module,
     set_temperature_to_gcode,
-    get_firmware_url,
-    create_firmware_json,
+    get_upgrade_url,
+    upgrade_template,
 )
 from .const import (
     LOGGER,
@@ -467,10 +467,7 @@ class Upgrade:
             "X1C": "x1",
             "X1E": "x1e"
         }
-        self.printer_name = device_mapping.get(
-            self._client._device.info.device_type, None
-        )
-
+        self.printer_name = device_mapping.get(self._client._device.info.device_type)
         if self.printer_name is None:
             return None
         return f"https://bambulab.com/en/support/firmware-download/{self.printer_name}"
@@ -478,15 +475,15 @@ class Upgrade:
     def install(self):
         """Install the update"""
         if self.printer_name is None:
-            LOGGER.warning("Firmware update installation failed, printer name not initialized.")
+            LOGGER.error("Printer name not found for firmware update.")
             return
 
-        firmware_url = get_firmware_url(self.printer_name)
-        if firmware_url:
-            firmware_json = create_firmware_json(firmware_url)
-            if firmware_json:
-                LOGGER.debug(firmware_json)
-                self._client.publish(firmware_json)
+        url = get_upgrade_url(self.printer_name)
+        if url is not None:
+            template = upgrade_template(url)
+            if template is not None:
+                LOGGER.debug(template)
+                self._client.publish(template)
                 self._client.callback("event_printer_data_update")
                 
     def print_update(self, data) -> bool:
@@ -563,29 +560,38 @@ class Upgrade:
         #   "status": "UPGRADE_SUCCESS"
         # },
         
-        # Verified only on P1 series. 
         # Cross-validation on the remaining series is required. 
         # Data values ​​for the upgrade_state dictionary
         state = data.get("upgrade_state", {})
-        self.upgrade_progress = int(state.get("progress", self.upgrade_progress)) \
-            if state.get("progress", self.upgrade_progress) != "" else 0
+        try:
+            self.upgrade_progress = int(state.get("progress", self.upgrade_progress))
+        except ValueError:
+            # Prevents unexpected "" strings from being empty.
+            self.upgrade_progress = 0
         self.new_version_state = state.get("new_version_state", self.new_version_state)
-        self.new_ver_list = state.get("new_ver_list", self.new_ver_list)
         self.cur_version = self._client._device.info.sw_ver
         self.new_version = self._client._device.info.sw_ver
+        self.new_ver_list = state.get("new_ver_list", self.new_ver_list)
         if self.new_version_state == 1:
-            ota_info = next(filter(
-                lambda x: x["name"] == "ota", self.new_ver_list
-            ), {})
-            if ota_info:
-                self.cur_version = ota_info["cur_ver"]
-                self.new_version = ota_info["new_ver"]
-            if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
-                self.upgrade_progress = 0
+            if len(self.new_ver_list) > 0:
+                ota_info = next(filter(
+                    lambda x: x["name"] == "ota", self.new_ver_list
+                ), {})
+                if ota_info:
+                    self.cur_version = ota_info["cur_ver"]
+                    self.new_version = ota_info["new_ver"]
+                if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
+                    self.upgrade_progress = 0
+            elif state.get("ota_new_version_number", None) != None:
+                self.new_version = state.get("ota_new_version_number")
+                if self.upgrade_progress == 100 and state.get("message") == "RK1126 start write flash success":
+                    self.upgrade_progress = 0
+            else:
+                LOGGER.error(f"Unable to interpret {state}")
             
         return (old_data != f"{self.__dict__}")
-    
-    
+
+
 @dataclass
 class PrintJob:
     """Return all information related content"""
