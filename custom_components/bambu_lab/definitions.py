@@ -111,6 +111,14 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         is_on_fn=lambda self: self.coordinator.get_model().info.online or self.coordinator.client.manual_refresh_mode
     ),
     BambuLabBinarySensorEntityDescription(
+        key="firmware_update",
+        translation_key="firmware_update",
+        device_class=BinarySensorDeviceClass.UPDATE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().info.new_version_state == 1,
+        exists_fn=lambda coordinator: not coordinator.get_option_enabled(Options.FIRMWAREUPDATE),
+    ),
+    BambuLabBinarySensorEntityDescription(
         key="door_open",
         translation_key="door_open",
         device_class=BinarySensorDeviceClass.DOOR,

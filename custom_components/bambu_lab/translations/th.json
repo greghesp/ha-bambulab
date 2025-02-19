@@ -192,6 +192,9 @@
       },
       "online": {
         "name": "ออนไลน์"
+      },
+      "firmware_update": {
+        "name": "อัปเดตเฟิร์มแวร์"
       }
     },
     "button": {

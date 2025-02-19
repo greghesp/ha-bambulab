@@ -16,7 +16,7 @@
       "already_configured": "장치가 이미 구성되어 있습니다",
       "no_printers": "계정에서 구성되지 않은 프린터를 찾을 수 없습니다.",
       "cloudflare": "Cloudflare가 연결 시도를 차단했습니다.",
-      "curl_unavailable": "컬_cffi 라이브러리를 사용할 수 없습니다."
+      "curl_unavailable": "curl_cffi 라이브러리를 사용할 수 없습니다."
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다. 자격 증명을 확인하세요.",
@@ -100,7 +100,7 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare가 연결 시도를 차단했습니다.",
-      "curl_unavailable": "컬_cffi 라이브러리를 사용할 수 없습니다."
+      "curl_unavailable": "curl_cffi 라이브러리를 사용할 수 없습니다."
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다.",
@@ -192,6 +192,9 @@
       },
       "online": {
         "name": "온라인"
+      },
+      "firmware_update": {
+        "name": "펌웨어 업데이트"
       }
     },
     "button": {
@@ -371,7 +374,7 @@
         "name": "MQTT 연결 모드",
         "state": {
           "local": "로컬",
-          "bambu_cloud": "밤부랩 클라우드"
+          "bambu_cloud": "뱀부랩 클라우드"
         }
       },
       "gcode_file": {
@@ -641,10 +644,10 @@
         "name": "프롬프트 소리 허용"
       },
       "ftp": {
-        "name": "프린터에서 모델 데이터를로드합니다"
+        "name": "프린터에서 모델 데이터 로드"
       },
       "timelapse": {
-        "name": "프린터에서 최신 타임 랩스를로드하십시오"
+        "name": "프린터에서 최신 타임랩스 로드"
       }
     },
     "update": {
@@ -656,7 +659,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "밤부랩 클라우드",
+        "bambu": "뱀부랩 클라우드",
         "lan": "랜 모드"
       }
     }

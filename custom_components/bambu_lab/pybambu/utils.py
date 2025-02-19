@@ -18,7 +18,7 @@ from .const import (
     FansEnum,
     TempEnum
 )
-from .commands import SEND_GCODE_TEMPLATE, FIRMWARE_UPDATE_TEMPLATE
+from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
 from .const_hms_errors import HMS_ERRORS
 from .const_print_errors import PRINT_ERROR_ERRORS
 
@@ -275,8 +275,9 @@ def get_Url(url: str, region: str):
         urlstr = urlstr.replace('.com', '.cn')
     return urlstr
 
-def get_firmware_url(name: str):
-    """Retrieve firmware url from BambuLab website"""
+
+def get_upgrade_url(name: str):
+    """Retrieve upgrade URL from BambuLab website"""
     response = requests.get(f"https://bambulab.com/en/support/firmware-download/{name}")
     soup = BeautifulSoup(response.text, 'html.parser')
     selector = soup.select_one(
@@ -293,8 +294,8 @@ def get_firmware_url(name: str):
         return selector.get("href")
     return None
 
-def create_firmware_json(url: str) -> dict:
-    """Create firmware json from url"""
+def upgrade_template(url: str) -> dict:
+    """Template for firmware upgrade"""
     pattern = (
         r"offline\/([\w-]+)\/([\d\.]+)\/([\w]+)\/"
         r"offline-([\w\-\.]+)\.zip"
@@ -303,11 +304,11 @@ def create_firmware_json(url: str) -> dict:
     if not info:
         LOGGER.warning(f"Could not parse firmware url: {url}")
         return None
-
-    update_template = FIRMWARE_UPDATE_TEMPLATE.copy()
-    update_template["upgrade"]["firmware_optional"]["firmware"]["version"] = info[1]
-    update_template["upgrade"]["firmware_optional"]["firmware"]["url"] = (
-        f"https://public-cdn.bblmw.com/upgrade/device/"
-        f"{info[0]}/{info[1]}/product/{info[2]}/{info[3]}.json.sig"
+    
+    model, version, hash, stamp = info
+    template = UPGRADE_CONFIRM_TEMPLATE.copy()
+    template["upgrade"]["url"] = template["upgrade"]["url"].format(
+        model=model, version=version, hash=hash, stamp=stamp
     )
-    return update_template
+    template["upgrade"]["version"] = version
+    return template
