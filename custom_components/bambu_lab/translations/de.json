@@ -192,6 +192,9 @@
       },
       "online": {
         "name": "Online"
+      },
+      "firmware_update": {
+        "name": "Firmware Status"
       }
     },
     "button": {

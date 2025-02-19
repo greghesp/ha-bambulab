@@ -192,6 +192,9 @@
       },
       "online": {
         "name": "En línea"
+      },
+      "firmware_update": {
+        "name": "Actualización de Firmware"
       }
     },
     "button": {

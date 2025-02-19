@@ -192,6 +192,9 @@
       },
       "online": {
         "name": "État"
+      },
+      "firmware_update": {
+        "name": "Mise à jour du micrologiciel"
       }
     },
     "button": {
