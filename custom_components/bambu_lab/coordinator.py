@@ -290,7 +290,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # midway temperature of the filament set in the ext spool
             if data.get('temperature') is None:
                 ams_tray = self.get_model().ams.data[ams_idx].tray[tray]
-                temperature = (int(ams_tray.nozzle_temp_min) + int(ams_tray.nozzle_temp_max)) / 2
+                temperature = (int(ams_tray.nozzle_temp_min) + int(ams_tray.nozzle_temp_max)) // 2
         else:
             LOGGER.error(f"An AMS tray or external spool is required")
             return False
