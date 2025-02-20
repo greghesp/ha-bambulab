@@ -30,7 +30,6 @@ jobs:
         run: |
           python '${{ github.workspace }}/scripts/fetch_filaments.py'
           python '${{ github.workspace }}/scripts/update_const.py'
-          python '${{ github.workspace }}/scripts/auto_translate.py'
 
       - name: 📝 Update manifest version
         run: |
