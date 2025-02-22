@@ -115,7 +115,7 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
         Camera.__init__(self)
 
     def camera_image(self, width: int | None = None, height: int | None = None) -> bytes | None:
-        return self.coordinator.get_model().chamber_image.get_jpeg()
+        return self.coordinator.get_model().chamber_image.get_image()
 
     @property
     def is_streaming(self) -> bool:

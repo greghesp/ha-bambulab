@@ -507,6 +507,9 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "remain_enabled": {
+            "name": "L'estimació del filament restant ha activat"
           }
         }
       },

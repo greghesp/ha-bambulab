@@ -511,6 +511,9 @@
           "remain": {
             "name": "Remaining filament"
           },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
           "tag_uid": {
             "name": "Spool serial number"
           },

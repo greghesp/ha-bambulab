@@ -546,7 +546,7 @@ class BambuClient:
         self.publish(START_PUSH)
 
     def on_jpeg_received(self, bytes):
-        self._device.chamber_image.set_jpeg(bytes)
+        self._device.chamber_image.set_image(bytes)
 
     def on_message(self, client, userdata, message):
         """Return the payload when received"""
