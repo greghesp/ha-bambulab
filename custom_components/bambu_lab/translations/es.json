@@ -507,6 +507,9 @@
           },
           "type": {
             "name": "Tipo"
+          },
+          "remain_enabled": {
+            "name": "Estimación de filamentos restante habilitada"
           }
         }
       },

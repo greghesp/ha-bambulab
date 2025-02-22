@@ -79,7 +79,7 @@ class CoverImage(ImageEntity, BambuLabEntity):
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
-        return self.coordinator.get_model().cover_image.get_jpeg()
+        return self.coordinator.get_model().cover_image.get_image()
 
     @property
     def image_last_updated(self) -> datetime | None:
@@ -109,7 +109,7 @@ class ChamberImage(ImageEntity, BambuLabEntity):
 
     def image(self) -> bytes | None:
         """Return bytes of image."""
-        return self.coordinator.get_model().chamber_image.get_jpeg()
+        return self.coordinator.get_model().chamber_image.get_image()
     
     @property
     def image_last_updated(self) -> datetime | None:

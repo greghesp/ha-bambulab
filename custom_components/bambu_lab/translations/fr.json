@@ -507,6 +507,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain_enabled": {
+            "name": "Estimation du filament restant activée"
           }
         }
       },
