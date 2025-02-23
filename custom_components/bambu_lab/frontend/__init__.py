@@ -108,7 +108,7 @@ class BambuLabCardRegistration:
                     await self.hass.data["lovelace"]["resources"].async_delete_item(resource.get("id"))
 
     async def async_remove_gzip_files(self):
-        await self.hass.async_add_executor_job(self.async_remove_gzip_files)
+        await self.hass.async_add_executor_job(self.remove_gzip_files)
 
     def remove_gzip_files(self):
         path = self.hass.config.path("custom_components/bambu_lab/frontend")
