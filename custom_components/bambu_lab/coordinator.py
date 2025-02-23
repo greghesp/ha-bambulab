@@ -281,6 +281,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         # Get the AMS device
         ams_device = self._get_device_from_entity(entity_id)
+        if ams_device is None:
+            LOGGER.error("Unable to find AMS or external spool from entity")
+
         # Get the device the AMS is connected to.
         parent_device_id = ams_device.via_device_id
         # Get my device id

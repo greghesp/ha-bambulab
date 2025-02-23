@@ -127,7 +127,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def unload_filament(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload_for_entity(call) is False:
+        if check_service_call_payload_for_device(call) is False:
             return
         hass.bus.fire(UNLOAD_FILAMENT_BUS_EVENT, call.data)
 
