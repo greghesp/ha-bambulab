@@ -17,7 +17,7 @@ HMS_ERRORS = {
     "0300020000010009": "The nozzle temperature control is abnormal; the hot end may not be installed. If you want to heat the hot end without it being installed, please turn on maintenance mode on the settings page.",
     "030002000001000B": "The nozzle temperature is abnormal. Temperature control system may have an issue.",
     "0300030000010001": "The hotend cooling fan speed is too slow or stopped. It may be stuck or the connector is not plugged in properly.",
-    "0300030000020002": "",
+    "0300030000020002": "The hotend cooling fan speed is slow. It may be stuck and need cleaning.",
     "0300040000020001": "The speed of the part cooling fan is too slow or stopped. It may be stuck or the connector is not plugged in properly.",
     "0300050000010001": "The motor driver is overheating. Its radiator may be loose, or its cooling fan may be damaged.",
     "0300060000010001": "Motor-A has an open-circuit. There may be a loose connection, or the motor may have failed.",
