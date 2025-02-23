@@ -1597,12 +1597,14 @@ class AMSList:
     """Return all AMS related info"""
     tray_now: int
     data: list[AMSInstance]
+    model: str
 
     def __init__(self, client):
         self._client = client
         self.tray_now = 0
         self.data = [None] * 4
         self._first_initialization_done = False
+        self.model = ""
 
     def info_update(self, data):
         old_data = f"{self.__dict__}"
@@ -1638,8 +1640,10 @@ class AMSList:
             name = module["name"]
             index = -1
             if name.startswith("ams/"):
+                self.model = "AMS"
                 index = int(name[4])
             elif name.startswith("ams_f1/"):
+                self.model = "AMS Lite"
                 index = int(name[7])
             
             if index != -1:

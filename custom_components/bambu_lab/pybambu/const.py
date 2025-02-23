@@ -23,7 +23,7 @@ class Features(IntEnum):
     CHAMBER_TEMPERATURE = 4,
     CURRENT_STAGE = 5,
     PRINT_LAYERS = 6,
-    AMS = 7,
+    AMS = 7, # Supports either AMS or AMS Lite
     EXTERNAL_SPOOL = 8,
     K_VALUE = 9,
     START_TIME = 10,
