@@ -108,20 +108,20 @@ class BambuLabCardRegistration:
                     await self.hass.data["lovelace"]["resources"].async_delete_item(resource.get("id"))
 
     async def async_remove_gzip_files(self):
-        await self.hass.async_add_executor_job(self.async_remove_gzip_files)
+        await self.hass.async_add_executor_job(self.remove_gzip_files)
 
     def remove_gzip_files(self):
+        _LOGGER.debug("remove_gzip_files")
         path = self.hass.config.path("custom_components/bambu_lab/frontend")
 
         gzip_files = [
             filename for filename in os.listdir(path) if filename.endswith(".gz")
         ]
 
+        _LOGGER.debug(gzip_files)
         for file in gzip_files:
             try:
-                if os.path.getmtime(f"{path}/{file}") < os.path.getmtime(
-                    f"{path}/{file.replace('.gz','')}"
-                ):
+                if os.path.getmtime(f"{path}/{file}") < os.path.getmtime(f"{path}/{file.replace('.gz','')}"):
                     _LOGGER.debug(f"Removing older gzip file - {file}")
                     os.remove(f"{path}/{file}")
             except Exception:
