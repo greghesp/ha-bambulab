@@ -55,7 +55,7 @@ class WatchdogThread(threading.Thread):
         self.setName(f"{self._client._device.info.device_type}-Watchdog-{threading.get_native_id()}")
         LOGGER.debug("Watchdog thread started.")
 
-        WATCHDOG_TIMER = 30
+        WATCHDOG_TIMER = 60
         while True:
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
             interval = time.time() - self._last_received_data
