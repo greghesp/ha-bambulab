@@ -25,7 +25,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
-    def check_service_call_payload(call: ServiceCall):
+    def check_service_call_payload_for_device(call: ServiceCall):
         LOGGER.debug(call)
 
         area_ids = call.data.get("area_id", [])
@@ -49,9 +49,33 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         
         return True
 
+    def check_service_call_payload_for_entity(call: ServiceCall):
+        LOGGER.debug(call)
+
+        area_ids = call.data.get("area_id", [])
+        device_ids = call.data.get("device_id", [])
+        entity_ids = call.data.get("entity_id", [])
+        label_ids = call.data.get("label_ids", [])
+
+        # Ensure only one entity ID is passed
+        if not isinstance(area_ids, list) or len(area_ids) != 0:
+            LOGGER.error("A single entity id must be specified as the target.")
+            return False
+        if not isinstance(device_ids, list) or len(device_ids) != 0:
+            LOGGER.error("A single entity id must be specified as the target.")
+            return False
+        if not isinstance(entity_ids, list) or len(entity_ids) != 1:
+            LOGGER.error("A single entity id must be specified as the target.")
+            return False
+        if not isinstance(label_ids, list) or len(label_ids) != 0:
+            LOGGER.error("A single entity id must be specified as the target.")
+            return False
+        
+        return True
+
     async def send_command(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload(call) is False:
+        if check_service_call_payload_for_device(call) is False:
             return
         hass.bus.fire(SEND_GCODE_BUS_EVENT, call.data)
 
@@ -64,7 +88,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def print_project_file(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload(call) is False:
+        if check_service_call_payload_for_device(call) is False:
             return
         hass.bus.fire(PRINT_PROJECT_FILE_BUS_EVENT, call.data)
 
@@ -77,7 +101,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def skip_objects(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload(call) is False:
+        if check_service_call_payload_for_device(call) is False:
             return
         hass.bus.fire(SKIP_OBJECTS_BUS_EVENT, call.data)
 
@@ -90,7 +114,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def move_axis(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload(call) is False:
+        if check_service_call_payload_for_device(call) is False:
             return
         hass.bus.fire(MOVE_AXIS_BUS_EVENT, call.data)
 
@@ -103,7 +127,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def unload_filament(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload(call) is False:
+        if check_service_call_payload_for_device(call) is False:
             return
         hass.bus.fire(UNLOAD_FILAMENT_BUS_EVENT, call.data)
 
@@ -116,7 +140,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def load_filament(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload(call) is False:
+        if check_service_call_payload_for_entity(call) is False:
             return
         hass.bus.fire(LOAD_FILAMENT_BUS_EVENT, call.data)
 
@@ -129,7 +153,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def extrude_retract(call: ServiceCall):
         """Handle the service call."""
-        if check_service_call_payload(call) is False:
+        if check_service_call_payload_for_device(call) is False:
             return
         hass.bus.fire(EXTRUDE_RETRACT_BUS_EVENT, call.data)
 

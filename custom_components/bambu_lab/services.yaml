@@ -175,28 +175,11 @@ unload_filament:
 
 load_filament:
   name: Load filament
-  description: Load a new filament into the extruder
+  description: Load a new filament into the extruder passed an AMS tray or an External spool entity
   target:
     entity:
       integration: bambu_lab
   fields:
-    tray:
-      name: AMS tray
-      description: The AMS tray to load filament from
-      example: 1
-      selector:
-        number:
-          min: 1
-          max: 16
-          step: 1
-    external_spool:
-      name: External spool
-      description: >-
-        Load filament from the external spool. Enabling the external spool will
-        override the AMS tray value if also set.
-      example: 1
-      selector:
-        boolean:
     temperature:
       name: Temperature
       description: >-
