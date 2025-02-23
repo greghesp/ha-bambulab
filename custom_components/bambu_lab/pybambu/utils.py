@@ -100,25 +100,6 @@ def get_current_stage(id) -> str:
 
 def get_HMS_error_text(code: str, language: str):
     """Return the human-readable description for an HMS error"""
-    try:
-        code = code.replace('_', '')
-        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=10)
-        json = response.json()
-        if json['result'] == 0:
-            # We successfuly got results.
-            data = json['data']['device_hms'][language]
-            for entry in data:
-                if entry['ecode'] == code:
-                    if "" != entry['intro']:
-                        return entry['intro']
-    except TimeoutError as e:
-        pass    
-    except ReadTimeoutError as e:
-        LOGGER.debug("ERROR: Timeout trying t retrieve print error text")
-    except:
-        LOGGER.debug(f"ERROR: {response.text}")
-
-    # Fallback to static copy
     error = HMS_ERRORS.get(code, 'unknown')
     if '' == error:
         return 'unknown'
@@ -127,26 +108,6 @@ def get_HMS_error_text(code: str, language: str):
 
 def get_print_error_text(code: str, language: str):
     """Return the human-readable description for a print error"""
-
-    try:
-        code = code.replace('_', '')
-        response = requests.get(f"https://e.bambulab.com/query.php?lang={language}&e={code}", timeout=10)
-        json = response.json()
-        if json['result'] == 0:
-            # We successfuly got results.
-            data = json['data']['device_error'][language]
-            for entry in data:
-                if entry['ecode'] == code:
-                    if "" != entry['intro']:
-                        return entry['intro']
-    except TimeoutError as e:
-        pass    
-    except ReadTimeoutError as e:
-        LOGGER.debug("ERROR: Timeout trying t retrieve print error text")
-    except:
-        LOGGER.debug(f"ERROR: {response.text}")
-
-    # Fallback to static copy
     error = PRINT_ERROR_ERRORS.get(code, 'unknown')
     if '' == error:
         return 'unknown'
