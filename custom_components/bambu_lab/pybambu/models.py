@@ -753,6 +753,12 @@ class PrintJob:
         if previously_idle and not currently_idle:
             self._client.callback("event_print_started")
 
+            # Sometimes the download completes so fast we go from a prior print's 100% to 100% for the new print in one update.
+            # Make sure we catch that case too. And Lan Mode never sets this - make sure we init it to 0.
+            self._gcode_file_prepare_percent = 0
+            # Clear existing cover & pick image data before attempting any fresh download.
+            self._clear_model_data();
+
             # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
             # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
             if self._client._device.supports_feature(Features.START_TIME_GENERATED):
@@ -766,13 +772,6 @@ class PrintJob:
                 # We can update task data from the cloud immediately. But ftp has to wait.
                 self._update_task_data()
 
-        if self.gcode_state == "PREPARE" and previous_gcode_state != "PREPARE":
-            # Sometimes the download completes so fast we go from a prior print's 100% to 100% for the new print in one update.
-            # Make sure we catch that case too.
-            self._gcode_file_prepare_percent = 0
-            # Clear existing cover & pick image data before attempting the fresh download.
-            self._clear_model_data();
-            
         old_gcode_file_prepare_percent = self._gcode_file_prepare_percent
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
         if self.gcode_state == "PREPARE":
