@@ -792,7 +792,7 @@ class PrintJob:
                 LOGGER.debug("PRINT STARTED BUT DOWNLOAD NEVER REACHED 99%")
                 self._update_task_data()
 
-        if self.gcode_state == "RUNNING" and previous_gcode_state == "PREPARE" and self._gcode_file_prepare_percent == 0:
+        if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE") and self._gcode_file_prepare_percent == 0:
             if self._client.ftp_enabled:
                 # This is a lan mode print where the gcode was pushed to the printer before the print ever started so
                 # there is no download to track. If we can find a definitive way to track true lan mode vs just a pure local
