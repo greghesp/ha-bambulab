@@ -1771,7 +1771,7 @@ class AMSTray:
     k: float
     tag_uid: str
     tray_uuid: str
-
+    tray_weight: int
 
     def __init__(self, client):
         self._client = client
@@ -1787,7 +1787,7 @@ class AMSTray:
         self.k = 0
         self.tag_uid = ""
         self.tray_uuid = ""
-
+        self.tray_weight = 0
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
@@ -1805,6 +1805,7 @@ class AMSTray:
             self.tag_uid = ""
             self.tray_uuid = ""
             self.k = 0
+            self.tray_weight = 0
         else:
             self.empty = False
             self.idx = data.get('tray_info_idx', self.idx)
@@ -1818,7 +1819,7 @@ class AMSTray:
             self.tag_uid = data.get('tag_uid', self.tag_uid)
             self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
-        
+            self.tray_weight = data.get('tray_weight', self.tray_weight)
         return (old_data != f"{self.__dict__}")
 
 

@@ -519,6 +519,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
           }
         }
       },
@@ -554,6 +557,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
           }
         }
       },
@@ -589,6 +595,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
           }
         }
       },
@@ -624,6 +633,9 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
           }
         }
       }
