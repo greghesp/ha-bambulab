@@ -519,6 +519,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -554,6 +560,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -589,6 +601,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -624,6 +642,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       }

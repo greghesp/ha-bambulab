@@ -409,6 +409,8 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "tag_uid": self.coordinator.get_model().get_active_tray().tag_uid,
             "tray_uuid": self.coordinator.get_model().get_active_tray().tray_uuid,
             "type": self.coordinator.get_model().get_active_tray().type,
+            "filament_id": self.coordinator.get_model().get_active_tray().idx,
+            "tray_weight": self.coordinator.get_model().get_active_tray().tray_weight,
         },
         available_fn=lambda self: self.coordinator.get_model().get_active_tray() is not None,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
@@ -493,6 +495,8 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "tag_uid": self.coordinator.get_model().ams.data[self.index].tray[0].tag_uid,
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[0].tray_uuid,
             "type": self.coordinator.get_model().ams.data[self.index].tray[0].type,
+            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[0].idx,
+            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[0].tray_weight,
         },
     ),
     BambuLabSensorEntityDescription(
@@ -515,6 +519,8 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "tag_uid": self.coordinator.get_model().ams.data[self.index].tray[1].tag_uid,
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[1].tray_uuid,
             "type": self.coordinator.get_model().ams.data[self.index].tray[1].type,
+            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[1].idx,
+            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[1].tray_weight,
         },
     ),
     BambuLabSensorEntityDescription(
@@ -537,6 +543,8 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "tag_uid": self.coordinator.get_model().ams.data[self.index].tray[2].tag_uid,
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[2].tray_uuid,
             "type": self.coordinator.get_model().ams.data[self.index].tray[2].type,
+            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[2].idx,
+            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[2].tray_weight,
         },
     ),
     BambuLabSensorEntityDescription(
@@ -559,6 +567,8 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "tag_uid": self.coordinator.get_model().ams.data[self.index].tray[3].tag_uid,
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[3].tray_uuid,
             "type": self.coordinator.get_model().ams.data[self.index].tray[3].type,
+            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[3].idx,
+            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[3].tray_weight,
         },
     ),
 )
