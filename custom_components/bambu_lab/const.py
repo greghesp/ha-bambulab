@@ -9,7 +9,7 @@ from homeassistant.const import Platform
 # Integration domain
 DOMAIN = "bambu_lab"
 BRAND = "Bambu Lab"
-URL_BASE = "/bambu_lab"
+URL_BASE = "/bambu_lab_test"
 
 LOGGER = logging.getLogger(__package__)
 LOGGERFORHA = logging.getLogger(f"{__package__}_HA")
