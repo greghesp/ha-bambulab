@@ -18,6 +18,7 @@
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
   "requirements": [
+    "bs4",
     "cloudscraper"
   ],
   "ssdp": [
