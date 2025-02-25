@@ -701,10 +701,10 @@ class BambuClient:
                 LOGGER.debug("Connection test was successful")
                 return True
         except OSError as e:
-            LOGGER.error(f"Connection test failed with exception {type(e)} Args: {e}")
+            LOGGER.error(f"Connection test to '{host}' failed: {type(e)} Args: {e}")
             return False
         except queue.Empty:
-            LOGGER.error(f"Connection test failed with timeout")
+            LOGGER.error(f"Connection test to '{host}' failed with timeout")
             return False
         finally:
             self.disconnect()
