@@ -690,5 +690,11 @@
         "lan": "Mode LAN"
       }
     }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "L’autenticació ha fallat per {dispositiu}",
+      "description": "Intentant connectar -se al laboratori Bambu ha fallat. Reconfigureu la integració i proporcioneu credencials noves."
+    }
   }
 }

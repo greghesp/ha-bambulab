@@ -10,6 +10,8 @@ from .const import (
 )
 import asyncio
 import re
+import time
+
 from typing import Any
 
 from homeassistant import config_entries
@@ -25,6 +27,7 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
     Platform
 )
+from homeassistant.helpers import issue_registry
 
 from .pybambu import BambuClient
 from .pybambu.const import (
@@ -102,6 +105,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if self._shutdown:
             # Handle race conditions when the integration is being deleted by re-registering and existing device.
             return
+        
+        if event == "event_printer_bambu_authentication_failed":
+            self._report_authentication_issue();
 
         if event == "event_printer_info_update":
             self._update_device_info()
@@ -631,3 +637,23 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if force_reload:
             # Force reload of sensors.
             return await self.hass.config_entries.async_reload(self._entry.entry_id)
+
+    def _report_authentication_issue(self):
+        # issue_id's are permanent - once ignore they will never show again so we need a unique id 
+        # per occurrence per integration instance. That does mean we'll fire a new issue every single
+        # print attempt since that's when we'll typically encounter the authentication failure as we
+        # attempt to get slicer settings.
+        timestamp = int(time.time())
+        issue_id = f"authentication_failed_{self.get_model().info.serial}_{timestamp}"
+
+        # Report the issue
+        LOGGER.debug("Creating issue for authentication failure")
+        issue_registry.async_create_issue(
+            hass=self._hass,
+            domain=DOMAIN,
+            issue_id=issue_id,
+            is_fixable=False,
+            severity=issue_registry.IssueSeverity.ERROR,
+            translation_key="authentication_failed",
+            translation_placeholders = {"device": self.config_entry.options.get('name', '')},
+        )

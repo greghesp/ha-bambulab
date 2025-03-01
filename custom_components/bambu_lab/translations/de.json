@@ -510,6 +510,12 @@
           },
           "remain_enabled": {
             "name": "Verbleibende Filamentschätzung aktiviert"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximales Filamentgewicht"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximales Filamentgewicht"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximales Filamentgewicht"
           }
         }
       },
@@ -615,6 +633,12 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximales Filamentgewicht"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "Bambu Lab-Cloud",
         "lan": "LAN-Modus"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Authentifizierung fehlgeschlagen für {Gerät}",
+      "description": "Der Versuch, eine Verbindung zum Bambu -Labor herzustellen, schlug fehl. Bitte konfigurieren Sie die Integration und stellen Sie neue Anmeldeinformationen an."
     }
   }
 }

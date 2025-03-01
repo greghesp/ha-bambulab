@@ -510,6 +510,12 @@
           },
           "remain_enabled": {
             "name": "Stima del filamento rimanente abilitato"
+          },
+          "filament_id": {
+            "name": "Filamento id"
+          },
+          "tray_weight": {
+            "name": "Peso massimo del filamento"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "Tipo"
+          },
+          "filament_id": {
+            "name": "Filamento id"
+          },
+          "tray_weight": {
+            "name": "Peso massimo del filamento"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "Tipo"
+          },
+          "filament_id": {
+            "name": "Filamento id"
+          },
+          "tray_weight": {
+            "name": "Peso massimo del filamento"
           }
         }
       },
@@ -615,6 +633,12 @@
           },
           "type": {
             "name": "Tipo"
+          },
+          "filament_id": {
+            "name": "Filamento id"
+          },
+          "tray_weight": {
+            "name": "Peso massimo del filamento"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "La nuvola di Bambu Lab",
         "lan": "Modalità Lan"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "L'autenticazione non è riuscita per {dispositivo}",
+      "description": "Tentare di connettersi al laboratorio di Bambu non è riuscito. Si prega di riconfigurare l'integrazione e fornire nuove credenziali."
     }
   }
 }

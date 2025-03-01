@@ -510,6 +510,12 @@
           },
           "remain_enabled": {
             "name": "Estimation du filament restant activée"
+          },
+          "filament_id": {
+            "name": "ID de filament"
+          },
+          "tray_weight": {
+            "name": "Poids maximum de filament"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "ID de filament"
+          },
+          "tray_weight": {
+            "name": "Poids maximum de filament"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "ID de filament"
+          },
+          "tray_weight": {
+            "name": "Poids maximum de filament"
           }
         }
       },
@@ -615,6 +633,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "ID de filament"
+          },
+          "tray_weight": {
+            "name": "Poids maximum de filament"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "Nuage Bambu Lab",
         "lan": "Mode réseau"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "L'authentification a échoué pour {périphérique}",
+      "description": "Tenter de se connecter au laboratoire Bambu a échoué. Veuillez reconfigurer l'intégration et fournir de nouvelles références."
     }
   }
 }

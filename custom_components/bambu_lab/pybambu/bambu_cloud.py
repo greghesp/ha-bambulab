@@ -125,7 +125,7 @@ class BambuCloud:
             LOGGER.error(f"Connection failed with error code: {response.status_code}")
             LOGGER.debug(f"Response: '{response.text}'")
             raise PermissionError(response.status_code, response.text)
-
+        
         LOGGER.debug(f"Response: {response.status_code}")
 
     def _get(self, urlenum: BambuUrl):

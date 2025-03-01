@@ -7,12 +7,12 @@
   "config_flow": true,
   "dependencies": [
     "device_automation",
-    "http",
-    "websocket_api",
     "ffmpeg",
-    "mqtt",
     "frontend",
-    "lovelace"
+    "http",
+    "lovelace",
+    "mqtt",
+    "websocket_api"
   ],
   "documentation": "https://github.com/greghesp/ha-bambulab",
   "iot_class": "local_push",
