@@ -510,6 +510,12 @@
           },
           "remain_enabled": {
             "name": "L'estimació del filament restant ha activat"
+          },
+          "filament_id": {
+            "name": "Identificador de filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim de filament"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "filament_id": {
+            "name": "Identificador de filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim de filament"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "filament_id": {
+            "name": "Identificador de filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim de filament"
           }
         }
       },
@@ -615,6 +633,12 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "filament_id": {
+            "name": "Identificador de filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim de filament"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "Núvol Bambu Lab",
         "lan": "Mode Lan"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "L’autenticació ha fallat per {dispositiu}",
+      "description": "Intentant connectar -se al laboratori Bambu ha fallat. Reconfigureu la integració i proporcioneu credencials noves."
     }
   }
 }

@@ -510,6 +510,12 @@
           },
           "remain_enabled": {
             "name": "나머지 필라멘트 추정이 활성화되었습니다"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "tray_weight": {
+            "name": "필라멘트의 최대 무게"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "유형"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "tray_weight": {
+            "name": "필라멘트의 최대 무게"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "유형"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "tray_weight": {
+            "name": "필라멘트의 최대 무게"
           }
         }
       },
@@ -615,6 +633,12 @@
           },
           "type": {
             "name": "유형"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "tray_weight": {
+            "name": "필라멘트의 최대 무게"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "뱀부랩 클라우드",
         "lan": "랜 모드"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "{device}에 대한 인증 실패",
+      "description": "Bambu Lab에 연결하려는 시도는 실패했습니다. 통합을 재구성하고 새로운 자격 증명을 제공하십시오."
     }
   }
 }

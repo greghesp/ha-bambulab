@@ -510,6 +510,12 @@
           },
           "remain_enabled": {
             "name": "Zostávajúci odhad vlákna povolený"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "tray_weight": {
+            "name": "Maximálna hmotnosť vlákna"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "tray_weight": {
+            "name": "Maximálna hmotnosť vlákna"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "tray_weight": {
+            "name": "Maximálna hmotnosť vlákna"
           }
         }
       },
@@ -615,6 +633,12 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "tray_weight": {
+            "name": "Maximálna hmotnosť vlákna"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "Bambu Lab cloud",
         "lan": "Režim LAN"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Autentifikácia zlyhala pre {zariadenia}",
+      "description": "Pokus o pripojenie k laboratória Bambu zlyhal. Prekonfigurujte integráciu a poskytnite nové poverenia."
     }
   }
 }
