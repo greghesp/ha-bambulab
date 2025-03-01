@@ -515,7 +515,7 @@
             "name": "ID del filament"
           },
           "tray_weight": {
-            "name": "Pes màxim de filament"
+            "name": "Pes màxim del filament"
           }
         }
       },
