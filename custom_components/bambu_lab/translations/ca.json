@@ -43,7 +43,7 @@
         "data": {
           "region": "Regió del compte:",
           "email": "Direcció de Correu Electrònic o Número de Telèfon",
-          "password": "Contrasenyaa",
+          "password": "Contrasenya",
           "newCode": "Sol·licita un codi nou",
           "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
@@ -364,9 +364,9 @@
           "idle": "Inactiva",
           "offline": "Fora de línia",
           "prepare": "Preparant",
-          "running": "En curso",
+          "running": "En curs",
           "pause": "Pausa",
-          "slicing": "Tallant",
+          "slicing": "Laminant",
           "init": "Inicialitzant"
         }
       },
@@ -502,14 +502,20 @@
           "remain": {
             "name": "Filament restant"
           },
+          "remain_enabled": {
+            "name": "Estimació del filament restant activada"
+          },
           "tag_uid": {
             "name": "Número de sèrie de la bobina"
           },
           "type": {
             "name": "Tipus"
           },
-          "remain_enabled": {
-            "name": "L'estimació del filament restant ha activat"
+          "filament_id": {
+            "name": "ID del filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim del filament"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "filament_id": {
+            "name": "ID del filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim del filament"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "filament_id": {
+            "name": "ID del filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim del filament"
           }
         }
       },
@@ -615,11 +633,17 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "filament_id": {
+            "name": "ID del filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim del filament"
           }
         }
       },
       "ip_address": {
-        "name": "adreça IP"
+        "name": "Adreça IP"
       },
       "printable_objects": {
         "name": "Objectes imprimibles"
@@ -655,7 +679,7 @@
     },
     "update": {
       "firmware_update": {
-        "name": "Actualització de Firmware"
+        "name": "Actualització del Firmware"
       }
     }
   },
@@ -663,7 +687,7 @@
     "configuration_type": {
       "options": {
         "bambu": "Núvol Bambu Lab",
-        "lan": "Mode Lan"
+        "lan": "Mode LAN"
       }
     }
   }
