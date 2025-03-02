@@ -191,3 +191,35 @@ load_filament:
           min: 0
           max: 250
           step: 1
+
+set_filament:
+  name: Set filament
+  description: Sets filament details on an AMS tray or an External spool entity
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    tray_info_idx:
+      name: Filament ID
+      description: >-
+       Bambu's filament ID. E.g. GFL96 is Generic PLA Silk
+      required: true
+      example: GFL96
+      selector:
+        text:
+    tray_color:
+      name: Color
+      description: >-
+        RGBA value for the color. E.g. FF0000FF is opaque red.
+      required: true
+      example: FF0000FF
+      selector:
+        text:
+    tray_type:
+      name: Filament type
+      description: >-
+        Type of filament. E.g. 'PLA' or 'PETG'
+      required: true
+      example: PLA
+      selector:
+        text:

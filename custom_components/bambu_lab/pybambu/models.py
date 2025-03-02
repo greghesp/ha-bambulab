@@ -787,7 +787,7 @@ class PrintJob:
         if self.gcode_state == "RUNNING" and previous_gcode_state == "PREPARE" and self._gcode_file_prepare_percent != 0 and self._gcode_file_prepare_percent < 99:
             if self._client.ftp_enabled:
                 # I've observed a bug where the download completes but the gcode_file_prepare_percent never reaches 100. If we transition to the
-                # running gcode_state without observing 100% we assume the download did actuall complete.
+                # running gcode_state without observing 100% we assume the download did actually complete.
                 LOGGER.debug("PRINT STARTED BUT DOWNLOAD NEVER REACHED 99%")
                 self._update_task_data()
 
@@ -996,7 +996,8 @@ class PrintJob:
             try:
                 LOGGER.debug(f"Looking for latest {extensions} file in {path}")
                 ftp.retrlines(f"LIST {path}", lambda line: file_list.append(file) if (file := parse_line(path, line)) is not None else None)
-                LOGGER.debug(f"Completed FTL list for {path}")
+                LOGGER.debug(f"Completed FTP list for {path}")
+                LOGGER.debug(file_list)
             except Exception as e:
                 LOGGER.error(f"FTP list Exception. Type: {type(e)} Args: {e}")
                 pass
@@ -2015,8 +2016,11 @@ class PrintError:
                 code = code.upper()
                 errors = {}
                 errors[f"code"] = code
-                errors[f"error"] = get_print_error_text(code, self._client.user_language)
-                # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
+                error_text = get_print_error_text(code, self._client.user_language)
+                errors[f"error"] = error_text
+                if error_text == 'unknown':
+                    # Suppress unknown errors as they get fired when there are no errors.
+                    errors = None
 
             if self._error != errors:
                 self._error = errors
