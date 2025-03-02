@@ -799,19 +799,6 @@ class PrintJob:
             if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE"):
                 # We haven't yet downloaded model data off the printer. I've observed three scenarios where this happens:
                 # 1. This is a lan mode print where the gcode was pushed to the printer before the print ever started so
-        if self.gcode_state == "RUNNING" and previous_gcode_state == "PREPARE" and self._gcode_file_prepare_percent != 0 and self._gcode_file_prepare_percent < 99:
-            if self._client.ftp_enabled:
-                # I've observed a bug where the download completes but the gcode_file_prepare_percent never reaches 100. If we transition to the
-                # running gcode_state without observing 100% we assume the download did actuall complete.
-                LOGGER.debug("PRINT STARTED BUT DOWNLOAD NEVER REACHED 99%")
-                self._update_task_data()
-
-        if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE") and self._gcode_file_prepare_percent == 0:
-            if self._client.ftp_enabled:
-                # This is a lan mode print where the gcode was pushed to the printer before the print ever started so
-                # there is no download to track. If we can find a definitive way to track true lan mode vs just a pure local
-                # only connection to a cloud connected printer, we can move this update to IDLE -> PREPARE instead since the
-                # model is already present before we even enter the PREPARE phase.
                 # 2. On the P1 I've observed a bug where the download completes but the gcode_file_prepare_percent never reaches 100.
                 # If we transition to the running gcode_state without observing 100% we assume the download did actually complete.
                 # 3. On the X1C for a local Bambu Studio slice sent via the cloud we see the download percentage immediately
