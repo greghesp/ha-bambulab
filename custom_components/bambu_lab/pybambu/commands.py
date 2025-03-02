@@ -87,8 +87,8 @@ AMS_FILAMENT_SETTING_TEMPLATE = {
         "sequence_id": "0",
         "command": "ams_filament_setting",
         "ams_id": 0,                # Index of the AMS
-        "tray_id": 0,               # Index of the tray
-        "tray_info_idx": "",        # Probably the setting ID of the filament profile
+        "tray_id": 0,               # Index of the tray with the AMS
+        "tray_info_idx": "",        # The setting ID of the filament profile
         "tray_color": "000000FF",   # Formatted as hex RRGGBBAA (alpha is always FF)
         "nozzle_temp_min": 0,       # Minimum nozzle temp for filament (in C)
         "nozzle_temp_max": 0,       # Maximum nozzle temp for filament (in C)

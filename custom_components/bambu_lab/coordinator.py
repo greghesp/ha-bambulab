@@ -358,6 +358,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command['print']['tray_id'] = tray
         command['print']['tray_color'] = data.get('tray_color', '')
         command['print']['tray_type'] = data.get('tray_type', '')
+        command['print']['nozzle_temp_min'] = data.get('nozzle_temp_min', '200')
+        command['print']['nozzle_temp_max'] = data.get('nozzle_temp_max', '240')
 
         # "nozzle_temp_min": 0,       # Minimum nozzle temp for filament (in C)
         # "nozzle_temp_max": 0,       # Maximum nozzle temp for filament (in C)

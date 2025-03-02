@@ -223,3 +223,25 @@ set_filament:
       example: PLA
       selector:
         text:
+    nozzle_temp_min:
+      name: Minimum recommended nozzle temperature
+      description: >-
+        The minimum temperature that it is recommended to print this filament at.
+      required: true
+      example: 220
+      selector:
+        number:
+          min: 160
+          max: 250
+          step: 1
+    nozzle_temp_max:
+      name: Maximum recommended nozzle temperature
+      description: >-
+        The maximum temperature that it is recommended to print this filament at.
+      required: true
+      example: 220
+      selector:
+        number:
+          min: 160
+          max: 250
+          step: 1
