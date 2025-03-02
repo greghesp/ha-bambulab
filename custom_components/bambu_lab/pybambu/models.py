@@ -615,7 +615,8 @@ class PrintJob:
     _ams_print_lengths: float
     _skipped_objects: list
     _printable_objects: dict
-    _gcode_file_prepare_percent : int
+    _gcode_file_prepare_percent: int
+    _loaded_model_data: bool
 
     @property
     def get_printable_objects(self) -> json:
@@ -674,6 +675,7 @@ class PrintJob:
         self._printable_objects = {}
         self._skipped_objects = []
         self._gcode_file_prepare_percent = -1
+        self._loaded_model_data = False
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -756,6 +758,7 @@ class PrintJob:
             # Sometimes the download completes so fast we go from a prior print's 100% to 100% for the new print in one update.
             # Make sure we catch that case too. And Lan Mode never sets this - make sure we init it to 0.
             self._gcode_file_prepare_percent = 0
+
             # Clear existing cover & pick image data before attempting any fresh download.
             self._clear_model_data();
 
@@ -776,14 +779,26 @@ class PrintJob:
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
         if self.gcode_state == "PREPARE":
             LOGGER.debug(f"DOWNLOAD PERCENTAGE: {old_gcode_file_prepare_percent} -> {self._gcode_file_prepare_percent}")
-        if (old_gcode_file_prepare_percent != -1) and (self._gcode_file_prepare_percent != old_gcode_file_prepare_percent):
-            if self._gcode_file_prepare_percent >= 99:
-                LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
-                if self._client.ftp_enabled:
-                    # Now we can update the model data by ftp. By this point the model has been successfully loaded to the printer.
-                    # and it's network stack is idle and shouldn't timeout or fail on us randomly.
-                    self._update_task_data()
 
+        # If we are FTP enabled and we haven't yet downloaded the model data, see if we can now.
+        if not self._loaded_model_data:
+
+            if self.gcode_state == "PREPARE" and \
+                old_gcode_file_prepare_percent > 0 and \
+                old_gcode_file_prepare_percent != self._gcode_file_prepare_percent and \
+                self._gcode_file_prepare_percent >= 99:
+
+                # X1C jumps straight from 0 to 100 so we can't use this to trigger the download.
+                # P1 sometimes only gets to 99% download and never reaches 100% so we treat 99% as complete.
+
+                # Now we can update the model data by ftp. By this point the model has been successfully loaded to the printer.
+                # and it's network stack is idle and shouldn't timeout or fail on us randomly.
+                LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
+                self._update_task_data()
+
+            if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE"):
+                # We haven't yet downloaded model data off the printer. I've observed three scenarios where this happens:
+                # 1. This is a lan mode print where the gcode was pushed to the printer before the print ever started so
         if self.gcode_state == "RUNNING" and previous_gcode_state == "PREPARE" and self._gcode_file_prepare_percent != 0 and self._gcode_file_prepare_percent < 99:
             if self._client.ftp_enabled:
                 # I've observed a bug where the download completes but the gcode_file_prepare_percent never reaches 100. If we transition to the
@@ -795,8 +810,14 @@ class PrintJob:
             if self._client.ftp_enabled:
                 # This is a lan mode print where the gcode was pushed to the printer before the print ever started so
                 # there is no download to track. If we can find a definitive way to track true lan mode vs just a pure local
-                # only connection to a cloud connected printer, we can move this update to IDLE -> PREPARE instead.
-                LOGGER.debug("LAN MODE DOWNLOAD STARTED")
+                # only connection to a cloud connected printer, we can move this update to IDLE -> PREPARE instead since the
+                # model is already present before we even enter the PREPARE phase.
+                # 2. On the P1 I've observed a bug where the download completes but the gcode_file_prepare_percent never reaches 100.
+                # If we transition to the running gcode_state without observing 100% we assume the download did actually complete.
+                # 3. On the X1C for a local Bambu Studio slice sent via the cloud we see the download percentage immediately
+                # jump to 100% at the same time we see the PREPARE phase start but if we try and download then, the model file
+                # is not present.
+                LOGGER.debug("REACHED RUNNING WITHOUT DOWNLOADING MODEL")
                 self._update_task_data()
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
@@ -944,11 +965,12 @@ class PrintJob:
                 if model_file is not None:
                     return model_file
 
-        # Fall back to find the latest file by timestamp
-        LOGGER.debug("Falling back to searching for latest 3mf file.")
-        model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
-        if model_path is not None:
-            model_file = self._attempt_ftp_download_of_file(ftp, model_path)
+        if self.subtask_name == "":
+            # Fall back to find the latest file by timestamp but only if we don't have a subtask name set - printer must have been rebooted.
+            LOGGER.debug("Falling back to searching for latest 3mf file.")
+            model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
+            if model_path is not None:
+                model_file = self._attempt_ftp_download_of_file(ftp, model_path)
 
         return model_file
     
@@ -996,7 +1018,7 @@ class PrintJob:
             try:
                 LOGGER.debug(f"Looking for latest {extensions} file in {path}")
                 ftp.retrlines(f"LIST {path}", lambda line: file_list.append(file) if (file := parse_line(path, line)) is not None else None)
-                LOGGER.debug(f"Completed FTL list for {path}")
+                LOGGER.debug(f"Completed FTP list for {path}")
             except Exception as e:
                 LOGGER.error(f"FTP list Exception. Type: {type(e)} Args: {e}")
                 pass
@@ -1066,6 +1088,8 @@ class PrintJob:
         LOGGER.info(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
 
     def _update_task_data(self):
+        self._loaded_model_data = True
+
         # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
@@ -1081,6 +1105,7 @@ class PrintJob:
 
     def _clear_model_data(self):
         LOGGER.debug("Clearing model data")
+        self._loaded_model_data = False
         self._client._device.cover_image.set_image(None)
         self._clear_pick_data();
 
@@ -2015,8 +2040,11 @@ class PrintError:
                 code = code.upper()
                 errors = {}
                 errors[f"code"] = code
-                errors[f"error"] = get_print_error_text(code, self._client.user_language)
-                # LOGGER.warning(f"PRINT ERRORS: {errors}") # This will emit a message to home assistant log every 1 second if enabled
+                error_text = get_print_error_text(code, self._client.user_language)
+                errors[f"error"] = error_text
+                if error_text == 'unknown':
+                    # Suppress unknown errors as they get fired when there are no errors.
+                    errors = None
 
             if self._error != errors:
                 self._error = errors
