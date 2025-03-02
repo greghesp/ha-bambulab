@@ -15,6 +15,7 @@ from .pybambu.const import (
     EXTRUDE_RETRACT_BUS_EVENT,
     LOAD_FILAMENT_BUS_EVENT,
     UNLOAD_FILAMENT_BUS_EVENT,
+    SET_FILAMENT_BUS_EVENT,
 )
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -136,6 +137,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         DOMAIN,
         "unload_filament",  # Service name
         unload_filament  # Handler function
+    )
+
+    async def set_filament(call: ServiceCall):
+        """Handle the service call."""
+        if check_service_call_payload_for_entity(call) is False:
+            return
+        hass.bus.fire(SET_FILAMENT_BUS_EVENT, call.data)
+
+    # Register the service with Home Assistant
+    hass.services.async_register(
+        DOMAIN,
+        "set_filament",  # Service name
+        set_filament  # Handler function
     )
 
     async def load_filament(call: ServiceCall):

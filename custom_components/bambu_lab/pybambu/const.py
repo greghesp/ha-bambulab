@@ -15,6 +15,7 @@ MOVE_AXIS_BUS_EVENT = 'bambu_lab_move_axis'
 EXTRUDE_RETRACT_BUS_EVENT = 'bambu_lab_extrude_retract'
 LOAD_FILAMENT_BUS_EVENT = 'bambu_lab_load_filament'
 UNLOAD_FILAMENT_BUS_EVENT = 'bambu_lab_unload_filament'
+SET_FILAMENT_BUS_EVENT = 'bambu_lab_set_filament'
 
 class Features(IntEnum):
     AUX_FAN = 1,
