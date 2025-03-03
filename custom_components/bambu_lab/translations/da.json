@@ -510,6 +510,12 @@
           },
           "remain_enabled": {
             "name": "Resterende filamentestimering aktiveret"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maksimal vægt af glødetråd"
           }
         }
       },
@@ -545,6 +551,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maksimal vægt af glødetråd"
           }
         }
       },
@@ -580,6 +592,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maksimal vægt af glødetråd"
           }
         }
       },
@@ -615,6 +633,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maksimal vægt af glødetråd"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "Bambu Lab sky",
         "lan": "Lan-tilstand"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Autentificering mislykkedes for {enhed}",
+      "description": "Forsøg på at oprette forbindelse til Bambu Lab mislykkedes. Konfigurer integrationen igen og giver friske legitimationsoplysninger."
     }
   }
 }

@@ -669,5 +669,11 @@
         "lan": "Lan Mode"
       }
     }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Authentication Failed for {device}",
+      "description": "Attempting to connect to Bambu Lab failed. Please reconfigure the integration and provide fresh credentials."
+    }
   }
 }

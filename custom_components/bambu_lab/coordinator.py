@@ -9,6 +9,9 @@ from .const import (
     OPTION_NAME,
 )
 import asyncio
+import re
+import time
+
 from typing import Any
 
 from homeassistant import config_entries
@@ -21,6 +24,7 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
     Platform
 )
+from homeassistant.helpers import issue_registry
 
 from .pybambu import BambuClient
 from .pybambu.const import (
@@ -32,6 +36,7 @@ from .pybambu.const import (
     EXTRUDE_RETRACT_BUS_EVENT,
     LOAD_FILAMENT_BUS_EVENT,
     UNLOAD_FILAMENT_BUS_EVENT,
+    SET_FILAMENT_BUS_EVENT,
 )
 from .pybambu.commands import (
     PRINT_PROJECT_FILE_TEMPLATE,
@@ -41,6 +46,7 @@ from .pybambu.commands import (
     HOME_GCODE,
     EXTRUDER_GCODE,
     SWITCH_AMS_TEMPLATE,
+    AMS_FILAMENT_SETTING_TEMPLATE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -79,6 +85,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.hass.bus.async_listen(EXTRUDE_RETRACT_BUS_EVENT, self._service_call_extrude_retract)
         self.hass.bus.async_listen(LOAD_FILAMENT_BUS_EVENT, self._service_call_load_filament)
         self.hass.bus.async_listen(UNLOAD_FILAMENT_BUS_EVENT, self._service_call_unload_filament)
+        self.hass.bus.async_listen(SET_FILAMENT_BUS_EVENT, self._service_call_set_filament)
 
     @callback
     def _async_shutdown(self, event: Event) -> None:
@@ -98,6 +105,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if self._shutdown:
             # Handle race conditions when the integration is being deleted by re-registering and existing device.
             return
+        
+        if event == "event_printer_bambu_authentication_failed":
+            self._report_authentication_issue();
 
         if event == "event_printer_info_update":
             self._update_device_info()
@@ -250,9 +260,123 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command['print']['param'] = gcode
         self.client.publish(command)
 
+    def _get_ams_and_tray_index_from_entity_entry(self, ams_device, entity_entry):
+        match = re.search(r"tray_([1-4])$", entity_entry.unique_id)
+        # Zero-index the tray ID and find the AMS index
+        tray = int(match.group(1)) - 1
+        # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
+        ams_serial = next(iter(ams_device.identifiers))[1]
+        ams_index = None
+        for index in range(0,4):
+            ams = self.get_model().ams.data[index]
+            if ams is not None:
+                if ams.serial == ams_serial:
+                    # We found the right AMS.
+                    ams_index = index
+                    break
+
+        full_tray = tray + ams_index * 4
+        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index+1}/4")
+
+        return ams_index, tray
+
+    def _service_call_set_filament(self, event: Event):
+        data = event.data
+        device_id = data.get('device_id', [])
+        if len(device_id) != 0:
+            LOGGER.error("Invalid entity data payload: {data}")
+            return False
+        entity_id = data.get('entity_id', [])
+        if len(entity_id) != 1:
+            LOGGER.error("Invalid entity data payload: {data}")
+            return False
+        entity_id = entity_id[0]
+
+        # Get the AMS device
+        ams_device = self._get_device_from_entity(entity_id)
+        if ams_device is None:
+            LOGGER.error("Unable to find AMS or external spool from entity")
+            return None
+
+        # Get the device the AMS is connected to.
+        ams_parent_device_id = ams_device.via_device_id
+
+        # Get my device id
+        dr = device_registry.async_get(self._hass)
+        hadevice = dr.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+
+        if ams_parent_device_id != hadevice.id:
+            return
+        
+        # This call is for us.
+        # Get the entity details.
+        er = entity_registry.async_get(self._hass)
+        entity_entry = er.async_get(entity_id)
+        entity_unique_id = entity_entry.unique_id
+        # entity_entry.unique_id is of the form:
+        #   X1C_<PRINTERSERIAL>_AMS_<AMSSERIAL>_tray_1
+        # or
+        #   X1C_<PRINTERSERIAL>_ExternalSpool_external_spool
+
+        if entity_unique_id.endswith('_external_spool'):
+            tray = 254
+        elif not self.get_model().supports_feature(Features.AMS):
+            LOGGER.error(f"AMS not available")
+            return False
+        elif re.search(r"tray_([1-4])$", entity_unique_id):
+            ams_index, tray = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
+            if ams_index is None:
+                LOGGER.error("Unable to locate AMS.")
+                return
+            ams_tray = self.get_model().ams.data[ams_index].tray[tray]
+            if ams_tray.empty:
+                LOGGER.error(f"AMS {ams_index + 1} tray {tray + 1} is empty")
+                return
+        else:
+            LOGGER.error(f"An AMS tray or external spool is required")
+            return False
+        
+        command = AMS_FILAMENT_SETTING_TEMPLATE
+        command['print']['ams_id'] = ams_index
+        command['print']['tray_info_idx'] = data.get('tray_info_idx', '')
+        command['print']['tray_id'] = tray
+        command['print']['tray_color'] = data.get('tray_color', '')
+        command['print']['tray_type'] = data.get('tray_type', '')
+        command['print']['nozzle_temp_min'] = data.get('nozzle_temp_min', '200')
+        command['print']['nozzle_temp_max'] = data.get('nozzle_temp_max', '240')
+
+        # "nozzle_temp_min": 0,       # Minimum nozzle temp for filament (in C)
+        # "nozzle_temp_max": 0,       # Maximum nozzle temp for filament (in C)
+        # "tray_type": "PLA"          # Type of filament, such as "PLA" or "ABS"
+
+        self.client.publish(command)
+
     def _service_call_load_filament(self, event: Event):
         data = event.data
-        if not self._service_call_is_for_me(data):
+        device_id = data.get('device_id', [])
+        if len(device_id) != 0:
+            LOGGER.error("Invalid entity data payload: {data}")
+            return False
+        entity_id = data.get('entity_id', [])
+        if len(entity_id) != 1:
+            LOGGER.error("Invalid entity data payload: {data}")
+            return False
+        entity_id = entity_id[0]
+
+        # Get the AMS device
+        ams_device = self._get_device_from_entity(entity_id)
+        if ams_device is None:
+            LOGGER.error("Unable to find AMS or external spool from entity")
+            return None
+
+        # Get the device the AMS is connected to.
+        ams_parent_device_id = ams_device.via_device_id
+
+        # Get my device id
+        dr = device_registry.async_get(self._hass)
+        hadevice = dr.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+
+        if ams_parent_device_id != hadevice.id:
             return
 
         LOGGER.debug(f"_service_call_load_filament: {data}")
@@ -276,20 +400,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
-        elif data.get('tray') is not None and tray >= 1 and tray <= 16:
-            # Zero-index the tray ID and find the AMS index
-            tray = tray -1
-            ams_idx = (tray // 4)
-            
-            # Check the AMS exists and has filament
-            if not self.get_model().ams.data[ams_idx] or self.get_model().ams.data[ams_idx].tray[tray].empty:
-                LOGGER.error(f"AMS tray '{data.get('tray')}' is empty")
-                return False
+        elif re.search(r"tray_([1-4])$", entity_unique_id):
+            ams_index, tray = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
+            if ams_index is None:
+                LOGGER.error("Unable to locate AMS.")
+                return
+
+            ams_tray = self.get_model().ams.data[ams_index].tray[tray]
+            if ams_tray.empty:
+                LOGGER.error(f"AMS {ams_index + 1} tray {tray + 1} is empty")
+                return
 
             # Unless a target temperature override is set, try and find the
             # midway temperature of the filament set in the ext spool
             if data.get('temperature') is None:
-                ams_tray = self.get_model().ams.data[ams_idx].tray[tray]
                 temperature = (int(ams_tray.nozzle_temp_min) + int(ams_tray.nozzle_temp_max)) // 2
         else:
             LOGGER.error(f"An AMS tray or external spool is required")
@@ -580,3 +704,23 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if force_reload:
             # Force reload of sensors.
             return await self.hass.config_entries.async_reload(self._entry.entry_id)
+
+    def _report_authentication_issue(self):
+        # issue_id's are permanent - once ignore they will never show again so we need a unique id 
+        # per occurrence per integration instance. That does mean we'll fire a new issue every single
+        # print attempt since that's when we'll typically encounter the authentication failure as we
+        # attempt to get slicer settings.
+        timestamp = int(time.time())
+        issue_id = f"authentication_failed_{self.get_model().info.serial}_{timestamp}"
+
+        # Report the issue
+        LOGGER.debug("Creating issue for authentication failure")
+        issue_registry.async_create_issue(
+            hass=self._hass,
+            domain=DOMAIN,
+            issue_id=issue_id,
+            is_fixable=False,
+            severity=issue_registry.IssueSeverity.ERROR,
+            translation_key="authentication_failed",
+            translation_placeholders = {"device": self.config_entry.options.get('name', '')},
+        )

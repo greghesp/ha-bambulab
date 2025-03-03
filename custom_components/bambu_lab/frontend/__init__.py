@@ -4,11 +4,14 @@ import logging
 import os
 import pathlib
 
+from packaging.version import parse
+
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.event import async_call_later
 from homeassistant.components.http import StaticPathConfig
+from homeassistant.const import __version__
 
-from ..const import BAMBU_LAB_CARDS, URL_BASE
+from ..const import BAMBU_LAB_CARDS, URL_BASE, LOGGER
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -16,9 +19,25 @@ class BambuLabCardRegistration:
     def __init__(self, hass: HomeAssistant):
         self.hass = hass
 
+    @property
+    def lovelace_mode(self):
+        ha_version = parse(__version__)
+        if (ha_version.major >= 2026) or ((ha_version.major == 2025) and (ha_version.minor >= 2)):
+            return self.hass.data["lovelace"].mode
+        else:
+            return self.hass.data["lovelace"]["mode"]
+
+    @property
+    def lovelace_resources(self):
+        ha_version = parse(__version__)
+        if (ha_version.major >= 2026) or ((ha_version.major == 2025) and (ha_version.minor >= 2)):
+            return self.hass.data["lovelace"].resources
+        else:
+            return self.hass.data["lovelace"]["resources"]
+
     async def async_register(self):
         await self.async_register_bambu_path()
-        if self.hass.data["lovelace"]["mode"] == "storage":
+        if self.lovelace_mode == "storage":
             await self.async_wait_for_lovelace_resources()
 
     # install card 
@@ -35,7 +54,7 @@ class BambuLabCardRegistration:
 
     async def async_wait_for_lovelace_resources(self) -> None:
         async def check_lovelace_resources_loaded(now):
-            if self.hass.data["lovelace"]["resources"].loaded:
+            if self.lovelace_resources.loaded:
                 await self.async_register_bambu_cards()
             else:
                 _LOGGER.debug("Unable to install Bambu Cards because Lovelace resources not yet loaded. Trying again in 5 seconds")
@@ -49,7 +68,7 @@ class BambuLabCardRegistration:
         # Get resources already registered
         bambu_resources = [
             resource
-            for resource in self.hass.data["lovelace"]["resources"].async_items()
+            for resource in self.lovelace_resources.async_items()
             if resource["url"].startswith(URL_BASE)
         ]
 
@@ -66,7 +85,7 @@ class BambuLabCardRegistration:
 
                         # Update card version
                         _LOGGER.debug("Updating %s to version %s", card.get("name"), card.get("version"))
-                        await self.hass.data["lovelace"]["resources"].async_update_item(res.get("id"), {
+                        await self.lovelace_resources.async_update_item(res.get("id"), {
                             "res_type":"module",
                             "url":url + "?v=" + card.get("version")
                         })
@@ -78,7 +97,7 @@ class BambuLabCardRegistration:
 
             if not card_registered:
                 _LOGGER.debug("Registering %s as version %s", card.get("name"), card.get("version"))
-                await self.hass.data["lovelace"]["resources"].async_create_item({
+                await self.lovelace_resources.async_create_item({
                     "res_type":"module",
                     "url":url + "?v=" + card.get("version")
                 })
@@ -95,17 +114,17 @@ class BambuLabCardRegistration:
 
     async def async_unregister(self):
         # Unload lovelace module resource
-        if self.hass.data["lovelace"]["mode"] == "storage":
+        if self.lovelace_mode == "storage":
             for card in BAMBU_LAB_CARDS:
                 url = f"{URL_BASE}/{card.get("filename")}"
                 bambu_resources = [
                     resource
-                     for resource in self.hass.data["lovelace"]["resources"].async_items()
+                     for resource in self.lovelace_resources.async_items()
                     if str(resource["url"]).startswith(url)
                 ]
 
                 for resource in bambu_resources:
-                    await self.hass.data["lovelace"]["resources"].async_delete_item(resource.get("id"))
+                    await self.lovelace_resources.async_delete_item(resource.get("id"))
 
     async def async_remove_gzip_files(self):
         await self.hass.async_add_executor_job(self.remove_gzip_files)

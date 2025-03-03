@@ -516,6 +516,12 @@
           },
           "remain_enabled": {
             "name": "Resterende schatting van de gloeidraad ingeschakeld"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximaal gewicht van de gloeidraad"
           }
         }
       },
@@ -551,6 +557,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximaal gewicht van de gloeidraad"
           }
         }
       },
@@ -586,6 +598,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximaal gewicht van de gloeidraad"
           }
         }
       },
@@ -621,6 +639,12 @@
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximaal gewicht van de gloeidraad"
           }
         }
       },
@@ -665,6 +689,12 @@
         "bambu": "Bambu Lab cloud",
         "lan": "Lan-modus"
       }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Authenticatie mislukt voor {apparaat}",
+      "description": "Proberen om verbinding te maken met Bambu Lab is mislukt. Configureer de integratie opnieuw en geef nieuwe referenties."
     }
   }
 }
