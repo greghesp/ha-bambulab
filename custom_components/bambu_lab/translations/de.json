@@ -380,6 +380,9 @@
       "gcode_file": {
         "name": "Gcode Dateiname"
       },
+      "gcode_file_downloaded": {
+        "name": "Gcode Dateiname heruntergeladen"
+      },
       "print_bed_type": {
         "name": "Druckbett Typ",
         "state": {
@@ -651,6 +654,9 @@
       },
       "timelapse": {
         "name": "Laden Sie den neuesten Zeitplan aus dem Drucker"
+      },
+      "download_gcode_file": {
+        "name": "GCode Datei in HA speichern"
       }
     },
     "update": {

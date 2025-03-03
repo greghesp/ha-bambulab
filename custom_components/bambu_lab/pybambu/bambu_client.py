@@ -55,7 +55,7 @@ class WatchdogThread(threading.Thread):
         self.setName(f"{self._client._device.info.device_type}-Watchdog-{threading.get_native_id()}")
         LOGGER.debug("Watchdog thread started.")
 
-        WATCHDOG_TIMER = 60
+        WATCHDOG_TIMER = 30
         while True:
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
             interval = time.time() - self._last_received_data
@@ -344,6 +344,7 @@ class BambuClient:
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
         self._enable_timelapse = config.get('enable_timelapse', False)
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
+        self._enable_download_gcode_file = config.get('enable_download_gcode_file', False)
 
         self._connected = False
         self._port = 1883
@@ -409,6 +410,13 @@ class BambuClient:
 
     def set_ftp_enabled(self, enable):
         self._enable_ftp = enable
+        
+    @property
+    def download_gcode_file_enabled(self):
+        return self._device.supports_feature(Features.DOWNLOAD_GCODE_FILE) and self._enable_download_gcode_file
+
+    def set_download_gcode_file_enabled(self, enable):
+        self._enable_download_gcode_file = enable
 
     @property
     def timelapse_enabled(self):
@@ -701,10 +709,10 @@ class BambuClient:
                 LOGGER.debug("Connection test was successful")
                 return True
         except OSError as e:
-            LOGGER.error(f"Connection test to '{host}' failed: {type(e)} Args: {e}")
+            LOGGER.error(f"Connection test failed with exception {type(e)} Args: {e}")
             return False
         except queue.Empty:
-            LOGGER.error(f"Connection test to '{host}' failed with timeout")
+            LOGGER.error(f"Connection test failed with timeout")
             return False
         finally:
             self.disconnect()

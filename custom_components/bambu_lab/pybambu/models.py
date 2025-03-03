@@ -4,12 +4,13 @@ import math
 import os
 import re
 import threading
+import shutil
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 from dateutil import parser, tz
 from packaging import version
-from zipfile import ZipFile
+from zipfile import ZipFile, ZipInfo
 from typing import Union
 import io
 import tempfile
@@ -172,6 +173,8 @@ class Device:
             elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.05.06.01"):
                 return True
             return False
+        elif feature == Features.DOWNLOAD_GCODE_FILE:
+            return True
 
         return False
     
@@ -600,6 +603,8 @@ class PrintJob:
     gcode_state: str
     file_type_icon: str
     gcode_file: str
+    gcode_file_downloaded: str
+    testblah: str
     subtask_name: str
     start_time: datetime
     end_time: datetime
@@ -656,6 +661,8 @@ class PrintJob:
         self.print_percentage = 0
         self.gcode_state = "unknown"
         self.gcode_file = ""
+        self.gcode_file_downloaded = ""
+        self.testblah = ""
         self.subtask_name = ""
         self.start_time = None
         self.end_time = None
@@ -753,12 +760,6 @@ class PrintJob:
         if previously_idle and not currently_idle:
             self._client.callback("event_print_started")
 
-            # Sometimes the download completes so fast we go from a prior print's 100% to 100% for the new print in one update.
-            # Make sure we catch that case too. And Lan Mode never sets this - make sure we init it to 0.
-            self._gcode_file_prepare_percent = 0
-            # Clear existing cover & pick image data before attempting any fresh download.
-            self._clear_model_data();
-
             # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
             # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
             if self._client._device.supports_feature(Features.START_TIME_GENERATED):
@@ -772,6 +773,13 @@ class PrintJob:
                 # We can update task data from the cloud immediately. But ftp has to wait.
                 self._update_task_data()
 
+        if self.gcode_state == "PREPARE" and previous_gcode_state != "PREPARE":
+            # Sometimes the download completes so fast we go from a prior print's 100% to 100% for the new print in one update.
+            # Make sure we catch that case too.
+            self._gcode_file_prepare_percent = 0
+            # Clear existing cover & pick image data before attempting the fresh download.
+            self._clear_model_data();
+            
         old_gcode_file_prepare_percent = self._gcode_file_prepare_percent
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
         if self.gcode_state == "PREPARE":
@@ -791,7 +799,7 @@ class PrintJob:
                 LOGGER.debug("PRINT STARTED BUT DOWNLOAD NEVER REACHED 99%")
                 self._update_task_data()
 
-        if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE") and self._gcode_file_prepare_percent == 0:
+        if self.gcode_state == "RUNNING" and previous_gcode_state == "PREPARE" and self._gcode_file_prepare_percent == 0:
             if self._client.ftp_enabled:
                 # This is a lan mode print where the gcode was pushed to the printer before the print ever started so
                 # there is no download to track. If we can find a definitive way to track true lan mode vs just a pure local
@@ -893,7 +901,7 @@ class PrintJob:
             LOGGER.debug(f"Attempting download of '{file_path}'")
             ftp.retrbinary(f"RETR {file_path}", file.write)
             file.flush()
-            LOGGER.debug(f"Successfully downloaded '{file_path}'.")
+            LOGGER.debug(f"Successfully downloaded '{file_path}' to '{file.name}'.")
             return file
         except ftplib.error_perm as e:
              if '550' not in str(e.args): # 550 is unavailable.
@@ -1112,7 +1120,6 @@ class PrintJob:
             with ZipFile(model_file) as archive:
                 # Extract the slicer XML config and parse the plate tree
                 plate = ElementTree.fromstring(archive.read('Metadata/slice_info.config')).find('plate')
-                
                 # Iterate through each config element and extract the data
                 # Example contents:
                 # {'key': 'index', 'value': '2'}
@@ -1151,6 +1158,24 @@ class PrintJob:
                         self._client._device.cover_image.set_image(archive.read(f"Metadata/plate_{plate_number}.png"))
                         LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
 
+                        #Extract gcode file from archive to HA www folder if download_gcode_file is enabled
+                        if self._client.download_gcode_file_enabled:
+                            try:
+                                local_gcode_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/tmp_gcode"
+                                local_gcode_filename = f"{os.path.basename(os.path.realpath(model_file.name))}.gcode"
+                                if not os.path.exists(local_gcode_dir):
+                                    os.makedirs(local_gcode_dir)
+                                for name in os.listdir(local_gcode_dir):
+                                    path = os.path.join(local_gcode_dir, name)
+                                    if os.path.isfile(path):
+                                        os.remove(path)
+                                with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(os.path.join(local_gcode_dir, local_gcode_filename), "wb") as target_path:
+                                    shutil.copyfileobj(gcode_entry, target_path)
+                                    self.gcode_file_downloaded = local_gcode_filename
+                            except Exception as e:
+                                LOGGER.debug(f"Error while extracting gcode zip entry to target path. {repr(e)}")
+                            
+                        
                         # And extract the plate type from the plate json.
                         self.print_bed_type = json.loads(archive.read(f"Metadata/plate_{plate_number}.json")).get('bed_type')
                     elif (metadata.get('key') == 'weight'):
@@ -1596,14 +1621,12 @@ class AMSList:
     """Return all AMS related info"""
     tray_now: int
     data: list[AMSInstance]
-    model: str
 
     def __init__(self, client):
         self._client = client
         self.tray_now = 0
         self.data = [None] * 4
         self._first_initialization_done = False
-        self.model = ""
 
     def info_update(self, data):
         old_data = f"{self.__dict__}"
@@ -1639,10 +1662,8 @@ class AMSList:
             name = module["name"]
             index = -1
             if name.startswith("ams/"):
-                self.model = "AMS"
                 index = int(name[4])
             elif name.startswith("ams_f1/"):
-                self.model = "AMS Lite"
                 index = int(name[7])
             
             if index != -1:
@@ -1771,7 +1792,7 @@ class AMSTray:
     k: float
     tag_uid: str
     tray_uuid: str
-    tray_weight: int
+
 
     def __init__(self, client):
         self._client = client
@@ -1787,7 +1808,7 @@ class AMSTray:
         self.k = 0
         self.tag_uid = ""
         self.tray_uuid = ""
-        self.tray_weight = 0
+
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
@@ -1805,7 +1826,6 @@ class AMSTray:
             self.tag_uid = ""
             self.tray_uuid = ""
             self.k = 0
-            self.tray_weight = 0
         else:
             self.empty = False
             self.idx = data.get('tray_info_idx', self.idx)
@@ -1819,7 +1839,7 @@ class AMSTray:
             self.tag_uid = data.get('tag_uid', self.tag_uid)
             self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
-            self.tray_weight = data.get('tray_weight', self.tray_weight)
+        
         return (old_data != f"{self.__dict__}")
 
 

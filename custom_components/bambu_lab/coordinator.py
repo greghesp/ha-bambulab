@@ -9,15 +9,11 @@ from .const import (
     OPTION_NAME,
 )
 import asyncio
-import re
 from typing import Any
 
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import (
-    device_registry,
-    entity_registry
-)
+from homeassistant.helpers import device_registry
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.core import Event, HomeAssistant, callback
@@ -174,24 +170,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
         device_id = data.get('device_id', [])
         if len(device_id) != 1:
-            LOGGER.error("Invalid device data payload: {data}")
+            LOGGER.error("Invalid skip objects data payload: {data}")
             return False
 
         return (device_id[0] == hadevice.id)
 
-    def _get_device_from_entity(self, entity_id):
-        """Get the device associated with a given entity_id."""
-        er = entity_registry.async_get(self._hass)
-        entity_entry = er.async_get(entity_id)
-
-        if not entity_entry or not entity_entry.device_id:
-            return None  # No associated device
-
-        dr = device_registry.async_get(self._hass)
-        device_entry = dr.async_get(entity_entry.device_id)
-
-        return device_entry  # Returns a DeviceEntry object or None
-        
     def _service_call_skip_objects(self, event: Event):
         data = event.data
         if not self._service_call_is_for_me(data):
@@ -269,31 +252,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _service_call_load_filament(self, event: Event):
         data = event.data
-        device_id = data.get('device_id', [])
-        if len(device_id) != 0:
-            LOGGER.error("Invalid entity data payload: {data}")
-            return False
-        entity_id = data.get('entity_id', [])
-        if len(entity_id) != 1:
-            LOGGER.error("Invalid entity data payload: {data}")
-            return False
-        entity_id = entity_id[0]
-
-        # Get the AMS device
-        ams_device = self._get_device_from_entity(entity_id)
-        if ams_device is None:
-            LOGGER.error("Unable to find AMS or external spool from entity")
-
-        # Get the device the AMS is connected to.
-        parent_device_id = ams_device.via_device_id
-        # Get my device id
-        dr = device_registry.async_get(self._hass)
-        hadevice = dr.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
-
-        if parent_device_id != hadevice.id:
+        if not self._service_call_is_for_me(data):
             return
-        
-        # This call is for us.
+
+        LOGGER.debug(f"_service_call_load_filament: {data}")
 
         # Printers with older firmware require a different method to change
         # filament. For now, only support newer firmware.
@@ -301,18 +263,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error(f"Loading filament is not available for this printer's firmware version, please update it")
             return False
 
-        # Get the entity details.
-        er = entity_registry.async_get(self._hass)
-        entity_entry = er.async_get(entity_id)
-        entity_unique_id = entity_entry.unique_id
-        # entity_entry.unique_id is of the form:
-        #   X1C_<PRINTERSERIAL>_AMS_<AMSSERIAL>_tray_1
-        # or
-        #   X1C_<PRINTERSERIAL>_ExternalSpool_external_spool
-
+        tray = int(data.get('tray', 1))
         temperature = int(data.get('temperature', 0))
 
-        if entity_unique_id.endswith('_external_spool'):
+        if data.get('external_spool') is True:
             tray = 254
             # Unless a target temperature override is set, try and find the
             # midway temperature of the filament set in the ext spool
@@ -322,34 +276,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
-        elif re.search(r"tray_([1-4])$", entity_unique_id):
-            match = re.search(r"tray_([1-4])$", entity_unique_id)
+        elif data.get('tray') is not None and tray >= 1 and tray <= 16:
             # Zero-index the tray ID and find the AMS index
-            tray = int(match.group(1)) - 1
-            # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
-            ams_serial = next(iter(ams_device.identifiers))[1]
-            ams_index = None
-            for index in range(0,4):
-                ams = self.get_model().ams.data[index]
-                if ams is not None:
-                    if ams.serial == ams_serial:
-                        # We found the right AMS.
-                        ams_index = index
-                        if ams.tray[tray].empty:
-                            LOGGER.error(f"AMS {ams_index + 1} tray {tray} is empty")
-                            return
-                        
-            if ams_index is None:
-                LOGGER.error("Unable to locate AMS.")
-                return
-
-            tray = tray + ams_index * 4
-            LOGGER.debug(f"FINAL TRAY VALUE: {tray}/15 = Tray {(tray)%4 + 1}/4 on AMS {ams_index+1}/4")
+            tray = tray -1
+            ams_idx = (tray // 4)
+            
+            # Check the AMS exists and has filament
+            if not self.get_model().ams.data[ams_idx] or self.get_model().ams.data[ams_idx].tray[tray].empty:
+                LOGGER.error(f"AMS tray '{data.get('tray')}' is empty")
+                return False
 
             # Unless a target temperature override is set, try and find the
             # midway temperature of the filament set in the ext spool
             if data.get('temperature') is None:
-                ams_tray = self.get_model().ams.data[ams_index].tray[tray]
+                ams_tray = self.get_model().ams.data[ams_idx].tray[tray]
                 temperature = (int(ams_tray.nozzle_temp_min) + int(ams_tray.nozzle_temp_max)) // 2
         else:
             LOGGER.error(f"An AMS tray or external spool is required")
@@ -505,7 +445,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for device in dev_reg.devices.values():
             if config_entry_id in device.config_entries:
                 # This device is associated with this printer.
-                if device.model == 'AMS' or device.model == 'AMS Lite':
+                if device.model == 'AMS':
                     # And it's an AMS device
                     ams_serial = list(device.identifiers)[0][1]
                     if ams_serial not in existing_ams_devices:
@@ -563,15 +503,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def get_ams_device(self, index):
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
-        device_name = f"{device_type}_{printer_serial}_AMS_{index+1}"
+        device_name=f"{device_type}_{printer_serial}_AMS_{index+1}"
         ams_serial = self.get_model().ams.data[index].serial
-        model = self.get_model().ams.model
 
         return DeviceInfo(
             identifiers={(DOMAIN, ams_serial)},
             via_device=(DOMAIN, printer_serial),
             name=device_name,
-            model=model,
+            model="AMS",
             manufacturer=BRAND,
             hw_version=self.get_model().ams.data[index].hw_version,
             sw_version=self.get_model().ams.data[index].sw_version
@@ -607,6 +546,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def set_option_enabled(self, option: Options, enable: bool):
         LOGGER.debug(f"Setting {OPTION_NAME[option]} to {enable}")
         options = dict(self.config_entry.options)
+        
+        if option == Options.DOWNLOAD_GCODE_FILE:
+            if enable:
+                enable = self.get_option_enabled(Options.FTP)
+        if option == Options.FTP:
+            if not enable:
+                options[OPTION_NAME[Options.DOWNLOAD_GCODE_FILE]] = enable
+        
         options[OPTION_NAME[option]] = enable
         self._hass.config_entries.async_update_entry(
             entry=self.config_entry,
@@ -626,6 +573,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case Options.FTP:
                 force_reload = True
             case Options.TIMELAPSE:
+                force_reload = True
+            case Options.DOWNLOAD_GCODE_FILE:
                 force_reload = True
 
         if force_reload:

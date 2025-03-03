@@ -23,7 +23,7 @@ class Features(IntEnum):
     CHAMBER_TEMPERATURE = 4,
     CURRENT_STAGE = 5,
     PRINT_LAYERS = 6,
-    AMS = 7, # Supports either AMS or AMS Lite
+    AMS = 7,
     EXTERNAL_SPOOL = 8,
     K_VALUE = 9,
     START_TIME = 10,
@@ -39,6 +39,7 @@ class Features(IntEnum):
     FTP = 21,
     TIMELAPSE = 22,
     AMS_SWITCH_COMMAND = 23,
+    DOWNLOAD_GCODE_FILE = 24
 
 
 class FansEnum(IntEnum):

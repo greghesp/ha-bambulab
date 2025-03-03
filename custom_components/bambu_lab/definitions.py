@@ -342,6 +342,13 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
     ),
     BambuLabSensorEntityDescription(
+        key="gcode_file_downloaded",
+        translation_key="gcode_file_downloaded",
+        available_fn=lambda self: self.coordinator.get_model().print_job.gcode_file_downloaded != "",
+        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_file_downloaded,
+        icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
+    ),
+    BambuLabSensorEntityDescription(
         key="subtask_name",
         translation_key="subtask_name",
         available_fn=lambda self: self.coordinator.get_model().print_job.subtask_name != "",
@@ -400,9 +407,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         extra_attributes=lambda self:
         {
             "color": f"#{self.coordinator.get_model().get_active_tray().color}",
-            "filament_id": self.coordinator.get_model().get_active_tray().idx,
             **({"k_value": self.coordinator.get_model().get_active_tray().k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
-            "tray_weight": self.coordinator.get_model().get_active_tray().tray_weight,
             "name": self.coordinator.get_model().get_active_tray().name,
             "nozzle_temp_min": self.coordinator.get_model().get_active_tray().nozzle_temp_min,
             "nozzle_temp_max": self.coordinator.get_model().get_active_tray().nozzle_temp_max,
@@ -486,9 +491,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
                     math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[0].color}",
             "empty": self.coordinator.get_model().ams.data[self.index].tray[0].empty,
-            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[0].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[0].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
-            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[0].tray_weight,
             "name": self.coordinator.get_model().ams.data[self.index].tray[0].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[0].nozzle_temp_min,
             "nozzle_temp_max": self.coordinator.get_model().ams.data[self.index].tray[0].nozzle_temp_max,
@@ -510,9 +513,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
                     math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[1].color}",
             "empty": self.coordinator.get_model().ams.data[self.index].tray[1].empty,
-            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[1].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[1].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
-            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[1].tray_weight,
             "name": self.coordinator.get_model().ams.data[self.index].tray[1].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[1].nozzle_temp_min,
             "nozzle_temp_max": self.coordinator.get_model().ams.data[self.index].tray[1].nozzle_temp_max,
@@ -534,9 +535,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
                     math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[2].color}",
             "empty": self.coordinator.get_model().ams.data[self.index].tray[2].empty,
-            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[2].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[2].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
-            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[2].tray_weight,
             "name": self.coordinator.get_model().ams.data[self.index].tray[2].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[2].nozzle_temp_min,
             "nozzle_temp_max": self.coordinator.get_model().ams.data[self.index].tray[2].nozzle_temp_max,
@@ -558,9 +557,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
                     math.floor(self.coordinator.get_model().ams.tray_now / 4) == self.index),
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[3].color}",
             "empty": self.coordinator.get_model().ams.data[self.index].tray[3].empty,
-            "filament_id": self.coordinator.get_model().ams.data[self.index].tray[3].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[3].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
-            "tray_weight": self.coordinator.get_model().ams.data[self.index].tray[3].tray_weight,
             "name": self.coordinator.get_model().ams.data[self.index].tray[3].name,
             "nozzle_temp_min": self.coordinator.get_model().ams.data[self.index].tray[3].nozzle_temp_min,
             "nozzle_temp_max": self.coordinator.get_model().ams.data[self.index].tray[3].nozzle_temp_max,

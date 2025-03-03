@@ -386,6 +386,9 @@
       "gcode_file": {
         "name": "Gcode filename"
       },
+      "gcode_file_downloaded": {
+        "name": "Gcode file downloaded"
+      },
       "print_bed_type": {
         "name": "Print bed type",
         "state": {
@@ -519,12 +522,6 @@
           },
           "type": {
             "name": "Type"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maximum weight of filament"
           }
         }
       },
@@ -560,12 +557,6 @@
           },
           "type": {
             "name": "Type"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maximum weight of filament"
           }
         }
       },
@@ -601,12 +592,6 @@
           },
           "type": {
             "name": "Type"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maximum weight of filament"
           }
         }
       },
@@ -642,12 +627,6 @@
           },
           "type": {
             "name": "Type"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maximum weight of filament"
           }
         }
       }
