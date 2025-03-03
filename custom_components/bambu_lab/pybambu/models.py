@@ -4,6 +4,7 @@ import math
 import os
 import re
 import threading
+import shutil
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
@@ -172,6 +173,8 @@ class Device:
             elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.05.06.01"):
                 return True
             return False
+        elif feature == Features.DOWNLOAD_GCODE_FILE:
+            return True
 
         return False
     
@@ -600,6 +603,7 @@ class PrintJob:
     gcode_state: str
     file_type_icon: str
     gcode_file: str
+    gcode_file_downloaded: str
     subtask_name: str
     start_time: datetime
     end_time: datetime
@@ -657,6 +661,7 @@ class PrintJob:
         self.print_percentage = 0
         self.gcode_state = "unknown"
         self.gcode_file = ""
+        self.gcode_file_downloaded = ""
         self.subtask_name = ""
         self.start_time = None
         self.end_time = None
@@ -1163,6 +1168,24 @@ class PrintJob:
                         self._client._device.cover_image.set_image(archive.read(f"Metadata/plate_{plate_number}.png"))
                         LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
 
+                        #Extract gcode file from archive to HA www folder if download_gcode_file is enabled
+                        if self._client.download_gcode_file_enabled:
+                            try:
+                                local_gcode_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/tmp_gcode"
+                                local_gcode_filename = f"{os.path.basename(os.path.realpath(model_file.name))}.gcode"
+                                if not os.path.exists(local_gcode_dir):
+                                    os.makedirs(local_gcode_dir)
+                                for name in os.listdir(local_gcode_dir):
+                                    path = os.path.join(local_gcode_dir, name)
+                                    if os.path.isfile(path):
+                                        os.remove(path)
+                                with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(os.path.join(local_gcode_dir, local_gcode_filename), "wb") as target_path:
+                                    shutil.copyfileobj(gcode_entry, target_path)
+                                    self.gcode_file_downloaded = local_gcode_filename
+                            except Exception as e:
+                                self.gcode_file_downloaded = "ERROR"
+                                LOGGER.debug(f"Error while extracting gcode zip entry to target path. {repr(e)}")
+                        
                         # And extract the plate type from the plate json.
                         self.print_bed_type = json.loads(archive.read(f"Metadata/plate_{plate_number}.json")).get('bed_type')
                     elif (metadata.get('key') == 'weight'):
