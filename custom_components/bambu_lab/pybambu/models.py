@@ -618,6 +618,8 @@ class PrintJob:
     _printable_objects: dict
     _gcode_file_prepare_percent: int
     _loaded_model_data: bool
+    _ftpRunAgain: bool
+    _ftpThread: threading.Thread
 
     @property
     def get_printable_objects(self) -> json:
@@ -677,6 +679,8 @@ class PrintJob:
         self._skipped_objects = []
         self._gcode_file_prepare_percent = -1
         self._loaded_model_data = False
+        self._ftpRunAgain = False
+        self._ftpThread = None
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -1092,8 +1096,14 @@ class PrintJob:
             self._download_task_data_from_cloud()
 
     def _download_task_data_from_printer(self):
-        thread = threading.Thread(target=self._async_download_task_data_from_printer)
-        thread.start()
+        if self._ftpThread is None:
+            # Only start a new thread if there
+            LOGGER.debug("Starting FTP thread.")
+            self._ftpThread = threading.Thread(target=self._async_download_task_data_from_printer)
+            self._ftpThread.start()
+        else:
+            LOGGER.debug("FTP thread already running.")
+            self._ftpRunAgain = True
 
     def _clear_model_data(self):
         LOGGER.debug("Clearing model data")
@@ -1109,9 +1119,21 @@ class PrintJob:
     def _async_download_task_data_from_printer(self):
         current_thread = threading.current_thread()
         current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
-        start_time = datetime.now()
-        LOGGER.info(f"Updating task data by FTP")
 
+        while True:
+            self._ftpRunAgain = False
+            start_time = datetime.now()
+            LOGGER.info(f"FTP thread starting.")
+            self._async_download_task_data_from_printer_worker()
+            end_time = datetime.now()
+            LOGGER.info(f"FTP thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
+            if not self._ftpRunAgain:
+                break
+            LOGGER.debug("FTP thread re-running.")
+
+        self._ftpThread = None
+
+    def _async_download_task_data_from_printer_worker(self):
         # Open the FTP connection
         ftp = self._client.ftp_connection()
 
@@ -1124,9 +1146,10 @@ class PrintJob:
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
                 # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 7 times
                 # 5 seconds apart
-                if i != 5:
+                if i != 6:
+                    LOGGER.debug(f"Sleeping 5s for X1 retry")
+                    time.sleep(5)
                     LOGGER.debug(f"Try #{i+1} for X1")
-                time.sleep(5)
             else:
                 break
 
@@ -1244,8 +1267,6 @@ class PrintJob:
 
             archive.close()
 
-            end_time = datetime.now()
-            LOGGER.info(f"Done updating task data by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
             self._client.callback("event_printer_data_update")
             result = True
         except Exception as e:
