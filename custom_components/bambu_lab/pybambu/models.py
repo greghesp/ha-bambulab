@@ -4,6 +4,7 @@ import math
 import os
 import re
 import threading
+import time
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
@@ -896,6 +897,10 @@ class PrintJob:
 
     ftp_search_paths = ['/', '/cache/']
     def _attempt_ftp_download_of_file(self, ftp, file_path):
+        if 'Metadata' in file_path:
+            # This is a ram drive on the X1 and is not accessible via FTP
+            return None
+
         file = tempfile.NamedTemporaryFile(delete=True)
         try:
             LOGGER.debug(f"Attempting download of '{file_path}'")
@@ -1109,7 +1114,22 @@ class PrintJob:
 
         # Open the FTP connection
         ftp = self._client.ftp_connection()
-        model_file = self._attempt_ftp_download(ftp)
+
+        for i in range(1,7):
+            model_file = self._attempt_ftp_download(ftp)
+            if model_file is not None:
+                break
+
+            if self._client._device.info.device_type == "X1" or self._client._device.info.device_type == "X1C" or self._client._device.info.device_type == "X1E":
+                # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
+                # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 7 times
+                # 5 seconds apart
+                if i != 5:
+                    LOGGER.debug(f"Try #{i+1} for X1")
+                time.sleep(5)
+            else:
+                break
+
         ftp.quit()
 
         if model_file is None:
