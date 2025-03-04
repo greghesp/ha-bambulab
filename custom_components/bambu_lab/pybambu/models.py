@@ -1184,7 +1184,7 @@ class PrintJob:
                                     self.gcode_file_downloaded = local_gcode_filename
                             except Exception as e:
                                 self.gcode_file_downloaded = "ERROR"
-                                LOGGER.debug(f"Error while extracting gcode zip entry to target path. {repr(e)}")
+                                LOGGER.error(f"Error while extracting gcode zip entry to target path. {repr(e)}")
                         
                         # And extract the plate type from the plate json.
                         self.print_bed_type = json.loads(archive.read(f"Metadata/plate_{plate_number}.json")).get('bed_type')

@@ -60,7 +60,7 @@ TIMELAPSE_SWITCH_DESCRIPTION = SwitchEntityDescription(
 )
 
 DOWNLOAD_GCODE_FILE_SWITCH_DESCRIPTION = SwitchEntityDescription(
-    key="downnload_gcode_file",
+    key="download_gcode_file",
     icon="mdi:folder-network",
     translation_key="download_gcode_file",
     entity_category=EntityCategory.CONFIG,
