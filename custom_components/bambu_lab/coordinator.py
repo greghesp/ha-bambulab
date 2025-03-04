@@ -361,10 +361,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command['print']['nozzle_temp_min'] = data.get('nozzle_temp_min', '200')
         command['print']['nozzle_temp_max'] = data.get('nozzle_temp_max', '240')
 
-        # "nozzle_temp_min": 0,       # Minimum nozzle temp for filament (in C)
-        # "nozzle_temp_max": 0,       # Maximum nozzle temp for filament (in C)
-        # "tray_type": "PLA"          # Type of filament, such as "PLA" or "ABS"
-
         self.client.publish(command)
 
     def _service_call_load_filament(self, event: Event):

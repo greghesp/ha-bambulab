@@ -232,7 +232,7 @@ set_filament:
       selector:
         number:
           min: 160
-          max: 250
+          max: 300
           step: 1
     nozzle_temp_max:
       name: Maximum recommended nozzle temperature
@@ -243,5 +243,5 @@ set_filament:
       selector:
         number:
           min: 160
-          max: 250
+          max: 300
           step: 1
