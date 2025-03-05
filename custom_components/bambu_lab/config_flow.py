@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import voluptuous as vol
 
 from typing import Any
@@ -70,6 +71,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return BambuOptionsFlowHandler(config_entry)
 
     def __init__(self) -> None:
+        # Set logging level to DEBUG during the configuration flow
+        LOGGER.setLevel(logging.DEBUG)
+
         self._bambu_cloud = BambuCloud("", "", "", "")
         self._show_existing = False
 
@@ -489,6 +493,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     authentication_type: str = None
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+        # Set logging level to DEBUG during the configuration flow
+        LOGGER.setLevel(logging.DEBUG)
+
         self.config_entry = config_entry
         self.region = self.config_entry.options.get('region', '')
         self.email = self.config_entry.options.get('email', '')
