@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "Objecten overgeslagen"
+      },
+      "gcode_file_downloaded": {
+        "name": "Gcode -bestand gedownload"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "Nieuwste timelapse vanuit de printer inladen"
+      },
+      "download_gcode_file": {
+        "name": "Sla Gcode -bestand op in HA"
       }
     },
     "update": {

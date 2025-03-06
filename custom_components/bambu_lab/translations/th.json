@@ -650,6 +650,9 @@
             "name": "น้ำหนักสูงสุดของเส้นใย"
           }
         }
+      },
+      "gcode_file_downloaded": {
+        "name": "ดาวน์โหลดไฟล์ gcode"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "โหลด Timelapse ล่าสุดจากเครื่องพิมพ์"
+      },
+      "download_gcode_file": {
+        "name": "บันทึกไฟล์ gcode ใน HA"
       }
     },
     "update": {

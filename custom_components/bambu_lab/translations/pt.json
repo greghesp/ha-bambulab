@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "Objetos ignorados"
+      },
+      "gcode_file_downloaded": {
+        "name": "Arquivo gcode baixado"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "Carregue o mais recente timelapse da impressora"
+      },
+      "download_gcode_file": {
+        "name": "Salvar o arquivo gcode em ha"
       }
     },
     "update": {

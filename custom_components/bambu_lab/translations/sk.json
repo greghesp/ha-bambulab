@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "Preskočené predmety"
+      },
+      "gcode_file_downloaded": {
+        "name": "Stiahnutý súbor GCode"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "Načítať najnovší časový čas z tlačiarne"
+      },
+      "download_gcode_file": {
+        "name": "Uložte súbor GCode v HA"
       }
     },
     "update": {

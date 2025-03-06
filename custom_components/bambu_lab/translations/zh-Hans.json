@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "跳过对象"
+      },
+      "gcode_file_downloaded": {
+        "name": "GCODE文件下载"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "从打印机加载最新的时间段"
+      },
+      "download_gcode_file": {
+        "name": "将GCODE文件保存在HA中"
       }
     },
     "update": {

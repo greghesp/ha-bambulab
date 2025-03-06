@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "Παραλείποντα αντικείμενα"
+      },
+      "gcode_file_downloaded": {
+        "name": "Λήψη αρχείου GCODE"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "Φορτώστε το τελευταίο χρονοδιάγραμμα από τον εκτυπωτή"
+      },
+      "download_gcode_file": {
+        "name": "Αποθηκεύστε το αρχείο gcode στο ha"
       }
     },
     "update": {
