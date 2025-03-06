@@ -386,6 +386,9 @@
       "gcode_file": {
         "name": "Gcode filename"
       },
+      "gcode_file_downloaded": {
+        "name": "Gcode file downloaded"
+      },
       "print_bed_type": {
         "name": "Print bed type",
         "state": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "Load latest timelapse from printer"
+      },
+      "download_gcode_file": {
+        "name": "Save GCode file in HA"
       }
     },
     "update": {

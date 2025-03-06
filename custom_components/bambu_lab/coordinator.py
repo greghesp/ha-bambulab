@@ -691,6 +691,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def set_option_enabled(self, option: Options, enable: bool):
         LOGGER.debug(f"Setting {OPTION_NAME[option]} to {enable}")
         options = dict(self.config_entry.options)
+        
+        if option == Options.DOWNLOAD_GCODE_FILE:
+            if enable:
+                enable = self.get_option_enabled(Options.FTP)
+        if option == Options.FTP:
+            if not enable:
+                options[OPTION_NAME[Options.DOWNLOAD_GCODE_FILE]] = enable
+                
         options[OPTION_NAME[option]] = enable
         self._hass.config_entries.async_update_entry(
             entry=self.config_entry,

@@ -59,6 +59,13 @@ TIMELAPSE_SWITCH_DESCRIPTION = SwitchEntityDescription(
     entity_category=EntityCategory.CONFIG,
 )
 
+DOWNLOAD_GCODE_FILE_SWITCH_DESCRIPTION = SwitchEntityDescription(
+    key="download_gcode_file",
+    icon="mdi:folder-network",
+    translation_key="download_gcode_file",
+    entity_category=EntityCategory.CONFIG,
+)
+
 
 async def async_setup_entry(
         hass: HomeAssistant,
@@ -85,6 +92,9 @@ async def async_setup_entry(
 
     if coordinator.get_model().supports_feature(Features.TIMELAPSE):
         async_add_entities([BambuLabTimelapseSwitch(coordinator, entry)])
+        
+    if coordinator.get_model().supports_feature(Features.DOWNLOAD_GCODE_FILE):
+        async_add_entities([BambuLabDownloadGcodeFileSwitch(coordinator, entry)])
 
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
@@ -290,3 +300,37 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Disable manual refresh mode."""
         self.coordinator.get_model().info.set_prompt_sound(False)
+
+
+class BambuLabDownloadGcodeFileSwitch(BambuLabSwitch):
+    """BambuLab DOWNLOAD_GCODE_FILE Switch"""
+
+    entity_description = DOWNLOAD_GCODE_FILE_SWITCH_DESCRIPTION
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            config_entry: ConfigEntry
+    ) -> None:
+        super().__init__(coordinator, config_entry)
+        self._attr_is_on = self.coordinator.get_option_enabled(Options.DOWNLOAD_GCODE_FILE)
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    @property
+    def icon(self) -> str:
+        """Return the icon for the switch."""
+        return "mdi:folder-network" if self.is_on else "mdi:folder-hidden"
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Enable DOWNLOAD_GCODE_FILE."""
+        self._attr_is_on = True
+        await self.coordinator.set_option_enabled(Options.DOWNLOAD_GCODE_FILE, self._attr_is_on)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Disable DOWNLOAD_GCODE_FILE."""
+        self._attr_is_on = False
+        await self.coordinator.set_option_enabled(Options.DOWNLOAD_GCODE_FILE, self._attr_is_on)
+

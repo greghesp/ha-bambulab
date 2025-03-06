@@ -43,6 +43,7 @@ class Options(IntEnum):
     TIMELAPSE = 4,
     MANUALREFRESH = 5,
     FIRMWAREUPDATE = 6,
+    DOWNLOAD_GCODE_FILE = 7
 
 OPTION_NAME = {
     Options.CAMERA:         "enable_camera",
@@ -50,5 +51,6 @@ OPTION_NAME = {
     Options.FIRMWAREUPDATE: "enable_firmware_update",
     Options.FTP:            "enable_ftp",
     Options.TIMELAPSE:      "enable_timelapse",
-    Options.MANUALREFRESH:  "manual_refresh_mode"
+    Options.MANUALREFRESH:  "manual_refresh_mode",
+    Options.DOWNLOAD_GCODE_FILE: "enable_download_gcode_file"
 }
