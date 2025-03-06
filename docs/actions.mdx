@@ -198,21 +198,21 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
     target:
       device_id: a1b2c3d4e5f6g7h8i9j0
     data:
-      type: Extrude
-      force: false
+      axis: X
+      distance: 10
     ```
 
     The `data` object should contain the following properties:
 
   <Accordion title="data" defaultOpen>
-    <Property name="type" type="string" required>
-      The type of action to perform.
+    <Property name="axis" type="string" required>
+      The axis to move. X1 and P1 devices, X and Y move the printhead, Z moves the bed. A1, Z moves the gantry, Y the bed, X the printhead.	
     </Property>
 
     ---
 
-    <Property name="force" type="boolean" optional>
-      Perform extrusion or retraction if nozzle temperature is below 170ºC.
+    <Property name="distance" type="number" required>
+      The distance (in mm) to move the axis A negative distance moves Z up, X left, Y forward.	
     </Property>
 
   </Accordion>
