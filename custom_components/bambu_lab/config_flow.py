@@ -62,6 +62,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     serial: str = ""
     authentication_type: str = None
     _show_existing: bool
+    _logging_level: None
 
     @staticmethod
     @callback
@@ -72,10 +73,17 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         # Set logging level to DEBUG during the configuration flow
+        LOGGER.warning("Setting logging level to DEBUG")
+        self.__logging_level = LOGGER.getEffectiveLevel()
         LOGGER.setLevel(logging.DEBUG)
 
         self._bambu_cloud = BambuCloud("", "", "", "")
         self._show_existing = False
+
+    def __del__(self) -> None:
+        # This isn't as immediate as I'd like it takes garbage collection but it'll kick in after a bit.
+        LOGGER.warning("Restoring logging level")
+        LOGGER.setLevel(self.__logging_level)
 
     async def async_step_user(
             self, user_input: dict[str, Any] | None = None
@@ -491,9 +499,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     region: str = ""
     email: str = ""
     authentication_type: str = None
+    _logging_level: None
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         # Set logging level to DEBUG during the configuration flow
+        LOGGER.warning("Setting logging level to DEBUG")
+        self.__logging_level = LOGGER.getEffectiveLevel()
         LOGGER.setLevel(logging.DEBUG)
 
         self.config_entry = config_entry
@@ -503,6 +514,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         self._bambu_cloud = BambuCloud("", "", "", "")
 
         LOGGER.debug(self.config_entry)
+
+    def __del__(self) -> None:
+        # This isn't as immediate as I'd like it takes garbage collection but it'll kick in after a bit.
+        LOGGER.warning("Restoring logging level")
+        LOGGER.setLevel(self.__logging_level)
 
     async def async_step_init(self, user_input: None = None) -> FlowResult:
         errors = {}
