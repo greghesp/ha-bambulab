@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "건너 뛰는 물체"
+      },
+      "gcode_file_downloaded": {
+        "name": "GCODE 파일 다운로드"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "프린터에서 최신 타임랩스 로드"
+      },
+      "download_gcode_file": {
+        "name": "HA에 GCODE 파일을 저장하십시오"
       }
     },
     "update": {

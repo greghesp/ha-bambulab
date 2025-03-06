@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "Springede objekter"
+      },
+      "gcode_file_downloaded": {
+        "name": "Gcode -fil downloadet"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "Indlæs den seneste tidslap fra printer"
+      },
+      "download_gcode_file": {
+        "name": "Gem gcode -fil i ha"
       }
     },
     "update": {

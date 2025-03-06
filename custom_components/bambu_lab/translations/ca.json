@@ -650,6 +650,9 @@
       },
       "skipped_objects": {
         "name": "Objectes saltats"
+      },
+      "gcode_file_downloaded": {
+        "name": "El fitxer GCode descarregat"
       }
     },
     "camera": {
@@ -675,6 +678,9 @@
       },
       "timelapse": {
         "name": "Carregueu el Timelapse més recent de la impressora"
+      },
+      "download_gcode_file": {
+        "name": "Deseu el fitxer de codis a HA"
       }
     },
     "update": {
