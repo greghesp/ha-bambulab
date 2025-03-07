@@ -1,5 +1,7 @@
 """The Bambu Lab component."""
 
+import asyncio
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers import entity_platform
@@ -25,7 +27,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         LOGGER.debug(f"handle_service_call: {call.service}")
         data = dict(call.data)
         data['service'] = call.service
+        
+        future = asyncio.Future()
+        call.hass.data[DOMAIN]['service_call_future'] = future
         hass.bus.fire(SERVICE_CALL_EVENT, data)
+
+        # Wait for the result from the second instance
+        try:
+            return await asyncio.wait_for(future, timeout=15)
+        except asyncio.TimeoutError:
+            LOGGER.error("Service call timed out")
+            return None
+        finally:
+            del call.hass.data[DOMAIN]['service_call_future']
 
     # Register the serviceS with Home Assistant
     services = [

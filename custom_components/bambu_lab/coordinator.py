@@ -175,7 +175,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         entity_id = data.get('entity_id', [])
         if len(entity_id) == 1:
             entity_device = self._get_device_from_entity(entity_id[0])
-            LOGGER.debug(f"entity_device: {entity_device}")
             if entity_device is None:
                 LOGGER.error("Unable to find device from entity")
                 return False
@@ -186,8 +185,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             via_device_id = entity_device.via_device_id
             if via_device_id == hadevice.id:
                 return True
-        
-        LOGGER.error(f"Invalid data payload: {data}")
+        else:
+            LOGGER.error(f"Invalid data payload: {data}")
+
         return False
 
     def _get_device_from_entity(self, entity_id):
@@ -209,6 +209,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if not self._is_service_call_for_me(data):
             # Call is not for this instance.
             return
+
+        future = self._hass.data[DOMAIN]['service_call_future']
+        if future is None:
+            LOGGER.error("Future is None")
+            return
         
         match data['service']:
             case "skip_objects":
@@ -226,7 +231,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case "print_project_file":
                 self._service_call_print_project_file(data)
             case _:
-                LOGGER.error(f"Unknown service call: {data}")      
+                LOGGER.error(f"Unknown service call: {data}")
+
+        future.set_result(True)
         
     def _service_call_skip_objects(self, data: dict):
         command = SKIP_OBJECTS_TEMPLATE
