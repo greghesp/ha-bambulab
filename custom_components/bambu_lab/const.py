@@ -14,6 +14,8 @@ URL_BASE = "/bambu_lab"
 LOGGER = logging.getLogger(__package__)
 LOGGERFORHA = logging.getLogger(f"{__package__}_HA")
 
+SERVICE_CALL_EVENT = "bambu_lab_service_call"
+
 PLATFORMS = (
     Platform.BINARY_SENSOR,
     Platform.BUTTON,

@@ -1,22 +1,19 @@
 """The Bambu Lab component."""
 
+import asyncio
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers import entity_platform
-from .const import DOMAIN, LOGGER, PLATFORMS
+from .const import (
+    DOMAIN,
+    LOGGER,
+    PLATFORMS,
+    SERVICE_CALL_EVENT
+)
 from .coordinator import BambuDataUpdateCoordinator
 from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
-from .pybambu.const import (
-    PRINT_PROJECT_FILE_BUS_EVENT,
-    SEND_GCODE_BUS_EVENT,
-    SKIP_OBJECTS_BUS_EVENT,
-    MOVE_AXIS_BUS_EVENT,
-    EXTRUDE_RETRACT_BUS_EVENT,
-    LOAD_FILAMENT_BUS_EVENT,
-    UNLOAD_FILAMENT_BUS_EVENT,
-    SET_FILAMENT_BUS_EVENT,
-)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
@@ -26,157 +23,41 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
-    def check_service_call_payload_for_device(call: ServiceCall):
-        LOGGER.debug(call)
-
-        area_ids = call.data.get("area_id", [])
-        device_ids = call.data.get("device_id", [])
-        entity_ids = call.data.get("entity_id", [])
-        label_ids = call.data.get("label_ids", [])
-
-        # Ensure only one device ID is passed
-        if not isinstance(area_ids, list) or len(area_ids) != 0:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
-        if not isinstance(device_ids, list) or len(device_ids) != 1:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
-        if not isinstance(entity_ids, list) or len(entity_ids) != 0:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
-        if not isinstance(label_ids, list) or len(label_ids) != 0:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
+    async def handle_service_call(call: ServiceCall):
+        LOGGER.debug(f"handle_service_call: {call.service}")
+        data = dict(call.data)
+        data['service'] = call.service
         
-        return True
+        future = asyncio.Future()
+        call.hass.data[DOMAIN]['service_call_future'] = future
+        hass.bus.fire(SERVICE_CALL_EVENT, data)
 
-    def check_service_call_payload_for_entity(call: ServiceCall):
-        LOGGER.debug(call)
+        # Wait for the result from the second instance
+        try:
+            return await asyncio.wait_for(future, timeout=15)
+        except asyncio.TimeoutError:
+            LOGGER.error("Service call timed out")
+            return None
+        finally:
+            del call.hass.data[DOMAIN]['service_call_future']
 
-        area_ids = call.data.get("area_id", [])
-        device_ids = call.data.get("device_id", [])
-        entity_ids = call.data.get("entity_id", [])
-        label_ids = call.data.get("label_ids", [])
-
-        # Ensure only one entity ID is passed
-        if not isinstance(area_ids, list) or len(area_ids) != 0:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        if not isinstance(device_ids, list) or len(device_ids) != 0:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        if not isinstance(entity_ids, list) or len(entity_ids) != 1:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        if not isinstance(label_ids, list) or len(label_ids) != 0:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        
-        return True
-
-    async def send_command(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_device(call) is False:
-            return
-        hass.bus.fire(SEND_GCODE_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "send_command",  # Service name
-        send_command    # Handler function
-    )
-
-    async def print_project_file(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_device(call) is False:
-            return
-        hass.bus.fire(PRINT_PROJECT_FILE_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "print_project_file",  # Service name
-        print_project_file  # Handler function
-    )
-
-    async def skip_objects(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_device(call) is False:
-            return
-        hass.bus.fire(SKIP_OBJECTS_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "skip_objects",  # Service name
-        skip_objects  # Handler function
-    )
-
-    async def move_axis(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_device(call) is False:
-            return
-        hass.bus.fire(MOVE_AXIS_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "move_axis",  # Service name
-        move_axis  # Handler function
-    )
-
-    async def unload_filament(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_device(call) is False:
-            return
-        hass.bus.fire(UNLOAD_FILAMENT_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "unload_filament",  # Service name
-        unload_filament  # Handler function
-    )
-
-    async def set_filament(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_entity(call) is False:
-            return
-        hass.bus.fire(SET_FILAMENT_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "set_filament",  # Service name
-        set_filament  # Handler function
-    )
-
-    async def load_filament(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_entity(call) is False:
-            return
-        hass.bus.fire(LOAD_FILAMENT_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "load_filament",  # Service name
-        load_filament  # Handler function
-    )
-
-    async def extrude_retract(call: ServiceCall):
-        """Handle the service call."""
-        if check_service_call_payload_for_device(call) is False:
-            return
-        hass.bus.fire(EXTRUDE_RETRACT_BUS_EVENT, call.data)
-
-    # Register the service with Home Assistant
-    hass.services.async_register(
-        DOMAIN,
-        "extrude_retract",  # Service name
-        extrude_retract  # Handler function
-    )
+    # Register the serviceS with Home Assistant
+    services = [
+        "send_command",
+        "print_project_file",
+        "skip_objects",
+        "move_axis",
+        "unload_filament",
+        "load_filament",
+        "extrude_retract",
+        "set_filament",
+    ]
+    for command in services:
+        hass.services.async_register(
+            DOMAIN,
+            command,
+            handle_service_call
+        )
 
     # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
