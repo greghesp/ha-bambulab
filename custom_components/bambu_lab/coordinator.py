@@ -719,6 +719,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 force_reload = True
             case Options.TIMELAPSE:
                 force_reload = True
+            case Options.DOWNLOAD_GCODE_FILE:
+                force_reload = True
 
         if force_reload:
             # Force reload of sensors.
