@@ -232,6 +232,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._service_call_print_project_file(data)
             case _:
                 LOGGER.error(f"Unknown service call: {data}")
+                future.set_result(False)
+                return
 
         future.set_result(True)
         
