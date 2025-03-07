@@ -213,6 +213,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         future = self._hass.data[DOMAIN]['service_call_future']
         if future is None:
             LOGGER.error("Future is None")
+            future.set_result(False)
             return
         
         match data['service']:
