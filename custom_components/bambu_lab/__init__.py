@@ -3,7 +3,11 @@
 import asyncio
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    SupportsResponse,
+)
 from homeassistant.helpers import entity_platform
 from .const import (
     DOMAIN,
@@ -34,7 +38,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         # Wait for the result from the second instance
         try:
-            return await asyncio.wait_for(future, timeout=15)
+            result =  await asyncio.wait_for(future, timeout=15)
+
+            # Fire an event with the result and original context ID
+            call.hass.bus.async_fire(
+                "bambu_lab.call_service_result",
+                {
+                    "service": call.service,
+                    "result": result,
+                    "context_id": call.context.id  # Pass the context ID for correlation
+                },
+                context=call.context
+            )
+            return result
         except asyncio.TimeoutError:
             LOGGER.error("Service call timed out")
             return None
@@ -57,7 +73,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.services.async_register(
             DOMAIN,
             command,
-            handle_service_call
+            handle_service_call,
+            supports_response=SupportsResponse.ONLY
         )
 
     # Set up all platforms for this device/entry.
