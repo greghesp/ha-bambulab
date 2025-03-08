@@ -19,7 +19,6 @@ FIELDS_TO_KEEP = [
     'filament_vendor',
     'filament_type',
     'filament_density',
-    'filament_cost',
     'nozzle_temperature',
     'nozzle_temperature_range_high',
     'nozzle_temperature_range_low',
@@ -127,11 +126,11 @@ async def fetch_filaments():
         sorted_data = OrderedDict(sorted(stripped_data.items()))
 
         # Write the data to filaments_github.json
-        with open(f"{SCRIPT_DIR}/../custom_components/bambu_lab/pybambu/filaments_github.json", 'w') as f:
+        with open(f"{SCRIPT_DIR}/../custom_components/bambu_lab/filaments_github.json", 'w') as f:
             json.dump(raw_data, f, indent=2)
 
         # Write the data to filaments_detail.json
-        with open(f"{SCRIPT_DIR}/../custom_components/bambu_lab/pybambu/filaments_detail.json", 'w') as f:
+        with open(f"{SCRIPT_DIR}/../custom_components/bambu_lab/filaments_detail.json", 'w') as f:
             json.dump(sorted_data, f, indent=2)
         
         print("Successfully wrote filament data to filament.json")

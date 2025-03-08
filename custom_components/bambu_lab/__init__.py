@@ -51,6 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "load_filament",
         "extrude_retract",
         "set_filament",
+        "get_filament_data",
     ]
     for command in services:
         hass.services.async_register(
