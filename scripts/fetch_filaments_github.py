@@ -33,7 +33,6 @@ def resolve_inherited_value(name: str, field: str, raw_data: dict[str, any]) -> 
         name: Name of the current filament profile
         field: Field to resolve
         raw_data: Dictionary of all filament profiles
-        visited: Set of already visited profiles to prevent infinite loops
     
     Returns:
         The resolved value or None if not found
