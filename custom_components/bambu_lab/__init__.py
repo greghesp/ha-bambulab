@@ -3,7 +3,11 @@
 import asyncio
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    SupportsResponse,
+)
 from homeassistant.helpers import entity_platform
 from .const import (
     DOMAIN,
@@ -57,7 +61,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.services.async_register(
             DOMAIN,
             command,
-            handle_service_call
+            handle_service_call,
+            supports_response=SupportsResponse.ONLY
         )
 
     # Set up all platforms for this device/entry.
