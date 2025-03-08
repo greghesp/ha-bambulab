@@ -38,19 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         # Wait for the result from the second instance
         try:
-            result =  await asyncio.wait_for(future, timeout=15)
-
-            # Fire an event with the result and original context ID
-            call.hass.bus.async_fire(
-                "bambu_lab.call_service_result",
-                {
-                    "service": call.service,
-                    "result": result,
-                    "context_id": call.context.id  # Pass the context ID for correlation
-                },
-                context=call.context
-            )
-            return result
+            return await asyncio.wait_for(future, timeout=15)
         except asyncio.TimeoutError:
             LOGGER.error("Service call timed out")
             return None
