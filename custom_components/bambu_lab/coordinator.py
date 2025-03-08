@@ -8,6 +8,7 @@ from .const import (
     Options,
     OPTION_NAME,
     SERVICE_CALL_EVENT,
+    FILAMENT_DATA,
 )
 import asyncio
 import re
@@ -216,27 +217,31 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             future.set_result(False)
             return
         
+        result = None
         match data['service']:
             case "skip_objects":
-                self._service_call_skip_objects(data)
+                result = self._service_call_skip_objects(data)
             case "move_axis":
-                self._service_call_move_axis(data)
+                result = self._service_call_move_axis(data)
             case "extrude_retract":
-                self._service_call_extrude_retract(data)
+                result = self._service_call_extrude_retract(data)
             case "load_filament":
-                self._service_call_load_filament(data)
+                result = self._service_call_load_filament(data)
             case "unload_filament":
-                self._service_call_unload_filament(data)
+                result = self._service_call_unload_filament(data)
             case "set_filament":
-                self._service_call_set_filament(data)
+                result = self._service_call_set_filament(data)
+            case "get_filament_data":
+                result = self._service_call_get_filament_data(data)
             case "print_project_file":
-                self._service_call_print_project_file(data)
+                result = self._service_call_print_project_file(data)
             case _:
                 LOGGER.error(f"Unknown service call: {data}")
-                future.set_result(False)
-                return
 
-        future.set_result(True)
+        if result is None:
+            result = False
+
+        future.set_result(result)
         
     def _service_call_skip_objects(self, data: dict):
         command = SKIP_OBJECTS_TEMPLATE
@@ -376,6 +381,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command['print']['nozzle_temp_max'] = data.get('nozzle_temp_max', '240')
 
         self.client.publish(command)
+
+    def _service_call_get_filament_data(self, data: dict):
+        return FILAMENT_DATA
 
     def _service_call_load_filament(self, data: dict):
         device_id = data.get('device_id', [])

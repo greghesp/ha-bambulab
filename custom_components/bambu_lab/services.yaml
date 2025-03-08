@@ -245,3 +245,11 @@ set_filament:
           min: 160
           max: 300
           step: 1
+
+get_filament_data:
+  name: Gets a json string with details about all known filaments
+  description: Gets a json string with details about all known filaments
+  target:
+    entity:
+      integration: bambu_lab
+ 

@@ -2348,5 +2348,4 @@ class SlicerSettings:
             if slicer_settings is None:
                 self._client.callback("event_printer_bambu_authentication_failed")
             else:
-                LOGGER.debug(f"Slicer settings: {slicer_settings}")
                 self._load_custom_filaments(slicer_settings)
