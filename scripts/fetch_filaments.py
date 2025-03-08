@@ -25,5 +25,5 @@ data = {f["filament_id"]: f["name"].split("@", 1)[0].strip() for f in get_filame
 output = json.dumps(data, indent=4, sort_keys=True)
 
 script_path = os.path.dirname(__file__)
-with open(f'{script_path}/../custom_components/bambu_lab/pybambu/filaments.json', 'w') as file:
+with open(f'{script_path}/../custom_components/bambu_lab/pybambu/filaments_detail.json', 'w') as file:
     file.write(output)

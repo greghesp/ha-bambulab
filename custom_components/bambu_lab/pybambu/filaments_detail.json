@@ -1,0 +1,258 @@
+{
+  "GFA00": {
+    "name": "Bambu PLA Basic",
+    "material": "PLA",
+    "sub_material": "",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.24
+  },
+  "GFA01": {
+    "name": "Bambu PLA Matte",
+    "material": "PLA",
+    "sub_material": "PLA Matte",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.31
+  },
+  "GFA02": {
+    "name": "Bambu PLA Metal",
+    "material": "PLA",
+    "sub_material": "PLA Metal",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.25
+  },
+  "GFA05": {
+    "name": "Bambu PLA Silk",
+    "material": "PLA",
+    "sub_material": "PLA Silk",
+    "base_min_nozzle_temp": 210,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.32
+  },
+  "GFA06": {
+    "name": "Bambu PLA Silk+",
+    "material": "PLA",
+    "sub_material": "PLA Silk+",
+    "base_min_nozzle_temp": 210,
+    "base_max_nozzle_temp": 240,
+    "base_density": 1.27
+  },
+  "GFA07": {
+    "name": "Bambu PLA Marble",
+    "material": "PLA",
+    "sub_material": "PLA Marble",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.22
+  },
+  "GFA08": {
+    "name": "Bambu PLA Sparkle",
+    "material": "PLA",
+    "sub_material": "PLA Sparkle",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.26
+  },
+  "GFA11": {
+    "name": "Bambu PLA Aero",
+    "material": "PLA",
+    "sub_material": "PLA Aero",
+    "base_min_nozzle_temp": 220,
+    "base_max_nozzle_temp": 260,
+    "base_density": 1.21
+  },
+  "GFA12": {
+    "name": "Bambu PLA Glow",
+    "material": "PLA",
+    "sub_material": "PLA Glow",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.26
+  },
+  "GFA15": {
+    "name": "Bambu PLA Galaxy",
+    "material": "PLA",
+    "sub_material": "PLA Galaxy",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.19
+  },
+  "GFA16": {
+    "name": "Bambu PLA Wood",
+    "material": "PLA",
+    "sub_material": "PLA Wood",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 240,
+    "base_density": 1.21
+  },
+  "GFA50": {
+    "name": "Bambu PLA-CF",
+    "material": "PLA",
+    "sub_material": "PLA-CF",
+    "base_min_nozzle_temp": 210,
+    "base_max_nozzle_temp": 240,
+    "base_density": 1.22
+  },
+  "GFB00": {
+    "name": "Bambu ABS",
+    "material": "ABS",
+    "sub_material": "",
+    "base_min_nozzle_temp": 240,
+    "base_max_nozzle_temp": 270,
+    "base_density": 1.05
+  },
+  "GFB01": {
+    "name": "Bambu ASA",
+    "material": "ASA",
+    "sub_material": "",
+    "base_min_nozzle_temp": 240,
+    "base_max_nozzle_temp": 270,
+    "base_density": 1.05
+  },
+  "GFB02": {
+    "name": "Bambu ASA Aero",
+    "material": "ASA",
+    "sub_material": "ASA Aero",
+    "base_min_nozzle_temp": 240,
+    "base_max_nozzle_temp": 280,
+    "base_density": 0.99
+  },
+  "GFB50": {
+    "name": "Bambu ABS-GF",
+    "material": "ABS",
+    "sub_material": "ABS-GF",
+    "base_min_nozzle_temp": 240,
+    "base_max_nozzle_temp": 270,
+    "base_density": 1.08
+  },
+  "GFB51": {
+    "name": "Bambu ASA-CF",
+    "material": "ASA",
+    "sub_material": "ASA-CF",
+    "base_min_nozzle_temp": 250,
+    "base_max_nozzle_temp": 280,
+    "base_density": 1.02
+  },
+  "GFC00": {
+    "name": "Bambu PC",
+    "material": "PC",
+    "sub_material": "",
+    "base_min_nozzle_temp": 250,
+    "base_max_nozzle_temp": 270,
+    "base_density": 1.2
+  },
+  "GFC01": {
+    "name": "Bambu PC-FR",
+    "material": "PC",
+    "sub_material": "PC-FR",
+    "base_min_nozzle_temp": 260,
+    "base_max_nozzle_temp": 280,
+    "base_density": 1.18
+  },
+  "GFG01": {
+    "name": "Bambu PETG Translucent",
+    "material": "PETG",
+    "sub_material": "PETG Translucent",
+    "base_min_nozzle_temp": 230,
+    "base_max_nozzle_temp": 260,
+    "base_density": 1.25
+  },
+  "GFG02": {
+    "name": "Bambu PETG-HF",
+    "material": "PETG",
+    "sub_material": "PETG-HF",
+    "base_min_nozzle_temp": 230,
+    "base_max_nozzle_temp": 260,
+    "base_density": 1.28
+  },
+  "GFG50": {
+    "name": "Bambu PETG-CF",
+    "material": "PETG",
+    "sub_material": "PETG-CF",
+    "base_min_nozzle_temp": 240,
+    "base_max_nozzle_temp": 270,
+    "base_density": 1.25
+  },
+  "GFN04": {
+    "name": "Bambu PAHT-CF",
+    "material": "PAHT",
+    "sub_material": "PAHT-CF",
+    "base_min_nozzle_temp": 260,
+    "base_max_nozzle_temp": 290,
+    "base_density": 1.06
+  },
+  "GFN05": {
+    "name": "Bambu PA6-CF",
+    "material": "PA6",
+    "sub_material": "PA6-CF",
+    "base_min_nozzle_temp": 260,
+    "base_max_nozzle_temp": 290,
+    "base_density": 1.09
+  },
+  "GFN06": {
+    "name": "Bambu PPA-CF",
+    "material": "PPA",
+    "sub_material": "PPA-CF",
+    "base_min_nozzle_temp": 280,
+    "base_max_nozzle_temp": 310,
+    "base_density": 1.25
+  },
+  "GFN08": {
+    "name": "Bambu PA6-GF",
+    "material": "PA6",
+    "sub_material": "PA6-GF",
+    "base_min_nozzle_temp": 260,
+    "base_max_nozzle_temp": 290,
+    "base_density": 1.14
+  },
+  "GFS03": {
+    "name": "Bambu Support for PA PET",
+    "material": "Support",
+    "sub_material": "Support for PA/PET",
+    "base_min_nozzle_temp": 280,
+    "base_max_nozzle_temp": 300,
+    "base_density": 1.17
+  },
+  "GFS04": {
+    "name": "Bambu PVA",
+    "material": "PVA",
+    "sub_material": "",
+    "base_min_nozzle_temp": 220,
+    "base_max_nozzle_temp": 250,
+    "base_density": 1.27
+  },
+  "GFS05": {
+    "name": "Bambu Support For PLA/PETG",
+    "material": "Support",
+    "sub_material": "Support For PLA-PETG",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 220,
+    "base_density": 1.28
+  },
+  "GFS06": {
+    "name": "Bambu Support for ABS",
+    "material": "Support",
+    "sub_material": "Support for ABS",
+    "base_min_nozzle_temp": 190,
+    "base_max_nozzle_temp": 220,
+    "base_density": 1.16
+  },
+  "GFU00": {
+    "name": "Bambu TPU 95A-HF",
+    "material": "TPU",
+    "sub_material": "TPU 95A-HF",
+    "base_min_nozzle_temp": 230,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.22
+  },
+  "GFU02": {
+    "name": "Bambu TPU for AMS",
+    "material": "TPU",
+    "sub_material": "TPU for AMS",
+    "base_min_nozzle_temp": 230,
+    "base_max_nozzle_temp": 230,
+    "base_density": 1.26
+  }
+}

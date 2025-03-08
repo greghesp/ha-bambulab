@@ -1142,16 +1142,16 @@ class PrintJob:
         # Open the FTP connection
         ftp = self._client.ftp_connection()
 
-        for i in range(1,7):
+        for i in range(1,13):
             model_file = self._attempt_ftp_download(ftp)
             if model_file is not None:
                 break
 
             if self._client._device.info.device_type == "X1" or self._client._device.info.device_type == "X1C" or self._client._device.info.device_type == "X1E":
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
-                # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 7 times
-                # 5 seconds apart
-                if i != 6:
+                # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
+                # 5 seconds apart over 60s.
+                if i != 12:
                     LOGGER.debug(f"Sleeping 5s for X1 retry")
                     time.sleep(5)
                     LOGGER.debug(f"Try #{i+1} for X1")
@@ -2348,4 +2348,5 @@ class SlicerSettings:
             if slicer_settings is None:
                 self._client.callback("event_printer_bambu_authentication_failed")
             else:
+                LOGGER.debug(f"Slicer settings: {slicer_settings}")
                 self._load_custom_filaments(slicer_settings)

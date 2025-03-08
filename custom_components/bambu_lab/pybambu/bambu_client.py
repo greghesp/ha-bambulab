@@ -71,7 +71,7 @@ class WatchdogThread(threading.Thread):
             elif interval < WATCHDOG_TIMER:
                 self._watchdog_fired = False
 
-        LOGGER.info("Watchdog thread exited.")
+        LOGGER.debug("Watchdog thread exited.")
 
 
 class ChamberImageThread(threading.Thread):
