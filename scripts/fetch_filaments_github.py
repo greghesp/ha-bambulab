@@ -63,7 +63,7 @@ def sanitize_field(field, value):
         
     # Add specific field processing logic
     if field == 'name':
-        return value.replace(' @base', '')
+        return value.split(' @')[0]
     if field in ['filament_cost', 'filament_density']:
         return float(value)
     elif field in ['nozzle_temperature', 'nozzle_temperature_range_high', 'nozzle_temperature_range_low']:
@@ -90,6 +90,9 @@ async def fetch_filaments():
             # First pass: Load all raw data
             for file in files:
                 if file['name'].endswith('.json'):
+                    # Skip files with '@' that aren't '@base'
+                    if ' @' in file['name'] and not ' @base' in file['name']:
+                        continue
                     print(f"Fetching {file['name']}")
                     async with session.get(file['download_url']) as content_response:
                         content = await content_response.text()
