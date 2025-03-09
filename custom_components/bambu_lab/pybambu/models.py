@@ -1896,6 +1896,9 @@ class AMSTray:
             self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
             self.tray_weight = data.get('tray_weight', self.tray_weight)
+            if self.name == "unknown":
+                # Fallback to the type if the name is unknown
+                self.name = self.type
         return (old_data != f"{self.__dict__}")
 
 
