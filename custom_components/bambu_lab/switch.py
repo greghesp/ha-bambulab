@@ -317,7 +317,12 @@ class BambuLabDownloadGcodeFileSwitch(BambuLabSwitch):
 
     @property
     def available(self) -> bool:
-        return True
+        return self.coordinator.get_option_enabled(Options.FTP)
+
+    @property
+    def is_on(self) -> bool:
+        """Return True if entity is on."""
+        return self.coordinator.get_option_enabled(Options.FTP) and self.coordinator.get_option_enabled(Options.DOWNLOAD_GCODE_FILE)
 
     @property
     def icon(self) -> str:
