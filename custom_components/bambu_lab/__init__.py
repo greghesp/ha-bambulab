@@ -46,23 +46,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             del call.hass.data[DOMAIN]['service_call_future']
 
     # Register the serviceS with Home Assistant
-    services = [
-        "send_command",
-        "print_project_file",
-        "skip_objects",
-        "move_axis",
-        "unload_filament",
-        "load_filament",
-        "extrude_retract",
-        "set_filament",
-        "get_filament_data",
-    ]
+    services = {
+        "send_command": SupportsResponse.NONE,
+        "print_project_file": SupportsResponse.NONE,
+        "skip_objects": SupportsResponse.NONE,
+        "move_axis": SupportsResponse.NONE,
+        "unload_filament": SupportsResponse.NONE,
+        "load_filament": SupportsResponse.NONE,
+        "extrude_retract": SupportsResponse.NONE,
+        "set_filament": SupportsResponse.NONE,
+        "get_filament_data": SupportsResponse.ONLY,
+    }
     for command in services:
         hass.services.async_register(
             DOMAIN,
             command,
             handle_service_call,
-            supports_response=SupportsResponse.ONLY
+            supports_response=services[command]
         )
 
     # Set up all platforms for this device/entry.
