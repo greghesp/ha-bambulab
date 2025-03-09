@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Filament restant"
+          },
+          "remain_enabled": {
+            "name": "Estimation du filament restant activée"
+          },
+          "tag_uid": {
+            "name": "Numéro de série Spool"
+          },
+          "filament_id": {
+            "name": "ID de filament"
+          },
+          "tray_weight": {
+            "name": "Poids maximum de filament"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "Poids maximum de filament"
+          },
+          "remain_enabled": {
+            "name": "Estimation du filament restant activée"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "Poids maximum de filament"
+          },
+          "remain_enabled": {
+            "name": "Estimation du filament restant activée"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "Poids maximum de filament"
+          },
+          "remain_enabled": {
+            "name": "Estimation du filament restant activée"
           }
         }
       },

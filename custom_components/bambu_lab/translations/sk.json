@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "remain": {
+            "name": "Zostávajúce vlákno"
+          },
+          "remain_enabled": {
+            "name": "Zostávajúci odhad vlákna povolený"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cievky"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "tray_weight": {
+            "name": "Maximálna hmotnosť vlákna"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "Maximálna hmotnosť vlákna"
+          },
+          "remain_enabled": {
+            "name": "Zostávajúci odhad vlákna povolený"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "Maximálna hmotnosť vlákna"
+          },
+          "remain_enabled": {
+            "name": "Zostávajúci odhad vlákna povolený"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "Maximálna hmotnosť vlákna"
+          },
+          "remain_enabled": {
+            "name": "Zostávajúci odhad vlákna povolený"
           }
         }
       },

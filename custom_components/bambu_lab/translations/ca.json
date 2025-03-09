@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "Tipus"
+          },
+          "remain": {
+            "name": "Filament restant"
+          },
+          "remain_enabled": {
+            "name": "L'estimació del filament restant ha activat"
+          },
+          "tag_uid": {
+            "name": "Número de sèrie de la bobina"
+          },
+          "filament_id": {
+            "name": "Identificador de filament"
+          },
+          "tray_weight": {
+            "name": "Pes màxim de filament"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "Pes màxim del filament"
+          },
+          "remain_enabled": {
+            "name": "L'estimació del filament restant ha activat"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "Pes màxim del filament"
+          },
+          "remain_enabled": {
+            "name": "L'estimació del filament restant ha activat"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "Pes màxim del filament"
+          },
+          "remain_enabled": {
+            "name": "L'estimació del filament restant ha activat"
           }
         }
       },

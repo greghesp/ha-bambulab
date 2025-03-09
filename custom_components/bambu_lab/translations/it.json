@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "Tipo"
+          },
+          "remain": {
+            "name": "Filamento rimanente"
+          },
+          "remain_enabled": {
+            "name": "Stima del filamento rimanente abilitato"
+          },
+          "tag_uid": {
+            "name": "Numero di serie spool"
+          },
+          "filament_id": {
+            "name": "Filamento id"
+          },
+          "tray_weight": {
+            "name": "Peso massimo del filamento"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "Peso massimo del filamento"
+          },
+          "remain_enabled": {
+            "name": "Stima del filamento rimanente abilitato"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "Peso massimo del filamento"
+          },
+          "remain_enabled": {
+            "name": "Stima del filamento rimanente abilitato"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "Peso massimo del filamento"
+          },
+          "remain_enabled": {
+            "name": "Stima del filamento rimanente abilitato"
           }
         }
       },

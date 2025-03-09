@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "유형"
+          },
+          "remain": {
+            "name": "남은 필라멘트"
+          },
+          "remain_enabled": {
+            "name": "나머지 필라멘트 추정이 활성화되었습니다"
+          },
+          "tag_uid": {
+            "name": "스풀 일련 번호"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "tray_weight": {
+            "name": "필라멘트의 최대 무게"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "필라멘트의 최대 무게"
+          },
+          "remain_enabled": {
+            "name": "나머지 필라멘트 추정이 활성화되었습니다"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "필라멘트의 최대 무게"
+          },
+          "remain_enabled": {
+            "name": "나머지 필라멘트 추정이 활성화되었습니다"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "필라멘트의 최대 무게"
+          },
+          "remain_enabled": {
+            "name": "나머지 필라멘트 추정이 활성화되었습니다"
           }
         }
       },

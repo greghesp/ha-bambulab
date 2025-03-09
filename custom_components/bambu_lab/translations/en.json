@@ -482,8 +482,23 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
+          "remain": {
+            "name": "Remaining filament"
+          },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
+          "tag_uid": {
+            "name": "Spool serial number"
+          },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -558,6 +573,9 @@
           "remain": {
             "name": "Remaining filament"
           },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
           "tag_uid": {
             "name": "Spool serial number"
           },
@@ -599,6 +617,9 @@
           "remain": {
             "name": "Remaining filament"
           },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
           "tag_uid": {
             "name": "Spool serial number"
           },
@@ -639,6 +660,9 @@
           },
           "remain": {
             "name": "Remaining filament"
+          },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
           },
           "tag_uid": {
             "name": "Spool serial number"

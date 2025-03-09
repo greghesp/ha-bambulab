@@ -1843,7 +1843,7 @@ class AMSTray:
     color: str
     nozzle_temp_min: int
     nozzle_temp_max: int
-    remain: int
+    _remain: int
     k: float
     tag_uid: str
     tray_uuid: str
@@ -1859,11 +1859,20 @@ class AMSTray:
         self.color = "00000000"  # RRGGBBAA
         self.nozzle_temp_min = 0
         self.nozzle_temp_max = 0
-        self.remain = 0
+        self._remain = -1
         self.k = 0
         self.tag_uid = ""
         self.tray_uuid = ""
         self.tray_weight = 0
+
+    @property
+    def remain(self) -> int:
+        return self._remain
+
+    @property
+    def remain_enabled(self) -> bool:
+        return self._client._device.supports_feature(Features.AMS_FILAMENT_REMAINING) and self._client._device.home_flag.ams_calibrate_remaining
+
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
@@ -1877,7 +1886,7 @@ class AMSTray:
             self.color = "00000000"  # RRGGBBAA
             self.nozzle_temp_min = 0
             self.nozzle_temp_max = 0
-            self.remain = 0
+            self._remain = -1
             self.tag_uid = ""
             self.tray_uuid = ""
             self.k = 0
@@ -1891,7 +1900,7 @@ class AMSTray:
             self.color = data.get('tray_color', self.color)
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
             self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
-            self.remain = data.get('remain', self.remain)
+            self._remain = data.get('remain', self._remain)
             self.tag_uid = data.get('tag_uid', self.tag_uid)
             self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
@@ -1908,7 +1917,14 @@ class ExternalSpool(AMSTray):
 
     def __init__(self, client):
         super().__init__(client)
-        self._client = client
+
+    @property
+    def remain(self) -> int:
+        return -1
+
+    @property
+    def remain_enabled(self) -> bool:
+        return False
 
     def print_update(self, data) -> bool:
 
