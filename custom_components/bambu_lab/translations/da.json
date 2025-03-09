@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Resterende glødetråd"
+          },
+          "remain_enabled": {
+            "name": "Resterende filamentestimering aktiveret"
+          },
+          "tag_uid": {
+            "name": "Spole serienummer"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maksimal vægt af glødetråd"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "Maksimal vægt af glødetråd"
+          },
+          "remain_enabled": {
+            "name": "Resterende filamentestimering aktiveret"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "Maksimal vægt af glødetråd"
+          },
+          "remain_enabled": {
+            "name": "Resterende filamentestimering aktiveret"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "Maksimal vægt af glødetråd"
+          },
+          "remain_enabled": {
+            "name": "Resterende filamentestimering aktiveret"
           }
         }
       },

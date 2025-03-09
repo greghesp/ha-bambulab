@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "Tipo"
+          },
+          "remain": {
+            "name": "Filamento restante"
+          },
+          "remain_enabled": {
+            "name": "Estimativa de filamento restante habilitada"
+          },
+          "tag_uid": {
+            "name": "Número de série da bobina"
+          },
+          "filament_id": {
+            "name": "ID do filamento"
+          },
+          "tray_weight": {
+            "name": "Peso máximo de filamento"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "Peso máximo de filamento"
+          },
+          "remain_enabled": {
+            "name": "Estimativa de filamento restante habilitada"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "Peso máximo de filamento"
+          },
+          "remain_enabled": {
+            "name": "Estimativa de filamento restante habilitada"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "Peso máximo de filamento"
+          },
+          "remain_enabled": {
+            "name": "Estimativa de filamento restante habilitada"
           }
         }
       },

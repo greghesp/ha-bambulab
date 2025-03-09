@@ -478,6 +478,21 @@
           },
           "type": {
             "name": "Type"
+          },
+          "remain": {
+            "name": "Resterende gloeidraad"
+          },
+          "remain_enabled": {
+            "name": "Resterende schatting van de filament ingeschakeld"
+          },
+          "tag_uid": {
+            "name": "Spoel serienummer"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximaal gewicht van de gloeidraad"
           }
         }
       },
@@ -563,6 +578,9 @@
           },
           "tray_weight": {
             "name": "Maximaal gewicht van de gloeidraad"
+          },
+          "remain_enabled": {
+            "name": "Resterende schatting van de filament ingeschakeld"
           }
         }
       },
@@ -604,6 +622,9 @@
           },
           "tray_weight": {
             "name": "Maximaal gewicht van de gloeidraad"
+          },
+          "remain_enabled": {
+            "name": "Resterende schatting van de filament ingeschakeld"
           }
         }
       },
@@ -645,6 +666,9 @@
           },
           "tray_weight": {
             "name": "Maximaal gewicht van de gloeidraad"
+          },
+          "remain_enabled": {
+            "name": "Resterende schatting van de filament ingeschakeld"
           }
         }
       },

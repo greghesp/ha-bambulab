@@ -475,6 +475,21 @@
           },
           "type": {
             "name": "Typ"
+          },
+          "remain": {
+            "name": "Verbleibendes Filament"
+          },
+          "remain_enabled": {
+            "name": "Verbleibende Filamentschätzung aktiviert"
+          },
+          "tag_uid": {
+            "name": "Spulen -Seriennummer"
+          },
+          "filament_id": {
+            "name": "Filament -ID"
+          },
+          "tray_weight": {
+            "name": "Maximales Filamentgewicht"
           }
         }
       },
@@ -560,6 +575,9 @@
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
+          },
+          "remain_enabled": {
+            "name": "Verbleibende Filamentschätzung aktiviert"
           }
         }
       },
@@ -601,6 +619,9 @@
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
+          },
+          "remain_enabled": {
+            "name": "Verbleibende Filamentschätzung aktiviert"
           }
         }
       },
@@ -642,6 +663,9 @@
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
+          },
+          "remain_enabled": {
+            "name": "Verbleibende Filamentschätzung aktiviert"
           }
         }
       },

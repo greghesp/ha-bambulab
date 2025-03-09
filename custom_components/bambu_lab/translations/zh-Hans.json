@@ -472,6 +472,21 @@
           },
           "type": {
             "name": "类型"
+          },
+          "remain": {
+            "name": "剩余的细丝"
+          },
+          "remain_enabled": {
+            "name": "启用了剩余的细丝估计"
+          },
+          "tag_uid": {
+            "name": "线轴序列号"
+          },
+          "filament_id": {
+            "name": "细丝ID"
+          },
+          "tray_weight": {
+            "name": "丝的最大重量"
           }
         }
       },
@@ -557,6 +572,9 @@
           },
           "tray_weight": {
             "name": "丝的最大重量"
+          },
+          "remain_enabled": {
+            "name": "启用了剩余的细丝估计"
           }
         }
       },
@@ -598,6 +616,9 @@
           },
           "tray_weight": {
             "name": "丝的最大重量"
+          },
+          "remain_enabled": {
+            "name": "启用了剩余的细丝估计"
           }
         }
       },
@@ -639,6 +660,9 @@
           },
           "tray_weight": {
             "name": "丝的最大重量"
+          },
+          "remain_enabled": {
+            "name": "启用了剩余的细丝估计"
           }
         }
       },
