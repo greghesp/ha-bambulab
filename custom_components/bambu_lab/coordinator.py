@@ -383,7 +383,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client.publish(command)
 
     def _service_call_get_filament_data(self, data: dict):
-        return FILAMENT_DATA
+        return FILAMENT_DATA | self.client.slicer_settings.filaments
 
     def _service_call_load_filament(self, data: dict):
         device_id = data.get('device_id', [])

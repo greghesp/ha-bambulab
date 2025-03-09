@@ -2323,6 +2323,35 @@ class HomeFlag:
         return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0
 
 
+@dataclass
+class FilamentInfo:
+    name: str;
+    filament_vendor: str;
+    filament_type: str;
+    filament_density: float;
+    nozzle_temperature: int;
+    nozzle_temperature_range_high: int;
+    nozzle_temperature_range_low: int;
+
+# Example custom filament;
+# {
+#   "setting_id": "PFUS9be9e18f81828a",
+#   "version": "1.9.0.2",
+#   "update_time": "2024-03-30 11:54:22",
+#   "name": "ELEGOO PLA Black @Bambu Lab X1 Carbon 0.6 nozzle",
+#   "nickname": null,
+#   "base_id": null,
+#   "filament_vendor": "ELEGOO",
+#   "filament_id": "P9816594",
+#   "filament_type": "PLA",
+#   "filament_is_support": false,
+#   "nozzle_temperature": [
+#     190,
+#     240
+#   ],
+#   "nozzle_hrc": 3
+# },
+      
 class SlicerSettings:
     custom_filaments: dict = field(default_factory=dict)
 
@@ -2330,15 +2359,28 @@ class SlicerSettings:
         self._client = client
         self.custom_filaments = {}
 
+    @property
+    def filaments(self):
+        return self.custom_filaments
+
     def _load_custom_filaments(self, slicer_settings: dict):
         if 'private' in slicer_settings["filament"]:
             for filament in slicer_settings['filament']['private']:
-                name = filament["name"]
-                if " @" in name:
-                    name = name[:name.index(" @")]
                 if filament.get("filament_id", "") != "":
-                    self.custom_filaments[filament["filament_id"]] = name
-            LOGGER.debug("Got custom filaments: %s", self.custom_filaments)
+                    name = filament["name"]
+                    if " @" in name:
+                        name = name[:name.index(" @")]
+                    id = filament["filament_id"]
+                    self.custom_filaments[id] = FilamentInfo(
+                        name=name,
+                        filament_vendor=filament["filament_vendor"],
+                        filament_type=filament["filament_type"],
+                        filament_density=0,
+                        nozzle_temperature=0,
+                        nozzle_temperature_range_high=filament["nozzle_temperature"][1],
+                        nozzle_temperature_range_low=filament["nozzle_temperature"][0]
+                    )
+            LOGGER.debug(f"Got {len(self.custom_filaments)} custom filaments.")
 
     def update(self):
         self.custom_filaments = {}
