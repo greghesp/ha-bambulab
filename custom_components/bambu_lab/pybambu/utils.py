@@ -77,11 +77,9 @@ def get_filament_name(idx, custom_filaments: dict):
     """Converts a filament idx to a human-readable name"""
     result = FILAMENT_NAMES.get(idx, "unknown")
     if result == "unknown" and idx != "":
-        result = custom_filaments.get(idx, None)
-        if result is not None:
-            result = result.name
-    # if result == "unknown" and idx != "":
-    #     LOGGER.debug(f"UNKNOWN FILAMENT IDX: '{idx}'")
+        custom = custom_filaments.get(idx, None)
+        if custom is not None:
+            result = custom.name
     return result
 
 
