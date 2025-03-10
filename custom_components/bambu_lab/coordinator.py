@@ -235,6 +235,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_get_filament_data(data)
             case "print_project_file":
                 result = self._service_call_print_project_file(data)
+            case "send_command":
+                result = self._service_call_send_gcode(data)
             case _:
                 LOGGER.error(f"Unknown service call: {data}")
 
