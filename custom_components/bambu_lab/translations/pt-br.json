@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Autenticação falhou para {dispositivo}",
+      "title": "Autenticação falhou para {device}",
       "description": "Tentar se conectar ao laboratório Bambu falhou. Reconfigure a integração e forneça novas credenciais."
     }
   }

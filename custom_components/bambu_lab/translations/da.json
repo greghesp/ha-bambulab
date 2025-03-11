@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Autentificering mislykkedes for {enhed}",
+      "title": "Autentificering mislykkedes for {device}",
       "description": "Forsøg på at oprette forbindelse til Bambu Lab mislykkedes. Konfigurer integrationen igen og giver friske legitimationsoplysninger."
     }
   }

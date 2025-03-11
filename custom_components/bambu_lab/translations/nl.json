@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Authenticatie mislukt voor {apparaat}",
+      "title": "Authenticatie mislukt voor {device}",
       "description": "Proberen om verbinding te maken met Bambu Lab is mislukt. Configureer de integratie opnieuw en geef nieuwe referenties."
     }
   }

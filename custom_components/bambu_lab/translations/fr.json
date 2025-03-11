@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "L'authentification a échoué pour {périphérique}",
+      "title": "L'authentification a échoué pour {device}",
       "description": "Tenter de se connecter au laboratoire Bambu a échoué. Veuillez reconfigurer l'intégration et fournir de nouvelles références."
     }
   }

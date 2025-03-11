@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Authentifizierung fehlgeschlagen für {Gerät}",
+      "title": "Authentifizierung fehlgeschlagen für {device}",
       "description": "Der Versuch, eine Verbindung zum Bambu -Labor herzustellen, schlug fehl. Bitte konfigurieren Sie die Integration und stellen Sie neue Anmeldeinformationen an."
     }
   }

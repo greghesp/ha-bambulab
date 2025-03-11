@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "L'autenticazione non è riuscita per {dispositivo}",
+      "title": "L'autenticazione non è riuscita per {device}",
       "description": "Tentare di connettersi al laboratorio di Bambu non è riuscito. Si prega di riconfigurare l'integrazione e fornire nuove credenziali."
     }
   }

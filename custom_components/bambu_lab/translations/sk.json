@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Autentifikácia zlyhala pre {zariadenia}",
+      "title": "Autentifikácia zlyhala pre {device}",
       "description": "Pokus o pripojenie k laboratória Bambu zlyhal. Prekonfigurujte integráciu a poskytnite nové poverenia."
     }
   }
