@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "L’autenticació ha fallat per {dispositiu}",
+      "title": "L’autenticació ha fallat per {device}",
       "description": "Intentant connectar -se al laboratori Bambu ha fallat. Reconfigureu la integració i proporcioneu credencials noves."
     }
   }

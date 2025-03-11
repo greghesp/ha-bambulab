@@ -723,7 +723,7 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "{设备}的身份验证失败",
+      "title": "{device}的身份验证失败",
       "description": "试图连接到BAMBU实验室失败。请重新配置集成并提供新的凭据。"
     }
   }
