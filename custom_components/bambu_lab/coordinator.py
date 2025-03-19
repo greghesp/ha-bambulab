@@ -356,6 +356,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         #   X1C_<PRINTERSERIAL>_ExternalSpool_external_spool
 
         if entity_unique_id.endswith('_external_spool'):
+            ams_index = 255
             tray = 254
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
