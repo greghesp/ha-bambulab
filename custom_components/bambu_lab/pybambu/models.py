@@ -566,32 +566,33 @@ class Upgrade:
         
         # Cross-validation on the remaining series is required. 
         # Data values ​​for the upgrade_state dictionary
-        state = data.get("upgrade_state", {})
-        try:
-            self.upgrade_progress = int(state.get("progress", self.upgrade_progress))
-        except ValueError:
-            # Prevents unexpected "" strings from being empty.
-            self.upgrade_progress = 0
-        self.new_version_state = state.get("new_version_state", self.new_version_state)
-        self.cur_version = self._client._device.info.sw_ver
-        self.new_version = self._client._device.info.sw_ver
-        self.new_ver_list = state.get("new_ver_list", self.new_ver_list)
-        if self.new_version_state == 1:
-            if len(self.new_ver_list) > 0:
-                ota_info = next(filter(
-                    lambda x: x["name"] == "ota", self.new_ver_list
-                ), {})
-                if ota_info:
-                    self.cur_version = ota_info["cur_ver"]
-                    self.new_version = ota_info["new_ver"]
-                if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
-                    self.upgrade_progress = 0
-            elif state.get("ota_new_version_number", None) != None:
-                self.new_version = state.get("ota_new_version_number")
-                if self.upgrade_progress == 100 and state.get("message") == "RK1126 start write flash success":
-                    self.upgrade_progress = 0
-            else:
-                LOGGER.error(f"Unable to interpret {state}")
+        state = data.get("upgrade_state", None)
+        if state is not None:
+            try:
+                self.upgrade_progress = int(state.get("progress", self.upgrade_progress))
+            except ValueError:
+                # Prevents unexpected "" strings from being empty.
+                self.upgrade_progress = 0
+            self.new_version_state = state.get("new_version_state", self.new_version_state)
+            self.cur_version = self._client._device.info.sw_ver
+            self.new_version = self._client._device.info.sw_ver
+            self.new_ver_list = state.get("new_ver_list", self.new_ver_list)
+            if self.new_version_state == 1:
+                if len(self.new_ver_list) > 0:
+                    ota_info = next(filter(
+                        lambda x: x["name"] == "ota", self.new_ver_list
+                    ), {})
+                    if ota_info:
+                        self.cur_version = ota_info["cur_ver"]
+                        self.new_version = ota_info["new_ver"]
+                    if self.upgrade_progress == 100 and state.get("message") == "0%, 0B/s":
+                        self.upgrade_progress = 0
+                elif state.get("ota_new_version_number", None) != None:
+                    self.new_version = state.get("ota_new_version_number")
+                    if self.upgrade_progress == 100 and state.get("message") == "RK1126 start write flash success":
+                        self.upgrade_progress = 0
+                else:
+                    LOGGER.error(f"Unable to interpret {state}")
             
         return (old_data != f"{self.__dict__}")
 
