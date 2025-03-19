@@ -14,31 +14,31 @@
   "config": {
     "abort": {
       "already_configured": "O dispositivo já está configurado",
-      "no_printers": "Nenhuma impressora não configurada encontrada na conta.",
-      "cloudflare": "Cloudflare bloqueou a tentativa de conexão.",
+      "no_printers": "Nenhuma impressora configurada foi encontrada na conta.",
+      "cloudflare": "Cloudflare bloqueou a tentativa de ligação.",
       "curl_unavailable": "A biblioteca curl_cffi não está disponível."
     },
     "error": {
       "cannot_connect": "Falha ao ligar. Verifique as credenciais.",
-      "cannot_connect_local_ip": "Falha ao ligar. Verifique o endereço IP fornecido.",
-      "cannot_connect_local_all": "Falha ao ligar. Verifique as definições fornecidas.",
+      "cannot_connect_local_ip": "Falha ao ligar. Verifique o endereço IP.",
+      "cannot_connect_local_all": "Falha ao ligar. Verifique as definições preenchidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
-      "code_needed": "O código de verificação deve ser fornecido.",
+      "code_needed": "O código de verificação deve ser preenchido.",
       "verifyCode": "O código de verificação é obrigatório. Verifique seu e-mail ou telefone.",
       "code_expired": "O código de verificação expirou. Novo código solicitado. Verifique seu e-mail ou telefone.",
-      "code_incorrect": "O código de verificação estava incorreto. ",
+      "code_incorrect": "O código de verificação esta incorreto. ",
       "tfaCode": "O código 2FA é obrigatório. "
     },
     "step": {
       "user": {
-        "description": "A configuração via nuvem Bambu Lab é mais simples e rápida. Contas de redes sociais sem senha não são suportadas.\n\rVocê também pode reutilizar credenciais de autenticação funcionais de outras impressoras. Se encontrados, eles serão listados pelo endereço de e-mail.\n\rOu você pode conectar-se fornecendo manualmente os detalhes da conexão local da impressora. Isso é necessário para uma impressora no modo Lan.",
+        "description": "A configuração via nuvem Bambu Lab é mais simples e rápida. Contas de redes sociais sem senha não são suportadas.\n\r também pode reutilizar credenciais de autenticação funcionais de outras impressoras. Se encontrados, eles serão listados pelo endereço de e-mail.\n\rOu  pode conectar-se fornecendo manualmente os detalhes da ligação local da impressora. Isso é necessário para uma impressora no modo Lan.",
         "data": {
           "printer_mode": "Modo de configuração da impressora:"
         }
       },
       "Bambu": {
-        "title": "Conexão em nuvem do Bambu Lab",
+        "title": "Ligação em nuvem do Bambu Lab",
         "description": "Forneça as suas credenciais da Bambu Lab:",
         "data": {
           "region": "Região da conta:",
@@ -57,7 +57,7 @@
       },
       "Bambu_Lan": {
         "title": "Configurar Ligação Local",
-        "description": "Você pode optar por conectar-se diretamente à impressora para atualizações de status, em vez de usar a nuvem do Bambu Lab. Isso lhe dá resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.",
+        "description": "Pode optar por conectar-se diretamente à impressora para atualizações de status, em vez de usar a nuvem do Bambu Lab. Isso lhe dá resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.",
         "data": {
           "local_mqtt": "Ligar localmente à impressora:",
           "host": "Endereço IP Local da Impressora:",
@@ -67,7 +67,7 @@
         "sections": {
           "advanced": {
             "name": "Opções avançadas",
-            "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
+            "description": "Essas opções são necessárias apenas se  tiver uma configuração fora do padrão.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
               "enable_firmware_update": "Ativar suporte de atualização de firmware"
@@ -87,7 +87,7 @@
         "sections": {
           "advanced": {
             "name": "Opções avançadas",
-            "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
+            "description": "Essas opções são necessárias apenas se  tiver uma configuração fora do padrão.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
               "enable_firmware_update": "Ativar suporte de atualização de firmware"
@@ -99,7 +99,7 @@
   },
   "options": {
     "abort": {
-      "cloudflare": "Cloudflare bloqueou a tentativa de conexão.",
+      "cloudflare": "Cloudflare bloqueou a tentativa de ligação.",
       "curl_unavailable": "A biblioteca curl_cffi não está disponível."
     },
     "error": {
@@ -117,13 +117,13 @@
     "step": {
       "init": {
         "title": "Ajustar definições de ligação",
-        "description": "A configuração via nuvem Bambu Lab é mais simples e rápida. Contas de redes sociais sem senha não são suportadas.\n\rVocê também pode reutilizar credenciais de autenticação funcionais de outras impressoras. Se encontrados, eles serão listados pelo endereço de e-mail.\n\rOu você pode conectar-se fornecendo manualmente os detalhes da conexão local da impressora. Isso é necessário para uma impressora no modo Lan.",
+        "description": "A configuração via nuvem Bambu Lab é mais simples e rápida. Contas de redes sociais sem senha não são suportadas.\n\r também pode reutilizar credenciais de autenticação funcionais de outras impressoras. Se encontrados, eles serão listados pelo endereço de e-mail.\n\rOu  pode conectar-se fornecendo manualmente os detalhes da ligação local da impressora. Isso é necessário para uma impressora no modo Lan.",
         "data": {
           "printer_mode": "Modo de configuração da impressora:"
         }
       },
       "Bambu": {
-        "title": "Conexão em nuvem do Bambu Lab",
+        "title": "ligação em nuvem do Bambu Lab",
         "description": "Forneça as suas credenciais da Bambu Lab:",
         "data": {
           "region": "Região da conta:",
@@ -136,7 +136,7 @@
       },
       "Bambu_Lan": {
         "title": "Ajustar Configuração da Impressora",
-        "description": "Você pode optar por conectar-se diretamente à impressora para atualizações de status, em vez de usar a nuvem do Bambu Lab. Isso lhe dá resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.",
+        "description": " pode optar por conectar-se diretamente à impressora para atualizações de status, em vez de usar a nuvem do Bambu Lab. Isso lhe dá resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.",
         "data": {
           "serial": "Ajuste as configurações para:",
           "host": "Endereço IP Local da Impressora:",
@@ -371,7 +371,7 @@
         }
       },
       "mqtt_mode": {
-        "name": "Modo de conexão MQTT",
+        "name": "Modo de ligação MQTT",
         "state": {
           "local": "Local",
           "bambu_cloud": "Nuvem Bambu Lab"
