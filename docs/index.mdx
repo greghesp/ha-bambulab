@@ -5,8 +5,34 @@ description: Integrate your Bambu Lab 3D Printer with Home Assistant
 
 ha-bambulab is an open-source Home Assistant integration, to connect your Bambu Lab 3D Printer to Home Assistant
 
+# Bambu Lab Authorization Control
+
+As of firmware 01.08.05.00, Bambu Lab has introduced new security measures to disable certain functionality that will impact this integration.  
+
+<Info>All **read** functionality will continue to work, regardless of firmware version</Info>
+
+For the sake of clarity, we refer to the functionality as:
+- Read:  Only reading data from the printer 
+- Write: Sending actions to the printer to control functionality - setting temperatures, moving axis etc
+
+## 01.08.05.00 and later
+
+If you choose to update to firmware version 01.08.05.00, and later and wish to keep your printer connected to Bambu Cloud, the majority of the write functionality will no longer work.  The functionality to read sensor information is not impacted.
+
+<Warning>If you use Home Assistant to perform write actions - **do not update** if you want to retain this functionality in Home Assistant and use Bambu Cloud.</Warning>
+
+If you wish to update to these firmware versions and retain write functionality, you must put your printer into LAN Mode, and enable Developer Mode.  This will restore write functionality, however you will lose all connectivity to Bambu Cloud - Bambu Handy app, Remote Monitoring etc
+
+For more information on 01.08.05.00, and how to enable Developer Mode, please see the [Bambu Lab Wiki](https://wiki.bambulab.com/en/x1/manual/X1-X1C-AMS-firmware-release-history)
+
+## 01.08.02.00 and earlier
+
+This firmware does not have the Bambu Lab Authorization Control functionality, and as such, all printers will continue to work with Bambu Cloud and Local Control options
+
+
+
 # Alternatives
 
-If you don't want to use the Home Assistant integration, there is an alternative [Node-Red flow](https://www.wolfwithsword.com/bambulab-to-home-assistant-nodered-configurator/) created by WolfWithSword.
+If you don't want to use the Home Assistant integration, there is an alternative [Node-Red flow](https://www.wolfwithsword.com/bambulab-to-home-assistant-nodered-configurator/) created by WolfWithSword.  The same information about the Bambu Lab Authorization Control also applies to the Node Red flow.
 It comes with a handy online configurator so that you can upload the generated flow, straight into Node-Red which will feed the data into Home Assistant in a similar manner
 
