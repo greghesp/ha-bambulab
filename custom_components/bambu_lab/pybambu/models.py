@@ -1125,18 +1125,22 @@ class PrintJob:
     def _async_download_task_data_from_printer(self):
         current_thread = threading.current_thread()
         current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
+        LOGGER.info(f"FTP thread starting.")
 
-        while True:
-            self._ftpRunAgain = False
-            start_time = datetime.now()
-            LOGGER.info(f"FTP thread starting.")
-            self._async_download_task_data_from_printer_worker()
-            end_time = datetime.now()
-            LOGGER.info(f"FTP thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
-            if not self._ftpRunAgain:
-                break
-            LOGGER.debug("FTP thread re-running.")
+        try:
+            while True:
+                self._ftpRunAgain = False
+                start_time = datetime.now()
+                self._async_download_task_data_from_printer_worker()
+                if not self._ftpRunAgain:
+                    break
+                end_time = datetime.now()
+                LOGGER.debug("FTP thread re-running. Elapsed time = {(end_time-start_time).seconds}s")
+        except Exception as e:
+            LOGGER.error(f"FTP thread failed with exception {e}")
 
+        end_time = datetime.now()
+        LOGGER.info(f"FTP thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
         self._ftpThread = None
 
     def _async_download_task_data_from_printer_worker(self):
