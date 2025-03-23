@@ -328,6 +328,7 @@ class BambuClient:
     _test_mode = bool
 
     def __init__(self, config):
+        self._config = config
         self.host = config['host']
         self._callback = None
         self._test_mode = False
@@ -365,6 +366,10 @@ class BambuClient:
         else:
             language = language[:2]
         self._user_language = language
+
+    @property
+    def settings(self):
+        return self._config
 
     @property
     def user_language(self):
