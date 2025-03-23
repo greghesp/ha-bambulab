@@ -1454,6 +1454,7 @@ class Info:
     nozzle_type: str
     usage_hours: float
     _ip_address: str
+    _force_ip: bool
 
     def __init__(self, client):
         self._client = client
@@ -1471,6 +1472,7 @@ class Info:
         self.nozzle_type = "unknown"
         self.usage_hours = client._usage_hours
         self._ip_address = client.host
+        self._force_ip = client.settings.get('force_ip', False)
 
     def set_online(self, online):
         if self.online != online:
@@ -1543,17 +1545,18 @@ class Info:
         #     ]
         #   },
 
-        info = data.get('net', {}).get('info', [])
-        for net in info:
-            ip_int = net.get("ip", 0)
-            if ip_int != 0:
-                prev_ip_address = self._ip_address
-                self._ip_address = get_ip_address_from_int(ip_int)
-                if self._ip_address != prev_ip_address:
-                    # IP address was retrieved from the initial mqtt payload or has changed.
-                    self._client.stop_camera()
-                    self._client.start_camera()                    
-                break
+        if not self._force_ip:
+            info = data.get('net', {}).get('info', [])
+            for net in info:
+                ip_int = net.get("ip", 0)
+                if ip_int != 0:
+                    prev_ip_address = self._ip_address
+                    self._ip_address = get_ip_address_from_int(ip_int)
+                    if self._ip_address != prev_ip_address:
+                        # IP address was retrieved from the initial mqtt payload or has changed.
+                        self._client.stop_camera()
+                        self._client.start_camera()                    
+                    break
 
         # Version data is provided differently for X1 and P1
         # P1P example:

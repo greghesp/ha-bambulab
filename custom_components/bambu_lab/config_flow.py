@@ -378,6 +378,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "usage_hours": float(user_input['usage_hours']),
                         'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
                         'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
+                        'force_ip': (user_input['host'] != bambu.get_device().info.ip_address),
                 }
 
                 title = device['dev_id']
@@ -450,7 +451,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "access_code": user_input['access_code'],
                         "usage_hours": float(user_input['usage_hours']),
                         'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
-                        'enable_firmware_update': user_input['advanced']['enable_firmware_update']                        
+                        'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
+                        'force_ip': (user_input['host'] != bambu.get_device().info.ip_address),
                 }
 
                 title = user_input['serial']
@@ -738,6 +740,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         options["usage_hours"] = float(user_input['usage_hours'])
                         options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                         options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                        options["force_ip"] = user_input['host'] != bambu.get_device().info.ip_address
                         
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
@@ -823,6 +826,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
                 title = self.config_entry.data['serial']
                 self.hass.config_entries.async_update_entry(
