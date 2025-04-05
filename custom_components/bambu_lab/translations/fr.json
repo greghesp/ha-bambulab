@@ -195,6 +195,9 @@
       },
       "firmware_update": {
         "name": "Mise à jour du micrologiciel"
+      },
+      "extruder_filament_state": {
+        "name": "État de filament extrudeur"
       }
     },
     "button": {

@@ -195,6 +195,9 @@
       },
       "firmware_update": {
         "name": "Aktualizacja oprogramowania"
+      },
+      "extruder_filament_state": {
+        "name": "Stan włókien wytłaczania"
       }
     },
     "button": {

@@ -195,6 +195,9 @@
       },
       "firmware_update": {
         "name": "อัปเดตเฟิร์มแวร์"
+      },
+      "extruder_filament_state": {
+        "name": "สถานะไส้กรอง"
       }
     },
     "button": {
