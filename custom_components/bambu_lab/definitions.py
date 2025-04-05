@@ -88,6 +88,11 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         is_on_fn=lambda self: self.coordinator.get_model().camera.timelapse == 'enable'
     ),
     BambuLabBinarySensorEntityDescription(
+        key="extruder_filament_state",
+        translation_key="extruder_filament_state",
+        is_on_fn=lambda self: self.coordinator.get_model().info.extruder_filament_state,
+    ),
+    BambuLabBinarySensorEntityDescription(
         key="hms",
         translation_key="hms_errors",
         device_class=BinarySensorDeviceClass.PROBLEM,

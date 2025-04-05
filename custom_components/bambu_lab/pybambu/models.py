@@ -1457,6 +1457,7 @@ class Info:
     nozzle_diameter: float
     nozzle_type: str
     usage_hours: float
+    extruder_filament_state: bool
     _ip_address: str
     _force_ip: bool
 
@@ -1475,6 +1476,7 @@ class Info:
         self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
         self.usage_hours = client._usage_hours
+        self.extruder_filament_state = False
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)
 
@@ -1633,6 +1635,9 @@ class Info:
                 self.wifi_sent = datetime.now()
                 changed = True
         
+        # "hw_switch_state": 1,
+        self.extruder_filament_state = bool(data.get("hw_switch_state", self.extruder_filament_state))
+
         return changed
 
 

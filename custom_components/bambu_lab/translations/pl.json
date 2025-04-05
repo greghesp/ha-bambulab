@@ -1,0 +1,730 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Drukowanie anulowane",
+      "event_print_failed": "Błąd drukowania",
+      "event_print_finished": "Drukowanie zakończone",
+      "event_print_started": "Rozpoczęto drukowanie",
+      "event_print_error": "Błąd drukowania",
+      "event_print_error_cleared": "Błąd drukowania usunięty",
+      "event_printer_error": "Błąd HMS",
+      "event_printer_error_cleared": "Błąd HMS usunięty"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "Urządzenie jest już skonfigurowane",
+      "no_printers": "Nie znaleziono nieskonfigurowanych drukarek na koncie.",
+      "cloudflare": "Cloudflare zablokował próbę połączenia.",
+      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna."
+    },
+    "error": {
+      "cannot_connect": "Nie udało się połączyć. Sprawdź dane logowania.",
+      "cannot_connect_local_ip": "Nie udało się połączyć. Sprawdź podany adres IP.",
+      "cannot_connect_local_all": "Nie udało się połączyć. Sprawdź podane ustawienia.",
+      "invalid_auth": "Nieprawidłowe uwierzytelnienie.",
+      "unknown": "Nieoczekiwany błąd.",
+      "code_needed": "Wymagany jest kod weryfikacyjny.",
+      "verifyCode": "Wymagany jest kod weryfikacyjny. Sprawdź e-mail lub telefon.",
+      "code_expired": "Kod weryfikacyjny wygasł. Poproś o nowy kod. Sprawdź e-mail lub telefon.",
+      "code_incorrect": "Niepoprawny kod weryfikacyjny. Wprowadź ponownie.",
+      "tfaCode": "Wymagany jest kod 2FA. Wprowadź go teraz."
+    },
+    "step": {
+      "user": {
+        "description": "Konfiguracja przez chmurę Bambu Lab jest najprostsza i najszybsza. Konta w mediach społecznościowych bez hasła nie są obsługiwane.\n\rMożesz również użyć danych logowania z innych drukarek. Jeśli zostaną znalezione, będą wyświetlone według adresu e-mail.\n\rMożna też podłączyć się ręcznie, podając dane lokalnego połączenia drukarki. Jest to wymagane w trybie Lan.",
+        "data": {
+          "printer_mode": "Tryb konfiguracji drukarki:"
+        }
+      },
+      "Bambu": {
+        "title": "Połączenie z chmurą Bambu Lab",
+        "description": "Podaj swoje dane logowania do Bambu Lab:",
+        "data": {
+          "region": "Region konta:",
+          "email": "Adres e-mail lub numer telefonu",
+          "password": "Hasło",
+          "newCode": "Poproś o nowy kod",
+          "verifyCode": "Kod weryfikacyjny z e-maila lub telefonu",
+          "tfaCode": "Kod uwierzytelniania dwuskładnikowego"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Wybór drukarki",
+        "data": {
+          "serial": "Wybierz drukarkę do dodania:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Konfiguracja połączenia lokalnego",
+        "description": "Możesz wybrać bezpośrednie połączenie z drukarką zamiast używania chmury Bambu Lab. Zapewnia to odporność na awarie chmury, ale w trybie hybrydowym niektóre funkcje mogą być niedostępne.",
+        "data": {
+          "local_mqtt": "Połącz lokalnie z drukarką:",
+          "host": "Lokalny adres IP drukarki:",
+          "access_code": "Kod dostępu:",
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opcje zaawansowane",
+            "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
+            "data": {
+              "disable_ssl_verify": "Wyłącz weryfikację SSL",
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "Połączenie w trybie Lan",
+        "description": "Podaj lokalny adres IP drukarki, numer seryjny i kod dostępu. Kod dostępu znajdziesz na ekranie drukarki, w ustawieniach sieci (WLAN). Numer seryjny (SN) znajduje się w ustawieniach urządzenia.",
+        "data": {
+          "serial": "Numer seryjny:",
+          "host": "Lokalny adres IP drukarki:",
+          "access_code": "Kod dostępu:",
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opcje zaawansowane",
+            "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
+            "data": {
+              "disable_ssl_verify": "Wyłącz weryfikację SSL",
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+            }
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cloudflare": "Cloudflare zablokował próbę połączenia.",
+      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna."
+    },
+    "error": {
+      "cannot_connect": "Nie udało się połączyć",
+      "cannot_connect_local_ip": "Nie udało się połączyć. Sprawdź podany adres IP.",
+      "cannot_connect_local_all": "Nie udało się połączyć. Sprawdź podane ustawienia.",
+      "invalid_auth": "Nieprawidłowe uwierzytelnienie.",
+      "unknown": "Nieoczekiwany błąd.",
+      "code_needed": "Wymagany jest kod weryfikacyjny.",
+      "verifyCode": "Wymagany jest kod weryfikacyjny. Sprawdź e-mail lub telefon.",
+      "code_expired": "Kod weryfikacyjny wygasł. Poproś o nowy kod. Sprawdź e-mail lub telefon.",
+      "code_incorrect": "Niepoprawny kod weryfikacyjny. Wprowadź ponownie.",
+      "tfaCode": "Wymagany jest kod 2FA. Wprowadź go teraz."
+    },
+    "step": {
+      "init": {
+        "title": "Dostosuj ustawienia połączenia",
+        "description": "Konfiguracja przez chmurę Bambu Lab jest najprostsza i najszybsza. Konta w mediach społecznościowych bez hasła nie są obsługiwane.\n\rMożesz również użyć danych logowania z innych drukarek. Jeśli zostaną znalezione, będą wyświetlone według adresu e-mail.\n\rMożna też podłączyć się ręcznie, podając dane lokalnego połączenia drukarki. Jest to wymagane w trybie Lan.",
+        "data": {
+          "printer_mode": "Tryb konfiguracji drukarki:"
+        }
+      },
+      "Bambu": {
+        "title": "Połączenie z chmurą Bambu Lab",
+        "description": "Podaj swoje dane logowania do Bambu Lab:",
+        "data": {
+          "region": "Region konta:",
+          "email": "Adres e-mail lub numer telefonu",
+          "password": "Hasło",
+          "newCode": "Poproś o nowy kod",
+          "verifyCode": "Kod weryfikacyjny z e-maila lub telefonu",
+          "tfaCode": "Kod uwierzytelniania dwuskładnikowego"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Dostosuj konfigurację drukarki",
+        "description": "Możesz wybrać bezpośrednie połączenie z drukarką zamiast używania chmury Bambu Lab. Zapewnia to odporność na awarie chmury, ale w trybie hybrydowym niektóre funkcje mogą być niedostępne.",
+        "data": {
+          "serial": "Dostosuj ustawienia dla:",
+          "host": "Lokalny adres IP drukarki:",
+          "access_code": "Kod dostępu:",
+          "local_mqtt": "Połącz bezpośrednio z drukarką zamiast przez chmurę:",
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opcje zaawansowane",
+            "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
+            "data": {
+              "disable_ssl_verify": "Wyłącz weryfikację SSL",
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "Połączenie w trybie Lan",
+        "description": "Podaj lokalny adres IP drukarki i kod dostępu. Kod znajdziesz na ekranie drukarki w ustawieniach sieci (WLAN).",
+        "data": {
+          "host": "Lokalny adres IP drukarki:",
+          "access_code": "Kod dostępu:",
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Opcje zaawansowane",
+            "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
+            "data": {
+              "disable_ssl_verify": "Wyłącz weryfikację SSL",
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+            }
+          }
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "door_open": {
+        "name": "Drzwi obudowy"
+      },
+      "timelapse": {
+        "name": "Nagrywanie timelapse"
+      },
+      "hms_errors": {
+        "name": "Błędy HMS"
+      },
+      "print_error": {
+        "name": "Błąd drukowania"
+      },
+      "online": {
+        "name": "Online"
+      },
+      "firmware_update": {
+        "name": "Aktualizacja oprogramowania"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Wstrzymaj drukowanie"
+      },
+      "resume": {
+        "name": "Wznów drukowanie"
+      },
+      "stop": {
+        "name": "Zatrzymaj drukowanie"
+      },
+      "refresh": {
+        "name": "Wymuś odświeżenie danych"
+      },
+      "dev": {
+        "name": "Debugowanie"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Wentylator chłodzący"
+      },
+      "aux_fan": {
+        "name": "Wentylator pomocniczy"
+      },
+      "chamber_fan": {
+        "name": "Wentylator komory"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Kamera"
+      },
+      "cover_image": {
+        "name": "Obraz okładki"
+      },
+      "pick_image": {
+        "name": "Obraz wyboru"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Oświetlenie komory"
+      },
+      "camera_light": {
+        "name": "Oświetlenie kamery"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Docelowa temperatura stołu"
+      },
+      "target_nozzle_temperature": {
+        "name": "Docelowa temperatura dyszy"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Prędkość drukowania",
+        "state": {
+          "silent": "Cichy",
+          "standard": "Standardowy",
+          "sport": "Sportowy",
+          "ludicrous": "Ekstremalny"
+        }
+      }
+    },
+    "sensor": {
+      "wifi_signal": {
+        "name": "Sygnał Wi-Fi"
+      },
+      "bed_temp": {
+        "name": "Temperatura stołu"
+      },
+      "target_bed_temp": {
+        "name": "Docelowa temperatura stołu"
+      },
+      "chamber_temp": {
+        "name": "Temperatura komory"
+      },
+      "target_nozzle_temp": {
+        "name": "Docelowa temperatura dyszy"
+      },
+      "nozzle_temp": {
+        "name": "Temperatura dyszy"
+      },
+      "aux_fan_speed": {
+        "name": "Prędkość wentylatora pomocniczego"
+      },
+      "cooling_fan_speed": {
+        "name": "Prędkość wentylatora chłodzącego"
+      },
+      "chamber_fan_speed": {
+        "name": "Prędkość wentylatora komory"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Prędkość wentylatora chłodzenia hotendu"
+      },
+      "speed_profile": {
+        "name": "Profil prędkości",
+        "state": {
+          "silent": "Cichy",
+          "standard": "Standardowy",
+          "sport": "Sportowy",
+          "ludicrous": "Ekstremalny"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modyfikator"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Nazwa drukarki"
+      },
+      "stage": {
+        "name": "Aktualny stan",
+        "state": {
+          "offline": "Offline",
+          "printing": "Drukowanie",
+          "auto_bed_leveling": "Automatyczne poziomowanie stołu",
+          "heatbed_preheating": "Podgrzewanie stołu",
+          "sweeping_xy_mech_mode": "Tryb czyszczenia osi XY",
+          "changing_filament": "Zmiana filamentu",
+          "m400_pause": "Pauza M400",
+          "paused_filament_runout": "Pauza z powodu braku filamentu",
+          "heating_hotend": "Podgrzewanie hotendu",
+          "calibrating_extrusion": "Kalibracja ekstruzji",
+          "scanning_bed_surface": "Skanowanie powierzchni stołu",
+          "inspecting_first_layer": "Kontrola pierwszej warstwy",
+          "identifying_build_plate_type": "Identyfikacja typu płyty roboczej",
+          "calibrating_micro_lidar": "Kalibracja mikro LiDAR",
+          "homing_toolhead": "Pozycjonowanie głowicy",
+          "cleaning_nozzle_tip": "Czyszczenie końcówki dyszy",
+          "checking_extruder_temperature": "Sprawdzanie temperatury ekstrudera",
+          "paused_user": "Pauza przez użytkownika",
+          "paused_front_cover_falling": "Pauza – opadnięcie przedniej pokrywy",
+          "calibrating_extrusion_flow": "Kalibracja przepływu ekstruzji",
+          "paused_nozzle_temperature_malfunction": "Pauza – błąd temperatury dyszy",
+          "paused_heat_bed_temperature_malfunction": "Pauza – błąd temperatury stołu",
+          "filament_unloading": "Wyładowywanie filamentu",
+          "paused_skipped_step": "Pauza – pominięte kroki",
+          "filament_loading": "Ładowanie filamentu",
+          "calibrating_motor_noise": "Kalibracja hałasu silnika",
+          "paused_ams_lost": "Pauza – utrata połączenia z AMS",
+          "paused_low_fan_speed_heat_break": "Pauza – niska prędkość wentylatora chłodzenia",
+          "paused_chamber_temperature_control_error": "Pauza – błąd kontroli temperatury komory",
+          "cooling_chamber": "Chłodzenie komory",
+          "paused_user_gcode": "Pauza przez kod G",
+          "motor_noise_showoff": "Pokaz hałasu silnika",
+          "paused_nozzle_filament_covered_detected": "Pauza – wykryto filament na dyszy",
+          "paused_cutter_error": "Pauza – błąd obcinacza",
+          "paused_first_layer_error": "Pauza – błąd pierwszej warstwy",
+          "paused_nozzle_clog": "Pauza – zatkana dysza",
+          "idle": "Bezczynny"
+        }
+      },
+      "print_progress": {
+        "name": "Postęp drukowania"
+      },
+      "print_status": {
+        "name": "Status druku",
+        "state": {
+          "failed": "Niepowodzenie",
+          "finish": "Zakończony",
+          "idle": "Bezczynny",
+          "offline": "Offline",
+          "prepare": "Przygotowanie",
+          "running": "W trakcie",
+          "pause": "Pauza",
+          "slicing": "Cięcie",
+          "init": "Inicjalizacja"
+        }
+      },
+      "printable_objects": {
+        "name": "Obiekty do druku"
+      },
+      "skipped_objects": {
+        "name": "Pominięte obiekty"
+      },
+      "mqtt_mode": {
+        "name": "Tryb połączenia MQTT",
+        "state": {
+          "local": "Lokalny",
+          "bambu_cloud": "Chmura Bambu Lab"
+        }
+      },
+      "gcode_file": {
+        "name": "Nazwa pliku G-code"
+      },
+      "gcode_file_downloaded": {
+        "name": "Pobrany plik G-code"
+      },
+      "print_bed_type": {
+        "name": "Print bed type",
+        "state": {
+          "textured_plate": "Textured plate",
+          "cool_plate": "Cool Plate / PLA Plate",
+          "hot_plate": "Smooth PEI Plate / High Temp Plate",
+          "eng_plate": "Engineering Plate"
+        }
+      },
+      "print_length": {
+        "name": "Długość druku"
+      },
+      "print_weight": {
+        "name": "Waga druku"
+      },
+      "subtask_name": {
+        "name": "Nazwa zadania"
+      },
+      "print_type": {
+        "name": "Typ druku",
+        "state": {
+          "local": "Lokalny",
+          "cloud": "Chmura",
+          "idle": "Bezczynny"
+        }
+      },
+      "start_time": {
+        "name": "Czas rozpoczęcia"
+      },
+      "remaining_time": {
+        "name": "Pozostały czas"
+      },
+      "end_time": {
+        "name": "Czas zakończenia"
+      },
+      "total_usage_hours": {
+        "name": "Całkowity czas użytkowania"
+      },
+      "current_layer": {
+        "name": "Aktualna warstwa"
+      },
+      "total_layers": {
+        "name": "Łączna liczba warstw"
+      },
+      "active_tray": {
+        "name": "Aktywna tacka"
+      },
+      "active_tray_index": {
+        "name": "Indeks aktywnej tacki"
+      },
+      "nozzle_diameter": {
+        "name": "Średnica dyszy"
+      },
+      "nozzle_type": {
+        "name": "Typ dyszy",
+        "state": {
+          "hardened_steel": "Stal hartowana",
+          "stainless_steel": "Stal nierdzewna"
+        }
+      },
+      "ip_address": {
+        "name": "Adres IP"
+      },
+      "humidity_index": {
+        "name": "Wskaźnik wilgotności"
+      },
+      "ams_temp": {
+        "name": "Temperatura AMS"
+      },
+      "external_spool": {
+        "name": "Zewnętrzna szpula",
+        "state_attributes": {
+          "active": {
+            "name": "Aktywna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "empty": {
+            "name": "Pusta"
+          },
+          "k_value": {
+            "name": "Wartość K"
+          },
+          "name": {
+            "name": "Nazwa"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimalna temperatura dyszy"
+          },
+          "nozzle_temp_max": {
+            "name": "Maksymalna temperatura dyszy"
+          },
+          "remain": {
+            "name": "Pozostały filament"
+          },
+          "remain_enabled": {
+            "name": "Szacowanie pozostałego filamentu włączone"
+          },
+          "tag_uid": {
+            "name": "Numer seryjny szpuli"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID filamentu"
+          },
+          "tray_weight": {
+            "name": "Maksymalna waga filamentu"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Tacka 1",
+        "state_attributes": {
+          "active": {
+            "name": "Aktywna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "empty": {
+            "name": "Pusta"
+          },
+          "k_value": {
+            "name": "Wartość K"
+          },
+          "name": {
+            "name": "Nazwa"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimalna temperatura dyszy"
+          },
+          "nozzle_temp_max": {
+            "name": "Maksymalna temperatura dyszy"
+          },
+          "remain": {
+            "name": "Pozostały filament"
+          },
+          "remain_enabled": {
+            "name": "Szacowanie pozostałego filamentu włączone"
+          },
+          "tag_uid": {
+            "name": "Numer seryjny szpuli"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID filamentu"
+          },
+          "tray_weight": {
+            "name": "Maksymalna waga filamentu"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Tacka 2",
+        "state_attributes": {
+          "active": {
+            "name": "Aktywna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "empty": {
+            "name": "Pusta"
+          },
+          "k_value": {
+            "name": "Wartość K"
+          },
+          "name": {
+            "name": "Nazwa"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimalna temperatura dyszy"
+          },
+          "nozzle_temp_max": {
+            "name": "Maksymalna temperatura dyszy"
+          },
+          "remain": {
+            "name": "Pozostały filament"
+          },
+          "remain_enabled": {
+            "name": "Szacowanie pozostałego filamentu włączone"
+          },
+          "tag_uid": {
+            "name": "Numer seryjny szpuli"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID filamentu"
+          },
+          "tray_weight": {
+            "name": "Maksymalna waga filamentu"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Tacka 3",
+        "state_attributes": {
+          "active": {
+            "name": "Aktywna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "empty": {
+            "name": "Pusta"
+          },
+          "k_value": {
+            "name": "Wartość K"
+          },
+          "name": {
+            "name": "Nazwa"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimalna temperatura dyszy"
+          },
+          "nozzle_temp_max": {
+            "name": "Maksymalna temperatura dyszy"
+          },
+          "remain": {
+            "name": "Pozostały filament"
+          },
+          "remain_enabled": {
+            "name": "Szacowanie pozostałego filamentu włączone"
+          },
+          "tag_uid": {
+            "name": "Numer seryjny szpuli"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID filamentu"
+          },
+          "tray_weight": {
+            "name": "Maksymalna waga filamentu"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Tacka 4",
+        "state_attributes": {
+          "active": {
+            "name": "Aktywna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "empty": {
+            "name": "Pusta"
+          },
+          "k_value": {
+            "name": "Wartość K"
+          },
+          "name": {
+            "name": "Nazwa"
+          },
+          "nozzle_temp_min": {
+            "name": "Minimalna temperatura dyszy"
+          },
+          "nozzle_temp_max": {
+            "name": "Maksymalna temperatura dyszy"
+          },
+          "remain": {
+            "name": "Pozostały filament"
+          },
+          "remain_enabled": {
+            "name": "Szacowanie pozostałego filamentu włączone"
+          },
+          "tag_uid": {
+            "name": "Numer seryjny szpuli"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID filamentu"
+          },
+          "tray_weight": {
+            "name": "Maksymalna waga filamentu"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Kamera"
+      }
+    },
+    "switch": {
+      "manual": {
+        "name": "Tryb ręcznego odświeżania"
+      },
+      "camera": {
+        "name": "Włącz kamerę"
+      },
+      "imagecamera": {
+        "name": "Użyj kamery obrazu"
+      },
+      "ftp": {
+        "name": "Załaduj dane modelu z drukarki"
+      },
+      "prompt_sound": {
+        "name": "Włącz dźwięk powiadomień"
+      },
+      "timelapse": {
+        "name": "Załaduj najnowszy timelapse z drukarki"
+      },
+      "download_gcode_file": {
+        "name": "Zapisz plik GCode w HA"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Aktualizacja oprogramowania"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Chmura Bambu Lab",
+        "lan": "Tryb Lan"
+      }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Błąd uwierzytelnienia dla {device}",
+      "description": "Próba połączenia z Bambu Lab nie powiodła się. Skonfiguruj integrację ponownie i podaj aktualne dane logowania."
+    }
+  }
+}
