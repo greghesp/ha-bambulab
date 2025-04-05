@@ -195,6 +195,9 @@
       },
       "firmware_update": {
         "name": "固件更新"
+      },
+      "extruder_filament_state": {
+        "name": "挤出机细丝状态"
       }
     },
     "button": {
