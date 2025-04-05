@@ -388,8 +388,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     options=options
                 )
 
-        default_disable_ssl_verify = '' if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
-        default_enable_firmware_update = '' if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
+        default_disable_ssl_verify = False if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
+        default_enable_firmware_update = False if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -464,8 +464,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             errors['base'] = "cannot_connect_local_all"
 
-        default_disable_ssl_verify = '' if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
-        default_enable_firmware_update = '' if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
+        default_disable_ssl_verify = False if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
+        default_enable_firmware_update = False if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -765,8 +765,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 mode=SelectSelectorMode.LIST)
         )
 
-        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', '') if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
-        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', '') if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
+        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
+        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -844,8 +844,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
         default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
-        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', '') if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
-        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', '') if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
+        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
+        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
