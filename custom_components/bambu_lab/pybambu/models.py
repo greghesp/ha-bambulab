@@ -117,7 +117,7 @@ class Device:
         if self.info.mqtt_mode == "bambu_cloud":
             return True
         # X1* have not yet blocked setting the temperatures when in nybrid connection mode.
-        if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E":
+        if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D":
             return True
         # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
         return not self._client.bambu_cloud.bambu_connected
@@ -130,7 +130,7 @@ class Device:
         elif feature == Features.CHAMBER_FAN:
             return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.CURRENT_STAGE:
             return True
         elif feature == Features.PRINT_LAYERS:
@@ -146,13 +146,13 @@ class Device:
         elif feature == Features.START_TIME_GENERATED:
             return True
         elif feature == Features.AMS_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.CAMERA_RTSP:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.CAMERA_IMAGE:
             return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
         elif feature == Features.DOOR_SENSOR:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.MANUAL_MODE:
             return False
         elif feature == Features.AMS_FILAMENT_REMAINING:
@@ -167,7 +167,7 @@ class Device:
         elif feature == Features.TIMELAPSE:
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
-            if self.info.device_type == "A1" or self.info.device_type == "A1MINI" or self.info.device_type == "X1E":
+            if self.info.device_type == "A1" or self.info.device_type == "A1MINI" or self.info.device_type == "X1E" or self.info.device_type == "H2D":
                 return True
             elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.02.99.10"):
                 return True
@@ -1733,6 +1733,9 @@ class AMSList:
             elif name.startswith("ams_f1/"):
                 self.model = "AMS Lite"
                 index = int(name[7])
+            elif name.startswith("n3f/"):
+                self.mode = "AMS 2 Pro"
+                index = int(name[4])
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
