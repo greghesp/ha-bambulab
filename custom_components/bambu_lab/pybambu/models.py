@@ -1734,7 +1734,7 @@ class AMSList:
                 self.model = "AMS Lite"
                 index = int(name[7])
             elif name.startswith("n3f/"):
-                self.mode = "AMS 2 Pro"
+                self.model = "AMS 2 Pro"
                 index = int(name[4])
             
             if index != -1:
