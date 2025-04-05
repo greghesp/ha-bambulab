@@ -56,10 +56,12 @@ body:
         - A1 Mini
         - P1P
         - P1S
+        - H2D
         - X1
         - X1C
         - X1E
         - AMS
+        - AMS 2 Pro
         - AMS Lite
     validations:
       required: true
