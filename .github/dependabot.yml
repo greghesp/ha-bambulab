@@ -5,7 +5,7 @@ updates:
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
-    interval: "daily"
+    interval: "weekly"
   groups:
     updates:
       applies-to: version-updates
