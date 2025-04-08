@@ -27,8 +27,8 @@
       "code_needed": "Es muss ein Bestätigungscode angegeben werden.",
       "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
-      "code_incorrect": "Der Bestätigungscode war falsch. ",
-      "tfaCode": "2FA-Code ist erforderlich. "
+      "code_incorrect": "Der Bestätigungscode war falsch.",
+      "tfaCode": "2FA-Code ist erforderlich."
     },
     "step": {
       "user": {
@@ -69,8 +69,8 @@
             "name": "Erweiterte Optionen",
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
-              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
-              "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
+              "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
             }
           }
         }
@@ -89,8 +89,8 @@
             "name": "Erweiterte Optionen",
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
-              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
-              "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
+              "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
             }
           }
         }
@@ -117,7 +117,7 @@
     "step": {
       "init": {
         "title": "Verbindungseinstellungen anpassen",
-        "description": "Die Konfiguration über die Bambu Lab Cloud ist am einfachsten und schnellsten. Social-Media-Konten ohne Passwort werden nicht unterstützt.\n\rSie können auch funktionierende Authentifizierungsdaten von anderen Druckern wiederverwenden. Wenn diese gefunden werden, werden sie nach der E-Mail-Adresse aufgelistet.\n\rAlternativ können Sie eine Verbindung herstellen, indem Sie die lokalen Verbindungsdetails des Druckers manuell angeben. Dies ist für einen Drucker im Lan-Modus erforderlich.",
+        "description": "Die Konfiguration über die Bambu Lab Cloud ist am einfachsten und schnellsten. Social-Media-Konten ohne Passwort werden nicht unterstützt.\n\rSie können auch funktionierende Authentifizierungsdaten von anderen Druckern wiederverwenden. Wenn diese gefunden werden, werden sie nach der E-Mail-Adresse aufgelistet.\n\rAlternativ können Sie eine Verbindung herstellen, indem Sie die lokalen Verbindungsdetails des Druckers manuell angeben. Dies ist für einen Drucker im LAN-Modus erforderlich.",
         "data": {
           "printer_mode": "Drucker-Konfigurationsmodus:"
         }
@@ -149,8 +149,8 @@
             "name": "Erweiterte Optionen",
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
-              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
-              "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
+              "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
             }
           }
         }
@@ -168,8 +168,8 @@
             "name": "Erweiterte Optionen",
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
-              "disable_ssl_verify": "Deaktivieren Sie die SSL -Überprüfung",
-              "enable_firmware_update": "Aktivieren Sie den Firmware -Update -Support"
+              "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
             }
           }
         }
@@ -274,7 +274,7 @@
         "name": "Druckbetttemperatur"
       },
       "target_bed_temp": {
-        "name": "Zieltemperatur des Druckbett"
+        "name": "Zieltemperatur vom Druckbett"
       },
       "chamber_temp": {
         "name": "Temperatur im Druckraum"
@@ -419,7 +419,7 @@
         "name": "Verbleibende Zeit"
       },
       "end_time": {
-        "name": "Vrs. Fertigstellung"
+        "name": "Endzeit"
       },
       "total_usage_hours": {
         "name": "Gesamtnutzung"
@@ -483,13 +483,13 @@
             "name": "Verbleibendes Filament"
           },
           "remain_enabled": {
-            "name": "Verbleibende Filamentschätzung aktiviert"
+            "name": "Berechnung verbleibendes Filament aktiviert"
           },
           "tag_uid": {
-            "name": "Spulen -Seriennummer"
+            "name": "Seriennummer der Spule"
           },
           "filament_id": {
-            "name": "Filament -ID"
+            "name": "Filament-ID"
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
@@ -524,16 +524,16 @@
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
-            "name": "Seriennummer des Filaments"
+            "name": "Seriennummer der Spule"
           },
           "type": {
             "name": "Typ"
           },
           "remain_enabled": {
-            "name": "Verbleibende Filamentschätzung aktiviert"
+            "name": "Berechnung verbleibendes Filament aktiviert"
           },
           "filament_id": {
-            "name": "Filament -ID"
+            "name": "Filament-ID"
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
@@ -568,19 +568,19 @@
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
-            "name": "Seriennummer des Filaments"
+            "name": "Seriennummer der Spule"
           },
           "type": {
             "name": "Typ"
           },
           "filament_id": {
-            "name": "Filament -ID"
+            "name": "Filament-ID"
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
           },
           "remain_enabled": {
-            "name": "Verbleibende Filamentschätzung aktiviert"
+            "name": "Berechnung verbleibendes Filament aktiviert"
           }
         }
       },
@@ -612,19 +612,19 @@
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
-            "name": "Seriennummer des Filaments"
+            "name": "Seriennummer der Spule"
           },
           "type": {
             "name": "Typ"
           },
           "filament_id": {
-            "name": "Filament -ID"
+            "name": "Filament-ID"
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
           },
           "remain_enabled": {
-            "name": "Verbleibende Filamentschätzung aktiviert"
+            "name": "Berechnung verbleibendes Filament aktiviert"
           }
         }
       },
@@ -656,19 +656,19 @@
             "name": "Verbleibende Filamentmenge"
           },
           "tag_uid": {
-            "name": "Seriennummer des Filaments"
+            "name": "Seriennummer der Spule"
           },
           "type": {
             "name": "Typ"
           },
           "filament_id": {
-            "name": "Filament -ID"
+            "name": "Filament-ID"
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
           },
           "remain_enabled": {
-            "name": "Verbleibende Filamentschätzung aktiviert"
+            "name": "Berechnung verbleibendes Filament aktiviert"
           }
         }
       },
@@ -695,16 +695,16 @@
         "name": "Kamera aktivieren"
       },
       "imagecamera": {
-        "name": "Verwenden Sie eine Bildsensorkamera"
+        "name": "Bildsensorkamera verwenden"
       },
       "prompt_sound": {
         "name": "Aufforderungston zulassen"
       },
       "ftp": {
-        "name": "Laden Sie Modelldaten aus dem Drucker laden"
+        "name": "Modelldaten vom Drucker laden"
       },
       "timelapse": {
-        "name": "Laden Sie den neuesten Zeitplan aus dem Drucker"
+        "name": "Neuste Zeitraffer-Aufnahme vom Drucker laden"
       },
       "download_gcode_file": {
         "name": "GCode Datei in HA speichern"
@@ -727,7 +727,7 @@
   "issues": {
     "authentication_failed": {
       "title": "Authentifizierung fehlgeschlagen für {device}",
-      "description": "Der Versuch, eine Verbindung zum Bambu -Labor herzustellen, schlug fehl. Bitte konfigurieren Sie die Integration und stellen Sie neue Anmeldeinformationen an."
+      "description": "Der Versuch eine Verbindung zu Bambu Lab herzustellen, schlug fehl. Bitte konfigurieren Sie die Integration und geben Sie aktuelle Anmeldeinformationen ein."
     }
   }
 }
