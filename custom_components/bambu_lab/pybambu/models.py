@@ -2399,7 +2399,7 @@ class SlicerSettings:
         return self.custom_filaments
 
     def _load_custom_filaments(self, slicer_settings: dict):
-        if 'private' in slicer_settings["filament"]:
+        if 'private' in slicer_settings.get("filament", {}):
             for filament in slicer_settings['filament']['private']:
                 if filament.get("filament_id", "") != "":
                     name = filament["name"]
