@@ -195,6 +195,9 @@
       },
       "firmware_update": {
         "name": "Aktualizácia firmvéru"
+      },
+      "extruder_filament_state": {
+        "name": "Extrudérový vlákno štát"
       }
     },
     "button": {

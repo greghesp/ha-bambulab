@@ -117,7 +117,7 @@ class Device:
         if self.info.mqtt_mode == "bambu_cloud":
             return True
         # X1* have not yet blocked setting the temperatures when in nybrid connection mode.
-        if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E":
+        if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D":
             return True
         # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
         return not self._client.bambu_cloud.bambu_connected
@@ -130,7 +130,7 @@ class Device:
         elif feature == Features.CHAMBER_FAN:
             return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.CURRENT_STAGE:
             return True
         elif feature == Features.PRINT_LAYERS:
@@ -146,13 +146,13 @@ class Device:
         elif feature == Features.START_TIME_GENERATED:
             return True
         elif feature == Features.AMS_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.CAMERA_RTSP:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.CAMERA_IMAGE:
             return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
         elif feature == Features.DOOR_SENSOR:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E"
+            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
         elif feature == Features.MANUAL_MODE:
             return False
         elif feature == Features.AMS_FILAMENT_REMAINING:
@@ -167,7 +167,7 @@ class Device:
         elif feature == Features.TIMELAPSE:
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
-            if self.info.device_type == "A1" or self.info.device_type == "A1MINI" or self.info.device_type == "X1E":
+            if self.info.device_type == "A1" or self.info.device_type == "A1MINI" or self.info.device_type == "X1E" or self.info.device_type == "H2D":
                 return True
             elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.02.99.10"):
                 return True
@@ -1125,18 +1125,22 @@ class PrintJob:
     def _async_download_task_data_from_printer(self):
         current_thread = threading.current_thread()
         current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
+        LOGGER.info(f"FTP thread starting.")
 
-        while True:
-            self._ftpRunAgain = False
-            start_time = datetime.now()
-            LOGGER.info(f"FTP thread starting.")
-            self._async_download_task_data_from_printer_worker()
-            end_time = datetime.now()
-            LOGGER.info(f"FTP thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
-            if not self._ftpRunAgain:
-                break
-            LOGGER.debug("FTP thread re-running.")
+        try:
+            while True:
+                self._ftpRunAgain = False
+                start_time = datetime.now()
+                self._async_download_task_data_from_printer_worker()
+                if not self._ftpRunAgain:
+                    break
+                end_time = datetime.now()
+                LOGGER.debug("FTP thread re-running. Elapsed time = {(end_time-start_time).seconds}s")
+        except Exception as e:
+            LOGGER.error(f"FTP thread failed with exception {e}")
 
+        end_time = datetime.now()
+        LOGGER.info(f"FTP thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
         self._ftpThread = None
 
     def _async_download_task_data_from_printer_worker(self):
@@ -1453,6 +1457,7 @@ class Info:
     nozzle_diameter: float
     nozzle_type: str
     usage_hours: float
+    extruder_filament_state: bool
     _ip_address: str
     _force_ip: bool
 
@@ -1471,6 +1476,7 @@ class Info:
         self.nozzle_diameter = 0
         self.nozzle_type = "unknown"
         self.usage_hours = client._usage_hours
+        self.extruder_filament_state = False
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)
 
@@ -1629,6 +1635,9 @@ class Info:
                 self.wifi_sent = datetime.now()
                 changed = True
         
+        # "hw_switch_state": 1,
+        self.extruder_filament_state = bool(data.get("hw_switch_state", self.extruder_filament_state))
+
         return changed
 
 
@@ -1724,6 +1733,9 @@ class AMSList:
             elif name.startswith("ams_f1/"):
                 self.model = "AMS Lite"
                 index = int(name[7])
+            elif name.startswith("n3f/"):
+                self.model = "AMS 2 Pro"
+                index = int(name[4])
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
@@ -2387,7 +2399,7 @@ class SlicerSettings:
         return self.custom_filaments
 
     def _load_custom_filaments(self, slicer_settings: dict):
-        if 'private' in slicer_settings["filament"]:
+        if 'private' in slicer_settings.get("filament", {}):
             for filament in slicer_settings['filament']['private']:
                 if filament.get("filament_id", "") != "":
                     name = filament["name"]

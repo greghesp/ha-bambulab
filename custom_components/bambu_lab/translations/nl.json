@@ -195,6 +195,9 @@
       },
       "firmware_update": {
         "name": "Firmware-update"
+      },
+      "extruder_filament_state": {
+        "name": "Extruder Filament State"
       }
     },
     "button": {

@@ -195,6 +195,9 @@
       },
       "firmware_update": {
         "name": "Ενημέρωση λογισμικού"
+      },
+      "extruder_filament_state": {
+        "name": "Κράτος νήματος εξωθητήρα"
       }
     },
     "button": {
