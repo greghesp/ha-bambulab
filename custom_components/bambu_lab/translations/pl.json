@@ -197,7 +197,7 @@
         "name": "Aktualizacja oprogramowania"
       },
       "extruder_filament_state": {
-        "name": "Stan włókien wytłaczania"
+        "name": "Stan filamentu w ekstruderze"
       }
     },
     "button": {
@@ -330,7 +330,7 @@
           "scanning_bed_surface": "Skanowanie powierzchni stołu",
           "inspecting_first_layer": "Kontrola pierwszej warstwy",
           "identifying_build_plate_type": "Identyfikacja typu płyty roboczej",
-          "calibrating_micro_lidar": "Kalibracja mikro LiDAR",
+          "calibrating_micro_lidar": "Kalibracja LiDAR",
           "homing_toolhead": "Pozycjonowanie głowicy",
           "cleaning_nozzle_tip": "Czyszczenie końcówki dyszy",
           "checking_extruder_temperature": "Sprawdzanie temperatury ekstrudera",
@@ -348,7 +348,7 @@
           "paused_chamber_temperature_control_error": "Pauza – błąd kontroli temperatury komory",
           "cooling_chamber": "Chłodzenie komory",
           "paused_user_gcode": "Pauza przez kod G",
-          "motor_noise_showoff": "Pokaz hałasu silnika",
+          "motor_noise_showoff": "Pokaz dzwięku silników",
           "paused_nozzle_filament_covered_detected": "Pauza – wykryto filament na dyszy",
           "paused_cutter_error": "Pauza – błąd obcinacza",
           "paused_first_layer_error": "Pauza – błąd pierwszej warstwy",
@@ -393,7 +393,7 @@
         "name": "Pobrany plik G-code"
       },
       "print_bed_type": {
-        "name": "Print bed type",
+        "name": "Typ płyty",
         "state": {
           "textured_plate": "Textured plate",
           "cool_plate": "Cool Plate / PLA Plate",
@@ -402,10 +402,10 @@
         }
       },
       "print_length": {
-        "name": "Długość druku"
+        "name": "Długość filamentu"
       },
       "print_weight": {
-        "name": "Waga druku"
+        "name": "Waga filamentu"
       },
       "subtask_name": {
         "name": "Nazwa zadania"
@@ -428,7 +428,7 @@
         "name": "Czas zakończenia"
       },
       "total_usage_hours": {
-        "name": "Całkowity czas użytkowania"
+        "name": "Całkowity czas pracy"
       },
       "current_layer": {
         "name": "Aktualna warstwa"
@@ -437,10 +437,10 @@
         "name": "Łączna liczba warstw"
       },
       "active_tray": {
-        "name": "Aktywna tacka"
+        "name": "Aktywny slot"
       },
       "active_tray_index": {
-        "name": "Indeks aktywnej tacki"
+        "name": "Indeks aktywnego slotu"
       },
       "nozzle_diameter": {
         "name": "Średnica dyszy"
@@ -456,7 +456,7 @@
         "name": "Adres IP"
       },
       "humidity_index": {
-        "name": "Wskaźnik wilgotności"
+        "name": "Indeks wilgotności"
       },
       "ams_temp": {
         "name": "Temperatura AMS"
@@ -471,7 +471,7 @@
             "name": "Kolor"
           },
           "empty": {
-            "name": "Pusta"
+            "name": "Brak"
           },
           "k_value": {
             "name": "Wartość K"
@@ -506,7 +506,7 @@
         }
       },
       "tray_1": {
-        "name": "Tacka 1",
+        "name": "Slot 1",
         "state_attributes": {
           "active": {
             "name": "Aktywna"
@@ -515,7 +515,7 @@
             "name": "Kolor"
           },
           "empty": {
-            "name": "Pusta"
+            "name": "Pusty"
           },
           "k_value": {
             "name": "Wartość K"
@@ -550,7 +550,7 @@
         }
       },
       "tray_2": {
-        "name": "Tacka 2",
+        "name": "Slot 2",
         "state_attributes": {
           "active": {
             "name": "Aktywna"
@@ -559,7 +559,7 @@
             "name": "Kolor"
           },
           "empty": {
-            "name": "Pusta"
+            "name": "Pusty"
           },
           "k_value": {
             "name": "Wartość K"
@@ -594,7 +594,7 @@
         }
       },
       "tray_3": {
-        "name": "Tacka 3",
+        "name": "Slot 3",
         "state_attributes": {
           "active": {
             "name": "Aktywna"
@@ -603,7 +603,7 @@
             "name": "Kolor"
           },
           "empty": {
-            "name": "Pusta"
+            "name": "Pusty"
           },
           "k_value": {
             "name": "Wartość K"
@@ -638,7 +638,7 @@
         }
       },
       "tray_4": {
-        "name": "Tacka 4",
+        "name": "Slot 4",
         "state_attributes": {
           "active": {
             "name": "Aktywna"
@@ -647,7 +647,7 @@
             "name": "Kolor"
           },
           "empty": {
-            "name": "Pusta"
+            "name": "Pusty"
           },
           "k_value": {
             "name": "Wartość K"
