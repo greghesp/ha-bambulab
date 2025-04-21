@@ -468,9 +468,9 @@ class Upgrade:
             Printers.P1P: "p1",
             Printers.P1S: "p1",
             Printers.A1MINI: "a1-mini",
-            Printers.A1: Printers.A1,
-            Printers.X1C: Printers.X1,
-            Printers.X1E: Printers.X1E
+            Printers.A1: "a1",
+            Printers.X1C: "x1c",
+            Printers.X1E: "x1e"
         }
         self.printer_name = device_mapping.get(self._client._device.info.device_type)
         if self.printer_name is None:
