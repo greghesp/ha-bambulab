@@ -519,7 +519,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTime.MINUTES,
         suggested_unit_of_measurement=UnitOfTime.HOURS,
         suggested_display_precision=3,
-        icon="mdi:timer-sand",
+        icon="mdi:fan-clock",
         device_class=SensorDeviceClass.DURATION,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time,
         exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING) and coordinator.get_model().ams.data[index].model == "AMS 2 Pro"
