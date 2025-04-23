@@ -43,7 +43,7 @@ class Features(IntEnum):
     TIMELAPSE = 22,
     AMS_SWITCH_COMMAND = 23,
     DOWNLOAD_GCODE_FILE = 24,
-    AMS_HUMIDITY = 15,
+    AMS_HUMIDITY = 25
 
 
 class FansEnum(IntEnum):

@@ -1855,6 +1855,7 @@ class AMSList:
                     self.data[index] = AMSInstance(self._client, "Unknown")
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
+
                 if self.data[index].humidity != int(ams["humidity_raw"]):
                     self.data[index].humidity = int(ams["humidity_raw"])
 
