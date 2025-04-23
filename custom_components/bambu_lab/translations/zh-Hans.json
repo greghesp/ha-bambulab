@@ -446,9 +446,6 @@
       "humidity_index": {
         "name": "湿度指数"
       },
-      "ams_temp": {
-        "name": "AMS 温度"
-      },
       "external_spool": {
         "name": "外挂料盘",
         "state_attributes": {

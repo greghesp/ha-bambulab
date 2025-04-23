@@ -452,9 +452,6 @@
       "humidity_index": {
         "name": "Luchtvochtigheidsindex"
       },
-      "ams_temp": {
-        "name": "AMS-temperatuur"
-      },
       "external_spool": {
         "name": "Externe spoel",
         "state_attributes": {

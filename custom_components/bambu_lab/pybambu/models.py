@@ -147,7 +147,11 @@ class Device:
         elif feature == Features.START_TIME_GENERATED:
             return True
         elif feature == Features.AMS_TEMPERATURE:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
+            if (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D):
+                return True
+            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
+                return True
+            return False
         elif feature == Features.CAMERA_RTSP:
             return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
         elif feature == Features.CAMERA_IMAGE:
@@ -177,6 +181,14 @@ class Device:
             return False
         elif feature == Features.DOWNLOAD_GCODE_FILE:
             return True
+        elif feature == Features.AMS_HUMIDITY:
+            if (self.info.device_type == "H2D"):
+                return True
+            elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.08.50.18"):
+                return True
+            elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.07.50.18"):
+                return True
+            return False
 
         return False
     
@@ -1665,6 +1677,7 @@ class AMSInstance:
     sw_version: str
     hw_version: str
     humidity_index: int
+    humidity: int
     temperature: int
     model: str
     tray: list["AMSTray"]
@@ -1674,6 +1687,7 @@ class AMSInstance:
         self.sw_version = ""
         self.hw_version = ""
         self.humidity_index = 0
+        self.humidity = 0
         self.temperature = 0
         self.model = model
         self.tray = [None] * 4
@@ -1841,6 +1855,9 @@ class AMSList:
                     self.data[index] = AMSInstance(self._client, "Unknown")
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
+                if self.data[index].humidity != int(ams["humidity_raw"]):
+                    self.data[index].humidity = int(ams["humidity_raw"])
+
                 if self.data[index].temperature != float(ams['temp']):
                     self.data[index].temperature = float(ams['temp'])
 

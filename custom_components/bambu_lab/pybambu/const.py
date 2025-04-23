@@ -42,7 +42,8 @@ class Features(IntEnum):
     FTP = 21,
     TIMELAPSE = 22,
     AMS_SWITCH_COMMAND = 23,
-    DOWNLOAD_GCODE_FILE = 24
+    DOWNLOAD_GCODE_FILE = 24,
+    AMS_HUMIDITY = 15,
 
 
 class FansEnum(IntEnum):

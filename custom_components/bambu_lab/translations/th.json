@@ -455,9 +455,6 @@
       "humidity_index": {
         "name": "ดัชนีความชื้น"
       },
-      "ams_temp": {
-        "name": "อุณหภูมิ AMS"
-      },
       "external_spool": {
         "name": "สปูลภายนอก",
         "state_attributes": {

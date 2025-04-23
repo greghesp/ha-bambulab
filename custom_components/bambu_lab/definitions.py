@@ -486,8 +486,15 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         # We subtract from 6 to match the new Bambu Handy/Studio presentation of 1 = dry, 5 = wet while the printer sends 1 = wet, 5 = dry
     ),
     BambuLabSensorEntityDescription(
+        key="humidity",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.HUMIDITY,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS_HUMIDITY)
+    ),
+    BambuLabSensorEntityDescription(
         key="temperature",
-        translation_key="ams_temp",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,

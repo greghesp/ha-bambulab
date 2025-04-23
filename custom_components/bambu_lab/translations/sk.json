@@ -446,9 +446,6 @@
       "humidity_index": {
         "name": "Index vlhkosti"
       },
-      "ams_temp": {
-        "name": "Teplota AMS"
-      },
       "external_spool": {
         "name": "Vonkajšia cievka",
         "state_attributes": {
