@@ -189,7 +189,14 @@ class Device:
             elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.07.50.18"):
                 return True
             return False
-
+        elif feature == Features.AMS_DRYING:
+            if (self.info.device_type == "H2D"):
+                return True
+            elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.08.50.18"):
+                return True
+            elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.07.50.18"):
+                return True
+            return False
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -1676,20 +1683,24 @@ class AMSInstance:
     serial: str
     sw_version: str
     hw_version: str
+    model: str
     humidity_index: int
     humidity: int
     temperature: int
     model: str
+    remaining_drying_time: int
     tray: list["AMSTray"]
 
     def __init__(self, client, model):
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
+        self.model = ""
         self.humidity_index = 0
         self.humidity = 0
         self.temperature = 0
         self.model = model
+        self.remaining_drying_time = 0
         self.tray = [None] * 4
         self.tray[0] = AMSTray(client)
         self.tray[1] = AMSTray(client)
@@ -1773,6 +1784,9 @@ class AMSList:
                     if self.data[index].hw_version != module['hw_ver']:
                         data_changed = True
                         self.data[index].hw_version = module['hw_ver']
+                    if self.data[index].model != model:
+                        data_changed = True
+                        self.data[index].model = model
             elif not self._first_initialization_done:
                 self._first_initialization_done = True
                 data_changed = True
@@ -1861,6 +1875,9 @@ class AMSList:
 
                 if self.data[index].temperature != float(ams['temp']):
                     self.data[index].temperature = float(ams['temp'])
+
+                if self.data[index].remaining_drying_time != int(ams['dry_time']):
+                    self.data[index].remaining_drying_time = int(ams['dry_time'])
 
                 tray_list = ams['tray']
                 for tray in tray_list:

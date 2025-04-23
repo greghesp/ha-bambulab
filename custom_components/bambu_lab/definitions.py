@@ -4,6 +4,7 @@ from __future__ import annotations
 import math
 from collections.abc import Callable
 from dataclasses import dataclass
+from .coordinator import BambuDataUpdateCoordinator
 
 from .const import Options
 
@@ -64,6 +65,17 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     extra_attributes: Callable[..., dict] = lambda _: {}
     icon_fn: Callable[..., str] = lambda _: None
 
+
+@dataclass
+class BambuLabAMSSensorEntityDescription(
+    SensorEntityDescription, BambuLabSensorEntityDescriptionMixin
+):
+    """Sensor entity description for Bambu Lab."""
+
+    available_fn: Callable[..., bool] = lambda _: True
+    exists_fn: Callable[[BambuDataUpdateCoordinator, int], bool] = lambda coordinator, index: True
+    extra_attributes: Callable[..., dict] = lambda _: {}
+    icon_fn: Callable[..., str] = lambda _: None
 
 @dataclass
 class BambuLabBinarySensorEntityDescriptionMixIn:
@@ -476,8 +488,8 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     ),
 )
 
-AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
-    BambuLabSensorEntityDescription(
+AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
+    BambuLabAMSSensorEntityDescription(
         key="humidity_index",
         translation_key="humidity_index",
         icon="mdi:water-percent",
@@ -485,23 +497,34 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: 6 - self.coordinator.get_model().ams.data[self.index].humidity_index
         # We subtract from 6 to match the new Bambu Handy/Studio presentation of 1 = dry, 5 = wet while the printer sends 1 = wet, 5 = dry
     ),
-    BambuLabSensorEntityDescription(
+    BambuLabAMSSensorEntityDescription(
         key="humidity",
         native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.HUMIDITY,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].humidity,
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS_HUMIDITY)
+        exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_HUMIDITY)
     ),
-    BambuLabSensorEntityDescription(
+    BambuLabAMSSensorEntityDescription(
         key="temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].temperature,
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS_TEMPERATURE)
+        exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_TEMPERATURE)
     ),
-    BambuLabSensorEntityDescription(
+    BambuLabAMSSensorEntityDescription(
+        key="remaining_drying_time",
+        translation_key="remaining_drying_time",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        suggested_display_precision=3,
+        icon="mdi:timer-sand",
+        device_class=SensorDeviceClass.DURATION,
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time,
+        exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING) and coordinator.get_model().ams.data[index].model == "AMS 2 Pro"
+    ),
+    BambuLabAMSSensorEntityDescription(
         key="tray_1",
         translation_key="tray_1",
         icon="mdi:printer-3d-nozzle",
@@ -525,7 +548,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "type": self.coordinator.get_model().ams.data[self.index].tray[0].type,
         },
     ),
-    BambuLabSensorEntityDescription(
+    BambuLabAMSSensorEntityDescription(
         key="tray_2",
         translation_key="tray_2",
         icon="mdi:printer-3d-nozzle",
@@ -549,7 +572,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "type": self.coordinator.get_model().ams.data[self.index].tray[1].type,
         },
     ),
-    BambuLabSensorEntityDescription(
+    BambuLabAMSSensorEntityDescription(
         key="tray_3",
         translation_key="tray_3",
         icon="mdi:printer-3d-nozzle",
@@ -573,7 +596,7 @@ AMS_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "type": self.coordinator.get_model().ams.data[self.index].tray[2].type,
         },
     ),
-    BambuLabSensorEntityDescription(
+    BambuLabAMSSensorEntityDescription(
         key="tray_4",
         translation_key="tray_4",
         icon="mdi:printer-3d-nozzle",

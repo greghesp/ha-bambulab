@@ -415,6 +415,9 @@
       "remaining_time": {
         "name": "Temps restant"
       },
+      "remaining_drying_time": {
+        "name": "Temps de chauffage restant"
+      },
       "end_time": {
         "name": "Heure de fin"
       },
