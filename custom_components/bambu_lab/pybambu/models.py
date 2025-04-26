@@ -182,19 +182,19 @@ class Device:
         elif feature == Features.DOWNLOAD_GCODE_FILE:
             return True
         elif feature == Features.AMS_HUMIDITY:
-            if (self.info.device_type == "H2D"):
+            if (self.info.device_type == Printers.H2D):
                 return True
-            elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.08.50.18"):
+            elif (self.info.device_type == Printers.H2D or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
                 return True
-            elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.07.50.18"):
+            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
                 return True
             return False
         elif feature == Features.AMS_DRYING:
-            if (self.info.device_type == "H2D"):
+            if (self.info.device_type == Printers.H2D):
                 return True
-            elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.08.50.18"):
+            elif (self.info.device_type == Printers.H2D or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
                 return True
-            elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.07.50.18"):
+            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
                 return True
             return False
         return False
