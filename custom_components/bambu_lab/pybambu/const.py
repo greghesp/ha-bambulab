@@ -4,9 +4,20 @@ import logging
 from pathlib import Path
 from enum import (
     IntEnum,
+    StrEnum,
 )
 
 LOGGER = logging.getLogger(__package__)
+
+class Printers(StrEnum):
+    X1E = "X1E"
+    X1C = "X1C"
+    X1 = "X1"
+    P1P = "P1P"
+    P1S = "P1S"
+    H2D = "H2D"
+    A1MINI = "A1MINI"
+    A1 = "A1"
 
 class Features(IntEnum):
     AUX_FAN = 1,

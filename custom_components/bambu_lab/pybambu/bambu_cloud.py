@@ -35,7 +35,8 @@ from dataclasses import dataclass
 
 from .const import (
      LOGGER,
-     BambuUrl
+     BambuUrl,
+     Printers
 )
 
 from .utils import get_Url
@@ -578,7 +579,7 @@ class BambuCloud:
 
     def get_device_type_from_device_product_name(self, device_product_name: str):
         if device_product_name == "X1 Carbon":
-            return "X1C"
+            return Printers.X1C
         return device_product_name.replace(" ", "").upper()
 
     def download(self, url: str) -> bytearray:

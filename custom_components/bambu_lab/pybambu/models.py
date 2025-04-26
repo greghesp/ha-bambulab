@@ -45,6 +45,7 @@ from .const import (
     Features,
     FansEnum,
     Home_Flag_Values,
+    Printers,
     SdcardState,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
@@ -117,20 +118,20 @@ class Device:
         if self.info.mqtt_mode == "bambu_cloud":
             return True
         # X1* have not yet blocked setting the temperatures when in nybrid connection mode.
-        if self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D":
+        if self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D:
             return True
         # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
         return not self._client.bambu_cloud.bambu_connected
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
-            return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
+            return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
         elif feature == Features.CHAMBER_LIGHT:
             return True
         elif feature == Features.CHAMBER_FAN:
-            return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
+            return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
         elif feature == Features.CURRENT_STAGE:
             return True
         elif feature == Features.PRINT_LAYERS:
@@ -140,38 +141,38 @@ class Device:
         elif feature == Features.EXTERNAL_SPOOL:
             return True
         elif feature == Features.K_VALUE:
-            return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
+            return self.info.device_type == Printers.P1P or self.info.device_type == Printers.P1S or self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
         elif feature == Features.START_TIME:
             return False
         elif feature == Features.START_TIME_GENERATED:
             return True
         elif feature == Features.AMS_TEMPERATURE:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
         elif feature == Features.CAMERA_RTSP:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
         elif feature == Features.CAMERA_IMAGE:
-            return self.info.device_type == "P1P" or self.info.device_type == "P1S" or self.info.device_type == "A1" or self.info.device_type == "A1MINI"
+            return self.info.device_type == Printers.P1P or self.info.device_type == Printers.P1S or self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
         elif feature == Features.DOOR_SENSOR:
-            return self.info.device_type == "X1" or self.info.device_type == "X1C" or self.info.device_type == "X1E" or self.info.device_type == "H2D"
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
         elif feature == Features.MANUAL_MODE:
             return False
         elif feature == Features.AMS_FILAMENT_REMAINING:
             # Technically this is not the AMS Lite but that's currently tied to only these printer types.
-            return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
+            return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
         elif feature == Features.SET_TEMPERATURE:
             return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
-            return self.info.device_type == "A1" or self.info.device_type == "A1MINI"
+            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
         elif feature == Features.FTP:
             return True
         elif feature == Features.TIMELAPSE:
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
-            if self.info.device_type == "A1" or self.info.device_type == "A1MINI" or self.info.device_type == "X1E" or self.info.device_type == "H2D":
+            if self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D:
                 return True
-            elif (self.info.device_type == "P1S" or self.info.device_type == "P1P") and self.supports_sw_version("01.02.99.10"):
+            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.02.99.10"):
                 return True
-            elif (self.info.device_type == "X1" or self.info.device_type == "X1C") and self.supports_sw_version("01.05.06.01"):
+            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.05.06.01"):
                 return True
             return False
         elif feature == Features.DOWNLOAD_GCODE_FILE:
@@ -205,7 +206,7 @@ class Device:
 
     @property
     def is_core_xy(self) -> bool:
-        return self.info.device_type != "A1" and self.info.device_type != "A1MINI"
+        return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
 
 @dataclass
 class Lights:
@@ -464,12 +465,12 @@ class Upgrade:
     def release_url(self) -> str:
         """Return the release url"""
         device_mapping = {
-            "P1P": "p1",
-            "P1S": "p1",
-            "A1MINI": "a1-mini",
-            "A1": "a1",
-            "X1C": "x1",
-            "X1E": "x1e"
+            Printers.P1P: "p1",
+            Printers.P1S: "p1",
+            Printers.A1MINI: "a1-mini",
+            Printers.A1: "a1",
+            Printers.X1C: "x1",
+            Printers.X1E: "x1e"
         }
         self.printer_name = device_mapping.get(self._client._device.info.device_type)
         if self.printer_name is None:
@@ -1152,7 +1153,7 @@ class PrintJob:
             if model_file is not None:
                 break
 
-            if self._client._device.info.device_type == "X1" or self._client._device.info.device_type == "X1C" or self._client._device.info.device_type == "X1E":
+            if self._client._device.info.device_type == Printers.X1 or self._client._device.info.device_type == Printers.X1C or self._client._device.info.device_type == Printers.X1E:
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
                 # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
                 # 5 seconds apart over 60s.
@@ -1341,7 +1342,7 @@ class PrintJob:
     #     "mode": "cloud_file",
     #     "isPublicProfile": false,
     #     "isPrintable": true,
-    #     "deviceModel": "P1P",
+    #     "deviceModel": Printers.P1P,
     #     "deviceName": "Bambu P1P",
     #     "bedType": "textured_plate"
     #     },
@@ -2288,7 +2289,7 @@ class HomeFlag:
         if not self._client._device.supports_feature(Features.DOOR_SENSOR):
             return False
         
-        if (self._device_type in ["X1", "X1C"] and version.parse(self._sw_ver) < version.parse("01.07.00.00")):
+        if (self._device_type in [Printers.X1, Printers.X1C] and version.parse(self._sw_ver) < version.parse("01.07.00.00")):
             return False
 
         return True
