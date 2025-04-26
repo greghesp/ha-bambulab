@@ -1784,9 +1784,6 @@ class AMSList:
                     if self.data[index].hw_version != module['hw_ver']:
                         data_changed = True
                         self.data[index].hw_version = module['hw_ver']
-                    if self.data[index].model != model:
-                        data_changed = True
-                        self.data[index].model = model
             elif not self._first_initialization_done:
                 self._first_initialization_done = True
                 data_changed = True
