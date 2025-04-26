@@ -1666,6 +1666,7 @@ class AMSInstance:
     hw_version: str
     humidity_index: int
     temperature: int
+    model: str
     tray: list["AMSTray"]
 
     def __init__(self, client):
@@ -1674,6 +1675,7 @@ class AMSInstance:
         self.hw_version = ""
         self.humidity_index = 0
         self.temperature = 0
+        self.model = ""
         self.tray = [None] * 4
         self.tray[0] = AMSTray(client)
         self.tray[1] = AMSTray(client)
@@ -1686,14 +1688,12 @@ class AMSList:
     """Return all AMS related info"""
     tray_now: int
     data: list[AMSInstance]
-    model: str
 
     def __init__(self, client):
         self._client = client
         self.tray_now = 0
         self.data = [None] * 4
         self._first_initialization_done = False
-        self.model = ""
 
     def info_update(self, data):
         old_data = f"{self.__dict__}"
@@ -1728,14 +1728,15 @@ class AMSList:
         for module in module_list:
             name = module["name"]
             index = -1
+            model = ""
             if name.startswith("ams/"):
-                self.model = "AMS"
+                model = "AMS"
                 index = int(name[4])
             elif name.startswith("ams_f1/"):
-                self.model = "AMS Lite"
+                model = "AMS Lite"
                 index = int(name[7])
             elif name.startswith("n3f/"):
-                self.model = "AMS 2 Pro"
+                model = "AMS 2 Pro"
                 index = int(name[4])
             
             if index != -1:
@@ -1745,7 +1746,8 @@ class AMSList:
                     # May get data before info so create entries if necessary
                     if self.data[index] is None:
                         self.data[index] = AMSInstance(self._client)
-
+                        self.data[index].model = model
+                        data_changed = True
                     if self.data[index].serial != module['sn']:
                         data_changed = True
                         self.data[index].serial = module['sn']
