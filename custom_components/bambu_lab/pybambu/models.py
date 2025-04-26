@@ -1745,8 +1745,11 @@ class AMSList:
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
                     if self.data[index] is None:
-                        self.data[index] = AMSInstance(self._client, model)
                         data_changed = True
+                        self.data[index] = AMSInstance(self._client, model)
+                    if self.data[index].model != model:
+                        data_changed = True
+                        self.data[index].model = model
                     if self.data[index].serial != module['sn']:
                         data_changed = True
                         self.data[index].serial = module['sn']
@@ -1835,8 +1838,7 @@ class AMSList:
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
                 if self.data[index] is None:
-                    self.data[index] = AMSInstance(self._client)
-
+                    self.data[index] = AMSInstance(self._client, "Unknown")
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
                 if self.data[index].temperature != float(ams['temp']):
