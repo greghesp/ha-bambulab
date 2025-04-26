@@ -1669,13 +1669,13 @@ class AMSInstance:
     model: str
     tray: list["AMSTray"]
 
-    def __init__(self, client):
+    def __init__(self, client, model):
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
         self.humidity_index = 0
         self.temperature = 0
-        self.model = ""
+        self.model = model
         self.tray = [None] * 4
         self.tray[0] = AMSTray(client)
         self.tray[1] = AMSTray(client)
@@ -1745,8 +1745,7 @@ class AMSList:
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
                     if self.data[index] is None:
-                        self.data[index] = AMSInstance(self._client)
-                        self.data[index].model = model
+                        self.data[index] = AMSInstance(self._client, model)
                         data_changed = True
                     if self.data[index].serial != module['sn']:
                         data_changed = True
