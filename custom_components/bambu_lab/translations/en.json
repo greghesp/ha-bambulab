@@ -398,8 +398,8 @@
       "ams_temp": {
         "name": "Temperature"
       },
-      "humidity_index": {
-        "name": "Humidity index"
+      "humidity": {
+        "name": "Humidity"
       },
       "print_bed_type": {
         "name": "Print bed type",
@@ -464,8 +464,8 @@
       "ip_address": {
         "name": "IP address"
       },
-      "humidity": {
-        "name": "Humidity"
+      "humidity_index": {
+        "name": "Humidity index"
       },
       "external_spool": {
         "name": "External spool",
