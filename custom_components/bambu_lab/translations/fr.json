@@ -415,9 +415,6 @@
       "remaining_time": {
         "name": "Temps restant"
       },
-      "remaining_drying_time": {
-        "name": "Temps de chauffage restant"
-      },
       "end_time": {
         "name": "Heure de fin"
       },
@@ -680,6 +677,9 @@
       },
       "gcode_file_downloaded": {
         "name": "Fichier G-code téléchargé"
+      },
+      "remaining_drying_time": {
+        "name": "Temps de chauffage restant"
       },
       "ams_temp": {
         "name": "Température"
