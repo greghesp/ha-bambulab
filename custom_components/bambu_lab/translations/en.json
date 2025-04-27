@@ -392,6 +392,15 @@
       "gcode_file_downloaded": {
         "name": "Gcode file downloaded"
       },
+      "remaining_drying_time": {
+        "name": "Remaining drying time"
+      },
+      "ams_temp": {
+        "name": "Temperature"
+      },
+      "humidity_index": {
+        "name": "Humidity index"
+      },
       "print_bed_type": {
         "name": "Print bed type",
         "state": {
@@ -423,9 +432,6 @@
       },
       "remaining_time": {
         "name": "Remaining time"
-      },
-      "remaining_drying_time": {
-        "name": "Remaining drying time"
       },
       "end_time": {
         "name": "End time"
@@ -460,12 +466,6 @@
       },
       "humidity": {
         "name": "Humidity"
-      },
-      "humidity_index": {
-        "name": "Humidity index"
-      },
-      "ams_temp": {
-        "name": "Temperature"
       },
       "external_spool": {
         "name": "External spool",
