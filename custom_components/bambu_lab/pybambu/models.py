@@ -55,6 +55,8 @@ from .const import (
 from .commands import (
     CHAMBER_LIGHT_ON,
     CHAMBER_LIGHT_OFF,
+    CHAMBER_LIGHT_2_ON,
+    CHAMBER_LIGHT_2_OFF,
     PROMPT_SOUND_ENABLE,
     PROMPT_SOUND_DISABLE,
     SPEED_PROFILE_TEMPLATE,
@@ -197,6 +199,8 @@ class Device:
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
                 return True
             return False
+        elif feature == Features.CHAMBER_LIGHT_2:
+            return (self.info.device_type == Printers.H2D)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -231,14 +235,22 @@ class Device:
 class Lights:
     """Return all light related info"""
     chamber_light: str
+    chamber_light2: str
     chamber_light_override: str
+    chamber_light2_override: str
     work_light: str
 
     def __init__(self, client):
         self._client = client
         self.chamber_light = "unknown"
+        self.chamber_light2 = "unknown"
         self.work_light = "unknown"
         self.chamber_light_override = ""
+        self.chamber_light2_override = ""
+
+    @property
+    def is_chamber_light_on(self):
+        return self.chamber_light == "on" or self.chamber_light2 == "on"
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -262,6 +274,16 @@ class Lights:
                 self.chamber_light_override = ""
         else:
             self.chamber_light = chamber_light
+
+        chamber_light2 = \
+            search(data.get("lights_report", []), lambda x: x.get('node', "") == "chamber_light2",
+                   {"mode": self.chamber_light2}).get("mode")
+        if self.chamber_light2_override != "":
+            if self.chamber_light2_override == chamber_light2:
+                self.chamber_light2_override = ""
+        else:
+            self.chamber_light2 = chamber_light2
+
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
@@ -273,12 +295,16 @@ class Lights:
         self.chamber_light_override = "on"
         self._client.callback("event_light_update")
         self._client.publish(CHAMBER_LIGHT_ON)
+        if self._client._device.supports_feature(Features.CHAMBER_LIGHT_2):
+            self._client.publish(CHAMBER_LIGHT_2_ON)
 
     def TurnChamberLightOff(self):
         self.chamber_light = "off"
         self.chamber_light_override = "off"
         self._client.callback("event_light_update")
         self._client.publish(CHAMBER_LIGHT_OFF)
+        if self._client._device.supports_feature(Features.CHAMBER_LIGHT_2):
+            self._client.publish(CHAMBER_LIGHT_2_OFF)
 
 
 @dataclass

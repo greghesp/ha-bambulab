@@ -44,7 +44,8 @@ class Features(IntEnum):
     AMS_SWITCH_COMMAND = 23,
     DOWNLOAD_GCODE_FILE = 24,
     AMS_HUMIDITY = 25,
-    AMS_DRYING = 26
+    AMS_DRYING = 26,
+    CHAMBER_LIGHT_2 = 27,
 
 
 class FansEnum(IntEnum):

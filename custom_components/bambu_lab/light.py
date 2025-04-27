@@ -57,7 +57,7 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
     @property
     def is_on(self) -> bool:
         """Return the state of the switch"""
-        if self.coordinator.get_model().lights.chamber_light == "on":
+        if self.coordinator.get_model().lights.is_chamber_light_on:
             return True
         return False
 
