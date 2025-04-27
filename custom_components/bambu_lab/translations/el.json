@@ -677,6 +677,12 @@
       },
       "gcode_file_downloaded": {
         "name": "Λήψη αρχείου GCODE"
+      },
+      "remaining_drying_time": {
+        "name": "Υπόλοιπο χρόνος στεγνώματος"
+      },
+      "ams_temp": {
+        "name": "Θερμοκρασία"
       }
     },
     "camera": {

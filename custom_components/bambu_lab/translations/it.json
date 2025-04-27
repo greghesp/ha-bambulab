@@ -677,6 +677,12 @@
       },
       "gcode_file_downloaded": {
         "name": "File GCode scaricato"
+      },
+      "remaining_drying_time": {
+        "name": "Tempo di asciugatura rimanente"
+      },
+      "ams_temp": {
+        "name": "Temperatura"
       }
     },
     "camera": {

@@ -677,6 +677,12 @@
       },
       "gcode_file_downloaded": {
         "name": "GCODE 파일 다운로드"
+      },
+      "remaining_drying_time": {
+        "name": "남아있는 건조 시간"
+      },
+      "ams_temp": {
+        "name": "온도"
       }
     },
     "camera": {

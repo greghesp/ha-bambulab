@@ -677,6 +677,12 @@
       },
       "gcode_file_downloaded": {
         "name": "GCODE文件下载"
+      },
+      "remaining_drying_time": {
+        "name": "剩余的干燥时间"
+      },
+      "ams_temp": {
+        "name": "温度"
       }
     },
     "camera": {

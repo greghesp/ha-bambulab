@@ -677,6 +677,12 @@
       },
       "gcode_file_downloaded": {
         "name": "Gcode -bestand gedownload"
+      },
+      "remaining_drying_time": {
+        "name": "Resterende droogtijd"
+      },
+      "ams_temp": {
+        "name": "Temperatuur"
       }
     },
     "camera": {

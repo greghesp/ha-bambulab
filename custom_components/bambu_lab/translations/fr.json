@@ -680,6 +680,9 @@
       },
       "gcode_file_downloaded": {
         "name": "Fichier G-code téléchargé"
+      },
+      "ams_temp": {
+        "name": "Température"
       }
     },
     "camera": {

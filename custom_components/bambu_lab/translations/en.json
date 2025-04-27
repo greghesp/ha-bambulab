@@ -461,6 +461,9 @@
       "humidity_index": {
         "name": "Humidity index"
       },
+      "ams_temp": {
+        "name": "Temperature"
+      },
       "external_spool": {
         "name": "External spool",
         "state_attributes": {
