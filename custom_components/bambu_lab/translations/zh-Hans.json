@@ -683,9 +683,6 @@
       },
       "ams_temp": {
         "name": "温度"
-      },
-      "humidity": {
-        "name": "湿度"
       }
     },
     "camera": {

@@ -683,9 +683,6 @@
       },
       "ams_temp": {
         "name": "Temperatura"
-      },
-      "humidity": {
-        "name": "Umidade"
       }
     },
     "camera": {
