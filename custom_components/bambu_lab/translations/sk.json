@@ -683,6 +683,9 @@
       },
       "ams_temp": {
         "name": "Teplota"
+      },
+      "humidity": {
+        "name": "Vlhkosť"
       }
     },
     "camera": {
