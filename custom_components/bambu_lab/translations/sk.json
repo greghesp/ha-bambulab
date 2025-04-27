@@ -677,6 +677,15 @@
       },
       "gcode_file_downloaded": {
         "name": "Stiahnutý súbor GCode"
+      },
+      "remaining_drying_time": {
+        "name": "Zostávajúci čas sušenia"
+      },
+      "ams_temp": {
+        "name": "Teplota"
+      },
+      "humidity": {
+        "name": "Vlhkosť"
       }
     },
     "camera": {

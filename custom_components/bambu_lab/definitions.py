@@ -499,6 +499,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     ),
     BambuLabAMSSensorEntityDescription(
         key="humidity",
+        translation_key="humidity",
         native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.HUMIDITY,
         state_class=SensorStateClass.MEASUREMENT,
@@ -507,6 +508,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     ),
     BambuLabAMSSensorEntityDescription(
         key="temperature",
+        translation_key="ams_temp",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,

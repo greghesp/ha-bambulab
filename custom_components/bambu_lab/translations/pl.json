@@ -677,6 +677,15 @@
             "name": "Maksymalna waga filamentu"
           }
         }
+      },
+      "remaining_drying_time": {
+        "name": "Pozostały czas suszenia"
+      },
+      "ams_temp": {
+        "name": "Temperatura"
+      },
+      "humidity": {
+        "name": "Wilgotność"
       }
     },
     "camera": {

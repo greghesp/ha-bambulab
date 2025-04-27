@@ -677,6 +677,15 @@
       },
       "gcode_file_downloaded": {
         "name": "Arquivo gcode baixado"
+      },
+      "remaining_drying_time": {
+        "name": "Tempo restante de secagem"
+      },
+      "ams_temp": {
+        "name": "Temperatura"
+      },
+      "humidity": {
+        "name": "Umidade"
       }
     },
     "camera": {

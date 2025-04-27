@@ -184,7 +184,7 @@ class Device:
         elif feature == Features.AMS_HUMIDITY:
             if (self.info.device_type == Printers.H2D):
                 return True
-            elif (self.info.device_type == Printers.H2D or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
+            elif (self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
                 return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
                 return True
@@ -192,7 +192,7 @@ class Device:
         elif feature == Features.AMS_DRYING:
             if (self.info.device_type == Printers.H2D):
                 return True
-            elif (self.info.device_type == Printers.H2D or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
+            elif (self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
                 return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
                 return True
@@ -1683,7 +1683,6 @@ class AMSInstance:
     serial: str
     sw_version: str
     hw_version: str
-    model: str
     humidity_index: int
     humidity: int
     temperature: int
@@ -1695,7 +1694,6 @@ class AMSInstance:
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
-        self.model = ""
         self.humidity_index = 0
         self.humidity = 0
         self.temperature = 0
@@ -1867,14 +1865,14 @@ class AMSList:
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
 
-                if self.data[index].humidity != int(ams["humidity_raw"]):
-                    self.data[index].humidity = int(ams["humidity_raw"])
+                if self.data[index].humidity != int(ams.get("humidity_raw", 0)):
+                    self.data[index].humidity = int(ams.get("humidity_raw", 0))
 
                 if self.data[index].temperature != float(ams['temp']):
                     self.data[index].temperature = float(ams['temp'])
 
-                if self.data[index].remaining_drying_time != int(ams['dry_time']):
-                    self.data[index].remaining_drying_time = int(ams['dry_time'])
+                if self.data[index].remaining_drying_time != int(ams.get('dry_time', 0)):
+                    self.data[index].remaining_drying_time = int(ams.get('dry_time', 0))
 
                 tray_list = ams['tray']
                 for tray in tray_list:

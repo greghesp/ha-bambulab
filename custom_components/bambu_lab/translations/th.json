@@ -677,6 +677,15 @@
       },
       "gcode_file_downloaded": {
         "name": "ดาวน์โหลดไฟล์ gcode"
+      },
+      "remaining_drying_time": {
+        "name": "เวลาอบแห้งที่เหลืออยู่"
+      },
+      "ams_temp": {
+        "name": "อุณหภูมิ"
+      },
+      "humidity": {
+        "name": "ความชื้น"
       }
     },
     "camera": {

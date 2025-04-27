@@ -677,6 +677,15 @@
       },
       "skipped_objects": {
         "name": "Übersprungene Objekte"
+      },
+      "remaining_drying_time": {
+        "name": "Verbleibende Trocknungszeit"
+      },
+      "ams_temp": {
+        "name": "Temperatur"
+      },
+      "humidity": {
+        "name": "Luftfeuchtigkeit"
       }
     },
     "camera": {

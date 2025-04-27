@@ -677,6 +677,15 @@
       },
       "gcode_file_downloaded": {
         "name": "El fitxer GCode descarregat"
+      },
+      "remaining_drying_time": {
+        "name": "Temps d'assecat restant"
+      },
+      "ams_temp": {
+        "name": "Temperatura"
+      },
+      "humidity": {
+        "name": "Humitat"
       }
     },
     "camera": {
