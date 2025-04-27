@@ -446,9 +446,6 @@
       "humidity_index": {
         "name": "Δείκτης υγρασίας"
       },
-      "ams_temp": {
-        "name": "Θερμοκρασία AMS"
-      },
       "external_spool": {
         "name": "Εξωτερικό νήμα",
         "state_attributes": {

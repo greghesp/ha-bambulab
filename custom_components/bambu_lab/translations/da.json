@@ -446,9 +446,6 @@
       "humidity_index": {
         "name": "Fugtighedsindeks"
       },
-      "ams_temp": {
-        "name": "AMS temperatur"
-      },
       "external_spool": {
         "name": "Ekstern spole",
         "state_attributes": {

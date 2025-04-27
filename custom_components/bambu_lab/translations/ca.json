@@ -446,9 +446,6 @@
       "humidity_index": {
         "name": "Índex d'humitat"
       },
-      "ams_temp": {
-        "name": "Temperatura de l'AMS"
-      },
       "external_spool": {
         "name": "Bobina externa",
         "state_attributes": {

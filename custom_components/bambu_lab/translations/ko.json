@@ -446,9 +446,6 @@
       "humidity_index": {
         "name": "습도 지수"
       },
-      "ams_temp": {
-        "name": "AMS 온도"
-      },
       "external_spool": {
         "name": "외부 스풀",
         "state_attributes": {

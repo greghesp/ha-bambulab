@@ -7,7 +7,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LOGGER
-from .definitions import PRINTER_SENSORS, VIRTUAL_TRAY_SENSORS, AMS_SENSORS, BambuLabSensorEntityDescription
+from .definitions import (
+    PRINTER_SENSORS,
+    VIRTUAL_TRAY_SENSORS,
+    AMS_SENSORS,
+    BambuLabAMSSensorEntityDescription,
+    BambuLabSensorEntityDescription,
+)
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity
 from .pybambu.const import Features
@@ -28,9 +34,9 @@ async def async_setup_entry(
                 async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor)])
 
     for sensor in AMS_SENSORS:
-        if sensor.exists_fn(coordinator):
-            for index in range (0, len(coordinator.get_model().ams.data)):
-                if coordinator.get_model().ams.data[index] is not None:
+        for index in range (0, len(coordinator.get_model().ams.data)):
+            if coordinator.get_model().ams.data[index] is not None:
+                if sensor.exists_fn(coordinator, index):
                     async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
 
     for sensor in PRINTER_SENSORS:    
@@ -81,7 +87,7 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
-            description: BambuLabSensorEntityDescription,
+            description: BambuLabAMSSensorEntityDescription,
             index: int
     ) -> None:
         """Initialise the sensor"""

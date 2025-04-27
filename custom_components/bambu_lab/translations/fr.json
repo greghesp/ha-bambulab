@@ -415,6 +415,9 @@
       "remaining_time": {
         "name": "Temps restant"
       },
+      "remaining_drying_time": {
+        "name": "Temps de chauffage restant"
+      },
       "end_time": {
         "name": "Heure de fin"
       },
@@ -445,9 +448,6 @@
       },
       "humidity_index": {
         "name": "Indice d'humidité"
-      },
-      "ams_temp": {
-        "name": "Température de la AMS"
       },
       "external_spool": {
         "name": "Bobine externe",

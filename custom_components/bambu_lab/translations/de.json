@@ -449,9 +449,6 @@
       "humidity_index": {
         "name": "Index der Luftfeuchtigkeit"
       },
-      "ams_temp": {
-        "name": "AMS-Temperatur"
-      },
       "external_spool": {
         "name": "Externe Spule",
         "state_attributes": {

@@ -458,9 +458,6 @@
       "humidity_index": {
         "name": "Indeks wilgotności"
       },
-      "ams_temp": {
-        "name": "Temperatura AMS"
-      },
       "external_spool": {
         "name": "Zewnętrzna szpula",
         "state_attributes": {

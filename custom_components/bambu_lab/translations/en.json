@@ -424,6 +424,9 @@
       "remaining_time": {
         "name": "Remaining time"
       },
+      "remaining_drying_time": {
+        "name": "Remaining drying time"
+      },
       "end_time": {
         "name": "End time"
       },
@@ -457,9 +460,6 @@
       },
       "humidity_index": {
         "name": "Humidity index"
-      },
-      "ams_temp": {
-        "name": "AMS temperature"
       },
       "external_spool": {
         "name": "External spool",
