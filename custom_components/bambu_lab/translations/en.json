@@ -458,6 +458,9 @@
       "ip_address": {
         "name": "IP address"
       },
+      "humidity": {
+        "name": "Humidity"
+      },
       "humidity_index": {
         "name": "Humidity index"
       },

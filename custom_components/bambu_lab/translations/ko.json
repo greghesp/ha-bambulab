@@ -683,6 +683,9 @@
       },
       "ams_temp": {
         "name": "온도"
+      },
+      "humidity": {
+        "name": "습기"
       }
     },
     "camera": {
