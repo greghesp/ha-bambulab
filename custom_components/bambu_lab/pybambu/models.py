@@ -249,7 +249,7 @@ class Lights:
         self.chamber_light2_override = ""
 
     @property
-    def is_on(self):
+    def is_chamber_light_on(self):
         return self.chamber_light == "on" or self.chamber_light2 == "on"
 
     def print_update(self, data) -> bool:
