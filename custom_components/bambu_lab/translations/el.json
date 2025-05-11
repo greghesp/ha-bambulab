@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Δεξιά θερμοκρασία στόχου ακροφυσίου"
+      },
+      "sdcard_status": {
+        "name": "Κατάσταση κάρτας SD",
+        "state": {
+          "missing": "Απών",
+          "normal": "Κανονικός",
+          "abnormal": "Ανώμαλος",
+          "readonly": "Μόνο διαβάστε"
+        }
       }
     },
     "camera": {

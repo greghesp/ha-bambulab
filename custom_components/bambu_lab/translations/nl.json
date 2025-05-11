@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Rechter mondstuk doeltemperatuur"
+      },
+      "sdcard_status": {
+        "name": "SD -kaartstatus",
+        "state": {
+          "missing": "Ontbrekend",
+          "normal": "Normaal",
+          "abnormal": "Abnormaal",
+          "readonly": "Alleen lezen"
+        }
       }
     },
     "camera": {

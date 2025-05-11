@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Temperatura docelowa dysz prawa"
+      },
+      "sdcard_status": {
+        "name": "Status karty SD",
+        "state": {
+          "missing": "Zaginiony",
+          "normal": "Normalna",
+          "abnormal": "Nieprawidłowy",
+          "readonly": "Czytaj tylko"
+        }
       }
     },
     "camera": {

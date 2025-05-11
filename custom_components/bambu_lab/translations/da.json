@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Højre dysemåltemperatur"
+      },
+      "sdcard_status": {
+        "name": "SD -kortstatus",
+        "state": {
+          "missing": "Manglende",
+          "normal": "Normal",
+          "abnormal": "Abnorm",
+          "readonly": "Læs kun"
+        }
       }
     },
     "camera": {

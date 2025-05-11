@@ -120,6 +120,12 @@ GCODE_STATE_OPTIONS = [
     "unknown"
 ]
 
+SDCARD_STATUS = [
+    "missing",
+    "normal",
+    "abnormal"
+]
+
 SPEED_PROFILE = {
     1: "silent",
     2: "standard",
@@ -159,12 +165,6 @@ HMS_MODULES = {
     0x08: "toolhead",
     0x03: "mc"
 }
-
-class SdcardState(IntEnum):
-    NO_SDCARD                           = 0x00000000,
-    HAS_SDCARD_NORMAL                   = 0x00000100,
-    HAS_SDCARD_ABNORMAL                 = 0x00000200,
-    SDCARD_STATE_NUM                    = 0x00000300,
 
 class Home_Flag_Values(IntEnum):
     X_AXIS                              = 0x00000001,

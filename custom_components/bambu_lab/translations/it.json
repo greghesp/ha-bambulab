@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Temperatura target dell'ugello destro"
+      },
+      "sdcard_status": {
+        "name": "Stato della scheda SD",
+        "state": {
+          "missing": "Mancante",
+          "normal": "Normale",
+          "abnormal": "Anormale",
+          "readonly": "Solo lettura"
+        }
       }
     },
     "camera": {

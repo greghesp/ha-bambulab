@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Rechte Düsenzieltemperatur"
+      },
+      "sdcard_status": {
+        "name": "SD -Kartenstatus",
+        "state": {
+          "missing": "Fehlen",
+          "normal": "Normal",
+          "abnormal": "Abnormal",
+          "readonly": "Nur lesen"
+        }
       }
     },
     "camera": {
