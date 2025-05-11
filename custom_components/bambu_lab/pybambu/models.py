@@ -201,6 +201,8 @@ class Device:
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
             return (self.info.device_type == Printers.H2D)
+        elif feature == Features.DUAL_NOZZLES:
+            return (self.info.device_type == Printers.H2D)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -353,6 +355,9 @@ class Temperature:
     chamber_temp: int
     nozzle_temp: int
     target_nozzle_temp: int
+    active_nozzle: int
+    nozzle_temps: dict
+    nozzle_target_temps: dict
 
     def __init__(self, client):
         self._client = client
@@ -361,16 +366,127 @@ class Temperature:
         self.chamber_temp = 0
         self.nozzle_temp = 0
         self.target_nozzle_temp = 0
+        self.active_nozzle = -1
+        self.nozzle_temps = { 0: 0, 1: 0}
+        self.target_nozzle_temps = { 0:0, 1: 0}
+
+    @property
+    def active_nozzle_index(self):
+        if self.active_nozzle == -1:
+            return 0;
+        return self.active_nozzle
+    
+    @property
+    def active_nozzle_temperature(self):
+        if self.active_nozzle == -1:
+            return self.nozzle_temp
+        else:
+            return self.nozzle_temps[self.active_nozzle]
+
+    @property
+    def active_nozzle_target_temperature(self):
+        if self.active_nozzle == -1:
+            return self.target_nozzle_temp
+        else:
+            return self.target_nozzle_temps[self.active_nozzle]
+
+    @property
+    def left_nozzle_temperature(self):
+        return self.nozzle_temps[0]
+
+    @property
+    def left_nozzle_target_temperature(self):
+        return self.target_nozzle_temps[0]
+
+    @property
+    def right_nozzle_temperature(self):
+        return self.target_nozzle_temps[1]
+
+    @property
+    def right_nozzle_target_temperature(self):
+        return self.target_nozzle_temp[1]
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
-        self.bed_temp = round(data.get("bed_temper", self.bed_temp))
-        self.target_bed_temp = round(data.get("bed_target_temper", self.target_bed_temp))
-        self.chamber_temp = round(data.get("chamber_temper", self.chamber_temp))
-        self.nozzle_temp = round(data.get("nozzle_temper", self.nozzle_temp))
-        self.target_nozzle_temp = round(data.get("nozzle_target_temper", self.target_nozzle_temp))
+        # New firmware puts bed temperature in two different places. Low word is current value. High word is the target.
+        # "device": {
+        #     "bed": {
+        #       "info": {
+        #         "temp": 6553700
+        #       },
+        #       "state": 2
+        #     },
+        #     "bed_temp": 6553700,
+            
+        bed_temp = data.get("device", {}).get("bed", {}).get("info", {}).get("temp", None)
+        if bed_temp is not None:
+            self.bed_temp = bed_temp & 0xFFFF
+            self.target_bed_temp = (bed_temp >> 16) & 0xFFFF
+        else:
+            self.bed_temp = round(data.get("bed_temper", self.bed_temp))
+            self.target_bed_temp = round(data.get("bed_target_temper", self.target_bed_temp))
+
+        # New firmware puts the chamber temperature in a different place.
+        # "device": {
+        #     "ctc": {
+        #       "info": {
+        #         "temp": 43
+        #       },
+        #       "state": 0
+        #     },
+        chamber_temp = data.get("device", {}).get("ctc", {}).get("info", {}).get("temp", None)
+        if chamber_temp is not None:
+            self.chamber_temp = chamber_temp
+        else:
+            self.chamber_temp = round(data.get("chamber_temper", self.chamber_temp))
+
+        # H2D has two nozzles in the extruder data block.
+        # "extruder": {
+        #   "info": [
+        #     {
+        #       ...
+        #       "id": 0,
+        #       "temp": 14418140 // low word is current, high word is target
+        #     },
+        #     {
+        #       ...
+        #       "id": 1,
+        #       "temp": 5767327 // low word is current, high word is target
+        #     }
+        #   ],
+        #   "state": 2 // low 4 bits is count of extruders; active extruder is next 4 bits
+        # },
+        if self._client._device.supports_feature(Features.DUAL_NOZZLES):
+            if "extruder" in data and "info" in data["extruder"]:
+                for entry in data["extruder"]["info"]:
+                    if entry.get("id") in (0, 1):
+                        nozzle_temp = entry.get("temp") & 0xFFFF
+                        nozzle_target_temp = (entry.get("temp") >> 16) & 0xFFFF
+                        self.nozzle_temps[entry["id"]] = nozzle_temp
+                        self.target_nozzle_temps[entry["id"]] = nozzle_target_temp
+                state = data["extruder"]["state"]
+                self.active_nozzle = (state >> 4) & 0xF
         
+        if self._client._device.info.device_type != Printers.H2D:
+            # New firmware put the nozzle data in a different location. Low word is current value. High word is the target.
+            # "extruder": {
+            #   "info": [
+            #     {
+            # ...
+            #       "temp": 17039620
+            #     }
+            #   ],
+            #   "state": 1
+            # },
+            nozzle_temp = data.get("extruder", {}).get("info", {}).get("temp", None)
+            if nozzle_temp is not None:
+                self.nozzle_temp = nozzle_temp & 0xFFFF
+                self.target_nozzle_temp = (nozzle_temp >> 16) & 0xFFFF
+            else:
+                self.nozzle_temp = round(data.get("nozzle_temper", self.nozzle_temp))
+                self.target_nozzle_temp = round(data.get("nozzle_target_temper", self.target_nozzle_temp))
+
         return (old_data != f"{self.__dict__}")
 
     def set_target_temp(self, temp: TempEnum, temperature: int):

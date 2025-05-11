@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Umidità"
+      },
+      "left_nozzle_temp": {
+        "name": "Temperatura dell'ugello sinistro"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Temperatura target dell'ugello sinistro"
+      },
+      "right_nozzle_temp": {
+        "name": "Temperatura dell'ugello giusto"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Temperatura target dell'ugello destro"
       }
     },
     "camera": {

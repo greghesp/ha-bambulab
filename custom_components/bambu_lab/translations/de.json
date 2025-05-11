@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Luftfeuchtigkeit"
+      },
+      "left_nozzle_temp": {
+        "name": "Linke Düsentemperatur"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Linksdüsenzieltemperatur"
+      },
+      "right_nozzle_temp": {
+        "name": "Rechte Düsentemperatur"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Rechte Düsenzieltemperatur"
       }
     },
     "camera": {

@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Humedad"
+      },
+      "left_nozzle_temp": {
+        "name": "Temperatura de la boquilla izquierda"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Temperatura objetivo de la boquilla izquierda"
+      },
+      "right_nozzle_temp": {
+        "name": "Temperatura de la boquilla derecha"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Temperatura objetivo de la boquilla derecha"
       }
     },
     "camera": {

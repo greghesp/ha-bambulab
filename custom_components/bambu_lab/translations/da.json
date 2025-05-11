@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Fugtighed"
+      },
+      "left_nozzle_temp": {
+        "name": "Efterladt dysetemperatur"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Efterladt dyse måltemperatur"
+      },
+      "right_nozzle_temp": {
+        "name": "Højre dysetemperatur"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Højre dysemåltemperatur"
       }
     },
     "camera": {

@@ -46,6 +46,7 @@ class Features(IntEnum):
     AMS_HUMIDITY = 25,
     AMS_DRYING = 26,
     CHAMBER_LIGHT_2 = 27,
+    DUAL_NOZZLES = 28
 
 
 class FansEnum(IntEnum):

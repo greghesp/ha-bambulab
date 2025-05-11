@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Vochtigheid"
+      },
+      "left_nozzle_temp": {
+        "name": "Linker mondstuktemperatuur"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Verlof mondstuk doeltemperatuur"
+      },
+      "right_nozzle_temp": {
+        "name": "Juiste mondstuktemperatuur"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Rechter mondstuk doeltemperatuur"
       }
     },
     "camera": {

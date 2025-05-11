@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Umidade"
+      },
+      "left_nozzle_temp": {
+        "name": "Temperatura do bico esquerdo"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Temperatura alvo do bico esquerdo"
+      },
+      "right_nozzle_temp": {
+        "name": "Temperatura do bico direito"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Temperatura alvo do bico direito"
       }
     },
     "camera": {

@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Υγρότητα"
+      },
+      "left_nozzle_temp": {
+        "name": "Αριστερά θερμοκρασία ακροφυσίου"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Αριστερά θερμοκρασία στόχου ακροφυσίου"
+      },
+      "right_nozzle_temp": {
+        "name": "Θερμοκρασία δεξιά ακροφύσιο"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Δεξιά θερμοκρασία στόχου ακροφυσίου"
       }
     },
     "camera": {
