@@ -2509,10 +2509,6 @@ class HomeFlag:
         return (self._value & Home_Flag_Values.AMS_CALIBRATE_REMAINING) != 0
 
     @property
-    def sdcard_present(self) -> bool:
-        return (self._value & Home_Flag_Values.SD_CARD_PRESENT) != 0
-
-    @property
     def ams_auto_switch_filament(self) -> bool:
         return (self._value & Home_Flag_Values.AMS_AUTO_SWITCH) != 0
 
