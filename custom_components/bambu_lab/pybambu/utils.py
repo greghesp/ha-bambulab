@@ -147,6 +147,28 @@ def get_printer_type(modules, default):
     # A1Mini = AP05 / N1 or AP04 / N1 or AP07 / N1
     # A1     = AP05 / N2S
     #
+    # P1S with newer firmare is different - esp32 product_name is now empty but ota product_name is distinct.
+    # {
+    #     "name": "ota",
+    #     "sw_ver": "01.08.00.00",
+    #     "hw_ver": "OTA",
+    #     "loader_ver": "00.00.00.00",
+    #     "sn": "**REDACTED**",
+    #     "product_name": "Bambu Lab P1S",
+    #     "visible": true,
+    #     "flag": 0
+    # },
+    # {
+    #     "name": "esp32",
+    #     "sw_ver": "01.11.35.43",
+    #     "hw_ver": "AP04",
+    #     "loader_ver": "00.00.00.00",
+    #     "sn": "**REDACTED**",
+    #     "product_name": "",
+    #     "visible": false,
+    #     "flag": 0
+    # },    
+    #
     # X1C printers are of the form:
     # {
     #     "hw_ver": "AP05",
@@ -165,6 +187,12 @@ def get_printer_type(modules, default):
     #     "sw_ver": "00.00.32.14"
     # }
     # X1E = AP02
+
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P1S")):
+      return 'P1S'
+
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P1P")):
+      return 'P1P'
 
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2D")):
       return 'H2D'
