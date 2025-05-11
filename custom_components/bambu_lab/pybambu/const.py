@@ -177,7 +177,6 @@ class Home_Flag_Values(IntEnum):
     AMS_CALIBRATE_REMAINING             = 0x00000080,
     SD_CARD_PRESENT                     = 0x00000100,
     SD_CARD_ABNORMAL                    = 0x00000200,
-    SD_CARD_STATE_MASK                  = 0x00000300,
     AMS_AUTO_SWITCH                     = 0x00000400,
     # Gap
     XCAM_ALLOW_PROMPT_SOUND             = 0x00020000,
