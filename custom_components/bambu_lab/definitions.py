@@ -35,7 +35,7 @@ from homeassistant.components.binary_sensor import (
 )
 
 from .const import LOGGER
-from .pybambu.const import PRINT_TYPE_OPTIONS, SPEED_PROFILE, Features, FansEnum, CURRENT_STAGE_OPTIONS, GCODE_STATE_OPTIONS
+from .pybambu.const import PRINT_TYPE_OPTIONS, SPEED_PROFILE, Features, FansEnum, CURRENT_STAGE_OPTIONS, GCODE_STATE_OPTIONS, SDCARD_STATUS
 
 
 def fan_to_percent(speed):
@@ -324,6 +324,16 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: len(self.coordinator.get_model().print_job.get_printable_objects),
         extra_attributes=lambda self: {"objects": self.coordinator.get_model().print_job.get_printable_objects},
+    ),
+    BambuLabSensorEntityDescription(
+        key="sdcard_status",
+        translation_key="sdcard_status",
+        icon="mdi:list-status",
+        value_fn=lambda
+            self: self.coordinator.get_model().home_flag.sdcard_status,
+        device_class=SensorDeviceClass.ENUM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        options=SDCARD_STATUS
     ),
     BambuLabSensorEntityDescription(
         key="skipped_objects",

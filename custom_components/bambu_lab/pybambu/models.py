@@ -46,7 +46,6 @@ from .const import (
     FansEnum,
     Home_Flag_Values,
     Printers,
-    SdcardState,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
@@ -2470,6 +2469,14 @@ class HomeFlag:
         return True
 
     @property
+    def sdcard_status(self) -> str:
+        if (self._value & Home_Flag_Values.SD_CARD_ABNORMAL) != 0:
+            return "abnormal"
+        if (self._value & Home_Flag_Values.SD_CARD_PRESENT) != 0:
+            return "normal"
+        return "missing"
+
+    @property
     def x_axis_homed(self) -> bool:
         return (self._value & Home_Flag_Values.X_AXIS) != 0
     
@@ -2503,12 +2510,8 @@ class HomeFlag:
 
     @property
     def sdcard_present(self) -> bool:
-        return (self._value & Home_Flag_Values.SD_CARD_STATE) != SdcardState.NO_SDCARD
+        return (self._value & Home_Flag_Values.SD_CARD_PRESENT) != 0
 
-    @property
-    def sdcard_normal(self) -> bool:
-        return self.sdcard_present and (self._value & Home_Flag_Values.HAS_SDCARD_ABNORMAL) != SdcardState.HAS_SDCARD_ABNORMAL
-    
     @property
     def ams_auto_switch_filament(self) -> bool:
         return (self._value & Home_Flag_Values.AMS_AUTO_SWITCH) != 0

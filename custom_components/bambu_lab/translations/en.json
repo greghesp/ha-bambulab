@@ -368,6 +368,15 @@
           "idle": "Idle"
         }
       },
+      "sdcard_status": { 
+        "name": "SD card status",
+        "state": {
+          "missing": "Missing",
+          "normal": "Normal",
+          "abnormal": "Abnormal",
+          "readonly": "Read only"
+        }
+      },
       "print_progress": {
         "name": "Print progress"
       },
