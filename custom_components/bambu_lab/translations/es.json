@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Temperatura objetivo de la boquilla derecha"
+      },
+      "sdcard_status": {
+        "name": "Estado de la tarjeta SD",
+        "state": {
+          "missing": "Desaparecido",
+          "normal": "Normal",
+          "abnormal": "Anormal",
+          "readonly": "Solo lectura"
+        }
       }
     },
     "camera": {

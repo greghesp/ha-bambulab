@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Température cible de la buse droite"
+      },
+      "sdcard_status": {
+        "name": "Statut de carte SD",
+        "state": {
+          "missing": "Manquant",
+          "normal": "Normale",
+          "abnormal": "Anormal",
+          "readonly": "Lire uniquement"
+        }
       }
     },
     "camera": {

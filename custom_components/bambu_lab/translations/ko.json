@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "오른쪽 노즐 목표 온도"
+      },
+      "sdcard_status": {
+        "name": "SD 카드 상태",
+        "state": {
+          "missing": "없어진",
+          "normal": "정상",
+          "abnormal": "이상",
+          "readonly": "만 읽으십시오"
+        }
       }
     },
     "camera": {

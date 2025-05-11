@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "Pravá dýza cieľová teplota"
+      },
+      "sdcard_status": {
+        "name": "Stav karty SD",
+        "state": {
+          "missing": "Chýbajúci",
+          "normal": "Normálny",
+          "abnormal": "Neobvyklý",
+          "readonly": "Čítať"
+        }
       }
     },
     "camera": {

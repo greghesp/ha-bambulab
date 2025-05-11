@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "右喷嘴目标温度"
+      },
+      "sdcard_status": {
+        "name": "SD卡状态",
+        "state": {
+          "missing": "丢失的",
+          "normal": "普通的",
+          "abnormal": "异常",
+          "readonly": "只读"
+        }
       }
     },
     "camera": {

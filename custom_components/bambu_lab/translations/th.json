@@ -698,6 +698,15 @@
       },
       "right_target_nozzle_temp": {
         "name": "อุณหภูมิเป้าหมายหัวฉีดขวา"
+      },
+      "sdcard_status": {
+        "name": "สถานะการ์ด SD",
+        "state": {
+          "missing": "หายไป",
+          "normal": "ปกติ",
+          "abnormal": "ผิดปกติ",
+          "readonly": "อ่านเท่านั้น"
+        }
       }
     },
     "camera": {
