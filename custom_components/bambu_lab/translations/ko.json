@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "습기"
+      },
+      "left_nozzle_temp": {
+        "name": "남은 노즐 온도"
+      },
+      "left_target_nozzle_temp": {
+        "name": "남은 노즐 목표 온도"
+      },
+      "right_nozzle_temp": {
+        "name": "오른쪽 노즐 온도"
+      },
+      "right_target_nozzle_temp": {
+        "name": "오른쪽 노즐 목표 온도"
       }
     },
     "camera": {

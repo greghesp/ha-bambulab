@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "ความชื้น"
+      },
+      "left_nozzle_temp": {
+        "name": "อุณหภูมิหัวฉีดซ้าย"
+      },
+      "left_target_nozzle_temp": {
+        "name": "อุณหภูมิเป้าหมายหัวฉีดซ้าย"
+      },
+      "right_nozzle_temp": {
+        "name": "อุณหภูมิหัวฉีดขวา"
+      },
+      "right_target_nozzle_temp": {
+        "name": "อุณหภูมิเป้าหมายหัวฉีดขวา"
       }
     },
     "camera": {

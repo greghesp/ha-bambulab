@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "湿度"
+      },
+      "left_nozzle_temp": {
+        "name": "左喷嘴温度"
+      },
+      "left_target_nozzle_temp": {
+        "name": "左喷嘴目标温度"
+      },
+      "right_nozzle_temp": {
+        "name": "右喷嘴温度"
+      },
+      "right_target_nozzle_temp": {
+        "name": "右喷嘴目标温度"
       }
     },
     "camera": {

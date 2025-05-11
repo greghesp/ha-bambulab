@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Vlhkosť"
+      },
+      "left_nozzle_temp": {
+        "name": "Teplota ľavej dýzy"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Ľavá dýza cieľová teplota"
+      },
+      "right_nozzle_temp": {
+        "name": "Pravá dýza teplota"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Pravá dýza cieľová teplota"
       }
     },
     "camera": {

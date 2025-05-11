@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Wilgotność"
+      },
+      "left_nozzle_temp": {
+        "name": "Lewa temperatura dyszy"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Lewa dysza temperatura docelowa"
+      },
+      "right_nozzle_temp": {
+        "name": "Temperatura dysz prawa"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Temperatura docelowa dysz prawa"
       }
     },
     "camera": {

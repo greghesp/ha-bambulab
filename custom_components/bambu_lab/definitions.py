@@ -190,22 +190,62 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_TEMPERATURE)
     ),
     BambuLabSensorEntityDescription(
-        key="target_nozzle_temp",
-        translation_key="target_nozzle_temp",
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-        device_class=SensorDeviceClass.TEMPERATURE,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().temperature.target_nozzle_temp
-    ),
-    BambuLabSensorEntityDescription(
         key="nozzle_temp",
         translation_key="nozzle_temp",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().temperature.nozzle_temp
+        value_fn=lambda self: self.coordinator.get_model().temperature.active_nozzle_temperature
+    ),
+    BambuLabSensorEntityDescription(
+        key="target_nozzle_temp",
+        translation_key="target_nozzle_temp",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().temperature.active_nozzle_target_temperature
+    ),
+    BambuLabSensorEntityDescription(
+        key="left_nozzle_temp",
+        translation_key="left_nozzle_temp",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().temperature.left_nozzle_temperature,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
+    ),
+    BambuLabSensorEntityDescription(
+        key="left_target_nozzle_temp",
+        translation_key="left_target_nozzle_temp",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().temperature.left_nozzle_target_temperature,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
+    ),
+    BambuLabSensorEntityDescription(
+        key="right_nozzle_temp",
+        translation_key="right_nozzle_temp",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().temperature.right_nozzle_temperature,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
+    ),
+    BambuLabSensorEntityDescription(
+        key="right_target_nozzle_temp",
+        translation_key="right_target_nozzle_temp",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:printer-3d-nozzle",
+        value_fn=lambda self: self.coordinator.get_model().temperature.right_nozzle_target_temperature,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
     ),
     BambuLabSensorEntityDescription(
         key="aux_fan_speed",

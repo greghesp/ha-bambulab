@@ -686,6 +686,18 @@
       },
       "humidity": {
         "name": "Humidité"
+      },
+      "left_nozzle_temp": {
+        "name": "Température de la buse gauche"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Température cible de la buse gauche"
+      },
+      "right_nozzle_temp": {
+        "name": "Température de la buse droite"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Température cible de la buse droite"
       }
     },
     "camera": {

@@ -285,6 +285,18 @@
       "nozzle_temp": {
         "name": "Nozzle temperature"
       },
+      "left_nozzle_temp": {
+        "name": "Left nozzle temperature"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Left nozzle target temperature"
+      },
+      "right_nozzle_temp": {
+        "name": "Right nozzle temperature"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Right nozzle target temperature"
+      },
       "aux_fan_speed": {
         "name": "Aux fan speed"
       },
