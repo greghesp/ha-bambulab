@@ -148,6 +148,8 @@ class Device:
         elif feature == Features.START_TIME_GENERATED:
             return True
         elif feature == Features.AMS_TEMPERATURE:
+            if self.info.sw_ver == "unknown":
+                LOGGER.error("Feaure.AMS_TEMPERATURE queried before version is known.")            
             if (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D):
                 return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
@@ -173,6 +175,8 @@ class Device:
         elif feature == Features.TIMELAPSE:
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
+            if self.info.sw_ver == "unknown":
+                LOGGER.error("Feaure.AMS_SWITCH_COMMAND queried before version is known.")            
             if self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D:
                 return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.02.99.10"):
@@ -183,6 +187,8 @@ class Device:
         elif feature == Features.DOWNLOAD_GCODE_FILE:
             return True
         elif feature == Features.AMS_HUMIDITY:
+            if self.info.sw_ver == "unknown":
+                LOGGER.error("Feaure.AMS_HUMIDITY queried before version is known.")            
             if (self.info.device_type == Printers.H2D):
                 return True
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
@@ -191,6 +197,8 @@ class Device:
                 return True
             return False
         elif feature == Features.AMS_DRYING:
+            if self.info.sw_ver == "unknown":
+                LOGGER.error("Feaure.AMS_DRYING queried before version is known.")
             if (self.info.device_type == Printers.H2D):
                 return True
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
@@ -202,6 +210,29 @@ class Device:
             return (self.info.device_type == Printers.H2D)
         elif feature == Features.DUAL_NOZZLES:
             return (self.info.device_type == Printers.H2D)
+        elif feature == Features.MQTT_ENCRYPTION:
+            # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
+            # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
+            if self.info.sw_ver == "unknown":
+                return False
+            
+            if (self.info.device_type == Printers.H2D):
+                # H2D doesn't have a developer lan mode.
+                return True
+            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
+                return not self.info.developer_lan_mode
+            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
+                return not self.info.developer_lan_mode
+            return False
+        elif feature == Features.NON_CLOUD_CHANGES_BLOCKED:
+            # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
+            # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
+            if self.info.sw_ver == "unknown":
+                return False
+            
+            if (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.00.00"):
+                return self.info.is_local_mqtt and self.info.has_bambu_cloud_connection
+            return False
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -1801,7 +1832,15 @@ class Info:
 
         return changed
 
+    @property
+    def is_local_mqtt(self):
+        return self._client._local_mqtt
 
+    @property
+    def developer_lan_mode(self):
+        # Set developer lan mode to be the same as local mqtt w/o bambu credentials available for now.
+        # TODO: Find a way to more accurately confirm developer lan mode is enabled.
+        return self._client._local_mqtt and not self.has_bambu_cloud_connection
 
     @property
     def has_bambu_cloud_connection(self) -> bool:
