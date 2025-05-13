@@ -151,7 +151,7 @@ class Device:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
             # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
             if self.info.sw_ver == "unknown":
-                LOGGER.error("Feature.AMS_TEMPERATURE queried before version is known.")
+                LOGGER.error("Features.AMS_TEMPERATURE queried before version is known.")
                 return False
 
             if (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D):
