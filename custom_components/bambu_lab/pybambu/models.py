@@ -403,7 +403,7 @@ class Temperature:
 
     @property
     def right_nozzle_target_temperature(self):
-        return self.target_nozzle_temp[1]
+        return self.target_nozzle_temps[1]
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
