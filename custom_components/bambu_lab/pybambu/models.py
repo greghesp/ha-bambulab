@@ -449,7 +449,7 @@ class Temperature:
 
     @property
     def right_nozzle_target_temperature(self):
-        return self.target_nozzle_temp[1]
+        return self.target_nozzle_temps[1]
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -482,7 +482,7 @@ class Temperature:
         #     },
         chamber_temp = data.get("device", {}).get("ctc", {}).get("info", {}).get("temp", None)
         if chamber_temp is not None:
-            self.chamber_temp = chamber_temp
+            self.chamber_temp = chamber_temp & 0xFFFF
         else:
             self.chamber_temp = round(data.get("chamber_temper", self.chamber_temp))
 
@@ -513,7 +513,7 @@ class Temperature:
                 state = data["extruder"]["state"]
                 self.active_nozzle = (state >> 4) & 0xF
         
-        if self._client._device.info.device_type != Printers.H2D:
+        else:
             # New firmware put the nozzle data in a different location. Low word is current value. High word is the target.
             # "extruder": {
             #   "info": [
