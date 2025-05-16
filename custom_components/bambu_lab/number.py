@@ -91,7 +91,10 @@ class BambuLabNumber(BambuLabEntity, NumberEntity):
     @property
     def available(self) -> bool:
         """Is the number available"""
-        return self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
+        available = self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
+        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION)
+        available = available and not self.coordinator.get_model().supports_feature(Features.NON_CLOUD_CHANGES_BLOCKED)
+        return available
     
     @property
     def native_value(self) -> float | None:
