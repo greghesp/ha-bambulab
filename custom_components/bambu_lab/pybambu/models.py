@@ -1883,7 +1883,7 @@ class AMSInstance:
     temperature: int
     model: str
     remaining_drying_time: int
-    tray: list["AMSTray"]
+    tray: dict[int, "AMSTray"]
 
     def __init__(self, client, model):
         self.serial = ""
@@ -1894,11 +1894,7 @@ class AMSInstance:
         self.temperature = 0
         self.model = model
         self.remaining_drying_time = 0
-        self.tray = [None] * 4
-        self.tray[0] = AMSTray(client)
-        self.tray[1] = AMSTray(client)
-        self.tray[2] = AMSTray(client)
-        self.tray[3] = AMSTray(client)
+        self.tray = {i: AMSTray(client) for i in [0, 1, 2, 3, 128]}
 
 
 @dataclass
