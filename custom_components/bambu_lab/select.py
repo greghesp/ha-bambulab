@@ -8,7 +8,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.select import SelectEntity
 
 from .const import DOMAIN, LOGGER
-from .pybambu.const import SPEED_PROFILE
+from .pybambu.const import Features, SPEED_PROFILE
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
 
@@ -47,7 +47,10 @@ class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self.coordinator.get_model().print_job.gcode_state == 'RUNNING'
+        available =  self.coordinator.get_model().print_job.gcode_state == 'RUNNING'
+        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION)
+        available = available and not self.coordinator.get_model().supports_feature(Features.NON_CLOUD_CHANGES_BLOCKED)
+        return available
 
     @property
     def current_option(self) -> str:

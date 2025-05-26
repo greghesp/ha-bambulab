@@ -46,7 +46,9 @@ class Features(IntEnum):
     AMS_HUMIDITY = 25,
     AMS_DRYING = 26,
     CHAMBER_LIGHT_2 = 27,
-    DUAL_NOZZLES = 28
+    DUAL_NOZZLES = 28,
+    MQTT_ENCRYPTION = 29,
+    NON_CLOUD_CHANGES_BLOCKED = 30
 
 
 class FansEnum(IntEnum):
