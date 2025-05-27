@@ -1908,7 +1908,6 @@ class AMSList:
                 # required as part of the home assistant device identity.
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
-                    LOGGER.debug(f"INDEX is {index}")
                     if self.data[index] is None:
                         data_changed = True
                         self.data[index] = AMSInstance(self._client, model)
