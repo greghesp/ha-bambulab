@@ -313,8 +313,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     ams_index = key
                     break
 
+        if ams_index > 128:
+            ams_index = ams_index - 1
         full_tray = tray + ams_index * 4
-        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index+1}")
+        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index}")
 
         return ams_index, tray
 
@@ -664,9 +666,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def get_ams_device(self, index):
+        # Adjust indices to be 1-based for normal AMS, 128-based for HT.
+        ams_index = index
+        if ams_index < 128:
+            ams_index = index + 1
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
-        device_name = f"{device_type}_{printer_serial}_AMS_{index+1}"
+        device_name = f"{device_type}_{printer_serial}_AMS_{ams_index}"
         ams_serial = self.get_model().ams.data[index].serial
         model = self.get_model().ams.data[index].model
 
