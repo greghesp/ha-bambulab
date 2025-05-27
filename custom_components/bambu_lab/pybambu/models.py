@@ -1851,12 +1851,12 @@ class AMSInstance:
 class AMSList:
     """Return all AMS related info"""
     tray_now: int
-    data: list[AMSInstance]
+    data: dict[int, AMSInstance]
 
     def __init__(self, client):
         self._client = client
         self.tray_now = 0
-        self.data = [None] * 4
+        self.data = {i: None for i in [0, 1, 2, 3, 128]}
         self._first_initialization_done = False
 
     def info_update(self, data):
@@ -1908,6 +1908,7 @@ class AMSList:
                 # required as part of the home assistant device identity.
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
+                    LOGGER.debug(f"INDEX is {index}")
                     if self.data[index] is None:
                         data_changed = True
                         self.data[index] = AMSInstance(self._client, model)

@@ -597,7 +597,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         # But we can use this to clean up orphaned AMS devices such as when an AMS is moved between printers.
         existing_ams_devices = []
-        for index in range (0, len(self.get_model().ams.data)):
+        for index in self.get_model().ams.data.keys():
             ams_entry = self.get_model().ams.data[index]
             if ams_entry is not None:
                 existing_ams_devices.append(ams_entry.serial)
