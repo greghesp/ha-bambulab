@@ -313,8 +313,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     ams_index = key
                     break
 
-        if ams_index > 128:
-            ams_index = ams_index - 1
         full_tray = tray + ams_index * 4
         LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index}")
 
