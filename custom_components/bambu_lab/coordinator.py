@@ -305,16 +305,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
         ams_serial = next(iter(ams_device.identifiers))[1]
         ams_index = None
-        for index in range(0,4):
-            ams = self.get_model().ams.data[index]
+        for key in self.get_model().ams.data.keys:
+            ams = self.get_model().ams.data[key]
             if ams is not None:
                 if ams.serial == ams_serial:
                     # We found the right AMS.
-                    ams_index = index
+                    ams_index = key
                     break
 
         full_tray = tray + ams_index * 4
-        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index+1}/4")
+        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index+1}")
 
         return ams_index, tray
 

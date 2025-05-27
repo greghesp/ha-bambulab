@@ -1842,7 +1842,7 @@ class AMSInstance:
         self.model = model
         self.remaining_drying_time = 0
         self.index = index
-        if index == 128:
+        if index >= 128:
             self.tray = [None]
             self.tray[0] = AMSTray(client)
         else:
@@ -1911,6 +1911,8 @@ class AMSList:
             elif name.startswith("n3s/"):
                 model = "AMS HT"
                 index = int(name[4])
+                # Adjust index so that it's 128-based.
+                index = index - 1
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
