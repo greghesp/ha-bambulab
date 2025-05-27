@@ -623,6 +623,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[1].tray_uuid,
             "type": self.coordinator.get_model().ams.data[self.index].tray[1].type,
         },
+        exists_fn=lambda coordinator, index: coordinator.get_model().ams.data[index].model != "AMS HT",
     ),
     BambuLabAMSSensorEntityDescription(
         key="tray_3",
@@ -647,6 +648,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[2].tray_uuid,
             "type": self.coordinator.get_model().ams.data[self.index].tray[2].type,
         },
+        exists_fn=lambda coordinator, index: coordinator.get_model().ams.data[index].model != "AMS HT",
     ),
     BambuLabAMSSensorEntityDescription(
         key="tray_4",
@@ -671,5 +673,6 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[3].tray_uuid,
             "type": self.coordinator.get_model().ams.data[self.index].tray[3].type,
         },
+        exists_fn=lambda coordinator, index: coordinator.get_model().ams.data[index].model != "AMS HT",
     ),
 )

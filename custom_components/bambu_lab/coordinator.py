@@ -608,7 +608,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for device in dev_reg.devices.values():
             if config_entry_id in device.config_entries:
                 # This device is associated with this printer.
-                if device.model == 'AMS' or device.model == 'AMS Lite' or device.model == 'AMS 2 Pro':
+                if device.model == 'AMS' or device.model == 'AMS Lite' or device.model == 'AMS 2 Pro' or device.model == 'AMS HT':
                     # And it's an AMS device
                     ams_serial = list(device.identifiers)[0][1]
                     if ams_serial not in existing_ams_devices:
