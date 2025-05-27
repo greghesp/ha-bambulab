@@ -1842,7 +1842,7 @@ class AMSInstance:
         self.model = model
         self.remaining_drying_time = 0
         self.index = index
-        if index == 128:
+        if index >= 128:
             self.tray = [None]
             self.tray[0] = AMSTray(client)
         else:
@@ -1862,7 +1862,7 @@ class AMSList:
     def __init__(self, client):
         self._client = client
         self.tray_now = 0
-        self.data = {i: None for i in [0, 1, 2, 3, 128]}
+        self.data = {}
         self._first_initialization_done = False
 
     def info_update(self, data):
@@ -1917,7 +1917,7 @@ class AMSList:
                 # required as part of the home assistant device identity.
                 if not module['sn'] == '':
                     # May get data before info so create entries if necessary
-                    if self.data[index] is None:
+                    if index not in self.data:
                         data_changed = True
                         self.data[index] = AMSInstance(self._client, model, index)
                     if self.data[index].model != model:
@@ -2010,7 +2010,7 @@ class AMSList:
             for ams in ams_list:
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
-                if self.data[index] is None:
+                if index not in self.data:
                     self.data[index] = AMSInstance(self._client, "Unknown", index)
 
                 if self.data[index].humidity_index != int(ams['humidity']):
