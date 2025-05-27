@@ -1902,6 +1902,9 @@ class AMSList:
             elif name.startswith("n3f/"):
                 model = "AMS 2 Pro"
                 index = int(name[4])
+            elif name.startswith("n3s/"):
+                model = "AMS HT"
+                index = int(name[4])
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
