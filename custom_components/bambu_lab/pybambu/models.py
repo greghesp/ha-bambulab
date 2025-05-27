@@ -1843,6 +1843,7 @@ class AMSInstance:
         self.remaining_drying_time = 0
         self.index = index
         if index == 128:
+            self.tray = [None]
             self.tray[0] = AMSTray(client)
         else:
             self.tray = [None] * 4
@@ -2011,7 +2012,7 @@ class AMSList:
                 # May get data before info so create entry if necessary
                 if self.data[index] is None:
                     self.data[index] = AMSInstance(self._client, "Unknown", index)
-                    
+
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
 
