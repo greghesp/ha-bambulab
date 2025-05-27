@@ -1824,6 +1824,7 @@ class AMSInstance:
     serial: str
     sw_version: str
     hw_version: str
+    index: int
     humidity_index: int
     humidity: int
     temperature: int
@@ -1831,7 +1832,7 @@ class AMSInstance:
     remaining_drying_time: int
     tray: list["AMSTray"]
 
-    def __init__(self, client, model):
+    def __init__(self, client, model, index):
         self.serial = ""
         self.sw_version = ""
         self.hw_version = ""
@@ -1840,23 +1841,28 @@ class AMSInstance:
         self.temperature = 0
         self.model = model
         self.remaining_drying_time = 0
-        self.tray = [None] * 4
-        self.tray[0] = AMSTray(client)
-        self.tray[1] = AMSTray(client)
-        self.tray[2] = AMSTray(client)
-        self.tray[3] = AMSTray(client)
+        self.index = index
+        if index == 128:
+            self.tray = [None]
+            self.tray[0] = AMSTray(client)
+        else:
+            self.tray = [None] * 4
+            self.tray[0] = AMSTray(client)
+            self.tray[1] = AMSTray(client)
+            self.tray[2] = AMSTray(client)
+            self.tray[3] = AMSTray(client)
 
 
 @dataclass
 class AMSList:
     """Return all AMS related info"""
     tray_now: int
-    data: list[AMSInstance]
+    data: dict[int, AMSInstance]
 
     def __init__(self, client):
         self._client = client
         self.tray_now = 0
-        self.data = [None] * 4
+        self.data = {i: None for i in [0, 1, 2, 3, 128]}
         self._first_initialization_done = False
 
     def info_update(self, data):
@@ -1902,6 +1908,9 @@ class AMSList:
             elif name.startswith("n3f/"):
                 model = "AMS 2 Pro"
                 index = int(name[4])
+            elif name.startswith("n3s/"):
+                model = "AMS HT"
+                index = int(name[4])
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
@@ -1910,7 +1919,7 @@ class AMSList:
                     # May get data before info so create entries if necessary
                     if self.data[index] is None:
                         data_changed = True
-                        self.data[index] = AMSInstance(self._client, model)
+                        self.data[index] = AMSInstance(self._client, model, index)
                     if self.data[index].model != model:
                         data_changed = True
                         self.data[index].model = model
@@ -2002,7 +2011,8 @@ class AMSList:
                 index = int(ams['id'])
                 # May get data before info so create entry if necessary
                 if self.data[index] is None:
-                    self.data[index] = AMSInstance(self._client, "Unknown")
+                    self.data[index] = AMSInstance(self._client, "Unknown", index)
+
                 if self.data[index].humidity_index != int(ams['humidity']):
                     self.data[index].humidity_index = int(ams['humidity'])
 
