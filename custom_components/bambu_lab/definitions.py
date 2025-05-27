@@ -156,6 +156,14 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().info.mqtt_mode
     ),
     BambuLabSensorEntityDescription(
+        key="tool_module",
+        translation_key="tool_module",
+        icon="mdi:printer-3d-nozzle",
+        device_class=SensorDeviceClass.ENUM,
+        options=["none", "laser", "cutter"],
+        value_fn=lambda self: self.coordinator.get_model().ext_tool_state
+    ),
+    BambuLabSensorEntityDescription(
         key="wifi_signal",
         translation_key="wifi_signal",
         native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,

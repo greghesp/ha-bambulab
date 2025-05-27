@@ -78,6 +78,7 @@ class Device:
         self.print_error = PrintError(client = client)
         self.camera = Camera(client = client)
         self.home_flag = HomeFlag(client=client)
+        self.ext_tool_state = None
         self.push_all_data = None
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
@@ -102,10 +103,27 @@ class Device:
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
 
+        # Handle ext_tool update
+        if "device" in data and "ext_tool" in data["device"]:
+            ext_tool = data["device"]["ext_tool"]
+            mount = ext_tool.get("mount")
+            tool_type = ext_tool.get("type")
+            prev_state = self.ext_tool_state
+            if mount == 0:
+                self.ext_tool_state = "none"
+            elif mount == 1 and tool_type == "LB01":
+                self.ext_tool_state = "laser"
+            elif mount == 1 and tool_type == "CP00":
+                self.ext_tool_state = "cutter"
+            if prev_state != self.ext_tool_state:
+                send_event = True
+
         self._client.callback("event_printer_data_update")
 
         if data.get("msg", 0) == 0:
             self.push_all_data = data
+
+        return send_event
 
     def info_update(self, data):
         self.info.info_update(data = data)

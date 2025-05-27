@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Nástrojový modul",
+        "state": {
+          "none": "Nenamontovaný",
+          "laser": "Laser",
+          "cutter": "Rezačka"
+        }
+      },
       "wifi_signal": {
         "name": "Wi-Fi signál"
       },
