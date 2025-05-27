@@ -1,0 +1,92 @@
+---
+title: Contributing
+---
+
+# How to contribute
+
+Want to contribute to ha-bambulab? Great! We have a few small asks though!
+
+- Please create your patch pull requests against the `main` branch.
+- Please be verbose in your description of your changes in your pull requests.
+
+# Frontend Development
+
+## Setup
+
+<Steps>
+  <Step title="Clone this repo">
+    Clone this repo
+
+    ```js
+    git clone https://github.com/greghesp/ha-bambulab.git
+    ```
+
+  </Step>
+  <Step title="Setup Home Assistant">
+    Setup a local instance of Home Assistant, I prefer to use Docker with the [Home Assistant Container](https://www.home-assistant.io/installation/#advanced-installation-methods) for this
+  </Step>
+  <Step title="Bind to Docker Volume">
+    Setup a docker-compose.yml file with the correct volume binds. My file as an example
+    ```yml
+    version: "3.3"
+    services:
+      hass:
+        image: homeassistant/home-assistant:beta
+        container_name: homeassistant
+        restart: unless-stopped # To reboot the container when the host comes back up from restarts.
+        ports:
+          - 8123:8123
+        volumes:
+          - type: bind
+            source: ../this_repo/custom_components/bambu_lab # Path to this folder within this repo
+            target: /config/www/community/ha-bambulab-cards
+          - ./hass_dev:/config
+    ```
+  </Step>
+</Steps>
+
+## Development
+
+<Steps>
+  <Step title="Navigate">
+    Navigate to the frontend directory of your clone
+  </Step>
+  <Step title="Install Dependencies">
+    Install dependecies from npm
+
+    ```js
+    npm install
+    ```
+
+  </Step>
+  <Step title="Start Dev Server">
+    Start the development server
+
+    ```js
+    npm install
+    ```
+
+  </Step>
+    <Step title="Build">
+    Once your work is complete, build the frontend to generate the `dist/ha-bambulab-cards.js` file before comitting
+
+    ```js
+    npm build
+    ```
+
+  </Step>
+</Steps>
+
+## Adding Cards
+
+<Warning>Please do not edit the `example-card`</Warning>
+
+To develop a new card, copy the `example-card` folder and rename the folder, files to match, and the variables within `const.ts`
+
+To include your card into the integration, open `ha-bambulab-cards.ts` and import your card:
+
+```js
+import "./cards/my-new-card/my-new-card";
+```
+
+Add your card to `custom_components/bambu_lab/const.py`, into the `BAMBU_LAB_CARDS` array. If you modify your card, ensure you update the version here

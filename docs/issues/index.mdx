@@ -1,0 +1,36 @@
+---
+title: Issues
+description: Debugging the integration
+---
+
+## Issues
+
+### Diagnostic File
+
+If you run into any issues, we now have built in diagnostics.
+To grab the latest information, hit the "Force Refresh Data" button under the Diagnostic section.
+
+![image](/images/force-refresh.png)
+
+Then on the device info page for the printer entity, you will see a "Download Diagnostics" button.
+Make sure you upload this to your Bug ticket/GitHub issue.
+
+![img.png](/images/diagnostics.png)
+
+### Debug Logging
+
+When logging a bug, always ensure you send us the debug logs. 
+
+If you are hitting issues during initial integration setup, you will need to enable logs in your configuration.yaml file by adding the following and restarting Home Assistant:
+```
+logger:
+  default: info
+  logs:
+    custom_components.bambu_lab: debug
+```
+
+If you have previously successfully installed the integration, debug logs can be enabled from the integration page within Home Assistant:
+
+![img.png](/images/debugging.png)
+
+The debug logs will appear in the standard Home Assistant logs.

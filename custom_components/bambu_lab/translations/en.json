@@ -5,51 +5,74 @@
       "event_print_failed": "Print failed",
       "event_print_finished": "Print finished",
       "event_print_started": "Print started",
-      "event_printer_error": "Printer error detected"
+      "event_print_error": "Print error",
+      "event_print_error_cleared": "Print error cleared",
+      "event_printer_error": "HMS error",
+      "event_printer_error_cleared": "HMS error cleared"
     }
   },
   "config": {
     "abort": {
-      "already_configured": "Device is already configured"
+      "already_configured": "Device is already configured",
+      "no_printers": "No unconfigured printers found in the account.",
+      "cloudflare": "Cloudflare has blocked the connection attempt.",
+      "curl_unavailable": "curl_cffi library is not available."
     },
     "error": {
       "cannot_connect": "Failed to connect. Check credentials.",
       "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
-      "no_printers": "No unconfigured printers found in the account.",
       "invalid_auth": "Invalid authentication.",
-      "unknown": "Unexpected error."
+      "unknown": "Unexpected error.",
+      "code_needed": "Verification code must be provided.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
+      "code_incorrect": "Verification code was incorrect. Please re-enter.",
+      "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan Only Mode.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud Connection",
+        "title": "Bambu Lab Cloud Connection",
         "description": "Please provide your Bambu Lab credentials:",
         "data": {
           "region": "Account region:",
-          "email": "Email Address",
-          "password": "Password"
+          "email": "Email Address or Phone Number",
+          "password": "Password",
+          "newCode": "Request new code",
+          "verifyCode": "Email or phone verification code",
+          "tfaCode": "Two factor authentication code"
         }
       },
       "Bambu_Choose_Device": {
         "title": "Printer Selection",
-        "description": "Choose which printer you want to add.",
         "data": {
-          "printer": "Choose Printer To Add:"
+          "serial": "Choose printer to add:"
         }
       },
       "Bambu_Lan": {
         "title": "Setup Local Connection",
-        "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Cloud.",
+        "description": "You can choose to connect directly to the printer for status updates instead of by Bambu Lab cloud. This gives you resilience to Bambu Lab cloud outages but Bambu Lab has restricted control of the printer when in this hybrid mode so some controls will be unavailable.",
         "data": {
           "local_mqtt": "Connect locally to the printer:",
           "host": "Local Printer IP Address:",
-          "access_code": "Access Code:"
+          "access_code": "Access Code:",
+          "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These options are only needed if you have a non-standard setup.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
+            }
+          }
         }
       },
       "Lan": {
@@ -58,44 +81,78 @@
         "data": {
           "serial": "Serial Number:",
           "host": "Local Printer IP Address:",
-          "access_code": "Access Code:"
+          "access_code": "Access Code:",
+          "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These options are only needed if you have a non-standard setup.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
+            }
+          }
         }
       }
     }
   },
   "options": {
+    "abort": {
+      "cloudflare": "Cloudflare has blocked the connection attempt.",
+      "curl_unavailable": "curl_cffi library is not available."
+    },
     "error": {
       "cannot_connect": "Failed to connect",
       "cannot_connect_local_ip": "Failed to connect. Check provided IP address.",
       "cannot_connect_local_all": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
-      "unknown": "Unexpected error."
+      "unknown": "Unexpected error.",
+      "code_needed": "Verification code must be provided.",
+      "verifyCode": "Verification code is required. Check your email or phone.",
+      "code_expired": "Verification code expired. New code requested. Check your email or phone.",
+      "code_incorrect": "Verification code was incorrect. Please re-enter.",
+      "tfaCode": "2FA code is required. Please enter it now."
     },
     "step": {
       "init": {
         "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Cloud is simplest. But does not support 2FA or social media accounts without a password. And it will not work for printers actively set to Lan Only Mode.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
       },
       "Bambu": {
-        "title": "Bambu Cloud Connection",
+        "title": "Bambu Lab Cloud Connection",
         "description": "Please provide your Bambu Lab credentials:",
         "data": {
           "region": "Account region:",
-          "email": "Email Address",
-          "password": "Password"
+          "email": "Email Address or Phone Number",
+          "password": "Password",
+          "newCode": "Request new code",
+          "verifyCode": "Email or phone verification code",
+          "tfaCode": "Two factor authentication code"
         }
       },
       "Bambu_Lan": {
         "title": "Adjust Printer Configuration",
-        "description": "You can optionally provide the local printer IP address and access code. This is required for camera access on the P1/A1. Or to be able to connect directly to the printer instead of via Bambu Cloud.",
+        "description": "You can choose to connect directly to the printer for status updates instead of by Bambu Lab cloud. This gives you resilience to Bambu Lab cloud outages but Bambu Lab has restricted control of the printer when in this hybrid mode so some controls will be unavailable.",
         "data": {
-          "printer": "Choose Printer To Add:",
+          "serial": "Adjust settings for:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
-          "local_mqtt": "Connect directly to printer instead of by Bambu Cloud:"
+          "local_mqtt": "Connect directly to printer instead of by Bambu Lab cloud:",
+          "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
+            }
+          }
         }
       },
       "Lan": {
@@ -103,7 +160,18 @@
         "description": "Please provide your local printer IP address and access code. The access code can be found on the printer screen in the network settings (WLAN).",
         "data": {
           "host": "Local Printer IP Address:",
-          "access_code": "Access Code:"
+          "access_code": "Access Code:",
+          "usage_hours": "Current usage hours (optional):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Advanced options",
+            "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
+            "data": {
+              "disable_ssl_verify": "Disable SSL verification",
+              "enable_firmware_update": "Enable firmware update support"
+            }
+          }
         }
       }
     }
@@ -119,11 +187,17 @@
       "hms_errors": {
         "name": "HMS errors"
       },
+      "print_error": {
+        "name": "Print error"
+      },
       "online": {
         "name": "Online"
       },
       "firmware_update": {
         "name": "Firmware update"
+      },
+      "extruder_filament_state": {
+        "name": "Extruder filament state"
       }
     },
     "button": {
@@ -137,7 +211,10 @@
         "name": "Stop printing"
       },
       "refresh": {
-        "name": "Force Refresh Data"
+        "name": "Force refresh data"
+      },
+      "dev": {
+        "name": "Debug"
       }
     },
     "fan": {
@@ -157,6 +234,9 @@
       },
       "cover_image": {
         "name": "Cover Image"
+      },
+      "pick_image": {
+        "name": "Pick image"
       }
     },
     "light": {
@@ -165,6 +245,14 @@
       },
       "camera_light": {
         "name": "Camera light"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Bed target temperature"
+      },
+      "target_nozzle_temperature": {
+        "name": "Nozzle target temperature"
       }
     },
     "select": {
@@ -186,7 +274,7 @@
         "name": "Bed temperature"
       },
       "target_bed_temp": {
-        "name": "Target Bed temperature"
+        "name": "Bed target temperature"
       },
       "chamber_temp": {
         "name": "Chamber temperature"
@@ -196,6 +284,18 @@
       },
       "nozzle_temp": {
         "name": "Nozzle temperature"
+      },
+      "left_nozzle_temp": {
+        "name": "Left nozzle temperature"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Left nozzle target temperature"
+      },
+      "right_nozzle_temp": {
+        "name": "Right nozzle temperature"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Right nozzle target temperature"
       },
       "aux_fan_speed": {
         "name": "Aux fan speed"
@@ -268,6 +368,15 @@
           "idle": "Idle"
         }
       },
+      "sdcard_status": { 
+        "name": "SD card status",
+        "state": {
+          "missing": "Missing",
+          "normal": "Normal",
+          "abnormal": "Abnormal",
+          "readonly": "Read only"
+        }
+      },
       "print_progress": {
         "name": "Print progress"
       },
@@ -285,20 +394,41 @@
           "init": "Init"
         }
       },
+      "printable_objects": {
+        "name": "Printable objects"
+      },
+      "skipped_objects": {
+        "name": "Skipped objects"
+      },
       "mqtt_mode": {
         "name": "MQTT connection mode",
         "state": {
           "local": "Local",
-          "bambu_cloud": "Bambu Cloud"
+          "bambu_cloud": "Bambu Lab cloud"
         }
       },
       "gcode_file": {
         "name": "Gcode filename"
       },
+      "gcode_file_downloaded": {
+        "name": "Gcode file downloaded"
+      },
+      "remaining_drying_time": {
+        "name": "Remaining drying time"
+      },
+      "ams_temp": {
+        "name": "Temperature"
+      },
+      "humidity": {
+        "name": "Humidity"
+      },
       "print_bed_type": {
         "name": "Print bed type",
         "state": {
-          "textured_plate": "Textured plate"
+          "textured_plate": "Textured plate",
+          "cool_plate": "Cool Plate / PLA Plate",
+          "hot_plate": "Smooth PEI Plate / High Temp Plate",
+          "eng_plate": "Engineering Plate"
         }
       },
       "print_length": {
@@ -310,6 +440,14 @@
       "subtask_name": {
         "name": "Task name"
       },
+      "print_type": {
+        "name": "Print type",
+        "state": {
+          "local": "Local",
+          "cloud": "Cloud",
+          "idle": "Idle"
+        }
+      },
       "start_time": {
         "name": "Start time"
       },
@@ -318,6 +456,9 @@
       },
       "end_time": {
         "name": "End time"
+      },
+      "total_usage_hours": {
+        "name": "Total usage"
       },
       "current_layer": {
         "name": "Current layer"
@@ -341,11 +482,11 @@
           "stainless_steel": "Stainless steel"
         }
       },
+      "ip_address": {
+        "name": "IP address"
+      },
       "humidity_index": {
         "name": "Humidity index"
-      },
-      "ams_temp": {
-        "name": "AMS temperature"
       },
       "external_spool": {
         "name": "External spool",
@@ -371,8 +512,23 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
+          "remain": {
+            "name": "Remaining filament"
+          },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
+          "tag_uid": {
+            "name": "Spool serial number"
+          },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -403,11 +559,20 @@
           "remain": {
             "name": "Remaining filament"
           },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
           "tag_uid": {
             "name": "Spool serial number"
           },
           "type": {
             "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -435,14 +600,23 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Remaining filament"
           },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
+          },
+          "type": {
+            "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -470,14 +644,23 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Remaining filament"
           },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
+          },
+          "type": {
+            "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       },
@@ -505,14 +688,23 @@
           "nozzle_temp_max": {
             "name": "Nozzle max temperature"
           },
-          "type": {
-            "name": "Type"
-          },
           "remain": {
             "name": "Remaining filament"
           },
+          "remain_enabled": {
+            "name": "Remaining filament estimation enabled"
+          },
           "tag_uid": {
-            "name": "Serial number of filament"
+            "name": "Spool serial number"
+          },
+          "type": {
+            "name": "Type"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maximum weight of filament"
           }
         }
       }
@@ -525,7 +717,44 @@
     "switch": {
       "manual": {
         "name": "Manual refresh mode"
+      },
+      "camera": {
+        "name": "Enable camera"
+      },
+      "imagecamera": {
+        "name": "Use image sensor camera"
+      },
+      "ftp": {
+        "name": "Load model data from printer"
+      },
+      "prompt_sound": {
+        "name": "Allow Prompt Sound"
+      },
+      "timelapse": {
+        "name": "Load latest timelapse from printer"
+      },
+      "download_gcode_file": {
+        "name": "Save GCode file in HA"
       }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Firmware update"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Lab cloud",
+        "lan": "Lan Mode"
+      }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Authentication Failed for {device}",
+      "description": "Attempting to connect to Bambu Lab failed. Please reconfigure the integration and provide fresh credentials."
     }
   }
 }

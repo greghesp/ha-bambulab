@@ -31,7 +31,7 @@ async def async_get_config_entry_diagnostics(
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     # Must convert this to a dict for redaction to work correctly. Redaction leaves empty values as empty so we know if a value was present or not.
-    entry = coordinator._entry.as_dict()
+    entry = coordinator.config_entry.as_dict()
 
     coordinator.client.publish(PUSH_ALL)
     coordinator.client.publish(GET_VERSION)

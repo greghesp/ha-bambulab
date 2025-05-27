@@ -1,0 +1,255 @@
+send_command:
+  name: Send Command
+  description: Send an arbitrary command to the 3D printer
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    command:
+      name: Command
+      description: The command to send to the printer
+      required: true
+      example: "M104 S200"
+      selector:
+        text:
+
+print_project_file:
+  name: Print 3MF project file
+  description: Print sliced 3MF file stored on the SD card
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    filepath:
+      name: File path
+      description: Filename on SD card
+      required: true
+      example: "filename.3mf"
+      selector:
+        text:
+    plate:
+      name: Plate number
+      description: Plate number to print
+      required: true
+      default: 1
+      selector:
+        number:
+          mode: box
+          min: 1
+          max: 100
+    timelapse:
+      name: Timelapse
+      description: Record timelapse of the print
+      default: false
+      required: true
+      selector:
+        boolean:
+    bed_leveling:
+      name: Bed Leveling
+      description: Perform bed leveling before print
+      default: true
+      required: true
+      selector:
+        boolean:
+    flow_cali:
+      name: Flow Calibration
+      description: Perform flow calibration before print
+      default: true
+      required: true
+      selector:
+        boolean:
+    vibration_cali:
+      name: Vibration Calibration
+      description: Perform vibration calibration (aka XY Mech Sweep) before print
+      default: true
+      required: true
+      selector:
+        boolean:
+    layer_inspect:
+      name: First Layer Inspection
+      description: Perform first layer inspection during print
+      default: true
+      required: true
+      selector:
+        boolean:
+    use_ams:
+      name: Use AMS
+      description: Use AMS for print. Uses external spool otherwise
+      default: false
+      required: true
+      selector:
+        boolean:
+    ams_mapping:
+      name: AMS Slots Mapping
+      description: https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738
+      default: "0"
+      example: "2,-1,0"
+      required: true
+      selector:
+        text:
+
+skip_objects:
+  name: Skip objects
+  description: Skip objects currently being printed
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    objects:
+      name: Object IDs
+      description: Object IDs are available from printable objects entity attributes
+      required: true
+      example: "409,1463"
+      selector:
+        text:
+
+move_axis:
+  name: Move axis
+  description: Move the printhead or bed
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    axis:
+      name: Axis
+      description: >-
+        The axis to move.
+        X1 and P1 devices, X and Y move the printhead, Z moves the bed.
+        A1, Z moves the gantry, Y the bed, X the printhead.
+      required: true
+      example: "X"
+      selector:
+        select:
+          multiple: false
+          mode: dropdown
+          options:
+            - X
+            - Y
+            - Z
+            - Home
+    distance:
+      name: Distance
+      description: >-
+        The distance (in mm) to move the axis
+        A negative distance moves Z up, X left, Y forward.
+      example: 10
+      selector:
+        number:
+          min: -100
+          max: 100
+          step: 1
+
+extrude_retract:
+  name: Extrude or retract filament
+  description: Perform an extrusion or extraction of the loaded filament
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    type:
+      name: Type
+      description: The type of extrude action to perform
+      required: true
+      example: "Extrude"
+      selector:
+        select:
+          multiple: false
+          mode: dropdown
+          options:
+            - Extrude
+            - Retract
+    force:
+      name: Force
+      description: >-
+        Perform extrusion or retraction if nozzle temperature is below 170ºC.
+      example: false
+      selector:
+        boolean:
+
+unload_filament:
+  name: Unload filament
+  description: Unload the filament currently loaded into the extruder
+  target:
+    entity:
+      integration: bambu_lab
+
+load_filament:
+  name: Load filament
+  description: Load a new filament into the extruder passed an AMS tray or an External spool entity
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    temperature:
+      name: Temperature
+      description: >-
+        Target nozzle temperature once the filament is loaded. By default uses
+        the midpoint between min and max temperature of the chosen filament.
+      example: 220
+      selector:
+        number:
+          min: 0
+          max: 250
+          step: 1
+
+set_filament:
+  name: Set filament
+  description: Sets filament details on an AMS tray or an External spool entity
+  target:
+    entity:
+      integration: bambu_lab
+  fields:
+    tray_info_idx:
+      name: Filament ID
+      description: >-
+       Bambu's filament ID. E.g. GFL96 is Generic PLA Silk
+      required: true
+      example: GFL96
+      selector:
+        text:
+    tray_color:
+      name: Color
+      description: >-
+        RGBA value for the color. E.g. FF0000FF is opaque red.
+      required: true
+      example: FF0000FF
+      selector:
+        text:
+    tray_type:
+      name: Filament type
+      description: >-
+        Type of filament. E.g. 'PLA' or 'PETG'
+      required: true
+      example: PLA
+      selector:
+        text:
+    nozzle_temp_min:
+      name: Minimum recommended nozzle temperature
+      description: >-
+        The minimum temperature that it is recommended to print this filament at.
+      required: true
+      example: 220
+      selector:
+        number:
+          min: 160
+          max: 300
+          step: 1
+    nozzle_temp_max:
+      name: Maximum recommended nozzle temperature
+      description: >-
+        The maximum temperature that it is recommended to print this filament at.
+      required: true
+      example: 220
+      selector:
+        number:
+          min: 160
+          max: 300
+          step: 1
+
+get_filament_data:
+  name: Gets a json string with details about all known filaments
+  description: Gets a json string with details about all known filaments
+  target:
+    entity:
+      integration: bambu_lab
+ 

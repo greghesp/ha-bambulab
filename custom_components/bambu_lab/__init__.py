@@ -1,9 +1,22 @@
 """The Bambu Lab component."""
 
+import asyncio
+
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
-from .const import DOMAIN, LOGGER, PLATFORMS
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    SupportsResponse,
+)
+from homeassistant.helpers import entity_platform
+from .const import (
+    DOMAIN,
+    LOGGER,
+    PLATFORMS,
+    SERVICE_CALL_EVENT
+)
 from .coordinator import BambuDataUpdateCoordinator
+from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -14,18 +27,59 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
+    async def handle_service_call(call: ServiceCall):
+        LOGGER.debug(f"handle_service_call: {call.service}")
+        data = dict(call.data)
+        data['service'] = call.service
+        
+        future = asyncio.Future()
+        call.hass.data[DOMAIN]['service_call_future'] = future
+        hass.bus.fire(SERVICE_CALL_EVENT, data)
+
+        # Wait for the result from the second instance
+        try:
+            return await asyncio.wait_for(future, timeout=15)
+        except asyncio.TimeoutError:
+            LOGGER.error("Service call timed out")
+            return None
+        finally:
+            del call.hass.data[DOMAIN]['service_call_future']
+
+    # Register the serviceS with Home Assistant
+    services = {
+        "send_command": SupportsResponse.NONE,
+        "print_project_file": SupportsResponse.NONE,
+        "skip_objects": SupportsResponse.NONE,
+        "move_axis": SupportsResponse.NONE,
+        "unload_filament": SupportsResponse.NONE,
+        "load_filament": SupportsResponse.NONE,
+        "extrude_retract": SupportsResponse.NONE,
+        "set_filament": SupportsResponse.NONE,
+        "get_filament_data": SupportsResponse.ONLY,
+    }
+    for command in services:
+        hass.services.async_register(
+            DOMAIN,
+            command,
+            handle_service_call,
+            supports_response=services[command]
+        )
+
     # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     # Reload entry when its updated.
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+    #entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     LOGGER.debug("async_setup_entry Complete")
 
     # Now that we've finished initialization fully, start the MQTT connection so that any necessary
     # sensor reinitialization happens entirely after the initial setup.
     await coordinator.start_mqtt()
-    
+
+    cards = BambuLabCardRegistration(hass)
+    await cards.async_register()
+
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -42,6 +96,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
+
+    cards = BambuLabCardRegistration(hass)
+    await cards.async_unregister()
 
     LOGGER.debug("Async Setup Unload Done")
     return True

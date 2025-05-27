@@ -1,0 +1,3875 @@
+{
+    "success": true,
+    "data": [
+        {
+            "id": "0I5tLrfzVryaSGZGoYXr",
+            "features": [],
+            "link": "https://store.bambulab.com/products/asa-aero",
+            "name": "Bambu ASA Aero",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFB02",
+            "material": "ASA",
+            "sub_material": "ASA Aero",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 240,
+            "base_max_nozzle_temp": 280,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 90,
+            "base_density": 0.99,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "VddywvZZcJDWnaY0Veco",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 39.59,
+                        "USD": 49.99
+                    },
+                    "color_hex": "#F5F1DD",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "8w1e05BBoi1nDt2Cbqaq",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-basic-gradient",
+            "name": "Bambu PLA Basic Gradient",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "",
+            "material": "PLA",
+            "sub_material": "PLA Basic Gradient",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.24,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "0FgURfhcvD1KMZPmWCYI",
+                    "color_name": "solar breeze",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#E94B3C; #FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "CTsksSqT6iO2Wz6ijrsH",
+                    "color_name": "cotton candy cloud",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#E7C1D5; #8EC9E9",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "eJ9414NdFH08G2zyMNgS",
+                    "color_name": "dusk glare",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#ED9558;#CE4406",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "fFPuTP4U8vmFBWzw8xJe",
+                    "color_name": "pink citrus",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#F78F77; #E4505A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "mksVMLivuiISu6HVpmfI",
+                    "color_name": "blueberry bubblegum",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#6FCAEF; #8573DD",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "n8mvellNsSlEmCdA25rD",
+                    "color_name": "ocean to meadow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#307FE2; #54FF9B",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "pFRZRxjktVvFr0SaTzbS",
+                    "color_name": "arctic whisper",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#9CDBD9; #FFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "xsYxB0NQLjcdOzBYfLce",
+                    "color_name": "mint lime",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#B6FF43; #4EC939",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "96dxcke241wEQQr15xEu",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-metal",
+            "name": "Bambu PLA Metal",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA02",
+            "material": "PLA",
+            "sub_material": "PLA Metal",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.25,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "3xBddCOoUjkBxwLfDVSR",
+                    "color_name": "oxide green metallic",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#1D7C6A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "6gGddKsSe2ojc76gTg9l",
+                    "color_name": "cobalt blue metallic",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#39699E",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ZGu7VKUvrl53HVCY0CmJ",
+                    "color_name": "copper brown metallic",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#AA6443",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "udbNpC6oWYrZqYsEaDc7",
+                    "color_name": "iridium gold metallic",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#B39B84",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "yUA6ez1agRbsPCR3gBpJ",
+                    "color_name": "iron gray metallic",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#43403D",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "BGFlVrhAU0sl8z74PAuB",
+            "features": [],
+            "link": "https://store.bambulab.com/products/petg-translucent",
+            "name": "Bambu PETG Translucent",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFG01",
+            "material": "PETG",
+            "sub_material": "PETG Translucent",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 230,
+            "base_max_nozzle_temp": 260,
+            "base_min_bed_temp": 65,
+            "base_max_bed_temp": 75,
+            "base_density": 1.25,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "DdquNLOS6ECUdRA1dvoh",
+                    "color_name": "translucent pink",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F9C1BD",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "DrI0bejEgMsDVVvBcv0O",
+                    "color_name": "clear",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Hbdw0mt4L1ugmeZkLvZq",
+                    "color_name": "translucent light blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#61B0FF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "I3vjjlMFQVYGERtPiVUl",
+                    "color_name": "translucent olive",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#748C45",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "KMCoTOqqA95DhaGdAFSN",
+                    "color_name": "translucent teal",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#77EDD7",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "MLeB3HuIDQsePsHqv71I",
+                    "color_name": "translucent light blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#61B0FF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "U6aNAa6Vir0M7jjNqDKr",
+                    "color_name": "translucent orange",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FF911A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "YJjA2KpByL8scUDHesIS",
+                    "color_name": "translucent gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#8E8E8E",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "eX9R5uFrCqhrC1myWv8L",
+                    "color_name": "translucent brown",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#C9A381",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "jCEvRnTidHxnaxxVUdyU",
+                    "color_name": "translucent pink",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F9C1BD",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "lqJKCq6jebJLhpr9VAUM",
+                    "color_name": "translucent teal",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#77EDD7",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "nQyqVMzcP41vmCcHS9i4",
+                    "color_name": "translucent purple",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#D6ABFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "vhfQPh4oXXng5ZrOu8Yd",
+                    "color_name": "clear",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "BlomX0ePeK9whagJOu6u",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-marble",
+            "name": "Bambu PLA Marble",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA07",
+            "material": "PLA",
+            "sub_material": "PLA Marble",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.22,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "HElhPMX2fvVfbd4JxC5Q",
+                    "color_name": "red granite",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#AD4E38",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "uw7aQgpacIb2QypWJ76U",
+                    "color_name": "white marble",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#F7F3F0",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "D0kZLn3VOIqicF6gVzLT",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-wood",
+            "name": "Bambu PLA Wood",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA16",
+            "material": "PLA",
+            "sub_material": "PLA Wood",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 240,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.21,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "2r6GJWaY5XG5peydwHoO",
+                    "color_name": "ochre yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#C98935",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "EEVuNqyIHD9lIrznl6Qw",
+                    "color_name": "clay brown",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#995F11",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Nz378icJUTbv35htVlkc",
+                    "color_name": "black walnut",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#4F3F24",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "f7GV6yyXnjPkwsjeb1u1",
+                    "color_name": "white oak",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#D6CCA3",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "fbaAK9I7Ou6x4ZMm9zi1",
+                    "color_name": "rosewood",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#4C241C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ksYsoOdn4us7YhxSsQPa",
+                    "color_name": "classic birch",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#918669",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "DNniPvOAF35q3hg27JPj",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-silk-upgrade",
+            "name": "Bambu PLA Silk+",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA06",
+            "material": "PLA",
+            "sub_material": "PLA Silk+",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 210,
+            "base_max_nozzle_temp": 240,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.27,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "5ixPlwaDKF6uUgxFHpNX",
+                    "color_name": "mint",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#96DCB9",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "7O3mTjn2TVnsKt7S9bea",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#008BDA",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "9UfOjZhOcz71ICcgyqs7",
+                    "color_name": "silver",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#C8C8C8",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "GX0DdOoxSOGdehIU8HXV",
+                    "color_name": "candy red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#D02727",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "N0s5dMGeUTPnBIFQ9Fwt",
+                    "color_name": "titan gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#5F6367",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "NBGsb40DQaKVjM6TVqEf",
+                    "color_name": "rose gold",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#BA9594",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "crfdxPG781zywRLGkwIz",
+                    "color_name": "champagne",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#F3CFB2",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "dbFTGUa18Xyumdxvvzyw",
+                    "color_name": "gold",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#F4A925",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "e8HqdqsS4uOr5cCJnDSg",
+                    "color_name": "baby blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#A8C6EE",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "fePXU4C9CXUb6osAyba5",
+                    "color_name": "pink",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#F7ADA6",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "nRJb61J1ALmAWAnFcl1Q",
+                    "color_name": "candy green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#018814",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "o6OCRwkfVY3ObdE5K7AC",
+                    "color_name": "purple",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#8671CB",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "phmaW9avaRoYqKQOUGTc",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "DioKWabnfJBDIkTGQe4k",
+            "features": [],
+            "link": "https://store.bambulab.com/products/petg-hf",
+            "name": "Bambu PETG-HF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFG02",
+            "material": "PETG",
+            "sub_material": "PETG-HF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 230,
+            "base_max_nozzle_temp": 260,
+            "base_min_bed_temp": 65,
+            "base_max_bed_temp": 75,
+            "base_density": 1.28,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "3NHQiJ2RYMcR0ELQz29Q",
+                    "color_name": "blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#002E96",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "4L3Qz5pk1Qw1bJmlwkXw",
+                    "color_name": "lake blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#1F79E5",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "85wDV8EPxhoYonZoJAfP",
+                    "color_name": "cream",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F9DFB9",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "BEX81BCiXBOp5xw2nuOH",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "FbUomjPTMzy6ZY4Q7Ahf",
+                    "color_name": "white",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "LweSo71GcLLo9qJAWgTK",
+                    "color_name": "lime green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#6EE53C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "MhaVo3m0C0ql0wGqASw0",
+                    "color_name": "peanut brown",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#875718",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Mxrf42ztW20ydpYHpjUH",
+                    "color_name": "black",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "NnwTtO1fJvOJGPpWaKJm",
+                    "color_name": "yellow",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FFD00B",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "dY8z0CFcAZOnwqiMJPmd",
+                    "color_name": "orange",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F75403",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "hjIVii8MROBz3CDFi8o3",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#ADB1B2",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "i8anfgKKDTWf5IWgMVKU",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "kea8FrcuNUkXv1LNC2BP",
+                    "color_name": "red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#EB3A3A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "rJkS9yyY83G5DyBNhoZG",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#002E96",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "tKm4820ZXPiFbRAGUGKq",
+                    "color_name": "gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#ADB1B2",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "tPisOU9x8FmFswUtwtkn",
+                    "color_name": "forest green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#39541A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "tz3vnvMa8oDhuLJ7evbm",
+                    "color_name": "green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#00AE42",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "uzZwhZeMv936yz7GY79l",
+                    "color_name": "red",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#EB3A3A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "wwlgVhHaRj4pHTWrdHdC",
+                    "color_name": "green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#00AE42",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "yC11dMJirTmU3v2x3iOR",
+                    "color_name": "dark gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#515151",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "G0m4h0wr5eznHmrlw0WH",
+            "features": [],
+            "link": "https://store.bambulab.com/products/tpu-for-ams",
+            "name": "Bambu TPU for AMS",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFU02",
+            "material": "TPU",
+            "sub_material": "TPU for AMS",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 230,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 30,
+            "base_max_bed_temp": 35,
+            "base_density": 1.26,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "2gwiugWzzY5agOoPZuF7",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 34.99,
+                        "USD": 38.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "2sEHyZMCUlLvHIezhlom",
+                    "color_name": "red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 34.99,
+                        "USD": 38.99
+                    },
+                    "color_hex": "#ED0000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "6uTydeNrj6tihnrrmy5Y",
+                    "color_name": "neon green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 34.99,
+                        "USD": 38.99
+                    },
+                    "color_hex": "#90FF1A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "7BsIlseciS2dVWMkgTpw",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 34.99,
+                        "USD": 38.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ADidnG4lM4ha6fK9UHbw",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 34.99,
+                        "USD": 38.99
+                    },
+                    "color_hex": "#939393",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "GFPXtrnDnstvXosOOUdQ",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 34.99,
+                        "USD": 38.99
+                    },
+                    "color_hex": "#5898DD",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ddHPnawOxbuB0ghN2MI6",
+                    "color_name": "yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 34.99,
+                        "USD": 38.99
+                    },
+                    "color_hex": "#F9EF41",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "GUgV8Cgmmlt3MU5BPYRn",
+            "features": [],
+            "link": "https://store.bambulab.com/products/support-for-abs",
+            "name": "Bambu Support for ABS",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFS06",
+            "material": "Support",
+            "sub_material": "Support for ABS",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 220,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 60,
+            "base_density": 1.16,
+            "base_weight": 500,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "Cl7fr8CtPuWUKcYPKyjd",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 500,
+                    "price": {
+                        "GBP": 13.99,
+                        "USD": 14.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "JYTdkXhVJFhRkQMNW5rk",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pc-fr",
+            "name": "Bambu PC-FR",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFC01",
+            "material": "PC",
+            "sub_material": "PC-FR",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 260,
+            "base_max_nozzle_temp": 280,
+            "base_min_bed_temp": 90,
+            "base_max_bed_temp": 110,
+            "base_density": 1.18,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "XSWaHNXSRMcfh48JPfZ4",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 48.99,
+                        "USD": 54.99
+                    },
+                    "color_hex": "#A8A8AA",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "c8a4mRl8zrEdHLlCVJ99",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 48.99,
+                        "USD": 54.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "vfM1lHTGGKOu2PkEUAKX",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 48.99,
+                        "USD": 54.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "Jqz2JTUJuUGwaTrZIhdN",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pc-filament",
+            "name": "Bambu PC",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFC00",
+            "material": "PC",
+            "sub_material": "",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 250,
+            "base_max_nozzle_temp": 270,
+            "base_min_bed_temp": 90,
+            "base_max_bed_temp": 110,
+            "base_density": 1.2,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "1cOJrwwybw2L53TZs9gH",
+                    "color_name": "clear black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 36.99,
+                        "USD": 39.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "8yTveTe6nNIhz9T1sznd",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 36.99,
+                        "USD": 39.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "9pAV8WSwAX1MjCqM46RT",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 36.99,
+                        "USD": 39.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "WCUfIgLOfcqOrg6gtOrU",
+                    "color_name": "transparent",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 36.99,
+                        "USD": 39.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "KM52idvTaG5F1CAtTQxW",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-silk-dual-color",
+            "name": "Bambu PLA Silk Dual Color",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "",
+            "material": "PLA",
+            "sub_material": "PLA Silk Dual Color",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 210,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.32,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "716gGnrJaHODjm7bxWdc",
+                    "color_name": "gilded rose",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#FF9425; #FCA2BF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "BnIobCsQpx2SZBOGGlsK",
+                    "color_name": "neon city",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#0047BB; #BB22A3",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "MalUf6nmhTVJX7NbSPXD",
+                    "color_name": "blue hawaii",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#60A4E8; #4CE4A0",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "OMo9v8cYPh5y8rROMYtY",
+                    "color_name": "midnight blaze",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#0047BB; #7D1B49",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "f3EPUfHSTaPqpIx54ObS",
+                    "color_name": "velvet eclipse",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#000000; #A34342",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "MFbx5IbnXMZrWnvNr8oz",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-galaxy",
+            "name": "Bambu PLA Galaxy",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA15",
+            "material": "PLA",
+            "sub_material": "PLA Galaxy",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.19,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "5qV2oR30lUZbHB2c4U3k",
+                    "color_name": "nebulae",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#424379",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "OkFkllU4h9P5s7Jn1Cn4",
+                    "color_name": "green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.69,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#3B665E",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "PKKPSen0KNWlJgao7g4k",
+                    "color_name": "purple",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#594177",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "cntPWt8XCwlSlwmitoMZ",
+                    "color_name": "brown",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.69,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#684A43",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "MibowWApvd7D6OLtHpgG",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pa6-gf",
+            "name": "Bambu PA6-GF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFN08",
+            "material": "PA6",
+            "sub_material": "PA6-GF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 260,
+            "base_max_nozzle_temp": 290,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 100,
+            "base_density": 1.14,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "7tT4KGvpDuM5CgnnsBzY",
+                    "color_name": "yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#FFCE00",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "EhcrPnVBIfxGGanidm9X",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#353533",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "SPzqq9EUQdu6OpGH20KQ",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#75AED8",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "TaGm2SlvEsPZLyqZ7PEG",
+                    "color_name": "lime",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#C5ED48",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "b42Wk7xEJp8YmDAJK4FP",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "qsXTjgtieTLpGH20rdV7",
+                    "color_name": "brown",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#5B492F",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "tFDZ3weag1D1XdPZKoeq",
+                    "color_name": "orange",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#FF4800",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "widoI9abfJpNukxO03eZ",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 53.99,
+                        "USD": 59.99
+                    },
+                    "color_hex": "#EAEAE4",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "Nl3RPndY0IkAIKAexen5",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-aero",
+            "name": "Bambu PLA Aero",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA11",
+            "material": "PLA",
+            "sub_material": "PLA Aero",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 220,
+            "base_max_nozzle_temp": 260,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.21,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "4iDgqpbdXniMt99nViDY",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 36.89,
+                        "USD": 44.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "e0UC1jtH2H23j0kZ7w69",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 40.99,
+                        "USD": 44.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "eC7G9CVfYNThAU3Ga6TB",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 36.89,
+                        "USD": 44.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "QGdStlr6pw7JESBOfuFv",
+            "features": [],
+            "link": "https://store.bambulab.com/products/asa-cf",
+            "name": "Bambu ASA-CF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFB51",
+            "material": "ASA",
+            "sub_material": "ASA-CF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 250,
+            "base_max_nozzle_temp": 280,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 100,
+            "base_density": 1.02,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "Zsy7fbimb3zTjYeFx50N",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 33.99,
+                        "USD": 36.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "S1QNiQFLgIJUrgcPpjxQ",
+            "features": [],
+            "link": "https://store.bambulab.com/products/petg-cf",
+            "name": "Bambu PETG-CF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFG50",
+            "material": "PETG",
+            "sub_material": "PETG-CF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 240,
+            "base_max_nozzle_temp": 270,
+            "base_min_bed_temp": 65,
+            "base_max_bed_temp": 75,
+            "base_density": 1.25,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "N1U9K7Im7BFdwho9N6BR",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "O6CP19SKAp0aW9OwihvM",
+                    "color_name": "brick red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#9f332a",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "hSZTORXXUIDhJyeEFWon",
+                    "color_name": "black",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 28.99,
+                        "USD": 31.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "rjQIH7z7IwxaqYOfqLFu",
+                    "color_name": "indigo blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#324585",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "tiFX0qja3JBwl3fbSV23",
+                    "color_name": "titan gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#565656",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ybI6bp5QLIRQufoZDRXk",
+                    "color_name": "violet purple",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#583061",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "zsTvhDoNJvtQtKYrYUoR",
+                    "color_name": "malachite green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#16b08e",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "TnBXHIN8Uk1X8tFyqsuP",
+            "features": [],
+            "link": "https://store.bambulab.com/products/support-for-pa-pet",
+            "name": "Bambu Support for PA PET",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFS03",
+            "material": "Support",
+            "sub_material": "Support for PA/PET",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 280,
+            "base_max_nozzle_temp": 300,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 110,
+            "base_density": 1.17,
+            "base_weight": 500,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "5tDnCMvLMgxB0ZPzgWtk",
+                    "color_name": "green",
+                    "product_type": "filament with spool",
+                    "weight": 500,
+                    "price": {
+                        "GBP": 35.99,
+                        "USD": 39.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "Vq2Pr1uorpcCHgyylTzE",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-sparkle",
+            "name": "Bambu PLA Sparkle",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA08",
+            "material": "PLA",
+            "sub_material": "PLA Sparkle",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.26,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "CmTECyNxn4qFGOBI3G8U",
+                    "color_name": "classic gold sparkle",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#CEA629",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "KN6TVEIS5d78mHexFBek",
+                    "color_name": "crimson red sparkle",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#792B36",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "P18O3ODJGCl3qBEPMqhD",
+                    "color_name": "royal purple sparkle",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#483D8B",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "QkRmGUz7IRVhT4rhACih",
+                    "color_name": "alpine green sparkle",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#3F5443",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Tv6v3iNCmlXNSkrEascu",
+                    "color_name": "onyx black sparkle",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#2D2B28",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "tRQbke5TfYF1DCKVV6N6",
+                    "color_name": "slate gray sparkle",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#8E9089",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "bhiZGXWsIAj6OKGBontE",
+            "features": [],
+            "link": "https://store.bambulab.com/products/abs-gf",
+            "name": "Bambu ABS-GF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFB50",
+            "material": "ABS",
+            "sub_material": "ABS-GF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 240,
+            "base_max_nozzle_temp": 270,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 100,
+            "base_density": 1.08,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "0EdVfpynO5rwuvsgHYrG",
+                    "color_name": "red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#E83100",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "0PsfWmIJuVFKLnbMYlEl",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#C6C6C6",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "8xJI1EodFj5QnWB0zI7V",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#0C3B95",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "HefHAL8euiEmLgwt2208",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "VMJWYCWhqChHy5kJWk2L",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#FFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "lKTWHHSDVNofw2HeATSO",
+                    "color_name": "orange",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#F48438",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ufeeQra7dxBeDtPCuxPm",
+                    "color_name": "yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#FFE133",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "yAuHwIk0e7prgGPHFPCa",
+                    "color_name": "green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#61BF36",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "fiXOPtd0MWi5n42D1Dlo",
+            "features": [],
+            "link": "https://store.bambulab.com/products/paht-cf",
+            "name": "Bambu PAHT-CF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFN04",
+            "material": "PAHT",
+            "sub_material": "PAHT-CF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 260,
+            "base_max_nozzle_temp": 290,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 100,
+            "base_density": 1.06,
+            "base_weight": 500,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "8qSf7pcS0z34sHrjpJtr",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 500,
+                    "price": {
+                        "GBP": 45.99,
+                        "USD": 49.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "t81a8ICXYV9N8D24X3H3",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 87.99,
+                        "USD": 49.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "hjvAEHx6TgrvcRJiXbJe",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-basic-filament",
+            "name": "Bambu PLA Basic",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA00",
+            "material": "PLA",
+            "sub_material": "",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.24,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "1mq5C3PRa7OkXtc3quzx",
+                    "color_name": "mistletoe green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#3F8E43",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "3GoDwWQSF1pV7i0GBG94",
+                    "color_name": "indigo purple",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#482960",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "45O6d58flol319jcC5kn",
+                    "color_name": "beige",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F7E6DE",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "4zPDJ0T5Fl5rTyUHU0PF",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#0A2989",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "6NqfUEnZBLNLqwZx4p1W",
+                    "color_name": "sunflower yellow",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FEC600",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "7Fn2BcYSaV1OrDZTjTdY",
+                    "color_name": "cocoa brown",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#6F5034",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "8cPLpuwN03TVaeinLdHy",
+                    "color_name": "jade white",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "8cnRlz3Nscz2TZGeVqiP",
+                    "color_name": "hot pink",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#F5547C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Aq6BiOmJyEnodlyM1iqM",
+                    "color_name": "cyan",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0086D6",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "D75nQwWY40CjId3LzZc4",
+                    "color_name": "cocoa brown",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#6F5034",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "GqiCj712WdPOg49gNTTe",
+                    "color_name": "light gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#D1D3D5",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "GrzVFjvNiPz3btt1aqTX",
+                    "color_name": "bambu green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#00AE42",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "HHCcsm79k30vD7wwoVha",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "IbXeoGlVv57imuK8ZmqO",
+                    "color_name": "magenta",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#EC008C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "M1ZOjtZ7HEGpisvFM07P",
+                    "color_name": "brown",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#9D432C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "N90zd3DprXNYKlzmcedm",
+                    "color_name": "hot pink",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F5547C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "NcsGQiuF5X9GDeSVNllv",
+                    "color_name": "dark gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#545454",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "OKpu1YTXNAqLMYakynsb",
+                    "color_name": "blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0A2989",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "OZBMnX7xeSo2aIDCeDGW",
+                    "color_name": "blue grey",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0A2989",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Ok883gr1mKOPh4SgvQXp",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#8E9089",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Pxje3UWsxs3cRsbz6gLj",
+                    "color_name": "mistletoe green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#3F8E43",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "QLFGAa578iW7KCSwkQL8",
+                    "color_name": "pumpkin orange",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FF9016",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Qr12t8FtgMsMrL7EZ77A",
+                    "color_name": "purple",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#5E43B7",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "SrD2fgcQpDlJRlB5QcMg",
+                    "color_name": "cyan",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0086D6",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "TCtWG0tnICnSyZPm05gi",
+                    "color_name": "turquoise",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#00B1B7",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Ue28B4tvnslfDULHMswT",
+                    "color_name": "pumpkin orange",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#FF9016",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "UytGwGlyvYPUqHSg8di2",
+                    "color_name": "sunflower yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#FEC600",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "WHN7eyUFVCen9D2bUfn6",
+                    "color_name": "bambu green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#00AE42",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "XAyJZ9rh0fvKn1tscjUd",
+                    "color_name": "yellow",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F4EE2A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "YgPpLk5AoR1k0hkz1FZK",
+                    "color_name": "black",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ZAPFpe5M5NgSeB80YxOz",
+                    "color_name": "jade white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "apyKcTT1RTwZvN9NTatq",
+                    "color_name": "maroon red",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#9D2235",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "dN79FXs20VuIuwQWBXla",
+                    "color_name": "gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#8E9089",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "dg7UYncntANoGMMnpjlh",
+                    "color_name": "orange",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FF6A13",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "dhTJo2aDj3G1KR4rtPvv",
+                    "color_name": "indigo purple",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#482960",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "dzpnUmmBat7i92RshSaO",
+                    "color_name": "cobalt blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0056B8",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "eK6PewRNRfDaZi9Td09F",
+                    "color_name": "red",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#C12E1F",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ksTDn0UbycGrbcfxzmmP",
+                    "color_name": "gold",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#E4BD68",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "nIzvtV78El1hpsv1oMrH",
+                    "color_name": "bronze",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#847D48",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "oA7byytXqCrmxLhz34Rl",
+                    "color_name": "silver",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#A6A9AA",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "tRfW1hQI1KiIBFl1HRc9",
+                    "color_name": "red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#C12E1F",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ubgRsPRqRAK0CiJEtX46",
+                    "color_name": "bright green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#BECF00",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "yfYnJqcWgRV6CZzN4ebR",
+                    "color_name": "pink",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F55A74",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "lAqsTnPeHX7tzbf8ITqh",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-matte",
+            "name": "Bambu PLA Matte",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA01",
+            "material": "PLA",
+            "sub_material": "PLA Matte",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.31,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "39KJkSCNOymjWTmQgnQL",
+                    "color_name": "matte ivory white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "3xtCx5yYMZaGflRxKPIA",
+                    "color_name": "matte plum",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#950051",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "4AtrkZL9nVusDwoLOFes",
+                    "color_name": "matte lilac purple",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#AE96D4",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "5P2O13fDYT0DvW7hku5W",
+                    "color_name": "matte desert tan",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#E8DBB7",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "5WGVZQWTtsKMJhaNGkiK",
+                    "color_name": "matte nardo gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#757575",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "5dubqkcxyzJpBlt2jFmH",
+                    "color_name": "matte caramel",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#AE835B",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "6Nu62wbkXrHh4dDzRGTb",
+                    "color_name": "matte dark red",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#BB3D43",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "COe0piMl8ry7qqZt8xA1",
+                    "color_name": "matte ash grey",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "DeUIaYe8sk3GDWe1FbeY",
+                    "color_name": "matte dark blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#042F56",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Gh128XepSiqvGQGACfZX",
+                    "color_name": "matte apple green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#C2E189",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "HELzIiZJbpfDcCtwfrUr",
+                    "color_name": "matte dark chocolate",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#4D3324",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "UTL4oynoYTO0K72BiHQN",
+                    "color_name": "matte dark brown",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#7D6556",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "VGe2UXhaORctVyTvedep",
+                    "color_name": "matte charcoal",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "W8XO3yAMUHFfoKJdcZg8",
+                    "color_name": "matte sakura pink",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#E8AFCF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "WeL5iy2Ec2HgEo8NOHmn",
+                    "color_name": "matte ash grey",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Xz5GZE7hKMjiR3d1fEaT",
+                    "color_name": "matte sky blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#56B7E6",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "aARvdrNouIhZEjTwIGbZ",
+                    "color_name": "matte mandarin orange",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#F99963",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "d6Y0WxMGc3SV8qvQf4bF",
+                    "color_name": "matte marine blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#0078BF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "jF8O5l1P02JTMVb7u2Ks",
+                    "color_name": "matte charcoal",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "k1neyF25QuR2Tz7QC736",
+                    "color_name": "matte scarlet red",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#DE4343",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "kxlrOfhnNRu1J3J1dMzu",
+                    "color_name": "matte ice blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#A3D8E1",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "lSQZ17hWlSEyTuR99rRp",
+                    "color_name": "matte ivory white",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "obboDiRdLCwXi13cegdr",
+                    "color_name": "matte grass green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#61C680",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "pfQgbFV3ONI2P40hbtpo",
+                    "color_name": "matte marine blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0078BF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "qJ9C8hHjgbUERjBnEkWW",
+                    "color_name": "matte scarlet red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#DE4343",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "spk90b0EXj1hUCk9LjBA",
+                    "color_name": "matte terracotta",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#B15533",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "uhQpeFruVpYyqnrqXdZF",
+                    "color_name": "matte latte brown",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#D3B7A7",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "uqXkLUrg3vSOO2yysEZ3",
+                    "color_name": "matte lemon yellow",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F7D959",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "vDAU2XEhU3KErBjTBh9x",
+                    "color_name": "matte mandarin orange",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#F99963",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "vIl8IKhnTa8kLEs5Nr2l",
+                    "color_name": "matte dark green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#68724D",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "wy4fNwfi1PLvflGdDzSo",
+                    "color_name": "matte bone white",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#CBC6B8",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "m5gnUHZeCvox6cZDLcbk",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pa6-cf",
+            "name": "Bambu PA6-CF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFN05",
+            "material": "PA6",
+            "sub_material": "PA6-CF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 260,
+            "base_max_nozzle_temp": 290,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 100,
+            "base_density": 1.09,
+            "base_weight": 500,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "sV1sqYWg7wAkpmYEHbMt",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 70.99,
+                        "USD": 42.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "txMuGIjzKMfpKeB9pwmf",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 500,
+                    "price": {
+                        "GBP": 37.99,
+                        "USD": 42.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "m6WNDVcDwcwvEDUGrGyB",
+            "features": [],
+            "link": "https://store.bambulab.com/products/abs-filament",
+            "name": "Bambu ABS",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFB00",
+            "material": "ABS",
+            "sub_material": "",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 240,
+            "base_max_nozzle_temp": 270,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 100,
+            "base_density": 1.05,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "02D95Kfwb0a51DAZ1Fg4",
+                    "color_name": "orange",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FF6A13",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "0ejTC6pv7ghblzqK9grh",
+                    "color_name": "beige",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99
+                    },
+                    "color_hex": "#DFD1A7",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "33VyDS4ilbmuwqIZ0ReI",
+                    "color_name": "olive",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#789D4A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "4m64hBuWbsCdPpPcBsNH",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "7TOwpAHo0Whl8sTk2qBp",
+                    "color_name": "azure",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#489FDF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "7eLFv6Q4Fc1jxwFFae1h",
+                    "color_name": "silver",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#87909A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "85zOUirCuOFBLB2kk1ga",
+                    "color_name": "blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0A2CA5",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "8SzmZsn6XVFBlLq62ECm",
+                    "color_name": "red",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#D32941",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Bb9CMIy6ZWNa75x32m7j",
+                    "color_name": "red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#D32941",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "CxDYuDNPKtjr7O4jWLKw",
+                    "color_name": "bambu green",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#00AE42",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "EyvUcJIKSkyzQiJpspmU",
+                    "color_name": "silver",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#87909A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "FYwN5usZRvpM0r1FJoZa",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0A2CA5",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "PAxoFmXxcyGuvZ4cMzvO",
+                    "color_name": "olive",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#789D4A",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "VSnvsTzTBAogEsxmjcL4",
+                    "color_name": "navy blue",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0C2340",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "WukIcmrSmgZCEje2f2AQ",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "c6Rsv1GQ3IV4jdFxamQ3",
+                    "color_name": "tangerine yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FFC72C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "kFFf4ZnXLgMFlNcWterH",
+                    "color_name": "tangerine yellow",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FFC72C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "kFOeUCtHNoDsQsc73YAz",
+                    "color_name": "navy blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#0C2340",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "lOS7rFdqk7I81INlx0oQ",
+                    "color_name": "bambu green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#00AE42",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "qPxnyfynoTnYh8G8PTzU",
+                    "color_name": "lavender",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99
+                    },
+                    "color_hex": "#7248BD",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "quVAe5Nusxw6fK7AvoFi",
+                    "color_name": "white",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 22.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ycbtzLPoUdAAJ7dNpAPJ",
+                    "color_name": "azure",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#489FDF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "yqY9j7Y9weMlUzoe91F5",
+                    "color_name": "black",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "z5sEqVcBxOx0KD5SiEI9",
+                    "color_name": "orange",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 17.99,
+                        "USD": 19.99
+                    },
+                    "color_hex": "#FF6A13",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "ncRwrMTtpRz2dmsF0EtY",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-silk",
+            "name": "Bambu PLA Silk",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA05",
+            "material": "PLA",
+            "sub_material": "PLA Silk",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 210,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.32,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "0EpZi4tvg8MIubUje1Q8",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "95XDSEYTOBBExIa0e0ik",
+                    "color_name": "copper",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#5E4B3C",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Dahp4LOUnxmjVltSHIL6",
+                    "color_name": "purple",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#854CE4",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "E3c9uayBtq1M7HiElKhh",
+                    "color_name": "pink",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#EEB1C1",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Ep9YSJeCmFLVlNozZoGi",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#147BD1",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "KrKt2ZLc3hfAuVzlCvHI",
+                    "color_name": "green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#4CE4A0",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "rMBdWocFJegs8ew3J574",
+                    "color_name": "gold",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#E5B03D",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "w10EDzPYcyUqsqJP9s1K",
+                    "color_name": "silver",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#EAECEB",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "o1vUmVM5zVVhPcmOWyxn",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pva",
+            "name": "Bambu PVA",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFS04",
+            "material": "PVA",
+            "sub_material": "",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 220,
+            "base_max_nozzle_temp": 250,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.27,
+            "base_weight": 500,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "ztIgm3Qx0LJskowFQxZv",
+                    "color_name": "clear",
+                    "product_type": "filament with spool",
+                    "weight": 500,
+                    "price": {
+                        "GBP": 35.99,
+                        "USD": 39.99
+                    },
+                    "color_hex": "#F0F1A8",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "pc8m6QOjJ0cyuWP0PoQY",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-cf",
+            "name": "Bambu PLA-CF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA50",
+            "material": "PLA",
+            "sub_material": "PLA-CF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 210,
+            "base_max_nozzle_temp": 240,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.22,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "HzIjnlQdlOH5aY91nL3z",
+                    "color_name": "burgundy red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#951e23",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "JixjVBWcO19XLSGfIEOs",
+                    "color_name": "lava gray",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 28.99,
+                        "USD": 31.99
+                    },
+                    "color_hex": "#4d5054",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Kz1B6rP9k6DBzv0GDTtq",
+                    "color_name": "lava gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#4d5054",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "QofMWOV0SUJSKEWMv3pB",
+                    "color_name": "jeans blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#6e88bc",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "QshjgmzcWOaHeReH9E2R",
+                    "color_name": "royal blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#2842AD",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "XRNIDZEdI27Vkh5uEWqs",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "gPjKwM6W9l91Gt6bHsnh",
+                    "color_name": "iris purple",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#69398E",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "nOyWreEqjaADmVLpBJyL",
+                    "color_name": "matcha green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 32.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "#5c9748",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "sPam5bNuyWIklOtsQtgo",
+                    "color_name": "black",
+                    "product_type": "refill",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 28.99,
+                        "USD": 31.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "qwghYkMa4wCGDW32Hj04",
+            "features": [],
+            "link": "https://store.bambulab.com/products/support-for-pla-petg",
+            "name": "Bambu Support For PLA/PETG",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFS05",
+            "material": "Support",
+            "sub_material": "Support For PLA-PETG",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 220,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 60,
+            "base_density": 1.28,
+            "base_weight": 500,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "L4utO6iBP0ql8PFFJUf4",
+                    "color_name": "nature",
+                    "product_type": "filament with spool",
+                    "weight": 500,
+                    "price": {
+                        "GBP": 30.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "oHd1cjP1aQAmjLZh8qBy",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 500,
+                    "price": {
+                        "GBP": 30.99,
+                        "USD": 34.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "svGKzjKG1aTZUHEG5IgW",
+            "features": [],
+            "link": "https://store.bambulab.com/products/tpu-95a-hf",
+            "name": "Bambu TPU 95A-HF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFU00",
+            "material": "TPU",
+            "sub_material": "TPU 95A-HF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 230,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 30,
+            "base_max_bed_temp": 35,
+            "base_density": 1.22,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "IIaHccArqdZMuyj2lMKI",
+                    "color_name": "red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 38.99,
+                        "USD": 41.99
+                    },
+                    "color_hex": "#C8102E",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "JrtEKuNQQIsArO5r9ueL",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 38.99,
+                        "USD": 41.99
+                    },
+                    "color_hex": "#101820",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "MzsXKP60F7MHOBQw5gND",
+                    "color_name": "yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 38.99,
+                        "USD": 41.99
+                    },
+                    "color_hex": "#F3E600",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "bKhH66ci660TdN3U9MTZ",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 38.99,
+                        "USD": 41.99
+                    },
+                    "color_hex": "#FFFFFF",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "uCqUQb3KqKiPqCP1bswj",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 38.99,
+                        "USD": 41.99
+                    },
+                    "color_hex": "#0072CE",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "uZII0oQwyfgBQVX14H7V",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 38.99,
+                        "USD": 41.99
+                    },
+                    "color_hex": "#898D8D",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "tIMXQVzSBpwGgrjgfDp6",
+            "features": [],
+            "link": "https://store.bambulab.com/products/ppa-cf",
+            "name": "Bambu PPA-CF",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFN06",
+            "material": "PPA",
+            "sub_material": "PPA-CF",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 280,
+            "base_max_nozzle_temp": 310,
+            "base_min_bed_temp": 100,
+            "base_max_bed_temp": 120,
+            "base_density": 1.25,
+            "base_weight": 750,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "HPGGn4PaBCeL1jjMXUni",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 750,
+                    "price": {
+                        "GBP": 132.99,
+                        "USD": 149.99
+                    },
+                    "color_hex": "",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "tcCDeWUW4rH6xt8xmAON",
+            "features": [],
+            "link": "https://store.bambulab.com/products/asa-filament",
+            "name": "Bambu ASA",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFB01",
+            "material": "ASA",
+            "sub_material": "",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 240,
+            "base_max_nozzle_temp": 270,
+            "base_min_bed_temp": 80,
+            "base_max_bed_temp": 100,
+            "base_density": 1.05,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "3xxwfKc4BlGyNyegMqUf",
+                    "color_name": "black",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 27.99,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#000000",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "GCSUbMRNmzQy2VyLTVOx",
+                    "color_name": "red",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 25.19,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#E02928",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "igwMwJkJFutuq3tTs9gh",
+                    "color_name": "gray",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 25.19,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#8A949E",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "m1UwyRvlitABmzUFAZ4k",
+                    "color_name": "green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 25.19,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#00A6A0",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "ofO5VPrk6gI8utAkDsJd",
+                    "color_name": "white",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 25.19,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#FFFAF2",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "x8KzdT373wAxqf1EGtWT",
+                    "color_name": "blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 25.19,
+                        "USD": 29.99
+                    },
+                    "color_hex": "#2140B4",
+                    "diameter": 1.75
+                }
+            ]
+        },
+        {
+            "id": "ul2zTBau8GNNSCgn6vOM",
+            "features": [],
+            "link": "https://store.bambulab.com/products/pla-glow",
+            "name": "Bambu PLA Glow",
+            "manufacturer": "Bambu Lab",
+            "manufacturer_id": "GFA12",
+            "material": "PLA",
+            "sub_material": "PLA Glow",
+            "base_diameter": 1.75,
+            "base_min_nozzle_temp": 190,
+            "base_max_nozzle_temp": 230,
+            "base_min_bed_temp": 35,
+            "base_max_bed_temp": 45,
+            "base_density": 1.26,
+            "base_weight": 1000,
+            "notes": "",
+            "variants": [
+                {
+                    "id": "OnJiak7ftCrf4ImLqHS3",
+                    "color_name": "glow yellow",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#F8FF80",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "Shu2wpEWEUZ3b5qQQ7z2",
+                    "color_name": "glow orange",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.69,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#FF9D5B",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "XWvJv5H27WgJ2ggbnSPX",
+                    "color_name": "glow pink",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 20.69,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#F17B8F",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "XdVTAcxSqosboGm20m9P",
+                    "color_name": "glow blue",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#7AC0E9",
+                    "diameter": 1.75
+                },
+                {
+                    "id": "giPvvYW64DJC2vNiNxrU",
+                    "color_name": "glow green",
+                    "product_type": "filament with spool",
+                    "weight": 1000,
+                    "price": {
+                        "GBP": 22.99,
+                        "USD": 24.99
+                    },
+                    "color_hex": "#A1FFAC",
+                    "diameter": 1.75
+                }
+            ]
+        }
+    ]
+}

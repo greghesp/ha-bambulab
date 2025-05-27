@@ -7,7 +7,8 @@ from .models import BambuLabEntity
 from .pybambu.const import Features
 
 from homeassistant.components.light import (
-    LightEntity
+    LightEntity,
+    ColorMode,
 )
 from .coordinator import BambuDataUpdateCoordinator
 
@@ -29,6 +30,8 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
     """ Defined the Chamber Light """
 
     _attr_icon = "mdi:led-strip-variant"
+    _attr_color_mode = ColorMode.ONOFF
+    _attr_supported_color_modes = {ColorMode.ONOFF}
 
     def __init__(
             self,
@@ -54,7 +57,7 @@ class BambuLabChamberLight(BambuLabEntity, LightEntity):
     @property
     def is_on(self) -> bool:
         """Return the state of the switch"""
-        if self.coordinator.get_model().lights.chamber_light == "on":
+        if self.coordinator.get_model().lights.is_chamber_light_on:
             return True
         return False
 

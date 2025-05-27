@@ -1,0 +1,857 @@
+{
+  "GFA00": {
+    "name": "Bambu PLA Basic",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.26,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA01": {
+    "name": "Bambu PLA Matte",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.32,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA02": {
+    "name": "Bambu PLA Metal",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.25,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA03": {
+    "name": "Bambu PLA Impact",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA05": {
+    "name": "Bambu PLA Silk",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.32,
+    "nozzle_temperature": 230,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA06": {
+    "name": "Bambu PLA Silk+",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.27,
+    "nozzle_temperature": 230,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA07": {
+    "name": "Bambu PLA Marble",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.22,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA08": {
+    "name": "Bambu PLA Sparkle",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.26,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA09": {
+    "name": "Bambu PLA Tough",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.26,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA11": {
+    "name": "Bambu PLA Aero",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA-AERO",
+    "filament_density": 1.21,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 260,
+    "nozzle_temperature_range_low": 210
+  },
+  "GFA12": {
+    "name": "Bambu PLA Glow",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.26,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA13": {
+    "name": "Bambu PLA Dynamic",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.26,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA15": {
+    "name": "Bambu PLA Galaxy",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.19,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA16": {
+    "name": "Bambu PLA Wood",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.21,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFA50": {
+    "name": "Bambu PLA-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA-CF",
+    "filament_density": 1.22,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 210
+  },
+  "GFB00": {
+    "name": "Bambu ABS",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "ABS",
+    "filament_density": 1.04,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFB01": {
+    "name": "Bambu ASA",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "ASA",
+    "filament_density": 1.05,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFB02": {
+    "name": "Bambu ASA-Aero",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "ASA-Aero",
+    "filament_density": 0.99,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFB50": {
+    "name": "Bambu ABS-GF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "ABS-GF",
+    "filament_density": 1.08,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFB51": {
+    "name": "Bambu ASA-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "ASA-CF",
+    "filament_density": 1.02,
+    "nozzle_temperature": 275,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 250
+  },
+  "GFB60": {
+    "name": "PolyLite ABS",
+    "filament_vendor": "Polymaker",
+    "filament_type": "ABS",
+    "filament_density": 1.03,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFB61": {
+    "name": "PolyLite ASA",
+    "filament_vendor": "Polymaker",
+    "filament_type": "ASA",
+    "filament_density": 1.02,
+    "nozzle_temperature": 260,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFB98": {
+    "name": "Generic ASA",
+    "filament_vendor": "Generic",
+    "filament_type": "ASA",
+    "filament_density": 1.04,
+    "nozzle_temperature": 260,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFB99": {
+    "name": "Generic ABS",
+    "filament_vendor": "Generic",
+    "filament_type": "ABS",
+    "filament_density": 1.04,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFC00": {
+    "name": "Bambu PC",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PC",
+    "filament_density": 1.04,
+    "nozzle_temperature": 280,
+    "nozzle_temperature_range_high": 290,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFC01": {
+    "name": "Bambu PC FR",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PC",
+    "filament_density": 1.19,
+    "nozzle_temperature": 280,
+    "nozzle_temperature_range_high": 290,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFC99": {
+    "name": "Generic PC",
+    "filament_vendor": "Generic",
+    "filament_type": "PC",
+    "filament_density": 1.04,
+    "nozzle_temperature": 280,
+    "nozzle_temperature_range_high": 290,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFG00": {
+    "name": "Bambu PETG Basic",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PETG",
+    "filament_density": 1.25,
+    "nozzle_temperature": 255,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 230
+  },
+  "GFG01": {
+    "name": "Bambu PETG Translucent",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PETG",
+    "filament_density": 1.25,
+    "nozzle_temperature": 245,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 230
+  },
+  "GFG02": {
+    "name": "Bambu PETG HF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PETG",
+    "filament_density": 1.28,
+    "nozzle_temperature": 245,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 230
+  },
+  "GFG50": {
+    "name": "Bambu PETG-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PETG-CF",
+    "filament_density": 1.25,
+    "nozzle_temperature": 255,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFG60": {
+    "name": "PolyLite PETG",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PETG",
+    "filament_density": 1.27,
+    "nozzle_temperature": 255,
+    "nozzle_temperature_range_high": 260,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFG96": {
+    "name": "Generic PETG HF",
+    "filament_vendor": "Generic",
+    "filament_type": "PETG",
+    "filament_density": 1.28,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFG97": {
+    "name": "Generic PCTG",
+    "filament_vendor": "Generic",
+    "filament_type": "PCTG",
+    "filament_density": 1.29,
+    "nozzle_temperature": 255,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFG98": {
+    "name": "Generic PETG-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PETG-CF",
+    "filament_density": 1.25,
+    "nozzle_temperature": 255,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFG99": {
+    "name": "Generic PETG",
+    "filament_vendor": "Generic",
+    "filament_type": "PETG",
+    "filament_density": 1.27,
+    "nozzle_temperature": 255,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFL00": {
+    "name": "PolyLite PLA",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PLA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL01": {
+    "name": "PolyTerra PLA",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PLA",
+    "filament_density": 1.31,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL03": {
+    "name": "eSUN PLA+",
+    "filament_vendor": "eSUN",
+    "filament_type": "PLA",
+    "filament_density": 1.25,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL04": {
+    "name": "Overture PLA",
+    "filament_vendor": "Overture",
+    "filament_type": "PLA",
+    "filament_density": 1.2,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL05": {
+    "name": "Overture Matte PLA",
+    "filament_vendor": "Overture",
+    "filament_type": "PLA",
+    "filament_density": 1.22,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL06": {
+    "name": "Fiberon PETG-ESD",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PETG",
+    "filament_density": 1.24,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 290,
+    "nozzle_temperature_range_low": 250
+  },
+  "GFL50": {
+    "name": "Fiberon PA6-CF",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PA6-CF",
+    "filament_density": 1.17,
+    "nozzle_temperature": 300,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 280
+  },
+  "GFL51": {
+    "name": "Fiberon PA6-GF",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PA-GF",
+    "filament_density": 1.2,
+    "nozzle_temperature": 300,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 280
+  },
+  "GFL52": {
+    "name": "Fiberon PA12-CF",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PA-CF",
+    "filament_density": 1.06,
+    "nozzle_temperature": 300,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFL53": {
+    "name": "Fiberon PA612-CF",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PA",
+    "filament_density": 1.06,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFL54": {
+    "name": "Fiberon PET-CF",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PET-CF",
+    "filament_density": 1.34,
+    "nozzle_temperature": 300,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 270
+  },
+  "GFL55": {
+    "name": "Fiberon PETG-rCF",
+    "filament_vendor": "Polymaker",
+    "filament_type": "PETG-CF",
+    "filament_density": 1.3,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFL95": {
+    "name": "Generic PLA High Speed",
+    "filament_vendor": "Generic",
+    "filament_type": "PLA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL96": {
+    "name": "Generic PLA Silk",
+    "filament_vendor": "Generic",
+    "filament_type": "PLA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL98": {
+    "name": "Generic PLA-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PLA-CF",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFL99": {
+    "name": "Generic PLA",
+    "filament_vendor": "Generic",
+    "filament_type": "PLA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFN03": {
+    "name": "Bambu PA-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PA-CF",
+    "filament_density": 1.09,
+    "nozzle_temperature": 280,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFN04": {
+    "name": "Bambu PAHT-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PA-CF",
+    "filament_density": 1.06,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFN05": {
+    "name": "Bambu PA6-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PA6-CF",
+    "filament_density": 1.1,
+    "nozzle_temperature": 275,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFN06": {
+    "name": "Bambu PPA-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PPA-CF",
+    "filament_density": 1.17,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 320,
+    "nozzle_temperature_range_low": 280
+  },
+  "GFN08": {
+    "name": "Bambu PA6-GF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PA-GF",
+    "filament_density": 1.14,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFN96": {
+    "name": "Generic PPA-GF",
+    "filament_vendor": "Generic",
+    "filament_type": "PPA-GF",
+    "filament_density": 1.17,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 320,
+    "nozzle_temperature_range_low": 280
+  },
+  "GFN97": {
+    "name": "Generic PPA-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PPA-CF",
+    "filament_density": 1.17,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 320,
+    "nozzle_temperature_range_low": 280
+  },
+  "GFN98": {
+    "name": "Generic PA-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PA-CF",
+    "filament_density": 1.04,
+    "nozzle_temperature": 290,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFN99": {
+    "name": "Generic PA",
+    "filament_vendor": "Generic",
+    "filament_type": "PA",
+    "filament_density": 1.04,
+    "nozzle_temperature": 260,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFP95": {
+    "name": "Generic PP-GF",
+    "filament_vendor": "Generic",
+    "filament_type": "PP-GF",
+    "filament_density": 1.05,
+    "nozzle_temperature": 235,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFP96": {
+    "name": "Generic PP-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PP-CF",
+    "filament_density": 1.01,
+    "nozzle_temperature": 235,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFP97": {
+    "name": "Generic PP",
+    "filament_vendor": "Generic",
+    "filament_type": "PP",
+    "filament_density": 0.93,
+    "nozzle_temperature": 235,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFP98": {
+    "name": "Generic PE-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PE-CF",
+    "filament_density": 0.95,
+    "nozzle_temperature": 210,
+    "nozzle_temperature_range_high": 220,
+    "nozzle_temperature_range_low": 175
+  },
+  "GFP99": {
+    "name": "Generic PE",
+    "filament_vendor": "Generic",
+    "filament_type": "PE",
+    "filament_density": 0.95,
+    "nozzle_temperature": 210,
+    "nozzle_temperature_range_high": 220,
+    "nozzle_temperature_range_low": 175
+  },
+  "GFR98": {
+    "name": "Generic PHA",
+    "filament_vendor": "Generic",
+    "filament_type": "PHA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFR99": {
+    "name": "Generic EVA",
+    "filament_vendor": "Generic",
+    "filament_type": "EVA",
+    "filament_density": 0.94,
+    "nozzle_temperature": 210,
+    "nozzle_temperature_range_high": 220,
+    "nozzle_temperature_range_low": 175
+  },
+  "GFS00": {
+    "name": "Bambu Support W",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.3,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFS01": {
+    "name": "Bambu Support G",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PA",
+    "filament_density": 1.22,
+    "nozzle_temperature": 280,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFS02": {
+    "name": "Bambu Support For PLA",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.3,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFS03": {
+    "name": "Bambu Support For PA/PET",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PA",
+    "filament_density": 1.22,
+    "nozzle_temperature": 280,
+    "nozzle_temperature_range_high": 300,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFS04": {
+    "name": "Bambu PVA",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PVA",
+    "filament_density": 1.27,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 210
+  },
+  "GFS05": {
+    "name": "Bambu Support For PLA/PETG",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PLA",
+    "filament_density": 1.19,
+    "nozzle_temperature": 210,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFS06": {
+    "name": "Bambu Support for ABS",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "ABS",
+    "filament_density": 1.04,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFS97": {
+    "name": "Generic BVOH",
+    "filament_vendor": "Generic",
+    "filament_type": "BVOH",
+    "filament_density": 1.13,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFS98": {
+    "name": "Generic HIPS",
+    "filament_vendor": "Generic",
+    "filament_type": "HIPS",
+    "filament_density": 1.06,
+    "nozzle_temperature": 240,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFS99": {
+    "name": "Generic PVA",
+    "filament_vendor": "Generic",
+    "filament_type": "PVA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFSB98": {
+    "name": "Generic ASA",
+    "filament_vendor": "Generic",
+    "filament_type": "ASA",
+    "filament_density": 1.04,
+    "nozzle_temperature": 260,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFSB99": {
+    "name": "Generic ABS",
+    "filament_vendor": "Generic",
+    "filament_type": "ABS",
+    "filament_density": 1.04,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 280,
+    "nozzle_temperature_range_low": 240
+  },
+  "GFSC99": {
+    "name": "Generic PC",
+    "filament_vendor": "Generic",
+    "filament_type": "PC",
+    "filament_density": 1.04,
+    "nozzle_temperature": 280,
+    "nozzle_temperature_range_high": 290,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFSG99": {
+    "name": "Generic PETG",
+    "filament_vendor": "Generic",
+    "filament_type": "PETG",
+    "filament_density": 1.27,
+    "nozzle_temperature": 255,
+    "nozzle_temperature_range_high": 270,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFSL98": {
+    "name": "Generic PLA-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PLA-CF",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFSL99": {
+    "name": "Generic PLA",
+    "filament_vendor": "Generic",
+    "filament_type": "PLA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFSL99_01": {
+    "name": "Generic PLA Silk",
+    "filament_vendor": "Generic",
+    "filament_type": "PLA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFSS99": {
+    "name": "Generic PVA",
+    "filament_vendor": "Generic",
+    "filament_type": "PVA",
+    "filament_density": 1.24,
+    "nozzle_temperature": 220,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 190
+  },
+  "GFT01": {
+    "name": "Bambu PET-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PET-CF",
+    "filament_density": 1.29,
+    "nozzle_temperature": 270,
+    "nozzle_temperature_range_high": 290,
+    "nozzle_temperature_range_low": 260
+  },
+  "GFT02": {
+    "name": "Bambu PPS-CF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "PPS-CF",
+    "filament_density": 1.26,
+    "nozzle_temperature": 320,
+    "nozzle_temperature_range_high": 340,
+    "nozzle_temperature_range_low": 310
+  },
+  "GFT97": {
+    "name": "Generic PPS",
+    "filament_vendor": "Generic",
+    "filament_type": "PPS",
+    "filament_density": 1.36,
+    "nozzle_temperature": 320,
+    "nozzle_temperature_range_high": 340,
+    "nozzle_temperature_range_low": 300
+  },
+  "GFT98": {
+    "name": "Generic PPS-CF",
+    "filament_vendor": "Generic",
+    "filament_type": "PPS-CF",
+    "filament_density": 1.26,
+    "nozzle_temperature": 320,
+    "nozzle_temperature_range_high": 340,
+    "nozzle_temperature_range_low": 310
+  },
+  "GFU00": {
+    "name": "Bambu TPU 95A HF",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "TPU",
+    "filament_density": 1.22,
+    "nozzle_temperature": 230,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 200
+  },
+  "GFU01": {
+    "name": "Bambu TPU 95A",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "TPU",
+    "filament_density": 1.22,
+    "nozzle_temperature": 230,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 200
+  },
+  "GFU02": {
+    "name": "Bambu TPU for AMS",
+    "filament_vendor": "Bambu Lab",
+    "filament_type": "TPU-AMS",
+    "filament_density": 1.26,
+    "nozzle_temperature": 230,
+    "nozzle_temperature_range_high": 240,
+    "nozzle_temperature_range_low": 220
+  },
+  "GFU98": {
+    "name": "Generic TPU for AMS",
+    "filament_vendor": "Generic",
+    "filament_type": "TPU-AMS",
+    "filament_density": 1.26,
+    "nozzle_temperature": 230,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 200
+  },
+  "GFU99": {
+    "name": "Generic TPU",
+    "filament_vendor": "Generic",
+    "filament_type": "TPU",
+    "filament_density": 1.24,
+    "nozzle_temperature": 240,
+    "nozzle_temperature_range_high": 250,
+    "nozzle_temperature_range_low": 200
+  }
+}

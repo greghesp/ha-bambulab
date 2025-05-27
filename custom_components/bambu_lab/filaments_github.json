@@ -1,0 +1,5234 @@
+{
+  "Bambu ABS @base": {
+    "type": "filament",
+    "name": "Bambu ABS @base",
+    "inherits": "fdm_filament_abs",
+    "from": "system",
+    "filament_id": "GFB00",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ]
+  },
+  "Bambu ABS-GF @base": {
+    "type": "filament",
+    "name": "Bambu ABS-GF @base",
+    "inherits": "fdm_filament_abs",
+    "from": "system",
+    "filament_id": "GFB50",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_cooling_layer_time": [
+      "12"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.08"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_type": [
+      "ABS-GF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "overhang_fan_speed": [
+      "30"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "4"
+    ]
+  },
+  "Bambu ASA @base": {
+    "type": "filament",
+    "name": "Bambu ASA @base",
+    "inherits": "fdm_filament_asa",
+    "from": "system",
+    "filament_id": "GFB01",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "eng_plate_temp": [
+      "100"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "100"
+    ],
+    "fan_max_speed": [
+      "35"
+    ],
+    "filament_cost": [
+      "31.99"
+    ],
+    "filament_density": [
+      "1.05"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "18"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "100"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "100"
+    ],
+    "nozzle_temperature": [
+      "270"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "270"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "textured_plate_temp": [
+      "100"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "100"
+    ]
+  },
+  "Bambu ASA-Aero @base": {
+    "type": "filament",
+    "name": "Bambu ASA-Aero @base",
+    "inherits": "fdm_filament_asa",
+    "from": "system",
+    "filament_id": "GFB02",
+    "instantiation": "false",
+    "description": "This filament is only used to print models with a low density usually, and some special parameters are required. To get better printing quality, please refer to this wiki: ASA Aero Printing Guide.",
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "50"
+    ],
+    "fan_min_speed": [
+      "30"
+    ],
+    "filament_cost": [
+      "49.99"
+    ],
+    "filament_density": [
+      "0.99"
+    ],
+    "filament_flow_ratio": [
+      "0.52"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_retraction_length": [
+      "1.5"
+    ],
+    "filament_type": [
+      "ASA-Aero"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_wipe_distance": [
+      "5"
+    ],
+    "filament_z_hop_types": [
+      "Normal Lift"
+    ],
+    "nozzle_temperature": [
+      "270"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "270"
+    ],
+    "overhang_fan_speed": [
+      "50"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "0"
+    ],
+    "slow_down_layer_time": [
+      "5"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ]
+  },
+  "Bambu ASA-CF @base": {
+    "type": "filament",
+    "name": "Bambu ASA-CF @base",
+    "inherits": "fdm_filament_asa",
+    "from": "system",
+    "filament_id": "GFB51",
+    "instantiation": "false",
+    "eng_plate_temp": [
+      "100"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "100"
+    ],
+    "fan_max_speed": [
+      "25"
+    ],
+    "filament_cost": [
+      "36.99"
+    ],
+    "filament_density": [
+      "1.02"
+    ],
+    "filament_flow_ratio": [
+      "0.9"
+    ],
+    "filament_max_volumetric_speed": [
+      "18"
+    ],
+    "filament_type": [
+      "ASA-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "100"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "100"
+    ],
+    "nozzle_temperature": [
+      "275"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "275"
+    ],
+    "nozzle_temperature_range_low": [
+      "250"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "temperature_vitrification": [
+      "108"
+    ],
+    "textured_plate_temp": [
+      "100"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "100"
+    ]
+  },
+  "Bambu PA-CF @base": {
+    "type": "filament",
+    "name": "Bambu PA-CF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFN03",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "filament_cost": [
+      "84.99"
+    ],
+    "filament_density": [
+      "1.09"
+    ],
+    "filament_flow_ratio": [
+      "0.96"
+    ],
+    "filament_type": [
+      "PA-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "280"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "280"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "temperature_vitrification": [
+      "170"
+    ]
+  },
+  "Bambu PA6-CF @base": {
+    "type": "filament",
+    "name": "Bambu PA6-CF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFN05",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "79.99"
+    ],
+    "filament_density": [
+      "1.10"
+    ],
+    "filament_flow_ratio": [
+      "0.96"
+    ],
+    "filament_type": [
+      "PA6-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "275"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "275"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "temperature_vitrification": [
+      "170"
+    ]
+  },
+  "Bambu PA6-GF @base": {
+    "type": "filament",
+    "name": "Bambu PA6-GF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFN08",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "59.99"
+    ],
+    "filament_density": [
+      "1.14"
+    ],
+    "filament_flow_ratio": [
+      "0.96"
+    ],
+    "filament_type": [
+      "PA-GF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "full_fan_speed_layer": [
+      "2"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "temperature_vitrification": [
+      "180"
+    ]
+  },
+  "Bambu PAHT-CF @base": {
+    "type": "filament",
+    "name": "Bambu PAHT-CF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFN04",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "94.99"
+    ],
+    "filament_density": [
+      "1.06"
+    ],
+    "filament_flow_ratio": [
+      "0.96"
+    ],
+    "filament_type": [
+      "PA-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "full_fan_speed_layer": [
+      "2"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "temperature_vitrification": [
+      "180"
+    ]
+  },
+  "Bambu PC @base": {
+    "type": "filament",
+    "name": "Bambu PC @base",
+    "inherits": "fdm_filament_pc",
+    "from": "system",
+    "filament_id": "GFC00",
+    "instantiation": "false",
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_cost": [
+      "39.99"
+    ],
+    "filament_flow_ratio": [
+      "0.94"
+    ]
+  },
+  "Bambu PC FR @base": {
+    "type": "filament",
+    "name": "Bambu PC FR @base",
+    "inherits": "fdm_filament_pc",
+    "from": "system",
+    "filament_id": "GFC01",
+    "instantiation": "false",
+    "filament_cost": [
+      "0"
+    ],
+    "filament_density": [
+      "1.19"
+    ],
+    "filament_flow_ratio": [
+      "0.94"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ]
+  },
+  "Bambu PET-CF @base": {
+    "type": "filament",
+    "name": "Bambu PET-CF @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFT01",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "80"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "80"
+    ],
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "84.99"
+    ],
+    "filament_density": [
+      "1.29"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "filament_type": [
+      "PET-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "100"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "100"
+    ],
+    "nozzle_temperature": [
+      "270"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "270"
+    ],
+    "nozzle_temperature_range_high": [
+      "290"
+    ],
+    "nozzle_temperature_range_low": [
+      "260"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "supertack_plate_temp": [
+      "80"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "80"
+    ],
+    "slow_down_layer_time": [
+      "2"
+    ],
+    "temperature_vitrification": [
+      "185"
+    ],
+    "textured_plate_temp": [
+      "100"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "100"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PETG Basic @base": {
+    "type": "filament",
+    "name": "Bambu PETG Basic @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG00",
+    "instantiation": "false",
+    "description": "To get better transparent or translucent results with the corresponding filament, please refer to this wiki: Printing tips for transparent PETG.",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "40"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.25"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "nozzle_temperature_range_low": [
+      "230"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PETG HF @base": {
+    "type": "filament",
+    "name": "Bambu PETG HF @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG02",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "40"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.28"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "21"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature": [
+      "245"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "230"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "nozzle_temperature_range_low": [
+      "230"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PETG Translucent @base": {
+    "type": "filament",
+    "name": "Bambu PETG Translucent @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG01",
+    "instantiation": "false",
+    "description": "To get better transparent or translucent results with the corresponding filament, please refer to this wiki: Printing tips for transparent PETG.",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.25"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature": [
+      "245"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "250"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "nozzle_temperature_range_low": [
+      "230"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PETG-CF @base": {
+    "type": "filament",
+    "name": "Bambu PETG-CF @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG50",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "filament_cost": [
+      "34.99"
+    ],
+    "filament_density": [
+      "1.25"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "14"
+    ],
+    "filament_type": [
+      "PETG-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "nozzle_temperature_range_low": [
+      "240"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ],
+    "temperature_vitrification": [
+      "70"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Aero @base": {
+    "type": "filament",
+    "name": "Bambu PLA Aero @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA11",
+    "instantiation": "false",
+    "description": "This filament is only used to print models with a low density usually, and some special parameters are required. To get better printing quality, please refer to this wiki: Instructions for printing RC model with foaming PLA (PLA Aero).",
+    "fan_min_speed": [
+      "30"
+    ],
+    "filament_cost": [
+      "44.99"
+    ],
+    "filament_density": [
+      "1.21"
+    ],
+    "filament_flow_ratio": [
+      "0.6"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_type": [
+      "PLA-AERO"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "nozzle_temperature_range_low": [
+      "210"
+    ],
+    "nozzle_temperature_range_high": [
+      "260"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Basic @base": {
+    "type": "filament",
+    "name": "Bambu PLA Basic @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA00",
+    "instantiation": "false",
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "21"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_scarf_height": [
+      "10%"
+    ],
+    "filament_scarf_gap": [
+      "0%"
+    ],
+    "filament_scarf_length": [
+      "10"
+    ],
+    "compatible_printers": [],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Dynamic @base": {
+    "type": "filament",
+    "name": "Bambu PLA Dynamic @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA13",
+    "instantiation": "false",
+    "filament_cost": [
+      "31.99"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Galaxy @base": {
+    "type": "filament",
+    "name": "Bambu PLA Galaxy @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA15",
+    "instantiation": "false",
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.19"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "21"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Glow @base": {
+    "type": "filament",
+    "name": "Bambu PLA Glow @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA12",
+    "instantiation": "false",
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "18"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "temperature_vitrification": [
+      "45"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Impact @base": {
+    "type": "filament",
+    "name": "Bambu PLA Impact @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA03",
+    "instantiation": "false",
+    "filament_cost": [
+      "25.4"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Marble @base": {
+    "type": "filament",
+    "name": "Bambu PLA Marble @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA07",
+    "instantiation": "false",
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Matte @base": {
+    "type": "filament",
+    "name": "Bambu PLA Matte @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA01",
+    "instantiation": "false",
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.32"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_scarf_height": [
+      "5%"
+    ],
+    "filament_scarf_gap": [
+      "0%"
+    ],
+    "filament_scarf_length": [
+      "10"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Metal @base": {
+    "type": "filament",
+    "name": "Bambu PLA Metal @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA02",
+    "instantiation": "false",
+    "description": "To make the prints get higher gloss, please dry the filament before use, and set the outer wall speed to be 40 to 60 mm/s when slicing.",
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.25"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Silk @base": {
+    "type": "filament",
+    "name": "Bambu PLA Silk @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA05",
+    "instantiation": "false",
+    "description": "To make the prints get higher gloss, please dry the filament before use, and set the outer wall speed to be 40 to 60 mm/s when slicing.",
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.32"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_height": [
+      "5%"
+    ],
+    "filament_scarf_gap": [
+      "0%"
+    ],
+    "nozzle_temperature": [
+      "230"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "230"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Silk+ @base": {
+    "type": "filament",
+    "name": "Bambu PLA Silk+ @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA06",
+    "instantiation": "false",
+    "description": "To make the prints get higher gloss, please dry the filament before use, and set the outer wall speed to be 40 to 60 mm/s when slicing.",
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.27"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_scarf_height": [
+      "5%"
+    ],
+    "filament_scarf_seam_type": [
+      "all"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "230"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "230"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Sparkle @base": {
+    "type": "filament",
+    "name": "Bambu PLA Sparkle @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA08",
+    "instantiation": "false",
+    "filament_cost": [
+      "29.99"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Tough @base": {
+    "type": "filament",
+    "name": "Bambu PLA Tough @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA09",
+    "instantiation": "false",
+    "filament_cost": [
+      "28.99"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Wood @base": {
+    "type": "filament",
+    "name": "Bambu PLA Wood @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA16",
+    "instantiation": "false",
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.21"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_long_retractions_when_cut": [
+      "1"
+    ],
+    "filament_max_volumetric_speed": [
+      "18"
+    ],
+    "filament_retraction_distances_when_cut": [
+      "18"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA-CF @base": {
+    "type": "filament",
+    "name": "Bambu PLA-CF @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA50",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "45"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "45"
+    ],
+    "filament_cost": [
+      "34.99"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_type": [
+      "PLA-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature_range_low": [
+      "210"
+    ],
+    "nozzle_temperature_range_high": [
+      "250"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "supertack_plate_temp": [
+      "50"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "50"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PPA-CF @base": {
+    "type": "filament",
+    "name": "Bambu PPA-CF @base",
+    "inherits": "fdm_filament_ppa",
+    "from": "system",
+    "filament_id": "GFN06",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials."
+  },
+  "Bambu PPS-CF @base": {
+    "type": "filament",
+    "name": "Bambu PPS-CF @base",
+    "inherits": "fdm_filament_pps",
+    "from": "system",
+    "filament_id": "GFT02",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_max_speed": [
+      "30"
+    ],
+    "filament_cost": [
+      "175"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_type": [
+      "PPS-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature_range_low": [
+      "310"
+    ],
+    "overhang_fan_threshold": [
+      "25%"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "temperature_vitrification": [
+      "220"
+    ]
+  },
+  "Bambu PVA @base": {
+    "type": "filament",
+    "name": "Bambu PVA @base",
+    "inherits": "fdm_filament_pva",
+    "from": "system",
+    "filament_id": "GFS04",
+    "instantiation": "false",
+    "description": "This is a water-soluble support filament, and usually it is only for the support structure and not for the model body. Printing this filament is of many requirements, and to get better printing quality, please refer to this wiki: PVA Printing Guide.",
+    "filament_cost": [
+      "79.98"
+    ],
+    "filament_density": [
+      "1.27"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature_range_high": [
+      "250"
+    ],
+    "nozzle_temperature_range_low": [
+      "210"
+    ],
+    "slow_down_layer_time": [
+      "7"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ]
+  },
+  "Bambu Support For PA/PET @base": {
+    "type": "filament",
+    "name": "Bambu Support For PA/PET @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFS03",
+    "instantiation": "false",
+    "description": "This is a non-water-soluble support filament, and usually it is only for the support structure and not for the model body. To get better printing quality, please refer to this wiki: Printing Tips for Support Filament and Support Function.",
+    "fan_cooling_layer_time": [
+      "10"
+    ],
+    "filament_cost": [
+      "34.99"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "280"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "280"
+    ],
+    "required_nozzle_HRC": [
+      "3"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ]
+  },
+  "Bambu Support For PLA @base": {
+    "type": "filament",
+    "name": "Bambu Support For PLA @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFS02",
+    "instantiation": "false",
+    "description": "This is a non-water-soluble support filament, and usually it is only for the support structure and not for the model body. To get better printing quality, please refer to this wiki: Printing Tips for Support Filament and Support Function.",
+    "cool_plate_temp": [
+      "40"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "40"
+    ],
+    "filament_cost": [
+      "69.98"
+    ],
+    "filament_density": [
+      "1.30"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu Support For PLA/PETG @base": {
+    "type": "filament",
+    "name": "Bambu Support For PLA/PETG @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFS05",
+    "instantiation": "false",
+    "description": "This is a non-water-soluble support filament, and usually it is only for the support structure and not for the model body. To get better printing quality, please refer to this wiki: Printing Tips for Support Filament and Support Function.",
+    "fan_cooling_layer_time": [
+      "80"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "20"
+    ],
+    "filament_cost": [
+      "69.98"
+    ],
+    "filament_density": [
+      "1.19"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "60"
+    ],
+    "nozzle_temperature": [
+      "210"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "210"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "textured_plate_temp": [
+      "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "60"
+    ]
+  },
+  "Bambu Support G @base": {
+    "type": "filament",
+    "name": "Bambu Support G @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFS01",
+    "instantiation": "false",
+    "description": "This is a non-water-soluble support filament, and usually it is only for the support structure and not for the model body. To get better printing quality, please refer to this wiki: Printing Tips for Support Filament and Support Function.",
+    "fan_cooling_layer_time": [
+      "10"
+    ],
+    "filament_cost": [
+      "34.99"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "280"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "280"
+    ],
+    "required_nozzle_HRC": [
+      "3"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ]
+  },
+  "Bambu Support W @base": {
+    "type": "filament",
+    "name": "Bambu Support W @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFS00",
+    "instantiation": "false",
+    "description": "This is a non-water-soluble support filament, and usually it is only for the support structure and not for the model body. To get better printing quality, please refer to this wiki: Printing Tips for Support Filament and Support Function.",
+    "cool_plate_temp": [
+      "40"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "40"
+    ],
+    "filament_cost": [
+      "69.98"
+    ],
+    "filament_density": [
+      "1.30"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu Support for ABS @base": {
+    "type": "filament",
+    "name": "Bambu Support for ABS @base",
+    "inherits": "fdm_filament_abs",
+    "from": "system",
+    "filament_id": "GFS06",
+    "instantiation": "false",
+    "description": "This is a non-water-soluble support filament, and usually it is only for the support structure and not for the model body. To get better printing quality, please refer to this wiki: Printing Tips for Support Filament and Support Function.",
+    "fan_max_speed": [
+      "30"
+    ],
+    "filament_cost": [
+      "29.98"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "temperature_vitrification": [
+      "90"
+    ]
+  },
+  "Bambu TPU 95A @base": {
+    "type": "filament",
+    "name": "Bambu TPU 95A @base",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU01",
+    "instantiation": "false",
+    "description": "This filament is too soft and not compatible with the AMS. Printing it is of many requirements, and to get better printing quality, please refer to this wiki: TPU printing guide.",
+    "filament_cost": [
+      "41.99"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "230"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "230"
+    ]
+  },
+  "Bambu TPU 95A HF @base": {
+    "type": "filament",
+    "name": "Bambu TPU 95A HF @base",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU00",
+    "instantiation": "false",
+    "description": "This filament is too soft and not compatible with the AMS. Printing it is of many requirements, and to get better printing quality, please refer to this wiki: TPU printing guide.",
+    "filament_cost": [
+      "41.99"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_retraction_length": [
+      "0.8"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "230"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "230"
+    ]
+  },
+  "Bambu TPU for AMS @base": {
+    "type": "filament",
+    "name": "Bambu TPU for AMS @base",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU02",
+    "instantiation": "false",
+    "description": "If you are to print a kind of soft TPU, please don't slice with this profile, and it is only for TPU that has high enough hardness (not less than 55D) and is compatible with the AMS. To get better printing quality, please refer to this wiki: TPU printing guide.",
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "50"
+    ],
+    "fan_min_speed": [
+      "20"
+    ],
+    "filament_cost": [
+      "38.99"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_flow_ratio": [
+      "0.97"
+    ],
+    "filament_max_volumetric_speed": [
+      "18"
+    ],
+    "filament_type": [
+      "TPU-AMS"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "230"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "230"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "overhang_fan_threshold": [
+      "25%"
+    ],
+    "slow_down_layer_time": [
+      "10"
+    ]
+  },
+  "Fiberon PA12-CF @base": {
+    "type": "filament",
+    "name": "Fiberon PA12-CF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFL52",
+    "instantiation": "false",
+    "eng_plate_temp": [
+      "40"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "40"
+    ],
+    "fan_cooling_layer_time": [
+      "15"
+    ],
+    "fan_max_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "99.99"
+    ],
+    "filament_density": [
+      "1.06"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "14"
+    ],
+    "filament_type": [
+      "PA-CF"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "full_fan_speed_layer": [
+      "2"
+    ],
+    "hot_plate_temp": [
+      "40"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "40"
+    ],
+    "nozzle_temperature": [
+      "300"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "300"
+    ],
+    "nozzle_temperature_range_low": [
+      "260"
+    ],
+    "overhang_fan_speed": [
+      "100"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "temperature_vitrification": [
+      "131"
+    ],
+    "textured_plate_temp": [
+      "40"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "40"
+    ]
+  },
+  "Fiberon PA6-CF @base": {
+    "type": "filament",
+    "name": "Fiberon PA6-CF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFL50",
+    "instantiation": "false",
+    "eng_plate_temp": [
+      "40"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "40"
+    ],
+    "fan_cooling_layer_time": [
+      "15"
+    ],
+    "fan_max_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "83.99"
+    ],
+    "filament_density": [
+      "1.17"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "14"
+    ],
+    "filament_type": [
+      "PA6-CF"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "hot_plate_temp": [
+      "40"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "40"
+    ],
+    "nozzle_temperature": [
+      "300"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "300"
+    ],
+    "nozzle_temperature_range_low": [
+      "280"
+    ],
+    "overhang_fan_speed": [
+      "100"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "temperature_vitrification": [
+      "215"
+    ],
+    "textured_plate_temp": [
+      "40"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "40"
+    ]
+  },
+  "Fiberon PA6-GF @base": {
+    "type": "filament",
+    "name": "Fiberon PA6-GF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFL51",
+    "instantiation": "false",
+    "eng_plate_temp": [
+      "40"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "40"
+    ],
+    "fan_cooling_layer_time": [
+      "15"
+    ],
+    "fan_max_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "63.99"
+    ],
+    "filament_density": [
+      "1.2"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_type": [
+      "PA-GF"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "full_fan_speed_layer": [
+      "2"
+    ],
+    "hot_plate_temp": [
+      "40"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "40"
+    ],
+    "nozzle_temperature": [
+      "300"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "300"
+    ],
+    "nozzle_temperature_range_low": [
+      "280"
+    ],
+    "overhang_fan_speed": [
+      "100"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "temperature_vitrification": [
+      "191"
+    ],
+    "textured_plate_temp": [
+      "40"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "40"
+    ]
+  },
+  "Fiberon PA612-CF @base": {
+    "type": "filament",
+    "name": "Fiberon PA612-CF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFL53",
+    "instantiation": "false",
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "94.99"
+    ],
+    "filament_density": [
+      "1.06"
+    ],
+    "filament_flow_ratio": [
+      "0.96"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "full_fan_speed_layer": [
+      "2"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "temperature_vitrification": [
+      "180"
+    ]
+  },
+  "Fiberon PET-CF @base": {
+    "type": "filament",
+    "name": "Fiberon PET-CF @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFL54",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "242"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "filament_cost": [
+      "89.99"
+    ],
+    "filament_density": [
+      "1.34"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_type": [
+      "PET-CF"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature": [
+      "300"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "300"
+    ],
+    "nozzle_temperature_range_high": [
+      "300"
+    ],
+    "nozzle_temperature_range_low": [
+      "270"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "supertack_plate_temp": [
+      "80"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "80"
+    ],
+    "slow_down_layer_time": [
+      "5"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "147"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Fiberon PETG-ESD @base": {
+    "type": "filament",
+    "name": "Fiberon PETG-ESD @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFL06",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "60"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "60"
+    ],
+    "fan_cooling_layer_time": [
+      "15"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "filament_cost": [
+      "0"
+    ],
+    "filament_density": [
+      "1.24"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "20"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "hot_plate_temp": [
+      "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "60"
+    ],
+    "nozzle_temperature": [
+      "290"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "290"
+    ],
+    "nozzle_temperature_range_high": [
+      "290"
+    ],
+    "nozzle_temperature_range_low": [
+      "250"
+    ],
+    "slow_down_layer_time": [
+      "2"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "76"
+    ],
+    "textured_plate_temp": [
+      "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "60"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Fiberon PETG-rCF @base": {
+    "type": "filament",
+    "name": "Fiberon PETG-rCF @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFL55",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "12"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "filament_cost": [
+      "39.99"
+    ],
+    "filament_density": [
+      "1.3"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_type": [
+      "PETG-CF"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature": [
+      "270"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "270"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "nozzle_temperature_range_low": [
+      "240"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "slow_down_layer_time": [
+      "2"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic ABS @base": {
+    "type": "filament",
+    "name": "Generic ABS @base",
+    "inherits": "fdm_filament_abs",
+    "from": "system",
+    "filament_id": "GFB99",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "16"
+    ]
+  },
+  "Generic ABS": {
+    "type": "filament",
+    "name": "Generic ABS",
+    "inherits": "Generic ABS @base",
+    "from": "system",
+    "setting_id": "GFSB99",
+    "instantiation": "true",
+    "filament_max_volumetric_speed": [
+      "15"
+    ],
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle"
+    ]
+  },
+  "Generic ASA @base": {
+    "type": "filament",
+    "name": "Generic ASA @base",
+    "inherits": "fdm_filament_asa",
+    "from": "system",
+    "filament_id": "GFB98",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "eng_plate_temp": [
+      "100"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "100"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "hot_plate_temp": [
+      "100"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "100"
+    ],
+    "textured_plate_temp": [
+      "100"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "100"
+    ]
+  },
+  "Generic ASA": {
+    "type": "filament",
+    "name": "Generic ASA",
+    "inherits": "Generic ASA @base",
+    "from": "system",
+    "setting_id": "GFSB98",
+    "instantiation": "true",
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle"
+    ]
+  },
+  "Generic BVOH @base": {
+    "type": "filament",
+    "name": "Generic BVOH @base",
+    "inherits": "fdm_filament_bvoh",
+    "from": "system",
+    "filament_id": "GFS97",
+    "instantiation": "false"
+  },
+  "Generic EVA @base": {
+    "type": "filament",
+    "name": "Generic EVA @base",
+    "inherits": "fdm_filament_eva",
+    "from": "system",
+    "filament_id": "GFR99",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "cool_plate_temp": [
+      "35"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "35"
+    ],
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "21.99"
+    ],
+    "filament_density": [
+      "0.94"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "hot_plate_temp": [
+      "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "55"
+    ],
+    "nozzle_temperature": [
+      "210"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "210"
+    ],
+    "nozzle_temperature_range_high": [
+      "220"
+    ],
+    "nozzle_temperature_range_low": [
+      "175"
+    ],
+    "overhang_fan_threshold": [
+      "50%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "slow_down_layer_time": [
+      "4"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "70"
+    ],
+    "textured_plate_temp": [
+      "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "55"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic HIPS @base": {
+    "type": "filament",
+    "name": "Generic HIPS @base",
+    "inherits": "fdm_filament_hips",
+    "from": "system",
+    "filament_id": "GFS98",
+    "instantiation": "false",
+    "filament_is_support": [
+      "1"
+    ]
+  },
+  "Generic PA-CF": {
+    "type": "filament",
+    "name": "Generic PA-CF",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFN98",
+    "setting_id": "GFSN99",
+    "instantiation": "true",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_type": [
+      "PA-CF"
+    ],
+    "full_fan_speed_layer": [
+      "2"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "temperature_vitrification": [
+      "170"
+    ],
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle"
+    ]
+  },
+  "Generic PA": {
+    "type": "filament",
+    "name": "Generic PA",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFN99",
+    "setting_id": "GFSN98",
+    "instantiation": "true",
+    "description": "When printing this filament, there's a risk of warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "chamber_temperatures": [
+      "60"
+    ],
+    "fan_cooling_layer_time": [
+      "65"
+    ],
+    "fan_max_speed": [
+      "85"
+    ],
+    "fan_min_speed": [
+      "40"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "nozzle_temperature": [
+      "260"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "260"
+    ],
+    "nozzle_temperature_range_high": [
+      "280"
+    ],
+    "nozzle_temperature_range_low": [
+      "240"
+    ],
+    "overhang_fan_speed": [
+      "95"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "required_nozzle_HRC": [
+      "3"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "slow_down_min_speed": [
+      "10"
+    ],
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab X1E 0.6 nozzle",
+      "Bambu Lab X1E 0.8 nozzle"
+    ]
+  },
+  "Generic PC @base": {
+    "type": "filament",
+    "name": "Generic PC @base",
+    "inherits": "fdm_filament_pc",
+    "from": "system",
+    "filament_id": "GFC99",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "filament_flow_ratio": [
+      "0.94"
+    ],
+    "filament_max_volumetric_speed": [
+      "16"
+    ]
+  },
+  "Generic PC": {
+    "type": "filament",
+    "name": "Generic PC",
+    "inherits": "Generic PC @base",
+    "from": "system",
+    "setting_id": "GFSC99",
+    "instantiation": "true",
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle"
+    ]
+  },
+  "Generic PCTG @base": {
+    "type": "filament",
+    "name": "Generic PCTG @base",
+    "inherits": "fdm_filament_pctg",
+    "from": "system",
+    "filament_id": "GFG97",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "40"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "28.99"
+    ],
+    "filament_density": [
+      "1.29"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "nozzle_temperature_range_low": [
+      "240"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "temperature_vitrification": [
+      "90"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PE @base": {
+    "type": "filament",
+    "name": "Generic PE @base",
+    "inherits": "fdm_filament_pe",
+    "from": "system",
+    "filament_id": "GFP99",
+    "instantiation": "false",
+    "filament_cost": [
+      "40.99"
+    ],
+    "filament_density": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "nozzle_temperature": [
+      "210"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "210"
+    ],
+    "nozzle_temperature_range_high": [
+      "220"
+    ],
+    "nozzle_temperature_range_low": [
+      "175"
+    ],
+    "temperature_vitrification": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PE-CF @base": {
+    "type": "filament",
+    "name": "Generic PE-CF @base",
+    "inherits": "fdm_filament_pe",
+    "from": "system",
+    "filament_id": "GFP98",
+    "instantiation": "false",
+    "filament_cost": [
+      "65.99"
+    ],
+    "filament_density": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_type": [
+      "PE-CF"
+    ],
+    "nozzle_temperature": [
+      "210"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "210"
+    ],
+    "nozzle_temperature_range_high": [
+      "220"
+    ],
+    "nozzle_temperature_range_low": [
+      "175"
+    ],
+    "temperature_vitrification": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PETG @base": {
+    "type": "filament",
+    "name": "Generic PETG @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG99",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "90"
+    ],
+    "fan_min_speed": [
+      "40"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PETG HF @base": {
+    "type": "filament",
+    "name": "Generic PETG HF @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG96",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "40"
+    ],
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.28"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "16"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature": [
+      "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "25"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PETG-CF @base": {
+    "type": "filament",
+    "name": "Generic PETG-CF @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG98",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "filament_cost": [
+      "34.99"
+    ],
+    "filament_density": [
+      "1.25"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_type": [
+      "PETG-CF"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "nozzle_temperature_range_low": [
+      "240"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PETG": {
+    "type": "filament",
+    "name": "Generic PETG",
+    "inherits": "Generic PETG @base",
+    "from": "system",
+    "setting_id": "GFSG99",
+    "instantiation": "true",
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab X1E 0.6 nozzle",
+      "Bambu Lab X1E 0.8 nozzle"
+    ]
+  },
+  "Generic PHA @base": {
+    "type": "filament",
+    "name": "Generic PHA @base",
+    "inherits": "fdm_filament_pha",
+    "from": "system",
+    "filament_id": "GFR98",
+    "instantiation": "false"
+  },
+  "Generic PLA @base": {
+    "type": "filament",
+    "name": "Generic PLA @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL99",
+    "instantiation": "false",
+    "description": "The generic presets are conservatively tuned for compatibility with a wider range of filaments. For higher printing quality and speeds, please use Bambu filaments with Bambu presets.",
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif};Prevent PLA from jamming\n\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PLA High Speed @base": {
+    "type": "filament",
+    "name": "Generic PLA High Speed @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL95",
+    "instantiation": "false",
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "18"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ]
+  },
+  "Generic PLA Silk @base": {
+    "type": "filament",
+    "name": "Generic PLA Silk @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL96",
+    "instantiation": "false",
+    "description": "To make the prints get higher gloss, please dry the filament before use, and set the outer wall speed to be 40 to 60 mm/s when slicing.",
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "supertack_plate_temp": [
+      "35"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "35"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif};Prevent PLA from jamming\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PLA Silk": {
+    "type": "filament",
+    "name": "Generic PLA Silk",
+    "inherits": "Generic PLA Silk @base",
+    "from": "system",
+    "setting_id": "GFSL99_01",
+    "instantiation": "true",
+    "filament_max_volumetric_speed": [
+      "7.5"
+    ],
+    "filament_retraction_length": [
+      "0.5"
+    ],
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab X1E 0.6 nozzle",
+      "Bambu Lab X1E 0.8 nozzle"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PLA-CF @base": {
+    "type": "filament",
+    "name": "Generic PLA-CF @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL98",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "45"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "45"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_type": [
+      "PLA-CF"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "supertack_plate_temp": [
+      "50"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "50"
+    ],
+    "slow_down_layer_time": [
+      "7"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PLA-CF": {
+    "type": "filament",
+    "name": "Generic PLA-CF",
+    "inherits": "Generic PLA-CF @base",
+    "from": "system",
+    "setting_id": "GFSL98",
+    "instantiation": "true",
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab X1E 0.6 nozzle",
+      "Bambu Lab X1E 0.8 nozzle"
+    ]
+  },
+  "Generic PLA": {
+    "type": "filament",
+    "name": "Generic PLA",
+    "inherits": "Generic PLA @base",
+    "from": "system",
+    "setting_id": "GFSL99",
+    "instantiation": "true",
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab X1E 0.6 nozzle",
+      "Bambu Lab X1E 0.8 nozzle"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Generic PP @base": {
+    "type": "filament",
+    "name": "Generic PP @base",
+    "inherits": "fdm_filament_pp",
+    "from": "system",
+    "filament_id": "GFP97",
+    "instantiation": "false"
+  },
+  "Generic PP-CF @base": {
+    "type": "filament",
+    "name": "Generic PP-CF @base",
+    "inherits": "fdm_filament_pp",
+    "from": "system",
+    "filament_id": "GFP96",
+    "instantiation": "false",
+    "filament_cost": [
+      "77.99"
+    ],
+    "filament_density": [
+      "1.01"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_type": [
+      "PP-CF"
+    ]
+  },
+  "Generic PP-GF @base": {
+    "type": "filament",
+    "name": "Generic PP-GF @base",
+    "inherits": "fdm_filament_pp",
+    "from": "system",
+    "filament_id": "GFP95",
+    "instantiation": "false",
+    "filament_cost": [
+      "59.99"
+    ],
+    "filament_density": [
+      "1.05"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_type": [
+      "PP-GF"
+    ]
+  },
+  "Generic PPA-CF @base": {
+    "type": "filament",
+    "name": "Generic PPA-CF @base",
+    "inherits": "fdm_filament_ppa",
+    "from": "system",
+    "filament_id": "GFN97",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_vendor": [
+      "Generic"
+    ]
+  },
+  "Generic PPA-GF @base": {
+    "type": "filament",
+    "name": "Generic PPA-GF @base",
+    "inherits": "fdm_filament_ppa",
+    "from": "system",
+    "filament_id": "GFN96",
+    "instantiation": "false",
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_type": [
+      "PPA-GF"
+    ],
+    "filament_vendor": [
+      "Generic"
+    ]
+  },
+  "Generic PPS @base": {
+    "type": "filament",
+    "name": "Generic PPS @base",
+    "inherits": "fdm_filament_pps",
+    "from": "system",
+    "filament_id": "GFT97",
+    "instantiation": "false"
+  },
+  "Generic PPS-CF @base": {
+    "type": "filament",
+    "name": "Generic PPS-CF @base",
+    "inherits": "fdm_filament_pps",
+    "from": "system",
+    "filament_id": "GFT98",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_max_speed": [
+      "30"
+    ],
+    "filament_cost": [
+      "240"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_max_volumetric_speed": [
+      "3"
+    ],
+    "filament_type": [
+      "PPS-CF"
+    ],
+    "nozzle_temperature_range_low": [
+      "310"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "temperature_vitrification": [
+      "220"
+    ]
+  },
+  "Generic PVA @base": {
+    "type": "filament",
+    "name": "Generic PVA @base",
+    "inherits": "fdm_filament_pva",
+    "from": "system",
+    "filament_id": "GFS99",
+    "instantiation": "false",
+    "description": "This is a water-soluble support filament, and usually it is only for the support structure and not for the model body. Printing this filament is of many requirements, and to get better printing quality, please refer to this wiki: PVA Printing Guide.",
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "16"
+    ],
+    "slow_down_layer_time": [
+      "7"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ]
+  },
+  "Generic PVA": {
+    "type": "filament",
+    "name": "Generic PVA",
+    "inherits": "Generic PVA @base",
+    "from": "system",
+    "setting_id": "GFSS99",
+    "instantiation": "true",
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab X1E 0.6 nozzle",
+      "Bambu Lab X1E 0.8 nozzle"
+    ]
+  },
+  "Generic TPU for AMS @base": {
+    "type": "filament",
+    "name": "Generic TPU for AMS @base",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU98",
+    "instantiation": "false",
+    "description": "If you are to print a kind of soft TPU, please don't slice with this profile, and it is only for TPU that has high enough hardness (not less than 55D) and is compatible with the AMS. To get better printing quality, please refer to this wiki: TPU printing guide.",
+    "filament_cost": [
+      "41.99"
+    ],
+    "filament_density": [
+      "1.26"
+    ],
+    "filament_max_volumetric_speed": [
+      "10.5"
+    ],
+    "filament_retraction_length": [
+      "0.8"
+    ],
+    "filament_type": [
+      "TPU-AMS"
+    ],
+    "nozzle_temperature": [
+      "230"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "230"
+    ]
+  },
+  "Generic TPU": {
+    "type": "filament",
+    "name": "Generic TPU",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU99",
+    "setting_id": "GFSR99",
+    "instantiation": "true",
+    "description": "This filament is too soft and not compatible with the AMS. Printing it is of many requirements, and to get better printing quality, please refer to this wiki: TPU printing guide.",
+    "filament_max_volumetric_speed": [
+      "3.2"
+    ],
+    "compatible_printers": [
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab X1E 0.6 nozzle",
+      "Bambu Lab X1E 0.8 nozzle"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >30)||(bed_temperature_initial_layer[current_extruder] >30)}M106 P3 S180\n{endif} \n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Overture Matte PLA @base": {
+    "type": "filament",
+    "name": "Overture Matte PLA @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL05",
+    "instantiation": "false",
+    "filament_cost": [
+      "24.52"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "16"
+    ],
+    "filament_vendor": [
+      "Overture"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ]
+  },
+  "Overture PLA @base": {
+    "type": "filament",
+    "name": "Overture PLA @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL04",
+    "instantiation": "false",
+    "filament_cost": [
+      "24.15"
+    ],
+    "filament_density": [
+      "1.2"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "15"
+    ],
+    "filament_vendor": [
+      "Overture"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ]
+  },
+  "PolyLite ABS @base": {
+    "type": "filament",
+    "name": "PolyLite ABS @base",
+    "inherits": "fdm_filament_abs",
+    "from": "system",
+    "filament_id": "GFB60",
+    "instantiation": "false",
+    "filament_cost": [
+      "26.9"
+    ],
+    "filament_density": [
+      "1.03"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "15"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ]
+  },
+  "PolyLite ASA @base": {
+    "type": "filament",
+    "name": "PolyLite ASA @base",
+    "inherits": "fdm_filament_asa",
+    "from": "system",
+    "filament_id": "GFB61",
+    "instantiation": "false",
+    "eng_plate_temp": [
+      "100"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "100"
+    ],
+    "filament_cost": [
+      "23.6"
+    ],
+    "filament_density": [
+      "1.02"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_max_volumetric_speed": [
+      "13"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "hot_plate_temp": [
+      "100"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "100"
+    ],
+    "textured_plate_temp": [
+      "100"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "100"
+    ]
+  },
+  "PolyLite PETG @base": {
+    "type": "filament",
+    "name": "PolyLite PETG @base",
+    "inherits": "fdm_filament_pet",
+    "from": "system",
+    "filament_id": "GFG60",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "70"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "70"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "90"
+    ],
+    "fan_min_speed": [
+      "40"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ],
+    "hot_plate_temp": [
+      "70"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "70"
+    ],
+    "overhang_fan_speed": [
+      "90"
+    ],
+    "overhang_fan_threshold": [
+      "10%"
+    ],
+    "slow_down_layer_time": [
+      "12"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "70"
+    ]
+  },
+  "PolyLite PLA @base": {
+    "type": "filament",
+    "name": "PolyLite PLA @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL00",
+    "instantiation": "false",
+    "filament_cost": [
+      "25.4"
+    ],
+    "filament_flow_ratio": [
+      "0.95"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ]
+  },
+  "PolyTerra PLA @base": {
+    "type": "filament",
+    "name": "PolyTerra PLA @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL01",
+    "instantiation": "false",
+    "filament_cost": [
+      "25.4"
+    ],
+    "filament_density": [
+      "1.31"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Polymaker"
+    ]
+  },
+  "eSUN PLA+ @base": {
+    "type": "filament",
+    "name": "eSUN PLA+ @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFL03",
+    "instantiation": "false",
+    "filament_cost": [
+      "22.99"
+    ],
+    "filament_density": [
+      "1.25"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "16"
+    ],
+    "filament_vendor": [
+      "eSUN"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_abs": {
+    "type": "filament",
+    "name": "fdm_filament_abs",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "activate_air_filtration": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "90"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "90"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "80"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.04"
+    ],
+    "filament_max_volumetric_speed": [
+      "28.6"
+    ],
+    "filament_type": [
+      "ABS"
+    ],
+    "hot_plate_temp": [
+      "90"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "90"
+    ],
+    "nozzle_temperature": [
+      "270"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "260"
+    ],
+    "nozzle_temperature_range_high": [
+      "280"
+    ],
+    "nozzle_temperature_range_low": [
+      "240"
+    ],
+    "overhang_fan_speed": [
+      "80"
+    ],
+    "overhang_fan_threshold": [
+      "25%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "slow_down_layer_time": [
+      "3"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "textured_plate_temp": [
+      "90"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "90"
+    ]
+  },
+  "fdm_filament_asa": {
+    "type": "filament",
+    "name": "fdm_filament_asa",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "activate_air_filtration": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "90"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "90"
+    ],
+    "fan_cooling_layer_time": [
+      "35"
+    ],
+    "fan_max_speed": [
+      "80"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.04"
+    ],
+    "filament_max_volumetric_speed": [
+      "28.6"
+    ],
+    "filament_type": [
+      "ASA"
+    ],
+    "hot_plate_temp": [
+      "90"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "90"
+    ],
+    "nozzle_temperature": [
+      "260"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "260"
+    ],
+    "nozzle_temperature_range_high": [
+      "280"
+    ],
+    "nozzle_temperature_range_low": [
+      "240"
+    ],
+    "overhang_fan_speed": [
+      "80"
+    ],
+    "overhang_fan_threshold": [
+      "25%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "slow_down_layer_time": [
+      "3"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "textured_plate_temp": [
+      "90"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "90"
+    ]
+  },
+  "fdm_filament_bvoh": {
+    "type": "filament",
+    "name": "fdm_filament_bvoh",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "cool_plate_temp": [
+      "40"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "40"
+    ],
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "69.99"
+    ],
+    "filament_density": [
+      "1.13"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "filament_type": [
+      "BVOH"
+    ],
+    "hot_plate_temp": [
+      "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "55"
+    ],
+    "nozzle_temperature": [
+      "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "nozzle_temperature_range_low": [
+      "190"
+    ],
+    "overhang_fan_threshold": [
+      "50%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "45"
+    ],
+    "textured_plate_temp": [
+      "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "55"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_common": {
+    "type": "filament",
+    "name": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "activate_air_filtration": [
+      "0"
+    ],
+    "chamber_temperatures": [
+      "0"
+    ],
+    "close_fan_the_first_x_layers": [
+      "3"
+    ],
+    "complete_print_exhaust_fan_speed": [
+      "70"
+    ],
+    "cool_plate_temp": [
+      "60"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "60"
+    ],
+    "during_print_exhaust_fan_speed": [
+      "70"
+    ],
+    "eng_plate_temp": [
+      "60"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "60"
+    ],
+    "fan_cooling_layer_time": [
+      "60"
+    ],
+    "fan_max_speed": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "35"
+    ],
+    "filament_cost": [
+      "0"
+    ],
+    "filament_density": [
+      "0"
+    ],
+    "filament_deretraction_speed": [
+      "nil"
+    ],
+    "filament_diameter": [
+      "1.75"
+    ],
+    "filament_flow_ratio": [
+      "1"
+    ],
+    "filament_is_support": [
+      "0"
+    ],
+    "filament_long_retractions_when_cut": [
+      "nil"
+    ],
+    "filament_max_volumetric_speed": [
+      "0"
+    ],
+    "filament_minimal_purge_on_wipe_tower": [
+      "15"
+    ],
+    "filament_retract_before_wipe": [
+      "nil"
+    ],
+    "filament_retract_restart_extra": [
+      "nil"
+    ],
+    "filament_retract_when_changing_layer": [
+      "nil"
+    ],
+    "filament_retraction_distances_when_cut": [
+      "nil"
+    ],
+    "filament_retraction_length": [
+      "nil"
+    ],
+    "filament_retraction_minimum_travel": [
+      "nil"
+    ],
+    "filament_retraction_speed": [
+      "nil"
+    ],
+    "filament_settings_id": [
+      ""
+    ],
+    "filament_soluble": [
+      "0"
+    ],
+    "filament_type": [
+      "PLA"
+    ],
+    "filament_vendor": [
+      "Generic"
+    ],
+    "filament_wipe": [
+      "nil"
+    ],
+    "filament_wipe_distance": [
+      "nil"
+    ],
+    "filament_z_hop": [
+      "nil"
+    ],
+    "filament_z_hop_types": [
+      "nil"
+    ],
+    "full_fan_speed_layer": [
+      "0"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_scarf_height": [
+      "10%"
+    ],
+    "filament_scarf_gap": [
+      "0%"
+    ],
+    "filament_scarf_length": [
+      "10"
+    ],
+    "filament_shrink": [
+      "100%"
+    ],
+    "hot_plate_temp": [
+      "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "60"
+    ],
+    "nozzle_temperature": [
+      "200"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "200"
+    ],
+    "overhang_fan_speed": [
+      "100"
+    ],
+    "overhang_fan_threshold": [
+      "95%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "0"
+    ],
+    "required_nozzle_HRC": [
+      "3"
+    ],
+    "supertack_plate_temp": [
+      "45"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "45"
+    ],
+    "slow_down_for_layer_cooling": [
+      "1"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "slow_down_min_speed": [
+      "10"
+    ],
+    "temperature_vitrification": [
+      "100"
+    ],
+    "textured_plate_temp": [
+      "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "60"
+    ],
+    "compatible_printers": [],
+    "filament_start_gcode": [
+      "; Filament gcode\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \nM106 P3 S0\n"
+    ]
+  },
+  "fdm_filament_eva": {
+    "type": "filament",
+    "name": "fdm_filament_eva",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "filament_type": [
+      "EVA"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ]
+  },
+  "fdm_filament_hips": {
+    "type": "filament",
+    "name": "fdm_filament_hips",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "cool_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "90"
+    ],
+    "hot_plate_temp": [
+      "90"
+    ],
+    "textured_plate_temp": [
+      "90"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "90"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "90"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "90"
+    ],
+    "fan_cooling_layer_time": [
+      "10"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "filament_type": [
+      "HIPS"
+    ],
+    "filament_density": [
+      "1.06"
+    ],
+    "filament_cost": [
+      "22.99"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "240"
+    ],
+    "fan_max_speed": [
+      "60"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "overhang_fan_threshold": [
+      "25%"
+    ],
+    "overhang_fan_speed": [
+      "80"
+    ],
+    "nozzle_temperature": [
+      "240"
+    ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "slow_down_layer_time": [
+      "6"
+    ],
+    "additional_cooling_fan_speed": [
+      "0"
+    ]
+  },
+  "fdm_filament_pa": {
+    "type": "filament",
+    "name": "fdm_filament_pa",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "activate_air_filtration": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "100"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "100"
+    ],
+    "fan_cooling_layer_time": [
+      "4"
+    ],
+    "fan_max_speed": [
+      "60"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.04"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "filament_type": [
+      "PA"
+    ],
+    "hot_plate_temp": [
+      "100"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "100"
+    ],
+    "nozzle_temperature": [
+      "290"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "290"
+    ],
+    "nozzle_temperature_range_high": [
+      "300"
+    ],
+    "nozzle_temperature_range_low": [
+      "260"
+    ],
+    "overhang_fan_speed": [
+      "30"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "slow_down_layer_time": [
+      "2"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "108"
+    ],
+    "textured_plate_temp": [
+      "100"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "100"
+    ]
+  },
+  "fdm_filament_pc": {
+    "type": "filament",
+    "name": "fdm_filament_pc",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "110"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "110"
+    ],
+    "fan_cooling_layer_time": [
+      "30"
+    ],
+    "fan_max_speed": [
+      "60"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.04"
+    ],
+    "filament_max_volumetric_speed": [
+      "18"
+    ],
+    "filament_type": [
+      "PC"
+    ],
+    "hot_plate_temp": [
+      "110"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "110"
+    ],
+    "nozzle_temperature": [
+      "280"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "270"
+    ],
+    "nozzle_temperature_range_high": [
+      "290"
+    ],
+    "nozzle_temperature_range_low": [
+      "260"
+    ],
+    "overhang_fan_speed": [
+      "60"
+    ],
+    "overhang_fan_threshold": [
+      "25%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "slow_down_layer_time": [
+      "2"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "120"
+    ],
+    "textured_plate_temp": [
+      "110"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "110"
+    ]
+  },
+  "fdm_filament_pctg": {
+    "type": "filament",
+    "name": "fdm_filament_pctg",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "20"
+    ],
+    "fan_min_speed": [
+      "20"
+    ],
+    "filament_cost": [
+      "30"
+    ],
+    "filament_density": [
+      "1.27"
+    ],
+    "filament_max_volumetric_speed": [
+      "25"
+    ],
+    "filament_type": [
+      "PCTG"
+    ],
+    "hot_plate_temp": [
+      "80"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "80"
+    ],
+    "nozzle_temperature": [
+      "255"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "255"
+    ],
+    "nozzle_temperature_range_high": [
+      "260"
+    ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "temperature_vitrification": [
+      "70"
+    ],
+    "textured_plate_temp": [
+      "80"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "80"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S180\n{elsif (bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S255\n{endif};Prevent PLA from jamming\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_pe": {
+    "type": "filament",
+    "name": "fdm_filament_pe",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "cool_plate_temp": [
+      "35"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "35"
+    ],
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.24"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_type": [
+      "PE"
+    ],
+    "hot_plate_temp": [
+      "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "55"
+    ],
+    "nozzle_temperature": [
+      "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "nozzle_temperature_range_low": [
+      "190"
+    ],
+    "overhang_fan_threshold": [
+      "50%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "slow_down_layer_time": [
+      "4"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "45"
+    ],
+    "textured_plate_temp": [
+      "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "55"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_pet": {
+    "type": "filament",
+    "name": "fdm_filament_pet",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "20"
+    ],
+    "fan_min_speed": [
+      "20"
+    ],
+    "filament_cost": [
+      "30"
+    ],
+    "filament_density": [
+      "1.27"
+    ],
+    "filament_max_volumetric_speed": [
+      "25"
+    ],
+    "filament_type": [
+      "PETG"
+    ],
+    "hot_plate_temp": [
+      "80"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "80"
+    ],
+    "nozzle_temperature": [
+      "255"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "255"
+    ],
+    "nozzle_temperature_range_high": [
+      "260"
+    ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "70"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "70"
+    ],
+    "temperature_vitrification": [
+      "70"
+    ],
+    "textured_plate_temp": [
+      "80"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "80"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S180\n{elsif (bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S255\n{endif};Prevent PLA from jamming\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_pha": {
+    "type": "filament",
+    "name": "fdm_filament_pha",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "cool_plate_temp": [
+      "35"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "35"
+    ],
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "27.99"
+    ],
+    "filament_density": [
+      "1.24"
+    ],
+    "filament_max_volumetric_speed": [
+      "6"
+    ],
+    "filament_type": [
+      "PHA"
+    ],
+    "hot_plate_temp": [
+      "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "55"
+    ],
+    "nozzle_temperature": [
+      "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "nozzle_temperature_range_low": [
+      "190"
+    ],
+    "overhang_fan_threshold": [
+      "50%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "slow_down_layer_time": [
+      "4"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "120"
+    ],
+    "textured_plate_temp": [
+      "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "55"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_pla": {
+    "type": "filament",
+    "name": "fdm_filament_pla",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "cool_plate_temp": [
+      "35"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "35"
+    ],
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.24"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
+    ],
+    "filament_scarf_gap": [
+      "15%"
+    ],
+    "hot_plate_temp": [
+      "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "55"
+    ],
+    "nozzle_temperature": [
+      "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "220"
+    ],
+    "nozzle_temperature_range_low": [
+      "190"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "overhang_fan_threshold": [
+      "50%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "slow_down_layer_time": [
+      "4"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "45"
+    ],
+    "textured_plate_temp": [
+      "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "55"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_pp": {
+    "type": "filament",
+    "name": "fdm_filament_pp",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "cool_plate_temp": [
+      "35"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "35"
+    ],
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "34.99"
+    ],
+    "filament_density": [
+      "0.93"
+    ],
+    "filament_max_volumetric_speed": [
+      "12"
+    ],
+    "filament_type": [
+      "PP"
+    ],
+    "hot_plate_temp": [
+      "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "55"
+    ],
+    "nozzle_temperature": [
+      "235"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "235"
+    ],
+    "nozzle_temperature_range_high": [
+      "250"
+    ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "overhang_fan_threshold": [
+      "50%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "slow_down_layer_time": [
+      "4"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "110"
+    ],
+    "textured_plate_temp": [
+      "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "55"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_ppa": {
+    "type": "filament",
+    "name": "fdm_filament_ppa",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "activate_air_filtration": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "100"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "100"
+    ],
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.17"
+    ],
+    "filament_flow_ratio": [
+      "0.96"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "filament_type": [
+      "PPA-CF"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "hot_plate_temp": [
+      "100"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "100"
+    ],
+    "nozzle_temperature": [
+      "290"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "290"
+    ],
+    "nozzle_temperature_range_high": [
+      "320"
+    ],
+    "nozzle_temperature_range_low": [
+      "280"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "required_nozzle_HRC": [
+      "40"
+    ],
+    "slow_down_layer_time": [
+      "2"
+    ],
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "temperature_vitrification": [
+      "210"
+    ],
+    "textured_plate_temp": [
+      "100"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "100"
+    ]
+  },
+  "fdm_filament_pps": {
+    "type": "filament",
+    "name": "fdm_filament_pps",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "chamber_temperatures": [
+      "60"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "0"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "0"
+    ],
+    "eng_plate_temp": [
+      "110"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "110"
+    ],
+    "fan_cooling_layer_time": [
+      "5"
+    ],
+    "fan_max_speed": [
+      "50"
+    ],
+    "fan_min_speed": [
+      "0"
+    ],
+    "filament_density": [
+      "1.36"
+    ],
+    "filament_flow_ratio": [
+      "0.96"
+    ],
+    "filament_max_volumetric_speed": [
+      "4"
+    ],
+    "filament_type": [
+      "PPS"
+    ],
+    "hot_plate_temp": [
+      "110"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "110"
+    ],
+    "nozzle_temperature": [
+      "320"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "320"
+    ],
+    "nozzle_temperature_range_high": [
+      "340"
+    ],
+    "nozzle_temperature_range_low": [
+      "300"
+    ],
+    "overhang_fan_speed": [
+      "30"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "slow_down_layer_time": [
+      "2"
+    ],
+    "temperature_vitrification": [
+      "125"
+    ],
+    "textured_plate_temp": [
+      "110"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "110"
+    ]
+  },
+  "fdm_filament_pva": {
+    "type": "filament",
+    "name": "fdm_filament_pva",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "cool_plate_temp": [
+      "45"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "45"
+    ],
+    "eng_plate_temp": [
+      "0"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "0"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.24"
+    ],
+    "filament_is_support": [
+      "1"
+    ],
+    "filament_max_volumetric_speed": [
+      "15"
+    ],
+    "filament_soluble": [
+      "1"
+    ],
+    "filament_type": [
+      "PVA"
+    ],
+    "hot_plate_temp": [
+      "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "55"
+    ],
+    "nozzle_temperature": [
+      "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "nozzle_temperature_range_low": [
+      "190"
+    ],
+    "overhang_fan_threshold": [
+      "50%"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "35"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "35"
+    ],
+    "slow_down_layer_time": [
+      "4"
+    ],
+    "slow_down_min_speed": [
+      "50"
+    ],
+    "temperature_vitrification": [
+      "45"
+    ],
+    "textured_plate_temp": [
+      "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "55"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "fdm_filament_tpu": {
+    "type": "filament",
+    "name": "fdm_filament_tpu",
+    "inherits": "fdm_filament_common",
+    "from": "system",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "70"
+    ],
+    "close_fan_the_first_x_layers": [
+      "1"
+    ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "cool_plate_temp": [
+      "30"
+    ],
+    "cool_plate_temp_initial_layer": [
+      "30"
+    ],
+    "eng_plate_temp": [
+      "30"
+    ],
+    "eng_plate_temp_initial_layer": [
+      "30"
+    ],
+    "fan_cooling_layer_time": [
+      "100"
+    ],
+    "fan_min_speed": [
+      "100"
+    ],
+    "filament_cost": [
+      "20"
+    ],
+    "filament_density": [
+      "1.24"
+    ],
+    "filament_max_volumetric_speed": [
+      "15"
+    ],
+    "filament_retraction_length": [
+      "0.4"
+    ],
+    "filament_type": [
+      "TPU"
+    ],
+    "hot_plate_temp": [
+      "35"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "35"
+    ],
+    "nozzle_temperature": [
+      "240"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "240"
+    ],
+    "nozzle_temperature_range_high": [
+      "250"
+    ],
+    "nozzle_temperature_range_low": [
+      "200"
+    ],
+    "reduce_fan_stop_start_freq": [
+      "1"
+    ],
+    "temperature_vitrification": [
+      "30"
+    ],
+    "textured_plate_temp": [
+      "35"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "35"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >30)||(bed_temperature_initial_layer[current_extruder] >30)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  }
+}
