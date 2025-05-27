@@ -1842,7 +1842,7 @@ class AMSInstance:
         self.model = model
         self.remaining_drying_time = 0
         self.index = index
-        if index >= 128:
+        if index >= 127:
             self.tray = [None]
             self.tray[0] = AMSTray(client)
         else:
