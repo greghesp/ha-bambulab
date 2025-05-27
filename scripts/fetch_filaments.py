@@ -16,7 +16,6 @@ def get_filaments() -> dict:
         if 'cloudflare' in response.text:
             print("CLOUDFLARED")
         raise ValueError(response.status_code)
-    print(response.json())
     return response.json()["printer"]["public"]
 
 
