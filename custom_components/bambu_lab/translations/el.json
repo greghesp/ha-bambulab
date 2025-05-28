@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Μονάδα εργαλείου",
+        "state": {
+          "none": "Μη τοποθετημένο",
+          "laser": "Λέιζερ",
+          "cutter": "Κόφτης"
+        }
+      },
       "wifi_signal": {
         "name": "Σήμα Wi-Fi"
       },

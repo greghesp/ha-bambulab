@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Mòdul d'eines",
+        "state": {
+          "none": "No muntat",
+          "laser": "Làser",
+          "cutter": "Tallador"
+        }
+      },
       "wifi_signal": {
         "name": "Senyal Wi-Fi"
       },

@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Gereedschapsmodule",
+        "state": {
+          "none": "Niet gemonteerd",
+          "laser": "Laser",
+          "cutter": "Snijder"
+        }
+      },
       "wifi_signal": {
         "name": "Wi-Fi-signaal"
       },

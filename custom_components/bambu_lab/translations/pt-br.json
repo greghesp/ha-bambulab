@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Módulo de ferramenta",
+        "state": {
+          "none": "Não montado",
+          "laser": "Laser",
+          "cutter": "Cortador"
+        }
+      },
       "wifi_signal": {
         "name": "Sinal Wi-Fi"
       },
