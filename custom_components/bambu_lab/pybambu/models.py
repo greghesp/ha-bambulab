@@ -115,6 +115,8 @@ class Device:
                 self.ext_tool_state = "laser"
             elif mount == 1 and tool_type == "CP00":
                 self.ext_tool_state = "cutter"
+            elif mount == 1 and tool_type:
+                self.ext_tool_state = None
             if prev_state != self.ext_tool_state:
                 send_event = True
 
