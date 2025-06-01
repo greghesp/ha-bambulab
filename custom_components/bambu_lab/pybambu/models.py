@@ -78,7 +78,7 @@ class Device:
         self.print_error = PrintError(client = client)
         self.camera = Camera(client = client)
         self.home_flag = HomeFlag(client=client)
-        self.ext_tool_state = None
+        self.extruder_tool = ExtruderTool(client=client)
         self.push_all_data = None
         self.get_version_data = None
         if self.supports_feature(Features.CAMERA_IMAGE):
@@ -102,30 +102,12 @@ class Device:
         send_event = send_event | self.print_error.print_update(data = data)
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
-
-        # Handle ext_tool update
-        if "device" in data and "ext_tool" in data["device"]:
-            ext_tool = data["device"]["ext_tool"]
-            mount = ext_tool.get("mount")
-            tool_type = ext_tool.get("type")
-            prev_state = self.ext_tool_state
-            if mount == 0:
-                self.ext_tool_state = "none"
-            elif mount == 1 and tool_type == "LB01":
-                self.ext_tool_state = "laser"
-            elif mount == 1 and tool_type == "CP00":
-                self.ext_tool_state = "cutter"
-            elif mount == 1 and tool_type:
-                self.ext_tool_state = None
-            if prev_state != self.ext_tool_state:
-                send_event = True
+        send_event = send_event | self.extruder_tool.print_update(data = data)
 
         self._client.callback("event_printer_data_update")
 
         if data.get("msg", 0) == 0:
             self.push_all_data = data
-
-        return send_event
 
     def info_update(self, data):
         self.info.info_update(data = data)
@@ -245,6 +227,8 @@ class Device:
         elif feature == Features.CHAMBER_LIGHT_2:
             return (self.info.device_type == Printers.H2D)
         elif feature == Features.DUAL_NOZZLES:
+            return (self.info.device_type == Printers.H2D)
+        elif feature == Features.EXTRUDER_TOOL:
             return (self.info.device_type == Printers.H2D)
         elif feature == Features.MQTT_ENCRYPTION:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
@@ -2685,3 +2669,31 @@ class SlicerSettings:
                 self._client.callback("event_printer_bambu_authentication_failed")
             else:
                 self._load_custom_filaments(slicer_settings)
+
+class ExtruderTool:
+    """Contains parsed _values from the ext_tool sensor"""
+    state: str
+
+    def __init__(self, client):
+        self._client = client
+        self.state = None
+
+    def print_update (self, data):
+        # Handle ext_tool update
+        old_data = f"{self.__dict__}"
+
+        if "device" in data and "ext_tool" in data["device"]:
+            ext_tool = data["device"]["ext_tool"]
+            mount = ext_tool.get("mount")
+            tool_type = ext_tool.get("type")
+            prev_state = self.state
+            if mount == 0:
+                self.state = "none"
+            elif mount == 1 and tool_type == "LB01":
+                self.state = "laser"
+            elif mount == 1 and tool_type == "CP00":
+                self.state = "cutter"
+            elif mount == 1 and tool_type:
+                self.state = None
+        
+        return (old_data != f"{self.__dict__}")

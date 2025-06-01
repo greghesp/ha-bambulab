@@ -47,8 +47,9 @@ class Features(IntEnum):
     AMS_DRYING = 26,
     CHAMBER_LIGHT_2 = 27,
     DUAL_NOZZLES = 28,
-    MQTT_ENCRYPTION = 29,
-    NON_CLOUD_CHANGES_BLOCKED = 30
+    EXTRUDER_TOOL = 29
+    MQTT_ENCRYPTION = 30,
+    NON_CLOUD_CHANGES_BLOCKED = 31,
 
 
 class FansEnum(IntEnum):
