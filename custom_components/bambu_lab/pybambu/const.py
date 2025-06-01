@@ -48,6 +48,8 @@ class Features(IntEnum):
     CHAMBER_LIGHT_2 = 27,
     DUAL_NOZZLES = 28,
     EXTRUDER_TOOL = 29,
+    MQTT_ENCRYPTION = 30,
+    NON_CLOUD_CHANGES_BLOCKED = 31,
 
 
 class FansEnum(IntEnum):
