@@ -305,16 +305,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
         ams_serial = next(iter(ams_device.identifiers))[1]
         ams_index = None
-        for index in range(0,4):
-            ams = self.get_model().ams.data[index]
+        for key in self.get_model().ams.data.keys:
+            ams = self.get_model().ams.data[key]
             if ams is not None:
                 if ams.serial == ams_serial:
                     # We found the right AMS.
-                    ams_index = index
+                    ams_index = key
                     break
 
         full_tray = tray + ams_index * 4
-        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index+1}/4")
+        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index}")
 
         return ams_index, tray
 
@@ -597,7 +597,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         # But we can use this to clean up orphaned AMS devices such as when an AMS is moved between printers.
         existing_ams_devices = []
-        for index in range (0, len(self.get_model().ams.data)):
+        for index in self.get_model().ams.data.keys():
             ams_entry = self.get_model().ams.data[index]
             if ams_entry is not None:
                 existing_ams_devices.append(ams_entry.serial)
@@ -608,7 +608,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for device in dev_reg.devices.values():
             if config_entry_id in device.config_entries:
                 # This device is associated with this printer.
-                if device.model == 'AMS' or device.model == 'AMS Lite' or device.model == 'AMS 2 Pro':
+                if device.model == 'AMS' or device.model == 'AMS Lite' or device.model == 'AMS 2 Pro' or device.model == 'AMS HT':
                     # And it's an AMS device
                     ams_serial = list(device.identifiers)[0][1]
                     if ams_serial not in existing_ams_devices:
@@ -664,9 +664,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def get_ams_device(self, index):
+        # Adjust indices to be 1-based for normal AMS, 128-based for HT.
+        ams_index = index
+        if ams_index < 128:
+            ams_index = index + 1
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
-        device_name = f"{device_type}_{printer_serial}_AMS_{index+1}"
+        device_name = f"{device_type}_{printer_serial}_AMS_{ams_index}"
         ams_serial = self.get_model().ams.data[index].serial
         model = self.get_model().ams.data[index].model
 

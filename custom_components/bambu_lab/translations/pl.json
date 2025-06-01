@@ -179,7 +179,7 @@
   "entity": {
     "binary_sensor": {
       "door_open": {
-        "name": "Drzwi obudowy"
+        "name": "Drzwi komory"
       },
       "timelapse": {
         "name": "Nagrywanie timelapse"
@@ -257,7 +257,7 @@
     },
     "select": {
       "printing_speed": {
-        "name": "Prędkość drukowania",
+        "name": "Prędkość druku",
         "state": {
           "silent": "Cichy",
           "standard": "Standardowy",
@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Moduł narzędziowy",
+        "state": {
+          "none": "Nie zamontowany",
+          "laser": "Laser",
+          "cutter": "Nóż"
+        }
+      },
       "wifi_signal": {
         "name": "Sygnał Wi-Fi"
       },
@@ -688,24 +696,24 @@
         "name": "Wilgotność"
       },
       "left_nozzle_temp": {
-        "name": "Lewa temperatura dyszy"
+        "name": "Temperatura dyszy lewej"
       },
       "left_target_nozzle_temp": {
-        "name": "Lewa dysza temperatura docelowa"
+        "name": "Temperatura docelowa dyszy lewej"
       },
       "right_nozzle_temp": {
-        "name": "Temperatura dysz prawa"
+        "name": "Temperatura dyszy prawej"
       },
       "right_target_nozzle_temp": {
-        "name": "Temperatura docelowa dysz prawa"
+        "name": "Temperatura docelowa dyszy prawej"
       },
       "sdcard_status": {
         "name": "Status karty SD",
         "state": {
-          "missing": "Zaginiony",
-          "normal": "Normalna",
+          "missing": "Brak karty",
+          "normal": "Prawidłowy",
           "abnormal": "Nieprawidłowy",
-          "readonly": "Czytaj tylko"
+          "readonly": "Tylko do odczytu"
         }
       }
     },

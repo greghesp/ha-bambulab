@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "도구 모듈",
+        "state": {
+          "none": "장착되지 않음",
+          "laser": "레이저",
+          "cutter": "커터"
+        }
+      },
       "wifi_signal": {
         "name": "Wi-Fi 신호"
       },

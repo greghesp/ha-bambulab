@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Modulo strumento",
+        "state": {
+          "none": "Non montato",
+          "laser": "Laser",
+          "cutter": "Taglierina"
+        }
+      },
       "wifi_signal": {
         "name": "Segnale Wi-Fi"
       },
