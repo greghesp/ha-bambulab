@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "โมดูลเครื่องมือ",
+        "state": {
+          "none": "ไม่ได้ติดตั้ง",
+          "laser": "เลเซอร์",
+          "cutter": "เครื่องตัด"
+        }
+      },
       "wifi_signal": {
         "name": "สัญญาณ Wi-Fi"
       },

@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Værktøjsmodul",
+        "state": {
+          "none": "Ikke monteret",
+          "laser": "Laser",
+          "cutter": "Skærer"
+        }
+      },
       "wifi_signal": {
         "name": "Wi-Fi signal"
       },

@@ -267,6 +267,14 @@
       }
     },
     "sensor": {
+      "tool_module": {
+        "name": "Module d’outil",
+        "state": {
+          "none": "Non monté",
+          "laser": "Laser",
+          "cutter": "Découpeur"
+        }
+      },
       "wifi_signal": {
         "name": "Signal Wi-Fi"
       },
