@@ -1959,16 +1959,16 @@ class AMSList:
             model = ""
             if name.startswith("ams/"):
                 model = "AMS"
-                index = int(name[4])
+                index = int(name[4:])
             elif name.startswith("ams_f1/"):
                 model = "AMS Lite"
-                index = int(name[7])
+                index = int(name[7:])
             elif name.startswith("n3f/"):
                 model = "AMS 2 Pro"
-                index = int(name[4])
+                index = int(name[4:])
             elif name.startswith("n3s/"):
                 model = "AMS HT"
-                index = int(name[4])
+                index = int(name[4:])
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is

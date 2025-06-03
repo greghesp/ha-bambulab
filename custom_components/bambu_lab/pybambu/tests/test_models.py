@@ -5,8 +5,8 @@ import sys
 import os
 import json
 
-# Add the pybambu directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Add the parent directory to the Python path to find pybambu
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from pybambu.models import PrintJob, Info, AMSList, HMSList, PrintError
 from pybambu.const import Printers
@@ -49,6 +49,7 @@ class TestInfo(unittest.TestCase):
 class TestAMSList(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
+        self.info = Info(self.client)
         self.ams_list = AMSList(self.client)
         # Load test data from P1P.json
         with open(os.path.join(os.path.dirname(__file__), 'P1P.json'), 'r') as f:
@@ -56,6 +57,9 @@ class TestAMSList(unittest.TestCase):
         # Load H2D test data
         with open(os.path.join(os.path.dirname(__file__), 'H2D.json'), 'r') as f:
             self.h2d_data = json.load(f)
+        # Load 2AMS1-1AMS2-1AMSHT test data
+        with open(os.path.join(os.path.dirname(__file__), '2AMS1-1AMS2-1AMSHT.json'), 'r') as f:
+            self.multi_ams_data = json.load(f)
 
     def test_ams_info_update(self):
         # Test AMS info update
@@ -102,6 +106,83 @@ class TestAMSList(unittest.TestCase):
         self.assertEqual(tray0.remain, 47)
         self.assertEqual(tray0.type, "PLA")
         self.assertEqual(tray0.color, "FFFFFFFF")
+        self.assertEqual(tray0.tray_weight, "1000")
+
+    def test_multi_ams_detection(self):
+        # Test detection of 4 different AMS instances (2 AMS, 1 AMS 2 Pro, 1 AMS HT)
+
+        # First initialize the version data as we get the model names from that.
+        data = self.multi_ams_data['get_version']
+        result = self.ams_list.info_update(data)
+
+        # Verify all four AMS instances are detected
+        self.assertIn(0, self.ams_list.data)  # First AMS
+        self.assertIn(1, self.ams_list.data)  # Second AMS
+        self.assertIn(2, self.ams_list.data)  # AMS 2 Pro
+        self.assertIn(128, self.ams_list.data)  # AMS HT
+
+        ams0 = self.ams_list.data[0]
+        ams1 = self.ams_list.data[1]
+        ams2 = self.ams_list.data[2]
+        ams_ht = self.ams_list.data[128]
+
+        # Verify they have the right model names
+        self.assertEqual(ams0.model, "AMS")  # Verify model name
+        self.assertEqual(ams1.model, "AMS")  # Verify model name
+        self.assertEqual(ams2.model, "AMS 2 Pro")  # Verify model name
+        self.assertEqual(ams_ht.model, "AMS HT")  # Verify model name
+        
+
+        # Now that we have the models, we can populate the sensor data from the payload.
+        data = self.multi_ams_data['push_all']
+        
+        result = self.ams_list.print_update(data)
+        self.assertTrue(result)
+        
+        # Verify all four AMS instances are detected
+        self.assertIn(0, self.ams_list.data)  # First AMS
+        self.assertIn(1, self.ams_list.data)  # Second AMS
+        self.assertIn(2, self.ams_list.data)  # AMS 2 Pro
+        self.assertIn(128, self.ams_list.data)  # AMS HT
+
+        # Refresh the variables after the print_update call.
+        ams0 = self.ams_list.data[0]
+        ams1 = self.ams_list.data[1]
+        ams2 = self.ams_list.data[2]
+        ams_ht = self.ams_list.data[128]
+
+        # Verify AMS 0 (First AMS)
+        self.assertEqual(len(ams0.tray), 4)  # Should have 4 trays
+        self.assertEqual(ams0.humidity, 8)
+        self.assertEqual(ams0.temperature, 26.2)
+        
+        # Verify AMS 1 (Second AMS)
+        self.assertEqual(len(ams1.tray), 4)  # Should have 4 trays
+        self.assertEqual(ams1.humidity, 4)
+        self.assertEqual(ams1.temperature, 25.4)
+        
+        # Verify AMS 2 (AMS 2 Pro)
+        self.assertEqual(len(ams2.tray), 4)  # Should have 4 trays
+        self.assertEqual(ams2.humidity, 9)
+        self.assertEqual(ams2.temperature, 65.0)
+        
+        # Verify AMS HT
+        self.assertEqual(len(ams_ht.tray), 1)  # Should have only 1 tray
+        self.assertEqual(ams_ht.humidity, 8)
+        self.assertEqual(ams_ht.temperature, 45.2)
+        
+        # Verify tray details for first tray in AMS 0
+        tray0 = ams0.tray[0]
+        self.assertEqual(tray0.remain, 93)
+        self.assertEqual(tray0.type, "PLA")
+        self.assertEqual(tray0.color, "000000FF")
+        self.assertEqual(tray0.tray_weight, "1000")
+
+        # Verify tray details for first tray in AMS HT
+        tray0 = ams_ht.tray[0]
+        self.assertEqual(tray0.remain, 100)
+        self.assertEqual(tray0.type, "PA-CF")
+        self.assertEqual(tray0.color, "000000FF")
         self.assertEqual(tray0.tray_weight, "1000")
 
 if __name__ == '__main__':

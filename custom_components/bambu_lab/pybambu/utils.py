@@ -25,6 +25,8 @@ from .const_print_errors import PRINT_ERROR_ERRORS
 
 def search(lst, predicate, default={}):
     """Search an array for a string"""
+    if lst is None:
+        return default
     for item in lst:
         if predicate(item):
             return item
