@@ -249,8 +249,10 @@ class Device:
             if self.info.sw_ver == "unknown":
                 return False
             
-            if (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.00.00"):
-                return self.info.is_local_mqtt and self.info.has_bambu_cloud_connection
+            # Disabling this as this block isn't actually occurring in this version.
+            #if (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.00.00"):
+            #    return self.info.is_local_mqtt and self.info.has_bambu_cloud_connection
+
             return False
         return False
     
