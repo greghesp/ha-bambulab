@@ -8,7 +8,7 @@ import json
 # Add the parent directory to the Python path to find pybambu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from pybambu.models import PrintJob, Info, AMSList, HMSList, PrintError
+from pybambu.models import PrintJob, Info, AMSList, HMSList, PrintError, Temperature
 from pybambu.const import Printers
 
 class TestPrintJob(unittest.TestCase):
@@ -184,6 +184,34 @@ class TestAMSList(unittest.TestCase):
         self.assertEqual(tray0.type, "PA-CF")
         self.assertEqual(tray0.color, "000000FF")
         self.assertEqual(tray0.tray_weight, "1000")
+
+class TestH2D(unittest.TestCase):
+    def setUp(self):
+        self.client = MagicMock()
+        self.info = Info(self.client)
+        self.temperature = Temperature(self.client)
+        # Load H2D test data
+        with open(os.path.join(os.path.dirname(__file__), 'H2D.json'), 'r') as f:
+            self.h2d_data = json.load(f)
+        
+        # Mock dual nozzles feature support
+        self.client._device.supports_feature.return_value = True
+
+    def test_h2d_nozzles(self):
+        data = self.h2d_data['push_all']
+        result = self.temperature.print_update(data)
+        self.assertTrue(result)
+
+        # Test left nozzle (index 0) temperatures
+        self.assertEqual(self.temperature.left_nozzle_temperature, 264)
+        self.assertEqual(self.temperature.left_nozzle_target_temperature, 225)
+
+        # Test right nozzle (index 1) temperatures
+        self.assertEqual(self.temperature.right_nozzle_temperature, 40)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 0)
+
+
+    
 
 if __name__ == '__main__':
     unittest.main() 
