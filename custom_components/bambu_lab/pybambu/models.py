@@ -250,6 +250,7 @@ class Device:
                 return False
             
             if (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.00.00"):
+                #LOGGER.debug(f"++++++++++++++++++++++++++ {self.supports_sw_version("01.07.00.00")} {self.info.is_local_mqtt and self.info.has_bambu_cloud_connection}")
                 return self.info.is_local_mqtt and self.info.has_bambu_cloud_connection
             return False
         return False
@@ -449,7 +450,7 @@ class Temperature:
 
     @property
     def right_nozzle_temperature(self):
-        return self.target_nozzle_temps[1]
+        return self.nozzle_temps[1]
 
     @property
     def right_nozzle_target_temperature(self):
@@ -507,14 +508,15 @@ class Temperature:
         #   "state": 2 // low 4 bits is count of extruders; active extruder is next 4 bits
         # },
         if self._client._device.supports_feature(Features.DUAL_NOZZLES):
-            if "extruder" in data and "info" in data["extruder"]:
-                for entry in data["extruder"]["info"]:
+            extruder_data = data.get("device", {}).get("extruder", {}).get("info")
+            if extruder_data is not None:
+                for entry in extruder_data:
                     if entry.get("id") in (0, 1):
                         nozzle_temp = entry.get("temp") & 0xFFFF
                         nozzle_target_temp = (entry.get("temp") >> 16) & 0xFFFF
                         self.nozzle_temps[entry["id"]] = nozzle_temp
                         self.target_nozzle_temps[entry["id"]] = nozzle_target_temp
-                state = data["extruder"]["state"]
+                state = data["device"]["extruder"]["state"]
                 self.active_nozzle = (state >> 4) & 0xF
         
         else:
