@@ -250,7 +250,6 @@ class Device:
                 return False
             
             if (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.00.00"):
-                #LOGGER.debug(f"++++++++++++++++++++++++++ {self.supports_sw_version("01.07.00.00")} {self.info.is_local_mqtt and self.info.has_bambu_cloud_connection}")
                 return self.info.is_local_mqtt and self.info.has_bambu_cloud_connection
             return False
         return False
