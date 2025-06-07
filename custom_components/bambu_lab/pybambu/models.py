@@ -240,7 +240,7 @@ class Device:
                 return not self.info.developer_lan_mode 
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
                 return not self.info.developer_lan_mode
-            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
+            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.08.02.00"):
                 return not self.info.developer_lan_mode
             return False
         elif feature == Features.NON_CLOUD_CHANGES_BLOCKED:
