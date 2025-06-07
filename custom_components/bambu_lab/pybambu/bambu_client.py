@@ -605,9 +605,6 @@ class BambuClient:
             else:
                 self._device.info.set_online(True)
                 self._watchdog.received_data()
-                if json_data.get("info") and json_data.get("info").get("command") == "get_version":
-                    LOGGER.debug("Got Version Data")
-                    self._device.info_update(data=json_data.get("info"))
                 if json_data.get("print"):
                     self._device.print_update(data=json_data.get("print"))
                     # Once we receive data, if in manual refresh mode, we disconnect again.
@@ -615,6 +612,9 @@ class BambuClient:
                         self.disconnect()
                     if json_data.get("print").get("msg", 0) == 0:
                         self._refreshed= False
+                elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
+                    LOGGER.debug("Got Version Data")
+                    self._device.info_update(data=json_data.get("info"))
 
 
         except Exception as e:
