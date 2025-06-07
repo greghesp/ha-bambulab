@@ -242,6 +242,8 @@ class Device:
                 return not self.info.developer_lan_mode
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.08.02.00"):
                 return not self.info.developer_lan_mode
+            elif (self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI) and self.supports_sw_version("01.05.00.00"):
+                return not self.info.developer_lan_mode
             return False
         elif feature == Features.NON_CLOUD_CHANGES_BLOCKED:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
