@@ -446,8 +446,6 @@ class BambuClient:
         else:
             self.client.tls_set()
 
-
-
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
         if self._mock:
@@ -727,7 +725,6 @@ class BambuClient:
             if result.get(timeout=10):
                 LOGGER.debug("Connection test was successful")
                 return True
-            LOGGER.debug("Response not received.")
         except OSError as e:
             LOGGER.error(f"Connection test to '{host}' failed: {type(e)} Args: {e}")
             return False
@@ -735,7 +732,6 @@ class BambuClient:
             LOGGER.error(f"Connection test to '{host}' failed with timeout")
             return False
         finally:
-            LOGGER.debug("DISCONNECTING FROM BROKER")
             self.disconnect()
 
     async def __aenter__(self):
