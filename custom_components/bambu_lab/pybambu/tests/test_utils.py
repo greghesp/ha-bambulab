@@ -19,6 +19,7 @@ class MockMQTTClient:
     _connected: bool = False
     
     def __init__(self, mock: str):
+        LOGGER.debug(f"********************** RUNNING IN MOCK MODE '{mock}'")
         self.connected = False
         self.subscribed_topics: Dict[str, Callable] = {}
         self.published_messages: Dict[str, list] = {}
@@ -37,21 +38,18 @@ class MockMQTTClient:
                 
     def connect(self, host: str, port: int = 1883, keepalive: int = 60) -> None:
         """Simulate connecting to an MQTT broker."""
-        LOGGER.debug(f"MQTTMOCK: Connecting to broker")
         self._connected = True
         if self._on_connect:
             self._on_connect(None, None, 0, None)
             
     def disconnect(self) -> None:
         """Simulate disconnecting from an MQTT broker."""
-        LOGGER.debug(f"MQTTMOCK: Disconnecting from broker")
         self._connected = False
         if self._on_disconnect:
             self._on_disconnect(None, None, 0)
             
     def subscribe(self, topic: str, callback: Optional[Callable] = None) -> None:
         """Subscribe to a topic and store the callback."""
-        LOGGER.debug(f"MQTTMOCK: Subscribing to topic: {topic}")
         self.subscribed_topics[topic] = callback
         
     def publish(self, topic: str, payload: str) -> MqttMessageInfo:
@@ -81,6 +79,7 @@ class MockMQTTClient:
         if command:
             response = self._test_payload.get(command)
             if response is not None and self._on_message:
+                LOGGER.debug(f"MQTTMOCK: Found response.")
                 message = MagicMock()
                 message.topic = topic
                 message.payload = json.dumps(response).encode()
@@ -97,7 +96,6 @@ class MockMQTTClient:
     @on_connect.setter
     def on_connect(self, callback: Callable):
         """Set the on_connect callback."""
-        LOGGER.debug(f"MQTTMOCK: Setting on_connect callback")
         self._on_connect = callback
         
     @property
@@ -107,7 +105,6 @@ class MockMQTTClient:
     @on_message.setter
     def on_message(self, callback: Callable):
         """Set the on_message callback."""
-        LOGGER.debug(f"MQTTMOCK: Setting on_message callback")
         self._on_message = callback
         
     @property
@@ -117,7 +114,6 @@ class MockMQTTClient:
     @on_disconnect.setter
     def on_disconnect(self, callback: Callable):
         """Set the on_disconnect callback."""
-        LOGGER.debug(f"MQTTMOCK: Setting on_disconnect callback")
         self._on_disconnect = callback
         
     def simulate_message(self, topic: str, payload: Dict[str, Any]) -> None:
@@ -170,7 +166,7 @@ class MockMQTTClient:
 
     def loop_forever(self) -> None:
         """Mock running the network loop forever."""
-        LOGGER.debug(f"MQTTMOCK: Running network loop forever")
+        LOGGER.debug(f"MQTTMOCK: Running network loop forever - NOT IMPLEMENTED")
         pass
 
     def reconnect_delay_set(self, min_delay: int = 1, max_delay: int = 120) -> None:

@@ -341,7 +341,6 @@ class BambuClient:
         self._manual_refresh_mode = False #config.get('manual_refresh_mode', False)
         self._serial = config.get('serial', '')
         if self._serial.startswith('MOCK-'):
-            LOGGER.debug(f"********************** RUNNING IN MOCK MODE: {self._serial}")
             self._mock = True
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
@@ -452,7 +451,6 @@ class BambuClient:
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
         if self._mock:
-            LOGGER.debug(f"********************** RUNNING IN MOCK MODE")
             self.client = MockMQTTClient(self._serial)
         else:
             self.client = mqtt.Client()
@@ -703,7 +701,6 @@ class BambuClient:
 
         self._test_mode = True
         if self._mock:
-            LOGGER.debug(f"********************** RUNNING IN MOCK MODE")
             self.client = MockMQTTClient(self._serial)
         else:
             self.client = mqtt.Client()
