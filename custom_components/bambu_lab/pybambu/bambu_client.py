@@ -33,7 +33,7 @@ from .commands import (
     PUSH_ALL,
     START_PUSH,
 )
-
+from .tests import MockMQTTClient
 
 class WatchdogThread(threading.Thread):
 
@@ -324,8 +324,9 @@ class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
     _watchdog = None
     _camera = None
-    _usage_hours: float
-    _test_mode = bool
+    _usage_hours: float = 0
+    _test_mode: bool = False
+    _mock: bool = False
 
     def __init__(self, config):
         self._config = config
@@ -339,6 +340,8 @@ class BambuClient:
         self._local_mqtt = config.get('local_mqtt', False)
         self._manual_refresh_mode = False #config.get('manual_refresh_mode', False)
         self._serial = config.get('serial', '')
+        if self._serial.startswith('MOCK-'):
+            self._mock = True
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
@@ -445,7 +448,10 @@ class BambuClient:
 
     async def connect(self, callback):
         """Connect to the MQTT Broker"""
-        self.client = mqtt.Client()
+        if self._mock:
+            self.client = MockMQTTClient(self._serial)
+        else:
+            self.client = mqtt.Client()
         self._callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
@@ -505,11 +511,12 @@ class BambuClient:
 
     def _on_connect(self):
         self._connected = True
-        self.subscribe_and_request_info()
 
         LOGGER.debug("Starting watchdog thread")
         self._watchdog = WatchdogThread(self)
         self._watchdog.start()
+
+        self.subscribe_and_request_info()
 
         # Start camera if enabled
         self.start_camera()
@@ -607,6 +614,7 @@ class BambuClient:
                     LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
 
+
         except Exception as e:
             LOGGER.error("An exception occurred processing a message:", exc_info=e)
             LOGGER.debug(message.payload)
@@ -619,7 +627,7 @@ class BambuClient:
     def publish(self, msg):
         """Publish a custom message"""
         result = self.client.publish(f"device/{self._serial}/request", json.dumps(msg))
-        status = result[0]
+        status = result.rc
         if status == 0:
             LOGGER.debug(f"Sent {msg} to topic device/{self._serial}/request")
             return True
@@ -690,7 +698,10 @@ class BambuClient:
                 result.put(True)
 
         self._test_mode = True
-        self.client = mqtt.Client()
+        if self._mock:
+            self.client = MockMQTTClient(self._serial)
+        else:
+            self.client = mqtt.Client()
         self.client.on_connect = self.try_on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = on_message
@@ -710,6 +721,7 @@ class BambuClient:
         try:
             self.client.connect(host, self._port)
             self.client.loop_start()
+            LOGGER.debug("Waiting for reponse.")
             if result.get(timeout=10):
                 LOGGER.debug("Connection test was successful")
                 return True
