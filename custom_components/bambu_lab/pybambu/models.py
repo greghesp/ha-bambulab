@@ -238,9 +238,11 @@ class Device:
             
             if (self.info.device_type == Printers.H2D) and self.supports_sw_version("01.01.01.00"):
                 return not self.info.developer_lan_mode 
-            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
+            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.32"):
                 return not self.info.developer_lan_mode
-            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
+            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.08.02.00"):
+                return not self.info.developer_lan_mode
+            elif (self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI) and self.supports_sw_version("01.05.00.00"):
                 return not self.info.developer_lan_mode
             return False
         elif feature == Features.NON_CLOUD_CHANGES_BLOCKED:
