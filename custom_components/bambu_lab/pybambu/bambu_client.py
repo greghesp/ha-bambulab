@@ -338,7 +338,6 @@ class BambuClient:
         self._auth_token = config.get('auth_token', '')
         self._device_type = config.get('device_type', 'unknown').upper()
         self._local_mqtt = config.get('local_mqtt', False)
-        self._manual_refresh_mode = False #config.get('manual_refresh_mode', False)
         self._serial = config.get('serial', '')
         if self._serial.startswith('MOCK-'):
             self._mock = True
@@ -382,20 +381,6 @@ class BambuClient:
     def connected(self):
         """Return if connected to server"""
         return self._connected
-
-    @property
-    def manual_refresh_mode(self):
-        """Return if the integration is running in poll mode"""
-        return self._manual_refresh_mode
-
-    async def set_manual_refresh_mode(self, on):
-        self._manual_refresh_mode = on
-        if self._manual_refresh_mode:
-            # Disconnect from the server. User must manually hit the refresh button to connect to refresh and then it will immediately disconnect.
-            self.disconnect()
-        else:
-            # Reconnect normally
-            await self.connect(self._callback)
 
     @property
     def camera_enabled(self):
@@ -605,9 +590,6 @@ class BambuClient:
                 self._watchdog.received_data()
                 if json_data.get("print"):
                     self._device.print_update(data=json_data.get("print"))
-                    # Once we receive data, if in manual refresh mode, we disconnect again.
-                    if self._manual_refresh_mode:
-                        self.disconnect()
                     if json_data.get("print").get("msg", 0) == 0:
                         self._refreshed= False
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
@@ -637,16 +619,12 @@ class BambuClient:
 
     async def refresh(self):
         """Force refresh data"""
-
-        if self._manual_refresh_mode:
-            await self.connect(self._callback)
-        else:
-            LOGGER.debug("Force Refresh: Getting Version Info")
-            self._refreshed = True
-            self.publish(GET_VERSION)
-            LOGGER.debug("Force Refresh: Request Push All")
-            self._refreshed = True
-            self.publish(PUSH_ALL)
+        LOGGER.debug("Force Refresh: Getting Version Info")
+        self._refreshed = True
+        self.publish(GET_VERSION)
+        LOGGER.debug("Force Refresh: Request Push All")
+        self._refreshed = True
+        self.publish(PUSH_ALL)
 
     def get_device(self):
         """Return device"""

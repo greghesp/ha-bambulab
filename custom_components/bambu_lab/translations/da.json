@@ -82,7 +82,8 @@
           "serial": "Serienummer:",
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):",
+          "developer_lan_mode": "Udvikler LAN -tilstand aktiveret:"
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):",
+          "developer_lan_mode": "Udvikler LAN -tilstand aktiveret:"
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,12 @@
       },
       "extruder_filament_state": {
         "name": "Ekstruderfilamentstilstand"
+      },
+      "developer_lan_mode": {
+        "name": "Udvikler LAN -tilstand"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT Encryption Firmware"
       }
     },
     "button": {
@@ -723,9 +731,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "Manuel opdateringstilstand"
-      },
       "camera": {
         "name": "Aktiver kamera"
       },

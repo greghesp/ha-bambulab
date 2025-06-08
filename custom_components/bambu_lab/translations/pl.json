@@ -82,7 +82,8 @@
           "serial": "Numer seryjny:",
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
-          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):",
+          "developer_lan_mode": "Włączony tryb programisty LAN:"
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
-          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):",
+          "developer_lan_mode": "Włączony tryb programisty LAN:"
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,12 @@
       },
       "extruder_filament_state": {
         "name": "Stan filamentu w ekstruderze"
+      },
+      "developer_lan_mode": {
+        "name": "Tryb programisty LAN"
+      },
+      "mqtt_encryption": {
+        "name": "Oprogramowanie układowe szyfrowania MQTT"
       }
     },
     "button": {
@@ -723,9 +731,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "Tryb ręcznego odświeżania"
-      },
       "camera": {
         "name": "Włącz kamerę"
       },

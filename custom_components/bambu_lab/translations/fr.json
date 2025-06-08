@@ -82,7 +82,8 @@
           "serial": "Numéro de série",
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
-          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
+          "developer_lan_mode": "Mode LAN développeur activé:"
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
-          "usage_hours": "Heures d'utilisation actuelles (facultatif) :"
+          "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
+          "developer_lan_mode": "Mode LAN développeur activé:"
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,12 @@
       },
       "extruder_filament_state": {
         "name": "État de filament extrudeur"
+      },
+      "developer_lan_mode": {
+        "name": "Mode LAN développeur"
+      },
+      "mqtt_encryption": {
+        "name": "Firmware de cryptage MQTT"
       }
     },
     "button": {
@@ -723,9 +731,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "Actualisation manuelle"
-      },
       "camera": {
         "name": "Activer la caméra"
       },

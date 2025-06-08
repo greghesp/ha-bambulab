@@ -82,6 +82,7 @@
           "serial": "Serial Number:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
+          "developer_lan_mode": "Developer Lan Mode Enabled:",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
@@ -161,6 +162,7 @@
         "data": {
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
+          "developer_lan_mode": "Developer Lan Mode Enabled:",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
@@ -178,6 +180,9 @@
   },
   "entity": {
     "binary_sensor": {
+      "developer_lan_mode": {
+        "name": "Developer Lan Mode"
+      },
       "door_open": {
         "name": "Enclosure door"
       },
@@ -192,6 +197,9 @@
       },
       "online": {
         "name": "Online"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT encryption firmware"
       },
       "firmware_update": {
         "name": "Firmware update"
@@ -723,9 +731,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "Manual refresh mode"
-      },
       "camera": {
         "name": "Enable camera"
       },

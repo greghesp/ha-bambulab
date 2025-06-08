@@ -82,7 +82,8 @@
           "serial": "序号：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "usage_hours": "当前使用时间（可选）："
+          "usage_hours": "当前使用时间（可选）：",
+          "developer_lan_mode": "启用了开发人员LAN模式："
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "usage_hours": "当前使用时间（可选）："
+          "usage_hours": "当前使用时间（可选）：",
+          "developer_lan_mode": "启用了开发人员LAN模式："
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,12 @@
       },
       "extruder_filament_state": {
         "name": "挤出机耗材状态"
+      },
+      "developer_lan_mode": {
+        "name": "开发人员LAN模式"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT加密固件"
       }
     },
     "button": {
@@ -723,9 +731,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "手动刷新模式"
-      },
       "camera": {
         "name": "启用相机"
       },
