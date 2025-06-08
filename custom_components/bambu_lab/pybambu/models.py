@@ -246,7 +246,7 @@ class Device:
         elif feature == Features.MQTT_ENCRYPTION_ENABLED:
             if self.supports_feature(Features.MQTT_ENCRYPTION_FIRMWARE):
                 return not self.info.developer_lan_mode
-            return True
+            return False
         return False
     
     def supports_sw_version(self, version: str) -> bool:
