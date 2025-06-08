@@ -82,7 +82,8 @@
           "serial": "Seriennummer:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):",
+          "developer_lan_mode": "Entwickler LAN -Modus aktiviert:"
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):",
+          "developer_lan_mode": "Entwickler LAN -Modus aktiviert:"
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,9 @@
       },
       "extruder_filament_state": {
         "name": "Extruder Filament Status"
+      },
+      "developer_lan_mode": {
+        "name": "Entwickler LAN -Modus"
       }
     },
     "button": {
@@ -723,9 +728,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "Manueller Aktualisierungsmodus"
-      },
       "camera": {
         "name": "Kamera aktivieren"
       },

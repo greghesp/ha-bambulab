@@ -82,7 +82,8 @@
           "serial": "Sériové čislo:",
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
-          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):",
+          "developer_lan_mode": "Povolený režim LAN s vývojárom:"
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
-          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):",
+          "developer_lan_mode": "Povolený režim LAN s vývojárom:"
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,9 @@
       },
       "extruder_filament_state": {
         "name": "Extrudérový vlákno štát"
+      },
+      "developer_lan_mode": {
+        "name": "Vývojár LAN Mode"
       }
     },
     "button": {
@@ -723,9 +728,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "Režim manuálneho obnovenia"
-      },
       "camera": {
         "name": "Povoliť kameru"
       },

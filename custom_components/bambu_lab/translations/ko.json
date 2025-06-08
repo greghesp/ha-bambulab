@@ -82,7 +82,8 @@
           "serial": "시리얼 번호:",
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "usage_hours": "현재 사용 시간 (선택 사항):"
+          "usage_hours": "현재 사용 시간 (선택 사항):",
+          "developer_lan_mode": "개발자 LAN 모드 활성화 :"
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "usage_hours": "현재 사용 시간 (선택 사항):"
+          "usage_hours": "현재 사용 시간 (선택 사항):",
+          "developer_lan_mode": "개발자 LAN 모드 활성화 :"
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,9 @@
       },
       "extruder_filament_state": {
         "name": "압출기 필라멘트 상태"
+      },
+      "developer_lan_mode": {
+        "name": "개발자 LAN 모드"
       }
     },
     "button": {
@@ -723,9 +728,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "수동 새로 고침 모드"
-      },
       "camera": {
         "name": "카메라 활성화"
       },

@@ -82,7 +82,8 @@
           "serial": "Número de Serie:",
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "developer_lan_mode": "Mode LAN desenvolupador activat:"
         },
         "sections": {
           "advanced": {
@@ -161,7 +162,8 @@
         "data": {
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "developer_lan_mode": "Mode LAN desenvolupador activat:"
         },
         "sections": {
           "advanced": {
@@ -198,6 +200,9 @@
       },
       "extruder_filament_state": {
         "name": "Estat de filament d'extrús"
+      },
+      "developer_lan_mode": {
+        "name": "Mode LAN desenvolupador"
       }
     },
     "button": {
@@ -723,9 +728,6 @@
       }
     },
     "switch": {
-      "manual": {
-        "name": "Mode d'actualització manual"
-      },
       "camera": {
         "name": "Habilitar càmera"
       },

@@ -167,8 +167,6 @@ class Device:
             return self.info.device_type == Printers.P1P or self.info.device_type == Printers.P1S or self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
         elif feature == Features.DOOR_SENSOR:
             return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
-        elif feature == Features.MANUAL_MODE:
-            return False
         elif feature == Features.AMS_FILAMENT_REMAINING:
             # Technically this is not the AMS Lite but that's currently tied to only these printer types.
             return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
@@ -1676,6 +1674,7 @@ class Info:
     extruder_filament_state: bool
     _ip_address: str
     _force_ip: bool
+    _developer_lan_mode: bool
 
     def __init__(self, client):
         self._client = client
@@ -1695,6 +1694,7 @@ class Info:
         self.extruder_filament_state = False
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)
+        self._developer_lan_mode = client.settings.get('developer_lan_mode', False)
 
     def set_online(self, online):
         if self.online != online:
@@ -1862,9 +1862,7 @@ class Info:
 
     @property
     def developer_lan_mode(self):
-        # Set developer lan mode to be the same as local mqtt w/o bambu credentials available for now.
-        # TODO: Find a way to more accurately confirm developer lan mode is enabled.
-        return self._client._local_mqtt and not self.has_bambu_cloud_connection
+        return self._developer_lan_mode
 
     @property
     def has_bambu_cloud_connection(self) -> bool:

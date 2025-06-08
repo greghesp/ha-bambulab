@@ -729,9 +729,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             data=self.config_entry.data,
             options=options)
         
-        if option == Options.MANUALREFRESH:
-            await self.client.set_manual_refresh_mode(enable)
-        
         force_reload = False
         match option:
             case Options.CAMERA:
