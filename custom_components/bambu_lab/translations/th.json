@@ -203,6 +203,9 @@
       },
       "developer_lan_mode": {
         "name": "นักพัฒนาโหมด LAN"
+      },
+      "mqtt_encryption": {
+        "name": "เฟิร์มแวร์การเข้ารหัส MQTT"
       }
     },
     "button": {

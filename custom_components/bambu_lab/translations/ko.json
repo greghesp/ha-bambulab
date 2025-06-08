@@ -203,6 +203,9 @@
       },
       "developer_lan_mode": {
         "name": "개발자 LAN 모드"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT 암호화 펌웨어"
       }
     },
     "button": {

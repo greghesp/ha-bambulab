@@ -203,6 +203,9 @@
       },
       "developer_lan_mode": {
         "name": "Udvikler LAN -tilstand"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT Encryption Firmware"
       }
     },
     "button": {

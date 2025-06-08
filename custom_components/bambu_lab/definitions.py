@@ -151,6 +151,13 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         is_on_fn=lambda self: self.coordinator.get_model().info.developer_lan_mode,
     ),
+    BambuLabBinarySensorEntityDescription(
+        key="mqtt_encryption",
+        translation_key="mqtt_encryption",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_FIRMWARE),
+    ),
 )
 
 PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (

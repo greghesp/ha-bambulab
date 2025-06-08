@@ -203,6 +203,9 @@
       },
       "developer_lan_mode": {
         "name": "Λειτουργία προγραμματιστή LAN"
+      },
+      "mqtt_encryption": {
+        "name": "Firmware κρυπτογράφησης MQTT"
       }
     },
     "button": {

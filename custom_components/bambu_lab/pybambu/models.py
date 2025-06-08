@@ -228,32 +228,25 @@ class Device:
             return (self.info.device_type == Printers.H2D)
         elif feature == Features.EXTRUDER_TOOL:
             return (self.info.device_type == Printers.H2D)
-        elif feature == Features.MQTT_ENCRYPTION:
+        elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
             # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
             if self.info.sw_ver == "unknown":
-                return False
+                return True
             
             if (self.info.device_type == Printers.H2D) and self.supports_sw_version("01.01.01.00"):
-                return not self.info.developer_lan_mode 
+                return True
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.32"):
-                return not self.info.developer_lan_mode
+                return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.08.02.00"):
-                return not self.info.developer_lan_mode
+                return True
             elif (self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI) and self.supports_sw_version("01.05.00.00"):
+                return True
+            return False
+        elif feature == Features.MQTT_ENCRYPTION_ENABLED:
+            if self.supports_feature(Features.MQTT_ENCRYPTION_FIRMWARE):
                 return not self.info.developer_lan_mode
-            return False
-        elif feature == Features.NON_CLOUD_CHANGES_BLOCKED:
-            # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
-            # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
-            if self.info.sw_ver == "unknown":
-                return False
-            
-            # Disabling this as this block isn't actually occurring in this version.
-            #if (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.00.00"):
-            #    return self.info.is_local_mqtt and self.info.has_bambu_cloud_connection
-
-            return False
+            return True
         return False
     
     def supports_sw_version(self, version: str) -> bool:

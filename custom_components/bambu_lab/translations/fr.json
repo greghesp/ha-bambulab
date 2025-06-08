@@ -203,6 +203,9 @@
       },
       "developer_lan_mode": {
         "name": "Mode LAN développeur"
+      },
+      "mqtt_encryption": {
+        "name": "Firmware de cryptage MQTT"
       }
     },
     "button": {

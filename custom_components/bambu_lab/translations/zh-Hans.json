@@ -203,6 +203,9 @@
       },
       "developer_lan_mode": {
         "name": "开发人员LAN模式"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT加密固件"
       }
     },
     "button": {

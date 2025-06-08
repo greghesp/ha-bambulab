@@ -198,6 +198,9 @@
       "online": {
         "name": "Online"
       },
+      "mqtt_encryption": {
+        "name": "MQTT encryption firmware"
+      },
       "firmware_update": {
         "name": "Firmware update"
       },

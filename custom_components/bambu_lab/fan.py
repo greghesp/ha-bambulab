@@ -86,8 +86,7 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     def available(self) -> bool:
         """Is the fan available"""
         available = True
-        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION)
-        available = available and not self.coordinator.get_model().supports_feature(Features.NON_CLOUD_CHANGES_BLOCKED)
+        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
         return available
     
     @property
