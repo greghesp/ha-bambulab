@@ -38,7 +38,8 @@ FANS: tuple[FanEntityDescription, ...] = (
     BambuLabFanEntityDescription(
         key="aux_fan",
         translation_key="aux_fan",
-        value_fn=lambda device: device.fans.get_fan_speed(FansEnum.AUXILIARY)
+        value_fn=lambda device: device.fans.get_fan_speed(FansEnum.AUXILIARY),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AUX_FAN)
     ),
     BambuLabFanEntityDescription(
         key="chamber_fan",

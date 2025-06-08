@@ -736,7 +736,7 @@
           "loader_ver": "00.00.00.00",
           "name": "ota",
           "product_name": "Bambu Lab X1-Carbon",
-          "sn": "Mock-X1CMULTIAMS",
+          "sn": "MOCK-X1CMULTIAMS",
           "sw_ver": "01.09.00.01",
           "visible": true
         },
@@ -746,7 +746,7 @@
           "loader_ver": "00.00.00.00",
           "name": "ams/0",
           "product_name": "AMS (1)",
-          "sn": "Mock-X1CMULTIAMS-AMS0",
+          "sn": "MOCK-X1CMULTIAMS-AMS0",
           "sw_ver": "00.01.06.62",
           "visible": true
         },
@@ -756,7 +756,7 @@
           "loader_ver": "00.00.00.00",
           "name": "ams/1",
           "product_name": "AMS (2)",
-          "sn": "Mock-X1CMULTIAMS-AMS1",
+          "sn": "MOCK-X1CMULTIAMS-AMS1",
           "sw_ver": "00.01.06.62",
           "visible": true
         },
@@ -766,7 +766,7 @@
           "loader_ver": "00.00.00.00",
           "name": "n3f/2",
           "product_name": "AMS 2 Pro (3)",
-          "sn": "Mock-X1CMULTIAMS-AMS2",
+          "sn": "MOCK-X1CMULTIAMS-AMS2",
           "sw_ver": "02.00.19.68",
           "visible": true
         },
@@ -776,7 +776,7 @@
           "loader_ver": "00.00.00.00",
           "name": "n3s/128",
           "product_name": "AMS HT (1)",
-          "sn": "Mock-X1CMULTIAMS-AMS128",
+          "sn": "MOCK-X1CMULTIAMS-AMS128",
           "sw_ver": "02.00.19.67",
           "visible": true
         },
