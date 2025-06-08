@@ -788,7 +788,7 @@
                 "loader_ver": "00.00.00.00",
                 "name": "n3f/0",
                 "product_name": "AMS 2 Pro (1)",
-                "sn": "MOCK-H2D-AMS0",
+                "sn": "MOCK-H2D-AMS0-LEFT",
                 "sw_ver": "02.00.19.47",
                 "visible": true
               },
@@ -798,7 +798,7 @@
                 "loader_ver": "00.00.00.00",
                 "name": "n3f/1",
                 "product_name": "AMS 2 Pro (2)",
-                "sn": "MOCK-H2D-AMS1",
+                "sn": "MOCK-H2D-AMS1-RIGHT",
                 "sw_ver": "02.00.19.47",
                 "visible": true
               },
