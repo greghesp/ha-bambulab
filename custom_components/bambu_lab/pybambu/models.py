@@ -258,8 +258,14 @@ class Device:
                 return None
             if self.ams.tray_now == 254:
                 return self.external_spool
-            active_ams = self.ams.data[math.floor(self.ams.tray_now / 4)]
-            active_tray = self.ams.tray_now % 4
+            if self.ams.tray_now >= 80:
+                # AMS HT's are indices 128-135 (0x80-0x87)
+                active_ams_index = self.ams.tray_now
+            else:
+                # Otherwise we need to shift the index down by 2 to get the correct AMS index
+                active_ams_index = self.ams.tray_now >> 2
+            active_ams = self.ams.data[active_ams_index]
+            active_tray = self.ams.tray_now & 0x3
             return None if active_ams is None else active_ams.tray[active_tray]
         else:
             return self.external_spool
