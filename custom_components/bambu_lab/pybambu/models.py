@@ -2140,8 +2140,8 @@ class AMSTray:
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
-        if len(data) == 1:
-            # If the data is exactly one entry then it's just the ID and the tray is empty.
+        if len(data) <= 2:
+            # If the data just id + state then the tray is empty.
             self.empty = True
             self.idx = ""
             self.name = "Empty"
