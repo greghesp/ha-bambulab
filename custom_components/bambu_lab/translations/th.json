@@ -452,9 +452,6 @@
       "active_tray": {
         "name": "ถาดที่ใช้งานอยู่"
       },
-      "active_tray_index": {
-        "name": "ดัชนีถาดที่ใช้งานอยู่"
-      },
       "nozzle_diameter": {
         "name": "ขนาดหัวฉีด"
       },

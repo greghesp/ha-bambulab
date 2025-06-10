@@ -449,9 +449,6 @@
       "active_tray": {
         "name": "Actieve tray"
       },
-      "active_tray_index": {
-        "name": "Actieve tray-index"
-      },
       "nozzle_diameter": {
         "name": "Nozzle-grootte"
       },

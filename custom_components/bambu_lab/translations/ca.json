@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "Safata activa"
       },
-      "active_tray_index": {
-        "name": "Índex de safata activa"
-      },
       "nozzle_diameter": {
         "name": "Grandària del broquet"
       },

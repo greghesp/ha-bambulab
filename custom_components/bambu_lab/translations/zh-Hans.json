@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "激活料盘"
       },
-      "active_tray_index": {
-        "name": "激活料盘索引"
-      },
       "nozzle_diameter": {
         "name": "喷嘴直径"
       },

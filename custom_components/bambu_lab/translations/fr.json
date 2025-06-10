@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "Emplacement actif"
       },
-      "active_tray_index": {
-        "name": "Emplacement actif (index)"
-      },
       "nozzle_diameter": {
         "name": "Taille de la buse"
       },
