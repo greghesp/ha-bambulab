@@ -2082,7 +2082,6 @@ class AMSList:
                             tray_now = entry["snow"]
                             self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
                             self._nozzle_ams_index[entry["id"]] = tray_now >> 8
-                            # NOT SURE WHAT AMS_HT WILL HAVE FOR INDEX
                             state = data["device"]["extruder"]["state"]
                             self._active_nozzle = (state >> 4) & 0xF
             self._active_ams_index = self._nozzle_ams_index[self._active_nozzle]
@@ -2116,6 +2115,8 @@ class AMSList:
 
                 if self.data[index].remaining_drying_time != int(ams.get('dry_time', 0)):
                     self.data[index].remaining_drying_time = int(ams.get('dry_time', 0))
+
+                self.data[index]._active = index == self._active_ams_index
 
                 tray_list = ams['tray']
                 for tray in tray_list:
