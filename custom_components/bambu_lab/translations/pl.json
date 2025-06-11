@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "Oprogramowanie układowe szyfrowania MQTT"
+      },
+      "active_ams": {
+        "name": "Aktywny"
       }
     },
     "button": {

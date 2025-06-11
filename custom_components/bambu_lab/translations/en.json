@@ -180,6 +180,9 @@
   },
   "entity": {
     "binary_sensor": {
+      "active_ams": {
+        "name": "Active"
+      },
       "developer_lan_mode": {
         "name": "Developer Lan Mode"
       },

@@ -35,8 +35,15 @@ from homeassistant.components.binary_sensor import (
 )
 
 from .const import LOGGER
-from .pybambu.const import PRINT_TYPE_OPTIONS, SPEED_PROFILE, Features, FansEnum, CURRENT_STAGE_OPTIONS, GCODE_STATE_OPTIONS, SDCARD_STATUS
-
+from .pybambu.const import (
+    PRINT_TYPE_OPTIONS,
+    SPEED_PROFILE,
+    CURRENT_STAGE_OPTIONS,
+    GCODE_STATE_OPTIONS,
+    SDCARD_STATUS,
+    FansEnum,
+    Features,
+)
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
@@ -77,6 +84,7 @@ class BambuLabAMSSensorEntityDescription(
     extra_attributes: Callable[..., dict] = lambda _: {}
     icon_fn: Callable[..., str] = lambda _: None
 
+
 @dataclass
 class BambuLabBinarySensorEntityDescriptionMixIn:
     """Mixin for required keys."""
@@ -89,6 +97,17 @@ class BambuLabBinarySensorEntityDescription(BinarySensorEntityDescription, Bambu
     available_fn: Callable[..., bool] = lambda _: True
     exists_fn: Callable[..., bool] = lambda _: True
     extra_attributes: Callable[..., dict] = lambda _: {}
+
+
+AMS_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
+    BambuLabBinarySensorEntityDescription(
+        key="active_ams",
+        translation_key="active_ams",
+        icon="mdi:check",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        is_on_fn=lambda self: self.coordinator.get_model().ams.data[self.index].active,
+    ),
+)
 
 
 PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (

@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "Firmware de xifrat MQTT"
+      },
+      "active_ams": {
+        "name": "Activa"
       }
     },
     "button": {

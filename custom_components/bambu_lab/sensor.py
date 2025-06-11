@@ -41,7 +41,7 @@ async def async_setup_entry(
 
     for sensor in PRINTER_SENSORS:    
         if sensor.exists_fn(coordinator):
-            async_add_entities([BambuLabSensor(coordinator, sensor, entry)])
+            async_add_entities([BambuLabSensor(coordinator, sensor)])
 
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
@@ -50,8 +50,7 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
-            description: BambuLabSensorEntityDescription,
-            config_entry: ConfigEntry
+            description: BambuLabSensorEntityDescription
     ) -> None:
         """Initialize the sensor."""
         self.coordinator = coordinator

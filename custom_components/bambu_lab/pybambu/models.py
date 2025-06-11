@@ -1858,26 +1858,21 @@ class Info:
 @dataclass
 class AMSInstance:
     """Return all AMS instance related info"""
-    serial: str
-    sw_version: str
-    hw_version: str
-    index: int
-    humidity_index: int
-    humidity: int
-    temperature: int
     model: str
-    remaining_drying_time: int
     tray: dict[int, "AMSTray"]
 
+    _active: bool = False
+    serial: str = ""
+    sw_version: str = ""
+    hw_version: str = ""
+    index: int = 0
+    humidity_index: int = 0
+    humidity: int = 0
+    temperature: int = 0
+    remaining_drying_time: int = 0
+
     def __init__(self, client, model, index):
-        self.serial = ""
-        self.sw_version = ""
-        self.hw_version = ""
-        self.humidity_index = 0
-        self.humidity = 0
-        self.temperature = 0
         self.model = model
-        self.remaining_drying_time = 0
         self.index = index
         if index >= 128:
             self.tray = [None]
@@ -1888,6 +1883,10 @@ class AMSInstance:
             self.tray[1] = AMSTray(client)
             self.tray[2] = AMSTray(client)
             self.tray[3] = AMSTray(client)
+
+    @property
+    def active(self):
+        return self._active
 
 
 @dataclass
