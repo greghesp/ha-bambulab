@@ -485,9 +485,6 @@
       "active_tray": {
         "name": "Active tray"
       },
-      "active_tray_index": {
-        "name": "Active tray index"
-      },
       "nozzle_diameter": {
         "name": "Nozzle size"
       },

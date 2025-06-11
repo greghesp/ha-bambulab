@@ -455,9 +455,6 @@
       "active_tray": {
         "name": "Aktywny slot"
       },
-      "active_tray_index": {
-        "name": "Indeks aktywnego slotu"
-      },
       "nozzle_diameter": {
         "name": "Średnica dyszy"
       },

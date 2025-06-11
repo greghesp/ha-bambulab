@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "활성 트레이"
       },
-      "active_tray_index": {
-        "name": "활성 트레이 인덱스"
-      },
       "nozzle_diameter": {
         "name": "노즐 직경"
       },

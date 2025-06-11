@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "Aktívny zásobník"
       },
-      "active_tray_index": {
-        "name": "Index aktívneho zásobníka"
-      },
       "nozzle_diameter": {
         "name": "Priemer trysky"
       },

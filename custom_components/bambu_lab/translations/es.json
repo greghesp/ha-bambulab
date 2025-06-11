@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "Bandeja activa"
       },
-      "active_tray_index": {
-        "name": "Índice de bandeja activa"
-      },
       "nozzle_diameter": {
         "name": "Tamaño de boquilla"
       },

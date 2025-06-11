@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "Piatto Attivo"
       },
-      "active_tray_index": {
-        "name": "Active tray index"
-      },
       "nozzle_diameter": {
         "name": "Dimensione Ugello"
       },

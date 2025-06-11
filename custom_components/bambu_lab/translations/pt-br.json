@@ -446,9 +446,6 @@
       "active_tray": {
         "name": "Bandeja ativa"
       },
-      "active_tray_index": {
-        "name": "Índice de bandeja ativa"
-      },
       "nozzle_diameter": {
         "name": "Diâmetro do bico"
       },

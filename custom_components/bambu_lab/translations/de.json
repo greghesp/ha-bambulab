@@ -449,9 +449,6 @@
       "active_tray": {
         "name": "Aktiver Slot"
       },
-      "active_tray_index": {
-        "name": "Aktiver Slotindex"
-      },
       "nozzle_diameter": {
         "name": "Düsengröße"
       },
