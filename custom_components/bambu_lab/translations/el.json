@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "Firmware κρυπτογράφησης MQTT"
+      },
+      "active_ams": {
+        "name": "Ενεργός"
       }
     },
     "button": {

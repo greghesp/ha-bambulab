@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "MQTT -coderingsfirmware"
+      },
+      "active_ams": {
+        "name": "Actief"
       }
     },
     "button": {

@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "Firmware de cifrado MQTT"
+      },
+      "active_ams": {
+        "name": "Activo"
       }
     },
     "button": {

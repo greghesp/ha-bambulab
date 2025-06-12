@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "MQTT Encryption Firmware"
+      },
+      "active_ams": {
+        "name": "Aktiv"
       }
     },
     "button": {

@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "Šifrovací firmvér MQTT"
+      },
+      "active_ams": {
+        "name": "Aktívny"
       }
     },
     "button": {

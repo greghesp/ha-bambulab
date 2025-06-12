@@ -584,8 +584,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug("_reinitialize_sensors START")
         LOGGER.debug("async_forward_entry_unload")
         await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
+        await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.BINARY_SENSOR)
         LOGGER.debug("async_forward_entry_setups")
-        await self.hass.config_entries.async_forward_entry_setups(self.config_entry, [Platform.SENSOR])
+        await self.hass.config_entries.async_forward_entry_setups(self.config_entry, [Platform.SENSOR, Platform.BINARY_SENSOR])
         LOGGER.debug("_reinitialize_sensors DONE")
 
     def _update_ams_info(self):

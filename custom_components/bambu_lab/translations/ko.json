@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "MQTT 암호화 펌웨어"
+      },
+      "active_ams": {
+        "name": "활동적인"
       }
     },
     "button": {

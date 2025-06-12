@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "เฟิร์มแวร์การเข้ารหัส MQTT"
+      },
+      "active_ams": {
+        "name": "คล่องแคล่ว"
       }
     },
     "button": {

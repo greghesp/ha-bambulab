@@ -206,6 +206,9 @@
       },
       "mqtt_encryption": {
         "name": "MQTT加密固件"
+      },
+      "active_ams": {
+        "name": "积极的"
       }
     },
     "button": {
