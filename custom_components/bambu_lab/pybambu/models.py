@@ -860,6 +860,7 @@ class PrintJob:
         else:
             for i in range(16):
                 if self._ams_print_weights[i] != 0:
+                    LOGGER.debug(f"AMS tray {i}: {self._ams_print_weights[i]}")
                     ams_index = (i // 4) + 1
                     ams_tray = (i % 4) + 1
                     values[f"AMS {ams_index} Tray {ams_tray}"] = self._ams_print_weights[i]
@@ -1567,6 +1568,8 @@ class PrintJob:
                 for ams_data in ams_print_data:
                     index = ams_data['ams']
                     weight = ams_data['weight']
+                    if not index in self._ams_print_weights:
+                        LOGGER.debug(f"AMS tray {index} not found in _ams_print_weights")
                     self._ams_print_weights[index] = weight
                     self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
 
