@@ -860,7 +860,6 @@ class PrintJob:
         else:
             for i in range(16):
                 if self._ams_print_weights[i] != 0:
-                    LOGGER.debug(f"AMS tray {i}: {self._ams_print_weights[i]}")
                     ams_index = (i // 4) + 1
                     ams_tray = (i % 4) + 1
                     values[f"AMS {ams_index} Tray {ams_tray}"] = self._ams_print_weights[i]
