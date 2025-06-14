@@ -1895,23 +1895,19 @@ class AMSInstance:
 @dataclass
 class AMSList:
     """Return all AMS related info"""
-    _tray_now: int
-    _active_nozzle: int
     _nozzle_tray_index: dict
     _nozzle_ams_index: dict
-    _active_ams_index: int
-    _active_tray_index: int
     data: dict[int, AMSInstance]
+
+    _active_ams_index: int = 255
+    _active_tray_index: int = 0
+    _first_initialization_done: bool = False
+    _tray_now: int = 0
 
     def __init__(self, client):
         self._client = client
-        self._tray_now = 0
-        self._first_initialization_done = False
         self._nozzle_tray_index = { 0: 0, 1: 0}
-        self._nozzle_ams_index = { 0: 0, 1: 0}  
-        self._active_ams_index = 0
-        self._active_tray_index = 0
-        self._active_nozzle = 0
+        self._nozzle_ams_index = { 0: 0, 1: 0}
         self.data = {}
 
     @property
