@@ -606,7 +606,11 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         icon="mdi:fan-clock",
         device_class=SensorDeviceClass.DURATION,
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time,
-        exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING) and coordinator.get_model().ams.data[index].model == "AMS 2 Pro"
+        exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING)
+        and (
+            coordinator.get_model().ams.data[index].model == "AMS 2 Pro"
+            or coordinator.get_model().ams.data[index].model == "AMS HT"
+        ),
     ),
     BambuLabAMSSensorEntityDescription(
         key="tray_1",
