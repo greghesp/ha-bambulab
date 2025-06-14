@@ -38,8 +38,12 @@ async def async_get_config_entry_diagnostics(
 
     diagnostics_data = {
         "config_entry": async_redact_data(entry, TO_REDACT),
-        "push_all": async_redact_data(coordinator.data.push_all_data, TO_REDACT),
-        "get_version": async_redact_data(coordinator.data.get_version_data, TO_REDACT),
+        "pushall": {
+            "print": async_redact_data(coordinator.data.push_all_data, TO_REDACT)
+        },
+        "get_version": {
+            "info": async_redact_data(coordinator.data.get_version_data, TO_REDACT)
+        }
     }
 
     return diagnostics_data

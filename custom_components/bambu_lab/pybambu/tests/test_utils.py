@@ -75,7 +75,7 @@ class MockMQTTClient:
                 command = payload.get('command')
         
         # If we found a command and have test data for it, simulate a response
-        LOGGER.debug(f"MQTTMOCK: Found request for command: {command}")
+        LOGGER.debug(f"MQTTMOCK: Request for command: {command}")
         if command:
             response = self._test_payload.get(command)
             if response is not None and self._on_message:
