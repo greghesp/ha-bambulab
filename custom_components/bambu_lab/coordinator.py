@@ -374,6 +374,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error(f"An AMS tray or external spool is required")
             return False
         
+        tray_color = data.get('tray_color', '')
+        # Allow them to include the preceding # in the provided color string.
+        tray_color = tray_color.replace('#', '')
+        if len(tray_color) == 6:
+            # If the provided string is RRGGBB, we need to add the AA value to make it an opaque RRGGBBAA
+            tray_color = f"{tray_color}FF"
+
         command = AMS_FILAMENT_SETTING_TEMPLATE
         command['print']['ams_id'] = ams_index
         command['print']['tray_info_idx'] = data.get('tray_info_idx', '')
