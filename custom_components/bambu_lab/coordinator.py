@@ -375,8 +375,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return False
         
         tray_color = data.get('tray_color', '')
-        if len(tray_color) == 7:
-            # If the provided string is #RRGGBB, we need to add the AA value to make it an opaque #RRGGBBAA
+        # Allow them to include the preceding # in the provided color string.
+        tray_color = tray_color.replace('#', '')
+        if len(tray_color) == 6:
+            # If the provided string is RRGGBB, we need to add the AA value to make it an opaque RRGGBBAA
             tray_color = f"{tray_color}FF"
 
         command = AMS_FILAMENT_SETTING_TEMPLATE
