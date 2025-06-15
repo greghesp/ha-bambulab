@@ -411,7 +411,8 @@
           "textured_plate": "Strukturierte Platte",
           "cool_plate": "Kühlplatte / PLA-Platte",
           "hot_plate": "Glatte PEI-Platte/Hochtemperaturplatte",
-          "eng_plate": "Technische Platte"
+          "eng_plate": "Technische Platte",
+          "supertack_plate": "Cool Plate Supertack"
         }
       },
       "print_length": {

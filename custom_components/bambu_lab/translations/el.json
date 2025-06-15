@@ -408,7 +408,8 @@
           "textured_plate": "Υφή βάσης",
           "cool_plate": "Cool Plate / Base PLA",
           "hot_plate": "Smooth PEI / High Temperature Plate",
-          "eng_plate": "Engineering Plate"
+          "eng_plate": "Engineering Plate",
+          "supertack_plate": "Δροσερή πλάκα supertack"
         }
       },
       "print_length": {

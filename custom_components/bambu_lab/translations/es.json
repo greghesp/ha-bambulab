@@ -408,7 +408,8 @@
           "textured_plate": "Placa Texturizada",
           "cool_plate": "Placa Fría / Placa PLA",
           "hot_plate": "Placa PEI Lisa / Placa de Alta Temperatura",
-          "eng_plate": "Placa de Ingeniería"
+          "eng_plate": "Placa de Ingeniería",
+          "supertack_plate": "Supertack de placa fría"
         }
       },
       "print_length": {

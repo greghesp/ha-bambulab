@@ -408,7 +408,8 @@
           "textured_plate": "Tekstureret plade",
           "cool_plate": "Køleplade / PLA plade",
           "hot_plate": "Glat PEI plade / Højtemperatur plade",
-          "eng_plate": "Ingeniørplade"
+          "eng_plate": "Ingeniørplade",
+          "supertack_plate": "Cool Plate Supertack"
         }
       },
       "print_length": {

@@ -408,7 +408,8 @@
           "textured_plate": "텍스처 플레이트",
           "cool_plate": "쿨 플레이트 / PLA 플레이트",
           "hot_plate": "부드러운 PEI 플레이트 / 고온 플레이트",
-          "eng_plate": "엔지니어링 플레이트"
+          "eng_plate": "엔지니어링 플레이트",
+          "supertack_plate": "멋진 플레이트 슈퍼 택"
         }
       },
       "print_length": {

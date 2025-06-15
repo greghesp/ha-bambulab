@@ -1569,6 +1569,7 @@ class PrintJob:
                     weight = ams_data['weight']
                     if not index in self._ams_print_weights:
                         LOGGER.debug(f"AMS tray {index} not found in _ams_print_weights")
+                        LOGGER.debug(f"ams_data: {ams_data}")
                     self._ams_print_weights[index] = weight
                     self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
 
