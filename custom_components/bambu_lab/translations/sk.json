@@ -408,7 +408,8 @@
           "textured_plate": "Textúrovaná podložka",
           "cool_plate": "Cool Plate / PLA Plate",
           "hot_plate": "Smooth PEI Plate / High Temp Plate",
-          "eng_plate": "Engineering Plate"
+          "eng_plate": "Engineering Plate",
+          "supertack_plate": "Cool Plate Supertack"
         }
       },
       "print_length": {
