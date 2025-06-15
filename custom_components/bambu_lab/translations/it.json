@@ -408,7 +408,8 @@
           "textured_plate": "Piatto Texutrizzato",
           "cool_plate": "Piatto Freddo/Piatto PLA",
           "hot_plate": "Piatto PEI Liscia/Piatto Alte Temperature",
-          "eng_plate": "Piatto d'Ingegneria"
+          "eng_plate": "Piatto d'Ingegneria",
+          "supertack_plate": "Supertack a piastra fresca"
         }
       },
       "print_length": {

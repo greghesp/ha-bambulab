@@ -414,7 +414,8 @@
           "textured_plate": "แผ่นพื้นผิว",
           "cool_plate": "จานเย็น / แผ่น PLA",
           "hot_plate": "แผ่น PEI เรียบ / แผ่นอุณหภูมิสูง",
-          "eng_plate": "แผ่นวิศวกรรม"
+          "eng_plate": "แผ่นวิศวกรรม",
+          "supertack_plate": "Supertack จานเย็น"
         }
       },
       "print_length": {

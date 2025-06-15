@@ -408,7 +408,8 @@
           "textured_plate": "纹理PEI打印版",
           "cool_plate": "低温打印板/PLA打印板",
           "hot_plate": "光面PEI打印板/高温打印板",
-          "eng_plate": "工程材料打印板"
+          "eng_plate": "工程材料打印板",
+          "supertack_plate": "凉爽的板supertack"
         }
       },
       "print_length": {
