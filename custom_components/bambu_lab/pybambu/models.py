@@ -1567,7 +1567,7 @@ class PrintJob:
                 for ams_data in ams_print_data:
                     index = ams_data['ams']
                     weight = ams_data['weight']
-                    if index in self._ams_print_weights:
+                    if 0 <= index < len(self._ams_print_weights):
                         self._ams_print_weights[index] = weight
                         self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
                     else:
