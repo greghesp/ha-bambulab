@@ -1567,11 +1567,15 @@ class PrintJob:
                 for ams_data in ams_print_data:
                     index = ams_data['ams']
                     weight = ams_data['weight']
-                    if not index in self._ams_print_weights:
+                    if index in self._ams_print_weights:
+                        self._ams_print_weights[index] = weight
+                        self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
+                    else:
+                        # Common case is this is a machine without an AMS and we get index == 255 (not 254 as might be expected)
+                        # And probably also a machine with an AMS but you did a print from the external spool.
+                        # This could also hit if you have reconfigured your printer and removed an AMS.
                         LOGGER.debug(f"AMS tray {index} not found in _ams_print_weights")
-                        LOGGER.debug(f"ams_data: {ams_data}")
-                    self._ams_print_weights[index] = weight
-                    self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
+                        LOGGER.debug(f"ams_print_data: {ams_print_data}")
 
             status = self._task_data['status']
             LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
