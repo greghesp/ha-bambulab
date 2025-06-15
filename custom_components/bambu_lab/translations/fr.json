@@ -403,12 +403,13 @@
         "name": "Ficher G-code"
       },
       "print_bed_type": {
-        "name": "Type de lit d’impression",
+        "name": "Type de plaque",
         "state": {
-          "textured_plate": "Plaque texturée",
-          "cool_plate": "Plaque froide / Plaque PLA",
-          "hot_plate": "Plaque PEI lisse / Plaque haute température",
-          "eng_plate": "Plaque d'ingénierie"
+          "textured_plate": "Plaque PEI texturée",
+          "cool_plate": "Plaque froide",
+          "hot_plate": "Plaque PEI lisse",
+          "eng_plate": "Plaque d'ingénierie",
+          "supertack_plate": "Plaque froide SuperTack"
         }
       },
       "print_length": {

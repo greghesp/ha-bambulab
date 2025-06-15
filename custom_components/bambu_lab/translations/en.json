@@ -447,7 +447,8 @@
           "textured_plate": "Textured plate",
           "cool_plate": "Cool Plate / PLA Plate",
           "hot_plate": "Smooth PEI Plate / High Temp Plate",
-          "eng_plate": "Engineering Plate"
+          "eng_plate": "Engineering Plate",
+          "supertack_plate": "Cool Plate SuperTack"
         }
       },
       "print_length": {
