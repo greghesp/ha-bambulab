@@ -480,7 +480,7 @@ class BambuClient:
         if not self._device.supports_feature(Features.CAMERA_RTSP):
             if self._device.supports_feature(Features.CAMERA_IMAGE):
                 if self._enable_camera and not self._test_mode:
-                    if self._device.info.ip_address != "" and self._access_code != "":
+                    if self._device.info.ip_address != "" and self._device.info.ip_address != "0.0.0.0" and self._access_code != "":
                         LOGGER.debug("Starting Chamber Image thread")
                         self._camera = ChamberImageThread(self)
                         self._camera.start()
@@ -497,9 +497,10 @@ class BambuClient:
     def _on_connect(self):
         self._connected = True
 
-        LOGGER.debug("Starting watchdog thread")
-        self._watchdog = WatchdogThread(self)
-        self._watchdog.start()
+        if self._device.info.ip_address != "" and self._device.info.ip_address != "0.0.0.0":
+            LOGGER.debug("Starting watchdog thread")
+            self._watchdog = WatchdogThread(self)
+            self._watchdog.start()
 
         self.subscribe_and_request_info()
 
