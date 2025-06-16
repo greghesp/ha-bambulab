@@ -38,7 +38,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         # Wait for the result from the second instance
         try:
-            return await asyncio.wait_for(future, timeout=15)
+            result = await asyncio.wait_for(future, timeout=15)
+            LOGGER.debug(f"Service call result: {result}")
+            return result
         except asyncio.TimeoutError:
             LOGGER.error("Service call timed out")
             return None
@@ -53,7 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "move_axis": SupportsResponse.NONE,
         "unload_filament": SupportsResponse.NONE,
         "load_filament": SupportsResponse.NONE,
-        "extrude_retract": SupportsResponse.NONE,
+        "extrude_retract": SupportsResponse.ONLY,
         "set_filament": SupportsResponse.NONE,
         "get_filament_data": SupportsResponse.ONLY,
     }
