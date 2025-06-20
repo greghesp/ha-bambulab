@@ -588,7 +588,8 @@ class BambuClient:
                     self._on_disconnect()
             else:
                 self._device.info.set_online(True)
-                self._watchdog.received_data()
+                if self._watchdog is not None:
+                    self._watchdog.received_data()
                 if json_data.get("print"):
                     self._device.print_update(data=json_data.get("print"))
                     if json_data.get("print").get("msg", 0) == 0:
