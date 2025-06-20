@@ -32,18 +32,14 @@ class MockMQTTClient:
         self._mid = 1
         self._test_payload = {}
         self._mock = mock
-        asyncio.create_task(self.load_mock_payload(mock))
-
-    async def load_mock_payload(self, mock: str):
+        self.load_mock_payload(mock)
+    
+    def load_mock_payload(self, mock: str):
         """Load test payload asynchronously."""
-        LOGGER.debug(f"Loading test payload from {mock}.json")
         file_path = os.path.join(os.path.dirname(__file__), f"{mock}.json")
-        # Use run_in_executor to perform file I/O in a separate thread
-        loop = asyncio.get_event_loop()
-        def read_file():
-            with open(file_path, 'r') as f:
-                return json.load(f)
-        self._test_payload = await loop.run_in_executor(None, read_file)
+        LOGGER.debug(f"Loading test payload from {mock}.json")
+        with open(file_path, 'r') as f:
+            self._test_payload = json.load(f)
                 
     def connect(self, host: str, port: int = 1883, keepalive: int = 60) -> None:
         """Simulate connecting to an MQTT broker."""
