@@ -452,7 +452,8 @@ class Temperature:
             self.target_bed_temp = (bed_temp >> 16) & 0xFFFF
         else:
             self.bed_temp = round(data.get("bed_temper", self.bed_temp))
-            self.target_bed_temp = round(data.get("bed_target_temper", self.target_bed_temp))
+            # Bambu Studio floors the value so match it.
+            self.target_bed_temp = math.floor(data.get("bed_target_temper", self.target_bed_temp))
 
         # New firmware puts the chamber temperature in a different place.
         # "device": {
