@@ -384,6 +384,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if len(tray_color) == 6:
             # If the provided string is RRGGBB, we need to add the AA value to make it an opaque RRGGBBAA
             tray_color = f"{tray_color}FF"
+        # String must be upper case
+        tray_color = tray_color.upper()
 
         command = AMS_FILAMENT_SETTING_TEMPLATE
         command['print']['ams_id'] = ams_index
