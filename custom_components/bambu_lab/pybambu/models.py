@@ -78,6 +78,7 @@ class Device:
         self.print_error = PrintError(client = client)
         self.camera = Camera(client = client)
         self.home_flag = HomeFlag(client=client)
+        self.extruder = Extruder(client=client)
         self.extruder_tool = ExtruderTool(client=client)
         self.push_all_data = None
         self.get_version_data = None
@@ -91,11 +92,12 @@ class Device:
         send_event = send_event | self.info.print_update(data = data)
         send_event = send_event | self.upgrade.print_update(data = data)
         send_event = send_event | self.print_job.print_update(data = data)
-        send_event = send_event | self.temperature.print_update(data = data)
         send_event = send_event | self.lights.print_update(data = data)
         send_event = send_event | self.fans.print_update(data = data)
         send_event = send_event | self.speed.print_update(data = data)
         send_event = send_event | self.stage.print_update(data = data)
+        send_event = send_event | self.extruder.print_update(data = data) # Must be before the AMS and external spools and temperature
+        send_event = send_event | self.temperature.print_update(data = data)
         send_event = send_event | self.ams.print_update(data = data)
         send_event = send_event | self.external_spool[0].print_update(data = data)
         send_event = send_event | self.external_spool[1].print_update(data = data)
@@ -377,46 +379,26 @@ class Temperature:
     bed_temp: int
     target_bed_temp: int
     chamber_temp: int
-    nozzle_temp: int
-    target_nozzle_temp: int
-    active_nozzle: int
     nozzle_temps: dict
     nozzle_target_temps: dict
-    nozzle_tray_index: dict
-    nozzle_ams_index: dict
 
     def __init__(self, client):
         self._client = client
         self.bed_temp = 0
         self.target_bed_temp = 0
         self.chamber_temp = 0
-        self.nozzle_temp = 0
-        self.target_nozzle_temp = 0
-        self.active_nozzle = -1
         self.nozzle_temps = { 0: 0, 1: 0}
         self.target_nozzle_temps = { 0:0, 1: 0}
-        self.nozzle_tray_index = { 0: 0, 1: 0}
-        self.nozzle_ams_index = { 0: 0, 1: 0}
 
     @property
-    def active_nozzle_index(self):
-        if self.active_nozzle == -1:
-            return 0;
-        return self.active_nozzle
-    
-    @property
     def active_nozzle_temperature(self):
-        if self.active_nozzle == -1:
-            return self.nozzle_temp
-        else:
-            return self.nozzle_temps[self.active_nozzle]
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self.nozzle_temps[active_nozzle]
 
     @property
     def active_nozzle_target_temperature(self):
-        if self.active_nozzle == -1:
-            return self.target_nozzle_temp
-        else:
-            return self.target_nozzle_temps[self.active_nozzle]
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self.target_nozzle_temps[active_nozzle]
 
     @property
     def left_nozzle_temperature(self):
@@ -488,34 +470,16 @@ class Temperature:
         #   ],
         #   "state": 2 // low 4 bits is count of extruders; active extruder is next 4 bits
         # },
-        if self._client._device.supports_feature(Features.DUAL_NOZZLES):
-            extruder_data = data.get("device", {}).get("extruder", {}).get("info")
-            if extruder_data is not None:
-                for entry in extruder_data:
-                    if entry.get("id") in (0, 1):
-                        if "temp" in entry:
-                            self.nozzle_temps[entry["id"]] = entry["temp"] & 0xFFFF
-                            self.target_nozzle_temps[entry["id"]] = (entry["temp"] >> 16) & 0xFFFF
-                state = data["device"]["extruder"]["state"]
-                self.active_nozzle = (state >> 4) & 0xF
+        extruder_data = data.get("device", {}).get("extruder", {}).get("info")
+        if extruder_data is not None:
+            for entry in extruder_data:
+                if entry.get("id") in (0, 1):
+                    if "temp" in entry:
+                        self.nozzle_temps[entry["id"]] = entry["temp"] & 0xFFFF
+                        self.target_nozzle_temps[entry["id"]] = (entry["temp"] >> 16) & 0xFFFF
         else:
-            # New firmware put the nozzle data in a different location. Low word is current value. High word is the target.
-            # "extruder": {
-            #   "info": [
-            #     {
-            # ...
-            #       "temp": 17039620
-            #     }
-            #   ],
-            #   "state": 1
-            # },
-            nozzle_temp = data.get("extruder", {}).get("info", {}).get("temp", None)
-            if nozzle_temp is not None:
-                self.nozzle_temp = nozzle_temp & 0xFFFF
-                self.target_nozzle_temp = (nozzle_temp >> 16) & 0xFFFF
-            else:
-                self.nozzle_temp = round(data.get("nozzle_temper", self.nozzle_temp))
-                self.target_nozzle_temp = round(data.get("nozzle_target_temper", self.target_nozzle_temp))
+            self.nozzle_temps[0] = round(data.get("nozzle_temper", self.nozzle_temps[0]))
+            self.target_nozzle_temps[0] = round(data.get("nozzle_target_temper", self.target_nozzle_temps[0]))
 
         return (old_data != f"{self.__dict__}")
 
@@ -1905,14 +1869,12 @@ class AMSInstance:
 @dataclass
 class AMSList:
     """Return all AMS related info"""
-    _nozzle_tray_index: dict
-    _nozzle_ams_index: dict
     data: dict[int, AMSInstance]
 
-    _active_ams_index: int = 255
-    _active_tray_index: int = 0
-    _first_initialization_done: bool = False
+    _nozzle_tray_index: dict
+    _nozzle_ams_index: dict
     _tray_now: int = 0
+    _first_initialization_done: bool = False
 
     def __init__(self, client):
         self._client = client
@@ -1922,22 +1884,30 @@ class AMSList:
 
     @property
     def active_ams_index(self):
-        return self._active_ams_index
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self._nozzle_ams_index[active_nozzle]
     
     @property
     def active_tray_index(self):
-        return self._active_tray_index
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self._nozzle_tray_index[active_nozzle]
     
     @property
     def active_tray(self):
-        if self._active_ams_index == 255:
-            return None
-        elif self._active_ams_index == 254:
-            return self._client._device.external_spool[0]
-        elif self.data[self._active_ams_index] is None:
+        if self.active_ams_index == 255:
+            if self.active_tray_index == 255:
+                return None
+            else:
+                return self._client._device.external_spool[0]
+        elif self.active_ams_index == 254:
+            if self.active_tray_index == 255:
+                return None
+            else:
+                return self._client._device.external_spool[1]
+        elif self.data[self.active_ams_index] is None:
             return None
         else:
-            return self.data[self._active_ams_index].tray[self._active_tray_index]
+            return self.data[self.active_ams_index].tray[self.active_tray_index]
 
     def info_update(self, data):
         old_data = f"{self.__dict__}"
@@ -2080,29 +2050,23 @@ class AMSList:
 
         self._tray_now = int(ams_data.get('tray_now', self._tray_now))
 
-        # For dual nozzles, first get nozzle ams tray data - which is stored in the 'snow' field.
-        if self._client._device.supports_feature(Features.DUAL_NOZZLES):
-            extruder_data = data.get("device", {}).get("extruder", {}).get("info")
-            if extruder_data is not None:
-                LOGGER.debug(f"extruder_data: {extruder_data}")
-                for entry in extruder_data:
-                    if entry.get("id") in (0, 1):
-                        if "snow" in entry:
-                            tray_now = entry["snow"]
-                            self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
-                            self._nozzle_ams_index[entry["id"]] = tray_now >> 8
-                            state = data["device"]["extruder"]["state"]
-                            self._active_nozzle = (state >> 4) & 0xF
-            self._active_ams_index = self._nozzle_ams_index[self._active_nozzle]
-            self._active_tray_index = self._nozzle_tray_index[self._active_nozzle]
+        extruder_data = data.get("device", {}).get("extruder", {}).get("info")
+        if extruder_data is not None:
+            LOGGER.debug(f"extruder_data: {extruder_data}")
+            for entry in extruder_data:
+                if entry.get("id") in (0, 1):
+                    if "snow" in entry:
+                        tray_now = entry["snow"]
+                        self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
+                        self._nozzle_ams_index[entry["id"]] = tray_now >> 8
         else:
             if self._tray_now >= 80:
                 # AMS HT's are indices 128-135 (0x80-0x87)
-                self._active_ams_index = self._tray_now
+                self._nozzle_ams_index[0] = self._tray_now
             else:
                 # Otherwise we need to shift the index down by 2 to get the correct AMS index
-                self._active_ams_index = self._tray_now >> 2
-            self._active_tray_index = self._tray_now & 0x3
+                self._nozzle_ams_index[0] = self._tray_now >> 2
+            self._nozzle_tray_index[0] = self._tray_now & 0x3
 
         if len(ams_data) != 0:
 
@@ -2125,7 +2089,7 @@ class AMSList:
                 if self.data[index].remaining_drying_time != int(ams.get('dry_time', 0)):
                     self.data[index].remaining_drying_time = int(ams.get('dry_time', 0))
 
-                self.data[index]._active = index == self._active_ams_index
+                self.data[index]._active = index == self.active_ams_index
 
                 tray_list = ams['tray']
                 for tray in tray_list:
@@ -2241,7 +2205,7 @@ class ExternalSpool(AMSTray):
     @property
     def active(self) -> bool:
         if self._client._device.supports_feature(Features.AMS):
-            if self._client._device.ams._tray_now == 254:
+            if self._client._device.ams.active_ams_index == (255 - self._index):
                 return True
         else:
             return True
@@ -2809,3 +2773,26 @@ class ExtruderTool:
                 self.state = None
         
         return (old_data != f"{self.__dict__}")
+    
+class Extruder:
+    _active_nozzle_index: int
+
+    def __init__(self, client):
+        self._client = client
+        self._active_nozzle_index = 0
+
+    def print_update (self, data):
+        # Handle ext_tool update
+        old_data = f"{self.__dict__}"
+
+        extruder_data = data.get("device", {}).get("extruder", {}).get("info")
+        if extruder_data is not None:
+            for entry in extruder_data:
+                state = data["device"]["extruder"]["state"]
+                self._active_nozzle_index = (state >> 4) & 0xF
+                        
+        return (old_data != f"{self.__dict__}")
+
+    @property
+    def active_nozzle_index(self):
+        return self._active_nozzle_index
