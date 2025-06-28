@@ -73,7 +73,7 @@ class Device:
         self.speed = Speed(client = client)
         self.stage = StageAction()
         self.ams = AMSList(client = client)
-        self.external_spool = ExternalSpool(client = client)
+        self.external_spool = [ ExternalSpool(client = client, index = 0), ExternalSpool(client = client, index = 1) ]
         self.hms = HMSList(client = client)
         self.print_error = PrintError(client = client)
         self.camera = Camera(client = client)
@@ -97,7 +97,8 @@ class Device:
         send_event = send_event | self.speed.print_update(data = data)
         send_event = send_event | self.stage.print_update(data = data)
         send_event = send_event | self.ams.print_update(data = data)
-        send_event = send_event | self.external_spool.print_update(data = data)
+        send_event = send_event | self.external_spool[0].print_update(data = data)
+        send_event = send_event | self.external_spool[1].print_update(data = data)
         send_event = send_event | self.hms.print_update(data = data)
         send_event = send_event | self.print_error.print_update(data = data)
         send_event = send_event | self.camera.print_update(data = data)
@@ -856,8 +857,10 @@ class PrintJob:
     @property
     def get_print_weights(self) -> dict:
         values = {}
-        if self._client._device.external_spool.active:
+        if self._client._device.external_spool[0].active:
             values["External Spool"] = self.print_weight
+        elif self._client._device.external_spool[1] and self._client._device.external_spool[1].active:
+            values["External Spool 2"] = self.print_weight
         else:
             for i in range(16):
                 if self._ams_print_weights[i] != 0:
@@ -869,8 +872,10 @@ class PrintJob:
     @property
     def get_print_lengths(self) -> dict:
         values = {}
-        if self._client._device.external_spool.active:
+        if self._client._device.external_spool[0].active:
             values["External Spool"] = self.print_length
+        elif self._client._device.external_spool[1].active:
+            values["External Spool 2"] = self.print_length
         else:
             for i in range(16):
                 if self._ams_print_lengths[i] != 0:
@@ -1928,7 +1933,7 @@ class AMSList:
         if self._active_ams_index == 255:
             return None
         elif self._active_ams_index == 254:
-            return self._client._device.external_spool
+            return self._client._device.external_spool[0]
         elif self.data[self._active_ams_index] is None:
             return None
         else:
@@ -2227,9 +2232,11 @@ class AMSTray:
 @dataclass
 class ExternalSpool(AMSTray):
     """Return the virtual tray related info"""
+    _index: int
 
-    def __init__(self, client):
+    def __init__(self, client, index: int):
         super().__init__(client)
+        self._index = index
 
     @property
     def active(self) -> bool:
@@ -2278,10 +2285,50 @@ class ExternalSpool(AMSTray):
         # This is exact same data as the AMS exposes so we can just defer to the AMSTray object
         # to parse this json.
 
+        # H2D virtual tray example
+        # "vir_slot": [
+        # {
+        #     "bed_temp": "0",
+        #     "bed_temp_type": "0",
+        #     "cali_idx": -1,
+        #     "cols": [
+        #     "76D9F4FF"
+        #     ],
+        #     "ctype": 0,
+        #     "drying_temp": "0",
+        #     "drying_time": "0",
+        #     "id": "254",
+        #     "nozzle_temp_max": "240",
+        #     "nozzle_temp_min": "190",
+        #     "remain": 0,
+        #     "tag_uid": "0000000000000000",
+        #     "total_len": 330000,
+        #     "tray_color": "76D9F4FF",
+        #     "tray_diameter": "1.75",
+        #     "tray_id_name": "",
+        #     "tray_info_idx": "GFA01",
+        #     "tray_sub_brands": "",
+        #     "tray_type": "PLA",
+        #     "tray_uuid": "00000000000000000000000000000000",
+        #     "tray_weight": "0",
+        #     "xcam_info": "000000000000000000000000"
+        # },
+        # {
+        # ...
+        #     "id": "254",
+
         received_virtual_tray_data = False
-        tray_data = data.get("vt_tray", {})
-        if len(tray_data) != 0:
-            received_virtual_tray_data = super().print_update(tray_data)
+
+        if data.get("vir_slot") is not None:
+            for vir_slot in data.get("vir_slot"):
+                id = int(vir_slot.get("id"))
+                if id == (255 - self._index):
+                    tray_data = vir_slot
+                    received_virtual_tray_data = super().print_update(tray_data)
+        else:
+            tray_data = data.get("vt_tray", {})
+            if len(tray_data) != 0:
+                received_virtual_tray_data = super().print_update(tray_data)
 
         return received_virtual_tray_data
 

@@ -31,7 +31,9 @@ async def async_setup_entry(
     if coordinator.get_model().supports_feature(Features.EXTERNAL_SPOOL):
         for sensor in VIRTUAL_TRAY_SENSORS:
             if sensor.exists_fn(coordinator):
-                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor)])
+                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0)])
+                if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
+                    async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 1)])
 
     for sensor in AMS_SENSORS:
         for index in coordinator.get_model().ams.data.keys():
@@ -53,11 +55,10 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
             description: BambuLabSensorEntityDescription
     ) -> None:
         """Initialize the sensor."""
-        self.coordinator = coordinator
+        super().__init__(coordinator=coordinator)
         self.entity_description = description
         printer = coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
-        super().__init__(coordinator=coordinator)
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -90,13 +91,12 @@ class BambuLabAMSSensor(AMSEntity, SensorEntity):
             index: int
     ) -> None:
         """Initialise the sensor"""
-        self.coordinator = coordinator
+        super().__init__(coordinator=coordinator)
         self.index = index
         printer = coordinator.get_model().info
         ams_instance = coordinator.get_model().ams.data[index]
         self.entity_description = description
         self._attr_unique_id = f"{printer.device_type}_{printer.serial}_AMS_{ams_instance.serial}_{description.key}"
-        super().__init__(coordinator=coordinator)
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -120,14 +120,15 @@ class BambuLabVirtualTraySensor(VirtualTrayEntity, SensorEntity):
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
-            description: BambuLabSensorEntityDescription
+            description: BambuLabSensorEntityDescription,
+            index: int,
     ) -> None:
         """Initialise the sensor"""
-        self.coordinator = coordinator
-        printer = coordinator.get_model().info
-        self.entity_description = description
-        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_ExternalSpool_{description.key}"
         super().__init__(coordinator=coordinator)
+        printer = coordinator.get_model().info
+        self.index = index
+        self.entity_description = description
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_ExternalSpool{'2' if index==1 else ''}_{description.key}"
 
     @property
     def extra_state_attributes(self) -> dict:

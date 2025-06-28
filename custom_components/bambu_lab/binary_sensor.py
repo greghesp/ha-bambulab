@@ -19,6 +19,7 @@ from .models import (
     BambuLabEntity,
     VirtualTrayEntity,
 )
+from .pybambu.const import Features
 
 
 async def async_setup_entry(
@@ -40,7 +41,9 @@ async def async_setup_entry(
 
     for sensor in VIRTUAL_TRAY_BINARY_SENSORS:    
         if sensor.exists_fn(coordinator):
-            async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor)])
+            async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor, 0)])
+            if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
+                async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor, 1)])
 
 
 class BambuLabBinarySensor(BambuLabEntity, BinarySensorEntity):
@@ -79,10 +82,10 @@ class BambuLabAMSBinarySensor(AMSEntity, BambuLabBinarySensor):
             index: int
     ) -> None:
         """Initialize the sensor."""
-        self.index = index
         super().__init__(coordinator=coordinator, description=description)
         printer = coordinator.get_model().info
         ams_instance = coordinator.get_model().ams.data[index]
+        self.index = index
         self.entity_description = description
         self._attr_unique_id = f"{printer.device_type}_{printer.serial}_AMS_{ams_instance.serial}_{description.key}"
 
@@ -93,10 +96,12 @@ class BambuLabExternalSpoolBinarySensor(VirtualTrayEntity, BambuLabBinarySensor)
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
-            description: BambuLabBinarySensorEntityDescription
+            description: BambuLabBinarySensorEntityDescription,
+            index: int,
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator=coordinator, description=description)
         printer = coordinator.get_model().info
+        self.index = index
         self.entity_description = description
-        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_ExternalSpool_{description.key}"
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_ExternalSpool{'2' if index==1 else ''}_{description.key}"

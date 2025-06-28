@@ -36,4 +36,4 @@ class VirtualTrayEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device information about this AMS entity."""
-        return self.coordinator.get_virtual_tray_device()
+        return self.coordinator.get_virtual_tray_device(self.index)
