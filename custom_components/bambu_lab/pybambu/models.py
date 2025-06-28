@@ -823,7 +823,7 @@ class PrintJob:
         values = {}
         if self._client._device.external_spool[0].active:
             values["External Spool"] = self.print_weight
-        elif self._client._device.external_spool[1] and self._client._device.external_spool[1].active:
+        elif self._client._device.external_spool[1].active:
             values["External Spool 2"] = self.print_weight
         else:
             for i in range(16):
@@ -2048,8 +2048,6 @@ class AMSList:
 
         ams_data = data.get("ams", {})
 
-        self._tray_now = int(ams_data.get('tray_now', self._tray_now))
-
         extruder_data = data.get("device", {}).get("extruder", {}).get("info")
         if extruder_data is not None:
             LOGGER.debug(f"extruder_data: {extruder_data}")
@@ -2060,13 +2058,25 @@ class AMSList:
                         self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
                         self._nozzle_ams_index[entry["id"]] = tray_now >> 8
         else:
-            if self._tray_now >= 80:
-                # AMS HT's are indices 128-135 (0x80-0x87)
-                self._nozzle_ams_index[0] = self._tray_now
-            else:
-                # Otherwise we need to shift the index down by 2 to get the correct AMS index
-                self._nozzle_ams_index[0] = self._tray_now >> 2
-            self._nozzle_tray_index[0] = self._tray_now & 0x3
+            tray_now = ams_data.get('tray_now')
+            if tray_now is not None:
+                tray_now = int(tray_now)
+                if tray_now == 255:
+                    # In the legacy mqtt payloads 255 nothing active
+                    self._nozzle_ams_index[0] = 255
+                    self._nozzle_tray_index[0] = 255
+                elif tray_now == 254:
+                    # In the legacy mqtt payloads 254 = external spool active
+                    self._nozzle_ams_index[0] = 255
+                    self._nozzle_tray_index[0] = 0
+                elif tray_now >= 80:
+                    # AMS HT's are indices 128-135 (0x80-0x87)
+                    self._nozzle_ams_index[0] = tray_now
+                    self._nozzle_tray_index[0] = tray_now & 0x3
+                else:
+                    # Otherwise we need to shift the index down by 2 to get the correct AMS index
+                    self._nozzle_ams_index[0] = tray_now >> 2
+                    self._nozzle_tray_index[0] = tray_now & 0x3
 
         if len(ams_data) != 0:
 
@@ -2205,7 +2215,9 @@ class ExternalSpool(AMSTray):
     @property
     def active(self) -> bool:
         if self._client._device.supports_feature(Features.AMS):
-            if self._client._device.ams.active_ams_index == (255 - self._index):
+            active_ams_index = self._client._device.ams.active_ams_index
+            active_tray_index = self._client._device.ams.active_tray_index
+            if active_ams_index == (255 - self._index) and active_tray_index == 0:
                 return True
         else:
             return True
