@@ -2050,7 +2050,6 @@ class AMSList:
 
         extruder_data = data.get("device", {}).get("extruder", {}).get("info")
         if extruder_data is not None:
-            LOGGER.debug(f"extruder_data: {extruder_data}")
             for entry in extruder_data:
                 if entry.get("id") in (0, 1):
                     if "snow" in entry:
