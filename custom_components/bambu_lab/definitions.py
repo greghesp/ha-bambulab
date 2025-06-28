@@ -570,6 +570,16 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     ),
 )
 
+VIRTUAL_TRAY_BINARY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabBinarySensorEntityDescription(
+        key="active_ams",
+        translation_key="active_ams",
+        icon="mdi:check",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        is_on_fn=lambda self: self.coordinator.get_model().external_spool.active,
+    ),
+)
+
 VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="external_spool",
