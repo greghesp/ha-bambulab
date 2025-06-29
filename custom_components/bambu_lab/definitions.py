@@ -384,6 +384,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: len(self.coordinator.get_model().print_job.get_printable_objects),
         extra_attributes=lambda self: {"objects": self.coordinator.get_model().print_job.get_printable_objects},
+        exists_fn=lambda coordinator: coordinator.get_option_enabled(Options.FTP),
     ),
     BambuLabSensorEntityDescription(
         key="sdcard_status",
@@ -402,6 +403,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: len(self.coordinator.get_model().print_job.get_skipped_objects),
         extra_attributes=lambda self: {"objects": self.coordinator.get_model().print_job.get_skipped_objects},
+        exists_fn=lambda coordinator: coordinator.get_option_enabled(Options.FTP),
     ),
     BambuLabSensorEntityDescription(
         key="start_time",
