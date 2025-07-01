@@ -648,19 +648,19 @@ class BambuClient:
         LOGGER.debug("Disconnect: Client Disconnecting")
         
         # Stop and wait for background threads
-        if hasattr(self, '_mqtt') and self._mqtt is not None:
+        if self._mqtt is not None:
             LOGGER.debug("Stopping MQTT thread")
             self._mqtt.stop()
             self._mqtt.join(timeout=5)
             self._mqtt = None
             
-        if hasattr(self, '_watchdog') and self._watchdog is not None:
+        if self._watchdog is not None:
             LOGGER.debug("Stopping watchdog thread")
             self._watchdog.stop()
             self._watchdog.join(timeout=5)
             self._watchdog = None
             
-        if hasattr(self, '_camera') and self._camera is not None:
+        if self._camera is not None:
             LOGGER.debug("Stopping camera thread")
             self._camera.stop()
             self._camera.join(timeout=5)
