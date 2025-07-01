@@ -45,7 +45,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             LOGGER.error("Service call timed out")
             return None
         finally:
-            del call.hass.data[DOMAIN]['service_call_future']
+            # Clean up the future safely
+            try:
+                if 'service_call_future' in call.hass.data[DOMAIN]:
+                    del call.hass.data[DOMAIN]['service_call_future']
+            except (KeyError, TypeError):
+                # Integration may have been reloaded, ignore cleanup errors
+                pass
 
     # Register the serviceS with Home Assistant
     services = {
@@ -71,9 +77,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     # Reload entry when its updated.
-    #entry.async_on_unload(entry.add_update_listener(async_reload_entry))
-
-    LOGGER.debug("async_setup_entry Complete")
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     # Now that we've finished initialization fully, start the MQTT connection so that any necessary
     # sensor reinitialization happens entirely after the initial setup.
@@ -81,6 +85,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     cards = BambuLabCardRegistration(hass)
     await cards.async_register()
+
+    LOGGER.debug("async_setup_entry Complete")
 
     return True
 
@@ -102,13 +108,14 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     cards = BambuLabCardRegistration(hass)
     await cards.async_unregister()
 
-    LOGGER.debug("Async Setup Unload Done")
+    LOGGER.debug("async_unload_entry Done")
     return True
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload the config entry when it changed."""
-    LOGGER.debug("Async Setup Reload")
-    await hass.config_entries.async_reload(entry.entry_id)
+    LOGGER.debug("async_reload_entry")
+    await async_unload_entry(hass, entry)
+    await async_setup_entry(hass, entry)
 
 async def async_migrate_entry(hass, config_entry: ConfigEntry):
     """Migrate old entry."""

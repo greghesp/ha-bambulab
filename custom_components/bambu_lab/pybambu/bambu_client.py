@@ -56,7 +56,7 @@ class WatchdogThread(threading.Thread):
         LOGGER.debug("Watchdog thread started.")
 
         WATCHDOG_TIMER = 60
-        while True:
+        while not self._stop_event.is_set():
             # Wait out the remainder of the watchdog delay or 1s, whichever is higher.
             interval = time.time() - self._last_received_data
             wait_time = max(1, WATCHDOG_TIMER - interval)
@@ -147,7 +147,8 @@ class ChamberImageThread(threading.Thread):
                     except socket.error as e:
                         LOGGER.error(f"Socket error: {e}")
                         # Sleep to allow printer to stabilize during boot when it may fail these connection attempts repeatedly.
-                        time.sleep(1)
+                        if self._stop_event.wait(1):
+                            break
                         continue
 
                     sslSock.setblocking(False)
@@ -158,13 +159,15 @@ class ChamberImageThread(threading.Thread):
 
                         except ssl.SSLWantReadError:
                             #LOGGER.debug("SSLWantReadError")
-                            time.sleep(1)
+                            if self._stop_event.wait(1):
+                                break
                             continue
 
                         except Exception as e:
                             LOGGER.error("A Chamber Image thread inner exception occurred:")
                             LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-                            time.sleep(1)
+                            if self._stop_event.wait(1):
+                                break
                             continue
 
                         if img is not None and len(dr) > 0:
@@ -241,7 +244,7 @@ class MqttThread(threading.Thread):
         LOGGER.debug("MQTT listener thread started.")
 
         exceptionSeen = ""
-        while True:
+        while not self._stop_event.is_set():
             try:
                 host = self._client.host if self._client._local_mqtt else self._client.bambu_cloud.cloud_mqtt_host
                 LOGGER.debug(f"Connect: Attempting Connection to {host}")
@@ -255,31 +258,39 @@ class MqttThread(threading.Thread):
                 if exceptionSeen != "TimeoutError":
                     LOGGER.debug(f"TimeoutError: {e}.")
                 exceptionSeen = "TimeoutError"
-                time.sleep(5)
+                if self._stop_event.wait(5):
+                    break
             except ConnectionError as e:
                 if exceptionSeen != "ConnectionError":
                     LOGGER.debug(f"ConnectionError: {e}.")
                 exceptionSeen = "ConnectionError"
-                time.sleep(5)
+                if self._stop_event.wait(5):
+                    break
             except OSError as e:
                 if e.errno == 113:
                     if exceptionSeen != "OSError113":
                         LOGGER.debug(f"OSError: {e}.")
                     exceptionSeen = "OSError113"
-                    time.sleep(5)
+                    if self._stop_event.wait(5):
+                        break
                 else:
                     LOGGER.error("A listener loop thread exception occurred:")
                     LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-                    time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+                    if self._stop_event.wait(1):  # Avoid a tight loop if this is a persistent error.
+                        break
             except Exception as e:
                 LOGGER.error("A listener loop thread exception occurred:")
                 LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-                time.sleep(1)  # Avoid a tight loop if this is a persistent error.
+                if self._stop_event.wait(1):  # Avoid a tight loop if this is a persistent error.
+                    break
 
-            if self._client.client is None:
+            if self._client.client is None or self._stop_event.is_set():
                 break
 
-            self._client.client.disconnect()
+            try:
+                self._client.client.disconnect()
+            except Exception:
+                pass
 
         LOGGER.info("MQTT listener thread exited.")
 
@@ -635,9 +646,35 @@ class BambuClient:
     def disconnect(self):
         """Disconnect the Bambu Client from server"""
         LOGGER.debug("Disconnect: Client Disconnecting")
+        
+        # Stop and wait for background threads
+        if self._mqtt is not None:
+            LOGGER.debug("Stopping MQTT thread")
+            self._mqtt.stop()
+            self._mqtt.join(timeout=5)
+            self._mqtt = None
+            
+        if self._watchdog is not None:
+            LOGGER.debug("Stopping watchdog thread")
+            self._watchdog.stop()
+            self._watchdog.join(timeout=5)
+            self._watchdog = None
+            
+        if self._camera is not None:
+            LOGGER.debug("Stopping camera thread")
+            self._camera.stop()
+            self._camera.join(timeout=5)
+            self._camera = None
+        
+        # Disconnect MQTT client
         if self.client is not None:
-            self.client.disconnect()
-            self.client = None
+            try:
+                self.client.loop_stop()
+                self.client.disconnect()
+            except Exception as e:
+                LOGGER.debug(f"Error during MQTT disconnect: {e}")
+            finally:
+                self.client = None
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS:
