@@ -2796,11 +2796,9 @@ class Extruder:
         # Handle ext_tool update
         old_data = f"{self.__dict__}"
 
-        extruder_data = data.get("device", {}).get("extruder", {}).get("info")
-        if extruder_data is not None:
-            for entry in extruder_data:
-                state = data["device"]["extruder"]["state"]
-                self._active_nozzle_index = (state >> 4) & 0xF
+        extruder_state = data.get("device", {}).get("extruder", {}).get("state")
+        if extruder_state is not None:
+            self._active_nozzle_index = (extruder_state >> 4) & 0xF
                         
         return (old_data != f"{self.__dict__}")
 
