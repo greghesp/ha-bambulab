@@ -62,6 +62,7 @@ body:
         - X1E
         - AMS
         - AMS 2 Pro
+        - AMS HT
         - AMS Lite
     validations:
       required: true
