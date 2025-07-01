@@ -1322,7 +1322,7 @@ class PrintJob:
                 if i != 12:
                     LOGGER.debug(f"Sleeping 5s for X1/H2D retry")
                     time.sleep(5)
-                    LOGGER.debug(f"Try #{i+1} for X1")
+                    LOGGER.debug(f"Try #{i+1} for X1/H2D")
             else:
                 break
 
