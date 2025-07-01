@@ -1320,7 +1320,7 @@ class PrintJob:
                 # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
                 # 5 seconds apart over 60s.
                 if i != 12:
-                    LOGGER.debug(f"Sleeping 5s for X1 retry")
+                    LOGGER.debug(f"Sleeping 5s for X1/H2D retry")
                     time.sleep(5)
                     LOGGER.debug(f"Try #{i+1} for X1")
             else:
