@@ -1312,7 +1312,10 @@ class PrintJob:
             if model_file is not None:
                 break
 
-            if self._client._device.info.device_type == Printers.X1 or self._client._device.info.device_type == Printers.X1C or self._client._device.info.device_type == Printers.X1E:
+            if (self._client._device.info.device_type == Printers.X1 or 
+                self._client._device.info.device_type == Printers.X1C or
+                self._client._device.info.device_type == Printers.X1E or
+                self._client._device.info.device_type == Printers.H2D):
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
                 # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
                 # 5 seconds apart over 60s.
