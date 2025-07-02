@@ -372,7 +372,23 @@
           "paused_cutter_error": "In pausa a causa di un errore della taglierina",
           "paused_first_layer_error": "In pausa a causa di un errore del primo livello",
           "paused_nozzle_clog": "In pausa a causa dell'ostruzione dell'ugello",
-          "idle": "Attesa"
+          "idle": "Attesa",
+          "check_absolute_accuracy_before_calibration": "Controllare la precisione assoluta della stampante prima della calibrazione",
+          "absolute_accuracy_calibration": "Calibrazione di precisione assoluta",
+          "check_absolute_accuracy_after_calibration": "Controllare la precisione assoluta della stampante dopo la calibrazione",
+          "calibrate_nozzle_offset": "Calibrazione offset dell'ugello",
+          "bed_level_high_temperature": "Livellamento del letto automatico ad alta temperatura",
+          "check_quick_release": "Controllo automatico: leva a rilascio rapido",
+          "check_door_and_cover": "Controllo automatico: porta superiore e copertina",
+          "laser_calibration": "Calibrazione laser",
+          "check_plaform": "Controllo automatico: piattaforma",
+          "check_birdeye_camera_position": "Controllo automatico: posizione della fotocamera Birdeye",
+          "calibrate_birdeye_camera": "Calibrare la telecamera Birdeye",
+          "bed_level_phase_1": "Livellamento del letto automatico - Fase 1",
+          "bed_level_phase_2": "Livellamento del letto automatico - Fase 2",
+          "heating_chamber": "Camera di riscaldamento",
+          "heated_bedcooling": "Raffreddamento a letto riscaldato",
+          "print_calibration_lines": "Linee di calibrazione della stampa"
         }
       },
       "print_progress": {

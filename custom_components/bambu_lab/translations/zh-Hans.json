@@ -372,7 +372,23 @@
           "paused_cutter_error": "由于切刀错误而暂停",
           "paused_first_layer_error": "由于第一层错误而暂停",
           "paused_nozzle_clog": "因喷嘴堵塞而暂停",
-          "idle": "空闲"
+          "idle": "空闲",
+          "check_absolute_accuracy_before_calibration": "在校准之前检查打印机绝对精度",
+          "absolute_accuracy_calibration": "绝对准确性校准",
+          "check_absolute_accuracy_after_calibration": "校准后检查打印机的绝对精度",
+          "calibrate_nozzle_offset": "喷嘴抵消校准",
+          "bed_level_high_temperature": "高温自动床平整",
+          "check_quick_release": "自动检查：快速释放杠杆",
+          "check_door_and_cover": "自动检查：门和上盖",
+          "laser_calibration": "激光校准",
+          "check_plaform": "自动检查：平台",
+          "check_birdeye_camera_position": "自动检查：鸟眼相机位置",
+          "calibrate_birdeye_camera": "校准鸟眼相机",
+          "bed_level_phase_1": "自动床平衡 - 阶段1",
+          "bed_level_phase_2": "自动床升级 - 第2阶段",
+          "heating_chamber": "加热室",
+          "heated_bedcooling": "加热床冷却",
+          "print_calibration_lines": "打印校准线"
         }
       },
       "print_progress": {

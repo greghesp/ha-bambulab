@@ -372,7 +372,23 @@
           "paused_cutter_error": "Aufgrund eines Schneidefehlers angehalten",
           "paused_first_layer_error": "Aufgrund eines Fehlers auf der ersten Ebene pausiert",
           "paused_nozzle_clog": "Wegen verstopfter Düse unterbrochen",
-          "idle": "Leerlauf"
+          "idle": "Leerlauf",
+          "check_absolute_accuracy_before_calibration": "Überprüfen Sie den Drucker Absolute Genauigkeit vor der Kalibrierung",
+          "absolute_accuracy_calibration": "Absolute Genauigkeitskalibrierung",
+          "check_absolute_accuracy_after_calibration": "Überprüfen Sie den Drucker die absolute Genauigkeit nach der Kalibrierung",
+          "calibrate_nozzle_offset": "Düsenversetztkalibrierung",
+          "bed_level_high_temperature": "Hochtemperatur -Auto -Bettniveau",
+          "check_quick_release": "Auto -Check: Schnellverkaufshebel",
+          "check_door_and_cover": "Autoscheck: Tür und obere Abdeckung",
+          "laser_calibration": "Laserkalibrierung",
+          "check_plaform": "Autoscheck: Plattform",
+          "check_birdeye_camera_position": "Autoscheck: Birdeye -Kamera -Position",
+          "calibrate_birdeye_camera": "Kalibrieren Sie die Vogelkamera",
+          "bed_level_phase_1": "Auto -Bett -Leveling - Phase 1",
+          "bed_level_phase_2": "Auto -Bett -Leveling - Phase 2",
+          "heating_chamber": "Heizkammer",
+          "heated_bedcooling": "Erhitzte Bettkühlung",
+          "print_calibration_lines": "Drucken von Kalibrierungslinien"
         }
       },
       "print_progress": {

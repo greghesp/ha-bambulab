@@ -101,6 +101,22 @@ CURRENT_STAGE_IDS = {
     33: "paused_cutter_error",
     34: "paused_first_layer_error",
     35: "paused_nozzle_clog",
+    36: "check_absolute_accuracy_before_calibration",
+    37: "absolute_accuracy_calibration",
+    38: "check_absolute_accuracy_after_calibration",
+    39: "calibrate_nozzle_offset",
+    40: "bed_level_high_temperature",
+    41: "check_quick_release",
+    42: "check_door_and_cover",
+    43: "laser_calibration",
+    44: "check_plaform",
+    45: "check_birdeye_camera_position",
+    46: "calibrate_birdeye_camera",
+    47: "bed_level_phase_1",
+    48: "bed_level_phase_2",
+    49: "heating_chamber",
+    50: "heated_bedcooling",
+    51: "print_calibration_lines",
     # X1 returns -1 for idle
     -1: "idle",  # DUPLICATED
     # P1 returns 255 for idle

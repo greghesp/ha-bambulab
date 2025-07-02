@@ -372,7 +372,23 @@
           "paused_cutter_error": "Pause på grund af cutter fejl",
           "paused_first_layer_error": "Pause på grund af fejl i første lag",
           "paused_nozzle_clog": "Pause på grund af tilstoppet dyse",
-          "idle": "Inaktiv"
+          "idle": "Inaktiv",
+          "check_absolute_accuracy_before_calibration": "Kontroller printer absolut nøjagtighed inden kalibrering",
+          "absolute_accuracy_calibration": "Absolut nøjagtighedskalibrering",
+          "check_absolute_accuracy_after_calibration": "Kontroller printer absolut nøjagtighed efter kalibrering",
+          "calibrate_nozzle_offset": "Dysudviklingskalibrering",
+          "bed_level_high_temperature": "Auto Bed Leveling med høj temperatur",
+          "check_quick_release": "Auto Check: Quick Release Lever",
+          "check_door_and_cover": "Auto Check: Dør og øvre dækning",
+          "laser_calibration": "Laserkalibrering",
+          "check_plaform": "Auto Check: Platform",
+          "check_birdeye_camera_position": "Auto Check: Birdeye Camera Position",
+          "calibrate_birdeye_camera": "Kalibrer Birdeye -kamera",
+          "bed_level_phase_1": "Auto Bed Leveling - Fase 1",
+          "bed_level_phase_2": "Auto Bed Leveling - Fase 2",
+          "heating_chamber": "Opvarmningskammer",
+          "heated_bedcooling": "Opvarmet seng afkøling",
+          "print_calibration_lines": "Udskrivning af kalibreringslinjer"
         }
       },
       "print_progress": {

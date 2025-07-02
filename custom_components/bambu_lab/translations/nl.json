@@ -372,7 +372,23 @@
           "paused_cutter_error": "Gepauzeerd vanwege een fout met de filamentsnijder",
           "paused_first_layer_error": "Gepauzeerd vanwege een fout met de eerste laag",
           "paused_nozzle_clog": "Gepauzeerd vanwege een verstopping in de nozzle",
-          "idle": "Inactief"
+          "idle": "Inactief",
+          "check_absolute_accuracy_before_calibration": "Controleer de absolute nauwkeurigheid van de printer vóór kalibratie",
+          "absolute_accuracy_calibration": "Absolute nauwkeurigheid kalibratie",
+          "check_absolute_accuracy_after_calibration": "Controleer de absolute nauwkeurigheid van de printer na kalibratie",
+          "calibrate_nozzle_offset": "Kalibratie van de spuitbeurt",
+          "bed_level_high_temperature": "Auto -bed nivellering op hoge temperatuur",
+          "check_quick_release": "Auto check: snelle release hendel",
+          "check_door_and_cover": "Auto check: deur en bovenklep",
+          "laser_calibration": "Laserkalibratie",
+          "check_plaform": "Auto check: platform",
+          "check_birdeye_camera_position": "Auto controle: Birdeye -camerapositie",
+          "calibrate_birdeye_camera": "Kalibreer Birdeye -camera",
+          "bed_level_phase_1": "Auto -bed nivellering - fase 1",
+          "bed_level_phase_2": "Auto -bed nivellering - fase 2",
+          "heating_chamber": "Verwarmingskamer",
+          "heated_bedcooling": "Verwarmde bedkoeling",
+          "print_calibration_lines": "Kalibratielijnen afdrukken"
         }
       },
       "print_progress": {
