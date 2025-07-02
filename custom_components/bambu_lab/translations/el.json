@@ -372,7 +372,23 @@
           "paused_cutter_error": "Παύση λόγω σφάλματος κόφτη",
           "paused_first_layer_error": "Παύση λόγω σφάλματος πρώτου στρώματος",
           "paused_nozzle_clog": "Παύση λόγω απόφραξης ακροφυσίου",
-          "idle": "Αδρανής"
+          "idle": "Αδρανής",
+          "check_absolute_accuracy_before_calibration": "Ελέγξτε την απόλυτη ακρίβεια του εκτυπωτή πριν από τη βαθμονόμηση",
+          "absolute_accuracy_calibration": "Βαθμονόμηση απόλυτης ακρίβειας",
+          "check_absolute_accuracy_after_calibration": "Ελέγξτε την απόλυτη ακρίβεια του εκτυπωτή μετά τη βαθμονόμηση",
+          "calibrate_nozzle_offset": "Βαθμονόμηση μετατόπισης ακροφυσίου",
+          "bed_level_high_temperature": "Υψηλής θερμοκρασίας Αυτόματη ισοπέδωση",
+          "check_quick_release": "Αυτόματος έλεγχος: μοχλός γρήγορης απελευθέρωσης",
+          "check_door_and_cover": "Αυτόματος έλεγχος: πόρτα και επάνω κάλυμμα",
+          "laser_calibration": "Βαθμονόμηση με λέιζερ",
+          "check_plaform": "Αυτόματος έλεγχος: πλατφόρμα",
+          "check_birdeye_camera_position": "Αυτόματο έλεγχο: θέση κάμερας birdeye",
+          "calibrate_birdeye_camera": "Βαθμολογήστε την κάμερα birdeye",
+          "bed_level_phase_1": "ΑΥΤΟΚΙΝΗΤΙΚΗ ΚΑΤΑΣΚΕΥΗ - Φάση 1",
+          "bed_level_phase_2": "ΑΥΤΟΜΑ ΕΠΙΛΟΓΗ Κρεβάτι - Φάση 2",
+          "heating_chamber": "Θάλαμος θέρμανσης",
+          "heated_bedcooling": "Θερμαινόμενη ψύξη κρεβατιού",
+          "print_calibration_lines": "Γραμμές βαθμονόμησης εκτύπωσης"
         }
       },
       "print_progress": {

@@ -372,7 +372,23 @@
           "paused_cutter_error": "หยุดชั่วคราวเนื่องจากข้อผิดพลาดของเครื่องตัด",
           "paused_first_layer_error": "หยุดชั่วคราวเนื่องจากข้อผิดพลาดชั้นแรก",
           "paused_nozzle_clog": "หยุดชั่วคราวเนื่องจากการอุดตันของหัวฉีด",
-          "idle": "ไม่ได้ใช้งาน"
+          "idle": "ไม่ได้ใช้งาน",
+          "check_absolute_accuracy_before_calibration": "ตรวจสอบความแม่นยำของเครื่องพิมพ์ก่อนการสอบเทียบ",
+          "absolute_accuracy_calibration": "การสอบเทียบความแม่นยำแน่นอน",
+          "check_absolute_accuracy_after_calibration": "ตรวจสอบความแม่นยำของเครื่องพิมพ์หลังจากการสอบเทียบ",
+          "calibrate_nozzle_offset": "การสอบเทียบแบบชดเชยหัวฉีด",
+          "bed_level_high_temperature": "การปรับระดับเตียงอัตโนมัติอุณหภูมิสูง",
+          "check_quick_release": "ตรวจสอบอัตโนมัติ: คันโยกรีลีสด่วน",
+          "check_door_and_cover": "ตรวจสอบอัตโนมัติ: ประตูและฝาครอบด้านบน",
+          "laser_calibration": "การสอบเทียบเลเซอร์",
+          "check_plaform": "ตรวจสอบอัตโนมัติ: แพลตฟอร์ม",
+          "check_birdeye_camera_position": "ตรวจสอบอัตโนมัติ: ตำแหน่งกล้อง Birdeye",
+          "calibrate_birdeye_camera": "ปรับเทียบกล้อง Birdeye",
+          "bed_level_phase_1": "การปรับระดับเตียงอัตโนมัติ - เฟส 1",
+          "bed_level_phase_2": "การปรับระดับเตียงอัตโนมัติ - เฟส 2",
+          "heating_chamber": "ห้องทำความร้อน",
+          "heated_bedcooling": "ความร้อนบนเตียงเย็น",
+          "print_calibration_lines": "สายการสอบเทียบการพิมพ์"
         }
       },
       "print_progress": {

@@ -372,7 +372,23 @@
           "paused_cutter_error": "Pauza – błąd obcinacza",
           "paused_first_layer_error": "Pauza – błąd pierwszej warstwy",
           "paused_nozzle_clog": "Pauza – zatkana dysza",
-          "idle": "Bezczynny"
+          "idle": "Bezczynny",
+          "check_absolute_accuracy_before_calibration": "Sprawdź bezwzględną dokładność drukarki przed kalibracją",
+          "absolute_accuracy_calibration": "Absolutna kalibracja dokładności",
+          "check_absolute_accuracy_after_calibration": "Sprawdź dokładność drukarki bez kalibracji",
+          "calibrate_nozzle_offset": "Kalibracja przesunięcia dyszy",
+          "bed_level_high_temperature": "Wysokiej temperatury automatyczne wyrównanie łóżka",
+          "check_quick_release": "Auto Check: Szybka dźwignia wydania",
+          "check_door_and_cover": "Auto Kontrola: drzwi i górna pokrywa",
+          "laser_calibration": "Kalibracja laserowa",
+          "check_plaform": "Auto Check: Platform",
+          "check_birdeye_camera_position": "Auto Kontrola: Pozycja kamery BirEYe",
+          "calibrate_birdeye_camera": "Kalibruj kamerę BirEye",
+          "bed_level_phase_1": "Auto -Bed Leveling - Faza 1",
+          "bed_level_phase_2": "Auto -Bed Leveling - faza 2",
+          "heating_chamber": "Komora grzewcza",
+          "heated_bedcooling": "Ogrzane chłodzenie łóżka",
+          "print_calibration_lines": "Linie kalibracji drukowania"
         }
       },
       "print_progress": {

@@ -372,7 +372,23 @@
           "paused_cutter_error": "Pausado devido a erro no cortador",
           "paused_first_layer_error": "Pausado devido a erro na primeira camada",
           "paused_nozzle_clog": "Pausado devido ao entupimento do bico",
-          "idle": "Parado"
+          "idle": "Parado",
+          "check_absolute_accuracy_before_calibration": "Verifique a precisão absoluta da impressora antes da calibração",
+          "absolute_accuracy_calibration": "Calibração de precisão absoluta",
+          "check_absolute_accuracy_after_calibration": "Verifique a precisão absoluta da impressora após a calibração",
+          "calibrate_nozzle_offset": "Calibração de deslocamento do bico",
+          "bed_level_high_temperature": "Nivelamento de cama automática de alta temperatura",
+          "check_quick_release": "Verificação automática: alavanca de liberação rápida",
+          "check_door_and_cover": "Verificação automática: porta e tampa superior",
+          "laser_calibration": "Calibração a laser",
+          "check_plaform": "Verificação automática: plataforma",
+          "check_birdeye_camera_position": "Verificação automática: Posição da câmera Birdeye",
+          "calibrate_birdeye_camera": "Calibre a câmera Birdeye",
+          "bed_level_phase_1": "Nivelamento da cama automática - Fase 1",
+          "bed_level_phase_2": "Nivelamento da cama automática - Fase 2",
+          "heating_chamber": "Câmara de aquecimento",
+          "heated_bedcooling": "Refriamento da cama aquecida",
+          "print_calibration_lines": "Linhas de calibração de impressão"
         }
       },
       "print_progress": {

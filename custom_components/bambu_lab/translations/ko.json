@@ -372,7 +372,23 @@
           "paused_cutter_error": "커터 오류로 일시정지됨",
           "paused_first_layer_error": "첫 번째 레이어 오류로 일시정지됨",
           "paused_nozzle_clog": "노즐 막힘으로 일시정지됨",
-          "idle": "대기 중"
+          "idle": "대기 중",
+          "check_absolute_accuracy_before_calibration": "교정 전에 프린터 절대 정확도를 확인하십시오",
+          "absolute_accuracy_calibration": "절대 정확도 교정",
+          "check_absolute_accuracy_after_calibration": "교정 후 프린터 절대 정확도를 확인하십시오",
+          "calibrate_nozzle_offset": "노즐 오프셋 교정",
+          "bed_level_high_temperature": "고온 오토 베드 레벨링",
+          "check_quick_release": "자동 점검 : 빠른 릴리스 레버",
+          "check_door_and_cover": "자동 점검 : 도어 및 상단 덮개",
+          "laser_calibration": "레이저 교정",
+          "check_plaform": "자동 확인 : 플랫폼",
+          "check_birdeye_camera_position": "자동 점검 : 버디 카메라 위치",
+          "calibrate_birdeye_camera": "버디 카메라를 교정하십시오",
+          "bed_level_phase_1": "자동 침대 레벨링 - 1 단계",
+          "bed_level_phase_2": "자동 침대 레벨링 - 2 단계",
+          "heating_chamber": "가열 챔버",
+          "heated_bedcooling": "가열 된 침대 냉각",
+          "print_calibration_lines": "교정 라인 인쇄"
         }
       },
       "print_progress": {

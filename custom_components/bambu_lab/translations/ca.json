@@ -372,7 +372,23 @@
           "paused_cutter_error": "Pausat degut a un error amb el tallador de filament",
           "paused_first_layer_error": "Pausat degut a un error amb la primera capa",
           "paused_nozzle_clog": "Pausat degut a una obstrucció al broquet",
-          "idle": "Inactiu"
+          "idle": "Inactiu",
+          "check_absolute_accuracy_before_calibration": "Comproveu la precisió absoluta de la impressora abans de la calibració",
+          "absolute_accuracy_calibration": "Calibració de precisió absoluta",
+          "check_absolute_accuracy_after_calibration": "Comproveu la precisió absoluta de la impressora després de la calibració",
+          "calibrate_nozzle_offset": "Calibració de desplaçament de la boquilla",
+          "bed_level_high_temperature": "Anivellament de llit automàtic d'alta temperatura",
+          "check_quick_release": "Comprovació automàtica: palanca de llançament ràpid",
+          "check_door_and_cover": "Comprovació automàtica: porta i coberta superior",
+          "laser_calibration": "Calibració làser",
+          "check_plaform": "Comprovació automàtica: plataforma",
+          "check_birdeye_camera_position": "Comprovació automàtica: posició de la càmera d'ocell",
+          "calibrate_birdeye_camera": "Calibrar càmera d'ocells",
+          "bed_level_phase_1": "Anivellament del llit automàtic - Fase 1",
+          "bed_level_phase_2": "Anivellament del llit automàtic - Fase 2",
+          "heating_chamber": "Cambra de calefacció",
+          "heated_bedcooling": "Refrigeració del llit escalfat",
+          "print_calibration_lines": "Línies de calibració d'impressió"
         }
       },
       "print_progress": {

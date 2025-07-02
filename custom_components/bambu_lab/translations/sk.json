@@ -372,7 +372,23 @@
           "paused_cutter_error": "Pozastavené kvôli chybe strihania",
           "paused_first_layer_error": "Pozastavené pre chybu prvej vrstvy",
           "paused_nozzle_clog": "Pozastavené z dôvodu upchatia trysky",
-          "idle": "Nečinná"
+          "idle": "Nečinná",
+          "check_absolute_accuracy_before_calibration": "Skontrolujte absolútnu presnosť tlačiarne pred kalibráciou",
+          "absolute_accuracy_calibration": "Kalibrácia absolútnej presnosti",
+          "check_absolute_accuracy_after_calibration": "Skontrolujte absolútnu presnosť tlačiarne po kalibrácii",
+          "calibrate_nozzle_offset": "Kalibrácia posunu dýzy",
+          "bed_level_high_temperature": "Vysokoteplotné vyrovnanie lôžka",
+          "check_quick_release": "Automatická kontrola: páka rýchleho vydania",
+          "check_door_and_cover": "Automatická kontrola: dvere a horný kryt",
+          "laser_calibration": "Laserová kalibrácia",
+          "check_plaform": "Automatická kontrola: platforma",
+          "check_birdeye_camera_position": "Automatická kontrola: poloha fotoaparátu Birdeye",
+          "calibrate_birdeye_camera": "Kalibrácia kamery Birdeye",
+          "bed_level_phase_1": "Vyrovnanie automatického lôžka - fáza 1",
+          "bed_level_phase_2": "Vyrovnanie automatického lôžka - fáza 2",
+          "heating_chamber": "Vykurovacia komora",
+          "heated_bedcooling": "Vyhrievané chladenie",
+          "print_calibration_lines": "Kalibračné vedenie"
         }
       },
       "print_progress": {

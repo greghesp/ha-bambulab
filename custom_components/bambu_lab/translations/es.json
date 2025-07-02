@@ -372,7 +372,23 @@
           "paused_cutter_error": "En pausa debido a un error con el cortador de filamento",
           "paused_first_layer_error": "En pausa debido a un error con la primera capa",
           "paused_nozzle_clog": "En pausa debido a una obstrucción en la boquilla",
-          "idle": "Inactivo"
+          "idle": "Inactivo",
+          "check_absolute_accuracy_before_calibration": "Verifique la precisión absoluta de la impresora antes de la calibración",
+          "absolute_accuracy_calibration": "Calibración de precisión absoluta",
+          "check_absolute_accuracy_after_calibration": "Verifique la precisión absoluta de la impresora después de la calibración",
+          "calibrate_nozzle_offset": "Calibración de compensación de boquilla",
+          "bed_level_high_temperature": "Nivelación de lecho automático de alta temperatura",
+          "check_quick_release": "Verificación automática: palanca de lanzamiento rápido",
+          "check_door_and_cover": "Verificación automática: puerta y cubierta superior",
+          "laser_calibration": "Calibración láser",
+          "check_plaform": "Verificación automática: plataforma",
+          "check_birdeye_camera_position": "Verificación automática: posición de la cámara Birdeye",
+          "calibrate_birdeye_camera": "Calibrar cámara birdeye",
+          "bed_level_phase_1": "Nivelación de cama automática - Fase 1",
+          "bed_level_phase_2": "Nivelación de cama automática - Fase 2",
+          "heating_chamber": "Cámara de calefacción",
+          "heated_bedcooling": "Enfriamiento de la cama con calefacción",
+          "print_calibration_lines": "Impresión de líneas de calibración"
         }
       },
       "print_progress": {
