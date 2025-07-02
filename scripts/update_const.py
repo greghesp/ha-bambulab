@@ -48,7 +48,7 @@ def process_json(json_data):
 
 def main():
     """The true main function."""
-    bambu_json_url = 'https://e.bambulab.com/query.php?lang=en'
+    bambu_json_url = 'https://raw.githubusercontent.com/bambulab/BambuStudio/master/resources/hms/hms_en_094.json'
 
     script_path = os.path.dirname(__file__)
 
