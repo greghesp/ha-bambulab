@@ -335,6 +335,7 @@ class BambuClient:
     """Initialize Bambu Client to connect to MQTT Broker"""
     _watchdog = None
     _camera = None
+    _mqtt = None
     _usage_hours: float = 0
     _test_mode: bool = False
     _mock: bool = False
