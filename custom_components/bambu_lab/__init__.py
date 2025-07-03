@@ -77,7 +77,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     # Reload entry when its updated.
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+    #entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     # Now that we've finished initialization fully, start the MQTT connection so that any necessary
     # sensor reinitialization happens entirely after the initial setup.
