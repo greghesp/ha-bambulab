@@ -339,6 +339,7 @@ class BambuClient:
     _usage_hours: float = 0
     _test_mode: bool = False
     _mock: bool = False
+    client = None
 
     def __init__(self, config):
         self._config = config
