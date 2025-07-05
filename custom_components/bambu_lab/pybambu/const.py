@@ -209,6 +209,11 @@ class Home_Flag_Values(IntEnum):
     SUPPORTED_PLUS                      = 0x08000000,
     # Gap
 
+class Stat_Flag_Values(IntEnum):
+    # Gap
+    DOOR_OPEN                           = 0x00800000,
+    # Gap
+
 class BambuUrl(IntEnum):
     LOGIN = 1,
     TFA_LOGIN = 2,
