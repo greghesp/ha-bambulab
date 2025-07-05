@@ -159,8 +159,8 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         translation_key="door_open",
         device_class=BinarySensorDeviceClass.DOOR,
         entity_category=EntityCategory.DIAGNOSTIC,
-        available_fn=lambda self: self.coordinator.get_model().home_flag.door_open_available,
-        is_on_fn=lambda self: self.coordinator.get_model().home_flag.door_open,
+        available_fn=lambda self: self.coordinator.get_model().stat_flag.door_open_available or self.coordinator.get_model().home_flag.door_open_available,
+        is_on_fn=lambda self: self.coordinator.get_model().stat_flag.door_open if self.coordinator.get_model().stat_flag.door_open_available else self.coordinator.get_model().home_flag.door_open_available,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DOOR_SENSOR),
     ),
     BambuLabBinarySensorEntityDescription(
