@@ -282,8 +282,9 @@
         "name": "Werkzeugmodul",
         "state": {
           "none": "Nicht montiert",
-          "laser": "Laser",
-          "cutter": "Schneider"
+          "cutter": "Schneider",
+          "laser10": "Laser (10W)",
+          "laser40": "Laser (40 W)"
         }
       },
       "wifi_signal": {

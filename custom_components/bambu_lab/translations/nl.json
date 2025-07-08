@@ -282,8 +282,9 @@
         "name": "Gereedschapsmodule",
         "state": {
           "none": "Niet gemonteerd",
-          "laser": "Laser",
-          "cutter": "Snijder"
+          "cutter": "Snijder",
+          "laser10": "Laser (10W)",
+          "laser40": "Laser (40W)"
         }
       },
       "wifi_signal": {

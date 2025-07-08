@@ -282,8 +282,9 @@
         "name": "工具模块",
         "state": {
           "none": "未安装",
-          "laser": "激光器",
-          "cutter": "切割器"
+          "cutter": "切割器",
+          "laser10": "激光（10W）",
+          "laser40": "激光（40W）"
         }
       },
       "wifi_signal": {

@@ -282,8 +282,9 @@
         "name": "도구 모듈",
         "state": {
           "none": "장착되지 않음",
-          "laser": "레이저",
-          "cutter": "커터"
+          "cutter": "커터",
+          "laser10": "레이저 (10W)",
+          "laser40": "레이저 (40W)"
         }
       },
       "wifi_signal": {

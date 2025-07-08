@@ -110,7 +110,10 @@ for filepath in files:
   with open(filepath, 'r', encoding='utf-8') as file:
     other_language = json.load(file)
 
+  print(f"\nLanguage: {language}")
   convert(old_english, new_english, other_language, language)
 
   with open(filepath, 'w', encoding='utf-8') as file:
     json.dump(other_language, file, ensure_ascii=False, indent=2)
+
+print("\n")

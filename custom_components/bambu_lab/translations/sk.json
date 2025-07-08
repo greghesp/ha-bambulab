@@ -282,8 +282,9 @@
         "name": "Nástrojový modul",
         "state": {
           "none": "Nenamontovaný",
-          "laser": "Laser",
-          "cutter": "Rezačka"
+          "cutter": "Rezačka",
+          "laser10": "Laser (10W)",
+          "laser40": "Laser (40 W)"
         }
       },
       "wifi_signal": {

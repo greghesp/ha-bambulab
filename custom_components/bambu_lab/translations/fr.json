@@ -282,8 +282,9 @@
         "name": "Module d’outil",
         "state": {
           "none": "Non monté",
-          "laser": "Laser",
-          "cutter": "Découpeur"
+          "cutter": "Découpeur",
+          "laser10": "Laser (10W)",
+          "laser40": "Laser (40W)"
         }
       },
       "wifi_signal": {
