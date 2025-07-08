@@ -282,8 +282,9 @@
         "name": "Værktøjsmodul",
         "state": {
           "none": "Ikke monteret",
-          "laser": "Laser",
-          "cutter": "Skærer"
+          "cutter": "Skærer",
+          "laser10": "Laser (10W)",
+          "laser40": "Laser (40W)"
         }
       },
       "wifi_signal": {

@@ -282,8 +282,9 @@
         "name": "Mòdul d'eines",
         "state": {
           "none": "No muntat",
-          "laser": "Làser",
-          "cutter": "Tallador"
+          "cutter": "Tallador",
+          "laser10": "Làser (10W)",
+          "laser40": "Làser (40W)"
         }
       },
       "wifi_signal": {

@@ -282,8 +282,9 @@
         "name": "Modulo strumento",
         "state": {
           "none": "Non montato",
-          "laser": "Laser",
-          "cutter": "Taglierina"
+          "cutter": "Taglierina",
+          "laser10": "Laser (10w)",
+          "laser40": "Laser (40w)"
         }
       },
       "wifi_signal": {

@@ -282,8 +282,9 @@
         "name": "Módulo de herramienta",
         "state": {
           "none": "No montado",
-          "laser": "Láser",
-          "cutter": "Cortador"
+          "cutter": "Cortador",
+          "laser10": "Láser (10W)",
+          "laser40": "Láser (40W)"
         }
       },
       "wifi_signal": {

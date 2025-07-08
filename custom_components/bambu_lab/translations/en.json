@@ -282,7 +282,8 @@
         "name": "Tool module",
         "state": {
           "none": "Not mounted",
-          "laser": "Laser",
+          "laser10": "Laser (10W)",
+          "laser40": "Laser (40W)",
           "cutter": "Cutter"
         }
       },
