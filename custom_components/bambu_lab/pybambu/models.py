@@ -2779,7 +2779,7 @@ class ExtruderTool:
             prev_state = self.state
             if mount == 0:
                 self.state = "none"
-            elif mount == 1 and tool_type == "LB010":
+            elif mount == 1 and tool_type == "LB00":
                 self.state = "laser10"
             elif mount == 1 and tool_type == "LB01":
                 self.state = "laser40"
