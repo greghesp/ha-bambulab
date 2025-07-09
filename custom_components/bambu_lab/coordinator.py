@@ -72,8 +72,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             name=DOMAIN
         )
 
-        # Store event listener removal callbacks
-        self._ha_stop_listener = self.hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._async_shutdown)
+        self.hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._async_shutdown)
         self._service_call_listener = self.hass.bus.async_listen(SERVICE_CALL_EVENT, self._handle_service_call_event)
 
     @callback
@@ -161,7 +160,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._shutdown = True
         
         # Remove event listeners
-        self._ha_stop_listener()
         self._service_call_listener()
         
         # Disconnect client - this will handle its own thread cleanup
