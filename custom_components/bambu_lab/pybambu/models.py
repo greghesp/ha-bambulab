@@ -45,6 +45,7 @@ from .const import (
     Features,
     FansEnum,
     Home_Flag_Values,
+    Stat_Flag_Values,
     Printers,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
@@ -78,6 +79,7 @@ class Device:
         self.print_error = PrintError(client = client)
         self.camera = Camera(client = client)
         self.home_flag = HomeFlag(client=client)
+        self.stat_flag = StatusFlag(client=client)
         self.extruder = Extruder(client=client)
         self.extruder_tool = ExtruderTool(client=client)
         self.push_all_data = None
@@ -105,6 +107,7 @@ class Device:
         send_event = send_event | self.print_error.print_update(data = data)
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
+        send_event = send_event | self.stat_flag.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
 
         self._client.callback("event_printer_data_update")
@@ -115,6 +118,7 @@ class Device:
     def info_update(self, data):
         self.info.info_update(data = data)
         self.home_flag.info_update(data = data)
+        self.stat_flag.info_update(data = data)
         self.ams.info_update(data = data)
         if data.get("command") == "get_version":
             self.get_version_data = data
@@ -2688,6 +2692,52 @@ class HomeFlag:
     def p1s_upgrade_installed(self) -> bool:
         return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0
 
+@dataclass
+class StatusFlag:
+    """Contains parsed _values from the 'stat' sensor"""
+    _value: int
+    _sw_ver: str
+    _device_type: str
+
+    def __init__(self, client):
+        self._value = 0
+        self._client = client
+        self._sw_ver = ""
+        self._device_type = ""
+
+    def info_update(self, data):
+        modules = data.get("module", [])
+        self._device_type = get_printer_type(modules, self._device_type)
+        self._sw_ver = get_sw_version(modules, self._sw_ver)
+
+    def print_update(self, data: dict) -> bool:
+        if "stat" not in data:
+            return False
+
+        old_data = f"{self.__dict__}"
+        try:
+            self._value = int(data.get("stat"), 16)
+        except (ValueError, TypeError):
+            LOGGER.warning("Failed to parse stat=%s", data.get("stat"))
+
+        return (old_data != f"{self.__dict__}")
+
+    @property
+    def door_open(self) -> bool | None:
+        if not self.door_open_available:
+            return None
+
+        return (self._value & Stat_Flag_Values.DOOR_OPEN) != 0
+
+    @property
+    def door_open_available(self) -> bool:
+        if not self._client._device.supports_feature(Features.DOOR_SENSOR):
+            return False
+
+        if (self._device_type in [Printers.X1, Printers.X1C] and version.parse(self._sw_ver) < version.parse("01.09.00.00")):
+            return False
+
+        return True
 
 @dataclass
 class FilamentInfo:
