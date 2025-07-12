@@ -92,7 +92,7 @@ class BambuLabNumber(BambuLabEntity, NumberEntity):
     def available(self) -> bool:
         """Is the number available"""
         available = self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
-        available = available and not self.coordinator.get_model().print_fun.mqtt_signature_required()
+        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
         return available
     
     @property
