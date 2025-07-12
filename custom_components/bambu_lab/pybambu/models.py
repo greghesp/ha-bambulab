@@ -49,7 +49,7 @@ from .const import (
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
-    TempEnum,
+    TempEnum, Print_Fun_Values,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -86,6 +86,7 @@ class Device:
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
+        self.print_fun = PrintFun(client = client)
 
     def print_update(self, data) -> bool:
         send_event = False
@@ -105,6 +106,7 @@ class Device:
         send_event = send_event | self.print_error.print_update(data = data)
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
+        send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
 
         self._client.callback("event_printer_data_update")
@@ -247,9 +249,7 @@ class Device:
                 return True
             return False
         elif feature == Features.MQTT_ENCRYPTION_ENABLED:
-            if self.supports_feature(Features.MQTT_ENCRYPTION_FIRMWARE):
-                return not self.info.developer_lan_mode
-            return False
+            return self.print_fun.mqtt_signature_required()
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -2688,6 +2688,29 @@ class HomeFlag:
     def p1s_upgrade_installed(self) -> bool:
         return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0
 
+
+@dataclass
+class PrintFun:
+    """Contains parsed _values from the print->fun sensor"""
+    _value: str
+    _int_value: int
+    _encryption_enabled: bool
+    
+    def __init__(self, client):
+        self._value = ""
+        self._client = client
+        self._encryption_enabled = False
+        self._int_value: int = 0
+
+    def print_update(self, data: dict) -> bool:
+        old_data = f"{self.__dict__}"
+        self._value = data.get("fun", str(self._value))
+        self._int_value = int(self._value, 16) if self._value else 0
+        return (old_data != f"{self.__dict__}")
+
+    def mqtt_signature_required(self) -> bool:
+        return (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+    
 
 @dataclass
 class FilamentInfo:

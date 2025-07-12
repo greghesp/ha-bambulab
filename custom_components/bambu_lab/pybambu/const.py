@@ -209,6 +209,11 @@ class Home_Flag_Values(IntEnum):
     SUPPORTED_PLUS                      = 0x08000000,
     # Gap
 
+class Print_Fun_Values(IntEnum):
+    # {"print":{"fun":"3EC1AFFF9CFF"}} <- dev mode disabled
+    # {"print":{"fun":"3EC18FFF9CFF"}} <- dev mode enabled
+    MQTT_SIGNATURE_REQUIRED             = 0x20000000
+
 class BambuUrl(IntEnum):
     LOGIN = 1,
     TFA_LOGIN = 2,
