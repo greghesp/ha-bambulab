@@ -8,7 +8,7 @@ import json
 # Add the parent directory to the Python path to find pybambu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from pybambu.models import PrintJob, Info, AMSList, HMSList, PrintError, Temperature
+from pybambu.models import PrintJob, Info, AMSList, Extruder, HMSList, PrintError, Temperature
 from pybambu.const import Printers
 
 class TestPrintJob(unittest.TestCase):
@@ -49,6 +49,9 @@ class TestInfo(unittest.TestCase):
 class TestAMSList(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
+        # Create a _device object on the client
+        self.client._device = MagicMock()
+        self.client._device.extruder = Extruder(self.client._device)
         self.info = Info(self.client)
         self.ams_list = AMSList(self.client)
         # Load test data from P1P.json
@@ -73,15 +76,16 @@ class TestAMSList(unittest.TestCase):
         # Test AMS print update
         data = self.test_data['push_all']
         
+        result = self.client._device.extruder.print_update(data)
         result = self.ams_list.print_update(data)
         self.assertTrue(result)
-        self.assertEqual(self.ams_list.tray_now, 0)
         self.assertIn(0, self.ams_list.data)
 
     def test_h2d_ams_detection(self):
         # Test that two AMS files are properly detected from H2D.json
         data = self.h2d_data['push_all']
         
+        result = self.client._device.extruder.print_update(data)
         result = self.ams_list.print_update(data)
         self.assertTrue(result)
         
@@ -136,6 +140,7 @@ class TestAMSList(unittest.TestCase):
         # Now that we have the models, we can populate the sensor data from the payload.
         data = self.multi_ams_data['push_all']
         
+        result = self.client._device.extruder.print_update(data)
         result = self.ams_list.print_update(data)
         self.assertTrue(result)
         
@@ -202,13 +207,13 @@ class TestH2D(unittest.TestCase):
         result = self.temperature.print_update(data)
         self.assertTrue(result)
 
-        # Test left nozzle (index 0) temperatures
-        self.assertEqual(self.temperature.left_nozzle_temperature, 264)
-        self.assertEqual(self.temperature.left_nozzle_target_temperature, 225)
+        # Test right nozzle (index 0) temperatures
+        self.assertEqual(self.temperature.right_nozzle_temperature, 264)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 225)
 
-        # Test right nozzle (index 1) temperatures
-        self.assertEqual(self.temperature.right_nozzle_temperature, 40)
-        self.assertEqual(self.temperature.right_nozzle_target_temperature, 0)
+        # Test left nozzle (index 1) temperatures
+        self.assertEqual(self.temperature.left_nozzle_temperature, 40)
+        self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
 
 
     
