@@ -82,8 +82,7 @@
           "serial": "Σειριακός Αριθμός:",
           "host": "Τοπική Διεύθυνση IP του Εκτυπωτή:",
           "access_code": "Κωδικός Πρόσβασης:",
-          "usage_hours": "Ώρες Χρήσης (προαιρετικά):",
-          "developer_lan_mode": "Ενεργοποιημένη η λειτουργία Developer LAN:"
+          "usage_hours": "Ώρες Χρήσης (προαιρετικά):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Τοπική Διεύθυνση IP του Εκτυπωτή:",
           "access_code": "Κωδικός Πρόσβασης:",
-          "usage_hours": "Ώρες Χρήσης (προαιρετικά):",
-          "developer_lan_mode": "Ενεργοποιημένη η λειτουργία Developer LAN:"
+          "usage_hours": "Ώρες Χρήσης (προαιρετικά):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Εντοπισμός εντοπισμού σφαλμάτων"
+      },
+      "buzzer_silence": {
+        "name": "Βομβητής - σιωπή"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Buzzer - Συναγερμός πυρκαγιάς"
+      },
+      "buzzer_beeping": {
+        "name": "Βομβητής - ηχογράφηση"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Φωτισμός κάμερας"
+      },
+      "heatbed_light": {
+        "name": "Φανάρισμα"
       }
     },
     "number": {

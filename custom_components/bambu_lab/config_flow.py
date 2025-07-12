@@ -322,7 +322,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 "host": "",
                 "local_mqtt": False,
                 "auth_token": self._bambu_cloud.auth_token,
-                "developer_lan_mode": False,
                 'device_type': device_type,
                 'serial': device['dev_id'],
             }
@@ -339,7 +338,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     'device_type': device_type,
                     'host': user_input['host'],
                     'local_mqtt': True,
-                    "developer_lan_mode": False,
                     'region': self.region,
                     'serial': device['dev_id'],
                 }
@@ -375,7 +373,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "name": device['name'],
                         "host": user_input.get('host', ""),
                         "local_mqtt": user_input.get('local_mqtt', False),
-                        "developer_lan_mode": False,
                         "auth_token": self._bambu_cloud.auth_token,
                         "access_code": user_input['access_code'],
                         "usage_hours": float(user_input['usage_hours']),
@@ -433,7 +430,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 'serial': user_input['serial'],
                 'host': user_input['host'],
                 'local_mqtt': True,
-                'developer_lan_mode': False,
             }
             bambu = BambuClient(config)
             success = await bambu.try_connection()
@@ -451,7 +447,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "name": "",
                         "host": user_input['host'],
                         "local_mqtt": True,
-                        "developer_lan_mode": user_input['developer_lan_mode'],
                         "auth_token": "",
                         "access_code": user_input['access_code'],
                         "usage_hours": float(user_input['usage_hours']),
@@ -477,7 +472,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
         fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
-        fields[vol.Required('developer_lan_mode', default = False if user_input is None else user_input.get('developer_lan_mode', ''))] = BOOLEAN_SELECTOR
         default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
@@ -704,7 +698,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 "username": self._bambu_cloud.username,
                 "host": "",
                 "local_mqtt": False,
-                "developer_lan_mode": False,
                 "auth_token": self._bambu_cloud.auth_token,
                 'device_type': self.config_entry.data['device_type'],
                 'serial': self.config_entry.data['serial'],
@@ -725,7 +718,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             'device_type': self.config_entry.data['device_type'],
                             'host': user_input['host'],
                             'local_mqtt': True,
-                            'developer_lan_mode': False,
                             'serial': self.config_entry.data['serial'],
                         }
                         bambu = BambuClient(config)
@@ -743,7 +735,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         options["name"] = device['name']
                         options["host"] = user_input['host']
                         options["local_mqtt"] = user_input.get('local_mqtt', False)
-                        options["developer_lan_mode"] = False
                         options["auth_token"] = self._bambu_cloud.auth_token
                         options["access_code"] = user_input['access_code']
                         options["usage_hours"] = float(user_input['usage_hours'])
@@ -814,7 +805,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 'device_type': self.config_entry.data['device_type'],
                 'host': user_input['host'],
                 'local_mqtt': True,
-                'developer_lan_mode': False,
                 'serial': self.config_entry.data['serial'],
                 'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
             }
@@ -831,7 +821,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["name"] = self.config_entry.options.get('name', '')
                 options["host"] = user_input['host']
                 options["local_mqtt"] = True
-                options["developer_lan_mode"] = user_input['developer_lan_mode']
                 options["auth_token"] = ''
                 options["access_code"] = user_input['access_code']
                 options["usage_hours"] = float(user_input['usage_hours'])
@@ -855,13 +844,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
         default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
-        default_developer_lan_mode = self.config_entry.options.get('developer_lan_mode', False) if user_input is None else user_input.get('developer_lan_mode', self.config_entry.options.get('access_code', False))
         default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
-        fields[vol.Required('developer_lan_mode', default = default_developer_lan_mode)] = BOOLEAN_SELECTOR
         default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(

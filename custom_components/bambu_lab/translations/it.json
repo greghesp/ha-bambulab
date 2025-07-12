@@ -82,8 +82,7 @@
           "serial": "Numero Seriale",
           "host": "Indirizzo IP della stampante:",
           "access_code": "Codice d'accesso",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
-          "developer_lan_mode": "Modalità LAN sviluppatore abilitata:"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Indirizzo IP della stampante:",
           "access_code": "Codice d'accesso",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
-          "developer_lan_mode": "Modalità LAN sviluppatore abilitata:"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Debug"
+      },
+      "buzzer_silence": {
+        "name": "Buzzer - Silenzio"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Buzzer - Allarme antincendio"
+      },
+      "buzzer_beeping": {
+        "name": "Buzzer - segnale acustico"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Luce Fotocamera"
+      },
+      "heatbed_light": {
+        "name": "Luce del letto riscaldante"
       }
     },
     "number": {

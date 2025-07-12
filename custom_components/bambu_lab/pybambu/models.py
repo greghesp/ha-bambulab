@@ -254,7 +254,7 @@ class Device:
                 return True
             return False
         elif feature == Features.MQTT_ENCRYPTION_ENABLED:
-            return self.print_fun.mqtt_signature_required()
+            return self.print_fun.mqtt_signature_required
         elif feature == Features.FIRE_ALARM_BUZZER:
             return (self.info.device_type == Printers.H2D)
         elif feature == Features.HEATBED_LIGHT:
@@ -1667,7 +1667,6 @@ class Info:
     extruder_filament_state: bool
     _ip_address: str
     _force_ip: bool
-    _developer_lan_mode: bool
 
     def __init__(self, client):
         self._client = client
@@ -1687,7 +1686,6 @@ class Info:
         self.extruder_filament_state = False
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)
-        self._developer_lan_mode = client.settings.get('developer_lan_mode', False)
 
     def set_online(self, online):
         if self.online != online:
@@ -1852,10 +1850,6 @@ class Info:
     @property
     def is_local_mqtt(self):
         return self._client._local_mqtt
-
-    @property
-    def developer_lan_mode(self):
-        return self._developer_lan_mode
 
     @property
     def has_bambu_cloud_connection(self) -> bool:
@@ -2755,6 +2749,7 @@ class PrintFun:
         self._int_value = int(self._value, 16) if self._value else 0
         return (old_data != f"{self.__dict__}")
 
+    @property
     def mqtt_signature_required(self) -> bool:
         return (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
     

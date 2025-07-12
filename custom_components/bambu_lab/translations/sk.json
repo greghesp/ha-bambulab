@@ -82,8 +82,7 @@
           "serial": "Sériové čislo:",
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
-          "usage_hours": "Aktuálne hodiny používania (voliteľné):",
-          "developer_lan_mode": "Povolený režim LAN s vývojárom:"
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
-          "usage_hours": "Aktuálne hodiny používania (voliteľné):",
-          "developer_lan_mode": "Povolený režim LAN s vývojárom:"
+          "usage_hours": "Aktuálne hodiny používania (voliteľné):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Ladiť"
+      },
+      "buzzer_silence": {
+        "name": "Bzučiak - Ticho"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Bzučiak - požiarny poplach"
+      },
+      "buzzer_beeping": {
+        "name": "Bzučiak - pípnutie"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Svetlo kamery"
+      },
+      "heatbed_light": {
+        "name": "Ohrievacie svetlo"
       }
     },
     "number": {
