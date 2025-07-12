@@ -240,10 +240,17 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
 
     entity_description = PROMPT_SOUND_SWITCH_DESCRIPTION
 
+    def available(self) -> bool:
+        """Is the sound switch available"""
+        available = True
+        # Changing the sound involves sending a "print"-type command that may require signature
+        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+        return available
+
     @property
     def icon(self) -> str:
         """Return the icon for the switch."""
-        return "mdi:volume-on" if self.is_on else "mdi:volume-off"
+        return "mdi:volume-high" if self.is_on else "mdi:volume-off"
 
     @property
     def is_on(self) -> bool:
@@ -251,11 +258,11 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
         return self.coordinator.get_model().home_flag.xcam_prompt_sound
 
     async def async_turn_on(self, **kwargs: Any) -> None:
-        """Enable A1 sound."""
+        """Enable A1 / H2D sound."""
         self.coordinator.get_model().info.set_prompt_sound(True)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
-        """Disable A1 sound."""
+        """Disable A1 / H2D sound."""
         self.coordinator.get_model().info.set_prompt_sound(False)
 
 

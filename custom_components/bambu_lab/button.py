@@ -5,7 +5,7 @@ from homeassistant.helpers.entity import EntityCategory
 
 from .const import DOMAIN, LOGGER
 from .models import BambuLabEntity
-from .pybambu.commands import PAUSE, RESUME, STOP
+from .pybambu.commands import PAUSE, RESUME, STOP, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING
 from .pybambu.const import Features
 
 from homeassistant.components.button import (
@@ -40,6 +40,27 @@ FORCE_REFRESH_BUTTON_DESCRIPTION = ButtonEntityDescription(
     entity_category=EntityCategory.DIAGNOSTIC,
 )
 
+# There is no reliable way to obtain state of the buzzer, so it is better to expose as buttons
+# Also, there are 3 possible states, therefore, it cannot be fully exposed by switch
+BUZZER_SILENCE_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="buzzer_silence",
+    icon="mdi:alarm-light-off-outline",
+    translation_key="buzzer_silence",
+    entity_category=EntityCategory.CONFIG,
+)
+BUZZER_FIRE_ALARM_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="buzzer_fire_alarm",
+    icon="mdi:alarm-light",
+    translation_key="buzzer_fire_alarm",
+    entity_category=EntityCategory.CONFIG,
+)
+BUZZER_BEEPING_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="buzzer_beeping",
+    icon="mdi:alarm-light-outline",
+    translation_key="buzzer_beeping",
+    entity_category=EntityCategory.CONFIG,
+)
+
 
 async def async_setup_entry(
         hass: HomeAssistant,
@@ -55,6 +76,13 @@ async def async_setup_entry(
         BambuLabStopButton(coordinator, entry),
         BambuLabRefreshButton(coordinator, entry)
     ]
+
+    if coordinator.get_model().supports_feature(Features.FIRE_ALARM_BUZZER):
+        buttons += [
+            BambuLabBuzzerSilenceButton(coordinator, entry),
+            BambuLabBuzzerFireAlarmButton(coordinator, entry),
+            BambuLabBuzzerBeepingButton(coordinator, entry)
+        ]
 
     async_add_entities(buttons)
 
@@ -137,3 +165,45 @@ class BambuLabRefreshButton(BambuLabButton):
     async def async_press(self) -> None:
         """ Force refresh MQTT info"""
         await self.coordinator.client.refresh()
+
+class BambuLabBuzzerSilenceButton(BambuLabButton):
+    """BambuLab Buzzer Silence Button"""
+
+    entity_description = BUZZER_SILENCE_BUTTON_DESCRIPTION
+
+    @property
+    def available(self) -> bool:
+        """Return if the button is available"""
+        return not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+
+    async def async_press(self) -> None:
+        """ Pause the Print on button press"""
+        self.coordinator.client.publish(BUZZER_SET_SILENT)
+
+class BambuLabBuzzerFireAlarmButton(BambuLabButton):
+    """BambuLab Buzzer Fire Alarm Button"""
+
+    entity_description = BUZZER_FIRE_ALARM_BUTTON_DESCRIPTION
+
+    @property
+    def available(self) -> bool:
+        """Return if the button is available"""
+        return not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+
+    async def async_press(self) -> None:
+        """ Pause the Print on button press"""
+        self.coordinator.client.publish(BUZZER_SET_ALARM)
+
+class BambuLabBuzzerBeepingButton(BambuLabButton):
+    """BambuLab Buzzer Beeping Button"""
+
+    entity_description = BUZZER_BEEPING_BUTTON_DESCRIPTION
+
+    @property
+    def available(self) -> bool:
+        """Return if the button is available"""
+        return not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+
+    async def async_press(self) -> None:
+        """ Pause the Print on button press"""
+        self.coordinator.client.publish(BUZZER_SET_BEEPING)

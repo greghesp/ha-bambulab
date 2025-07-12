@@ -12,6 +12,13 @@ CHAMBER_LIGHT_2_OFF = {
     "system": {"sequence_id": "0", "command": "ledctrl", "led_node": "chamber_light2", "led_mode": "off",
                "led_on_time": 500, "led_off_time": 500, "loop_times": 0, "interval_time": 0}}
 
+HEATBED_LIGHT_ON = {
+    "system": {"sequence_id": "0", "command": "ledctrl", "led_node": "heatbed_light", "led_mode": "on",
+               "led_on_time": 0, "led_off_time": 0, "loop_times": 0, "interval_time": 0}}
+HEATBED_LIGHT_OFF = {
+    "system": {"sequence_id": "0", "command": "ledctrl", "led_node": "heatbed_light", "led_mode": "off",
+               "led_on_time": 0, "led_off_time": 0, "loop_times": 0, "interval_time": 0}}
+
 SPEED_PROFILE_TEMPLATE = {"print": {"sequence_id": "0", "command": "print_speed", "param": ""}}
 
 GET_VERSION = {"info": {"sequence_id": "0", "command": "get_version"}}
@@ -109,6 +116,11 @@ EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}
 
-# A1 only
+# A1 and H2D only
 PROMPT_SOUND_ENABLE  = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": True}}
 PROMPT_SOUND_DISABLE = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": False}}
+
+# H2D only
+BUZZER_SET_SILENT  = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 0, "reason": ""}}
+BUZZER_SET_ALARM   = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 1, "reason": ""}}
+BUZZER_SET_BEEPING = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 2, "reason": ""}}
