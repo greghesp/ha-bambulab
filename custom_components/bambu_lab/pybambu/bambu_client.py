@@ -610,6 +610,8 @@ class BambuClient:
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     LOGGER.debug("Got Version Data")
                     self._device.info_update(data=json_data.get("info"))
+                elif json_data.get("system") and json_data.get("system").get("command"):
+                    self._device.observe_system_command(data=json_data.get("system"))
 
 
         except Exception as e:
@@ -712,6 +714,7 @@ class BambuClient:
             if (json_data.get('print', {}).get('command', '') == 'push_status') and (json_data.get('print', {}).get('msg', 0) == 0):
                 self._device.print_update(data=json_data.get("print"))
                 self.received_push = True
+            # Observe system command is not needed here because it is not an initial message.
 
             if self.received_info and self.received_push:
                 result.put(True)

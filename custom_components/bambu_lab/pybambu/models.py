@@ -49,7 +49,7 @@ from .const import (
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
-    TempEnum,
+    TempEnum, Print_Fun_Values,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -58,7 +58,8 @@ from .commands import (
     CHAMBER_LIGHT_2_OFF,
     PROMPT_SOUND_ENABLE,
     PROMPT_SOUND_DISABLE,
-    SPEED_PROFILE_TEMPLATE,
+    SPEED_PROFILE_TEMPLATE, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING, HEATBED_LIGHT_ON,
+    HEATBED_LIGHT_OFF,
 )
 
 class Device:
@@ -86,6 +87,7 @@ class Device:
             self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
+        self.print_fun = PrintFun(client = client)
 
     def print_update(self, data) -> bool:
         send_event = False
@@ -105,6 +107,7 @@ class Device:
         send_event = send_event | self.print_error.print_update(data = data)
         send_event = send_event | self.camera.print_update(data = data)
         send_event = send_event | self.home_flag.print_update(data = data)
+        send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
 
         self._client.callback("event_printer_data_update")
@@ -118,6 +121,10 @@ class Device:
         self.ams.info_update(data = data)
         if data.get("command") == "get_version":
             self.get_version_data = data
+
+    def observe_system_command(self, data):
+        if data.get("command") == "ledctrl" and data.get("led_node") == "heatbed_light":
+            self.lights.observe_system_command(data)
 
     def _supports_temperature_set(self):
         # When talking to the Bambu cloud mqtt, setting the temperatures is allowed.
@@ -176,7 +183,7 @@ class Device:
         elif feature == Features.SET_TEMPERATURE:
             return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
-            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
+            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.H2D
         elif feature == Features.FTP:
             return True
         elif feature == Features.TIMELAPSE:
@@ -247,9 +254,11 @@ class Device:
                 return True
             return False
         elif feature == Features.MQTT_ENCRYPTION_ENABLED:
-            if self.supports_feature(Features.MQTT_ENCRYPTION_FIRMWARE):
-                return not self.info.developer_lan_mode
-            return False
+            return self.print_fun.mqtt_signature_required()
+        elif feature == Features.FIRE_ALARM_BUZZER:
+            return (self.info.device_type == Printers.H2D)
+        elif feature == Features.HEATBED_LIGHT:
+            return (self.info.device_type == Printers.H2D)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -266,12 +275,14 @@ class Lights:
     chamber_light2: str
     chamber_light_override: str
     chamber_light2_override: str
+    heatbed_light: str
     work_light: str
 
     def __init__(self, client):
         self._client = client
         self.chamber_light = "unknown"
         self.chamber_light2 = "unknown"
+        self.heatbed_light = "unknown"
         self.work_light = "unknown"
         self.chamber_light_override = ""
         self.chamber_light2_override = ""
@@ -279,6 +290,12 @@ class Lights:
     @property
     def is_chamber_light_on(self):
         return self.chamber_light == "on" or self.chamber_light2 == "on"
+
+    @property
+    def is_heatbed_light_on(self) -> bool | None:
+        if self.heatbed_light == "unknown":
+            return None
+        return self.heatbed_light == "on"
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -315,8 +332,18 @@ class Lights:
         self.work_light = \
             search(data.get("lights_report", []), lambda x: x.get('node', "") == "work_light",
                    {"mode": self.work_light}).get("mode")
-        
+
+        # Currently, the status of headbed light is not available (even switching it using printer UI shows an
+        #   error in MQTT: "did not find the valid led: heatbed_light"). Therefore, it is initially in an unknown state.
+
         return (old_data != f"{self.__dict__}")
+
+    def observe_system_command(self, data):
+        # State can be inferred from system->command = ledctrl, but the initial state is still not known.
+        # Even printer UI causes such a message to be sent as the "command execution result".
+        if data.get("led_node") == "heatbed_light":
+            self.heatbed_light = data.get("led_mode")
+        # Should be replaced with proper reading in print_update once fixed in the actual firmware
 
     def TurnChamberLightOn(self):
         self.chamber_light = "on"
@@ -333,6 +360,16 @@ class Lights:
         self._client.publish(CHAMBER_LIGHT_OFF)
         if self._client._device.supports_feature(Features.CHAMBER_LIGHT_2):
             self._client.publish(CHAMBER_LIGHT_2_OFF)
+
+    def TurnHeatbedLightOn(self):
+        self.heatbed_light = "on"
+        self._client.callback("event_light_update")
+        self._client.publish(HEATBED_LIGHT_ON)
+
+    def TurnHeatbedLightOff(self):
+        self.heatbed_light = "off"
+        self._client.callback("event_light_update")
+        self._client.publish(HEATBED_LIGHT_OFF)
 
 
 @dataclass
@@ -1833,6 +1870,16 @@ class Info:
             self._client.publish(PROMPT_SOUND_ENABLE)
         else:
             self._client.publish(PROMPT_SOUND_DISABLE)
+
+    def buzzer_silence(self):
+        self._client.publish(BUZZER_SET_SILENT)
+
+    def buzzer_fire_alarm(self):
+        self._client.publish(BUZZER_SET_ALARM)
+
+    def buzzer_attention_beep(self):
+        self._client.publish(BUZZER_SET_SILENT) # need to reset first for it to work properly
+        self._client.publish(BUZZER_SET_BEEPING)
        
 
 @dataclass
@@ -2688,6 +2735,29 @@ class HomeFlag:
     def p1s_upgrade_installed(self) -> bool:
         return (self._value & Home_Flag_Values.INSTALLED_PLUS) !=  0
 
+
+@dataclass
+class PrintFun:
+    """Contains parsed _values from the print->fun sensor"""
+    _value: str
+    _int_value: int
+    _encryption_enabled: bool
+    
+    def __init__(self, client):
+        self._value = ""
+        self._client = client
+        self._encryption_enabled = False
+        self._int_value: int = 0
+
+    def print_update(self, data: dict) -> bool:
+        old_data = f"{self.__dict__}"
+        self._value = data.get("fun", str(self._value))
+        self._int_value = int(self._value, 16) if self._value else 0
+        return (old_data != f"{self.__dict__}")
+
+    def mqtt_signature_required(self) -> bool:
+        return (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+    
 
 @dataclass
 class FilamentInfo:
