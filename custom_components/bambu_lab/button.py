@@ -40,7 +40,8 @@ FORCE_REFRESH_BUTTON_DESCRIPTION = ButtonEntityDescription(
     entity_category=EntityCategory.DIAGNOSTIC,
 )
 
-# There is no reliable way to obtain state of the buzzer, better to expose it as buttons
+# There is no reliable way to obtain state of the buzzer, so it is better to expose as buttons
+# Also, there are 3 possible states, therefore, it cannot be fully exposed by switch
 BUZZER_SILENCE_BUTTON_DESCRIPTION = ButtonEntityDescription(
     key="buzzer_silence",
     icon="mdi:alarm-light-off-outline",

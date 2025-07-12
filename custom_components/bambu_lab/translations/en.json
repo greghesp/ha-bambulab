@@ -265,6 +265,9 @@
       },
       "camera_light": {
         "name": "Camera light"
+      },
+      "heatbed_light": {
+        "name": "Heatbed light"
       }
     },
     "number": {

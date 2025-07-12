@@ -12,6 +12,13 @@ CHAMBER_LIGHT_2_OFF = {
     "system": {"sequence_id": "0", "command": "ledctrl", "led_node": "chamber_light2", "led_mode": "off",
                "led_on_time": 500, "led_off_time": 500, "loop_times": 0, "interval_time": 0}}
 
+HEATBED_LIGHT_ON = {
+    "system": {"sequence_id": "0", "command": "ledctrl", "led_node": "heatbed_light", "led_mode": "on",
+               "led_on_time": 0, "led_off_time": 0, "loop_times": 0, "interval_time": 0}}
+HEATBED_LIGHT_OFF = {
+    "system": {"sequence_id": "0", "command": "ledctrl", "led_node": "heatbed_light", "led_mode": "off",
+               "led_on_time": 0, "led_off_time": 0, "loop_times": 0, "interval_time": 0}}
+
 SPEED_PROFILE_TEMPLATE = {"print": {"sequence_id": "0", "command": "print_speed", "param": ""}}
 
 GET_VERSION = {"info": {"sequence_id": "0", "command": "get_version"}}
