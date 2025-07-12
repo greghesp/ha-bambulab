@@ -226,6 +226,15 @@
       },
       "dev": {
         "name": "Debug"
+      },
+      "buzzer_silence": {
+        "name": "Buzzer - Silence"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Buzzer - Fire alarm"
+      },
+      "buzzer_beeping": {
+        "name": "Buzzer - Beeping"
       }
     },
     "fan": {

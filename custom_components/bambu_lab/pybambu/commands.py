@@ -109,6 +109,11 @@ EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}
 
-# A1 only
+# A1 and H2D only
 PROMPT_SOUND_ENABLE  = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": True}}
 PROMPT_SOUND_DISABLE = {"print" : {"sequence_id": "0", "command": "print_option", "sound_enable": False}}
+
+# H2D only
+BUZZER_SET_SILENT  = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 0, "reason": ""}}
+BUZZER_SET_ALARM   = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 1, "reason": ""}}
+BUZZER_SET_BEEPING = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 2, "reason": ""}}

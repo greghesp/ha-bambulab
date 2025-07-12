@@ -58,7 +58,7 @@ from .commands import (
     CHAMBER_LIGHT_2_OFF,
     PROMPT_SOUND_ENABLE,
     PROMPT_SOUND_DISABLE,
-    SPEED_PROFILE_TEMPLATE,
+    SPEED_PROFILE_TEMPLATE, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING,
 )
 
 class Device:
@@ -250,6 +250,8 @@ class Device:
             return False
         elif feature == Features.MQTT_ENCRYPTION_ENABLED:
             return self.print_fun.mqtt_signature_required()
+        elif feature == Features.FIRE_ALARM_BUZZER:
+            return (self.info.device_type == Printers.H2D)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -1833,6 +1835,16 @@ class Info:
             self._client.publish(PROMPT_SOUND_ENABLE)
         else:
             self._client.publish(PROMPT_SOUND_DISABLE)
+
+    def buzzer_silence(self):
+        self._client.publish(BUZZER_SET_SILENT)
+
+    def buzzer_fire_alarm(self):
+        self._client.publish(BUZZER_SET_ALARM)
+
+    def buzzer_attention_beep(self):
+        self._client.publish(BUZZER_SET_SILENT) # need to reset first for it to work properly
+        self._client.publish(BUZZER_SET_BEEPING)
        
 
 @dataclass

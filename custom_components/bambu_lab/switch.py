@@ -250,7 +250,7 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
     @property
     def icon(self) -> str:
         """Return the icon for the switch."""
-        return "mdi:volume-on" if self.is_on else "mdi:volume-off"
+        return "mdi:volume-high" if self.is_on else "mdi:volume-off"
 
     @property
     def is_on(self) -> bool:
