@@ -91,9 +91,9 @@ async def async_get_config_entry_diagnostics(
     
     This includes:
     - Configuration entry data (redacted)
-    - Complete device state from pybambu objects
+    - Raw MQTT data (push_all and get_version) (redacted)
+    - Class member state from pybambu objects (redacted)
     - Feature support information
-    - Raw MQTT data (push_all and get_version)
     """
     
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
