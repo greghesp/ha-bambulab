@@ -1,6 +1,12 @@
 """The Bambu Lab component."""
 
 import asyncio
+import json
+import os
+import mimetypes
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+from pathlib import Path
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import (
@@ -9,6 +15,10 @@ from homeassistant.core import (
     SupportsResponse,
 )
 from homeassistant.helpers import entity_platform
+from homeassistant.components.http import HomeAssistantView
+from aiohttp import web
+import aiofiles
+
 from .const import (
     DOMAIN,
     LOGGER,
@@ -19,6 +29,150 @@ from .coordinator import BambuDataUpdateCoordinator
 from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
 
+
+class FileCacheAPIView(HomeAssistantView):
+    """API endpoint for file cache data."""
+    
+    url = "/api/bambu_lab/file_cache/{serial}"
+    name = "api:bambu_lab:file_cache"
+    requires_auth = True
+    
+    def __init__(self, hass: HomeAssistant):
+        """Initialize the view."""
+        self.hass = hass
+    
+    async def get(self, request: web.Request, serial: str) -> web.Response:
+        """Handle GET request for file cache data."""
+        try:
+            # Find the coordinator for this serial
+            coordinator = None
+            for entry_id in self.hass.data[DOMAIN]:
+                if entry_id == "service_call_future":
+                    continue
+                coord = self.hass.data[DOMAIN][entry_id]
+                if coord.get_model().info.serial == serial:
+                    coordinator = coord
+                    break
+            
+            if not coordinator:
+                return web.json_response(
+                    {"error": f"Printer with serial {serial} not found"}, 
+                    status=404
+                )
+            
+            # Get query parameters
+            file_type = request.query.get('file_type', 'all')
+            
+            # Get cached files using the coordinator's method
+            files = await coordinator.get_cached_files(file_type=file_type)
+            
+            # Format the response
+            response_data = {
+                "serial": serial,
+                "file_type": file_type,
+                "files": files,
+                "total_files": len(files),
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            return web.json_response(response_data)
+            
+        except Exception as e:
+            LOGGER.error(f"Error in file cache API: {e}")
+            return web.json_response(
+                {"error": "Internal server error"}, 
+                status=500
+            )
+
+
+class FileCacheMediaView(HomeAssistantView):
+    """API endpoint for serving media files (thumbnails)."""
+    
+    url = "/api/bambu_lab/file_cache/{serial}/media/{filepath:.*}"
+    name = "api:bambu_lab:file_cache_media"
+    requires_auth = True
+    
+    def __init__(self, hass: HomeAssistant):
+        """Initialize the view."""
+        self.hass = hass
+    
+    async def get(self, request: web.Request, serial: str, filepath: str) -> web.Response:
+        """Handle GET request for media files."""
+        try:
+            # Find the coordinator for this serial
+            coordinator = None
+            for entry_id in self.hass.data[DOMAIN]:
+                if entry_id == "service_call_future":
+                    continue
+                coord = self.hass.data[DOMAIN][entry_id]
+                if coord.get_model().info.serial == serial:
+                    coordinator = coord
+                    break
+            
+            if not coordinator:
+                return web.json_response(
+                    {"error": f"Printer with serial {serial} not found"}, 
+                    status=404
+                )
+            
+            # Get the file cache directory
+            cache_dir = coordinator.get_file_cache_directory()
+            if not cache_dir:
+                return web.json_response(
+                    {"error": "File cache not enabled"}, 
+                    status=400
+                )
+            
+            # Construct the full file path
+            full_path = Path(cache_dir) / filepath
+            
+            # Security check: ensure the file is within the cache directory
+            try:
+                full_path.resolve().relative_to(Path(cache_dir).resolve())
+            except ValueError:
+                return web.json_response(
+                    {"error": "Access denied"}, 
+                    status=403
+                )
+            
+            # Check if file exists
+            if not full_path.exists() or not full_path.is_file():
+                return web.json_response(
+                    {"error": "File not found"}, 
+                    status=404
+                )
+            
+            # Get file info
+            stat = full_path.stat()
+            content_type, _ = mimetypes.guess_type(str(full_path))
+            if not content_type:
+                content_type = 'application/octet-stream'
+            
+            # Read and serve the file
+            async with aiofiles.open(full_path, 'rb') as f:
+                content = await f.read()
+            
+            # Set appropriate headers
+            headers = {
+                'Content-Type': content_type,
+                'Content-Length': str(stat.st_size),
+                'Cache-Control': 'public, max-age=3600',  # Cache for 1 hour
+                'Last-Modified': datetime.fromtimestamp(stat.st_mtime).strftime('%a, %d %b %Y %H:%M:%S GMT')
+            }
+            
+            return web.Response(
+                body=content,
+                headers=headers
+            )
+            
+        except Exception as e:
+            LOGGER.error(f"Error serving media file: {e}")
+            return web.json_response(
+                {"error": "Internal server error"}, 
+                status=500
+            )
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
     LOGGER.debug("async_setup_entry Start")
@@ -26,6 +180,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+
+    # Register file cache API endpoints
+    hass.http.register_view(FileCacheAPIView(hass))
+    hass.http.register_view(FileCacheMediaView(hass))
 
     async def handle_service_call(call: ServiceCall):
         LOGGER.debug(f"handle_service_call: {call.service}")

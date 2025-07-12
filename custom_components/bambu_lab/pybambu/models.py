@@ -1379,7 +1379,7 @@ class PrintJob:
                         self._client._device.cover_image.set_image(archive.read(f"Metadata/plate_{plate_number}.png"))
                         LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
 
-                        #Extract gcode file from archive to HA www folder if download_gcode_file is enabled
+                        # Extract gcode file from archive to HA www folder if download_gcode_file is enabled
                         if self._client.download_gcode_file_enabled:
                             try:
                                 local_gcode_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/tmp_gcode"

@@ -767,6 +767,9 @@ class BambuClient:
         """
         self.disconnect()
 
+    def download_3mf_and_extract_metadata(self, model_file, thumbnail_cache_path=None):
+        return self._device.print_job.extract_3mf_metadata(model_file, thumbnail_cache_path=thumbnail_cache_path)
+
 @functools.lru_cache(maxsize=1)
 def create_local_ssl_context():
     """

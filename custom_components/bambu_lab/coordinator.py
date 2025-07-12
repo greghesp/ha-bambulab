@@ -13,8 +13,10 @@ from .const import (
 import asyncio
 import re
 import time
-
-from typing import Any
+import os
+from pathlib import Path
+from datetime import datetime
+from typing import Any, Optional, List, Dict
 
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
@@ -209,7 +211,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         return device_entry  # Returns a DeviceEntry object or None
 
-    def _handle_service_call_event(self, event: Event) -> Any:
+    async def _handle_service_call_event(self, event: Event) -> Any:
         data = event.data
 
         if not self._is_service_call_for_me(data):
@@ -783,6 +785,149 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             translation_placeholders = {"device": self.config_entry.options.get('name', '')},
         )
 
+    def get_file_cache_directory(self) -> Optional[str]:
+        """Get the file cache directory for this printer."""
+        if not self.get_option_enabled(Options.FILE_CACHE):
+            return None
+        
+        serial = self.get_model().info.serial
+        return f"/config/www/media/ha-bambulab/{serial}"
+    
+    async def get_cached_files(self, file_type: str = 'all') -> List[Dict[str, Any]]:
+        """Get list of cached files with metadata."""
+        cache_dir = self.get_file_cache_directory()
+        if not cache_dir or not os.path.exists(cache_dir):
+            return []
+        
+        files = []
+        cache_path = Path(cache_dir)
+        
+        # Define file type patterns
+        type_patterns = {
+            '3mf': ['*.3mf'],
+            'gcode': ['*.gcode'],
+            'timelapse': ['*.mp4', '*.avi', '*.mov'],
+            'thumbnail': ['*.jpg', '*.jpeg', '*.png', '*.bmp'],
+            'all': ['*']
+        }
+        
+        patterns = type_patterns.get(file_type, ['*'])
+        
+        for pattern in patterns:
+            for file_path in cache_path.rglob(pattern):
+                if file_path.is_file():
+                    # Get file stats
+                    stat = file_path.stat()
+                    
+                    # Determine file type
+                    file_ext = file_path.suffix.lower()
+                    if file_ext == '.3mf':
+                        detected_type = '3mf'
+                    elif file_ext == '.gcode':
+                        detected_type = 'gcode'
+                    elif file_ext in ['.mp4', '.avi', '.mov']:
+                        detected_type = 'timelapse'
+                    elif file_ext in ['.jpg', '.jpeg', '.png', '.bmp']:
+                        detected_type = 'thumbnail'
+                    else:
+                        detected_type = 'unknown'
+                    
+                    # Skip if not matching requested type (unless 'all')
+                    if file_type != 'all' and detected_type != file_type:
+                        continue
+                    
+                    # Look for thumbnail
+                    thumbnail_path = None
+                    if detected_type in ['3mf', 'gcode']:
+                        # Look for thumbnail in same directory
+                        thumbnail_name = file_path.stem + '.jpg'
+                        thumbnail_candidates = [
+                            file_path.parent / thumbnail_name,
+                            file_path.parent / (file_path.stem + '.png'),
+                            file_path.parent / (file_path.stem + '.jpeg')
+                        ]
+                        
+                        for thumb_path in thumbnail_candidates:
+                            if thumb_path.exists():
+                                thumbnail_path = str(thumb_path.relative_to(cache_path))
+                                break
+                    
+                    # Format file size
+                    size_bytes = stat.st_size
+                    if size_bytes < 1024:
+                        size_human = f"{size_bytes} B"
+                    elif size_bytes < 1024 * 1024:
+                        size_human = f"{size_bytes / 1024:.1f} KB"
+                    elif size_bytes < 1024 * 1024 * 1024:
+                        size_human = f"{size_bytes / (1024 * 1024):.1f} MB"
+                    else:
+                        size_human = f"{size_bytes / (1024 * 1024 * 1024):.1f} GB"
+                    
+                    file_info = {
+                        'filename': file_path.name,
+                        'path': str(file_path.relative_to(cache_path)),
+                        'type': detected_type,
+                        'size': size_bytes,
+                        'size_human': size_human,
+                        'modified': datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                        'thumbnail_path': thumbnail_path
+                    }
+                    
+                    files.append(file_info)
+        
+        # Sort by modification time (newest first)
+        files.sort(key=lambda x: x['modified'], reverse=True)
+        
+        return files
+    
+    async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:
+        """Clear the file cache."""
+        cache_dir = self.get_file_cache_directory()
+        if not cache_dir or not os.path.exists(cache_dir):
+            return {"success": False, "error": "File cache not enabled or directory not found"}
+        
+        try:
+            cache_path = Path(cache_dir)
+            deleted_count = 0
+            
+            if file_type == 'all':
+                # Delete all files in cache directory
+                for file_path in cache_path.rglob('*'):
+                    if file_path.is_file():
+                        file_path.unlink()
+                        deleted_count += 1
+            else:
+                # Delete only specific file type
+                type_patterns = {
+                    '3mf': ['*.3mf'],
+                    'gcode': ['*.gcode'],
+                    'timelapse': ['*.mp4', '*.avi', '*.mov'],
+                    'thumbnail': ['*.jpg', '*.jpeg', '*.png', '*.bmp']
+                }
+                
+                patterns = type_patterns.get(file_type, [])
+                for pattern in patterns:
+                    for file_path in cache_path.rglob(pattern):
+                        if file_path.is_file():
+                            file_path.unlink()
+                            deleted_count += 1
+            
+            return {
+                "success": True,
+                "deleted_count": deleted_count,
+                "file_type": file_type
+            }
+            
+        except Exception as e:
+            LOGGER.error(f"Error clearing file cache: {e}")
+            return {"success": False, "error": str(e)}
+
+    async def download_3mf_with_thumbnail(self, model_file_path):
+        serial = self.get_model().info.serial
+        cache_dir = f"/config/www/media/ha-bambulab/{serial}/thumbnails"
+        filename = os.path.splitext(os.path.basename(model_file_path))[0] + ".png"
+        thumbnail_cache_path = os.path.join(cache_dir, filename)
+        return self.client.download_3mf_and_extract_metadata(model_file_path, thumbnail_cache_path=thumbnail_cache_path)
 
     def check_service_call_payload_for_device(call: ServiceCall):
         LOGGER.debug(call)
