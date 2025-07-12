@@ -82,8 +82,7 @@
           "serial": "Numer seryjny:",
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
-          "usage_hours": "Aktualny czas pracy (opcjonalnie):",
-          "developer_lan_mode": "Włączony tryb programisty LAN:"
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
-          "usage_hours": "Aktualny czas pracy (opcjonalnie):",
-          "developer_lan_mode": "Włączony tryb programisty LAN:"
+          "usage_hours": "Aktualny czas pracy (opcjonalnie):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Debugowanie"
+      },
+      "buzzer_silence": {
+        "name": "Brzęczyk - cisza"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Brzęczyk - alarm przeciwpożarowy"
+      },
+      "buzzer_beeping": {
+        "name": "Brzęczyk - sygnał dźwiękowy"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Oświetlenie kamery"
+      },
+      "heatbed_light": {
+        "name": "Ogrzone światło"
       }
     },
     "number": {

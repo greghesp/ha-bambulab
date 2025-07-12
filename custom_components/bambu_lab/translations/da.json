@@ -82,8 +82,7 @@
           "serial": "Serienummer:",
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):",
-          "developer_lan_mode": "Udvikler LAN -tilstand aktiveret:"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):",
-          "developer_lan_mode": "Udvikler LAN -tilstand aktiveret:"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Debug"
+      },
+      "buzzer_silence": {
+        "name": "Summer - stilhed"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Summer - brandalarm"
+      },
+      "buzzer_beeping": {
+        "name": "Buzzer - Biping"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Kameralys"
+      },
+      "heatbed_light": {
+        "name": "Varmebed lys"
       }
     },
     "number": {

@@ -82,8 +82,7 @@
           "serial": "Número de Serie:",
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
-          "usage_hours": "Cantidad de horas de uso (opcional):",
-          "developer_lan_mode": "Modo LAN de desarrollador habilitado:"
+          "usage_hours": "Cantidad de horas de uso (opcional):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
-          "usage_hours": "Cantidad de horas de uso (opcional):",
-          "developer_lan_mode": "Modo LAN de desarrollador habilitado:"
+          "usage_hours": "Cantidad de horas de uso (opcional):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Depurar"
+      },
+      "buzzer_silence": {
+        "name": "Timbre - silencio"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Buzzer - Alarma de incendio"
+      },
+      "buzzer_beeping": {
+        "name": "Timbre - pitido"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Luz de cámara"
+      },
+      "heatbed_light": {
+        "name": "Luz de lecho de calor"
       }
     },
     "number": {

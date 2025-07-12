@@ -82,8 +82,7 @@
           "serial": "Serienummer:",
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
-          "developer_lan_mode": "Ontwikkelaar LAN -modus ingeschakeld:"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
-          "developer_lan_mode": "Ontwikkelaar LAN -modus ingeschakeld:"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Debug"
+      },
+      "buzzer_silence": {
+        "name": "Zoemer - stilte"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Zoemer - brandalarm"
+      },
+      "buzzer_beeping": {
+        "name": "Zoemer - piepend"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Cameralicht"
+      },
+      "heatbed_light": {
+        "name": "Heatbed licht"
       }
     },
     "number": {

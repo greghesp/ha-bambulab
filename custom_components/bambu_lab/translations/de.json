@@ -82,8 +82,7 @@
           "serial": "Seriennummer:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "usage_hours": "Aktuelle Nutzungsstunden (optional):",
-          "developer_lan_mode": "Entwickler LAN -Modus aktiviert:"
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "usage_hours": "Aktuelle Nutzungsstunden (optional):",
-          "developer_lan_mode": "Entwickler LAN -Modus aktiviert:"
+          "usage_hours": "Aktuelle Nutzungsstunden (optional):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Debuggen"
+      },
+      "buzzer_silence": {
+        "name": "Summer - Stille"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Summer - Feueralarm"
+      },
+      "buzzer_beeping": {
+        "name": "Summer - Beeping"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Kamerabeleuchtung"
+      },
+      "heatbed_light": {
+        "name": "Heizbett Licht"
       }
     },
     "number": {

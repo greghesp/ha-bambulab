@@ -82,7 +82,6 @@
           "serial": "Serial Number:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
-          "developer_lan_mode": "Developer Lan Mode Enabled:",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
@@ -162,7 +161,6 @@
         "data": {
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
-          "developer_lan_mode": "Developer Lan Mode Enabled:",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
