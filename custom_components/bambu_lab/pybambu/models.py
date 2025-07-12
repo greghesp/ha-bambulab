@@ -176,7 +176,7 @@ class Device:
         elif feature == Features.SET_TEMPERATURE:
             return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
-            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
+            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.H2D
         elif feature == Features.FTP:
             return True
         elif feature == Features.TIMELAPSE:
