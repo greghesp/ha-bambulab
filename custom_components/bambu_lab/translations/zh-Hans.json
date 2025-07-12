@@ -82,8 +82,7 @@
           "serial": "序号：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "usage_hours": "当前使用时间（可选）：",
-          "developer_lan_mode": "启用了开发人员LAN模式："
+          "usage_hours": "当前使用时间（可选）："
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "usage_hours": "当前使用时间（可选）：",
-          "developer_lan_mode": "启用了开发人员LAN模式："
+          "usage_hours": "当前使用时间（可选）："
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "调试"
+      },
+      "buzzer_silence": {
+        "name": "蜂鸣器 - 沉默"
+      },
+      "buzzer_fire_alarm": {
+        "name": "蜂鸣器 - 火警警报"
+      },
+      "buzzer_beeping": {
+        "name": "蜂鸣器 - 蜂鸣器"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "摄像头灯"
+      },
+      "heatbed_light": {
+        "name": "加热灯"
       }
     },
     "number": {

@@ -82,8 +82,7 @@
           "serial": "시리얼 번호:",
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "usage_hours": "현재 사용 시간 (선택 사항):",
-          "developer_lan_mode": "개발자 LAN 모드 활성화 :"
+          "usage_hours": "현재 사용 시간 (선택 사항):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "usage_hours": "현재 사용 시간 (선택 사항):",
-          "developer_lan_mode": "개발자 LAN 모드 활성화 :"
+          "usage_hours": "현재 사용 시간 (선택 사항):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "디버그"
+      },
+      "buzzer_silence": {
+        "name": "버저 - 침묵"
+      },
+      "buzzer_fire_alarm": {
+        "name": "버저 - 불 경보"
+      },
+      "buzzer_beeping": {
+        "name": "부저 - 삐"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "카메라 라이트"
+      },
+      "heatbed_light": {
+        "name": "가열 된 빛"
       }
     },
     "number": {

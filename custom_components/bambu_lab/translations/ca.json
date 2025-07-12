@@ -82,8 +82,7 @@
           "serial": "Número de Serie:",
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):",
-          "developer_lan_mode": "Mode LAN desenvolupador activat:"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):"
         },
         "sections": {
           "advanced": {
@@ -162,8 +161,7 @@
         "data": {
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):",
-          "developer_lan_mode": "Mode LAN desenvolupador activat:"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):"
         },
         "sections": {
           "advanced": {
@@ -226,6 +224,15 @@
       },
       "dev": {
         "name": "Anterioritat"
+      },
+      "buzzer_silence": {
+        "name": "Buzzer - Silenci"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Buzzer: alarma d'incendi"
+      },
+      "buzzer_beeping": {
+        "name": "Buzzer: beeping"
       }
     },
     "fan": {
@@ -256,6 +263,9 @@
       },
       "camera_light": {
         "name": "Llum de la càmera"
+      },
+      "heatbed_light": {
+        "name": "Llum de calor"
       }
     },
     "number": {
