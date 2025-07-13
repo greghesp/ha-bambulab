@@ -174,7 +174,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
 
-        # First test if a device_id is specified and if so, check if it matches
         device_id = data.get('device_id', [])
         if len(device_id) == 1:
             return (device_id[0] == hadevice.id)
@@ -505,18 +504,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _service_call_print_project_file(self, data: dict):
         command = PRINT_PROJECT_FILE_TEMPLATE
-        file = data.get("filepath")
-        plate = data.get("plate")
-        timelapse = data.get("timelapse")
-        bed_leveling = data.get("bed_leveling")
-        flow_cali = data.get("flow_cali")
-        vibration_cali = data.get("vibration_cali")
-        layer_inspect = data.get("layer_inspect")
-        use_ams = data.get("use_ams")
+        filepath = data.get("filepath")
+        plate = data.get("plate", 1)
+        timelapse = data.get("timelapse", False)
+        bed_leveling = data.get("bed_leveling", False)
+        flow_cali = data.get("flow_cali", False)
+        vibration_cali = data.get("vibration_cali", False)
+        layer_inspect = data.get("layer_inspect", False)
+        use_ams = data.get("use_ams", False)
         ams_mapping = data.get("ams_mapping")
 
         command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
-        command["print"]["url"] = f"ftp://{file}"
+        command["print"]["url"] = f"ftp://sdcard/{filepath}"
         command["print"]["timelapse"] = timelapse
         command["print"]["bed_leveling"] = bed_leveling
         command["print"]["flow_cali"] = flow_cali
@@ -524,6 +523,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["layer_inspect"] = layer_inspect
         command["print"]["use_ams"] = use_ams
         command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
+        command["print"]["subtask_name"] = os.path.basename(filepath)
 
         self.client.publish(command)
 
