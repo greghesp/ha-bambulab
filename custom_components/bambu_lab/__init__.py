@@ -43,6 +43,7 @@ class FileCacheAPIView(HomeAssistantView):
     
     async def get(self, request: web.Request, serial: str) -> web.Response:
         """Handle GET request for file cache data."""
+        LOGGER.debug("FileCacheAPIView::get()")
         try:
             # Find the coordinator for this serial
             coordinator = None
@@ -74,6 +75,7 @@ class FileCacheAPIView(HomeAssistantView):
                 "total_files": len(files),
                 "timestamp": datetime.now().isoformat()
             }
+            LOGGER.debug(f"Response: {response_data}")
             
             return web.json_response(response_data)
             
@@ -94,10 +96,12 @@ class FileCacheMediaView(HomeAssistantView):
     
     def __init__(self, hass: HomeAssistant):
         """Initialize the view."""
+        LOGGER.debug(f"FileCacheMediaView initialized with URL: {self.url}")
         self.hass = hass
     
     async def get(self, request: web.Request, serial: str, filepath: str) -> web.Response:
         """Handle GET request for media files."""
+        LOGGER.debug("FileCacheMediaView::get()")
         try:
             # Find the coordinator for this serial
             coordinator = None
@@ -182,8 +186,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
     # Register file cache API endpoints
+    LOGGER.info("Registering file cache API endpoints")
     hass.http.register_view(FileCacheAPIView(hass))
     hass.http.register_view(FileCacheMediaView(hass))
+    LOGGER.info("File cache API endpoints registered successfully")
 
     async def handle_service_call(call: ServiceCall):
         LOGGER.debug(f"handle_service_call: {call.service}")

@@ -1134,35 +1134,31 @@ class PrintJob:
         return None
 
     def _attempt_ftp_download(self, ftp) -> Union[str, None]:
-        model_file = None
+
+        filenames_to_try = []
 
         # First test if the subtaskname exists as a 3mf
         if self.subtask_name != '':
             if self.subtask_name.endswith('.3mf'):
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.subtask_name)
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(self.subtask_name)
             else:
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.3mf")
-                if model_file is not None:
-                    return model_file
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.gcode.3mf")
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(f"{self.subtask_name}.3mf")
+                filenames_to_try.append(f"{self.subtask_name}.gcode.3mf")
+
 
         # If we didn't find it then try the gcode file
         if (self.gcode_file != '') and (self.subtask_name != self.gcode_file):
             if self.gcode_file.endswith('.3mf'):
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.gcode_file)
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(self.gcode_file)
             else:
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.3mf")
-                if model_file is not None:
-                    return model_file
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.gcode.3mf")
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(f"{self.gcode_file}.3mf")
+                filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
+
+        # Try each candidate filename in order
+        for filename in filenames_to_try:
+            model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=filename)
+            if model_file is not None:
+                return filename, model_file
 
         if self.subtask_name == "":
             # Fall back to find the latest file by timestamp but only if we don't have a subtask name set - printer must have been rebooted.
@@ -1170,8 +1166,9 @@ class PrintJob:
             model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
             if model_path is not None:
                 model_file = self._attempt_ftp_download_of_file(ftp, model_path)
+                return os.path.basename(model_path), model_file
 
-        return model_file
+        return None, None
     
     def _find_latest_file(self, ftp, search_paths, extensions: list):
         # Look for the newest file with extension in directory.
@@ -1345,7 +1342,7 @@ class PrintJob:
         ftp = self._client.ftp_connection()
 
         for i in range(1,13):
-            model_file = self._attempt_ftp_download(ftp)
+            filename, model_file = self._attempt_ftp_download(ftp)
             if model_file is not None:
                 break
 
@@ -1500,6 +1497,29 @@ class PrintJob:
         except Exception as e:
             LOGGER.error(f"Unexpected error parsing model data: {e}")
         
+            
+        LOGGER.debug(f"FILENAME: {filename}")    # Save the 3MF file and cover image to the media cache directory
+        try:
+            serial = self._client._serial
+            cache_dir = f"/config/www/media/ha-bambulab/{serial}"
+            os.makedirs(cache_dir, exist_ok=True)
+
+            # Save the 3MF file
+            if model_file:
+                model_file.seek(0)
+                cache_3mf_path = os.path.join(cache_dir, filename)
+                with open(cache_3mf_path, "wb") as f:
+                    f.write(model_file.read())
+
+            # Save the cover image
+            cover_bytes = self._client._device.cover_image.get_image()
+            if cover_bytes and 'plate_number' in locals() and plate_number is not None:
+                cover_path = os.path.join(cache_dir, os.path.splitext(filename)[0]+'.png')
+                with open(cover_path, "wb") as f:
+                    f.write(cover_bytes)
+        except Exception as e:
+            LOGGER.error(f"Failed to save 3MF or cover image to media cache: {e}")
+            
         # Close and delete temporary file
         model_file.close();
         return result

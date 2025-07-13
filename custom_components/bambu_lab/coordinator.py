@@ -838,7 +838,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     
                     # Look for thumbnail
                     thumbnail_path = None
-                    if detected_type in ['3mf', 'gcode']:
+                    if detected_type in ['timelapse', '3mf', 'gcode']:
                         # Look for thumbnail in same directory
                         thumbnail_name = file_path.stem + '.jpg'
                         thumbnail_candidates = [
