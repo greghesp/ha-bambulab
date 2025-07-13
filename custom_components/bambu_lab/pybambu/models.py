@@ -1254,7 +1254,7 @@ class PrintJob:
             os.makedirs(directory_path, exist_ok=True)
 
             if os.path.exists(local_file_path):
-                LOGGER.debug("Timelapse already downloaded.")
+                LOGGER.debug(f"Timelapse already downloaded: {file_path}")
             else:
                 with open(local_file_path, 'wb') as f:
                     # Fetch the video from FTP and close the connection
@@ -1501,7 +1501,7 @@ class PrintJob:
         LOGGER.debug(f"FILENAME: {filename}")    # Save the 3MF file and cover image to the media cache directory
         try:
             serial = self._client._serial
-            cache_dir = f"/config/www/media/ha-bambulab/{serial}"
+            cache_dir = f"/config/www/media/ha-bambulab/{serial}/model"
             os.makedirs(cache_dir, exist_ok=True)
 
             # Save the 3MF file

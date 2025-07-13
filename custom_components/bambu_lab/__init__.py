@@ -62,7 +62,12 @@ class FileCacheAPIView(HomeAssistantView):
                 )
             
             # Get query parameters
-            file_type = request.query.get('file_type', 'all')
+            file_type = request.query.get('file_type')
+            if file_type is None:
+                return web.json_response(
+                    {"error": f"file_type not set"}, 
+                    status=404
+                )
             
             # Get cached files using the coordinator's method
             files = await coordinator.get_cached_files(file_type=file_type)

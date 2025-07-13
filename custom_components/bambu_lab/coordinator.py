@@ -729,6 +729,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 default = True
             case Options.FTP:
                 default = options.get('local_mqtt', False)
+            case Options.TIMELAPSE_CACHE:
+                default = False
 
         return options.get(OPTION_NAME[option], default)
         
@@ -793,9 +795,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         serial = self.get_model().info.serial
         return f"/config/www/media/ha-bambulab/{serial}"
     
-    async def get_cached_files(self, file_type: str = 'all') -> List[Dict[str, Any]]:
+    async def get_cached_files(self, file_type: str) -> List[Dict[str, Any]]:
         """Get list of cached files with metadata."""
         cache_dir = self.get_file_cache_directory()
+        if file_type == 'timelapse':
+            cache_dir = os.path.join(cache_dir, 'timelapse')
         if not cache_dir or not os.path.exists(cache_dir):
             return []
         
@@ -807,8 +811,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             '3mf': ['*.3mf'],
             'gcode': ['*.gcode'],
             'timelapse': ['*.mp4', '*.avi', '*.mov'],
-            'thumbnail': ['*.jpg', '*.jpeg', '*.png', '*.bmp'],
-            'all': ['*']
         }
         
         patterns = type_patterns.get(file_type, ['*'])
@@ -827,8 +829,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                         detected_type = 'gcode'
                     elif file_ext in ['.mp4', '.avi', '.mov']:
                         detected_type = 'timelapse'
-                    elif file_ext in ['.jpg', '.jpeg', '.png', '.bmp']:
-                        detected_type = 'thumbnail'
                     else:
                         detected_type = 'unknown'
                     
@@ -839,15 +839,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     # Look for thumbnail
                     thumbnail_path = None
                     if detected_type in ['timelapse', '3mf', 'gcode']:
-                        # Look for thumbnail in same directory
-                        thumbnail_name = file_path.stem + '.jpg'
                         thumbnail_candidates = [
-                            file_path.parent / thumbnail_name,
+                            file_path.parent / (file_path.stem + '.jpg'),
                             file_path.parent / (file_path.stem + '.png'),
-                            file_path.parent / (file_path.stem + '.jpeg')
+                            file_path.parent / (file_path.stem + '.jpeg'),
                         ]
                         
                         for thumb_path in thumbnail_candidates:
+                            LOGGER.debug(f"Looking for {thumb_path}")
                             if thumb_path.exists():
                                 thumbnail_path = str(thumb_path.relative_to(cache_path))
                                 break
@@ -921,13 +920,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as e:
             LOGGER.error(f"Error clearing file cache: {e}")
             return {"success": False, "error": str(e)}
-
-    async def download_3mf_with_thumbnail(self, model_file_path):
-        serial = self.get_model().info.serial
-        cache_dir = f"/config/www/media/ha-bambulab/{serial}/thumbnails"
-        filename = os.path.splitext(os.path.basename(model_file_path))[0] + ".png"
-        thumbnail_cache_path = os.path.join(cache_dir, filename)
-        return self.client.download_3mf_and_extract_metadata(model_file_path, thumbnail_cache_path=thumbnail_cache_path)
 
     def check_service_call_payload_for_device(call: ServiceCall):
         LOGGER.debug(call)

@@ -71,7 +71,8 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of 3mf and thumbnails to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant",
+              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
             }
           }
         }
@@ -92,7 +93,8 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of 3mf and thumbnails to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant",
+              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
             }
           }
         }
@@ -153,7 +155,8 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of 3mf and thumbnails to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant",
+              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
             }
           }
         }
@@ -173,7 +176,8 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of 3mf and thumbnails to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant",
+              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
             }
           }
         }
