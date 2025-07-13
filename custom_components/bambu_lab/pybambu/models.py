@@ -1501,7 +1501,7 @@ class PrintJob:
         LOGGER.debug(f"FILENAME: {filename}")    # Save the 3MF file and cover image to the media cache directory
         try:
             serial = self._client._serial
-            cache_dir = f"/config/www/media/ha-bambulab/{serial}/model"
+            cache_dir = f"/config/www/media/ha-bambulab/{serial}/3mf"
             os.makedirs(cache_dir, exist_ok=True)
 
             # Save the 3MF file

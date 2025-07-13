@@ -798,8 +798,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def get_cached_files(self, file_type: str) -> List[Dict[str, Any]]:
         """Get list of cached files with metadata."""
         cache_dir = self.get_file_cache_directory()
-        if file_type == 'timelapse':
-            cache_dir = os.path.join(cache_dir, 'timelapse')
+        cache_dir = os.path.join(cache_dir, file_type)
         if not cache_dir or not os.path.exists(cache_dir):
             return []
         
@@ -832,8 +831,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     else:
                         detected_type = 'unknown'
                     
-                    # Skip if not matching requested type (unless 'all')
-                    if file_type != 'all' and detected_type != file_type:
+                    if detected_type != file_type:
                         continue
                     
                     # Look for thumbnail
