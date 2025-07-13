@@ -418,11 +418,11 @@
                 "state": 0
               },
               "ext_tool": {
-                "calib": 2,
-                "low_prec": true,
-                "mount": 0,
-                "th_temp": 0,
-                "type": ""
+                "calib": 0,
+                "low_prec": false,
+                "mount": 1,
+                "th_temp": 29,
+                "type": "LB00"
               },
               "extruder": {
                 "info": [
