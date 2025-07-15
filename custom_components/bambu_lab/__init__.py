@@ -43,7 +43,6 @@ class FileCacheAPIView(HomeAssistantView):
     
     async def get(self, request: web.Request, serial: str) -> web.Response:
         """Handle GET request for file cache data."""
-        LOGGER.debug("FileCacheAPIView::get()")
         try:
             # Find the coordinator for this serial
             coordinator = None
@@ -92,21 +91,18 @@ class FileCacheAPIView(HomeAssistantView):
             )
 
 
-class FileCacheMediaView(HomeAssistantView):
-    """API endpoint for serving media files (thumbnails)."""
-    
-    url = "/api/bambu_lab/file_cache/{serial}/media/{filepath:.*}"
-    name = "api:bambu_lab:file_cache_media"
+class FileCacheFileView(HomeAssistantView):
+    """API endpoint for serving any cached file (media or raw)."""
+    url = "/api/bambu_lab/file_cache/{serial}/file/{filepath:.*}"
+    name = "api:bambu_lab:file_cache_file"
     requires_auth = True
-    
+
     def __init__(self, hass: HomeAssistant):
-        """Initialize the view."""
-        LOGGER.debug(f"FileCacheMediaView initialized with URL: {self.url}")
+        LOGGER.debug(f"FileCacheFileView initialized with URL: {self.url}")
         self.hass = hass
-    
+
     async def get(self, request: web.Request, serial: str, filepath: str) -> web.Response:
-        """Handle GET request for media files."""
-        LOGGER.debug("FileCacheMediaView::get()")
+        LOGGER.debug("FileCacheFileView::get()")
         try:
             # Find the coordinator for this serial
             coordinator = None
@@ -117,69 +113,53 @@ class FileCacheMediaView(HomeAssistantView):
                 if coord.get_model().info.serial == serial:
                     coordinator = coord
                     break
-            
             if not coordinator:
-                return web.json_response(
-                    {"error": f"Printer with serial {serial} not found"}, 
-                    status=404
-                )
-            
+                return web.json_response({"error": f"Printer with serial {serial} not found"}, status=404)
+
             # Get the file cache directory
             cache_dir = coordinator.get_file_cache_directory()
             if not cache_dir:
-                return web.json_response(
-                    {"error": "File cache not enabled"}, 
-                    status=400
-                )
-            
+                return web.json_response({"error": "File cache not enabled"}, status=400)
+
             # Construct the full file path
             full_path = Path(cache_dir) / filepath
-            
+
             # Security check: ensure the file is within the cache directory
             try:
                 full_path.resolve().relative_to(Path(cache_dir).resolve())
             except ValueError:
-                return web.json_response(
-                    {"error": "Access denied"}, 
-                    status=403
-                )
-            
+                return web.json_response({"error": "Access denied"}, status=403)
+
             # Check if file exists
             if not full_path.exists() or not full_path.is_file():
-                return web.json_response(
-                    {"error": "File not found"}, 
-                    status=404
-                )
-            
+                return web.json_response({"error": "File not found"}, status=404)
+
             # Get file info
             stat = full_path.stat()
             content_type, _ = mimetypes.guess_type(str(full_path))
             if not content_type:
                 content_type = 'application/octet-stream'
-            
+
             # Read and serve the file
             async with aiofiles.open(full_path, 'rb') as f:
                 content = await f.read()
-            
-            # Set appropriate headers
+
+            # Always set Content-Disposition: attachment
             headers = {
                 'Content-Type': content_type,
                 'Content-Length': str(stat.st_size),
                 'Cache-Control': 'public, max-age=3600',  # Cache for 1 hour
-                'Last-Modified': datetime.fromtimestamp(stat.st_mtime).strftime('%a, %d %b %Y %H:%M:%S GMT')
+                'Last-Modified': datetime.fromtimestamp(stat.st_mtime).strftime('%a, %d %b %Y %H:%M:%S GMT'),
+                'Content-Disposition': f'attachment; filename="{os.path.basename(filepath)}"',
             }
-            
+
             return web.Response(
                 body=content,
                 headers=headers
             )
-            
         except Exception as e:
-            LOGGER.error(f"Error serving media file: {e}")
-            return web.json_response(
-                {"error": "Internal server error"}, 
-                status=500
-            )
+            LOGGER.error(f"Error serving file: {e}")
+            return web.json_response({"error": "Internal server error"}, status=500)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -193,7 +173,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Register file cache API endpoints
     LOGGER.info("Registering file cache API endpoints")
     hass.http.register_view(FileCacheAPIView(hass))
-    hass.http.register_view(FileCacheMediaView(hass))
+    hass.http.register_view(FileCacheFileView(hass))
     LOGGER.info("File cache API endpoints registered successfully")
 
     async def handle_service_call(call: ServiceCall):

@@ -1102,7 +1102,7 @@ class PrintJob:
     #     FILE: /cache/Lovers Valentine Day Shadowbox.3mf
     # 
 
-    ftp_search_paths = ['/', '/cache/']
+    ftp_search_paths = ['/cache/', '/']
     def _attempt_ftp_download_of_file(self, ftp, file_path):
         if 'Metadata' in file_path:
             # This is a ram drive on the X1 and is not accessible via FTP
@@ -1110,7 +1110,9 @@ class PrintJob:
 
         file = tempfile.NamedTemporaryFile(delete=True)
         try:
-            LOGGER.debug(f"Attempting download of '{file_path}'")
+            LOGGER.debug(f"Looking for '{file_path}'")
+            size = ftp.size(file_path)
+            LOGGER.debug(f"File exists. Size: {size} bytes. Attempting download.")
             ftp.retrbinary(f"RETR {file_path}", file.write)
             file.flush()
             LOGGER.debug(f"Successfully downloaded '{file_path}'.")
@@ -1510,6 +1512,15 @@ class PrintJob:
                 cache_3mf_path = os.path.join(cache_dir, filename)
                 with open(cache_3mf_path, "wb") as f:
                     f.write(model_file.read())
+
+            # Save the slice_info.config file
+            try:
+                slice_info_bytes = archive.read('Metadata/slice_info.config')
+                slice_info_path = os.path.join(cache_dir, f"{os.path.splitext(filename)[0]}.slice_info.config")
+                with open(slice_info_path, "wb") as f:
+                    f.write(slice_info_bytes)
+            except Exception as e:
+                LOGGER.error(f"Failed to save slice_info.config: {e}")
 
             # Save the cover image
             cover_bytes = self._client._device.cover_image.get_image()
@@ -2423,6 +2434,10 @@ class StageAction:
         self._print_type = data.get("print_type", self._print_type)
         if self._print_type.lower() not in PRINT_TYPE_OPTIONS:
             self._print_type = "unknown"
+
+        # New way it is presented
+        self._id = int(data.get("stage", {}).get("_id", self._id))
+        # Old way it's presented
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
