@@ -1372,6 +1372,9 @@ class PrintJob:
         try:
             LOGGER.debug(f"File size is {os.path.getsize(model_file.name)} bytes")
 
+            serial = self._client._serial
+            cache_dir = f"/config/www/media/ha-bambulab/{serial}/3mf"
+
             # Open the 3mf zip archive
             with ZipFile(model_file) as archive:
                 # Extract the slicer XML config and parse the plate tree
@@ -1492,7 +1495,7 @@ class PrintJob:
                     except:
                         LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
 
-                # Save the 3MF file only if file cache is enabled
+                # Save the slice_info.config file only if file cache is enabled
                 if self._client.settings.get('enable_file_cache', False):                # Save the slice_info.config file
                     try:
                         slice_info_bytes = archive.read('Metadata/slice_info.config')
@@ -1512,8 +1515,6 @@ class PrintJob:
         # Save the 3MF file only if file cache is enabled
         if self._client.settings.get('enable_file_cache', False):
             try:
-                serial = self._client._serial
-                cache_dir = f"/config/www/media/ha-bambulab/{serial}/3mf"
                 os.makedirs(cache_dir, exist_ok=True)
 
                 # Save the 3MF file
