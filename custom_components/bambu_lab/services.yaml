@@ -251,5 +251,4 @@ get_filament_data:
   description: Gets a json string with details about all known filaments
   target:
     entity:
-      integration: bambu_lab
- 
+      integration: bambu_lab 

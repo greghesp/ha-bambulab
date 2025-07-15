@@ -358,7 +358,7 @@ class BambuClient:
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
-        self._enable_timelapse = config.get('enable_timelapse', False)
+        self._enable_timelapse = config.get('enable_timelapse_cache', False)
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
         self._enable_download_gcode_file = config.get('enable_download_gcode_file', False)
 
@@ -769,6 +769,9 @@ class BambuClient:
             _exc_info: Exec type.
         """
         self.disconnect()
+
+    def download_3mf_and_extract_metadata(self, model_file, thumbnail_cache_path=None):
+        return self._device.print_job.extract_3mf_metadata(model_file, thumbnail_cache_path=thumbnail_cache_path)
 
 @functools.lru_cache(maxsize=1)
 def create_local_ssl_context():

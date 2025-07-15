@@ -47,7 +47,9 @@ class Options(IntEnum):
     FTP = 3,
     TIMELAPSE = 4,
     FIRMWAREUPDATE = 6,
-    DOWNLOAD_GCODE_FILE = 7
+    DOWNLOAD_GCODE_FILE = 7,
+    FILE_CACHE = 8,
+    TIMELAPSE_CACHE = 9
 
 OPTION_NAME = {
     Options.CAMERA:         "enable_camera",
@@ -55,7 +57,9 @@ OPTION_NAME = {
     Options.FIRMWAREUPDATE: "enable_firmware_update",
     Options.FTP:            "enable_ftp",
     Options.TIMELAPSE:      "enable_timelapse",
-    Options.DOWNLOAD_GCODE_FILE: "enable_download_gcode_file"
+    Options.DOWNLOAD_GCODE_FILE: "enable_download_gcode_file",
+    Options.FILE_CACHE:     "enable_file_cache",
+    Options.TIMELAPSE_CACHE: "enable_timelapse_cache"
 }
 
 def load_dict(filename: str) -> dict:
