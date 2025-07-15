@@ -1492,44 +1492,46 @@ class PrintJob:
                     except:
                         LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
 
+                # Save the 3MF file only if file cache is enabled
+                if self._client.settings.get('enable_file_cache', False):                # Save the slice_info.config file
+                    try:
+                        slice_info_bytes = archive.read('Metadata/slice_info.config')
+                        slice_info_path = os.path.join(cache_dir, f"{os.path.splitext(filename)[0]}.slice_info.config")
+                        with open(slice_info_path, "wb") as f:
+                            f.write(slice_info_bytes)
+                    except Exception as e:
+                        LOGGER.error(f"Failed to save slice_info.config: {e}")
+
             archive.close()
 
             self._client.callback("event_printer_data_update")
             result = True
         except Exception as e:
             LOGGER.error(f"Unexpected error parsing model data: {e}")
-        
-            
-        LOGGER.debug(f"FILENAME: {filename}")    # Save the 3MF file and cover image to the media cache directory
-        try:
-            serial = self._client._serial
-            cache_dir = f"/config/www/media/ha-bambulab/{serial}/3mf"
-            os.makedirs(cache_dir, exist_ok=True)
-
-            # Save the 3MF file
-            if model_file:
-                model_file.seek(0)
-                cache_3mf_path = os.path.join(cache_dir, filename)
-                with open(cache_3mf_path, "wb") as f:
-                    f.write(model_file.read())
-
-            # Save the slice_info.config file
+               
+        # Save the 3MF file only if file cache is enabled
+        if self._client.settings.get('enable_file_cache', False):
             try:
-                slice_info_bytes = archive.read('Metadata/slice_info.config')
-                slice_info_path = os.path.join(cache_dir, f"{os.path.splitext(filename)[0]}.slice_info.config")
-                with open(slice_info_path, "wb") as f:
-                    f.write(slice_info_bytes)
-            except Exception as e:
-                LOGGER.error(f"Failed to save slice_info.config: {e}")
+                serial = self._client._serial
+                cache_dir = f"/config/www/media/ha-bambulab/{serial}/3mf"
+                os.makedirs(cache_dir, exist_ok=True)
 
-            # Save the cover image
-            cover_bytes = self._client._device.cover_image.get_image()
-            if cover_bytes and 'plate_number' in locals() and plate_number is not None:
-                cover_path = os.path.join(cache_dir, os.path.splitext(filename)[0]+'.png')
-                with open(cover_path, "wb") as f:
-                    f.write(cover_bytes)
-        except Exception as e:
-            LOGGER.error(f"Failed to save 3MF or cover image to media cache: {e}")
+                # Save the 3MF file
+                if model_file:
+                    model_file.seek(0)
+                    cache_3mf_path = os.path.join(cache_dir, filename)
+                    with open(cache_3mf_path, "wb") as f:
+                        f.write(model_file.read())
+
+
+                # Save the cover image
+                cover_bytes = self._client._device.cover_image.get_image()
+                if cover_bytes and 'plate_number' in locals() and plate_number is not None:
+                    cover_path = os.path.join(cache_dir, os.path.splitext(filename)[0]+'.png')
+                    with open(cover_path, "wb") as f:
+                        f.write(cover_bytes)
+            except Exception as e:
+                LOGGER.error(f"Failed to save 3MF or cover image to media cache: {e}")
             
         # Close and delete temporary file
         model_file.close();

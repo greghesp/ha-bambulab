@@ -93,7 +93,7 @@ class FileCacheAPIView(HomeAssistantView):
 
 class FileCacheFileView(HomeAssistantView):
     """API endpoint for serving any cached file (media or raw)."""
-    url = "/api/bambu_lab/file_cache/{serial}/file/{filepath:.*}"
+    url = "/api/bambu_lab/file_cache/{serial}/{filepath:.*}"
     name = "api:bambu_lab:file_cache_file"
     requires_auth = True
 
