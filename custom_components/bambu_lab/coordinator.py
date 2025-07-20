@@ -837,11 +837,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                             cache_root / file_relative_path.parent / (file_path.stem + '.png'),
                             cache_root / file_relative_path.parent / (file_path.stem + '.jpeg'),
                         ]
-                        LOGGER.debug(f"Looking for thumbnails for {file_path.name}: {[str(t) for t in thumbnail_candidates]}")
                         for thumb_path in thumbnail_candidates:
                             if thumb_path.exists():
                                 thumbnail_path = thumb_path  # Store the real path
-                                LOGGER.debug(f"Found thumbnail: {thumbnail_path}")
                                 break
                     
                     # Format file size
