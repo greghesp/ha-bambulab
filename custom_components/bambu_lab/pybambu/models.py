@@ -1112,7 +1112,24 @@ class PrintJob:
         try:
             LOGGER.debug(f"Looking for '{file_path}'")
             size = ftp.size(file_path)
-            LOGGER.debug(f"File exists. Size: {size} bytes. Attempting download.")
+            LOGGER.debug(f"File exists. Size: {size} bytes.")
+            
+            # Check if file already exists in cache with same size
+            if self._client.settings.get('enable_file_cache', False):
+                cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/3mf"
+                filename = os.path.basename(file_path)
+                cache_file_path = os.path.join(cache_dir, filename)
+                
+                if os.path.exists(cache_file_path):
+                    cache_file_size = os.path.getsize(cache_file_path)
+                    if cache_file_size == size:
+                        LOGGER.debug(f"File already exists in cache with same size ({size} bytes). Skipping download.")
+                        file.close()
+                        # Return a file object pointing to the cached file
+                        cached_file = open(cache_file_path, 'rb')
+                        return cached_file
+            
+            LOGGER.debug(f"Attempting download.")
             ftp.retrbinary(f"RETR {file_path}", file.write)
             file.flush()
             LOGGER.debug(f"Successfully downloaded '{file_path}'.")
@@ -1519,11 +1536,16 @@ class PrintJob:
 
                 # Save the 3MF file
                 if model_file:
-                    model_file.seek(0)
-                    cache_3mf_path = os.path.join(cache_dir, filename)
-                    with open(cache_3mf_path, "wb") as f:
-                        f.write(model_file.read())
-
+                    # Check if the file is already in the cache directory
+                    model_file_path = model_file.name
+                    if not model_file_path.startswith(cache_dir):
+                        # Only save if it's not already in the cache
+                        model_file.seek(0)
+                        cache_3mf_path = os.path.join(cache_dir, filename)
+                        with open(cache_3mf_path, "wb") as f:
+                            f.write(model_file.read())
+                    else:
+                        LOGGER.debug(f"File already caced: {model_file_path}")
 
                 # Save the cover image
                 cover_bytes = self._client._device.cover_image.get_image()
