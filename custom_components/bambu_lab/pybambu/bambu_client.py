@@ -358,9 +358,7 @@ class BambuClient:
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
-        self._enable_timelapse = config.get('enable_timelapse_cache', False)
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
-        self._enable_download_gcode_file = config.get('enable_download_gcode_file', False)
 
         self._connected = False
         self._port = 1883
@@ -418,25 +416,11 @@ class BambuClient:
         self._enable_ftp = enable
         
     @property
-    def download_gcode_file_enabled(self):
-        return self._device.supports_feature(Features.DOWNLOAD_GCODE_FILE) and self._enable_download_gcode_file
-
-    def set_download_gcode_file_enabled(self, enable):
-        self._enable_download_gcode_file = enable
-
-    @property
-    def timelapse_enabled(self):
-        return self._device.supports_feature(Features.TIMELAPSE) and self._enable_timelapse
-
-    @property
     def local_tls_context(self):
         if self._disable_ssl_verify:
             return create_insecure_ssl_context()
         else:
             return create_local_ssl_context()
-
-    def set_timelapse_enabled(self, enable):
-        self._enable_timelapse = enable
 
     def setup_tls(self):
         if self._local_mqtt:

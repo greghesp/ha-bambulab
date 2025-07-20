@@ -70,7 +70,8 @@
             "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
+              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
+              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Queste opzioni avanzate sono funzionalità precoci o rischiose. Leggi la documentazione e usali a proprio rischio.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
+              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Queste opzioni avanzate sono funzionalità precoci o rischiose. Leggi la documentazione e usali a proprio rischio.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
+              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "Carica i dati del modello dalla stampante"
-      },
-      "timelapse": {
-        "name": "Carica l'ultimo timelapse dalla stampante"
-      },
-      "download_gcode_file": {
-        "name": "Salva il file GCode in HA"
       }
     },
     "update": {

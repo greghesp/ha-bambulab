@@ -70,7 +70,8 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_file_cache": "启用模型文件的缓存到家庭助理"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_file_cache": "启用模型文件的缓存到家庭助理"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "这些高级选项是早期或风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_file_cache": "启用模型文件的缓存到家庭助理"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "这些高级选项是早期或有风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_file_cache": "启用模型文件的缓存到家庭助理"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "打印机加载模型数据"
-      },
-      "timelapse": {
-        "name": "从打印机加载最新的时间段"
-      },
-      "download_gcode_file": {
-        "name": "将GCODE文件保存在HA中"
       }
     },
     "update": {

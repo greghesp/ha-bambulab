@@ -379,7 +379,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
                         'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
                         'enable_file_cache': user_input['advanced']['enable_file_cache'],
-                        'enable_timelapse_cache': user_input['advanced']['enable_timelapse_cache'],
                         'force_ip': (user_input['host'] != bambu.get_device().info.ip_address),
                 }
 
@@ -393,7 +392,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         default_disable_ssl_verify = False if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
         default_enable_firmware_update = False if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
         default_enable_file_cache = False if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', '')
-        default_enable_timelapse_cache = False if user_input is None else user_input.get('advanced', {}).get('enable_timelapse_cache', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -409,7 +407,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
                 vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
-                vol.Required('enable_timelapse_cache', default=default_enable_timelapse_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -459,7 +456,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
                         'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
                         'enable_file_cache': user_input['advanced']['enable_file_cache'],
-                        'enable_timelapse_cache': user_input['advanced']['enable_timelapse_cache'],
                         'force_ip': (user_input['host'] != bambu.get_device().info.ip_address),
                 }
 
@@ -475,7 +471,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         default_disable_ssl_verify = False if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
         default_enable_firmware_update = False if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
         default_enable_file_cache = False if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', '')
-        default_enable_timelapse_cache = False if user_input is None else user_input.get('advanced', {}).get('enable_timelapse_cache', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -489,7 +484,6 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
                 vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
-                vol.Required('enable_timelapse_cache', default=default_enable_timelapse_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -753,7 +747,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                         options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                         options["enable_file_cache"] = user_input['advanced']['enable_file_cache']
-                        options["enable_timelapse_cache"] = user_input['advanced']['enable_timelapse_cache']
                         options["force_ip"] = user_input['host'] != bambu.get_device().info.ip_address
                         
                         title = device['dev_id']
@@ -782,7 +775,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
         default_enable_file_cache = self.config_entry.options.get('enable_file_cache', False) if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', self.config_entry.options.get('enable_file_cache', ''))
-        default_enable_timelapse_cache = self.config_entry.options.get('enable_timelapse_cache', False) if user_input is None else user_input.get('advanced', {}).get('enable_timelapse_cache', self.config_entry.options.get('enable_timelapse_cache', ''))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -799,7 +791,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
                 vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
-                vol.Required('enable_timelapse_cache', default=default_enable_timelapse_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -827,7 +818,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
                 'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
                 'enable_file_cache': user_input['advanced']['enable_file_cache'],
-                'enable_timelapse_cache': user_input['advanced']['enable_timelapse_cache'],
             }
             bambu = BambuClient(config)
             success = await bambu.try_connection()
@@ -848,7 +838,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                 options["enable_file_cache"] = user_input['advanced']['enable_file_cache']
-                options["enable_timelapse_cache"] = user_input['advanced']['enable_timelapse_cache']
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
                 title = self.config_entry.data['serial']
@@ -870,7 +859,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
         default_enable_file_cache = self.config_entry.options.get('enable_file_cache', False) if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', self.config_entry.options.get('enable_file_cache', ''))
-        default_enable_timelapse_cache = self.config_entry.options.get('enable_timelapse_cache', False) if user_input is None else user_input.get('advanced', {}).get('enable_timelapse_cache', self.config_entry.options.get('enable_timelapse_cache', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
@@ -881,7 +869,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
                 vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
-                vol.Required('enable_timelapse_cache', default=default_enable_timelapse_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )

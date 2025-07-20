@@ -71,8 +71,7 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant",
-              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -93,8 +92,7 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant",
-              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -155,8 +153,7 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant",
-              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -176,8 +173,7 @@
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant",
-              "enable_timelapse_cache": "Enable caching of timelapses to home assistant"
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -778,12 +774,6 @@
       },
       "prompt_sound": {
         "name": "Allow Prompt Sound"
-      },
-      "timelapse": {
-        "name": "Load latest timelapse from printer"
-      },
-      "download_gcode_file": {
-        "name": "Save GCode file in HA"
       }
     },
     "update": {

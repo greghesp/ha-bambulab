@@ -729,21 +729,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 default = True
             case Options.FTP:
                 default = options.get('local_mqtt', False)
-            case Options.TIMELAPSE_CACHE:
-                default = False
 
         return options.get(OPTION_NAME[option], default)
         
     async def set_option_enabled(self, option: Options, enable: bool):
         LOGGER.debug(f"Setting {OPTION_NAME[option]} to {enable}")
         options = dict(self.config_entry.options)
-        
-        if option == Options.DOWNLOAD_GCODE_FILE:
-            if enable:
-                enable = self.get_option_enabled(Options.FTP)
-        if option == Options.FTP:
-            if not enable:
-                options[OPTION_NAME[Options.DOWNLOAD_GCODE_FILE]] = enable
                 
         options[OPTION_NAME[option]] = enable
         self._hass.config_entries.async_update_entry(
@@ -759,8 +750,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case Options.IMAGECAMERA:
                 force_reload = True
             case Options.FTP:
-                force_reload = True
-            case Options.TIMELAPSE:
                 force_reload = True
 
         if force_reload:
@@ -811,7 +800,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         # Define file type patterns
         type_patterns = {
-            '3mf': ['*.3mf'],
+            'prints': ['*.3mf'],
             'gcode': ['*.gcode'],
             'timelapse': ['*.mp4', '*.avi', '*.mov'],
         }
@@ -827,7 +816,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     # Determine file type
                     file_ext = file_path.suffix.lower()
                     if file_ext == '.3mf':
-                        detected_type = '3mf'
+                        detected_type = 'prints'
                     elif file_ext == '.gcode':
                         detected_type = 'gcode'
                     elif file_ext in ['.mp4', '.avi', '.mov']:
@@ -840,7 +829,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     
                     # Look for thumbnail
                     thumbnail_path = None
-                    if detected_type in ['timelapse', '3mf', 'gcode']:
+                    if detected_type in ['timelapse', 'prints', 'gcode']:
                         # Create thumbnail candidates relative to cache root
                         file_relative_path = file_path.relative_to(cache_root)
                         thumbnail_candidates = [
@@ -848,11 +837,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                             cache_root / file_relative_path.parent / (file_path.stem + '.png'),
                             cache_root / file_relative_path.parent / (file_path.stem + '.jpeg'),
                         ]
-                        
                         LOGGER.debug(f"Looking for thumbnails for {file_path.name}: {[str(t) for t in thumbnail_candidates]}")
                         for thumb_path in thumbnail_candidates:
                             if thumb_path.exists():
-                                thumbnail_path = f"{self.get_model().info.serial}/{file_type}/{file_path.stem}{thumb_path.suffix}"
+                                thumbnail_path = thumb_path  # Store the real path
                                 LOGGER.debug(f"Found thumbnail: {thumbnail_path}")
                                 break
                     
@@ -866,15 +854,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                         size_human = f"{size_bytes / (1024 * 1024):.1f} MB"
                     else:
                         size_human = f"{size_bytes / (1024 * 1024 * 1024):.1f} GB"
-                    
+
+                    # Build API path relative to cache root (preserves subdirs like 'cache/')
+                    api_path = f"{self.get_model().info.serial}/{file_path.relative_to(cache_root)}"
+                    api_thumbnail_path = None
+                    if thumbnail_path:
+                        api_thumbnail_path = f"{self.get_model().info.serial}/{thumbnail_path.relative_to(cache_root)}"
+
                     file_info = {
                         'filename': file_path.name,
-                        'path': f"{self.get_model().info.serial}/{file_type}/{str(file_path.relative_to(cache_path))}",
+                        'path': api_path,
                         'type': detected_type,
                         'size': size_bytes,
                         'size_human': size_human,
                         'modified': datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                        'thumbnail_path': thumbnail_path
+                        'thumbnail_path': api_thumbnail_path
                     }
                     
                     files.append(file_info)
@@ -903,10 +897,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             else:
                 # Delete only specific file type
                 type_patterns = {
-                    '3mf': ['*.3mf'],
+                    'prints': ['*.3mf'],
                     'gcode': ['*.gcode'],
                     'timelapse': ['*.mp4', '*.avi', '*.mov'],
-                    'thumbnail': ['*.jpg', '*.jpeg', '*.png', '*.bmp']
                 }
                 
                 patterns = type_patterns.get(file_type, [])

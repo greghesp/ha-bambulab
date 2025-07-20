@@ -70,7 +70,8 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "Carregueu les dades del model de la impressora"
-      },
-      "timelapse": {
-        "name": "Carregueu el Timelapse més recent de la impressora"
-      },
-      "download_gcode_file": {
-        "name": "Deseu el fitxer de codis a HA"
       }
     },
     "update": {

@@ -46,7 +46,6 @@ class PrintHistoryAPIView(HomeAssistantView):
         """Handle GET request for print history from all printers."""
         try:
             # Get query parameters for filtering
-            file_type = request.query.get('file_type', '3mf')  # Default to 3mf files
             serial_filter = request.query.get('serial')  # Optional filter by serial
             
             all_files = []
@@ -65,7 +64,7 @@ class PrintHistoryAPIView(HomeAssistantView):
                 
                 # Get cached files for this printer
                 try:
-                    files = await coordinator.get_cached_files(file_type=file_type)
+                    files = await coordinator.get_cached_files(file_type='prints')
                     
                     # Get the device ID from the device registry
                     dev_reg = device_registry.async_get(self.hass)
@@ -94,7 +93,6 @@ class PrintHistoryAPIView(HomeAssistantView):
             
             # Format the response
             response_data = {
-                "file_type": file_type,
                 "files": all_files,
                 "total_files": len(all_files),
                 "total_printers": len(set(f["printer_serial"] for f in all_files)),
@@ -132,7 +130,6 @@ class VideoAPIView(HomeAssistantView):
         """Handle GET request for videos from all printers."""
         try:
             # Get query parameters for filtering
-            video_type = request.query.get('video_type', 'timelapse')  # Default to timelapse
             serial_filter = request.query.get('serial')  # Optional filter by serial
             
             all_videos = []
@@ -151,7 +148,7 @@ class VideoAPIView(HomeAssistantView):
                 
                 # Get cached files for this printer (videos)
                 try:
-                    files = await coordinator.get_cached_files(file_type=video_type)
+                    files = await coordinator.get_cached_files(file_type='timelapse')
                     
                     # Get the device ID from the device registry
                     dev_reg = device_registry.async_get(self.hass)
@@ -180,7 +177,6 @@ class VideoAPIView(HomeAssistantView):
             
             # Format the response
             response_data = {
-                "video_type": video_type,
                 "videos": all_videos,
                 "total_videos": len(all_videos),
                 "total_printers": len(set(v["printer_serial"] for v in all_videos)),
@@ -214,7 +210,6 @@ class FileCacheFileView(HomeAssistantView):
         self.hass = hass
 
     async def get(self, request: web.Request, serial: str, filepath: str) -> web.Response:
-        LOGGER.debug("FileCacheFileView::get()")
         try:
             # Find the coordinator for this serial
             coordinator = None
