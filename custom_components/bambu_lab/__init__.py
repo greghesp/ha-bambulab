@@ -18,6 +18,7 @@ from homeassistant.helpers import entity_platform
 from homeassistant.components.http import HomeAssistantView
 from aiohttp import web
 import aiofiles
+from homeassistant.helpers import device_registry
 
 from .const import (
     DOMAIN,
@@ -30,61 +31,172 @@ from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
 
 
-class FileCacheAPIView(HomeAssistantView):
-    """API endpoint for file cache data."""
+class PrintHistoryAPIView(HomeAssistantView):
+    """API endpoint for print history data from all printers."""
     
-    url = "/api/bambu_lab/file_cache/{serial}"
-    name = "api:bambu_lab:file_cache"
+    url = "/api/bambu_lab/print_history"
+    name = "api:bambu_lab:print_history"
     requires_auth = True
     
     def __init__(self, hass: HomeAssistant):
         """Initialize the view."""
         self.hass = hass
     
-    async def get(self, request: web.Request, serial: str) -> web.Response:
-        """Handle GET request for file cache data."""
+    async def get(self, request: web.Request) -> web.Response:
+        """Handle GET request for print history from all printers."""
         try:
-            # Find the coordinator for this serial
-            coordinator = None
+            # Get query parameters for filtering
+            file_type = request.query.get('file_type', '3mf')  # Default to 3mf files
+            serial_filter = request.query.get('serial')  # Optional filter by serial
+            
+            all_files = []
+            
+            # Iterate through all coordinators
             for entry_id in self.hass.data[DOMAIN]:
                 if entry_id == "service_call_future":
                     continue
-                coord = self.hass.data[DOMAIN][entry_id]
-                if coord.get_model().info.serial == serial:
-                    coordinator = coord
-                    break
+                
+                coordinator = self.hass.data[DOMAIN][entry_id]
+                printer_info = coordinator.get_model().info
+                
+                # Apply serial filter if provided
+                if serial_filter and printer_info.serial != serial_filter:
+                    continue
+                
+                # Get cached files for this printer
+                try:
+                    files = await coordinator.get_cached_files(file_type=file_type)
+                    
+                    # Get the device ID from the device registry
+                    dev_reg = device_registry.async_get(self.hass)
+                    hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, printer_info.serial)})
+                    device_id = hadevice.id if hadevice else None
+                    
+                    # Get printer name from device registry or use device_type as fallback
+                    printer_name = hadevice.name if hadevice and hadevice.name else printer_info.device_type
+                    
+                    # Add printer information to each file entry
+                    for file_info in files:
+                        file_info.update({
+                            "printer_serial": printer_info.serial,
+                            "printer_device_id": device_id,
+                            "printer_name": printer_name,
+                            "printer_model": printer_info.device_type,
+                        })
+                        all_files.append(file_info)
+                        
+                except Exception as e:
+                    LOGGER.error(f"Error getting files for printer {printer_info.serial}: {e}")
+                    continue
             
-            if not coordinator:
-                return web.json_response(
-                    {"error": f"Printer with serial {serial} not found"}, 
-                    status=404
-                )
-            
-            # Get query parameters
-            file_type = request.query.get('file_type')
-            if file_type is None:
-                return web.json_response(
-                    {"error": f"file_type not set"}, 
-                    status=404
-                )
-            
-            # Get cached files using the coordinator's method
-            files = await coordinator.get_cached_files(file_type=file_type)
+            # Sort by modification time (newest first)
+            all_files.sort(key=lambda x: x.get('modified', 0), reverse=True)
             
             # Format the response
             response_data = {
-                "serial": serial,
                 "file_type": file_type,
-                "files": files,
-                "total_files": len(files),
+                "files": all_files,
+                "total_files": len(all_files),
+                "total_printers": len(set(f["printer_serial"] for f in all_files)),
                 "timestamp": datetime.now().isoformat()
             }
-            LOGGER.debug(f"Response: {response_data}")
+            
+            if serial_filter:
+                response_data["filtered_by_serial"] = serial_filter
+            
+            LOGGER.debug(f"Print history response: {len(all_files)} files from {response_data['total_printers']} printers")
+            LOGGER.debug(response_data)
             
             return web.json_response(response_data)
             
         except Exception as e:
-            LOGGER.error(f"Error in file cache API: {e}")
+            LOGGER.error(f"Error in print history API: {e}")
+            return web.json_response(
+                {"error": "Internal server error"}, 
+                status=500
+            )
+
+
+class VideoAPIView(HomeAssistantView):
+    """API endpoint for video data from all printers."""
+    
+    url = "/api/bambu_lab/videos"
+    name = "api:bambu_lab:videos"
+    requires_auth = True
+    
+    def __init__(self, hass: HomeAssistant):
+        """Initialize the view."""
+        self.hass = hass
+    
+    async def get(self, request: web.Request) -> web.Response:
+        """Handle GET request for videos from all printers."""
+        try:
+            # Get query parameters for filtering
+            video_type = request.query.get('video_type', 'timelapse')  # Default to timelapse
+            serial_filter = request.query.get('serial')  # Optional filter by serial
+            
+            all_videos = []
+            
+            # Iterate through all coordinators
+            for entry_id in self.hass.data[DOMAIN]:
+                if entry_id == "service_call_future":
+                    continue
+                
+                coordinator = self.hass.data[DOMAIN][entry_id]
+                printer_info = coordinator.get_model().info
+                
+                # Apply serial filter if provided
+                if serial_filter and printer_info.serial != serial_filter:
+                    continue
+                
+                # Get cached files for this printer (videos)
+                try:
+                    files = await coordinator.get_cached_files(file_type=video_type)
+                    
+                    # Get the device ID from the device registry
+                    dev_reg = device_registry.async_get(self.hass)
+                    hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, printer_info.serial)})
+                    device_id = hadevice.id if hadevice else None
+                    
+                    # Get printer name from device registry or use device_type as fallback
+                    printer_name = hadevice.name if hadevice and hadevice.name else printer_info.device_type
+                    
+                    # Add printer information to each video entry
+                    for file_info in files:
+                        file_info.update({
+                            "printer_serial": printer_info.serial,
+                            "printer_device_id": device_id,
+                            "printer_name": printer_name,
+                            "printer_model": printer_info.device_type,
+                        })
+                        all_videos.append(file_info)
+                        
+                except Exception as e:
+                    LOGGER.error(f"Error getting videos for printer {printer_info.serial}: {e}")
+                    continue
+            
+            # Sort by modification time (newest first)
+            all_videos.sort(key=lambda x: x.get('modified', 0), reverse=True)
+            
+            # Format the response
+            response_data = {
+                "video_type": video_type,
+                "videos": all_videos,
+                "total_videos": len(all_videos),
+                "total_printers": len(set(v["printer_serial"] for v in all_videos)),
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            if serial_filter:
+                response_data["filtered_by_serial"] = serial_filter
+            
+            LOGGER.debug(f"Video response: {len(all_videos)} videos from {response_data['total_printers']} printers")
+            LOGGER.debug(response_data)
+            
+            return web.json_response(response_data)
+            
+        except Exception as e:
+            LOGGER.error(f"Error in video API: {e}")
             return web.json_response(
                 {"error": "Internal server error"}, 
                 status=500
@@ -172,7 +284,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Register file cache API endpoints
     LOGGER.info("Registering file cache API endpoints")
-    hass.http.register_view(FileCacheAPIView(hass))
+    hass.http.register_view(PrintHistoryAPIView(hass))
+    hass.http.register_view(VideoAPIView(hass))
     hass.http.register_view(FileCacheFileView(hass))
     LOGGER.info("File cache API endpoints registered successfully")
 

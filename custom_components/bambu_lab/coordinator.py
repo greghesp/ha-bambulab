@@ -798,12 +798,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def get_cached_files(self, file_type: str) -> List[Dict[str, Any]]:
         """Get list of cached files with metadata."""
         cache_dir = self.get_file_cache_directory()
+        if not cache_dir:
+            return []
+            
         cache_dir = os.path.join(cache_dir, file_type)
-        if not cache_dir or not os.path.exists(cache_dir):
+        if not os.path.exists(cache_dir):
             return []
         
         files = []
         cache_path = Path(cache_dir)
+        cache_root = Path(self.get_file_cache_directory())  # Get the root cache directory
         
         # Define file type patterns
         type_patterns = {
@@ -837,16 +841,19 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     # Look for thumbnail
                     thumbnail_path = None
                     if detected_type in ['timelapse', '3mf', 'gcode']:
+                        # Create thumbnail candidates relative to cache root
+                        file_relative_path = file_path.relative_to(cache_root)
                         thumbnail_candidates = [
-                            file_path.parent / (file_path.stem + '.jpg'),
-                            file_path.parent / (file_path.stem + '.png'),
-                            file_path.parent / (file_path.stem + '.jpeg'),
+                            cache_root / file_relative_path.parent / (file_path.stem + '.jpg'),
+                            cache_root / file_relative_path.parent / (file_path.stem + '.png'),
+                            cache_root / file_relative_path.parent / (file_path.stem + '.jpeg'),
                         ]
                         
+                        LOGGER.debug(f"Looking for thumbnails for {file_path.name}: {[str(t) for t in thumbnail_candidates]}")
                         for thumb_path in thumbnail_candidates:
-                            LOGGER.debug(f"Looking for {thumb_path}")
                             if thumb_path.exists():
-                                thumbnail_path = str(thumb_path.relative_to(cache_path))
+                                thumbnail_path = f"{self.get_model().info.serial}/{file_type}/{file_path.stem}{thumb_path.suffix}"
+                                LOGGER.debug(f"Found thumbnail: {thumbnail_path}")
                                 break
                     
                     # Format file size
@@ -862,7 +869,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     
                     file_info = {
                         'filename': file_path.name,
-                        'path': str(file_path.relative_to(cache_path)),
+                        'path': f"{self.get_model().info.serial}/{file_type}/{str(file_path.relative_to(cache_path))}",
                         'type': detected_type,
                         'size': size_bytes,
                         'size_human': size_human,
