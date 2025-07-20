@@ -17,6 +17,7 @@ import io
 import tempfile
 import xml.etree.ElementTree as ElementTree
 from PIL import Image, ImageDraw, ImageFont
+import asyncio
 
 from .utils import (
     search,
@@ -1717,6 +1718,54 @@ class PrintJob:
         object_count = len(seen_identify_ids)
         LOGGER.debug(f"Finished proccessing pick image, found {object_count} object{'s'[:object_count^1]}")
         return seen_identify_ids
+
+    async def async_ftp_file_check(self, file_path: str, expected_size: int) -> bool:
+        """Async check if a file exists on the printer via FTP and matches the expected size."""
+        def _check():
+            ftp = None
+            try:
+                ftp = self._client.ftp_connection()
+                size = ftp.size(file_path)
+                return size == expected_size
+            except Exception as e:
+                LOGGER.debug(f"FTP file check failed for {file_path}: {e}")
+                return False
+            finally:
+                if ftp:
+                    try:
+                        ftp.quit()
+                    except Exception:
+                        pass
+        return await asyncio.to_thread(_check)
+
+    async def async_ftp_upload_file(self, local_path: str, remote_path: str) -> bool:
+        """Async upload a file to the printer via FTP."""
+        def _upload():
+            ftp = None
+            try:
+                ftp = self._client.ftp_connection()
+                # Ensure remote directory exists
+                dirs = remote_path.strip('/').split('/')[:-1]
+                current = ''
+                for d in dirs:
+                    current += f'/{d}'
+                    try:
+                        ftp.mkd(current)
+                    except Exception:
+                        pass  # Directory may already exist
+                with open(local_path, 'rb') as f:
+                    ftp.storbinary(f'STOR {remote_path}', f)
+                return True
+            except Exception as e:
+                LOGGER.debug(f"FTP upload failed for {local_path} to {remote_path}: {e}")
+                return False
+            finally:
+                if ftp:
+                    try:
+                        ftp.quit()
+                    except Exception:
+                        pass
+        return await asyncio.to_thread(_upload)
 
 @dataclass
 class Info:

@@ -269,6 +269,62 @@ class FileCacheFileView(HomeAssistantView):
             return web.json_response({"error": "Internal server error"}, status=500)
 
 
+class EnsureCacheFileAPIView(HomeAssistantView):
+    """API endpoint to ensure a cache file is present on the target printer via FTP."""
+    url = "/api/bambu_lab/ensure_cache_file"
+    name = "api:bambu_lab:ensure_cache_file"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant):
+        self.hass = hass
+
+    async def post(self, request: web.Request) -> web.Response:
+        try:
+            data = await request.json()
+            serial = data.get("serial")
+            cache_path = data.get("cache_path")
+            expected_size = data.get("expected_size")
+            LOGGER.info(f"EnsureCacheFileAPIView called: serial={serial}, cache_path={cache_path}, expected_size={expected_size}")
+            if not serial or not cache_path or expected_size is None:
+                return web.json_response({"error": "Missing required parameters: serial, cache_path, expected_size"}, status=400)
+
+            # Find the coordinator for this serial
+            coordinator = None
+            for entry_id in self.hass.data[DOMAIN]:
+                if entry_id == "service_call_future":
+                    continue
+                coord = self.hass.data[DOMAIN][entry_id]
+                if coord.get_model().info.serial == serial:
+                    coordinator = coord
+                    break
+            if not coordinator:
+                return web.json_response({"error": f"Printer with serial {serial} not found"}, status=404)
+
+            model = coordinator.get_model()
+            BASE_CACHE_DIR = "/config/www/media/ha-bambulab/"
+            local_path = os.path.join(BASE_CACHE_DIR, cache_path)
+            cache_index = cache_path.find('/cache/')
+            if cache_index == -1:
+                return web.json_response({"error": "cache_path must include '/cache/'"}, status=400)
+            remote_path = cache_path[cache_index:]  # e.g., '/cache/Fidgets_v14.3mf'
+            LOGGER.debug(f"EnsureCacheFileAPIView: local_path={local_path}, remote_path={remote_path}")
+
+            # Check if file exists and matches size
+            present = await model.print_job.async_ftp_file_check(remote_path, expected_size)
+            if present:
+                return web.json_response({"status": "present", "detail": "File already present with expected size."})
+
+            # If not present, upload
+            uploaded = await model.print_job.async_ftp_upload_file(local_path, remote_path)
+            if uploaded:
+                return web.json_response({"status": "uploaded", "detail": "File uploaded to printer."})
+            else:
+                return web.json_response({"status": "error", "detail": "Failed to upload file to printer."}, status=500)
+        except Exception as e:
+            LOGGER.error(f"Error in ensure_cache_file API: {e}")
+            return web.json_response({"error": "Internal server error"}, status=500)
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
     LOGGER.debug("async_setup_entry Start")
@@ -282,6 +338,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.http.register_view(PrintHistoryAPIView(hass))
     hass.http.register_view(VideoAPIView(hass))
     hass.http.register_view(FileCacheFileView(hass))
+    hass.http.register_view(EnsureCacheFileAPIView(hass))
     LOGGER.info("File cache API endpoints registered successfully")
 
     async def handle_service_call(call: ServiceCall):
