@@ -329,6 +329,21 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
                                             server_hostname=self.host,
                                             session=session)
         return conn, size
+    
+    def storbinary_no_unwrap(self, cmd, fp, blocksize=8192, callback=None, rest=None):
+        """Version of storbinary that skips conn.unwrap() to avoid SSL timeout."""
+        self.voidcmd('TYPE I')
+        with self.transfercmd(cmd, rest) as conn:
+            while True:
+                buf = fp.read(blocksize)
+                if not buf:
+                    break
+                conn.sendall(buf)
+                if callback:
+                    callback(buf)
+            # SKIP conn.unwrap() which causes timeout
+            conn.close()
+        return self.voidresp()    
 
 @dataclass
 class BambuClient:

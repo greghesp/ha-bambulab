@@ -3,6 +3,7 @@ import json
 import math
 import os
 import re
+import ssl
 import threading
 import shutil
 import time
@@ -18,6 +19,7 @@ import tempfile
 import xml.etree.ElementTree as ElementTree
 from PIL import Image, ImageDraw, ImageFont
 import asyncio
+import aiofiles
 
 from .utils import (
     search,
@@ -1721,51 +1723,104 @@ class PrintJob:
 
     async def async_ftp_file_check(self, file_path: str, expected_size: int) -> bool:
         """Async check if a file exists on the printer via FTP and matches the expected size."""
-        def _check():
-            ftp = None
-            try:
-                ftp = self._client.ftp_connection()
-                size = ftp.size(file_path)
-                return size == expected_size
-            except Exception as e:
-                LOGGER.debug(f"FTP file check failed for {file_path}: {e}")
-                return False
-            finally:
-                if ftp:
-                    try:
-                        ftp.quit()
-                    except Exception:
-                        pass
-        return await asyncio.to_thread(_check)
+        # Create a task that runs in the background
+        task = asyncio.create_task(self._perform_ftp_check(file_path, expected_size))
+        return await task
+
+    async def _perform_ftp_check(self, file_path: str, expected_size: int) -> bool:
+        """Internal method to perform the actual FTP check using ftplib."""
+        try:
+            LOGGER.debug(f"FTP file check: Creating client for {file_path}")
+            
+            # Run the blocking FTP operations in a thread executor
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(None, self._sync_ftp_check, file_path, expected_size)
+            return result
+            
+        except Exception as e:
+            LOGGER.debug(f"FTP file check failed for {file_path}: {e}")
+            return False
+
+    def _sync_ftp_check(self, file_path: str, expected_size: int) -> bool:
+        """Synchronous FTP check method to run in executor."""
+        ftp = None
+        try:
+            # Use the connection helper from bambu_client
+            ftp = self._client.ftp_connection()
+            
+            LOGGER.debug(f"FTP file check: Getting file size for {file_path}")
+            # Get file size
+            size = ftp.size(file_path)
+            LOGGER.debug(f"FTP file check: File size is {size}, expected {expected_size}")
+            
+            return int(size) == expected_size
+            
+        except Exception as e:
+            LOGGER.debug(f"FTP file check failed for {file_path}: {e}")
+            return False
+        finally:
+            if ftp:
+                try:
+                    ftp.quit()
+                except Exception:
+                    pass
 
     async def async_ftp_upload_file(self, local_path: str, remote_path: str) -> bool:
-        """Async upload a file to the printer via FTP."""
-        def _upload():
-            ftp = None
-            try:
-                ftp = self._client.ftp_connection()
-                # Ensure remote directory exists
-                dirs = remote_path.strip('/').split('/')[:-1]
-                current = ''
-                for d in dirs:
-                    current += f'/{d}'
-                    try:
-                        ftp.mkd(current)
-                    except Exception:
-                        pass  # Directory may already exist
-                with open(local_path, 'rb') as f:
-                    ftp.storbinary(f'STOR {remote_path}', f)
-                return True
-            except Exception as e:
-                LOGGER.debug(f"FTP upload failed for {local_path} to {remote_path}: {e}")
-                return False
-            finally:
-                if ftp:
-                    try:
-                        ftp.quit()
-                    except Exception:
-                        pass
-        return await asyncio.to_thread(_upload)
+        """Async upload a file to the printer via FTP using ftplib."""
+        # Create a task that runs in the background
+        task = asyncio.create_task(self._perform_ftp_upload(local_path, remote_path))
+        return await task
+
+    async def _perform_ftp_upload(self, local_path: str, remote_path: str) -> bool:
+        """Internal method to perform the actual FTP upload using ftplib."""
+        try:
+            LOGGER.debug(f"FTP upload: Creating client for {local_path} -> {remote_path}")
+            
+            # Run the blocking FTP operations in a thread executor
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(None, self._sync_ftp_upload, local_path, remote_path)
+            return result
+            
+        except Exception as e:
+            LOGGER.debug(f"FTP upload failed for {local_path} to {remote_path}: {e}")
+            return False
+
+    def _sync_ftp_upload(self, local_path: str, remote_path: str) -> bool:
+        """Synchronous FTP upload method to run in executor."""
+        ftp = None
+        try:
+            # Use the connection helper from bambu_client
+            ftp = self._client.ftp_connection()
+            
+            # Ensure remote directory exists
+            dirs = remote_path.strip('/').split('/')[:-1]
+            current = ''
+            for d in dirs:
+                current += f'/{d}'
+                try:
+                    LOGGER.debug(f"FTP upload: Creating directory {current}")
+                    ftp.mkd(current)
+                except Exception:
+                    LOGGER.debug(f"FTP upload: Directory {current} may already exist")
+                    pass  # Directory may already exist
+            
+            LOGGER.debug(f"FTP upload: Starting file upload")
+            # Upload file
+            with open(local_path, 'rb') as f:
+                ftp.storbinary_no_unwrap(f'STOR {remote_path}', f)
+            
+            LOGGER.debug(f"FTP upload: Upload completed successfully")
+            return True
+            
+        except Exception as e:
+            LOGGER.debug(f"FTP upload failed for {local_path} to {remote_path}: {e}")
+            return False
+        finally:
+            if ftp:
+                try:
+                    ftp.quit()
+                except Exception:
+                    pass
 
 @dataclass
 class Info:
