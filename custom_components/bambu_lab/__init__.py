@@ -314,8 +314,12 @@ class EnsureCacheFileAPIView(HomeAssistantView):
             if present:
                 return web.json_response({"status": "present", "detail": "File already present with expected size."})
 
+            def ha_progress_callback(progress_data):
+                # Schedule the event fire on the event loop thread
+                self.hass.loop.call_soon_threadsafe(self.hass.bus.async_fire, "bambu_upload_progress", progress_data)
+
             # If not present, upload
-            uploaded = await model.print_job.async_ftp_upload_file(local_path, remote_path)
+            uploaded = await model.print_job.async_ftp_upload_file(local_path, remote_path, progress_callback=ha_progress_callback)
             if uploaded:
                 return web.json_response({"status": "uploaded", "detail": "File uploaded to printer."})
             else:

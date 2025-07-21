@@ -3,7 +3,6 @@ import json
 import math
 import os
 import re
-import ssl
 import threading
 import shutil
 import time
@@ -19,7 +18,6 @@ import tempfile
 import xml.etree.ElementTree as ElementTree
 from PIL import Image, ImageDraw, ImageFont
 import asyncio
-import aiofiles
 
 from .utils import (
     search,
@@ -1723,23 +1721,8 @@ class PrintJob:
 
     async def async_ftp_file_check(self, file_path: str, expected_size: int) -> bool:
         """Async check if a file exists on the printer via FTP and matches the expected size."""
-        # Create a task that runs in the background
-        task = asyncio.create_task(self._perform_ftp_check(file_path, expected_size))
-        return await task
-
-    async def _perform_ftp_check(self, file_path: str, expected_size: int) -> bool:
-        """Internal method to perform the actual FTP check using ftplib."""
-        try:
-            LOGGER.debug(f"FTP file check: Creating client for {file_path}")
-            
-            # Run the blocking FTP operations in a thread executor
-            loop = asyncio.get_event_loop()
-            result = await loop.run_in_executor(None, self._sync_ftp_check, file_path, expected_size)
-            return result
-            
-        except Exception as e:
-            LOGGER.debug(f"FTP file check failed for {file_path}: {e}")
-            return False
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self._sync_ftp_check, file_path, expected_size)
 
     def _sync_ftp_check(self, file_path: str, expected_size: int) -> bool:
         """Synchronous FTP check method to run in executor."""
@@ -1765,33 +1748,15 @@ class PrintJob:
                 except Exception:
                     pass
 
-    async def async_ftp_upload_file(self, local_path: str, remote_path: str) -> bool:
-        """Async upload a file to the printer via FTP using ftplib."""
-        # Create a task that runs in the background
-        task = asyncio.create_task(self._perform_ftp_upload(local_path, remote_path))
-        return await task
+    async def async_ftp_upload_file(self, local_path: str, remote_path: str, progress_callback=None) -> bool:
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self._sync_ftp_upload, local_path, remote_path, progress_callback)
 
-    async def _perform_ftp_upload(self, local_path: str, remote_path: str) -> bool:
-        """Internal method to perform the actual FTP upload using ftplib."""
-        try:
-            LOGGER.debug(f"FTP upload: Creating client for {local_path} -> {remote_path}")
-            
-            # Run the blocking FTP operations in a thread executor
-            loop = asyncio.get_event_loop()
-            result = await loop.run_in_executor(None, self._sync_ftp_upload, local_path, remote_path)
-            return result
-            
-        except Exception as e:
-            LOGGER.debug(f"FTP upload failed for {local_path} to {remote_path}: {e}")
-            return False
-
-    def _sync_ftp_upload(self, local_path: str, remote_path: str) -> bool:
-        """Synchronous FTP upload method to run in executor."""
+    def _sync_ftp_upload(self, local_path: str, remote_path: str, progress_callback=None) -> bool:
         ftp = None
         try:
-            # Use the connection helper from bambu_client
             ftp = self._client.ftp_connection()
-            
+
             # Ensure remote directory exists
             dirs = remote_path.strip('/').split('/')[:-1]
             current = ''
@@ -1803,15 +1768,44 @@ class PrintJob:
                 except Exception:
                     LOGGER.debug(f"FTP upload: Directory {current} may already exist")
                     pass  # Directory may already exist
-            
+
             LOGGER.debug(f"FTP upload: Starting file upload")
-            # Upload file
+            file_size = os.path.getsize(local_path)
+            filename = os.path.basename(local_path)
+            total_sent = 0
+            chunk_size = 8192
+
+            def internal_progress_callback(data):
+                nonlocal total_sent
+                total_sent += len(data)
+                if progress_callback:
+                    progress_callback({
+                        "serial": self._client._serial,
+                        "filename": filename,
+                        "bytes_sent": total_sent,
+                        "total": file_size,
+                    })
+
             with open(local_path, 'rb') as f:
-                ftp.storbinary_no_unwrap(f'STOR {remote_path}', f)
-            
+                # Use storbinary_no_unwrap with the progress callback
+                ftp.storbinary_no_unwrap(f'STOR {remote_path}', f, blocksize=chunk_size, callback=internal_progress_callback)
+
             LOGGER.debug(f"FTP upload: Upload completed successfully")
+
+            # After successful upload, copy to cache path
+            # Remove leading slash from remote_path for relative path
+            relative_path = remote_path.lstrip('/')
+            cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
+            cache_file_path = os.path.join(cache_dir, relative_path)
+            os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
+            try:
+                shutil.copy2(local_path, cache_file_path)
+                LOGGER.debug(f"Copied uploaded file to cache: {cache_file_path}")
+            except Exception as e:
+                LOGGER.error(f"Failed to copy uploaded file to cache: {e}")
+
             return True
-            
+
         except Exception as e:
             LOGGER.debug(f"FTP upload failed for {local_path} to {remote_path}: {e}")
             return False
