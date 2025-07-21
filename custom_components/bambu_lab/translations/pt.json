@@ -70,7 +70,8 @@
             "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware",
+              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware",
+              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Essas opções avançadas são funcionalidades precoces ou arriscadas. Leia a documentação e use -os por sua conta e risco.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware",
+              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Essas opções avançadas são funcionalidades precoces ou arriscadas. Leia a documentação e use -os por sua conta e risco.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware",
+              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "Carregar dados do modelo de impressora"
-      },
-      "timelapse": {
-        "name": "Carregue o mais recente timelapse da impressora"
-      },
-      "download_gcode_file": {
-        "name": "Salvar o arquivo gcode em ha"
       }
     },
     "update": {

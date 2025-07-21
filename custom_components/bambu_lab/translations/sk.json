@@ -70,7 +70,8 @@
             "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_file_cache": "Povoľte ukladanie do vyrovnávacej pamäte modelových súborov domácemu asistentovi"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_file_cache": "Povoľte ukladanie do vyrovnávacej pamäte modelových súborov domácemu asistentovi"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Tieto pokročilé možnosti sú včasnou alebo riskantnou funkciou. Prečítajte si dokumentáciu a použite ich na svoje vlastné riziko.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_file_cache": "Povoľte ukladanie do vyrovnávacej pamäte modelových súborov domácemu asistentovi"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Tieto pokročilé možnosti sú včasnou alebo riskantnou funkciou. Prečítajte si dokumentáciu a použite ich na svoje vlastné riziko.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_file_cache": "Povoľte ukladanie do vyrovnávacej pamäte modelových súborov domácemu asistentovi"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "Načítať údaje o modeli z tlačiarne"
-      },
-      "timelapse": {
-        "name": "Načítať najnovší časový čas z tlačiarne"
-      },
-      "download_gcode_file": {
-        "name": "Uložte súbor GCode v HA"
       }
     },
     "update": {

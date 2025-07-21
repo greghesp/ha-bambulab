@@ -70,7 +70,8 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_file_cache": "Włącz buforowanie plików modelowych Asystentowi Home"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_file_cache": "Włącz buforowanie plików modelowych Asystentowi Home"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_file_cache": "Włącz buforowanie plików modelowych Asystentowi Home"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_file_cache": "Włącz buforowanie plików modelowych Asystentowi Home"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "prompt_sound": {
         "name": "Włącz dźwięk powiadomień"
-      },
-      "timelapse": {
-        "name": "Załaduj najnowszy timelapse z drukarki"
-      },
-      "download_gcode_file": {
-        "name": "Zapisz plik GCode w HA"
       }
     },
     "update": {

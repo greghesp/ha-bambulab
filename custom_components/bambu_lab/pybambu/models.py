@@ -17,6 +17,7 @@ import io
 import tempfile
 import xml.etree.ElementTree as ElementTree
 from PIL import Image, ImageDraw, ImageFont
+import asyncio
 
 from .utils import (
     search,
@@ -186,8 +187,6 @@ class Device:
             return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.H2D
         elif feature == Features.FTP:
             return True
-        elif feature == Features.TIMELAPSE:
-            return False
         elif feature == Features.AMS_SWITCH_COMMAND:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
             # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
@@ -202,8 +201,6 @@ class Device:
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.05.06.01"):
                 return True
             return False
-        elif feature == Features.DOWNLOAD_GCODE_FILE:
-            return True
         elif feature == Features.AMS_HUMIDITY:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
             # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
@@ -1102,19 +1099,55 @@ class PrintJob:
     #     FILE: /cache/Lovers Valentine Day Shadowbox.3mf
     # 
 
-    ftp_search_paths = ['/', '/cache/']
+    ftp_search_paths = ['/cache/', '/']
     def _attempt_ftp_download_of_file(self, ftp, file_path):
         if 'Metadata' in file_path:
             # This is a ram drive on the X1 and is not accessible via FTP
             return None
 
-        file = tempfile.NamedTemporaryFile(delete=True)
         try:
-            LOGGER.debug(f"Attempting download of '{file_path}'")
-            ftp.retrbinary(f"RETR {file_path}", file.write)
-            file.flush()
-            LOGGER.debug(f"Successfully downloaded '{file_path}'.")
-            return file
+            LOGGER.debug(f"Looking for '{file_path}'")
+            size = ftp.size(file_path)
+            LOGGER.debug(f"File exists. Size: {size} bytes.")
+            
+            # Determine where to save the file
+            if self._client.settings.get('enable_file_cache', False):
+                # Save directly to cache with preserved sub-path structure
+                cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
+                relative_path = file_path.lstrip('/')
+                cache_file_path = os.path.join(cache_dir, relative_path)
+                
+                # Check if file already exists in cache with same size
+                if os.path.exists(cache_file_path):
+                    cache_file_size = os.path.getsize(cache_file_path)
+                    if cache_file_size == size:
+                        LOGGER.debug(f"File already exists in cache with same size ({size} bytes). Skipping download.")
+                        return cache_file_path
+                
+                # Ensure the directory exists
+                os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
+                
+                # Download directly to cache
+                with open(cache_file_path, 'wb') as f:
+                    ftp.retrbinary(f"RETR {file_path}", f.write)
+                    f.flush()
+                
+                LOGGER.debug(f"Successfully downloaded '{file_path}' to cache.")
+                return cache_file_path
+            else:
+                # File caching disabled - save to temporary location
+                temp_file = tempfile.NamedTemporaryFile(delete=False)
+                try:
+                    ftp.retrbinary(f"RETR {file_path}", temp_file.write)
+                    temp_file.flush()
+                    temp_file.close()
+                    LOGGER.debug(f"Successfully downloaded '{file_path}' to temporary location.")
+                    return temp_file.name
+                except Exception as e:
+                    temp_file.close()
+                    os.unlink(temp_file.name)
+                    raise e
+                    
         except ftplib.error_perm as e:
              if '550' not in str(e.args): # 550 is unavailable.
                  LOGGER.debug(f"Failed to download model at '{file_path}': {e}")
@@ -1122,56 +1155,52 @@ class PrintJob:
             LOGGER.debug(f"Unexpected exception at '{file_path}': {type(e)} Args: {e}")
             # Optionally add retry logic here
             pass
-        file.close()
         return None
 
     def _attempt_ftp_download_of_file_from_search_path(self, ftp, filename):
         for path in self.ftp_search_paths:
             file_path = f"{path}{filename.lstrip('/')}"
-            file = self._attempt_ftp_download_of_file(ftp, file_path)
-            if file is not None:
-                return file
+            result = self._attempt_ftp_download_of_file(ftp, file_path)
+            if result is not None:
+                return result
         return None
 
     def _attempt_ftp_download(self, ftp) -> Union[str, None]:
-        model_file = None
+
+        filenames_to_try = []
 
         # First test if the subtaskname exists as a 3mf
         if self.subtask_name != '':
             if self.subtask_name.endswith('.3mf'):
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.subtask_name)
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(self.subtask_name)
             else:
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.3mf")
-                if model_file is not None:
-                    return model_file
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.subtask_name}.gcode.3mf")
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(f"{self.subtask_name}.3mf")
+                filenames_to_try.append(f"{self.subtask_name}.gcode.3mf")
+
 
         # If we didn't find it then try the gcode file
         if (self.gcode_file != '') and (self.subtask_name != self.gcode_file):
             if self.gcode_file.endswith('.3mf'):
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=self.gcode_file)
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(self.gcode_file)
             else:
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.3mf")
-                if model_file is not None:
-                    return model_file
-                model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=f"{self.gcode_file}.gcode.3mf")
-                if model_file is not None:
-                    return model_file
+                filenames_to_try.append(f"{self.gcode_file}.3mf")
+                filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
+
+        # Try each candidate filename in order
+        for filename in filenames_to_try:
+            model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=filename)
+            if model_file is not None:
+                return model_file
 
         if self.subtask_name == "":
             # Fall back to find the latest file by timestamp but only if we don't have a subtask name set - printer must have been rebooted.
             LOGGER.debug("Falling back to searching for latest 3mf file.")
             model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])
             if model_path is not None:
-                model_file = self._attempt_ftp_download_of_file(ftp, model_path)
+                model_file_path = self._attempt_ftp_download_of_file(ftp, model_path)
+                return model_file_path
 
-        return model_file
+        return None
     
     def _find_latest_file(self, ftp, search_paths, extensions: list):
         # Look for the newest file with extension in directory.
@@ -1194,7 +1223,7 @@ class PrintJob:
                     timestamp = timestamp.replace(year=utc_time_now.year)
                     if timestamp > utc_time_now:
                         timestamp = timestamp.replace(year=datetime.now().year - 1)
-                    return timestamp, f"{path}{filename}"
+                    return timestamp, f"{path}/{filename}" if path != '/' else f"/{filename}"
                 else:
                     return None
 
@@ -1205,7 +1234,7 @@ class PrintJob:
                 if extension in extensions:
                     timestamp = datetime.strptime(timestamp_str, '%b %d %Y')
                     timestamp = timestamp.replace(tzinfo=timezone.utc)
-                    return timestamp, f"{path}{filename}"
+                    return timestamp, f"{path}/{filename}" if path != '/' else f"/{filename}"
                 else:
                     return None
             
@@ -1236,10 +1265,10 @@ class PrintJob:
         # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
-        if not self._client.timelapse_enabled:
+        if not self._client.settings.get('enable_file_cache', False):
             return
         thread = threading.Thread(target=self._async_download_timelapse)
-        thread.start()       
+        thread.start()
         
     def _async_download_timelapse(self):
         current_thread = threading.current_thread()
@@ -1249,37 +1278,54 @@ class PrintJob:
 
         # Open the FTP connection
         ftp = self._client.ftp_connection()
-        file_path = self._find_latest_file(ftp, '/timelapse', ['.mp4','.avi'])
+        file_path = self._find_latest_file(ftp, ['/timelapse'], ['.mp4','.avi'])
         if file_path is not None:
             # timelapse_path is of form '/timelapse/foo.mp4'
             local_file_path = os.path.join(f"/config/www/media/ha-bambulab/{self._client._serial}", file_path.lstrip('/'))
             directory_path = os.path.dirname(local_file_path)
             os.makedirs(directory_path, exist_ok=True)
 
-            if os.path.exists(local_file_path):
-                LOGGER.debug("Timelapse already downloaded.")
-            else:
-                with open(local_file_path, 'wb') as f:
-                    # Fetch the video from FTP and close the connection
-                    LOGGER.info(f"Downloading '{file_path}'")
-                    ftp.retrbinary(f"RETR {file_path}", f.write)
-                    f.flush()
-
-            # Convert to the thumbnail path.
-            directory = os.path.dirname(file_path)
-            filename = os.path.basename(file_path)
-            filename_without_extension, _ = os.path.splitext(filename)
-            filename = f"{filename_without_extension}.jpg"
-            file_path = os.path.join(directory, 'thumbnail', filename)
-            local_file_path = os.path.join(f"/config/www/media/ha-bambulab/{self._client._serial}/timelapse", filename)
-            if os.path.exists(local_file_path):
-                LOGGER.debug("Thumbnail already downloaded.")
-            else:
-                with open(local_file_path, 'wb') as f:
-                    # Fetch the video from FTP and close the connection
-                    LOGGER.info(f"Downloading '{file_path}'")
-                    ftp.retrbinary(f"RETR {file_path}", f.write)
-                    f.flush()
+            try:
+                # Get the file size from FTP
+                size = ftp.size(file_path)
+                LOGGER.debug(f"Timelapse file exists. Size: {size} bytes.")
+                
+                # Check if file already exists with same size
+                should_download = False
+                if os.path.exists(local_file_path):
+                    local_file_size = os.path.getsize(local_file_path)
+                    if local_file_size == size:
+                        LOGGER.debug(f"Timelapse already downloaded with same size ({size} bytes): {file_path}")
+                    else:
+                        LOGGER.debug(f"Timelapse file size differs (local: {local_file_size}, remote: {size}). Re-downloading.")
+                        should_download = True
+                else:
+                    LOGGER.debug(f"Timelapse file doesn't exist locally. Downloading.")
+                    should_download = True
+                
+                if should_download:
+                    # Download video
+                    with open(local_file_path, 'wb') as f:
+                        LOGGER.info(f"Downloading '{file_path}'")
+                        ftp.retrbinary(f"RETR {file_path}", f.write)
+                        f.flush()
+                    
+                    # Download thumbnail
+                    filename = os.path.basename(file_path)
+                    filename_without_extension, _ = os.path.splitext(filename)
+                    thumbnail_filename = f"{filename_without_extension}.jpg"
+                    thumbnail_path = os.path.join(os.path.dirname(file_path), 'thumbnail', thumbnail_filename)
+                    thumbnail_local_path = os.path.join(os.path.dirname(local_file_path), thumbnail_filename)
+                    with open(thumbnail_local_path, 'wb') as f:
+                        LOGGER.info(f"Downloading '{thumbnail_path}'")
+                        ftp.retrbinary(f"RETR {thumbnail_path}", f.write)
+                        f.flush()
+                    
+            except ftplib.error_perm as e:
+                if '550' not in str(e.args): # 550 is unavailable.
+                    LOGGER.debug(f"Failed to download timelapse at '{file_path}': {e}")
+            except Exception as e:
+                LOGGER.debug(f"Unexpected exception downloading timelapse at '{file_path}': {type(e)} Args: {e}")
 
         ftp.quit()
 
@@ -1345,8 +1391,8 @@ class PrintJob:
         ftp = self._client.ftp_connection()
 
         for i in range(1,13):
-            model_file = self._attempt_ftp_download(ftp)
-            if model_file is not None:
+            model_file_path = self._attempt_ftp_download(ftp)
+            if model_file_path is not None:
                 break
 
             if (self._client._device.info.device_type == Printers.X1 or 
@@ -1365,16 +1411,19 @@ class PrintJob:
 
         ftp.quit()
 
-        if model_file is None:
+        if model_file_path is None:
             LOGGER.debug("No model file found.")
             return
 
         result = False
+        
         try:
-            LOGGER.debug(f"File size is {os.path.getsize(model_file.name)} bytes")
+            LOGGER.debug(f"File size is {os.path.getsize(model_file_path)} bytes")
+
+            model_dir = os.path.dirname(model_file_path)
 
             # Open the 3mf zip archive
-            with ZipFile(model_file) as archive:
+            with ZipFile(model_file_path) as archive:
                 # Extract the slicer XML config and parse the plate tree
                 plate = ElementTree.fromstring(archive.read('Metadata/slice_info.config')).find('plate')
                 
@@ -1416,20 +1465,26 @@ class PrintJob:
                         self._client._device.cover_image.set_image(archive.read(f"Metadata/plate_{plate_number}.png"))
                         LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
 
-                        #Extract gcode file from archive to HA www folder if download_gcode_file is enabled
-                        if self._client.download_gcode_file_enabled:
+                        if self._client.settings.get('enable_file_cache', False):
+                            # Save the cover image to the cache
                             try:
-                                local_gcode_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/tmp_gcode"
-                                local_gcode_filename = f"{os.path.basename(os.path.realpath(model_file.name))}.gcode"
-                                if not os.path.exists(local_gcode_dir):
-                                    os.makedirs(local_gcode_dir)
-                                for name in os.listdir(local_gcode_dir):
-                                    path = os.path.join(local_gcode_dir, name)
-                                    if os.path.isfile(path):
-                                        os.remove(path)
-                                with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(os.path.join(local_gcode_dir, local_gcode_filename), "wb") as target_path:
+                                # Save the cover image directly to the cache
+                                cover_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.png'
+                                cover_path = os.path.join(model_dir, cover_filename)
+                                with archive.open(f"Metadata/plate_{plate_number}.png") as cover_entry, open(cover_path, "wb") as target_path:
+                                    shutil.copyfileobj(cover_entry, target_path)
+                                LOGGER.debug(f"Cover image saved to: {cover_path}")
+                            except Exception as e:
+                                LOGGER.error(f"Failed to save cover image: {e}")
+
+                        if self._client.settings.get('enable_file_cache', False):
+                            try:
+                                # Save the gcode file to the cache
+                                gcode_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.gcode'
+                                gcode_path = os.path.join(model_dir, gcode_filename)
+                                with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(gcode_path, "wb") as target_path:
                                     shutil.copyfileobj(gcode_entry, target_path)
-                                    self.gcode_file_downloaded = local_gcode_filename
+                                    self.gcode_file_downloaded = gcode_filename
                             except Exception as e:
                                 self.gcode_file_downloaded = "ERROR"
                                 LOGGER.error(f"Error while extracting gcode zip entry to target path. {repr(e)}")
@@ -1493,6 +1548,18 @@ class PrintJob:
                     except:
                         LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
 
+                # Save the slice_info.config file only if file cache is enabled
+                if self._client.settings.get('enable_file_cache', False):
+                    try:
+                        slice_info_bytes = archive.read('Metadata/slice_info.config')
+                        # Save the slice_info.config in the same directory as the model file
+                        slice_info_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.slice_info.config'
+                        slice_info_path = os.path.join(model_dir, slice_info_filename)
+                        with open(slice_info_path, "wb") as f:
+                            f.write(slice_info_bytes)
+                    except Exception as e:
+                        LOGGER.error(f"Failed to save slice_info.config: {e}")
+
             archive.close()
 
             self._client.callback("event_printer_data_update")
@@ -1500,8 +1567,14 @@ class PrintJob:
         except Exception as e:
             LOGGER.error(f"Unexpected error parsing model data: {e}")
         
-        # Close and delete temporary file
-        model_file.close();
+        # Clean up temporary file if caching is disabled
+        if not self._client.settings.get('enable_file_cache', False) and model_file_path and os.path.exists(model_file_path):
+            try:
+                os.unlink(model_file_path)
+                LOGGER.debug(f"Deleted temporary file: {model_file_path}")
+            except Exception as e:
+                LOGGER.error(f"Failed to delete temporary file {model_file_path}: {e}")
+            
         return result
 
     # The task list is of the following form with a 'hits' array with typical 20 entries.
@@ -1645,6 +1718,103 @@ class PrintJob:
         object_count = len(seen_identify_ids)
         LOGGER.debug(f"Finished proccessing pick image, found {object_count} object{'s'[:object_count^1]}")
         return seen_identify_ids
+
+    async def async_ftp_file_check(self, file_path: str, expected_size: int) -> bool:
+        """Async check if a file exists on the printer via FTP and matches the expected size."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self._sync_ftp_check, file_path, expected_size)
+
+    def _sync_ftp_check(self, file_path: str, expected_size: int) -> bool:
+        """Synchronous FTP check method to run in executor."""
+        ftp = None
+        try:
+            # Use the connection helper from bambu_client
+            ftp = self._client.ftp_connection()
+            
+            LOGGER.debug(f"FTP file check: Getting file size for {file_path}")
+            # Get file size
+            size = ftp.size(file_path)
+            LOGGER.debug(f"FTP file check: File size is {size}, expected {expected_size}")
+            
+            return int(size) == expected_size
+            
+        except Exception as e:
+            LOGGER.debug(f"FTP file check failed for {file_path}: {e}")
+            return False
+        finally:
+            if ftp:
+                try:
+                    ftp.quit()
+                except Exception:
+                    pass
+
+    async def async_ftp_upload_file(self, local_path: str, remote_path: str, progress_callback=None) -> bool:
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self._sync_ftp_upload, local_path, remote_path, progress_callback)
+
+    def _sync_ftp_upload(self, local_path: str, remote_path: str, progress_callback=None) -> bool:
+        ftp = None
+        try:
+            ftp = self._client.ftp_connection()
+
+            # Ensure remote directory exists
+            dirs = remote_path.strip('/').split('/')[:-1]
+            current = ''
+            for d in dirs:
+                current += f'/{d}'
+                try:
+                    LOGGER.debug(f"FTP upload: Creating directory {current}")
+                    ftp.mkd(current)
+                except Exception:
+                    LOGGER.debug(f"FTP upload: Directory {current} may already exist")
+                    pass  # Directory may already exist
+
+            LOGGER.debug(f"FTP upload: Starting file upload")
+            file_size = os.path.getsize(local_path)
+            filename = os.path.basename(local_path)
+            total_sent = 0
+            chunk_size = 8192
+
+            def internal_progress_callback(data):
+                nonlocal total_sent
+                total_sent += len(data)
+                if progress_callback:
+                    progress_callback({
+                        "serial": self._client._serial,
+                        "filename": filename,
+                        "bytes_sent": total_sent,
+                        "total": file_size,
+                    })
+
+            with open(local_path, 'rb') as f:
+                # Use storbinary_no_unwrap with the progress callback
+                ftp.storbinary_no_unwrap(f'STOR {remote_path}', f, blocksize=chunk_size, callback=internal_progress_callback)
+
+            LOGGER.debug(f"FTP upload: Upload completed successfully")
+
+            # After successful upload, copy to cache path
+            # Remove leading slash from remote_path for relative path
+            relative_path = remote_path.lstrip('/')
+            cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
+            cache_file_path = os.path.join(cache_dir, relative_path)
+            os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
+            try:
+                shutil.copy2(local_path, cache_file_path)
+                LOGGER.debug(f"Copied uploaded file to cache: {cache_file_path}")
+            except Exception as e:
+                LOGGER.error(f"Failed to copy uploaded file to cache: {e}")
+
+            return True
+
+        except Exception as e:
+            LOGGER.debug(f"FTP upload failed for {local_path} to {remote_path}: {e}")
+            return False
+        finally:
+            if ftp:
+                try:
+                    ftp.quit()
+                except Exception:
+                    pass
 
 @dataclass
 class Info:
@@ -2403,6 +2573,10 @@ class StageAction:
         self._print_type = data.get("print_type", self._print_type)
         if self._print_type.lower() not in PRINT_TYPE_OPTIONS:
             self._print_type = "unknown"
+
+        # New way it is presented
+        self._id = int(data.get("stage", {}).get("_id", self._id))
+        # Old way it's presented
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.

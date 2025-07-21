@@ -70,7 +70,8 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen, og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "Indlæsningsmodeldata fra printer"
-      },
-      "timelapse": {
-        "name": "Indlæs den seneste tidslap fra printer"
-      },
-      "download_gcode_file": {
-        "name": "Gem gcode -fil i ha"
       }
     },
     "update": {

@@ -70,7 +70,8 @@
             "description": "Estas opciones solo son necesarias si tiene una configuración no estándar.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
+              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Estas opciones solo son necesarias si tiene una configuración no estándar.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
+              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Estas opciones avanzadas son la funcionalidad temprana o arriesgada. Lea la documentación y úsela bajo su propio riesgo.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
+              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Estas opciones avanzadas son la funcionalidad temprana o arriesgada. Lea la documentación y úsela bajo su propio riesgo.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
+              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "Cargar datos del modelo de la impresora"
-      },
-      "timelapse": {
-        "name": "Cargue el último timelapse de la impresora"
-      },
-      "download_gcode_file": {
-        "name": "Guardar el archivo Gcode en HA"
       }
     },
     "update": {

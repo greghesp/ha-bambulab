@@ -70,7 +70,8 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_file_cache": "Enable caching of model files to home assistant"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "prompt_sound": {
         "name": "Allow Prompt Sound"
-      },
-      "timelapse": {
-        "name": "Load latest timelapse from printer"
-      },
-      "download_gcode_file": {
-        "name": "Save GCode file in HA"
       }
     },
     "update": {

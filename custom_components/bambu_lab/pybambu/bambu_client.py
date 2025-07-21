@@ -329,6 +329,21 @@ class ImplicitFTP_TLS(ftplib.FTP_TLS):
                                             server_hostname=self.host,
                                             session=session)
         return conn, size
+    
+    def storbinary_no_unwrap(self, cmd, fp, blocksize=8192, callback=None, rest=None):
+        """Version of storbinary that skips conn.unwrap() to avoid SSL timeout."""
+        self.voidcmd('TYPE I')
+        with self.transfercmd(cmd, rest) as conn:
+            while True:
+                buf = fp.read(blocksize)
+                if not buf:
+                    break
+                conn.sendall(buf)
+                if callback:
+                    callback(buf)
+            # SKIP conn.unwrap() which causes timeout
+            conn.close()
+        return self.voidresp()    
 
 @dataclass
 class BambuClient:
@@ -358,9 +373,7 @@ class BambuClient:
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
-        self._enable_timelapse = config.get('enable_timelapse', False)
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
-        self._enable_download_gcode_file = config.get('enable_download_gcode_file', False)
 
         self._connected = False
         self._port = 1883
@@ -418,25 +431,11 @@ class BambuClient:
         self._enable_ftp = enable
         
     @property
-    def download_gcode_file_enabled(self):
-        return self._device.supports_feature(Features.DOWNLOAD_GCODE_FILE) and self._enable_download_gcode_file
-
-    def set_download_gcode_file_enabled(self, enable):
-        self._enable_download_gcode_file = enable
-
-    @property
-    def timelapse_enabled(self):
-        return self._device.supports_feature(Features.TIMELAPSE) and self._enable_timelapse
-
-    @property
     def local_tls_context(self):
         if self._disable_ssl_verify:
             return create_insecure_ssl_context()
         else:
             return create_local_ssl_context()
-
-    def set_timelapse_enabled(self, enable):
-        self._enable_timelapse = enable
 
     def setup_tls(self):
         if self._local_mqtt:
@@ -769,6 +768,9 @@ class BambuClient:
             _exc_info: Exec type.
         """
         self.disconnect()
+
+    def download_3mf_and_extract_metadata(self, model_file, thumbnail_cache_path=None):
+        return self._device.print_job.extract_3mf_metadata(model_file, thumbnail_cache_path=thumbnail_cache_path)
 
 @functools.lru_cache(maxsize=1)
 def create_local_ssl_context():

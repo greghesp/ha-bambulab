@@ -13,8 +13,10 @@ from .const import (
 import asyncio
 import re
 import time
-
-from typing import Any
+import os
+from pathlib import Path
+from datetime import datetime
+from typing import Any, Optional, List, Dict
 
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
@@ -172,7 +174,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
 
-        # First test if a device_id is specified and if so, check if it matches
         device_id = data.get('device_id', [])
         if len(device_id) == 1:
             return (device_id[0] == hadevice.id)
@@ -209,7 +210,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         return device_entry  # Returns a DeviceEntry object or None
 
-    def _handle_service_call_event(self, event: Event) -> Any:
+    async def _handle_service_call_event(self, event: Event) -> Any:
         data = event.data
 
         if not self._is_service_call_for_me(data):
@@ -503,18 +504,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _service_call_print_project_file(self, data: dict):
         command = PRINT_PROJECT_FILE_TEMPLATE
-        file = data.get("filepath")
-        plate = data.get("plate")
-        timelapse = data.get("timelapse")
-        bed_leveling = data.get("bed_leveling")
-        flow_cali = data.get("flow_cali")
-        vibration_cali = data.get("vibration_cali")
-        layer_inspect = data.get("layer_inspect")
-        use_ams = data.get("use_ams")
+        filepath = data.get("filepath")
+        plate = data.get("plate", 1)
+        timelapse = data.get("timelapse", False)
+        bed_leveling = data.get("bed_leveling", False)
+        flow_cali = data.get("flow_cali", False)
+        vibration_cali = data.get("vibration_cali", False)
+        layer_inspect = data.get("layer_inspect", False)
+        use_ams = data.get("use_ams", False)
         ams_mapping = data.get("ams_mapping")
 
         command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
-        command["print"]["url"] = f"ftp://{file}"
+        command["print"]["url"] = f"file:///sdcard/{filepath}"
         command["print"]["timelapse"] = timelapse
         command["print"]["bed_leveling"] = bed_leveling
         command["print"]["flow_cali"] = flow_cali
@@ -522,6 +523,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["layer_inspect"] = layer_inspect
         command["print"]["use_ams"] = use_ams
         command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
+        command["print"]["subtask_name"] = os.path.basename(filepath)
 
         self.client.publish(command)
 
@@ -733,13 +735,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def set_option_enabled(self, option: Options, enable: bool):
         LOGGER.debug(f"Setting {OPTION_NAME[option]} to {enable}")
         options = dict(self.config_entry.options)
-        
-        if option == Options.DOWNLOAD_GCODE_FILE:
-            if enable:
-                enable = self.get_option_enabled(Options.FTP)
-        if option == Options.FTP:
-            if not enable:
-                options[OPTION_NAME[Options.DOWNLOAD_GCODE_FILE]] = enable
                 
         options[OPTION_NAME[option]] = enable
         self._hass.config_entries.async_update_entry(
@@ -755,8 +750,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case Options.IMAGECAMERA:
                 force_reload = True
             case Options.FTP:
-                force_reload = True
-            case Options.TIMELAPSE:
                 force_reload = True
 
         if force_reload:
@@ -783,6 +776,146 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             translation_placeholders = {"device": self.config_entry.options.get('name', '')},
         )
 
+    def get_file_cache_directory(self) -> Optional[str]:
+        """Get the file cache directory for this printer."""
+        if not self.get_option_enabled(Options.FILE_CACHE):
+            return None
+        
+        serial = self.get_model().info.serial
+        return f"/config/www/media/ha-bambulab/{serial}"
+    
+    async def get_cached_files(self, file_type: str) -> List[Dict[str, Any]]:
+        """Get list of cached files with metadata."""
+        cache_dir = self.get_file_cache_directory()
+        if not cache_dir:
+            return []
+            
+        cache_dir = os.path.join(cache_dir, file_type)
+        if not os.path.exists(cache_dir):
+            return []
+        
+        files = []
+        cache_path = Path(cache_dir)
+        cache_root = Path(self.get_file_cache_directory())  # Get the root cache directory
+        
+        # Define file type patterns
+        type_patterns = {
+            'prints': ['*.3mf'],
+            'gcode': ['*.gcode'],
+            'timelapse': ['*.mp4', '*.avi', '*.mov'],
+        }
+        
+        patterns = type_patterns.get(file_type, ['*'])
+        
+        for pattern in patterns:
+            for file_path in cache_path.rglob(pattern):
+                if file_path.is_file():
+                    # Get file stats
+                    stat = file_path.stat()
+                    
+                    # Determine file type
+                    file_ext = file_path.suffix.lower()
+                    if file_ext == '.3mf':
+                        detected_type = 'prints'
+                    elif file_ext == '.gcode':
+                        detected_type = 'gcode'
+                    elif file_ext in ['.mp4', '.avi', '.mov']:
+                        detected_type = 'timelapse'
+                    else:
+                        detected_type = 'unknown'
+                    
+                    if detected_type != file_type:
+                        continue
+                    
+                    # Look for thumbnail
+                    thumbnail_path = None
+                    if detected_type in ['timelapse', 'prints', 'gcode']:
+                        # Create thumbnail candidates relative to cache root
+                        file_relative_path = file_path.relative_to(cache_root)
+                        thumbnail_candidates = [
+                            cache_root / file_relative_path.parent / (file_path.stem + '.jpg'),
+                            cache_root / file_relative_path.parent / (file_path.stem + '.png'),
+                            cache_root / file_relative_path.parent / (file_path.stem + '.jpeg'),
+                        ]
+                        for thumb_path in thumbnail_candidates:
+                            if thumb_path.exists():
+                                thumbnail_path = thumb_path  # Store the real path
+                                break
+                    
+                    # Format file size
+                    size_bytes = stat.st_size
+                    if size_bytes < 1024:
+                        size_human = f"{size_bytes} B"
+                    elif size_bytes < 1024 * 1024:
+                        size_human = f"{size_bytes / 1024:.1f} KB"
+                    elif size_bytes < 1024 * 1024 * 1024:
+                        size_human = f"{size_bytes / (1024 * 1024):.1f} MB"
+                    else:
+                        size_human = f"{size_bytes / (1024 * 1024 * 1024):.1f} GB"
+
+                    # Build API path relative to cache root (preserves subdirs like 'cache/')
+                    api_path = f"{self.get_model().info.serial}/{file_path.relative_to(cache_root)}"
+                    api_thumbnail_path = None
+                    if thumbnail_path:
+                        api_thumbnail_path = f"{self.get_model().info.serial}/{thumbnail_path.relative_to(cache_root)}"
+
+                    file_info = {
+                        'filename': file_path.name,
+                        'path': api_path,
+                        'type': detected_type,
+                        'size': size_bytes,
+                        'size_human': size_human,
+                        'modified': datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                        'thumbnail_path': api_thumbnail_path
+                    }
+                    
+                    files.append(file_info)
+        
+        # Sort by modification time (newest first)
+        files.sort(key=lambda x: x['modified'], reverse=True)
+        
+        return files
+    
+    async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:
+        """Clear the file cache."""
+        cache_dir = self.get_file_cache_directory()
+        if not cache_dir or not os.path.exists(cache_dir):
+            return {"success": False, "error": "File cache not enabled or directory not found"}
+        
+        try:
+            cache_path = Path(cache_dir)
+            deleted_count = 0
+            
+            if file_type == 'all':
+                # Delete all files in cache directory
+                for file_path in cache_path.rglob('*'):
+                    if file_path.is_file():
+                        file_path.unlink()
+                        deleted_count += 1
+            else:
+                # Delete only specific file type
+                type_patterns = {
+                    'prints': ['*.3mf'],
+                    'gcode': ['*.gcode'],
+                    'timelapse': ['*.mp4', '*.avi', '*.mov'],
+                }
+                
+                patterns = type_patterns.get(file_type, [])
+                for pattern in patterns:
+                    for file_path in cache_path.rglob(pattern):
+                        if file_path.is_file():
+                            file_path.unlink()
+                            deleted_count += 1
+            
+            return {
+                "success": True,
+                "deleted_count": deleted_count,
+                "file_type": file_type
+            }
+            
+        except Exception as e:
+            LOGGER.error(f"Error clearing file cache: {e}")
+            return {"success": False, "error": str(e)}
 
     def check_service_call_payload_for_device(call: ServiceCall):
         LOGGER.debug(call)

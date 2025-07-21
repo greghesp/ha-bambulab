@@ -70,7 +70,8 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_file_cache": "Aktivieren Sie die Zwischenspeicherung von Modelldateien an den Home Assistant"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_file_cache": "Aktivieren Sie die Zwischenspeicherung von Modelldateien an den Home Assistant"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_file_cache": "Aktivieren Sie die Zwischenspeicherung von Modelldateien an den Home Assistant"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_file_cache": "Aktivieren Sie die Zwischenspeicherung von Modelldateien an den Home Assistant"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "ftp": {
         "name": "Modelldaten vom Drucker laden"
-      },
-      "timelapse": {
-        "name": "Neuste Zeitraffer-Aufnahme vom Drucker laden"
-      },
-      "download_gcode_file": {
-        "name": "GCode Datei in HA speichern"
       }
     },
     "update": {

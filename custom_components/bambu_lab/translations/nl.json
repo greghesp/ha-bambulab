@@ -70,7 +70,8 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
             }
           }
         }
@@ -90,7 +91,8 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
             }
           }
         }
@@ -150,7 +152,8 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
             }
           }
         }
@@ -169,7 +172,8 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
             }
           }
         }
@@ -770,12 +774,6 @@
       },
       "prompt_sound": {
         "name": "Toestaan van bevestigingsgeluiden"
-      },
-      "timelapse": {
-        "name": "Nieuwste timelapse vanuit de printer inladen"
-      },
-      "download_gcode_file": {
-        "name": "Sla Gcode -bestand op in HA"
       }
     },
     "update": {
