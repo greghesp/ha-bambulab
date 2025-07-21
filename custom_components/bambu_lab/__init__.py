@@ -80,7 +80,7 @@ class PrintHistoryAPIView(HomeAssistantView):
                             "printer_serial": printer_info.serial,
                             "printer_device_id": device_id,
                             "printer_name": printer_name,
-                            "printer_model": printer_info.device_type,
+                            "printer_model": printer_info.device_type,  # Add printer model
                         })
                         all_files.append(file_info)
                         
@@ -164,7 +164,7 @@ class VideoAPIView(HomeAssistantView):
                             "printer_serial": printer_info.serial,
                             "printer_device_id": device_id,
                             "printer_name": printer_name,
-                            "printer_model": printer_info.device_type,
+                            "printer_model": printer_info.device_type,  # Add printer model
                         })
                         all_videos.append(file_info)
                         
