@@ -19,7 +19,6 @@ TO_REDACT = [
     "access_code",
     "auth_token",
     "email",
-    "rtsp_url",
     "serial",
     "sn",
     "title",
