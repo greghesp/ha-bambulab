@@ -463,7 +463,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             tray = 254
             # Unless a target temperature override is set, try and find the
             # midway temperature of the filament set in the ext spool
-            ext_spool = self.get_model().external_spool
+            ext_spool = self.get_model().external_spool[0]
             if data.get('temperature') is None and not ext_spool.empty:
                 temperature = (int(ext_spool.nozzle_temp_min) + int(ext_spool.nozzle_temp_max)) / 2
         elif not self.get_model().supports_feature(Features.AMS):
