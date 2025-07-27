@@ -2435,7 +2435,7 @@ class ExternalSpool(AMSTray):
         else:
             return True
         return False
-    
+
     @property
     def remain(self) -> int:
         return -1
