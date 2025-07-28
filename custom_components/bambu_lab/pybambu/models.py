@@ -1266,18 +1266,16 @@ class PrintJob:
     def prune_print_history_files(self):
         LOGGER.debug("Pruning print history")
         cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
-        extensions = ['.3mf']
         self._prune_old_files(directory=cache_file_path,
-                              extensions=extensions,
+                              extensions=['.3mf'],
                               keep=self._client._timelapse_cache_count,
                               extra_extensions=['.jpg', '.png', '.slice_info.config', '.gcode'])
 
     def prune_timelapse_files(self):
         LOGGER.debug("Pruning timelapse history")
         cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/timelapse"
-        video_extensions = ['.mp4','.avi']
         self._prune_old_files(directory=cache_file_path,
-                              extensions=video_extensions,
+                              extensions=['.mp4','.avi'],
                               keep=self._client._timelapse_cache_count,
                               extra_extensions=['.jpg', '.png'])
             
@@ -1335,7 +1333,7 @@ class PrintJob:
         # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
-        if self._client.settings.get('timelapse_cache_count', -1) == -1:
+        if self._client._timelapse_cache_count == -1:
             return
         thread = threading.Thread(target=self._async_download_timelapse)
         thread.start()
