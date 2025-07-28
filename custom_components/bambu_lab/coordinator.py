@@ -797,9 +797,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def get_file_cache_directory(self) -> Optional[str]:
         """Get the file cache directory for this printer."""
-        if not self.get_option_enabled(Options.FILE_CACHE):
-            return None
-        
         serial = self.get_model().info.serial
         return f"/config/www/media/ha-bambulab/{serial}"
     

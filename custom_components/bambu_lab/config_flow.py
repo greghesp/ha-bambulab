@@ -375,11 +375,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "local_mqtt": user_input.get('local_mqtt', False),
                         "auth_token": self._bambu_cloud.auth_token,
                         "access_code": user_input['access_code'],
+                        "print_cache_count": max(-1, int(user_input['print_cache_count'])),
+                        "timelapse_cache_count": max(-1, int(user_input['timelapse_cache_count'])),
                         "usage_hours": float(user_input['usage_hours']),
-                        'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
-                        'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
-                        'enable_file_cache': user_input['advanced']['enable_file_cache'],
-                        'force_ip': (user_input['host'] != bambu.get_device().info.ip_address),
+                        "disable_ssl_verify": user_input['advanced']['disable_ssl_verify'],
+                        "enable_firmware_update": user_input['advanced']['enable_firmware_update'],
+                        "force_ip": (user_input['host'] != bambu.get_device().info.ip_address),
                 }
 
                 title = device['dev_id']
@@ -389,24 +390,26 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     options=options
                 )
 
+        default_host = default_host if user_input is None else user_input['host']
+        default_access_code = device['dev_access_code'] if user_input is None else user_input['access_code']
+        default_print_cache_count = "100" if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = "1" if user_input is None else user_input['timelapse_cache_count']
+        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = False if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
         default_enable_firmware_update = False if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
-        default_enable_file_cache = False if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         fields[vol.Optional('local_mqtt', default = False)] = BOOLEAN_SELECTOR
-        default_host = default_host if user_input is None else user_input['host']
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
-        default_access_code = device['dev_access_code'] if user_input is None else user_input['access_code']
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
-        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -452,11 +455,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "local_mqtt": True,
                         "auth_token": "",
                         "access_code": user_input['access_code'],
+                        "print_cache_count": max(-1, int(user_input['print_cache_count'])),
+                        "timelapse_cache_count": max(-1, int(user_input['timelapse_cache_count'])),
                         "usage_hours": float(user_input['usage_hours']),
-                        'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
-                        'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
-                        'enable_file_cache': user_input['advanced']['enable_file_cache'],
-                        'force_ip': (user_input['host'] != bambu.get_device().info.ip_address),
+                        "disable_ssl_verify": user_input['advanced']['disable_ssl_verify'],
+                        "enable_firmware_update": user_input['advanced']['enable_firmware_update'],
+                        "force_ip": (user_input['host'] != bambu.get_device().info.ip_address),
                 }
 
                 title = user_input['serial']
@@ -468,22 +472,27 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             errors['base'] = "cannot_connect_local_all"
 
+        default_host = '' if user_input is None else user_input.get('host', '')
+        default_serial = '' if user_input is None else user_input.get('serial', '')
+        default_access_code = '' if user_input is None else user_input.get('access_code', '')
+        default_print_cache_count = "100" if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = "1" if user_input is None else user_input['timelapse_cache_count']
+        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = False if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
         default_enable_firmware_update = False if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
-        default_enable_file_cache = False if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', '')
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('host', default = '' if user_input is None else user_input.get('host', ''))] = TEXT_SELECTOR
-        fields[vol.Required('serial', default = '' if user_input is None else user_input.get('serial', ''))] = TEXT_SELECTOR
-        fields[vol.Required('access_code', default = '' if user_input is None else user_input.get('access_code', ''))] = TEXT_SELECTOR
-        default_usage_hours = "0" if user_input is None else user_input['usage_hours']
+        fields[vol.Required('host', default = default_host)] = TEXT_SELECTOR
+        fields[vol.Required('serial', default = default_serial)] = TEXT_SELECTOR
+        fields[vol.Required('access_code', default = default_access_code)] = TEXT_SELECTOR
+        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -746,7 +755,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         options["usage_hours"] = float(user_input['usage_hours'])
                         options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                         options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
-                        options["enable_file_cache"] = user_input['advanced']['enable_file_cache']
+                        options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
+                        options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                         options["force_ip"] = user_input['host'] != bambu.get_device().info.ip_address
                         
                         title = device['dev_id']
@@ -772,25 +782,30 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 mode=SelectSelectorMode.LIST)
         )
 
+        if user_input is not None:
+            default_host = user_input['host']
+        default_serial = self.config_entry.data['serial']
+        default_local_mqtt = self.config_entry.options.get('local_mqtt', False)
+        default_access_code = self.config_entry.options.get('access_code', access_code)
+        default_print_cache_count = self.config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = self.config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
+        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
-        default_enable_file_cache = self.config_entry.options.get('enable_file_cache', False) if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', self.config_entry.options.get('enable_file_cache', ''))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        fields[vol.Required('serial', default=self.config_entry.data['serial'])] = printer_selector
-        fields[vol.Optional('local_mqtt', default=self.config_entry.options.get('local_mqtt', False))] = BOOLEAN_SELECTOR
-        if user_input is not None:
-            default_host = user_input['host']
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
-        fields[vol.Optional('access_code', default=self.config_entry.options.get('access_code', access_code))] = TEXT_SELECTOR
-        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        fields[vol.Required('serial', default=default_serial)] = printer_selector
+        fields[vol.Optional('local_mqtt', default=default_local_mqtt)] = BOOLEAN_SELECTOR
+        fields[vol.Optional('access_code', default=default_access_code)] = TEXT_SELECTOR
+        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -816,8 +831,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 'local_mqtt': True,
                 'serial': self.config_entry.data['serial'],
                 'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
-                'enable_firmware_update': user_input['advanced']['enable_firmware_update'],
-                'enable_file_cache': user_input['advanced']['enable_file_cache'],
             }
             bambu = BambuClient(config)
             success = await bambu.try_connection()
@@ -834,10 +847,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["local_mqtt"] = True
                 options["auth_token"] = ''
                 options["access_code"] = user_input['access_code']
+                options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
+                options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
-                options["enable_file_cache"] = user_input['advanced']['enable_file_cache']
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
                 title = self.config_entry.data['serial']
@@ -856,19 +870,21 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
         default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
+        default_print_cache_count = self.config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = self.config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
+        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
-        default_enable_file_cache = self.config_entry.options.get('enable_file_cache', False) if user_input is None else user_input.get('advanced', {}).get('enable_file_cache', self.config_entry.options.get('enable_file_cache', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
-        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Required('enable_file_cache', default=default_enable_file_cache): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
