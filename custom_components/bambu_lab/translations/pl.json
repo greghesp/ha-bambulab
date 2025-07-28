@@ -278,6 +278,12 @@
       },
       "target_nozzle_temperature": {
         "name": "Docelowa temperatura dyszy"
+      },
+      "print_cache_count": {
+        "name": "Buforowany historia drukowania"
+      },
+      "timelapse_cache_count": {
+        "name": "Buforowana liczba timelapse"
       }
     },
     "select": {
