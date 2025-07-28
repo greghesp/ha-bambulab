@@ -278,6 +278,12 @@
       },
       "target_nozzle_temperature": {
         "name": "Nozzle target temperature"
+      },
+      "print_cache_count": {
+        "name": "Cached print history count"
+      },
+      "timelapse_cache_count": {
+        "name": "Cached timelapse count"
       }
     },
     "select": {

@@ -756,6 +756,25 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # Force reload of sensors.
             return await self.hass.config_entries.async_reload(self._entry.entry_id)
 
+    def get_option_value(self, option: Options) -> int:
+        options = dict(self.config_entry.options)
+        default = 0
+        return options.get(OPTION_NAME[option], default)
+        
+    async def set_option_value(self, option: Options, value: int):
+        LOGGER.debug(f"Setting {OPTION_NAME[option]} to {value}")
+        options = dict(self.config_entry.options)
+                
+        options[OPTION_NAME[option]] = value
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            title=self.get_model().info.serial,
+            data=self.config_entry.data,
+            options=options)
+
+        # Force reload of integration to effect cache update.
+        return await self.hass.config_entries.async_reload(self._entry.entry_id)
+
     def _report_authentication_issue(self):
         # issue_id's are permanent - once ignore they will never show again so we need a unique id 
         # per occurrence per integration instance. That does mean we'll fire a new issue every single

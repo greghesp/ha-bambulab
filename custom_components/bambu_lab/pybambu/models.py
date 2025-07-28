@@ -1,4 +1,5 @@
 import ftplib
+import glob
 import json
 import math
 import os
@@ -11,8 +12,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 from dateutil import parser, tz
 from packaging import version
+from pathlib import Path
 from zipfile import ZipFile
-from typing import Union
+from typing import List, Union
 import io
 import tempfile
 import xml.etree.ElementTree as ElementTree
@@ -1122,6 +1124,8 @@ class PrintJob:
                     cache_file_size = os.path.getsize(cache_file_path)
                     if cache_file_size == size:
                         LOGGER.debug(f"File already exists in cache with same size ({size} bytes). Skipping download.")
+                        # Update last edited time to refresh it's cache lifetime.
+                        os.utime(cache_file_path, None)
                         return cache_file_path
                 
                 # Ensure the directory exists
@@ -1261,6 +1265,74 @@ class PrintJob:
 
         return None
     
+    def prune_print_history_files(self):
+        LOGGER.debug("Pruning print history")
+        cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
+        extensions = ['.3mf']
+        self._prune_old_files(directory=cache_file_path,
+                              extensions=extensions,
+                              keep=self._client._timelapse_cache_count,
+                              extra_extensions=['.jpg', '.png', '.slice_info.config', '.gcode'])
+
+    def prune_timelapse_files(self):
+        LOGGER.debug("Pruning timelapse history")
+        cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/timelapse"
+        video_extensions = ['.mp4','.avi']
+        self._prune_old_files(directory=cache_file_path,
+                              extensions=video_extensions,
+                              keep=self._client._timelapse_cache_count,
+                              extra_extensions=['.jpg', '.png'])
+            
+    def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=[]):
+
+        if keep == 0:
+            # Cache pruning is disabled.
+            LOGGER.debug("Skipping as pruning is disabled.")
+            return
+        
+        dir_path = Path(directory)
+        if not dir_path.is_dir():
+            LOGGER.debug(f"{directory} is not a valid directory")
+            return
+        
+        LOGGER.debug(f"{dir_path}")
+        
+        # Get list of files matching the provided list of extensions
+        matching_files = [
+            f for f in dir_path.rglob('*')            
+            if f.is_file() and f.suffix in extensions
+        ]
+        
+        # Sort files by last modification time, newest first
+        matching_files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+
+        # Files to delete: those beyond the 'keep' most recent
+        old_files = matching_files[keep:]
+
+        LOGGER.debug(f"{matching_files} {old_files}")
+        LOGGER.debug(f"Keeping {keep} files. Deleting {len(old_files)} files.")
+        
+        for primary_file in old_files:
+            try:
+                #os.remove(primary_file )
+                LOGGER.debug(f"Deleted: {primary_file }")
+            except Exception as e:
+                LOGGER.error(f"Failed to delete {primary_file}: {e}")
+                continue
+
+            # Get base name without extension
+            base_name = os.path.splitext(primary_file)[0]
+
+            # Delete associated files with alternate extensions
+            for ext in extra_extensions:
+                assoc_file = base_name + ext
+                if os.path.exists(assoc_file):
+                    try:
+                        #os.remove(assoc_file)
+                        LOGGER.debug(f"Deleted associated: {assoc_file}")
+                    except Exception as e:
+                        LOGGER.error(f"Failed to delete associated {assoc_file}: {e}")
+    
     def _download_timelapse(self):
         # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
@@ -1278,10 +1350,12 @@ class PrintJob:
 
         # Open the FTP connection
         ftp = self._client.ftp_connection()
-        file_path = self._find_latest_file(ftp, ['/timelapse'], ['.mp4','.avi'])
+        video_extensions = ['.mp4','.avi']
+        file_path = self._find_latest_file(ftp, ['/timelapse'], video_extensions)
         if file_path is not None:
             # timelapse_path is of form '/timelapse/foo.mp4'
-            local_file_path = os.path.join(f"/config/www/media/ha-bambulab/{self._client._serial}", file_path.lstrip('/'))
+            cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}"
+            local_file_path = os.path.join(cache_file_path, file_path.lstrip('/'))
             directory_path = os.path.dirname(local_file_path)
             os.makedirs(directory_path, exist_ok=True)
 
@@ -1330,6 +1404,9 @@ class PrintJob:
         ftp.quit()
 
         end_time = datetime.now()
+
+        self.prune_timelapse_files()
+
         LOGGER.info(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
 
     def _update_task_data(self):
@@ -1567,6 +1644,8 @@ class PrintJob:
         except Exception as e:
             LOGGER.error(f"Unexpected error parsing model data: {e}")
         
+        self.prune_print_history_files()
+
         # Clean up temporary file if caching is disabled
         if not self._client.settings.get('enable_file_cache', False) and model_file_path and os.path.exists(model_file_path):
             try:
