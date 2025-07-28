@@ -368,7 +368,7 @@ class BambuClient:
         self._local_mqtt = config.get('local_mqtt', False)
         self._serial = config.get('serial', '')
         self._enable_camera = config.get('enable_camera', True)
-        self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
+        self._enable_ftp = config.get('enable_ftp', True)
         if self._serial.startswith('MOCK-'):
             self._enable_ftp = False
             self._enable_camera = False
