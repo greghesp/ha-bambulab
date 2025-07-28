@@ -62,6 +62,8 @@
           "local_mqtt": "Connect locally to the printer:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
+          "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
@@ -70,8 +72,7 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -83,6 +84,8 @@
           "serial": "Serial Number:",
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
+          "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
@@ -91,8 +94,7 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -144,6 +146,8 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "local_mqtt": "Connect directly to printer instead of by Bambu Lab cloud:",
+          "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
@@ -152,8 +156,7 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -164,6 +167,8 @@
         "data": {
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
+          "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
         "sections": {
@@ -172,8 +177,7 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_file_cache": "Enable caching of model files to home assistant"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }

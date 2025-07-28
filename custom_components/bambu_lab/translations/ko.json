@@ -62,7 +62,9 @@
           "local_mqtt": "로컬에서 프린터에 연결:",
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "usage_hours": "현재 사용 시간 (선택 사항):"
+          "usage_hours": "현재 사용 시간 (선택 사항):",
+          "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_file_cache": "모델 파일을 홈 비서로 캐싱 할 수 있습니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "시리얼 번호:",
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "usage_hours": "현재 사용 시간 (선택 사항):"
+          "usage_hours": "현재 사용 시간 (선택 사항):",
+          "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_file_cache": "모델 파일을 홈 비서로 캐싱 할 수 있습니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
           "local_mqtt": "Bambu Lab 클라우드 대신 프린터에 직접 연결:",
-          "usage_hours": "현재 사용 시간 (선택 사항):"
+          "usage_hours": "현재 사용 시간 (선택 사항):",
+          "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_file_cache": "모델 파일을 홈 비서로 캐싱 할 수 있습니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "usage_hours": "현재 사용 시간 (선택 사항):"
+          "usage_hours": "현재 사용 시간 (선택 사항):",
+          "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_file_cache": "모델 파일을 홈 비서로 캐싱 할 수 있습니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }

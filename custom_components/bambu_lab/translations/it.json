@@ -62,7 +62,9 @@
           "local_mqtt": "Connettiti direttamente alla stampante invece che tramite Bambu Cloud:",
           "host": "Indirizzo IP locale della stampante:",
           "access_code": "Codice d'accesso",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
+          "print_cache_count": "Numero di modelli da cache per Home Assistant (-1 per illimitato):",
+          "timelapse_cache_count": "Numero di video di timelapse per la cache per Home Assistant (-1 per illimitato):"
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "Numero Seriale",
           "host": "Indirizzo IP della stampante:",
           "access_code": "Codice d'accesso",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
+          "print_cache_count": "Numero di modelli da cache per Home Assistant (-1 per illimitato):",
+          "timelapse_cache_count": "Numero di video di timelapse per la cache per Home Assistant (-1 per illimitato):"
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "Indirizzo IP della stampante:",
           "access_code": "Codice di accesso:",
           "local_mqtt": "Connettiti direttamente alla stampante anziché al cloud Bambu Lab:",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
+          "print_cache_count": "Numero di modelli da cache per Home Assistant (-1 per illimitato):",
+          "timelapse_cache_count": "Numero di video di timelapse per la cache per Home Assistant (-1 per illimitato):"
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "Queste opzioni avanzate sono funzionalità precoci o rischiose. Leggi la documentazione e usali a proprio rischio.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "Indirizzo IP della stampante:",
           "access_code": "Codice d'accesso",
-          "usage_hours": "Orari di utilizzo attuali (facoltativo):"
+          "usage_hours": "Orari di utilizzo attuali (facoltativo):",
+          "print_cache_count": "Numero di modelli da cache per Home Assistant (-1 per illimitato):",
+          "timelapse_cache_count": "Numero di video di timelapse per la cache per Home Assistant (-1 per illimitato):"
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "Queste opzioni avanzate sono funzionalità precoci o rischiose. Leggi la documentazione e usali a proprio rischio.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_file_cache": "Abilita la memorizzazione nella cache dei file del modello ad Assistente Home"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }

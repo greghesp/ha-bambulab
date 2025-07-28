@@ -62,7 +62,9 @@
           "local_mqtt": "Lokaal verbinden met de printer:",
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
+          "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
+          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):"
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "Serienummer:",
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
+          "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
+          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):"
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "Local Printer IP Address:",
           "access_code": "Toegangscode:",
           "local_mqtt": "Lokaal verbinden met de printer in plaats van via Bambu Lab Cloud:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
+          "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
+          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):"
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
-          "usage_hours": "Huidige gebruiksduur in uren (optioneel):"
+          "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
+          "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
+          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):"
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_file_cache": "Schakel caching van modelbestanden in voor Home Assistant"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }

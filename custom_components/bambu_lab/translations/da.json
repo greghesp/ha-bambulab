@@ -62,7 +62,9 @@
           "local_mqtt": "Forbind lokalt til printeren:",
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):",
+          "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "Serienummer:",
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):",
+          "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
           "local_mqtt": "Tilslut direkte til printeren i stedet for via Bambu Lab-skyen:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):",
+          "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen, og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "usage_hours": "Aktuelle brugstimer (valgfrit):"
+          "usage_hours": "Aktuelle brugstimer (valgfrit):",
+          "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_file_cache": "Aktivér cache af modelfiler til hjemmeassistent"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }

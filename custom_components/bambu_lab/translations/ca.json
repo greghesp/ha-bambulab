@@ -62,7 +62,9 @@
           "local_mqtt": "Connectar localmente a la impresora:",
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
+          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):"
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "Número de Serie:",
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
+          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):"
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
           "local_mqtt": "Connecteu-vos directament a la impressora en lloc del núvol de Bambu Lab:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
+          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):"
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "Adreça IP Local de la Impressora:",
           "access_code": "Codi d'accés:",
-          "usage_hours": "Quantitat d'hores d'ús (opcional):"
+          "usage_hours": "Quantitat d'hores d'ús (opcional):",
+          "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
+          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):"
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_file_cache": "Habiliteu la memòria cau de fitxers de models a l'assistent de casa"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }

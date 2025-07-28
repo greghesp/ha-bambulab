@@ -1113,20 +1113,18 @@ class PrintJob:
             LOGGER.debug(f"File exists. Size: {size} bytes.")
             
             # Determine where to save the file
-            if self._client.settings.get('enable_file_cache', False):
-                # Save directly to cache with preserved sub-path structure
-                cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
-                relative_path = file_path.lstrip('/')
-                cache_file_path = os.path.join(cache_dir, relative_path)
-                
-                # Check if file already exists in cache with same size
-                if os.path.exists(cache_file_path):
-                    cache_file_size = os.path.getsize(cache_file_path)
-                    if cache_file_size == size:
-                        LOGGER.debug(f"File already exists in cache with same size ({size} bytes). Skipping download.")
-                        # Update last edited time to refresh it's cache lifetime.
-                        os.utime(cache_file_path, None)
-                        return cache_file_path
+            cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
+            relative_path = file_path.lstrip('/')
+            cache_file_path = os.path.join(cache_dir, relative_path)
+            
+            # Check if file already exists in cache with same size
+            if os.path.exists(cache_file_path):
+                cache_file_size = os.path.getsize(cache_file_path)
+                if cache_file_size == size:
+                    LOGGER.debug(f"File already exists in cache with same size ({size} bytes). Skipping download.")
+                    # Update last edited time to refresh it's cache lifetime.
+                    os.utime(cache_file_path, None)
+                    return cache_file_path
                 
                 # Ensure the directory exists
                 os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
@@ -1285,11 +1283,11 @@ class PrintJob:
             
     def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=[]):
 
-        if keep == 0:
+        if keep == -1:
             # Cache pruning is disabled.
             LOGGER.debug("Skipping as pruning is disabled.")
             return
-        
+
         dir_path = Path(directory)
         if not dir_path.is_dir():
             LOGGER.debug(f"{directory} is not a valid directory")
@@ -1337,7 +1335,7 @@ class PrintJob:
         # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
-        if not self._client.settings.get('enable_file_cache', False):
+        if self._client.settings.get('timelapse_cache_count', -1) == -1:
             return
         thread = threading.Thread(target=self._async_download_timelapse)
         thread.start()
@@ -1542,29 +1540,27 @@ class PrintJob:
                         self._client._device.cover_image.set_image(archive.read(f"Metadata/plate_{plate_number}.png"))
                         LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
 
-                        if self._client.settings.get('enable_file_cache', False):
-                            # Save the cover image to the cache
-                            try:
-                                # Save the cover image directly to the cache
-                                cover_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.png'
-                                cover_path = os.path.join(model_dir, cover_filename)
-                                with archive.open(f"Metadata/plate_{plate_number}.png") as cover_entry, open(cover_path, "wb") as target_path:
-                                    shutil.copyfileobj(cover_entry, target_path)
-                                LOGGER.debug(f"Cover image saved to: {cover_path}")
-                            except Exception as e:
-                                LOGGER.error(f"Failed to save cover image: {e}")
+                        # Save the cover image to the cache
+                        try:
+                            # Save the cover image directly to the cache
+                            cover_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.png'
+                            cover_path = os.path.join(model_dir, cover_filename)
+                            with archive.open(f"Metadata/plate_{plate_number}.png") as cover_entry, open(cover_path, "wb") as target_path:
+                                shutil.copyfileobj(cover_entry, target_path)
+                            LOGGER.debug(f"Cover image saved to: {cover_path}")
+                        except Exception as e:
+                            LOGGER.error(f"Failed to save cover image: {e}")
 
-                        if self._client.settings.get('enable_file_cache', False):
-                            try:
-                                # Save the gcode file to the cache
-                                gcode_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.gcode'
-                                gcode_path = os.path.join(model_dir, gcode_filename)
-                                with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(gcode_path, "wb") as target_path:
-                                    shutil.copyfileobj(gcode_entry, target_path)
-                                    self.gcode_file_downloaded = gcode_filename
-                            except Exception as e:
-                                self.gcode_file_downloaded = "ERROR"
-                                LOGGER.error(f"Error while extracting gcode zip entry to target path. {repr(e)}")
+                        try:
+                            # Save the gcode file to the cache
+                            gcode_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.gcode'
+                            gcode_path = os.path.join(model_dir, gcode_filename)
+                            with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(gcode_path, "wb") as target_path:
+                                shutil.copyfileobj(gcode_entry, target_path)
+                                self.gcode_file_downloaded = gcode_filename
+                        except Exception as e:
+                            self.gcode_file_downloaded = "ERROR"
+                            LOGGER.error(f"Error while extracting gcode zip entry to target path. {repr(e)}")
                         
                         # And extract the plate type from the plate json.
                         self.print_bed_type = json.loads(archive.read(f"Metadata/plate_{plate_number}.json")).get('bed_type')
@@ -1626,16 +1622,15 @@ class PrintJob:
                         LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
 
                 # Save the slice_info.config file only if file cache is enabled
-                if self._client.settings.get('enable_file_cache', False):
-                    try:
-                        slice_info_bytes = archive.read('Metadata/slice_info.config')
-                        # Save the slice_info.config in the same directory as the model file
-                        slice_info_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.slice_info.config'
-                        slice_info_path = os.path.join(model_dir, slice_info_filename)
-                        with open(slice_info_path, "wb") as f:
-                            f.write(slice_info_bytes)
-                    except Exception as e:
-                        LOGGER.error(f"Failed to save slice_info.config: {e}")
+                try:
+                    slice_info_bytes = archive.read('Metadata/slice_info.config')
+                    # Save the slice_info.config in the same directory as the model file
+                    slice_info_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.slice_info.config'
+                    slice_info_path = os.path.join(model_dir, slice_info_filename)
+                    with open(slice_info_path, "wb") as f:
+                        f.write(slice_info_bytes)
+                except Exception as e:
+                    LOGGER.error(f"Failed to save slice_info.config: {e}")
 
             archive.close()
 
@@ -1646,14 +1641,6 @@ class PrintJob:
         
         self.prune_print_history_files()
 
-        # Clean up temporary file if caching is disabled
-        if not self._client.settings.get('enable_file_cache', False) and model_file_path and os.path.exists(model_file_path):
-            try:
-                os.unlink(model_file_path)
-                LOGGER.debug(f"Deleted temporary file: {model_file_path}")
-            except Exception as e:
-                LOGGER.error(f"Failed to delete temporary file {model_file_path}: {e}")
-            
         return result
 
     # The task list is of the following form with a 'hits' array with typical 20 entries.

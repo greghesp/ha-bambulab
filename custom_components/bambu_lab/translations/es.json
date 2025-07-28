@@ -62,7 +62,9 @@
           "local_mqtt": "Conectar localmente a la impresora:",
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
-          "usage_hours": "Cantidad de horas de uso (opcional):"
+          "usage_hours": "Cantidad de horas de uso (opcional):",
+          "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "Estas opciones solo son necesarias si tiene una configuración no estándar.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
-              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "Número de Serie:",
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
-          "usage_hours": "Cantidad de horas de uso (opcional):"
+          "usage_hours": "Cantidad de horas de uso (opcional):",
+          "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "Estas opciones solo son necesarias si tiene una configuración no estándar.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
-              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "Dirección IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
           "local_mqtt": "Conéctese directamente a la impresora en lugar de hacerlo a través de la nube de Bambu Lab:",
-          "usage_hours": "Cantidad de horas de uso (opcional):"
+          "usage_hours": "Cantidad de horas de uso (opcional):",
+          "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "Estas opciones avanzadas son la funcionalidad temprana o arriesgada. Lea la documentación y úsela bajo su propio riesgo.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
-              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
-          "usage_hours": "Cantidad de horas de uso (opcional):"
+          "usage_hours": "Cantidad de horas de uso (opcional):",
+          "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "Estas opciones avanzadas son la funcionalidad temprana o arriesgada. Lea la documentación y úsela bajo su propio riesgo.",
             "data": {
               "disable_ssl_verify": "Desactivar la verificación SSL",
-              "enable_firmware_update": "Habilitar soporte de actualización de firmware",
-              "enable_file_cache": "Habilitar el almacenamiento en caché de los archivos de modelos al asistente de inicio"
+              "enable_firmware_update": "Habilitar soporte de actualización de firmware"
             }
           }
         }

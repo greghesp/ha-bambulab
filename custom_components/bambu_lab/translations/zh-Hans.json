@@ -62,7 +62,9 @@
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Lab 云：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "usage_hours": "当前使用时间（可选）："
+          "usage_hours": "当前使用时间（可选）：",
+          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
+          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_file_cache": "启用模型文件的缓存到家庭助理"
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "序号：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "usage_hours": "当前使用时间（可选）："
+          "usage_hours": "当前使用时间（可选）：",
+          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
+          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_file_cache": "启用模型文件的缓存到家庭助理"
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
           "local_mqtt": "直接连接到打印机，而不是通过 Bambu Lab 云：",
-          "usage_hours": "当前使用时间（可选）："
+          "usage_hours": "当前使用时间（可选）：",
+          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
+          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "这些高级选项是早期或风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_file_cache": "启用模型文件的缓存到家庭助理"
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "usage_hours": "当前使用时间（可选）："
+          "usage_hours": "当前使用时间（可选）：",
+          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
+          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "这些高级选项是早期或有风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_file_cache": "启用模型文件的缓存到家庭助理"
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }

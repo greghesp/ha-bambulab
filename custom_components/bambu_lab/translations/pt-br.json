@@ -62,7 +62,9 @@
           "local_mqtt": "Conectar localmente à impressora:",
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -70,8 +72,7 @@
             "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware",
-              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
             }
           }
         }
@@ -83,7 +84,9 @@
           "serial": "Número de Série:",
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -91,8 +94,7 @@
             "description": "Essas opções são necessárias apenas se você tiver uma configuração fora do padrão.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware",
-              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
             }
           }
         }
@@ -144,7 +146,9 @@
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
           "local_mqtt": "Conecte-se diretamente à impressora em vez da nuvem do Bambu Lab:",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -152,8 +156,7 @@
             "description": "Essas opções avançadas são funcionalidades precoces ou arriscadas. Leia a documentação e use -os por sua conta e risco.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware",
-              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
             }
           }
         }
@@ -164,7 +167,9 @@
         "data": {
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
         },
         "sections": {
           "advanced": {
@@ -172,8 +177,7 @@
             "description": "Essas opções avançadas são funcionalidades precoces ou arriscadas. Leia a documentação e use -os por sua conta e risco.",
             "data": {
               "disable_ssl_verify": "Desative a verificação SSL",
-              "enable_firmware_update": "Ativar suporte de atualização de firmware",
-              "enable_file_cache": "Ativar armazenamento em cache de arquivos de modelo para assistente doméstico"
+              "enable_firmware_update": "Ativar suporte de atualização de firmware"
             }
           }
         }
