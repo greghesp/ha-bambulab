@@ -70,7 +70,8 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_min_value=0,
         native_step=1,
         value_fn=lambda self: self.coordinator.get_option_value(Options.PRINT_CACHE_COUNT),
-        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.PRINT_CACHE_COUNT, value)
+        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.PRINT_CACHE_COUNT, value),
+        exists_fn=lambda self: self.coordinator.get_option_enabled(Options.FILE_CACHE),
     ),
     BambuLabNumberEntityDescription(
         key="timelapse_cache_count",
@@ -80,7 +81,8 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_min_value=0,
         native_step=1,
         value_fn=lambda self: self.coordinator.get_option_value(Options.TIMELAPSE_CACHE_COUNT),
-        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.TIMELAPSE_CACHE_COUNT, value)
+        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.TIMELAPSE_CACHE_COUNT, value),
+        exists_fn=lambda self: self.coordinator.get_option_enabled(Options.FILE_CACHE),
     ),
 )
 
