@@ -49,6 +49,7 @@ class PrintHistoryAPIView(HomeAssistantView):
             serial_filter = request.query.get('serial')  # Optional filter by serial
             
             all_files = []
+            total_size_bytes = 0
             
             # Iterate through all coordinators
             for entry_id in self.hass.data[DOMAIN]:
@@ -76,6 +77,7 @@ class PrintHistoryAPIView(HomeAssistantView):
                     
                     # Add printer information to each file entry
                     for file_info in files:
+                        total_size_bytes = total_size_bytes + file_info['size']
                         file_info.update({
                             "printer_serial": printer_info.serial,
                             "printer_device_id": device_id,
@@ -95,6 +97,7 @@ class PrintHistoryAPIView(HomeAssistantView):
             response_data = {
                 "files": all_files,
                 "total_files": len(all_files),
+                "total_size_bytes": total_size_bytes,
                 "total_printers": len(set(f["printer_serial"] for f in all_files)),
                 "timestamp": datetime.now().isoformat()
             }
@@ -133,7 +136,8 @@ class VideoAPIView(HomeAssistantView):
             serial_filter = request.query.get('serial')  # Optional filter by serial
             
             all_videos = []
-            
+            total_size_bytes = 0
+           
             # Iterate through all coordinators
             for entry_id in self.hass.data[DOMAIN]:
                 if entry_id == "service_call_future":
@@ -160,6 +164,7 @@ class VideoAPIView(HomeAssistantView):
                     
                     # Add printer information to each video entry
                     for file_info in files:
+                        total_size_bytes = total_size_bytes + file_info['size']
                         file_info.update({
                             "printer_serial": printer_info.serial,
                             "printer_device_id": device_id,
@@ -179,6 +184,7 @@ class VideoAPIView(HomeAssistantView):
             response_data = {
                 "videos": all_videos,
                 "total_videos": len(all_videos),
+                "total_size_bytes": total_size_bytes,
                 "total_printers": len(set(v["printer_serial"] for v in all_videos)),
                 "timestamp": datetime.now().isoformat()
             }

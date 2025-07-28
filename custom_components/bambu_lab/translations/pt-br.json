@@ -278,6 +278,12 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura alvo do bico"
+      },
+      "print_cache_count": {
+        "name": "Contagem de histórico de impressão em cache"
+      },
+      "timelapse_cache_count": {
+        "name": "Contagem de timelaps em cache"
       }
     },
     "select": {

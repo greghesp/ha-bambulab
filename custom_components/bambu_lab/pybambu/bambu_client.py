@@ -373,6 +373,8 @@ class BambuClient:
         self._username = config.get('username', '')
         self._enable_camera = config.get('enable_camera', True)
         self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
+        self._print_cache_count = config.get('print_cache_count', 0)
+        self._timelapse_cache_count = config.get('timelapse_cache_count', 0)
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
 
         self._connected = False
@@ -394,6 +396,9 @@ class BambuClient:
         else:
             language = language[:2]
         self._user_language = language
+
+        self._device.print_job.prune_print_history_files()
+        self._device.print_job.prune_timelapse_files()
 
     @property
     def settings(self):

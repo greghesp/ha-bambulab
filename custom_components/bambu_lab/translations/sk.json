@@ -278,6 +278,12 @@
       },
       "target_nozzle_temperature": {
         "name": "Cieľová teplota trysky"
+      },
+      "print_cache_count": {
+        "name": "Počet histórie tlače v cache"
+      },
+      "timelapse_cache_count": {
+        "name": "Počet časových čias"
       }
     },
     "select": {

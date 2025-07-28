@@ -278,6 +278,12 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura objetivo de la boquilla"
+      },
+      "print_cache_count": {
+        "name": "Recuento de historial de impresión en caché"
+      },
+      "timelapse_cache_count": {
+        "name": "Recuento de elapso de tiempo almacenado en caché"
       }
     },
     "select": {

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 
 from homeassistant.components.number import (
     NumberEntity,
@@ -10,22 +10,28 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, LOGGER
+from .const import (
+    DOMAIN,
+    LOGGER,
+    Options,
+)
+
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
 from .pybambu.const import Features, TempEnum
 
 
 @dataclass
-class BambuLabTemperatureEntityDescriptionMixin:
+class BambuLabNumberEntityDescriptionMixin:
     """Mixin for required keys."""
     value_fn: Callable[..., any]
-    set_value_fn: Callable[..., None]
-
+    set_value_fn: Callable[..., Awaitable[None]]
 
 @dataclass
-class BambuLabNumberEntityDescription(NumberEntityDescription, BambuLabTemperatureEntityDescriptionMixin):
-    """Editable (number) temperature entity description for Bambu Lab."""
+class BambuLabNumberEntityDescription(NumberEntityDescription, BambuLabNumberEntityDescriptionMixin):
+    """Sensor entity description for Bambu Lab."""
+    available_fn: Callable[..., bool] = lambda _: True
+    exists_fn: Callable[..., bool] = lambda _: True
 
 
 NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
@@ -39,8 +45,9 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=320, # TODO: Determine by actual printer model
         native_step=1,
-        value_fn=lambda device: device.temperature.active_nozzle_target_temperature,
-        set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.NOZZLE, value)
+        value_fn=lambda self: self.coordinator.get_model().temperature.active_nozzle_target_temperature,
+        set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.NOZZLE, value),
+        available_fn=lambda self: self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE) and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED),
     ),
     BambuLabNumberEntityDescription(
         key="target_bed_temperature",
@@ -51,8 +58,31 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_min_value=0,
         native_max_value=120,  # TODO: Determine by actual printer model and voltage
         native_step=1,
-        value_fn=lambda device: device.temperature.target_bed_temp,
-        set_value_fn=lambda device, value: device.temperature.set_target_temp(TempEnum.HEATBED, value)
+        value_fn=lambda self: self.coordinator.get_model().temperature.target_bed_temp,
+        set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.HEATBED, value),
+        available_fn=lambda self: self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE) and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED),
+    ),
+    BambuLabNumberEntityDescription(
+        key="print_cache_count",
+        translation_key="print_cache_count",
+        icon="mdi:file-image-outline",
+        mode=NumberMode.BOX,
+        native_min_value=0,
+        native_step=1,
+        value_fn=lambda self: self.coordinator.get_option_value(Options.PRINT_CACHE_COUNT),
+        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.PRINT_CACHE_COUNT, value),
+        exists_fn=lambda self: self.coordinator.get_option_enabled(Options.FILE_CACHE),
+    ),
+    BambuLabNumberEntityDescription(
+        key="timelapse_cache_count",
+        translation_key="timelapse_cache_count",
+        icon="mdi:file-video-outline",
+        mode=NumberMode.BOX,
+        native_min_value=0,
+        native_step=1,
+        value_fn=lambda self: self.coordinator.get_option_value(Options.TIMELAPSE_CACHE_COUNT),
+        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.TIMELAPSE_CACHE_COUNT, value),
+        exists_fn=lambda self: self.coordinator.get_option_enabled(Options.FILE_CACHE),
     ),
 )
 
@@ -82,24 +112,17 @@ class BambuLabNumber(BambuLabEntity, NumberEntity):
             config_entry: ConfigEntry
     ) -> None:
         """Initialize the number."""
+        self.coordinator = coordinator
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
-        self._attr_native_value = description.value_fn(coordinator.get_model())
+        self._attr_native_value = description.value_fn(self)
 
         super().__init__(coordinator=coordinator)
 
     @property
-    def available(self) -> bool:
-        """Is the number available"""
-        available = self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE)
-        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
-        return available
-    
-    @property
     def native_value(self) -> float | None:
         """Return the value reported by the number."""
-        return self.entity_description.value_fn(self.coordinator.get_model())
+        return self.entity_description.value_fn(self)
 
-    def set_native_value(self, value: float) -> None:
-        """Update the current value."""
-        self.entity_description.set_value_fn(self.coordinator.get_model(), round(value))
+    async def async_set_native_value(self, value: float) -> None:
+        await self.entity_description.set_value_fn(self, round(value))

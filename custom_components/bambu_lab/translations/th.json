@@ -278,6 +278,12 @@
       },
       "target_nozzle_temperature": {
         "name": "อุณหภูมิเป้าหมายของหัวฉีด"
+      },
+      "print_cache_count": {
+        "name": "จำนวนประวัติพิมพ์แคช"
+      },
+      "timelapse_cache_count": {
+        "name": "จำนวนเวลาที่แคช"
       }
     },
     "select": {
