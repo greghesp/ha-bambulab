@@ -367,12 +367,14 @@ class BambuClient:
         self._device_type = config.get('device_type', 'unknown').upper()
         self._local_mqtt = config.get('local_mqtt', False)
         self._serial = config.get('serial', '')
+        self._enable_camera = config.get('enable_camera', True)
+        self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
         if self._serial.startswith('MOCK-'):
+            self._enable_ftp = False
+            self._enable_camera = False
             self._mock = True
         self._usage_hours = config.get('usage_hours', 0)
         self._username = config.get('username', '')
-        self._enable_camera = config.get('enable_camera', True)
-        self._enable_ftp = config.get('enable_ftp', self._local_mqtt)
         self._print_cache_count = max(-1, int(config.get('print_cache_count', 1)))
         if self._print_cache_count == 0:
             # We always cache at least one model as we use that to avoid redownloading from ftp on startup.

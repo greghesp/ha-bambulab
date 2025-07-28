@@ -1264,6 +1264,8 @@ class PrintJob:
         return None
     
     def prune_print_history_files(self):
+        if self._client._test_mode:
+            return
         LOGGER.debug("Pruning print history")
         cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
         self._prune_old_files(directory=cache_file_path,
@@ -1272,6 +1274,8 @@ class PrintJob:
                               extra_extensions=['.jpg', '.png', '.slice_info.config', '.gcode'])
 
     def prune_timelapse_files(self):
+        if self._client._test_mode:
+            return
         LOGGER.debug("Pruning timelapse history")
         cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/timelapse"
         self._prune_old_files(directory=cache_file_path,
@@ -1333,7 +1337,9 @@ class PrintJob:
         # If we are running in connection test mode, skip updating the last print task data.
         if self._client._test_mode:
             return
-        if self._client._timelapse_cache_count == -1:
+        if not self._client.ftp_enabled:
+            return
+        if self._client._timelapse_cache_count == 0:
             return
         thread = threading.Thread(target=self._async_download_timelapse)
         thread.start()
@@ -1418,15 +1424,14 @@ class PrintJob:
             self._download_task_data_from_cloud()
 
     def _download_task_data_from_printer(self):
-        if not self._client._mock:
-            if self._ftpThread is None:
-                # Only start a new thread if there
-                LOGGER.debug("Starting FTP thread.")
-                self._ftpThread = threading.Thread(target=self._async_download_task_data_from_printer)
-                self._ftpThread.start()
-            else:
-                LOGGER.debug("FTP thread already running.")
-                self._ftpRunAgain = True
+        if self._ftpThread is None:
+            # Only start a new thread if there
+            LOGGER.debug("Starting FTP thread.")
+            self._ftpThread = threading.Thread(target=self._async_download_task_data_from_printer)
+            self._ftpThread.start()
+        else:
+            LOGGER.debug("FTP thread already running.")
+            self._ftpRunAgain = True
 
     def _clear_model_data(self):
         LOGGER.debug("Clearing model data")
