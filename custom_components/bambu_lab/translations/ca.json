@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura objectiu del broquet"
-      },
-      "print_cache_count": {
-        "name": "Compte d’historial d’impressió en memòria cau"
-      },
-      "timelapse_cache_count": {
-        "name": "Recompte de timelapse en memòria cau"
       }
     },
     "select": {

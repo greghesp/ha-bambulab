@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "Doeltemperatuur nozzle"
-      },
-      "print_cache_count": {
-        "name": "Geschiedenis van de cache afdrukken"
-      },
-      "timelapse_cache_count": {
-        "name": "Timelaps cached cache"
       }
     },
     "select": {

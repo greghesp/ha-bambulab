@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "Måletemperatur for dyse"
-      },
-      "print_cache_count": {
-        "name": "Cache Print History Count"
-      },
-      "timelapse_cache_count": {
-        "name": "Cache -tællingstælling"
       }
     },
     "select": {

@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "Zieltemperatur der Düse"
-      },
-      "print_cache_count": {
-        "name": "Zwischengespeicherte Druckgeschichte zählen"
-      },
-      "timelapse_cache_count": {
-        "name": "Zwischengespeicherte Zeitrafferenzahl"
       }
     },
     "select": {

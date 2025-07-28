@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "喷嘴目标温度"
-      },
-      "print_cache_count": {
-        "name": "缓存的印刷历史记录数量"
-      },
-      "timelapse_cache_count": {
-        "name": "缓存的及时数量"
       }
     },
     "select": {

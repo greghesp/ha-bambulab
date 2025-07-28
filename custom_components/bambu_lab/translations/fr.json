@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "Température cible de la buse"
-      },
-      "print_cache_count": {
-        "name": "Compte d'historique des imprimés mis en cache"
-      },
-      "timelapse_cache_count": {
-        "name": "Comptage de timelapse mis en cache"
       }
     },
     "select": {

@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura Target Ugello"
-      },
-      "print_cache_count": {
-        "name": "Conteggio della storia della stampa cache"
-      },
-      "timelapse_cache_count": {
-        "name": "Conteggio cache di timelapse"
       }
     },
     "select": {

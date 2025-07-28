@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "Στόχος θερμοκρασίας ακροφυσίου"
-      },
-      "print_cache_count": {
-        "name": "Αριθμός ιστορικού αποθηκών εκτύπωσης"
-      },
-      "timelapse_cache_count": {
-        "name": "Μέτρηση αποθηκευμένων χρονοδιαγραμμάτων"
       }
     },
     "select": {

@@ -62,28 +62,6 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.HEATBED, value),
         available_fn=lambda self: self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE) and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED),
     ),
-    BambuLabNumberEntityDescription(
-        key="print_cache_count",
-        translation_key="print_cache_count",
-        icon="mdi:file-image-outline",
-        mode=NumberMode.BOX,
-        native_min_value=0,
-        native_step=1,
-        value_fn=lambda self: self.coordinator.get_option_value(Options.PRINT_CACHE_COUNT),
-        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.PRINT_CACHE_COUNT, value),
-        exists_fn=lambda self: self.coordinator.get_option_enabled(Options.FILE_CACHE),
-    ),
-    BambuLabNumberEntityDescription(
-        key="timelapse_cache_count",
-        translation_key="timelapse_cache_count",
-        icon="mdi:file-video-outline",
-        mode=NumberMode.BOX,
-        native_min_value=0,
-        native_step=1,
-        value_fn=lambda self: self.coordinator.get_option_value(Options.TIMELAPSE_CACHE_COUNT),
-        set_value_fn=lambda self, value: self.coordinator.set_option_value(Options.TIMELAPSE_CACHE_COUNT, value),
-        exists_fn=lambda self: self.coordinator.get_option_enabled(Options.FILE_CACHE),
-    ),
 )
 
 

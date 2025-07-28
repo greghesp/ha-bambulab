@@ -282,12 +282,6 @@
       },
       "target_nozzle_temperature": {
         "name": "노즐 목표 온도"
-      },
-      "print_cache_count": {
-        "name": "캐시 된 인쇄 히스토리 카운트"
-      },
-      "timelapse_cache_count": {
-        "name": "캐시 된 타임 랩스 수"
       }
     },
     "select": {
