@@ -68,14 +68,14 @@ body:
     id: diagnostic
     attributes:
       label: Diagnostic Output
-      placeholder: Paste content here or drag and drop log files here.
+      placeholder: Paste content ordrag and drop diagnostic log files here.
       description: |
         Add your Diagnostics file download. To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics
   - type: textarea
     id: logs
     attributes:
       label: Log Extracts
-      placeholder: Paste content here or drag and drop log files here.
+      placeholder: Paste content or drag and drop log files here.
   - type: textarea
     id: other
     attributes:
