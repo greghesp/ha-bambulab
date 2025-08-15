@@ -8,7 +8,6 @@ body:
     id: ha-version
     attributes:
       label: Home Assistant Version
-      description: The version of Home Assistant
       placeholder: 2024.11.1
     validations:
       required: true
@@ -16,7 +15,6 @@ body:
     id: habl-version
     attributes:
       label: Bambu Lab Integration Version
-      description: The version of this integration you're using
       placeholder: v2.0.33
     validations:
       required: true
@@ -70,19 +68,15 @@ body:
     id: diagnostic
     attributes:
       label: Diagnostic Output
-      placeholder: Go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics and drag it here
+      placeholder: Paste content here or drag and drop log files to the other information field.
       description: |
-        Add your Diagnostics file download.  To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics
-  
-        Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+        Add your Diagnostics file download. To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics
       render: shell
-    validations:
-      required: true
   - type: textarea
     id: logs
     attributes:
       label: Log Extracts
-      description: Any log information?
+      placeholder: Paste content here or drag and drop log files to the other information field.
       render: shell
   - type: textarea
     id: other
