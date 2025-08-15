@@ -13,7 +13,7 @@
   },
   "config": {
     "abort": {
-      "already_configured": "Urządzenie jest już skonfigurowane",
+      "already_configured": "To urządzenie jest już dodane",
       "no_printers": "Nie znaleziono nieskonfigurowanych drukarek na koncie.",
       "cloudflare": "Cloudflare zablokował próbę połączenia.",
       "curl_unavailable": "Biblioteka curl_cffi jest niedostępna."
@@ -34,7 +34,7 @@
       "user": {
         "description": "Konfiguracja przez chmurę Bambu Lab jest najprostsza i najszybsza. Konta w mediach społecznościowych bez hasła nie są obsługiwane.\n\rMożesz również użyć danych logowania z innych drukarek. Jeśli zostaną znalezione, będą wyświetlone według adresu e-mail.\n\rMożna też podłączyć się ręcznie, podając dane lokalnego połączenia drukarki. Jest to wymagane w trybie Lan.",
         "data": {
-          "printer_mode": "Tryb konfiguracji drukarki:"
+          "printer_mode": "Sposób konfiguracji drukarki:"
         }
       },
       "Bambu": {
@@ -63,8 +63,8 @@
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
-          "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):"
+          "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
+          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):"
         },
         "sections": {
           "advanced": {
@@ -85,8 +85,8 @@
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
-          "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):"
+          "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
+          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):"
         },
         "sections": {
           "advanced": {
@@ -187,7 +187,7 @@
   "entity": {
     "binary_sensor": {
       "door_open": {
-        "name": "Drzwi komory"
+        "name": "Drzwi obudowy"
       },
       "timelapse": {
         "name": "Nagrywanie timelapse"
@@ -211,7 +211,7 @@
         "name": "Tryb programisty LAN"
       },
       "mqtt_encryption": {
-        "name": "Oprogramowanie układowe szyfrowania MQTT"
+        "name": "Szyfrowanie MQTT"
       },
       "active_ams": {
         "name": "Aktywny"
@@ -234,13 +234,13 @@
         "name": "Debugowanie"
       },
       "buzzer_silence": {
-        "name": "Brzęczyk - cisza"
+        "name": "Wycisz brzęczyk"
       },
       "buzzer_fire_alarm": {
-        "name": "Brzęczyk - alarm przeciwpożarowy"
+        "name": "Alarm przeciwpożarowy (brzęczyk)"
       },
       "buzzer_beeping": {
-        "name": "Brzęczyk - sygnał dźwiękowy"
+        "name": "Sygnał dźwiękowy (brzęczyk)"
       }
     },
     "fan": {
@@ -251,7 +251,7 @@
         "name": "Wentylator pomocniczy"
       },
       "chamber_fan": {
-        "name": "Wentylator komory"
+        "name": "Wentylator obudowy"
       }
     },
     "image": {
@@ -259,7 +259,7 @@
         "name": "Kamera"
       },
       "cover_image": {
-        "name": "Obraz okładki"
+        "name": "Podgląd modelu"
       },
       "pick_image": {
         "name": "Obraz wyboru"
@@ -267,13 +267,13 @@
     },
     "light": {
       "chamber_light": {
-        "name": "Oświetlenie komory"
+        "name": "Oświetlenie wnętrza"
       },
       "camera_light": {
         "name": "Oświetlenie kamery"
       },
       "heatbed_light": {
-        "name": "Ogrzone światło"
+        "name": "Oświetlenie stołu"
       }
     },
     "number": {
@@ -315,7 +315,7 @@
         "name": "Docelowa temperatura stołu"
       },
       "chamber_temp": {
-        "name": "Temperatura komory"
+        "name": "Temperatura wewnątrz obudowy"
       },
       "target_nozzle_temp": {
         "name": "Docelowa temperatura dyszy"
@@ -330,7 +330,7 @@
         "name": "Prędkość wentylatora chłodzącego"
       },
       "chamber_fan_speed": {
-        "name": "Prędkość wentylatora komory"
+        "name": "Prędkość wentylatora obudowy"
       },
       "heatbreak_fan_speed": {
         "name": "Prędkość wentylatora chłodzenia hotendu"
@@ -359,10 +359,10 @@
           "printing": "Drukowanie",
           "auto_bed_leveling": "Automatyczne poziomowanie stołu",
           "heatbed_preheating": "Podgrzewanie stołu",
-          "sweeping_xy_mech_mode": "Tryb czyszczenia osi XY",
+          "sweeping_xy_mech_mode": "Czyszczenie osi XY",
           "changing_filament": "Zmiana filamentu",
           "m400_pause": "Pauza M400",
-          "paused_filament_runout": "Pauza z powodu braku filamentu",
+          "paused_filament_runout": "Pauza - brak filamentu",
           "heating_hotend": "Podgrzewanie hotendu",
           "calibrating_extrusion": "Kalibracja ekstruzji",
           "scanning_bed_surface": "Skanowanie powierzchni stołu",
@@ -371,7 +371,7 @@
           "calibrating_micro_lidar": "Kalibracja LiDAR",
           "homing_toolhead": "Pozycjonowanie głowicy",
           "cleaning_nozzle_tip": "Czyszczenie końcówki dyszy",
-          "checking_extruder_temperature": "Sprawdzanie temperatury ekstrudera",
+          "checking_extruder_temperature": "Sprawdzanie temperatury głowicy",
           "paused_user": "Pauza przez użytkownika",
           "paused_front_cover_falling": "Pauza – opadnięcie przedniej pokrywy",
           "calibrating_extrusion_flow": "Kalibracja przepływu ekstruzji",
@@ -384,30 +384,30 @@
           "paused_ams_lost": "Pauza – utrata połączenia z AMS",
           "paused_low_fan_speed_heat_break": "Pauza – niska prędkość wentylatora chłodzenia",
           "paused_chamber_temperature_control_error": "Pauza – błąd kontroli temperatury komory",
-          "cooling_chamber": "Chłodzenie komory",
-          "paused_user_gcode": "Pauza przez kod G",
-          "motor_noise_showoff": "Pokaz dzwięku silników",
+          "cooling_chamber": "Chłodzenie wnetrza komory",
+          "paused_user_gcode": "Pauza spowodowana poleceniem G-code",
+          "motor_noise_showoff": "Prezentacja pracy silników",
           "paused_nozzle_filament_covered_detected": "Pauza – wykryto filament na dyszy",
           "paused_cutter_error": "Pauza – błąd obcinacza",
           "paused_first_layer_error": "Pauza – błąd pierwszej warstwy",
           "paused_nozzle_clog": "Pauza – zatkana dysza",
           "idle": "Bezczynny",
-          "check_absolute_accuracy_before_calibration": "Sprawdź bezwzględną dokładność drukarki przed kalibracją",
-          "absolute_accuracy_calibration": "Absolutna kalibracja dokładności",
-          "check_absolute_accuracy_after_calibration": "Sprawdź dokładność drukarki bez kalibracji",
+          "check_absolute_accuracy_before_calibration": "Sprawdzenie dokładności wymiarowej (przed kalibracją)",
+          "absolute_accuracy_calibration": "Kalibracja dokładności wymiarowej",
+          "check_absolute_accuracy_after_calibration": "Sprawdzenie dokładności wymiarowej (po kalibracji)",
           "calibrate_nozzle_offset": "Kalibracja przesunięcia dyszy",
-          "bed_level_high_temperature": "Wysokiej temperatury automatyczne wyrównanie łóżka",
-          "check_quick_release": "Auto Check: Szybka dźwignia wydania",
-          "check_door_and_cover": "Auto Kontrola: drzwi i górna pokrywa",
-          "laser_calibration": "Kalibracja laserowa",
-          "check_plaform": "Auto Check: Platform",
-          "check_birdeye_camera_position": "Auto Kontrola: Pozycja kamery BirEYe",
-          "calibrate_birdeye_camera": "Kalibruj kamerę BirEye",
+          "bed_level_high_temperature": "Poziomowanie stołu w wysokiej temperaturze",
+          "check_quick_release": "Auto test: mechanizm szybkiego zwalniania",
+          "check_door_and_cover": "Auto test: drzwi i pokrywa",
+          "laser_calibration": "Kalibracja modułu laserowego",
+          "check_plaform": "Auto test: Stół roboczy",
+          "check_birdeye_camera_position": "Auto test: pozycja kamery BirdEye",
+          "calibrate_birdeye_camera": "Kalibracja kamery BirdEye",
           "bed_level_phase_1": "Auto -Bed Leveling - Faza 1",
           "bed_level_phase_2": "Auto -Bed Leveling - faza 2",
           "heating_chamber": "Komora grzewcza",
-          "heated_bedcooling": "Ogrzane chłodzenie łóżka",
-          "print_calibration_lines": "Linie kalibracji drukowania"
+          "heated_bedcooling": "Chłodzenie stołu",
+          "print_calibration_lines": "Wydruk kalibracyjny"
         }
       },
       "print_progress": {
@@ -421,17 +421,17 @@
           "idle": "Bezczynny",
           "offline": "Offline",
           "prepare": "Przygotowanie",
-          "running": "W trakcie",
+          "running": "Drukowanie",
           "pause": "Pauza",
           "slicing": "Cięcie",
           "init": "Inicjalizacja"
         }
       },
       "printable_objects": {
-        "name": "Obiekty do druku"
+        "name": "Elementy do druku"
       },
       "skipped_objects": {
-        "name": "Pominięte obiekty"
+        "name": "Pominięte elementy"
       },
       "mqtt_mode": {
         "name": "Tryb połączenia MQTT",
@@ -453,7 +453,7 @@
           "cool_plate": "Cool Plate / PLA Plate",
           "hot_plate": "Smooth PEI Plate / High Temp Plate",
           "eng_plate": "Engineering Plate",
-          "supertack_plate": "Fajny supertack płyty"
+          "supertack_plate": "Cool SuperTack Plate"
         }
       },
       "print_length": {
@@ -755,7 +755,7 @@
         "name": "Status karty SD",
         "state": {
           "missing": "Brak karty",
-          "normal": "Prawidłowy",
+          "normal": "Obecna, OK",
           "abnormal": "Nieprawidłowy",
           "readonly": "Tylko do odczytu"
         }
