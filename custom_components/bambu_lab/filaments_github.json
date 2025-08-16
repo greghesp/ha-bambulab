@@ -15,6 +15,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "7.4"
     ]
   },
   "Bambu ABS-GF @base": {
@@ -57,6 +60,9 @@
     ],
     "slow_down_layer_time": [
       "4"
+    ],
+    "impact_strength_z": [
+      "5.3"
     ]
   },
   "Bambu ASA @base": {
@@ -111,6 +117,9 @@
     ],
     "textured_plate_temp_initial_layer": [
       "100"
+    ],
+    "impact_strength_z": [
+      "4.9"
     ]
   },
   "Bambu ASA-Aero @base": {
@@ -146,7 +155,7 @@
       "1.5"
     ],
     "filament_type": [
-      "ASA-Aero"
+      "ASA-AERO"
     ],
     "filament_vendor": [
       "Bambu Lab"
@@ -174,6 +183,9 @@
     ],
     "filament_scarf_seam_type": [
       "none"
+    ],
+    "impact_strength_z": [
+      "3.4"
     ]
   },
   "Bambu ASA-CF @base": {
@@ -236,6 +248,9 @@
     ],
     "textured_plate_temp_initial_layer": [
       "100"
+    ],
+    "impact_strength_z": [
+      "9.4"
     ]
   },
   "Bambu PA-CF @base": {
@@ -275,6 +290,9 @@
     ],
     "temperature_vitrification": [
       "170"
+    ],
+    "impact_strength_z": [
+      "5.7"
     ]
   },
   "Bambu PA6-CF @base": {
@@ -323,6 +341,9 @@
     ],
     "temperature_vitrification": [
       "170"
+    ],
+    "impact_strength_z": [
+      "15.5"
     ]
   },
   "Bambu PA6-GF @base": {
@@ -368,6 +389,9 @@
     ],
     "temperature_vitrification": [
       "180"
+    ],
+    "impact_strength_z": [
+      "4.1"
     ]
   },
   "Bambu PAHT-CF @base": {
@@ -413,6 +437,9 @@
     ],
     "temperature_vitrification": [
       "180"
+    ],
+    "impact_strength_z": [
+      "13.3"
     ]
   },
   "Bambu PC @base": {
@@ -430,6 +457,9 @@
     ],
     "filament_flow_ratio": [
       "0.94"
+    ],
+    "impact_strength_z": [
+      "9.0"
     ]
   },
   "Bambu PC FR @base": {
@@ -450,6 +480,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "8"
     ]
   },
   "Bambu PET-CF @base": {
@@ -502,17 +535,17 @@
     "hot_plate_temp_initial_layer": [
       "100"
     ],
+    "nozzle_temperature_range_low": [
+      "260"
+    ],
+    "nozzle_temperature_range_high": [
+      "290"
+    ],
     "nozzle_temperature": [
       "270"
     ],
     "nozzle_temperature_initial_layer": [
       "270"
-    ],
-    "nozzle_temperature_range_high": [
-      "290"
-    ],
-    "nozzle_temperature_range_low": [
-      "260"
     ],
     "overhang_fan_speed": [
       "40"
@@ -540,6 +573,12 @@
     ],
     "textured_plate_temp_initial_layer": [
       "100"
+    ],
+    "filament_adhesiveness_category": [
+      "800"
+    ],
+    "impact_strength_z": [
+      "4.5"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -615,6 +654,9 @@
     ],
     "textured_plate_temp_initial_layer": [
       "70"
+    ],
+    "impact_strength_z": [
+      "13.6"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -695,6 +737,15 @@
     ],
     "textured_plate_temp_initial_layer": [
       "70"
+    ],
+    "filament_change_length": [
+      "12"
+    ],
+    "filament_prime_volume": [
+      "30"
+    ],
+    "impact_strength_z": [
+      "10.6"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -777,6 +828,9 @@
     "textured_plate_temp_initial_layer": [
       "70"
     ],
+    "impact_strength_z": [
+      "7.2"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -857,6 +911,9 @@
     "textured_plate_temp_initial_layer": [
       "70"
     ],
+    "impact_strength_z": [
+      "10.7"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -905,6 +962,9 @@
     "supertack_plate_temp_initial_layer": [
       "0"
     ],
+    "impact_strength_z": [
+      "3.1"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -943,7 +1003,16 @@
     "filament_scarf_length": [
       "10"
     ],
+    "filament_change_length": [
+      "5"
+    ],
+    "filament_prime_volume": [
+      "30"
+    ],
     "compatible_printers": [],
+    "impact_strength_z": [
+      "13.8"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -963,6 +1032,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "20.8"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -989,6 +1061,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "5.8"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -1019,25 +1094,52 @@
     "temperature_vitrification": [
       "45"
     ],
+    "impact_strength_z": [
+      "19.8"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
   },
-  "Bambu PLA Impact @base": {
+  "Bambu PLA Lite @base": {
     "type": "filament",
-    "name": "Bambu PLA Impact @base",
+    "name": "Bambu PLA Lite @base",
     "inherits": "fdm_filament_pla",
     "from": "system",
-    "filament_id": "GFA03",
+    "filament_id": "GFA18",
     "instantiation": "false",
     "filament_cost": [
-      "25.4"
+      "0"
+    ],
+    "filament_density": [
+      "1.40"
     ],
     "filament_flow_ratio": [
-      "0.95"
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "16"
+    ],
+    "filament_scarf_gap": [
+      "0%"
+    ],
+    "filament_scarf_height": [
+      "5%"
+    ],
+    "filament_scarf_seam_type": [
+      "none"
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "6.6"
+    ],
+    "nozzle_temperature": [
+      "210"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "210"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -1062,6 +1164,9 @@
     "filament_vendor": [
       "Bambu Lab"
     ],
+    "impact_strength_z": [
+      "6.5"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -1084,6 +1189,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "6.6"
     ],
     "filament_scarf_seam_type": [
       "none"
@@ -1120,6 +1228,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "16.8"
     ],
     "filament_scarf_seam_type": [
       "none"
@@ -1166,6 +1277,9 @@
     "supertack_plate_temp_initial_layer": [
       "0"
     ],
+    "impact_strength_z": [
+      "4.6"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -1191,7 +1305,7 @@
       "5%"
     ],
     "filament_scarf_seam_type": [
-      "all"
+      "none"
     ],
     "filament_vendor": [
       "Bambu Lab"
@@ -1201,6 +1315,9 @@
     ],
     "nozzle_temperature_initial_layer": [
       "230"
+    ],
+    "impact_strength_z": [
+      "8.5"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -1224,6 +1341,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "10.3"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -1250,6 +1370,91 @@
     ],
     "filament_scarf_seam_type": [
       "none"
+    ],
+    "impact_strength_z": [
+      "12.3"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Tough+ @base": {
+    "type": "filament",
+    "name": "Bambu PLA Tough+ @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA10",
+    "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "80"
+    ],
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.21"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_max_volumetric_speed": [
+      "21"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "filament_scarf_gap": [
+      "0%"
+    ],
+    "filament_change_length": [
+      "5"
+    ],
+    "filament_prime_volume": [
+      "30"
+    ],
+    "impact_strength_z": [
+      "13.8"
+    ],
+    "nozzle_temperature": [
+      "245"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "245"
+    ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "250"
+    ],
+    "slow_down_layer_time": [
+      "8"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
+  "Bambu PLA Translucent @base": {
+    "type": "filament",
+    "name": "Bambu PLA Translucent @base",
+    "inherits": "fdm_filament_pla",
+    "from": "system",
+    "filament_id": "GFA17",
+    "instantiation": "false",
+    "filament_cost": [
+      "24.99"
+    ],
+    "filament_density": [
+      "1.22"
+    ],
+    "filament_flow_ratio": [
+      "0.98"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "slow_down_layer_time": [
+      "8"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -1285,6 +1490,9 @@
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "5.6"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -1339,6 +1547,9 @@
     "slow_down_layer_time": [
       "8"
     ],
+    "impact_strength_z": [
+      "7.8"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -1350,7 +1561,10 @@
     "from": "system",
     "filament_id": "GFN06",
     "instantiation": "false",
-    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials."
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "impact_strength_z": [
+      "4.3"
+    ]
   },
   "Bambu PPS-CF @base": {
     "type": "filament",
@@ -1389,6 +1603,9 @@
     ],
     "temperature_vitrification": [
       "220"
+    ],
+    "impact_strength_z": [
+      "2.8"
     ]
   },
   "Bambu PVA @base": {
@@ -1458,6 +1675,9 @@
     ],
     "slow_down_layer_time": [
       "6"
+    ],
+    "filament_adhesiveness_category": [
+      "703"
     ]
   },
   "Bambu Support For PLA @base": {
@@ -1491,6 +1711,9 @@
     ],
     "slow_down_layer_time": [
       "8"
+    ],
+    "filament_adhesiveness_category": [
+      "702"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -1554,6 +1777,9 @@
     ],
     "textured_plate_temp_initial_layer": [
       "60"
+    ],
+    "filament_adhesiveness_category": [
+      "705"
     ]
   },
   "Bambu Support G @base": {
@@ -1593,6 +1819,9 @@
     ],
     "slow_down_layer_time": [
       "6"
+    ],
+    "filament_adhesiveness_category": [
+      "701"
     ]
   },
   "Bambu Support W @base": {
@@ -1627,6 +1856,9 @@
     "slow_down_layer_time": [
       "8"
     ],
+    "filament_adhesiveness_category": [
+      "700"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -1644,6 +1876,9 @@
     ],
     "filament_cost": [
       "29.98"
+    ],
+    "filament_density": [
+      "1.16"
     ],
     "filament_flow_ratio": [
       "0.95"
@@ -1668,6 +1903,75 @@
     ],
     "temperature_vitrification": [
       "90"
+    ],
+    "filament_adhesiveness_category": [
+      "706"
+    ]
+  },
+  "Bambu TPU 85A @base": {
+    "type": "filament",
+    "name": "Bambu TPU 85A @base",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU04",
+    "instantiation": "false",
+    "description": "This filament is too soft and not compatible with the AMS. Printing it is of many requirements, and to get better printing quality, please refer to this wiki: TPU printing guide.",
+    "filament_cost": [
+      "44.99"
+    ],
+    "filament_density": [
+      "1.18"
+    ],
+    "filament_max_volumetric_speed": [
+      "2.2"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "225"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "225"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "slow_down_layer_time": [
+      "20"
+    ]
+  },
+  "Bambu TPU 90A @base": {
+    "type": "filament",
+    "name": "Bambu TPU 90A @base",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU03",
+    "instantiation": "false",
+    "description": "This filament is too soft and not compatible with the AMS. Printing it is of many requirements, and to get better printing quality, please refer to this wiki: TPU printing guide.",
+    "filament_cost": [
+      "59.99"
+    ],
+    "filament_max_volumetric_speed": [
+      "2.8"
+    ],
+    "filament_vendor": [
+      "Bambu Lab"
+    ],
+    "nozzle_temperature": [
+      "225"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "225"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
+    "slow_down_layer_time": [
+      "14"
+    ],
+    "impact_strength_z": [
+      "87.3"
     ]
   },
   "Bambu TPU 95A @base": {
@@ -1692,6 +1996,9 @@
     ],
     "nozzle_temperature_initial_layer": [
       "230"
+    ],
+    "impact_strength_z": [
+      "88.7"
     ]
   },
   "Bambu TPU 95A HF @base": {
@@ -1708,14 +2015,23 @@
     "filament_density": [
       "1.22"
     ],
+    "filament_deretraction_speed": [
+      "10"
+    ],
     "filament_max_volumetric_speed": [
       "12"
     ],
     "filament_retraction_length": [
-      "0.8"
+      "2"
+    ],
+    "filament_retraction_speed": [
+      "10"
     ],
     "filament_vendor": [
       "Bambu Lab"
+    ],
+    "impact_strength_z": [
+      "86.3"
     ],
     "nozzle_temperature": [
       "230"
@@ -1747,11 +2063,20 @@
     "filament_density": [
       "1.26"
     ],
+    "filament_deretraction_speed": [
+      "10"
+    ],
     "filament_flow_ratio": [
       "0.97"
     ],
     "filament_max_volumetric_speed": [
       "18"
+    ],
+    "filament_retraction_length": [
+      "2"
+    ],
+    "filament_retraction_speed": [
+      "10"
     ],
     "filament_type": [
       "TPU-AMS"
@@ -1776,6 +2101,9 @@
     ],
     "slow_down_layer_time": [
       "10"
+    ],
+    "impact_strength_z": [
+      "9.6"
     ]
   },
   "Fiberon PA12-CF @base": {
@@ -2078,17 +2406,17 @@
     "hot_plate_temp_initial_layer": [
       "70"
     ],
+    "nozzle_temperature_range_low": [
+      "270"
+    ],
+    "nozzle_temperature_range_high": [
+      "300"
+    ],
     "nozzle_temperature": [
       "300"
     ],
     "nozzle_temperature_initial_layer": [
       "300"
-    ],
-    "nozzle_temperature_range_high": [
-      "300"
-    ],
-    "nozzle_temperature_range_low": [
-      "270"
     ],
     "required_nozzle_HRC": [
       "40"
@@ -2113,6 +2441,9 @@
     ],
     "textured_plate_temp_initial_layer": [
       "70"
+    ],
+    "filament_adhesiveness_category": [
+      "800"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >80)||(bed_temperature_initial_layer[current_extruder] >80)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >60)||(bed_temperature_initial_layer[current_extruder] >60)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -2370,7 +2701,10 @@
     "inherits": "fdm_filament_bvoh",
     "from": "system",
     "filament_id": "GFS97",
-    "instantiation": "false"
+    "instantiation": "false",
+    "filament_adhesiveness_category": [
+      "797"
+    ]
   },
   "Generic EVA @base": {
     "type": "filament",
@@ -2418,17 +2752,17 @@
     "hot_plate_temp_initial_layer": [
       "55"
     ],
+    "nozzle_temperature_range_low": [
+      "175"
+    ],
+    "nozzle_temperature_range_high": [
+      "220"
+    ],
     "nozzle_temperature": [
       "210"
     ],
     "nozzle_temperature_initial_layer": [
       "210"
-    ],
-    "nozzle_temperature_range_high": [
-      "220"
-    ],
-    "nozzle_temperature_range_low": [
-      "175"
     ],
     "overhang_fan_threshold": [
       "50%"
@@ -2466,59 +2800,13 @@
       "1"
     ]
   },
-  "Generic PA-CF": {
+  "Generic PA @base": {
     "type": "filament",
-    "name": "Generic PA-CF",
-    "inherits": "fdm_filament_pa",
-    "from": "system",
-    "filament_id": "GFN98",
-    "setting_id": "GFSN99",
-    "instantiation": "true",
-    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
-    "fan_cooling_layer_time": [
-      "5"
-    ],
-    "fan_max_speed": [
-      "30"
-    ],
-    "fan_min_speed": [
-      "10"
-    ],
-    "filament_type": [
-      "PA-CF"
-    ],
-    "full_fan_speed_layer": [
-      "2"
-    ],
-    "overhang_fan_speed": [
-      "40"
-    ],
-    "overhang_fan_threshold": [
-      "0%"
-    ],
-    "temperature_vitrification": [
-      "170"
-    ],
-    "compatible_printers": [
-      "Bambu Lab X1 Carbon 0.4 nozzle",
-      "Bambu Lab X1 Carbon 0.6 nozzle",
-      "Bambu Lab X1 Carbon 0.8 nozzle",
-      "Bambu Lab X1 0.4 nozzle",
-      "Bambu Lab X1 0.6 nozzle",
-      "Bambu Lab X1 0.8 nozzle",
-      "Bambu Lab P1S 0.4 nozzle",
-      "Bambu Lab P1S 0.6 nozzle",
-      "Bambu Lab P1S 0.8 nozzle"
-    ]
-  },
-  "Generic PA": {
-    "type": "filament",
-    "name": "Generic PA",
+    "name": "Generic PA @base",
     "inherits": "fdm_filament_pa",
     "from": "system",
     "filament_id": "GFN99",
-    "setting_id": "GFSN98",
-    "instantiation": "true",
+    "instantiation": "false",
     "description": "When printing this filament, there's a risk of warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
     "chamber_temperatures": [
       "60"
@@ -2561,7 +2849,67 @@
     ],
     "slow_down_min_speed": [
       "10"
+    ]
+  },
+  "Generic PA-CF @base": {
+    "type": "filament",
+    "name": "Generic PA-CF @base",
+    "inherits": "fdm_filament_pa",
+    "from": "system",
+    "filament_id": "GFN98",
+    "instantiation": "false",
+    "description": "When printing this filament, there's a risk of nozzle clogging, oozing, warping and low layer adhesion strength. To get better results, please refer to this wiki: Printing Tips for High Temp / Engineering materials.",
+    "fan_cooling_layer_time": [
+      "5"
     ],
+    "fan_max_speed": [
+      "30"
+    ],
+    "fan_min_speed": [
+      "10"
+    ],
+    "filament_type": [
+      "PA-CF"
+    ],
+    "full_fan_speed_layer": [
+      "2"
+    ],
+    "overhang_fan_speed": [
+      "40"
+    ],
+    "overhang_fan_threshold": [
+      "0%"
+    ],
+    "temperature_vitrification": [
+      "170"
+    ]
+  },
+  "Generic PA-CF": {
+    "type": "filament",
+    "name": "Generic PA-CF",
+    "inherits": "Generic PA-CF @base",
+    "from": "system",
+    "setting_id": "GFSN99",
+    "instantiation": "true",
+    "compatible_printers": [
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.6 nozzle",
+      "Bambu Lab X1 Carbon 0.8 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 0.6 nozzle",
+      "Bambu Lab X1 0.8 nozzle",
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1S 0.6 nozzle",
+      "Bambu Lab P1S 0.8 nozzle"
+    ]
+  },
+  "Generic PA": {
+    "type": "filament",
+    "name": "Generic PA",
+    "inherits": "Generic PA @base",
+    "from": "system",
+    "setting_id": "GFSN98",
+    "instantiation": "true",
     "compatible_printers": [
       "Bambu Lab X1 Carbon 0.4 nozzle",
       "Bambu Lab X1 Carbon 0.6 nozzle",
@@ -2713,6 +3061,9 @@
     "temperature_vitrification": [
       "70"
     ],
+    "filament_adhesiveness_category": [
+      "901"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
@@ -2750,6 +3101,9 @@
     ],
     "temperature_vitrification": [
       "70"
+    ],
+    "filament_adhesiveness_category": [
+      "901"
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
@@ -2863,14 +3217,14 @@
     "hot_plate_temp_initial_layer": [
       "70"
     ],
+    "nozzle_temperature_range_high": [
+      "270"
+    ],
     "nozzle_temperature": [
       "220"
     ],
     "nozzle_temperature_initial_layer": [
       "220"
-    ],
-    "nozzle_temperature_range_high": [
-      "270"
     ],
     "overhang_fan_speed": [
       "90"
@@ -2937,11 +3291,11 @@
     "hot_plate_temp_initial_layer": [
       "70"
     ],
-    "nozzle_temperature_range_high": [
-      "270"
-    ],
     "nozzle_temperature_range_low": [
       "240"
+    ],
+    "nozzle_temperature_range_high": [
+      "270"
     ],
     "overhang_fan_speed": [
       "90"
@@ -3083,6 +3437,9 @@
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "Generic PLA-CF @base": {
@@ -3143,6 +3500,9 @@
       "Bambu Lab X1E 0.4 nozzle",
       "Bambu Lab X1E 0.6 nozzle",
       "Bambu Lab X1E 0.8 nozzle"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "Generic PLA": {
@@ -3168,6 +3528,9 @@
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "Generic PP @base": {
@@ -3289,6 +3652,9 @@
     ],
     "temperature_vitrification": [
       "220"
+    ],
+    "impact_strength_z": [
+      "5.7"
     ]
   },
   "Generic PVA @base": {
@@ -3334,6 +3700,21 @@
       "Bambu Lab X1E 0.8 nozzle"
     ]
   },
+  "Generic TPU @base": {
+    "type": "filament",
+    "name": "Generic TPU @base",
+    "inherits": "fdm_filament_tpu",
+    "from": "system",
+    "filament_id": "GFU99",
+    "instantiation": "false",
+    "description": "This filament is too soft and not compatible with the AMS. Printing it is of many requirements, and to get better printing quality, please refer to this wiki: TPU printing guide.",
+    "filament_max_volumetric_speed": [
+      "3.2"
+    ],
+    "filament_start_gcode": [
+      "; filament start gcode\n{if (bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >30)||(bed_temperature_initial_layer[current_extruder] >30)}M106 P3 S180\n{endif} \n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ]
+  },
   "Generic TPU for AMS @base": {
     "type": "filament",
     "name": "Generic TPU for AMS @base",
@@ -3367,15 +3748,10 @@
   "Generic TPU": {
     "type": "filament",
     "name": "Generic TPU",
-    "inherits": "fdm_filament_tpu",
+    "inherits": "Generic TPU @base",
     "from": "system",
-    "filament_id": "GFU99",
     "setting_id": "GFSR99",
     "instantiation": "true",
-    "description": "This filament is too soft and not compatible with the AMS. Printing it is of many requirements, and to get better printing quality, please refer to this wiki: TPU printing guide.",
-    "filament_max_volumetric_speed": [
-      "3.2"
-    ],
     "compatible_printers": [
       "Bambu Lab X1 0.4 nozzle",
       "Bambu Lab X1 0.6 nozzle",
@@ -3389,9 +3765,6 @@
       "Bambu Lab X1E 0.4 nozzle",
       "Bambu Lab X1E 0.6 nozzle",
       "Bambu Lab X1E 0.8 nozzle"
-    ],
-    "filament_start_gcode": [
-      "; filament start gcode\n{if (bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >30)||(bed_temperature_initial_layer[current_extruder] >30)}M106 P3 S180\n{endif} \n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ]
   },
   "Overture Matte PLA @base": {
@@ -3644,12 +4017,6 @@
     "activate_air_filtration": [
       "1"
     ],
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
-      "0"
-    ],
     "cool_plate_temp": [
       "0"
     ],
@@ -3716,11 +4083,23 @@
     "slow_down_min_speed": [
       "20"
     ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
     "textured_plate_temp": [
       "90"
     ],
     "textured_plate_temp_initial_layer": [
       "90"
+    ],
+    "filament_adhesiveness_category": [
+      "200"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_asa": {
@@ -3731,12 +4110,6 @@
     "instantiation": "false",
     "activate_air_filtration": [
       "1"
-    ],
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
-      "0"
     ],
     "cool_plate_temp": [
       "0"
@@ -3804,11 +4177,26 @@
     "slow_down_min_speed": [
       "20"
     ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
     "textured_plate_temp": [
       "90"
     ],
     "textured_plate_temp_initial_layer": [
       "90"
+    ],
+    "filament_adhesiveness_category": [
+      "200"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
+    ],
+    "impact_strength_z": [
+      "4.9"
     ]
   },
   "fdm_filament_bvoh": {
@@ -3868,12 +4256,6 @@
     "nozzle_temperature_initial_layer": [
       "220"
     ],
-    "nozzle_temperature_range_high": [
-      "240"
-    ],
-    "nozzle_temperature_range_low": [
-      "190"
-    ],
     "overhang_fan_threshold": [
       "50%"
     ],
@@ -3900,6 +4282,9 @@
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_common": {
@@ -3908,6 +4293,9 @@
     "from": "system",
     "instantiation": "false",
     "activate_air_filtration": [
+      "0"
+    ],
+    "additional_cooling_fan_speed": [
       "0"
     ],
     "chamber_temperatures": [
@@ -3958,17 +4346,32 @@
     "filament_flow_ratio": [
       "1"
     ],
+    "filament_flush_temp": [
+      "0"
+    ],
+    "filament_flush_volumetric_speed": [
+      "0"
+    ],
     "filament_is_support": [
       "0"
     ],
     "filament_long_retractions_when_cut": [
       "nil"
     ],
+    "filament_long_retractions_when_ec": [
+      "nil"
+    ],
     "filament_max_volumetric_speed": [
       "0"
     ],
+    "filament_ramming_volumetric_speed": [
+      "-1"
+    ],
     "filament_minimal_purge_on_wipe_tower": [
       "15"
+    ],
+    "filament_printable": [
+      "3"
     ],
     "filament_retract_before_wipe": [
       "nil"
@@ -3980,6 +4383,9 @@
       "nil"
     ],
     "filament_retraction_distances_when_cut": [
+      "nil"
+    ],
+    "filament_retraction_distances_when_ec": [
       "nil"
     ],
     "filament_retraction_length": [
@@ -4009,6 +4415,9 @@
     "filament_wipe_distance": [
       "nil"
     ],
+    "filament_prime_volume": [
+      "45"
+    ],
     "filament_z_hop": [
       "nil"
     ],
@@ -4017,6 +4426,12 @@
     ],
     "full_fan_speed_layer": [
       "0"
+    ],
+    "filament_extruder_id": [
+      "1"
+    ],
+    "filament_extruder_variant": [
+      "Direct Drive Standard"
     ],
     "filament_scarf_seam_type": [
       "none"
@@ -4039,11 +4454,20 @@
     "hot_plate_temp_initial_layer": [
       "60"
     ],
+    "nozzle_temperature_range_low": [
+      "190"
+    ],
+    "nozzle_temperature_range_high": [
+      "240"
+    ],
     "nozzle_temperature": [
       "200"
     ],
     "nozzle_temperature_initial_layer": [
       "200"
+    ],
+    "long_retractions_when_ec": [
+      "0"
     ],
     "overhang_fan_speed": [
       "100"
@@ -4056,6 +4480,9 @@
     ],
     "required_nozzle_HRC": [
       "3"
+    ],
+    "retraction_distances_when_ec": [
+      "0"
     ],
     "supertack_plate_temp": [
       "45"
@@ -4081,12 +4508,129 @@
     "textured_plate_temp_initial_layer": [
       "60"
     ],
+    "counter_coef_1": [
+      "0"
+    ],
+    "counter_coef_2": [
+      "0.008"
+    ],
+    "counter_coef_3": [
+      "-0.041"
+    ],
+    "hole_coef_1": [
+      "0"
+    ],
+    "hole_coef_2": [
+      "-0.008"
+    ],
+    "hole_coef_3": [
+      "0.23415"
+    ],
+    "counter_limit_min": [
+      "-0.035"
+    ],
+    "counter_limit_max": [
+      "0.033"
+    ],
+    "hole_limit_min": [
+      "0.088"
+    ],
+    "hole_limit_max": [
+      "0.22"
+    ],
+    "circle_compensation_speed": [
+      "200"
+    ],
+    "diameter_limit": [
+      "50"
+    ],
     "compatible_printers": [],
+    "impact_strength_z": [
+      "10"
+    ],
     "filament_start_gcode": [
       "; Filament gcode\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
     ],
     "filament_end_gcode": [
       "; filament end gcode \nM106 P3 S0\n"
+    ],
+    "filament_pre_cooling_temperature": [
+      "0"
+    ],
+    "filament_ramming_travel_time": [
+      "0"
+    ]
+  },
+  "fdm_filament_dual_common": {
+    "type": "filament",
+    "name": "fdm_filament_dual_common",
+    "from": "system",
+    "instantiation": "false",
+    "filament_deretraction_speed": [
+      "nil",
+      "nil"
+    ],
+    "filament_extruder_variant": [
+      "Direct Drive Standard",
+      "Direct Drive High Flow"
+    ],
+    "filament_max_volumetric_speed": [
+      "",
+      ""
+    ],
+    "filament_retract_before_wipe": [
+      "nil",
+      "nil"
+    ],
+    "filament_retract_when_changing_layer": [
+      "nil",
+      "nil"
+    ],
+    "filament_retraction_length": [
+      "nil",
+      "nil"
+    ],
+    "filament_retraction_minimum_travel": [
+      "nil",
+      "nil"
+    ],
+    "filament_retraction_speed": [
+      "nil",
+      "nil"
+    ],
+    "filament_wipe": [
+      "nil",
+      "nil"
+    ],
+    "filament_wipe_distance": [
+      "nil",
+      "nil"
+    ],
+    "filament_prime_volume": [
+      "45"
+    ],
+    "filament_z_hop": [
+      "nil",
+      "nil"
+    ],
+    "filament_z_hop_types": [
+      "nil",
+      "nil"
+    ],
+    "filament_flow_ratio": [
+      "",
+      ""
+    ],
+    "nozzle_temperature": [
+      "",
+      ""
+    ],
+    "nozzle_temperature_initial_layer": [
+      "",
+      ""
+    ],
+    "filament_change_length": [
+      "10"
     ]
   },
   "fdm_filament_eva": {
@@ -4103,6 +4647,9 @@
     ],
     "supertack_plate_temp_initial_layer": [
       "0"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_hips": {
@@ -4111,53 +4658,23 @@
     "inherits": "fdm_filament_common",
     "from": "system",
     "instantiation": "false",
+    "additional_cooling_fan_speed": [
+      "0"
+    ],
     "cool_plate_temp": [
-      "0"
-    ],
-    "eng_plate_temp": [
-      "90"
-    ],
-    "hot_plate_temp": [
-      "90"
-    ],
-    "textured_plate_temp": [
-      "90"
-    ],
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
       "0"
     ],
     "cool_plate_temp_initial_layer": [
       "0"
     ],
+    "eng_plate_temp": [
+      "90"
+    ],
     "eng_plate_temp_initial_layer": [
-      "90"
-    ],
-    "hot_plate_temp_initial_layer": [
-      "90"
-    ],
-    "textured_plate_temp_initial_layer": [
       "90"
     ],
     "fan_cooling_layer_time": [
       "10"
-    ],
-    "filament_max_volumetric_speed": [
-      "8"
-    ],
-    "filament_type": [
-      "HIPS"
-    ],
-    "filament_density": [
-      "1.06"
-    ],
-    "filament_cost": [
-      "22.99"
-    ],
-    "nozzle_temperature_initial_layer": [
-      "240"
     ],
     "fan_max_speed": [
       "60"
@@ -4165,29 +4682,65 @@
     "fan_min_speed": [
       "0"
     ],
-    "overhang_fan_threshold": [
-      "25%"
+    "filament_cost": [
+      "22.99"
     ],
-    "overhang_fan_speed": [
-      "80"
+    "filament_density": [
+      "1.06"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ],
+    "filament_type": [
+      "HIPS"
+    ],
+    "hot_plate_temp": [
+      "90"
+    ],
+    "hot_plate_temp_initial_layer": [
+      "90"
     ],
     "nozzle_temperature": [
       "240"
     ],
-    "nozzle_temperature_range_low": [
-      "220"
+    "nozzle_temperature_initial_layer": [
+      "240"
     ],
     "nozzle_temperature_range_high": [
       "270"
     ],
-    "slow_down_min_speed": [
-      "20"
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "overhang_fan_speed": [
+      "80"
+    ],
+    "overhang_fan_threshold": [
+      "25%"
     ],
     "slow_down_layer_time": [
       "6"
     ],
-    "additional_cooling_fan_speed": [
+    "slow_down_min_speed": [
+      "20"
+    ],
+    "supertack_plate_temp": [
       "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
+    "textured_plate_temp": [
+      "90"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "90"
+    ],
+    "filament_adhesiveness_category": [
+      "798"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pa": {
@@ -4198,12 +4751,6 @@
     "instantiation": "false",
     "activate_air_filtration": [
       "1"
-    ],
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
-      "0"
     ],
     "cool_plate_temp": [
       "0"
@@ -4268,6 +4815,12 @@
     "slow_down_min_speed": [
       "20"
     ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
     "temperature_vitrification": [
       "108"
     ],
@@ -4276,6 +4829,12 @@
     ],
     "textured_plate_temp_initial_layer": [
       "100"
+    ],
+    "filament_adhesiveness_category": [
+      "400"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pc": {
@@ -4284,12 +4843,6 @@
     "inherits": "fdm_filament_common",
     "from": "system",
     "instantiation": "false",
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
-      "0"
-    ],
     "cool_plate_temp": [
       "0"
     ],
@@ -4356,6 +4909,12 @@
     "slow_down_min_speed": [
       "20"
     ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
     "temperature_vitrification": [
       "120"
     ],
@@ -4364,6 +4923,12 @@
     ],
     "textured_plate_temp_initial_layer": [
       "110"
+    ],
+    "filament_adhesiveness_category": [
+      "500"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pctg": {
@@ -4402,17 +4967,17 @@
     "hot_plate_temp_initial_layer": [
       "80"
     ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "260"
+    ],
     "nozzle_temperature": [
       "255"
     ],
     "nozzle_temperature_initial_layer": [
       "255"
-    ],
-    "nozzle_temperature_range_high": [
-      "260"
-    ],
-    "nozzle_temperature_range_low": [
-      "220"
     ],
     "reduce_fan_stop_start_freq": [
       "1"
@@ -4434,6 +4999,9 @@
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S180\n{elsif (bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S255\n{endif};Prevent PLA from jamming\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pe": {
@@ -4490,12 +5058,6 @@
     "nozzle_temperature_initial_layer": [
       "220"
     ],
-    "nozzle_temperature_range_high": [
-      "240"
-    ],
-    "nozzle_temperature_range_low": [
-      "190"
-    ],
     "overhang_fan_threshold": [
       "50%"
     ],
@@ -4525,6 +5087,9 @@
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pet": {
@@ -4563,17 +5128,17 @@
     "hot_plate_temp_initial_layer": [
       "80"
     ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "260"
+    ],
     "nozzle_temperature": [
       "255"
     ],
     "nozzle_temperature_initial_layer": [
       "255"
-    ],
-    "nozzle_temperature_range_high": [
-      "260"
-    ],
-    "nozzle_temperature_range_low": [
-      "220"
     ],
     "reduce_fan_stop_start_freq": [
       "1"
@@ -4593,8 +5158,14 @@
     "textured_plate_temp_initial_layer": [
       "80"
     ],
+    "filament_adhesiveness_category": [
+      "300"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S180\n{elsif (bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S255\n{endif};Prevent PLA from jamming\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pha": {
@@ -4651,12 +5222,6 @@
     "nozzle_temperature_initial_layer": [
       "220"
     ],
-    "nozzle_temperature_range_high": [
-      "240"
-    ],
-    "nozzle_temperature_range_low": [
-      "190"
-    ],
     "overhang_fan_threshold": [
       "50%"
     ],
@@ -4686,6 +5251,9 @@
     ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pla": {
@@ -4745,12 +5313,6 @@
     "nozzle_temperature_initial_layer": [
       "220"
     ],
-    "nozzle_temperature_range_low": [
-      "190"
-    ],
-    "nozzle_temperature_range_high": [
-      "240"
-    ],
     "overhang_fan_threshold": [
       "50%"
     ],
@@ -4772,8 +5334,17 @@
     "textured_plate_temp_initial_layer": [
       "55"
     ],
+    "filament_adhesiveness_category": [
+      "100"
+    ],
+    "impact_strength_z": [
+      "10.0"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pp": {
@@ -4824,17 +5395,17 @@
     "hot_plate_temp_initial_layer": [
       "55"
     ],
+    "nozzle_temperature_range_low": [
+      "220"
+    ],
+    "nozzle_temperature_range_high": [
+      "250"
+    ],
     "nozzle_temperature": [
       "235"
     ],
     "nozzle_temperature_initial_layer": [
       "235"
-    ],
-    "nozzle_temperature_range_high": [
-      "250"
-    ],
-    "nozzle_temperature_range_low": [
-      "220"
     ],
     "overhang_fan_threshold": [
       "50%"
@@ -4863,8 +5434,14 @@
     "textured_plate_temp_initial_layer": [
       "55"
     ],
+    "filament_adhesiveness_category": [
+      "902"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_ppa": {
@@ -4875,12 +5452,6 @@
     "instantiation": "false",
     "activate_air_filtration": [
       "1"
-    ],
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
-      "0"
     ],
     "cool_plate_temp": [
       "0"
@@ -4954,6 +5525,12 @@
     "slow_down_min_speed": [
       "20"
     ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
     "temperature_vitrification": [
       "210"
     ],
@@ -4962,6 +5539,9 @@
     ],
     "textured_plate_temp_initial_layer": [
       "100"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pps": {
@@ -4972,12 +5552,6 @@
     "instantiation": "false",
     "chamber_temperatures": [
       "60"
-    ],
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
-      "0"
     ],
     "cool_plate_temp": [
       "0"
@@ -5039,6 +5613,12 @@
     "slow_down_layer_time": [
       "2"
     ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
     "temperature_vitrification": [
       "125"
     ],
@@ -5047,6 +5627,12 @@
     ],
     "textured_plate_temp_initial_layer": [
       "110"
+    ],
+    "filament_adhesiveness_category": [
+      "801"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_pva": {
@@ -5109,12 +5695,6 @@
     "nozzle_temperature_initial_layer": [
       "220"
     ],
-    "nozzle_temperature_range_high": [
-      "240"
-    ],
-    "nozzle_temperature_range_low": [
-      "190"
-    ],
     "overhang_fan_threshold": [
       "50%"
     ],
@@ -5142,8 +5722,14 @@
     "textured_plate_temp_initial_layer": [
       "55"
     ],
+    "filament_adhesiveness_category": [
+      "704"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   },
   "fdm_filament_tpu": {
@@ -5157,12 +5743,6 @@
     ],
     "close_fan_the_first_x_layers": [
       "1"
-    ],
-    "supertack_plate_temp": [
-      "0"
-    ],
-    "supertack_plate_temp_initial_layer": [
-      "0"
     ],
     "cool_plate_temp": [
       "30"
@@ -5218,6 +5798,12 @@
     "reduce_fan_stop_start_freq": [
       "1"
     ],
+    "supertack_plate_temp": [
+      "0"
+    ],
+    "supertack_plate_temp_initial_layer": [
+      "0"
+    ],
     "temperature_vitrification": [
       "30"
     ],
@@ -5227,8 +5813,14 @@
     "textured_plate_temp_initial_layer": [
       "35"
     ],
+    "filament_adhesiveness_category": [
+      "600"
+    ],
     "filament_start_gcode": [
       "; filament start gcode\n{if  (bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S255\n{elsif(bed_temperature[current_extruder] >30)||(bed_temperature_initial_layer[current_extruder] >30)}M106 P3 S180\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+    ],
+    "filament_end_gcode": [
+      "; filament end gcode \n\n"
     ]
   }
 }
