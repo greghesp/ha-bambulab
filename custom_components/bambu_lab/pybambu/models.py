@@ -1112,43 +1112,32 @@ class PrintJob:
             size = ftp.size(file_path)
             LOGGER.debug(f"File exists. Size: {size} bytes.")
             
-            # Determine where to save the file
             cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
             relative_path = file_path.lstrip('/')
             cache_file_path = os.path.join(cache_dir, relative_path)
-            
+
+            # Ensure the directory exists
+            os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
+
             # Check if file already exists in cache with same size
-            if os.path.exists(cache_file_path):
+            try:
                 cache_file_size = os.path.getsize(cache_file_path)
                 if cache_file_size == size:
-                    LOGGER.debug(f"File already exists in cache with same size ({size} bytes). Skipping download.")
+                    LOGGER.debug(f"File already in cache with same size.")
                     # Update last edited time to refresh it's cache lifetime.
                     os.utime(cache_file_path, None)
                     return cache_file_path
-                
-                # Ensure the directory exists
-                os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
-                
-                # Download directly to cache
-                with open(cache_file_path, 'wb') as f:
-                    ftp.retrbinary(f"RETR {file_path}", f.write)
-                    f.flush()
-                
-                LOGGER.debug(f"Successfully downloaded '{file_path}' to cache.")
-                return cache_file_path
-            else:
-                # File caching disabled - save to temporary location
-                temp_file = tempfile.NamedTemporaryFile(delete=False)
-                try:
-                    ftp.retrbinary(f"RETR {file_path}", temp_file.write)
-                    temp_file.flush()
-                    temp_file.close()
-                    LOGGER.debug(f"Successfully downloaded '{file_path}' to temporary location.")
-                    return temp_file.name
-                except Exception as e:
-                    temp_file.close()
-                    os.unlink(temp_file.name)
-                    raise e
+            except FileNotFoundError:
+                # File doesn't exist in the cache.
+                pass
+
+            # Download to cache
+            with open(cache_file_path, 'wb') as f:
+                ftp.retrbinary(f"RETR {file_path}", f.write)
+                f.flush()
+            
+            LOGGER.debug(f"Successfully downloaded '{file_path}' to cache.")
+            return cache_file_path
                     
         except ftplib.error_perm as e:
              if '550' not in str(e.args): # 550 is unavailable.
@@ -1371,7 +1360,7 @@ class PrintJob:
                 if os.path.exists(local_file_path):
                     local_file_size = os.path.getsize(local_file_path)
                     if local_file_size == size:
-                        LOGGER.debug(f"Timelapse already downloaded with same size ({size} bytes): {file_path}")
+                        LOGGER.debug(f"Timelapse file found in cache.")
                     else:
                         LOGGER.debug(f"Timelapse file size differs (local: {local_file_size}, remote: {size}). Re-downloading.")
                         should_download = True
