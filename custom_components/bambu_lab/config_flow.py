@@ -517,6 +517,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     email: str = ""
     authentication_type: str = None
     _logging_level: None
+    _config_entry: config_entries.ConfigEntry = None
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         # Set logging level to DEBUG during the configuration flow
@@ -524,13 +525,13 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         self.__logging_level = LOGGER.getEffectiveLevel()
         LOGGER.setLevel(logging.DEBUG)
 
-        self.config_entry = config_entry
-        self.region = self.config_entry.options.get('region', '')
-        self.email = self.config_entry.options.get('email', '')
+        self._config_entry = config_entry
+        self.region = self._config_entry.options.get('region', '')
+        self.email = self._config_entry.options.get('email', '')
 
         self._bambu_cloud = BambuCloud("", "", "", "")
 
-        LOGGER.debug(self.config_entry)
+        LOGGER.debug(self._config_entry)
 
     def __del__(self) -> None:
         # This isn't as immediate as I'd like it takes garbage collection but it'll kick in after a bit.
@@ -580,14 +581,14 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         # Build form
         default_option = ''
         if self.email != '':
-            default_option = self.email if self.config_entry.options['auth_token'] != "" else 'lan'
+            default_option = self.email if self._config_entry.options['auth_token'] != "" else 'lan'
             modes = [
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value=self.email, label=self.email),
                 SelectOptionDict(value="lan", label="")
             ]
         else:
-            default_option = 'bambu' if self.config_entry.options['auth_token'] != "" else 'lan'
+            default_option = 'bambu' if self._config_entry.options['auth_token'] != "" else 'lan'
             modes = [
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
@@ -675,9 +676,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         if self.authentication_type is None:
-            default_region = self.config_entry.options.get('region', '') if user_input is None else user_input.get('region', '')
+            default_region = self._config_entry.options.get('region', '') if user_input is None else user_input.get('region', '')
             fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
-            default_email = self.config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
+            default_email = self._config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
             fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
@@ -714,8 +715,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 "host": "",
                 "local_mqtt": False,
                 "auth_token": self._bambu_cloud.auth_token,
-                'device_type': self.config_entry.data['device_type'],
-                'serial': self.config_entry.data['serial'],
+                'device_type': self._config_entry.data['device_type'],
+                'serial': self._config_entry.data['serial'],
             }
             bambu = BambuClient(config)
             success = await bambu.try_connection()
@@ -730,10 +731,10 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         LOGGER.debug(f"Options Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                         config = {
                             'access_code': user_input['access_code'],
-                            'device_type': self.config_entry.data['device_type'],
+                            'device_type': self._config_entry.data['device_type'],
                             'host': user_input['host'],
                             'local_mqtt': True,
-                            'serial': self.config_entry.data['serial'],
+                            'serial': self._config_entry.data['serial'],
                         }
                         bambu = BambuClient(config)
                         success = await bambu.try_connection()
@@ -742,8 +743,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
                     if success:
                         LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
-                        data = dict(self.config_entry.data)
-                        options = dict(self.config_entry.options)
+                        data = dict(self._config_entry.data)
+                        options = dict(self._config_entry.options)
                         options["region"] = self.region
                         options["email"] = self.email
                         options["username"] = self._bambu_cloud.username
@@ -761,18 +762,18 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
-                            entry=self.config_entry,
+                            entry=self._config_entry,
                             title=title,
                             data=data,
                             options=options
                         )
-                        await self.hass.config_entries.async_reload(self.config_entry.entry_id)
+                        await self.hass.config_entries.async_reload(self._config_entry.entry_id)
                         return self.async_create_entry(title="", data=None)
 
         printer_list = []
         access_code = ''
         for device in device_list:
-            if device['dev_id'] == self.config_entry.data['serial']:
+            if device['dev_id'] == self._config_entry.data['serial']:
                 printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
                 access_code = device['dev_access_code']
 
@@ -784,14 +785,14 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         if user_input is not None:
             default_host = user_input['host']
-        default_serial = self.config_entry.data['serial']
-        default_local_mqtt = self.config_entry.options.get('local_mqtt', False)
-        default_access_code = self.config_entry.options.get('access_code', access_code)
-        default_print_cache_count = self.config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
-        default_timelapse_cache_count = self.config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
-        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
-        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
-        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
+        default_serial = self._config_entry.data['serial']
+        default_local_mqtt = self._config_entry.options.get('local_mqtt', False)
+        default_access_code = self._config_entry.options.get('access_code', access_code)
+        default_print_cache_count = self._config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
+        default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
+        default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -826,10 +827,10 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             LOGGER.debug(f"Options Flow async_step_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
             config = {
                 'access_code': user_input['access_code'],
-                'device_type': self.config_entry.data['device_type'],
+                'device_type': self._config_entry.data['device_type'],
                 'host': user_input['host'],
                 'local_mqtt': True,
-                'serial': self.config_entry.data['serial'],
+                'serial': self._config_entry.data['serial'],
                 'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
             }
             bambu = BambuClient(config)
@@ -837,12 +838,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
             if success:
                 LOGGER.debug("Options Flow: Writing entry")
-                data = dict(self.config_entry.data)
-                options = dict(self.config_entry.options)
-                options["region"] = self.config_entry.options.get('region', '')
+                data = dict(self._config_entry.data)
+                options = dict(self._config_entry.options)
+                options["region"] = self._config_entry.options.get('region', '')
                 options["email"] = ''
                 options["username"] = ''
-                options["name"] = self.config_entry.options.get('name', '')
+                options["name"] = self._config_entry.options.get('name', '')
                 options["host"] = user_input['host']
                 options["local_mqtt"] = True
                 options["auth_token"] = ''
@@ -854,27 +855,27 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
-                title = self.config_entry.data['serial']
+                title = self._config_entry.data['serial']
                 self.hass.config_entries.async_update_entry(
-                    entry=self.config_entry,
+                    entry=self._config_entry,
                     title=title,
                     data=data,
                     options=options
                 )
-                await self.hass.config_entries.async_reload(self.config_entry.entry_id)
+                await self.hass.config_entries.async_reload(self._config_entry.entry_id)
                 return self.async_create_entry(title="", data=None)
 
             errors['base'] = "cannot_connect_local_all"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
-        default_host = self.config_entry.options.get('host', '') if user_input is None else user_input.get('host', self.config_entry.options.get('host', ''))
-        default_access_code = self.config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self.config_entry.options.get('access_code', ''))
-        default_print_cache_count = self.config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
-        default_timelapse_cache_count = self.config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
-        default_usage_hours = str(self.config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
-        default_disable_ssl_verify = self.config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self.config_entry.options.get('disable_ssl_verify', ''))
-        default_enable_firmware_update = self.config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self.config_entry.options.get('enable_firmware_update', ''))
+        default_host = self._config_entry.options.get('host', '') if user_input is None else user_input.get('host', self._config_entry.options.get('host', ''))
+        default_access_code = self._config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self._config_entry.options.get('access_code', ''))
+        default_print_cache_count = self._config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
+        default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
+        default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR

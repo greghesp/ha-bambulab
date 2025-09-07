@@ -134,7 +134,7 @@ class Device:
         if self.info.mqtt_mode == "bambu_cloud":
             return True
         # X1* have not yet blocked setting the temperatures when in nybrid connection mode.
-        if self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D:
+        if self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S:
             return True
         # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
         return not self._client.bambu_cloud.bambu_connected
@@ -147,7 +147,7 @@ class Device:
         elif feature == Features.CHAMBER_FAN:
             return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
         elif feature == Features.CURRENT_STAGE:
             return True
         elif feature == Features.PRINT_LAYERS:
@@ -169,24 +169,24 @@ class Device:
                 LOGGER.error("Features.AMS_TEMPERATURE queried before version is known.")
                 return False
 
-            if (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D):
+            if (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S):
                 return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
                 return True
             return False
         elif feature == Features.CAMERA_RTSP:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
         elif feature == Features.CAMERA_IMAGE:
             return self.info.device_type == Printers.P1P or self.info.device_type == Printers.P1S or self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
         elif feature == Features.DOOR_SENSOR:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
         elif feature == Features.AMS_FILAMENT_REMAINING:
             # Technically this is not the AMS Lite but that's currently tied to only these printer types.
             return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
         elif feature == Features.SET_TEMPERATURE:
             return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
-            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.H2D
+            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
         elif feature == Features.FTP:
             return True
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -210,7 +210,7 @@ class Device:
                 LOGGER.error("Features.AMS_HUMIDITY queried before version is known.")            
                 return False
 
-            if (self.info.device_type == Printers.H2D):
+            if (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S):
                 return True
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
                 return True
@@ -224,7 +224,7 @@ class Device:
                 LOGGER.error("Features.AMS_DRYING queried before version is known.")
                 return False
             
-            if (self.info.device_type == Printers.H2D):
+            if (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S):
                 return True
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
                 return True
@@ -232,11 +232,11 @@ class Device:
                 return True
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
-            return (self.info.device_type == Printers.H2D)
+            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
         elif feature == Features.DUAL_NOZZLES:
             return (self.info.device_type == Printers.H2D)
         elif feature == Features.EXTRUDER_TOOL:
-            return (self.info.device_type == Printers.H2D)
+            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
             # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
@@ -244,6 +244,8 @@ class Device:
                 return True
             
             if (self.info.device_type == Printers.H2D) and self.supports_sw_version("01.01.01.00"):
+                return True
+            if (self.info.device_type == Printers.H2S):
                 return True
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.32"):
                 return True
@@ -255,9 +257,9 @@ class Device:
         elif feature == Features.MQTT_ENCRYPTION_ENABLED:
             return self.print_fun.mqtt_signature_required
         elif feature == Features.FIRE_ALARM_BUZZER:
-            return (self.info.device_type == Printers.H2D)
+            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
         elif feature == Features.HEATBED_LIGHT:
-            return (self.info.device_type == Printers.H2D)
+            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -1466,14 +1468,15 @@ class PrintJob:
             if (self._client._device.info.device_type == Printers.X1 or 
                 self._client._device.info.device_type == Printers.X1C or
                 self._client._device.info.device_type == Printers.X1E or
-                self._client._device.info.device_type == Printers.H2D):
+                self._client._device.info.device_type == Printers.H2D or
+                self._client._device.info.device_type == Printers.H2S):
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
                 # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
                 # 5 seconds apart over 60s.
                 if i != 12:
-                    LOGGER.debug(f"Sleeping 5s for X1/H2D retry")
+                    LOGGER.debug(f"Sleeping 5s for X1/H2 retry")
                     time.sleep(5)
-                    LOGGER.debug(f"Try #{i+1} for X1/H2D")
+                    LOGGER.debug(f"Try #{i+1} for X1/H2")
             else:
                 break
 

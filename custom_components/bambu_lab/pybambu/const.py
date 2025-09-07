@@ -16,6 +16,7 @@ class Printers(StrEnum):
     P1P = "P1P"
     P1S = "P1S"
     H2D = "H2D"
+    H2S = "H2S"
     A1MINI = "A1MINI"
     A1 = "A1"
 
