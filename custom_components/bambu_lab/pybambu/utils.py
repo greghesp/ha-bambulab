@@ -199,6 +199,9 @@ def get_printer_type(modules, default):
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2D")):
       return 'H2D'
 
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2S")):
+      return 'H2S'
+
     apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
     if len(apNode.keys()) > 1:
         hw_ver = apNode['hw_ver']

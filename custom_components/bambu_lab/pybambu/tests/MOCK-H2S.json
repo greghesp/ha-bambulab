@@ -1,0 +1,598 @@
+{
+    "pushall": {
+        "print": {
+          "2D": {
+            "bs": {
+              "bi": [
+                {
+                  "clock_in": false,
+                  "est_time": 0,
+                  "idx": 0,
+                  "print_then": false,
+                  "proc_list": [],
+                  "step_type": 1,
+                  "tool_info": {
+                    "color": "",
+                    "diameter": 0.4000000059604645,
+                    "id": 8978432
+                  },
+                  "type": 137
+                }
+              ],
+              "total_time": 0
+            },
+            "cond": 14,
+            "cur_stage": {
+              "clock_in_time": 0,
+              "idx": 0,
+              "left_time": 0,
+              "process": 0,
+              "state": 0
+            },
+            "first_confirm": false,
+            "makeable": false,
+            "material": {
+              "cur_id_list": [],
+              "state": 0,
+              "tar_id": "",
+              "tar_name": ""
+            }
+          },
+          "3D": {
+            "layer_num": 24,
+            "total_layer_num": 75
+          },
+          "ams": {
+            "ams": [
+              {
+                "dry_time": 0,
+                "humidity": "1",
+                "humidity_raw": "36",
+                "id": "0",
+                "info": "1003",
+                "temp": "42.7",
+                "tray": [
+                  {
+                    "bed_temp": "0",
+                    "bed_temp_type": "0",
+                    "cali_idx": 0,
+                    "cols": [
+                      "FFFFFFFF"
+                    ],
+                    "ctype": 0,
+                    "drying_temp": "0",
+                    "drying_time": "0",
+                    "id": "0",
+                    "nozzle_temp_max": "280",
+                    "nozzle_temp_min": "240",
+                    "remain": -1,
+                    "state": 11,
+                    "tag_uid": "0000000000000000",
+                    "total_len": 330000,
+                    "tray_color": "FFFFFFFF",
+                    "tray_diameter": "1.75",
+                    "tray_id_name": "",
+                    "tray_info_idx": "P8874e68",
+                    "tray_sub_brands": "",
+                    "tray_type": "ABS",
+                    "tray_uuid": "00000000000000000000000000000000",
+                    "tray_weight": "0",
+                    "xcam_info": "000000000000000000000000"
+                  },
+                  {
+                    "id": "1",
+                    "state": 8
+                  },
+                  {
+                    "id": "2",
+                    "state": 0
+                  },
+                  {
+                    "id": "3",
+                    "state": 0
+                  }
+                ]
+              }
+            ],
+            "ams_exist_bits": "1",
+            "ams_exist_bits_raw": "1",
+            "cali_id": 255,
+            "cali_stat": 0,
+            "insert_flag": true,
+            "power_on_flag": false,
+            "tray_exist_bits": "1",
+            "tray_is_bbl_bits": "1",
+            "tray_now": "0",
+            "tray_pre": "0",
+            "tray_read_done_bits": "1",
+            "tray_reading_bits": "0",
+            "tray_tar": "0",
+            "unbind_ams_stat": 0,
+            "version": 339
+          },
+          "ams_rfid_status": 0,
+          "ams_status": 768,
+          "ap_err": 0,
+          "aux": "2001004",
+          "aux_part_fan": false,
+          "batch_id": 0,
+          "bed_target_temper": 105.0,
+          "bed_temper": 105.0,
+          "big_fan1_speed": "0",
+          "big_fan2_speed": "0",
+          "cali_version": 2,
+          "canvas_id": 0,
+          "care": [
+            {
+              "id": "ls",
+              "info": "8701864"
+            },
+            {
+              "id": "ld",
+              "info": "641864"
+            },
+            {
+              "id": "lr",
+              "info": "8701864"
+            }
+          ],
+          "cfg": "185FDA99",
+          "command": "push_status",
+          "cooling_fan_speed": "2",
+          "design_id": "0",
+          "device": {
+            "airduct": {
+              "modeCur": 1,
+              "modeList": [
+                {
+                  "ctrl": [
+                    16,
+                    32,
+                    48
+                  ],
+                  "modeId": 0,
+                  "off": [
+                    96
+                  ]
+                },
+                {
+                  "ctrl": [
+                    16
+                  ],
+                  "modeId": 1,
+                  "off": [
+                    32,
+                    48
+                  ]
+                },
+                {
+                  "ctrl": [
+                    48
+                  ],
+                  "modeId": 2,
+                  "off": []
+                }
+              ],
+              "parts": [
+                {
+                  "func": 0,
+                  "id": 16,
+                  "range": 6553600,
+                  "state": 10
+                },
+                {
+                  "func": 1,
+                  "id": 32,
+                  "range": 6553600,
+                  "state": 0
+                },
+                {
+                  "func": 2,
+                  "id": 48,
+                  "range": 6553600,
+                  "state": 0
+                },
+                {
+                  "func": 3,
+                  "id": 96,
+                  "range": 6553600,
+                  "state": 100
+                }
+              ],
+              "subMode": 0
+            },
+            "bed": {
+              "info": {
+                "temp": 6881385
+              },
+              "state": 2
+            },
+            "bed_temp": 6881385,
+            "cam": {
+              "laser": {
+                "cond": 252,
+                "state": 0
+              }
+            },
+            "ctc": {
+              "info": {
+                "temp": 3932220
+              },
+              "state": 2
+            },
+            "ext_tool": {
+              "calib": 2,
+              "low_prec": true,
+              "mount": 0,
+              "mount_3d": 0,
+              "th_temp": 0,
+              "type": ""
+            },
+            "extruder": {
+              "info": [
+                {
+                  "filam_bak": [],
+                  "hnow": 0,
+                  "hpre": 0,
+                  "htar": 0,
+                  "id": 0,
+                  "info": 78,
+                  "snow": 0,
+                  "spre": 0,
+                  "star": 0,
+                  "stat": 197376,
+                  "temp": 18022675
+                }
+              ],
+              "state": 1
+            },
+            "fan": 411904,
+            "fire_ext": {
+              "bot_err": 0,
+              "cd": 0,
+              "cd_init": 15,
+              "connect_flag": 0,
+              "drill_flag": 0,
+              "history": [],
+              "remain_time": 0,
+              "rm_init": 33,
+              "state": 0
+            },
+            "laser": {
+              "power": 0
+            },
+            "nozzle": {
+              "exist": 1,
+              "info": [
+                {
+                  "diameter": 0.4,
+                  "id": 0,
+                  "tm": 0,
+                  "type": "HS01",
+                  "wear": 0
+                }
+              ],
+              "state": 0
+            },
+            "plate": {
+              "base": 4,
+              "cali2d_id": "",
+              "cur_id": "P0101",
+              "mat": 1,
+              "tar_id": ""
+            },
+            "type": 1
+          },
+          "err": "0",
+          "fail_reason": "0",
+          "fan_gear": 25,
+          "file": "/data/Metadata/plate_1.gcode",
+          "force_upgrade": false,
+          "fun": "21FF1AFFF9CB7",
+          "gcode_file": "/data/Metadata/plate_1.gcode",
+          "gcode_file_prepare_percent": "100",
+          "gcode_state": "RUNNING",
+          "heatbreak_fan_speed": "15",
+          "hms": [],
+          "home_flag": -1066967617,
+          "hw_switch_state": 3,
+          "info": {
+            "temp": 3932220
+          },
+          "ipcam": {
+            "agora_service": "disable",
+            "brtc_service": "enable",
+            "bs_state": 0,
+            "ipcam_dev": "1",
+            "ipcam_record": "enable",
+            "laser_preview_res": 4,
+            "mode_bits": 2,
+            "resolution": "1080p",
+            "rtsp_url": "rtsps://192.168.178.140:322/streaming/live/1",
+            "timelapse": "disable",
+            "tl_store_hpd_type": 2,
+            "tl_store_path_type": 2,
+            "tutk_server": "disable"
+          },
+          "job": {
+            "cur_stage": {
+              "idx": 0,
+              "state": 2
+            },
+            "stage": [
+              {
+                "clock_in": false,
+                "color": [
+                  ""
+                ],
+                "diameter": [
+                  0.4000000059604645
+                ],
+                "est_time": 0,
+                "heigh": 0.0,
+                "idx": 0,
+                "platform": "",
+                "print_then": false,
+                "proc_list": [],
+                "tool": [
+                  "HS01"
+                ],
+                "type": 2
+              }
+            ]
+          },
+          "job_attr": 17,
+          "job_id": "465293773",
+          "lan_task_id": "0",
+          "layer_num": 24,
+          "lights_report": [
+            {
+              "mode": "on",
+              "node": "chamber_light"
+            },
+            {
+              "mode": "flashing",
+              "node": "work_light"
+            },
+            {
+              "mode": "on",
+              "node": "chamber_light2"
+            }
+          ],
+          "mapping": [
+            0
+          ],
+          "mc_action": 0,
+          "mc_err": 0,
+          "mc_percent": 42,
+          "mc_print_error_code": "0",
+          "mc_print_stage": "2",
+          "mc_print_sub_stage": 0,
+          "mc_remaining_time": 78,
+          "mc_stage": 2,
+          "model_id": "US23390bfeab0123",
+          "msg": 0,
+          "net": {
+            "conf": 16,
+            "info": [
+              {
+                "ip": 2360518848,
+                "mask": 16777215
+              },
+              {
+                "ip": 0,
+                "mask": 0
+              }
+            ]
+          },
+          "nozzle_diameter": "0.4",
+          "nozzle_target_temper": 275.0,
+          "nozzle_temper": 275.0,
+          "nozzle_type": "HS01",
+          "online": {
+            "ahb": true,
+            "version": 5
+          },
+          "percent": 42,
+          "plate_cnt": 1,
+          "plate_id": 1,
+          "plate_idx": 1,
+          "prepare_per": 100,
+          "print_error": 0,
+          "print_gcode_action": 0,
+          "print_real_action": 0,
+          "print_type": "cloud",
+          "profile_id": "396905974",
+          "project_id": "465293773",
+          "queue": 0,
+          "queue_est": 0,
+          "queue_number": 0,
+          "queue_sts": 0,
+          "queue_total": 0,
+          "remain_time": 78,
+          "s_obj": [],
+          "sdcard": true,
+          "sequence_id": "5002",
+          "spd_lvl": 2,
+          "spd_mag": 100,
+          "stat": "16382180F0",
+          "state": 4,
+          "stg": [
+            13,
+            4,
+            14,
+            49,
+            1,
+            3
+          ],
+          "stg_cur": 0,
+          "subtask_id": "465293773",
+          "subtask_name": "Kabelfuehrung_v3",
+          "t_utc": 1756741151768,
+          "task_id": "465293773",
+          "total_layer_num": 75,
+          "upgrade_state": {
+            "ahb_new_version_number": "",
+            "ams_new_version_number": "",
+            "consistency_request": false,
+            "dis_state": 0,
+            "err_code": 0,
+            "ext_new_version_number": "",
+            "force_upgrade": false,
+            "idx": 5,
+            "idx2": 147730888,
+            "lower_limit": "00.00.00.00",
+            "message": "RK1126 start write flash success",
+            "module": "",
+            "new_version_state": 2,
+            "ota_new_version_number": "",
+            "progress": "100",
+            "sequence_id": 0,
+            "sn": "**REDACTED**",
+            "status": "UPGRADE_SUCCESS"
+          },
+          "upload": {
+            "file_size": 0,
+            "finish_size": 0,
+            "message": "Good",
+            "oss_url": "",
+            "progress": 0,
+            "sequence_id": "0903",
+            "speed": 0,
+            "status": "idle",
+            "task_id": "",
+            "time_remaining": 0,
+            "trouble_id": ""
+          },
+          "ver": "2000A",
+          "vir_slot": [
+            {
+              "bed_temp": "0",
+              "bed_temp_type": "0",
+              "cali_idx": -1,
+              "cols": [
+                "00000000"
+              ],
+              "ctype": 0,
+              "drying_temp": "0",
+              "drying_time": "0",
+              "id": "255",
+              "nozzle_temp_max": "0",
+              "nozzle_temp_min": "0",
+              "remain": 0,
+              "tag_uid": "0000000000000000",
+              "total_len": 330000,
+              "tray_color": "00000000",
+              "tray_diameter": "1.75",
+              "tray_id_name": "",
+              "tray_info_idx": "",
+              "tray_sub_brands": "",
+              "tray_type": "",
+              "tray_uuid": "00000000000000000000000000000000",
+              "tray_weight": "0",
+              "xcam_info": "000000000000000000000000"
+            }
+          ],
+          "wifi_signal": "-44dBm",
+          "xcam": {
+            "allow_skip_parts": false,
+            "buildplate_marker_detector": true,
+            "cfg": 224695,
+            "first_layer_inspector": true,
+            "halt_print_sensitivity": "medium",
+            "print_halt": true,
+            "printing_monitor": true,
+            "spaghetti_detector": true
+          },
+          "xcam_status": "0"
+        }
+      },
+      "get_version": {
+        "info": {
+          "command": "get_version",
+          "module": [
+            {
+              "flag": 3,
+              "hw_ver": "N/A",
+              "loader_ver": "00.00.00.00",
+              "name": "ota",
+              "product_name": "Bambu Lab H2S",
+              "sn": "MOCK-H2S",
+              "sw_ver": "01.01.00.00",
+              "visible": true
+            },
+            {
+              "flag": 0,
+              "hw_ver": "N3F05",
+              "loader_ver": "00.00.00.00",
+              "name": "n3f/0",
+              "product_name": "AMS 2 Pro (1)",
+              "sn": "MOCK-H2S-AMS0",
+              "sw_ver": "03.00.21.29",
+              "visible": true
+            },
+            {
+              "flag": 0,
+              "hw_ver": "AHB02",
+              "loader_ver": "00.00.00.21",
+              "name": "ahb",
+              "product_name": "",
+              "sn": "**REDACTED**",
+              "sw_ver": "02.04.09.70",
+              "visible": false
+            },
+            {
+              "flag": 0,
+              "hw_ver": "N/A",
+              "loader_ver": "00.00.00.00",
+              "name": "mc-sub",
+              "product_name": "",
+              "sn": "**REDACTED**",
+              "sw_ver": "00.00.00.00",
+              "visible": false
+            },
+            {
+              "flag": 0,
+              "hw_ver": "TH04",
+              "loader_ver": "00.00.01.01",
+              "name": "th",
+              "product_name": "",
+              "sn": "**REDACTED**",
+              "sw_ver": "02.00.19.33",
+              "visible": false
+            },
+            {
+              "flag": 0,
+              "hw_ver": "SMC09",
+              "loader_ver": "00.00.09.26",
+              "name": "smc",
+              "product_name": "",
+              "sn": "**REDACTED**",
+              "sw_ver": "02.01.12.02",
+              "visible": false
+            },
+            {
+              "flag": 0,
+              "hw_ver": "MC09",
+              "loader_ver": "02.00.65.20",
+              "name": "mc",
+              "product_name": "",
+              "sn": "**REDACTED**",
+              "sw_ver": "02.00.65.20",
+              "visible": false
+            },
+            {
+              "flag": 0,
+              "hw_ver": "AP05",
+              "loader_ver": "00.00.01.11",
+              "name": "ap",
+              "product_name": "",
+              "sn": "**REDACTED**",
+              "sw_ver": "00.00.65.32",
+              "visible": false
+            }
+          ],
+          "sequence_id": "0"
+        }
+    }
+}  
