@@ -309,10 +309,14 @@ class EnsureCacheFileAPIView(HomeAssistantView):
             model = coordinator.get_model()
             BASE_CACHE_DIR = "/config/www/media/ha-bambulab/"
             local_path = os.path.join(BASE_CACHE_DIR, cache_path)
-            cache_index = cache_path.find('/cache/')
-            if cache_index == -1:
-                return web.json_response({"error": "cache_path must include '/cache/'"}, status=400)
-            remote_path = cache_path[cache_index:]  # e.g., '/cache/Fidgets_v14.3mf'
+            # local_path is of form '/config/www/media/ha-bambulab/<SERIAL>/prints/Fidgets_v14.3mf'
+            #                    or '/config/www/media/ha-bambulab/<SERIAL>/prints/cache/Fidgets_v14.3mf'
+            # Depending where the print source chose to put the file onto the printer.
+            # Orca likes the root. Bambu Studio likes the cache directory.
+            remote_path_index = cache_path.find('/prints/')
+            if remote_path_index == -1:
+                return web.json_response({"error": "cache_path invalid - does not include '/prints/'"}, status=400)
+            remote_path = cache_path[remote_path_index+len('/prints'):]  # e.g., '/cache/Fidgets_v14.3mf'
             LOGGER.debug(f"EnsureCacheFileAPIView: local_path={local_path}, remote_path={remote_path}")
 
             # Check if file exists and matches size
