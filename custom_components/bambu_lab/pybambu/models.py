@@ -1409,10 +1409,9 @@ class PrintJob:
         if self._client._test_mode:
             return
         
+        self._download_task_data_from_cloud()
         if self._client.ftp_enabled:
             self._download_task_data_from_printer()
-        else:
-            self._download_task_data_from_cloud()
 
     def _download_task_data_from_printer(self):
         if self._ftpThread is None:
