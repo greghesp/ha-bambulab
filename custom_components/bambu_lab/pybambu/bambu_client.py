@@ -437,9 +437,6 @@ class BambuClient:
     def ftp_enabled(self):
         return self._device.supports_feature(Features.FTP) and self._enable_ftp
 
-    def set_ftp_enabled(self, enable):
-        self._enable_ftp = enable
-        
     @property
     def local_tls_context(self):
         if self._disable_ssl_verify:
