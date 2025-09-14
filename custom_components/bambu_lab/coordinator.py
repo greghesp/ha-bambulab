@@ -515,7 +515,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_mapping = data.get("ams_mapping")
 
         command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
-        command["print"]["url"] = f"file:///sdcard/{filepath}"
+        if filepath.contains('//'):
+            command["print"]["url"] = filepath
+        else
+            command["print"]["url"] = f"file:///sdcard/{filepath}"
+
         command["print"]["timelapse"] = timelapse
         command["print"]["bed_leveling"] = bed_leveling
         command["print"]["flow_cali"] = flow_cali
