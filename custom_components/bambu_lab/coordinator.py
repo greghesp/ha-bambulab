@@ -517,7 +517,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
         if filepath.contains('//'):
             command["print"]["url"] = filepath
-        else
+        else:
             command["print"]["url"] = f"file:///sdcard/{filepath}"
 
         command["print"]["timelapse"] = timelapse
