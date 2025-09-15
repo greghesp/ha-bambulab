@@ -403,8 +403,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Optional('local_mqtt', default = False)] = BOOLEAN_SELECTOR
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
-        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
-        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
@@ -475,8 +475,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         default_host = '' if user_input is None else user_input.get('host', '')
         default_serial = '' if user_input is None else user_input.get('serial', '')
         default_access_code = '' if user_input is None else user_input.get('access_code', '')
-        default_print_cache_count = "100" if user_input is None else user_input['print_cache_count']
-        default_timelapse_cache_count = "1" if user_input is None else user_input['timelapse_cache_count']
+        default_print_cache_count = "100" if user_input is None else int(user_input['print_cache_count'])
+        default_timelapse_cache_count = "1" if user_input is None else int(user_input['timelapse_cache_count'])
         default_usage_hours = "0" if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = False if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', '')
         default_enable_firmware_update = False if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', '')
@@ -486,8 +486,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('host', default = default_host)] = TEXT_SELECTOR
         fields[vol.Required('serial', default = default_serial)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = default_access_code)] = TEXT_SELECTOR
-        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
-        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
@@ -788,8 +788,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_serial = self._config_entry.data['serial']
         default_local_mqtt = self._config_entry.options.get('local_mqtt', False)
         default_access_code = self._config_entry.options.get('access_code', access_code)
-        default_print_cache_count = self._config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
-        default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
+        default_print_cache_count = self._config_entry.options.get('print_cache_count', "100") if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', "1") if user_input is None else user_input['timelapse_cache_count']
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
@@ -800,8 +800,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Required('serial', default=default_serial)] = printer_selector
         fields[vol.Optional('local_mqtt', default=default_local_mqtt)] = BOOLEAN_SELECTOR
         fields[vol.Optional('access_code', default=default_access_code)] = TEXT_SELECTOR
-        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
-        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
@@ -871,16 +871,16 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
         default_host = self._config_entry.options.get('host', '') if user_input is None else user_input.get('host', self._config_entry.options.get('host', ''))
         default_access_code = self._config_entry.options.get('access_code', '') if user_input is None else user_input.get('access_code', self._config_entry.options.get('access_code', ''))
-        default_print_cache_count = self._config_entry.options.get('print_cache_count', 100) if user_input is None else user_input['print_cache_count']
-        default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', 1) if user_input is None else user_input['timelapse_cache_count']
+        default_print_cache_count = self._config_entry.options.get('print_cache_count', "100") if user_input is None else user_input['print_cache_count']
+        default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', "1") if user_input is None else user_input['timelapse_cache_count']
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
-        fields[vol.Optional('print_cache_count', default=default_print_cache_count)] = NUMBER_SELECTOR
-        fields[vol.Optional('timelapse_cache_count', default=default_timelapse_cache_count)] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
             vol.Schema({
