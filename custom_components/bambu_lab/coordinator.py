@@ -515,7 +515,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_mapping = data.get("ams_mapping")
 
         command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
-        if filepath.contains('//'):
+        if '//' in filepath:
             command["print"]["url"] = filepath
         else:
             command["print"]["url"] = f"file:///sdcard/{filepath}"
