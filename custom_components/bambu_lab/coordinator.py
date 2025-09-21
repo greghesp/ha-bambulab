@@ -34,7 +34,10 @@ from homeassistant.const import (
 from homeassistant.helpers import issue_registry
 
 from .pybambu import BambuClient
-from .pybambu.const import Features
+from .pybambu.const import (
+    Features,
+    Printers
+)
 from .pybambu.commands import (
     PRINT_PROJECT_FILE_TEMPLATE,
     SEND_GCODE_TEMPLATE,
@@ -518,7 +521,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if '//' in filepath:
             command["print"]["url"] = filepath
         else:
-            command["print"]["url"] = f"file:///sdcard/{filepath}"
+            if self.config_entry.data["device_type"] in [Printers.H2S, Printers.H2D]:
+                command["print"]["url"] = f"ftp:///{filepath}"
+            else:
+                command["print"]["url"] = f"file:///sdcard/{filepath}"
 
         command["print"]["timelapse"] = timelapse
         command["print"]["bed_leveling"] = bed_leveling
