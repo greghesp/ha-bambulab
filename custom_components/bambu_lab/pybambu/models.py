@@ -1104,7 +1104,7 @@ class PrintJob:
     # 
 
     ftp_search_paths = ['/cache/', '/']
-    def _attempt_ftp_download_of_file(self, ftp, file_path):
+    def _attempt_ftp_download_of_file(self, ftp, file_path, progress_callback=None):
         if 'Metadata' in file_path:
             # This is a ram drive on the X1 and is not accessible via FTP
             return None
@@ -1133,12 +1133,45 @@ class PrintJob:
                 # File doesn't exist in the cache.
                 pass
 
-            # Download to cache
+            # Download to cache with progress tracking
+            total_downloaded = 0
+            filename = os.path.basename(file_path)
+            start_time = time.time()
+            last_log_time = start_time
+            
+            def download_progress_callback(data):
+                nonlocal total_downloaded, last_log_time
+                try:
+                    total_downloaded += len(data)
+                    percentage = (total_downloaded / size) * 100
+                    
+                    # Only log every 10 seconds
+                    current_time = time.time()
+                    if current_time - last_log_time >= 2:
+                        LOGGER.debug(f"FTP download progress: {percentage:.0f}% ({total_downloaded//1024}/{size//1024} KB)")
+                        last_log_time = current_time
+                    
+                    if progress_callback:
+                        progress_callback(percentage)
+                except Exception as e:
+                    LOGGER.debug(f"Error in progress callback: {e}")
+                    # Don't let progress callback errors break the download
+
             with open(cache_file_path, 'wb') as f:
-                ftp.retrbinary(f"RETR {file_path}", f.write)
+                # Create a wrapper function that combines file writing and progress tracking
+                def write_with_progress(data):
+                    f.write(data)
+                    download_progress_callback(data)
+                
+                ftp.retrbinary(f"RETR {file_path}", write_with_progress)
                 f.flush()
             
-            LOGGER.debug(f"Successfully downloaded '{file_path}' to cache.")
+            # Calculate download statistics
+            end_time = time.time()
+            download_time = end_time - start_time
+            download_speed = size / download_time if download_time > 0 else 0
+            
+            LOGGER.debug(f"Successfully downloaded '{file_path}' to cache. Time: {download_time:.0f}s, Speed: {download_speed/1024:.0f} KB/s")
             return cache_file_path
                     
         except ftplib.error_perm as e:
