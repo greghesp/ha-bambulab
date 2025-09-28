@@ -48,6 +48,7 @@ from .const import (
     Features,
     FansEnum,
     Home_Flag_Values,
+    Stat_Flag_Values,
     Printers,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
@@ -1929,6 +1930,7 @@ class Info:
     nozzle_type: str
     usage_hours: float
     extruder_filament_state: bool
+    door_open: bool
     _ip_address: str
     _force_ip: bool
 
@@ -1948,6 +1950,7 @@ class Info:
         self.nozzle_type = "unknown"
         self.usage_hours = client._usage_hours
         self.extruder_filament_state = False
+        self.door_open = False
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)
 
@@ -2092,6 +2095,23 @@ class Info:
         self.nozzle_diameter = float(data.get("nozzle_diameter", self.nozzle_diameter))
         self.nozzle_type = data.get("nozzle_type", self.nozzle_type)
 
+        # Door status may be provided in two places depending on printer model and firmware version.
+        # Old example:
+        #   "home_flag": -1066934785,   # closed
+        #   "home_flag": -1058546177,   # open
+        # New example:
+        #   "stat": "46258008",  # closed
+        #   "stat": "46A58008",  # open
+        if self._client._device.supports_feature(Features.DOOR_SENSOR):
+            if (self.device_type in [Printers.X1, Printers.X1C] and version.parse(self.sw_ver) < version.parse("01.09.00.00")):
+                # Old (home_flag)
+                if "home_flag" in data:
+                    self.door_open = (data["home_flag"] & Home_Flag_Values.DOOR_OPEN) != 0
+            elif "stat" in data:
+                # New (stat)
+                stat_value = int(data["stat"], 16)
+                self.door_open = (stat_value & Stat_Flag_Values.DOOR_OPEN) != 0
+
         # Compute if there's a delta before we check the wifi_signal value.
         changed = (old_data != f"{self.__dict__}")
 
@@ -2110,6 +2130,13 @@ class Info:
         self.extruder_filament_state = bool(data.get("hw_switch_state", self.extruder_filament_state))
 
         return changed
+
+    @property
+    def door_open_available(self) -> bool:
+        if (self.device_type in [Printers.X1, Printers.X1C] and version.parse(self.sw_ver) < version.parse("01.07.00.00")):
+            return False
+
+        return self._client._device.supports_feature(Features.DOOR_SENSOR)
 
     @property
     def is_local_mqtt(self):
@@ -2915,23 +2942,6 @@ class HomeFlag:
         old_data = f"{self.__dict__}"
         self._value = int(data.get("home_flag", str(self._value)))
         return (old_data != f"{self.__dict__}")
-
-    @property
-    def door_open(self) -> bool | None:
-        if not self.door_open_available:
-            return None
-
-        return (self._value & Home_Flag_Values.DOOR_OPEN) != 0
-
-    @property
-    def door_open_available(self) -> bool:
-        if not self._client._device.supports_feature(Features.DOOR_SENSOR):
-            return False
-        
-        if (self._device_type in [Printers.X1, Printers.X1C] and version.parse(self._sw_ver) < version.parse("01.07.00.00")):
-            return False
-
-        return True
 
     @property
     def sdcard_status(self) -> str:
