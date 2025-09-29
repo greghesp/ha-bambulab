@@ -683,6 +683,18 @@
       },
       "xcam_status": "0"
     },
+    "push_old_door_closed": {
+      "home_flag": -1066934785
+    },
+    "push_old_door_opened": {
+      "home_flag": -1058546177
+    },
+    "push_door_closed": {
+        "stat": "46258008"
+    },
+    "push_door_opened": {
+        "stat": "46A58008"
+    },
     "get_version": {
       "command": "get_version",
       "module": [

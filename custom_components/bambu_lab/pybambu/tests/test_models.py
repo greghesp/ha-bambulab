@@ -199,8 +199,46 @@ class TestH2D(unittest.TestCase):
         with open(os.path.join(os.path.dirname(__file__), 'H2D.json'), 'r') as f:
             self.h2d_data = json.load(f)
         
-        # Mock dual nozzles feature support
+        # Mock feature support
         self.client._device.supports_feature.return_value = True
+
+    def test_h2d_door_open(self):
+        data = self.h2d_data['push_all']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+
+        self.assertTrue(self.info.door_open_available)
+        self.assertFalse(self.info.door_open)
+
+        # On the H2D, door status is in the stat field.
+        data = self.h2d_data['push_door_opened']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertTrue(self.info.door_open)
+
+        # On the H2D, door status is in the stat field.
+        data = self.h2d_data['push_door_closed']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertFalse(self.info.door_open)
+
+    def test_h2d_door_ignores_old_flag(self):
+        data = self.h2d_data['push_all']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+
+        self.assertTrue(self.info.door_open_available)
+        self.assertFalse(self.info.door_open)
+
+        # On the H2D, door status is in the stat field, not home_flag.
+        data = self.h2d_data['push_old_door_opened']
+        _ = self.info.print_update(data)
+        self.assertFalse(self.info.door_open)
+
+        data = self.h2d_data['push_old_door_closed']
+        _ = self.info.print_update(data)
+        self.assertFalse(self.info.door_open)
+
 
     def test_h2d_nozzles(self):
         data = self.h2d_data['push_all']
