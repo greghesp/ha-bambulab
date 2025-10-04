@@ -533,9 +533,9 @@
           "hardened_steel": "Hardened steel",
           "stainless_steel": "Stainless steel",
           "tungsten_carbide": "Tungsten carbide",
-          "high_flow_hardened_steel": "hardened steel with large flow",
-          "high_flow_stainless_steel": "stainless steel with large flow",
-          "high_flow_tungsten_carbide": "tungsten carbide with large flow"
+          "high_flow_hardened_steel": "High flow hardened steel",
+          "high_flow_stainless_steel": "High flow stainless steel",
+          "high_flow_tungsten_carbide": "High flow tungsten carbide"
         }
       },
       "left_nozzle_diameter": {
@@ -547,9 +547,9 @@
           "hardened_steel": "Hardened steel",
           "stainless_steel": "Stainless steel",
           "tungsten_carbide": "Tungsten carbide",
-          "high_flow_hardened_steel": "hardened steel with large flow",
-          "high_flow_stainless_steel": "stainless steel with large flow",
-          "high_flow_tungsten_carbide": "tungsten carbide with large flow"
+          "high_flow_hardened_steel": "High flow hardened steel",
+          "high_flow_stainless_steel": "High flow stainless steel",
+          "high_flow_tungsten_carbide": "High flow tungsten carbide"
         }
       },
       "right_nozzle_diameter": {
@@ -561,9 +561,9 @@
           "hardened_steel": "Hardened steel",
           "stainless_steel": "Stainless steel",
           "tungsten_carbide": "Tungsten carbide",
-          "high_flow_hardened_steel": "hardened steel with large flow",
-          "high_flow_stainless_steel": "stainless steel with large flow",
-          "high_flow_tungsten_carbide": "tungsten carbide with large flow"
+          "high_flow_hardened_steel": "High flow hardened steel",
+          "high_flow_stainless_steel": "High flow stainless steel",
+          "high_flow_tungsten_carbide": "High flow tungsten carbide"
         }
       },
       "ip_address": {
