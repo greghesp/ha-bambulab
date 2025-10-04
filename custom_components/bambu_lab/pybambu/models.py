@@ -2095,20 +2095,18 @@ class Info:
         self.nozzle_diameter = float(data.get("nozzle_diameter", self.nozzle_diameter))
         self.nozzle_type = data.get("nozzle_type", self.nozzle_type)
 
-        # Door status may be provided in two places depending on printer model and firmware version.
-        # Old example:
+        # Door status may be provided in two places depending on printer model.
+        # X1 example:
         #   "home_flag": -1066934785,   # closed
         #   "home_flag": -1058546177,   # open
-        # New example:
+        # H2 example:
         #   "stat": "46258008",  # closed
         #   "stat": "46A58008",  # open
         if self._client._device.supports_feature(Features.DOOR_SENSOR):
-            if (self.device_type in [Printers.X1, Printers.X1C] and version.parse(self.sw_ver) < version.parse("01.09.00.00")):
-                # Old (home_flag)
+            if self.device_type in [Printers.X1, Printers.X1C]:
                 if "home_flag" in data:
                     self.door_open = (data["home_flag"] & Home_Flag_Values.DOOR_OPEN) != 0
             elif "stat" in data:
-                # New (stat)
                 stat_value = int(data["stat"], 16)
                 self.door_open = (stat_value & Stat_Flag_Values.DOOR_OPEN) != 0
 
