@@ -495,7 +495,11 @@
         "name": "Düsentyp",
         "state": {
           "hardened_steel": "Gehärteter Stahl",
-          "stainless_steel": "Edelstahl"
+          "stainless_steel": "Edelstahl",
+          "tungsten_carbide": "Wolfram -Carbid",
+          "high_flow_hardened_steel": "hartem Stahl mit großem Fluss",
+          "high_flow_stainless_steel": "Edelstahl mit großem Fluss",
+          "high_flow_tungsten_carbide": "Wolframkarbid mit großem Fluss"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normal",
           "abnormal": "Abnormal",
           "readonly": "Nur lesen"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Linke Düsengröße"
+      },
+      "left_nozzle_type": {
+        "name": "Linke Düsentyp",
+        "state": {
+          "hardened_steel": "Ausgehärteter Stahl",
+          "stainless_steel": "Edelstahl",
+          "tungsten_carbide": "Wolfram -Carbid",
+          "high_flow_hardened_steel": "hartem Stahl mit großem Fluss",
+          "high_flow_stainless_steel": "Edelstahl mit großem Fluss",
+          "high_flow_tungsten_carbide": "Wolframkarbid mit großem Fluss"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Rechte Düsengröße"
+      },
+      "right_nozzle_type": {
+        "name": "Rechte Düsentyp",
+        "state": {
+          "hardened_steel": "Ausgehärteter Stahl",
+          "stainless_steel": "Edelstahl",
+          "tungsten_carbide": "Wolfram -Carbid",
+          "high_flow_hardened_steel": "hartem Stahl mit großem Fluss",
+          "high_flow_stainless_steel": "Edelstahl mit großem Fluss",
+          "high_flow_tungsten_carbide": "Wolframkarbid mit großem Fluss"
         }
       }
     },

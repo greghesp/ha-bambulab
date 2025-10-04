@@ -492,7 +492,11 @@
         "name": "노즐 유형",
         "state": {
           "hardened_steel": "경화 강철",
-          "stainless_steel": "스테인리스 강"
+          "stainless_steel": "스테인리스 강",
+          "tungsten_carbide": "텅스텐 카바이드",
+          "high_flow_hardened_steel": "큰 흐름이있는 강화 강철",
+          "high_flow_stainless_steel": "큰 흐름이있는 스테인레스 스틸",
+          "high_flow_tungsten_carbide": "큰 흐름이있는 텅스텐 카바이드"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "정상",
           "abnormal": "이상",
           "readonly": "만 읽으십시오"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "왼쪽 노즐 크기"
+      },
+      "left_nozzle_type": {
+        "name": "왼쪽 노즐 유형",
+        "state": {
+          "hardened_steel": "강화 된 강철",
+          "stainless_steel": "스테인레스 스틸",
+          "tungsten_carbide": "텅스텐 카바이드",
+          "high_flow_hardened_steel": "큰 흐름이있는 강화 강철",
+          "high_flow_stainless_steel": "큰 흐름이있는 스테인레스 스틸",
+          "high_flow_tungsten_carbide": "큰 흐름이있는 텅스텐 카바이드"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "오른쪽 노즐 크기"
+      },
+      "right_nozzle_type": {
+        "name": "오른쪽 노즐 유형",
+        "state": {
+          "hardened_steel": "강화 된 강철",
+          "stainless_steel": "스테인레스 스틸",
+          "tungsten_carbide": "텅스텐 카바이드",
+          "high_flow_hardened_steel": "큰 흐름이있는 강화 강철",
+          "high_flow_stainless_steel": "큰 흐름이있는 스테인레스 스틸",
+          "high_flow_tungsten_carbide": "큰 흐름이있는 텅스텐 카바이드"
         }
       }
     },

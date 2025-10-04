@@ -492,7 +492,11 @@
         "name": "Tipus de broquet",
         "state": {
           "hardened_steel": "Acer endurit",
-          "stainless_steel": "Acer inoxidable"
+          "stainless_steel": "Acer inoxidable",
+          "tungsten_carbide": "Carbur de tungstè",
+          "high_flow_hardened_steel": "Acer endurit amb un gran flux",
+          "high_flow_stainless_steel": "Acer inoxidable amb un gran flux",
+          "high_flow_tungsten_carbide": "Carbur de tungstè amb gran flux"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normal",
           "abnormal": "Anormal",
           "readonly": "Llegiu només"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Mida de la boquilla esquerra"
+      },
+      "left_nozzle_type": {
+        "name": "Tipus de la boquilla esquerra",
+        "state": {
+          "hardened_steel": "Acer endurit",
+          "stainless_steel": "Acer inoxidable",
+          "tungsten_carbide": "Carbur de tungstè",
+          "high_flow_hardened_steel": "Acer endurit amb un gran flux",
+          "high_flow_stainless_steel": "Acer inoxidable amb un gran flux",
+          "high_flow_tungsten_carbide": "Carbur de tungstè amb gran flux"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Mida de la boquilla dreta"
+      },
+      "right_nozzle_type": {
+        "name": "Tipus de boquilla dreta",
+        "state": {
+          "hardened_steel": "Acer endurit",
+          "stainless_steel": "Acer inoxidable",
+          "tungsten_carbide": "Carbur de tungstè",
+          "high_flow_hardened_steel": "Acer endurit amb un gran flux",
+          "high_flow_stainless_steel": "Acer inoxidable amb un gran flux",
+          "high_flow_tungsten_carbide": "Carbur de tungstè amb gran flux"
         }
       }
     },

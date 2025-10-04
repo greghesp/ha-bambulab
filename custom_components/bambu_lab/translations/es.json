@@ -492,7 +492,11 @@
         "name": "Tipo de boquilla",
         "state": {
           "hardened_steel": "Acero endurecido",
-          "stainless_steel": "Acero inoxidable"
+          "stainless_steel": "Acero inoxidable",
+          "tungsten_carbide": "Carburo de tungsteno",
+          "high_flow_hardened_steel": "acero endurecido con flujo grande",
+          "high_flow_stainless_steel": "acero inoxidable con flujo grande",
+          "high_flow_tungsten_carbide": "Carburo de tungsteno con gran flujo"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normal",
           "abnormal": "Anormal",
           "readonly": "Solo lectura"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Tamaño de la boquilla izquierda"
+      },
+      "left_nozzle_type": {
+        "name": "Tipo de boquilla izquierda",
+        "state": {
+          "hardened_steel": "Acero endurecido",
+          "stainless_steel": "Acero inoxidable",
+          "tungsten_carbide": "Carburo de tungsteno",
+          "high_flow_hardened_steel": "acero endurecido con flujo grande",
+          "high_flow_stainless_steel": "acero inoxidable con flujo grande",
+          "high_flow_tungsten_carbide": "Carburo de tungsteno con gran flujo"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Tamaño de la boquilla derecha"
+      },
+      "right_nozzle_type": {
+        "name": "Tipo de boquilla derecha",
+        "state": {
+          "hardened_steel": "Acero endurecido",
+          "stainless_steel": "Acero inoxidable",
+          "tungsten_carbide": "Carburo de tungsteno",
+          "high_flow_hardened_steel": "acero endurecido con flujo grande",
+          "high_flow_stainless_steel": "acero inoxidable con flujo grande",
+          "high_flow_tungsten_carbide": "Carburo de tungsteno con gran flujo"
         }
       }
     },

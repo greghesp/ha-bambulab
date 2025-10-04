@@ -492,7 +492,11 @@
         "name": "Type de buse",
         "state": {
           "hardened_steel": "Acier trempé",
-          "stainless_steel": "Acier inoxydable"
+          "stainless_steel": "Acier inoxydable",
+          "tungsten_carbide": "Carbure de tungstène",
+          "high_flow_hardened_steel": "Acier durci avec un grand débit",
+          "high_flow_stainless_steel": "acier inoxydable avec un grand débit",
+          "high_flow_tungsten_carbide": "carbure de tungstène avec un grand débit"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normale",
           "abnormal": "Anormal",
           "readonly": "Lire uniquement"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Taille de la buse gauche"
+      },
+      "left_nozzle_type": {
+        "name": "Type de buse gauche",
+        "state": {
+          "hardened_steel": "Acier durci",
+          "stainless_steel": "Acier inoxydable",
+          "tungsten_carbide": "Carbure de tungstène",
+          "high_flow_hardened_steel": "Acier durci avec un grand débit",
+          "high_flow_stainless_steel": "acier inoxydable avec un grand débit",
+          "high_flow_tungsten_carbide": "carbure de tungstène avec un grand débit"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Taille de la buse droite"
+      },
+      "right_nozzle_type": {
+        "name": "Type de buse droit",
+        "state": {
+          "hardened_steel": "Acier durci",
+          "stainless_steel": "Acier inoxydable",
+          "tungsten_carbide": "Carbure de tungstène",
+          "high_flow_hardened_steel": "Acier durci avec un grand débit",
+          "high_flow_stainless_steel": "acier inoxydable avec un grand débit",
+          "high_flow_tungsten_carbide": "carbure de tungstène avec un grand débit"
         }
       }
     },

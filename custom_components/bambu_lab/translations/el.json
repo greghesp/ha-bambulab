@@ -492,7 +492,11 @@
         "name": "Τύπος ακροφυσίου",
         "state": {
           "hardened_steel": "Σκληρυμένος χάλυβας",
-          "stainless_steel": "Ανοξείδωτος χάλυβας"
+          "stainless_steel": "Ανοξείδωτος χάλυβας",
+          "tungsten_carbide": "Καρβίδιο βολφραμίου",
+          "high_flow_hardened_steel": "σκληρυμένος χάλυβας με μεγάλη ροή",
+          "high_flow_stainless_steel": "από ανοξείδωτο χάλυβα με μεγάλη ροή",
+          "high_flow_tungsten_carbide": "καρβίδιο βολφραμίου με μεγάλη ροή"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Κανονικός",
           "abnormal": "Ανώμαλος",
           "readonly": "Μόνο διαβάστε"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Μέγεθος ακροφυσίου αριστερού"
+      },
+      "left_nozzle_type": {
+        "name": "Αριστερά τύπου ακροφυσίου",
+        "state": {
+          "hardened_steel": "Χαλύβδινο χαλύβδινο",
+          "stainless_steel": "Από ανοξείδωτο χάλυβα",
+          "tungsten_carbide": "Καρβίδιο βολφραμίου",
+          "high_flow_hardened_steel": "σκληρυμένος χάλυβας με μεγάλη ροή",
+          "high_flow_stainless_steel": "από ανοξείδωτο χάλυβα με μεγάλη ροή",
+          "high_flow_tungsten_carbide": "καρβίδιο βολφραμίου με μεγάλη ροή"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Μέγεθος δεξιού ακροφυσίου"
+      },
+      "right_nozzle_type": {
+        "name": "Τύπος δεξιού ακροφυσίου",
+        "state": {
+          "hardened_steel": "Χαλύβδινο χαλύβδινο",
+          "stainless_steel": "Από ανοξείδωτο χάλυβα",
+          "tungsten_carbide": "Καρβίδιο βολφραμίου",
+          "high_flow_hardened_steel": "σκληρυμένος χάλυβας με μεγάλη ροή",
+          "high_flow_stainless_steel": "από ανοξείδωτο χάλυβα με μεγάλη ροή",
+          "high_flow_tungsten_carbide": "καρβίδιο βολφραμίου με μεγάλη ροή"
         }
       }
     },

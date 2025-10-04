@@ -492,7 +492,11 @@
         "name": "Typ trysky",
         "state": {
           "hardened_steel": "Tvrdená oceľ",
-          "stainless_steel": "Nerezová oceľ"
+          "stainless_steel": "Nerezová oceľ",
+          "tungsten_carbide": "Karbid volta",
+          "high_flow_hardened_steel": "kalená oceľ s veľkým prietokom",
+          "high_flow_stainless_steel": "nehrdzavejúca oceľ s veľkým prietokom",
+          "high_flow_tungsten_carbide": "karbid volfrámu s veľkým prietokom"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normálny",
           "abnormal": "Neobvyklý",
           "readonly": "Čítať"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Veľkosť ľavej dýzy"
+      },
+      "left_nozzle_type": {
+        "name": "Typ ľavej trysky",
+        "state": {
+          "hardened_steel": "Zatvrdnutá oceľ",
+          "stainless_steel": "Nehrdzavejúca oceľ",
+          "tungsten_carbide": "Karbid volta",
+          "high_flow_hardened_steel": "kalená oceľ s veľkým prietokom",
+          "high_flow_stainless_steel": "nehrdzavejúca oceľ s veľkým prietokom",
+          "high_flow_tungsten_carbide": "karbid volfrámu s veľkým prietokom"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Pravá veľkosť dýzy"
+      },
+      "right_nozzle_type": {
+        "name": "Typ správnej dýzy",
+        "state": {
+          "hardened_steel": "Zatvrdnutá oceľ",
+          "stainless_steel": "Nehrdzavejúca oceľ",
+          "tungsten_carbide": "Karbid volta",
+          "high_flow_hardened_steel": "kalená oceľ s veľkým prietokom",
+          "high_flow_stainless_steel": "nehrdzavejúca oceľ s veľkým prietokom",
+          "high_flow_tungsten_carbide": "karbid volfrámu s veľkým prietokom"
         }
       }
     },

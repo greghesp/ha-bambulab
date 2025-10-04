@@ -492,7 +492,11 @@
         "name": "Tipo di Ugello",
         "state": {
           "hardened_steel": "Acciaio Temprato",
-          "stainless_steel": "Acciaio Inossidabile"
+          "stainless_steel": "Acciaio Inossidabile",
+          "tungsten_carbide": "Carburo di tungsteno",
+          "high_flow_hardened_steel": "acciaio temprato con grande flusso",
+          "high_flow_stainless_steel": "acciaio inossidabile con grande flusso",
+          "high_flow_tungsten_carbide": "Carburo di tungsteno con grande flusso"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normale",
           "abnormal": "Anormale",
           "readonly": "Solo lettura"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Dimensione dell'ugello sinistro"
+      },
+      "left_nozzle_type": {
+        "name": "Tipo di ugello sinistro",
+        "state": {
+          "hardened_steel": "Acciaio temprato",
+          "stainless_steel": "Acciaio inossidabile",
+          "tungsten_carbide": "Carburo di tungsteno",
+          "high_flow_hardened_steel": "acciaio temprato con grande flusso",
+          "high_flow_stainless_steel": "acciaio inossidabile con grande flusso",
+          "high_flow_tungsten_carbide": "Carburo di tungsteno con grande flusso"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Dimensione giusta dell'ugello"
+      },
+      "right_nozzle_type": {
+        "name": "Tipo di ugello giusto",
+        "state": {
+          "hardened_steel": "Acciaio temprato",
+          "stainless_steel": "Acciaio inossidabile",
+          "tungsten_carbide": "Carburo di tungsteno",
+          "high_flow_hardened_steel": "acciaio temprato con grande flusso",
+          "high_flow_stainless_steel": "acciaio inossidabile con grande flusso",
+          "high_flow_tungsten_carbide": "Carburo di tungsteno con grande flusso"
         }
       }
     },
