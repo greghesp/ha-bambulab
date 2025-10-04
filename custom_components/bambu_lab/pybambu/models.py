@@ -1926,8 +1926,8 @@ class Info:
     online: bool
     new_version_state: int
     mqtt_mode: str
-    nozzle_diameter: float
-    nozzle_type: str
+    nozzle_diameters: dict[int, float|None]
+    nozzle_types: dict[int, str|None]
     usage_hours: float
     extruder_filament_state: bool
     door_open: bool
@@ -1946,8 +1946,8 @@ class Info:
         self.online = False
         self.new_version_state = 0
         self.mqtt_mode = "local" if self._client._local_mqtt else "bambu_cloud"
-        self.nozzle_diameter = 0
-        self.nozzle_type = "unknown"
+        self.nozzle_diameters = {0: None, 1: None}
+        self.nozzle_types = {0: None, 1: None}
         self.usage_hours = client._usage_hours
         self.extruder_filament_state = False
         self.door_open = False
@@ -2090,10 +2090,28 @@ class Info:
 
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
-        # "nozzle_diameter": "0.4",
-        # "nozzle_type": "hardened_steel",
-        self.nozzle_diameter = float(data.get("nozzle_diameter", self.nozzle_diameter))
-        self.nozzle_type = data.get("nozzle_type", self.nozzle_type)
+        # Nozzle data is provided differently for dual-nozzle printers (at least)
+        # New:
+        #  "nozzle": {
+        #    "info": [
+        #      {"id": 0, "diameter": "0.4", "type": "HS01"},
+        #      {"id": 1, "diameter": "0.4", "type": "HS01"}
+        #    ]
+        # },
+        # Old:
+        #   "nozzle_diameter": "0.4",
+        #   "nozzle_type": "hardened_steel",
+        nozzle_data = data.get("device", {}).get("nozzle", {}).get("info")
+        if nozzle_data is not None:
+            for entry in nozzle_data:
+                if entry.get("id") in (0, 1):
+                    self.nozzle_diameters[entry["id"]] = float(entry["diameter"])
+                    self.nozzle_types[entry["id"]] = Info._nozzle_type_name(entry["type"])
+        else:
+            if "nozzle_diameter" in data:
+                self.nozzle_diameters[0] = float(data["nozzle_diameter"])
+            if "nozzle_type" in data:
+                self.nozzle_types[0] = data["nozzle_type"]
 
         # Door status may be provided in two places depending on printer model and firmware version.
         # Old example:
@@ -2132,6 +2150,30 @@ class Info:
         return changed
 
     @property
+    def active_nozzle_diameter(self) -> float | None:
+        return self.nozzle_diameters[self._client._device.extruder.active_nozzle_index]
+
+    @property
+    def active_nozzle_type(self) -> str | None:
+        return self.nozzle_types[self._client._device.extruder.active_nozzle_index]
+
+    @property
+    def left_nozzle_diameter(self) -> float | None:
+        return self.nozzle_diameters[1]
+
+    @property
+    def left_nozzle_type(self) -> str | None:
+        return self.nozzle_types[1]
+
+    @property
+    def right_nozzle_diameter(self) -> float | None:
+        return self.nozzle_diameters[0]
+
+    @property
+    def right_nozzle_type(self) -> str | None:
+        return self.nozzle_types[0]
+
+    @property
     def door_open_available(self) -> bool:
         if (self.device_type in [Printers.X1, Printers.X1C] and version.parse(self.sw_ver) < version.parse("01.07.00.00")):
             return False
@@ -2166,6 +2208,23 @@ class Info:
         self._client.publish(BUZZER_SET_SILENT) # need to reset first for it to work properly
         self._client.publish(BUZZER_SET_BEEPING)
        
+    @staticmethod
+    def _nozzle_type_name(nozzle_type_code: str) -> str:
+        # Second character indicates standard vs high flow
+        if nozzle_type_code[1] == "H":
+            flow_prefix = "high_flow_"
+        else:
+            flow_prefix = ""
+
+        # Last two digits indicate the material
+        material_code = nozzle_type_code[2:4]
+        _MATERIALS = {
+            "00": "stainless_steel",
+            "01": "hardened_steel",
+            "05": "tungsten_carbide",
+        }
+        return flow_prefix + _MATERIALS.get(material_code, "unknown")
+
 
 @dataclass
 class AMSInstance:

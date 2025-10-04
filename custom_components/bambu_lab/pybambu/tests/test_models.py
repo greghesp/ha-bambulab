@@ -35,6 +35,11 @@ class TestInfo(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
         self.info = Info(self.client)
+
+        # Create a _device object on the client
+        self.client._device = MagicMock()
+        self.client._device.extruder = Extruder(self.client._device)
+
         # Load test data from P1P.json
         with open(os.path.join(os.path.dirname(__file__), 'P1P.json'), 'r') as f:
             self.test_data = json.load(f)
@@ -45,6 +50,16 @@ class TestInfo(unittest.TestCase):
         
         self.info.info_update(data)
         self.assertEqual(self.info.sw_ver, "01.07.00.00")
+
+    def test_info_update_nozzle(self):
+        # Test basic info update
+        data = self.test_data['push_all']
+
+        self.client._device.extruder.print_update(data)
+        self.info.print_update(data)
+
+        self.assertEqual(self.info.active_nozzle_diameter, 0.4)
+        self.assertEqual(self.info.active_nozzle_type, "hardened_steel")
 
 class TestAMSList(unittest.TestCase):
     def setUp(self):
@@ -195,12 +210,51 @@ class TestH2D(unittest.TestCase):
         self.client = MagicMock()
         self.info = Info(self.client)
         self.temperature = Temperature(self.client)
+
+        # Create a _device object on the client
+        self.client._device = MagicMock()
+        self.client._device.extruder = Extruder(self.client._device)
+
         # Load H2D test data
         with open(os.path.join(os.path.dirname(__file__), 'H2D.json'), 'r') as f:
             self.h2d_data = json.load(f)
         
         # Mock feature support
         self.client._device.supports_feature.return_value = True
+
+    def test_h2d_nozzle_info(self):
+        data = self.h2d_data['push_all']
+        result = self.client._device.extruder.print_update(data)
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+
+        self.assertEqual(self.client._device.extruder.active_nozzle_index, 0)  # right is active
+        self.assertEqual(self.info.active_nozzle_diameter, 0.4)
+        self.assertEqual(self.info.active_nozzle_type, "hardened_steel")
+        self.assertEqual(self.info.left_nozzle_diameter, 0.4)
+        self.assertEqual(self.info.right_nozzle_diameter, 0.4)
+        self.assertEqual(self.info.left_nozzle_type, "high_flow_hardened_steel")
+        self.assertEqual(self.info.right_nozzle_type, "hardened_steel")
+
+        data = self.h2d_data['push_alt_nozzle_info']
+        result = self.info.print_update(data)
+        self.assertEqual(self.info.active_nozzle_diameter, 0.2)
+        self.assertEqual(self.info.active_nozzle_type, "stainless_steel")
+        self.assertEqual(self.info.left_nozzle_diameter, 0.6)
+        self.assertEqual(self.info.left_nozzle_type, "tungsten_carbide")
+        self.assertEqual(self.info.right_nozzle_diameter, 0.2)
+        self.assertEqual(self.info.right_nozzle_type, "stainless_steel")
+
+        data = self.h2d_data['push_left_extruder']
+        result = self.client._device.extruder.print_update(data)
+        self.assertEqual(self.client._device.extruder.active_nozzle_index, 1)
+
+        self.assertEqual(self.info.active_nozzle_diameter, 0.6)
+        self.assertEqual(self.info.active_nozzle_type, "tungsten_carbide")
+        self.assertEqual(self.info.left_nozzle_diameter, 0.6)
+        self.assertEqual(self.info.left_nozzle_type, "tungsten_carbide")
+        self.assertEqual(self.info.right_nozzle_diameter, 0.2)
+        self.assertEqual(self.info.right_nozzle_type, "stainless_steel")
 
     def test_h2d_door_open(self):
         data = self.h2d_data['push_all']
