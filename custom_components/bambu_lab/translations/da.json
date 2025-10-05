@@ -492,7 +492,11 @@
         "name": "Dysens type",
         "state": {
           "hardened_steel": "Hærdet stål",
-          "stainless_steel": "Rustfrit stål"
+          "stainless_steel": "Rustfrit stål",
+          "tungsten_carbide": "Wolframcarbid",
+          "high_flow_hardened_steel": "hærdet stål med stor strømning",
+          "high_flow_stainless_steel": "rustfrit stål med stor strømning",
+          "high_flow_tungsten_carbide": "wolframcarbid med stor strømning"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normal",
           "abnormal": "Abnorm",
           "readonly": "Læs kun"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Efterladt dysestørrelse"
+      },
+      "left_nozzle_type": {
+        "name": "Efterladt dysetype",
+        "state": {
+          "hardened_steel": "Hærdet stål",
+          "stainless_steel": "Rustfrit stål",
+          "tungsten_carbide": "Wolframcarbid",
+          "high_flow_hardened_steel": "hærdet stål med stor strømning",
+          "high_flow_stainless_steel": "rustfrit stål med stor strømning",
+          "high_flow_tungsten_carbide": "wolframcarbid med stor strømning"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Højre dysestørrelse"
+      },
+      "right_nozzle_type": {
+        "name": "Højre dysetype",
+        "state": {
+          "hardened_steel": "Hærdet stål",
+          "stainless_steel": "Rustfrit stål",
+          "tungsten_carbide": "Wolframcarbid",
+          "high_flow_hardened_steel": "hærdet stål med stor strømning",
+          "high_flow_stainless_steel": "rustfrit stål med stor strømning",
+          "high_flow_tungsten_carbide": "wolframcarbid med stor strømning"
         }
       }
     },

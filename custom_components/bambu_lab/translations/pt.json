@@ -492,7 +492,11 @@
         "name": "Tipo de bico",
         "state": {
           "hardened_steel": "Aço endurecido",
-          "stainless_steel": "Aço inoxidável"
+          "stainless_steel": "Aço inoxidável",
+          "tungsten_carbide": "Carboneto de tungstênio",
+          "high_flow_hardened_steel": "Aço endurecido com grande fluxo",
+          "high_flow_stainless_steel": "Aço inoxidável com grande fluxo",
+          "high_flow_tungsten_carbide": "carboneto de tungstênio com grande fluxo"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "Normal",
           "abnormal": "Anormal",
           "readonly": "Somente leitura"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Tamanho do bico esquerdo"
+      },
+      "left_nozzle_type": {
+        "name": "Tipo de bico esquerdo",
+        "state": {
+          "hardened_steel": "Aço endurecido",
+          "stainless_steel": "Aço inoxidável",
+          "tungsten_carbide": "Carboneto de tungstênio",
+          "high_flow_hardened_steel": "Aço endurecido com grande fluxo",
+          "high_flow_stainless_steel": "Aço inoxidável com grande fluxo",
+          "high_flow_tungsten_carbide": "carboneto de tungstênio com grande fluxo"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Tamanho do bico direito"
+      },
+      "right_nozzle_type": {
+        "name": "Tipo de bico direito",
+        "state": {
+          "hardened_steel": "Aço endurecido",
+          "stainless_steel": "Aço inoxidável",
+          "tungsten_carbide": "Carboneto de tungstênio",
+          "high_flow_hardened_steel": "Aço endurecido com grande fluxo",
+          "high_flow_stainless_steel": "Aço inoxidável com grande fluxo",
+          "high_flow_tungsten_carbide": "carboneto de tungstênio com grande fluxo"
         }
       }
     },

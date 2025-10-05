@@ -495,7 +495,11 @@
         "name": "Nozzle-type",
         "state": {
           "hardened_steel": "Gehard staal",
-          "stainless_steel": "Roestvast staal"
+          "stainless_steel": "Roestvast staal",
+          "tungsten_carbide": "Wolfraamcarbide",
+          "high_flow_hardened_steel": "gehard staal met grote stroom",
+          "high_flow_stainless_steel": "roestvrij staal met grote stroom",
+          "high_flow_tungsten_carbide": "wolfraamcarbide met grote stroom"
         }
       },
       "ip_address": {
@@ -758,6 +762,34 @@
           "normal": "Normaal",
           "abnormal": "Abnormaal",
           "readonly": "Alleen lezen"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Linker mondstukformaat"
+      },
+      "left_nozzle_type": {
+        "name": "Linker mondstuktype",
+        "state": {
+          "hardened_steel": "Gehard staal",
+          "stainless_steel": "Roestvrij staal",
+          "tungsten_carbide": "Wolfraamcarbide",
+          "high_flow_hardened_steel": "gehard staal met grote stroom",
+          "high_flow_stainless_steel": "roestvrij staal met grote stroom",
+          "high_flow_tungsten_carbide": "wolfraamcarbide met grote stroom"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Juiste mondstukformaat"
+      },
+      "right_nozzle_type": {
+        "name": "Rechter mondstuktype",
+        "state": {
+          "hardened_steel": "Gehard staal",
+          "stainless_steel": "Roestvrij staal",
+          "tungsten_carbide": "Wolfraamcarbide",
+          "high_flow_hardened_steel": "gehard staal met grote stroom",
+          "high_flow_stainless_steel": "roestvrij staal met grote stroom",
+          "high_flow_tungsten_carbide": "wolfraamcarbide met grote stroom"
         }
       }
     },

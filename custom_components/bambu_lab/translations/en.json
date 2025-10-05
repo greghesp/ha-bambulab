@@ -531,7 +531,39 @@
         "name": "Nozzle type",
         "state": {
           "hardened_steel": "Hardened steel",
-          "stainless_steel": "Stainless steel"
+          "stainless_steel": "Stainless steel",
+          "tungsten_carbide": "Tungsten carbide",
+          "high_flow_hardened_steel": "High flow hardened steel",
+          "high_flow_stainless_steel": "High flow stainless steel",
+          "high_flow_tungsten_carbide": "High flow tungsten carbide"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Left nozzle size"
+      },
+      "left_nozzle_type": {
+        "name": "Left nozzle type",
+        "state": {
+          "hardened_steel": "Hardened steel",
+          "stainless_steel": "Stainless steel",
+          "tungsten_carbide": "Tungsten carbide",
+          "high_flow_hardened_steel": "High flow hardened steel",
+          "high_flow_stainless_steel": "High flow stainless steel",
+          "high_flow_tungsten_carbide": "High flow tungsten carbide"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Right nozzle size"
+      },
+      "right_nozzle_type": {
+        "name": "Right nozzle type",
+        "state": {
+          "hardened_steel": "Hardened steel",
+          "stainless_steel": "Stainless steel",
+          "tungsten_carbide": "Tungsten carbide",
+          "high_flow_hardened_steel": "High flow hardened steel",
+          "high_flow_stainless_steel": "High flow stainless steel",
+          "high_flow_tungsten_carbide": "High flow tungsten carbide"
         }
       },
       "ip_address": {

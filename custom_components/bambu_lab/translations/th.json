@@ -498,7 +498,11 @@
         "name": "ชนิดหัวฉีด",
         "state": {
           "hardened_steel": "เหล็กแข็ง",
-          "stainless_steel": "สแตนเลส"
+          "stainless_steel": "สแตนเลส",
+          "tungsten_carbide": "ทังสเตนคาร์ไบด์",
+          "high_flow_hardened_steel": "เหล็กแข็งที่มีการไหลขนาดใหญ่",
+          "high_flow_stainless_steel": "สแตนเลสที่มีการไหลขนาดใหญ่",
+          "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ที่มีการไหลขนาดใหญ่"
         }
       },
       "ip_address": {
@@ -758,6 +762,34 @@
           "normal": "ปกติ",
           "abnormal": "ผิดปกติ",
           "readonly": "อ่านเท่านั้น"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "ขนาดหัวฉีดซ้าย"
+      },
+      "left_nozzle_type": {
+        "name": "ประเภทหัวฉีดซ้าย",
+        "state": {
+          "hardened_steel": "เหล็กแข็ง",
+          "stainless_steel": "สแตนเลส",
+          "tungsten_carbide": "ทังสเตนคาร์ไบด์",
+          "high_flow_hardened_steel": "เหล็กแข็งที่มีการไหลขนาดใหญ่",
+          "high_flow_stainless_steel": "สแตนเลสที่มีการไหลขนาดใหญ่",
+          "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ที่มีการไหลขนาดใหญ่"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "ขนาดหัวฉีดขวา"
+      },
+      "right_nozzle_type": {
+        "name": "ประเภทหัวฉีดขวา",
+        "state": {
+          "hardened_steel": "เหล็กแข็ง",
+          "stainless_steel": "สแตนเลส",
+          "tungsten_carbide": "ทังสเตนคาร์ไบด์",
+          "high_flow_hardened_steel": "เหล็กแข็งที่มีการไหลขนาดใหญ่",
+          "high_flow_stainless_steel": "สแตนเลสที่มีการไหลขนาดใหญ่",
+          "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ที่มีการไหลขนาดใหญ่"
         }
       }
     },

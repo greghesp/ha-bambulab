@@ -501,7 +501,11 @@
         "name": "Typ dyszy",
         "state": {
           "hardened_steel": "Stal hartowana",
-          "stainless_steel": "Stal nierdzewna"
+          "stainless_steel": "Stal nierdzewna",
+          "tungsten_carbide": "Węglenie wolframowe",
+          "high_flow_hardened_steel": "stalowa stal z dużym przepływem",
+          "high_flow_stainless_steel": "stal nierdzewna z dużym przepływem",
+          "high_flow_tungsten_carbide": "Węglenie wolframowe z dużym przepływem"
         }
       },
       "ip_address": {
@@ -758,6 +762,34 @@
           "normal": "Obecna, OK",
           "abnormal": "Nieprawidłowy",
           "readonly": "Tylko do odczytu"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Lewy rozmiar dyszy"
+      },
+      "left_nozzle_type": {
+        "name": "Lewy typ dyszy",
+        "state": {
+          "hardened_steel": "Stalowa stal",
+          "stainless_steel": "Stal nierdzewna",
+          "tungsten_carbide": "Węglenie wolframowe",
+          "high_flow_hardened_steel": "stalowa stal z dużym przepływem",
+          "high_flow_stainless_steel": "stal nierdzewna z dużym przepływem",
+          "high_flow_tungsten_carbide": "Węglenie wolframowe z dużym przepływem"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Właściwy rozmiar dyszy"
+      },
+      "right_nozzle_type": {
+        "name": "Rzeczy typu dyszy",
+        "state": {
+          "hardened_steel": "Stalowa stal",
+          "stainless_steel": "Stal nierdzewna",
+          "tungsten_carbide": "Węglenie wolframowe",
+          "high_flow_hardened_steel": "stalowa stal z dużym przepływem",
+          "high_flow_stainless_steel": "stal nierdzewna z dużym przepływem",
+          "high_flow_tungsten_carbide": "Węglenie wolframowe z dużym przepływem"
         }
       }
     },

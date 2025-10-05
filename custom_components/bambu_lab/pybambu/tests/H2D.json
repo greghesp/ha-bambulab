@@ -391,7 +391,7 @@
               "diameter": 0.4,
               "id": 1,
               "tm": 0,
-              "type": "HS01",
+              "type": "HH01",
               "wear": 0
             }
           ],
@@ -694,6 +694,35 @@
     },
     "push_door_opened": {
         "stat": "46A58008"
+    },
+    "push_left_extruder": {
+        "device": {
+          "extruder": {"state": 274}
+        }
+    },
+    "push_alt_nozzle_info": {
+      "device": {
+        "nozzle": {
+          "exist": 3,
+          "info": [
+            {
+              "diameter": 0.2,
+              "id": 0,
+              "tm": 0,
+              "type": "HS00",
+              "wear": 0
+            },
+            {
+              "diameter": 0.6,
+              "id": 1,
+              "tm": 0,
+              "type": "HX05",
+              "wear": 0
+            }
+          ],
+          "state": 0
+        }
+      }
     },
     "get_version": {
       "command": "get_version",

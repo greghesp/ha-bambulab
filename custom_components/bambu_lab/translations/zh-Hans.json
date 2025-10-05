@@ -492,7 +492,11 @@
         "name": "喷嘴类型",
         "state": {
           "hardened_steel": "硬化钢喷嘴",
-          "stainless_steel": "不锈钢喷嘴"
+          "stainless_steel": "不锈钢喷嘴",
+          "tungsten_carbide": "碳化钨",
+          "high_flow_hardened_steel": "硬化钢",
+          "high_flow_stainless_steel": "不锈钢有大流动",
+          "high_flow_tungsten_carbide": "碳化氢碳化物含量大"
         }
       },
       "humidity_index": {
@@ -758,6 +762,34 @@
           "normal": "普通的",
           "abnormal": "异常",
           "readonly": "只读"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "左喷嘴大小"
+      },
+      "left_nozzle_type": {
+        "name": "左喷嘴类型",
+        "state": {
+          "hardened_steel": "硬化钢",
+          "stainless_steel": "不锈钢",
+          "tungsten_carbide": "碳化钨",
+          "high_flow_hardened_steel": "硬化钢",
+          "high_flow_stainless_steel": "不锈钢有大流动",
+          "high_flow_tungsten_carbide": "碳化氢碳化物含量大"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "正确的喷嘴大小"
+      },
+      "right_nozzle_type": {
+        "name": "正确的喷嘴类型",
+        "state": {
+          "hardened_steel": "硬化钢",
+          "stainless_steel": "不锈钢",
+          "tungsten_carbide": "碳化钨",
+          "high_flow_hardened_steel": "硬化钢",
+          "high_flow_stainless_steel": "不锈钢有大流动",
+          "high_flow_tungsten_carbide": "碳化氢碳化物含量大"
         }
       }
     },
