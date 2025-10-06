@@ -83,7 +83,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     @callback
     def _async_shutdown(self, event: Event) -> None:
         """Call when Home Assistant is stopping."""
-        LOGGER.debug(f"HOME ASSISTANT IS SHUTTING DOWN")
+        LOGGER.debug("HOME ASSISTANT IS SHUTTING DOWN")
         self.shutdown()
 
     def event_handler(self, event: str):
@@ -334,11 +334,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _service_call_set_filament(self, data: dict):
         device_id = data.get('device_id', [])
         if len(device_id) != 0:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = data.get('entity_id', [])
         if len(entity_id) != 1:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = entity_id[0]
 
@@ -422,11 +422,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _service_call_load_filament(self, data: dict):
         device_id = data.get('device_id', [])
         if len(device_id) != 0:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = data.get('entity_id', [])
         if len(entity_id) != 1:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = entity_id[0]
 
@@ -647,7 +647,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                         ams_devices_to_remove.append(device.id)
 
         for device in ams_devices_to_remove:
-            LOGGER.debug(f"Removing stale AMS.")
+            LOGGER.debug("Removing stale AMS.")
             dev_reg.async_remove_device(device)
 
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
