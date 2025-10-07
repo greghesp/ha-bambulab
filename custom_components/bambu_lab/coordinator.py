@@ -463,7 +463,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         temperature = int(data.get('temperature', 0))
 
         if entity_unique_id.endswith('_external_spool'):
-            tray = 254
+            ams_index = 255
+            tray = 0
             # Unless a target temperature override is set, try and find the
             # midway temperature of the filament set in the ext spool
             ext_spool = self.get_model().external_spool[0]
@@ -492,7 +493,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
         command = SWITCH_AMS_TEMPLATE
+        command['print']['ams_id'] = ams_index
+        command['print']['slot_id'] = tray
         command['print']['target'] = tray
+        if ams_index == 255:
+            command['print']['target'] = 254
         command['print']['tar_temp'] = temperature
         self.client.publish(command)
 
@@ -502,6 +507,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
         
         command = SWITCH_AMS_TEMPLATE
+        command['print']['ams_id'] = 255
+        command['print']['slot_id'] = 255
         command['print']['target'] = 255
         self.client.publish(command)
 
