@@ -2109,7 +2109,7 @@ class Info:
         # Old:
         #   "nozzle_diameter": "0.4",
         #   "nozzle_type": "hardened_steel",
-        nozzle_data = data.get("device", {}).get("nozzle", {}).get("info", None)
+        nozzle_data = data.get("device", {}).get("nozzle", {}).get("info")
         if nozzle_data is not None and isinstance(nozzle_data, list):
             for entry in nozzle_data:
                 if entry.get("id") in (0, 1):
