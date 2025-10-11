@@ -83,7 +83,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     @callback
     def _async_shutdown(self, event: Event) -> None:
         """Call when Home Assistant is stopping."""
-        LOGGER.debug(f"HOME ASSISTANT IS SHUTTING DOWN")
+        LOGGER.debug("HOME ASSISTANT IS SHUTTING DOWN")
         self.shutdown()
 
     def event_handler(self, event: str):
@@ -334,11 +334,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _service_call_set_filament(self, data: dict):
         device_id = data.get('device_id', [])
         if len(device_id) != 0:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = data.get('entity_id', [])
         if len(entity_id) != 1:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = entity_id[0]
 
@@ -419,14 +419,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         return combined_data
 
-    def _service_call_load_filament(self, data: dict):
+    def _service_call_load_unload_filament(self, load: bool, data: dict):
         device_id = data.get('device_id', [])
         if len(device_id) != 0:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = data.get('entity_id', [])
         if len(entity_id) != 1:
-            LOGGER.error("Invalid entity data payload: {data}")
+            LOGGER.error(f"Invalid entity data payload: {data}")
             return False
         entity_id = entity_id[0]
 
@@ -463,12 +463,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         temperature = int(data.get('temperature', 0))
 
         if entity_unique_id.endswith('_external_spool'):
-            tray = 254
-            # Unless a target temperature override is set, try and find the
-            # midway temperature of the filament set in the ext spool
-            ext_spool = self.get_model().external_spool[0]
-            if data.get('temperature') is None and not ext_spool.empty:
-                temperature = (int(ext_spool.nozzle_temp_min) + int(ext_spool.nozzle_temp_max)) / 2
+            ams_index, tray = 255, 0
+            target = 254
+            # search selected external spool by identifier
+            for i, ext_spool in enumerate(self.get_model().external_spool):
+                vtray = self.get_virtual_tray_device(i)
+                if vtray['identifiers'] == ams_device.identifiers:
+                    ams_index = 255 - i
+                    # Unless a target temperature override is set, try and find the
+                    # midway temperature of the filament set in the ext spool
+                    if data.get('temperature') is None and not ext_spool.empty:
+                        temperature = (int(ext_spool.nozzle_temp_min) + int(ext_spool.nozzle_temp_max)) // 2
+                    break
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
@@ -477,6 +483,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             if ams_index is None:
                 LOGGER.error("Unable to locate AMS.")
                 return
+            # old protocol
+            target = ams_index * 4 + tray
 
             ams_tray = self.get_model().ams.data[ams_index].tray[tray]
             if ams_tray.empty:
@@ -492,18 +500,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
         command = SWITCH_AMS_TEMPLATE
-        command['print']['target'] = tray
-        command['print']['tar_temp'] = temperature
+        command['print']['ams_id'] = ams_index
+        if load:
+            command['print']['slot_id'] = tray
+            command['print']['target'] = target
+            command['print']['tar_temp'] = temperature
+        else:
+            command['print']['slot_id'] = 255
+            command['print']['target'] = 255
         self.client.publish(command)
 
+    def _service_call_load_filament(self, data: dict):
+        return self._service_call_load_unload_filament(True, data)
+
     def _service_call_unload_filament(self, data: dict):
-        if not self.get_model().supports_feature(Features.AMS_SWITCH_COMMAND):
-            LOGGER.error(f"Loading filament is not available for this printer's firmware version, please update it")
-            return
-        
-        command = SWITCH_AMS_TEMPLATE
-        command['print']['target'] = 255
-        self.client.publish(command)
+        return self._service_call_load_unload_filament(False, data)
 
     def _service_call_print_project_file(self, data: dict):
         command = PRINT_PROJECT_FILE_TEMPLATE
@@ -647,7 +658,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                         ams_devices_to_remove.append(device.id)
 
         for device in ams_devices_to_remove:
-            LOGGER.debug(f"Removing stale AMS.")
+            LOGGER.debug("Removing stale AMS.")
             dev_reg.async_remove_device(device)
 
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.

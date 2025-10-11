@@ -89,6 +89,8 @@ SWITCH_AMS_TEMPLATE = {
     "print": {
         "command": "ams_change_filament",
         "sequence_id": "0",
+        "ams_id": 255,              # Index of the AMS
+        "slot_id": 0,               # Index of the tray with the AMS
         "target": 255,
         "curr_temp": 0,
         "tar_temp": 0
