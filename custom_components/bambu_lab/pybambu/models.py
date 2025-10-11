@@ -2091,18 +2091,26 @@ class Info:
         self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
 
         # Nozzle data is provided differently for dual-nozzle printers (at least)
-        # New:
+        # New (H2D):
         #  "nozzle": {
         #    "info": [
         #      {"id": 0, "diameter": "0.4", "type": "HS01"},
         #      {"id": 1, "diameter": "0.4", "type": "HS01"}
         #    ]
         # },
+        # Old (X1C v1.08.02.00 firmware):
+        #  "nozzle": {
+        #    "0": {
+        #      "info": 8,
+        #      "temp": 23
+        #    },
+        #    "info": 69
+        #  }
         # Old:
         #   "nozzle_diameter": "0.4",
         #   "nozzle_type": "hardened_steel",
-        nozzle_data = data.get("device", {}).get("nozzle", {}).get("info")
-        if nozzle_data is not None:
+        nozzle_data = data.get("device", {}).get("nozzle", {}).get("info", None)
+        if nozzle_data is not None and isinstance(nozzle_data, list):
             for entry in nozzle_data:
                 if entry.get("id") in (0, 1):
                     self.nozzle_diameters[entry["id"]] = float(entry["diameter"])
