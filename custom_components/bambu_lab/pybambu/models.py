@@ -2806,7 +2806,12 @@ class HMSList:
                 index = index + 1
                 attr = int(hms['attr'])
                 code = int(hms['code'])
-                hms_notif = HMSNotification(user_language=self._client.user_language, attr=attr, code=code)
+                hms_notif = HMSNotification(
+                    device_type=self._client._device.info.device_type,
+                    user_language=self._client.user_language,
+                    attr=attr,
+                    code=code
+                    )
                 errors[f"{index}-Code"] = f"HMS_{hms_notif.hms_code}"
                 errors[f"{index}-Error"] = hms_notif.hms_error
                 errors[f"{index}-Wiki"] = hms_notif.wiki_url
@@ -2858,7 +2863,7 @@ class PrintError:
                 code = code.upper()
                 errors = {}
                 errors[f"code"] = code
-                error_text = get_print_error_text(code, self._client.user_language)
+                error_text = get_print_error_text(code, self._client._device.info.device_type, self._client.user_language)
                 errors[f"error"] = error_text
                 if error_text == 'unknown':
                     # Suppress unknown errors as they get fired when there are no errors.
@@ -2886,7 +2891,8 @@ class HMSNotification:
     attr: int
     code: int
 
-    def __init__(self, user_language: str, attr: int, code: int):
+    def __init__(self, device_type: Printers | str, user_language: str, attr: int, code: int):
+        self._device_type = device_type
         self._user_language = user_language
         self.attr = attr
         self.code = code
@@ -2907,7 +2913,7 @@ class HMSNotification:
     
     @property
     def hms_error(self) -> str:
-        error_text = get_HMS_error_text(code=self.hms_code, language=self._user_language)
+        error_text = get_HMS_error_text(self.hms_code, self._device_type, self._user_language)
         return error_text
 
     @property
