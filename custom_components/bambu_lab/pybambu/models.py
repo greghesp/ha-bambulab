@@ -264,6 +264,9 @@ class Device:
         return False
     
     def supports_sw_version(self, version: str) -> bool:
+        if compare_version(self.info.sw_ver, "99.0.0.0"):
+            # This is the X1+ firmware version. Treat it as 01.08.02.00
+            return compare_version("01.08.02.00", version) >= 0
         return compare_version(self.info.sw_ver, version) >= 0
     
     @property
@@ -2181,7 +2184,7 @@ class Info:
 
     @property
     def door_open_available(self) -> bool:
-        if (self.device_type in [Printers.X1, Printers.X1C] and version.parse(self.sw_ver) < version.parse("01.07.00.00")):
+        if (self.device_type in [Printers.X1, Printers.X1C] and not self.supports_sw_version("01.07.00.00")):
             return False
 
         return self._client._device.supports_feature(Features.DOOR_SENSOR)
