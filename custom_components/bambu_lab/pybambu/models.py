@@ -176,7 +176,7 @@ class Device:
                 return True
             return False
         elif feature == Features.CAMERA_RTSP:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
+            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S or self.info.device_type == Printers.P2S
         elif feature == Features.CAMERA_IMAGE:
             return self.info.device_type == Printers.P1P or self.info.device_type == Printers.P1S or self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
         elif feature == Features.DOOR_SENSOR:
@@ -231,6 +231,8 @@ class Device:
                 return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
                 return True
+            elif (self.info.device_type == Printers.P2S):
+                return True
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
             return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
@@ -251,6 +253,8 @@ class Device:
             elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.32"):
                 return True
             elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.08.02.00"):
+                return True
+            elif (self.info.device_type == Printers.P2S):
                 return True
             elif (self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI) and self.supports_sw_version("01.05.00.00"):
                 return True
