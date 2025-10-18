@@ -1031,7 +1031,7 @@ class PrintJob:
             self._gcode_file_prepare_percent = 0
 
             # Clear existing cover & pick image data before attempting any fresh download.
-            self._clear_model_data();
+            self._clear_model_data()
 
             # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
             # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
@@ -1522,7 +1522,7 @@ class PrintJob:
         LOGGER.debug("Clearing model data")
         self._loaded_model_data = False
         self._client._device.cover_image.set_image(None)
-        self._clear_pick_data();
+        self._clear_pick_data()
 
     def _clear_pick_data(self):
         LOGGER.debug("Clearing pick data")
@@ -3160,13 +3160,13 @@ class PrintFun:
 
 @dataclass
 class FilamentInfo:
-    name: str;
-    filament_vendor: str;
-    filament_type: str;
-    filament_density: float;
-    nozzle_temperature: int;
-    nozzle_temperature_range_high: int;
-    nozzle_temperature_range_low: int;
+    name: str
+    filament_vendor: str
+    filament_type: str
+    filament_density: float
+    nozzle_temperature: int
+    nozzle_temperature_range_high: int
+    nozzle_temperature_range_low: int
 
 # Example custom filament;
 # {
