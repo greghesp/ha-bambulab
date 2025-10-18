@@ -255,7 +255,10 @@ class Device:
                 LOGGER.error("Features.AMS_HUMIDITY queried before version is known.")            
                 return False
 
-            if (self.info.device_type == Printers.H2D or
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI):
+                return False # Needs fixing once supporting firmware version is known.
+            elif (self.info.device_type == Printers.H2D or
                 self.info.device_type == Printers.H2S or
                 self.info.device_type == Printers.P2S):
                 return True
@@ -300,7 +303,7 @@ class Device:
                 return True
             
             if (self.info.device_type == Printers.A1 or
-                  self.info.device_type == Printers.A1MINI):
+                self.info.device_type == Printers.A1MINI):
                 return self.supports_sw_version("01.05.00.00")
             elif (self.info.device_type == Printers.H2D):
                 return self.supports_sw_version("01.01.01.00")
