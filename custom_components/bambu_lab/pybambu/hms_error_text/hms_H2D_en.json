@@ -1146,7 +1146,7 @@
     "0500070000020101": "unknown",
     "0500070000020201": "unknown",
     "0500400000010039": "Laser module Serial Number error",
-    "0500400000010040": "Cutting module Serial Number error",
+    "0500400000010040": "Cutting module Serial Number error.",
     "0501040000010044": "The firmware of AMS B does not match the printer. Please update it on the 'Firmware' page.",
     "0501040000030002": "Threaded rods need lubrication now.",
     "0501040000030004": "Please clean and lubricate the X-axis linear rail, YZ-axis linear rods, and the extruder lift linear rail.",
