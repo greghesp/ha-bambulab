@@ -142,13 +142,15 @@ class Device:
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
-            return self.is_core_xy
+            return not (self.info.device_type == Printers.A1 or
+                        self.info.device_type == Printers.A1MINI)
         elif feature == Features.CHAMBER_LIGHT:
             return True
         elif feature == Features.CHAMBER_FAN:
             # The P1P may not have a fan but we don't have a perfectly reliable way to detect that. The p1s upgrade
             # flag would largely be good though but not accessible here.
-            return self.is_core_xy
+            return not (self.info.device_type == Printers.A1 or
+                        self.info.device_type == Printers.A1MINI)
         elif feature == Features.CHAMBER_TEMPERATURE:
             return (self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S or
