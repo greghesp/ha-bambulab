@@ -142,13 +142,22 @@ class Device:
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
-            return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
+            return not (self.info.device_type == Printers.A1 or
+                        self.info.device_type == Printers.A1MINI)
         elif feature == Features.CHAMBER_LIGHT:
             return True
         elif feature == Features.CHAMBER_FAN:
-            return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
+            # The P1P may not have a fan but we don't have a perfectly reliable way to detect that. The p1s upgrade
+            # flag would largely be good though but not accessible here.
+            return not (self.info.device_type == Printers.A1 or
+                        self.info.device_type == Printers.A1MINI)
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
+            return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2S or
+                    self.info.device_type == Printers.P2S or
+                    self.info.device_type == Printers.X1 or
+                    self.info.device_type == Printers.X1C or
+                    self.info.device_type == Printers.X1E)
         elif feature == Features.CURRENT_STAGE:
             return True
         elif feature == Features.PRINT_LAYERS:
@@ -158,7 +167,10 @@ class Device:
         elif feature == Features.EXTERNAL_SPOOL:
             return True
         elif feature == Features.K_VALUE:
-            return self.info.device_type == Printers.P1P or self.info.device_type == Printers.P1S or self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
+            return (self.info.device_type == Printers.A1 or
+                    self.info.device_type == Printers.A1MINI or
+                    self.info.device_type == Printers.P1P or
+                    self.info.device_type == Printers.P1S)
         elif feature == Features.START_TIME:
             return False
         elif feature == Features.START_TIME_GENERATED:
@@ -170,24 +182,50 @@ class Device:
                 LOGGER.error("Features.AMS_TEMPERATURE queried before version is known.")
                 return False
 
-            if (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S):
+            if (self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.H2S or 
+                self.info.device_type == Printers.X1 or
+                self.info.device_type == Printers.X1C or
+                self.info.device_type == Printers.X1E):
                 return True
-            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
-                return True
+            elif (self.info.device_type == Printers.P1S or
+                  self.info.device_type == Printers.P1P):
+                return self.supports_sw_version("01.07.50.18")
             return False
         elif feature == Features.CAMERA_RTSP:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S or self.info.device_type == Printers.P2S
+            return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2S or
+                    self.info.device_type == Printers.X1 or
+                    self.info.device_type == Printers.X1C or
+                    self.info.device_type == Printers.X1E or
+                    self.info.device_type == Printers.P2S)
         elif feature == Features.CAMERA_IMAGE:
-            return self.info.device_type == Printers.P1P or self.info.device_type == Printers.P1S or self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI
+            return (self.info.device_type == Printers.A1 or
+                    self.info.device_type == Printers.A1MINI or
+                    self.info.device_type == Printers.P1P or
+                    self.info.device_type == Printers.P1S)
         elif feature == Features.DOOR_SENSOR:
-            return self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
+            return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2S or
+                    self.info.device_type == Printers.X1 or
+                    self.info.device_type == Printers.X1C or
+                    self.info.device_type == Printers.X1E)
         elif feature == Features.AMS_FILAMENT_REMAINING:
-            # Technically this is not the AMS Lite but that's currently tied to only these printer types.
-            return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI):
+                # Technically this is not the AMS Lite but that's currently tied to only these printer types.
+                # This needs fixing now the A1 printers support the other AMS models.
+                return False
+            return True
         elif feature == Features.SET_TEMPERATURE:
             return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
-            return self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S
+            return (not self.print_fun.mqtt_signature_required and
+                    (self.info.device_type == Printers.A1 or
+                     self.info.device_type == Printers.A1MINI or
+                     self.info.device_type == Printers.H2D or
+                     self.info.device_type == Printers.H2S or
+                     self.info.device_type == Printers.P2S))
         elif feature == Features.FTP:
             return True
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -197,12 +235,18 @@ class Device:
                 LOGGER.error("Features.AMS_SWITCH_COMMAND queried before version is known.")            
                 return False
 
-            if self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D:
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI or
+                self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.P2S or
+                self.info.device_type == Printers.X1E):
                 return True
-            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.02.99.10"):
-                return True
-            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.05.06.01"):
-                return True
+            elif (self.info.device_type == Printers.P1S or
+                   self.info.device_type == Printers.P1P):
+                return self.supports_sw_version("01.02.99.10")
+            elif (self.info.device_type == Printers.X1 or
+                  self.info.device_type == Printers.X1C):
+                return self.supports_sw_version("01.05.06.01")
             return False
         elif feature == Features.AMS_HUMIDITY:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
@@ -211,12 +255,19 @@ class Device:
                 LOGGER.error("Features.AMS_HUMIDITY queried before version is known.")            
                 return False
 
-            if (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S):
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI):
+                return False # Needs fixing once supporting firmware version is known.
+            elif (self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.H2S or
+                self.info.device_type == Printers.P2S):
                 return True
-            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
-                return True
-            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
-                return True
+            elif (self.info.device_type == Printers.X1 or
+                 self.info.device_type == Printers.X1C):
+                return self.supports_sw_version("01.08.50.18")
+            elif (self.info.device_type == Printers.P1S or
+                  self.info.device_type == Printers.P1P):
+                return self.supports_sw_version("01.07.50.18")
             return False
         elif feature == Features.AMS_DRYING:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
@@ -225,46 +276,53 @@ class Device:
                 LOGGER.error("Features.AMS_DRYING queried before version is known.")
                 return False
             
-            if (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S):
+            if (self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.H2S or
+                self.info.device_type == Printers.P2S):
                 return True
-            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.18"):
-                return True
-            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.07.50.18"):
-                return True
-            elif (self.info.device_type == Printers.P2S):
-                return True
+            elif (self.info.device_type == Printers.X1 or
+                  self.info.device_type == Printers.X1C):
+                return self.supports_sw_version("01.08.50.18")
+            elif (self.info.device_type == Printers.P1S or
+                  self.info.device_type == Printers.P1P):
+                return self.supports_sw_version("01.07.50.18")
+            # This needs fixing now the A1 printers support the other AMS models.
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
-            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
+            return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2S)
         elif feature == Features.DUAL_NOZZLES:
             return (self.info.device_type == Printers.H2D)
         elif feature == Features.EXTRUDER_TOOL:
-            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
+            return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2S)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
             # This means it can't be used for exists_fn checks for sensors. And will initially return False for available_fn calls from HA.
             if self.info.sw_ver == "unknown":
                 return True
             
-            if (self.info.device_type == Printers.H2D) and self.supports_sw_version("01.01.01.00"):
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI):
+                return self.supports_sw_version("01.05.00.00")
+            elif (self.info.device_type == Printers.H2D):
+                return self.supports_sw_version("01.01.01.00")
+            elif (self.info.device_type == Printers.H2S or
+                  self.info.device_type == Printers.P2S):
                 return True
-            if (self.info.device_type == Printers.H2S):
-                return True
-            elif (self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C) and self.supports_sw_version("01.08.50.32"):
-                return True
-            elif (self.info.device_type == Printers.P1S or self.info.device_type == Printers.P1P) and self.supports_sw_version("01.08.02.00"):
-                return True
-            elif (self.info.device_type == Printers.P2S):
-                return True
-            elif (self.info.device_type == Printers.A1 or self.info.device_type == Printers.A1MINI) and self.supports_sw_version("01.05.00.00"):
-                return True
+            elif (self.info.device_type == Printers.P1S or
+                  self.info.device_type == Printers.P1P):
+                return self.supports_sw_version("01.08.02.00")
+            elif (self.info.device_type == Printers.X1 or 
+                  self.info.device_type == Printers.X1C):
+                return self.supports_sw_version("01.08.50.32")
             return False
-        elif feature == Features.MQTT_ENCRYPTION_ENABLED:
-            return self.print_fun.mqtt_signature_required
         elif feature == Features.FIRE_ALARM_BUZZER:
-            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
+            return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2S)
         elif feature == Features.HEATBED_LIGHT:
-            return (self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S)
+            return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2S)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -275,7 +333,8 @@ class Device:
     
     @property
     def is_core_xy(self) -> bool:
-        return self.info.device_type != Printers.A1 and self.info.device_type != Printers.A1MINI
+        return (self.info.device_type != Printers.A1 and
+                self.info.device_type != Printers.A1MINI)
 
 @dataclass
 class Lights:
@@ -977,7 +1036,7 @@ class PrintJob:
             self._gcode_file_prepare_percent = 0
 
             # Clear existing cover & pick image data before attempting any fresh download.
-            self._clear_model_data();
+            self._clear_model_data()
 
             # Generate the start_time for P1P/S when printer moves from idle to another state. Original attempt with remaining time
             # becoming non-zero didn't work as it never bounced to zero in at least the scenario where a print was canceled.
@@ -1468,7 +1527,7 @@ class PrintJob:
         LOGGER.debug("Clearing model data")
         self._loaded_model_data = False
         self._client._device.cover_image.set_image(None)
-        self._clear_pick_data();
+        self._clear_pick_data()
 
     def _clear_pick_data(self):
         LOGGER.debug("Clearing pick data")
@@ -3106,13 +3165,13 @@ class PrintFun:
 
 @dataclass
 class FilamentInfo:
-    name: str;
-    filament_vendor: str;
-    filament_type: str;
-    filament_density: float;
-    nozzle_temperature: int;
-    nozzle_temperature_range_high: int;
-    nozzle_temperature_range_low: int;
+    name: str
+    filament_vendor: str
+    filament_type: str
+    filament_density: float
+    nozzle_temperature: int
+    nozzle_temperature_range_high: int
+    nozzle_temperature_range_low: int
 
 # Example custom filament;
 # {

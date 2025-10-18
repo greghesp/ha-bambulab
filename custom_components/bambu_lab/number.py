@@ -47,7 +47,7 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_step=1,
         value_fn=lambda self: self.coordinator.get_model().temperature.active_nozzle_target_temperature,
         set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.NOZZLE, value),
-        available_fn=lambda self: self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE) and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED),
+        available_fn=lambda self: self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE) and not self.coordinator.get_model().print_fun.mqtt_signature_required,
     ),
     BambuLabNumberEntityDescription(
         key="target_bed_temperature",
@@ -60,7 +60,7 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         native_step=1,
         value_fn=lambda self: self.coordinator.get_model().temperature.target_bed_temp,
         set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.HEATBED, value),
-        available_fn=lambda self: self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE) and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED),
+        available_fn=lambda self: self.coordinator.get_model().supports_feature(Features.SET_TEMPERATURE) and not self.coordinator.get_model().print_fun.mqtt_signature_required,
     ),
 )
 
