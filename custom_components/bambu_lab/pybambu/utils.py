@@ -1,11 +1,15 @@
+import json
+import logging
 import math
 import requests
 import socket
 import re
 
 from datetime import datetime, timedelta
+from functools import cache
 from urllib3.exceptions import ReadTimeoutError
 from bs4 import BeautifulSoup
+from pathlib import Path
 
 from .const import (
     CURRENT_STAGE_IDS,
@@ -16,11 +20,10 @@ from .const import (
     LOGGER,
     BAMBU_URL,
     FansEnum,
+    Printers,
     TempEnum
 )
 from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
-from .const_hms_errors import HMS_ERRORS
-from .const_print_errors import PRINT_ERROR_ERRORS
 
 
 def search(lst, predicate, default={}):
@@ -99,24 +102,94 @@ def get_current_stage(id) -> str:
     """Return the human-readable description for a stage action"""
     return CURRENT_STAGE_IDS.get(int(id), "unknown")
 
+@cache
+def get_HMS_error_text(error_code: str, device_type: Printers | str, preferred_language: str) -> str:
+    """
+    Return the human-readable description for an HMS error
+    
+    This returns the best available description for the HMS error. First preference
+    is to return a string in the requested language; second preference is to return
+    an error string tailored for the printer. An English message is better than
+    'unknown' when there is no translation, and the error code identifies the affected
+    part, so a message for a different printer should provide some clue as to the problem.
 
-def get_HMS_error_text(code: str, language: str):
-    """Return the human-readable description for an HMS error"""
-    code = code.replace("_", "")
-    error = HMS_ERRORS.get(code, 'unknown')
-    if '' == error:
-        return 'unknown'
-    return error
+    :param error_code: The code to look up from the printer, optionally with underscores,
+        e.g. '0300_0C00_0001_0004' or '03000C0000010004'.
+    :param device_type: The type of the printer.
+    :param preferred_language: The preferred language code, e.g. 'de', 'pt-BR'. This is not
+        case-sensitive.
+    """
+    return _get_error_text("device_hms", error_code, device_type, preferred_language)
 
+@cache
+def get_print_error_text(error_code: str, device_type: Printers | str, preferred_language: str) -> str:
+    """
+    Return the human-readable description for a print error
+    
+    This returns the best available desription for the error. First preference
+    is to return a string in the requested language; second preference is to return
+    an error string tailored for the printer. An English message is better than
+    'unknown' when there is no translation, and the error code identifies the affected
+    part, so a message for a different printer should provide some clue as to the problem.
 
-def get_print_error_text(code: str, language: str):
-    """Return the human-readable description for a print error"""
-    code = code.replace("_", "")
-    error = PRINT_ERROR_ERRORS.get(code, 'unknown')
-    if '' == error:
-        return 'unknown'
-    return error
+    :param code: The code to look up from the printer, optionally with underscores, e.g.
+        '0300_0C00' or '03000C0000'.
+    :param device_type: The type of the printer.
+    :param preferred_language: The preferred language code, e.g. 'de', 'pt-BR'. This is not
+        case-sensitive.
+    """
+    return _get_error_text("device_error", error_code, device_type, preferred_language)
 
+@cache
+def _get_error_text(error_type: str, error_code: str, device_type: Printers | str, preferred_language: str) -> str:
+    """
+    Return the human-readable description for an error
+    
+    This returns the best available desription for the error. First preference
+    is to return a string in the requested locale or at least language; second
+    preference is to return an error string tailored for the printer. An English
+    message is better than 'unknown' when there is no translation, and the error
+    code identifies the affected part, so a message for a different printer should
+    provide some clue as to the problem.
+
+    :param error_type: The type of error to look up, either "device_hms" or "device_error".
+    :param error_code: The error code to look up from the printer, optionally with underscores.
+    :param device_type: The type of the printer.
+    :param preferred_language: The preferred language code, e.g. 'de', 'pt-BR'. This is not
+        case-sensitive.
+    """
+    LOGGER.debug(f"Looking up {error_type=} {error_code=} {device_type=} {preferred_language=}")
+    error_code = error_code.replace("_", "")
+
+    # Candidate locale(s) in priority order
+    locales = [preferred_language.lower()]
+    if len(preferred_language) > 2:
+        locales.append(preferred_language[:2].lower())
+    if preferred_language != "en":
+        locales.append("en")
+
+    for locale_code in locales:
+        for dev_type in (device_type, Printers.H2D):
+            LOGGER.debug(f"Looking for HMS error: {locale_code=} {dev_type=} {error_code=}")
+            error_data = _load_error_data(dev_type, locale_code)
+            try:
+                return error_data[error_type][error_code]
+            except KeyError:
+                pass
+
+    return 'unknown'
+
+@cache
+def _load_error_data(device_type: Printers | str, language: str) -> dict:
+    """Load error data for a specific device type and language"""
+    LOGGER.debug(f"Loading HMS error data for {device_type=} {language=}")
+    filename = Path(__file__).parent / "hms_error_text" / f"hms_{str(device_type)}_{language}.json"
+    if not filename.exists():
+        logging.debug(f"No HMS error data for {device_type=} {language=}")
+        return {}
+
+    with open(filename) as f:
+        return json.load(f)
 
 def get_HMS_severity(code: int) -> str:
     uint_code = code >> 16

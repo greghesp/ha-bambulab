@@ -13,7 +13,7 @@ pip install -r "$SCRIPT_DIR/tests/requirements.txt"
 cd "$(dirname "$SCRIPT_DIR")"
 
 # Run tests with PYTHONPATH set to include the parent directory
-PYTHONPATH="$(pwd)" python3 -m unittest pybambu.tests.test_models -v
+PYTHONPATH="$(pwd)" python3 -m unittest pybambu.tests.test_models pybambu.tests.test_error_lookup -v
 
 # Deactivate virtual environment
 deactivate
