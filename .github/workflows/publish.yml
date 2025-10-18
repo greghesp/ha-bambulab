@@ -24,13 +24,6 @@ jobs:
         run: pip install -r requirements.txt
         working-directory: "${{ github.workspace }}/scripts"
 
-      - name: 🧵 Run Python Scripts
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python '${{ github.workspace }}/scripts/fetch_filaments.py'
-          python '${{ github.workspace }}/scripts/update_const.py'
-
       - name: 📝 Update manifest version
         run: |
           VERSION="${{ github.event.release.tag_name }}"
