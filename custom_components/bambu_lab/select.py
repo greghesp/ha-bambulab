@@ -48,7 +48,7 @@ class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         available =  self.coordinator.get_model().print_job.gcode_state == 'RUNNING'
-        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+        available = available and not self.coordinator.get_model().print_fun.mqtt_signature_required
         return available
 
     @property

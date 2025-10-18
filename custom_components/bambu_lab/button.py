@@ -174,7 +174,7 @@ class BambuLabBuzzerSilenceButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        return not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+        return not self.coordinator.get_model().print_fun.mqtt_signature_required
 
     async def async_press(self) -> None:
         """ Pause the Print on button press"""
@@ -188,7 +188,7 @@ class BambuLabBuzzerFireAlarmButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        return not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+        return not self.coordinator.get_model().print_fun.mqtt_signature_required
 
     async def async_press(self) -> None:
         """ Pause the Print on button press"""
@@ -202,7 +202,7 @@ class BambuLabBuzzerBeepingButton(BambuLabButton):
     @property
     def available(self) -> bool:
         """Return if the button is available"""
-        return not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+        return not self.coordinator.get_model().print_fun.mqtt_signature_required
 
     async def async_press(self) -> None:
         """ Pause the Print on button press"""

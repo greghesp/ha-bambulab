@@ -312,8 +312,6 @@ class Device:
                   self.info.device_type == Printers.X1C):
                 return self.supports_sw_version("01.08.50.32")
             return False
-        elif feature == Features.MQTT_ENCRYPTION_ENABLED:
-            return self.print_fun.mqtt_signature_required
         elif feature == Features.FIRE_ALARM_BUZZER:
             return (self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S)

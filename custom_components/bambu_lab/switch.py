@@ -191,7 +191,7 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
         """Is the sound switch available"""
         available = True
         # Changing the sound involves sending a "print"-type command that may require signature
-        available = available and not self.coordinator.get_model().supports_feature(Features.MQTT_ENCRYPTION_ENABLED)
+        available = available and not self.coordinator.get_model().print_fun.mqtt_signature_required
         return available
 
     @property
