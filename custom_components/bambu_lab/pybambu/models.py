@@ -182,7 +182,10 @@ class Device:
                 LOGGER.error("Features.AMS_TEMPERATURE queried before version is known.")
                 return False
 
-            if (self.info.device_type == Printers.H2D or
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI):
+                return self.supports_sw_version("01.06.10.33")
+            elif (self.info.device_type == Printers.H2D or
                 self.info.device_type == Printers.H2S or 
                 self.info.device_type == Printers.X1 or
                 self.info.device_type == Printers.X1C or
@@ -220,12 +223,13 @@ class Device:
         elif feature == Features.SET_TEMPERATURE:
             return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
-            return (not self.print_fun.mqtt_signature_required and
-                    (self.info.device_type == Printers.A1 or
-                     self.info.device_type == Printers.A1MINI or
-                     self.info.device_type == Printers.H2D or
-                     self.info.device_type == Printers.H2S or
-                     self.info.device_type == Printers.P2S))
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI or
+                self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.H2S or
+                self.info.device_type == Printers.P2S):
+                return not self.print_fun.mqtt_signature_required
+            return False
         elif feature == Features.FTP:
             return True
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -242,7 +246,7 @@ class Device:
                 self.info.device_type == Printers.X1E):
                 return True
             elif (self.info.device_type == Printers.P1S or
-                   self.info.device_type == Printers.P1P):
+                  self.info.device_type == Printers.P1P):
                 return self.supports_sw_version("01.02.99.10")
             elif (self.info.device_type == Printers.X1 or
                   self.info.device_type == Printers.X1C):
@@ -257,13 +261,13 @@ class Device:
 
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI):
-                return False # Needs fixing once supporting firmware version is known.
+                return self.supports_sw_version("01.06.10.33")
             elif (self.info.device_type == Printers.H2D or
-                self.info.device_type == Printers.H2S or
-                self.info.device_type == Printers.P2S):
+                  self.info.device_type == Printers.H2S or
+                  self.info.device_type == Printers.P2S):
                 return True
             elif (self.info.device_type == Printers.X1 or
-                 self.info.device_type == Printers.X1C):
+                  self.info.device_type == Printers.X1C):
                 return self.supports_sw_version("01.08.50.18")
             elif (self.info.device_type == Printers.P1S or
                   self.info.device_type == Printers.P1P):
