@@ -1383,7 +1383,6 @@ class PrintJob:
 
         dir_path = Path(directory)
         if not dir_path.is_dir():
-            LOGGER.debug(f"{directory} is not a valid directory")
             return
         
         LOGGER.debug(f"{dir_path}")
@@ -1400,7 +1399,6 @@ class PrintJob:
         # Files to delete: those beyond the 'keep' most recent
         old_files = matching_files[keep:]
 
-        LOGGER.debug(f"{matching_files} {old_files}")
         LOGGER.debug(f"Keeping {keep} files. Deleting {len(old_files)} files.")
         
         for primary_file in old_files:
