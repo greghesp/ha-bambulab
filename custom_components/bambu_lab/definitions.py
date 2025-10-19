@@ -533,6 +533,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().ams.active_tray.name,
         extra_attributes=lambda self:
         {
+            "ams_index": self.coordinator.get_model().ams.active_ams_index,
             "color": f"#{self.coordinator.get_model().ams.active_tray.color}",
             "filament_id": self.coordinator.get_model().ams.active_tray.idx,
             **({"k_value": self.coordinator.get_model().ams.active_tray.k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -543,6 +544,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "remain": self.coordinator.get_model().ams.active_tray.remain,
             "remain_enabled": self.coordinator.get_model().ams.active_tray.remain_enabled,
             "tag_uid": self.coordinator.get_model().ams.active_tray.tag_uid,
+            "tray_index": self.coordinator.get_model().ams.active_tray_index,
             "tray_uuid": self.coordinator.get_model().ams.active_tray.tray_uuid,
             "type": self.coordinator.get_model().ams.active_tray.type,
         },
