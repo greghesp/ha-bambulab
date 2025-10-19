@@ -86,9 +86,7 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     @property
     def available(self) -> bool:
         """Is the fan available"""
-        available = True
-        available = available and not self.coordinator.get_model().print_fun.mqtt_signature_required
-        return available
+        return not self.coordinator.get_model().print_fun.mqtt_signature_required
     
     @property
     def is_on(self) -> bool:
