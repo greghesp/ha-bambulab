@@ -331,6 +331,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
             result = 0
+            force_ip = False
             if user_input.get('host', "") != "":
                 LOGGER.debug(f"Config Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                 config = {
@@ -343,7 +344,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 }
                 bambu = BambuClient(config)
                 result = await bambu.try_connection()
-                if result == -1: # Timeout
+                if result == 0:
+                    force_ip = user_input['host'] != bambu.get_device().info.ip_address
+                elif result == -1: # Timeout
                     errors['base'] = "cannot_connect_local_timeout"
                 elif result == 5: # Access denied
                     errors['base'] = "cannot_connect_local_access_denied"
@@ -390,7 +393,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "usage_hours": float(user_input['usage_hours']),
                         "disable_ssl_verify": user_input['advanced']['disable_ssl_verify'],
                         "enable_firmware_update": user_input['advanced']['enable_firmware_update'],
-                        "force_ip": (user_input['host'] != bambu.get_device().info.ip_address),
+                        "force_ip": force_ip,
                 }
 
                 title = device['dev_id']
