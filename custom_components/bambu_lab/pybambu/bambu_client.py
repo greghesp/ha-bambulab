@@ -758,7 +758,7 @@ class BambuClient:
         else:
             self.client.username_pw_set(self._username, password=self._auth_token)
 
-        LOGGER.debug("Test connection: Connecting to %s", host)
+        LOGGER.debug(f"Test connection: Connecting to {host}")
         try:
             self.client.connect(host, self._port)
             self.client.loop_start()
