@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
-      "cannot_connect_local_ip": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
@@ -28,7 +27,12 @@
       "verifyCode": "È richiesto il codice di verifica. Controlla la tua email o il tuo telefono.",
       "code_expired": "Il codice di verifica è scaduto. Nuovo codice richiesto. Controlla la tua email o il tuo telefono.",
       "code_incorrect": "Il codice di verifica errato.",
-      "tfaCode": "È richiesto il codice 2FA."
+      "tfaCode": "È richiesto il codice 2FA.",
+      "cannot_connect_local_timeout": "Impossibile connettersi. Connessione scaduta.",
+      "cannot_connect_local_access_denied": "Impossibile connettersi. Accesso negato: controlla il codice di accesso.",
+      "cannot_connect_local_incorrect_serial": "Impossibile connettersi. La connessione è stata chiusa dalla stampante: controllare il numero di serie.",
+      "cannot_connect_local_incorrect_address": "Impossibile connettersi. Connessione rifiutata: controlla l'indirizzo IP.",
+      "cannot_connect_local_address_unreachable": "Impossibile connettersi. Indirizzo non raggiungibile: controlla la connessione di rete."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
-      "cannot_connect_local_ip": "Impossibile connettersi. Controllare l'indirizzo IP fornito.",
       "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
@@ -116,7 +119,12 @@
       "verifyCode": "È richiesto il codice di verifica. Controlla la tua email o il tuo telefono.",
       "code_expired": "Il codice di verifica è scaduto. Nuovo codice richiesto. Controlla la tua email o il tuo telefono.",
       "code_incorrect": "Il codice di verifica non era corretto.",
-      "tfaCode": "È richiesto il codice 2FA."
+      "tfaCode": "È richiesto il codice 2FA.",
+      "cannot_connect_local_timeout": "Impossibile connettersi. Connessione scaduta.",
+      "cannot_connect_local_access_denied": "Impossibile connettersi. Accesso negato: controlla il codice di accesso.",
+      "cannot_connect_local_incorrect_serial": "Impossibile connettersi. La connessione è stata chiusa dalla stampante: controllare il numero di serie.",
+      "cannot_connect_local_incorrect_address": "Impossibile connettersi. Connessione rifiutata: controlla l'indirizzo IP.",
+      "cannot_connect_local_address_unreachable": "Impossibile connettersi. Indirizzo non raggiungibile: controlla la connessione di rete."
     },
     "step": {
       "init": {

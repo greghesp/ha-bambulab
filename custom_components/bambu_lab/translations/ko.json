@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다. 자격 증명을 확인하세요.",
-      "cannot_connect_local_ip": "연결에 실패했습니다. 제공된 IP 주소를 확인하세요.",
       "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
       "invalid_auth": "잘못된 인증 정보입니다.",
       "unknown": "예기치 않은 오류입니다.",
@@ -28,7 +27,12 @@
       "verifyCode": "인증코드가 필요합니다. 이메일이나 전화를 확인하세요.",
       "code_expired": "인증 코드가 만료되었습니다. 새로운 코드가 요청되었습니다. 이메일이나 전화를 확인하세요.",
       "code_incorrect": "인증코드가 올바르지 않습니다. ",
-      "tfaCode": "2FA 코드가 필요합니다. "
+      "tfaCode": "2FA 코드가 필요합니다. ",
+      "cannot_connect_local_timeout": "연결하지 못했습니다. 연결 시간이 초과되었습니다.",
+      "cannot_connect_local_access_denied": "연결하지 못했습니다. 액세스가 거부되었습니다. 액세스 코드를 확인하세요.",
+      "cannot_connect_local_incorrect_serial": "연결하지 못했습니다. 프린터에 의해 연결이 종료되었습니다. 일련번호를 확인하세요.",
+      "cannot_connect_local_incorrect_address": "연결하지 못했습니다. 연결이 거부되었습니다. IP 주소를 확인하세요.",
+      "cannot_connect_local_address_unreachable": "연결하지 못했습니다. 주소에 연결할 수 없습니다. 네트워크 연결을 확인하세요."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다.",
-      "cannot_connect_local_ip": "연결에 실패했습니다. 제공된 IP 주소를 확인하세요.",
       "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
       "invalid_auth": "잘못된 인증 정보입니다.",
       "unknown": "예기치 않은 오류입니다.",
@@ -116,7 +119,12 @@
       "verifyCode": "인증코드가 필요합니다. 이메일이나 전화를 확인하세요.",
       "code_expired": "인증 코드가 만료되었습니다. 새로운 코드가 요청되었습니다. 이메일이나 전화를 확인하세요.",
       "code_incorrect": "인증코드가 올바르지 않습니다. ",
-      "tfaCode": "2FA 코드가 필요합니다. "
+      "tfaCode": "2FA 코드가 필요합니다. ",
+      "cannot_connect_local_timeout": "연결하지 못했습니다. 연결 시간이 초과되었습니다.",
+      "cannot_connect_local_access_denied": "연결하지 못했습니다. 액세스가 거부되었습니다. 액세스 코드를 확인하세요.",
+      "cannot_connect_local_incorrect_serial": "연결하지 못했습니다. 프린터에 의해 연결이 종료되었습니다. 일련번호를 확인하세요.",
+      "cannot_connect_local_incorrect_address": "연결하지 못했습니다. 연결이 거부되었습니다. IP 주소를 확인하세요.",
+      "cannot_connect_local_address_unreachable": "연결하지 못했습니다. 주소에 연결할 수 없습니다. 네트워크 연결을 확인하세요."
     },
     "step": {
       "init": {

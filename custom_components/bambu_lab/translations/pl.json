@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć. Sprawdź dane logowania.",
-      "cannot_connect_local_ip": "Nie udało się połączyć. Sprawdź podany adres IP.",
       "cannot_connect_local_all": "Nie udało się połączyć. Sprawdź podane ustawienia.",
       "invalid_auth": "Nieprawidłowe uwierzytelnienie.",
       "unknown": "Nieoczekiwany błąd.",
@@ -28,7 +27,12 @@
       "verifyCode": "Wymagany jest kod weryfikacyjny. Sprawdź e-mail lub telefon.",
       "code_expired": "Kod weryfikacyjny wygasł. Poproś o nowy kod. Sprawdź e-mail lub telefon.",
       "code_incorrect": "Niepoprawny kod weryfikacyjny. Wprowadź ponownie.",
-      "tfaCode": "Wymagany jest kod 2FA. Wprowadź go teraz."
+      "tfaCode": "Wymagany jest kod 2FA. Wprowadź go teraz.",
+      "cannot_connect_local_timeout": "Nie udało się połączyć. Upłynął limit czasu połączenia.",
+      "cannot_connect_local_access_denied": "Nie udało się połączyć. Odmowa dostępu - sprawdź kod dostępu.",
+      "cannot_connect_local_incorrect_serial": "Nie udało się połączyć. Połączenie zostało zamknięte przez drukarkę - sprawdź numer seryjny.",
+      "cannot_connect_local_incorrect_address": "Nie udało się połączyć. Połączenie odrzucone – sprawdź adres IP.",
+      "cannot_connect_local_address_unreachable": "Nie udało się połączyć. Adres nieosiągalny - sprawdź połączenie sieciowe."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć",
-      "cannot_connect_local_ip": "Nie udało się połączyć. Sprawdź podany adres IP.",
       "cannot_connect_local_all": "Nie udało się połączyć. Sprawdź podane ustawienia.",
       "invalid_auth": "Nieprawidłowe uwierzytelnienie.",
       "unknown": "Nieoczekiwany błąd.",
@@ -116,7 +119,12 @@
       "verifyCode": "Wymagany jest kod weryfikacyjny. Sprawdź e-mail lub telefon.",
       "code_expired": "Kod weryfikacyjny wygasł. Poproś o nowy kod. Sprawdź e-mail lub telefon.",
       "code_incorrect": "Niepoprawny kod weryfikacyjny. Wprowadź ponownie.",
-      "tfaCode": "Wymagany jest kod 2FA. Wprowadź go teraz."
+      "tfaCode": "Wymagany jest kod 2FA. Wprowadź go teraz.",
+      "cannot_connect_local_timeout": "Nie udało się połączyć. Upłynął limit czasu połączenia.",
+      "cannot_connect_local_access_denied": "Nie udało się połączyć. Odmowa dostępu - sprawdź kod dostępu.",
+      "cannot_connect_local_incorrect_serial": "Nie udało się połączyć. Połączenie zostało zamknięte przez drukarkę - sprawdź numer seryjny.",
+      "cannot_connect_local_incorrect_address": "Nie udało się połączyć. Połączenie odrzucone – sprawdź adres IP.",
+      "cannot_connect_local_address_unreachable": "Nie udało się połączyć. Adres nieosiągalny - sprawdź połączenie sieciowe."
     },
     "step": {
       "init": {

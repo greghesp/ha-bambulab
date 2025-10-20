@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Error de connexió. Revisa les credencials.",
-      "cannot_connect_local_ip": "Error de connexió. Revisa l'adreça IP proporcionada.",
       "cannot_connect_local_all": "Error de connexió. Revisa la configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
@@ -28,7 +27,12 @@
       "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
       "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
       "code_incorrect": "El codi de verificació és incorrecte. Si us plau, introdueix-lo de nou.",
-      "tfaCode": "Cal codi 2FA. Si us plau, introdueix-ho."
+      "tfaCode": "Cal codi 2FA. Si us plau, introdueix-ho.",
+      "cannot_connect_local_timeout": "No s'ha pogut connectar. La connexió s'ha esgotat.",
+      "cannot_connect_local_access_denied": "No s'ha pogut connectar. Accés denegat: comproveu el codi d'accés.",
+      "cannot_connect_local_incorrect_serial": "No s'ha pogut connectar. La connexió va ser tancada per la impressora: comproveu el número de sèrie.",
+      "cannot_connect_local_incorrect_address": "No s'ha pogut connectar. Connexió rebutjada: comproveu l'adreça IP.",
+      "cannot_connect_local_address_unreachable": "No s'ha pogut connectar. Adreça inaccessible: comproveu la connexió de xarxa."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Error de connexió.",
-      "cannot_connect_local_ip": "Error de connexió. Revisa l'adreça IP proporcionada.",
       "cannot_connect_local_all": "Error de connexió. Revisa configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
@@ -116,7 +119,12 @@
       "verifyCode": "Cal un codi de verificació. Comproveu el vostre correu electrònic o telèfon.",
       "code_expired": "El codi de verificació ha caducat. S'ha sol·licitat un codi nou. Comproveu el vostre correu electrònic o telèfon.",
       "code_incorrect": "El codi de verificació era incorrecte. Si us plau, introdueix-lo de nou.",
-      "tfaCode": "Cal codi 2FA. Si us plau, introdueix-lo."
+      "tfaCode": "Cal codi 2FA. Si us plau, introdueix-lo.",
+      "cannot_connect_local_timeout": "No s'ha pogut connectar. La connexió s'ha esgotat.",
+      "cannot_connect_local_access_denied": "No s'ha pogut connectar. Accés denegat: comproveu el codi d'accés.",
+      "cannot_connect_local_incorrect_serial": "No s'ha pogut connectar. La connexió va ser tancada per la impressora: comproveu el número de sèrie.",
+      "cannot_connect_local_incorrect_address": "No s'ha pogut connectar. Connexió rebutjada: comproveu l'adreça IP.",
+      "cannot_connect_local_address_unreachable": "No s'ha pogut connectar. Adreça inaccessible: comproveu la connexió de xarxa."
     },
     "step": {
       "init": {

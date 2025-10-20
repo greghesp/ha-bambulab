@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
-      "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
       "invalid_auth": "Authentifizierung fehlgeschlagen.",
       "unknown": "Unerwarteter Fehler.",
@@ -28,7 +27,12 @@
       "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_incorrect": "Der Bestätigungscode war falsch.",
-      "tfaCode": "2FA-Code ist erforderlich."
+      "tfaCode": "2FA-Code ist erforderlich.",
+      "cannot_connect_local_timeout": "Verbindung konnte nicht hergestellt werden. Zeitüberschreitung bei der Verbindung.",
+      "cannot_connect_local_access_denied": "Verbindung konnte nicht hergestellt werden. Zugang verweigert – Zugangscode prüfen.",
+      "cannot_connect_local_incorrect_serial": "Verbindung konnte nicht hergestellt werden. Die Verbindung wurde vom Drucker geschlossen. Überprüfen Sie die Seriennummer.",
+      "cannot_connect_local_incorrect_address": "Verbindung konnte nicht hergestellt werden. Verbindung abgelehnt – IP-Adresse prüfen.",
+      "cannot_connect_local_address_unreachable": "Verbindung konnte nicht hergestellt werden. Adresse nicht erreichbar – Netzwerkverbindung überprüfen."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
-      "cannot_connect_local_ip": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die angegebene IP-Adresse.",
       "cannot_connect_local_all": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
       "invalid_auth": "Authentifizierung fehlgeschlagen",
       "unknown": "Unerwarteter Fehler",
@@ -116,7 +119,12 @@
       "verifyCode": "Ein Bestätigungscode ist erforderlich. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_expired": "Der Bestätigungscode ist abgelaufen. Neuer Code angefordert. Überprüfen Sie Ihre E-Mails oder Ihr Telefon.",
       "code_incorrect": "Der Bestätigungscode war falsch. ",
-      "tfaCode": "2FA-Code ist erforderlich. "
+      "tfaCode": "2FA-Code ist erforderlich. ",
+      "cannot_connect_local_timeout": "Verbindung konnte nicht hergestellt werden. Zeitüberschreitung bei der Verbindung.",
+      "cannot_connect_local_access_denied": "Verbindung konnte nicht hergestellt werden. Zugang verweigert – Zugangscode prüfen.",
+      "cannot_connect_local_incorrect_serial": "Verbindung konnte nicht hergestellt werden. Die Verbindung wurde vom Drucker geschlossen. Überprüfen Sie die Seriennummer.",
+      "cannot_connect_local_incorrect_address": "Verbindung konnte nicht hergestellt werden. Verbindung abgelehnt – IP-Adresse prüfen.",
+      "cannot_connect_local_address_unreachable": "Verbindung konnte nicht hergestellt werden. Adresse nicht erreichbar – Netzwerkverbindung überprüfen."
     },
     "step": {
       "init": {

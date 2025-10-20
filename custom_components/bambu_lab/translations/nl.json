@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Verbinding mislukt. Controleer de logingegevens.",
-      "cannot_connect_local_ip": "Verbinding mislukt. Controleer het opgegeven IP-adres.",
       "cannot_connect_local_all": "Verbinding mislukt. Controleer opgegeven instellingen.",
       "invalid_auth": "Ongeldige authenticatie.",
       "unknown": "Onverwachte fout.",
@@ -28,7 +27,12 @@
       "verifyCode": "Verificatiecode is vereist. Controleer e-mail of telefoon.",
       "code_expired": "Vertificatiecode is verlopen. Nieuwe verificatiecode is aangevraagd. Controleer hiervoor e-mail of telefoon.",
       "code_incorrect": "Verificatiecode is incorrect. Voer opnieuw in.",
-      "tfaCode": "Twee-factor-authenticatiecode is vereist. Voer deze in."
+      "tfaCode": "Twee-factor-authenticatiecode is vereist. Voer deze in.",
+      "cannot_connect_local_timeout": "Kan geen verbinding maken. Er is een time-out voor de verbinding opgetreden.",
+      "cannot_connect_local_access_denied": "Kan geen verbinding maken. Toegang geweigerd - controleer de toegangscode.",
+      "cannot_connect_local_incorrect_serial": "Kan geen verbinding maken. De verbinding is verbroken door de printer. Controleer het serienummer.",
+      "cannot_connect_local_incorrect_address": "Kan geen verbinding maken. Verbinding geweigerd - controleer het IP-adres.",
+      "cannot_connect_local_address_unreachable": "Kan geen verbinding maken. Adres onbereikbaar - controleer netwerkverbinding."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Verbinden mislukt",
-      "cannot_connect_local_ip": "Verbinding mislukt. Controleer het opgegeven IP-adres.",
       "cannot_connect_local_all": "Verbinding mislukt. Controleer opgegeven instellingen.",
       "invalid_auth": "Ongeldige authenticatie.",
       "unknown": "Onverwachte fout.",
@@ -116,7 +119,12 @@
       "verifyCode": "Verificatiecode is vereist. Controleer e-mail of telefoon.",
       "code_expired": "Vertificatiecode is verlopen. Nieuwe verificatiecode is aangevraagd. Controleer hiervoor e-mail of telefoon.",
       "code_incorrect": "Verificatiecode is incorrect. Voer opnieuw in.",
-      "tfaCode": "Twee-factor-authenticatiecode is vereist. Voer deze in."
+      "tfaCode": "Twee-factor-authenticatiecode is vereist. Voer deze in.",
+      "cannot_connect_local_timeout": "Kan geen verbinding maken. Er is een time-out voor de verbinding opgetreden.",
+      "cannot_connect_local_access_denied": "Kan geen verbinding maken. Toegang geweigerd - controleer de toegangscode.",
+      "cannot_connect_local_incorrect_serial": "Kan geen verbinding maken. De verbinding is verbroken door de printer. Controleer het serienummer.",
+      "cannot_connect_local_incorrect_address": "Kan geen verbinding maken. Verbinding geweigerd - controleer het IP-adres.",
+      "cannot_connect_local_address_unreachable": "Kan geen verbinding maken. Adres onbereikbaar - controleer netwerkverbinding."
     },
     "step": {
       "init": {
