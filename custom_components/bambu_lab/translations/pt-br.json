@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Falha ao conectar. Verifique as credenciais.",
-      "cannot_connect_local_ip": "Falha ao conectar. Verifique o endereço IP fornecido.",
       "cannot_connect_local_all": "Falha ao conectar. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
@@ -28,7 +27,12 @@
       "verifyCode": "O código de verificação é obrigatório. Verifique seu e-mail ou telefone.",
       "code_expired": "O código de verificação expirou. Novo código solicitado. Verifique seu e-mail ou telefone.",
       "code_incorrect": "O código de verificação estava incorreto. ",
-      "tfaCode": "O código 2FA é obrigatório. "
+      "tfaCode": "O código 2FA é obrigatório. ",
+      "cannot_connect_local_timeout": "Falha ao conectar. A conexão expirou.",
+      "cannot_connect_local_access_denied": "Falha ao conectar. Acesso negado - verifique o código de acesso.",
+      "cannot_connect_local_incorrect_serial": "Falha ao conectar. A conexão foi encerrada pela impressora - verifique o número de série.",
+      "cannot_connect_local_incorrect_address": "Falha ao conectar. Conexão recusada - verifique o endereço IP.",
+      "cannot_connect_local_address_unreachable": "Falha ao conectar. Endereço inacessível - verifique a conexão de rede."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Falha na conexão",
-      "cannot_connect_local_ip": "Falha na conexão. Verifique o endereço IP fornecido.",
       "cannot_connect_local_all": "Falha na conexão. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
@@ -116,7 +119,12 @@
       "verifyCode": "O código de verificação é obrigatório. Verifique seu e-mail ou telefone.",
       "code_expired": "O código de verificação expirou. Novo código solicitado. Verifique seu e-mail ou telefone.",
       "code_incorrect": "O código de verificação estava incorreto. ",
-      "tfaCode": "O código 2FA é obrigatório. "
+      "tfaCode": "O código 2FA é obrigatório. ",
+      "cannot_connect_local_timeout": "Falha ao conectar. A conexão expirou.",
+      "cannot_connect_local_access_denied": "Falha ao conectar. Acesso negado - verifique o código de acesso.",
+      "cannot_connect_local_incorrect_serial": "Falha ao conectar. A conexão foi encerrada pela impressora - verifique o número de série.",
+      "cannot_connect_local_incorrect_address": "Falha ao conectar. Conexão recusada - verifique o endereço IP.",
+      "cannot_connect_local_address_unreachable": "Falha ao conectar. Endereço inacessível - verifique a conexão de rede."
     },
     "step": {
       "init": {

@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Error al conectar. Revisa las credenciales.",
-      "cannot_connect_local_ip": "Error al conectar. Revisa la dirección IP proporcionada.",
       "cannot_connect_local_all": "Error al conectar. Revisa la configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
@@ -28,7 +27,12 @@
       "verifyCode": "Se requiere código de verificación. Consulta tu correo electrónico o teléfono.",
       "code_expired": "El código de verificación expiró. Nuevo código solicitado. Consulta tu correo electrónico o teléfono.",
       "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
-      "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo."
+      "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo.",
+      "cannot_connect_local_timeout": "No se pudo conectar. Se agotó el tiempo de conexión.",
+      "cannot_connect_local_access_denied": "No se pudo conectar. Acceso denegado: verifique el código de acceso.",
+      "cannot_connect_local_incorrect_serial": "No se pudo conectar. La impresora cerró la conexión; verifique el número de serie.",
+      "cannot_connect_local_incorrect_address": "No se pudo conectar. Conexión rechazada: verifique la dirección IP.",
+      "cannot_connect_local_address_unreachable": "No se pudo conectar. Dirección inalcanzable: verifique la conexión de red."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Error al conectar",
-      "cannot_connect_local_ip": "Error al conectar. Revisa la dirección de IP proporcionada.",
       "cannot_connect_local_all": "Error al conectar. Revisa configuración proporcionada.",
       "invalid_auth": "Autenticación inválida.",
       "unknown": "Error inesperado.",
@@ -116,7 +119,12 @@
       "verifyCode": "Se requiere código de verificación. Consulta tu correo electrónico o teléfono.",
       "code_expired": "El código de verificación expiró. Nuevo código solicitado. Consulta tu correo electrónico o teléfono.",
       "code_incorrect": "El código de verificación era incorrecto. Por favor, introdúcelo de nuevo.",
-      "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo."
+      "tfaCode": "Se requiere código 2FA. Por favor, introdúcelo.",
+      "cannot_connect_local_timeout": "No se pudo conectar. Se agotó el tiempo de conexión.",
+      "cannot_connect_local_access_denied": "No se pudo conectar. Acceso denegado: verifique el código de acceso.",
+      "cannot_connect_local_incorrect_serial": "No se pudo conectar. La impresora cerró la conexión; verifique el número de serie.",
+      "cannot_connect_local_incorrect_address": "No se pudo conectar. Conexión rechazada: verifique la dirección IP.",
+      "cannot_connect_local_address_unreachable": "No se pudo conectar. Dirección inalcanzable: verifique la conexión de red."
     },
     "step": {
       "init": {

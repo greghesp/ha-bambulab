@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Nepodarilo sa pripojiť. Skontrolujte poverenia.",
-      "cannot_connect_local_ip": "Nepodarilo sa pripojiť. Skontrolujte zadanú IP adresu.",
       "cannot_connect_local_all": "Nepodarilo sa pripojiť. Skontrolujte zadané nastavenia.",
       "invalid_auth": "Neplatné overenie.",
       "unknown": "Neočakávaná chyba.",
@@ -28,7 +27,12 @@
       "verifyCode": "Vyžaduje sa overovací kód. Skontrolujte e-mail alebo telefón.",
       "code_expired": "Platnosť overovacieho kódu vypršala. Požadovaný nový kód. Skontrolujte  e-mail alebo telefón.",
       "code_incorrect": "Overovací kód bol nesprávny. Prosím zadajte ho znova.",
-      "tfaCode": "2FA kód je požadovaný. Prosím zadajte ho teraz."
+      "tfaCode": "2FA kód je požadovaný. Prosím zadajte ho teraz.",
+      "cannot_connect_local_timeout": "Nepodarilo sa pripojiť. Časový limit spojenia vypršal.",
+      "cannot_connect_local_access_denied": "Nepodarilo sa pripojiť. Prístup odmietnutý - skontrolujte prístupový kód.",
+      "cannot_connect_local_incorrect_serial": "Nepodarilo sa pripojiť. Spojenie bolo ukončené tlačiarňou - skontrolujte sériové číslo.",
+      "cannot_connect_local_incorrect_address": "Nepodarilo sa pripojiť. Pripojenie odmietnuté - skontrolujte IP adresu.",
+      "cannot_connect_local_address_unreachable": "Nepodarilo sa pripojiť. Adresa je nedostupná – skontrolujte sieťové pripojenie."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Nepodarilo sa pripojiť",
-      "cannot_connect_local_ip": "Nepodarilo sa pripojiť. Skontrolujte zadanú IP adresu.",
       "cannot_connect_local_all": "Nepodarilo sa pripojiť. Skontrolujte zadané nastavenia.",
       "invalid_auth": "Neplatné overenie.",
       "unknown": "Neočakávaná chyba.",
@@ -116,7 +119,12 @@
       "verifyCode": "Vyžaduje sa overovací kód. Skontrolujte e-mail alebo telefón.",
       "code_expired": "Platnosť overovacieho kódu vypršala. Požadovaný nový kód. Skontrolujte  e-mail alebo telefón.",
       "code_incorrect": "Overovací kód bol nesprávny. Prosím zadajte ho znova.",
-      "tfaCode": "2FA kód je požadovaný. Prosím zadajte ho teraz."
+      "tfaCode": "2FA kód je požadovaný. Prosím zadajte ho teraz.",
+      "cannot_connect_local_timeout": "Nepodarilo sa pripojiť. Časový limit spojenia vypršal.",
+      "cannot_connect_local_access_denied": "Nepodarilo sa pripojiť. Prístup odmietnutý - skontrolujte prístupový kód.",
+      "cannot_connect_local_incorrect_serial": "Nepodarilo sa pripojiť. Spojenie bolo ukončené tlačiarňou - skontrolujte sériové číslo.",
+      "cannot_connect_local_incorrect_address": "Nepodarilo sa pripojiť. Pripojenie odmietnuté - skontrolujte IP adresu.",
+      "cannot_connect_local_address_unreachable": "Nepodarilo sa pripojiť. Adresa je nedostupná – skontrolujte sieťové pripojenie."
     },
     "step": {
       "init": {

@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes. Tjek legitimationsoplysninger.",
-      "cannot_connect_local_ip": "Forbindelse mislykkedes. Tjek den angivne IP-adresse.",
       "cannot_connect_local_all": "Forbindelse mislykkedes. Tjek de angivne indstillinger.",
       "invalid_auth": "Ugyldig autentifikation.",
       "unknown": "Uventet fejl.",
@@ -28,7 +27,12 @@
       "verifyCode": "Bekræftelseskode kræves. Tjek din e-mail eller telefon.",
       "code_expired": "Bekræftelseskode udløbet. Ny kode anmodet. Tjek din e-mail eller telefon.",
       "code_incorrect": "Bekræftelseskoden var forkert. Indtast venligst igen.",
-      "tfaCode": "2FA-kode kræves. Indtast den nu."
+      "tfaCode": "2FA-kode kræves. Indtast den nu.",
+      "cannot_connect_local_timeout": "Kunne ikke oprette forbindelse. Forbindelsen fik timeout.",
+      "cannot_connect_local_access_denied": "Kunne ikke oprette forbindelse. Adgang nægtet - tjek adgangskoden.",
+      "cannot_connect_local_incorrect_serial": "Kunne ikke oprette forbindelse. Forbindelsen blev lukket af printeren - tjek serienummeret.",
+      "cannot_connect_local_incorrect_address": "Kunne ikke oprette forbindelse. Forbindelse nægtet - tjek IP-adressen.",
+      "cannot_connect_local_address_unreachable": "Kunne ikke oprette forbindelse. Adressen kan ikke nås - tjek netværksforbindelsen."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes",
-      "cannot_connect_local_ip": "Forbindelse mislykkedes. Tjek den angivne IP-adresse.",
       "cannot_connect_local_all": "Forbindelse mislykkedes. Tjek de angivne indstillinger.",
       "invalid_auth": "Ugyldig autentifikation.",
       "unknown": "Uventet fejl.",
@@ -116,7 +119,12 @@
       "verifyCode": "Bekræftelseskode kræves. Tjek din e-mail eller telefon.",
       "code_expired": "Bekræftelseskode udløbet. Ny kode anmodet. Tjek din e-mail eller telefon.",
       "code_incorrect": "Bekræftelseskoden var forkert. Indtast venligst igen.",
-      "tfaCode": "2FA-kode kræves. Indtast den nu."
+      "tfaCode": "2FA-kode kræves. Indtast den nu.",
+      "cannot_connect_local_timeout": "Kunne ikke oprette forbindelse. Forbindelsen fik timeout.",
+      "cannot_connect_local_access_denied": "Kunne ikke oprette forbindelse. Adgang nægtet - tjek adgangskoden.",
+      "cannot_connect_local_incorrect_serial": "Kunne ikke oprette forbindelse. Forbindelsen blev lukket af printeren - tjek serienummeret.",
+      "cannot_connect_local_incorrect_address": "Kunne ikke oprette forbindelse. Forbindelse nægtet - tjek IP-adressen.",
+      "cannot_connect_local_address_unreachable": "Kunne ikke oprette forbindelse. Adressen kan ikke nås - tjek netværksforbindelsen."
     },
     "step": {
       "init": {

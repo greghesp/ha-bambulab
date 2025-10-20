@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
-      "cannot_connect_local_ip": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
       "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
@@ -28,7 +27,12 @@
       "verifyCode": "Un code de vérification est requis. Vérifiez votre courrier électronique ou votre téléphone.",
       "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre courrier électronique ou votre téléphone.",
       "code_incorrect": "Le code de vérification était incorrect. ",
-      "tfaCode": "Le code 2FA est requis. "
+      "tfaCode": "Le code 2FA est requis. ",
+      "cannot_connect_local_timeout": "Échec de la connexion. La connexion a expiré.",
+      "cannot_connect_local_access_denied": "Échec de la connexion. Accès refusé - vérifiez le code d'accès.",
+      "cannot_connect_local_incorrect_serial": "Échec de la connexion. La connexion a été fermée par l'imprimante - vérifiez le numéro de série.",
+      "cannot_connect_local_incorrect_address": "Échec de la connexion. Connexion refusée - vérifiez l'adresse IP.",
+      "cannot_connect_local_address_unreachable": "Échec de la connexion. Adresse inaccessible - vérifiez la connexion réseau."
     },
     "step": {
       "user": {
@@ -108,7 +112,6 @@
     },
     "error": {
       "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
-      "cannot_connect_local_ip": "Echec de la connexion. Vérifiez l’adresse IP fournie.",
       "cannot_connect_local_all": "Echec de la connexion. Vérifiez les paramètres fournis.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
@@ -116,7 +119,12 @@
       "verifyCode": "Un code de vérification est requis. Vérifiez votre courrier électronique ou votre téléphone.",
       "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre courrier électronique ou votre téléphone.",
       "code_incorrect": "Le code de vérification était incorrect. ",
-      "tfaCode": "Le code 2FA est requis. "
+      "tfaCode": "Le code 2FA est requis. ",
+      "cannot_connect_local_timeout": "Échec de la connexion. La connexion a expiré.",
+      "cannot_connect_local_access_denied": "Échec de la connexion. Accès refusé - vérifiez le code d'accès.",
+      "cannot_connect_local_incorrect_serial": "Échec de la connexion. La connexion a été fermée par l'imprimante - vérifiez le numéro de série.",
+      "cannot_connect_local_incorrect_address": "Échec de la connexion. Connexion refusée - vérifiez l'adresse IP.",
+      "cannot_connect_local_address_unreachable": "Échec de la connexion. Adresse inaccessible - vérifiez la connexion réseau."
     },
     "step": {
       "init": {

@@ -326,11 +326,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 'serial': device['dev_id'],
             }
             bambu = BambuClient(config)
-            success = await bambu.try_connection()
-            default_host = bambu.get_device().info.ip_address if success else ""
+            result = await bambu.try_connection()
+            default_host = bambu.get_device().info.ip_address if result == 0 else ""
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
-            success = True
+            result = 0
             if user_input.get('host', "") != "":
                 LOGGER.debug(f"Config Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                 config = {
@@ -342,11 +342,21 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     'serial': device['dev_id'],
                 }
                 bambu = BambuClient(config)
-                success = await bambu.try_connection()
-                if not success:
+                result = await bambu.try_connection()
+                if result == -1: # Timeout
+                    errors['base'] = "cannot_connect_local_timeout"
+                elif result == 5: # Access denied
+                    errors['base'] = "cannot_connect_local_access_denied"
+                elif result == 7: # Incorrect serial number
+                    errors['base'] = "cannot_connect_local_incorrect_serial"
+                elif result == 111: # Connection refused
+                    errors['base'] = "cannot_connect_local_incorrect_address"
+                elif result == 113: # Connection refused
+                    errors['base'] = "cannot_connect_local_address_unreachable"
+                else:
                     errors['base'] = "cannot_connect_local_all"
 
-            if success:
+            if result == 0:
                 if self._show_existing:
                     # Check to see if this device is already registered and delete it if so.
                     dev_reg = device_registry.async_get(self.hass)
@@ -438,9 +448,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 'local_mqtt': True,
             }
             bambu = BambuClient(config)
-            success = await bambu.try_connection()
+            result = await bambu.try_connection()
 
-            if success:
+            if result == 0:
                 LOGGER.debug("Config Flow: Writing entry")
                 data = {
                         "device_type": bambu.get_device().info.device_type,
@@ -469,8 +479,18 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     data=data,
                     options=options
                 )
-
-            errors['base'] = "cannot_connect_local_all"
+            elif result == -1: # Timeout
+                errors['base'] = "cannot_connect_local_timeout"
+            elif result == 5: # Access denied
+                errors['base'] = "cannot_connect_local_access_denied"
+            elif result == 7: # Incorrect serial number
+                errors['base'] = "cannot_connect_local_incorrect_serial"
+            elif result == 111: # Connection refused
+                errors['base'] = "cannot_connect_local_incorrect_address"
+            elif result == 113: # Connection refused
+                errors['base'] = "cannot_connect_local_address_unreachable"
+            else:
+                errors['base'] = "cannot_connect_local_all"
 
         default_host = '' if user_input is None else user_input.get('host', '')
         default_serial = '' if user_input is None else user_input.get('serial', '')
@@ -719,14 +739,14 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 'serial': self._config_entry.data['serial'],
             }
             bambu = BambuClient(config)
-            success = await bambu.try_connection()
-            default_host = bambu.get_device().info.ip_address if success else ""
+            result = await bambu.try_connection()
+            default_host = bambu.get_device().info.ip_address if result == 0 else ""
 
         if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
             for device in device_list:
                 if device['dev_id'] == user_input['serial']:
 
-                    success = True
+                    result = 0
                     if user_input.get('host', "") != "":
                         LOGGER.debug(f"Options Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                         config = {
@@ -737,11 +757,21 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                             'serial': self._config_entry.data['serial'],
                         }
                         bambu = BambuClient(config)
-                        success = await bambu.try_connection()
-                        if not success:
-                            errors['base'] = "cannot_connect_local_ip"
+                        result = await bambu.try_connection()
+                        if result == -1: # Timeout
+                            errors['base'] = "cannot_connect_local_timeout"
+                        elif result == 5: # Access denied
+                            errors['base'] = "cannot_connect_local_access_denied"
+                        elif result == 7: # Incorrect serial number
+                            errors['base'] = "cannot_connect_local_incorrect_serial"
+                        elif result == 111: # Connection refused
+                            errors['base'] = "cannot_connect_local_incorrect_address"
+                        elif result == 113: # Connection refused
+                            errors['base'] = "cannot_connect_local_address_unreachable"
+                        else:
+                            errors['base'] = "cannot_connect_local_all"
 
-                    if success:
+                    if result == 0:
                         LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
                         data = dict(self._config_entry.data)
                         options = dict(self._config_entry.options)
@@ -834,9 +864,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
             }
             bambu = BambuClient(config)
-            success = await bambu.try_connection()
+            result = await bambu.try_connection()
 
-            if success:
+            if result == 0:
                 LOGGER.debug("Options Flow: Writing entry")
                 data = dict(self._config_entry.data)
                 options = dict(self._config_entry.options)
@@ -864,8 +894,18 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 )
                 await self.hass.config_entries.async_reload(self._config_entry.entry_id)
                 return self.async_create_entry(title="", data=None)
-
-            errors['base'] = "cannot_connect_local_all"
+            elif result == -1: # Timeout
+                errors['base'] = "cannot_connect_local_timeout"
+            elif result == 5: # Access denied
+                errors['base'] = "cannot_connect_local_access_denied"
+            elif result == 7: # Incorrect serial number
+                errors['base'] = "cannot_connect_local_incorrect_serial"
+            elif result == 111: # Connection refused
+                errors['base'] = "cannot_connect_local_incorrect_address"
+            elif result == 113: # Connection refused
+                errors['base'] = "cannot_connect_local_address_unreachable"
+            else:
+                errors['base'] = "cannot_connect_local_all"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
