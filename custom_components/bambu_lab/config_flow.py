@@ -747,6 +747,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 if device['dev_id'] == user_input['serial']:
 
                     result = 0
+                    force_ip = False
                     if user_input.get('host', "") != "":
                         LOGGER.debug(f"Options Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                         config = {
@@ -758,7 +759,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         }
                         bambu = BambuClient(config)
                         result = await bambu.try_connection()
-                        if result == -1: # Timeout
+                        if result == 0:
+                            force_ip = user_input['host'] != bambu.get_device().info.ip_address
+                        elif result == -1: # Timeout
                             errors['base'] = "cannot_connect_local_timeout"
                         elif result == 5: # Access denied
                             errors['base'] = "cannot_connect_local_access_denied"
@@ -788,7 +791,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                         options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
                         options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
-                        options["force_ip"] = user_input['host'] != bambu.get_device().info.ip_address
+                        options["force_ip"] = force_ip
                         
                         title = device['dev_id']
                         self.hass.config_entries.async_update_entry(
