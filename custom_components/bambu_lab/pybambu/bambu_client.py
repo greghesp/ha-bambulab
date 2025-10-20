@@ -764,7 +764,10 @@ class BambuClient:
             self.client.loop_start()
             LOGGER.debug("Waiting for reponse.")
             return_result = result.get(timeout=10)
-            LOGGER.debug("Connection test was successful")
+            if return_result == 0:
+                LOGGER.debug("Connection test was successful")
+            else:
+                LOGGER.debug(f"Connection test failed with result: {return_result}")
             return return_result
         except OSError as e:
             LOGGER.error(f"Connection test to '{host}' failed: {type(e)} Args: {e}")
