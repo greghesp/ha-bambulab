@@ -543,7 +543,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["vibration_cali"] = vibration_cali
         command["print"]["layer_inspect"] = layer_inspect
         command["print"]["use_ams"] = use_ams
-        command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
+        if use_ams:
+            command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
         command["print"]["subtask_name"] = os.path.basename(filepath)
 
         self.client.publish(command)
