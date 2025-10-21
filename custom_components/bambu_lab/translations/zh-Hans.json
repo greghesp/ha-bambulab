@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
-      "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
       "code_needed": "必须提供验证码。",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
       "cannot_connect_local_incorrect_address": "连接失败。连接被拒绝 - 检查 IP 地址。",
-      "cannot_connect_local_address_unreachable": "连接失败。地址无法访问 - 检查网络连接。"
+      "cannot_connect_local_address_unreachable": "连接失败。地址无法访问 - 检查网络连接。",
+      "cannot_connect_cloud_timeout": "尝试连接 Bambu Lab 云超时。",
+      "cannot_connect_cloud_access_denied": "Bambu Lab 云拒绝访问。您的历史记录中必须有云打印才能使云连接正常工作。",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab 云拒绝连接。",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab 云地址无法访问。",
+      "cannot_connect_cloud_unknown": "连接到 Bambu Lab 云时出现未知错误。",
+      "cannot_connect_local_unknown": "连接失败。检查提供的设置。"
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
-      "cannot_connect_local_all": "连接失败。检查提供的设置。",
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
       "code_needed": "必须提供验证码。",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
       "cannot_connect_local_incorrect_address": "连接失败。连接被拒绝 - 检查 IP 地址。",
-      "cannot_connect_local_address_unreachable": "连接失败。地址无法访问 - 检查网络连接。"
+      "cannot_connect_local_address_unreachable": "连接失败。地址无法访问 - 检查网络连接。",
+      "cannot_connect_cloud_timeout": "尝试连接 Bambu Lab 云超时。",
+      "cannot_connect_cloud_access_denied": "Bambu Lab 云拒绝访问。您的历史记录中必须有云打印才能使云连接正常工作。",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab 云拒绝连接。",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab 云地址无法访问。",
+      "cannot_connect_cloud_unknown": "连接到 Bambu Lab 云时出现未知错误。",
+      "cannot_connect_local_unknown": "连接失败。检查提供的设置。"
     },
     "step": {
       "init": {

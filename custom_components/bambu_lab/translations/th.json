@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบข้อมูลรับรอง",
-      "cannot_connect_local_all": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้ไว้",
       "invalid_auth": "การรับรองความถูกต้องไม่ถูกต้อง",
       "unknown": "ข้อผิดพลาดที่ไม่คาดคิด",
       "code_needed": "ต้องระบุรหัสการตรวจสอบ",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "ไม่สามารถเชื่อมต่อได้ การเข้าถึงถูกปฏิเสธ - ตรวจสอบรหัสการเข้าถึง",
       "cannot_connect_local_incorrect_serial": "ไม่สามารถเชื่อมต่อได้ การเชื่อมต่อถูกปิดโดยเครื่องพิมพ์ - ตรวจสอบหมายเลขซีเรียล",
       "cannot_connect_local_incorrect_address": "ไม่สามารถเชื่อมต่อได้ การเชื่อมต่อถูกปฏิเสธ - ตรวจสอบที่อยู่ IP",
-      "cannot_connect_local_address_unreachable": "ไม่สามารถเชื่อมต่อได้ ไม่สามารถเข้าถึงที่อยู่ได้ - ตรวจสอบการเชื่อมต่อเครือข่าย"
+      "cannot_connect_local_address_unreachable": "ไม่สามารถเชื่อมต่อได้ ไม่สามารถเข้าถึงที่อยู่ได้ - ตรวจสอบการเชื่อมต่อเครือข่าย",
+      "cannot_connect_cloud_timeout": "หมดเวลาพยายามเชื่อมต่อกับคลาวด์ Bambu Lab",
+      "cannot_connect_cloud_access_denied": "การเข้าถึงถูกปฏิเสธโดยระบบคลาวด์ Bambu Lab คุณต้องมีการพิมพ์แบบคลาวด์ในประวัติของคุณเพื่อให้การเชื่อมต่อระบบคลาวด์ทำงานได้",
+      "cannot_connect_cloud_connection_refused": "การเชื่อมต่อถูกปฏิเสธโดยคลาวด์ Bambu Lab",
+      "cannot_connect_cloud_address_unreachable": "ไม่สามารถเข้าถึงที่อยู่คลาวด์ของ Bambu Lab",
+      "cannot_connect_cloud_unknown": "เกิดข้อผิดพลาดที่ไม่รู้จักในการเชื่อมต่อกับคลาวด์ Bambu Lab",
+      "cannot_connect_local_unknown": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้มา"
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "ไม่สามารถเชื่อมต่อได้",
-      "cannot_connect_local_all": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้ไว้",
       "invalid_auth": "การรับรองความถูกต้องไม่ถูกต้อง",
       "unknown": "ข้อผิดพลาดที่ไม่คาดคิด",
       "code_needed": "ต้องระบุรหัสการตรวจสอบ",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "ไม่สามารถเชื่อมต่อได้ การเข้าถึงถูกปฏิเสธ - ตรวจสอบรหัสการเข้าถึง",
       "cannot_connect_local_incorrect_serial": "ไม่สามารถเชื่อมต่อได้ การเชื่อมต่อถูกปิดโดยเครื่องพิมพ์ - ตรวจสอบหมายเลขซีเรียล",
       "cannot_connect_local_incorrect_address": "ไม่สามารถเชื่อมต่อได้ การเชื่อมต่อถูกปฏิเสธ - ตรวจสอบที่อยู่ IP",
-      "cannot_connect_local_address_unreachable": "ไม่สามารถเชื่อมต่อได้ ไม่สามารถเข้าถึงที่อยู่ได้ - ตรวจสอบการเชื่อมต่อเครือข่าย"
+      "cannot_connect_local_address_unreachable": "ไม่สามารถเชื่อมต่อได้ ไม่สามารถเข้าถึงที่อยู่ได้ - ตรวจสอบการเชื่อมต่อเครือข่าย",
+      "cannot_connect_cloud_timeout": "หมดเวลาพยายามเชื่อมต่อกับคลาวด์ Bambu Lab",
+      "cannot_connect_cloud_access_denied": "การเข้าถึงถูกปฏิเสธโดยระบบคลาวด์ Bambu Lab คุณต้องมีการพิมพ์แบบคลาวด์ในประวัติของคุณเพื่อให้การเชื่อมต่อระบบคลาวด์ทำงานได้",
+      "cannot_connect_cloud_connection_refused": "การเชื่อมต่อถูกปฏิเสธโดยคลาวด์ Bambu Lab",
+      "cannot_connect_cloud_address_unreachable": "ไม่สามารถเข้าถึงที่อยู่คลาวด์ของ Bambu Lab",
+      "cannot_connect_cloud_unknown": "เกิดข้อผิดพลาดที่ไม่รู้จักในการเชื่อมต่อกับคลาวด์ Bambu Lab",
+      "cannot_connect_local_unknown": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้มา"
     },
     "step": {
       "init": {

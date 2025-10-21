@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć. Sprawdź dane logowania.",
-      "cannot_connect_local_all": "Nie udało się połączyć. Sprawdź podane ustawienia.",
       "invalid_auth": "Nieprawidłowe uwierzytelnienie.",
       "unknown": "Nieoczekiwany błąd.",
       "code_needed": "Wymagany jest kod weryfikacyjny.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "Nie udało się połączyć. Odmowa dostępu - sprawdź kod dostępu.",
       "cannot_connect_local_incorrect_serial": "Nie udało się połączyć. Połączenie zostało zamknięte przez drukarkę - sprawdź numer seryjny.",
       "cannot_connect_local_incorrect_address": "Nie udało się połączyć. Połączenie odrzucone – sprawdź adres IP.",
-      "cannot_connect_local_address_unreachable": "Nie udało się połączyć. Adres nieosiągalny - sprawdź połączenie sieciowe."
+      "cannot_connect_local_address_unreachable": "Nie udało się połączyć. Adres nieosiągalny - sprawdź połączenie sieciowe.",
+      "cannot_connect_cloud_timeout": "Upłynął limit czasu próby połączenia z chmurą Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Odmowa dostępu przez chmurę Bambu Lab. Aby połączenie z chmurą działało, musisz mieć wydruk w chmurze w swojej historii.",
+      "cannot_connect_cloud_connection_refused": "Połączenie odrzucone przez chmurę Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Adres chmury Bambu Lab jest nieosiągalny.",
+      "cannot_connect_cloud_unknown": "Nieznany błąd podczas łączenia z chmurą Bambu Lab.",
+      "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć",
-      "cannot_connect_local_all": "Nie udało się połączyć. Sprawdź podane ustawienia.",
       "invalid_auth": "Nieprawidłowe uwierzytelnienie.",
       "unknown": "Nieoczekiwany błąd.",
       "code_needed": "Wymagany jest kod weryfikacyjny.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "Nie udało się połączyć. Odmowa dostępu - sprawdź kod dostępu.",
       "cannot_connect_local_incorrect_serial": "Nie udało się połączyć. Połączenie zostało zamknięte przez drukarkę - sprawdź numer seryjny.",
       "cannot_connect_local_incorrect_address": "Nie udało się połączyć. Połączenie odrzucone – sprawdź adres IP.",
-      "cannot_connect_local_address_unreachable": "Nie udało się połączyć. Adres nieosiągalny - sprawdź połączenie sieciowe."
+      "cannot_connect_local_address_unreachable": "Nie udało się połączyć. Adres nieosiągalny - sprawdź połączenie sieciowe.",
+      "cannot_connect_cloud_timeout": "Upłynął limit czasu próby połączenia z chmurą Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Odmowa dostępu przez chmurę Bambu Lab. Aby połączenie z chmurą działało, musisz mieć wydruk w chmurze w swojej historii.",
+      "cannot_connect_cloud_connection_refused": "Połączenie odrzucone przez chmurę Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Adres chmury Bambu Lab jest nieosiągalny.",
+      "cannot_connect_cloud_unknown": "Nieznany błąd podczas łączenia z chmurą Bambu Lab.",
+      "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia."
     },
     "step": {
       "init": {

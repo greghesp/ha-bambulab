@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
-      "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
       "code_needed": "È necessario fornire il codice di verifica.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "Impossibile connettersi. Accesso negato: controlla il codice di accesso.",
       "cannot_connect_local_incorrect_serial": "Impossibile connettersi. La connessione è stata chiusa dalla stampante: controllare il numero di serie.",
       "cannot_connect_local_incorrect_address": "Impossibile connettersi. Connessione rifiutata: controlla l'indirizzo IP.",
-      "cannot_connect_local_address_unreachable": "Impossibile connettersi. Indirizzo non raggiungibile: controlla la connessione di rete."
+      "cannot_connect_local_address_unreachable": "Impossibile connettersi. Indirizzo non raggiungibile: controlla la connessione di rete.",
+      "cannot_connect_cloud_timeout": "Timeout nel tentativo di connessione al cloud di Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Accesso negato dal cloud di Bambu Lab. È necessario disporre di un'impronta cloud nella cronologia affinché la connessione cloud funzioni.",
+      "cannot_connect_cloud_connection_refused": "Connessione rifiutata dal cloud di Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Indirizzo cloud di Bambu Lab irraggiungibile.",
+      "cannot_connect_cloud_unknown": "Errore sconosciuto durante la connessione al cloud Bambu Lab.",
+      "cannot_connect_local_unknown": "Impossibile connettersi. Controlla le impostazioni fornite."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
-      "cannot_connect_local_all": "Impossibile connettersi. Controllare le impostazioni fornite.",
       "invalid_auth": "Autenticazione non valida.",
       "unknown": "Errore inaspettato.",
       "code_needed": "È necessario fornire il codice di verifica.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "Impossibile connettersi. Accesso negato: controlla il codice di accesso.",
       "cannot_connect_local_incorrect_serial": "Impossibile connettersi. La connessione è stata chiusa dalla stampante: controllare il numero di serie.",
       "cannot_connect_local_incorrect_address": "Impossibile connettersi. Connessione rifiutata: controlla l'indirizzo IP.",
-      "cannot_connect_local_address_unreachable": "Impossibile connettersi. Indirizzo non raggiungibile: controlla la connessione di rete."
+      "cannot_connect_local_address_unreachable": "Impossibile connettersi. Indirizzo non raggiungibile: controlla la connessione di rete.",
+      "cannot_connect_cloud_timeout": "Timeout nel tentativo di connessione al cloud di Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Accesso negato dal cloud di Bambu Lab. È necessario disporre di un'impronta cloud nella cronologia affinché la connessione cloud funzioni.",
+      "cannot_connect_cloud_connection_refused": "Connessione rifiutata dal cloud di Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Indirizzo cloud di Bambu Lab irraggiungibile.",
+      "cannot_connect_cloud_unknown": "Errore sconosciuto durante la connessione al cloud Bambu Lab.",
+      "cannot_connect_local_unknown": "Impossibile connettersi. Controlla le impostazioni fornite."
     },
     "step": {
       "init": {

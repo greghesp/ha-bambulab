@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다. 자격 증명을 확인하세요.",
-      "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
       "invalid_auth": "잘못된 인증 정보입니다.",
       "unknown": "예기치 않은 오류입니다.",
       "code_needed": "인증 코드를 제공해야 합니다.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "연결하지 못했습니다. 액세스가 거부되었습니다. 액세스 코드를 확인하세요.",
       "cannot_connect_local_incorrect_serial": "연결하지 못했습니다. 프린터에 의해 연결이 종료되었습니다. 일련번호를 확인하세요.",
       "cannot_connect_local_incorrect_address": "연결하지 못했습니다. 연결이 거부되었습니다. IP 주소를 확인하세요.",
-      "cannot_connect_local_address_unreachable": "연결하지 못했습니다. 주소에 연결할 수 없습니다. 네트워크 연결을 확인하세요."
+      "cannot_connect_local_address_unreachable": "연결하지 못했습니다. 주소에 연결할 수 없습니다. 네트워크 연결을 확인하세요.",
+      "cannot_connect_cloud_timeout": "Bambu Lab 클라우드에 연결하는 동안 시간이 초과되었습니다.",
+      "cannot_connect_cloud_access_denied": "Bambu Lab 클라우드에서 액세스가 거부되었습니다. 클라우드 연결이 작동하려면 기록에 클라우드 프린트가 있어야 합니다.",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab 클라우드에서 연결을 거부했습니다.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab 클라우드 주소에 연결할 수 없습니다.",
+      "cannot_connect_cloud_unknown": "Bambu Lab 클라우드 연결에 알 수 없는 오류가 발생했습니다.",
+      "cannot_connect_local_unknown": "연결하지 못했습니다. 제공된 설정을 확인하세요."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다.",
-      "cannot_connect_local_all": "연결에 실패했습니다. 제공된 설정을 확인하세요.",
       "invalid_auth": "잘못된 인증 정보입니다.",
       "unknown": "예기치 않은 오류입니다.",
       "code_needed": "인증 코드를 제공해야 합니다.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "연결하지 못했습니다. 액세스가 거부되었습니다. 액세스 코드를 확인하세요.",
       "cannot_connect_local_incorrect_serial": "연결하지 못했습니다. 프린터에 의해 연결이 종료되었습니다. 일련번호를 확인하세요.",
       "cannot_connect_local_incorrect_address": "연결하지 못했습니다. 연결이 거부되었습니다. IP 주소를 확인하세요.",
-      "cannot_connect_local_address_unreachable": "연결하지 못했습니다. 주소에 연결할 수 없습니다. 네트워크 연결을 확인하세요."
+      "cannot_connect_local_address_unreachable": "연결하지 못했습니다. 주소에 연결할 수 없습니다. 네트워크 연결을 확인하세요.",
+      "cannot_connect_cloud_timeout": "Bambu Lab 클라우드에 연결하는 동안 시간이 초과되었습니다.",
+      "cannot_connect_cloud_access_denied": "Bambu Lab 클라우드에서 액세스가 거부되었습니다. 클라우드 연결이 작동하려면 기록에 클라우드 프린트가 있어야 합니다.",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab 클라우드에서 연결을 거부했습니다.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab 클라우드 주소에 연결할 수 없습니다.",
+      "cannot_connect_cloud_unknown": "Bambu Lab 클라우드 연결에 알 수 없는 오류가 발생했습니다.",
+      "cannot_connect_local_unknown": "연결하지 못했습니다. 제공된 설정을 확인하세요."
     },
     "step": {
       "init": {

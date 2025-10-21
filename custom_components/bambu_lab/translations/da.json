@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes. Tjek legitimationsoplysninger.",
-      "cannot_connect_local_all": "Forbindelse mislykkedes. Tjek de angivne indstillinger.",
       "invalid_auth": "Ugyldig autentifikation.",
       "unknown": "Uventet fejl.",
       "code_needed": "Bekræftelseskode skal angives.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "Kunne ikke oprette forbindelse. Adgang nægtet - tjek adgangskoden.",
       "cannot_connect_local_incorrect_serial": "Kunne ikke oprette forbindelse. Forbindelsen blev lukket af printeren - tjek serienummeret.",
       "cannot_connect_local_incorrect_address": "Kunne ikke oprette forbindelse. Forbindelse nægtet - tjek IP-adressen.",
-      "cannot_connect_local_address_unreachable": "Kunne ikke oprette forbindelse. Adressen kan ikke nås - tjek netværksforbindelsen."
+      "cannot_connect_local_address_unreachable": "Kunne ikke oprette forbindelse. Adressen kan ikke nås - tjek netværksforbindelsen.",
+      "cannot_connect_cloud_timeout": "Timeout for forsøget på at oprette forbindelse til Bambu Lab-skyen.",
+      "cannot_connect_cloud_access_denied": "Adgang nægtet af Bambu Lab-skyen. Du skal have et cloudprint i din historik for at cloudforbindelsen kan fungere.",
+      "cannot_connect_cloud_connection_refused": "Forbindelse nægtet af Bambu Lab-skyen.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Labs cloud-adresse kan ikke nås.",
+      "cannot_connect_cloud_unknown": "Ukendt fejl ved forbindelse til Bambu Lab-skyen.",
+      "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes",
-      "cannot_connect_local_all": "Forbindelse mislykkedes. Tjek de angivne indstillinger.",
       "invalid_auth": "Ugyldig autentifikation.",
       "unknown": "Uventet fejl.",
       "code_needed": "Bekræftelseskode skal angives.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "Kunne ikke oprette forbindelse. Adgang nægtet - tjek adgangskoden.",
       "cannot_connect_local_incorrect_serial": "Kunne ikke oprette forbindelse. Forbindelsen blev lukket af printeren - tjek serienummeret.",
       "cannot_connect_local_incorrect_address": "Kunne ikke oprette forbindelse. Forbindelse nægtet - tjek IP-adressen.",
-      "cannot_connect_local_address_unreachable": "Kunne ikke oprette forbindelse. Adressen kan ikke nås - tjek netværksforbindelsen."
+      "cannot_connect_local_address_unreachable": "Kunne ikke oprette forbindelse. Adressen kan ikke nås - tjek netværksforbindelsen.",
+      "cannot_connect_cloud_timeout": "Timeout for forsøget på at oprette forbindelse til Bambu Lab-skyen.",
+      "cannot_connect_cloud_access_denied": "Adgang nægtet af Bambu Lab-skyen. Du skal have et cloudprint i din historik for at cloudforbindelsen kan fungere.",
+      "cannot_connect_cloud_connection_refused": "Forbindelse nægtet af Bambu Lab-skyen.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Labs cloud-adresse kan ikke nås.",
+      "cannot_connect_cloud_unknown": "Ukendt fejl ved forbindelse til Bambu Lab-skyen.",
+      "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger."
     },
     "step": {
       "init": {
