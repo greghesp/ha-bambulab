@@ -313,23 +313,33 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
         default_host = ""
-        if user_input is None:
-            LOGGER.debug("Config Flow async_step_Bambu_Lan: Testing cloud mqtt to get printer IP address")
-            config = {
-                "region": self.region,
-                "email": self.email,
-                "username": self._bambu_cloud.username,
-                "host": "",
-                "local_mqtt": False,
-                "auth_token": self._bambu_cloud.auth_token,
-                'device_type': device_type,
-                'serial': device['dev_id'],
-            }
-            bambu = BambuClient(config)
-            result = await bambu.try_connection()
-            default_host = bambu.get_device().info.ip_address if result == 0 else ""
+        LOGGER.debug("Config Flow async_step_Bambu_Lan: Testing cloud mqtt to get printer IP address")
+        config = {
+            "region": self.region,
+            "email": self.email,
+            "username": self._bambu_cloud.username,
+            "host": "",
+            "local_mqtt": False,
+            "auth_token": self._bambu_cloud.auth_token,
+            'device_type': device_type,
+            'serial': device['dev_id'],
+        }
+        bambu = BambuClient(config)
+        result = await bambu.try_connection()
+        if result == 0:
+            default_host = bambu.get_device().info.ip_address
+        elif result == -1: # Timeout
+            errors['base'] = "cannot_connect_cloud_timeout"
+        elif result == 5: # Access denied
+            errors['base'] = "cannot_connect_cloud_access_denied"
+        elif result == 111: # Connection refused
+            errors['base'] = "cannot_connect_cloud_connection_refused"
+        elif result == 113: # Address unreachable
+            errors['base'] = "cannot_connect_cloud_address_unreachable"
+        else:
+            errors['base'] = "cannot_connect_cloud_unknown"
 
-        if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
+        if (result == 0) and (user_input is not None) and ((user_input.get('host', "") != "") or (user_input.get('local_mqtt', False) == False)):
             result = 0
             force_ip = False
             if user_input.get('host', "") != "":
@@ -357,7 +367,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 elif result == 113: # Connection refused
                     errors['base'] = "cannot_connect_local_address_unreachable"
                 else:
-                    errors['base'] = "cannot_connect_local_all"
+                    errors['base'] = "cannot_connect_local_unknown"
 
             if result == 0:
                 if self._show_existing:
@@ -493,7 +503,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             elif result == 113: # Connection refused
                 errors['base'] = "cannot_connect_local_address_unreachable"
             else:
-                errors['base'] = "cannot_connect_local_all"
+                errors['base'] = "cannot_connect_local_unknown"
 
         default_host = '' if user_input is None else user_input.get('host', '')
         default_serial = '' if user_input is None else user_input.get('serial', '')
@@ -729,23 +739,33 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             self._bambu_cloud.get_device_list)
 
         default_host = ""
-        if user_input is None:
-            LOGGER.debug("Options Flow async_step_Bambu_Lan: Testing cloud mqtt to get printer IP address")
-            config = {
-                "region": self.region,
-                "email": self.email,
-                "username": self._bambu_cloud.username,
-                "host": "",
-                "local_mqtt": False,
-                "auth_token": self._bambu_cloud.auth_token,
-                'device_type': self._config_entry.data['device_type'],
-                'serial': self._config_entry.data['serial'],
-            }
-            bambu = BambuClient(config)
-            result = await bambu.try_connection()
-            default_host = bambu.get_device().info.ip_address if result == 0 else ""
+        LOGGER.debug("Options Flow async_step_Bambu_Lan: Testing cloud mqtt to get printer IP address")
+        config = {
+            "region": self.region,
+            "email": self.email,
+            "username": self._bambu_cloud.username,
+            "host": "",
+            "local_mqtt": False,
+            "auth_token": self._bambu_cloud.auth_token,
+            'device_type': self._config_entry.data['device_type'],
+            'serial': self._config_entry.data['serial'],
+        }
+        bambu = BambuClient(config)
+        result = await bambu.try_connection()
+        if result == 0:
+            default_host = bambu.get_device().info.ip_address
+        elif result == -1: # Timeout
+            errors['base'] = "cannot_connect_cloud_timeout"
+        elif result == 5: # Access denied
+            errors['base'] = "cannot_connect_cloud_access_denied"
+        elif result == 111: # Connection refused
+            errors['base'] = "cannot_connect_cloud_connection_refused"
+        elif result == 113: # Address unreachable
+            errors['base'] = "cannot_connect_cloud_address_unreachable"
+        else:
+            errors['base'] = "cannot_connect_cloud_unknown"
 
-        if (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
+        if (result == 0) and (user_input is not None) and ((user_input.get('host', "") != "") or (user_input['local_mqtt'] == False)):
             for device in device_list:
                 if device['dev_id'] == user_input['serial']:
 
@@ -775,7 +795,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         elif result == 113: # Connection refused
                             errors['base'] = "cannot_connect_local_address_unreachable"
                         else:
-                            errors['base'] = "cannot_connect_local_all"
+                            errors['base'] = "cannot_connect_local_unknown"
 
                     if result == 0:
                         LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
@@ -911,7 +931,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             elif result == 113: # Connection refused
                 errors['base'] = "cannot_connect_local_address_unreachable"
             else:
-                errors['base'] = "cannot_connect_local_all"
+                errors['base'] = "cannot_connect_local_unknown"
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()

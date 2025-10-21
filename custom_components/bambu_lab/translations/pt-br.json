@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Falha ao conectar. Verifique as credenciais.",
-      "cannot_connect_local_all": "Falha ao conectar. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
       "code_needed": "O código de verificação deve ser fornecido.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "Falha ao conectar. Acesso negado - verifique o código de acesso.",
       "cannot_connect_local_incorrect_serial": "Falha ao conectar. A conexão foi encerrada pela impressora - verifique o número de série.",
       "cannot_connect_local_incorrect_address": "Falha ao conectar. Conexão recusada - verifique o endereço IP.",
-      "cannot_connect_local_address_unreachable": "Falha ao conectar. Endereço inacessível - verifique a conexão de rede."
+      "cannot_connect_local_address_unreachable": "Falha ao conectar. Endereço inacessível - verifique a conexão de rede.",
+      "cannot_connect_cloud_timeout": "O tempo limite da tentativa de conexão com a nuvem do Bambu Lab esgotou.",
+      "cannot_connect_cloud_access_denied": "Acesso negado pela nuvem do Bambu Lab. Você deve ter uma impressão em nuvem em seu histórico para que a conexão em nuvem funcione.",
+      "cannot_connect_cloud_connection_refused": "Conexão recusada pela nuvem do Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Endereço da nuvem do Bambu Lab inacessível.",
+      "cannot_connect_cloud_unknown": "Erro desconhecido ao conectar-se à nuvem do Bambu Lab.",
+      "cannot_connect_local_unknown": "Falha ao conectar. Verifique as configurações fornecidas."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "Falha na conexão",
-      "cannot_connect_local_all": "Falha na conexão. Verifique as definições fornecidas.",
       "invalid_auth": "Autenticação inválida.",
       "unknown": "Erro inesperado.",
       "code_needed": "O código de verificação deve ser fornecido.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "Falha ao conectar. Acesso negado - verifique o código de acesso.",
       "cannot_connect_local_incorrect_serial": "Falha ao conectar. A conexão foi encerrada pela impressora - verifique o número de série.",
       "cannot_connect_local_incorrect_address": "Falha ao conectar. Conexão recusada - verifique o endereço IP.",
-      "cannot_connect_local_address_unreachable": "Falha ao conectar. Endereço inacessível - verifique a conexão de rede."
+      "cannot_connect_local_address_unreachable": "Falha ao conectar. Endereço inacessível - verifique a conexão de rede.",
+      "cannot_connect_cloud_timeout": "O tempo limite da tentativa de conexão com a nuvem do Bambu Lab esgotou.",
+      "cannot_connect_cloud_access_denied": "Acesso negado pela nuvem do Bambu Lab. Você deve ter uma impressão em nuvem em seu histórico para que a conexão em nuvem funcione.",
+      "cannot_connect_cloud_connection_refused": "Conexão recusada pela nuvem do Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Endereço da nuvem do Bambu Lab inacessível.",
+      "cannot_connect_cloud_unknown": "Erro desconhecido ao conectar-se à nuvem do Bambu Lab.",
+      "cannot_connect_local_unknown": "Falha ao conectar. Verifique as configurações fornecidas."
     },
     "step": {
       "init": {

@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Error de connexió. Revisa les credencials.",
-      "cannot_connect_local_all": "Error de connexió. Revisa la configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
       "code_needed": "S'ha de proporcionar el codi de verificació.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "No s'ha pogut connectar. Accés denegat: comproveu el codi d'accés.",
       "cannot_connect_local_incorrect_serial": "No s'ha pogut connectar. La connexió va ser tancada per la impressora: comproveu el número de sèrie.",
       "cannot_connect_local_incorrect_address": "No s'ha pogut connectar. Connexió rebutjada: comproveu l'adreça IP.",
-      "cannot_connect_local_address_unreachable": "No s'ha pogut connectar. Adreça inaccessible: comproveu la connexió de xarxa."
+      "cannot_connect_local_address_unreachable": "No s'ha pogut connectar. Adreça inaccessible: comproveu la connexió de xarxa.",
+      "cannot_connect_cloud_timeout": "S'ha esgotat el temps d'intent de connectar-se al núvol de Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Accés denegat pel núvol de Bambu Lab. Heu de tenir una impressió al núvol al vostre historial perquè la connexió al núvol funcioni.",
+      "cannot_connect_cloud_connection_refused": "Connexió rebutjada pel núvol de Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "L'adreça del núvol de Bambu Lab no és accessible.",
+      "cannot_connect_cloud_unknown": "Error desconegut en connectar-se al núvol de Bambu Lab.",
+      "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "Error de connexió.",
-      "cannot_connect_local_all": "Error de connexió. Revisa configuració proporcionada.",
       "invalid_auth": "Autenticació invàlida.",
       "unknown": "Error inesperat.",
       "code_needed": "S'ha de proporcionar el codi de verificació.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "No s'ha pogut connectar. Accés denegat: comproveu el codi d'accés.",
       "cannot_connect_local_incorrect_serial": "No s'ha pogut connectar. La connexió va ser tancada per la impressora: comproveu el número de sèrie.",
       "cannot_connect_local_incorrect_address": "No s'ha pogut connectar. Connexió rebutjada: comproveu l'adreça IP.",
-      "cannot_connect_local_address_unreachable": "No s'ha pogut connectar. Adreça inaccessible: comproveu la connexió de xarxa."
+      "cannot_connect_local_address_unreachable": "No s'ha pogut connectar. Adreça inaccessible: comproveu la connexió de xarxa.",
+      "cannot_connect_cloud_timeout": "S'ha esgotat el temps d'intent de connectar-se al núvol de Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Accés denegat pel núvol de Bambu Lab. Heu de tenir una impressió al núvol al vostre historial perquè la connexió al núvol funcioni.",
+      "cannot_connect_cloud_connection_refused": "Connexió rebutjada pel núvol de Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "L'adreça del núvol de Bambu Lab no és accessible.",
+      "cannot_connect_cloud_unknown": "Error desconegut en connectar-se al núvol de Bambu Lab.",
+      "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada."
     },
     "step": {
       "init": {

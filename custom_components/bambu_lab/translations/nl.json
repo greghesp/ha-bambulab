@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Verbinding mislukt. Controleer de logingegevens.",
-      "cannot_connect_local_all": "Verbinding mislukt. Controleer opgegeven instellingen.",
       "invalid_auth": "Ongeldige authenticatie.",
       "unknown": "Onverwachte fout.",
       "code_needed": "Verificatiecode moet worden opgegeven.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "Kan geen verbinding maken. Toegang geweigerd - controleer de toegangscode.",
       "cannot_connect_local_incorrect_serial": "Kan geen verbinding maken. De verbinding is verbroken door de printer. Controleer het serienummer.",
       "cannot_connect_local_incorrect_address": "Kan geen verbinding maken. Verbinding geweigerd - controleer het IP-adres.",
-      "cannot_connect_local_address_unreachable": "Kan geen verbinding maken. Adres onbereikbaar - controleer netwerkverbinding."
+      "cannot_connect_local_address_unreachable": "Kan geen verbinding maken. Adres onbereikbaar - controleer netwerkverbinding.",
+      "cannot_connect_cloud_timeout": "Er is een time-out opgetreden bij het verbinden met de Bambu Lab-cloud.",
+      "cannot_connect_cloud_access_denied": "Toegang geweigerd door Bambu Lab-cloud. U moet een cloudafdruk in uw geschiedenis hebben om de cloudverbinding te laten werken.",
+      "cannot_connect_cloud_connection_refused": "Verbinding geweigerd door Bambu Lab-cloud.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab-cloudadres onbereikbaar.",
+      "cannot_connect_cloud_unknown": "Onbekende fout bij het verbinden met de Bambu Lab-cloud.",
+      "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "Verbinden mislukt",
-      "cannot_connect_local_all": "Verbinding mislukt. Controleer opgegeven instellingen.",
       "invalid_auth": "Ongeldige authenticatie.",
       "unknown": "Onverwachte fout.",
       "code_needed": "Verificatiecode moet worden opgegeven.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "Kan geen verbinding maken. Toegang geweigerd - controleer de toegangscode.",
       "cannot_connect_local_incorrect_serial": "Kan geen verbinding maken. De verbinding is verbroken door de printer. Controleer het serienummer.",
       "cannot_connect_local_incorrect_address": "Kan geen verbinding maken. Verbinding geweigerd - controleer het IP-adres.",
-      "cannot_connect_local_address_unreachable": "Kan geen verbinding maken. Adres onbereikbaar - controleer netwerkverbinding."
+      "cannot_connect_local_address_unreachable": "Kan geen verbinding maken. Adres onbereikbaar - controleer netwerkverbinding.",
+      "cannot_connect_cloud_timeout": "Er is een time-out opgetreden bij het verbinden met de Bambu Lab-cloud.",
+      "cannot_connect_cloud_access_denied": "Toegang geweigerd door Bambu Lab-cloud. U moet een cloudafdruk in uw geschiedenis hebben om de cloudverbinding te laten werken.",
+      "cannot_connect_cloud_connection_refused": "Verbinding geweigerd door Bambu Lab-cloud.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab-cloudadres onbereikbaar.",
+      "cannot_connect_cloud_unknown": "Onbekende fout bij het verbinden met de Bambu Lab-cloud.",
+      "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen."
     },
     "step": {
       "init": {

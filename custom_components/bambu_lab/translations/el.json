@@ -20,7 +20,6 @@
     },
     "error": {
       "cannot_connect": "Αποτυχία σύνδεσης. Ελέγξτε τα στοιχεία σύνδεσης.",
-      "cannot_connect_local_all": "Αποτυχία σύνδεσης. Ελέγξτε τις ρυθμίσεις.",
       "invalid_auth": "Μη έγκυρη ταυτοποίηση.",
       "unknown": "Απρόσμενο σφάλμα.",
       "code_needed": "Πρέπει να παρέχεται κωδικός επαλήθευσης.",
@@ -32,7 +31,13 @@
       "cannot_connect_local_access_denied": "Αποτυχία σύνδεσης. Δεν επιτρέπεται η πρόσβαση - ελέγξτε τον κωδικό πρόσβασης.",
       "cannot_connect_local_incorrect_serial": "Αποτυχία σύνδεσης. Η σύνδεση έκλεισε από τον εκτυπωτή - ελέγξτε τον σειριακό αριθμό.",
       "cannot_connect_local_incorrect_address": "Αποτυχία σύνδεσης. Η σύνδεση απορρίφθηκε - ελέγξτε τη διεύθυνση IP.",
-      "cannot_connect_local_address_unreachable": "Αποτυχία σύνδεσης. Η διεύθυνση δεν είναι προσβάσιμη - ελέγξτε τη σύνδεση δικτύου."
+      "cannot_connect_local_address_unreachable": "Αποτυχία σύνδεσης. Η διεύθυνση δεν είναι προσβάσιμη - ελέγξτε τη σύνδεση δικτύου.",
+      "cannot_connect_cloud_timeout": "Λήγει το χρονικό όριο της προσπάθειας σύνδεσης στο cloud Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Δεν επιτρέπεται η πρόσβαση από το νέφος Bambu Lab. Πρέπει να έχετε μια εκτύπωση cloud στο ιστορικό σας για να λειτουργήσει η σύνδεση στο cloud.",
+      "cannot_connect_cloud_connection_refused": "Η σύνδεση απορρίφθηκε από το σύννεφο Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Η διεύθυνση cloud του Bambu Lab δεν είναι προσβάσιμη.",
+      "cannot_connect_cloud_unknown": "Άγνωστο σφάλμα σύνδεσης στο νέφος Bambu Lab.",
+      "cannot_connect_local_unknown": "Αποτυχία σύνδεσης. Ελέγξτε τις παρεχόμενες ρυθμίσεις."
     },
     "step": {
       "user": {
@@ -112,7 +117,6 @@
     },
     "error": {
       "cannot_connect": "Αποτυχία σύνδεσης",
-      "cannot_connect_local_all": "Αποτυχία σύνδεσης. Ελέγξτε τις ρυθμίσεις.",
       "invalid_auth": "Μη έγκυρη ταυτοποίηση.",
       "unknown": "Απρόσμενο σφάλμα.",
       "code_needed": "Πρέπει να παρέχεται κωδικός επαλήθευσης.",
@@ -124,7 +128,13 @@
       "cannot_connect_local_access_denied": "Αποτυχία σύνδεσης. Δεν επιτρέπεται η πρόσβαση - ελέγξτε τον κωδικό πρόσβασης.",
       "cannot_connect_local_incorrect_serial": "Αποτυχία σύνδεσης. Η σύνδεση έκλεισε από τον εκτυπωτή - ελέγξτε τον σειριακό αριθμό.",
       "cannot_connect_local_incorrect_address": "Αποτυχία σύνδεσης. Η σύνδεση απορρίφθηκε - ελέγξτε τη διεύθυνση IP.",
-      "cannot_connect_local_address_unreachable": "Αποτυχία σύνδεσης. Η διεύθυνση δεν είναι προσβάσιμη - ελέγξτε τη σύνδεση δικτύου."
+      "cannot_connect_local_address_unreachable": "Αποτυχία σύνδεσης. Η διεύθυνση δεν είναι προσβάσιμη - ελέγξτε τη σύνδεση δικτύου.",
+      "cannot_connect_cloud_timeout": "Λήγει το χρονικό όριο της προσπάθειας σύνδεσης στο cloud Bambu Lab.",
+      "cannot_connect_cloud_access_denied": "Δεν επιτρέπεται η πρόσβαση από το νέφος Bambu Lab. Πρέπει να έχετε μια εκτύπωση cloud στο ιστορικό σας για να λειτουργήσει η σύνδεση στο cloud.",
+      "cannot_connect_cloud_connection_refused": "Η σύνδεση απορρίφθηκε από το σύννεφο Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Η διεύθυνση cloud του Bambu Lab δεν είναι προσβάσιμη.",
+      "cannot_connect_cloud_unknown": "Άγνωστο σφάλμα σύνδεσης στο νέφος Bambu Lab.",
+      "cannot_connect_local_unknown": "Αποτυχία σύνδεσης. Ελέγξτε τις παρεχόμενες ρυθμίσεις."
     },
     "step": {
       "init": {
