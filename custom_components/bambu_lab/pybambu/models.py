@@ -330,8 +330,8 @@ class Device:
         return False
     
     def supports_sw_version(self, version: str) -> bool:
-        if compare_version(self.info.sw_ver, "99.0.0.0"):
-            # This is the X1+ firmware version. Treat it as 01.08.02.00
+        if compare_version(self.info.sw_ver, "99.0.0.0") >= 0:
+            # This is an X1+ firmware version. Treat it as 01.08.02.00.
             return compare_version("01.08.02.00", version) >= 0
         return compare_version(self.info.sw_ver, version) >= 0
     
