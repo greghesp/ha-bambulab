@@ -294,7 +294,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return { "Success": False,
                      "Error": "Invalid type specified: '{move}'." }
 
-        nozzle_temp = self.get_model().temperature.nozzle_temp
+        nozzle_temp = self.get_model().temperature.active_nozzle_temperature
         if force is not True and nozzle_temp < 170:
             LOGGER.error(f"Nozzle temperature too low to perform extrusion: {nozzle_temp}ºC")
             return { "Success": False,
