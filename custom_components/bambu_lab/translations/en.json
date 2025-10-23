@@ -21,7 +21,7 @@
     "error": {
       "cannot_connect": "Failed to connect. Check credentials.",
       "cannot_connect_cloud_timeout": "Timed out trying to connect to Bambu Lab cloud.",
-      "cannot_connect_cloud_access_denied": "Access denied by Bambu Lab cloud. You must have a cloud print in your history for cloud connection to work.",
+      "cannot_connect_cloud_access_denied": "Access denied by Bambu Lab cloud.",
       "cannot_connect_cloud_connection_refused": "Connection refused by Bambu Lab cloud.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab cloud address unreachable.",
       "cannot_connect_cloud_unknown": "Unknown error connecting to Bambu Lab cloud.",
@@ -118,7 +118,7 @@
     "error": {
       "cannot_connect": "Failed to connect",
       "cannot_connect_cloud_timeout": "Timed out trying to connect to Bambu Lab cloud.",
-      "cannot_connect_cloud_access_denied": "Access denied by Bambu Lab cloud. You must have a cloud print in your history for cloud connection to work.",
+      "cannot_connect_cloud_access_denied": "Access denied by Bambu Lab cloud.",
       "cannot_connect_cloud_connection_refused": "Connection refused by Bambu Lab cloud.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab cloud address unreachable.",
       "cannot_connect_cloud_unknown": "Unknown error connecting to Bambu Lab cloud.",
