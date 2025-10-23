@@ -447,6 +447,8 @@ class BambuClient:
     def setup_tls(self):
         if self._local_mqtt:
             self.client.tls_set_context(self.local_tls_context)
+            if self._disable_ssl_verify:
+                self.client.tls_insecure_set(True) 
         else:
             self.client.tls_set()
 
@@ -814,7 +816,7 @@ def create_local_ssl_context():
 
 @functools.lru_cache(maxsize=1)
 def create_insecure_ssl_context():
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     context.check_hostname = False
     context.verify_mode = ssl.CERT_NONE
     return context
