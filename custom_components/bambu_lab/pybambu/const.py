@@ -229,6 +229,8 @@ class BambuUrl(IntEnum):
     SLICER_SETTINGS = 6,
     TASKS = 7,
     PROJECTS = 8,
+    USERDETAIL = 9,
+    PREFERENCE = 10,
 
 BAMBU_URL = {
     BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
@@ -239,4 +241,5 @@ BAMBU_URL = {
     BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=1.10.0.89',
     BambuUrl.TASKS: 'https://api.bambulab.com/v1/user-service/my/tasks',
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
+    BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
 }

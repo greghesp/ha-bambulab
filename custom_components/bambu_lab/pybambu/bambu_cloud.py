@@ -295,22 +295,13 @@ class BambuCloud:
         tokens = self._auth_token.split(".")
         if len(tokens) != 3:
             LOGGER.debug("Received authToken is not a JWT.")
-            LOGGER.debug("Trying to use project API to retrieve username instead")
-            response = self.get_projects();
+            LOGGER.debug("Trying to use preference API to retrieve username instead")
+            response = self._get(BambuUrl.PREFERENCE)
             if response is not None:
-                projectsnode = response.get('projects', None)
-                if projectsnode is None:
-                    LOGGER.debug("Failed to find projects node")
-                else:
-                    if len(projectsnode) == 0:
-                        LOGGER.debug("No projects node in response")
-                    else:
-                        project=projectsnode[0]
-                        if project.get('user_id', None) is None:
-                            LOGGER.debug("No user_id entry")
-                        else:
-                            username = f"u_{project['user_id']}"
-                            LOGGER.debug(f"Found user_id of {username[:7]}xxxxx")
+                uid = response.json().get('uid', None)
+                if uid is not None:
+                    username = f"u_{uid}"
+                    LOGGER.debug(f"Found user_id of {username[:7]}xxxxx")
         else:
             LOGGER.debug("Authentication token looks to be a JWT")
             try:
