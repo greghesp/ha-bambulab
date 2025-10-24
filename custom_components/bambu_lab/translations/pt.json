@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "Configurar Ligação Local",
-        "description": "Você pode optar por conectar-se diretamente à impressora para atualizações de status, em vez de usar a nuvem do Bambu Lab. Isso lhe dá resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.",
+        "description": "Você pode optar por se conectar diretamente à impressora mqtt em vez da nuvem do Bambu Lab. Isso proporciona resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.\n\rIndependentemente desta escolha, a integração obterá o endereço IP da impressora da nuvem do Bambu Lab e confirmará se ela pode se conectar a ela, pois isso é necessário para câmera, histórico de impressão e suporte para lapso de tempo. Se a sua impressora estiver inacessível ao Home Assistant, você poderá desativar esta verificação, mas perderá esses recursos.",
         "data": {
-          "local_mqtt": "Ligar localmente à impressora:",
+          "local_mqtt": "Conecte-se diretamente à impressora mqtt:",
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
           "usage_hours": "Horas de utilização atuais (opcional):",
           "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "skip_local_mqtt": "Ignore o teste de conexão mqtt local (não recomendado):"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "Ajustar Configuração da Impressora",
-        "description": "Você pode optar por conectar-se diretamente à impressora para atualizações de status, em vez de usar a nuvem do Bambu Lab. Isso lhe dá resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.",
+        "description": "Você pode optar por se conectar diretamente à impressora mqtt em vez da nuvem do Bambu Lab. Isso proporciona resiliência às interrupções na nuvem do Bambu Lab, mas o Bambu Lab restringiu o controle da impressora neste modo híbrido, portanto alguns controles estarão indisponíveis.\n\rIndependentemente desta escolha, a integração obterá o endereço IP da impressora da nuvem do Bambu Lab e confirmará se ela pode se conectar a ela, pois isso é necessário para câmera, histórico de impressão e suporte para lapso de tempo. Se a sua impressora estiver inacessível ao Home Assistant, você poderá desativar esta verificação, mas perderá esses recursos.",
         "data": {
           "serial": "Ajuste as configurações para:",
           "host": "Endereço IP Local da Impressora:",
           "access_code": "Código de Acesso:",
-          "local_mqtt": "Conecte-se diretamente à impressora em vez da nuvem do Bambu Lab:",
+          "local_mqtt": "Conecte-se diretamente à impressora mqtt:",
           "usage_hours": "Horas de utilização atuais (opcional):",
           "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "skip_local_mqtt": "Ignore o teste de conexão mqtt local (não recomendado):"
         },
         "sections": {
           "advanced": {

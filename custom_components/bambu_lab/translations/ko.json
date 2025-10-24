@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "로컬 연결 설정",
-        "description": "상태 업데이트를 위해 Bambu Lab 클라우드 대신 프린터에 직접 연결하도록 선택할 수 있습니다. 이렇게 하면 Bambu Lab 클라우드 중단에 대한 복원력이 제공되지만 Bambu Lab은 이 하이브리드 모드에 있을 때 프린터 제어를 제한하므로 일부 제어를 사용할 수 없습니다.",
+        "description": "Bambu Lab 클라우드 대신 프린터 mqtt에 직접 연결하도록 선택할 수 있습니다. 이는 Bambu Lab 클라우드 중단에 대한 복원력을 제공하지만 Bambu Lab은 이 하이브리드 모드에 있을 때 프린터 제어를 제한하므로 일부 제어를 사용할 수 없습니다.\n\r이 선택에 관계없이 통합은 Bambu Lab 클라우드에서 프린터 IP 주소를 가져오고 카메라, 인쇄 기록 및 타임랩스 지원에 필요하므로 연결할 수 있는지 확인합니다. 홈어시스턴트가 프린터에 액세스할 수 없는 경우 이 확인을 비활성화할 수 있지만 해당 기능은 손실됩니다.",
         "data": {
-          "local_mqtt": "로컬에서 프린터에 연결:",
+          "local_mqtt": "프린터 mqtt에 직접 연결:",
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
           "usage_hours": "현재 사용 시간 (선택 사항):",
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
-          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
+          "skip_local_mqtt": "로컬 mqtt 연결 테스트 건너뛰기(권장되지 않음):"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "프린터 구성 조정",
-        "description": "상태 업데이트를 위해 Bambu Lab 클라우드 대신 프린터에 직접 연결하도록 선택할 수 있습니다. 이렇게 하면 Bambu Lab 클라우드 중단에 대한 복원력이 제공되지만 Bambu Lab은 이 하이브리드 모드에 있을 때 프린터 제어를 제한하므로 일부 제어를 사용할 수 없습니다.",
+        "description": "Bambu Lab 클라우드 대신 프린터 mqtt에 직접 연결하도록 선택할 수 있습니다. 이는 Bambu Lab 클라우드 중단에 대한 복원력을 제공하지만 Bambu Lab은 이 하이브리드 모드에 있을 때 프린터 제어를 제한하므로 일부 제어를 사용할 수 없습니다.\n\r이 선택에 관계없이 통합은 Bambu Lab 클라우드에서 프린터 IP 주소를 가져오고 카메라, 인쇄 기록 및 타임랩스 지원에 필요하므로 연결할 수 있는지 확인합니다. 홈어시스턴트가 프린터에 액세스할 수 없는 경우 이 확인을 비활성화할 수 있지만 해당 기능은 손실됩니다.",
         "data": {
           "serial": "다음에 대한 설정을 조정합니다.",
           "host": "로컬 프린터 IP 주소:",
           "access_code": "접근 코드:",
-          "local_mqtt": "Bambu Lab 클라우드 대신 프린터에 직접 연결:",
+          "local_mqtt": "프린터 mqtt에 직접 연결:",
           "usage_hours": "현재 사용 시간 (선택 사항):",
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
-          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
+          "skip_local_mqtt": "로컬 mqtt 연결 테스트 건너뛰기(권장되지 않음):"
         },
         "sections": {
           "advanced": {

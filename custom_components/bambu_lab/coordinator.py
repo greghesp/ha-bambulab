@@ -750,7 +750,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case Options.CAMERA:
                 default = True
             case Options.FTP:
-                default = options.get('local_mqtt', False)
+                return True  # Always enabled, no option to disable
 
         return options.get(OPTION_NAME[option], default)
         
@@ -770,8 +770,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case Options.CAMERA:
                 force_reload = True
             case Options.IMAGECAMERA:
-                force_reload = True
-            case Options.FTP:
                 force_reload = True
 
         if force_reload:
