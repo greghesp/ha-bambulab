@@ -189,7 +189,8 @@ class Device:
                 self.info.device_type == Printers.H2S or 
                 self.info.device_type == Printers.X1 or
                 self.info.device_type == Printers.X1C or
-                self.info.device_type == Printers.X1E):
+                self.info.device_type == Printers.X1E or
+                self.info.device_type == Printers.P2S):
                 return True
             elif (self.info.device_type == Printers.P1S or
                   self.info.device_type == Printers.P1P):
@@ -212,7 +213,8 @@ class Device:
                     self.info.device_type == Printers.H2S or
                     self.info.device_type == Printers.X1 or
                     self.info.device_type == Printers.X1C or
-                    self.info.device_type == Printers.X1E)
+                    self.info.device_type == Printers.X1E or
+                    self.info.device_type == Printers.P2S)
         elif feature == Features.AMS_FILAMENT_REMAINING:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI):
