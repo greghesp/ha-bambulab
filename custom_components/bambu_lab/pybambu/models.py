@@ -1434,8 +1434,6 @@ class PrintJob:
             return
         if self._client._timelapse_cache_count == 0:
             return
-        if self._client.host == "":
-            return
         thread = threading.Thread(target=self._async_download_timelapse)
         thread.start()
         
