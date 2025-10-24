@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "Configurer la connexion locale",
-        "description": "Vous pouvez choisir de vous connecter directement à l'imprimante pour les mises à jour d'état plutôt que via le cloud Bambu Lab. Cela vous donne une résilience aux pannes de cloud de Bambu Lab, mais Bambu Lab a restreint le contrôle de l'imprimante dans ce mode hybride, de sorte que certains contrôles seront indisponibles.",
+        "description": "Vous pouvez choisir de vous connecter directement à l'imprimante mqtt au lieu du cloud Bambu Lab. Cela donne de la résilience aux pannes de cloud de Bambu Lab, mais Bambu Lab a restreint le contrôle de l'imprimante dans ce mode hybride, de sorte que certains contrôles seront indisponibles.\n\rQuel que soit ce choix, l'intégration obtiendra l'adresse IP de l'imprimante du cloud Bambu Lab et confirmera qu'elle peut s'y connecter car cela est requis pour la prise en charge de l'appareil photo, de l'historique d'impression et du timelapse. Si votre imprimante est inaccessible à votre Home Assistant, vous pouvez désactiver cette vérification mais vous perdrez ces fonctionnalités.",
         "data": {
-          "local_mqtt": "Connectez-vous directement à l’imprimante au lieu de passer par Bambu Cloud :",
+          "local_mqtt": "Connectez-vous directement à l'imprimante mqtt :",
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à cache à l'assistant à domicile (-1 pour illimité):",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):",
+          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "Ajuster la configuration de l’imprimante",
-        "description": "Vous pouvez choisir de vous connecter directement à l'imprimante pour les mises à jour d'état plutôt que via le Cloud Bambu Lab. Cela vous donne une résilience aux pannes de cloud de Bambu Lab, mais Bambu Lab a restreint le contrôle de l'imprimante dans ce mode hybride, de sorte que certains contrôles seront indisponibles.",
+        "description": "Vous pouvez choisir de vous connecter directement à l'imprimante mqtt au lieu du cloud Bambu Lab. Cela donne de la résilience aux pannes de cloud de Bambu Lab, mais Bambu Lab a restreint le contrôle de l'imprimante dans ce mode hybride, de sorte que certains contrôles seront indisponibles.\n\rQuel que soit ce choix, l'intégration obtiendra l'adresse IP de l'imprimante du cloud Bambu Lab et confirmera qu'elle peut s'y connecter car cela est requis pour la prise en charge de l'appareil photo, de l'historique d'impression et du timelapse. Si votre imprimante est inaccessible à votre Home Assistant, vous pouvez désactiver cette vérification mais vous perdrez ces fonctionnalités.",
         "data": {
           "serial": "Ajustez les paramètres pour :",
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès :",
-          "local_mqtt": "Connectez-vous directement à l'imprimante plutôt que via le Cloud Bambu Lab :",
+          "local_mqtt": "Connectez-vous directement à l'imprimante mqtt :",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à cache à l'assistant à domicile (-1 pour illimité):",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):",
+          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
         },
         "sections": {
           "advanced": {

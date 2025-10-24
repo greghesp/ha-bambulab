@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "设置本地连接",
-        "description": "您可以选择直接连接到打印机进行状态更新，而不是通过 Bambu Lab 云。这使您能够应对 Bambu Lab 云中断的情况，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。",
+        "description": "您可以选择直接连接打印机 mqtt 而不是 Bambu Lab 云。这为 Bambu Lab 云中断提供了弹性，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。\n\r无论选择如何，集成都会从 Bambu Lab 云获取打印机 IP 地址，并确认它可以连接到它，因为这是相机、打印历史记录和延时摄影支持所必需的。如果您的家庭助理无法访问您的打印机，那么您可以禁用此检查，但您将失去这些功能。",
         "data": {
-          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Lab 云：",
+          "local_mqtt": "直接连接打印机 mqtt：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
           "usage_hours": "当前使用时间（可选）：",
           "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
-          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
+          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）：",
+          "skip_local_mqtt": "跳过本地mqtt连接测试（不推荐）："
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "调整打印机配置",
-        "description": "您可以选择直接连接到打印机进行状态更新，而不是通过 Bambu Lab 云。这使您能够应对 Bambu Lab 云中断的情况，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。",
+        "description": "您可以选择直接连接打印机 mqtt 而不是 Bambu Lab 云。这为 Bambu Lab 云中断提供了弹性，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。\n\r无论选择如何，集成都会从 Bambu Lab 云获取打印机 IP 地址，并确认它可以连接到它，因为这是相机、打印历史记录和延时摄影支持所必需的。如果您的家庭助理无法访问您的打印机，那么您可以禁用此检查，但您将失去这些功能。",
         "data": {
           "serial": "调整设置：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
-          "local_mqtt": "直接连接到打印机，而不是通过 Bambu Lab 云：",
+          "local_mqtt": "直接连接打印机 mqtt：",
           "usage_hours": "当前使用时间（可选）：",
           "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
-          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
+          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）：",
+          "skip_local_mqtt": "跳过本地mqtt连接测试（不推荐）："
         },
         "sections": {
           "advanced": {

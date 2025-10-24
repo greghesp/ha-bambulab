@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "Nastavenie lokálneho pripojenia",
-        "description": "Môžete sa rozhodnúť pripojiť priamo k tlačiarni pre aktualizácie stavu namiesto cloudu Bambu Lab. To vám dáva odolnosť voči výpadkom cloudu Bambu Lab, ale Bambu Lab má obmedzené ovládanie tlačiarne v tomto hybridnom režime, takže niektoré ovládacie prvky budú nedostupné.",
+        "description": "Môžete sa rozhodnúť pripojiť priamo k tlačiarni mqtt namiesto cloudu Bambu Lab. To poskytuje odolnosť voči výpadkom cloudu Bambu Lab, ale Bambu Lab obmedzilo ovládanie tlačiarne v tomto hybridnom režime, takže niektoré ovládacie prvky budú nedostupné.\n\rBez ohľadu na túto voľbu získa integrácia IP adresu tlačiarne z cloudu Bambu Lab a potvrdí, že sa k nej môže pripojiť, pretože je to potrebné pre fotoaparát, históriu tlače a podporu časozberu. Ak je vaša tlačiareň nedostupná pre domáceho asistenta, môžete túto kontrolu zakázať, ale tieto funkcie stratíte.",
         "data": {
-          "local_mqtt": "Pripojenie lokálne na tlačiareň:",
+          "local_mqtt": "Priame pripojenie k tlačiarni mqtt:",
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):",
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
-          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):"
+          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
+          "skip_local_mqtt": "Preskočiť test miestneho pripojenia mqtt (neodporúča sa):"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "Úprava nastavenia tlačiarne",
-        "description": "Môžete sa rozhodnúť pripojiť priamo k tlačiarni pre aktualizácie stavu namiesto cloudu Bambu Lab. To vám dáva odolnosť voči výpadkom cloudu Bambu Lab, ale Bambu Lab má obmedzené ovládanie tlačiarne v tomto hybridnom režime, takže niektoré ovládacie prvky budú nedostupné.",
+        "description": "Môžete sa rozhodnúť pripojiť priamo k tlačiarni mqtt namiesto cloudu Bambu Lab. To poskytuje odolnosť voči výpadkom cloudu Bambu Lab, ale Bambu Lab obmedzilo ovládanie tlačiarne v tomto hybridnom režime, takže niektoré ovládacie prvky budú nedostupné.\n\rBez ohľadu na túto voľbu získa integrácia IP adresu tlačiarne z cloudu Bambu Lab a potvrdí, že sa k nej môže pripojiť, pretože je to potrebné pre fotoaparát, históriu tlače a podporu časozberu. Ak je vaša tlačiareň nedostupná pre domáceho asistenta, môžete túto kontrolu zakázať, ale tieto funkcie stratíte.",
         "data": {
           "serial": "Upravte nastavenia pre:",
           "host": "Lokálna IP adresa tlačiarne:",
           "access_code": "Prístupový kód:",
-          "local_mqtt": "Pripojte sa priamo k tlačiarni namiesto cloudu Bambu Lab:",
+          "local_mqtt": "Priame pripojenie k tlačiarni mqtt:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):",
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
-          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):"
+          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
+          "skip_local_mqtt": "Preskočiť test miestneho pripojenia mqtt (neodporúča sa):"
         },
         "sections": {
           "advanced": {

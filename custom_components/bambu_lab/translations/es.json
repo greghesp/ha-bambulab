@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "Configuración de Conexión Local",
-        "description": "Puede optar por conectarse directamente a la impresora para obtener actualizaciones de estado en lugar de hacerlo mediante la nube de Bambu Lab. Esto le brinda resistencia a las interrupciones en la nube de Bambu Lab, pero Bambu Lab tiene un control restringido de la impresora cuando está en este modo híbrido, por lo que algunos controles no estarán disponibles.",
+        "description": "Puede optar por conectarse directamente a la impresora mqtt en lugar de a la nube de Bambu Lab. Esto brinda resistencia a las interrupciones en la nube de Bambu Lab, pero Bambu Lab tiene un control restringido de la impresora cuando está en este modo híbrido, por lo que algunos controles no estarán disponibles.\n\rIndependientemente de esta elección, la integración obtendrá la dirección IP de la impresora de la nube de Bambu Lab y confirmará que puede conectarse a ella, ya que esto es necesario para la cámara, el historial de impresión y la compatibilidad con lapso de tiempo. Si Home Assistant no puede acceder a su impresora, puede desactivar esta verificación, pero perderá esas funciones.",
         "data": {
-          "local_mqtt": "Conectar localmente a la impresora:",
+          "local_mqtt": "Conéctese directamente a la impresora mqtt:",
           "host": "Dirección de IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
           "usage_hours": "Cantidad de horas de uso (opcional):",
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "skip_local_mqtt": "Omita la prueba de conexión mqtt local (no recomendado):"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "Ajusta la configuración de conexión",
-        "description": "Puede optar por conectarse directamente a la impresora para obtener actualizaciones de estado en lugar de hacerlo mediante la nube de Bambu Lab. Esto le brinda resistencia a las interrupciones en la nube de Bambu Lab, pero Bambu Lab tiene un control restringido de la impresora cuando está en este modo híbrido, por lo que algunos controles no estarán disponibles.",
+        "description": "Puede optar por conectarse directamente a la impresora mqtt en lugar de a la nube de Bambu Lab. Esto brinda resistencia a las interrupciones en la nube de Bambu Lab, pero Bambu Lab tiene un control restringido de la impresora cuando está en este modo híbrido, por lo que algunos controles no estarán disponibles.\n\rIndependientemente de esta elección, la integración obtendrá la dirección IP de la impresora de la nube de Bambu Lab y confirmará que puede conectarse a ella, ya que esto es necesario para la cámara, el historial de impresión y la compatibilidad con lapso de tiempo. Si Home Assistant no puede acceder a su impresora, puede desactivar esta verificación, pero perderá esas funciones.",
         "data": {
           "serial": "Ajustar la configuración para:",
           "host": "Dirección IP Local de la Impresora:",
           "access_code": "Código de Acceso:",
-          "local_mqtt": "Conéctese directamente a la impresora en lugar de hacerlo a través de la nube de Bambu Lab:",
+          "local_mqtt": "Conéctese directamente a la impresora mqtt:",
           "usage_hours": "Cantidad de horas de uso (opcional):",
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "skip_local_mqtt": "Omita la prueba de conexión mqtt local (no recomendado):"
         },
         "sections": {
           "advanced": {

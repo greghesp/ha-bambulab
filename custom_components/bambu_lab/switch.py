@@ -63,9 +63,6 @@ async def async_setup_entry(
     if coordinator.get_model().supports_feature(Features.PROMPT_SOUND):
         async_add_entities([BambuLabPromptSoundSwitch(coordinator, entry)])
 
-    if coordinator.get_model().supports_feature(Features.FTP):
-        async_add_entities([BambuLabFtpSwitch(coordinator, entry)])
-
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
     """Base BambuLab Switch"""
@@ -147,39 +144,6 @@ class BambuLabCameraImageSwitch(BambuLabSwitch):
         """Disable the camera."""
         self._attr_is_on = False
         await self.coordinator.set_option_enabled(Options.IMAGECAMERA, self._attr_is_on)
-
-
-class BambuLabFtpSwitch(BambuLabSwitch):
-    """BambuLab FTP Switch"""
-
-    entity_description = FTP_SWITCH_DESCRIPTION
-
-    def __init__(
-            self,
-            coordinator: BambuDataUpdateCoordinator,
-            config_entry: ConfigEntry
-    ) -> None:
-        super().__init__(coordinator, config_entry)
-        self._attr_is_on = self.coordinator.get_option_enabled(Options.FTP)
-
-    @property
-    def available(self) -> bool:
-        return True
-
-    @property
-    def icon(self) -> str:
-        """Return the icon for the switch."""
-        return "mdi:folder-network" if self.is_on else "mdi:folder-hidden"
-
-    async def async_turn_on(self, **kwargs: Any) -> None:
-        """Enable FTP."""
-        self._attr_is_on = True
-        await self.coordinator.set_option_enabled(Options.FTP, self._attr_is_on)
-
-    async def async_turn_off(self, **kwargs: Any) -> None:
-        """Disable FTP."""
-        self._attr_is_on = False
-        await self.coordinator.set_option_enabled(Options.FTP, self._attr_is_on)
 
 
 class BambuLabPromptSoundSwitch(BambuLabSwitch):

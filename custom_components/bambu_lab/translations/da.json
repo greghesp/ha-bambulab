@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "Opsæt lokal forbindelse",
-        "description": "Du kan vælge at oprette forbindelse direkte til printeren for statusopdateringer i stedet for via Bambu Lab-skyen. Dette giver dig modstandsdygtighed over for Bambu Labs skyudfald, men Bambu Lab har begrænset kontrol over printeren, når den er i denne hybridtilstand, så nogle kontroller vil være utilgængelige.",
+        "description": "Du kan vælge at oprette forbindelse direkte til printeren mqtt i stedet for Bambu Lab cloud. Dette giver modstandsdygtighed over for Bambu Labs skyudfald, men Bambu Lab har begrænset kontrol over printeren, når den er i denne hybridtilstand, så nogle kontroller vil være utilgængelige.\n\rUanset dette valg vil integrationen få printerens IP-adresse fra Bambu Lab cloud og bekræfte, at den kan oprette forbindelse til den, da dette er påkrævet for kamera, printhistorik og timelapse support. Hvis din printer er utilgængelig for din Home Assistant, kan du deaktivere denne kontrol, men du vil miste disse funktioner.",
         "data": {
-          "local_mqtt": "Forbind lokalt til printeren:",
+          "local_mqtt": "Tilslut direkte til printeren mqtt:",
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
-          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "Juster printerkonfiguration",
-        "description": "Du kan vælge at oprette forbindelse direkte til printeren for statusopdateringer i stedet for via Bambu Lab-skyen. Dette giver dig modstandsdygtighed over for Bambu Labs skyudfald, men Bambu Lab har begrænset kontrol over printeren, når den er i denne hybridtilstand, så nogle kontroller vil være utilgængelige.",
+        "description": "Du kan vælge at oprette forbindelse direkte til printeren mqtt i stedet for Bambu Lab cloud. Dette giver modstandsdygtighed over for Bambu Labs skyudfald, men Bambu Lab har begrænset kontrol over printeren, når den er i denne hybridtilstand, så nogle kontroller vil være utilgængelige.\n\rUanset dette valg vil integrationen få printerens IP-adresse fra Bambu Lab cloud og bekræfte, at den kan oprette forbindelse til den, da dette er påkrævet for kamera, printhistorik og timelapse support. Hvis din printer er utilgængelig for din Home Assistant, kan du deaktivere denne kontrol, men du vil miste disse funktioner.",
         "data": {
           "serial": "Juster indstillinger for:",
           "host": "Lokal printer-IP-adresse:",
           "access_code": "Adgangskode:",
-          "local_mqtt": "Tilslut direkte til printeren i stedet for via Bambu Lab-skyen:",
+          "local_mqtt": "Tilslut direkte til printeren mqtt:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
-          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):"
         },
         "sections": {
           "advanced": {

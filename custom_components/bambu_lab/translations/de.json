@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "Lokale Verbindung einrichten",
-        "description": "Sie können für Statusaktualisierungen auch eine direkte Verbindung zum Drucker statt über die Bambu Lab-Cloud herstellen. Dadurch sind Sie widerstandsfähiger gegen Ausfälle der Bambu Lab-Cloud. Allerdings hat Bambu Lab in diesem Hybridmodus nur eine eingeschränkte Kontrolle über den Drucker, sodass einige Steuerungen nicht verfügbar sind.",
+        "description": "Sie können sich auch für eine direkte Verbindung zum Drucker-mqtt statt zur Bambu Lab-Cloud entscheiden. Dies erhöht die Ausfallsicherheit bei Cloud-Ausfällen von Bambu Lab, allerdings hat Bambu Lab in diesem Hybridmodus nur eine eingeschränkte Kontrolle über den Drucker, sodass einige Steuerungen nicht verfügbar sind.\n\rUnabhängig von dieser Wahl erhält die Integration die IP-Adresse des Druckers aus der Bambu Lab-Cloud und bestätigt, dass eine Verbindung mit ihr hergestellt werden kann, da dies für die Kamera-, Druckverlaufs- und Zeitrafferunterstützung erforderlich ist. Wenn Ihr Home Assistant nicht auf Ihren Drucker zugreifen kann, können Sie diese Prüfung deaktivieren, diese Funktionen gehen dann jedoch verloren.",
         "data": {
-          "local_mqtt": "Verbinden Sie sich direkt mit dem Drucker statt über die Bambu Cloud:",
+          "local_mqtt": "Direkte Verbindung zum Drucker mqtt herstellen:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
-          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):"
+          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "Anpassen der Druckerkonfiguration",
-        "description": "Sie können für Statusaktualisierungen auch eine direkte Verbindung zum Drucker statt über die Bambu Lab-Cloud herstellen. Dadurch sind Sie widerstandsfähiger gegen Ausfälle der Bambu Lab-Cloud. Allerdings hat Bambu Lab in diesem Hybridmodus nur eine eingeschränkte Kontrolle über den Drucker, sodass einige Steuerungen nicht verfügbar sind.",
+        "description": "Sie können sich auch für eine direkte Verbindung zum Drucker-mqtt statt zur Bambu Lab-Cloud entscheiden. Dies erhöht die Ausfallsicherheit bei Cloud-Ausfällen von Bambu Lab, allerdings hat Bambu Lab in diesem Hybridmodus nur eine eingeschränkte Kontrolle über den Drucker, sodass einige Steuerungen nicht verfügbar sind.\n\rUnabhängig von dieser Wahl erhält die Integration die IP-Adresse des Druckers aus der Bambu Lab-Cloud und bestätigt, dass eine Verbindung mit ihr hergestellt werden kann, da dies für die Kamera-, Druckverlaufs- und Zeitrafferunterstützung erforderlich ist. Wenn Ihr Home Assistant nicht auf Ihren Drucker zugreifen kann, können Sie diese Prüfung deaktivieren, diese Funktionen gehen dann jedoch verloren.",
         "data": {
           "serial": "Passen Sie die Einstellungen an für:",
           "host": "IP-Adresse des lokalen Druckers:",
           "access_code": "Zugangscode",
-          "local_mqtt": "Stellen Sie eine direkte Verbindung zum Drucker statt über die Bambu Lab-Cloud her:",
+          "local_mqtt": "Direkte Verbindung zum Drucker mqtt herstellen:",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
-          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):"
+          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):"
         },
         "sections": {
           "advanced": {

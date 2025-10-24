@@ -66,14 +66,15 @@
       },
       "Bambu_Lan": {
         "title": "Konfiguracja połączenia lokalnego",
-        "description": "Możesz wybrać bezpośrednie połączenie z drukarką zamiast używania chmury Bambu Lab. Zapewnia to odporność na awarie chmury, ale w trybie hybrydowym niektóre funkcje mogą być niedostępne.",
+        "description": "Możesz połączyć się bezpośrednio z mqtt drukarki zamiast z chmurą Bambu Lab. Zapewnia to odporność na awarie chmury Bambu Lab, ale Bambu Lab ograniczyło kontrolę nad drukarką w trybie hybrydowym, więc niektóre elementy sterujące będą niedostępne.\n\rNiezależnie od tego wyboru, integracja pobierze adres IP drukarki z chmury Bambu Lab i potwierdzi, że może się z nią połączyć, ponieważ jest to wymagane do obsługi aparatu, historii wydruków i obsługi timelapse. Jeśli Twoja drukarka jest niedostępna dla Home Assistant, możesz wyłączyć to sprawdzanie, ale utracisz te funkcje.",
         "data": {
-          "local_mqtt": "Połącz lokalnie z drukarką:",
+          "local_mqtt": "Połącz się bezpośrednio z mqtt drukarki:",
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
-          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):"
+          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):",
+          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
         },
         "sections": {
           "advanced": {
@@ -158,15 +159,16 @@
       },
       "Bambu_Lan": {
         "title": "Dostosuj konfigurację drukarki",
-        "description": "Możesz wybrać bezpośrednie połączenie z drukarką zamiast używania chmury Bambu Lab. Zapewnia to odporność na awarie chmury, ale w trybie hybrydowym niektóre funkcje mogą być niedostępne.",
+        "description": "Możesz połączyć się bezpośrednio z mqtt drukarki zamiast z chmurą Bambu Lab. Zapewnia to odporność na awarie chmury Bambu Lab, ale Bambu Lab ograniczyło kontrolę nad drukarką w trybie hybrydowym, więc niektóre elementy sterujące będą niedostępne.\n\rNiezależnie od tego wyboru, integracja pobierze adres IP drukarki z chmury Bambu Lab i potwierdzi, że może się z nią połączyć, ponieważ jest to wymagane do obsługi aparatu, historii wydruków i obsługi timelapse. Jeśli Twoja drukarka jest niedostępna dla Home Assistant, możesz wyłączyć to sprawdzanie, ale utracisz te funkcje.",
         "data": {
           "serial": "Dostosuj ustawienia dla:",
           "host": "Lokalny adres IP drukarki:",
           "access_code": "Kod dostępu:",
-          "local_mqtt": "Połącz bezpośrednio z drukarką zamiast przez chmurę:",
+          "local_mqtt": "Połącz się bezpośrednio z mqtt drukarki:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):"
+          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
+          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
         },
         "sections": {
           "advanced": {
