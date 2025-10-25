@@ -351,6 +351,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         'local_mqtt': True,
                         'region': self.region,
                         'serial': device['dev_id'],
+                        'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
                     }
                     bambu = BambuClient(config)
                     result = await bambu.try_connection()
@@ -462,6 +463,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 'serial': user_input['serial'],
                 'host': user_input['host'],
                 'local_mqtt': True,
+                'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
             }
             bambu = BambuClient(config)
             result = await bambu.try_connection()
@@ -782,6 +784,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                                 'host': user_input['host'],
                                 'local_mqtt': True,
                                 'serial': self._config_entry.data['serial'],
+                                'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
                             }
                             bambu = BambuClient(config)
                             result = await bambu.try_connection()
