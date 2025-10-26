@@ -1477,7 +1477,7 @@ class PrintJob:
                 if should_download:
                     # Download video
                     with open(local_file_path, 'wb') as f:
-                        LOGGER.info(f"Downloading '{file_path}'")
+                        LOGGER.debug(f"Downloading '{file_path}'")
                         ftp.retrbinary(f"RETR {file_path}", f.write)
                         f.flush()
                     
@@ -1504,7 +1504,7 @@ class PrintJob:
 
         self.prune_timelapse_files()
 
-        LOGGER.info(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
+        LOGGER.debug(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
 
     def _update_task_data(self):
         self._loaded_model_data = True
@@ -1541,7 +1541,7 @@ class PrintJob:
     def _async_download_task_data_from_printer(self):
         current_thread = threading.current_thread()
         current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
-        LOGGER.info(f"FTP thread starting.")
+        LOGGER.debug(f"FTP thread starting.")
 
         try:
             while True:
