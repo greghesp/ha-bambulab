@@ -103,7 +103,7 @@ class BambuLabNumber(BambuLabEntity, NumberEntity):
         return self.entity_description.value_fn(self)
 
     async def async_set_native_value(self, value: float) -> None:
-        await self.entity_description.set_value_fn(self, round(value))
+        self.entity_description.set_value_fn(self, round(value))
 
     @property
     def available(self) -> bool:

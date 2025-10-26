@@ -292,7 +292,7 @@ class MqttThread(threading.Thread):
             except Exception:
                 pass
 
-        LOGGER.info("MQTT listener thread exited.")
+        LOGGER.debug("MQTT listener thread exited.")
 
 class ImplicitFTP_TLS(ftplib.FTP_TLS):
     """

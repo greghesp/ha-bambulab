@@ -348,12 +348,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
     # Register file cache API endpoints
-    LOGGER.info("Registering file cache API endpoints")
     hass.http.register_view(PrintHistoryAPIView(hass))
     hass.http.register_view(VideoAPIView(hass))
     hass.http.register_view(FileCacheFileView(hass))
     hass.http.register_view(EnsureCacheFileAPIView(hass))
-    LOGGER.info("File cache API endpoints registered successfully")
 
     async def handle_service_call(call: ServiceCall):
         LOGGER.debug(f"handle_service_call: {call.service}")
