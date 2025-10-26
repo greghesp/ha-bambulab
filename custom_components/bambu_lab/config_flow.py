@@ -772,10 +772,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         if user_input is not None:
             if result == 0:
+                force_ip = False
                 for device in device_list:
                     if device['dev_id'] == user_input['serial']:
-
-                        force_ip = False
                         if user_input.get('local_mqtt', False) or not user_input.get('skip_local_mqtt', False):
                             LOGGER.debug(f"Options Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
                             config = {
