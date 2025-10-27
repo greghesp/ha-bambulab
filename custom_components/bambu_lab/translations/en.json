@@ -215,6 +215,9 @@
       "door_open": {
         "name": "Enclosure door"
       },
+      "airduct_mode": {
+        "name": "Airduct Mode"
+      },
       "timelapse": {
         "name": "Recording timelapse"
       },
