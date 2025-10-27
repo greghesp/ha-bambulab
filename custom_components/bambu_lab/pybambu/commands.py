@@ -126,3 +126,7 @@ PROMPT_SOUND_DISABLE = {"print" : {"sequence_id": "0", "command": "print_option"
 BUZZER_SET_SILENT  = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 0, "reason": ""}}
 BUZZER_SET_ALARM   = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 1, "reason": ""}}
 BUZZER_SET_BEEPING = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "mode": 2, "reason": ""}}
+
+# P2S only
+AIRDUCT_SET_COOLING = {"print": {"sequence_id": "0", "command": "set_airduct", "modeId": 0, "submode": -1}}
+AIRDUCT_SET_HEATING_FILTER = {"print": {"sequence_id": "0", "command": "set_airduct", "modeId": 1, "submode": -1}}

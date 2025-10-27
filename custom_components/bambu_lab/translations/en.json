@@ -833,6 +833,9 @@
       },
       "prompt_sound": {
         "name": "Allow Prompt Sound"
+      },
+      "airduct_mode": {
+        "name": "Cooling Mode or Heating/Filter Mode"
       }
     },
     "update": {

@@ -209,6 +209,9 @@
       "door_open": {
         "name": "Gehäusetür"
       },
+      "airduct_mode": {
+        "name": "Luftkanalmodus"
+      },
       "timelapse": {
         "name": "Aufnahme von Zeitraffern"
       },
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "Modelldaten vom Drucker laden"
+      },
+      "airduct_mode": {
+        "name": "Aktiviere Kühlluftmodus oder Heizluft-/Filtermodus"
       }
     },
     "update": {

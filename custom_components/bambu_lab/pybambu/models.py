@@ -62,6 +62,8 @@ from .commands import (
     CHAMBER_LIGHT_2_OFF,
     PROMPT_SOUND_ENABLE,
     PROMPT_SOUND_DISABLE,
+    AIRDUCT_SET_COOLING,
+    AIRDUCT_SET_HEATING_FILTER,
     SPEED_PROFILE_TEMPLATE, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING, HEATBED_LIGHT_ON,
     HEATBED_LIGHT_OFF,
 )
@@ -2296,6 +2298,13 @@ class Info:
             self._client.publish(PROMPT_SOUND_ENABLE)
         else:
             self._client.publish(PROMPT_SOUND_DISABLE)
+            
+    def set_airduct_mode(self, enable: bool):
+        if enable:
+            self._client.publish(AIRDUCT_SET_COOLING)            
+        else:
+            self._client.publish(AIRDUCT_SET_HEATING_FILTER)            
+            
 
     def buzzer_silence(self):
         self._client.publish(BUZZER_SET_SILENT)
