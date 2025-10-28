@@ -578,7 +578,12 @@ class BambuClient:
                 clean_msg = re.sub(r"False", "false", str(clean_msg))
                 LOGGER.debug(f"Received data: {clean_msg}")
 
-            json_data = json.loads(message.payload)
+            try:
+                json_data = json.loads(message.payload)
+            except json.JSONDecodeError as e:
+                LOGGER.error(f"Failed to decode JSON message: '{message.payload}'")
+                raise
+            
             if json_data.get("event"):
                 # These are events from the bambu cloud mqtt feed and allow us to detect when a local
                 # device has connected/disconnected (e.g. turned on/off)
