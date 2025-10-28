@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Activa"
+      },
+      "airduct_mode": {
+        "name": "Mode de conducte d'aire"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "Carregueu les dades del model de la impressora"
+      },
+      "airduct_mode": {
+        "name": "Mode de refrigeració o mode de calefacció/filtre"
       }
     },
     "update": {

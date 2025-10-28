@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "활동적인"
+      },
+      "airduct_mode": {
+        "name": "에어덕트 모드"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "프린터에서 모델 데이터 로드"
+      },
+      "airduct_mode": {
+        "name": "냉각 모드 또는 가열/필터 모드"
       }
     },
     "update": {

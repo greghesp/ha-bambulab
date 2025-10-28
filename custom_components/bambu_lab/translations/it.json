@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Attivo"
+      },
+      "airduct_mode": {
+        "name": "Modalità condotto d'aria"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "Carica i dati del modello dalla stampante"
+      },
+      "airduct_mode": {
+        "name": "Modalità di raffreddamento o modalità di riscaldamento/filtro"
       }
     },
     "update": {

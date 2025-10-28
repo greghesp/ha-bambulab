@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Aktywny"
+      },
+      "airduct_mode": {
+        "name": "Tryb przewodu powietrznego"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "prompt_sound": {
         "name": "Włącz dźwięk powiadomień"
+      },
+      "airduct_mode": {
+        "name": "Tryb chłodzenia lub tryb ogrzewania/filtrowania"
       }
     },
     "update": {

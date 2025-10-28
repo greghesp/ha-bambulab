@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Ativo"
+      },
+      "airduct_mode": {
+        "name": "Modo Airduct"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "Carregar dados do modelo de impressora"
+      },
+      "airduct_mode": {
+        "name": "Modo de resfriamento ou modo de aquecimento/filtro"
       }
     },
     "update": {

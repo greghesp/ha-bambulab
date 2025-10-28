@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "积极的"
+      },
+      "airduct_mode": {
+        "name": "风道模式"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "打印机加载模型数据"
+      },
+      "airduct_mode": {
+        "name": "冷却模式或加热/过滤模式"
       }
     },
     "update": {

@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Actief"
+      },
+      "airduct_mode": {
+        "name": "Luchtkanaalmodus"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "prompt_sound": {
         "name": "Toestaan van bevestigingsgeluiden"
+      },
+      "airduct_mode": {
+        "name": "Koelmodus of verwarmings-/filtermodus"
       }
     },
     "update": {

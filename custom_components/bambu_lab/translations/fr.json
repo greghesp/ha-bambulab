@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Actif"
+      },
+      "airduct_mode": {
+        "name": "Mode conduit d'air"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "Charger le modèle depuis l'imprimante"
+      },
+      "airduct_mode": {
+        "name": "Mode refroidissement ou mode chauffage/filtrage"
       }
     },
     "update": {

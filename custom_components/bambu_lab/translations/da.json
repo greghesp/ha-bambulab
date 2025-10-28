@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Aktiv"
+      },
+      "airduct_mode": {
+        "name": "Airduct Mode"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "Indlæsningsmodeldata fra printer"
+      },
+      "airduct_mode": {
+        "name": "Køletilstand eller Opvarmning/Filtertilstand"
       }
     },
     "update": {
