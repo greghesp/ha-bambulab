@@ -721,7 +721,7 @@ class BambuClient:
                     self.client = None
 
         def try_on_message(client, userdata, message):
-            json_data = safe_json_loads.loads(message.payload)
+            json_data = safe_json_loads(message.payload)
 
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
             clean_msg = re.sub(r"\\n *", "", str(message.payload))
