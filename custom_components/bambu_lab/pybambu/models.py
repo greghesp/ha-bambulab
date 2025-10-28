@@ -2224,7 +2224,7 @@ class Info:
         #   "modeCur": 0, // 0 = Cooling only, 1 = Heating/Filter
         #   "modeFunc": 0, // 0 = Cooling only, 1 = Heating/Filter        
         if self._client._device.supports_feature(Features.AIRDUCT_MODE):            
-            self.airduct_mode = (data.get("device", {}).get("airduct", {}).get("modeCur", 0) == 1)            
+            self.airduct_mode = (data.get("device", {}).get("airduct", {}).get("modeCur", 1 if self.airduct_mode else 0) == 1)
 
         # Compute if there's a delta before we check the wifi_signal value.
         changed = (old_data != f"{self.__dict__}")
