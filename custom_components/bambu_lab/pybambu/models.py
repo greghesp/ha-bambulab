@@ -62,6 +62,8 @@ from .commands import (
     CHAMBER_LIGHT_2_OFF,
     PROMPT_SOUND_ENABLE,
     PROMPT_SOUND_DISABLE,
+    AIRDUCT_SET_COOLING,
+    AIRDUCT_SET_HEATING_FILTER,
     SPEED_PROFILE_TEMPLATE, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING, HEATBED_LIGHT_ON,
     HEATBED_LIGHT_OFF,
 )
@@ -195,6 +197,12 @@ class Device:
             elif (self.info.device_type == Printers.P1S or
                   self.info.device_type == Printers.P1P):
                 return self.supports_sw_version("01.07.50.18")
+            return False
+        elif feature == Features.AIRDUCT_MODE:
+            # Airduct mode (Filter/Heating and Cooling) is currently only present on P2S
+            if self.info.device_type == Printers.P2S:
+                return True
+            
             return False
         elif feature == Features.CAMERA_RTSP:
             return (self.info.device_type == Printers.H2D or
@@ -2001,6 +2009,8 @@ class Info:
     usage_hours: float
     extruder_filament_state: bool
     door_open: bool
+    airduct_mode: bool
+        
     _ip_address: str
     _force_ip: bool
 
@@ -2021,8 +2031,10 @@ class Info:
         self.usage_hours = client._usage_hours
         self.extruder_filament_state = False
         self.door_open = False
+        self.airduct_mode = False
         self._ip_address = client.host
-        self._force_ip = client.settings.get('force_ip', False)
+        self._force_ip = client.settings.get('force_ip', False)                
+        
 
     def set_online(self, online):
         if self.online != online:
@@ -2206,6 +2218,14 @@ class Info:
                 stat_value = int(data["stat"], 16)
                 self.door_open = (stat_value & Stat_Flag_Values.DOOR_OPEN) != 0
 
+
+        # Airduct mode is provided under print/device/airduct
+        # P2S example:
+        #   "modeCur": 0, // 0 = Cooling only, 1 = Heating/Filter
+        #   "modeFunc": 0, // 0 = Cooling only, 1 = Heating/Filter        
+        if self._client._device.supports_feature(Features.AIRDUCT_MODE):            
+            self.airduct_mode = (data.get("device", {}).get("airduct", {}).get("modeCur", 1 if self.airduct_mode else 0) == 1)
+
         # Compute if there's a delta before we check the wifi_signal value.
         changed = (old_data != f"{self.__dict__}")
 
@@ -2256,6 +2276,11 @@ class Info:
 
         return self._client._device.supports_feature(Features.DOOR_SENSOR)
 
+    
+    @property
+    def airduct_mode_available(self) -> bool:        
+        return self._client._device.supports_feature(Features.AIRDUCT_MODE)
+
     @property
     def is_local_mqtt(self):
         return self._client._local_mqtt
@@ -2273,6 +2298,13 @@ class Info:
             self._client.publish(PROMPT_SOUND_ENABLE)
         else:
             self._client.publish(PROMPT_SOUND_DISABLE)
+            
+    def set_airduct_mode(self, enable: bool):
+        if enable:
+            self._client.publish(AIRDUCT_SET_COOLING)            
+        else:
+            self._client.publish(AIRDUCT_SET_HEATING_FILTER)            
+            
 
     def buzzer_silence(self):
         self._client.publish(BUZZER_SET_SILENT)

@@ -235,6 +235,9 @@
       },
       "active_ams": {
         "name": "Aktívny"
+      },
+      "airduct_mode": {
+        "name": "Režim vzduchovodu"
       }
     },
     "button": {
@@ -830,6 +833,9 @@
       },
       "ftp": {
         "name": "Načítať údaje o modeli z tlačiarne"
+      },
+      "airduct_mode": {
+        "name": "Režim chladenia alebo režim vykurovania/filtra"
       }
     },
     "update": {

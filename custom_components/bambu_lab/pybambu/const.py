@@ -50,6 +50,8 @@ class Features(IntEnum):
     MQTT_ENCRYPTION_FIRMWARE = 30,
     FIRE_ALARM_BUZZER = 32,
     HEATBED_LIGHT = 33,
+    AIRDUCT_MODE = 34,
+    
 
 
 class FansEnum(IntEnum):
