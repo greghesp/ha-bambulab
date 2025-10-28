@@ -411,7 +411,7 @@ def safe_json_loads(raw_bytes):
     try:
         json_data = json.loads(text)
         return json_data
-    except json.JSONDecodeError as e:
+    except Exception as e:
         LOGGER.error(f"Failed to decode JSON payload: '{text}'")
         LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
         raise
