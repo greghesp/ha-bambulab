@@ -393,3 +393,25 @@ def upgrade_template(url: str) -> dict:
     )
     template["upgrade"]["version"] = version
     return template
+
+def safe_json_loads(raw_bytes):
+
+    # First try to decode it normally for efficiency.
+    try:
+        json_data = json.loads(raw_bytes)
+        return json_data
+    except json.JSONDecodeError as e:
+        pass
+
+    # Double up all backslashes to make JSON valid. Decode as non-utf8 to avoid errors and
+    # the content being modified.
+    text = raw_bytes.decode('latin-1')
+    text = text.replace('\\', '\\\\')
+
+    try:
+        json_data = json.loads(text)
+        return json_data
+    except json.JSONDecodeError as e:
+        LOGGER.error(f"Failed to decode JSON payload: '{text}'")
+        LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+        raise

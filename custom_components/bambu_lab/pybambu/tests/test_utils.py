@@ -7,6 +7,7 @@ from typing import Dict, Any, Callable, Optional
 from ..const import (
     LOGGER,
 )
+from ..utils import safe_json_loads
 
 class MqttMessageInfo:
     """Mock MQTT message info object."""
@@ -38,8 +39,9 @@ class MockMQTTClient:
         """Load test payload asynchronously."""
         file_path = os.path.join(os.path.dirname(__file__), f"{mock}.json")
         LOGGER.debug(f"Loading test payload from {mock}.json")
-        with open(file_path, 'r') as f:
-            self._test_payload = json.load(f)
+        with open(file_path, 'rb') as f:
+            raw_bytes = f.read()
+            self._test_payload = safe_json_loads(raw_bytes)
                 
     def connect(self, host: str, port: int = 1883, keepalive: int = 60) -> None:
         """Simulate connecting to an MQTT broker."""

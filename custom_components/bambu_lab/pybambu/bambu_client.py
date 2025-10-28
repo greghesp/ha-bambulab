@@ -34,6 +34,7 @@ from .commands import (
     START_PUSH,
 )
 from .tests import MockMQTTClient
+from .utils import safe_json_loads
 
 class WatchdogThread(threading.Thread):
 
@@ -578,12 +579,7 @@ class BambuClient:
                 clean_msg = re.sub(r"False", "false", str(clean_msg))
                 LOGGER.debug(f"Received data: {clean_msg}")
 
-            try:
-                json_data = json.loads(message.payload)
-            except json.JSONDecodeError as e:
-                LOGGER.error(f"Failed to decode JSON message: '{message.payload}'")
-                raise
-            
+            json_data = safe_json_loads(message.payload)
             if json_data.get("event"):
                 # These are events from the bambu cloud mqtt feed and allow us to detect when a local
                 # device has connected/disconnected (e.g. turned on/off)
@@ -725,7 +721,8 @@ class BambuClient:
                     self.client = None
 
         def try_on_message(client, userdata, message):
-            json_data = json.loads(message.payload)
+            json_data = safe_json_loads.loads(message.payload)
+
             # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
             clean_msg = re.sub(r"\\n *", "", str(message.payload))
             # And adjust all payload to be meet proper json syntax instead of being pythonized so I can feed it directly into an online json prettifier
