@@ -106,7 +106,6 @@ class PrintHistoryAPIView(HomeAssistantView):
                 response_data["filtered_by_serial"] = serial_filter
             
             LOGGER.debug(f"Print history response: {len(all_files)} files from {response_data['total_printers']} printers")
-            LOGGER.debug(response_data)
             
             return web.json_response(response_data)
             
@@ -193,7 +192,6 @@ class VideoAPIView(HomeAssistantView):
                 response_data["filtered_by_serial"] = serial_filter
             
             LOGGER.debug(f"Video response: {len(all_videos)} videos from {response_data['total_printers']} printers")
-            LOGGER.debug(response_data)
             
             return web.json_response(response_data)
             
