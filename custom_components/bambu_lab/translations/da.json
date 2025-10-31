@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Autentificering mislykkedes for {device}",
-      "description": "Forsøg på at oprette forbindelse til Bambu Lab mislykkedes. Konfigurer integrationen igen og giver friske legitimationsoplysninger."
+      "title": "Godkendelse mislykkedes",
+      "description": "Forsøg på at oprette forbindelse til Bambu Lab mislykkedes for {device}. Genkonfigurer integrationen og angiv nye legitimationsoplysninger."
+    },
+    "no_external_storage": {
+      "title": "Intet USB- eller SD-kort fundet",
+      "description": "{device} har ikke et USB- eller SD-kort tilsluttet. Dette er nødvendigt for alle funktioner, der afhænger af ftp til printeren, såsom forsidebilledet, overspringsobjekter og udskriftshistorik."
     }
   }
 }

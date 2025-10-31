@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "{device}的身份验证失败",
-      "description": "试图连接到 Bambu Lab 失败。请重新配置集成并提供新的凭据。"
+      "title": "认证失败",
+      "description": "尝试连接到 {device} 的 Bambu Lab 失败。请重新配置集成并提供新的凭据。"
+    },
+    "no_external_storage": {
+      "title": "未检测到 USB 或 SD 卡",
+      "description": "{device} 未连接 USB 或 SD 卡。这对于依赖 ftp 连接到打印机的所有功能都是必需的，例如封面图像、跳过对象和打印历史记录。"
     }
   }
 }

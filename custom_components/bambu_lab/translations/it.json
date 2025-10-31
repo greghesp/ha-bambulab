@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "L'autenticazione non è riuscita per {device}",
-      "description": "Tentare di connettersi al laboratorio di Bambu non è riuscito. Si prega di riconfigurare l'integrazione e fornire nuove credenziali."
+      "title": "Autenticazione non riuscita",
+      "description": "Il tentativo di connessione a Bambu Lab non è riuscito per {dispositivo}. Riconfigurare l'integrazione e fornire nuove credenziali."
+    },
+    "no_external_storage": {
+      "title": "Nessuna scheda USB o SD rilevata",
+      "description": "{device} non ha una scheda USB o SD collegata. Ciò è necessario per tutte le funzionalità che dipendono da FTP per la stampante come l'immagine di copertina, il salto degli oggetti e la cronologia di stampa."
     }
   }
 }

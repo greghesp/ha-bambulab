@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "L'authentification a échoué pour {device}",
-      "description": "Tenter de se connecter au laboratoire Bambu a échoué. Veuillez reconfigurer l'intégration et fournir de nouvelles références."
+      "title": "Échec de l'authentification",
+      "description": "La tentative de connexion à Bambu Lab a échoué pour {device}. Veuillez reconfigurer l'intégration et fournir de nouvelles informations d'identification."
+    },
+    "no_external_storage": {
+      "title": "Aucune carte USB ou SD détectée",
+      "description": "{device} n'a pas de carte USB ou SD connectée. Ceci est nécessaire pour toutes les fonctionnalités qui dépendent du FTP vers l'imprimante, telles que l'image de couverture, le saut d'objets et l'historique d'impression."
     }
   }
 }

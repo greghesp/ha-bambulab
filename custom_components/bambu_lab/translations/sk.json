@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Autentifikácia zlyhala pre {device}",
-      "description": "Pokus o pripojenie k laboratória Bambu zlyhal. Prekonfigurujte integráciu a poskytnite nové poverenia."
+      "title": "Autentifikácia zlyhala",
+      "description": "Pokus o pripojenie k Bambu Lab zlyhal pre {device}. Prekonfigurujte integráciu a poskytnite nové poverenia."
+    },
+    "no_external_storage": {
+      "title": "Nebolo zistené žiadne USB alebo SD karta",
+      "description": "{device} nemá pripojenú kartu USB alebo SD. Je to potrebné pre všetky funkcie, ktoré závisia od ftp na tlačiarni, ako je obrázok na obale, preskakovanie objektov a história tlače."
     }
   }
 }

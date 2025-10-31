@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "La autenticación falló para {device}",
-      "description": "Intentar conectarse al laboratorio Bambu falló. Controle la integración y proporcione credenciales nuevas."
+      "title": "Error de autenticación",
+      "description": "El intento de conectarse a Bambu Lab falló para {dispositivo}. Vuelva a configurar la integración y proporcione credenciales nuevas."
+    },
+    "no_external_storage": {
+      "title": "No se detecta ninguna tarjeta USB o SD",
+      "description": "{device} no tiene una tarjeta USB o SD conectada. Esto es necesario para todas las funciones que dependen de ftp para la impresora, como la imagen de portada, la omisión de objetos y el historial de impresión."
     }
   }
 }

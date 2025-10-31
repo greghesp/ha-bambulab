@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Authentifizierung fehlgeschlagen für {device}",
-      "description": "Der Versuch eine Verbindung zu Bambu Lab herzustellen, schlug fehl. Bitte konfigurieren Sie die Integration und geben Sie aktuelle Anmeldeinformationen ein."
+      "title": "Authentifizierung fehlgeschlagen",
+      "description": "Der Versuch, eine Verbindung zu Bambu Lab herzustellen, ist für {device} fehlgeschlagen. Bitte konfigurieren Sie die Integration neu und geben Sie neue Anmeldeinformationen ein."
+    },
+    "no_external_storage": {
+      "title": "Keine USB- oder SD-Karte erkannt",
+      "description": "An {Gerät} ist weder eine USB- noch eine SD-Karte angeschlossen. Dies ist für alle Funktionen erforderlich, die von der FTP-Verbindung zum Drucker abhängig sind, wie z. B. das Titelbild, das Überspringen von Objekten und den Druckverlauf."
     }
   }
 }
