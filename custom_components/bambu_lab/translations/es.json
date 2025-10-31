@@ -855,7 +855,7 @@
   "issues": {
     "authentication_failed": {
       "title": "Error de autenticación",
-      "description": "El intento de conectarse a Bambu Lab falló para {dispositivo}. Vuelva a configurar la integración y proporcione credenciales nuevas."
+      "description": "El intento de conectarse a Bambu Lab falló para {device}. Vuelva a configurar la integración y proporcione credenciales nuevas."
     },
     "no_external_storage": {
       "title": "No se detecta ninguna tarjeta USB o SD",

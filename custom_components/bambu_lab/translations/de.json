@@ -859,7 +859,7 @@
     },
     "no_external_storage": {
       "title": "Keine USB- oder SD-Karte erkannt",
-      "description": "An {Gerät} ist weder eine USB- noch eine SD-Karte angeschlossen. Dies ist für alle Funktionen erforderlich, die von der FTP-Verbindung zum Drucker abhängig sind, wie z. B. das Titelbild, das Überspringen von Objekten und den Druckverlauf."
+      "description": "An {device} ist weder eine USB- noch eine SD-Karte angeschlossen. Dies ist für alle Funktionen erforderlich, die von der FTP-Verbindung zum Drucker abhängig sind, wie z. B. das Titelbild, das Überspringen von Objekten und den Druckverlauf."
     }
   }
 }

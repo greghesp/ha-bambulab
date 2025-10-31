@@ -855,7 +855,7 @@
   "issues": {
     "authentication_failed": {
       "title": "Uwierzytelnienie nie powiodło się",
-      "description": "Próba połączenia z Bambu Lab nie powiodła się dla {urządzenia}. Proszę ponownie skonfigurować integrację i podać nowe dane uwierzytelniające."
+      "description": "Próba połączenia z Bambu Lab nie powiodła się dla {device}. Proszę ponownie skonfigurować integrację i podać nowe dane uwierzytelniające."
     },
     "no_external_storage": {
       "title": "Nie wykryto USB ani karty SD",
