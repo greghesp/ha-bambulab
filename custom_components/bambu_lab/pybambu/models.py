@@ -1,5 +1,5 @@
 import ftplib
-import glob
+import functools
 import json
 import math
 import os
@@ -11,14 +11,11 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 from dateutil import parser, tz
-from packaging import version
 from pathlib import Path
 from zipfile import ZipFile
 from typing import List, Union
-import io
-import tempfile
 import xml.etree.ElementTree as ElementTree
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 import asyncio
 
 from .utils import (
@@ -1133,7 +1130,7 @@ class PrintJob:
                 # self.end_time isn't updated if we hit an AMS retract at print end but the printer does count that entire
                 # paused time as usage hours. So we need to use the current time instead of the last recorded end time in
                 # our calculation here.
-                duration = datetime.now() - self.start_time
+                duration = get_end_time(0) - self.start_time
                 # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
                 new_hours = round((duration.seconds / 60 / 60) * 100) / 100
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
@@ -1195,8 +1192,8 @@ class PrintJob:
             size = ftp.size(file_path)
             LOGGER.debug(f"File exists. Size: {size} bytes.")
             
-            cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
             relative_path = file_path.lstrip('/')
+            cache_dir = os.path.join(self._client.cache_path, "prints")
             cache_file_path = os.path.join(cache_dir, relative_path)
 
             # Ensure the directory exists
@@ -1371,8 +1368,7 @@ class PrintJob:
     def prune_print_history_files(self):
         if self._client._test_mode:
             return
-        LOGGER.debug("Pruning print history")
-        cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
+        cache_file_path = os.path.join(self._client.cache_path, "prints")
         self._prune_old_files(directory=cache_file_path,
                               extensions=['.3mf'],
                               keep=self._client._print_cache_count,
@@ -1382,7 +1378,7 @@ class PrintJob:
         if self._client._test_mode:
             return
         LOGGER.debug("Pruning timelapse history")
-        cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}/timelapse"
+        cache_file_path = os.path.join(self._client.cache_path, "timelapse")
         self._prune_old_files(directory=cache_file_path,
                               extensions=['.mp4','.avi'],
                               keep=self._client._timelapse_cache_count,
@@ -1459,8 +1455,7 @@ class PrintJob:
         file_path = self._find_latest_file(ftp, ['/timelapse'], video_extensions)
         if file_path is not None:
             # timelapse_path is of form '/timelapse/foo.mp4'
-            cache_file_path = f"/config/www/media/ha-bambulab/{self._client._serial}"
-            local_file_path = os.path.join(cache_file_path, file_path.lstrip('/'))
+            local_file_path = os.path.join(self._client.cache_path, file_path.lstrip('/'))
             directory_path = os.path.dirname(local_file_path)
             os.makedirs(directory_path, exist_ok=True)
 
@@ -1863,8 +1858,6 @@ class PrintJob:
         LOGGER.debug(f"Processing the pick image for objects")
         # Open the pick image so we can detect objects present
         image_width, image_height = image.size
-        draw = ImageDraw.Draw(image)
-        font = ImageFont.load_default(size=18)
         
         seen_colors = set()
         seen_identify_ids = set()
@@ -1968,7 +1961,7 @@ class PrintJob:
             # After successful upload, copy to cache path
             # Remove leading slash from remote_path for relative path
             relative_path = remote_path.lstrip('/')
-            cache_dir = f"/config/www/media/ha-bambulab/{self._client._serial}/prints"
+            cache_dir = os.path.join(self._client.cache_path, "prints")
             cache_file_path = os.path.join(cache_dir, relative_path)
             os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
             try:
@@ -3106,7 +3099,7 @@ class HomeFlag:
         self._client = client
         self._sw_ver = ""
         self._device_type = ""
-        _fired_missing_sdcard_event = False
+        self._fired_missing_sdcard_event = False
 
     def info_update(self, data):
         modules = data.get("module", [])

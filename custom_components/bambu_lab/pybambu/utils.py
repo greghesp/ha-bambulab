@@ -1,3 +1,4 @@
+import functools
 import json
 import logging
 import math
@@ -25,6 +26,7 @@ from .const import (
 )
 from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
 
+from homeassistant.util import dt as dt_util
 
 def search(lst, predicate, default={}):
     """Search an array for a string"""
@@ -337,14 +339,12 @@ def get_start_time(timestamp):
 
 def get_end_time(remaining_time):
     """Calculate the end time of a print"""
-    end_time = round_minute(datetime.now() + timedelta(minutes=remaining_time))
+    end_time = round_minute(dt_util.now() + timedelta(minutes=remaining_time))
     return end_time
 
 
-def round_minute(date: datetime = None, round_to: int = 1):
+def round_minute(date: datetime, round_to: int = 1):
     """ Round datetime object to minutes"""
-    if not date:
-        date = datetime.now()
     date = date.replace(second=0, microsecond=0)
     delta = date.minute % round_to
     return date.replace(minute=date.minute - delta)
