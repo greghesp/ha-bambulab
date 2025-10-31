@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "USB 또는 SD 카드가 감지되지 않음",
       "description": "{device}에는 USB 또는 SD 카드가 연결되어 있지 않습니다. 이는 표지 이미지, 개체 건너뛰기, 인쇄 기록 등 프린터에 대한 FTP에 의존하는 모든 기능에 필요합니다."
+    },
+    "live_view_disabled": {
+      "title": "라이브 뷰 비활성화됨",
+      "description": "{device}의 프린터 설정에서 라이브 뷰가 비활성화되었습니다. 카메라 기능을 사용하려면 이 기능을 활성화하세요."
     }
   }
 }

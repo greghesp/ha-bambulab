@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "No s'ha detectat cap USB o targeta SD",
       "description": "{device} no té una targeta USB o SD connectada. Això és necessari per a totes les funcions que depenen de l'ftp a la impressora, com ara la imatge de portada, ometre objectes i historial d'impressió."
+    },
+    "live_view_disabled": {
+      "title": "Visualització en directe desactivada",
+      "description": "{device} té la visualització en directe desactivada a la configuració de la impressora. Activeu-ho per utilitzar les funcions de la càmera."
     }
   }
 }

@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "Geen USB- of SD-kaart gedetecteerd",
       "description": "Op {device} is geen USB- of SD-kaart aangesloten. Dit is nodig voor alle functies die afhankelijk zijn van ftp naar de printer, zoals de omslagafbeelding, het overslaan van objecten en de afdrukgeschiedenis."
+    },
+    "live_view_disabled": {
+      "title": "Liveweergave uitgeschakeld",
+      "description": "Voor {device} is liveweergave uitgeschakeld in de printerinstellingen. Schakel dit in om de camerafuncties te gebruiken."
     }
   }
 }

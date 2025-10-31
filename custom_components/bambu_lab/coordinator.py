@@ -107,6 +107,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if event == "event_printer_no_external_storage":
             self._report_no_external_storage_issue();
 
+        if event == "event_printer_live_view_disabled":
+            self._report_live_view_disabled_issue();
+
         if event == "event_printer_info_update":
             self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
@@ -844,6 +847,32 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             translation_key="authentication_failed",
             translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
+
+    def _report_live_view_disabled_issue(self):
+        issue_id = f"live_view_disabled_{self.get_model().info.serial}"
+
+        # Check if the issue already exists
+        registry = issue_registry.async_get(self._hass)
+        existing_issue = registry.async_get_issue(
+            domain=DOMAIN,
+            issue_id=issue_id,
+        )
+        if existing_issue is not None:
+            # Issue already exists, no need to create it again
+            return
+
+        # Report the issue
+        LOGGER.debug("Creating issue for no external storage")
+        issue_registry.async_create_issue(
+            hass=self._hass,
+            domain=DOMAIN,
+            issue_id=issue_id,
+            is_fixable=False,
+            severity=issue_registry.IssueSeverity.WARNING,
+            translation_key="live_view_disabled",
+            translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
+        )
+
 
     @functools.lru_cache(maxsize=1)
     def get_file_cache_directory(self, serial: str|None = None) -> str:

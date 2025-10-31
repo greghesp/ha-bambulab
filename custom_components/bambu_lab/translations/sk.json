@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "Nebolo zistené žiadne USB alebo SD karta",
       "description": "{device} nemá pripojenú kartu USB alebo SD. Je to potrebné pre všetky funkcie, ktoré závisia od ftp na tlačiarni, ako je obrázok na obale, preskakovanie objektov a história tlače."
+    },
+    "live_view_disabled": {
+      "title": "Živé zobrazenie je vypnuté",
+      "description": "{device} má v nastaveniach tlačiarne zakázaný živý náhľad. Ak chcete používať funkcie fotoaparátu, povoľte to."
     }
   }
 }

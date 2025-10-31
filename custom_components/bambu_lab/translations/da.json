@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "Intet USB- eller SD-kort fundet",
       "description": "{device} har ikke et USB- eller SD-kort tilsluttet. Dette er nødvendigt for alle funktioner, der afhænger af ftp til printeren, såsom forsidebilledet, overspringsobjekter og udskriftshistorik."
+    },
+    "live_view_disabled": {
+      "title": "Live View deaktiveret",
+      "description": "{device} har live view deaktiveret i printerindstillingerne. Aktiver dette for at bruge kameraets funktioner."
     }
   }
 }

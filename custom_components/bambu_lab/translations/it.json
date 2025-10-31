@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "Nessuna scheda USB o SD rilevata",
       "description": "{device} non ha una scheda USB o SD collegata. Ciò è necessario per tutte le funzionalità che dipendono da FTP per la stampante come l'immagine di copertina, il salto degli oggetti e la cronologia di stampa."
+    },
+    "live_view_disabled": {
+      "title": "Visualizzazione dal vivo disabilitata",
+      "description": "{device} ha la visualizzazione live disabilitata nelle impostazioni della stampante. Abilitalo per utilizzare le funzionalità della fotocamera."
     }
   }
 }
