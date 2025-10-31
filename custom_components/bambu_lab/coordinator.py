@@ -11,6 +11,7 @@ from .const import (
     FILAMENT_DATA,
 )
 import asyncio
+import functools
 import re
 import time
 import os
@@ -63,6 +64,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config = entry.data.copy()
         config.update(entry.options.items())
         config['user_language'] = hass.config.language
+        config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
         self.client = BambuClient(config)
             
         self._updatedDevice = False
@@ -843,11 +845,23 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
 
-    def get_file_cache_directory(self) -> Optional[str]:
+    @functools.lru_cache(maxsize=1)
+    def get_file_cache_directory(self, serial: str|None = None) -> str:
         """Get the file cache directory for this printer."""
-        serial = self.get_model().info.serial
-        return f"/config/www/media/ha-bambulab/{serial}"
-    
+        if serial is None:
+            serial = self.get_model().info.serial
+        default_path = Path(self._hass.config.path(f"www/media/ha-bambulab/{serial}"))
+        LOGGER.debug(f"Using file cache directory: '{default_path}'")
+        try:
+            default_path.mkdir(parents=True, exist_ok=True)
+            return str(default_path)
+        except (OSError, PermissionError):
+            media_dir = self._hass.config.media_dirs.get("local")
+            LOGGER.debug(f"Default media directory not writable, falling back to local media directory : '{media_dir}'")
+            fallback_path = Path(media_dir) / f"ha-bambulab/{serial}"
+            fallback_path.mkdir(parents=True, exist_ok=True)
+            return str(fallback_path)
+
     async def get_cached_files(self, file_type: str) -> List[Dict[str, Any]]:
         """Get list of cached files with metadata."""
         cache_dir = self.get_file_cache_directory()

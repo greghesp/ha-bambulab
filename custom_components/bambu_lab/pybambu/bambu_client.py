@@ -382,6 +382,8 @@ class BambuClient:
             self._print_cache_count = 1
         self._timelapse_cache_count = max(-1, int(config.get('timelapse_cache_count', 0)))
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
+        self._cache_path = config.get('file_cache_path', f'/config/www/media/ha-bambulab/{self._serial}')
+        LOGGER.debug(f"Using file cache path: {self._cache_path}")
 
         self._connected = False
         self._port = 8883
@@ -409,6 +411,10 @@ class BambuClient:
     @property
     def settings(self):
         return self._config
+    
+    @property
+    def cache_path(self):
+        return self._cache_path
 
     @property
     def user_language(self):
