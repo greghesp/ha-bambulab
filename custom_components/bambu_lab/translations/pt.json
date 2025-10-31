@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "Nenhum USB ou cartão SD detectado",
       "description": "{device} não tem um cartão USB ou SD conectado. Isso é necessário para todos os recursos que dependem de FTP para a impressora, como imagem da capa, objetos ignorados e histórico de impressão."
+    },
+    "live_view_disabled": {
+      "title": "Visualização ao vivo desativada",
+      "description": "{device} tem a visualização ao vivo desativada nas configurações da impressora. Ative esta opção para usar os recursos da câmera."
     }
   }
 }

@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "No se detecta ninguna tarjeta USB o SD",
       "description": "{device} no tiene una tarjeta USB o SD conectada. Esto es necesario para todas las funciones que dependen de ftp para la impresora, como la imagen de portada, la omisión de objetos y el historial de impresión."
+    },
+    "live_view_disabled": {
+      "title": "Vista en vivo deshabilitada",
+      "description": "{device} tiene la vista en vivo deshabilitada en la configuración de la impresora. Habilite esto para utilizar las funciones de la cámara."
     }
   }
 }

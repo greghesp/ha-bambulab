@@ -458,6 +458,7 @@ class Camera:
     resolution: str
     rtsp_url: str
     timelapse: str
+    _fired_camera_disabled_event: bool
 
     def __init__(self, client):
         self._client = client
@@ -465,6 +466,7 @@ class Camera:
         self.resolution = ''
         self.rtsp_url = None
         self.timelapse = ''
+        self._fired_camera_disabled_event = False
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -484,6 +486,10 @@ class Camera:
         self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
         if self._client._enable_camera:
             self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
+            if self.rtsp_url == "disable":
+                if not self._fired_camera_disabled_event:
+                    self._fired_camera_disabled_event = True
+                    self._client.callback("event_printer_live_view_disabled")
         else:
             self.rtsp_url = None
         

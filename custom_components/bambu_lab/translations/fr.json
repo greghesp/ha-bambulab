@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "Aucune carte USB ou SD détectée",
       "description": "{device} n'a pas de carte USB ou SD connectée. Ceci est nécessaire pour toutes les fonctionnalités qui dépendent du FTP vers l'imprimante, telles que l'image de couverture, le saut d'objets et l'historique d'impression."
+    },
+    "live_view_disabled": {
+      "title": "Affichage en direct désactivé",
+      "description": "{device} a l'affichage en direct désactivé dans les paramètres de l'imprimante. Veuillez l'activer pour utiliser les fonctionnalités de l'appareil photo."
     }
   }
 }

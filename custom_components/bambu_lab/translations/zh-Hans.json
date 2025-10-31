@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "未检测到 USB 或 SD 卡",
       "description": "{device} 未连接 USB 或 SD 卡。这对于依赖 ftp 连接到打印机的所有功能都是必需的，例如封面图像、跳过对象和打印历史记录。"
+    },
+    "live_view_disabled": {
+      "title": "实时取景已禁用",
+      "description": "{device} 在打印机设置中禁用了实时查看。请启用此功能以使用相机功能。"
     }
   }
 }

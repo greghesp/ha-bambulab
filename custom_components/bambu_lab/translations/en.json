@@ -860,6 +860,10 @@
     "no_external_storage": {
       "title": "No USB or SD Card Detected",
       "description": "{device} does not have an USB or SD card connected. This is needed for all features that depend on ftp to the printer such as the cover image, skipping objects and print history."
+    },
+    "live_view_disabled": {
+      "title": "Live View Disabled",
+      "description": "{device} has live view disabled in the printer settings. Please enable this to use the camera features."
     }
   }
 }
