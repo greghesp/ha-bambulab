@@ -101,6 +101,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         if event == "event_printer_bambu_authentication_failed":
             self._report_authentication_issue();
+        
+        if event == "event_printer_no_external_storage":
+            self._report_no_external_storage_issue();
 
         if event == "event_printer_info_update":
             self._update_device_info()
@@ -795,6 +798,31 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # Force reload of integration to effect cache update.
         return await self.hass.config_entries.async_reload(self._entry.entry_id)
 
+    def _report_no_external_storage_issue(self):
+        issue_id = f"no_external_storage_{self.get_model().info.serial}"
+
+        # Check if the issue already exists
+        registry = issue_registry.async_get(self._hass)
+        existing_issue = registry.async_get_issue(
+            domain=DOMAIN,
+            issue_id=issue_id,
+        )
+        if existing_issue is not None:
+            # Issue already exists, no need to create it again
+            return
+
+        # Report the issue
+        LOGGER.debug("Creating issue for no external storage")
+        issue_registry.async_create_issue(
+            hass=self._hass,
+            domain=DOMAIN,
+            issue_id=issue_id,
+            is_fixable=False,
+            severity=issue_registry.IssueSeverity.WARNING,
+            translation_key="no_external_storage",
+            translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
+        )
+
     def _report_authentication_issue(self):
         # issue_id's are permanent - once ignore they will never show again so we need a unique id 
         # per occurrence per integration instance. That does mean we'll fire a new issue every single
@@ -812,7 +840,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             is_fixable=False,
             severity=issue_registry.IssueSeverity.ERROR,
             translation_key="authentication_failed",
-            translation_placeholders = {"device": self.config_entry.options.get('name', '')},
+            translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
 
     def get_file_cache_directory(self) -> Optional[str]:

@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Błąd uwierzytelnienia dla {device}",
-      "description": "Próba połączenia z Bambu Lab nie powiodła się. Skonfiguruj integrację ponownie i podaj aktualne dane logowania."
+      "title": "Uwierzytelnienie nie powiodło się",
+      "description": "Próba połączenia z Bambu Lab nie powiodła się dla {device}. Proszę ponownie skonfigurować integrację i podać nowe dane uwierzytelniające."
+    },
+    "no_external_storage": {
+      "title": "Nie wykryto USB ani karty SD",
+      "description": "{device} nie ma podłączonego USB ani karty SD. Jest to potrzebne w przypadku wszystkich funkcji zależnych od połączenia FTP z drukarką, takich jak obraz okładki, pomijanie obiektów i historia drukowania."
     }
   }
 }

@@ -1363,7 +1363,7 @@ class PrintJob:
             for extension in extensions:
                 if file[1].endswith(extension):
                     if extension in extensions:
-                        LOGGER.debug(f"Found latest file {file[1]}")
+                        LOGGER.debug(f"Found latest file {file[1]} with timestamp {file[0]}")
                         return file[1]
 
         return None
@@ -3099,12 +3099,14 @@ class HomeFlag:
     _value: int
     _sw_ver: str
     _device_type: str 
+    _fired_missing_sdcard_event: bool
 
     def __init__(self, client):
         self._value = 0
         self._client = client
         self._sw_ver = ""
         self._device_type = ""
+        _fired_missing_sdcard_event = False
 
     def info_update(self, data):
         modules = data.get("module", [])
@@ -3114,6 +3116,12 @@ class HomeFlag:
     def print_update(self, data: dict) -> bool:
         old_data = f"{self.__dict__}"
         self._value = int(data.get("home_flag", str(self._value)))
+        if self.sdcard_status == "missing":
+            if not self._fired_missing_sdcard_event:
+                self._fired_missing_sdcard_event = True
+                self._client.callback("event_printer_missing_sdcard")
+        else:
+            self._fired_missing_sdcard_event = False
         return (old_data != f"{self.__dict__}")
 
     @property

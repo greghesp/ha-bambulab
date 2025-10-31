@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "Authentication Failed for {device}",
-      "description": "Attempting to connect to Bambu Lab failed. Please reconfigure the integration and provide fresh credentials."
+      "title": "Authentication Failed",
+      "description": "Attempting to connect to Bambu Lab failed for {device}. Please reconfigure the integration and provide fresh credentials."
+    },
+    "no_external_storage": {
+      "title": "No USB or SD Card Detected",
+      "description": "{device} does not have an USB or SD card connected. This is needed for all features that depend on ftp to the printer such as the cover image, skipping objects and print history."
     }
   }
 }

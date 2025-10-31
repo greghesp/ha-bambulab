@@ -854,8 +854,12 @@
   },
   "issues": {
     "authentication_failed": {
-      "title": "{device}에 대한 인증 실패",
-      "description": "Bambu Lab에 연결하려는 시도는 실패했습니다. 통합을 재구성하고 새로운 자격 증명을 제공하십시오."
+      "title": "인증 실패",
+      "description": "{device}에 대한 Bambu Lab 연결 시도가 실패했습니다. 통합을 재구성하고 새로운 자격 증명을 제공하세요."
+    },
+    "no_external_storage": {
+      "title": "USB 또는 SD 카드가 감지되지 않음",
+      "description": "{device}에는 USB 또는 SD 카드가 연결되어 있지 않습니다. 이는 표지 이미지, 개체 건너뛰기, 인쇄 기록 등 프린터에 대한 FTP에 의존하는 모든 기능에 필요합니다."
     }
   }
 }
