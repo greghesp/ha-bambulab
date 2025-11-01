@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "不锈钢有大流动",
           "high_flow_tungsten_carbide": "碳化氢碳化物含量大"
         }
+      },
+      "model_download_percentage": {
+        "name": "模型下载"
       }
     },
     "camera": {

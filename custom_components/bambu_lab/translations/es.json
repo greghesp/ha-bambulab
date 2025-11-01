@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "acero inoxidable con flujo grande",
           "high_flow_tungsten_carbide": "Carburo de tungsteno con gran flujo"
         }
+      },
+      "model_download_percentage": {
+        "name": "Descarga del modelo"
       }
     },
     "camera": {

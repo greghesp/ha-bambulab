@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "από ανοξείδωτο χάλυβα με μεγάλη ροή",
           "high_flow_tungsten_carbide": "καρβίδιο βολφραμίου με μεγάλη ροή"
         }
+      },
+      "model_download_percentage": {
+        "name": "Λήψη μοντέλου"
       }
     },
     "camera": {

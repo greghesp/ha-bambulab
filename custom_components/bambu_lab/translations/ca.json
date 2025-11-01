@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "Acer inoxidable amb un gran flux",
           "high_flow_tungsten_carbide": "Carbur de tungstè amb gran flux"
         }
+      },
+      "model_download_percentage": {
+        "name": "Descàrrega del model"
       }
     },
     "camera": {

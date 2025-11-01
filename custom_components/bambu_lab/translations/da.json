@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "rustfrit stål med stor strømning",
           "high_flow_tungsten_carbide": "wolframcarbid med stor strømning"
         }
+      },
+      "model_download_percentage": {
+        "name": "Download model"
       }
     },
     "camera": {
