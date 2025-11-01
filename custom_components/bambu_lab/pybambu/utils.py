@@ -339,7 +339,7 @@ def get_start_time(timestamp):
 
 def get_end_time(remaining_time):
     """Calculate the end time of a print"""
-    end_time = round_minute(dt_util.now() + timedelta(minutes=remaining_time))
+    end_time = round_minute(dt_util.utcnow() + timedelta(minutes=remaining_time))
     return end_time
 
 
