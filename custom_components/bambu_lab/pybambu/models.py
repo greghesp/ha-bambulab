@@ -1025,12 +1025,6 @@ class PrintJob:
             self._update_task_data()
             self._download_timelapse()
 
-        # Calculate start / end time after we update task data so we don't stomp on prepopulated values while idle on integration start.
-        if data.get("gcode_start_time") is not None:
-            if self.start_time != get_start_time(int(data.get("gcode_start_time"))):
-                LOGGER.debug(f"GCODE START TIME: {self.start_time}")
-            self.start_time = get_start_time(int(data.get("gcode_start_time")))
-
         # Generate the end_time from the remaining_time mqtt payload value if present.
         if data.get("mc_remaining_time") is not None:
             existing_remaining_time = self.remaining_time
@@ -1844,20 +1838,22 @@ class PrintJob:
                 cloud_time_str = self._task_data.get('startTime', "")
                 LOGGER.debug(f"CLOUD START TIME1: {self.start_time}")
                 if cloud_time_str != "":
-                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                    self.start_time = local_dt
+                    cloud_dt = parser.parse(cloud_time_str)
+                    if cloud_dt.tzinfo is None:
+                        cloud_dt = cloud_dt.replace(tzinfo=tz.UTC)
+                    # Convert everything to UTC-aware datetime
+                    self.start_time = cloud_dt.astimezone(tz.UTC)
                     LOGGER.debug(f"CLOUD START TIME2: {self.start_time}")
 
                 # "endTime": "2023-12-21T19:02:35Z"
                 cloud_time_str = self._task_data.get('endTime', "")
                 LOGGER.debug(f"CLOUD END TIME1: {self.end_time}")
                 if cloud_time_str != "":
-                    local_dt = parser.parse(cloud_time_str).astimezone(tz.tzlocal())
-                    # Convert it to timestamp and back to get rid of timezone in printed output to match datetime objects created from mqtt timestamps.
-                    local_dt = datetime.fromtimestamp(local_dt.timestamp())
-                    self.end_time = local_dt
+                    cloud_dt = parser.parse(cloud_time_str)
+                    if cloud_dt.tzinfo is None:
+                        cloud_dt = cloud_dt.replace(tzinfo=tz.UTC)
+                    # Convert everything to UTC-aware datetime
+                    self.start_time = cloud_dt.astimezone(tz.UTC)
                     LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
     def _identify_objects_in_pick_image(self, image: Image) -> set:
