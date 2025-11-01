@@ -903,6 +903,7 @@ class PrintJob:
     _loaded_model_data: bool
     _ftpRunAgain: bool
     _ftpThread: threading.Thread
+    _ftp_download_percentage: int
 
     def __init__(self, client):
         self._client = client
@@ -931,6 +932,11 @@ class PrintJob:
         self._loaded_model_data = False
         self._ftpRunAgain = False
         self._ftpThread = None
+        self._ftp_download_percentage = 100
+
+    @property
+    def model_download_percentage(self) -> int:
+        return self._ftp_download_percentage
 
     @property
     def get_printable_objects(self) -> json:
@@ -1213,10 +1219,10 @@ class PrintJob:
 
             # Download to cache with progress tracking
             total_downloaded = 0
-            filename = os.path.basename(file_path)
             start_time = time.time()
             last_log_time = start_time
-            
+
+            self._ftp_download_percentage = 0
             def download_progress_callback(data):
                 nonlocal total_downloaded, last_log_time
                 try:
@@ -1227,6 +1233,7 @@ class PrintJob:
                     current_time = time.time()
                     if current_time - last_log_time >= 2:
                         LOGGER.debug(f"FTP download progress: {percentage:.0f}% ({total_downloaded//1024}/{size//1024} KB)")
+                        self._ftp_download_percentage = int(percentage)
                         last_log_time = current_time
                     
                     if progress_callback:
@@ -1245,6 +1252,7 @@ class PrintJob:
                 f.flush()
             
             # Calculate download statistics
+            self._ftp_download_percentage = 100
             end_time = time.time()
             download_time = end_time - start_time
             download_speed = size / download_time if download_time > 0 else 0
@@ -1740,6 +1748,7 @@ class PrintJob:
             result = True
         except Exception as e:
             LOGGER.error(f"Unexpected error parsing model data: {e}")
+            LOGGER.debug()
         
         self.prune_print_history_files()
 
@@ -1864,11 +1873,8 @@ class PrintJob:
         seen_colors = set()
         seen_identify_ids = set()
 
-        # Clone the image if it's to be labelled, otherwise the labels
-        # are detected as objects
-        pixels = image.load()
-
         # Loop through every pixel and label the first occurrence of each unique color
+        pixels = image.load()
         for y in range(image_height):
             for x in range(image_width):
                 current_color = pixels[x, y]

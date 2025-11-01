@@ -370,6 +370,9 @@
       "heatbreak_fan_speed": {
         "name": "Heatbreak fan speed"
       },
+      "model_download_percentage": {
+        "name": "Model download"
+      },
       "speed_profile": {
         "name": "Speed profile",
         "state": {

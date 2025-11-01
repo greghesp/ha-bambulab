@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "큰 흐름이있는 스테인레스 스틸",
           "high_flow_tungsten_carbide": "큰 흐름이있는 텅스텐 카바이드"
         }
+      },
+      "model_download_percentage": {
+        "name": "모델 다운로드"
       }
     },
     "camera": {

@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "roestvrij staal met grote stroom",
           "high_flow_tungsten_carbide": "wolfraamcarbide met grote stroom"
         }
+      },
+      "model_download_percentage": {
+        "name": "Model downloaden"
       }
     },
     "camera": {

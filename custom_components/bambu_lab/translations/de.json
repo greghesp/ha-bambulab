@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "Edelstahl mit großem Fluss",
           "high_flow_tungsten_carbide": "Wolframkarbid mit großem Fluss"
         }
+      },
+      "model_download_percentage": {
+        "name": "Modell-Download"
       }
     },
     "camera": {

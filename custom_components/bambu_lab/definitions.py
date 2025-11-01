@@ -351,6 +351,15 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.HEATBREAK)
     ),
     BambuLabSensorEntityDescription(
+        key="model_download_percentage",
+        translation_key="model_download_percentage",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:percent",
+        value_fn=lambda self: self.coordinator.get_model().print_job.model_download_percentage,
+        exists_fn=lambda coordinator: coordinator.get_option_enabled(Options.FTP),
+    ),
+    BambuLabSensorEntityDescription(
         key="speed_profile",
         translation_key="speed_profile",
         icon="mdi:speedometer",

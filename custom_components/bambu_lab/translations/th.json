@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "สแตนเลสที่มีการไหลขนาดใหญ่",
           "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ที่มีการไหลขนาดใหญ่"
         }
+      },
+      "model_download_percentage": {
+        "name": "ดาวน์โหลดโมเดล"
       }
     },
     "camera": {

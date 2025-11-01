@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "stal nierdzewna z dużym przepływem",
           "high_flow_tungsten_carbide": "Węglenie wolframowe z dużym przepływem"
         }
+      },
+      "model_download_percentage": {
+        "name": "Pobieranie modelu"
       }
     },
     "camera": {

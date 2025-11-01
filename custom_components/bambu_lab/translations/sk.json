@@ -814,6 +814,9 @@
           "high_flow_stainless_steel": "nehrdzavejúca oceľ s veľkým prietokom",
           "high_flow_tungsten_carbide": "karbid volfrámu s veľkým prietokom"
         }
+      },
+      "model_download_percentage": {
+        "name": "Model na stiahnutie"
       }
     },
     "camera": {
