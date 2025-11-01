@@ -1220,21 +1220,22 @@ class PrintJob:
             # Download to cache with progress tracking
             total_downloaded = 0
             start_time = time.time()
-            last_log_time = start_time
+            last_log_percentage = 0
 
             self._ftp_download_percentage = 0
             def download_progress_callback(data):
-                nonlocal total_downloaded, last_log_time
+                nonlocal total_downloaded, last_log_percentage
                 try:
                     total_downloaded += len(data)
-                    percentage = (total_downloaded / size) * 100
+                    percentage = int((total_downloaded / size) * 100)
                     
                     # Only log every 10 seconds
                     current_time = time.time()
-                    if current_time - last_log_time >= 2:
+                    if last_log_percentage != percentage:
                         LOGGER.debug(f"FTP download progress: {percentage:.0f}% ({total_downloaded//1024}/{size//1024} KB)")
                         self._ftp_download_percentage = int(percentage)
-                        last_log_time = current_time
+                        last_log_percentage = percentage
+                        self._client.callback("event_printer_data_update")
                     
                     if progress_callback:
                         progress_callback(percentage)
