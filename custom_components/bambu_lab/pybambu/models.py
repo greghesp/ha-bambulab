@@ -1698,10 +1698,13 @@ class PrintJob:
                         # Filament count should be greater than the zero-indexed filament ID
                         if filament_count > filament_index:
                             ams_index = self.ams_mapping[filament_index]
-                            # We add the filament as you can map multiple slicer filaments to the same physical filament.
-                            self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
-                            self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
-                            log_label = f"AMS Tray {ams_index + 1}"
+                            if ams_index >= 16: # BUG - This will not yet handle AMS HT devices
+                                # We add the filament as you can map multiple slicer filaments to the same physical filament.
+                                self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
+                                self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
+                                log_label = f"AMS Tray {ams_index + 1}"
+                            else:
+                                LOGGER.debug(f"ams_mapping: {self.ams_mapping}")
                         elif plate_filament_count > 0:
                             # Multi filament print but the AMS mapping is unknown
                             # The data is only sent in the mqtt payload once and isn't part of the 'full' data so the integration must be
@@ -2172,7 +2175,7 @@ class Info:
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
 
-        self.new_version_state = data.get("upgrade_state", {}).get("new_version_state", self.new_version_state)
+        self.new_version_state = (data.get("upgrade_state") or {}).get("new_version_state", self.new_version_state)
 
         # Nozzle data is provided differently for dual-nozzle printers (at least)
         # New (H2D):
