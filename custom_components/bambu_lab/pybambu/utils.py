@@ -1,4 +1,5 @@
 import functools
+import gzip
 import json
 import logging
 import math
@@ -175,14 +176,14 @@ def _get_error_text(error_type: str, error_code: str, device_type: Printers | st
 
 @cache
 def _load_error_data(language: str) -> dict:
-    filename = Path(__file__).parent / "hms_error_text" / f"hms_{language}.json"
+    filename = Path(__file__).parent / "hms_error_text" / f"hms_{language}.json.gz"
     if not filename.exists():
         LOGGER.debug(f"No HMS error data for {language=}")
         return {}
 
-    with open(filename, encoding="utf-8") as f:
+    with gzip.open(filename, "rt", encoding="utf-8") as f:
         return json.load(f)
-
+    
 def get_HMS_severity(code: int) -> str:
     uint_code = code >> 16
     if code > 0 and uint_code in HMS_SEVERITY_LEVELS:

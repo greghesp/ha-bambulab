@@ -3,12 +3,14 @@
 from __future__ import annotations
 from collections import defaultdict, Counter
 
+import gzip
 import json
 import logging
 import re
 import urllib.request
 from pathlib import Path
 
+SCRIPT_DIR = Path(__file__).parent
 INTEGRATION_DIR = Path(__file__).parent.parent.joinpath("custom_components", "bambu_lab")
 TRANSLATIONS_DIR = INTEGRATION_DIR / "translations"
 PYBAMBU_DIR = INTEGRATION_DIR / "pybambu"
@@ -153,8 +155,14 @@ def main():
             all_devices[printer_type] = get_error_text(lang, printer_type, serial_prefix)
 
         merged = merge_device_errors(all_devices)
-        with open(PYBAMBU_DIR / "hms_error_text" / f"hms_{lang}.json", "w", encoding="utf-8") as file:
-            json.dump(merged, file, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+        # Write human readable json for PR reviews to a sub-directory alongside the script.
+        with open(SCRIPT_DIR / "hms_error_text" / f"hms_{lang}.json", "w", encoding="utf-8") as file:
+            json.dump(merged, file, sort_keys=True, indent=2, ensure_ascii=False)
+
+        # Write gzip files for minimum file size to the integration directories.
+        with gzip.open(PYBAMBU_DIR / "hms_error_text" / f"hms_{lang}.json.gz", "wt", encoding="utf-8") as gzfile:
+            json.dump(merged, gzfile, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 if __name__ == "__main__":
     main()
