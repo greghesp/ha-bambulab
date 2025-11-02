@@ -89,19 +89,13 @@ def process_json(bambu_data: dict, language: str) -> dict[str, dict[str, str]]:
 
     for error_entry in bambu_data["data"]["device_hms"][data_language]:
         code = error_entry["ecode"].upper()
-        value = (
+        error_data["device_hms"][code] = (
             error_entry["intro"].replace('"', "'").replace("\n", "").replace("  ", " ")
         )
-        if value == "":
-            value = "unknown"
-        error_data["device_hms"][code] = value
 
     for error_entry in bambu_data["data"]["device_error"][data_language]:
         code = error_entry["ecode"].upper()
-        value = error_entry["intro"].replace('"', "'")
-        if value == "":
-            value = "unknown"
-        error_data["device_error"][code] = value
+        error_data["device_error"][code] = error_entry["intro"].replace('"', "'")
 
     return error_data
 

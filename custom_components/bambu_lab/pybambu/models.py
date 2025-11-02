@@ -2881,12 +2881,10 @@ class StageAction:
 @dataclass
 class HMSList:
     """Return all HMS related info"""
-    _count: int
     _errors: dict
 
     def __init__(self, client):
         self._client = client
-        self._count = 0
         self._errors = {}
         self._errors["Count"] = 0
         
@@ -2904,13 +2902,10 @@ class HMSList:
 
         if 'hms' in data.keys():
             hmsList = data.get('hms', [])
-            self._count = len(hmsList)
             errors = {}
-            errors["Count"] = self._count
 
             index: int = 0
             for hms in hmsList:
-                index = index + 1
                 attr = int(hms['attr'])
                 code = int(hms['code'])
                 hms_notif = HMSNotification(
@@ -2919,6 +2914,11 @@ class HMSList:
                     attr=attr,
                     code=code
                     )
+                if not hms_notif.hms_error:
+                    LOGGER.debug("Skipping HMS notification with code %s (no text).", hms_notif.hms_code)
+                    continue  # skip invalid entries
+
+                index = index + 1
                 errors[f"{index}-Code"] = f"HMS_{hms_notif.hms_code}"
                 errors[f"{index}-Error"] = hms_notif.hms_error
                 errors[f"{index}-Wiki"] = hms_notif.wiki_url
@@ -2926,10 +2926,12 @@ class HMSList:
                 #LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
                 #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure
 
+            errors["Count"] = index
+
             if self._errors != errors:
                 LOGGER.debug("Updating HMS error list.")
                 self._errors = errors
-                if self._count != 0:
+                if self._errors["Count"] != 0:
                     LOGGER.warning(f"HMS ERRORS: {errors}")
                 self._client.callback("event_printer_error")
                 return True
@@ -2943,7 +2945,7 @@ class HMSList:
     
     @property
     def error_count(self) -> int:
-        return self._count
+        return self._errors["Count"]
 
 @dataclass
 class PrintError:
