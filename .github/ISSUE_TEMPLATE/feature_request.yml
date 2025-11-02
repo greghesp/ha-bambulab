@@ -18,9 +18,12 @@ body:
       options:
         - A1
         - A1 Mini
+        - H2C
         - H2D
+        - H2S
         - P1P
         - P1S
+        - P2S
         - X1
         - X1C
         - X1E
