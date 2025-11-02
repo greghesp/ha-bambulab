@@ -52,9 +52,12 @@ body:
       options:
         - A1
         - A1 Mini
+        - H2C
         - H2D
+        - H2S
         - P1P
         - P1S
+        - P2S
         - X1
         - X1C
         - X1E
@@ -69,14 +72,14 @@ body:
     attributes:
       label: Diagnostic Output
       description: |
-        Add your Diagnostics file download. To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics
+        Add your Diagnostics file download. To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics. If you do not include this, your issue is increasingly likely to be summarily closed as inactionable as psychic debugging only gets you so far.
       placeholder: Paste content or drag and drop diagnostic log files here.
   - type: textarea
     id: logs
     attributes:
       label: Log Extracts
       description: |
-        Look for relevant logs from the integration in the Home Assistant logs.
+        Look for relevant logs from the integration in the Home Assistant logs. For much more rapid response, enable debug logging for the integration and reproduce the issue and provide the full debug logs.
         These can be found at Settings->System->Logs.
       placeholder: Paste content or drag and drop the full log files here.
   - type: textarea
