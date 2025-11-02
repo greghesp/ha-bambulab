@@ -72,7 +72,7 @@ body:
     attributes:
       label: Diagnostic Output
       description: |
-        Add your Diagnostics file download. To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics. If you do not include these your issue is increasingly likely to be summarily closed as inactionable as psychic debugging only gets you so far.
+        Add your Diagnostics file download. To get this, go to the Home Assistant Bambu Lab Integration, and click Download Diagnostics. If you do not include this, your issue is increasingly likely to be summarily closed as inactionable as psychic debugging only gets you so far.
       placeholder: Paste content or drag and drop diagnostic log files here.
   - type: textarea
     id: logs
