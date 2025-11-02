@@ -1,6 +1,7 @@
 """Update the HMS error texts from the Bambu servers."""
 
 from __future__ import annotations
+from collections import defaultdict, Counter
 
 import json
 import logging
@@ -50,7 +51,7 @@ def get_languages() -> list[str]:
     return sorted(get_local_languages() | get_bambu_languages())
 
 
-def update_error_text(language: str, printer_type: str, serial_prefix: str) -> None:
+def get_error_text(language: str, printer_type: str, serial_prefix: str) -> None:
     """Fetch error text for the given language and printer type, and save it."""
 
     url = f"https://e.bambulab.com/query.php?lang={language}&d={serial_prefix}"
@@ -63,8 +64,7 @@ def update_error_text(language: str, printer_type: str, serial_prefix: str) -> N
     logging.info(f"Processing HMS data for {printer_type=} {language=}")
     error_data = process_json(error_data, language)
 
-    with open(PYBAMBU_DIR / "hms_error_text" / f"hms_{printer_type}_{language}.json", "w") as file:
-        json.dump(error_data, file, indent=2, sort_keys=True)
+    return error_data
 
 
 def download_json(json_url) -> dict:
@@ -105,15 +105,56 @@ def process_json(bambu_data: dict, language: str) -> dict[str, dict[str, str]]:
 
     return error_data
 
+def collect_errors(all_devices, category):
+    code_messages = defaultdict(set)
+    for printer_type, device_data in all_devices.items():
+        for code, msg in device_data.get(category, {}).items():
+            code_messages[code].add(msg)
+    return code_messages
+
+def merge_device_errors(all_devices):
+    merged = {"device_error": {}, "device_hms": {}}
+
+    for category in ["device_error", "device_hms"]:
+        # Collect messages per code
+        code_messages = defaultdict(dict)  # code -> {device: message}
+        for device_name, device_data in all_devices.items():
+            if device_data is not None:
+                for code, msg in device_data.get(category, {}).items():
+                    code_messages[code][device_name] = msg
+
+        # Build merged structure
+        for code, device_msg_map in code_messages.items():
+            # Count occurrences of each message
+            msg_counter = Counter(device_msg_map.values())
+            default_msg, _ = msg_counter.most_common(1)[0]
+
+            # Map each message to its devices
+            msg_to_models = defaultdict(list)
+            for device, msg in device_msg_map.items():
+                if msg == default_msg:
+                    continue
+                msg_to_models[msg].append(device)
+
+            # Add default message with placeholder "_"
+            msg_to_models[default_msg] = []
+
+            merged[category][code] = dict(msg_to_models)
+
+    return merged
 
 def main():
     """The true main function."""
     logging.basicConfig(level=logging.INFO)
 
     for lang in get_languages():
+        all_devices = {}
         for printer_type, serial_prefix in _DEVICE_TYPES.items():
-            update_error_text(lang, printer_type, serial_prefix)
+            all_devices[printer_type] = get_error_text(lang, printer_type, serial_prefix)
 
+        merged = merge_device_errors(all_devices)
+        with open(PYBAMBU_DIR / "hms_error_text" / f"hms_{lang}.json", "w", encoding="utf-8") as file:
+            json.dump(merged, file, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 if __name__ == "__main__":
     main()
