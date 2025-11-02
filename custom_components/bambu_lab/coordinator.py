@@ -765,24 +765,31 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def set_option_enabled(self, option: Options, enable: bool):
         LOGGER.debug(f"Setting {OPTION_NAME[option]} to {enable}")
         options = dict(self.config_entry.options)
-                
-        options[OPTION_NAME[option]] = enable
-        self._hass.config_entries.async_update_entry(
-            entry=self.config_entry,
-            title=self.get_model().info.serial,
-            data=self.config_entry.data,
-            options=options)
-        
-        force_reload = False
-        match option:
-            case Options.CAMERA:
-                force_reload = True
-            case Options.IMAGECAMERA:
-                force_reload = True
 
-        if force_reload:
-            # Force reload of sensors.
-            return await self.hass.config_entries.async_reload(self._entry.entry_id)
+        # First make sure we have at least a default value present to compare against.
+        if not OPTION_NAME[option] in options:
+            options[OPTION_NAME[option]] = self.get_option_enabled(option)
+
+        LOGGER.debug(f"options: {options}")
+        # Only apply the change if it differs from the current setting.
+        if options[OPTION_NAME[option]] != enable:
+            options[OPTION_NAME[option]] = enable
+            self._hass.config_entries.async_update_entry(
+                entry=self.config_entry,
+                title=self.get_model().info.serial,
+                data=self.config_entry.data,
+                options=options)
+            
+            force_reload = False
+            match option:
+                case Options.CAMERA:
+                    force_reload = True
+                case Options.IMAGECAMERA:
+                    force_reload = True
+
+            if force_reload:
+                # Force reload of sensors.
+                return await self.hass.config_entries.async_reload(self._entry.entry_id)
 
     def get_option_value(self, option: Options) -> int:
         options = dict(self.config_entry.options)
@@ -792,16 +799,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def set_option_value(self, option: Options, value: int):
         LOGGER.debug(f"Setting {OPTION_NAME[option]} to {value}")
         options = dict(self.config_entry.options)
-                
-        options[OPTION_NAME[option]] = value
-        self._hass.config_entries.async_update_entry(
-            entry=self.config_entry,
-            title=self.get_model().info.serial,
-            data=self.config_entry.data,
-            options=options)
 
-        # Force reload of integration to effect cache update.
-        return await self.hass.config_entries.async_reload(self._entry.entry_id)
+        # First make sure we have at least a default value present to compare against.
+        if not OPTION_NAME[option] in options:
+            options[OPTION_NAME[option]] = self.get_option_enabled(option)
+
+        if options[OPTION_NAME[option]] != value:
+            options[OPTION_NAME[option]] = value
+            self._hass.config_entries.async_update_entry(
+                entry=self.config_entry,
+                title=self.get_model().info.serial,
+                data=self.config_entry.data,
+                options=options)
+
+            # Force reload of integration to effect cache update.
+            return await self.hass.config_entries.async_reload(self._entry.entry_id)
 
     def _report_no_external_storage_issue(self):
         issue_id = f"no_external_storage_{self.get_model().info.serial}"
