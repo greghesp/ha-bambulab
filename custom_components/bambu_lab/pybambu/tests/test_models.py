@@ -315,6 +315,26 @@ class TestHms(unittest.TestCase):
             "2-Severity": "serious"
             })
 
+    def test_error_ignored(self):
+        """When an HMS error has empty text, it is ignored."""
+        self.client._device.info.device_type = Printers.A1
+        self.client.user_language = "en"
+        data = {"hms": [{"attr": 201326848, "code": 131086}, {"attr": 134180864, "code": 131075}]}
+
+        result = self.hms.print_update(data)
+        self.assertTrue(result)
+        self.client.callback.assert_called_once_with("event_printer_error")
+        self.assertEqual(1, self.hms.error_count)
+
+        # The first error (0C00_0100_0002_000E) is ignored because the text is an empty string.
+        self.assertDictEqual(self.hms.errors, {
+            "Count": 1,
+            "1-Code": "HMS_07FF_7000_0002_0003",
+            "1-Error": "Please check if the filament is coming out of the nozzle. If not, gently push the material and try to extrude again.",
+            "1-Wiki": "https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/07FF_7000_0002_0003",
+            "1-Severity": "serious"
+            })
+
     def test_error_cleared(self):
         data = {"hms": [{"attr": 50331904, "code": 65543}]}
 

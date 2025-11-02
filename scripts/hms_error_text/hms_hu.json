@@ -572,7 +572,7 @@
       "A nyomtatási fájl nem elérhető. Kérjük, győződj meg róla, hogy az adathordozó nem lett eltávolítva.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "A szeletelt fájlban megadott modell nem egyezik a nyomtatód típusával. Folytatod?": []
@@ -772,11 +772,11 @@
       ]
     },
     "0500C011": {
+      "": [],
       "Az SD-kártya teljesítménye leromlott, ami hatással lehet a nyomtatásra, a naplózásra és a videók rögzítésére. Próbáld meg formázni. Ha a probléma továbbra is fennáll, cseréld ki az SD-kártyát.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Lézer/Vágómodul csatlakozik a szerszámfejhez. A szárítási folyamat automatikusan leállt.": []
@@ -1761,7 +1761,7 @@
       "Hibák találhatók az első rétegen. Amennyiben a hibát elfogadhatónak találod, kattints a „Folytatás“ gombra a nyomtatási feladat folytatásához.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "Kiürített filament halmozódott fel az anyagkidobó csúszdában, ami beleütközhet a nyomtatófejbe.": []
@@ -2974,7 +2974,7 @@
       "A hotend-ventilátor fordulatszáma túl alacsony. Lehet, hogy beragadt és tisztításra szorul.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "Az extrudálóerő-érzékelő frekvenciája túl alacsony. Lehet, hogy a fúvóka nincs beszerelve, vagy a fúvóka hűtőbordája túl messze van az érzékelőtől.": [
@@ -3129,7 +3129,7 @@
       "A jobb oldali extruder extrudálóerő-érzékelőjének adatai rendellenes ugrást jeleznek, amelynek oka lehet a szenzor rossz érintkezése vagy meghibásodása.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "A bal oldali extruder extrudálóerő-érzékelőjének frekvenciája túl alacsony. Lehet, hogy az érzékelő túl messze van felszerelve, vagy az érzékelő meglazult.": []
@@ -3625,7 +3625,7 @@
       "Kommunikációs hiba a lézer negyedik tengelyének motorja és a pozícióérzékelő között. Ha az újraindítás után sem működik megfelelően, kérjük, vedd fel a kapcsolatot az ügyfélszolgálattal.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "A média pipeline hibásan működik. Kérjük, indítsd újra a nyomtatót. Ha többszöri próbálkozás után sem működik, fordulj az ügyfélszolgálathoz.": []
@@ -3634,13 +3634,13 @@
       "Az USB kamera nincs csatlakoztatva. Kérjük, ellenőrizd a kábelcsatlakozásokat.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "Nincs elég hely az SD-kártyán; kérjük szabadíts fel egy kis helyet.": [],
@@ -3675,7 +3675,7 @@
       ]
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "Nem sikerült csatlakozni az internethez. Kérjük, ellenőrizd a hálózati kapcsolatot.": []
@@ -3770,31 +3770,31 @@
       "Egyes külső modulok nem kompatibilisek a nyomtató firmware-verziójával, ami befolyásolhatja a használatot. Kérjük, lépj „Firmware” oldalra - miközben csatlakozol az internethez - a frissítés elvégzéséhez, vagy a wikiben található leírás alapján offline is elvégezheted a frissítést.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "Az SD-kártya kapacitása nem elegendő a nyomtatási fájlok gyorsítótárazásához.": [],
@@ -3808,7 +3808,7 @@
       "A felhasználói adatok lejártak, jelentkezz be újra.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "A rendszer a MicroSD-kártya teljesítményének csökkenését észlelte. Ez hatással lehet a nyomtatási feladatokra, a naplózásra és a videófelvételekre. Kérjük, próbáld meg formázni vagy cserélni a MicroSD-kártyát.": []
@@ -3907,7 +3907,7 @@
       "Az AMS D Slot4 RFID-címkéje nem olvasható.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "A BirdsEye kamera nincs telepítve. Kérjük, kapcsold ki a nyomtatót, majd szereld be a kamerát.": []
@@ -3970,19 +3970,19 @@
       "Az MQTT-parancs ellenőrzése sikertelen, frissítsd a Studiót (és a hálózati bővítményt) vagy a Handyt a legújabb verzióra, majd indítsd újra a szoftvert és próbáld újra.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "A BirdsEye kamera nem működik megfelelően. Kérjük, próbáld meg újraindítani az eszközt. Ha a probléma többszöri újraindítás után is fennáll, ellenőrizd a kamera csatlakozását, vagy fordulj az ügyfélszolgálathoz.": []
@@ -4024,7 +4024,7 @@
       "A time-lapse szett hitelesítése sikertelen. Kérjük, csatlakoztasd újra a kábelt, vagy indítsd újra a nyomtatót.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "A készülék mérnöki üzemmódban van, kérjük, ügyelj az információbiztonságra.": []
@@ -4042,40 +4042,40 @@
       "A Live View kamera nincs a helyén; ellenőrizd a hardverkapcsolatot.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "A szerszámfej kamera nincs csatlakoztatva. Kérjük, ellenőrizd a hardver- és kábelcsatlakozásokat.": []
@@ -4090,40 +4090,40 @@
       "A Live View kamera nincs csatlakoztatva. Kérjük, ellenőrizd a hardver- és kábelcsatlakozásokat.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Lézermodul szériaszám hiba": []
@@ -4168,7 +4168,7 @@
       "AMS C: tanúsítványhiba. Kérjük, csatlakoztasd újra a kábelt vagy indítsd újra a nyomtatót.": []
     },
     "0503000000030027": {
-      "unknown": []
+      "": []
     },
     "0503040000010044": {
       "AMS D: a firmware nem kompatibilis a nyomtatóval. Kérjük, frissítsd a „Firmware' oldalon.": []
@@ -10464,7 +10464,7 @@
       "A Liveview kamera kalibrálása sikertelen és a szériaszámát nem lehet beolvasni. Kérjük, vedd fel a kapcsolatot az ügyfélszolgálattal.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "A Micro Lidar kamera hibásan működik. Kérjük, olvasd el a Wikit a hibaelhárításhoz.": [],
@@ -10483,22 +10483,22 @@
       "A fúvóka kamera hibásan működik. Kérjük, fordulj az ügyfélszolgálathoz, ha ez az üzenet többször is megjelenik.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "A fúvóka kamera lencséje szennyezett, ami befolyásolhatja az MI-funkciókat. Kérjük, hogy a lehető leghamarabb tisztítsd meg a fúvóka kamera lencséjének felületét.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "A fúvóka kamera hőmérséklete túl magas, emiatt az MI-funkció nem működik. Amint a hőmérséklet visszatér a normál értékre, az MI-funkció újból működni fog.": []

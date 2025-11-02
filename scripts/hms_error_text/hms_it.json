@@ -572,7 +572,7 @@
       "File di stampa non disponibile. Verifica se la MicroSD è inserita.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "Il file non è compatibile con il modello di stampante corrente. Continuare?": []
@@ -772,11 +772,11 @@
       ]
     },
     "0500C011": {
+      "": [],
       "Le prestazioni della scheda SD sono diminuite, il che potrebbe influire su stampa, registrazione e video. Prova a formattarla. Se i problemi persistono, sostituisci la scheda SD.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Modulo laser/taglio collegato alla testa di stampa. Il processo di essiccazione è stato interrotto automaticamente.": []
@@ -1805,7 +1805,7 @@
       "Sono stati rilevati difetti nel primo strato. Se i difetti sono accettabili, seleziona 'Riprendi' per riprendere il lavoro di stampa.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "Il filamento spurgato si è accumulato nello scivolo degli scarti, causando una collisione con la testa dell'utensile.": []
@@ -3058,7 +3058,7 @@
       "La velocità della ventola di raffreddamento dell'hotend è lenta. Potrebbe essere bloccata e deve essere pulita.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "Il valore del sensore di forza di estrusione è basso, il nozzle non sembra installato.": [],
@@ -3213,7 +3213,7 @@
       "È stato rilevato un salto anomalo nei dati del sensore di pressione estrusore destro, probabilmente causato da un contatto difettoso del sensore o da un sensore difettoso.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "La frequenza del sensore di forza di estrusione dell'estrusore sinistro è troppo bassa. Il sensore potrebbe essere installato troppo lontano oppure potrebbe essere allentato.": []
@@ -3706,7 +3706,7 @@
       "Errore di comunicazione tra il motore del quarto asse laser e il sensore di posizione. Se il riavvio non risolve il problema, contattare l’assistenza clienti.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "La pipeline multimediale presenta un malfunzionamento. Si prega di riavviare la stampante. Se diversi tentativi dovessero fallire, contattare l'assistenza clienti.": []
@@ -3715,13 +3715,13 @@
       "La camera USB non è collegata. Verifica il collegamento del cavo della camera.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "Spazio insufficiente nella microSD; libera un po' di spazio.": [],
@@ -3756,7 +3756,7 @@
       "Impossibile registrare fotografie time-lapse senza la scheda MicroSD inserita.": []
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "Impossibile connettersi ad Internet. Controlla la connessione di rete.": []
@@ -3851,31 +3851,31 @@
       "Alcuni moduli sono incompatibili con la versione del firmware della stampante e ciò potrebbe comprometterne l'utilizzo. Per aggiornarlo assicurati di essere collegato ad internet e vai alla pagina 'Firmware', oppure aggiornalo offline consultando la guida sul wiki.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "Capacità insufficiente dell'unità flash USB per memorizzare nella cache i file di stampa.": [
@@ -3889,7 +3889,7 @@
       "Le informazioni utente sono scadute, effettuare nuovamente l’accesso.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "È stata rilevata una degradazione delle prestazioni della scheda MicroSD. Potrebbe influire sui lavori di stampa, sui registri e sui video. Si prega di formattare o sostituire la scheda MicroSD.": []
@@ -3988,7 +3988,7 @@
       "Il tag RFID nell'AMS D Slot 4 non è stato identificato.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "La Camera BirdsEye non è installata. Spegnere la stampante e quindi installare la videocamera.": []
@@ -4051,19 +4051,19 @@
       "La verifica del comando MQTT non è riuscita. Aggiorna Studio (incluso il plugin di rete) o Handy all’ultima versione, quindi riavvia il software e riprova.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "La telecamera BirdsEye non funziona correttamente. Prova a riavviare il dispositivo. Se il problema persiste dopo diversi riavvii, controlla lo stato della connessione della telecamera o contatta l'assistenza clienti.": []
@@ -4105,7 +4105,7 @@
       "Autenticazione del kit time-lapse non riuscita. Ricollegare il cavo o riavviare la stampante.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "Il dispositivo è in stato di progettazione; presta attenzione alle questioni relative alla sicurezza delle informazioni.": []
@@ -4123,40 +4123,40 @@
       "La telecamera IA Live View non è in posizione; Controlla la connessione hardware.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "Telecamera ToolHead non connessa. Controlla l'hardware e i collegamenti via cavo.": []
@@ -4171,40 +4171,40 @@
       "Collegamento telecamera Live View fallito. Controlla l'hardware e il collegamento dei cavi.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Errore numero seriale modulo laser": []
@@ -4249,7 +4249,7 @@
       "Certificazione AMS C fallita. Ricollega il cavo o riavvia la stampante.": []
     },
     "0503000000030027": {
-      "unknown": []
+      "": []
     },
     "0503040000010044": {
       "Firmware AMS D non compatibile con la stampante. Aggiornalo dalla pagina 'Firmware'.": []
@@ -10545,7 +10545,7 @@
       "Calibrazione videocamera Live View non riuscita e numero di serie della telecamera non può essere letto. Contatta il team di assistenza clienti.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "La Telecamera Toolhead non funziona correttamente. Se questo problema si verifica più volte durante la stampa, contatta l'assistenza clienti.": [
@@ -10564,22 +10564,22 @@
       "La Nozzle Camera non funziona correttamente. Se questo problema si verifica più volte durante la stampa, contatta l'assistenza clienti.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "La lente della Nozzle Camera è sporca, il che potrebbe influire sulla funzionalità di monitoraggio AI. Si prega di pulire la superficie della lente della Nozzle Camera il prima possibile.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "La temperatura della Nozzle Camera è troppo alta, causando la sospensione della funzione di rilevamento AI. La funzione riprenderà automaticamente una volta che la temperatura tornerà alla normalità.": []

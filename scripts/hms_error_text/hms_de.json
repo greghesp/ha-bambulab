@@ -572,7 +572,7 @@
       "Die Druckdatei ist nicht verfügbar. Bitte überprüfen Sie, ob das Speichermedium entfernt wurde.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "Ihre geslicete Datei stimmt nicht mit dem aktuellen Druckermodell überein. Fortfahren?": []
@@ -772,11 +772,11 @@
       ]
     },
     "0500C011": {
+      "": [],
       "Die Leistung der SD-Karte hat nachgelassen, was sich auf das Drucken, Protokollieren und die Videoaufzeichnung auswirken kann. Versuchen Sie, die Karte zu formatieren. Wenn die Probleme weiterhin bestehen, ersetzen Sie bitte die SD-Karte.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Laser-/Schneidmodul mit dem Werkzeugkopf verbunden. Der Trocknungsprozess wurde automatisch gestoppt.": []
@@ -1816,7 +1816,7 @@
       "Es wurden Fehler in der ersten Schicht festgestellt. Wenn die Fehler akzeptabel sind, klicken Sie auf die Schaltfläche 'Fortsetzen', um den Druckauftrag fortzusetzen.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "Gespültes Filament hat sich im Abfallschacht angesammelt, was eine Kollision mit dem Werkzeugkopf verursachen kann.": []
@@ -3069,7 +3069,7 @@
       "Der Hotendlüfter dreht sich zu langsam. Er steckt möglicherweise fest und muss gereinigt werden.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "Der Wert des Extrusionskraftsensors ist niedrig. Die Düse scheint nicht installiert zu sein.": [],
@@ -3224,7 +3224,7 @@
       "Ein ungewöhnlicher Sprung in den Daten des Extrusionskraftsensors des rechten Extruders wurde festgestellt, der möglicherweise durch einen schlechten Sensorkontakt oder einen defekten Sensor verursacht wurde.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "Die Frequenz des Extrusionskraftsensors des linken Extruders ist zu niedrig. Der Sensor ist möglicherweise zu weit entfernt oder der Sensor ist lose.": []
@@ -3720,7 +3720,7 @@
       "Kommunikationsfehler zwischen dem Motor der vierten Achse des Lasers und dem Positionssensor. Wenn ein Neustart nicht erfolgreich ist, wenden Sie sich bitte an den Support.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "Die Medienpipeline hat eine Fehlfunktion. Bitte starten Sie den Drucker neu. Wenn mehrere Versuche fehlschlagen, wenden Sie sich bitte an den Kundendienst.": []
@@ -3729,13 +3729,13 @@
       "Die Live-View-Kamera ist nicht angeschlossen. Bitte überprüfen Sie die Hardware und die Kabelverbindungen.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "Nicht genug Platz auf dem USB-Flash-Laufwerk. Bitte geben Sie etwas Platz frei.": [
@@ -3770,7 +3770,7 @@
       ]
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "Internetverbindung fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung.": []
@@ -3865,31 +3865,31 @@
       "Einige Module sind mit der Firmware-Version des Druckers nicht kompatibel, was die Verwendung beeinträchtigen kann. Bitte gehen Sie zur Seite „Firmware“, um die Firmware zu aktualisieren, nachdem Sie eine Verbindung zum Internet hergestellt haben. Alternativ können Sie die Aktualisierung auch offline gemäß den Anweisungen im Wiki durchführen.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "Die Kapazität der SD-Karte reicht nicht aus, um Druckdateien zwischenzuspeichern.": [],
@@ -3903,7 +3903,7 @@
       "Die Benutzerinformationen sind abgelaufen. Bitte melden Sie sich erneut an.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "Es wurde eine Leistungsverschlechterung der SD-Karte festgestellt. Dies kann sich auf Druckaufträge, Protokolle und Videoaufzeichnungen auswirken. Bitte versuchen Sie, die MicroSD-Karte zu formatieren oder zu wechseln.": []
@@ -4002,7 +4002,7 @@
       "Der RFID-Tag am AMS D Slot4 kann nicht identifiziert werden.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "Die BirdsEye-Kamera ist nicht installiert. Bitte schalten Sie den Drucker aus und installieren Sie dann die Kamera.": []
@@ -4065,19 +4065,19 @@
       "Die Überprüfung des MQTT-Befehls ist fehlgeschlagen. Bitte aktualisieren Sie Studio (einschließlich des Netzwerk-Plugins) oder Handy auf die neueste Version, starten Sie die Software neu und versuchen Sie es erneut.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "Die BirdsEye-Kamera funktioniert nicht richtig. Bitte versuchen Sie, das Gerät neu zu starten. Wenn das Problem nach mehreren Neustarts weiterhin besteht, überprüfen Sie den Verbindungsstatus der Kamera oder wenden Sie sich an den Kundensupport.": []
@@ -4119,7 +4119,7 @@
       "Die Authentifizierung des Zeitraffer-Kits ist fehlgeschlagen. Bitte schließen Sie das Kabel erneut an oder starten Sie den Drucker neu.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "Das Gerät befindet sich im Entwicklungsstadium. Bitte beachten Sie die Hinweise zur Sicherheit.": []
@@ -4137,40 +4137,40 @@
       "Die AI-Live-View-Kamera ist nicht angeschlossen. Bitte überprüfen Sie die Hardwareverbindung.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "Die Bindung der Toolhead-Kamera ist fehlgeschlagen. Bitte überprüfen Sie die Hardware und die Kabelverbindungen.": []
@@ -4185,40 +4185,40 @@
       "Die Live-View-Kamera ist nicht angeschlossen. Bitte überprüfen Sie die Hardware und die Kabelverbindungen.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Lasermodul Seriennummer Fehler": []
@@ -10556,7 +10556,7 @@
       "Die Kalibrierung der Live-View-Kamera ist fehlgeschlagen und die Seriennummer der Live-View-Kamera kann nicht gelesen werden. Bitte wenden Sie sich an den Kundensupport.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "Die Micro-Lidar-Kamera funktioniert nicht richtig. Bitte informieren Sie sich im Wiki über die Fehlerbehebung.": [],
@@ -10575,22 +10575,22 @@
       "Die Düsenkamera hat eine Fehlfunktion. Wenn dieses Problem während des Drucks mehrmals auftritt, wenden Sie sich bitte an den Kundendienst.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "Die Linse der Düsenkamera ist verschmutzt, was die KI-Überwachungsfunktion beeinträchtigen kann. Bitte reinigen Sie die Oberfläche der Linse der Düsenkamera so bald wie möglich.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "Die Temperatur der Düsenkamera ist zu hoch, wodurch die KI-Erkennungsfunktion unterbrochen wurde. Die Funktion wird automatisch wieder aufgenommen, sobald die Temperatur wieder normal ist.": []

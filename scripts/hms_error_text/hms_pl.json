@@ -572,7 +572,7 @@
       "Plik do druku jest niedostępny. Sprawdź, czy nośnik pamięci nie został usunięty.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "Twój plik nie jest zgodny z bieżącym modelem drukarki. Kontynuować?": []
@@ -772,11 +772,11 @@
       ]
     },
     "0500C011": {
+      "": [],
       "Wydajność karty SD uległa pogorszeniu, co może wpływać na drukowanie, rejestrowanie danych i wideo. Spróbuj sformatować kartę. Jeśli problemy będą się utrzymywać, wymień kartę SD.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Moduł Lasera/Tnący jest podłączony do głowicy. Proces suszenia został automatycznie zatrzymany.": []
@@ -1801,7 +1801,7 @@
       "Wykryto wady pierwszej warstwy. Jeśli wady są akceptowalne, wybierz 'Wznów', aby wznowić zadanie drukowania.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "Filament po czyszczeniu zgromadził się w zsypie na odpady, co może spowodować kolizję głowicy.": []
@@ -3054,7 +3054,7 @@
       "Prędkość wentylatora chłodzącego hotend jest za niska. Może być on zablokowany i wymagać czyszczenia.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "Częstotliwość czujnika siły ekstruzji jest zbyt niska. Dysza może być niewłaściwie zainstalowana, lub radiator dyszy znajduje się zbyt daleko od czujnika.": [
@@ -3209,7 +3209,7 @@
       "Wystąpił nieprawidłowy odczyt siły ekstruzji z prawego ekstrudera, możliwa przyczyna to luźne połączenie lub wadliwy czujnik.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "Częstotliwość czujnika siły ekstruzji lewego ekstrudera jest zbyt niska. Czujnik może być zamontowany zbyt daleko lub może być poluzowany.": []
@@ -3702,7 +3702,7 @@
       "Komunikacja między silnikiem 4 osi lasera a czujnikiem położenia jest nieprawidłowa. Jeśli ponowne uruchomienie nie rozwiąże problemu, skontaktuj się z działem obsługi klienta.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "Ścieżka przesyłania mediów działa nieprawidłowo. Proszę ponownie uruchomić drukarkę. Jeśli wielokrotne próby zawiodą, prosimy o kontakt z obsługą klienta.": []
@@ -3711,13 +3711,13 @@
       "Kamera Live View nie jest podłączona. Proszę sprawdzić sprzęt oraz połączenia kablowe.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "Brak miejsca na pamięci USB. Proszę zwolnij trochę miejsca.": [
@@ -3752,7 +3752,7 @@
       ]
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "Nie udało się połączyć z Internetem. Sprawdź połączenie sieciowe.": []
@@ -3847,31 +3847,31 @@
       "Niektóre moduły są niekompatybilne z obecną wersją firmware drukarki, co może wpływać na jej prawidłowe działanie. Połącz się z internetem i przejdź do strony 'Firmware', aby zaktualizować oprogramowanie lub wykonaj aktualizację offline zgodnie z Wiki.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "Pojemność dysku USB jest niewystarczająca do buforowania plików do druku.": [
@@ -3885,7 +3885,7 @@
       "Informacje o użytkowniku wygasły, zaloguj się ponownie.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "Wykryto spadek wydajności karty MicroSD. Może to mieć wpływ na zadania drukowania, dzienniki i nagrania wideo. Spróbuj sformatować lub wymienić kartę MicroSD.": []
@@ -3984,7 +3984,7 @@
       "Nie można zidentyfikować RFID-tag w gnieździe 4 modułu AMS D.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "Kamera BirdsEye nie jest zainstalowana. Wyłącz drukarkę, a następnie zainstaluj kamerę.": []
@@ -4047,19 +4047,19 @@
       "Weryfikacja polecenia MQTT nie powiodła się. Zaktualizuj Studio (wraz z wtyczką sieciową) lub Handy do najnowszej wersji, a następnie uruchom program ponownie i ponów próbę.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "Kamera BirdsEye nie działa prawidłowo. Spróbuj ponownie uruchomić urządzenie. Jeśli problem nie ustąpi po wielokrotnym ponownym uruchomieniu, sprawdź stan połączenia kamery lub skontaktuj się z obsługą klienta.": []
@@ -4101,7 +4101,7 @@
       "Błąd autoryzacji zestawu do time-lapse. Spróbuj podłączyć kabel ponownie lub zrestartować drukarkę.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "Urządzenie znajduje się w fazie inżynieryjnej. Proszę zwrócić uwagę na kwestie związane z bezpieczeństwem.": []
@@ -4119,40 +4119,40 @@
       "Kamera AI Live View nie jest na miejscu. Proszę sprawdzić połączenie sprzętowe.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "Kamera głowicy nie jest podłączona. Proszę sprawdzić sprzęt oraz połączenia kablowe.": []
@@ -4167,40 +4167,40 @@
       "Powiązanie kamery Live View nie powiodło się. Proszę sprawdzić sprzęt oraz połączenia kablowe.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Numer seryjny modułu lasera jest błędny": []
@@ -4245,7 +4245,7 @@
       "Certyfikacja AMS C nie powiodła się. Podłącz ponownie kabel lub uruchom ponownie drukarkę.": []
     },
     "0503000000030027": {
-      "unknown": []
+      "": []
     },
     "0503040000010044": {
       "Firmware AMS D nie jest zgodny z drukarką. Zaktualizuj go na stronie 'Firmware'.": []
@@ -10541,7 +10541,7 @@
       "Kalibracja kamery Live View nie powiodła się i nie można odczytać numeru seryjnego kamery Liveview. Prosimy o kontakt z działem obsługi klienta.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "Kamera Micro Lidar nie działa prawidłowo. Aby uzyskać pomoc w rozwiązywaniu problemów, zapoznaj się z Wiki.": [],
@@ -10560,22 +10560,22 @@
       "Kamera dyszy działa nieprawidłowo. Jeśli problem będzie występować wielokrotnie podczas druku, proszę skontaktować się z obsługą klienta.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "Soczewka kamery dyszy jest zabrudzona, co może wpłynąć na funkcjonalność monitorowania AI. Proszę jak najszybciej wyczyścić soczewkę kamery.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "Temperatura kamery dyszy jest zbyt wysoka, co powoduje wstrzymanie funkcji wykrywania AI. Funkcja zostanie automatycznie wznowiona, gdy temperatura wróci do normy.": []
