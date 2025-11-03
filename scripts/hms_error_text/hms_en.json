@@ -572,7 +572,7 @@
       "The print file is not available. Please check to see if the storage media has been removed.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "Your sliced file is not consistent with the current printer model. Continue?": []
@@ -772,11 +772,11 @@
       ]
     },
     "0500C011": {
+      "": [],
       "SD card performance has degraded, which may affect printing, logging, and video. Try formatting it. If issues persist, please replace the SD card.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Laser/Cutting module connected to the toolhead. The drying process has been automatically stopped.": []
@@ -893,22 +893,22 @@
       "Unknown module detected; please try updating the firmware to the latest version.": []
     },
     "05024007": {
-      "unknown": []
+      "": []
     },
     "05024008": {
-      "unknown": []
+      "": []
     },
     "05024009": {
-      "unknown": []
+      "": []
     },
     "0502400A": {
-      "unknown": []
+      "": []
     },
     "0502400B": {
-      "unknown": []
+      "": []
     },
     "0502400C": {
-      "unknown": []
+      "": []
     },
     "0502400D": {
       "Failed to start a new task: filament loading/unloading not completed.": []
@@ -1822,7 +1822,7 @@
       "First layer defects were detected. If the defects are acceptable, select 'Resume' to resume the print job.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "Purged filament has piled up in the waste chute, which may cause a tool head collision.": []
@@ -3081,7 +3081,7 @@
       "The hotend cooling fan speed is slow. It may be stuck and need cleaning.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "The frequency of the extrusion force sensor is too low. The nozzle may not be installed, or the nozzle heat sink may be too far away from the sensor.": [
@@ -3239,7 +3239,7 @@
       "An anomalous jump in the right extruder extrusion force sensor data has been detected, potentially caused by poor sensor contact or a faulty sensor.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "The frequency of the extrusion force sensor of the left extruder is too low. The sensor may be installed too far, or the sensor may be loose.": []
@@ -3738,7 +3738,7 @@
       "Laser module detected. Please install the right nozzle correctly to ensure proper Laser Module Mounting Calibration.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "The media pipeline is malfunctioning. Please restart the printer. If multiple attempts fail, please contact customer support.": []
@@ -3747,13 +3747,13 @@
       "Liveview camera is not connected. Please check the hardware and cable connections.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "Not enough space on MicroSD Card; please clear some space.": [],
@@ -3788,7 +3788,7 @@
       ]
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "Failed to connect to the internet. Please check the network connection.": []
@@ -3874,7 +3874,7 @@
       "The Toolhead expansion module is malfunctioning. Please power off, check the connection, and restart the device.": []
     },
     "0500030000010053": {
-      "unknown": []
+      "": []
     },
     "050003000002000C": {
       "Wireless hardware error: please turn off/on WiFi or restart the device.": []
@@ -3886,31 +3886,31 @@
       "Some modules are incompatible with the printer's firmware version, which may affect use. Please go to the 'Firmware' page to update after connected to the internet, or you may update offline according to wiki.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "Micro SD Card capacity is insufficient to cache print files.": [],
@@ -3924,7 +3924,7 @@
       "User information has expired, please log in again.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "MicroSD Card performance degradation has been detected. It may affect print jobs, logs, and video records. Please format or change the MicroSD card.": []
@@ -3972,7 +3972,7 @@
       "Safety Key is not inserted. Please follow the Wiki to install it.": []
     },
     "0500040000010056": {
-      "unknown": []
+      "": []
     },
     "0500040000020007": {
       "The bed temperature exceeds the filament's vitrification temperature, which may cause a nozzle clog. Please keep the front door of the printer open or lower the bed temperature.": []
@@ -4026,7 +4026,7 @@
       "The RFID-tag on AMS D Slot4 cannot be identified.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "The BirdsEye Camera is not installed. Please power off printer and then install the camera.": []
@@ -4089,19 +4089,19 @@
       "MQTT Command verification failed. Please update Studio (including the network plugin) or Handy to the latest version, then restart the software and try again.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "The BirdsEye Camera is malfunctioning. Please try restarting the device. If the issue persists after multiple restarts, check the camera connection status or contact customer support.": []
@@ -4143,7 +4143,7 @@
       "Time-lapse kit authentication failed. Please reconnect the cable or restart the printer.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "The device is in the engineering state; please pay attention to information security related matters.": []
@@ -4161,40 +4161,40 @@
       "The Live View camera is not in place; please check the hardware connection.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "ToolHead Camera is not connected. Please check the hardware and cable connections.": []
@@ -4209,55 +4209,55 @@
       "Live View camera is not connected. Please check the hardware and cable connections.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500070000020001": {
-      "unknown": []
+      "": []
     },
     "0500070000020002": {
-      "unknown": []
+      "": []
     },
     "0500070000020003": {
-      "unknown": []
+      "": []
     },
     "0500070000020101": {
-      "unknown": []
+      "": []
     },
     "0500070000020201": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Laser module Serial Number error": []
@@ -4302,13 +4302,13 @@
       "AMS C certification failed. Please reconnect the cable or restart the printer.": []
     },
     "0503000000030027": {
-      "unknown": []
+      "": []
     },
     "0503000000030028": {
-      "unknown": []
+      "": []
     },
     "0503000000030029": {
-      "unknown": []
+      "": []
     },
     "0503040000010044": {
       "The firmware of AMS D does not match the printer. Please update it on the 'Firmware' page.": []
@@ -10604,7 +10604,7 @@
       "The Live View Camera calibration failed and the Liveview camera serial number cannot be read. Please contact the customer support team.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "Micro Lidar camera is malfunctioning. Please refer to the Wiki for troubleshooting.": [],
@@ -10620,28 +10620,28 @@
       "Failed to get image from Live View Camera. Spaghetti and waste chute pileup detection is not available at this time.": []
     },
     "0C0001000002000E": {
-      "unknown": []
+      "": []
     },
     "0C00010000020014": {
       "Nozzle Camera is malfunctioning. If this issue occurs multiple times during printing, please contact customer support.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "Nozzle camera lens is dirty, which may affect the AI monitoring functionality. Please clean the surface of the nozzle camera lens as soon as possible.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "Nozzle Camera's temperature is too high, causing the AI detection feature to pause. The feature will automatically resume once the temperature returns to normal.": []
@@ -10765,7 +10765,7 @@
       "Your printer seems to be printing without extruding.": []
     },
     "0C0003000003001A": {
-      "unknown": []
+      "": []
     },
     "0C0003000003001B": {
       "Possible spaghetti defects were detected. Please check the print quality and decide if the job should be stopped.": []
@@ -10810,7 +10810,7 @@
       "The type of platform is not supported for this task. Please use the correct platform to continue.": []
     },
     "0C00040000020006": {
-      "unknown": []
+      "": []
     },
     "0C00040000020007": {
       "BirdsEye Camera is setting up. Please clear all objects and remove the mat. Make sure the marker is not obstructed. Meanwhile, clean both the BirdsEye Camera and Toolhead Camera, and remove any foreign objects blocking their view.": []

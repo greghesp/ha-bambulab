@@ -569,7 +569,7 @@
       "O arquivo de impressão não está disponível. Verifique se a mídia de armazenamento foi removida.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "Seu arquivo fatiado não é consistente com o modelo atual da impressora. Continuar?": []
@@ -769,11 +769,11 @@
       "Exceção de leitura/gravação do cartão microSD. Por favor, reinsira ou substitua o cartão microSD.": []
     },
     "0500C011": {
+      "": [],
       "O desempenho do cartão SD diminuiu, o que pode afetar a impressão, o registro e o vídeo. Tente formatá-lo. Se os problemas persistirem, substitua o cartão SD.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Módulo de laser/corte conectado ao cabeçote da ferramenta. O processo de secagem foi interrompido automaticamente.": []
@@ -1813,7 +1813,7 @@
       "Defeitos na primeira camada foram detectados. Se os defeitos forem aceitáveis, clique no botão “Continuar” para retomar o trabalho de impressão.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "O filamento purgado se acumulou na calha de resíduos, o que pode causar uma colisão na cabeça da ferramenta.": []
@@ -3066,7 +3066,7 @@
       "A velocidade do ventilador do bico está lenta. Ele pode estar preso e precisa ser limpo.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "A frequência do sensor de força de extrusão é muito baixa. O bocal pode não estar instalado ou o dissipador de calor do bocal pode estar muito longe do sensor.": [
@@ -3221,7 +3221,7 @@
       "Foi detectado um salto anômalo nos dados do sensor de força de extrusão do extrusor direito, possivelmente causado por mau contato do sensor ou sensor com defeito.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "A frequência do sensor de força de extrusão da extrusora esquerda é muito baixa. O sensor pode estar instalado muito longe ou pode estar solto.": []
@@ -3720,7 +3720,7 @@
       "Módulo laser detectado. Instale o bico corretamente para garantir a calibração adequada da montagem do módulo laser.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "O pipeline de mídia está com defeito. Reinicie a impressora. Se várias tentativas falharem, entre em contato com o serviço de atendimento ao cliente.": []
@@ -3729,13 +3729,13 @@
       "A câmera USB não está conectada. Verifique a conexão do cabo da câmera de vídeo.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "Não há espaço suficiente na unidade flash USB; limpe algum espaço.": [
@@ -3770,7 +3770,7 @@
       "Não é possível gravar fotografias com lapso de tempo sem o cartão microSD inserido.": []
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "Falha na conexão com a Internet. Verifique a conexão de rede.": []
@@ -3865,31 +3865,31 @@
       "Alguns módulos externos são incompatíveis com a versão de firmware da impressora, o que pode afetar o funcionamento normal. Acesse a página &quot;Firmware&quot; enquanto estiver conectado à internet para atualizar.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "A capacidade da unidade flash USB é insuficiente para armazenar em cache os arquivos de impressão.": [
@@ -3903,7 +3903,7 @@
       "As informações do usuário expiraram, faça login novamente.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "Foi detectada uma degradação no desempenho do cartão MicroSD. Isso pode afetar trabalhos de impressão, registros e gravações de vídeo. Tente formatar ou trocar o cartão MicroSD.": []
@@ -3999,7 +3999,7 @@
       "A etiqueta RFID no AMS4 Slot4 não pode ser identificada.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "A câmera BirdsEye não está instalada. Desligue a impressora e instale a câmera.": []
@@ -4062,19 +4062,19 @@
       "Falha na verificação do comando MQTT. Atualize o Studio (incluindo o plugin de rede) ou o Handy para a versão mais recente, reinicie o software e tente novamente.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "A câmera BirdsEye está com defeito. Tente reiniciar o dispositivo. Se o problema persistir após várias reinicializações, verifique o status da conexão da câmera ou entre em contato com o suporte ao cliente.": []
@@ -4116,7 +4116,7 @@
       "Falha na autenticação do kit de lapso de tempo. Reconecte o cabo ou reinicie a impressora.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "O dispositivo está no estado de engenharia, preste atenção aos assuntos relacionados à segurança da informação.": []
@@ -4134,40 +4134,40 @@
       "A câmera Live View não está no lugar; verifique a conexão do hardware.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "A encadernação da câmera Toolhead falhou. Verifique as conexões do hardware e dos cabos.": []
@@ -4182,40 +4182,40 @@
       "A câmera Live View não está conectada. Verifique as conexões do hardware e dos cabos.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Erro no número de série do módulo laser": []
@@ -4260,7 +4260,7 @@
       "Falha na certificação AMS C. Reconecte o cabo ou reinicie a impressora.": []
     },
     "0503000000030027": {
-      "unknown": []
+      "": []
     },
     "0503040000010044": {
       "O firmware do AMS D não corresponde à impressora. Atualize-o na página “Firmware”.": []
@@ -10556,7 +10556,7 @@
       "A calibração da câmera Live View falhou e o número de série da câmera Liveview não pode ser lido. Entre em contato com a equipe de suporte ao cliente.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "A câmera Micro Lidar está com defeito. Consulte o Wiki para solucionar problemas.": [],
@@ -10575,22 +10575,22 @@
       "A câmera do bocal está com defeito. Se esse problema ocorrer várias vezes durante a impressão, entre em contato com o suporte ao cliente.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "A lente da câmera do bocal está suja, o que pode afetar a funcionalidade de monitoramento de IA. Limpe a superfície da lente da câmera do bocal o mais rápido possível.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "A temperatura da câmera Nozzle está muito alta, fazendo com que o recurso de detecção de IA seja pausado. O recurso será retomado automaticamente quando a temperatura voltar ao normal.": []
@@ -11299,7 +11299,7 @@
       "O filamento AMS3 Slot3 pode ser quebrado no tubo de PTFE.": []
     },
     "1202220000020004": {
-      "O filamento AMS3 Slot3 pode estar quebrado no cabeçote da ferramenta.": _]
+      "O filamento AMS3 Slot3 pode estar quebrado no cabeçote da ferramenta.": []
     },
     "1202220000020005": {
       "O filamento do AMS3 Slot3 acabou e a purga do filamento antigo ocorreu de forma anormal; verifique se o filamento está preso no cabeçote.": []
@@ -11322,7 +11322,7 @@
     "1202230000020003": {
       "O filamento AMS3 Slot4 pode ser quebrado no tubo de PTFE.": []
     },
-$   "1202230000020004": {
+    "1202230000020004": {
       "O filamento AMS3 Slot4 pode estar quebrado no cabeçote da ferramenta.": []
     },
     "1202230000020005": {
@@ -17711,7 +17711,7 @@ $   "1202230000020004": {
       "A posição do hotend esquerdo é anormal durante a impressão. Verifique se o bloqueador de fluxo risca o modelo impresso.": []
     },
     "18FE800000020003": {
-      "unknown": []
+      "": []
     },
     "18FE810000010001": {
       "O motor de comutação da extrusora está funcionando de forma anormal. Verifique se o cabo de conexão está solto.": []

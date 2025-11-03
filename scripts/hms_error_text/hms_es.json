@@ -572,7 +572,7 @@
       "Se detectó que el archivo de impresión no está disponible. Confirme si se ha quitado el dispositivo de almacenamiento.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "El archivo gcode no es coherente con el modelo de impresora actual. ¿Continuar?": []
@@ -772,11 +772,11 @@
       ]
     },
     "0500C011": {
+      "": [],
       "El rendimiento de la tarjeta SD se ha reducido, lo que puede afectar la impresión, el registro y la grabación de vídeo. Intente formatearla. Si el problema persiste, reemplace la tarjeta SD.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Módulo láser/cortador conectado al cabezal. El proceso de secado se ha detenido automáticamente.": []
@@ -1825,7 +1825,7 @@
       "Se detectaron defectos en la primera capa. Si los defectos son aceptables, haga clic en el botón «Reanudar» para reanudar el trabajo de impresión.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "El filamento purgado se ha acumulado en el conducto de desagüe, lo que puede provocar una colisión en el cabezal de la herramienta.": []
@@ -3078,7 +3078,7 @@
       "La velocidad del ventilador de la boquilla es lenta. Puede que esté atascado y necesite limpieza.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "El valor del sensor de fuerza de extrusión es bajo, la boquilla parece no estar instalada.": [],
@@ -3233,7 +3233,7 @@
       "Se ha detectado un salto anómalo en los datos del extruder extrusion force sensor derecho, posiblemente causado por un mal contacto del sensor o un sensor defectuoso.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "La frecuencia del sensor de fuerza de extrusión del extrusor izquierdo es demasiado baja. Es posible que el sensor esté instalado demasiado lejos o que esté suelto.": []
@@ -3729,7 +3729,7 @@
       "Error de comunicación entre el motor del cuarto eje del láser y el sensor de posición. Si el reinicio falla, contacte con atención al cliente.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "El canal de medios no funciona correctamente. Reinicie la impresora. Si varios intentos fallan, póngase en contacto con el servicio de atención al cliente.": []
@@ -3738,13 +3738,13 @@
       "La cámara en tiempo real no está conectada. Por favor, verifique las conexiones de hardware y los cables.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "No hay suficiente espacio en la tarjeta MicroSD; por favor, libere algo de espacio.": [],
@@ -3779,7 +3779,7 @@
       ]
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "No se pudo conectar a Internet. Compruebe la conexión de red.": []
@@ -3874,31 +3874,31 @@
       "Algunos módulos no son compatibles con la versión del firmware de la impresora, lo que puede afectar a su uso. Vaya a la página «Firmware» para actualizarlo después de conectarse a Internet, o puede actualizarlo sin conexión, según la wiki.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "La capacidad de la tarjeta SD no es suficiente para almacenar en caché archivos de impresión.": [],
@@ -3912,7 +3912,7 @@
       "La información del usuario ha caducado. Vuelva a iniciar sesión.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "Se ha detectado una degradación del rendimiento de la tarjeta microSD. Puede afectar a los trabajos de impresión, los registros y las grabaciones de vídeo. Intente formatear o cambiar la tarjeta microSD.": []
@@ -4011,7 +4011,7 @@
       "No se puede identificar la etiqueta RFID en la ranura 4 del AMS D.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "La cámara BirdsEye no está instalada. Apague la impresora y, a continuación, instale la cámara.": []
@@ -4074,19 +4074,19 @@
       "Error en la verificación del comando MQTT. Actualice Studio (incluido el complemento de red) o Handy a la última versión, reinicie el software e inténtelo de nuevo.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "La cámara BirdEye no funciona correctamente. Intente reiniciar el dispositivo. Si el problema persiste después de varios reinicios, comprueba el estado de la conexión de la cámara o ponte en contacto con el servicio de atención al cliente.": []
@@ -4128,7 +4128,7 @@
       "Error en la autenticación del kit de time-lapse. Vuelva a conectar el cable o reinicie la impresora.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "El dispositivo está en estado de ingeniería, por favor preste atención a los asuntos relacionados con la seguridad de la información.": []
@@ -4146,40 +4146,40 @@
       "La cámara AI Live View no está en su lugar; verifique la conexión del hardware.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "Error en la vinculación de la cámara del cabezal. Verifique las conexiones del hardware y del cable.": []
@@ -4194,40 +4194,40 @@
       "La cámara Live View no está conectada. Verifique el hardware y las conexiones de los cables.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Error de número de serie del módulo láser": []
@@ -10565,7 +10565,7 @@
       "La calibración de la cámara Live View falló y no se puede leer el número de serie de la cámara Liveview. Ponte en contacto con el equipo de atención al cliente.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "La cámara Micro Lidar no funciona correctamente. Consulte la Wiki para obtener información sobre la solución de problemas.": [],
@@ -10584,22 +10584,22 @@
       "La cámara de la boquilla no funciona correctamente. Si este problema se produce varias veces durante la impresión, póngase en contacto con el servicio de atención al cliente.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "La lente de la cámara con boquilla está sucia, lo que puede afectar a la funcionalidad de monitoreo de la IA. Limpie la superficie de la lente de la cámara con boquilla lo antes posible.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "La temperatura de la cámara del inyector es demasiado alta, lo que hace que la función de detección de IA se detenga. La función se reanudará automáticamente una vez que la temperatura vuelva a la normalidad.": []
@@ -10720,7 +10720,7 @@
       "Es posible que se hayan caído algunos objetos o que el extrusor no esté extruyendo con normalidad. Verifique y decida si debe detener la impresión.": []
     },
     "0C00030000030010": {
-      "unknown": []
+      "": []
     },
     "0C0003000003001A": {
       "La detección de objetos extraños ha fallado, posiblemente debido a una interrupción manual (por ejemplo, al hacer clic en «Detener»). Si no es así, intenta reiniciar la impresora o actualizar el firmware.": [

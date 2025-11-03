@@ -572,7 +572,7 @@
       "Le fichier d'impression n'est pas disponible. Vérifiez si le support de stockage a été retiré.": []
     },
     "05008030": {
-      "unknown": []
+      "": []
     },
     "05008036": {
       "Votre fichier découpé n'est pas compatible avec le modèle d'imprimante actuel. Poursuivre ?": []
@@ -772,11 +772,11 @@
       ]
     },
     "0500C011": {
+      "": [],
       "Les performances de la carte SD se sont dégradées, ce qui peut affecter l'impression, l'enregistrement et la vidéo. Essayez de la formater. Si les problèmes persistent, remplacez la carte SD.": [
         "P1P",
         "P1S"
-      ],
-      "unknown": []
+      ]
     },
     "0500C032": {
       "Module laser/découpe connecté à la tête d'outil. Le processus de séchage a été automatiquement arrêté.": []
@@ -1825,7 +1825,7 @@
       "Des défauts de première couche ont été détectés. Si les défauts sont acceptables, cliquez sur le bouton « Reprendre » pour continuer l'impression.": []
     },
     "0C008002": {
-      "unknown": []
+      "": []
     },
     "0C008005": {
       "Le filament purgé s'est amassé dans la goulotte d'évacuation, ce qui peut provoquer une collision de la tête de l'outil.": []
@@ -3078,7 +3078,7 @@
       "La vitesse du ventilateur de la buse est faible. Il est peut-être coincé et nécessite un nettoyage.": []
     },
     "0300180000000000": {
-      "unknown": []
+      "": []
     },
     "0300180000010001": {
       "La fréquence du capteur de force d'extrusion est trop faible. La buse n'est peut-être pas installée ou le dissipateur thermique de la buse est peut-être trop éloigné du capteur.": [
@@ -3233,7 +3233,7 @@
       "Une variation anormale a été détectée dans les données du capteur de force d’extrusion de l’extrudeur droit, possiblement due à un mauvais contact du capteur ou à un capteur défectueux.": []
     },
     "0300260000000000": {
-      "unknown": []
+      "": []
     },
     "0300260000010001": {
       "La fréquence du capteur de force d'extrusion de l'extrudeur gauche est trop faible. Le capteur est peut-être installé trop loin ou il est peut-être mal fixé.": []
@@ -3729,7 +3729,7 @@
       "Erreur de communication entre le moteur du quatrième axe laser et le capteur de position. En cas d'échec du redémarrage, veuillez contacter le service client.": []
     },
     "050001000001000A": {
-      "unknown": []
+      "": []
     },
     "0500010000020001": {
       "Erreur de lien média. Veuillez redémarrer la machine. Si plusieurs tentatives échouent, veuillez contacter le service clientèle.": []
@@ -3738,13 +3738,13 @@
       "La caméra Live View n'est pas connectée. Vérifiez le matériel et les connexions des câbles.": []
     },
     "0500010000020003": {
-      "unknown": []
+      "": []
     },
     "0500010000020008": {
-      "unknown": []
+      "": []
     },
     "0500010000020009": {
-      "unknown": []
+      "": []
     },
     "0500010000030004": {
       "Espace insuffisant sur la carte microSD, veuillez libérer de l'espace.": [],
@@ -3774,7 +3774,7 @@
       "Impossible d'enregistrer des photos en time-lapse sans carte SD.": []
     },
     "0500010000030009": {
-      "unknown": []
+      "": []
     },
     "0500020000020001": {
       "Impossible de se connecter à Internet. Vérifiez la connexion réseau.": []
@@ -3869,31 +3869,31 @@
       "Certains modules ne sont pas compatibles avec la version du microprogramme de l'imprimante, ce qui peut affecter son utilisation. Veuillez vous rendre sur la page « Micrologiciel » pour effectuer la mise à jour après vous être connecté à Internet, ou vous pouvez effectuer la mise à jour hors ligne selon le wiki.": []
     },
     "0500030000020010": {
-      "unknown": []
+      "": []
     },
     "0500030000020011": {
-      "unknown": []
+      "": []
     },
     "0500030000020012": {
-      "unknown": []
+      "": []
     },
     "0500030000020013": {
-      "unknown": []
+      "": []
     },
     "0500030000020014": {
-      "unknown": []
+      "": []
     },
     "0500030000020015": {
-      "unknown": []
+      "": []
     },
     "0500030000020016": {
-      "unknown": []
+      "": []
     },
     "0500030000020017": {
-      "unknown": []
+      "": []
     },
     "0500030000020018": {
-      "unknown": []
+      "": []
     },
     "0500030000020020": {
       "La capacité de la carte SD est insuffisante pour mettre en cache les fichiers d'impression.": [],
@@ -3907,7 +3907,7 @@
       "Les informations de l'utilisateur ont expiré, veuillez-vous reconnecter.": []
     },
     "0500030000030007": {
-      "unknown": []
+      "": []
     },
     "0500030000030022": {
       "Une dégradation des performances de la carte SD a été détectée. Cela peut affecter les impression, les journaux et les enregistrements vidéo. Formatez ou changez la carte SD.": []
@@ -4006,7 +4006,7 @@
       "Le tag RFID du filament 4 AMS D ne peut pas être identifiée.": []
     },
     "0500040000020020": {
-      "unknown": []
+      "": []
     },
     "0500040000020030": {
       "La caméra BirdsEye n'est pas installée. Mettez l'imprimante hors tension, puis installez l'appareil photo.": []
@@ -4069,19 +4069,19 @@
       "La vérification de la commande MQTT a échoué. Mettez à jour Studio (y compris le plug-in réseau) ou Handy vers la dernière version, puis redémarrez le logiciel et réessayez.": []
     },
     "0500050000010008": {
-      "unknown": []
+      "": []
     },
     "0500050000010009": {
-      "unknown": []
+      "": []
     },
     "050005000001000A": {
-      "unknown": []
+      "": []
     },
     "050005000001000B": {
-      "unknown": []
+      "": []
     },
     "050005000001000C": {
-      "unknown": []
+      "": []
     },
     "050005000001000D": {
       "La caméra BirdsEye ne fonctionne pas correctement. Essaie de redémarrer l'appareil. Si le problème persiste après plusieurs redémarrages, vérifie l'état de connexion de la caméra ou contacte l'assistance clientèle.": []
@@ -4123,7 +4123,7 @@
       "Échec de l'authentification du kit time-lapse. Veuillez reconnecter le câble ou redémarrer l'imprimante.": []
     },
     "0500050000020030": {
-      "unknown": []
+      "": []
     },
     "0500050000030002": {
       "L'appareil est en mode ingénierie, veuillez prêter attention aux questions liées à la sécurité de l’information.": []
@@ -4141,40 +4141,40 @@
       "La caméra Live View n'est pas en place ; veuillez vérifier la connexion matérielle.": []
     },
     "0500060000020005": {
-      "unknown": []
+      "": []
     },
     "0500060000020006": {
-      "unknown": []
+      "": []
     },
     "0500060000020007": {
-      "unknown": []
+      "": []
     },
     "0500060000020008": {
-      "unknown": []
+      "": []
     },
     "0500060000020011": {
-      "unknown": []
+      "": []
     },
     "0500060000020012": {
-      "unknown": []
+      "": []
     },
     "0500060000020013": {
-      "unknown": []
+      "": []
     },
     "0500060000020014": {
-      "unknown": []
+      "": []
     },
     "0500060000020021": {
-      "unknown": []
+      "": []
     },
     "0500060000020022": {
-      "unknown": []
+      "": []
     },
     "0500060000020023": {
-      "unknown": []
+      "": []
     },
     "0500060000020024": {
-      "unknown": []
+      "": []
     },
     "0500060000020031": {
       "La caméra ToolHead n'est pas connectée. Vérifiez le matériel et les connexions des câbles.": []
@@ -4189,40 +4189,40 @@
       "La caméra Live View n'est pas connectée. Vérifiez le matériel et les connexions des câbles.": []
     },
     "0500060000020041": {
-      "unknown": []
+      "": []
     },
     "0500060000020042": {
-      "unknown": []
+      "": []
     },
     "0500060000020043": {
-      "unknown": []
+      "": []
     },
     "0500060000020044": {
-      "unknown": []
+      "": []
     },
     "0500060000020051": {
-      "unknown": []
+      "": []
     },
     "0500060000020052": {
-      "unknown": []
+      "": []
     },
     "0500060000020053": {
-      "unknown": []
+      "": []
     },
     "0500060000020054": {
-      "unknown": []
+      "": []
     },
     "0500060000020061": {
-      "unknown": []
+      "": []
     },
     "0500060000020062": {
-      "unknown": []
+      "": []
     },
     "05000600000200A0": {
-      "unknown": []
+      "": []
     },
     "05000600000200A1": {
-      "unknown": []
+      "": []
     },
     "0500400000010039": {
       "Erreur de numéro de série du module laser": []
@@ -4267,7 +4267,7 @@
       "La certification AMS C a échoué. Veuillez rebrancher le câble ou redémarrer l'imprimante.": []
     },
     "0503000000030027": {
-      "unknown": []
+      "": []
     },
     "0503040000010044": {
       "Le firmware de l'AMS D ne correspond pas à l'imprimante. Veuillez le mettre à jour sur la page 'Firmware'.": []
@@ -10563,7 +10563,7 @@
       "L'étalonnage de la caméra Live View a échoué et le numéro de série de la caméra Liveview ne peut pas être lu. Veuillez contacter l'équipe d'assistance à la clientèle.": []
     },
     "0C00010000010018": {
-      "unknown": []
+      "": []
     },
     "0C00010000020002": {
       "La caméra Micro Lidar ne fonctionne pas correctement. Veuillez consulter le Wiki pour la résolution des problèmes.": [],
@@ -10582,22 +10582,22 @@
       "La caméra de la buse fonctionne incorrectement. Si ce problème se produit plusieurs fois pendant l'impression, veuillez contacter le service clientèle.": []
     },
     "0C00010000020015": {
-      "unknown": []
+      "": []
     },
     "0C00010000020016": {
-      "unknown": []
+      "": []
     },
     "0C00010000020017": {
       "L'objectif de la caméra de la buse est sale, ce qui peut affecter la fonctionnalité de surveillance de l'IA. Veuillez nettoyer la surface de l'objectif de la caméra de la buse dès que possible.": []
     },
     "0C00010000020019": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001A": {
-      "unknown": []
+      "": []
     },
     "0C0001000002001B": {
-      "unknown": []
+      "": []
     },
     "0C0001000003000C": {
       "La température de la caméra de la buse est trop élevée, ce qui entraîne une pause de la fonction de détection de l'IA. La fonction reprendra automatiquement une fois que la température sera revenue à la normale.": []
