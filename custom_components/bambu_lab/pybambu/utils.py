@@ -8,7 +8,6 @@ import socket
 import re
 
 from datetime import datetime, timedelta, timezone
-from functools import cache
 from urllib3.exceptions import ReadTimeoutError
 from bs4 import BeautifulSoup
 from pathlib import Path
