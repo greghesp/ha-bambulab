@@ -8,7 +8,6 @@ import socket
 import re
 
 from datetime import datetime, timedelta, timezone
-from functools import cache
 from urllib3.exceptions import ReadTimeoutError
 from bs4 import BeautifulSoup
 from pathlib import Path
@@ -103,7 +102,6 @@ def get_current_stage(id) -> str:
     """Return the human-readable description for a stage action"""
     return CURRENT_STAGE_IDS.get(int(id), "unknown")
 
-@cache
 def get_HMS_error_text(error_code: str, device_type: Printers | str, preferred_language: str) -> str:
     """
     Return the human-readable description for an HMS error
@@ -122,7 +120,6 @@ def get_HMS_error_text(error_code: str, device_type: Printers | str, preferred_l
     """
     return _get_error_text("device_hms", error_code, device_type, preferred_language)
 
-@cache
 def get_print_error_text(error_code: str, device_type: Printers | str, preferred_language: str) -> str:
     """
     Return the human-readable description for a print error
@@ -141,7 +138,7 @@ def get_print_error_text(error_code: str, device_type: Printers | str, preferred
     """
     return _get_error_text("device_error", error_code, device_type, preferred_language)
 
-@cache
+@functools.lru_cache(maxsize=8)
 def _get_error_text(error_type: str, error_code: str, device_type: Printers | str, preferred_language: str) -> str:
     """
     Return the human-readable description for an error
@@ -174,7 +171,6 @@ def _get_error_text(error_type: str, error_code: str, device_type: Printers | st
 
     return 'unknown'
 
-@cache
 def _load_error_data(language: str) -> dict:
     filename = Path(__file__).parent / "hms_error_text" / f"hms_{language}.json.gz"
     if not filename.exists():
