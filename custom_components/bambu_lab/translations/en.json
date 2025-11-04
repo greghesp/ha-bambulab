@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Live View Disabled",
       "description": "{device} has live view disabled in the printer settings. Please enable this to use the camera features."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "MQTT Encryption Enabled",
+      "description": "{device} is cloud connected with mqtt encryption enabled. Only the light can be controlled by this integration. All other controls are unavailable. The printer must be set to developer lan mode in order to allow control from home assistant."
     }
   }
 }

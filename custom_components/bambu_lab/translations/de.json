@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Live View deaktiviert",
       "description": "Bei {device} ist die Live-Ansicht in den Druckereinstellungen deaktiviert. Bitte aktivieren Sie dies, um die Kamerafunktionen zu nutzen."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "MQTT-Verschlüsselung aktiviert",
+      "description": "{device} ist mit der Cloud verbunden und die MQTT-Verschlüsselung ist aktiviert. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Der Drucker muss auf den Entwickler-LAN-Modus eingestellt sein, um die Steuerung über den Heimassistenten zu ermöglichen."
     }
   }
 }

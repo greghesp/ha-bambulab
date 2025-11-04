@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "实时取景已禁用",
       "description": "{device} 在打印机设置中禁用了实时查看。请启用此功能以使用相机功能。"
+    },
+    "mqtt_encryption_enabled": {
+      "title": "启用 MQTT 加密",
+      "description": "{device} 已连接到云并启用了 mqtt 加密。这种集成只能控制光。所有其他控件均不可用。打印机必须设置为开发人员 LAN 模式才能允许家庭助理进行控制。"
     }
   }
 }

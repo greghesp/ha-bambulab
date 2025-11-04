@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Live View deaktiveret",
       "description": "{device} har live view deaktiveret i printerindstillingerne. Aktiver dette for at bruge kameraets funktioner."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "MQTT-kryptering aktiveret",
+      "description": "{device} er en sky forbundet med mqtt-kryptering aktiveret. Kun lyset kan styres af denne integration. Alle andre kontroller er ikke tilgængelige. Printeren skal indstilles til udvikler-lan-tilstand for at tillade kontrol fra hjemmeassistenten."
     }
   }
 }

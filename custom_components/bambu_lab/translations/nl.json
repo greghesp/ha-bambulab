@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Liveweergave uitgeschakeld",
       "description": "Voor {device} is liveweergave uitgeschakeld in de printerinstellingen. Schakel dit in om de camerafuncties te gebruiken."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "MQTT-codering ingeschakeld",
+      "description": "{device} is met de cloud verbonden en mqtt-codering is ingeschakeld. Alleen het licht kan door deze integratie worden aangestuurd. Alle andere bedieningselementen zijn niet beschikbaar. De printer moet worden ingesteld op de Developer LAN-modus om bediening vanuit de thuisassistent mogelijk te maken."
     }
   }
 }

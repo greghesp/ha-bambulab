@@ -102,15 +102,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
         
         if event == "event_printer_bambu_authentication_failed":
-            self._report_authentication_issue();
+            self._report_authentication_issue()
         
-        if event == "event_printer_no_external_storage":
-            self._report_no_external_storage_issue();
+        elif event == "event_printer_no_external_storage":
+            self._report_no_external_storage_issue()
 
-        if event == "event_printer_live_view_disabled":
-            self._report_live_view_disabled_issue();
+        elif event == "event_printer_live_view_disabled":
+            self._report_live_view_disabled_issue()
+        
+        elif event == "event_printer_mqtt_encryption_enabled":
+            self._report_encryption_enabled_issue()
 
-        if event == "event_printer_info_update":
+        elif event == "event_printer_info_update":
             self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
                 self._update_external_spool_info()
@@ -882,6 +885,31 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             is_fixable=False,
             severity=issue_registry.IssueSeverity.WARNING,
             translation_key="live_view_disabled",
+            translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
+        )
+
+    def _report_encryption_enabled_issue(self):
+        issue_id = f"mqtt_encryption_enabled_{self.get_model().info.serial}"
+
+        # Check if the issue already exists
+        registry = issue_registry.async_get(self._hass)
+        existing_issue = registry.async_get_issue(
+            domain=DOMAIN,
+            issue_id=issue_id,
+        )
+        if existing_issue is not None:
+            # Issue already exists, no need to create it again
+            return
+
+        # Report the issue
+        LOGGER.debug("Creating issue for mqtt encryption enabled")
+        issue_registry.async_create_issue(
+            hass=self._hass,
+            domain=DOMAIN,
+            issue_id=issue_id,
+            is_fixable=False,
+            severity=issue_registry.IssueSeverity.WARNING,
+            translation_key="mqtt_encryption_enabled",
             translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
 
