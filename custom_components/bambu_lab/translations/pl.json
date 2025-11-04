@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Podgląd na żywo wyłączony",
       "description": "{device} ma wyłączony podgląd na żywo w ustawieniach drukarki. Włącz tę opcję, aby móc korzystać z funkcji aparatu."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "Szyfrowanie MQTT włączone",
+      "description": "{device} ma połączenie z chmurą i włączone szyfrowanie mqtt. Dzięki tej integracji można kontrolować wyłącznie światło. Wszystkie inne elementy sterujące są niedostępne. Aby umożliwić sterowanie z poziomu asystenta domowego, drukarka musi być ustawiona na tryb LAN programisty."
     }
   }
 }

@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Vista en vivo deshabilitada",
       "description": "{device} tiene la vista en vivo deshabilitada en la configuración de la impresora. Habilite esto para utilizar las funciones de la cámara."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "Cifrado MQTT habilitado",
+      "description": "{device} está conectado a la nube con el cifrado mqtt habilitado. Sólo la luz puede ser controlada por esta integración. Todos los demás controles no están disponibles. La impresora debe estar configurada en modo LAN de desarrollador para permitir el control desde el asistente doméstico."
     }
   }
 }

@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Živé zobrazenie je vypnuté",
       "description": "{device} má v nastaveniach tlačiarne zakázaný živý náhľad. Ak chcete používať funkcie fotoaparátu, povoľte to."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "Šifrovanie MQTT je povolené",
+      "description": "{device} je pripojené ku cloudu s povoleným šifrovaním mqtt. Touto integráciou je možné ovládať iba svetlo. Všetky ostatné ovládacie prvky sú nedostupné. Tlačiareň musí byť nastavená na režim vývojárskej siete, aby bolo možné ovládať z domáceho asistenta."
     }
   }
 }

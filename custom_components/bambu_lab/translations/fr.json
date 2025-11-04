@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Affichage en direct désactivé",
       "description": "{device} a l'affichage en direct désactivé dans les paramètres de l'imprimante. Veuillez l'activer pour utiliser les fonctionnalités de l'appareil photo."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "Cryptage MQTT activé",
+      "description": "{device} est connecté au cloud avec le cryptage mqtt activé. Seule la lumière peut être contrôlée par cette intégration. Tous les autres contrôles ne sont pas disponibles. L'imprimante doit être réglée en mode LAN développeur afin de permettre le contrôle depuis Home Assistant."
     }
   }
 }

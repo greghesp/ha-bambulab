@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Visualització en directe desactivada",
       "description": "{device} té la visualització en directe desactivada a la configuració de la impressora. Activeu-ho per utilitzar les funcions de la càmera."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "Encriptació MQTT habilitat",
+      "description": "{device} està connectat al núvol amb el xifratge mqtt habilitat. Només la llum es pot controlar mitjançant aquesta integració. Tots els altres controls no estan disponibles. La impressora s'ha de configurar en mode LAN de desenvolupador per permetre el control des de l'assistent domèstic."
     }
   }
 }

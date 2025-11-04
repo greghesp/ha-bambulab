@@ -867,6 +867,10 @@
     "live_view_disabled": {
       "title": "Visualizzazione dal vivo disabilitata",
       "description": "{device} ha la visualizzazione live disabilitata nelle impostazioni della stampante. Abilitalo per utilizzare le funzionalità della fotocamera."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "Crittografia MQTT abilitata",
+      "description": "{device} è connesso al cloud con crittografia mqtt abilitata. Solo la luce può essere controllata da questa integrazione. Tutti gli altri controlli non sono disponibili. La stampante deve essere impostata sulla modalità lan sviluppatore per consentire il controllo dall'assistente domestico."
     }
   }
 }

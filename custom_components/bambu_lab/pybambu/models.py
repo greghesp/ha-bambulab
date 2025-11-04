@@ -3202,22 +3202,30 @@ class PrintFun:
     _value: str
     _int_value: int
     _encryption_enabled: bool
+    _fired_encryption_enabled_event: bool
     
     def __init__(self, client):
         self._value = ""
         self._client = client
         self._encryption_enabled = False
         self._int_value: int = 0
+        self._fired_encryption_enabled_event = False
 
     def print_update(self, data: dict) -> bool:
         old_data = f"{self.__dict__}"
         self._value = data.get("fun", str(self._value))
         self._int_value = int(self._value, 16) if self._value else 0
+        self._encryption_enabled = (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+        if self._encryption_enabled:
+            if not self._fired_encryption_enabled_event:
+                self._fired_encryption_enabled_event = True
+                self._client.callback("event_printer_mqtt_encryption_enabled")
+
         return (old_data != f"{self.__dict__}")
 
     @property
     def mqtt_signature_required(self) -> bool:
-        return (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+        return self._encryption_enabled
     
 
 @dataclass
