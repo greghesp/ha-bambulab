@@ -1699,7 +1699,7 @@ class PrintJob:
                             # Filament count should be greater than the zero-indexed filament ID
                             if filament_count > filament_index:
                                 ams_index = self.ams_mapping[filament_index]
-                                if ams_index >= 16: # BUG - This will not yet handle AMS HT devices
+                                if ams_index < 16: # BUG - This will not yet handle AMS HT devices
                                     # We add the filament as you can map multiple slicer filaments to the same physical filament.
                                     self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
                                     self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
