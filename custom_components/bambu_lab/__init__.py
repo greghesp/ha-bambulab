@@ -1,7 +1,6 @@
 """The Bambu Lab component."""
 
 import asyncio
-import json
 import os
 import mimetypes
 from datetime import datetime
@@ -305,8 +304,11 @@ class EnsureCacheFileAPIView(HomeAssistantView):
                 return web.json_response({"error": f"Printer with serial {serial} not found"}, status=404)
 
             model = coordinator.get_model()
-            BASE_CACHE_DIR = "/config/www/media/ha-bambulab/"
-            local_path = os.path.join(BASE_CACHE_DIR, cache_path)
+            # First get the cached path from the print UX. This may be for a different printer (i.e. it already
+            # includes the serial) so we need to allow for that.
+            base_cache_path = Path(coordinator.get_file_cache_directory()).parent
+            local_path = str(base_cache_path / cache_path)
+
             # local_path is of form '/config/www/media/ha-bambulab/<SERIAL>/prints/Fidgets_v14.3mf'
             #                    or '/config/www/media/ha-bambulab/<SERIAL>/prints/cache/Fidgets_v14.3mf'
             # Depending where the print source chose to put the file onto the printer.
