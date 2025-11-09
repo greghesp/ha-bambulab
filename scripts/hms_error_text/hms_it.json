@@ -505,6 +505,9 @@
     "05004044": {
       "Malfunzionamento della fotocamera BirdsEye: ti preghiamo di contattare l’assistenza clienti.": []
     },
+    "05004045": {
+      "Controllo hotend in corso. Questa operazione è temporaneamente non disponibile. Attendi.": []
+    },
     "05004050": {
       "Errore rilevato sulla scheda di stampa.": []
     },

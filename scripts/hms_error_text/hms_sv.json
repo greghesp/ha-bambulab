@@ -505,6 +505,9 @@
     "05004044": {
       "BirdsEye kamera fel: kontakta kundsupport.": []
     },
+    "05004045": {
+      "Kontroll av hotend pågår. Den här åtgärden är tillfälligt otillgänglig. Vänta.": []
+    },
     "05004050": {
       "Fel upptäckt på utskrifts kortet.": []
     },
@@ -4247,6 +4250,9 @@
     },
     "0502050000010014": {
       "AMS C certifiering misslyckades. Anslut kabeln igen eller starta om printern.": []
+    },
+    "0503000000030027": {
+      "": []
     },
     "0503040000010044": {
       "AMS D firmware matchar inte printern. Uppgradera den på sidan ”Firmware”.": []

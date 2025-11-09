@@ -505,6 +505,9 @@
     "05004044": {
       "Dysfonctionnement de la caméra BirdsEye : veuillez contacter le service clientèle.": []
     },
+    "05004045": {
+      "Vérification du Hotend en cours. Cette opération est temporairement indisponible. Veuillez patienter.": []
+    },
     "05004050": {
       "Une erreur a été détectée sur la carte d'impression.": []
     },

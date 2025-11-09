@@ -87,6 +87,9 @@
     "03004052": {
       "Blade Z-axis homing failed": []
     },
+    "03004057": {
+      "Z-axis step loss detected. The task has stopped. Please check if there are any obstructions beneath the heatbed.": []
+    },
     "03004066": {
       "Calibration of motion precision failed.": []
     },
@@ -251,6 +254,12 @@
     },
     "03008055": {
       "The module mounted on the toolhead does not match the task. Please install the correct module.": []
+    },
+    "03008057": {
+      "The rotary attachment is disconnected. Please ensure it is properly installed and the cable is securely plugged in.": []
+    },
+    "03008058": {
+      "The rotary attachment is detected. Please remove it before continuing.": []
     },
     "03008061": {
       "The mode of Airflow System failed to activate; check the air door condition.": []
@@ -505,6 +514,9 @@
     "05004044": {
       "BirdsEye Camera malfunction: please contact customer support.": []
     },
+    "05004045": {
+      "Hotend check in progress. This operation is temporarily unavailable. Please wait.": []
+    },
     "05004050": {
       "Error detected on the print board.": []
     },
@@ -554,10 +566,10 @@
       "The device cannot detect the Air Pump.  Please reconnect the module cable or restart the printer.": []
     },
     "050040A0": {
-      "The device cannot detect Laser Fourth Axis.  Please reconnect the module cable or restart the printer.": []
+      "The Rotary Attachment module is not detected. Please reconnect the cable or restart the printer.": []
     },
     "050040A1": {
-      "The device cannot detect Fire Extinguisher.  Please reconnect the module cable or restart the printer.": []
+      "The Auto Fire Extinguishing System is not detected.  Please reconnect the module cable or restart the printer.": []
     },
     "050040A3": {
       "AMS(or AMS lite) A communication is abnormal. Please reconnect the module cable or restart the printer.": []
@@ -585,6 +597,9 @@
     },
     "05008041": {
       "The filament in hotend is too cold. Extrusion may damage the extruder. Still feeding in/out the filament?": []
+    },
+    "05008048": {
+      "The module on the toolhead is not calibrated. Please cancel the task to perform calibration or switch to a calibrated module.": []
     },
     "05008051": {
       "Detected build plate is not the same as the Gcode file. Please adjust slicer settings or use the correct plate.": []
@@ -3227,7 +3242,7 @@
       "The frequency of the extrusion force sensor of the right extruder is too high. The sensor may be damaged, or the nozzle heat sink may be too close to the sensor.": []
     },
     "0300250000010008": {
-      "The right nozzle touches the heating bed abnormally. Please check whether there is filament residue on the nozzle or foreign matter where the nozzle touches the bed.": []
+      "The right nozzle touches the heating bed abnormally. Please check whether there is filament residue on the nozzle, foreign matter at the point where the nozzle contacts the bed, or severe deformation of the flow blocker.": []
     },
     "030025000001000A": {
       "Nozzle offset calibration failed. Filament sticks to the nozzle, which may affect print quality. Please clean the nozzle and try again.": []
@@ -3260,7 +3275,7 @@
       "The frequency of the extrusion force sensor of the left extruder is too high. The sensor may be installed too close, or the sensor may be loose.": []
     },
     "0300260000010008": {
-      "The left nozzle touches the heating bed abnormally. Please check whether there is filament residue on the nozzle or foreign matter where the nozzle touches the bed.": []
+      "The left nozzle touches the heating bed abnormally. Please check whether there is filament residue on the nozzle, foreign matter at the point where the nozzle contacts the bed, or severe deformation of the flow blocker.": []
     },
     "030026000001000B": {
       "Nozzle presence detection failed: Left extruder nozzle not installed or improperly installed.": []
@@ -3534,7 +3549,7 @@
       "The front door is open.": []
     },
     "0300970000010001": {
-      "The top cover seems to be open; the task has been paused": []
+      "The top cover seems to be open; the task has been paused.": []
     },
     "0300970000010002": {
       "The top cover Hall sensor (Front Right) is abnormal; please check whether the connection wire is loose.": []
@@ -3723,13 +3738,16 @@
       "The fire extinguisher motor reset is jammed. Please gently turn the emergency handwheel left and right until the resistance decreases. Then, power off the fire extinguisher and turn it back on.": []
     },
     "0300D70000020001": {
-      "Laser fourth axis is not connected": []
+      "The rotary attachment is disconnected. Please ensure it is properly installed and the cable is securely plugged in.": []
+    },
+    "0300D70000020002": {
+      "The rotary attachment is detected. Please remove it before continuing.": []
     },
     "0300D80000010001": {
-      "Laser fourth axis motor has an open-circuit. There may be a loose connection, or the motor may have failed.": []
+      "The rotary attachment is disconnected. Please ensure it is properly installed and the cable is securely plugged in.": []
     },
     "0300D80000010002": {
-      "Laser fourth axis motor error. Please power off and then power on to restart the laser fourth axis.": []
+      "The rotary attachment motor error. Please power off and then power on to restart the rotary attachment.": []
     },
     "0300D90000020001": {
       "Communication error between the laser fourth axis motor and the position sensor. If restarting fails, please contact customer support.": []
@@ -4134,10 +4152,10 @@
       "Cutting module certification failed. Please reconnect the cable or restart the printer.": []
     },
     "0500050000010018": {
-      "Laser Fourth Axis module certification failed. Please reconnect the module cable or restart the printer.": []
+      "The Rotary Attachment module certification failed. Please reconnect the cable or restart the printer.": []
     },
     "0500050000010019": {
-      "Fire Extinguisher module certification failed. Please reconnect the module cable or restart the printer.": []
+      "The Auto Fire Extinguishing System certification failed. Please reconnect the module cable or restart the printer.": []
     },
     "0500050000010021": {
       "Time-lapse kit authentication failed. Please reconnect the cable or restart the printer.": []
@@ -10786,7 +10804,7 @@
       "The exposure parameters of the BirdsEye Camera are not effective; please try again.": []
     },
     "0C00040000010014": {
-      "Cutting Protection Base not detected, whichmay lead to heatbed damage. Please place it and continue.": []
+      "Cutting Protection Base not detected, which may lead to heatbed damage. Please place it and continue.": []
     },
     "0C00040000010015": {
       "Laser Protective Insert not detected. Please place it and continue.": []

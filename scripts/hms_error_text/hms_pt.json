@@ -502,6 +502,9 @@
     "05004044": {
       "Avaria da câmera BirdsEye: entre em contato com o suporte ao cliente.": []
     },
+    "05004045": {
+      "Verificação do Hotend em andamento. Esta operação está temporariamente indisponível. Aguarde.": []
+    },
     "05004050": {
       "Erro detectado na placa de impressão.": []
     },

@@ -505,6 +505,9 @@
     "05004044": {
       "Fehlfunktion der BirdsEye-Kamera: Bitte wenden Sie sich an den Support.": []
     },
+    "05004045": {
+      "Hotend-Prüfung läuft. Dieser Vorgang ist vorübergehend nicht verfügbar. Bitte warten Sie.": []
+    },
     "05004050": {
       "Fehler auf der Druckplatte entdeckt.": []
     },
@@ -4261,6 +4264,9 @@
     },
     "0502050000010014": {
       "AMS C: Zertifizierung ist fehlgeschlagen. Bitte schließen Sie das Kabel erneut an oder starten Sie den Drucker neu.": []
+    },
+    "0503000000030027": {
+      "": []
     },
     "0503040000010044": {
       "AMS D: Die Firmware passt nicht zum Drucker. Bitte aktualisieren Sie diese auf der Seite „Firmware“.": []

@@ -505,6 +505,9 @@
     "05004044": {
       "Fallo de funcionamiento de la cámara BirdsEye: póngase en contacto con el servicio de atención al cliente.": []
     },
+    "05004045": {
+      "Comprobación del hotend en curso. Esta operación no está disponible temporalmente. Por favor, espere.": []
+    },
     "05004050": {
       "Se ha detectado un error en la placa de impresión.": []
     },
@@ -4270,6 +4273,9 @@
     },
     "0502050000010014": {
       "La certificación AMS C falló. Vuelva a conectar el cable o reinicie la impresora.": []
+    },
+    "0503000000030027": {
+      "": []
     },
     "0503040000010044": {
       "El firmware del AMS D no coincide con el de la impresora. Actualízalo en la página «Firmware».": []
