@@ -148,6 +148,9 @@ def main():
     for lang in get_languages():
         all_devices = {}
         for printer_type, serial_prefix in _DEVICE_TYPES.items():
+            if lang == "zh_cn" or lang == "zh-Hans":
+                all_devices[printer_type] = get_error_text("zh-cn", printer_type, serial_prefix)
+                continue
             all_devices[printer_type] = get_error_text(lang, printer_type, serial_prefix)
 
         merged = merge_device_errors(all_devices)
