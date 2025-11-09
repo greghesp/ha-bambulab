@@ -1933,6 +1933,16 @@ class PrintJob:
         return await loop.run_in_executor(None, self._sync_ftp_upload, local_path, remote_path, progress_callback)
 
     def _sync_ftp_upload(self, local_path: str, remote_path: str, progress_callback=None) -> bool:
+        try:
+            # Before we upload, make sure the file is present in this printer's local cache directory
+            relative_path = remote_path.lstrip('/')
+            this_printer_cache_file_path = Path(self._client.cache_path) / "prints" / relative_path
+            this_printer_cache_file_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(local_path, this_printer_cache_file_path)
+            LOGGER.debug(f"Copied file to local cache: {this_printer_cache_file_path}")
+        except Exception as e:
+            LOGGER.error(f"Failed to copy file to local cache: {e}")
+
         ftp = None
         try:
             ftp = self._client.ftp_connection()
@@ -1971,18 +1981,6 @@ class PrintJob:
                 ftp.storbinary_no_unwrap(f'STOR {remote_path}', f, blocksize=chunk_size, callback=internal_progress_callback)
 
             LOGGER.debug(f"FTP upload: Upload completed successfully")
-
-            # After successful upload, copy to cache path
-            # Remove leading slash from remote_path for relative path
-            relative_path = remote_path.lstrip('/')
-            cache_dir = os.path.join(self._client.cache_path, "prints")
-            cache_file_path = os.path.join(cache_dir, relative_path)
-            os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
-            try:
-                shutil.copy2(local_path, cache_file_path)
-                LOGGER.debug(f"Copied uploaded file to cache: {cache_file_path}")
-            except Exception as e:
-                LOGGER.error(f"Failed to copy uploaded file to cache: {e}")
 
             return True
 

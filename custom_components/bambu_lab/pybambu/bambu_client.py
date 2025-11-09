@@ -153,9 +153,12 @@ class ChamberImageThread(threading.Thread):
                         continue
 
                     sslSock.setblocking(False)
+                    failure_count = 0
                     while not self._stop_event.is_set():
+                        failure_count = failure_count + 1
                         try:
                             dr = sslSock.recv(read_chunk_size)
+                            failure_count = 0
                             #LOGGER.debug(f"Received {len(dr)} bytes.")
 
                         except ssl.SSLWantReadError:
@@ -165,11 +168,15 @@ class ChamberImageThread(threading.Thread):
                             continue
 
                         except Exception as e:
-                            LOGGER.error("A Chamber Image thread inner exception occurred:")
+                            LOGGER.error("Chamber Image thread inner exception occurred:")
                             LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                             if self._stop_event.wait(1):
                                 break
                             continue
+
+                        if failure_count >= 10:
+                            LOGGER.error("Chamber Image: Too many consecutive read failures occured.")
+                            break
 
                         if img is not None and len(dr) > 0:
                             img += dr
@@ -210,19 +217,21 @@ class ChamberImageThread(threading.Thread):
 
                         else:
                             LOGGER.error(f"UNEXPECTED DATA RECEIVED: {len(dr)}")
+                            # Sleep for a short while and then re-attempt the connection.
                             time.sleep(1)
+                            break
 
             except OSError as e:
                 if e.errno == 113:
                     LOGGER.debug("Host is unreachable")
                 else:
-                    LOGGER.error("A Chamber Image thread outer exception occurred:")
+                    LOGGER.error("Chamber Image thread outer exception occurred:")
                     LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(2)  # Avoid a tight loop if this is a persistent error.
 
             except Exception as e:
-                LOGGER.error(f"A Chamber Image thread outer exception occurred:")
+                LOGGER.error(f"Chamber Image thread outer exception occurred:")
                 LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(2)  # Avoid a tight loop if this is a persistent error.

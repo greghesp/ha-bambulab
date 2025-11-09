@@ -920,7 +920,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if serial is None:
             serial = self.get_model().info.serial
         default_path = Path(self._hass.config.path(f"www/media/ha-bambulab/{serial}"))
-        LOGGER.debug(f"Using file cache directory: '{default_path}'")
         try:
             default_path.mkdir(parents=True, exist_ok=True)
             return str(default_path)
