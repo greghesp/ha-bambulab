@@ -505,6 +505,9 @@
     "05004044": {
       "BirdsEye kamera meghibásodás: kérjük, vedd fel a kapcsolatot az ügyfélszolgálattal.": []
     },
+    "05004045": {
+      "A hotend ellenőrzése folyamatban van. Ez a művelet ideiglenesen nem elérhető. Kérjük, várj.": []
+    },
     "05004050": {
       "Hiba a nyomtatólapon.": []
     },
