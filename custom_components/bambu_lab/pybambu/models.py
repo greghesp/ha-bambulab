@@ -1984,7 +1984,7 @@ class PrintJob:
                     else:
                         raise
 
-            # Verify upload succeeded by comparing file size
+            # Verify upload really succeeded by comparing file size
             remote_size = ftp.size(remote_path)
             if remote_size != file_size:
                 LOGGER.error(f"Size mismatch after FTP upload ({remote_size} != expected {file_size})")
