@@ -2079,8 +2079,10 @@ class Info:
         #         "sn": "..."
         #     },
         modules = data.get("module", [])
+        old_device_type = self.device_type
         self.device_type = get_printer_type(modules, self.device_type)
-        LOGGER.debug(f"Device is {self.device_type}")
+        if old_device_type != self.device_type:
+            LOGGER.debug(f"Device is {self.device_type}")
         self.hw_ver = get_hw_version(modules, self.hw_ver)
         self.sw_ver = get_sw_version(modules, self.sw_ver)
         self._client.callback("event_printer_info_update")
