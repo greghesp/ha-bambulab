@@ -1953,11 +1953,9 @@ class PrintJob:
             for d in dirs:
                 current += f'/{d}'
                 try:
-                    LOGGER.debug(f"FTP upload: Creating directory {current}")
                     ftp.mkd(current)
                 except Exception:
-                    LOGGER.debug(f"FTP upload: Directory {current} may already exist")
-                    pass  # Directory may already exist
+                    pass  # Directory may already exist which is fine
 
             LOGGER.debug(f"FTP upload: Starting file upload")
             file_size = os.path.getsize(local_path)
@@ -1977,8 +1975,20 @@ class PrintJob:
                     })
 
             with open(local_path, 'rb') as f:
-                # Use storbinary_no_unwrap with the progress callback
-                ftp.storbinary_no_unwrap(f'STOR {remote_path}', f, blocksize=chunk_size, callback=internal_progress_callback)
+                try:
+                    ftp.storbinary_no_unwrap(f'STOR {remote_path}', f, blocksize=chunk_size, callback=internal_progress_callback)
+                except Exception as e:
+                    # Handle the benign 426 “Failure reading network stream” case
+                    if "426" in str(e):
+                        LOGGER.warning(f"Ignoring benign FTP 426 for {remote_path}: {e}")
+                    else:
+                        raise
+
+            # Verify upload really succeeded by comparing file size
+            remote_size = ftp.size(remote_path)
+            if remote_size != file_size:
+                LOGGER.error(f"Size mismatch after FTP upload ({remote_size} != expected {file_size})")
+                raise ValueError(f"FTP upload verification failed: remote={remote_size}, local={file_size}")
 
             LOGGER.debug(f"FTP upload: Upload completed successfully")
 
