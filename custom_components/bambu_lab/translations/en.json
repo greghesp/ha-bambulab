@@ -233,6 +233,9 @@
       "mqtt_encryption": {
         "name": "MQTT encryption firmware"
       },
+      "hybrid_mode_blocks_control": {
+        "name": "Hybrid MQTT blocks control"
+      },
       "firmware_update": {
         "name": "Firmware update"
       },

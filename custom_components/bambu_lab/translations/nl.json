@@ -238,6 +238,9 @@
       },
       "airduct_mode": {
         "name": "Luchtkanaalmodus"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "Hybride MQTT blokkeert de controle"
       }
     },
     "button": {

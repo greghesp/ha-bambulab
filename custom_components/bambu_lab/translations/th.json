@@ -238,6 +238,9 @@
       },
       "airduct_mode": {
         "name": "โหมดท่ออากาศ"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "ไฮบริด MQTT บล็อกการควบคุม"
       }
     },
     "button": {

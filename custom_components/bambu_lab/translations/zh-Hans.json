@@ -238,6 +238,9 @@
       },
       "airduct_mode": {
         "name": "风道模式"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "混合 MQTT 块控制"
       }
     },
     "button": {

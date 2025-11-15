@@ -238,6 +238,9 @@
       },
       "active_ams": {
         "name": "Aktiv"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "Hybrides MQTT blockiert die Kontrolle"
       }
     },
     "button": {

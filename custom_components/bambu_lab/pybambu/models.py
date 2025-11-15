@@ -30,7 +30,6 @@ from .utils import (
     get_hw_version,
     get_sw_version,
     compare_version,
-    get_start_time,
     get_end_time,
     get_HMS_error_text,
     get_print_error_text,
@@ -200,6 +199,13 @@ class Device:
             if self.info.device_type == Printers.P2S:
                 return True
             
+            return False
+        elif feature == Features.HYBRID_MODE_BLOCKS_CONTROL:
+            if (self.info.device_type == Printers.P1S or
+                self.info.device_type == Printers.P1P):
+                # Not sure what the first version that did this was. At least this - could be earlier.
+                return self.supports_sw_version("01.07.00.00")
+            # Only the P1 firmware did this as far as I know. Not the A1.
             return False
         elif feature == Features.CAMERA_RTSP:
             return (self.info.device_type == Printers.H2D or
@@ -2049,7 +2055,14 @@ class Info:
         self.airduct_mode = False
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)                
-        
+
+    @property
+    def is_hybrid_mode_blocking(self) -> bool:
+        if not self.mqtt_mode == "local":
+            return False
+        if not self._client._device.supports_feature(Features.HYBRID_MODE_BLOCKS_CONTROL):
+            return False
+        return self._client.bambu_cloud.bambu_connected
 
     def set_online(self, online):
         if self.online != online:
