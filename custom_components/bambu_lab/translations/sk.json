@@ -238,6 +238,9 @@
       },
       "airduct_mode": {
         "name": "Režim vzduchovodu"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "Hybridné MQTT blokuje riadenie"
       }
     },
     "button": {

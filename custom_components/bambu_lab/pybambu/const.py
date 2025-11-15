@@ -21,6 +21,7 @@ class Printers(StrEnum):
     A1MINI = "A1MINI"
     A1 = "A1"
 
+
 class Features(IntEnum):
     AUX_FAN = 1,
     CHAMBER_LIGHT = 2,
@@ -33,6 +34,7 @@ class Features(IntEnum):
     K_VALUE = 9,
     START_TIME = 10,
     AMS_TEMPERATURE = 11,
+    HYBRID_MODE_BLOCKS_CONTROL = 12,
     CAMERA_RTSP = 13,
     START_TIME_GENERATED = 14,
     CAMERA_IMAGE = 15,
@@ -51,7 +53,6 @@ class Features(IntEnum):
     FIRE_ALARM_BUZZER = 32,
     HEATBED_LIGHT = 33,
     AIRDUCT_MODE = 34,
-    
 
 
 class FansEnum(IntEnum):

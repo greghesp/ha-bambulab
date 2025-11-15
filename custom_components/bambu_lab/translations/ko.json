@@ -238,6 +238,9 @@
       },
       "airduct_mode": {
         "name": "에어덕트 모드"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "하이브리드 MQTT 블록 제어"
       }
     },
     "button": {

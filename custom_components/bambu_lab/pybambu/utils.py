@@ -311,18 +311,14 @@ def get_sw_version(modules, default):
     return default
 
 def compare_version(version_max, version_min):
+    if version_max == "unknown":
+        # Happens unavoidably during startup when we don't yet know the current printer firmware version.
+        return False
     maxver = list(map(int, version_max.split('.')))
     minver = list(map(int, version_min.split('.')))
 
     # Returns 1 if max > min, -1 if max < min, 0 if equal
     return (maxver > minver) - (maxver < minver)
-
-def get_start_time(timestamp):
-    """Return start time of a print"""
-    if timestamp == 0:
-        return None
-    return datetime.fromtimestamp(timestamp)
-
 
 def get_end_time(remaining_time):
     """Calculate the end time of a print"""
