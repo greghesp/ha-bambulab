@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "Aktívny"
       },
+      "drying": {
+        "name": "Sušenie"
+      },
       "airduct_mode": {
         "name": "Režim vzduchovodu"
       },

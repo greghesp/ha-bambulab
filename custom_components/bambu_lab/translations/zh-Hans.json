@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "积极的"
       },
+      "drying": {
+        "name": "干燥"
+      },
       "airduct_mode": {
         "name": "风道模式"
       },

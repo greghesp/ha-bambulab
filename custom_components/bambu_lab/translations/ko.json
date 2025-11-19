@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "활동적인"
       },
+      "drying": {
+        "name": "건조"
+      },
       "airduct_mode": {
         "name": "에어덕트 모드"
       },

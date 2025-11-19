@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "Ενεργός"
       },
+      "drying": {
+        "name": "Ξήρανση"
+      },
       "airduct_mode": {
         "name": "Λειτουργία Airduct"
       },

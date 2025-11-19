@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "Aktiv"
       },
+      "drying": {
+        "name": "Tørring"
+      },
       "airduct_mode": {
         "name": "Airduct Mode"
       },
