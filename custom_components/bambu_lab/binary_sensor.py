@@ -37,7 +37,8 @@ async def async_setup_entry(
     for sensor in AMS_BINARY_SENSORS:
         for index in coordinator.get_model().ams.data.keys():
             if coordinator.get_model().ams.data[index] is not None:
-                async_add_entities([BambuLabAMSBinarySensor(coordinator, sensor, index)])
+                if sensor.exists_fn(coordinator, index):
+                    async_add_entities([BambuLabAMSBinarySensor(coordinator, sensor, index)])
 
     for sensor in VIRTUAL_TRAY_BINARY_SENSORS:    
         if sensor.exists_fn(coordinator):
