@@ -12,6 +12,7 @@ from .definitions import (
     AMS_BINARY_SENSORS,
     PRINTER_BINARY_SENSORS,
     VIRTUAL_TRAY_BINARY_SENSORS,
+    BambuLabAMSBinarySensorEntityDescription,
     BambuLabBinarySensorEntityDescription,
 )
 from .models import (
@@ -79,7 +80,7 @@ class BambuLabAMSBinarySensor(AMSEntity, BambuLabBinarySensor):
     def __init__(
             self,
             coordinator: BambuDataUpdateCoordinator,
-            description: BambuLabBinarySensorEntityDescription,
+            description: BambuLabAMSBinarySensorEntityDescription,
             index: int
     ) -> None:
         """Initialize the sensor."""
