@@ -2618,14 +2618,20 @@ class AMSList:
                 if index not in self.data:
                     self.data[index] = AMSInstance(self._client, "Unknown", index)
 
-                if self.data[index].humidity_index != int(ams['humidity']):
-                    self.data[index].humidity_index = int(ams['humidity'])
+                # Sometimes when the AMS is being powered on it may send bogus humidity and temperature values.
+                # So ignore these values if they are out of a sensible range.
 
-                if self.data[index].humidity != int(ams.get("humidity_raw", 0)):
-                    self.data[index].humidity = int(ams.get("humidity_raw", 0))
+                humidity_index = int(ams['humidity'])
+                if 1 <= humidity_index <= 5 and self.data[index].humidity_index != humidity_index:
+                    self.data[index].humidity_index = humidity_index
 
-                if self.data[index].temperature != float(ams['temp']):
-                    self.data[index].temperature = float(ams['temp'])
+                humidity = int(ams.get("humidity_raw", 0))
+                if 1 <= humidity <= 100 and self.data[index].humidity != humidity:
+                    self.data[index].humidity = humidity
+
+                temperature = float(ams['temp'])
+                if 0 <= temperature <= 100 and self.data[index].temperature != temperature:
+                    self.data[index].temperature = temperature
 
                 if self.data[index].remaining_drying_time != int(ams.get('dry_time', 0)):
                     self.data[index].remaining_drying_time = int(ams.get('dry_time', 0))
