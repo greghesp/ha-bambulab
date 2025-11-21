@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "Activo"
       },
+      "drying": {
+        "name": "Secado"
+      },
       "airduct_mode": {
         "name": "Modo de conducto de aire"
       },

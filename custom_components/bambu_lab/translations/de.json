@@ -239,6 +239,9 @@
       "active_ams": {
         "name": "Aktiv"
       },
+      "drying": {
+        "name": "Trocknen"
+      },
       "hybrid_mode_blocks_control": {
         "name": "Hybrides MQTT blockiert die Kontrolle"
       }

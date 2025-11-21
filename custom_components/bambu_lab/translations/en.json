@@ -209,6 +209,9 @@
       "active_ams": {
         "name": "Active"
       },
+      "drying": {
+        "name": "Drying"
+      },
       "developer_lan_mode": {
         "name": "Developer Lan Mode"
       },

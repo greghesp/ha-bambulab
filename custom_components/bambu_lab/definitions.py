@@ -98,13 +98,33 @@ class BambuLabBinarySensorEntityDescription(BinarySensorEntityDescription, Bambu
     extra_attributes: Callable[..., dict] = lambda _: {}
 
 
-AMS_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
-    BambuLabBinarySensorEntityDescription(
+@dataclass
+class BambuLabAMSBinarySensorEntityDescription(BinarySensorEntityDescription, BambuLabBinarySensorEntityDescriptionMixIn):
+    """Binary sensor entity description for Bambu Lab AMS."""
+    available_fn: Callable[..., bool] = lambda _: True
+    exists_fn: Callable[[BambuDataUpdateCoordinator, int], bool] = lambda coordinator, index: True
+    extra_attributes: Callable[..., dict] = lambda _: {}
+
+
+AMS_BINARY_SENSORS: tuple[BambuLabAMSBinarySensorEntityDescription, ...] = (
+    BambuLabAMSBinarySensorEntityDescription(
         key="active_ams",
         translation_key="active_ams",
         icon="mdi:check",
         device_class=BinarySensorDeviceClass.RUNNING,
         is_on_fn=lambda self: self.coordinator.get_model().ams.data[self.index].active,
+    ),
+    BambuLabAMSBinarySensorEntityDescription(
+        key="drying",
+        translation_key="drying",
+        icon="mdi:heat-wave",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        is_on_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time > 0,
+        exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING)
+        and (
+            coordinator.get_model().ams.data[index].model == "AMS 2 Pro"
+            or coordinator.get_model().ams.data[index].model == "AMS HT"
+        ),
     ),
 )
 

@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "Actief"
       },
+      "drying": {
+        "name": "Drogen"
+      },
       "airduct_mode": {
         "name": "Luchtkanaalmodus"
       },

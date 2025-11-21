@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "คล่องแคล่ว"
       },
+      "drying": {
+        "name": "การอาบแห้ง"
+      },
       "airduct_mode": {
         "name": "โหมดท่ออากาศ"
       },

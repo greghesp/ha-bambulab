@@ -236,6 +236,9 @@
       "active_ams": {
         "name": "Aktywny"
       },
+      "drying": {
+        "name": "Suszenie"
+      },
       "airduct_mode": {
         "name": "Tryb przewodu powietrznego"
       },
