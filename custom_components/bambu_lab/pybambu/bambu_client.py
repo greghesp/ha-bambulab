@@ -801,7 +801,7 @@ def create_local_ssl_context():
     script_path = os.path.abspath(__file__)
     directory_path = os.path.dirname(script_path)
     context = ssl.create_default_context()
-    for filename in ("bambu.cert", "bambu_p2s_250626.cert"):
+    for filename in ("bambu.cert", "bambu_p2s_250626.cert", "bambu_h2c_251122.cert"):
         path = os.path.join(directory_path, filename)
         context.load_verify_locations(cafile=path)
 
