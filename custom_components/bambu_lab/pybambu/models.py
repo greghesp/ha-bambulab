@@ -132,8 +132,14 @@ class Device:
         # When talking to the Bambu cloud mqtt, setting the temperatures is allowed.
         if self.info.mqtt_mode == "bambu_cloud":
             return True
-        # X1* have not yet blocked setting the temperatures when in nybrid connection mode.
-        if self.info.device_type == Printers.X1 or self.info.device_type == Printers.X1C or self.info.device_type == Printers.X1E or self.info.device_type == Printers.H2D or self.info.device_type == Printers.H2S:
+        # X1* have not yet blocked setting the temperatures when in hybrid connection mode.
+        # Is this accurate now that mqtt encryption landed?
+        if (self.info.device_type == Printers.H2C or
+            self.info.device_type == Printers.H2D or
+            self.info.device_type == Printers.H2S or
+            self.info.device_type == Printers.X1 or
+            self.info.device_type == Printers.X1C or
+            self.info.device_type == Printers.X1E):
             return True
         # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
         return not self._client.bambu_cloud.bambu_connected
@@ -150,7 +156,8 @@ class Device:
             return not (self.info.device_type == Printers.A1 or
                         self.info.device_type == Printers.A1MINI)
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return (self.info.device_type == Printers.H2D or
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S or
                     self.info.device_type == Printers.P2S or
                     self.info.device_type == Printers.X1 or
@@ -183,12 +190,13 @@ class Device:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI):
                 return self.supports_sw_version("01.06.10.33")
-            elif (self.info.device_type == Printers.H2D or
-                self.info.device_type == Printers.H2S or 
-                self.info.device_type == Printers.X1 or
-                self.info.device_type == Printers.X1C or
-                self.info.device_type == Printers.X1E or
-                self.info.device_type == Printers.P2S):
+            elif (self.info.device_type == Printers.H2C or
+                  self.info.device_type == Printers.H2D or
+                  self.info.device_type == Printers.H2S or 
+                  self.info.device_type == Printers.P2S or
+                  self.info.device_type == Printers.X1 or
+                  self.info.device_type == Printers.X1C or
+                  self.info.device_type == Printers.X1E):
                 return True
             elif (self.info.device_type == Printers.P1S or
                   self.info.device_type == Printers.P1P):
@@ -208,24 +216,26 @@ class Device:
             # Only the P1 firmware did this as far as I know. Not the A1.
             return False
         elif feature == Features.CAMERA_RTSP:
-            return (self.info.device_type == Printers.H2D or
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S or
+                    self.info.device_type == Printers.P2S or
                     self.info.device_type == Printers.X1 or
                     self.info.device_type == Printers.X1C or
-                    self.info.device_type == Printers.X1E or
-                    self.info.device_type == Printers.P2S)
+                    self.info.device_type == Printers.X1E)
         elif feature == Features.CAMERA_IMAGE:
             return (self.info.device_type == Printers.A1 or
                     self.info.device_type == Printers.A1MINI or
                     self.info.device_type == Printers.P1P or
                     self.info.device_type == Printers.P1S)
         elif feature == Features.DOOR_SENSOR:
-            return (self.info.device_type == Printers.H2D or
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S or
+                    self.info.device_type == Printers.P2S or
                     self.info.device_type == Printers.X1 or
                     self.info.device_type == Printers.X1C or
-                    self.info.device_type == Printers.X1E or
-                    self.info.device_type == Printers.P2S)
+                    self.info.device_type == Printers.X1E)
         elif feature == Features.AMS_FILAMENT_REMAINING:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI):
@@ -238,6 +248,7 @@ class Device:
         elif feature == Features.PROMPT_SOUND:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI or
+                self.info.device_type == Printers.H2C or
                 self.info.device_type == Printers.H2D or
                 self.info.device_type == Printers.H2S or
                 self.info.device_type == Printers.P2S):
@@ -254,6 +265,7 @@ class Device:
 
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI or
+                self.info.device_type == Printers.H2C or
                 self.info.device_type == Printers.H2D or
                 self.info.device_type == Printers.P2S or
                 self.info.device_type == Printers.X1E):
@@ -275,7 +287,8 @@ class Device:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI):
                 return self.supports_sw_version("01.06.10.33")
-            elif (self.info.device_type == Printers.H2D or
+            elif (self.info.device_type == Printers.H2C or
+                  self.info.device_type == Printers.H2D or
                   self.info.device_type == Printers.H2S or
                   self.info.device_type == Printers.P2S):
                 return True
@@ -293,7 +306,8 @@ class Device:
                 LOGGER.error("Features.AMS_DRYING queried before version is known.")
                 return False
             
-            if (self.info.device_type == Printers.H2D or
+            if (self.info.device_type == Printers.H2C or
+                self.info.device_type == Printers.H2D or
                 self.info.device_type == Printers.H2S or
                 self.info.device_type == Printers.P2S):
                 return True
@@ -306,12 +320,15 @@ class Device:
             # This needs fixing now the A1 printers support the other AMS models.
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
-            return (self.info.device_type == Printers.H2D or
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S)
         elif feature == Features.DUAL_NOZZLES:
-            return (self.info.device_type == Printers.H2D)
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D)
         elif feature == Features.EXTRUDER_TOOL:
-            return (self.info.device_type == Printers.H2D or
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
@@ -338,7 +355,8 @@ class Device:
             return (self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S)
         elif feature == Features.HEATBED_LIGHT:
-            return (self.info.device_type == Printers.H2D or
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2S)
         return False
     
@@ -1589,6 +1607,7 @@ class PrintJob:
             if (self._client._device.info.device_type == Printers.X1 or 
                 self._client._device.info.device_type == Printers.X1C or
                 self._client._device.info.device_type == Printers.X1E or
+                self._client._device.info.device_type == Printers.H2C or
                 self._client._device.info.device_type == Printers.H2D or
                 self._client._device.info.device_type == Printers.H2S):
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even

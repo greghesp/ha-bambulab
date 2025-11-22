@@ -10,16 +10,17 @@ from enum import (
 LOGGER = logging.getLogger(__package__)
 
 class Printers(StrEnum):
-    X1E = "X1E"
-    X1C = "X1C"
-    X1 = "X1"
+    A1 = "A1"
+    A1MINI = "A1MINI"
     P1P = "P1P"
     P1S = "P1S"
     P2S = "P2S"
+    H2C = "H2C"
     H2D = "H2D"
     H2S = "H2S"
-    A1MINI = "A1MINI"
-    A1 = "A1"
+    X1E = "X1E"
+    X1C = "X1C"
+    X1 = "X1"
 
 
 class Features(IntEnum):
