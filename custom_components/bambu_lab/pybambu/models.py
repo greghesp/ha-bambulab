@@ -136,6 +136,7 @@ class Device:
         # Is this accurate now that mqtt encryption landed?
         if (self.info.device_type == Printers.H2C or
             self.info.device_type == Printers.H2D or
+            self.info.device_type == Printers.H2DP or
             self.info.device_type == Printers.H2S or
             self.info.device_type == Printers.X1 or
             self.info.device_type == Printers.X1C or
@@ -158,6 +159,7 @@ class Device:
         elif feature == Features.CHAMBER_TEMPERATURE:
             return (self.info.device_type == Printers.H2C or
                     self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP or
                     self.info.device_type == Printers.H2S or
                     self.info.device_type == Printers.P2S or
                     self.info.device_type == Printers.X1 or
@@ -192,6 +194,7 @@ class Device:
                 return self.supports_sw_version("01.06.10.33")
             elif (self.info.device_type == Printers.H2C or
                   self.info.device_type == Printers.H2D or
+                  self.info.device_type == Printers.H2DP or
                   self.info.device_type == Printers.H2S or 
                   self.info.device_type == Printers.P2S or
                   self.info.device_type == Printers.X1 or
@@ -218,6 +221,7 @@ class Device:
         elif feature == Features.CAMERA_RTSP:
             return (self.info.device_type == Printers.H2C or
                     self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP or
                     self.info.device_type == Printers.H2S or
                     self.info.device_type == Printers.P2S or
                     self.info.device_type == Printers.X1 or
@@ -231,6 +235,7 @@ class Device:
         elif feature == Features.DOOR_SENSOR:
             return (self.info.device_type == Printers.H2C or
                     self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP or
                     self.info.device_type == Printers.H2S or
                     self.info.device_type == Printers.P2S or
                     self.info.device_type == Printers.X1 or
@@ -250,6 +255,7 @@ class Device:
                 self.info.device_type == Printers.A1MINI or
                 self.info.device_type == Printers.H2C or
                 self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.H2DP or
                 self.info.device_type == Printers.H2S or
                 self.info.device_type == Printers.P2S):
                 return not self.print_fun.mqtt_signature_required
@@ -267,6 +273,7 @@ class Device:
                 self.info.device_type == Printers.A1MINI or
                 self.info.device_type == Printers.H2C or
                 self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.H2DP or
                 self.info.device_type == Printers.P2S or
                 self.info.device_type == Printers.X1E):
                 return True
@@ -289,6 +296,7 @@ class Device:
                 return self.supports_sw_version("01.06.10.33")
             elif (self.info.device_type == Printers.H2C or
                   self.info.device_type == Printers.H2D or
+                  self.info.device_type == Printers.H2DP or
                   self.info.device_type == Printers.H2S or
                   self.info.device_type == Printers.P2S):
                 return True
@@ -308,6 +316,7 @@ class Device:
             
             if (self.info.device_type == Printers.H2C or
                 self.info.device_type == Printers.H2D or
+                self.info.device_type == Printers.H2DP or
                 self.info.device_type == Printers.H2S or
                 self.info.device_type == Printers.P2S):
                 return True
@@ -322,13 +331,16 @@ class Device:
         elif feature == Features.CHAMBER_LIGHT_2:
             return (self.info.device_type == Printers.H2C or
                     self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP or
                     self.info.device_type == Printers.H2S)
         elif feature == Features.DUAL_NOZZLES:
             return (self.info.device_type == Printers.H2C or
-                    self.info.device_type == Printers.H2D)
+                    self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP)
         elif feature == Features.EXTRUDER_TOOL:
             return (self.info.device_type == Printers.H2C or
                     self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP or
                     self.info.device_type == Printers.H2S)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             # We can't evaluate this until we have the printer version, which isn't available until we receive the first mqtt payloads.
@@ -340,6 +352,8 @@ class Device:
                 self.info.device_type == Printers.A1MINI):
                 return self.supports_sw_version("01.05.00.00")
             elif (self.info.device_type == Printers.H2D):
+                return self.supports_sw_version("01.01.01.00")
+            elif (self.info.device_type == Printers.H2DP):
                 return self.supports_sw_version("01.01.01.00")
             elif (self.info.device_type == Printers.H2S or
                   self.info.device_type == Printers.P2S):
@@ -353,10 +367,12 @@ class Device:
             return False
         elif feature == Features.FIRE_ALARM_BUZZER:
             return (self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP or
                     self.info.device_type == Printers.H2S)
         elif feature == Features.HEATBED_LIGHT:
             return (self.info.device_type == Printers.H2C or
                     self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DP or
                     self.info.device_type == Printers.H2S)
         return False
     
@@ -1609,6 +1625,7 @@ class PrintJob:
                 self._client._device.info.device_type == Printers.X1E or
                 self._client._device.info.device_type == Printers.H2C or
                 self._client._device.info.device_type == Printers.H2D or
+                self._client._device.info.device_type == Printers.H2DP or
                 self._client._device.info.device_type == Printers.H2S):
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
                 # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
