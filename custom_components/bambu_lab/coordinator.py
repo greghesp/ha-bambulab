@@ -1,15 +1,6 @@
 from __future__ import annotations
 
-from .const import (
-    BRAND,
-    DOMAIN,
-    LOGGER,
-    LOGGERFORHA,
-    Options,
-    OPTION_NAME,
-    SERVICE_CALL_EVENT,
-    FILAMENT_DATA,
-)
+import ast
 import asyncio
 import functools
 import re
@@ -33,6 +24,17 @@ from homeassistant.const import (
     Platform
 )
 from homeassistant.helpers import issue_registry
+
+from .const import (
+    BRAND,
+    DOMAIN,
+    LOGGER,
+    LOGGERFORHA,
+    Options,
+    OPTION_NAME,
+    SERVICE_CALL_EVENT,
+    FILAMENT_DATA,
+)
 
 from .pybambu import BambuClient
 from .pybambu.const import (
@@ -267,8 +269,32 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
     def _service_call_skip_objects(self, data: dict):
         command = SKIP_OBJECTS_TEMPLATE
-        object_ids = data.get("objects")
-        command["print"]["obj_list"] = [int(x) for x in object_ids.split(',')]
+        objects = data.get("objects")
+
+        # normalize to list[int]
+        try:
+            # Normalize objects into a list of strings
+            if isinstance(objects, int):
+                parts = [str(objects)]
+            elif isinstance(objects, str):
+                text = objects.strip()
+                if text.startswith("[") and text.endswith("]"):
+                    text = text[1:-1].strip()
+                parts = [p.strip() for p in text.split(",")]
+            elif isinstance(objects, (list, tuple)):
+                parts = [str(x).strip() for x in objects]
+            else:
+                raise ValueError()
+
+            # Step 2: convert parts to ints with validation
+            obj_list = [int(p) for p in parts if p.isdigit()]
+            if len(obj_list) != len(parts):
+                raise ValueError()
+        except Exception:
+            LOGGER.error(f"Invalid objects value, should be comma separated ID list: {objects!r}")
+            return
+
+        command["print"]["obj_list"] = obj_list
         self.client.publish(command)
 
     def _service_call_send_gcode(self, data: dict):
