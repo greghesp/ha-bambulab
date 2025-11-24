@@ -863,76 +863,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # Force reload of integration to effect cache update.
             return await self.hass.config_entries.async_reload(self._entry.entry_id)
 
-    def _report_no_external_storage_issue(self):
-        issue_id = f"no_external_storage_{self.get_model().info.serial}"
-
-        # Check if the issue already exists
-        registry = issue_registry.async_get(self._hass)
-        existing_issue = registry.async_get_issue(
-            domain=DOMAIN,
-            issue_id=issue_id,
-        )
-        if existing_issue is not None:
-            # Issue already exists, no need to create it again
-            return
-
-        # Report the issue
-        LOGGER.debug("Creating issue for no external storage")
-        issue_registry.async_create_issue(
-            hass=self._hass,
-            domain=DOMAIN,
-            issue_id=issue_id,
-            is_fixable=False,
-            severity=issue_registry.IssueSeverity.WARNING,
-            translation_key="no_external_storage",
-            translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
-        )
-
-    def _report_authentication_issue(self):
-        # issue_id's are permanent - once ignore they will never show again so we need a unique id 
-        # per occurrence per integration instance. That does mean we'll fire a new issue every single
-        # print attempt since that's when we'll typically encounter the authentication failure as we
-        # attempt to get slicer settings.
-        timestamp = int(time.time())
-        issue_id = f"authentication_failed_{self.get_model().info.serial}_{timestamp}"
-
-        # Report the issue
-        LOGGER.debug("Creating issue for authentication failure")
-        issue_registry.async_create_issue(
-            hass=self._hass,
-            domain=DOMAIN,
-            issue_id=issue_id,
-            is_fixable=False,
-            severity=issue_registry.IssueSeverity.ERROR,
-            translation_key="authentication_failed",
-            translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
-        )
-
-    def _report_live_view_disabled_issue(self):
-        issue_id = f"live_view_disabled_{self.get_model().info.serial}"
-
-        # Check if the issue already exists
-        registry = issue_registry.async_get(self._hass)
-        existing_issue = registry.async_get_issue(
-            domain=DOMAIN,
-            issue_id=issue_id,
-        )
-        if existing_issue is not None:
-            # Issue already exists, no need to create it again
-            return
-
-        # Report the issue
-        LOGGER.debug("Creating issue for no external storage")
-        issue_registry.async_create_issue(
-            hass=self._hass,
-            domain=DOMAIN,
-            issue_id=issue_id,
-            is_fixable=False,
-            severity=issue_registry.IssueSeverity.WARNING,
-            translation_key="live_view_disabled",
-            translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
-        )
-
     def _report_generic_issue(self, issue: str, force: bool):
         if force:
             # force generates a unique issue each time.
@@ -953,16 +883,33 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         # Report the issue
-        LOGGER.debug(f"Creating issue for {issue} enabled")
+        LOGGER.debug(f"Creating issue for {issue}")
+        if force:
+            severity = issue_registry.IssueSeverity.ERROR
+        else:
+            severity = issue_registry.IssueSeverity.WARNING
         issue_registry.async_create_issue(
             hass=self._hass,
             domain=DOMAIN,
             issue_id=issue_id,
             is_fixable=False,
-            severity=issue_registry.IssueSeverity.WARNING,
+            severity=severity,
             translation_key=issue,
             translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
+
+    def _report_authentication_issue(self):
+        # issue_id's are permanent - once ignore they will never show again so we need a unique id 
+        # per occurrence per integration instance. That does mean we'll fire a new issue every single
+        # print attempt since that's when we'll typically encounter the authentication failure as we
+        # attempt to get slicer settings.
+        self._report_generic_issue("authentication_failed", True)
+
+    def _report_no_external_storage_issue(self):
+        self._report_generic_issue("no_external_storage")
+
+    def _report_live_view_disabled_issue(self):
+        self._report_generic_issue("live_view_disabled")
 
     def _report_encryption_enabled_issue(self, force: bool = False):
         self._report_generic_issue("mqtt_encryption_enabled", force)
