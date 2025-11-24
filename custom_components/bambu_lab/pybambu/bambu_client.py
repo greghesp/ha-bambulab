@@ -371,7 +371,6 @@ class BambuClient:
         self._timelapse_cache_count = max(-1, int(config.get('timelapse_cache_count', 0)))
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
         self._cache_path = config.get('file_cache_path', f'/config/www/media/ha-bambulab/{self._serial}')
-        LOGGER.debug(f"Using file cache path: {self._cache_path}")
 
         self._connected = False
         self._port = 8883
@@ -392,9 +391,6 @@ class BambuClient:
         else:
             language = language[:2]
         self._user_language = language
-
-        self._device.print_job.prune_print_history_files()
-        self._device.print_job.prune_timelapse_files()
 
     @property
     def settings(self):
@@ -472,6 +468,9 @@ class BambuClient:
         LOGGER.debug("Starting MQTT listener thread")
         self._mqtt = MqttThread(self)
         self._mqtt.start()
+
+        self._device.print_job.prune_print_history_files()
+        self._device.print_job.prune_timelapse_files()
 
     def subscribe_and_request_info(self):
         LOGGER.debug("Now subscribing...")

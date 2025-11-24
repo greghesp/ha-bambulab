@@ -877,6 +877,10 @@
     "mqtt_encryption_enabled": {
       "title": "MQTT-Verschlüsselung aktiviert",
       "description": "{device} ist mit der Cloud verbunden und die MQTT-Verschlüsselung ist aktiviert. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Der Drucker muss auf den Entwickler-LAN-Modus eingestellt sein, um die Steuerung über den Heimassistenten zu ermöglichen."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Steuerung der Hybridverbindungsblöcke",
+      "description": "{device} ist mit der Cloud verbunden, verfügt jedoch über eine lokale MQTT-Verbindung durch die Integration. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Stellen Sie die Verbindung auf reine Cloud um, um die Steuerung zu ermöglichen."
     }
   }
 }

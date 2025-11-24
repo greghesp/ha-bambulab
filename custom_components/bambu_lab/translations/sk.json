@@ -877,6 +877,10 @@
     "mqtt_encryption_enabled": {
       "title": "Šifrovanie MQTT je povolené",
       "description": "{device} je pripojené ku cloudu s povoleným šifrovaním mqtt. Touto integráciou je možné ovládať iba svetlo. Všetky ostatné ovládacie prvky sú nedostupné. Tlačiareň musí byť nastavená na režim vývojárskej siete, aby bolo možné ovládať z domáceho asistenta."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Hybridné riadenie blokov pripojenia",
+      "description": "{device} je pripojené ku cloudu, ale s lokálnym pripojením mqtt integráciou. Touto integráciou je možné ovládať iba svetlo. Všetky ostatné ovládacie prvky sú nedostupné. Ak chcete povoliť ovládanie, prepnite pripojenie na čistý cloud."
     }
   }
 }

@@ -877,6 +877,10 @@
     "mqtt_encryption_enabled": {
       "title": "Szyfrowanie MQTT włączone",
       "description": "{device} ma połączenie z chmurą i włączone szyfrowanie mqtt. Dzięki tej integracji można kontrolować wyłącznie światło. Wszystkie inne elementy sterujące są niedostępne. Aby umożliwić sterowanie z poziomu asystenta domowego, drukarka musi być ustawiona na tryb LAN programisty."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Sterowanie hybrydowymi blokami połączeń",
+      "description": "{device} jest połączone z chmurą, ale dzięki integracji ma lokalne połączenie mqtt. Dzięki tej integracji można kontrolować wyłącznie światło. Wszystkie inne elementy sterujące są niedostępne. Przełącz połączenie na czystą chmurę, aby umożliwić kontrolę."
     }
   }
 }

@@ -877,6 +877,10 @@
     "mqtt_encryption_enabled": {
       "title": "Crittografia MQTT abilitata",
       "description": "{device} è connesso al cloud con crittografia mqtt abilitata. Solo la luce può essere controllata da questa integrazione. Tutti gli altri controlli non sono disponibili. La stampante deve essere impostata sulla modalità lan sviluppatore per consentire il controllo dall'assistente domestico."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Controllo dei blocchi di connessione ibridi",
+      "description": "{device} è connesso al cloud ma con connessione mqtt locale tramite l'integrazione. Solo la luce può essere controllata da questa integrazione. Tutti gli altri controlli non sono disponibili. Passa la connessione al cloud puro per abilitare il controllo."
     }
   }
 }

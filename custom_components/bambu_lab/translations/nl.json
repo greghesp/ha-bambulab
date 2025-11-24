@@ -877,6 +877,10 @@
     "mqtt_encryption_enabled": {
       "title": "MQTT-codering ingeschakeld",
       "description": "{device} is met de cloud verbonden en mqtt-codering is ingeschakeld. Alleen het licht kan door deze integratie worden aangestuurd. Alle andere bedieningselementen zijn niet beschikbaar. De printer moet worden ingesteld op de Developer LAN-modus om bediening vanuit de thuisassistent mogelijk te maken."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Hybride verbinding blokkeert controle",
+      "description": "{device} is verbonden met de cloud maar met lokale mqtt-verbinding door de integratie. Alleen het licht kan door deze integratie worden aangestuurd. Alle andere bedieningselementen zijn niet beschikbaar. Schakel de verbinding naar pure cloud om controle mogelijk te maken."
     }
   }
 }
