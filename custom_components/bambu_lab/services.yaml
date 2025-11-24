@@ -252,3 +252,10 @@ get_filament_data:
   target:
     entity:
       integration: bambu_lab 
+
+read_rfid:
+  name: Read the RFID tag on a Bambu spool
+  description: Triggers the AMS to attempt to re-read the RFID tag on the current spool. You must provide the AMS tray entity.
+  target:
+    entity:
+      integration: bambu_lab

@@ -111,6 +111,15 @@ AMS_FILAMENT_SETTING_TEMPLATE = {
     }
 }
 
+AMS_READ_RFID_TEMPLATE = {
+    "print": {
+        "sequence_id": "0",
+        "command": "ams_get_rfid",
+        "ams_id": 0,                # Index of the AMS
+        "slot_id": 0,               # Index of the tray with the AMS
+    }
+}
+
 MOVE_AXIS_GCODE = "M211 S\nM211 X1 Y1 Z1\nM1002 push_ref_mode\nG91 \nG1 {axis}{distance}.0 F{speed}\nM1002 pop_ref_mode\nM211 R\n"
 HOME_GCODE = "G28\n"
 EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"
@@ -130,3 +139,4 @@ BUZZER_SET_BEEPING = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "
 # P2S only
 AIRDUCT_SET_COOLING = {"print": {"sequence_id": "0", "command": "set_airduct", "modeId": 0, "submode": -1}}
 AIRDUCT_SET_HEATING_FILTER = {"print": {"sequence_id": "0", "command": "set_airduct", "modeId": 1, "submode": -1}}
+

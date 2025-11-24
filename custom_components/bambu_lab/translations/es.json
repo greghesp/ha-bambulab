@@ -877,6 +877,10 @@
     "mqtt_encryption_enabled": {
       "title": "Cifrado MQTT habilitado",
       "description": "{device} está conectado a la nube con el cifrado mqtt habilitado. Sólo la luz puede ser controlada por esta integración. Todos los demás controles no están disponibles. La impresora debe estar configurada en modo LAN de desarrollador para permitir el control desde el asistente doméstico."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Control de bloques de conexión híbrida",
+      "description": "{device} está conectado a la nube pero con conexión mqtt local mediante la integración. Sólo la luz puede ser controlada por esta integración. Todos los demás controles no están disponibles. Cambie la conexión a la nube pura para habilitar el control."
     }
   }
 }

@@ -877,6 +877,10 @@
     "mqtt_encryption_enabled": {
       "title": "Cryptage MQTT activé",
       "description": "{device} est connecté au cloud avec le cryptage mqtt activé. Seule la lumière peut être contrôlée par cette intégration. Tous les autres contrôles ne sont pas disponibles. L'imprimante doit être réglée en mode LAN développeur afin de permettre le contrôle depuis Home Assistant."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Contrôle des blocs de connexion hybrides",
+      "description": "{device} est connecté au cloud mais avec une connexion mqtt locale par l'intégration. Seule la lumière peut être contrôlée par cette intégration. Tous les autres contrôles ne sont pas disponibles. Basculez la connexion vers le cloud pur pour activer le contrôle."
     }
   }
 }

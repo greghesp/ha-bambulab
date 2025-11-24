@@ -50,6 +50,7 @@ from .pybambu.commands import (
     EXTRUDER_GCODE,
     SWITCH_AMS_TEMPLATE,
     AMS_FILAMENT_SETTING_TEMPLATE,
+    AMS_READ_RFID_TEMPLATE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -232,6 +233,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if not self._is_service_call_for_me(data):
             # Call is not for this instance.
             return
+        
+        LOGGER.debug(f"self.get_model().info.is_hybrid_mode_blocking: {self.get_model().info.is_hybrid_mode_blocking}")
+        LOGGER.debug(f"self.get_model().print_fun.mqtt_signature_required: {self.get_model().print_fun.mqtt_signature_required}")
+        if self.get_model().print_fun.mqtt_signature_required:
+            LOGGER.error("Printer firmware requires mqtt encryption. All control actions are blocked.")
+            self._report_encryption_enabled_issue(True)
+            return False
+
+        if self.get_model().info.is_hybrid_mode_blocking:
+            LOGGER.error("Printer is in hybrid connection mode. All control actions sent to local mqtt are blocked.")
+            self._report_hybrid_mode_blocking_issue(True)
+            return False
 
         future = self._hass.data[DOMAIN]['service_call_future']
         if future is None:
@@ -255,6 +268,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_set_filament(data)
             case "get_filament_data":
                 result = self._service_call_get_filament_data(data)
+            case "read_rfid":
+                result = self._service_call_read_rfid(data)
             case "print_project_file":
                 result = self._service_call_print_project_file(data)
             case "send_command":
@@ -368,15 +383,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         return ams_index, tray
 
-    def _service_call_set_filament(self, data: dict):
+    def _get_ams_device_and_tray(self, data: dict):
         device_id = data.get('device_id', [])
         if len(device_id) != 0:
             LOGGER.error(f"Invalid entity data payload: {data}")
-            return False
+            return None
         entity_id = data.get('entity_id', [])
         if len(entity_id) != 1:
             LOGGER.error(f"Invalid entity data payload: {data}")
-            return False
+            return None
         entity_id = entity_id[0]
 
         # Get the AMS device
@@ -384,7 +399,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if ams_device is None:
             LOGGER.error("Unable to find AMS or external spool from entity")
             return None
-
+        
         # Get the device the AMS is connected to.
         ams_parent_device_id = ams_device.via_device_id
 
@@ -393,13 +408,40 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         hadevice = dr.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
 
         if ams_parent_device_id != hadevice.id:
+            return None
+
+        return ams_device, entity_id        
+
+    def _service_call_read_rfid(self, data:dict):
+        ams_device, entity_id = self._get_ams_device_and_tray(data)
+        if entity_id is None:
+            return False
+
+        # Get the entity details.
+        er = entity_registry.async_get(self._hass)
+        entity_entry = er.async_get(entity_id)
+
+        ams_index, tray_index = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
+        if ams_index is None:
+            LOGGER.error("Unable to locate AMS.")
             return
+
+        command = AMS_READ_RFID_TEMPLATE
+        command['print']['ams_id'] = ams_index
+        command['print']['slot_id'] = tray_index
+
+        self.client.publish(command)
+
+    def _service_call_set_filament(self, data: dict):
+        ams_device, entity_id = self._get_ams_device_and_tray(data)
+        if entity_id is None:
+            return False
         
-        # This call is for us.
         # Get the entity details.
         er = entity_registry.async_get(self._hass)
         entity_entry = er.async_get(entity_id)
         entity_unique_id = entity_entry.unique_id
+        
         # entity_entry.unique_id is of the form:
         #   X1C_<PRINTERSERIAL>_AMS_<AMSSERIAL>_tray_1
         # or
@@ -407,18 +449,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         if entity_unique_id.endswith('_external_spool'):
             ams_index = 255
-            tray = 254
+            tray_index = 254
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
         elif re.search(r"tray_([1-4])$", entity_unique_id):
-            ams_index, tray = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
+            ams_index, tray_index = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
             if ams_index is None:
                 LOGGER.error("Unable to locate AMS.")
                 return
-            ams_tray = self.get_model().ams.data[ams_index].tray[tray]
+            ams_tray = self.get_model().ams.data[ams_index].tray[tray_index]
             if ams_tray.empty:
-                LOGGER.error(f"AMS {ams_index + 1} tray {tray + 1} is empty")
+                LOGGER.error(f"AMS {ams_index + 1} tray {tray_index + 1} is empty")
                 return
         else:
             LOGGER.error(f"An AMS tray or external spool is required")
@@ -436,7 +478,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command = AMS_FILAMENT_SETTING_TEMPLATE
         command['print']['ams_id'] = ams_index
         command['print']['tray_info_idx'] = data.get('tray_info_idx', '')
-        command['print']['tray_id'] = tray
+        command['print']['tray_id'] = tray_index
         command['print']['tray_color'] = data.get('tray_color', '')
         command['print']['tray_type'] = data.get('tray_type', '')
         command['print']['nozzle_temp_min'] = data.get('nozzle_temp_min', '200')
@@ -457,30 +499,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return combined_data
 
     def _service_call_load_unload_filament(self, load: bool, data: dict):
-        device_id = data.get('device_id', [])
-        if len(device_id) != 0:
-            LOGGER.error(f"Invalid entity data payload: {data}")
+        ams_device, entity_id = self._get_ams_device_and_tray(data)
+        if entity_id is None:
             return False
-        entity_id = data.get('entity_id', [])
-        if len(entity_id) != 1:
-            LOGGER.error(f"Invalid entity data payload: {data}")
-            return False
-        entity_id = entity_id[0]
-
-        # Get the AMS device
-        ams_device = self._get_device_from_entity(entity_id)
-        if ams_device is None:
-            LOGGER.error("Unable to find AMS or external spool from entity")
-            return None
-
-        # Get the device the AMS is connected to.
-        ams_parent_device_id = ams_device.via_device_id
-
-        # Get my device id
-        dr = device_registry.async_get(self._hass)
-        hadevice = dr.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
-
-        # This call is for us.
 
         # Printers with older firmware require a different method to change
         # filament. For now, only support newer firmware.
@@ -914,8 +935,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
 
-    def _report_encryption_enabled_issue(self):
-        issue_id = f"mqtt_encryption_enabled_{self.get_model().info.serial}"
+    def _report_generic_issue(self, issue: str, force: bool):
+        if force:
+            # force generates a unique issue each time.
+            timestamp = int(time.time())
+            issue_id = f"{issue}_{self.get_model().info.serial}_{timestamp}"
+        else:
+            # One-time issue
+            issue_id = f"{issue}_{self.get_model().info.serial}"
 
         # Check if the issue already exists
         registry = issue_registry.async_get(self._hass)
@@ -928,17 +955,22 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         # Report the issue
-        LOGGER.debug("Creating issue for mqtt encryption enabled")
+        LOGGER.debug(f"Creating issue for {issue} enabled")
         issue_registry.async_create_issue(
             hass=self._hass,
             domain=DOMAIN,
             issue_id=issue_id,
             is_fixable=False,
             severity=issue_registry.IssueSeverity.WARNING,
-            translation_key="mqtt_encryption_enabled",
+            translation_key=issue,
             translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
 
+    def _report_encryption_enabled_issue(self, force: bool = False):
+        self._report_generic_issue("mqtt_encryption_enabled", force)
+
+    def _report_hybrid_mode_blocking_issue(self, force: bool = False):
+        self._report_generic_issue("hybrid_mode_blocking", force)
 
     @functools.lru_cache(maxsize=1)
     def get_file_cache_directory(self, serial: str|None = None) -> str:
