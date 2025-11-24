@@ -234,8 +234,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # Call is not for this instance.
             return
         
-        LOGGER.debug(f"self.get_model().info.is_hybrid_mode_blocking: {self.get_model().info.is_hybrid_mode_blocking}")
-        LOGGER.debug(f"self.get_model().print_fun.mqtt_signature_required: {self.get_model().print_fun.mqtt_signature_required}")
         if self.get_model().print_fun.mqtt_signature_required:
             LOGGER.error("Printer firmware requires mqtt encryption. All control actions are blocked.")
             self._report_encryption_enabled_issue(True)
