@@ -241,6 +241,18 @@ class Device:
                     self.info.device_type == Printers.X1 or
                     self.info.device_type == Printers.X1C or
                     self.info.device_type == Printers.X1E)
+        elif feature == Features.READ_RFID_COMMAND:
+            if (self.info.device_type == Printers.A1 or
+                self.info.device_type == Printers.A1MINI):
+                return self.supports_sw_version("01.06.00.00")
+            if (self.info.device_type == Printers.P1P or
+                self.info.device_type == Printers.P1S):
+                return self.supports_sw_version("01.08.01.00")
+            if (self.info.device_type == Printers.X1 or
+                self.info.device_type == Printers.X1C or
+                self.info.device_type == Printers.X1E):
+                return self.supports_sw_version("01.09.00.00")
+            return True
         elif feature == Features.AMS_FILAMENT_REMAINING:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI):

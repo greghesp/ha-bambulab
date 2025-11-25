@@ -51,6 +51,7 @@ from .pybambu.commands import (
     SWITCH_AMS_TEMPLATE,
     AMS_FILAMENT_SETTING_TEMPLATE,
     AMS_READ_RFID_TEMPLATE,
+    AMS_READ_RFID_GCODE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -423,11 +424,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if ams_index is None:
             LOGGER.error("Unable to locate AMS.")
             return
-
-        command = AMS_READ_RFID_TEMPLATE
-        command['print']['ams_id'] = ams_index
-        command['print']['slot_id'] = tray_index
-
+        
+        if self.get_model().supports_feature(Features.READ_RFID_COMMAND):
+            command = AMS_READ_RFID_TEMPLATE
+            command['print']['ams_id'] = ams_index
+            command['print']['slot_id'] = tray_index
+        else:
+            command = SEND_GCODE_TEMPLATE
+            gcode = AMS_READ_RFID_GCODE
+            gcode = gcode.format(global_tray_index = (ams_index*4) + tray_index)
+            command['print']['param'] = gcode
         self.client.publish(command)
 
     def _service_call_set_filament(self, data: dict):

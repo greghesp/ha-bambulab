@@ -6,11 +6,16 @@ next: /misc/contributing
 nextTitle: Misc
 ---
 
-For all actions, you can specify a `target` property to specify the device to send the action to.
+For most actions, you specify a `target` property which is the the device_id to send the action to. In a cases involving an AMS tray, this must instead be an entity_id.
 
 ```yaml
 target:
   device_id: a1b2c3d4e5f6g7h8i9j0
+```
+
+```yaml
+target:
+  entity_id: a1b2c3d4e5f6g7h8i9j0
 ```
 
 ## Send Command
@@ -46,8 +51,6 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
     target:
       device_id: a1b2c3d4e5f6g7h8i9j0
     data:
-      type: Extrude
-      force: false
     ```
 
     The `data` object should contain the following properties:
@@ -241,7 +244,7 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 </Property>
 
 ## Read AMS RFID target
-<Property name="action" type="bambu_lab.ams_read_rfid" required>
+<Property name="action" type="bambu_lab.read_rfid" required>
   Read the RFID tag on a Bambu spool
   Triggers the AMS to attempt to re-read the RFID tag on the current spool. You must provide the AMS tray entity.
 
