@@ -258,7 +258,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
         
         result = None
-        match data['service']:
+        match service_call_name:
             case "skip_objects":
                 result = self._service_call_skip_objects(data)
             case "move_axis":
