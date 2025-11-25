@@ -123,6 +123,7 @@ AMS_READ_RFID_TEMPLATE = {
 MOVE_AXIS_GCODE = "M211 S\nM211 X1 Y1 Z1\nM1002 push_ref_mode\nG91 \nG1 {axis}{distance}.0 F{speed}\nM1002 pop_ref_mode\nM211 R\n"
 HOME_GCODE = "G28\n"
 EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"
+AMS_READ_RFID_GCODE ="M620 R{global_tray_index}\n"
 
 # X1 only currently
 GET_ACCESSORIES = {"system": {"sequence_id": "0", "command": "get_accessories", "accessory_type": "none"}}
