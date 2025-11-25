@@ -235,15 +235,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # Call is not for this instance.
             return
         
-        if self.get_model().print_fun.mqtt_signature_required:
-            LOGGER.error("Printer firmware requires mqtt encryption. All control actions are blocked.")
-            self._report_encryption_enabled_issue(True)
-            return False
+        service_call_name = data['service']
+        write_action = True
+        if service_call_name == 'get_filament_data':
+            write_action = False
 
-        if self.get_model().info.is_hybrid_mode_blocking:
-            LOGGER.error("Printer is in hybrid connection mode. All control actions sent to local mqtt are blocked.")
-            self._report_hybrid_mode_blocking_issue(True)
-            return False
+        if write_action:
+            if self.get_model().print_fun.mqtt_signature_required:
+                LOGGER.error("Printer firmware requires mqtt encryption. All control actions are blocked.")
+                self._report_encryption_enabled_issue(True)
+                return False
+
+            if self.get_model().info.is_hybrid_mode_blocking:
+                LOGGER.error("Printer is in hybrid connection mode. All control actions sent to local mqtt are blocked.")
+                self._report_hybrid_mode_blocking_issue(True)
+                return False
 
         future = self._hass.data[DOMAIN]['service_call_future']
         if future is None:
@@ -878,15 +884,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # One-time issue
             issue_id = f"{issue}_{self.get_model().info.serial}"
 
-        # Check if the issue already exists
-        registry = issue_registry.async_get(self._hass)
-        existing_issue = registry.async_get_issue(
-            domain=DOMAIN,
-            issue_id=issue_id,
-        )
-        if existing_issue is not None:
-            # Issue already exists, no need to create it again
-            return
+            # Check if the issue already exists
+            registry = issue_registry.async_get(self._hass)
+            existing_issue = registry.async_get_issue(
+                domain=DOMAIN,
+                issue_id=issue_id,
+            )
+            if existing_issue is not None:
+                # Issue already exists, no need to create it again
+                return
 
         # Report the issue
         LOGGER.debug(f"Creating issue for {issue}")
