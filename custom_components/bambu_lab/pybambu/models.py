@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import ftplib
-import functools
 import json
 import math
 import os
@@ -2416,7 +2417,7 @@ class Info:
 class AMSInstance:
     """Return all AMS instance related info"""
     model: str
-    tray: dict[int, "AMSTray"]
+    tray: list[AMSTray]
 
     _active: bool = False
     serial: str = ""
@@ -2453,7 +2454,6 @@ class AMSList:
 
     _nozzle_tray_index: dict
     _nozzle_ams_index: dict
-    _tray_now: int = 0
     _first_initialization_done: bool = False
 
     def __init__(self, client):
@@ -2634,8 +2634,8 @@ class AMSList:
                 if entry.get("id") in (0, 1):
                     if "snow" in entry:
                         tray_now = entry["snow"]
-                        self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
                         self._nozzle_ams_index[entry["id"]] = tray_now >> 8
+                        self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
         else:
             tray_now = ams_data.get('tray_now')
             if tray_now is not None:
@@ -2651,14 +2651,13 @@ class AMSList:
                 elif tray_now >= 80:
                     # AMS HT's are indices 128-135 (0x80-0x87)
                     self._nozzle_ams_index[0] = tray_now
-                    self._nozzle_tray_index[0] = tray_now & 0x3
+                    self._nozzle_tray_index[0] = 0
                 else:
                     # Otherwise we need to shift the index down by 2 to get the correct AMS index
                     self._nozzle_ams_index[0] = tray_now >> 2
                     self._nozzle_tray_index[0] = tray_now & 0x3
 
         if len(ams_data) != 0:
-
             ams_list = ams_data.get("ams", [])
             for ams in ams_list:
                 index = int(ams['id'])
@@ -2684,17 +2683,18 @@ class AMSList:
                 if self.data[index].remaining_drying_time != int(ams.get('dry_time', 0)):
                     self.data[index].remaining_drying_time = int(ams.get('dry_time', 0))
 
-                self.data[index]._active = index == self.active_ams_index
-
                 tray_list = ams['tray']
                 for tray in tray_list:
                     tray_id = int(tray['id'])
                     self.data[index].tray[tray_id].print_update(tray)
-                    active_tray = False
-                    if index == self.active_ams_index:
-                        if self.active_tray_index == tray_id:
-                            active_tray = True
-                    self.data[index].tray[tray_id].active = active_tray
+
+        # Now that we've populated the AMS/Trays (if this is first time through), we must
+        # loop over all the ams and trays to set active states correctly.
+        for index in self.data:
+            self.data[index]._active = (index == self.active_ams_index)
+            for tray_id, tray in enumerate(self.data[index].tray):
+                active_tray = (index == self.active_ams_index) and (self.active_tray_index == tray_id)
+                tray.active = active_tray
 
         data_changed = (old_data != f"{self.__dict__}")
         return data_changed
