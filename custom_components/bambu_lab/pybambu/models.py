@@ -2629,39 +2629,33 @@ class AMSList:
         ams_data = data.get("ams", {})
 
         extruder_data = data.get("device", {}).get("extruder", {}).get("info")
-        ams_id = 255
-        ams_tray = 255
         if extruder_data is not None:
             for entry in extruder_data:
                 if entry.get("id") in (0, 1):
                     if "snow" in entry:
                         tray_now = entry["snow"]
-                        ams_id = tray_now >> 8
-                        ams_tray = tray_now & 0x3
-                        self._nozzle_ams_index[entry["id"]] = ams_id
-                        self._nozzle_tray_index[entry["id"]] = ams_tray
+                        self._nozzle_ams_index[entry["id"]] = tray_now >> 8
+                        self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
         else:
             tray_now = ams_data.get('tray_now')
             if tray_now is not None:
                 tray_now = int(tray_now)
                 if tray_now == 255:
                     # In the legacy mqtt payloads 255 nothing active
-                    ams_id = 255
-                    tray_id = 255
+                    self._nozzle_ams_index[0] = 255
+                    self._nozzle_tray_index[0] = 255
                 elif tray_now == 254:
                     # In the legacy mqtt payloads 254 = external spool active
-                    ams_id = 255
-                    tray_id = 0
+                    self._nozzle_ams_index[0] = 255
+                    self._nozzle_tray_index[0] = 0
                 elif tray_now >= 80:
                     # AMS HT's are indices 128-135 (0x80-0x87)
-                    ams_id = tray_now
-                    tray_id = 0
+                    self._nozzle_ams_index[0] = tray_now
+                    self._nozzle_tray_index[0] = 0
                 else:
                     # Otherwise we need to shift the index down by 2 to get the correct AMS index
-                    ams_id = tray_now >> 2
-                    tray_id = tray_now & 0x3
-                self._nozzle_ams_index[0] = ams_id
-                self._nozzle_tray_index[0] = tray_id
+                    self._nozzle_ams_index[0] = tray_now >> 2
+                    self._nozzle_tray_index[0] = tray_now & 0x3
 
         if len(ams_data) != 0:
             ams_list = ams_data.get("ams", [])
