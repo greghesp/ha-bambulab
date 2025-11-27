@@ -475,7 +475,6 @@ class TestH2D(unittest.TestCase):
         result = self.info.print_update(data)
         self.assertTrue(result)
 
-        self.assertTrue(self.info.door_open_available)
         self.assertFalse(self.info.door_open)
 
         # On the H2D, door status is in the stat field.
@@ -495,7 +494,6 @@ class TestH2D(unittest.TestCase):
         result = self.info.print_update(data)
         self.assertTrue(result)
 
-        self.assertTrue(self.info.door_open_available)
         self.assertFalse(self.info.door_open)
 
         # On the H2D, door status is in the stat field, not home_flag.

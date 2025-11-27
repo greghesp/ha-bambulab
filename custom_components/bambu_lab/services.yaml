@@ -259,3 +259,66 @@ read_rfid:
   target:
     entity:
       integration: bambu_lab
+
+filament_drying:
+  name: Filament Drying
+  description: Controls the AMS 2 and HT filament drying. Provide the AMS device.
+  fields:
+    device_id:
+      name: AMS Device
+      description: Select the AMS device to run drying on.
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
+    temp:
+      name: Heating temperature
+      description: >-
+        The temperature to dry at. Must be >= 45 or action will be ignored.
+      required: true
+      example: 45
+      default: 45
+      selector:
+        number:
+          min: 45
+          max: 60
+          step: 1
+    cooling_temp:
+      name: Cooling temperature
+      description: >-
+        The temperature to cool to? Must be >= 45 or action will be ignored.
+      required: true
+      example: 45
+      default: 45
+      selector:
+        number:
+          min: 45
+          max: 60
+          step: 1
+    mode:
+      name: Mode
+      description: >-
+        True for on, False for off
+      required: true
+      default: true
+      selector:
+        boolean:
+    rotate_tray:
+      name: Whether to rotate the tray while drying.
+      description: >-
+        True for on, False for off
+      default: true
+      required: true
+      selector:
+        boolean:
+    duration:
+      name: Duration
+      description: >-
+        How long to dry for. In minutes.
+      required: true
+      default: 120
+      selector:
+        number:
+          mode: box
+          min: 1
+          max: 1440

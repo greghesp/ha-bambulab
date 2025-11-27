@@ -53,6 +53,7 @@ from .pybambu.commands import (
     AMS_FILAMENT_SETTING_TEMPLATE,
     AMS_READ_RFID_TEMPLATE,
     AMS_READ_RFID_GCODE,
+    AMS_FILAMENT_DRYING_TEMPLATE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -188,12 +189,19 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     def _is_service_call_for_me(self, data: dict):
+        # TODO - Pass in if a device or an entity is required
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
 
-        device_id = data.get('device_id', [])
-        if len(device_id) == 1:
-            return (device_id[0] == hadevice.id)
+        device_id = data.get('device_id', None)
+        if device_id is not None:
+            if device_id == hadevice.id:
+                return True
+            ams_device = dev_reg.async_get(device_id)
+            via_device_id = ams_device.via_device_id
+            if via_device_id is not None and (via_device_id == hadevice.id):
+                return True
+            return False
 
         # Next test if an entity_id is specified and if so, get it's device_id, check if it matches
         entity_id = data.get('entity_id', [])
@@ -229,7 +237,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _handle_service_call_event(self, event: Event) -> Any:
         data = event.data
-
         if not self._is_service_call_for_me(data):
             # Call is not for this instance.
             return
@@ -278,6 +285,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_print_project_file(data)
             case "send_command":
                 result = self._service_call_send_gcode(data)
+            case "filament_drying":
+                result = self._service_call_filament_drying(data)
             case _:
                 LOGGER.error(f"Unknown service call: {data}")
 
@@ -366,12 +375,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client.publish(command)
 
         return { "Success": True }
-
-    def _get_ams_and_tray_index_from_entity_entry(self, ams_device, entity_entry):
-        match = re.search(r"tray_([1-4])$", entity_entry.unique_id)
-        # Zero-index the tray ID and find the AMS index
-        tray = int(match.group(1)) - 1
-        # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
+    
+    def _get_ams_index_from_device(self, ams_device):
         ams_serial = next(iter(ams_device.identifiers))[1]
         ams_index = None
         for key in self.get_model().ams.data.keys():
@@ -381,12 +386,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     # We found the right AMS.
                     ams_index = key
                     break
+        return ams_index
+
+    def _get_ams_and_tray_index_from_entity_entry(self, ams_device, entity_entry):
+        match = re.search(r"tray_([1-4])$", entity_entry.unique_id)
+        # Zero-index the tray ID and find the AMS index
+        tray = int(match.group(1)) - 1
+        # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
+        ams_index = self._get_ams_index_from_device(ams_device)
 
         full_tray = tray + ams_index * 4
         LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index}")
 
         return ams_index, tray
-
+    
     def _get_ams_device_and_tray(self, data: dict):
         device_id = data.get('device_id', [])
         if len(device_id) != 0:
@@ -415,6 +428,30 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return None
 
         return ams_device, entity_id        
+    
+    def _service_call_filament_drying(self, data:dict):
+
+        dev_reg = device_registry.async_get(self._hass)
+        device_id = data["device_id"]
+        ams_device = dev_reg.async_get(device_id)
+        model = ams_device.model
+        if (model != 'AMS 2') and (model != 'AMS HT'):
+            LOGGER.error("Passed device is not an AMS 2 or AMS HT.")
+            return False
+
+        ams_index = self._get_ams_index_from_device(ams_device)
+
+        command = AMS_FILAMENT_DRYING_TEMPLATE
+        command['print']['ams_id'] = ams_index
+        command['print']['temp'] = data.get('temp', 0)
+        command['print']['cooling_temp'] = data.get('cooling_temp', 0)
+        command['print']['duration'] = data.get('duration', 0)
+        command['print']['mode'] = 1 if data.get('mode', False) else 0
+        command['print']['rotate_tray'] = data.get('rotate_tray', False)
+
+        self.client.publish(command)
+
+        return True
 
     def _service_call_read_rfid(self, data:dict):
         ams_device, entity_id = self._get_ams_device_and_tray(data)
