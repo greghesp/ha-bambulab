@@ -515,7 +515,10 @@
         "name": "Gesamtzahl der Schichten"
       },
       "active_tray": {
-        "name": "Aktiver Slot"
+        "name": "Aktiver Slot",
+        "state": {
+          "none": "Keiner"
+        }
       },
       "nozzle_diameter": {
         "name": "Düsengröße"

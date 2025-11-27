@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import ast
 import asyncio
 import functools
+import os
 import re
 import time
-import os
 from pathlib import Path
 from datetime import datetime
 from typing import Any, Optional, List, Dict
@@ -24,6 +23,7 @@ from homeassistant.const import (
     Platform
 )
 from homeassistant.helpers import issue_registry
+from homeassistant.helpers import entity_registry as er
 
 from .const import (
     BRAND,
@@ -32,6 +32,7 @@ from .const import (
     LOGGERFORHA,
     Options,
     OPTION_NAME,
+    PLATFORMS,
     SERVICE_CALL_EVENT,
     FILAMENT_DATA,
 )
@@ -118,12 +119,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._report_encryption_enabled_issue()
 
         elif event == "event_printer_info_update":
-            self._update_device_info()
             if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
                 self._update_external_spool_info()
 
-        elif event == "event_ams_info_update":
-            self._update_ams_info()
+        elif event == "event_printer_ready":
+            self._printer_ready()
 
         elif event == "event_light_update":
             self._update_data()
@@ -693,20 +693,39 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def _reinitialize_sensors(self):
         LOGGER.debug("_reinitialize_sensors START")
         LOGGER.debug("async_forward_entry_unload")
-        await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.SENSOR)
-        await self.hass.config_entries.async_forward_entry_unload(self.config_entry, Platform.BINARY_SENSOR)
+        for platform in PLATFORMS:
+            await self.hass.config_entries.async_forward_entry_unload(self.config_entry, platform)
         LOGGER.debug("async_forward_entry_setups")
-        await self.hass.config_entries.async_forward_entry_setups(self.config_entry, [Platform.SENSOR, Platform.BINARY_SENSOR])
+        await self.hass.config_entries.async_forward_entry_setups(self.config_entry, PLATFORMS)
         LOGGER.debug("_reinitialize_sensors DONE")
 
-    def _update_ams_info(self):
-        LOGGER.debug("_update_ams_info")
+        # Check for dead entities and clean them up
+        self._remove_dead_entities()
 
-        # We don't need to add the AMS devices here as home assistant will ignore devices with no sensors and
-        # automatically add devices when we add sensors linked to them with the device we pass when adding the
-        # sensors - which is controlled in the single get_ams_device() method.
+        # Versions may have changed so update those now that the device and sensors are ready.
+        self._update_device_info()
 
-        # But we can use this to clean up orphaned AMS devices such as when an AMS is moved between printers.
+    def _remove_dead_entities(self):
+        """Remove entities no longer created by the integration."""
+
+        entity_registry = er.async_get(self.hass)
+        config_entry_id = self.config_entry.entry_id
+
+        entities = [
+            entry for entry in entity_registry.entities.values()
+            if entry.config_entry_id == config_entry_id
+        ]
+
+        for entity in entities:
+            state = self.hass.states.get(entity.entity_id)
+            if state is not None and state.attributes.get("restored") is True:
+                LOGGER.debug(f"{entity.entity_id} is DEAD. Removing it.")
+                entity_registry.async_remove(entity.entity_id)
+        
+    def _printer_ready(self):
+        LOGGER.debug(f"_printer_ready: {self.config_entry.data["serial"]}")
+
+        # First clean up orphaned AMS devices such as when an AMS is moved between printers.
         existing_ams_devices = []
         for index in self.get_model().ams.data.keys():
             ams_entry = self.get_model().ams.data[index]

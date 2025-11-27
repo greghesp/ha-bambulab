@@ -512,7 +512,10 @@
         "name": "总层数"
       },
       "active_tray": {
-        "name": "激活料盘"
+        "name": "激活料盘",
+        "state": {
+          "none": "没有任何"
+        }
       },
       "nozzle_diameter": {
         "name": "喷嘴直径"

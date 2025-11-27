@@ -55,12 +55,17 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback
 ) -> None:
-    LOGGER.debug("FAN::async_setup_entry")
+    
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-
-    for description in FANS:
-        if description.exists_fn(coordinator):
-            async_add_entities([BambuLabFan(coordinator, description, entry)])
+    if not coordinator.get_model().has_full_printer_data:
+        return
+    
+    LOGGER.debug("FAN::async_setup_entry")
+    # Fans work in hybrid mode so we don't need to block entities on that.
+    if not coordinator.get_model().print_fun.mqtt_signature_required:
+        for description in FANS:
+            if description.exists_fn(coordinator):
+                async_add_entities([BambuLabFan(coordinator, description, entry)])
 
     LOGGER.debug("FAN::async_setup_entry DONE")
 
@@ -83,11 +88,6 @@ class BambuLabFan(BambuLabEntity, FanEntity):
 
         super().__init__(coordinator=coordinator)
 
-    @property
-    def available(self) -> bool:
-        """Is the fan available"""
-        return not self.coordinator.get_model().print_fun.mqtt_signature_required
-    
     @property
     def is_on(self) -> bool:
         """Return the state of the fan"""

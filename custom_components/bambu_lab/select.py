@@ -19,14 +19,15 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
-    LOGGER.debug("SELECT::async_setup_entry")
-    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    async_add_entities(
-        [
-            BambuLabSpeedSelect(coordinator)
-        ]
-    )
+    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if not coordinator.get_model().has_full_printer_data:
+        return
+    
+    LOGGER.debug("SELECT::async_setup_entry")
+    # Unsure if hybrid mode also blocks speed control.
+    if not coordinator.get_model().print_fun.mqtt_signature_required:
+        async_add_entities( [ BambuLabSpeedSelect(coordinator) ] )
 
 
 class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
@@ -47,9 +48,7 @@ class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        available =  self.coordinator.get_model().print_job.gcode_state == 'RUNNING'
-        available = available and not self.coordinator.get_model().print_fun.mqtt_signature_required
-        return available
+        return self.coordinator.get_model().print_job.gcode_state == 'RUNNING'
 
     @property
     def current_option(self) -> str:

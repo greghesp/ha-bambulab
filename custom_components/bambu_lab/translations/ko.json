@@ -512,7 +512,10 @@
         "name": "총 레이어 수"
       },
       "active_tray": {
-        "name": "활성 트레이"
+        "name": "활성 트레이",
+        "state": {
+          "none": "없음"
+        }
       },
       "nozzle_diameter": {
         "name": "노즐 직경"

@@ -521,7 +521,10 @@
         "name": "Łączna liczba warstw"
       },
       "active_tray": {
-        "name": "Aktywny slot"
+        "name": "Aktywny slot",
+        "state": {
+          "none": "Nic"
+        }
       },
       "nozzle_diameter": {
         "name": "Średnica dyszy"

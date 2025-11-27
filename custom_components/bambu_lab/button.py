@@ -67,24 +67,30 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback
 ) -> None:
+
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if not coordinator.get_model().has_full_printer_data:
+        return
+
     LOGGER.debug(f"BUTTON::async_setup_entry")
 
-    buttons = [
-        BambuLabPauseButton(coordinator, entry),
-        BambuLabResumeButton(coordinator, entry),
-        BambuLabStopButton(coordinator, entry),
-        BambuLabRefreshButton(coordinator, entry)
-    ]
-
-    if coordinator.get_model().supports_feature(Features.FIRE_ALARM_BUZZER):
-        buttons += [
-            BambuLabBuzzerSilenceButton(coordinator, entry),
-            BambuLabBuzzerFireAlarmButton(coordinator, entry),
-            BambuLabBuzzerBeepingButton(coordinator, entry)
+    # Unsure if hybrid model blocks this control.
+    if not coordinator.get_model().print_fun.mqtt_signature_required:
+        buttons = [
+            BambuLabPauseButton(coordinator, entry),
+            BambuLabResumeButton(coordinator, entry),
+            BambuLabStopButton(coordinator, entry),
+            BambuLabRefreshButton(coordinator, entry)
         ]
 
-    async_add_entities(buttons)
+        if coordinator.get_model().supports_feature(Features.FIRE_ALARM_BUZZER):
+            buttons += [
+                BambuLabBuzzerSilenceButton(coordinator, entry),
+                BambuLabBuzzerFireAlarmButton(coordinator, entry),
+                BambuLabBuzzerBeepingButton(coordinator, entry)
+            ]
+
+        async_add_entities(buttons)
 
 
 class BambuLabButton(BambuLabEntity, ButtonEntity):
@@ -171,11 +177,6 @@ class BambuLabBuzzerSilenceButton(BambuLabButton):
 
     entity_description = BUZZER_SILENCE_BUTTON_DESCRIPTION
 
-    @property
-    def available(self) -> bool:
-        """Return if the button is available"""
-        return not self.coordinator.get_model().print_fun.mqtt_signature_required
-
     async def async_press(self) -> None:
         """ Pause the Print on button press"""
         self.coordinator.client.publish(BUZZER_SET_SILENT)
@@ -185,11 +186,6 @@ class BambuLabBuzzerFireAlarmButton(BambuLabButton):
 
     entity_description = BUZZER_FIRE_ALARM_BUTTON_DESCRIPTION
 
-    @property
-    def available(self) -> bool:
-        """Return if the button is available"""
-        return not self.coordinator.get_model().print_fun.mqtt_signature_required
-
     async def async_press(self) -> None:
         """ Pause the Print on button press"""
         self.coordinator.client.publish(BUZZER_SET_ALARM)
@@ -198,11 +194,6 @@ class BambuLabBuzzerBeepingButton(BambuLabButton):
     """BambuLab Buzzer Beeping Button"""
 
     entity_description = BUZZER_BEEPING_BUTTON_DESCRIPTION
-
-    @property
-    def available(self) -> bool:
-        """Return if the button is available"""
-        return not self.coordinator.get_model().print_fun.mqtt_signature_required
 
     async def async_press(self) -> None:
         """ Pause the Print on button press"""

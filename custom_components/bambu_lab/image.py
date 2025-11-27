@@ -43,8 +43,11 @@ async def async_setup_entry(
 ) -> None:
     """Set up the Everything but the Kitchen Sink config entry."""
 
-    LOGGER.debug("IMAGE::async_setup_entry")
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][config_entry.entry_id]
+    if not coordinator.get_model().has_full_printer_data:
+        return
+
+    LOGGER.debug("IMAGE::async_setup_entry")
 
     if COVER_IMAGE_SENSOR.exists_fn(coordinator):
         cover_image = CoverImage(hass, coordinator, COVER_IMAGE_SENSOR)

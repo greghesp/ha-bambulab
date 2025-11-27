@@ -512,7 +512,10 @@
         "name": "Samlet antal lag"
       },
       "active_tray": {
-        "name": "Aktiv bakke"
+        "name": "Aktiv bakke",
+        "state": {
+          "none": "Ingen"
+        }
       },
       "nozzle_diameter": {
         "name": "Dyse størrelse"

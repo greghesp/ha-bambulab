@@ -512,7 +512,10 @@
         "name": "Cantidad total de capas"
       },
       "active_tray": {
-        "name": "Bandeja activa"
+        "name": "Bandeja activa",
+        "state": {
+          "none": "Ninguno"
+        }
       },
       "nozzle_diameter": {
         "name": "Tamaño de boquilla"

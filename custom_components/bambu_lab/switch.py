@@ -58,7 +58,11 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback
 ) -> None:
+    
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if not coordinator.get_model().has_full_printer_data:
+        return
+    
     LOGGER.debug(f"SWITCH::async_setup_entry")
 
     # A camera is always present so the switch to turn it on and off should be always present.
@@ -67,11 +71,12 @@ async def async_setup_entry(
     if coordinator.get_model().supports_feature(Features.CAMERA_IMAGE):
         async_add_entities([BambuLabCameraImageSwitch(coordinator, entry)])
 
-    if coordinator.get_model().supports_feature(Features.PROMPT_SOUND):
-        async_add_entities([BambuLabPromptSoundSwitch(coordinator, entry)])
+    if not coordinator.get_model().print_fun.mqtt_signature_required:
+        if coordinator.get_model().supports_feature(Features.PROMPT_SOUND):
+                async_add_entities([BambuLabPromptSoundSwitch(coordinator, entry)])
     
-    if coordinator.get_model().supports_feature(Features.AIRDUCT_MODE):
-        async_add_entities([BambuLabPromptAirductModeSwitch(coordinator, entry)])
+        if coordinator.get_model().supports_feature(Features.AIRDUCT_MODE):
+            async_add_entities([BambuLabPromptAirductModeSwitch(coordinator, entry)])
 
 
 class BambuLabSwitch(BambuLabEntity, SwitchEntity):
@@ -102,10 +107,6 @@ class BambuLabCameraSwitch(BambuLabSwitch):
     ) -> None:
         super().__init__(coordinator, config_entry)
         self._attr_is_on = self.coordinator.get_option_enabled(Options.CAMERA)
-
-    @property
-    def available(self) -> bool:
-        return True
 
     @property
     def icon(self) -> str:
@@ -161,13 +162,6 @@ class BambuLabPromptSoundSwitch(BambuLabSwitch):
 
     entity_description = PROMPT_SOUND_SWITCH_DESCRIPTION
 
-    def available(self) -> bool:
-        """Is the sound switch available"""
-        available = True
-        # Changing the sound involves sending a "print"-type command that may require signature
-        available = available and not self.coordinator.get_model().print_fun.mqtt_signature_required
-        return available
-
     @property
     def icon(self) -> str:
         """Return the icon for the switch."""
@@ -201,13 +195,6 @@ class BambuLabPromptAirductModeSwitch(BambuLabSwitch):
         super().__init__(coordinator, config_entry)
         self._attr_is_on = self.coordinator.get_model().info.airduct_mode == 0 
         
-    def available(self) -> bool:
-        """Is the air duct mode switch available"""
-        available = True
-        # Changing the air duct mode involves sending a "print"-type command that may require signature
-        available = available and not self.coordinator.get_model().print_fun.mqtt_signature_required
-        return available
-
     @property
     def icon(self) -> str:
         """Return the icon for the switch."""

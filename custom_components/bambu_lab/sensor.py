@@ -27,6 +27,8 @@ async def async_setup_entry(
     """Set up BambuLab sensor based on a config entry."""
     
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if not coordinator.get_model().has_full_printer_data:
+        return
 
     if coordinator.get_model().supports_feature(Features.EXTERNAL_SPOOL):
         for sensor in VIRTUAL_TRAY_SENSORS:
@@ -37,9 +39,8 @@ async def async_setup_entry(
 
     for sensor in AMS_SENSORS:
         for index in coordinator.get_model().ams.data.keys():
-            if coordinator.get_model().ams.data[index] is not None:
-                if sensor.exists_fn(coordinator, index):
-                    async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
+            if sensor.exists_fn(coordinator, index):
+                async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
 
     for sensor in PRINTER_SENSORS:    
         if sensor.exists_fn(coordinator):
