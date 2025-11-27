@@ -193,9 +193,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
 
-        device_id = data.get('device_id', [])
-        if len(device_id) == 1:
-            device_id = device_id[0]
+        device_id = data.get('device_id', None)
+        if device_id is not None:
             if device_id == hadevice.id:
                 return True
             ams_device = dev_reg.async_get(device_id)
@@ -433,7 +432,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _service_call_filament_drying(self, data:dict):
 
         dev_reg = device_registry.async_get(self._hass)
-        device_id = data["device_id"][0]
+        device_id = data["device_id"]
         ams_device = dev_reg.async_get(device_id)
         model = ams_device.model
         if (model != 'AMS 2') and (model != 'AMS HT'):
