@@ -554,7 +554,10 @@
         "name": "Total layer count"
       },
       "active_tray": {
-        "name": "Active tray"
+        "name": "Active tray",
+        "state": {
+          "none": "None"
+        }
       },
       "nozzle_diameter": {
         "name": "Nozzle size"

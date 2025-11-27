@@ -512,7 +512,10 @@
         "name": "Contagem total de camadas"
       },
       "active_tray": {
-        "name": "Bandeja ativa"
+        "name": "Bandeja ativa",
+        "state": {
+          "none": "Nenhum"
+        }
       },
       "nozzle_diameter": {
         "name": "Tamanho do bico"

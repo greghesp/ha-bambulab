@@ -113,38 +113,34 @@ class Device:
         send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
 
+        send_ready_event = self.get_version_data is not None and self.push_all_data is None
+        if data.get("command") == "push_status":
+            if data.get("msg", 0) == 0:
+                self.push_all_data = data
+                if send_ready_event:
+                    self._client.callback("event_printer_ready")
+
         self._client.callback("event_printer_data_update")
 
-        if data.get("msg", 0) == 0:
-            self.push_all_data = data
+    @property
+    def has_full_printer_data(self):
+        return (self.push_all_data != None) and (self.get_version_data != None)
 
     def info_update(self, data):
         self.info.info_update(data = data)
         self.home_flag.info_update(data = data)
         self.ams.info_update(data = data)
+
         if data.get("command") == "get_version":
+            send_ready_event = self.get_version_data is None and self.push_all_data is not None
             self.get_version_data = data
+            if send_ready_event:
+                self._client.callback("event_printer_ready")
+
 
     def observe_system_command(self, data):
         if data.get("command") == "ledctrl" and data.get("led_node") == "heatbed_light":
             self.lights.observe_system_command(data)
-
-    def _supports_temperature_set(self):
-        # When talking to the Bambu cloud mqtt, setting the temperatures is allowed.
-        if self.info.mqtt_mode == "bambu_cloud":
-            return True
-        # X1* have not yet blocked setting the temperatures when in hybrid connection mode.
-        # Is this accurate now that mqtt encryption landed?
-        if (self.info.device_type == Printers.H2C or
-            self.info.device_type == Printers.H2D or
-            self.info.device_type == Printers.H2DPRO or
-            self.info.device_type == Printers.H2S or
-            self.info.device_type == Printers.X1 or
-            self.info.device_type == Printers.X1C or
-            self.info.device_type == Printers.X1E):
-            return True
-        # What's left is P1 and A1 printers that we are connecting by local mqtt. These are supported only in pure Lan Mode.
-        return not self._client.bambu_cloud.bambu_connected
 
     def supports_feature(self, feature):
         if feature == Features.AUX_FAN:
@@ -261,8 +257,6 @@ class Device:
                 # This needs fixing now the A1 printers support the other AMS models.
                 return False
             return True
-        elif feature == Features.SET_TEMPERATURE:
-            return self._supports_temperature_set()
         elif feature == Features.PROMPT_SOUND:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI or
@@ -2561,9 +2555,6 @@ class AMSList:
                 data_changed = True
 
         data_changed = data_changed or (old_data != f"{self.__dict__}")
-
-        if data_changed:
-            self._client.callback("event_ams_info_update")
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"

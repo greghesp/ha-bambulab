@@ -29,7 +29,10 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
+
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if not coordinator.get_model().has_full_printer_data:
+        return
 
     for sensor in PRINTER_BINARY_SENSORS:    
         if sensor.exists_fn(coordinator):

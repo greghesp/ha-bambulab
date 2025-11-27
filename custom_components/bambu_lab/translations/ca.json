@@ -512,7 +512,10 @@
         "name": "Quantitat total de capes"
       },
       "active_tray": {
-        "name": "Safata activa"
+        "name": "Safata activa",
+        "state": {
+          "none": "Cap"
+        }
       },
       "nozzle_diameter": {
         "name": "Grandària del broquet"

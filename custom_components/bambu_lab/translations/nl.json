@@ -515,7 +515,10 @@
         "name": "Hoeveelheid lagen"
       },
       "active_tray": {
-        "name": "Actieve tray"
+        "name": "Actieve tray",
+        "state": {
+          "none": "Geen"
+        }
       },
       "nozzle_diameter": {
         "name": "Nozzle-grootte"

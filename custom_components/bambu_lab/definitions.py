@@ -574,8 +574,9 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="active_tray",
         translation_key="active_tray",
         icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: self.coordinator.get_model().ams.active_tray.name,
+        value_fn=lambda self: "none" if self.coordinator.get_model().ams.active_tray is None else self.coordinator.get_model().ams.active_tray.name,
         extra_attributes=lambda self:
+        {} if self.coordinator.get_model().ams.active_tray is  None else
         {
             "ams_index": self.coordinator.get_model().ams.active_ams_index,
             "color": f"#{self.coordinator.get_model().ams.active_tray.color}",
@@ -592,7 +593,6 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "tray_uuid": self.coordinator.get_model().ams.active_tray.tray_uuid,
             "type": self.coordinator.get_model().ams.active_tray.type,
         },
-        available_fn=lambda self: self.coordinator.get_model().ams.active_tray is not None,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
     ),
     BambuLabSensorEntityDescription(

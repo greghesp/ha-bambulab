@@ -512,7 +512,10 @@
         "name": "Livelli Totali"
       },
       "active_tray": {
-        "name": "Piatto Attivo"
+        "name": "Piatto Attivo",
+        "state": {
+          "none": "Nessuno"
+        }
       },
       "nozzle_diameter": {
         "name": "Dimensione Ugello"

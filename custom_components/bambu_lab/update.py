@@ -30,9 +30,13 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback
 ) -> None:
-    LOGGER.debug(f"UPDATE::async_setup_entry")
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if not coordinator.get_model().has_full_printer_data:
+        return
+
+    LOGGER.debug(f"UPDATE::async_setup_entry")
+
     if coordinator.get_option_enabled(Options.FIRMWAREUPDATE):
         async_add_entities([BambuLabUpdate(coordinator, FIRMWARE_UPDATE_DESCRIPTION, entry)])
 
@@ -57,11 +61,6 @@ class BambuLabUpdate(BambuLabEntity, UpdateEntity):
         self.entity_description = description
         printer = self.coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
-    
-    @property
-    def available(self) -> bool:
-        """Return True if the update is available."""
-        return True
     
     @property
     def latest_version(self) -> str:

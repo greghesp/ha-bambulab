@@ -43,7 +43,6 @@ class Features(IntEnum):
     DOOR_SENSOR = 16,
     READ_RFID_COMMAND = 17,
     AMS_FILAMENT_REMAINING = 18,
-    SET_TEMPERATURE = 19,
     PROMPT_SOUND = 20,
     FTP = 21,
     AMS_SWITCH_COMMAND = 23,

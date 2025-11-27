@@ -512,7 +512,10 @@
         "name": "Celkový počet vrstiev"
       },
       "active_tray": {
-        "name": "Aktívny zásobník"
+        "name": "Aktívny zásobník",
+        "state": {
+          "none": "žiadne"
+        }
       },
       "nozzle_diameter": {
         "name": "Priemer trysky"

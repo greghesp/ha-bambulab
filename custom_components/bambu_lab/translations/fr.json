@@ -512,7 +512,10 @@
         "name": "Nombre total de couches"
       },
       "active_tray": {
-        "name": "Emplacement actif"
+        "name": "Emplacement actif",
+        "state": {
+          "none": "Aucun"
+        }
       },
       "nozzle_diameter": {
         "name": "Taille de la buse"
