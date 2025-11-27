@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import ast
 import asyncio
 import functools
+import os
 import re
 import time
-import os
 from pathlib import Path
 from datetime import datetime
 from typing import Any, Optional, List, Dict
@@ -700,9 +699,29 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         await self.hass.config_entries.async_forward_entry_setups(self.config_entry, PLATFORMS)
         LOGGER.debug("_reinitialize_sensors DONE")
 
+        # Check for dead entities and clean them up
+        self._remove_dead_entities()
+
         # Versions may have changed so update those now that the device and sensors are ready.
         self._update_device_info()
 
+    def _remove_dead_entities(self):
+        """Remove entities no longer created by the integration."""
+
+        entity_registry = er.async_get(self.hass)
+        config_entry_id = self.config_entry.entry_id
+
+        entities = [
+            entry for entry in entity_registry.entities.values()
+            if entry.config_entry_id == config_entry_id
+        ]
+
+        for entity in entities:
+            state = self.hass.states.get(entity.entity_id)
+            if state is not None and state.attributes.get("restored") is True:
+                LOGGER.debug(f"{entity.entity_id} is DEAD. Removing it.")
+                entity_registry.async_remove(entity.entity_id)
+        
     def _printer_ready(self):
         LOGGER.debug(f"_printer_ready: {self.config_entry.data["serial"]}")
 
