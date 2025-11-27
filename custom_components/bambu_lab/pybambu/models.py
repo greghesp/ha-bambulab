@@ -225,7 +225,7 @@ class Device:
                     self.info.device_type == Printers.H2S or
                     self.info.device_type == Printers.P2S or
                     self.info.device_type == Printers.X1E)
-        elif feature == Features.READ_RFID_COMMAND:
+        elif feature == Features.AMS_READ_RFID_COMMAND:
             if (self.info.device_type == Printers.A1 or
                 self.info.device_type == Printers.A1MINI):
                 return self.supports_sw_version("01.06.00.00")

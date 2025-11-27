@@ -430,7 +430,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error("Unable to locate AMS.")
             return
         
-        if self.get_model().supports_feature(Features.READ_RFID_COMMAND):
+        if self.get_model().supports_feature(Features.AMS_READ_RFID_COMMAND):
             command = AMS_READ_RFID_TEMPLATE
             command['print']['ams_id'] = ams_index
             command['print']['slot_id'] = tray_index
