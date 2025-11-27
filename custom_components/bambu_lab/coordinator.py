@@ -119,8 +119,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._report_encryption_enabled_issue()
 
         elif event == "event_printer_info_update":
-            if self.get_model().supports_feature(Features.EXTERNAL_SPOOL):
-                self._update_external_spool_info()
+            self._update_external_spool_info()
 
         elif event == "event_printer_ready":
             self._printer_ready()
@@ -431,7 +430,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error("Unable to locate AMS.")
             return
         
-        if self.get_model().supports_feature(Features.READ_RFID_COMMAND):
+        if self.get_model().supports_feature(Features.AMS_READ_RFID_COMMAND):
             command = AMS_READ_RFID_TEMPLATE
             command['print']['ams_id'] = ams_index
             command['print']['slot_id'] = tray_index
@@ -718,7 +717,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         for entity in entities:
             state = self.hass.states.get(entity.entity_id)
-            if state is not None and state.attributes.get("restored") is True:
+            if state is None or state.attributes.get("restored") is True:
                 LOGGER.debug(f"{entity.entity_id} is DEAD. Removing it.")
                 entity_registry.async_remove(entity.entity_id)
         
@@ -836,8 +835,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         match option:
             case Options.CAMERA:
                 default = True
-            case Options.FTP:
-                return True  # Always enabled, no option to disable
 
         return options.get(OPTION_NAME[option], default)
         
@@ -858,17 +855,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 title=self.get_model().info.serial,
                 data=self.config_entry.data,
                 options=options)
-            
-            force_reload = False
-            match option:
-                case Options.CAMERA:
-                    force_reload = True
-                case Options.IMAGECAMERA:
-                    force_reload = True
 
-            if force_reload:
-                # Force reload of sensors.
-                return await self.hass.config_entries.async_reload(self._entry.entry_id)
+            # Refresh all entities to handle deleted/added entities.
+            self._printer_ready()
 
     def get_option_value(self, option: Options) -> int:
         options = dict(self.config_entry.options)

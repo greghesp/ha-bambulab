@@ -18,21 +18,21 @@ CHAMBER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
         translation_key="p1p_camera",
         value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and coordinator.get_option_enabled(Options.IMAGECAMERA),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and
+                                      coordinator.get_option_enabled(Options.CAMERA) and
+                                      coordinator.get_option_enabled(Options.IMAGECAMERA)
     )
 
 COVER_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="cover_image",
         translation_key="cover_image",
-        value_fn=lambda self: self.coordinator.get_model().print_job.get_cover_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().info.has_bambu_cloud_connection or coordinator.get_option_enabled(Options.FTP)
+        value_fn=lambda self: self.coordinator.get_model().print_job.get_cover_image()
     )
 
 PICK_IMAGE_SENSOR = BambuLabSensorEntityDescription(
         key="pick_image",
         translation_key="pick_image",
-        value_fn=lambda self: self.coordinator.get_model().print_job.get_pick_image(),
-        exists_fn=lambda coordinator: coordinator.get_option_enabled(Options.FTP)
+        value_fn=lambda self: self.coordinator.get_model().print_job.get_pick_image()
     )
 
 
@@ -49,13 +49,9 @@ async def async_setup_entry(
 
     LOGGER.debug("IMAGE::async_setup_entry")
 
-    if COVER_IMAGE_SENSOR.exists_fn(coordinator):
-        cover_image = CoverImage(hass, coordinator, COVER_IMAGE_SENSOR)
-        async_add_entities([cover_image])
-
-    if PICK_IMAGE_SENSOR.exists_fn(coordinator):
-        pick_image = PickImage(hass, coordinator, PICK_IMAGE_SENSOR)
-        async_add_entities([pick_image])
+    cover_image = CoverImage(hass, coordinator, COVER_IMAGE_SENSOR)
+    pick_image = PickImage(hass, coordinator, PICK_IMAGE_SENSOR)
+    async_add_entities([cover_image, pick_image])
 
     if CHAMBER_IMAGE_SENSOR.exists_fn(coordinator):
         chamber_image = ChamberImage(hass, coordinator, CHAMBER_IMAGE_SENSOR)
@@ -118,10 +114,6 @@ class ChamberImage(ImageEntity, BambuLabEntity):
     def image_last_updated(self) -> datetime | None:
         """The time when the image was last updated."""
         return self.coordinator.get_model().chamber_image.get_last_update_time()
-    
-    @property
-    def available(self) -> bool:
-        return self.coordinator.get_model().chamber_image.available and self.coordinator.get_option_enabled(Options.CAMERA)
 
 
 class PickImage(ImageEntity, BambuLabEntity):

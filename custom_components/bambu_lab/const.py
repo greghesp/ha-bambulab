@@ -44,7 +44,6 @@ BAMBU_LAB_CARDS = [
 class Options(IntEnum):
     CAMERA = 1,
     IMAGECAMERA = 2,
-    FTP = 3,
     FIRMWAREUPDATE = 6
 
 OPTION_NAME = {

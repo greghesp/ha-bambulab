@@ -23,8 +23,7 @@ async def async_setup_entry(
         return
 
     entities_to_add: list = []
-    if coordinator.data.supports_feature(Features.CHAMBER_LIGHT):
-        entities_to_add.append(BambuLabChamberLight(coordinator, entry))
+    entities_to_add.append(BambuLabChamberLight(coordinator, entry))
     if coordinator.data.supports_feature(Features.HEATBED_LIGHT):
         entities_to_add.append(BambuLabHeatbedLight(coordinator, entry))
     async_add_entities(entities_to_add)
