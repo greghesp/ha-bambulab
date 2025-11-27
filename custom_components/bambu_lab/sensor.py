@@ -30,12 +30,11 @@ async def async_setup_entry(
     if not coordinator.get_model().has_full_printer_data:
         return
 
-    if coordinator.get_model().supports_feature(Features.EXTERNAL_SPOOL):
-        for sensor in VIRTUAL_TRAY_SENSORS:
-            if sensor.exists_fn(coordinator):
-                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0)])
-                if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
-                    async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 1)])
+    for sensor in VIRTUAL_TRAY_SENSORS:
+        if sensor.exists_fn(coordinator):
+            async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0)])
+            if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
+                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 1)])
 
     for sensor in AMS_SENSORS:
         for index in coordinator.get_model().ams.data.keys():

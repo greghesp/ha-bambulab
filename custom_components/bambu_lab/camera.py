@@ -16,7 +16,9 @@ CHAMBER_CAMERA_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
         translation_key="p1p_camera",
         value_fn=lambda self: self.coordinator.get_model().get_camera_image(),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and not coordinator.get_option_enabled(Options.IMAGECAMERA),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CAMERA_IMAGE) and
+                                      coordinator.get_option_enabled(Options.CAMERA) and
+                                      not coordinator.get_option_enabled(Options.IMAGECAMERA)
     )
 
 async def async_setup_entry(
@@ -31,13 +33,13 @@ async def async_setup_entry(
 
     LOGGER.debug(f"CAMERA::async_setup_entry")
 
-    if coordinator.get_model().supports_feature(Features.CAMERA_RTSP):
-        entities_to_add: list = [BambuLabRtspCamera(coordinator, entry)]
-        async_add_entities(entities_to_add)
+    if coordinator.get_model().supports_feature(Features.CAMERA_RTSP) and coordinator.get_option_enabled(Options.CAMERA):
+        url = coordinator.get_model().camera.rtsp_url
+        if url != None and url != "disable":
+            async_add_entities([BambuLabRtspCamera(coordinator, entry)])
 
     if CHAMBER_CAMERA_SENSOR.exists_fn(coordinator):
-        entities_to_add: list = [BambuLabImageCamera(coordinator, entry)]
-        async_add_entities(entities_to_add)
+        async_add_entities([BambuLabImageCamera(coordinator, entry)])
 
 
 class BambuLabRtspCamera(BambuLabEntity, Camera):
@@ -73,11 +75,6 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
     @property
     def use_stream_for_stills(self) -> bool:
         return True
-
-    @property
-    def available(self) -> bool:
-        url = self.coordinator.get_model().camera.rtsp_url
-        return url != None and url != "disable"
 
     async def stream_source(self) -> str | None:
         if self.available:
@@ -128,7 +125,3 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
     @property
     def is_recording(self) -> bool:
         return False
-    
-    @property
-    def available(self) -> bool:
-        return self.coordinator.get_model().chamber_image.available and self.coordinator.get_option_enabled(Options.CAMERA)

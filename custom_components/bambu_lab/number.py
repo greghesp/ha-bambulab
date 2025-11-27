@@ -30,8 +30,6 @@ class BambuLabNumberEntityDescriptionMixin:
 @dataclass
 class BambuLabNumberEntityDescription(NumberEntityDescription, BambuLabNumberEntityDescriptionMixin):
     """Sensor entity description for Bambu Lab."""
-    available_fn: Callable[..., bool] = lambda _: True
-    exists_fn: Callable[..., bool] = lambda _: True
 
 
 NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
