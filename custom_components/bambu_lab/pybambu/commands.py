@@ -120,6 +120,20 @@ AMS_READ_RFID_TEMPLATE = {
     }
 }
 
+AMS_FILAMENT_DRYING_TEMPLATE = {
+  "print": {
+    "sequence_id": "0",
+    "command": "ams_filament_drying",
+    "ams_id": 0,
+    "temp": 45,
+    "cooling_temp": 45,
+    "duration": 12,
+    "humidity": 0,
+    "mode": 0,
+    "rotate_tray": False,
+  }
+}
+
 MOVE_AXIS_GCODE = "M211 S\nM211 X1 Y1 Z1\nM1002 push_ref_mode\nG91 \nG1 {axis}{distance}.0 F{speed}\nM1002 pop_ref_mode\nM211 R\n"
 HOME_GCODE = "G28\n"
 EXTRUDER_GCODE = "M83 \nG0 E{distance}.0 F900\n"

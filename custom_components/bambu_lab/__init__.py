@@ -399,6 +399,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "set_filament": SupportsResponse.NONE,
         "get_filament_data": SupportsResponse.ONLY,
         "read_rfid": SupportsResponse.NONE,
+        "filament_drying": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(
