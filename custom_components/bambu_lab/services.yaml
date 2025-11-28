@@ -262,7 +262,7 @@ read_rfid:
 
 start_filament_drying:
   name: Start Filament Drying
-  description: Starts AMS 2 and AMS HT filament drying.
+  description: Starts AMS filament drying.
   fields:
     device_id:
       name: AMS Device
@@ -300,7 +300,7 @@ start_filament_drying:
 
 stop_filament_drying:
   name: Stop Filament Drying
-  description: Stops AMS 2 and AMS HT filament drying.
+  description: Stops AMS filament drying.
   fields:
     device_id:
       name: AMS Device
