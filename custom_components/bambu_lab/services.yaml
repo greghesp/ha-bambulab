@@ -260,13 +260,13 @@ read_rfid:
     entity:
       integration: bambu_lab
 
-filament_drying:
-  name: Filament Drying
-  description: Controls the AMS 2 and HT filament drying. Provide the AMS device.
+start_filament_drying:
+  name: Start Filament Drying
+  description: Starts AMS filament drying.
   fields:
     device_id:
       name: AMS Device
-      description: Select the AMS device to run drying on.
+      description: Select the AMS 2 or AMS HT device to run drying on.
       required: true
       selector:
         device:
@@ -274,51 +274,38 @@ filament_drying:
     temp:
       name: Heating temperature
       description: >-
-        The temperature to dry at. Must be >= 45 or action will be ignored.
+        AMS 2 max is 65C. AMS HT max is 85C.
       required: true
       example: 45
       default: 45
       selector:
         number:
           min: 45
-          max: 60
+          max: 85
           step: 1
-    cooling_temp:
-      name: Cooling temperature
-      description: >-
-        The temperature to cool to? Must be >= 45 or action will be ignored.
-      required: true
-      example: 45
-      default: 45
-      selector:
-        number:
-          min: 45
-          max: 60
-          step: 1
-    mode:
-      name: Mode
-      description: >-
-        True for on, False for off
-      required: true
-      default: true
-      selector:
-        boolean:
     rotate_tray:
-      name: Whether to rotate the tray while drying.
-      description: >-
-        True for on, False for off
-      default: true
+      name: Rotate tray while drying
+      default: false
       required: true
       selector:
         boolean:
     duration:
-      name: Duration
-      description: >-
-        How long to dry for. In minutes.
+      name: Duration (in Hours)
       required: true
-      default: 120
+      default: 2
       selector:
         number:
-          mode: box
           min: 1
-          max: 1440
+          max: 24
+
+stop_filament_drying:
+  name: Stop Filament Drying
+  description: Stops AMS filament drying.
+  fields:
+    device_id:
+      name: AMS Device
+      description: Select the AMS 2 or AMS HT device to stop drying on.
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
