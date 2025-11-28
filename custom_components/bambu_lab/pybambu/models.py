@@ -86,8 +86,7 @@ class Device:
         self.extruder_tool = ExtruderTool(client=client)
         self.push_all_data = None
         self.get_version_data = None
-        if self.supports_feature(Features.CAMERA_IMAGE):
-            self.chamber_image = ChamberImage(client = client)
+        self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
         self.print_fun = PrintFun(client = client)
@@ -143,10 +142,30 @@ class Device:
             self.lights.observe_system_command(data)
 
     def supports_feature(self, feature):
+
+        # First check known early feature check scenarios:
+        if feature == Features.CAMERA_RTSP:
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
+                    self.info.device_type == Printers.H2DPRO or
+                    self.info.device_type == Printers.H2S or
+                    self.info.device_type == Printers.P2S or
+                    self.info.device_type == Printers.X1 or
+                    self.info.device_type == Printers.X1C or
+                    self.info.device_type == Printers.X1E)
+        elif feature == Features.CAMERA_IMAGE:
+            return (self.info.device_type == Printers.A1 or
+                    self.info.device_type == Printers.A1MINI or
+                    self.info.device_type == Printers.P1P or
+                    self.info.device_type == Printers.P1S)
+
+        # Now check that we have a version. All tests after this are expected to only be called after the
+        # first full set of data from the printer has been received and so version will be available.
         if self.info.sw_ver == "unknown":
             LOGGER.error(f"supports_feature queried for {feature} before printer firmware version is known.")
             return False
 
+        # All following features should only be every checked after full initialization data is available.
         if feature == Features.AUX_FAN:
             return not (self.info.device_type == Printers.A1 or
                         self.info.device_type == Printers.A1MINI)
@@ -201,20 +220,6 @@ class Device:
                 return self.supports_sw_version("01.07.00.00")
             # Only the P1 firmware did this as far as I know. Not the A1.
             return False
-        elif feature == Features.CAMERA_RTSP:
-            return (self.info.device_type == Printers.H2C or
-                    self.info.device_type == Printers.H2D or
-                    self.info.device_type == Printers.H2DPRO or
-                    self.info.device_type == Printers.H2S or
-                    self.info.device_type == Printers.P2S or
-                    self.info.device_type == Printers.X1 or
-                    self.info.device_type == Printers.X1C or
-                    self.info.device_type == Printers.X1E)
-        elif feature == Features.CAMERA_IMAGE:
-            return (self.info.device_type == Printers.A1 or
-                    self.info.device_type == Printers.A1MINI or
-                    self.info.device_type == Printers.P1P or
-                    self.info.device_type == Printers.P1S)
         elif feature == Features.DOOR_SENSOR:
             if (self.info.device_type in [Printers.X1,
                                           Printers.X1C]):
