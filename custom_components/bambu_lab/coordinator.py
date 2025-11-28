@@ -458,7 +458,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             command['print']['cooling_temp'] = 45 # Must be at least 45 or the command is ignored
 
             duration = data.get('duration')
-            if duration is None or duration < 1 or duration > 12:
+            if duration is None or duration < 1 or duration > 24:
                 LOGGER.error(f"Duration value of '{duration}' not set or out of range.")
                 return False
             command['print']['duration'] = duration
