@@ -293,7 +293,10 @@ class Device:
                 return self.supports_sw_version("01.07.50.18")
             return False
         elif feature == Features.AMS_DRYING:
-            if (self.info.device_type == Printers.H2C or
+            if (self.info.device_type == Printers.A1 or
+                  self.info.device_type == Printers.A1MINI):
+                return self.supports_sw_version("01.06.10.33")
+            elif (self.info.device_type == Printers.H2C or
                 self.info.device_type == Printers.H2D or
                 self.info.device_type == Printers.H2DPRO or
                 self.info.device_type == Printers.H2S or
