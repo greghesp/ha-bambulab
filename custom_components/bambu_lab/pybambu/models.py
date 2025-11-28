@@ -86,8 +86,7 @@ class Device:
         self.extruder_tool = ExtruderTool(client=client)
         self.push_all_data = None
         self.get_version_data = None
-        if self.supports_feature(Features.CAMERA_IMAGE):
-            self.chamber_image = ChamberImage(client = client)
+        self.chamber_image = ChamberImage(client = client)
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
         self.print_fun = PrintFun(client = client)
