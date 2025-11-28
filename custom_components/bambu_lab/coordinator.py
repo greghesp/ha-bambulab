@@ -285,7 +285,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_print_project_file(data)
             case "send_command":
                 result = self._service_call_send_gcode(data)
-            case "filament_drying":
+            case "start_filament_drying":
+                result = self._service_call_filament_drying(data)
+            case "stop_filament_drying":
                 result = self._service_call_filament_drying(data)
             case _:
                 LOGGER.error(f"Unknown service call: {data}")
@@ -438,16 +440,32 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if (model != 'AMS 2') and (model != 'AMS HT'):
             LOGGER.error("Passed device is not an AMS 2 or AMS HT.")
             return False
-
+        
         ams_index = self._get_ams_index_from_device(ams_device)
-
         command = AMS_FILAMENT_DRYING_TEMPLATE
         command['print']['ams_id'] = ams_index
-        command['print']['temp'] = data.get('temp', 0)
-        command['print']['cooling_temp'] = data.get('cooling_temp', 0)
-        command['print']['duration'] = data.get('duration', 0)
-        command['print']['mode'] = 1 if data.get('mode', False) else 0
-        command['print']['rotate_tray'] = data.get('rotate_tray', False)
+        
+        start_command = data['service'] == 'start_filament_drying'
+        if start_command:
+            temp = data.get('temp')
+            if temp is None or temp < 45 or temp > 85:
+                LOGGER.error(f"Temperature value of '{temp}' not set or out of range.")
+                return False
+            if model != 'AMS HT' and temp > 65:
+                LOGGER.error(f"Temperature value of {temp}C too high for AMS 2.")
+                return False
+            command['print']['temp'] = temp
+            command['print']['cooling_temp'] = 45 # Must be at least 45 or the command is ignored
+
+            duration = data.get('duration')
+            if duration is None or duration < 1 or duration > 12:
+                LOGGER.error(f"Duration value of '{duration}' not set or out of range.")
+                return False
+            command['print']['duration'] = duration
+            command['print']['mode'] = 1
+            command['print']['rotate_tray'] = data.get('rotate_tray', False)
+        else:
+            command['print']['mode'] = 0
 
         self.client.publish(command)
 
