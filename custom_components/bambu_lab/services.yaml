@@ -119,7 +119,7 @@ move_axis:
       name: Axis
       description: >-
         The axis to move.
-        X,P,H printers, X and Y move the printhead, Z moves the bed.
+        X/P/H printers, X and Y move the printhead, Z moves the bed.
         A1, X moves the printhead, Y the bed, Z moves the gantry.
       required: true
       example: "X"
