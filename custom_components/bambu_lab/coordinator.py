@@ -194,6 +194,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         device_id = data.get('device_id')
         entity_id = data.get('entity_id')
+        if device_id is None and entity_id is None:
+            LOGGER.error(f"Invalid data payload, neither device_id or entity_id provided: {data}")
 
         if device_id is not None:
             if entity_id is not None:
@@ -221,7 +223,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             via_device_id = entity_device.via_device_id
             if via_device_id == hadevice.id:
                 return True
-
+            
         return False
 
     def _get_device_from_entity(self, entity_id):
