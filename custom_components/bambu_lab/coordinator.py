@@ -189,12 +189,17 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return self.client.publish(msg)
 
     def _is_service_call_for_me(self, data: dict):
-        # TODO - Pass in if a device or an entity is required
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
 
-        device_id = data.get('device_id', None)
+        device_id = data.get('device_id')
+        entity_id = data.get('entity_id')
+
         if device_id is not None:
+            if entity_id is not None:
+                LOGGER.error("Either a device_id or an entity_id must be provided for a service call, not both.")
+                return False
+
             if device_id == hadevice.id:
                 return True
             ams_device = dev_reg.async_get(device_id)
@@ -204,9 +209,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
         # Next test if an entity_id is specified and if so, get it's device_id, check if it matches
-        entity_id = data.get('entity_id', [])
-        if len(entity_id) == 1:
-            entity_device = self._get_device_from_entity(entity_id[0])
+        if entity_id is not None:
+            entity_device = self._get_device_from_entity(entity_id)
             if entity_device is None:
                 LOGGER.error("Unable to find device from entity")
                 return False
@@ -217,8 +221,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             via_device_id = entity_device.via_device_id
             if via_device_id == hadevice.id:
                 return True
-        else:
-            LOGGER.error(f"Invalid data payload: {data}")
 
         return False
 
@@ -403,15 +405,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return ams_index, tray
     
     def _get_ams_device_and_tray(self, data: dict):
-        device_id = data.get('device_id', [])
-        if len(device_id) != 0:
-            LOGGER.error(f"Invalid entity data payload: {data}")
+        entity_id = data.get('entity_id')
+        if entity_id is None:
+            LOGGER.error(f"Invalid data payload, missing entity_id: {data}")
             return None
-        entity_id = data.get('entity_id', [])
-        if len(entity_id) != 1:
-            LOGGER.error(f"Invalid entity data payload: {data}")
-            return None
-        entity_id = entity_id[0]
 
         # Get the AMS device
         ams_device = self._get_device_from_entity(entity_id)
@@ -432,9 +429,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return ams_device, entity_id        
     
     def _service_call_filament_drying(self, data:dict):
+        device_id = data["device_id"]
+        if device_id is None:
+            LOGGER.error(f"Invalid data payload, missing device_id: {data}")
+            return None
 
         dev_reg = device_registry.async_get(self._hass)
-        device_id = data["device_id"]
         ams_device = dev_reg.async_get(device_id)
         model = ams_device.model
         if (model != 'AMS 2') and (model != 'AMS HT'):
@@ -1140,51 +1140,3 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as e:
             LOGGER.error(f"Error clearing file cache: {e}")
             return {"success": False, "error": str(e)}
-
-    def check_service_call_payload_for_device(call: ServiceCall):
-        LOGGER.debug(call)
-
-        area_ids = call.data.get("area_id", [])
-        device_ids = call.data.get("device_id", [])
-        entity_ids = call.data.get("entity_id", [])
-        label_ids = call.data.get("label_ids", [])
-
-        # Ensure only one device ID is passed
-        if not isinstance(area_ids, list) or len(area_ids) != 0:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
-        if not isinstance(device_ids, list) or len(device_ids) != 1:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
-        if not isinstance(entity_ids, list) or len(entity_ids) != 0:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
-        if not isinstance(label_ids, list) or len(label_ids) != 0:
-            LOGGER.error("A single device id must be specified as the target.")
-            return False
-        
-        return True
-
-    def check_service_call_payload_for_entity(call: ServiceCall):
-        LOGGER.debug(call)
-
-        area_ids = call.data.get("area_id", [])
-        device_ids = call.data.get("device_id", [])
-        entity_ids = call.data.get("entity_id", [])
-        label_ids = call.data.get("label_ids", [])
-
-        # Ensure only one entity ID is passed
-        if not isinstance(area_ids, list) or len(area_ids) != 0:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        if not isinstance(device_ids, list) or len(device_ids) != 0:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        if not isinstance(entity_ids, list) or len(entity_ids) != 1:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        if not isinstance(label_ids, list) or len(label_ids) != 0:
-            LOGGER.error("A single entity id must be specified as the target.")
-            return False
-        
-        return True

@@ -1,13 +1,16 @@
 send_command:
   name: Send Command
-  description: Send an arbitrary command to the 3D printer
-  target:
-    entity:
-      integration: bambu_lab
+  description: Send an arbitrary gcode command to the 3D printer
   fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
     command:
       name: Command
-      description: The command to send to the printer
+      description: The command to send to the printer. Must have a trailing new line.
       required: true
       example: "M104 S200"
       selector:
@@ -16,10 +19,13 @@ send_command:
 print_project_file:
   name: Print 3MF project file
   description: Print sliced 3MF file stored on the SD card
-  target:
-    entity:
-      integration: bambu_lab
   fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
     filepath:
       name: File path
       description: Filename on SD card
@@ -29,7 +35,6 @@ print_project_file:
         text:
     plate:
       name: Plate number
-      description: Plate number to print
       required: true
       default: 1
       selector:
@@ -38,43 +43,37 @@ print_project_file:
           min: 1
           max: 100
     timelapse:
-      name: Timelapse
-      description: Record timelapse of the print
+      name: Record timelapse of the print
       default: false
       required: true
       selector:
         boolean:
     bed_leveling:
-      name: Bed Leveling
-      description: Perform bed leveling before print
+      name: Perform bed leveling before print
       default: true
       required: true
       selector:
         boolean:
     flow_cali:
-      name: Flow Calibration
-      description: Perform flow calibration before print
+      name: Perform flow calibration before print
       default: true
       required: true
       selector:
         boolean:
     vibration_cali:
-      name: Vibration Calibration
-      description: Perform vibration calibration (aka XY Mech Sweep) before print
+      name: Perform vibration Calibration before print
       default: true
       required: true
       selector:
         boolean:
     layer_inspect:
-      name: First Layer Inspection
-      description: Perform first layer inspection during print
+      name: Perform first layer inspection before print
       default: true
       required: true
       selector:
         boolean:
     use_ams:
       name: Use AMS
-      description: Use AMS for print. Uses external spool otherwise
       default: false
       required: true
       selector:
@@ -91,10 +90,13 @@ print_project_file:
 skip_objects:
   name: Skip objects
   description: Skip objects currently being printed
-  target:
-    entity:
-      integration: bambu_lab
   fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
     objects:
       name: Object IDs
       description: Object IDs are available from printable objects entity attributes
@@ -106,16 +108,19 @@ skip_objects:
 move_axis:
   name: Move axis
   description: Move the printhead or bed
-  target:
-    entity:
-      integration: bambu_lab
   fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
     axis:
       name: Axis
       description: >-
         The axis to move.
-        X1 and P1 devices, X and Y move the printhead, Z moves the bed.
-        A1, Z moves the gantry, Y the bed, X the printhead.
+        X,P,H printers, X and Y move the printhead, Z moves the bed.
+        A1, X moves the printhead, Y the bed, Z moves the gantry.
       required: true
       example: "X"
       selector:
@@ -142,10 +147,13 @@ move_axis:
 extrude_retract:
   name: Extrude or retract filament
   description: Perform an extrusion or extraction of the loaded filament
-  target:
-    entity:
-      integration: bambu_lab
   fields:
+    device_id:
+      name: Bambu printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
     type:
       name: Type
       description: The type of extrude action to perform
@@ -169,17 +177,24 @@ extrude_retract:
 unload_filament:
   name: Unload filament
   description: Unload the filament currently loaded into the extruder
-  target:
-    entity:
-      integration: bambu_lab
+  fields:
+    device_id:
+      name: AMS or External Spool device
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
 
 load_filament:
   name: Load filament
   description: Load a new filament into the extruder passed an AMS tray or an External spool entity
-  target:
-    entity:
-      integration: bambu_lab
   fields:
+    entity_id:
+      name: Tray or External Spool entity
+      required: true
+      selector:
+        entity:
+          integration: bambu_lab
     temperature:
       name: Temperature
       description: >-
@@ -195,10 +210,13 @@ load_filament:
 set_filament:
   name: Set filament
   description: Sets filament details on an AMS tray or an External spool entity
-  target:
-    entity:
-      integration: bambu_lab
   fields:
+    entity_id:
+      name: Tray or External spool entity
+      required: true
+      selector:
+        entity:
+          integration: bambu_lab
     tray_info_idx:
       name: Filament ID
       description: >-
@@ -249,24 +267,31 @@ set_filament:
 get_filament_data:
   name: Gets a json string with details about all known filaments
   description: Gets a json string with details about all known filaments
-  target:
-    entity:
-      integration: bambu_lab 
+  fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
 
 read_rfid:
   name: Read the RFID tag on a Bambu spool
-  description: Triggers the AMS to attempt to re-read the RFID tag on the current spool. You must provide the AMS tray entity.
-  target:
-    entity:
-      integration: bambu_lab
+  description: Triggers the AMS to attempt to re-read the RFID tag on the current spool.
+  fields:
+    entity_id:
+      name: AMS Tray
+      required: true
+      selector:
+        entity:
+          integration: bambu_lab
 
 start_filament_drying:
   name: Start Filament Drying
   description: Starts AMS filament drying.
   fields:
     device_id:
-      name: AMS Device
-      description: Select the AMS 2 or AMS HT device to run drying on.
+      name: AMS 2 Pro or AMS HT
       required: true
       selector:
         device:
