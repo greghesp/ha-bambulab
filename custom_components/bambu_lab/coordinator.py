@@ -439,7 +439,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         dev_reg = device_registry.async_get(self._hass)
         ams_device = dev_reg.async_get(device_id)
         model = ams_device.model
-        if (model != 'AMS 2') and (model != 'AMS HT'):
+        if (model != 'AMS 2 Pro') and (model != 'AMS HT'):
             LOGGER.error("Passed device is not an AMS 2 or AMS HT.")
             return False
         
