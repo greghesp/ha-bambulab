@@ -392,7 +392,7 @@ def safe_json_loads(raw_bytes):
     except json.JSONDecodeError as e:
         # Some machines give this error for invalid unicode sequences in the mqtt payload.
         pass
-    except json.UnicodeError as e:
+    except UnicodeDecodeError as e:
         # Some machines give this error instead.
         pass
 
