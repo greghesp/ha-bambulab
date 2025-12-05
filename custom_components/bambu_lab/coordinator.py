@@ -940,7 +940,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # Force reload of integration to effect cache update.
             return await self.hass.config_entries.async_reload(self._entry.entry_id)
 
-    def _report_generic_issue(self, issue: str, force: bool):
+    def _report_generic_issue(self, issue: str, force: bool = False):
         if force:
             # force generates a unique issue each time.
             timestamp = int(time.time())
@@ -976,7 +976,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def _report_authentication_issue(self):
-        # issue_id's are permanent - once ignore they will never show again so we need a unique id 
+        # issue_id's are permanent - once ignored they will never show again so we need a unique id 
         # per occurrence per integration instance. That does mean we'll fire a new issue every single
         # print attempt since that's when we'll typically encounter the authentication failure as we
         # attempt to get slicer settings.
