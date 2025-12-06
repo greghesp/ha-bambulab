@@ -384,26 +384,16 @@ def upgrade_template(url: str) -> dict:
     return template
 
 def safe_json_loads(raw_bytes):
-
-    # First try to decode it normally for efficiency.
+    # 1. Try proper UTF-8 first (JSON spec default)
     try:
-        json_data = json.loads(raw_bytes)
-        return json_data
-    except json.JSONDecodeError as e:
-        # Some machines give this error for invalid unicode sequences in the mqtt payload.
-        pass
-    except UnicodeDecodeError as e:
-        # Some machines give this error instead.
+        return json.loads(raw_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
         pass
 
-    # Double up all backslashes to make JSON valid. Decode as non-utf8 to avoid errors and
-    # the content being modified.
-    text = raw_bytes.decode('latin-1')
-    text = text.replace('\\', '\\\\')
-
+    # 2. Latin-1 fallback: preserves bytes exactly
     try:
-        json_data = json.loads(text)
-        return json_data
+        text = raw_bytes.decode("latin-1")
+        return json.loads(text)
     except Exception as e:
         LOGGER.error(f"Failed to decode JSON payload: '{text}'")
         LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")

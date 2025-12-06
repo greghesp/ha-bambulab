@@ -387,7 +387,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                                 except Exception as e:
                                     LOGGER.error("Failed to remove config entry: %s", e)
 
-                    LOGGER.debug(f"Config Flow: Writing entry: '{device['name']}'")
+                    printer_name = device['name']
+                    LOGGER.debug(f"Config Flow: Writing entry for '{printer_name}'")
                     data = {
                             "device_type": device_type,
                             "serial": device['dev_id']
@@ -396,7 +397,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             "region": self.region,
                             "email": self.email,
                             "username": self._bambu_cloud.username,
-                            "name": device['name'],
+                            "name": printer_name,
                             "host": user_input.get('host', ""),
                             "local_mqtt": user_input.get('local_mqtt', False),
                             "auth_token": self._bambu_cloud.auth_token,
@@ -469,7 +470,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             result = await bambu.try_connection()
 
             if result == 0:
-                LOGGER.debug("Config Flow: Writing entry")
+                printer_name = f"{bambu.get_device().info.device_type}-{user_input['serial']}"
+                LOGGER.debug(f"Config Flow: Writing entry for '{printer_name}'")
                 data = {
                         "device_type": bambu.get_device().info.device_type,
                         "serial": user_input['serial']
@@ -478,7 +480,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "region": "",
                         "email": "",
                         "username": "",
-                        "name": "",
+                        "name": printer_name,
                         "host": user_input['host'],
                         "local_mqtt": True,
                         "auth_token": "",
@@ -743,6 +745,16 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
 
+        # Get the device we are working with.
+        device = None
+        for device in device_list:
+            if device['dev_id'] == self._config_entry.data['serial']:
+                break
+
+        if device is None: 
+            LOGGER.error(f"Unable to find device for serial: {self._config_entry.data['serial']}")
+            return self.async_abort(reason='device_not_found')
+
         default_host = ""
         LOGGER.debug("Options Flow async_step_Bambu_Lan: Testing cloud mqtt to get printer IP address")
         config = {
@@ -773,72 +785,68 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             if result == 0:
                 force_ip = False
-                for device in device_list:
-                    if device['dev_id'] == user_input['serial']:
-                        if user_input.get('local_mqtt', False) or not user_input.get('skip_local_mqtt', False):
-                            LOGGER.debug(f"Options Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
-                            config = {
-                                'access_code': user_input['access_code'],
-                                'device_type': self._config_entry.data['device_type'],
-                                'host': user_input['host'],
-                                'local_mqtt': True,
-                                'serial': self._config_entry.data['serial'],
-                                'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
-                            }
-                            bambu = BambuClient(config)
-                            result = await bambu.try_connection()
-                            if result == 0:
-                                force_ip = user_input['host'] != bambu.get_device().info.ip_address
-                            elif result == -1: # Timeout
-                                errors['base'] = "cannot_connect_local_timeout"
-                            elif result == 5: # Access denied
-                                errors['base'] = "cannot_connect_local_access_denied"
-                            elif result == 7: # Incorrect serial number
-                                errors['base'] = "cannot_connect_local_incorrect_serial"
-                            elif result == 111: # Connection refused
-                                errors['base'] = "cannot_connect_local_incorrect_address"
-                            elif result == 113: # Connection refused
-                                errors['base'] = "cannot_connect_local_address_unreachable"
-                            else:
-                                errors['base'] = "cannot_connect_local_unknown"
-                        else:
-                            user_input['host'] = ""
-
+                if user_input.get('local_mqtt', False) or not user_input.get('skip_local_mqtt', False):
+                    LOGGER.debug(f"Options Flow async_step_Bambu_Lan: Testing local mqtt to '{user_input.get('host', '')}'")
+                    config = {
+                        'access_code': user_input['access_code'],
+                        'device_type': self._config_entry.data['device_type'],
+                        'host': user_input['host'],
+                        'local_mqtt': True,
+                        'serial': self._config_entry.data['serial'],
+                        'disable_ssl_verify': user_input['advanced']['disable_ssl_verify'],
+                    }
+                    bambu = BambuClient(config)
+                    result = await bambu.try_connection()
                     if result == 0:
-                        LOGGER.debug(f"Options Flow: Writing entry: '{device['name']}'")
-                        data = dict(self._config_entry.data)
-                        options = dict(self._config_entry.options)
-                        options["region"] = self.region
-                        options["email"] = self.email
-                        options["username"] = self._bambu_cloud.username
-                        options["name"] = device['name']
-                        options["host"] = user_input['host']
-                        options["local_mqtt"] = user_input.get('local_mqtt', False)
-                        options["auth_token"] = self._bambu_cloud.auth_token
-                        options["access_code"] = user_input['access_code']
-                        options["usage_hours"] = float(user_input['usage_hours'])
-                        options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
-                        options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
-                        options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
-                        options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
-                        options["force_ip"] = force_ip
-                        
-                        title = device['dev_id']
-                        self.hass.config_entries.async_update_entry(
-                            entry=self._config_entry,
-                            title=title,
-                            data=data,
-                            options=options
-                        )
-                        await self.hass.config_entries.async_reload(self._config_entry.entry_id)
-                        return self.async_create_entry(title="", data=None)
+                        force_ip = user_input['host'] != bambu.get_device().info.ip_address
+                    elif result == -1: # Timeout
+                        errors['base'] = "cannot_connect_local_timeout"
+                    elif result == 5: # Access denied
+                        errors['base'] = "cannot_connect_local_access_denied"
+                    elif result == 7: # Incorrect serial number
+                        errors['base'] = "cannot_connect_local_incorrect_serial"
+                    elif result == 111: # Connection refused
+                        errors['base'] = "cannot_connect_local_incorrect_address"
+                    elif result == 113: # Connection refused
+                        errors['base'] = "cannot_connect_local_address_unreachable"
+                    else:
+                        errors['base'] = "cannot_connect_local_unknown"
+                else:
+                    user_input['host'] = ""
+
+                if result == 0:
+                    printer_name = device['name']
+                    LOGGER.debug(f"Options Flow: Writing entry for '{printer_name}'")
+                    data = dict(self._config_entry.data)
+                    options = dict(self._config_entry.options)
+                    options["region"] = self.region
+                    options["email"] = self.email
+                    options["username"] = self._bambu_cloud.username
+                    options["name"] = printer_name
+                    options["host"] = user_input['host']
+                    options["local_mqtt"] = user_input.get('local_mqtt', False)
+                    options["auth_token"] = self._bambu_cloud.auth_token
+                    options["access_code"] = user_input['access_code']
+                    options["usage_hours"] = float(user_input['usage_hours'])
+                    options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
+                    options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                    options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
+                    options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
+                    options["force_ip"] = force_ip
+                    
+                    title = device['dev_id']
+                    self.hass.config_entries.async_update_entry(
+                        entry=self._config_entry,
+                        title=title,
+                        data=data,
+                        options=options
+                    )
+                    await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+                    return self.async_create_entry(title="", data=None)
 
         printer_list = []
-        access_code = ''
-        for device in device_list:
-            if device['dev_id'] == self._config_entry.data['serial']:
-                printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
-                access_code = device['dev_access_code']
+        printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
+        access_code = device['dev_access_code']
 
         printer_selector = SelectSelector(
             SelectSelectorConfig(
@@ -901,13 +909,14 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             result = await bambu.try_connection()
 
             if result == 0:
-                LOGGER.debug("Options Flow: Writing entry")
+                printer_name = self._config_entry.options.get('name', f"{bambu.get_device().info.device_type}-{user_input['serial']}")
+                LOGGER.debug(f"Options Flow: Writing entry for '{printer_name}'")
                 data = dict(self._config_entry.data)
                 options = dict(self._config_entry.options)
                 options["region"] = self._config_entry.options.get('region', '')
                 options["email"] = ''
                 options["username"] = ''
-                options["name"] = self._config_entry.options.get('name', '')
+                options["name"] = printer_name
                 options["host"] = user_input['host']
                 options["local_mqtt"] = True
                 options["auth_token"] = ''
