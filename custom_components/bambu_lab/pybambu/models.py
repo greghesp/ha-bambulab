@@ -351,6 +351,11 @@ class Device:
                     self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2DPRO or
                     self.info.device_type == Printers.H2S)
+        elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
+            return (self.info.device_type == Printers.A1 or
+                    self.info.device_type == Printers.A1MINI or
+                    self.info.device_type == Printers.P1P or
+                    self.info.device_type == Printers.P1S)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -1089,19 +1094,18 @@ class PrintJob:
 
         # If we are FTP enabled and we haven't yet downloaded the model data, see if we can now.
         if not self._loaded_model_data:
+            if self._client._device.supports_feature(Features.SUPPORTS_EARLY_FTP_DOWNLOAD):
+                if self.gcode_state == "PREPARE" and \
+                    old_gcode_file_prepare_percent > 0 and \
+                    old_gcode_file_prepare_percent != self._gcode_file_prepare_percent and \
+                    self._gcode_file_prepare_percent >= 99:
 
-            if self.gcode_state == "PREPARE" and \
-                old_gcode_file_prepare_percent > 0 and \
-                old_gcode_file_prepare_percent != self._gcode_file_prepare_percent and \
-                self._gcode_file_prepare_percent >= 99:
+                    # P1 sometimes only gets to 99% download and never reaches 100% so we treat 99% as complete.
 
-                # X1C jumps straight from 0 to 100 so we can't use this to trigger the download.
-                # P1 sometimes only gets to 99% download and never reaches 100% so we treat 99% as complete.
-
-                # Now we can update the model data by ftp. By this point the model has been successfully loaded to the printer.
-                # and it's network stack is idle and shouldn't timeout or fail on us randomly.
-                LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
-                self._update_task_data()
+                    # Now we can update the model data by ftp. By this point the model has been successfully loaded to the printer.
+                    # and it's network stack is idle and shouldn't timeout or fail on us randomly.
+                    LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
+                    self._update_task_data()
 
             if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE"):
                 # We haven't yet downloaded model data off the printer. I've observed three scenarios where this happens:
@@ -1594,20 +1598,14 @@ class PrintJob:
             if model_file_path is not None:
                 break
 
-            if (self._client._device.info.device_type == Printers.X1 or 
-                self._client._device.info.device_type == Printers.X1C or
-                self._client._device.info.device_type == Printers.X1E or
-                self._client._device.info.device_type == Printers.H2C or
-                self._client._device.info.device_type == Printers.H2D or
-                self._client._device.info.device_type == Printers.H2DPRO or
-                self._client._device.info.device_type == Printers.H2S):
+            if not self._client._device.supports_feature(Features.SUPPORTS_EARLY_FTP_DOWNLOAD):
                 # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
                 # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
                 # 5 seconds apart over 60s.
                 if i != 12:
-                    LOGGER.debug(f"Sleeping 5s for X1/H2 retry")
+                    LOGGER.debug(f"Sleeping 5s for X1/H2/P2 retry")
                     time.sleep(5)
-                    LOGGER.debug(f"Try #{i+1} for X1/H2")
+                    LOGGER.debug(f"Try #{i+1} for X1/H2/P")
             else:
                 break
 

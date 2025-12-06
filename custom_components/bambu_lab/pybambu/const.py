@@ -48,6 +48,7 @@ class Features(IntEnum):
     HYBRID_MODE_BLOCKS_CONTROL = 21,
     MQTT_ENCRYPTION_FIRMWARE = 22,
     AIRDUCT_MODE = 23,
+    SUPPORTS_EARLY_FTP_DOWNLOAD = 24,
 
 
 class FansEnum(IntEnum):
