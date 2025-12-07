@@ -448,7 +448,8 @@ class BambuClient:
         if self._mock:
             self.client = MockMQTTClient(self._serial)
         else:
-            self.client = mqtt.Client()
+            self.client = mqtt.Client(protocol=mqtt.MQTTv311)
+            self.client.enable_logger()
         self._callback = callback
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
