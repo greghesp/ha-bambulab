@@ -528,7 +528,8 @@
           "tungsten_carbide": "Carbur de tungstè",
           "high_flow_hardened_steel": "Acer endurit amb un gran flux",
           "high_flow_stainless_steel": "Acer inoxidable amb un gran flux",
-          "high_flow_tungsten_carbide": "Carbur de tungstè amb gran flux"
+          "high_flow_tungsten_carbide": "Carbur de tungstè amb gran flux",
+          "unknown": "Desconegut"
         }
       },
       "humidity_index": {

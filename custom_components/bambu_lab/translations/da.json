@@ -528,7 +528,8 @@
           "tungsten_carbide": "Wolframcarbid",
           "high_flow_hardened_steel": "hærdet stål med stor strømning",
           "high_flow_stainless_steel": "rustfrit stål med stor strømning",
-          "high_flow_tungsten_carbide": "wolframcarbid med stor strømning"
+          "high_flow_tungsten_carbide": "wolframcarbid med stor strømning",
+          "unknown": "Ukendt"
         }
       },
       "humidity_index": {
