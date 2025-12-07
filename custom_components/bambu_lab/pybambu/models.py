@@ -2027,7 +2027,6 @@ class Info:
     device_type: str
     wifi_signal: int
     wifi_sent: datetime
-    device_type: str
     hw_ver: str
     sw_ver: str
     online: bool
@@ -2038,7 +2037,7 @@ class Info:
     usage_hours: float
     extruder_filament_state: bool
     door_open: bool
-    airduct_mode: bool
+    airduct_mode: int
         
     _ip_address: str
     _force_ip: bool
@@ -2060,7 +2059,7 @@ class Info:
         self.usage_hours = client._usage_hours
         self.extruder_filament_state = False
         self.door_open = False
-        self.airduct_mode = False
+        self.airduct_mode = 0
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)                
 
@@ -2248,21 +2247,19 @@ class Info:
         # H2 example:
         #   "stat": "46258008",  # closed
         #   "stat": "46A58008",  # open
-        if self._client._device.supports_feature(Features.DOOR_SENSOR):
-            if self.device_type in [Printers.X1, Printers.X1C]:
-                if "home_flag" in data:
-                    self.door_open = (data["home_flag"] & Home_Flag_Values.DOOR_OPEN) != 0
-            elif "stat" in data:
-                stat_value = int(data["stat"], 16)
-                self.door_open = (stat_value & Stat_Flag_Values.DOOR_OPEN) != 0
+        if self.device_type in [Printers.X1, Printers.X1C]:
+            if "home_flag" in data:
+                self.door_open = (data["home_flag"] & Home_Flag_Values.DOOR_OPEN) != 0
+        elif "stat" in data:
+            stat_value = int(data["stat"], 16)
+            self.door_open = (stat_value & Stat_Flag_Values.DOOR_OPEN) != 0
 
 
         # Airduct mode is provided under print/device/airduct
         # P2S example:
         #   "modeCur": 0, // 0 = Cooling only, 1 = Heating/Filter
         #   "modeFunc": 0, // 0 = Cooling only, 1 = Heating/Filter        
-        if self._client._device.supports_feature(Features.AIRDUCT_MODE):            
-            self.airduct_mode = (data.get("device", {}).get("airduct", {}).get("modeCur", 1 if self.airduct_mode else 0) == 1)
+        self.airduct_mode = data.get("device", {}).get("airduct", {}).get("modeCur", self.airduct_mode)
 
         # Compute if there's a delta before we check the wifi_signal value.
         changed = (old_data != f"{self.__dict__}")
@@ -3308,13 +3305,16 @@ class SlicerSettings:
                         nozzle_temperature_range_low=filament["nozzle_temperature"][0]
                     )
             LOGGER.debug(f"Got {len(self.custom_filaments)} custom filaments.")
+        else:
+            LOGGER.debug(f"Received no filament data: {filaments}")
 
     def update(self):
         self.custom_filaments = {}
         if self._client.bambu_cloud.auth_token != "":
-            LOGGER.debug("Loading slicer settings")
+            LOGGER.debug(f"Loading slicer settings for {self._client._device.info.device_type} / {self._client._serial}")
             slicer_settings = self._client.bambu_cloud.get_slicer_settings()
             if slicer_settings is None:
+                LOGGER.debug(f"Failed to get slicer settings for {self._client._device.info.device_type} / {self._client._serial}")
                 self._client.callback("event_printer_bambu_authentication_failed")
             else:
                 self._load_custom_filaments(slicer_settings)
