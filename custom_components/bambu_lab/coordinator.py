@@ -903,7 +903,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if not OPTION_NAME[option] in options:
             options[OPTION_NAME[option]] = self.get_option_enabled(option)
 
-        LOGGER.debug(f"options: {options}")
         # Only apply the change if it differs from the current setting.
         if options[OPTION_NAME[option]] != enable:
             options[OPTION_NAME[option]] = enable
