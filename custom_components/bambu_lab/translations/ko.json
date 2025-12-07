@@ -528,7 +528,8 @@
           "tungsten_carbide": "텅스텐 카바이드",
           "high_flow_hardened_steel": "큰 흐름이있는 강화 강철",
           "high_flow_stainless_steel": "큰 흐름이있는 스테인레스 스틸",
-          "high_flow_tungsten_carbide": "큰 흐름이있는 텅스텐 카바이드"
+          "high_flow_tungsten_carbide": "큰 흐름이있는 텅스텐 카바이드",
+          "unknown": "알려지지 않은"
         }
       },
       "humidity_index": {

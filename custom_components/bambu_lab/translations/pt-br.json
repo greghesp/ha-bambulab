@@ -528,7 +528,8 @@
           "tungsten_carbide": "Carboneto de tungstênio",
           "high_flow_hardened_steel": "Aço endurecido com grande fluxo",
           "high_flow_stainless_steel": "Aço inoxidável com grande fluxo",
-          "high_flow_tungsten_carbide": "carboneto de tungstênio com grande fluxo"
+          "high_flow_tungsten_carbide": "carboneto de tungstênio com grande fluxo",
+          "unknown": "Desconhecido"
         }
       },
       "humidity_index": {

@@ -534,7 +534,8 @@
           "tungsten_carbide": "ทังสเตนคาร์ไบด์",
           "high_flow_hardened_steel": "เหล็กแข็งที่มีการไหลขนาดใหญ่",
           "high_flow_stainless_steel": "สแตนเลสที่มีการไหลขนาดใหญ่",
-          "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ที่มีการไหลขนาดใหญ่"
+          "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ที่มีการไหลขนาดใหญ่",
+          "unknown": "ไม่ทราบ"
         }
       },
       "ip_address": {

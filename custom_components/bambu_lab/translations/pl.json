@@ -537,7 +537,8 @@
           "tungsten_carbide": "Węglenie wolframowe",
           "high_flow_hardened_steel": "stalowa stal z dużym przepływem",
           "high_flow_stainless_steel": "stal nierdzewna z dużym przepływem",
-          "high_flow_tungsten_carbide": "Węglenie wolframowe z dużym przepływem"
+          "high_flow_tungsten_carbide": "Węglenie wolframowe z dużym przepływem",
+          "unknown": "Nieznany"
         }
       },
       "ip_address": {

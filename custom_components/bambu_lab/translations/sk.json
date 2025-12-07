@@ -528,7 +528,8 @@
           "tungsten_carbide": "Karbid volta",
           "high_flow_hardened_steel": "kalená oceľ s veľkým prietokom",
           "high_flow_stainless_steel": "nehrdzavejúca oceľ s veľkým prietokom",
-          "high_flow_tungsten_carbide": "karbid volfrámu s veľkým prietokom"
+          "high_flow_tungsten_carbide": "karbid volfrámu s veľkým prietokom",
+          "unknown": "Neznámy"
         }
       },
       "humidity_index": {

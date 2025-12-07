@@ -2232,8 +2232,8 @@ class Info:
         if nozzle_data is not None and isinstance(nozzle_data, list):
             for entry in nozzle_data:
                 if entry.get("id") in (0, 1):
-                    self.nozzle_diameters[entry["id"]] = float(entry["diameter"])
-                    self.nozzle_types[entry["id"]] = Info._nozzle_type_name(entry["type"])
+                    self.nozzle_diameters[entry["id"]] = float(entry.get("diameter", 0))
+                    self.nozzle_types[entry["id"]] = Info._nozzle_type_name(entry.get("type", ""))
         else:
             if "nozzle_diameter" in data:
                 self.nozzle_diameters[0] = float(data["nozzle_diameter"])
@@ -2341,6 +2341,9 @@ class Info:
        
     @staticmethod
     def _nozzle_type_name(nozzle_type_code: str) -> str:
+        if str == "":
+            return "unknown"
+
         # Second character indicates standard vs high flow
         if nozzle_type_code[1] == "H":
             flow_prefix = "high_flow_"

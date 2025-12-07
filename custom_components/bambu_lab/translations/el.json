@@ -528,7 +528,8 @@
           "tungsten_carbide": "Καρβίδιο βολφραμίου",
           "high_flow_hardened_steel": "σκληρυμένος χάλυβας με μεγάλη ροή",
           "high_flow_stainless_steel": "από ανοξείδωτο χάλυβα με μεγάλη ροή",
-          "high_flow_tungsten_carbide": "καρβίδιο βολφραμίου με μεγάλη ροή"
+          "high_flow_tungsten_carbide": "καρβίδιο βολφραμίου με μεγάλη ροή",
+          "unknown": "Αγνωστος"
         }
       },
       "humidity_index": {

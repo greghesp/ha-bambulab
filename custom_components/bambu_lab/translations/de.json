@@ -531,7 +531,8 @@
           "tungsten_carbide": "Wolfram -Carbid",
           "high_flow_hardened_steel": "hartem Stahl mit großem Fluss",
           "high_flow_stainless_steel": "Edelstahl mit großem Fluss",
-          "high_flow_tungsten_carbide": "Wolframkarbid mit großem Fluss"
+          "high_flow_tungsten_carbide": "Wolframkarbid mit großem Fluss",
+          "unknown": "Unbekannt"
         }
       },
       "humidity_index": {

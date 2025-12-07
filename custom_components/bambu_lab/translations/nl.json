@@ -531,7 +531,8 @@
           "tungsten_carbide": "Wolfraamcarbide",
           "high_flow_hardened_steel": "gehard staal met grote stroom",
           "high_flow_stainless_steel": "roestvrij staal met grote stroom",
-          "high_flow_tungsten_carbide": "wolfraamcarbide met grote stroom"
+          "high_flow_tungsten_carbide": "wolfraamcarbide met grote stroom",
+          "unknown": "Onbekend"
         }
       },
       "ip_address": {
