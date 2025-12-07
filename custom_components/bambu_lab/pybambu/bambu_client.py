@@ -418,7 +418,7 @@ class BambuClient:
             self._callback(event)
 
     def set_camera_enabled(self, enable):
-        self._enable_camera = enable
+        self._enable_camera = enable and (self.host != "")
         if self._enable_camera:
             self.start_camera()
         else:

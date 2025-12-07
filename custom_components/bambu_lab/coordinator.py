@@ -916,6 +916,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # Refresh all entities to handle deleted/added entities.
             self._printer_ready()
 
+            if option == Options.CAMERA:
+                # Camera option changed, need to poke bambu client to update its camera state:
+                self.client.set_camera_enabled(enable)
+
     def get_option_value(self, option: Options) -> int:
         options = dict(self.config_entry.options)
         default = 0
