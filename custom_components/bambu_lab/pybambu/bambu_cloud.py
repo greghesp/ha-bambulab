@@ -96,7 +96,8 @@ class BambuCloud:
             'X-BBL-Executable-info': '{}',
             'X-BBL-Agent-OS-Type': 'linux',
             'accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip, deflate'
         }
         # Orca/Bambu Studio also add this - need to work out what an appropriate ID is to put here:
         # 'X-BBL-Device-ID': BBL_AUTH_UUID,
@@ -130,24 +131,28 @@ class BambuCloud:
         LOGGER.debug(f"Response: {response.status_code}")
 
     def _get(self, urlenum: BambuUrl):
-        url = get_Url(urlenum, self._region)
-        headers=self._get_headers_with_auth_token()
-        if CONNECTION_MECHANISM == ConnectionMechanismEnum.CURL_CFFI:
-            if not curl_available:
-                LOGGER.debug(f"Curl library is unavailable.")
-                raise CurlUnavailableError()
-            response = curl_requests.get(url, headers=headers, timeout=10, impersonate=IMPERSONATE_BROWSER)
-        elif CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
-            if len(headers) == 0:
-                headers = self._get_headers()
-            scraper = cloudscraper.create_scraper()
-            response = scraper.get(url, headers=headers, timeout=10)
-        elif CONNECTION_MECHANISM == ConnectionMechanismEnum.REQUESTS:
-            if len(headers) == 0:
-                headers = self._get_headers()
-            response = requests.get(url, headers=headers, timeout=10)
-        else:
-            raise NotImplementedError()
+        try:
+            url = get_Url(urlenum, self._region)
+            headers=self._get_headers_with_auth_token()
+            if CONNECTION_MECHANISM == ConnectionMechanismEnum.CURL_CFFI:
+                if not curl_available:
+                    LOGGER.debug(f"Curl library is unavailable.")
+                    raise CurlUnavailableError()
+                response = curl_requests.get(url, headers=headers, timeout=10, impersonate=IMPERSONATE_BROWSER)
+            elif CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
+                if len(headers) == 0:
+                    headers = self._get_headers()
+                scraper = cloudscraper.create_scraper()
+                response = scraper.get(url, headers=headers, timeout=10)
+            elif CONNECTION_MECHANISM == ConnectionMechanismEnum.REQUESTS:
+                if len(headers) == 0:
+                    headers = self._get_headers()
+                response = requests.get(url, headers=headers, timeout=10)
+            else:
+                raise NotImplementedError()
+        except Exception as e:
+            LOGGER.error(f"Connection to Bambu Cloud failed: {e}")
+            raise e
 
         self._test_response(response)
 
