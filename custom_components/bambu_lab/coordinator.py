@@ -945,9 +945,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _report_generic_issue(self, issue: str, force: bool = False):
         if force:
-            # force generates a unique issue each time.
-            timestamp = int(time.time())
-            issue_id = f"{issue}_{self.get_model().info.serial}_{timestamp}"
+            # force generates a unique issue each time, but at most one a day so we don't spam in repetive failure scenarios.
+            today = datetime.now().strftime("%Y%m%d")
+            issue_id = f"{issue}_{self.get_model().info.serial}_{today}"
         else:
             # One-time issue
             issue_id = f"{issue}_{self.get_model().info.serial}"
