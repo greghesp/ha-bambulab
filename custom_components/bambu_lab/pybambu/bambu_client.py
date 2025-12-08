@@ -11,11 +11,9 @@ import re
 import socket
 import ssl
 import struct
-import tempfile
 import threading
 import time
-from zipfile import ZipFile
-import xml.etree.ElementTree as ElementTree
+import uuid
 
 from dataclasses import dataclass
 from typing import Any
@@ -448,7 +446,9 @@ class BambuClient:
         if self._mock:
             self.client = MockMQTTClient(self._serial)
         else:
-            self.client = mqtt.Client(protocol=mqtt.MQTTv311)
+            self.client = mqtt.Client(client_id=f"ha-bambulab-{uuid.uuid4()}",
+                                      protocol=mqtt.MQTTv311,
+                                      clean_session=True)
             self.client.enable_logger()
         self._callback = callback
         self.client.on_connect = self.on_connect
