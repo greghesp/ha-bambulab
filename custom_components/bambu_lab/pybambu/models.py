@@ -2207,7 +2207,7 @@ class Info:
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
 
-        self.new_version_state = (data.get("upgrade_state") or {}).get("new_version_state", self.new_version_state)
+        self.new_version_state = data.get("upgrade_state",{}).get("new_version_state", self.new_version_state)
 
         # Nozzle data is provided differently for dual-nozzle printers (at least)
         # New (H2D):

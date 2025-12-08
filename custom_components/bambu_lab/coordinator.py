@@ -944,20 +944,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return await self.hass.config_entries.async_reload(self._entry.entry_id)
 
     def _report_generic_issue(self, issue: str, force: bool = False):
-        if force:
-            # force generates a unique issue each time.
-            timestamp = int(time.time())
-            issue_id = f"{issue}_{self.get_model().info.serial}_{timestamp}"
-        else:
-            # One-time issue
-            issue_id = f"{issue}_{self.get_model().info.serial}"
 
-            # Check if the issue already exists
-            registry = issue_registry.async_get(self._hass)
-            existing_issue = registry.async_get_issue(
-                domain=DOMAIN,
-                issue_id=issue_id,
-            )
+        issue_id = f"{issue}_{self.get_model().info.serial}"
+
+        # Check if the issue already exists
+        registry = issue_registry.async_get(self._hass)
+        existing_issue = registry.async_get_issue(domain=DOMAIN, issue_id=issue_id)
+
+        if force:
+            # Delete issue so we can re-create it but only ever have one in the list.
+            if existing_issue is not None:
+                registry.async_delete_issue(domain=DOMAIN, issue_id=issue_id)
+        else:
             if existing_issue is not None:
                 # Issue already exists, no need to create it again
                 return
