@@ -909,7 +909,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             result = await bambu.try_connection()
 
             if result == 0:
-                printer_name = self._config_entry.options.get('name', f"{bambu.get_device().info.device_type}-{user_input['serial']}")
+                printer_name = f"{bambu.get_device().info.device_type}-{config['serial']}"
+                printer_name = self._config_entry.options.get('name', printer_name)
                 LOGGER.debug(f"Options Flow: Writing entry for '{printer_name}'")
                 data = dict(self._config_entry.data)
                 options = dict(self._config_entry.options)
