@@ -30,7 +30,7 @@ print_project_file:
       name: File path
       description: Filename on SD card
       required: true
-      example: "filename.3mf"
+      example: "cache/filename.3mf"
       selector:
         text:
     plate:
