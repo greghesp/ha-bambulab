@@ -6,16 +6,16 @@ next: /misc/contributing
 nextTitle: Misc
 ---
 
-For most actions, you specify a `target` property which is the the device_id to send the action to. In a cases involving an AMS tray, this must instead be an entity_id.
+For all actions the target device or entity is passed as a field parameter. In cases involving an AMS tray, this must be an entity id. In all other cases a device id.
 
 ```yaml
-target:
-  device_id: a1b2c3d4e5f6g7h8i9j0
+  data:
+    device_id: a1b2c3d4e5f6g7h8i9j0
 ```
 
 ```yaml
-target:
-  entity_id: a1b2c3d4e5f6g7h8i9j0
+  data:
+    entity_id: a1b2c3d4e5f6g7h8i9j0
 ```
 
 ## Send Command
@@ -26,10 +26,9 @@ or not so before invoking this action, you should check the printer state to ens
 
     ```yaml
     action: bambu_lab.send_command
-    target:
-      device_id: a1b2c3d4e5f6g7h8i9j0
     data:
       command: M104 S200
+      device_id: a1b2c3d4e5f6g7h8i9j0
     ```
 
     The `data` object should contain the following properties:
@@ -48,9 +47,8 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
     ```yaml
     action: bambu_lab.print_project_file
-    target:
-      device_id: a1b2c3d4e5f6g7h8i9j0
     data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
     ```
 
     The `data` object should contain the following properties:
@@ -118,10 +116,9 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
     ```yaml
     action: bambu_lab.extrude_retract
-    target:
-      device_id: a1b2c3d4e5f6g7h8i9j0
     data:
       type: Extrude
+      device_id: a1b2c3d4e5f6g7h8i9j0
       force: false
     ```
 
@@ -148,11 +145,8 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
     ```yaml
     action: bambu_lab.load_filament
-    target:
-      device_id: a1b2c3d4e5f6g7h8i9j0
     data:
-      tray: 1
-      external_spool: 1
+      entity_id: a1b2c3d4e5f6g7h8i9j0
       temperature: 220
     ```
 
@@ -185,12 +179,42 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
     ```yaml
     action: bambu_lab.unload_filament
-    target:
+    data:
       device_id: a1b2c3d4e5f6g7h8i9j0
     ```
 
 </Property>
 
+## Set Filament
+
+<Property name="action" type="bambu_lab.set_filament" required>
+  Sets filament type and other data for an AMS tray or the external spool tray.
+
+    ```yaml
+    action: bambu_lab.set_filament
+    data:
+      entity_id: a1b2c3d4e5f6g7h8i9j0
+      tray_info_idx: GFL96
+      tray_color: FF00FF00
+      tray_type: PLA
+      nozzle_temp_min: 190
+      nozzle_temp_max: 240
+    ```
+
+</Property>
+
+## Get Filament Data
+
+<Property name="action" type="bambu_lab.get_filament_data" required>
+  Gets a json string with details about all known filaments
+
+    ```yaml
+    action: bambu_lab.get_filament_data
+    data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
+    ```
+
+</Property>
 ## Move Axis
 
 <Property name="action" type="bambu_lab.move_axis" required>
@@ -198,9 +222,8 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
     ```yaml
     action: bambu_lab.move_axis
-    target:
-      device_id: a1b2c3d4e5f6g7h8i9j0
     data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
       axis: X
       distance: 10
     ```
@@ -228,9 +251,8 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
   
     ```yaml
     action: bambu_lab.skip_objects
-    target:
-      device_id: a1b2c3d4e5f6g7h8i9j0
     data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
       objects: 409,1463
     ```
 
@@ -250,7 +272,32 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
     ```yaml
     action: bambu_lab.ams_read_rfid
-    target:
+    data:
       entity_id: a1b2c3d4e5f6g7h8i9j0
+    ```
+</Property>
+
+## Start the AMS filament drying
+<Property name="action" type="bambu_lab.start_filament_drying" required>
+  Starts AMS filament drying.
+
+    ```yaml
+    action: bambu_lab.ams_read_rfid
+    data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
+      temp: 65
+      rotate_tray: false
+      duration: 12
+    ```
+</Property>
+
+## Stops the AMS filament drying
+<Property name="action" type="bambu_lab.stop_filament_drying" required>
+  Stops AMS filament drying.
+
+    ```yaml
+    action: bambu_lab.stop_filament_drying
+    data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
     ```
 </Property>
