@@ -88,7 +88,7 @@
         }
       },
       "Lan": {
-        "title": "Lan Mode Connection",
+        "title": "Verbinding via lan",
         "description": "Geef het IP-adres, serienummer en de toegangscode van uw lokale printer op. De toegangscode vindt u op het printerscherm, in de netwerkinstellingen (WLAN). Het serienummer (SN) vindt u in de apparaatinstellingen.",
         "data": {
           "serial": "Serienummer:",
@@ -142,7 +142,7 @@
         "title": "Verbindingsinstellingen aanpassen",
         "description": "Configuratie via Bambu Lab Cloud is het eenvoudigst en snelst. Social media accounts zonder wachtwoord worden niet ondersteund.\n\rU kunt ook werkende authenticatiegegevens van andere printers hergebruiken. Als deze worden gevonden, worden ze weergegeven op basis van het e-mailadres.\n\rOf u kunt verbinding maken door handmatig de lokale verbindingsgegevens van de printer op te geven. Dit is vereist voor een printer in lan-modus.",
         "data": {
-          "printer_mode": "Printer configuration mode:"
+          "printer_mode": "Printerconfiguratiemodus:"
         }
       },
       "Bambu": {
@@ -161,8 +161,8 @@
         "title": "Opzetten lokale verbinding",
         "description": "U kunt ervoor kiezen om rechtstreeks verbinding te maken met de printer mqtt in plaats van met de Bambu Lab-cloud. Dit geeft veerkracht bij cloudstoringen van Bambu Lab, maar Bambu Lab heeft de controle over de printer beperkt in deze hybride modus, zodat sommige bedieningselementen niet beschikbaar zullen zijn.\n\rOngeacht deze keuze haalt de integratie het IP-adres van de printer uit de Bambu Lab-cloud en bevestigt dat er verbinding mee kan worden gemaakt, aangezien dit vereist is voor camera-, printgeschiedenis en timelapse-ondersteuning. Als uw printer niet toegankelijk is voor uw Home Assistant, kunt u deze controle uitschakelen, maar deze functies gaan verloren.",
         "data": {
-          "serial": "Adjust settings for:",
-          "host": "Local Printer IP Address:",
+          "serial": "Instellingen aanpassen voor:",
+          "host": "Lokaal IP-adres van printer:",
           "access_code": "Toegangscode:",
           "local_mqtt": "Rechtstreeks verbinding maken met printer mqtt:",
           "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
@@ -257,7 +257,7 @@
         "name": "Printen stoppen"
       },
       "refresh": {
-        "name": "Force refresh data"
+        "name": "Gegevens verversen"
       },
       "dev": {
         "name": "Debug"
@@ -374,7 +374,7 @@
         },
         "state_attributes": {
           "modifier": {
-            "name": "Modifier"
+            "name": "Aanpassing"
           }
         }
       },
@@ -416,7 +416,7 @@
           "cooling_chamber": "Kamer aan het koelen",
           "paused_user_gcode": "Gepauzeerd vanwege door aan de gcode toegevoegde pauzeer-instructie",
           "motor_noise_showoff": "Motorlawaai showoff",
-          "paused_nozzle_filament_covered_detected": "Paused due to nozzle filament covered detected",
+          "paused_nozzle_filament_covered_detected": "Gepauzeerd: filament op de nozzle gedetecteerd",
           "paused_cutter_error": "Gepauzeerd vanwege een fout met de filamentsnijder",
           "paused_first_layer_error": "Gepauzeerd vanwege een fout met de eerste laag",
           "paused_nozzle_clog": "Gepauzeerd vanwege een verstopping in de nozzle",
@@ -450,7 +450,7 @@
           "idle": "Inactief",
           "offline": "Offline",
           "prepare": "Voorbereiden",
-          "running": "Running",
+          "running": "Bezig",
           "pause": "Gepauzeerd",
           "slicing": "Aan het slicen",
           "init": "Aan het initialiseren"
@@ -476,7 +476,7 @@
           "cool_plate": "Cool Plate / PLA Plate",
           "hot_plate": "Smooth PEI Plate / High Temp Plate",
           "eng_plate": "Engineering Plate",
-          "supertack_plate": "Coole plaat supertack"
+          "supertack_plate": "Cool Plate SuperTack"
         }
       },
       "print_length": {
@@ -839,7 +839,7 @@
         "name": "Camera inschakelen"
       },
       "imagecamera": {
-        "name": "Use image sensor camera"
+        "name": "Camera als afbeeldingssensor ontsluiten"
       },
       "ftp": {
         "name": "Model-data vanuit printer inladen"
@@ -860,7 +860,7 @@
   "selector": {
     "configuration_type": {
       "options": {
-        "bambu": "Bambu Lab cloud",
+        "bambu": "Bambu Lab-cloud",
         "lan": "Lan-modus"
       }
     }
