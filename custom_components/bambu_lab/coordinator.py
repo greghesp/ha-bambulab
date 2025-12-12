@@ -780,7 +780,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         for entity in entities:
             state = self.hass.states.get(entity.entity_id)
-            if state is None or state.attributes.get("restored") is True:
+            if state is not None and state.attributes.get("restored") is True:
                 LOGGER.debug(f"{entity.entity_id} is DEAD. Removing it.")
                 entity_registry.async_remove(entity.entity_id)
         
