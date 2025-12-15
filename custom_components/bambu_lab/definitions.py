@@ -640,6 +640,13 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda self: self.coordinator.get_model().info.ip_address
     ),
+    BambuLabSensorEntityDescription(
+        key="serial",
+        translation_key="serial",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:identifier",
+        value_fn=lambda self: self.coordinator.get_model().info.serial
+    )
 )
 
 VIRTUAL_TRAY_BINARY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (

@@ -827,6 +827,9 @@
       },
       "model_download_percentage": {
         "name": "Λήψη μοντέλου"
+      },
+      "serial": {
+        "name": "Αύξων αριθμός"
       }
     },
     "camera": {

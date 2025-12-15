@@ -827,6 +827,9 @@
       },
       "model_download_percentage": {
         "name": "ดาวน์โหลดโมเดล"
+      },
+      "serial": {
+        "name": "หมายเลขซีเรียล"
       }
     },
     "camera": {

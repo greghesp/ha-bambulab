@@ -827,6 +827,9 @@
       },
       "model_download_percentage": {
         "name": "모델 다운로드"
+      },
+      "serial": {
+        "name": "일련번호"
       }
     },
     "camera": {
