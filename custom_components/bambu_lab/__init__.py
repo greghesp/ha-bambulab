@@ -309,8 +309,8 @@ class EnsureCacheFileAPIView(HomeAssistantView):
             base_cache_path = Path(coordinator.get_file_cache_directory()).parent
             local_path = str(base_cache_path / cache_path)
 
-            # local_path is of form '/config/www/media/ha-bambulab/<SERIAL>/prints/Fidgets_v14.3mf'
-            #                    or '/config/www/media/ha-bambulab/<SERIAL>/prints/cache/Fidgets_v14.3mf'
+            # local_path is of form '/config/www/media/ha-bambulab/<SERIAL>/prints/<file_size>-Fidgets_v14.3mf'
+            #                    or '/config/www/media/ha-bambulab/<SERIAL>/prints/cache/<file_size>-Fidgets_v14.3mf'
             # Depending where the print source chose to put the file onto the printer.
             # Orca likes the root. Bambu Studio likes the cache directory.
             remote_path_index = cache_path.find('/prints/')
@@ -323,6 +323,15 @@ class EnsureCacheFileAPIView(HomeAssistantView):
             present = await model.print_job.async_ftp_file_check(remote_path, expected_size)
             if present:
                 return web.json_response({"status": "present", "detail": "File already present with expected size."})
+            else:
+                # Now check the legacy path without <file_size>- in the fiulename and use that if we find a match.
+                legacy_remote_path = Path(remote_path)
+                if legacy_remote_path.name.startswith(f"{expected_size}-"):
+                    legacy_remote_path = legacy_remote_path.parent / legacy_remote_path.name.removeprefix(f"{expected_size}-")
+                    LOGGER.debug(f"Checking legacy remote path: {legacy_remote_path}")
+                    present = await model.print_job.async_ftp_file_check(str(legacy_remote_path), expected_size)
+                    if present:
+                        return web.json_response({"status": "use_legacy_path", "detail": str(legacy_remote_path)})
 
             def ha_progress_callback(progress_data):
                 # Schedule the event fire on the event loop thread
