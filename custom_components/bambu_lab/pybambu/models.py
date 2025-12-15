@@ -1418,7 +1418,10 @@ class PrintJob:
                 LOGGER.error(f"FTP list Exception. Type: {type(e)} Args: {e}")
                 pass
 
+
+        LOGGER.debug("Unsorted:\n%s", "\n".join(f" - {entry}" for entry in file_list[-5:]))
         files = sorted(file_list, key=lambda file: file[0], reverse=True)
+        LOGGER.debug("Sorted:\n%s", "\n".join(f" - {entry}" for entry in files[:5]))
         for file in files:
             for extension in extensions:
                 if file[1].endswith(extension):
