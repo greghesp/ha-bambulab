@@ -1205,35 +1205,70 @@ class PrintJob:
     #     FILE: /cache/Lovers Valentine Day Shadowbox.3mf
     # 
 
-    ftp_search_paths = ['/cache/', '/']
+    # The cached files also include the file size appended to them so that new prints of the same model
+    # filename but different settings can be cached independently. This keeps the print history truer and
+    # allows reprints of earlier prints that had the same name.
+    #
+    # The legacy caching approach just put them in a matching path in the local cache for
+    # the printer. If we encounter that, we move the files to the new size-based subdirectory.
     def _attempt_ftp_download_of_file(self, ftp, file_path, progress_callback=None):
         if 'Metadata' in file_path:
             # This is a ram drive on the X1 and is not accessible via FTP
             return None
 
+        cache_root = os.path.join(self._client.cache_path, "prints")
+
         try:
             LOGGER.debug(f"Looking for '{file_path}'")
-            size = ftp.size(file_path)
+            size = int(ftp.size(file_path))
             LOGGER.debug(f"File exists. Size: {size} bytes.")
-            
-            relative_path = file_path.lstrip('/')
-            cache_dir = os.path.join(self._client.cache_path, "prints")
-            cache_file_path = os.path.join(cache_dir, relative_path)
+
+            relative_path = Path(file_path.lstrip('/'))
+            subdir = relative_path.parent
+            filename = relative_path.name
+
+            if filename.startswith(f"{size}-"):
+                # Craft legacy cache filepath for backwards compatibility:
+                cache_file_path = Path(cache_root) / subdir / filename
+                cache_file_path_legacy = Path(cache_root) / subdir / filename.removeprefix(f"{size}-")
+            else:
+                cache_file_path = Path(cache_root) / subdir / f"{size}-{filename}"
+                cache_file_path_legacy = Path(cache_root) / subdir / filename
 
             # Ensure the directory exists
-            os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
+            cache_file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Check if file already exists in cache with same size
-            try:
-                cache_file_size = os.path.getsize(cache_file_path)
-                if cache_file_size == size:
-                    LOGGER.debug(f"File already in cache with same size.")
-                    # Update last edited time to refresh it's cache lifetime.
-                    os.utime(cache_file_path, None)
-                    return cache_file_path
-            except FileNotFoundError:
-                # File doesn't exist in the cache.
-                pass
+            # First check the new cache file path:
+            if cache_file_path.exists() and cache_file_path.stat().st_size == size:
+                LOGGER.debug(f"File already in cache: {cache_file_path}")
+                # Update last edited time to refresh its cache lifetime and print order in history.
+                os.utime(cache_file_path, None)
+                return str(cache_file_path)
+
+            # Check the legacy path second for backwards compatibility.
+            if cache_file_path_legacy.exists() and cache_file_path_legacy.stat().st_size == size:
+                LOGGER.debug(f"File already in cache: {cache_file_path_legacy}")
+                # File exists but in the old naming scheme. Move files to new location.
+                extensions = [
+                    ".3mf",
+                    ".gcode",
+                    ".png",
+                    ".slice_info.config",
+                ]
+                # Base path without the final suffix (so we can swap extensions)
+                for extension in extensions:
+                    src = cache_file_path_legacy.with_suffix("").with_suffix(extension)
+                    dst = cache_file_path.with_suffix("").with_suffix(extension)
+                    if src.exists():
+                        LOGGER.debug(f"Moving {src} -> {dst}")
+                        try:
+                            shutil.move(str(src), str(dst))
+                        except Exception as e:
+                            LOGGER.debug(f"Failed moving {src} -> {dst}: {e}")
+
+                # Update last edited time to refresh it's cache lifetime and print order in history.
+                os.utime(cache_file_path, None)
+                return str(cache_file_path)
 
             # Download to cache with progress tracking
             total_downloaded = 0
@@ -1261,7 +1296,7 @@ class PrintJob:
                     LOGGER.debug(f"Error in progress callback: {e}")
                     # Don't let progress callback errors break the download
 
-            with open(cache_file_path, 'wb') as f:
+            with open(str(cache_file_path), 'wb') as f:
                 # Create a wrapper function that combines file writing and progress tracking
                 def write_with_progress(data):
                     f.write(data)
@@ -1277,7 +1312,7 @@ class PrintJob:
             download_speed = size / download_time if download_time > 0 else 0
             
             LOGGER.debug(f"Successfully downloaded '{file_path}' to cache. Time: {download_time:.0f}s, Speed: {download_speed/1024:.0f} KB/s")
-            return cache_file_path
+            return str(cache_file_path)
                     
         except ftplib.error_perm as e:
              if '550' not in str(e.args): # 550 is unavailable.
@@ -1288,6 +1323,7 @@ class PrintJob:
             pass
         return None
 
+    ftp_search_paths = ['/cache/', '/']
     def _attempt_ftp_download_of_file_from_search_path(self, ftp, filename):
         for path in self.ftp_search_paths:
             file_path = f"{path}{filename.lstrip('/')}"
@@ -1436,7 +1472,7 @@ class PrintJob:
         # Files to delete: those beyond the 'keep' most recent
         old_files = matching_files[keep:]
 
-        LOGGER.debug(f"Keeping {keep} files. Deleting {len(old_files)} files.")
+        LOGGER.debug(f"Keeping up to {keep} files. Deleting {len(old_files)} excess files.")
         
         for primary_file in old_files:
             try:
