@@ -605,6 +605,9 @@
       "ip_address": {
         "name": "IP address"
       },
+      "serial": {
+        "name": "Serial number"
+      },
       "humidity_index": {
         "name": "Humidity index"
       },

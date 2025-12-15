@@ -827,6 +827,9 @@
       },
       "model_download_percentage": {
         "name": "Model na stiahnutie"
+      },
+      "serial": {
+        "name": "Sériové číslo"
       }
     },
     "camera": {

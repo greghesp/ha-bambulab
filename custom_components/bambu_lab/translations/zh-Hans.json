@@ -827,6 +827,9 @@
       },
       "model_download_percentage": {
         "name": "模型下载"
+      },
+      "serial": {
+        "name": "序列号"
       }
     },
     "camera": {

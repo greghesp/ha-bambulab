@@ -827,6 +827,9 @@
       },
       "model_download_percentage": {
         "name": "Téléchargement du modèle"
+      },
+      "serial": {
+        "name": "Numéro de série"
       }
     },
     "camera": {
