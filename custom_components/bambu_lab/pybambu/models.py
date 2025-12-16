@@ -1391,7 +1391,7 @@ class PrintJob:
                     # Since these dates don't have the year we have to work it out. For the most part that is going to be
                     # the current year, but we need to handle the case where the file is from December and now it's January
                     # or the file is from January but it's currently December because we've just passed through the New Year.
-                    # The transition from without year to with year is ~180 days in the past.
+                    # The transition from without year to with year is ~6 months in the past.
                     timestamp = datetime.strptime(timestamp_str, '%b %d %H:%M')
                     timestamp = timestamp.replace(tzinfo=timezone.utc)
                     utc_time_now = datetime.now().astimezone(timezone.utc)
@@ -1399,7 +1399,7 @@ class PrintJob:
                     # Initially assume current year, then adjust if the parsed time would be more than ~6 months away from now
                     timestamp = timestamp.replace(year=utc_time_now.year)
                     delta = timestamp - utc_time_now
-                    six_months = timedelta(days=180)
+                    six_months = timedelta(days=190) # Slightly more than 6 months to be safe
 
                     # If the timestamp is more than six months in the future, it's really from the previous year. This will be a
                     # common case for files from the previous year until we reach mid-year current time.
