@@ -1373,23 +1373,46 @@ class PrintJob:
         # Look for the newest file with extension in directory.
         file_list = []
         def parse_line(path: str, line: str):
+            # Example line content:
+            # -rw-r--r--    1 1000     1000      1632221 Jun 17  2025 video_2025-06-17_12-12-18.mp4
+            # -rw-r--r--    1 1000     1000      1640240 Jun 18 00:27 video_2025-06-17_14-48-33.mp4
+            # (retrieved on 12/16/2025)
+
             # Match the line format: '-rw-rw-rw- 1 user group 1234 Jan 01 12:34 filename'
             pattern_with_time_no_year      = r'^\S+\s+\d+\s+\S+\s+\S+\s+\d+\s+(\S+\s+\d+\s+\d+:\d+)\s+(.+)$'
             # Match the line format: '-rw-rw-rw- 1 user group 1234 Jan 01 2024 filename'
             pattern_without_time_just_year = r'^\S+\s+\d+\s+\S+\s+\S+\s+\d+\s+(\S+\s+\d+\s+\d+)\s+(.+)$'
             match = re.match(pattern_with_time_no_year, line)
+            #LOGGER.debug(line)
             if match:
                 timestamp_str, filename = match.groups()
                 _, extension = os.path.splitext(filename)
                 if extension in extensions:
-                    # Since these dates don't have the year we have to work it out. If the date is earlier in 
-                    # the year than now then it's this year. If it's later it's last year.
+                    # Since these dates don't have the year we have to work it out. For the most part that is going to be
+                    # the current year, but we need to handle the case where the file is from December and now it's January
+                    # or the file is from January but it's currently December because we've just passed through the New Year.
+                    # The transition from without year to with year is ~180 days in the past.
                     timestamp = datetime.strptime(timestamp_str, '%b %d %H:%M')
                     timestamp = timestamp.replace(tzinfo=timezone.utc)
                     utc_time_now = datetime.now().astimezone(timezone.utc)
+
+                    # Initially assume current year, then adjust if the parsed time would be more than ~6 months away from now
                     timestamp = timestamp.replace(year=utc_time_now.year)
-                    if timestamp > utc_time_now:
-                        timestamp = timestamp.replace(year=datetime.now().year - 1)
+                    delta = timestamp - utc_time_now
+                    six_months = timedelta(days=180)
+
+                    # If the timestamp is more than six months in the future, it's really from the previous year. This will be a
+                    # common case for files from the previous year until we reach mid-year current time.
+                    if delta > six_months:
+                        timestamp = timestamp.replace(year=utc_time_now.year - 1)
+
+                    # If the timestamp is more than six months in the past, it's from next year. Should be rare but could happen
+                    # as the timezone the printer uses is not consistent. Sometimes it's UTC+8 (China), sometimes UTC, sometimes
+                    # local + day light savings. So we could end up with a slightly future time (ignoring year) that becomes way
+                    # in the past when we assign the current year right before new years.
+                    elif delta < -six_months:
+                        timestamp = timestamp.replace(year=utc_time_now.year + 1)
+
                     return timestamp, f"{path}/{filename}" if path != '/' else f"/{filename}"
                 else:
                     return None
@@ -1419,9 +1442,9 @@ class PrintJob:
                 pass
 
 
-        LOGGER.debug("Unsorted:\n%s", "\n".join(f" - {entry}" for entry in file_list[-5:]))
+        LOGGER.debug("Unsorted (last 5):\n%s", "\n".join(f" - {entry}" for entry in file_list[-5:]))
         files = sorted(file_list, key=lambda file: file[0], reverse=True)
-        LOGGER.debug("Sorted:\n%s", "\n".join(f" - {entry}" for entry in files[:5]))
+        LOGGER.debug("Sorted (first 5):\n%s", "\n".join(f" - {entry}" for entry in files[:5]))
         for file in files:
             for extension in extensions:
                 if file[1].endswith(extension):
