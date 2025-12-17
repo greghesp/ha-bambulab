@@ -112,9 +112,11 @@ class Device:
         send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
 
-        send_ready_event = self.get_version_data is not None and self.push_all_data is None
         if data.get("command") == "push_status":
             if data.get("msg", 0) == 0:
+                send_ready_event = self.get_version_data is not None and self.push_all_data is None
+                if self.push_all_data is None:
+                    LOGGER.debug("Reached first push of all data.")
                 self.push_all_data = data
                 if send_ready_event:
                     self._client.callback("event_printer_ready")
@@ -132,6 +134,8 @@ class Device:
 
         if data.get("command") == "get_version":
             send_ready_event = self.get_version_data is None and self.push_all_data is not None
+            if self.get_version_data is None:
+                LOGGER.debug("Reached first push of version data.")
             self.get_version_data = data
             if send_ready_event:
                 self._client.callback("event_printer_ready")
@@ -1442,9 +1446,7 @@ class PrintJob:
                 pass
 
 
-        LOGGER.debug("Unsorted (last 5):\n%s", "\n".join(f" - {entry}" for entry in file_list[-5:]))
         files = sorted(file_list, key=lambda file: file[0], reverse=True)
-        LOGGER.debug("Sorted (first 5):\n%s", "\n".join(f" - {entry}" for entry in files[:5]))
         for file in files:
             for extension in extensions:
                 if file[1].endswith(extension):

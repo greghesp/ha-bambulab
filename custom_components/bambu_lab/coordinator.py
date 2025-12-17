@@ -759,9 +759,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._update_device_info()
 
         # Allow HA entity platform to finish adding entities before we try to delete dead ones.
-        # Needs to delay two event loop ticks as entity addition is doubly async.
-        await asyncio.sleep(0)
-        await asyncio.sleep(0)
+        # Needs to delay a little as entity addition async in a way we cannot wait on.
+        await asyncio.sleep(1)
 
         # Check for dead entities and clean them up
         LOGGER.debug("Checking for dead entities to remove")
