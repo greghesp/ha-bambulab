@@ -1,0 +1,893 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Tisk zrušen",
+      "event_print_failed": "Tisk selhal",
+      "event_print_finished": "Tisk dokončen",
+      "event_print_started": "Tisk zahájen",
+      "event_print_error": "Chyba tisku",
+      "event_print_error_cleared": "Chyba tisku vyřešena",
+      "event_printer_error": "Chyba HMS",
+      "event_printer_error_cleared": "Chyba HMS vyřešena"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "Zařízení je již nakonfigurováno",
+      "no_printers": "Na účtu nebyly nalezeny žádné nenakonfigurované tiskárny.",
+      "cloudflare": "Cloudflare zablokoval pokus o připojení.",
+      "curl_unavailable": "Knihovna curl_cffi není k dispozici."
+    },
+    "error": {
+      "cannot_connect": "Nepodařilo se připojit. Zkontrolujte přihlašovací údaje.",
+      "cannot_connect_cloud_timeout": "Časový limit pro připojení ke cloudu Bambu Lab vypršel.",
+      "cannot_connect_cloud_access_denied": "Přístup zamítnut cloudem Bambu Lab.",
+      "cannot_connect_cloud_connection_refused": "Připojení odmítnuto cloudem Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Adresa cloudu Bambu Lab je nedostupná.",
+      "cannot_connect_cloud_unknown": "Neznámá chyba při připojování ke cloudu Bambu Lab.",
+      "cannot_connect_local_timeout": "Nepodařilo se připojit. Časový limit vypršel.",
+      "cannot_connect_local_access_denied": "Nepodařilo se připojit. Přístup odepřen - zkontrolujte přístupový kód.",
+      "cannot_connect_local_incorrect_serial": "Nepodařilo se připojit. Spojení bylo uzavřeno tiskárnou - zkontrolujte sériové číslo.",
+      "cannot_connect_local_incorrect_address": "Nepodařilo se připojit. Spojení odmítnuto - zkontrolujte IP adresu.",
+      "cannot_connect_local_address_unreachable": "Nepodařilo se připojit. Adresa nedostupná - zkontrolujte připojení k síti.",
+      "cannot_connect_local_unknown": "Nepodařilo se připojit. Zkontrolujte zadaná nastavení.",
+      "invalid_auth": "Neplatné ověření.",
+      "unknown": "Neočekávaná chyba.",
+      "code_needed": "Musí být poskytnut ověřovací kód.",
+      "verifyCode": "Je vyžadován ověřovací kód. Zkontrolujte svůj e-mail nebo telefon.",
+      "code_expired": "Platnost ověřovacího kódu vypršela. Byl vyžádán nový kód. Zkontrolujte svůj e-mail nebo telefon.",
+      "code_incorrect": "Ověřovací kód byl nesprávný. Zadejte jej prosím znovu.",
+      "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní."
+    },
+    "step": {
+      "user": {
+        "description": "Konfigurace přes cloud Bambu Lab je nejjednodušší a nejrychlejší. Účty sociálních médií bez hesla nejsou podporovány.\n\rMůžete také znovu použít funkční ověřovací údaje z jiných tiskáren. Pokud budou nalezeny, budou uvedeny podle e-mailové adresy.\n\rNebo se můžete připojit ručním zadáním údajů o místním připojení tiskárny. To je vyžadováno pro tiskárnu v režimu LAN.",
+        "data": {
+          "printer_mode": "Režim konfigurace tiskárny:"
+        }
+      },
+      "Bambu": {
+        "title": "Připojení ke cloudu Bambu Lab",
+        "description": "Zadejte své přihlašovací údaje Bambu Lab:",
+        "data": {
+          "region": "Region účtu:",
+          "email": "E-mailová adresa nebo telefonní číslo",
+          "password": "Heslo",
+          "newCode": "Vyžádat nový kód",
+          "verifyCode": "Ověřovací kód z e-mailu nebo telefonu",
+          "tfaCode": "Kód dvoufaktorového ověření"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Výběr tiskárny",
+        "data": {
+          "serial": "Vyberte tiskárnu k přidání:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Nastavení místního připojení",
+        "description": "Můžete zvolit přímé připojení k MQTT tiskárny namísto cloudu Bambu Lab. To poskytuje odolnost vůči výpadkům cloudu Bambu Lab, ale Bambu Lab má v tomto hybridním režimu omezenou kontrolu nad tiskárnou, takže některé ovládací prvky nebudou dostupné.\n\rBez ohledu na tuto volbu integrace získá IP adresu tiskárny z cloudu Bambu Lab a potvrdí, že se k ní může připojit, protože to je vyžadováno pro podporu kamery, historie tisku a časosběru. Pokud je vaše tiskárna pro Home Assistant nedostupná, můžete tuto kontrolu zakázat, ale přijdete o tyto funkce.",
+        "data": {
+          "local_mqtt": "Připojit přímo k MQTT tiskárny:",
+          "skip_local_mqtt": "Přeskočit test místního připojení MQTT (nedoporučuje se):",
+          "host": "Lokální IP adresa tiskárny:",
+          "access_code": "Přístupový kód:",
+          "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
+            "data": {
+              "disable_ssl_verify": "Zakázat ověřování SSL",
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "Připojení v režimu LAN",
+        "description": "Zadejte prosím lokální IP adresu tiskárny, sériové číslo a přístupový kód. Přístupový kód naleznete na obrazovce tiskárny v nastavení sítě (WLAN). Sériové číslo (SN) naleznete v nastavení zařízení.",
+        "data": {
+          "serial": "Sériové číslo:",
+          "host": "Lokální IP adresa tiskárny:",
+          "access_code": "Přístupový kód:",
+          "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
+            "data": {
+              "disable_ssl_verify": "Zakázat ověřování SSL",
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+            }
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cloudflare": "Cloudflare zablokoval pokus o připojení.",
+      "curl_unavailable": "Knihovna curl_cffi není k dispozici."
+    },
+    "error": {
+      "cannot_connect": "Nepodařilo se připojit",
+      "cannot_connect_cloud_timeout": "Časový limit pro připojení ke cloudu Bambu Lab vypršel.",
+      "cannot_connect_cloud_access_denied": "Přístup zamítnut cloudem Bambu Lab.",
+      "cannot_connect_cloud_connection_refused": "Připojení odmítnuto cloudem Bambu Lab.",
+      "cannot_connect_cloud_address_unreachable": "Adresa cloudu Bambu Lab je nedostupná.",
+      "cannot_connect_cloud_unknown": "Neznámá chyba při připojování ke cloudu Bambu Lab.",
+      "cannot_connect_local_timeout": "Nepodařilo se připojit. Časový limit vypršel.",
+      "cannot_connect_local_access_denied": "Nepodařilo se připojit. Přístup odepřen - zkontrolujte přístupový kód.",
+      "cannot_connect_local_incorrect_serial": "Nepodařilo se připojit. Spojení bylo uzavřeno tiskárnou - zkontrolujte sériové číslo.",
+      "cannot_connect_local_incorrect_address": "Nepodařilo se připojit. Spojení odmítnuto - zkontrolujte IP adresu.",
+      "cannot_connect_local_address_unreachable": "Nepodařilo se připojit. Adresa nedostupná - zkontrolujte připojení k síti.",
+      "cannot_connect_local_unknown": "Nepodařilo se připojit. Zkontrolujte zadaná nastavení.",
+      "invalid_auth": "Neplatné ověření.",
+      "unknown": "Neočekávaná chyba.",
+      "code_needed": "Musí být poskytnut ověřovací kód.",
+      "verifyCode": "Je vyžadován ověřovací kód. Zkontrolujte svůj e-mail nebo telefon.",
+      "code_expired": "Platnost ověřovacího kódu vypršela. Byl vyžádán nový kód. Zkontrolujte svůj e-mail nebo telefon.",
+      "code_incorrect": "Ověřovací kód byl nesprávný. Zadejte jej prosím znovu.",
+      "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní."
+    },
+    "step": {
+      "init": {
+        "title": "Upravit nastavení připojení",
+        "description": "Konfigurace přes cloud Bambu Lab je nejjednodušší a nejrychlejší. Účty sociálních médií bez hesla nejsou podporovány.\n\rMůžete také znovu použít funkční ověřovací údaje z jiných tiskáren. Pokud budou nalezeny, budou uvedeny podle e-mailové adresy.\n\rNebo se můžete připojit ručním zadáním údajů o místním připojení tiskárny. To je vyžadováno pro tiskárnu v režimu LAN.",
+        "data": {
+          "printer_mode": "Režim konfigurace tiskárny:"
+        }
+      },
+      "Bambu": {
+        "title": "Připojení ke cloudu Bambu Lab",
+        "description": "Zadejte své přihlašovací údaje Bambu Lab:",
+        "data": {
+          "region": "Region účtu:",
+          "email": "E-mailová adresa nebo telefonní číslo",
+          "password": "Heslo",
+          "newCode": "Vyžádat nový kód",
+          "verifyCode": "Ověřovací kód z e-mailu nebo telefonu",
+          "tfaCode": "Kód dvoufaktorového ověření"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Upravit konfiguraci tiskárny",
+        "description": "Můžete zvolit přímé připojení k MQTT tiskárny namísto cloudu Bambu Lab. To poskytuje odolnost vůči výpadkům cloudu Bambu Lab, ale Bambu Lab má v tomto hybridním režimu omezenou kontrolu nad tiskárnou, takže některé ovládací prvky nebudou dostupné.\n\rBez ohledu na tuto volbu integrace získá IP adresu tiskárny z cloudu Bambu Lab a potvrdí, že se k ní může připojit, protože to je vyžadováno pro podporu kamery, historie tisku a časosběru. Pokud je vaše tiskárna pro Home Assistant nedostupná, můžete tuto kontrolu zakázat, ale přijdete o tyto funkce.",
+        "data": {
+          "serial": "Upravit nastavení pro:",
+          "host": "Lokální IP adresa tiskárny:",
+          "access_code": "Přístupový kód:",
+          "local_mqtt": "Připojit přímo k MQTT tiskárny:",
+          "skip_local_mqtt": "Přeskočit test místního připojení MQTT (nedoporučuje se):",
+          "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
+            "data": {
+              "disable_ssl_verify": "Zakázat ověřování SSL",
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "Připojení v režimu LAN",
+        "description": "Zadejte prosím lokální IP adresu tiskárny a přístupový kód. Přístupový kód naleznete na obrazovce tiskárny v nastavení sítě (WLAN).",
+        "data": {
+          "host": "Lokální IP adresa tiskárny:",
+          "access_code": "Přístupový kód:",
+          "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilé možnosti",
+            "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
+            "data": {
+              "disable_ssl_verify": "Zakázat ověřování SSL",
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+            }
+          }
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "active_ams": {
+        "name": "Aktivní"
+      },
+      "drying": {
+        "name": "Sušení"
+      },
+      "developer_lan_mode": {
+        "name": "Vývojářský LAN režim"
+      },
+      "door_open": {
+        "name": "Dvířka krytu"
+      },
+      "airduct_mode": {
+        "name": "Režim vzduchového kanálu"
+      },
+      "timelapse": {
+        "name": "Nahrávání časosběru"
+      },
+      "hms_errors": {
+        "name": "Chyby HMS"
+      },
+      "print_error": {
+        "name": "Chyba tisku"
+      },
+      "online": {
+        "name": "Online"
+      },
+      "mqtt_encryption": {
+        "name": "Firmware šifrování MQTT"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "Hybridní MQTT blokuje ovládání"
+      },
+      "firmware_update": {
+        "name": "Aktualizace firmwaru"
+      },
+      "extruder_filament_state": {
+        "name": "Stav filamentu v extruderu"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Pozastavit tisk"
+      },
+      "resume": {
+        "name": "Obnovit tisk"
+      },
+      "stop": {
+        "name": "Zastavit tisk"
+      },
+      "refresh": {
+        "name": "Vynutit obnovení dat"
+      },
+      "dev": {
+        "name": "Ladění"
+      },
+      "buzzer_silence": {
+        "name": "Bzučák - Ticho"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Bzučák - Požární poplach"
+      },
+      "buzzer_beeping": {
+        "name": "Bzučák - Pípání"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Chladicí ventilátor"
+      },
+      "aux_fan": {
+        "name": "Pomocný ventilátor"
+      },
+      "chamber_fan": {
+        "name": "Ventilátor komory"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Kamera"
+      },
+      "cover_image": {
+        "name": "Obrázek obálky"
+      },
+      "pick_image": {
+        "name": "Vybrat obrázek"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Světlo komory"
+      },
+      "camera_light": {
+        "name": "Světlo kamery"
+      },
+      "heatbed_light": {
+        "name": "Světlo vyhřívané podložky"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Cílová teplota podložky"
+      },
+      "target_nozzle_temperature": {
+        "name": "Cílová teplota trysky"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Rychlost tisku",
+        "state": {
+          "silent": "Tichá",
+          "standard": "Standardní",
+          "sport": "Sportovní",
+          "ludicrous": "Šílená"
+        }
+      }
+    },
+    "sensor": {
+      "tool_module": {
+        "name": "Nástrojový modul",
+        "state": {
+          "none": "Není namontován",
+          "laser10": "Laser (10W)",
+          "laser40": "Laser (40W)",
+          "cutter": "Řezačka"
+        }
+      },
+      "wifi_signal": {
+        "name": "Signál Wi-Fi"
+      },
+      "bed_temp": {
+        "name": "Teplota podložky"
+      },
+      "target_bed_temp": {
+        "name": "Cílová teplota podložky"
+      },
+      "chamber_temp": {
+        "name": "Teplota komory"
+      },
+      "target_nozzle_temp": {
+        "name": "Cílová teplota trysky"
+      },
+      "nozzle_temp": {
+        "name": "Teplota trysky"
+      },
+      "left_nozzle_temp": {
+        "name": "Teplota levé trysky"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Cílová teplota levé trysky"
+      },
+      "right_nozzle_temp": {
+        "name": "Teplota pravé trysky"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Cílová teplota pravé trysky"
+      },
+      "aux_fan_speed": {
+        "name": "Rychlost pomocného ventilátoru"
+      },
+      "cooling_fan_speed": {
+        "name": "Rychlost chladicího ventilátoru"
+      },
+      "chamber_fan_speed": {
+        "name": "Rychlost ventilátoru komory"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Rychlost ventilátoru heatbreaku"
+      },
+      "model_download_percentage": {
+        "name": "Stažení modelu"
+      },
+      "speed_profile": {
+        "name": "Profil rychlosti",
+        "state": {
+          "silent": "Tichý",
+          "standard": "Standardní",
+          "sport": "Sportovní",
+          "ludicrous": "Šílený"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Modifikátor"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Název tiskárny"
+      },
+      "stage": {
+        "name": "Aktuální fáze",
+        "state": {
+          "offline": "Offline",
+          "printing": "Tisk",
+          "auto_bed_leveling": "Automatické vyrovnání podložky",
+          "heatbed_preheating": "Předehřev podložky",
+          "sweeping_xy_mech_mode": "Testování mechaniky XY",
+          "changing_filament": "Výměna filamentu",
+          "m400_pause": "M400 pauza",
+          "paused_filament_runout": "Pozastaveno z důvodu dojití filamentu",
+          "heating_hotend": "Zahřívání hotendu",
+          "calibrating_extrusion": "Kalibrace extruze",
+          "scanning_bed_surface": "Skenování povrchu podložky",
+          "inspecting_first_layer": "Kontrola první vrstvy",
+          "identifying_build_plate_type": "Identifikace typu tiskové podložky",
+          "calibrating_micro_lidar": "Kalibrace mikro LiDARu",
+          "homing_toolhead": "Parkování tiskové hlavy",
+          "cleaning_nozzle_tip": "Čištění špičky trysky",
+          "checking_extruder_temperature": "Kontrola teploty extruderu",
+          "paused_user": "Tisk byl pozastaven uživatelem",
+          "paused_front_cover_falling": "Pauza - pád předního krytu",
+          "calibrating_extrusion_flow": "Kalibrace průtoku extruze",
+          "paused_nozzle_temperature_malfunction": "Pozastaveno z důvodu poruchy teploty trysky",
+          "paused_heat_bed_temperature_malfunction": "Pozastaveno z důvodu poruchy teploty podložky",
+          "filament_unloading": "Vysouvání filamentu",
+          "paused_skipped_step": "Pozastaveno z důvodu přeskočení kroků",
+          "filament_loading": "Zavádění filamentu",
+          "calibrating_motor_noise": "Kalibrace hluku motoru",
+          "paused_ams_lost": "Pozastaveno - ztráta AMS",
+          "paused_low_fan_speed_heat_break": "Pozastaveno kvůli nízké rychlosti ventilátoru heatbreaku",
+          "paused_chamber_temperature_control_error": "Pozastaveno kvůli chybě regulace teploty komory",
+          "cooling_chamber": "Chlazení komory",
+          "paused_user_gcode": "Pozastaveno uživatelskou instrukcí v G-code",
+          "motor_noise_showoff": "Ukázka hluku motoru",
+          "paused_nozzle_filament_covered_detected": "Pozastaveno - detekováno zakrytí trysky filamentem",
+          "paused_cutter_error": "Pozastaveno kvůli chybě řezačky",
+          "paused_first_layer_error": "Pozastaveno kvůli chybě první vrstvy",
+          "paused_nozzle_clog": "Pozastaveno kvůli ucpání trysky",
+          "check_absolute_accuracy_before_calibration": "Kontrola absolutní přesnosti tiskárny před kalibrací",
+          "absolute_accuracy_calibration": "Kalibrace absolutní přesnosti",
+          "check_absolute_accuracy_after_calibration": "Kontrola absolutní přesnosti tiskárny po kalibraci",
+          "calibrate_nozzle_offset": "Kalibrace ofsetu trysky",
+          "bed_level_high_temperature": "Vysokoteplotní automatické vyrovnání podložky",
+          "check_quick_release": "Automatická kontrola: Páčka rychlého uvolnění",
+          "check_door_and_cover": "Automatická kontrola: Dvířka a horní kryt",
+          "laser_calibration": "Kalibrace laseru",
+          "check_plaform": "Automatická kontrola: Platforma",
+          "check_birdeye_camera_position": "Automatická kontrola: Pozice kamery z ptačí perspektivy",
+          "calibrate_birdeye_camera": "Kalibrace kamery z ptačí perspektivy",
+          "bed_level_phase_1": "Automatické vyrovnání podložky - fáze 1",
+          "bed_level_phase_2": "Automatické vyrovnání podložky - fáze 2",
+          "heating_chamber": "Zahřívání komory",
+          "heated_bedcooling": "Chlazení vyhřívané podložky",
+          "print_calibration_lines": "Tisk kalibračních čar",
+          "idle": "Nečinnost"
+        }
+      },
+      "sdcard_status": {
+        "name": "Stav SD karty",
+        "state": {
+          "missing": "Chybí",
+          "normal": "Normální",
+          "abnormal": "Abnormální",
+          "readonly": "Pouze pro čtení"
+        }
+      },
+      "print_progress": {
+        "name": "Průběh tisku"
+      },
+      "print_status": {
+        "name": "Stav tisku",
+        "state": {
+          "failed": "Selhal",
+          "finish": "Dokončen",
+          "idle": "Nečinnost",
+          "offline": "Offline",
+          "prepare": "Příprava",
+          "running": "Běží",
+          "pause": "Pauza",
+          "slicing": "Slicování",
+          "init": "Inicializace"
+        }
+      },
+      "printable_objects": {
+        "name": "Tisknutelné objekty"
+      },
+      "skipped_objects": {
+        "name": "Přeskočené objekty"
+      },
+      "mqtt_mode": {
+        "name": "Režim připojení MQTT",
+        "state": {
+          "local": "Lokální",
+          "bambu_cloud": "Bambu Lab cloud"
+        }
+      },
+      "gcode_file": {
+        "name": "Název Gcode souboru"
+      },
+      "gcode_file_downloaded": {
+        "name": "Gcode soubor stažen"
+      },
+      "remaining_drying_time": {
+        "name": "Zbývající čas sušení"
+      },
+      "ams_temp": {
+        "name": "Teplota"
+      },
+      "humidity": {
+        "name": "Vlhkost"
+      },
+      "print_bed_type": {
+        "name": "Typ tiskové podložky",
+        "state": {
+          "textured_plate": "Texturovaná podložka",
+          "cool_plate": "Studená podložka / PLA podložka",
+          "hot_plate": "Hladká PEI podložka / Vysokoteplotní podložka",
+          "eng_plate": "Inženýrská podložka",
+          "supertack_plate": "Studená podložka SuperTack"
+        }
+      },
+      "print_length": {
+        "name": "Délka tisku"
+      },
+      "print_weight": {
+        "name": "Hmotnost tisku"
+      },
+      "subtask_name": {
+        "name": "Název úlohy"
+      },
+      "print_type": {
+        "name": "Typ tisku",
+        "state": {
+          "local": "Lokální",
+          "cloud": "Cloud",
+          "idle": "Nečinnost"
+        }
+      },
+      "start_time": {
+        "name": "Čas zahájení"
+      },
+      "remaining_time": {
+        "name": "Zbývající čas"
+      },
+      "end_time": {
+        "name": "Čas ukončení"
+      },
+      "total_usage_hours": {
+        "name": "Celkové využití"
+      },
+      "current_layer": {
+        "name": "Aktuální vrstva"
+      },
+      "total_layers": {
+        "name": "Celkový počet vrstev"
+      },
+      "active_tray": {
+        "name": "Aktivní slot",
+        "state": {
+          "none": "Žádný"
+        }
+      },
+      "nozzle_diameter": {
+        "name": "Velikost trysky"
+      },
+      "nozzle_type": {
+        "name": "Typ trysky",
+        "state": {
+          "hardened_steel": "Tvrzená ocel",
+          "stainless_steel": "Nerezová ocel",
+          "tungsten_carbide": "Karbid wolframu",
+          "high_flow_hardened_steel": "Tvrzená ocel High Flow",
+          "high_flow_stainless_steel": "Nerezová ocel High Flow",
+          "high_flow_tungsten_carbide": "Karbid wolframu High Flow",
+          "unknown": "Neznámý"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Velikost levé trysky"
+      },
+      "left_nozzle_type": {
+        "name": "Typ levé trysky",
+        "state": {
+          "hardened_steel": "Tvrzená ocel",
+          "stainless_steel": "Nerezová ocel",
+          "tungsten_carbide": "Karbid wolframu",
+          "high_flow_hardened_steel": "Tvrzená ocel High Flow",
+          "high_flow_stainless_steel": "Nerezová ocel High Flow",
+          "high_flow_tungsten_carbide": "Karbid wolframu High Flow"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Velikost pravé trysky"
+      },
+      "right_nozzle_type": {
+        "name": "Typ pravé trysky",
+        "state": {
+          "hardened_steel": "Tvrzená ocel",
+          "stainless_steel": "Nerezová ocel",
+          "tungsten_carbide": "Karbid wolframu",
+          "high_flow_hardened_steel": "Tvrzená ocel High Flow",
+          "high_flow_stainless_steel": "Nerezová ocel High Flow",
+          "high_flow_tungsten_carbide": "Karbid wolframu High Flow"
+        }
+      },
+      "ip_address": {
+        "name": "IP adresa"
+      },
+      "serial": {
+        "name": "Sériové číslo"
+      },
+      "humidity_index": {
+        "name": "Index vlhkosti"
+      },
+      "external_spool": {
+        "name": "Externí cívka",
+        "state_attributes": {
+          "active": {
+            "name": "Aktivní"
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "empty": {
+            "name": "Prázdná"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Název"
+          },
+          "nozzle_temp_min": {
+            "name": "Min. teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max. teplota trysky"
+          },
+          "remain": {
+            "name": "Zbývající filament"
+          },
+          "remain_enabled": {
+            "name": "Odhad zbývajícího filamentu povolen"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cívky"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID Filamentu"
+          },
+          "tray_weight": {
+            "name": "Maximální hmotnost filamentu"
+          }
+        }
+      },
+      "tray_1": {
+        "name": "Slot 1",
+        "state_attributes": {
+          "active": {
+            "name": "Aktivní"
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "empty": {
+            "name": "Prázdná"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Název"
+          },
+          "nozzle_temp_min": {
+            "name": "Min. teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max. teplota trysky"
+          },
+          "remain": {
+            "name": "Zbývající filament"
+          },
+          "remain_enabled": {
+            "name": "Odhad zbývajícího filamentu povolen"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cívky"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID Filamentu"
+          },
+          "tray_weight": {
+            "name": "Maximální hmotnost filamentu"
+          }
+        }
+      },
+      "tray_2": {
+        "name": "Slot 2",
+        "state_attributes": {
+          "active": {
+            "name": "Aktivní"
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "empty": {
+            "name": "Prázdná"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Název"
+          },
+          "nozzle_temp_min": {
+            "name": "Min. teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max. teplota trysky"
+          },
+          "remain": {
+            "name": "Zbývající filament"
+          },
+          "remain_enabled": {
+            "name": "Odhad zbývajícího filamentu povolen"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cívky"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID Filamentu"
+          },
+          "tray_weight": {
+            "name": "Maximální hmotnost filamentu"
+          }
+        }
+      },
+      "tray_3": {
+        "name": "Slot 3",
+        "state_attributes": {
+          "active": {
+            "name": "Aktivní"
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "empty": {
+            "name": "Prázdná"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Název"
+          },
+          "nozzle_temp_min": {
+            "name": "Min. teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max. teplota trysky"
+          },
+          "remain": {
+            "name": "Zbývající filament"
+          },
+          "remain_enabled": {
+            "name": "Odhad zbývajícího filamentu povolen"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cívky"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID Filamentu"
+          },
+          "tray_weight": {
+            "name": "Maximální hmotnost filamentu"
+          }
+        }
+      },
+      "tray_4": {
+        "name": "Slot 4",
+        "state_attributes": {
+          "active": {
+            "name": "Aktivní"
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "empty": {
+            "name": "Prázdná"
+          },
+          "k_value": {
+            "name": "Hodnota K"
+          },
+          "name": {
+            "name": "Název"
+          },
+          "nozzle_temp_min": {
+            "name": "Min. teplota trysky"
+          },
+          "nozzle_temp_max": {
+            "name": "Max. teplota trysky"
+          },
+          "remain": {
+            "name": "Zbývající filament"
+          },
+          "remain_enabled": {
+            "name": "Odhad zbývajícího filamentu povolen"
+          },
+          "tag_uid": {
+            "name": "Sériové číslo cívky"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "filament_id": {
+            "name": "ID Filamentu"
+          },
+          "tray_weight": {
+            "name": "Maximální hmotnost filamentu"
+          }
+        }
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Kamera"
+      }
+    },
+    "switch": {
+      "camera": {
+        "name": "Povolit kameru"
+      },
+      "imagecamera": {
+        "name": "Použít kameru obrazového senzoru"
+      },
+      "ftp": {
+        "name": "Načíst data modelu z tiskárny"
+      },
+      "prompt_sound": {
+        "name": "Povolit zvukové upozornění"
+      },
+      "airduct_mode": {
+        "name": "Režim chlazení nebo vytápění/filtrace"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Aktualizace firmwaru"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Lab cloud",
+        "lan": "LAN Režim"
+      }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Ověření selhalo",
+      "description": "Pokus o připojení k Bambu Lab pro {device} selhal. Znovu nakonfigurujte integraci a zadejte nové přihlašovací údaje."
+    },
+    "no_external_storage": {
+      "title": "USB nebo SD karta nebyla detekována",
+      "description": "{device} nemá připojené USB ani SD kartu. To je potřeba pro všechny funkce, které závisí na FTP připojení k tiskárně, jako je obrázek obálky, přeskakování objektů a historie tisku."
+    },
+    "live_view_disabled": {
+      "title": "Živý náhled zakázán",
+      "description": "{device} má v nastavení tiskárny zakázán živý náhled. Pro použití funkcí kamery jej prosím povolte."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "Šifrování MQTT povoleno",
+      "description": "{device} je připojen ke cloudu se zapnutým šifrováním MQTT. Touto integrací lze ovládat pouze světlo. Všechny ostatní ovládací prvky jsou nedostupné. Aby bylo možné tiskárnu ovládat z Home Assistant, musí být nastavena do vývojářského LAN režimu."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Hybridní připojení blokuje ovládání",
+      "description": "{device} je připojen ke cloudu, ale integrace používá místní připojení MQTT. Touto integrací lze ovládat pouze světlo. Všechny ostatní ovládací prvky jsou nedostupné. Pro povolení ovládání přepněte připojení na čistě cloudové."
+    }
+  }
+}
