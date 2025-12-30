@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Chamber fan"
+      },
+      "aux_left_fan": {
+        "name": "Aux left fan"
       }
     },
     "image": {
@@ -450,11 +453,11 @@
           "bed_level_phase_2": "Auto bed leveling - phase 2",
           "heating_chamber": "Heating chamber",
           "heated_bedcooling": "Heated bed cooling",
-          "print_calibration_lines": "Printing calibration lines",          
+          "print_calibration_lines": "Printing calibration lines",
           "idle": "Idle"
         }
       },
-      "sdcard_status": { 
+      "sdcard_status": {
         "name": "SD card status",
         "state": {
           "missing": "Missing",
