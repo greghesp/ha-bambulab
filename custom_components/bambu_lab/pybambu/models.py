@@ -336,7 +336,8 @@ class Device:
                 return self.supports_sw_version("01.01.01.00")
             elif (self.info.device_type == Printers.H2DPRO):
                 return self.supports_sw_version("01.01.01.00")
-            elif (self.info.device_type == Printers.H2S or
+            elif (self.info.device_type == Printers.H2C or
+                  self.info.device_type == Printers.H2S or
                   self.info.device_type == Printers.P2S):
                 return True
             elif (self.info.device_type == Printers.P1S or
@@ -347,7 +348,8 @@ class Device:
                 return self.supports_sw_version("01.08.50.32")
             return False
         elif feature == Features.FIRE_ALARM_BUZZER:
-            return (self.info.device_type == Printers.H2D or
+            return (self.info.device_type == Printers.H2C or
+                    self.info.device_type == Printers.H2D or
                     self.info.device_type == Printers.H2DPRO or
                     self.info.device_type == Printers.H2S)
         elif feature == Features.HEATBED_LIGHT:
