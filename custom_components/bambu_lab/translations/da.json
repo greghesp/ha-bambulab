@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Hybridforbindelse blokerer kontrol",
-      "description": "{device} er cloud-forbundet, men med lokal mqtt-forbindelse af integrationen. Kun lyset kan styres af denne integration. Alle andre kontroller er ikke tilgængelige. Skift forbindelsen til ren sky for at aktivere kontrol."
+      "description": "{device} er cloud-forbundet, men med lokal mqtt-forbindelse af integrationen. Dette blokerer for indstilling af temperaturer og genudskrivning fra historikken. Skift forbindelsen til ren sky for at aktivere fuld kontrol."
     }
   }
 }

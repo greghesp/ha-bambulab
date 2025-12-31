@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Controle de blocos de conexão híbrida",
-      "description": "{device} está conectado à nuvem, mas com conexão mqtt local pela integração. Somente a luz pode ser controlada por esta integração. Todos os outros controles estão indisponíveis. Mude a conexão para nuvem pura para ativar o controle."
+      "description": "{device} está conectado à nuvem, mas com conexão mqtt local pela integração. Isso bloqueia a configuração de temperaturas e a reimpressão do histórico. Mude a conexão para nuvem pura para permitir controle total."
     }
   }
 }
