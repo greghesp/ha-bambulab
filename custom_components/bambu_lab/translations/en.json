@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Hybrid Connection Blocks Control",
-      "description": "{device} is cloud connected but with local mqtt connection by the integration. Only the light can be controlled by this integration. All other controls are unavailable. Switch the connection to pure cloud to enable control."
+      "description": "{device} is cloud connected but with local mqtt connection by the integration. This blocks setting temperatures and reprinting from history. Switch the connection to pure cloud to enable full control."
     }
   }
 }

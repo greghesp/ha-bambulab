@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Contrôle des blocs de connexion hybrides",
-      "description": "{device} est connecté au cloud mais avec une connexion mqtt locale par l'intégration. Seule la lumière peut être contrôlée par cette intégration. Tous les autres contrôles ne sont pas disponibles. Basculez la connexion vers le cloud pur pour activer le contrôle."
+      "description": "{device} est connecté au cloud mais avec une connexion mqtt locale par l'intégration. Cela bloque le réglage des températures et la réimpression de l'historique. Basculez la connexion vers le cloud pur pour permettre un contrôle total."
     }
   }
 }

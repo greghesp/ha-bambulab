@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Hybridní připojení blokuje ovládání",
-      "description": "{device} je připojen ke cloudu, ale integrace používá místní připojení MQTT. Touto integrací lze ovládat pouze světlo. Všechny ostatní ovládací prvky jsou nedostupné. Pro povolení ovládání přepněte připojení na čistě cloudové."
+      "description": "{device} je připojeno ke cloudu, ale s místním připojením mqtt integrací. To blokuje nastavení teplot a opakovaný tisk z historie. Přepněte připojení na čistý cloud, abyste měli plnou kontrolu."
     }
   }
 }

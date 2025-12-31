@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Hybridné riadenie blokov pripojenia",
-      "description": "{device} je pripojené ku cloudu, ale s lokálnym pripojením mqtt integráciou. Touto integráciou je možné ovládať iba svetlo. Všetky ostatné ovládacie prvky sú nedostupné. Ak chcete povoliť ovládanie, prepnite pripojenie na čistý cloud."
+      "description": "{device} je pripojené ku cloudu, ale s lokálnym pripojením mqtt integráciou. Toto blokuje nastavenie teplôt a opätovnú tlač z histórie. Ak chcete získať plnú kontrolu, prepnite pripojenie na čistý cloud."
     }
   }
 }

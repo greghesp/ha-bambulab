@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Control de blocs de connexió híbrid",
-      "description": "{device} està connectat al núvol però amb connexió mqtt local per la integració. Només la llum es pot controlar mitjançant aquesta integració. Tots els altres controls no estan disponibles. Canvia la connexió al núvol pur per activar el control."
+      "description": "{device} està connectat al núvol però amb connexió mqtt local per la integració. Això bloqueja la configuració de temperatures i la reimpressió de l'historial. Canvia la connexió al núvol pur per permetre el control total."
     }
   }
 }

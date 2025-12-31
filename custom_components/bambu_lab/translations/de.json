@@ -887,7 +887,7 @@
     },
     "hybrid_mode_blocking": {
       "title": "Steuerung der Hybridverbindungsblöcke",
-      "description": "{device} ist mit der Cloud verbunden, verfügt jedoch über eine lokale MQTT-Verbindung durch die Integration. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Stellen Sie die Verbindung auf reine Cloud um, um die Steuerung zu ermöglichen."
+      "description": "{device} ist mit der Cloud verbunden, verfügt jedoch über eine lokale MQTT-Verbindung durch die Integration. Dadurch werden das Einstellen von Temperaturen und das Nachdrucken des Verlaufs blockiert. Stellen Sie die Verbindung auf reine Cloud um, um die vollständige Kontrolle zu ermöglichen."
     }
   }
 }
