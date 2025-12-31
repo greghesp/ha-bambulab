@@ -61,7 +61,11 @@ from .commands import (
     PROMPT_SOUND_DISABLE,
     AIRDUCT_SET_COOLING,
     AIRDUCT_SET_HEATING_FILTER,
-    SPEED_PROFILE_TEMPLATE, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING, HEATBED_LIGHT_ON,
+    SPEED_PROFILE_TEMPLATE,
+    BUZZER_SET_SILENT,
+    BUZZER_SET_ALARM,
+    BUZZER_SET_BEEPING,
+    HEATBED_LIGHT_ON,
     HEATBED_LIGHT_OFF,
 )
 
@@ -535,8 +539,8 @@ class Temperature:
         self.bed_temp = 0
         self.target_bed_temp = 0
         self.chamber_temp = 0
-        self.nozzle_temps = { 0: 0, 1: 0}
-        self.target_nozzle_temps = { 0:0, 1: 0}
+        self.nozzle_temps = { 0: 0, 1: 0, 15: 0}
+        self.target_nozzle_temps = { 0:0, 1: 0, 15: 0}
 
     @property
     def active_nozzle_temperature(self):
@@ -2120,8 +2124,8 @@ class Info:
         self.online = False
         self.new_version_state = 0
         self.mqtt_mode = "local" if self._client._local_mqtt else "bambu_cloud"
-        self.nozzle_diameters = {0: None, 1: None}
-        self.nozzle_types = {0: None, 1: None}
+        self.nozzle_diameters = {0: None, 1: None, 15: None}
+        self.nozzle_types = {0: None, 1: None, 15: None}
         self.usage_hours = client._usage_hours
         self.extruder_filament_state = False
         self.door_open = False
@@ -2471,8 +2475,8 @@ class AMSList:
 
     def __init__(self, client):
         self._client = client
-        self._nozzle_tray_index = { 0: 0, 1: 0}
-        self._nozzle_ams_index = { 0: 0, 1: 0}
+        self._nozzle_tray_index = { 0: 0, 1: 0, 15: 0}
+        self._nozzle_ams_index = { 0: 0, 1: 0, 15: 0}
         self.data = {}
 
     @property
@@ -2763,38 +2767,31 @@ class AMSTray:
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
-        if len(data) <= 2:
-            # If the data just id + state then the tray is empty.
-            self.empty = True
-            self.idx = ""
-            self.name = "Empty"
+        self.idx = data.get('tray_info_idx', self.idx)
+        self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
+        self.type = data.get('tray_type', self.type)
+        self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+        self.color = data.get('tray_color', self.color)
+        self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
+        self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+        self._remain = data.get('remain', self._remain)
+        self.tag_uid = data.get('tag_uid', self.tag_uid)
+        self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
+        self.k = data.get('k', self.k)
+        self.tray_weight = data.get('tray_weight', self.tray_weight)
+        if self.name == "unknown":
+            # Fallback to the type if the name is unknown
+            self.name = self.type
+        self.empty = (self.name == "Empty")
+        if self.name == "Empty":
             self.type = "Empty"
             self.sub_brands = ""
-            self.color = "00000000"  # RRGGBBAA
-            self.nozzle_temp_min = 0
-            self.nozzle_temp_max = 0
             self._remain = -1
             self.tag_uid = ""
             self.tray_uuid = ""
             self.k = 0
             self.tray_weight = 0
-        else:
-            self.empty = False
-            self.idx = data.get('tray_info_idx', self.idx)
-            self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
-            self.type = data.get('tray_type', self.type)
-            self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
-            self.color = data.get('tray_color', self.color)
-            self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
-            self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
-            self._remain = data.get('remain', self._remain)
-            self.tag_uid = data.get('tag_uid', self.tag_uid)
-            self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
-            self.k = data.get('k', self.k)
-            self.tray_weight = data.get('tray_weight', self.tray_weight)
-            if self.name == "unknown":
-                # Fallback to the type if the name is unknown
-                self.name = self.type
+
         return (old_data != f"{self.__dict__}")
 
 
