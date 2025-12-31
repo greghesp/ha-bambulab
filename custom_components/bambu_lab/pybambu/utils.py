@@ -52,7 +52,7 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
         fanString = "P2"
     elif fan == FansEnum.CHAMBER:
         fanString = "P3"
-    elif fan == FansEnum.AUXILIARY_LEFT:
+    elif fan == FansEnum.SECONDARY_AUXILIARY:
         fanString = "P10"
 
     percentage = round(percentage / 10) * 10

@@ -49,7 +49,7 @@ class Features(IntEnum):
     MQTT_ENCRYPTION_FIRMWARE = 22,
     AIRDUCT_MODE = 23,
     SUPPORTS_EARLY_FTP_DOWNLOAD = 24,
-    AUX_LEFT_FAN = 25,
+    SECONDARY_AUX_FAN = 25,
 
 
 class FansEnum(IntEnum):
@@ -57,7 +57,7 @@ class FansEnum(IntEnum):
     AUXILIARY = 2,
     CHAMBER = 3,
     HEATBREAK = 4,
-    AUXILIARY_LEFT = 5,
+    SECONDARY_AUXILIARY = 5,
 
 
 class TempEnum(IntEnum):

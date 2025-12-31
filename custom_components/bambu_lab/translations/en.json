@@ -282,8 +282,8 @@
       "chamber_fan": {
         "name": "Chamber fan"
       },
-      "aux_left_fan": {
-        "name": "Aux left fan"
+      "secondary_aux_fan": {
+        "name": "Secondary aux fan"
       }
     },
     "image": {

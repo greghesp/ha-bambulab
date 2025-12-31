@@ -360,8 +360,8 @@ class Device:
                     self.info.device_type == Printers.A1MINI or
                     self.info.device_type == Printers.P1P or
                     self.info.device_type == Printers.P1S)
-        elif feature == Features.AUX_LEFT_FAN:
-            return self.info.device_type in (Printers.P1P, Printers.P1S, Printers.P2S, Printers.X1C, Printers.X1E)
+        elif feature == Features.SECONDARY_AUX_FAN:
+            return self.info.device_type == Printers.P2S
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -662,10 +662,10 @@ class Fans:
     _cooling_fan_speed_override_time: datetime
     _heatbreak_fan_speed_percentage: int
     _heatbreak_fan_speed: int
-    _aux_left_fan_speed_percentage: int
-    _aux_left_fan_speed: int
-    _aux_left_fan_speed_override: int
-    _aux_left_fan_speed_override_time: datetime
+    _secondary_aux_fan_speed_percentage: int
+    _secondary_aux_fan_speed: int
+    _secondary_aux_fan_speed_override: int
+    _secondary_aux_fan_speed_override_time: datetime
 
     def __init__(self, client):
         self._client = client
@@ -683,10 +683,10 @@ class Fans:
         self._cooling_fan_speed_override_time = None
         self._heatbreak_fan_speed_percentage = 0
         self._heatbreak_fan_speed = 0
-        self._aux_left_fan_speed_percentage = 0
-        self._aux_left_fan_speed = 0
-        self._aux_left_fan_speed_override = 0
-        self._aux_left_fan_speed_override_time = None
+        self._secondary_aux_fan_speed_percentage = 0
+        self._secondary_aux_fan_speed = 0
+        self._secondary_aux_fan_speed_override = 0
+        self._secondary_aux_fan_speed_override_time = None
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -713,10 +713,10 @@ class Fans:
         self._heatbreak_fan_speed_percentage = fan_percentage(self._heatbreak_fan_speed)
         if data.get('device') and data["device"].get('airduct') and data["device"]["airduct"].get('parts') and next((item for item in data["device"]["airduct"]["parts"] if item["id"] == 160), None):
             fan_part = next(item for item in data["device"]["airduct"]["parts"] if item["id"] == 160)
-            self._aux_left_fan_speed = fan_part.get("value", self._aux_left_fan_speed)
-            self._aux_left_fan_speed_percentage = fan_percentage(self._aux_left_fan_speed)
-        if self._aux_left_fan_speed_override_time is not None:
-            delta = datetime.now() - self._aux_left_fan_speed_override_time
+            self._secondary_aux_fan_speed = fan_part.get("value", self._secondary_aux_fan_speed)
+            self._secondary_aux_fan_speed_percentage = fan_percentage(self._secondary_aux_fan_speed)
+        if self._secondary_aux_fan_speed_override_time is not None:
+            delta = datetime.now() - self._secondary_aux_fan_speed_override_time
             if delta.seconds > 5:
                 self._cooling_fan_speed_override_time = None
 
@@ -736,9 +736,9 @@ class Fans:
         elif fan == FansEnum.CHAMBER:
             self._chamber_fan_speed_override = percentage
             self._chamber_fan_speed_override_time = datetime.now()
-        elif fan == FansEnum.AUXILIARY_LEFT:
-            self._aux_left_fan_speed_override = percentage
-            self._aux_left_fan_speed_override_time = datetime.now()
+        elif fan == FansEnum.SECONDARY_AUXILIARY:
+            self._secondary_aux_fan_speed_override = percentage
+            self._secondary_aux_fan_speed_override_time = datetime.now()
 
         LOGGER.debug(command)
         self._client.publish(command)
@@ -763,8 +763,8 @@ class Fans:
                 return self._chamber_fan_speed_percentage
         elif fan == FansEnum.HEATBREAK:
             return self._heatbreak_fan_speed_percentage
-        elif fan == FansEnum.AUXILIARY_LEFT:
-            if self._aux_left_fan_speed_override_time is not None:
+        elif fan == FansEnum.SECONDARY_AUXILIARY:
+            if self._secondary_aux_fan_speed_override_time is not None:
                 return self._chamber_fan_speed_override
             return self._chamber_fan_speed_percentage
 
