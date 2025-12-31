@@ -32,9 +32,11 @@ async def async_setup_entry(
 
     for sensor in VIRTUAL_TRAY_SENSORS:
         if sensor.exists_fn(coordinator):
-            async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0)])
             if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
-                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 1)])
+                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 1, "")])  # Left
+                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0, "2")]) # Right
+            else:
+                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0, "")])
 
     for sensor in AMS_SENSORS:
         for index in coordinator.get_model().ams.data.keys():
@@ -122,13 +124,15 @@ class BambuLabVirtualTraySensor(VirtualTrayEntity, SensorEntity):
             coordinator: BambuDataUpdateCoordinator,
             description: BambuLabSensorEntityDescription,
             index: int,
+            suffix: str
     ) -> None:
         """Initialise the sensor"""
         super().__init__(coordinator=coordinator)
         printer = coordinator.get_model().info
         self.index = index
+        self.suffix = suffix
         self.entity_description = description
-        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_ExternalSpool{'2' if index==1 else ''}_{description.key}"
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_ExternalSpool{suffix}_{description.key}"
 
     @property
     def extra_state_attributes(self) -> dict:
