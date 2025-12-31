@@ -33,8 +33,8 @@ async def async_setup_entry(
     for sensor in VIRTUAL_TRAY_SENSORS:
         if sensor.exists_fn(coordinator):
             if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
-                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0, "2")]) # Right
                 async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 1, "")])  # Left
+                async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0, "2")]) # Right
             else:
                 async_add_entities([BambuLabVirtualTraySensor(coordinator, sensor, 0, "")])
 

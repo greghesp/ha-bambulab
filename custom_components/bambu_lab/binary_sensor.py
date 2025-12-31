@@ -47,8 +47,8 @@ async def async_setup_entry(
     for sensor in VIRTUAL_TRAY_BINARY_SENSORS:    
         if sensor.exists_fn(coordinator):
             if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
-                async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor, 1, "2")]) # Right
-                async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor, 0, "")])  # Left
+                async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor, 1, "")])  # Left
+                async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor, 0, "2")]) # Right
             else:
                 async_add_entities([BambuLabExternalSpoolBinarySensor(coordinator, sensor, 0, "")])
 
