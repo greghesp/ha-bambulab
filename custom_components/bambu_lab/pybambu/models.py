@@ -217,7 +217,8 @@ class Device:
             return False
         elif feature == Features.AIRDUCT_MODE:
             # Airduct mode (Filter/Heating and Cooling) is currently only present on P2S
-            if self.info.device_type == Printers.P2S:
+            if (self.info.device_type == Printers.P2S or
+                self.info.device_type == Printers.H2C):
                 return True
             
             return False

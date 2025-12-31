@@ -119,9 +119,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif event == "event_printer_mqtt_encryption_enabled":
             self._report_encryption_enabled_issue()
 
-        elif event == "event_printer_info_update":
-            self._update_external_spool_info()
-
         elif event == "event_printer_ready":
             self._printer_ready()
 
@@ -578,15 +575,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         #   X1C_<PRINTERSERIAL>_AMS_<AMSSERIAL>_tray_1
         # or
         #   X1C_<PRINTERSERIAL>_ExternalSpool_external_spool
+        #   H2C_<PRINTERSERIAL>_ExternalSpool_Left_external_spool
+        #   H2C_<PRINTERSERIAL>_ExternalSpool_Right_external_spool
 
         temperature = int(data.get('temperature', 0))
 
         if entity_unique_id.endswith('_external_spool'):
-            ams_index, tray = 255, 0
+            ams_index = 255
+            tray = 0
             target = 254
             # search selected external spool by identifier
+            suffices = ['']
+            if len(self.get_model().external_spool) == 2:
+                suffices = ['2', '']
             for i, ext_spool in enumerate(self.get_model().external_spool):
-                vtray = self.get_virtual_tray_device(i)
+                vtray = self.get_virtual_tray_device(suffices[i])
                 if vtray['identifiers'] == ams_device.identifiers:
                     ams_index = 255 - i
                     # Unless a target temperature override is set, try and find the
@@ -809,19 +812,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
         self.hass.async_create_task(self._reinitialize_sensors())
 
-    def _update_external_spool_info(self):
-        dev_reg = device_registry.async_get(self._hass)
-        hadevice = dev_reg.async_get_or_create(config_entry_id=self.config_entry.entry_id,
-                                               identifiers={(DOMAIN, f"{self.get_model().info.serial}_ExternalSpool")})
-        serial = self.config_entry.data["serial"]
-        device_type = self.config_entry.data["device_type"]
-        dev_reg.async_update_device(hadevice.id,
-                                    name=f"{device_type}_{serial}_ExternalSpool",
-                                    model="External Spool",
-                                    manufacturer=BRAND,
-                                    sw_version="",
-                                    hw_version="")
-
     def PublishDeviceTriggerEvent(self, event: str):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
@@ -871,13 +861,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             sw_version=self.get_model().ams.data[index].sw_version
         )
 
-    def get_virtual_tray_device(self, index: int):
+    def get_virtual_tray_device(self, suffix: str):
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
-        device_name=f"{device_type}_{printer_serial}_ExternalSpool{'2' if index==1 else ''}"
+        device_name=f"{device_type}_{printer_serial}_ExternalSpool{suffix}"
 
         return DeviceInfo(
-            identifiers={(DOMAIN, f"{printer_serial}_ExternalSpool{'2' if index==1 else ''}")},
+            identifiers={(DOMAIN, f"{printer_serial}_ExternalSpool{suffix}")},
             via_device=(DOMAIN, printer_serial),
             name=device_name,
             model="External Spool",
