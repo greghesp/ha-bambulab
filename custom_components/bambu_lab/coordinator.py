@@ -955,7 +955,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if force:
             # Delete issue so we can re-create it but only ever have one in the list.
             if existing_issue is not None:
-                issue_registry.async_delete_issue(domain=DOMAIN, issue_id=issue_id)
+                issue_registry.async_delete_issue(hass=self._hass, domain=DOMAIN, issue_id=issue_id)
         else:
             if existing_issue is not None:
                 # Issue already exists, no need to create it again
