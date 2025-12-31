@@ -80,6 +80,8 @@ def to_whole(number):
 
 def get_filament_name(idx, custom_filaments: dict):
     """Converts a filament idx to a human-readable name"""
+    if idx == "":
+        return "Empty"
     result = FILAMENT_NAMES.get(idx, "unknown")
     if result == "unknown" and idx != "":
         custom = custom_filaments.get(idx, None)

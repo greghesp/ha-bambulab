@@ -1,6 +1,10 @@
+import os
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
+from io import BytesIO
+from PIL import Image, ImageDraw
 from urllib.parse import urlparse
 
 from .const import DOMAIN, LOGGER, Options
@@ -95,6 +99,41 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
         LOGGER.debug("No RTSP Feed available")
         return None
 
+    def camera_image(self, width=None, height=None):
+        """Return a still image placeholder if RTSP fails."""
+        img_width = width or 320
+        img_height = height or 240
+
+        # Create black background image
+        img = Image.new("RGB", (img_width, img_height), color=(0, 0, 0))
+        draw = ImageDraw.Draw(img)
+
+        mark_height = img_height // 4
+        mark_width = mark_height // 6
+        spacing = mark_height // 4  # space between line and dot
+        center_x = img_width // 2
+        center_y = img_height // 2 - spacing // 2  # shift line slightly up
+
+        # Draw the line (upper part of exclamation mark)
+        draw.rectangle(
+            [center_x - mark_width // 2, center_y - mark_height // 2,
+            center_x + mark_width // 2, center_y + mark_height // 2],
+            fill=(255, 0, 0)
+        )
+
+        # Draw the dot below the line with spacing
+        dot_radius = mark_width
+        dot_center_y = center_y + mark_height // 2 + spacing + dot_radius
+        draw.ellipse(
+            [center_x - dot_radius, dot_center_y - dot_radius,
+            center_x + dot_radius, dot_center_y + dot_radius],
+            fill=(255, 0, 0)
+        )
+
+        # Convert image to bytes
+        buf = BytesIO()
+        img.save(buf, format="JPEG")
+        return buf.getvalue()
 
 class BambuLabImageCamera(BambuLabEntity, Camera):
     """Camera from chamber image"""

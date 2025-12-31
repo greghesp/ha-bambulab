@@ -256,11 +256,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._report_encryption_enabled_issue(True)
                 return False
 
-            if self.get_model().info.is_hybrid_mode_blocking:
-                LOGGER.error("Printer is in hybrid connection mode. All control actions sent to local mqtt are blocked.")
-                self._report_hybrid_mode_blocking_issue(True)
-                return False
-
         future = self._hass.data[DOMAIN]['service_call_future']
         if future is None:
             LOGGER.error("Future is None")
@@ -515,7 +510,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         if entity_unique_id.endswith('_external_spool'):
             ams_index = 255
-            tray_index = 254
+            tray_index = 0
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
@@ -960,7 +955,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if force:
             # Delete issue so we can re-create it but only ever have one in the list.
             if existing_issue is not None:
-                registry.async_delete_issue(domain=DOMAIN, issue_id=issue_id)
+                issue_registry.async_delete_issue(domain=DOMAIN, issue_id=issue_id)
         else:
             if existing_issue is not None:
                 # Issue already exists, no need to create it again
