@@ -575,8 +575,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         #   X1C_<PRINTERSERIAL>_AMS_<AMSSERIAL>_tray_1
         # or
         #   X1C_<PRINTERSERIAL>_ExternalSpool_external_spool
-        #   H2C_<PRINTERSERIAL>_ExternalSpool_Left_external_spool
-        #   H2C_<PRINTERSERIAL>_ExternalSpool_Right_external_spool
+        #   H2C_<PRINTERSERIAL>_ExternalSpool_external_spool  # Left
+        #   H2C_<PRINTERSERIAL>_ExternalSpool2_external_spool # Right
 
         temperature = int(data.get('temperature', 0))
 
