@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Ventola Camera di Stampa"
+      },
+      "secondary_aux_fan": {
+        "name": "Ventola ausiliaria secondaria"
       }
     },
     "image": {

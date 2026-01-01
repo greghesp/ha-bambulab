@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "打印仓风扇"
+      },
+      "secondary_aux_fan": {
+        "name": "辅助辅助风扇"
       }
     },
     "image": {

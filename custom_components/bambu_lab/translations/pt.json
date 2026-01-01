@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Ventoinha do compartimento"
+      },
+      "secondary_aux_fan": {
+        "name": "Ventilador auxiliar secundário"
       }
     },
     "image": {

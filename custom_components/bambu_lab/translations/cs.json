@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Ventilátor komory"
+      },
+      "secondary_aux_fan": {
+        "name": "Sekundární pomocný ventilátor"
       }
     },
     "image": {

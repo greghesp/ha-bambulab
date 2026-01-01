@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Ventilateur de la chambre"
+      },
+      "secondary_aux_fan": {
+        "name": "Ventilateur auxiliaire secondaire"
       }
     },
     "image": {

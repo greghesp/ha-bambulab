@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "챔버 팬"
+      },
+      "secondary_aux_fan": {
+        "name": "보조 보조 팬"
       }
     },
     "image": {
