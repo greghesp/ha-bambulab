@@ -182,7 +182,7 @@ class Device:
         elif feature == Features.AMS:
             return len(self.ams.data) != 0
         elif feature == Features.K_VALUE:
-            return model in (a1_printers | h2_printers)
+            return model in (a1_printers | p1_printers)
         elif feature == Features.AMS_TEMPERATURE:
             if model in a1_printers:
                 return self.supports_sw_version("01.06.10.33")
