@@ -19,7 +19,7 @@ Available events:
 - Print canceled
 - Print failed (X1 only)
 - HMS error detected. With additional data payload:
-    - cod
+    - code
     - error
     - url (wiki link for error)
 - Print error detected. This is a separate set of errors that aren't surfaced as HMS errors. No I don't know why. With additional data payload:
@@ -28,7 +28,7 @@ Available events:
 
 For the most part these are just conveniences - you could craft an automation triggering the same way but it takes a bit more effort to understand which sensor(s) to use to track the activity you want which requires understanding how the sensors and what the available states are.
 
-The print canceled and print error events are only a transient event from the printer rather than a persistent state so these are not avaialble from sensors.
+The print canceled and print error events are only a transient event from the printer rather than a persistent state so these are not available from sensors.
 
 The printer sensor that exposes HMS errors as a list would very complex to effectively handle correctly in the multi-error case so the printer errors event just gives you the most recent error to allow much easier handling in a notification.
 
