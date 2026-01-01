@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Ανεμιστήρας θαλάμου"
+      },
+      "secondary_aux_fan": {
+        "name": "Δευτερεύων ανεμιστήρας aux"
       }
     },
     "image": {

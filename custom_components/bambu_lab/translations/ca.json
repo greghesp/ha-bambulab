@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Ventilador de la carcassa"
+      },
+      "secondary_aux_fan": {
+        "name": "Ventilador auxiliar secundari"
       }
     },
     "image": {

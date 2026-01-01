@@ -281,6 +281,9 @@
       },
       "chamber_fan": {
         "name": "Wentylator obudowy"
+      },
+      "secondary_aux_fan": {
+        "name": "Dodatkowy wentylator pomocniczy"
       }
     },
     "image": {
