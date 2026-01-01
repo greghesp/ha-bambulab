@@ -46,6 +46,12 @@ FANS: tuple[FanEntityDescription, ...] = (
         translation_key="chamber_fan",
         value_fn=lambda device: device.fans.get_fan_speed(FansEnum.CHAMBER),
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
+    ),
+    BambuLabFanEntityDescription(
+        key="secondary_aux_fan",
+        translation_key="secondary_aux_fan",
+        value_fn=lambda device: device.fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SECONDARY_AUX_FAN)
     )
 )
 
@@ -108,6 +114,8 @@ class BambuLabFan(BambuLabEntity, FanEntity):
             self.coordinator.get_model().fans.set_fan_speed(FansEnum.AUXILIARY, percentage)
         elif self.entity_description.key == "chamber_fan":
             self.coordinator.get_model().fans.set_fan_speed(FansEnum.CHAMBER, percentage)
+        elif self.entity_description.key == "secondary_aux_fan":
+            self.coordinator.get_model().fans.set_fan_speed(FansEnum.SECONDARY_AUXILIARY, percentage)
 
     def set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
