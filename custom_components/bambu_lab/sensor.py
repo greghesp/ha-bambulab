@@ -5,6 +5,7 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import DOMAIN, LOGGER
 from .definitions import (
@@ -25,7 +26,7 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
-    
+
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     if not coordinator.get_model().has_full_printer_data:
         return
@@ -43,9 +44,10 @@ async def async_setup_entry(
             if sensor.exists_fn(coordinator, index):
                 async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
 
-    for sensor in PRINTER_SENSORS:    
+    for sensor in PRINTER_SENSORS:
         if sensor.exists_fn(coordinator):
-            async_add_entities([BambuLabSensor(coordinator, sensor)])
+            sensor_class = BambuLabRestoreSensor if sensor.is_restoring else BambuLabSensor
+            async_add_entities([sensor_class(coordinator, sensor)])
 
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
@@ -81,7 +83,35 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     def icon(self) -> str | None:
         """Return a dynamic icon if needed"""
         return self.entity_description.icon_fn(self) if self.entity_description.icon_fn else self.entity_description.icon
-    
+
+
+class BambuLabRestoreSensor(BambuLabSensor, RestoreEntity):
+    """A BambuLabSensor that restores its state on restart."""
+
+    def __init__(self, coordinator, description):
+        super().__init__(coordinator, description)
+        self._restored_value = None
+
+    @property
+    def native_value(self):
+        """Return live value if available, otherwise restored value."""
+        try:
+            live_value = super().native_value
+            if live_value is not None:
+                return live_value
+        except (AttributeError, KeyError, TypeError):
+            pass
+
+        return self._restored_value
+
+    async def async_added_to_hass(self) -> None:
+        """Handle entity which will be added."""
+        await super().async_added_to_hass()
+
+        if (last_state := await self.async_get_last_state()) is not None:
+            if last_state.state not in ("unknown", "unavailable"):
+                self._restored_value = last_state.state
+
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
     """Representation of a BambuLab AMS that is updated via MQTT."""
