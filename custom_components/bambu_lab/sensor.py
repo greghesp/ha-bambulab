@@ -134,7 +134,7 @@ class BambuLabRestoreSensor(BambuLabSensor, RestoreEntity):
                     if dt_value.tzinfo is None:
                         dt_value = dt_value.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
                     job.start_time = dt_value
-                    LOGGER.info(f"LAN Mode: Injected restored start_time into pybambu: {dt_value}")
+                    LOGGER.debug(f"LAN Mode: Injected restored start_time into pybambu: {dt_value}")
                 except (ValueError, TypeError):
                     LOGGER.error("Failed to parse restored start_time string for pybambu")
                     return None
