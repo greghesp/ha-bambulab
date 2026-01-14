@@ -13,7 +13,6 @@ from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntityDescription,
     SensorStateClass,
-    RestoreEntity
 )
 from homeassistant.components.update import (
     UpdateDeviceClass,
@@ -449,8 +448,8 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="start_time",
         translation_key="start_time",
         icon="mdi:clock",
-        available_fn=lambda self: self.coordinator.get_model().print_job.start_time is not None,
-        value_fn=lambda self: dt_util.as_local(self.coordinator.get_model().print_job.start_time).replace(tzinfo=None),
+        available_fn=lambda self: self._start_time_avail_fn(),
+        value_fn=lambda self: self._start_time_value_fn(),
         is_restoring=True,
     ),
     BambuLabSensorEntityDescription(

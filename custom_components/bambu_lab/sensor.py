@@ -6,6 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN, LOGGER
 from .definitions import (
@@ -90,27 +91,55 @@ class BambuLabRestoreSensor(BambuLabSensor, RestoreEntity):
 
     def __init__(self, coordinator, description):
         super().__init__(coordinator, description)
-        self._restored_value = None
-
-    @property
-    def native_value(self):
-        """Return live value if available, otherwise restored value."""
-        try:
-            live_value = super().native_value
-            if live_value is not None:
-                return live_value
-        except (AttributeError, KeyError, TypeError):
-            pass
-
-        return self._restored_value
+        self._restored_state = None
 
     async def async_added_to_hass(self) -> None:
-        """Handle entity which will be added."""
+        """Handle restore logic"""
         await super().async_added_to_hass()
-
         if (last_state := await self.async_get_last_state()) is not None:
             if last_state.state not in ("unknown", "unavailable"):
-                self._restored_value = last_state.state
+                self._restored_state = last_state.state
+                LOGGER.debug(f"State pulled from Restore Entity: {last_state}")
+
+    def _start_time_avail_fn(self) -> bool:
+        """
+        Availability callback with restored state handling for LAN only Start Time
+        """
+        model = self.coordinator.get_model()
+        if model.print_job.start_time is not None:
+            return True
+        job = model.print_job
+        has_end_time = job.end_time is not None
+        is_lan_mode = model.info.mqtt_mode == "local"
+        if is_lan_mode and has_end_time and self._restored_state is not None:
+            return True
+        return False
+
+    def _start_time_value_fn(self):
+        """
+        Value callback with restored state handling for LAN only Start Time
+        """
+        model = self.coordinator.get_model()
+        live_value = model.print_job.start_time
+        if live_value is not None:
+            return dt_util.as_local(live_value).replace(tzinfo=None)
+        job = model.print_job
+        is_printing = job.gcode_state.lower() in ("running", "pause")
+        has_end_time = job.end_time is not None
+        is_lan_mode = model.info.mqtt_mode == "local"
+        if is_printing and is_lan_mode and has_end_time and self._restored_state is not None:
+            if isinstance(self._restored_state, str):
+                try:
+                    dt_value = dt_util.parse_datetime(self._restored_state)
+                    if dt_value.tzinfo is None:
+                        dt_value = dt_value.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+                    job.start_time = dt_value
+                    LOGGER.info(f"LAN Mode: Injected restored start_time into pybambu: {dt_value}")
+                except (ValueError, TypeError):
+                    LOGGER.error("Failed to parse restored start_time string for pybambu")
+                    return None
+            return self._restored_state
+        return None
 
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
