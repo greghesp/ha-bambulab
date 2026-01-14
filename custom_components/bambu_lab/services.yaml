@@ -178,7 +178,7 @@ unload_filament:
   name: Unload filament
   description: Unload the filament currently loaded into the extruder
   fields:
-    device_id:
+    entity_id:
       name: AMS or External Spool device
       required: true
       selector:
