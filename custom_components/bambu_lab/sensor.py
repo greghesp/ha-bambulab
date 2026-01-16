@@ -5,6 +5,8 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN, LOGGER
 from .definitions import (
@@ -25,7 +27,7 @@ async def async_setup_entry(
         async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
-    
+
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     if not coordinator.get_model().has_full_printer_data:
         return
@@ -43,9 +45,10 @@ async def async_setup_entry(
             if sensor.exists_fn(coordinator, index):
                 async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
 
-    for sensor in PRINTER_SENSORS:    
+    for sensor in PRINTER_SENSORS:
         if sensor.exists_fn(coordinator):
-            async_add_entities([BambuLabSensor(coordinator, sensor)])
+            sensor_class = BambuLabRestoreSensor if sensor.is_restoring else BambuLabSensor
+            async_add_entities([sensor_class(coordinator, sensor)])
 
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
@@ -81,7 +84,63 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
     def icon(self) -> str | None:
         """Return a dynamic icon if needed"""
         return self.entity_description.icon_fn(self) if self.entity_description.icon_fn else self.entity_description.icon
-    
+
+
+class BambuLabRestoreSensor(BambuLabSensor, RestoreEntity):
+    """A BambuLabSensor that restores its state on restart."""
+
+    def __init__(self, coordinator, description):
+        super().__init__(coordinator, description)
+        self._restored_state = None
+
+    async def async_added_to_hass(self) -> None:
+        """Handle restore logic"""
+        await super().async_added_to_hass()
+        if (last_state := await self.async_get_last_state()) is not None:
+            if last_state.state not in ("unknown", "unavailable"):
+                self._restored_state = last_state.state
+                LOGGER.debug(f"State pulled from Restore Entity: {last_state}")
+
+    def _start_time_avail_fn(self) -> bool:
+        """
+        Availability callback with restored state handling for LAN only Start Time
+        """
+        model = self.coordinator.get_model()
+        if model.print_job.start_time is not None:
+            return True
+        job = model.print_job
+        has_end_time = job.end_time is not None
+        is_lan_mode = model.info.mqtt_mode == "local"
+        if is_lan_mode and has_end_time and self._restored_state is not None:
+            return True
+        return False
+
+    def _start_time_value_fn(self):
+        """
+        Value callback with restored state handling for LAN only Start Time
+        """
+        model = self.coordinator.get_model()
+        live_value = model.print_job.start_time
+        if live_value is not None:
+            return dt_util.as_local(live_value).replace(tzinfo=None)
+        job = model.print_job
+        is_printing = job.gcode_state.lower() in ("running", "pause")
+        has_end_time = job.end_time is not None
+        is_lan_mode = model.info.mqtt_mode == "local"
+        if is_printing and is_lan_mode and has_end_time and self._restored_state is not None:
+            if isinstance(self._restored_state, str):
+                try:
+                    dt_value = dt_util.parse_datetime(self._restored_state)
+                    if dt_value.tzinfo is None:
+                        dt_value = dt_value.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+                    job.start_time = dt_value
+                    LOGGER.debug(f"LAN Mode: Injected restored start_time into pybambu: {dt_value}")
+                except (ValueError, TypeError):
+                    LOGGER.error("Failed to parse restored start_time string for pybambu")
+                    return None
+            return self._restored_state
+        return None
+
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
     """Representation of a BambuLab AMS that is updated via MQTT."""
