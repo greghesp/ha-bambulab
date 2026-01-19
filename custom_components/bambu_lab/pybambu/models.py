@@ -2699,6 +2699,9 @@ class AMSTray:
         self.idx = data.get('tray_info_idx', self.idx)
         self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
         self.type = data.get('tray_type', self.type)
+        if self.name == "unknown":
+            # Fallback to the type if the name is unknown
+            self.name = self.type
         self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
         self.color = data.get('tray_color', self.color)
         self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
@@ -2708,11 +2711,12 @@ class AMSTray:
         self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
         self.k = data.get('k', self.k)
         self.tray_weight = data.get('tray_weight', self.tray_weight)
-        if self.name == "unknown":
-            # Fallback to the type if the name is unknown
-            self.name = self.type
-        self.empty = (self.name == "Empty")
-        if self.name == "Empty":
+
+        # If the data is just the id, then the tray is empty.
+        self.empty = (len(data) == 1) and ('id' in data)
+        if self.empty:
+            self.idx = ""
+            self.name = "Empty"
             self.type = "Empty"
             self.sub_brands = ""
             self._remain = -1
