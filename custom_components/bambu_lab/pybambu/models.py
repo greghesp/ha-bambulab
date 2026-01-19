@@ -2718,6 +2718,7 @@ class AMSTray:
             self.idx = ""
             self.name = "Empty"
             self.type = "Empty"
+            self.color = "00000000"
             self.sub_brands = ""
             self._remain = -1
             self.tag_uid = ""
