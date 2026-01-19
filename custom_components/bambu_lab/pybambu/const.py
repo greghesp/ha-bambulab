@@ -161,6 +161,25 @@ PRINT_TYPE_OPTIONS = {
     "unknown"
 }
 
+AMS_DRYING_MODELS = [
+    "AMS 2 Pro",
+    "AMS HT"
+]
+
+AMS_MODELS = [
+    "AMS",
+    "AMS Lite",
+    "AMS 2 Pro",
+    "AMS HT"
+]
+
+AMS_MODELS_AND_EXTERNAL_SPOOL = [
+    "AMS",
+    "AMS Lite",
+    "AMS 2 Pro",
+    "AMS HT",
+    "External Spool"
+]
 
 def load_dict(filename: str) -> dict:
     with open(filename) as f:
