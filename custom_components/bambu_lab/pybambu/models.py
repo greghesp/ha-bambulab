@@ -2720,6 +2720,8 @@ class AMSTray:
             self.type = "Empty"
             self.sub_brands = ""
             self.color = "00000000"
+            self.nozzle_temp_min = 0
+            self.nozzle_temp_max = 0
             self._remain = -1
             self.tag_uid = ""
             self.tray_uuid = ""
