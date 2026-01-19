@@ -158,10 +158,14 @@ class Device:
         dual_nozzle_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO}
         model = self.info.device_type
 
-        # First check known early feature check scenarios:
+        # First check known early feature check scenarios. These are features that can be checked as part of
+        # processing the mqtt payload and so may be called before full initialization is complete as it processes
+        # the very first payload.
         if feature == Features.CAMERA_RTSP:
             return model in (h2_printers | p2_printers | x1_printers)
         elif feature == Features.CAMERA_IMAGE:
+            return model in (a1_printers | p1_printers)
+        elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
             return model in (a1_printers | p1_printers)
 
         # Now check that we have a version. All tests after this are expected to only be called after the
@@ -267,8 +271,6 @@ class Device:
             return model in h2_printers
         elif feature == Features.HEATBED_LIGHT:
             return model in h2_printers
-        elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
-            return model in (a1_printers | p1_printers)
         elif feature == Features.SECONDARY_AUX_FAN:
             return model in p2_printers
         return False
