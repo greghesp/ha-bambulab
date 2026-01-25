@@ -493,7 +493,8 @@
         "state": {
           "local": "로컬",
           "cloud": "클라우드",
-          "idle": "대기 중"
+          "idle": "대기 중",
+          "unknown": "알려지지 않은"
         }
       },
       "start_time": {

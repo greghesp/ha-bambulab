@@ -502,7 +502,8 @@
         "state": {
           "local": "Lokalny",
           "cloud": "Chmura",
-          "idle": "Bezczynny"
+          "idle": "Bezczynny",
+          "unknown": "Nieznany"
         }
       },
       "start_time": {

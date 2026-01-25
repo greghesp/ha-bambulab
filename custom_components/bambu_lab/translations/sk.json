@@ -493,7 +493,8 @@
         "state": {
           "local": "Lokálna",
           "cloud": "Cloudová",
-          "idle": "Nečinná"
+          "idle": "Nečinná",
+          "unknown": "Neznámy"
         }
       },
       "start_time": {

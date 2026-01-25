@@ -493,7 +493,8 @@
         "state": {
           "local": "本地",
           "cloud": "云端",
-          "idle": "无效"
+          "idle": "无效",
+          "unknown": "未知"
         }
       },
       "start_time": {

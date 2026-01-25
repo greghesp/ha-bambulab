@@ -535,7 +535,8 @@
         "state": {
           "local": "Lokální",
           "cloud": "Cloud",
-          "idle": "Nečinnost"
+          "idle": "Nečinnost",
+          "unknown": "Neznámý"
         }
       },
       "start_time": {

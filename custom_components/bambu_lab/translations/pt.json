@@ -493,7 +493,8 @@
         "state": {
           "local": "Local",
           "cloud": "Nuvem",
-          "idle": "Parado"
+          "idle": "Parado",
+          "unknown": "Desconhecido"
         }
       },
       "start_time": {

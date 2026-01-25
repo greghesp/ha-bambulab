@@ -843,7 +843,7 @@ class PrintJob:
     file_type_icon: str
     gcode_file: str
     gcode_file_downloaded: str
-    subtask_name: str
+    _subtask_name: str
     start_time: datetime
     end_time: datetime
     remaining_time: int
@@ -853,7 +853,7 @@ class PrintJob:
     print_weight: float
     print_length: int
     print_bed_type: str
-    print_type: str
+    _print_type: str
     _ams_print_weights: float
     _ams_print_lengths: float
     _skipped_objects: list
@@ -870,7 +870,7 @@ class PrintJob:
         self.gcode_state = "unknown"
         self.gcode_file = ""
         self.gcode_file_downloaded = ""
-        self.subtask_name = ""
+        self._subtask_name = ""
         self.start_time = None
         self.end_time = None
         self.remaining_time = 0
@@ -884,7 +884,7 @@ class PrintJob:
         self.print_length = 0
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
-        self.print_type = ""
+        self._print_type = ""
         self._printable_objects = {}
         self._skipped_objects = []
         self._gcode_file_prepare_percent = -1
@@ -934,6 +934,14 @@ class PrintJob:
                     ams_tray = (i % 4) + 1
                     values[f"AMS {ams_index} Tray {ams_tray}"] = self._ams_print_lengths[i]
         return values
+    
+    @property
+    def subtask_name(self) -> str:
+        return None if self._subtask_name == "" else self._subtask_name
+    
+    @property
+    def print_type(self) -> str:
+        return "unknown" if self._print_type == "" else self._print_type
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -970,16 +978,16 @@ class PrintJob:
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         if old_gcode_file != self.gcode_file:
             LOGGER.debug(f"GCODE_FILE: {self.gcode_file}")
-        self.print_type = data.get("print_type", self.print_type)
-        if self.print_type.lower() not in PRINT_TYPE_OPTIONS:
-            if self.print_type != "":
-                LOGGER.debug(f"Unknown print_type. Please log an issue : '{self.print_type}'")
-            self.print_type = "unknown"
-        old_subtask_name = self.subtask_name
-        self.subtask_name = data.get("subtask_name", self.subtask_name)
-        if old_subtask_name != self.subtask_name:
-            LOGGER.debug(f"SUBTASK_NAME: {self.subtask_name}")
-        self.file_type_icon = "mdi:file" if self.print_type != "cloud" else "mdi:cloud-outline"
+        self._print_type = data.get("print_type", self._print_type)
+        if self._print_type.lower() not in PRINT_TYPE_OPTIONS:
+            if self._print_type != "":
+                LOGGER.debug(f"Unknown print_type. Please log an issue : '{self._print_type}'")
+            self._print_type = "unknown"
+        old_subtask_name = self._subtask_name
+        self._subtask_name = data.get("subtask_name", self._subtask_name)
+        if old_subtask_name != self._subtask_name:
+            LOGGER.debug(f"SUBTASK_NAME: {self._subtask_name}")
+        self.file_type_icon = "mdi:file" if self._print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.ams_mapping = data.get("ams_mapping", self.ams_mapping)
@@ -1276,16 +1284,16 @@ class PrintJob:
         filenames_to_try = []
 
         # First test if the subtaskname exists as a 3mf
-        if self.subtask_name != '':
-            if self.subtask_name.endswith('.3mf'):
-                filenames_to_try.append(self.subtask_name)
+        if self._subtask_name != '':
+            if self._subtask_name.endswith('.3mf'):
+                filenames_to_try.append(self._subtask_name)
             else:
-                filenames_to_try.append(f"{self.subtask_name}.3mf")
-                filenames_to_try.append(f"{self.subtask_name}.gcode.3mf")
+                filenames_to_try.append(f"{self._subtask_name}.3mf")
+                filenames_to_try.append(f"{self._subtask_name}.gcode.3mf")
 
 
         # If we didn't find it then try the gcode file
-        if (self.gcode_file != '') and (self.subtask_name != self.gcode_file):
+        if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
             if self.gcode_file.endswith('.3mf'):
                 filenames_to_try.append(self.gcode_file)
             else:
@@ -1298,7 +1306,7 @@ class PrintJob:
             if model_file is not None:
                 return model_file
 
-        if self.subtask_name == "":
+        if self._subtask_name == "":
             # Fall back to find the latest file by timestamp but only if we don't have a subtask name set - printer must have been rebooted.
             LOGGER.debug("Falling back to searching for latest 3mf file.")
             model_path = self._find_latest_file(ftp, self.ftp_search_paths, ['.3mf'])

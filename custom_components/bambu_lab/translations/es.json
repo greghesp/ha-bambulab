@@ -493,7 +493,8 @@
         "state": {
           "local": "Local",
           "cloud": "Cloud",
-          "idle": "Inactiva"
+          "idle": "Inactiva",
+          "unknown": "Desconocido"
         }
       },
       "start_time": {
