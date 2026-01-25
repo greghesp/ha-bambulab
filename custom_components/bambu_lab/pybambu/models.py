@@ -2696,25 +2696,17 @@ class AMSTray:
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
-        self.idx = data.get('tray_info_idx', self.idx)
-        self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
-        self.type = data.get('tray_type', self.type)
-        if self.name == "unknown":
-            # Fallback to the type if the name is unknown
-            self.name = self.type
-        self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
-        self.color = data.get('tray_color', self.color)
-        self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
-        self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
-        self._remain = data.get('remain', self._remain)
-        self.tag_uid = data.get('tag_uid', self.tag_uid)
-        self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
-        self.k = data.get('k', self.k)
-        self.tray_weight = data.get('tray_weight', self.tray_weight)
+        # Detect empty tray notifications by checking if payload contains ONLY metadata fields.
+        # Empty trays send just {"id": "X"} or {"id": "X", "state": Y} with no filament data.
+        # Any other field beyond id/state indicates filament data (works for both X1 full
+        # payloads and P1 delta payloads, and is future-proof if Bambu adds new fields).
+        METADATA_ONLY_FIELDS = {'id', 'state'}
+        payload_fields = set(data.keys())
+        is_empty_notification = ('id' in data) and payload_fields.issubset(METADATA_ONLY_FIELDS)
 
-        # If the data is just the id, then the tray is empty.
-        self.empty = (len(data) == 1) and ('id' in data)
-        if self.empty:
+        if is_empty_notification:
+            # Tray is empty - reset all fields to defaults
+            self.empty = True
             self.idx = ""
             self.name = "Empty"
             self.type = "Empty"
@@ -2727,6 +2719,25 @@ class AMSTray:
             self.tray_uuid = ""
             self.k = 0
             self.tray_weight = 0
+        else:
+            # Tray has filament data - update fields normally
+            # Using .get() preserves existing values for delta updates
+            self.empty = False
+            self.idx = data.get('tray_info_idx', self.idx)
+            self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
+            self.type = data.get('tray_type', self.type)
+            if self.name == "unknown":
+                # Fallback to the type if the name is unknown
+                self.name = self.type
+            self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+            self.color = data.get('tray_color', self.color)
+            self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
+            self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
+            self._remain = data.get('remain', self._remain)
+            self.tag_uid = data.get('tag_uid', self.tag_uid)
+            self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
+            self.k = data.get('k', self.k)
+            self.tray_weight = data.get('tray_weight', self.tray_weight)
 
         return (old_data != f"{self.__dict__}")
 
