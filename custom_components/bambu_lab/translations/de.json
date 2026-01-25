@@ -496,7 +496,8 @@
         "state": {
           "local": "Lokal",
           "cloud": "Cloud",
-          "idle": "Leerlauf"
+          "idle": "Leerlauf",
+          "unknown": "Unbekannt"
         }
       },
       "start_time": {

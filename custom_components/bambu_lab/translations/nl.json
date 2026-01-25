@@ -496,7 +496,8 @@
         "state": {
           "local": "Lokaal",
           "cloud": "via cloud",
-          "idle": "Inactief"
+          "idle": "Inactief",
+          "unknown": "Onbekend"
         }
       },
       "start_time": {

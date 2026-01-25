@@ -535,7 +535,8 @@
         "state": {
           "local": "Local",
           "cloud": "Cloud",
-          "idle": "Idle"
+          "idle": "Idle",
+          "unknown": "Unknown"
         }
       },
       "start_time": {
