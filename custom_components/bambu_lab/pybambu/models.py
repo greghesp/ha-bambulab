@@ -439,7 +439,7 @@ class Temperature:
     target_bed_temp: int
     chamber_temp: int
     nozzle_temps: dict
-    nozzle_target_temps: dict
+    target_nozzle_temps: dict
 
     def __init__(self, client):
         self._client = client
