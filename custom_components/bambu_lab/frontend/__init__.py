@@ -20,9 +20,11 @@ class BambuLabCardRegistration:
         self.hass = hass
 
     @property
-    def lovelace_mode(self):
+    def lovelace_resource_mode(self):
         ha_version = parse(__version__)
-        if (ha_version.major >= 2026) or ((ha_version.major == 2025) and (ha_version.minor >= 2)):
+        if (ha_version.major >= 2026) and (ha_version.minor >= 2):
+            return self.hass.data["lovelace"].resource_mode
+        elif (ha_version.major >= 2026) or ((ha_version.major == 2025) and (ha_version.minor >= 2)):
             return self.hass.data["lovelace"].mode
         else:
             return self.hass.data["lovelace"]["mode"]
@@ -37,7 +39,7 @@ class BambuLabCardRegistration:
 
     async def async_register(self):
         await self.async_register_bambu_path()
-        if self.lovelace_mode == "storage":
+        if self.lovelace_resource_mode == "storage":
             await self.async_wait_for_lovelace_resources()
 
     # install card 
@@ -114,7 +116,7 @@ class BambuLabCardRegistration:
 
     async def async_unregister(self):
         # Unload lovelace module resource
-        if self.lovelace_mode == "storage":
+        if self.lovelace_resource_mode == "storage":
             for card in BAMBU_LAB_CARDS:
                 url = f"{URL_BASE}/{card.get("filename")}"
                 bambu_resources = [
