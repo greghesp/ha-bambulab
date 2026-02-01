@@ -11,6 +11,10 @@ from homeassistant.helpers.event import async_call_later
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.const import __version__
 
+from .utils import (
+    compare_version,
+)
+
 from ..const import BAMBU_LAB_CARDS, URL_BASE, LOGGER
 
 _LOGGER = logging.getLogger(__name__)
@@ -21,18 +25,16 @@ class BambuLabCardRegistration:
 
     @property
     def lovelace_resource_mode(self):
-        ha_version = parse(__version__)
-        if (ha_version.major >= 2026) and (ha_version.minor >= 2):
+        if compare_version(__version__, "2026.1.3") >= 0:
             return self.hass.data["lovelace"].resource_mode
-        elif (ha_version.major >= 2026) or ((ha_version.major == 2025) and (ha_version.minor >= 2)):
+        elif compare_version(__version__, "2025.2.0") >= 0:
             return self.hass.data["lovelace"].mode
         else:
             return self.hass.data["lovelace"]["mode"]
 
     @property
     def lovelace_resources(self):
-        ha_version = parse(__version__)
-        if (ha_version.major >= 2026) or ((ha_version.major == 2025) and (ha_version.minor >= 2)):
+        if compare_version(__version__, "2025.2.0") >= 0:
             return self.hass.data["lovelace"].resources
         else:
             return self.hass.data["lovelace"]["resources"]
