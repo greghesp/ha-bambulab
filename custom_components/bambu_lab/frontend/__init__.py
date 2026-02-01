@@ -11,7 +11,7 @@ from homeassistant.helpers.event import async_call_later
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.const import __version__
 
-from .utils import (
+from ..pybambu.utils import (
     compare_version,
 )
 
