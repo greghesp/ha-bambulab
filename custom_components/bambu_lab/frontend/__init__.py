@@ -25,7 +25,7 @@ class BambuLabCardRegistration:
 
     @property
     def lovelace_resource_mode(self):
-        if compare_version(__version__, "2026.1.3") >= 0:
+        if compare_version(__version__, "2026.2.0") >= 0:
             return self.hass.data["lovelace"].resource_mode
         elif compare_version(__version__, "2025.2.0") >= 0:
             return self.hass.data["lovelace"].mode
