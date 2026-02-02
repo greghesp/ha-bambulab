@@ -320,12 +320,24 @@ def get_sw_version(modules, default):
         return ota.get("sw_ver")
     return default
 
+def safe_int(part):
+    """Safely convert a version string segment to an integer."""
+    try:
+        return int(part)
+    except ValueError:
+        # Extract leading digits for version parts like '0b1' or '1a2'
+        match = re.match(r'^\d+', part)
+        if match:
+            return int(match.group(0))
+        return 0
+
+
 def compare_version(version_max, version_min):
     if version_max == "unknown":
         # Happens unavoidably during startup when we don't yet know the current printer firmware version.
         return False
-    maxver = list(map(int, version_max.split('.')))
-    minver = list(map(int, version_min.split('.')))
+    maxver = list(map(safe_int, version_max.split('.')))
+    minver = list(map(safe_int, version_min.split('.')))
 
     # Returns 1 if max > min, -1 if max < min, 0 if equal
     return (maxver > minver) - (maxver < minver)
