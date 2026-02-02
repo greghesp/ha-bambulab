@@ -341,6 +341,7 @@ class BambuClient:
     _usage_hours: float = 0
     _test_mode: bool = False
     _mock: bool = False
+    _last_error_code: int = 0
     client = None
 
     def __init__(self, config):
@@ -373,6 +374,7 @@ class BambuClient:
         self._connected = False
         self._port = 8883
         self._refreshed = False
+        self._last_error_code = 0
 
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(
@@ -530,7 +532,11 @@ class BambuClient:
         if (result_code == 0):
             LOGGER.debug(f"On Disconnect: Printer disconnected cleanly")
         else:
-            LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
+            if self._last_error_code != result_code:
+                LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
+            else:
+                LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
+        self._last_error_code = result_code
         self._on_disconnect()
 
     def _on_disconnect(self):
