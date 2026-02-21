@@ -548,6 +548,9 @@
           "color": {
             "name": "颜色"
           },
+          "cols": {
+            "name": "颜色"
+          },
           "empty": {
             "name": "空"
           },
@@ -590,6 +593,9 @@
             "name": "激活"
           },
           "color": {
+            "name": "颜色"
+          },
+          "cols": {
             "name": "颜色"
           },
           "empty": {
@@ -636,6 +642,9 @@
           "color": {
             "name": "颜色"
           },
+          "cols": {
+            "name": "颜色"
+          },
           "empty": {
             "name": "空"
           },
@@ -680,6 +689,9 @@
           "color": {
             "name": "颜色"
           },
+          "cols": {
+            "name": "颜色"
+          },
           "empty": {
             "name": "空"
           },
@@ -722,6 +734,9 @@
             "name": "激活"
           },
           "color": {
+            "name": "颜色"
+          },
+          "cols": {
             "name": "颜色"
           },
           "empty": {

@@ -548,6 +548,9 @@
           "color": {
             "name": "Cor"
           },
+          "cols": {
+            "name": "Cores"
+          },
           "empty": {
             "name": "Vazio"
           },
@@ -591,6 +594,9 @@
           },
           "color": {
             "name": "Cor"
+          },
+          "cols": {
+            "name": "Cores"
           },
           "empty": {
             "name": "Vazio"
@@ -636,6 +642,9 @@
           "color": {
             "name": "Cor"
           },
+          "cols": {
+            "name": "Cores"
+          },
           "empty": {
             "name": "Vazio"
           },
@@ -680,6 +689,9 @@
           "color": {
             "name": "Cor"
           },
+          "cols": {
+            "name": "Cores"
+          },
           "empty": {
             "name": "Vazio"
           },
@@ -723,6 +735,9 @@
           },
           "color": {
             "name": "Cor"
+          },
+          "cols": {
+            "name": "Cores"
           },
           "empty": {
             "name": "Vazio"

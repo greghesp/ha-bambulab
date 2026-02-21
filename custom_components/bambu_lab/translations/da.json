@@ -548,6 +548,9 @@
           "color": {
             "name": "Farve"
           },
+          "cols": {
+            "name": "Farver"
+          },
           "empty": {
             "name": "Tom"
           },
@@ -591,6 +594,9 @@
           },
           "color": {
             "name": "Farve"
+          },
+          "cols": {
+            "name": "Farver"
           },
           "empty": {
             "name": "Tom"
@@ -636,6 +642,9 @@
           "color": {
             "name": "Farve"
           },
+          "cols": {
+            "name": "Farver"
+          },
           "empty": {
             "name": "Tom"
           },
@@ -680,6 +689,9 @@
           "color": {
             "name": "Farve"
           },
+          "cols": {
+            "name": "Farver"
+          },
           "empty": {
             "name": "Tom"
           },
@@ -723,6 +735,9 @@
           },
           "color": {
             "name": "Farve"
+          },
+          "cols": {
+            "name": "Farver"
           },
           "empty": {
             "name": "Tom"

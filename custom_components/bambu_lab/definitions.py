@@ -569,6 +569,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         {
             "ams_index": self.coordinator.get_model().ams.active_ams_index,
             "color": f"#{self.coordinator.get_model().ams.active_tray.color}",
+            "cols": [f"#{c}" for c in self.coordinator.get_model().ams.active_tray.cols],
             "filament_id": self.coordinator.get_model().ams.active_tray.idx,
             **({"k_value": self.coordinator.get_model().ams.active_tray.k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
             "tray_weight": self.coordinator.get_model().ams.active_tray.tray_weight,
@@ -671,6 +672,7 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         {
             "active": self.coordinator.get_model().external_spool[self.index].active,
             "color": f"#{self.coordinator.get_model().external_spool[self.index].color}",
+            "cols": [f"#{c}" for c in self.coordinator.get_model().external_spool[self.index].cols],
             "empty": self.coordinator.get_model().external_spool[self.index].empty,
             "filament_id": self.coordinator.get_model().external_spool[self.index].idx,
             **({"k_value": self.coordinator.get_model().external_spool[self.index].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -737,6 +739,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[0].active,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[0].color}",
+            "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[0].cols],
             "empty": self.coordinator.get_model().ams.data[self.index].tray[0].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[0].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[0].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -760,6 +763,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[1].active,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[1].color}",
+            "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[1].cols],
             "empty": self.coordinator.get_model().ams.data[self.index].tray[1].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[1].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[1].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -784,6 +788,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[2].active,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[2].color}",
+            "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[2].cols],
             "empty": self.coordinator.get_model().ams.data[self.index].tray[2].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[2].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[2].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -808,6 +813,7 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[3].active,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[3].color}",
+            "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[3].cols],
             "empty": self.coordinator.get_model().ams.data[self.index].tray[3].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[3].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[3].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
