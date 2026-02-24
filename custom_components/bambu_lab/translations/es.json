@@ -548,6 +548,9 @@
           "color": {
             "name": "Color"
           },
+          "cols": {
+            "name": "Colores"
+          },
           "empty": {
             "name": "Vacía"
           },
@@ -591,6 +594,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "cols": {
+            "name": "Colores"
           },
           "empty": {
             "name": "Vacía"
@@ -636,6 +642,9 @@
           "color": {
             "name": "Color"
           },
+          "cols": {
+            "name": "Colores"
+          },
           "empty": {
             "name": "Vacía"
           },
@@ -680,6 +689,9 @@
           "color": {
             "name": "Color"
           },
+          "cols": {
+            "name": "Colores"
+          },
           "empty": {
             "name": "Vacía"
           },
@@ -723,6 +735,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "cols": {
+            "name": "Colores"
           },
           "empty": {
             "name": "Vacía"

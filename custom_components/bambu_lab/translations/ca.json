@@ -548,6 +548,9 @@
           "color": {
             "name": "Color"
           },
+          "cols": {
+            "name": "Colors"
+          },
           "empty": {
             "name": "Buida"
           },
@@ -591,6 +594,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "cols": {
+            "name": "Colors"
           },
           "empty": {
             "name": "Buida"
@@ -636,6 +642,9 @@
           "color": {
             "name": "Color"
           },
+          "cols": {
+            "name": "Colors"
+          },
           "empty": {
             "name": "Buida"
           },
@@ -680,6 +689,9 @@
           "color": {
             "name": "Color"
           },
+          "cols": {
+            "name": "Colors"
+          },
           "empty": {
             "name": "Buida"
           },
@@ -723,6 +735,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "cols": {
+            "name": "Colors"
           },
           "empty": {
             "name": "Buida"

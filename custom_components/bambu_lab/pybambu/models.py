@@ -2667,6 +2667,7 @@ class AMSTray:
     tray_uuid: str
     tray_weight: int
     _active: bool
+    cols: list
 
     def __init__(self, client):
         self._client = client
@@ -2684,6 +2685,7 @@ class AMSTray:
         self.tray_uuid = ""
         self.tray_weight = 0
         self._active = False
+        self.cols = []
 
     @property
     def remain(self) -> int:
@@ -2727,6 +2729,7 @@ class AMSTray:
             self.tray_uuid = ""
             self.k = 0
             self.tray_weight = 0
+            self.cols = []
         else:
             # Tray has filament data - update fields normally
             # Using .get() preserves existing values for delta updates
@@ -2746,7 +2749,8 @@ class AMSTray:
             self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
             self.tray_weight = data.get('tray_weight', self.tray_weight)
-
+            self.cols = data.get('cols', self.cols)
+        
         return (old_data != f"{self.__dict__}")
 
 

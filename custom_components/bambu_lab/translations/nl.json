@@ -554,6 +554,9 @@
           "color": {
             "name": "Kleur"
           },
+          "cols": {
+            "name": "Kleuren"
+          },
           "empty": {
             "name": "Leeg"
           },
@@ -597,6 +600,9 @@
           },
           "color": {
             "name": "Kleur"
+          },
+          "cols": {
+            "name": "Kleuren"
           },
           "empty": {
             "name": "Leeg"
@@ -642,6 +648,9 @@
           "color": {
             "name": "Kleur"
           },
+          "cols": {
+            "name": "Kleuren"
+          },
           "empty": {
             "name": "Leeg"
           },
@@ -686,6 +695,9 @@
           "color": {
             "name": "Kleur"
           },
+          "cols": {
+            "name": "Kleuren"
+          },
           "empty": {
             "name": "Leeg"
           },
@@ -729,6 +741,9 @@
           },
           "color": {
             "name": "Kleur"
+          },
+          "cols": {
+            "name": "Kleuren"
           },
           "empty": {
             "name": "Leeg"

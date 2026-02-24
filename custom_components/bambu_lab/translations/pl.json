@@ -560,6 +560,9 @@
           "color": {
             "name": "Kolor"
           },
+          "cols": {
+            "name": "Kolory"
+          },
           "empty": {
             "name": "Brak"
           },
@@ -603,6 +606,9 @@
           },
           "color": {
             "name": "Kolor"
+          },
+          "cols": {
+            "name": "Kolory"
           },
           "empty": {
             "name": "Pusty"
@@ -648,6 +654,9 @@
           "color": {
             "name": "Kolor"
           },
+          "cols": {
+            "name": "Kolory"
+          },
           "empty": {
             "name": "Pusty"
           },
@@ -692,6 +701,9 @@
           "color": {
             "name": "Kolor"
           },
+          "cols": {
+            "name": "Kolory"
+          },
           "empty": {
             "name": "Pusty"
           },
@@ -735,6 +747,9 @@
           },
           "color": {
             "name": "Kolor"
+          },
+          "cols": {
+            "name": "Kolory"
           },
           "empty": {
             "name": "Pusty"

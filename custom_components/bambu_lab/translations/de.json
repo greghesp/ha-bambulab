@@ -551,6 +551,9 @@
           "color": {
             "name": "Farbe"
           },
+          "cols": {
+            "name": "Farben"
+          },
           "empty": {
             "name": "Leer"
           },
@@ -594,6 +597,9 @@
           },
           "color": {
             "name": "Farbe"
+          },
+          "cols": {
+            "name": "Farben"
           },
           "empty": {
             "name": "Leer"
@@ -639,6 +645,9 @@
           "color": {
             "name": "Farbe"
           },
+          "cols": {
+            "name": "Farben"
+          },
           "empty": {
             "name": "Leer"
           },
@@ -683,6 +692,9 @@
           "color": {
             "name": "Farbe"
           },
+          "cols": {
+            "name": "Farben"
+          },
           "empty": {
             "name": "Leer"
           },
@@ -726,6 +738,9 @@
           },
           "color": {
             "name": "Farbe"
+          },
+          "cols": {
+            "name": "Farben"
           },
           "empty": {
             "name": "Leer"

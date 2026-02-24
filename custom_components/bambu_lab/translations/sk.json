@@ -548,6 +548,9 @@
           "color": {
             "name": "Farba"
           },
+          "cols": {
+            "name": "Farby"
+          },
           "empty": {
             "name": "Prázdna"
           },
@@ -591,6 +594,9 @@
           },
           "color": {
             "name": "Farba"
+          },
+          "cols": {
+            "name": "Farby"
           },
           "empty": {
             "name": "Prázdny"
@@ -636,6 +642,9 @@
           "color": {
             "name": "Farba"
           },
+          "cols": {
+            "name": "Farby"
+          },
           "empty": {
             "name": "Prázdny"
           },
@@ -680,6 +689,9 @@
           "color": {
             "name": "Farba"
           },
+          "cols": {
+            "name": "Farby"
+          },
           "empty": {
             "name": "Prázdny"
           },
@@ -723,6 +735,9 @@
           },
           "color": {
             "name": "Farba"
+          },
+          "cols": {
+            "name": "Farby"
           },
           "empty": {
             "name": "Prázdny"

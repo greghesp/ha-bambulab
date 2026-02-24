@@ -548,6 +548,9 @@
           "color": {
             "name": "Colore"
           },
+          "cols": {
+            "name": "Colori"
+          },
           "empty": {
             "name": "Vuoto"
           },
@@ -591,6 +594,9 @@
           },
           "color": {
             "name": "Colore"
+          },
+          "cols": {
+            "name": "Colori"
           },
           "empty": {
             "name": "Vuota"
@@ -636,6 +642,9 @@
           "color": {
             "name": "Colore"
           },
+          "cols": {
+            "name": "Colori"
+          },
           "empty": {
             "name": "Vuota"
           },
@@ -680,6 +689,9 @@
           "color": {
             "name": "Colore"
           },
+          "cols": {
+            "name": "Colori"
+          },
           "empty": {
             "name": "Vuota"
           },
@@ -723,6 +735,9 @@
           },
           "color": {
             "name": "Colore"
+          },
+          "cols": {
+            "name": "Colori"
           },
           "empty": {
             "name": "Vuota"
