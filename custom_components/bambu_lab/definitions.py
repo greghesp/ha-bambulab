@@ -568,8 +568,12 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         {} if self.coordinator.get_model().ams.active_tray is None else
         {
             "ams_index": self.coordinator.get_model().ams.active_ams_index,
+            "bed_temp": self.coordinator.get_model().ams.active_tray.bed_temp,
             "color": f"#{self.coordinator.get_model().ams.active_tray.color}",
             "cols": [f"#{c}" for c in self.coordinator.get_model().ams.active_tray.cols],
+            "ctype": self.coordinator.get_model().ams.active_tray.ctype,
+            "dry_temp": self.coordinator.get_model().ams.active_tray.dry_temp,
+            "dry_time": self.coordinator.get_model().ams.active_tray.dry_time,
             "filament_id": self.coordinator.get_model().ams.active_tray.idx,
             **({"k_value": self.coordinator.get_model().ams.active_tray.k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
             "tray_weight": self.coordinator.get_model().ams.active_tray.tray_weight,
@@ -671,8 +675,12 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         extra_attributes=lambda self:
         {
             "active": self.coordinator.get_model().external_spool[self.index].active,
+            "bed_temp": self.coordinator.get_model().external_spool[self.index].bed_temp,
             "color": f"#{self.coordinator.get_model().external_spool[self.index].color}",
             "cols": [f"#{c}" for c in self.coordinator.get_model().external_spool[self.index].cols],
+            "ctype": self.coordinator.get_model().external_spool[self.index].ctype,
+            "dry_temp": self.coordinator.get_model().external_spool[self.index].dry_temp,
+            "dry_time": self.coordinator.get_model().external_spool[self.index].dry_time,
             "empty": self.coordinator.get_model().external_spool[self.index].empty,
             "filament_id": self.coordinator.get_model().external_spool[self.index].idx,
             **({"k_value": self.coordinator.get_model().external_spool[self.index].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -738,8 +746,12 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         extra_attributes=lambda self:
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[0].active,
+            "bed_temp": self.coordinator.get_model().ams.data[self.index].tray[0].bed_temp,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[0].color}",
             "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[0].cols],
+            "ctype": self.coordinator.get_model().ams.data[self.index].tray[0].ctype,
+            "dry_temp": self.coordinator.get_model().ams.data[self.index].tray[0].dry_temp,
+            "dry_time": self.coordinator.get_model().ams.data[self.index].tray[0].dry_time,
             "empty": self.coordinator.get_model().ams.data[self.index].tray[0].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[0].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[0].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -762,8 +774,12 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         extra_attributes=lambda self:
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[1].active,
+            "bed_temp": self.coordinator.get_model().ams.data[self.index].tray[1].bed_temp,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[1].color}",
             "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[1].cols],
+            "ctype": self.coordinator.get_model().ams.data[self.index].tray[1].ctype,
+            "dry_temp": self.coordinator.get_model().ams.data[self.index].tray[1].dry_temp,
+            "dry_time": self.coordinator.get_model().ams.data[self.index].tray[1].dry_time,
             "empty": self.coordinator.get_model().ams.data[self.index].tray[1].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[1].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[1].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -787,8 +803,12 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         extra_attributes=lambda self:
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[2].active,
+            "bed_temp": self.coordinator.get_model().ams.data[self.index].tray[2].bed_temp,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[2].color}",
             "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[2].cols],
+            "ctype": self.coordinator.get_model().ams.data[self.index].tray[2].ctype,
+            "dry_temp": self.coordinator.get_model().ams.data[self.index].tray[2].dry_temp,
+            "dry_time": self.coordinator.get_model().ams.data[self.index].tray[2].dry_time,
             "empty": self.coordinator.get_model().ams.data[self.index].tray[2].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[2].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[2].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),
@@ -812,8 +832,12 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         extra_attributes=lambda self:
         {
             "active": self.coordinator.get_model().ams.data[self.index].tray[3].active,
+            "bed_temp": self.coordinator.get_model().ams.data[self.index].tray[3].bed_temp,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[3].color}",
             "cols": [f"#{c}" for c in self.coordinator.get_model().ams.data[self.index].tray[3].cols],
+            "ctype": self.coordinator.get_model().ams.data[self.index].tray[3].ctype,
+            "dry_temp": self.coordinator.get_model().ams.data[self.index].tray[3].dry_temp,
+            "dry_time": self.coordinator.get_model().ams.data[self.index].tray[3].dry_time,
             "empty": self.coordinator.get_model().ams.data[self.index].tray[3].empty,
             "filament_id": self.coordinator.get_model().ams.data[self.index].tray[3].idx,
             **({"k_value": self.coordinator.get_model().ams.data[self.index].tray[3].k} if self.coordinator.get_model().supports_feature(Features.K_VALUE) else {}),

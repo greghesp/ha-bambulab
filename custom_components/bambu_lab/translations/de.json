@@ -548,11 +548,23 @@
           "active": {
             "name": "Aktiv"
           },
+          "bed_temp": {
+            "name": "Heizbett Temperatur"
+          },
           "color": {
             "name": "Farbe"
           },
           "cols": {
             "name": "Farben"
+          },
+          "ctype": {
+            "name": "Farbtyp"
+          },
+          "dry_temp": {
+            "name": "Trocknungstemperatur"
+          },
+          "dry_time": {
+            "name": "Trocknungszeit"
           },
           "empty": {
             "name": "Leer"
@@ -595,11 +607,23 @@
           "active": {
             "name": "Aktiv"
           },
+          "bed_temp": {
+            "name": "Heizbett Temperatur"
+          },
           "color": {
             "name": "Farbe"
           },
           "cols": {
             "name": "Farben"
+          },
+          "ctype": {
+            "name": "Farbtyp"
+          },
+          "dry_temp": {
+            "name": "Trocknungstemperatur"
+          },
+          "dry_time": {
+            "name": "Trocknungszeit"
           },
           "empty": {
             "name": "Leer"
@@ -642,11 +666,23 @@
           "active": {
             "name": "Aktiv"
           },
+          "bed_temp": {
+            "name": "Heizbett Temperatur"
+          },
           "color": {
             "name": "Farbe"
           },
           "cols": {
             "name": "Farben"
+          },
+          "ctype": {
+            "name": "Farbtyp"
+          },
+          "dry_temp": {
+            "name": "Trocknungstemperatur"
+          },
+          "dry_time": {
+            "name": "Trocknungszeit"
           },
           "empty": {
             "name": "Leer"
@@ -689,11 +725,23 @@
           "active": {
             "name": "Aktiv"
           },
+          "bed_temp": {
+            "name": "Heizbett Temperatur"
+          },
           "color": {
             "name": "Farbe"
           },
           "cols": {
             "name": "Farben"
+          },
+          "ctype": {
+            "name": "Farbtyp"
+          },
+          "dry_temp": {
+            "name": "Trocknungstemperatur"
+          },
+          "dry_time": {
+            "name": "Trocknungszeit"
           },
           "empty": {
             "name": "Leer"
@@ -736,11 +784,23 @@
           "active": {
             "name": "Aktiv"
           },
+          "bed_temp": {
+            "name": "Heizbett Temperatur"
+          },
           "color": {
             "name": "Farbe"
           },
           "cols": {
             "name": "Farben"
+          },
+          "ctype": {
+            "name": "Farbtyp"
+          },
+          "dry_temp": {
+            "name": "Trocknungstemperatur"
+          },
+          "dry_time": {
+            "name": "Trocknungszeit"
           },
           "empty": {
             "name": "Leer"
