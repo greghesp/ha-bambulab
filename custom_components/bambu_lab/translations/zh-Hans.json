@@ -583,6 +583,18 @@
           },
           "tray_weight": {
             "name": "耗材的最大重量"
+          },
+          "bed_temp": {
+            "name": "床温"
+          },
+          "ctype": {
+            "name": "颜色类型"
+          },
+          "dry_temp": {
+            "name": "干燥温度"
+          },
+          "dry_time": {
+            "name": "干燥时间"
           }
         }
       },
@@ -630,6 +642,18 @@
           },
           "tray_weight": {
             "name": "耗材的最大重量"
+          },
+          "bed_temp": {
+            "name": "床温"
+          },
+          "ctype": {
+            "name": "颜色类型"
+          },
+          "dry_temp": {
+            "name": "干燥温度"
+          },
+          "dry_time": {
+            "name": "干燥时间"
           }
         }
       },
@@ -677,6 +701,18 @@
           },
           "remain_enabled": {
             "name": "启用了剩余的耗材估计"
+          },
+          "bed_temp": {
+            "name": "床温"
+          },
+          "ctype": {
+            "name": "颜色类型"
+          },
+          "dry_temp": {
+            "name": "干燥温度"
+          },
+          "dry_time": {
+            "name": "干燥时间"
           }
         }
       },
@@ -724,6 +760,18 @@
           },
           "remain_enabled": {
             "name": "启用了剩余的耗材估计"
+          },
+          "bed_temp": {
+            "name": "床温"
+          },
+          "ctype": {
+            "name": "颜色类型"
+          },
+          "dry_temp": {
+            "name": "干燥温度"
+          },
+          "dry_time": {
+            "name": "干燥时间"
           }
         }
       },
@@ -771,6 +819,18 @@
           },
           "remain_enabled": {
             "name": "启用了剩余的耗材估计"
+          },
+          "bed_temp": {
+            "name": "床温"
+          },
+          "ctype": {
+            "name": "颜色类型"
+          },
+          "dry_temp": {
+            "name": "干燥温度"
+          },
+          "dry_time": {
+            "name": "干燥时间"
           }
         }
       },

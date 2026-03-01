@@ -583,6 +583,18 @@
           },
           "tray_weight": {
             "name": "Maksimal vægt af glødetråd"
+          },
+          "bed_temp": {
+            "name": "Sengetemperatur"
+          },
+          "ctype": {
+            "name": "Farvetype"
+          },
+          "dry_temp": {
+            "name": "Tørretemperatur"
+          },
+          "dry_time": {
+            "name": "Tørretid"
           }
         }
       },
@@ -630,6 +642,18 @@
           },
           "tray_weight": {
             "name": "Maksimal vægt af glødetråd"
+          },
+          "bed_temp": {
+            "name": "Sengetemperatur"
+          },
+          "ctype": {
+            "name": "Farvetype"
+          },
+          "dry_temp": {
+            "name": "Tørretemperatur"
+          },
+          "dry_time": {
+            "name": "Tørretid"
           }
         }
       },
@@ -677,6 +701,18 @@
           },
           "remain_enabled": {
             "name": "Resterende filamentestimering aktiveret"
+          },
+          "bed_temp": {
+            "name": "Sengetemperatur"
+          },
+          "ctype": {
+            "name": "Farvetype"
+          },
+          "dry_temp": {
+            "name": "Tørretemperatur"
+          },
+          "dry_time": {
+            "name": "Tørretid"
           }
         }
       },
@@ -724,6 +760,18 @@
           },
           "remain_enabled": {
             "name": "Resterende filamentestimering aktiveret"
+          },
+          "bed_temp": {
+            "name": "Sengetemperatur"
+          },
+          "ctype": {
+            "name": "Farvetype"
+          },
+          "dry_temp": {
+            "name": "Tørretemperatur"
+          },
+          "dry_time": {
+            "name": "Tørretid"
           }
         }
       },
@@ -771,6 +819,18 @@
           },
           "remain_enabled": {
             "name": "Resterende filamentestimering aktiveret"
+          },
+          "bed_temp": {
+            "name": "Sengetemperatur"
+          },
+          "ctype": {
+            "name": "Farvetype"
+          },
+          "dry_temp": {
+            "name": "Tørretemperatur"
+          },
+          "dry_time": {
+            "name": "Tørretid"
           }
         }
       },

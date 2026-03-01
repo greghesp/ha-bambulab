@@ -583,6 +583,18 @@
           },
           "tray_weight": {
             "name": "Peso máximo de filamento"
+          },
+          "bed_temp": {
+            "name": "Temperatura da cama"
+          },
+          "ctype": {
+            "name": "Tipo de cor"
+          },
+          "dry_temp": {
+            "name": "Temperatura de secagem"
+          },
+          "dry_time": {
+            "name": "Tempo de secagem"
           }
         }
       },
@@ -630,6 +642,18 @@
           },
           "tray_weight": {
             "name": "Peso máximo de filamento"
+          },
+          "bed_temp": {
+            "name": "Temperatura da cama"
+          },
+          "ctype": {
+            "name": "Tipo de cor"
+          },
+          "dry_temp": {
+            "name": "Temperatura de secagem"
+          },
+          "dry_time": {
+            "name": "Tempo de secagem"
           }
         }
       },
@@ -677,6 +701,18 @@
           },
           "remain_enabled": {
             "name": "Estimativa de filamento restante habilitada"
+          },
+          "bed_temp": {
+            "name": "Temperatura da cama"
+          },
+          "ctype": {
+            "name": "Tipo de cor"
+          },
+          "dry_temp": {
+            "name": "Temperatura de secagem"
+          },
+          "dry_time": {
+            "name": "Tempo de secagem"
           }
         }
       },
@@ -724,6 +760,18 @@
           },
           "remain_enabled": {
             "name": "Estimativa de filamento restante habilitada"
+          },
+          "bed_temp": {
+            "name": "Temperatura da cama"
+          },
+          "ctype": {
+            "name": "Tipo de cor"
+          },
+          "dry_temp": {
+            "name": "Temperatura de secagem"
+          },
+          "dry_time": {
+            "name": "Tempo de secagem"
           }
         }
       },
@@ -771,6 +819,18 @@
           },
           "remain_enabled": {
             "name": "Estimativa de filamento restante habilitada"
+          },
+          "bed_temp": {
+            "name": "Temperatura da cama"
+          },
+          "ctype": {
+            "name": "Tipo de cor"
+          },
+          "dry_temp": {
+            "name": "Temperatura de secagem"
+          },
+          "dry_time": {
+            "name": "Tempo de secagem"
           }
         }
       },
