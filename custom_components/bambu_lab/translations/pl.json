@@ -602,6 +602,18 @@
           },
           "tray_weight": {
             "name": "Maksymalna waga filamentu"
+          },
+          "bed_temp": {
+            "name": "Temperatura łóżka"
+          },
+          "ctype": {
+            "name": "Rodzaj koloru"
+          },
+          "dry_temp": {
+            "name": "Temperatura suszenia"
+          },
+          "dry_time": {
+            "name": "Czas suszenia"
           }
         }
       },
@@ -649,6 +661,18 @@
           },
           "tray_weight": {
             "name": "Maksymalna waga filamentu"
+          },
+          "bed_temp": {
+            "name": "Temperatura łóżka"
+          },
+          "ctype": {
+            "name": "Rodzaj koloru"
+          },
+          "dry_temp": {
+            "name": "Temperatura suszenia"
+          },
+          "dry_time": {
+            "name": "Czas suszenia"
           }
         }
       },
@@ -696,6 +720,18 @@
           },
           "tray_weight": {
             "name": "Maksymalna waga filamentu"
+          },
+          "bed_temp": {
+            "name": "Temperatura łóżka"
+          },
+          "ctype": {
+            "name": "Rodzaj koloru"
+          },
+          "dry_temp": {
+            "name": "Temperatura suszenia"
+          },
+          "dry_time": {
+            "name": "Czas suszenia"
           }
         }
       },
@@ -743,6 +779,18 @@
           },
           "tray_weight": {
             "name": "Maksymalna waga filamentu"
+          },
+          "bed_temp": {
+            "name": "Temperatura łóżka"
+          },
+          "ctype": {
+            "name": "Rodzaj koloru"
+          },
+          "dry_temp": {
+            "name": "Temperatura suszenia"
+          },
+          "dry_time": {
+            "name": "Czas suszenia"
           }
         }
       },
@@ -790,6 +838,18 @@
           },
           "tray_weight": {
             "name": "Maksymalna waga filamentu"
+          },
+          "bed_temp": {
+            "name": "Temperatura łóżka"
+          },
+          "ctype": {
+            "name": "Rodzaj koloru"
+          },
+          "dry_temp": {
+            "name": "Temperatura suszenia"
+          },
+          "dry_time": {
+            "name": "Czas suszenia"
           }
         }
       },

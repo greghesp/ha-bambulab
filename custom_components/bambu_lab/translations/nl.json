@@ -596,6 +596,18 @@
           },
           "tray_weight": {
             "name": "Maximaal gewicht van de gloeidraad"
+          },
+          "bed_temp": {
+            "name": "Bedtemperatuur"
+          },
+          "ctype": {
+            "name": "Kleurtype"
+          },
+          "dry_temp": {
+            "name": "Droogtemperatuur"
+          },
+          "dry_time": {
+            "name": "Droogtijd"
           }
         }
       },
@@ -643,6 +655,18 @@
           },
           "tray_weight": {
             "name": "Maximaal gewicht van de gloeidraad"
+          },
+          "bed_temp": {
+            "name": "Bedtemperatuur"
+          },
+          "ctype": {
+            "name": "Kleurtype"
+          },
+          "dry_temp": {
+            "name": "Droogtemperatuur"
+          },
+          "dry_time": {
+            "name": "Droogtijd"
           }
         }
       },
@@ -690,6 +714,18 @@
           },
           "remain_enabled": {
             "name": "Resterende schatting van de filament ingeschakeld"
+          },
+          "bed_temp": {
+            "name": "Bedtemperatuur"
+          },
+          "ctype": {
+            "name": "Kleurtype"
+          },
+          "dry_temp": {
+            "name": "Droogtemperatuur"
+          },
+          "dry_time": {
+            "name": "Droogtijd"
           }
         }
       },
@@ -737,6 +773,18 @@
           },
           "remain_enabled": {
             "name": "Resterende schatting van de filament ingeschakeld"
+          },
+          "bed_temp": {
+            "name": "Bedtemperatuur"
+          },
+          "ctype": {
+            "name": "Kleurtype"
+          },
+          "dry_temp": {
+            "name": "Droogtemperatuur"
+          },
+          "dry_time": {
+            "name": "Droogtijd"
           }
         }
       },
@@ -784,6 +832,18 @@
           },
           "remain_enabled": {
             "name": "Resterende schatting van de filament ingeschakeld"
+          },
+          "bed_temp": {
+            "name": "Bedtemperatuur"
+          },
+          "ctype": {
+            "name": "Kleurtype"
+          },
+          "dry_temp": {
+            "name": "Droogtemperatuur"
+          },
+          "dry_time": {
+            "name": "Droogtijd"
           }
         }
       },

@@ -590,6 +590,18 @@
           },
           "tray_weight": {
             "name": "필라멘트의 최대 무게"
+          },
+          "bed_temp": {
+            "name": "침대 온도"
+          },
+          "ctype": {
+            "name": "색상 유형"
+          },
+          "dry_temp": {
+            "name": "건조 온도"
+          },
+          "dry_time": {
+            "name": "건조시간"
           }
         }
       },
@@ -637,6 +649,18 @@
           },
           "tray_weight": {
             "name": "필라멘트의 최대 무게"
+          },
+          "bed_temp": {
+            "name": "침대 온도"
+          },
+          "ctype": {
+            "name": "색상 유형"
+          },
+          "dry_temp": {
+            "name": "건조 온도"
+          },
+          "dry_time": {
+            "name": "건조시간"
           }
         }
       },
@@ -684,6 +708,18 @@
           },
           "remain_enabled": {
             "name": "나머지 필라멘트 추정이 활성화되었습니다"
+          },
+          "bed_temp": {
+            "name": "침대 온도"
+          },
+          "ctype": {
+            "name": "색상 유형"
+          },
+          "dry_temp": {
+            "name": "건조 온도"
+          },
+          "dry_time": {
+            "name": "건조시간"
           }
         }
       },
@@ -731,6 +767,18 @@
           },
           "remain_enabled": {
             "name": "나머지 필라멘트 추정이 활성화되었습니다"
+          },
+          "bed_temp": {
+            "name": "침대 온도"
+          },
+          "ctype": {
+            "name": "색상 유형"
+          },
+          "dry_temp": {
+            "name": "건조 온도"
+          },
+          "dry_time": {
+            "name": "건조시간"
           }
         }
       },
@@ -778,6 +826,18 @@
           },
           "remain_enabled": {
             "name": "나머지 필라멘트 추정이 활성화되었습니다"
+          },
+          "bed_temp": {
+            "name": "침대 온도"
+          },
+          "ctype": {
+            "name": "색상 유형"
+          },
+          "dry_temp": {
+            "name": "건조 온도"
+          },
+          "dry_time": {
+            "name": "건조시간"
           }
         }
       },

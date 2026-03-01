@@ -590,6 +590,18 @@
           },
           "tray_weight": {
             "name": "Maximálna hmotnosť vlákna"
+          },
+          "bed_temp": {
+            "name": "Teplota lôžka"
+          },
+          "ctype": {
+            "name": "Typ farby"
+          },
+          "dry_temp": {
+            "name": "Teplota sušenia"
+          },
+          "dry_time": {
+            "name": "Doba schnutia"
           }
         }
       },
@@ -637,6 +649,18 @@
           },
           "tray_weight": {
             "name": "Maximálna hmotnosť vlákna"
+          },
+          "bed_temp": {
+            "name": "Teplota lôžka"
+          },
+          "ctype": {
+            "name": "Typ farby"
+          },
+          "dry_temp": {
+            "name": "Teplota sušenia"
+          },
+          "dry_time": {
+            "name": "Doba schnutia"
           }
         }
       },
@@ -684,6 +708,18 @@
           },
           "remain_enabled": {
             "name": "Zostávajúci odhad vlákna povolený"
+          },
+          "bed_temp": {
+            "name": "Teplota lôžka"
+          },
+          "ctype": {
+            "name": "Typ farby"
+          },
+          "dry_temp": {
+            "name": "Teplota sušenia"
+          },
+          "dry_time": {
+            "name": "Doba schnutia"
           }
         }
       },
@@ -731,6 +767,18 @@
           },
           "remain_enabled": {
             "name": "Zostávajúci odhad vlákna povolený"
+          },
+          "bed_temp": {
+            "name": "Teplota lôžka"
+          },
+          "ctype": {
+            "name": "Typ farby"
+          },
+          "dry_temp": {
+            "name": "Teplota sušenia"
+          },
+          "dry_time": {
+            "name": "Doba schnutia"
           }
         }
       },
@@ -778,6 +826,18 @@
           },
           "remain_enabled": {
             "name": "Zostávajúci odhad vlákna povolený"
+          },
+          "bed_temp": {
+            "name": "Teplota lôžka"
+          },
+          "ctype": {
+            "name": "Typ farby"
+          },
+          "dry_temp": {
+            "name": "Teplota sušenia"
+          },
+          "dry_time": {
+            "name": "Doba schnutia"
           }
         }
       },

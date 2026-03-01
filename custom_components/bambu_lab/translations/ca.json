@@ -590,6 +590,18 @@
           },
           "tray_weight": {
             "name": "Pes màxim de filament"
+          },
+          "bed_temp": {
+            "name": "Temperatura del llit"
+          },
+          "ctype": {
+            "name": "Tipus de color"
+          },
+          "dry_temp": {
+            "name": "Temperatura d'assecat"
+          },
+          "dry_time": {
+            "name": "Temps d'assecat"
           }
         }
       },
@@ -637,6 +649,18 @@
           },
           "tray_weight": {
             "name": "Pes màxim del filament"
+          },
+          "bed_temp": {
+            "name": "Temperatura del llit"
+          },
+          "ctype": {
+            "name": "Tipus de color"
+          },
+          "dry_temp": {
+            "name": "Temperatura d'assecat"
+          },
+          "dry_time": {
+            "name": "Temps d'assecat"
           }
         }
       },
@@ -684,6 +708,18 @@
           },
           "remain_enabled": {
             "name": "L'estimació del filament restant ha activat"
+          },
+          "bed_temp": {
+            "name": "Temperatura del llit"
+          },
+          "ctype": {
+            "name": "Tipus de color"
+          },
+          "dry_temp": {
+            "name": "Temperatura d'assecat"
+          },
+          "dry_time": {
+            "name": "Temps d'assecat"
           }
         }
       },
@@ -731,6 +767,18 @@
           },
           "remain_enabled": {
             "name": "L'estimació del filament restant ha activat"
+          },
+          "bed_temp": {
+            "name": "Temperatura del llit"
+          },
+          "ctype": {
+            "name": "Tipus de color"
+          },
+          "dry_temp": {
+            "name": "Temperatura d'assecat"
+          },
+          "dry_time": {
+            "name": "Temps d'assecat"
           }
         }
       },
@@ -778,6 +826,18 @@
           },
           "remain_enabled": {
             "name": "L'estimació del filament restant ha activat"
+          },
+          "bed_temp": {
+            "name": "Temperatura del llit"
+          },
+          "ctype": {
+            "name": "Tipus de color"
+          },
+          "dry_temp": {
+            "name": "Temperatura d'assecat"
+          },
+          "dry_time": {
+            "name": "Temps d'assecat"
           }
         }
       },

@@ -590,6 +590,18 @@
           },
           "tray_weight": {
             "name": "Peso massimo del filamento"
+          },
+          "bed_temp": {
+            "name": "Temperatura del letto"
+          },
+          "ctype": {
+            "name": "Tipo di colore"
+          },
+          "dry_temp": {
+            "name": "Temperatura di asciugatura"
+          },
+          "dry_time": {
+            "name": "Tempo di asciugatura"
           }
         }
       },
@@ -637,6 +649,18 @@
           },
           "tray_weight": {
             "name": "Peso massimo del filamento"
+          },
+          "bed_temp": {
+            "name": "Temperatura del letto"
+          },
+          "ctype": {
+            "name": "Tipo di colore"
+          },
+          "dry_temp": {
+            "name": "Temperatura di asciugatura"
+          },
+          "dry_time": {
+            "name": "Tempo di asciugatura"
           }
         }
       },
@@ -684,6 +708,18 @@
           },
           "remain_enabled": {
             "name": "Stima del filamento rimanente abilitato"
+          },
+          "bed_temp": {
+            "name": "Temperatura del letto"
+          },
+          "ctype": {
+            "name": "Tipo di colore"
+          },
+          "dry_temp": {
+            "name": "Temperatura di asciugatura"
+          },
+          "dry_time": {
+            "name": "Tempo di asciugatura"
           }
         }
       },
@@ -731,6 +767,18 @@
           },
           "remain_enabled": {
             "name": "Stima del filamento rimanente abilitato"
+          },
+          "bed_temp": {
+            "name": "Temperatura del letto"
+          },
+          "ctype": {
+            "name": "Tipo di colore"
+          },
+          "dry_temp": {
+            "name": "Temperatura di asciugatura"
+          },
+          "dry_time": {
+            "name": "Tempo di asciugatura"
           }
         }
       },
@@ -778,6 +826,18 @@
           },
           "remain_enabled": {
             "name": "Stima del filamento rimanente abilitato"
+          },
+          "bed_temp": {
+            "name": "Temperatura del letto"
+          },
+          "ctype": {
+            "name": "Tipo di colore"
+          },
+          "dry_temp": {
+            "name": "Temperatura di asciugatura"
+          },
+          "dry_time": {
+            "name": "Tempo di asciugatura"
           }
         }
       },

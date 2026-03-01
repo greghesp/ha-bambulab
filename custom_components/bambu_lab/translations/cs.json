@@ -666,6 +666,18 @@
           },
           "tray_weight": {
             "name": "Maximální hmotnost filamentu"
+          },
+          "bed_temp": {
+            "name": "Teplota postele"
+          },
+          "ctype": {
+            "name": "Typ barvy"
+          },
+          "dry_temp": {
+            "name": "Teplota sušení"
+          },
+          "dry_time": {
+            "name": "Doba schnutí"
           }
         }
       },
@@ -713,6 +725,18 @@
           },
           "tray_weight": {
             "name": "Maximální hmotnost filamentu"
+          },
+          "bed_temp": {
+            "name": "Teplota postele"
+          },
+          "ctype": {
+            "name": "Typ barvy"
+          },
+          "dry_temp": {
+            "name": "Teplota sušení"
+          },
+          "dry_time": {
+            "name": "Doba schnutí"
           }
         }
       },
@@ -760,6 +784,18 @@
           },
           "tray_weight": {
             "name": "Maximální hmotnost filamentu"
+          },
+          "bed_temp": {
+            "name": "Teplota postele"
+          },
+          "ctype": {
+            "name": "Typ barvy"
+          },
+          "dry_temp": {
+            "name": "Teplota sušení"
+          },
+          "dry_time": {
+            "name": "Doba schnutí"
           }
         }
       },
@@ -807,6 +843,18 @@
           },
           "tray_weight": {
             "name": "Maximální hmotnost filamentu"
+          },
+          "bed_temp": {
+            "name": "Teplota postele"
+          },
+          "ctype": {
+            "name": "Typ barvy"
+          },
+          "dry_temp": {
+            "name": "Teplota sušení"
+          },
+          "dry_time": {
+            "name": "Doba schnutí"
           }
         }
       },
@@ -854,6 +902,18 @@
           },
           "tray_weight": {
             "name": "Maximální hmotnost filamentu"
+          },
+          "bed_temp": {
+            "name": "Teplota postele"
+          },
+          "ctype": {
+            "name": "Typ barvy"
+          },
+          "dry_temp": {
+            "name": "Teplota sušení"
+          },
+          "dry_time": {
+            "name": "Doba schnutí"
           }
         }
       }
