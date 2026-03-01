@@ -2993,7 +2993,7 @@ class HMSList:
                 LOGGER.debug("Updating HMS error list.")
                 self._errors = errors
                 if self._errors["Count"] != 0:
-                    LOGGER.warning(f"HMS ERRORS: {errors}")
+                    LOGGER.debug(f"HMS ERRORS: {errors}")
                 self._client.callback("event_printer_error")
                 return True
         
