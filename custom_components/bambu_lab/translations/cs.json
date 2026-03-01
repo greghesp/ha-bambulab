@@ -454,7 +454,14 @@
           "heating_chamber": "Zahřívání komory",
           "heated_bedcooling": "Chlazení vyhřívané podložky",
           "print_calibration_lines": "Tisk kalibračních čar",
-          "idle": "Nečinnost"
+          "idle": "Nečinnost",
+          "check_material": "Automatická kontrola: Materiál",
+          "calibrating_live_view_camera": "Kalibrace kamery s živým náhledem",
+          "waiting_for_heatbed_temperature": "Čekání, až vyhřívaná podložka dosáhne cílové teploty",
+          "check_material_position": "Automatická kontrola: Poloha materiálu",
+          "calibrating_cutter_model_offset": "Kalibrace offsetu řezacího modulu",
+          "measuring_surface": "Měřicí plocha",
+          "thermal_preconditioning": "Tepelná předúprava pro optimalizaci první vrstvy"
         }
       },
       "sdcard_status": {

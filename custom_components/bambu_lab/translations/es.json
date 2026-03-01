@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Nivelación de cama automática - Fase 2",
           "heating_chamber": "Cámara de calefacción",
           "heated_bedcooling": "Enfriamiento de la cama con calefacción",
-          "print_calibration_lines": "Impresión de líneas de calibración"
+          "print_calibration_lines": "Impresión de líneas de calibración",
+          "check_material": "Comprobación automática: Material",
+          "calibrating_live_view_camera": "Calibración de la cámara Live View",
+          "waiting_for_heatbed_temperature": "Esperando a que la base calefactora alcance la temperatura objetivo",
+          "check_material_position": "Comprobación automática: posición del material",
+          "calibrating_cutter_model_offset": "Calibración de compensación del módulo cortador",
+          "measuring_surface": "Superficie de medición",
+          "thermal_preconditioning": "Preacondicionamiento térmico para la optimización de la primera capa."
         }
       },
       "print_progress": {

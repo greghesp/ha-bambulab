@@ -454,6 +454,13 @@
           "heating_chamber": "Heating chamber",
           "heated_bedcooling": "Heated bed cooling",
           "print_calibration_lines": "Printing calibration lines",
+          "check_material": "Auto Check: Material",
+          "calibrating_live_view_camera": "Live View camera calibration",
+          "waiting_for_heatbed_temperature": "Waiting for heatbed to reach target temperature",
+          "check_material_position": "Auto Check: Material position",
+          "calibrating_cutter_model_offset": "Cutter module offset calibration",
+          "measuring_surface": "Measuring surface",
+          "thermal_preconditioning": "Thermal preconditioning for first layer optimization",
           "idle": "Idle"
         }
       },

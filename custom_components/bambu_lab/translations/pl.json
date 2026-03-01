@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Auto -Bed Leveling - faza 2",
           "heating_chamber": "Komora grzewcza",
           "heated_bedcooling": "Chłodzenie stołu",
-          "print_calibration_lines": "Wydruk kalibracyjny"
+          "print_calibration_lines": "Wydruk kalibracyjny",
+          "check_material": "Automatyczna kontrola: Materiał",
+          "calibrating_live_view_camera": "Kalibracja kamery z podglądem na żywo",
+          "waiting_for_heatbed_temperature": "Oczekiwanie, aż podgrzewany stół osiągnie temperaturę docelową",
+          "check_material_position": "Automatyczna kontrola: pozycja materiału",
+          "calibrating_cutter_model_offset": "Kalibracja przesunięcia modułu tnącego",
+          "measuring_surface": "Powierzchnia pomiarowa",
+          "thermal_preconditioning": "Wstępne kondycjonowanie termiczne w celu optymalizacji pierwszej warstwy"
         }
       },
       "print_progress": {

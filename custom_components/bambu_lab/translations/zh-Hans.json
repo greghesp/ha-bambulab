@@ -439,7 +439,14 @@
           "bed_level_phase_2": "自动床升级 - 第2阶段",
           "heating_chamber": "加热室",
           "heated_bedcooling": "加热床冷却",
-          "print_calibration_lines": "打印校准线"
+          "print_calibration_lines": "打印校准线",
+          "check_material": "自动检查：材料",
+          "calibrating_live_view_camera": "实时取景相机校准",
+          "waiting_for_heatbed_temperature": "等待热床达到目标温度",
+          "check_material_position": "自动检查：材料位置",
+          "calibrating_cutter_model_offset": "刀具模块偏移校准",
+          "measuring_surface": "测量面",
+          "thermal_preconditioning": "第一层优化的热预处理"
         }
       },
       "print_progress": {

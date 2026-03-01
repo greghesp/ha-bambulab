@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Auto -Bett -Leveling - Phase 2",
           "heating_chamber": "Heizkammer",
           "heated_bedcooling": "Erhitzte Bettkühlung",
-          "print_calibration_lines": "Drucken von Kalibrierungslinien"
+          "print_calibration_lines": "Drucken von Kalibrierungslinien",
+          "check_material": "Automatische Prüfung: Material",
+          "calibrating_live_view_camera": "Kalibrierung der Live View-Kamera",
+          "waiting_for_heatbed_temperature": "Warten darauf, dass das Heizbett die Zieltemperatur erreicht",
+          "check_material_position": "Automatische Prüfung: Materialposition",
+          "calibrating_cutter_model_offset": "Offsetkalibrierung des Schneidmoduls",
+          "measuring_surface": "Messfläche",
+          "thermal_preconditioning": "Thermische Vorkonditionierung zur Optimierung der ersten Schicht"
         }
       },
       "print_progress": {

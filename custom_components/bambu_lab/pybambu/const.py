@@ -70,7 +70,7 @@ CURRENT_STAGE_IDS = {
     0: "printing",
     1: "auto_bed_leveling",
     2: "heatbed_preheating",
-    3: "sweeping_xy_mech_mode",
+    3: "sweeping_xy_mech_mode", # Vibration compensation
     4: "changing_filament",
     5: "m400_pause",
     6: "paused_filament_runout",
@@ -119,6 +119,13 @@ CURRENT_STAGE_IDS = {
     49: "heating_chamber",
     50: "heated_bedcooling",
     51: "print_calibration_lines",
+    52: "check_material",
+    53: "calibrating_live_view_camera",
+    54: "waiting_for_heatbed_temperature",
+    55: "check_material_position",
+    56: "calibrating_cutter_model_offset",
+    57: "measuring_surface",
+    58: "thermal_preconditioning",
     # X1 returns -1 for idle
     -1: "idle",  # DUPLICATED
     # P1 returns 255 for idle

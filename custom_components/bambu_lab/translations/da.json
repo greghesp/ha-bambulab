@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Auto Bed Leveling - Fase 2",
           "heating_chamber": "Opvarmningskammer",
           "heated_bedcooling": "Opvarmet seng afkøling",
-          "print_calibration_lines": "Udskrivning af kalibreringslinjer"
+          "print_calibration_lines": "Udskrivning af kalibreringslinjer",
+          "check_material": "Autocheck: Materiale",
+          "calibrating_live_view_camera": "Live View-kamerakalibrering",
+          "waiting_for_heatbed_temperature": "Venter på, at heatbed når måltemperaturen",
+          "check_material_position": "Auto Check: Materialeposition",
+          "calibrating_cutter_model_offset": "Kuttermodul offset kalibrering",
+          "measuring_surface": "Måleoverflade",
+          "thermal_preconditioning": "Termisk forkonditionering til optimering af første lag"
         }
       },
       "print_progress": {

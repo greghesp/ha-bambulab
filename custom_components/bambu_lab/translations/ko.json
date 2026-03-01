@@ -439,7 +439,14 @@
           "bed_level_phase_2": "자동 침대 레벨링 - 2 단계",
           "heating_chamber": "가열 챔버",
           "heated_bedcooling": "가열 된 침대 냉각",
-          "print_calibration_lines": "교정 라인 인쇄"
+          "print_calibration_lines": "교정 라인 인쇄",
+          "check_material": "자동 확인: 재료",
+          "calibrating_live_view_camera": "라이브 뷰 카메라 보정",
+          "waiting_for_heatbed_temperature": "히트베드가 목표 온도에 도달할 때까지 기다리는 중",
+          "check_material_position": "자동 확인: 재료 위치",
+          "calibrating_cutter_model_offset": "커터 모듈 오프셋 교정",
+          "measuring_surface": "측정면",
+          "thermal_preconditioning": "첫 번째 레이어 최적화를 위한 열 사전 조정"
         }
       },
       "print_progress": {
