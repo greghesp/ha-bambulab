@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Nivelamento da cama automática - Fase 2",
           "heating_chamber": "Câmara de aquecimento",
           "heated_bedcooling": "Refriamento da cama aquecida",
-          "print_calibration_lines": "Linhas de calibração de impressão"
+          "print_calibration_lines": "Linhas de calibração de impressão",
+          "check_material": "Verificação automática: material",
+          "calibrating_live_view_camera": "Calibração da câmera Live View",
+          "waiting_for_heatbed_temperature": "Aguardando que a cama térmica atinja a temperatura desejada",
+          "check_material_position": "Verificação automática: posição do material",
+          "calibrating_cutter_model_offset": "Calibração de deslocamento do módulo cortador",
+          "measuring_surface": "Superfície de medição",
+          "thermal_preconditioning": "Pré-condicionamento térmico para otimização da primeira camada"
         }
       },
       "print_progress": {

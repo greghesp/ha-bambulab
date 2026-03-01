@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Vyrovnanie automatického lôžka - fáza 2",
           "heating_chamber": "Vykurovacia komora",
           "heated_bedcooling": "Vyhrievané chladenie",
-          "print_calibration_lines": "Kalibračné vedenie"
+          "print_calibration_lines": "Kalibračné vedenie",
+          "check_material": "Automatická kontrola: Materiál",
+          "calibrating_live_view_camera": "Kalibrácia kamery so živým náhľadom",
+          "waiting_for_heatbed_temperature": "Čaká sa, kým vyhrievacia podložka dosiahne cieľovú teplotu",
+          "check_material_position": "Automatická kontrola: Poloha materiálu",
+          "calibrating_cutter_model_offset": "Kalibrácia ofsetu rezacieho modulu",
+          "measuring_surface": "Meracia plocha",
+          "thermal_preconditioning": "Tepelné predkondicionovanie pre optimalizáciu prvej vrstvy"
         }
       },
       "print_progress": {

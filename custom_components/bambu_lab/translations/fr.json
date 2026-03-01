@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Nivellement de lit automatique - Phase 2",
           "heating_chamber": "Chambre de chauffage",
           "heated_bedcooling": "Refroidissement au lit chauffé",
-          "print_calibration_lines": "Lignes d'étalonnage d'impression"
+          "print_calibration_lines": "Lignes d'étalonnage d'impression",
+          "check_material": "Vérification automatique : Matériau",
+          "calibrating_live_view_camera": "Étalonnage de la caméra Live View",
+          "waiting_for_heatbed_temperature": "En attente que le lit chauffant atteigne la température cible",
+          "check_material_position": "Vérification automatique : position du matériau",
+          "calibrating_cutter_model_offset": "Étalonnage du décalage du module de coupe",
+          "measuring_surface": "Surface de mesure",
+          "thermal_preconditioning": "Préconditionnement thermique pour l'optimisation de la première couche"
         }
       },
       "print_progress": {

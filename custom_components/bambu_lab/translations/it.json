@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Livellamento del letto automatico - Fase 2",
           "heating_chamber": "Camera di riscaldamento",
           "heated_bedcooling": "Raffreddamento a letto riscaldato",
-          "print_calibration_lines": "Linee di calibrazione della stampa"
+          "print_calibration_lines": "Linee di calibrazione della stampa",
+          "check_material": "Controllo automatico: materiale",
+          "calibrating_live_view_camera": "Calibrazione della fotocamera Live View",
+          "waiting_for_heatbed_temperature": "In attesa che il piano riscaldato raggiunga la temperatura target",
+          "check_material_position": "Controllo automatico: posizione del materiale",
+          "calibrating_cutter_model_offset": "Calibrazione offset del modulo taglierina",
+          "measuring_surface": "Superficie di misurazione",
+          "thermal_preconditioning": "Precondizionamento termico per l'ottimizzazione del primo strato"
         }
       },
       "print_progress": {

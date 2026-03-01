@@ -439,7 +439,14 @@
           "bed_level_phase_2": "Anivellament del llit automàtic - Fase 2",
           "heating_chamber": "Cambra de calefacció",
           "heated_bedcooling": "Refrigeració del llit escalfat",
-          "print_calibration_lines": "Línies de calibració d'impressió"
+          "print_calibration_lines": "Línies de calibració d'impressió",
+          "check_material": "Comprovació automàtica: material",
+          "calibrating_live_view_camera": "Calibració de la càmera de visualització en directe",
+          "waiting_for_heatbed_temperature": "Esperant que el llit calent arribi a la temperatura objectiu",
+          "check_material_position": "Comprovació automàtica: posició del material",
+          "calibrating_cutter_model_offset": "Calibració de l'offset del mòdul de tallador",
+          "measuring_surface": "Superfície de mesura",
+          "thermal_preconditioning": "Precondicionament tèrmic per a l'optimització de la primera capa"
         }
       },
       "print_progress": {
