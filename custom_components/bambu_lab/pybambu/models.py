@@ -2668,6 +2668,10 @@ class AMSTray:
     tray_weight: int
     _active: bool
     cols: list
+    ctype: int
+    dry_temp = int
+    dry_time = int
+    bed_temp = int
 
     def __init__(self, client):
         self._client = client
@@ -2686,6 +2690,10 @@ class AMSTray:
         self.tray_weight = 0
         self._active = False
         self.cols = []
+        self.ctype = 0
+        self.dry_temp = 0
+        self.dry_time = 0
+        self.bed_temp = 0
 
     @property
     def remain(self) -> int:
@@ -2730,6 +2738,10 @@ class AMSTray:
             self.k = 0
             self.tray_weight = 0
             self.cols = []
+            self.ctype = 0
+            self.dry_temp = 0
+            self.dry_time = 0
+            self.bed_temp = 0
         else:
             # Tray has filament data - update fields normally
             # Using .get() preserves existing values for delta updates
@@ -2750,6 +2762,10 @@ class AMSTray:
             self.k = data.get('k', self.k)
             self.tray_weight = data.get('tray_weight', self.tray_weight)
             self.cols = data.get('cols', self.cols)
+            self.ctype = data.get('ctype', self.ctype)
+            self.dry_temp = data.get('tray_temp', self.dry_temp)
+            self.dry_time = data.get('tray_time', self.dry_time)
+            self.bed_temp = data.get('bed_temp', self.bed_temp)
         
         return (old_data != f"{self.__dict__}")
 

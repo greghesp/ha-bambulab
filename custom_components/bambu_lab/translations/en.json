@@ -621,11 +621,23 @@
           "active": {
             "name": "Active"
           },
+          "bed_temp": {
+            "name": "Bed temperature"
+          },
           "color": {
             "name": "Color"
           },
           "cols": {
             "name": "Colors"
+          },
+          "ctype": {
+            "name": "Color type"
+          },
+          "dry_temp": {
+            "name": "Drying temperature"
+          },
+          "dry_time": {
+            "name": "Drying time"
           },
           "empty": {
             "name": "Empty"
@@ -668,11 +680,23 @@
           "active": {
             "name": "Active"
           },
+          "bed_temp": {
+            "name": "Bed temperature"
+          },
           "color": {
             "name": "Color"
           },
           "cols": {
             "name": "Colors"
+          },
+          "ctype": {
+            "name": "Color type"
+          },
+          "dry_temp": {
+            "name": "Drying temperature"
+          },
+          "dry_time": {
+            "name": "Drying time"
           },
           "empty": {
             "name": "Empty"
@@ -715,11 +739,23 @@
           "active": {
             "name": "Active"
           },
+          "bed_temp": {
+            "name": "Bed temperature"
+          },
           "color": {
             "name": "Color"
           },
           "cols": {
             "name": "Colors"
+          },
+          "ctype": {
+            "name": "Color type"
+          },
+          "dry_temp": {
+            "name": "Drying temperature"
+          },
+          "dry_time": {
+            "name": "Drying time"
           },
           "empty": {
             "name": "Empty"
@@ -762,11 +798,23 @@
           "active": {
             "name": "Active"
           },
+          "bed_temp": {
+            "name": "Bed temperature"
+          },
           "color": {
             "name": "Color"
           },
           "cols": {
             "name": "Colors"
+          },
+          "ctype": {
+            "name": "Color type"
+          },
+          "dry_temp": {
+            "name": "Drying temperature"
+          },
+          "dry_time": {
+            "name": "Drying time"
           },
           "empty": {
             "name": "Empty"
@@ -809,11 +857,23 @@
           "active": {
             "name": "Active"
           },
+          "bed_temp": {
+            "name": "Bed temperature"
+          },
           "color": {
             "name": "Color"
           },
           "cols": {
             "name": "Colors"
+          },
+          "ctype": {
+            "name": "Color type"
+          },
+          "dry_temp": {
+            "name": "Drying temperature"
+          },
+          "dry_time": {
+            "name": "Drying time"
           },
           "empty": {
             "name": "Empty"
