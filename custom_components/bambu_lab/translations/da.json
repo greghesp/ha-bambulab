@@ -605,242 +605,6 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Bakke 1",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "color": {
-            "name": "Farve"
-          },
-          "cols": {
-            "name": "Farver"
-          },
-          "empty": {
-            "name": "Tom"
-          },
-          "k_value": {
-            "name": "K værdi"
-          },
-          "name": {
-            "name": "Navn"
-          },
-          "nozzle_temp_min": {
-            "name": "Dysens minimumstemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Dysens maksimumstemperatur"
-          },
-          "remain": {
-            "name": "Resterende filament"
-          },
-          "tag_uid": {
-            "name": "Spolens serienummer"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "remain_enabled": {
-            "name": "Resterende filamentestimering aktiveret"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maksimal vægt af glødetråd"
-          },
-          "bed_temp": {
-            "name": "Sengetemperatur"
-          },
-          "ctype": {
-            "name": "Farvetype"
-          },
-          "dry_temp": {
-            "name": "Tørretemperatur"
-          },
-          "dry_time": {
-            "name": "Tørretid"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Bakke 2",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "color": {
-            "name": "Farve"
-          },
-          "cols": {
-            "name": "Farver"
-          },
-          "empty": {
-            "name": "Tom"
-          },
-          "k_value": {
-            "name": "K værdi"
-          },
-          "name": {
-            "name": "Navn"
-          },
-          "nozzle_temp_min": {
-            "name": "Dysens minimumstemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Dysens maksimumstemperatur"
-          },
-          "remain": {
-            "name": "Resterende filament"
-          },
-          "tag_uid": {
-            "name": "Spolens serienummer"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maksimal vægt af glødetråd"
-          },
-          "remain_enabled": {
-            "name": "Resterende filamentestimering aktiveret"
-          },
-          "bed_temp": {
-            "name": "Sengetemperatur"
-          },
-          "ctype": {
-            "name": "Farvetype"
-          },
-          "dry_temp": {
-            "name": "Tørretemperatur"
-          },
-          "dry_time": {
-            "name": "Tørretid"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Bakke 3",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "color": {
-            "name": "Farve"
-          },
-          "cols": {
-            "name": "Farver"
-          },
-          "empty": {
-            "name": "Tom"
-          },
-          "k_value": {
-            "name": "K værdi"
-          },
-          "name": {
-            "name": "Navn"
-          },
-          "nozzle_temp_min": {
-            "name": "Dysens minimumstemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Dysens maksimumstemperatur"
-          },
-          "remain": {
-            "name": "Resterende filament"
-          },
-          "tag_uid": {
-            "name": "Spolens serienummer"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maksimal vægt af glødetråd"
-          },
-          "remain_enabled": {
-            "name": "Resterende filamentestimering aktiveret"
-          },
-          "bed_temp": {
-            "name": "Sengetemperatur"
-          },
-          "ctype": {
-            "name": "Farvetype"
-          },
-          "dry_temp": {
-            "name": "Tørretemperatur"
-          },
-          "dry_time": {
-            "name": "Tørretid"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Bakke 4",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "color": {
-            "name": "Farve"
-          },
-          "cols": {
-            "name": "Farver"
-          },
-          "empty": {
-            "name": "Tom"
-          },
-          "k_value": {
-            "name": "K værdi"
-          },
-          "name": {
-            "name": "Navn"
-          },
-          "nozzle_temp_min": {
-            "name": "Dysens minimumstemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Dysens maksimumstemperatur"
-          },
-          "remain": {
-            "name": "Resterende filament"
-          },
-          "tag_uid": {
-            "name": "Spolens serienummer"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "tray_weight": {
-            "name": "Maksimal vægt af glødetråd"
-          },
-          "remain_enabled": {
-            "name": "Resterende filamentestimering aktiveret"
-          },
-          "bed_temp": {
-            "name": "Sengetemperatur"
-          },
-          "ctype": {
-            "name": "Farvetype"
-          },
-          "dry_temp": {
-            "name": "Tørretemperatur"
-          },
-          "dry_time": {
-            "name": "Tørretid"
-          }
-        }
-      },
       "ip_address": {
         "name": "IP-adresse"
       },
@@ -916,6 +680,65 @@
       },
       "serial": {
         "name": "Serienummer"
+      },
+      "tray": {
+        "name": "Bakke {tray_number}",
+        "state_attributes": {
+          "active": {
+            "name": "Aktiv"
+          },
+          "color": {
+            "name": "Farve"
+          },
+          "cols": {
+            "name": "Farver"
+          },
+          "empty": {
+            "name": "Tom"
+          },
+          "k_value": {
+            "name": "K værdi"
+          },
+          "name": {
+            "name": "Navn"
+          },
+          "nozzle_temp_min": {
+            "name": "Dysens minimumstemperatur"
+          },
+          "nozzle_temp_max": {
+            "name": "Dysens maksimumstemperatur"
+          },
+          "remain": {
+            "name": "Resterende filament"
+          },
+          "tag_uid": {
+            "name": "Spolens serienummer"
+          },
+          "type": {
+            "name": "Type"
+          },
+          "remain_enabled": {
+            "name": "Resterende filamentestimering aktiveret"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "tray_weight": {
+            "name": "Maksimal vægt af glødetråd"
+          },
+          "bed_temp": {
+            "name": "Sengetemperatur"
+          },
+          "ctype": {
+            "name": "Farvetype"
+          },
+          "dry_temp": {
+            "name": "Tørretemperatur"
+          },
+          "dry_time": {
+            "name": "Tørretid"
+          }
+        }
       }
     },
     "camera": {

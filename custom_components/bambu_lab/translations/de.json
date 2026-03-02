@@ -608,242 +608,6 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Slot 1",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "bed_temp": {
-            "name": "Heizbett Temperatur"
-          },
-          "color": {
-            "name": "Farbe"
-          },
-          "cols": {
-            "name": "Farben"
-          },
-          "ctype": {
-            "name": "Farbtyp"
-          },
-          "dry_temp": {
-            "name": "Trocknungstemperatur"
-          },
-          "dry_time": {
-            "name": "Trocknungszeit"
-          },
-          "empty": {
-            "name": "Leer"
-          },
-          "k_value": {
-            "name": "K-Wert"
-          },
-          "name": {
-            "name": "Name"
-          },
-          "nozzle_temp_min": {
-            "name": "Düse Mindesttemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Düse Maximaltemperatur"
-          },
-          "remain": {
-            "name": "Verbleibende Filamentmenge"
-          },
-          "tag_uid": {
-            "name": "Seriennummer der Spule"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "remain_enabled": {
-            "name": "Berechnung verbleibendes Filament aktiviert"
-          },
-          "filament_id": {
-            "name": "Filament-ID"
-          },
-          "tray_weight": {
-            "name": "Maximales Filamentgewicht"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Slot 2",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "bed_temp": {
-            "name": "Heizbett Temperatur"
-          },
-          "color": {
-            "name": "Farbe"
-          },
-          "cols": {
-            "name": "Farben"
-          },
-          "ctype": {
-            "name": "Farbtyp"
-          },
-          "dry_temp": {
-            "name": "Trocknungstemperatur"
-          },
-          "dry_time": {
-            "name": "Trocknungszeit"
-          },
-          "empty": {
-            "name": "Leer"
-          },
-          "k_value": {
-            "name": "K-Wert"
-          },
-          "name": {
-            "name": "Name"
-          },
-          "nozzle_temp_min": {
-            "name": "Düse Mindesttemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Düse Maximaltemperatur"
-          },
-          "remain": {
-            "name": "Verbleibende Filamentmenge"
-          },
-          "tag_uid": {
-            "name": "Seriennummer der Spule"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "Filament-ID"
-          },
-          "tray_weight": {
-            "name": "Maximales Filamentgewicht"
-          },
-          "remain_enabled": {
-            "name": "Berechnung verbleibendes Filament aktiviert"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Slot 3",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "bed_temp": {
-            "name": "Heizbett Temperatur"
-          },
-          "color": {
-            "name": "Farbe"
-          },
-          "cols": {
-            "name": "Farben"
-          },
-          "ctype": {
-            "name": "Farbtyp"
-          },
-          "dry_temp": {
-            "name": "Trocknungstemperatur"
-          },
-          "dry_time": {
-            "name": "Trocknungszeit"
-          },
-          "empty": {
-            "name": "Leer"
-          },
-          "k_value": {
-            "name": "K-Wert"
-          },
-          "name": {
-            "name": "Name"
-          },
-          "nozzle_temp_min": {
-            "name": "Düse Mindesttemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Düse Maximaltemperatur"
-          },
-          "remain": {
-            "name": "Verbleibende Filamentmenge"
-          },
-          "tag_uid": {
-            "name": "Seriennummer der Spule"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "Filament-ID"
-          },
-          "tray_weight": {
-            "name": "Maximales Filamentgewicht"
-          },
-          "remain_enabled": {
-            "name": "Berechnung verbleibendes Filament aktiviert"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Slot 4",
-        "state_attributes": {
-          "active": {
-            "name": "Aktiv"
-          },
-          "bed_temp": {
-            "name": "Heizbett Temperatur"
-          },
-          "color": {
-            "name": "Farbe"
-          },
-          "cols": {
-            "name": "Farben"
-          },
-          "ctype": {
-            "name": "Farbtyp"
-          },
-          "dry_temp": {
-            "name": "Trocknungstemperatur"
-          },
-          "dry_time": {
-            "name": "Trocknungszeit"
-          },
-          "empty": {
-            "name": "Leer"
-          },
-          "k_value": {
-            "name": "K-Wert"
-          },
-          "name": {
-            "name": "Name"
-          },
-          "nozzle_temp_min": {
-            "name": "Düse Mindesttemperatur"
-          },
-          "nozzle_temp_max": {
-            "name": "Düse Maximaltemperatur"
-          },
-          "remain": {
-            "name": "Verbleibende Filamentmenge"
-          },
-          "tag_uid": {
-            "name": "Seriennummer der Spule"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "Filament-ID"
-          },
-          "tray_weight": {
-            "name": "Maximales Filamentgewicht"
-          },
-          "remain_enabled": {
-            "name": "Berechnung verbleibendes Filament aktiviert"
-          }
-        }
-      },
       "ip_address": {
         "name": "IP-Adresse"
       },
@@ -916,6 +680,65 @@
       },
       "serial": {
         "name": "Seriennummer"
+      },
+      "tray": {
+        "name": "Slot {tray_number}",
+        "state_attributes": {
+          "active": {
+            "name": "Aktiv"
+          },
+          "bed_temp": {
+            "name": "Heizbett Temperatur"
+          },
+          "color": {
+            "name": "Farbe"
+          },
+          "cols": {
+            "name": "Farben"
+          },
+          "ctype": {
+            "name": "Farbtyp"
+          },
+          "dry_temp": {
+            "name": "Trocknungstemperatur"
+          },
+          "dry_time": {
+            "name": "Trocknungszeit"
+          },
+          "empty": {
+            "name": "Leer"
+          },
+          "k_value": {
+            "name": "K-Wert"
+          },
+          "name": {
+            "name": "Name"
+          },
+          "nozzle_temp_min": {
+            "name": "Düse Mindesttemperatur"
+          },
+          "nozzle_temp_max": {
+            "name": "Düse Maximaltemperatur"
+          },
+          "remain": {
+            "name": "Verbleibende Filamentmenge"
+          },
+          "tag_uid": {
+            "name": "Seriennummer der Spule"
+          },
+          "type": {
+            "name": "Typ"
+          },
+          "remain_enabled": {
+            "name": "Berechnung verbleibendes Filament aktiviert"
+          },
+          "filament_id": {
+            "name": "Filament-ID"
+          },
+          "tray_weight": {
+            "name": "Maximales Filamentgewicht"
+          }
+        }
       }
     },
     "camera": {

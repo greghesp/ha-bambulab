@@ -614,242 +614,6 @@
           }
         }
       },
-      "tray_1": {
-        "name": "ถาด 1",
-        "state_attributes": {
-          "active": {
-            "name": "คล่องแคล่ว"
-          },
-          "color": {
-            "name": "สี"
-          },
-          "cols": {
-            "name": "สี"
-          },
-          "empty": {
-            "name": "ว่างเปล่า"
-          },
-          "k_value": {
-            "name": "ค่า k"
-          },
-          "name": {
-            "name": "ชื่อ"
-          },
-          "nozzle_temp_min": {
-            "name": "อุณหภูมิของหัวฉีด"
-          },
-          "nozzle_temp_max": {
-            "name": "อุณหภูมิสูงสุดของหัวฉีด"
-          },
-          "remain": {
-            "name": "เส้นใยที่เหลืออยู่"
-          },
-          "tag_uid": {
-            "name": "หมายเลขซีเรียล"
-          },
-          "type": {
-            "name": "พิมพ์"
-          },
-          "remain_enabled": {
-            "name": "เปิดใช้งานการประมาณเส้นใยที่เหลืออยู่"
-          },
-          "filament_id": {
-            "name": "รหัสเส้นใย"
-          },
-          "tray_weight": {
-            "name": "น้ำหนักสูงสุดของเส้นใย"
-          },
-          "bed_temp": {
-            "name": "อุณหภูมิเตียง"
-          },
-          "ctype": {
-            "name": "ประเภทสี"
-          },
-          "dry_temp": {
-            "name": "อุณหภูมิการอบแห้ง"
-          },
-          "dry_time": {
-            "name": "เวลาในการอบแห้ง"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "ถาด 2",
-        "state_attributes": {
-          "active": {
-            "name": "คล่องแคล่ว"
-          },
-          "color": {
-            "name": "สี"
-          },
-          "cols": {
-            "name": "สี"
-          },
-          "empty": {
-            "name": "ว่างเปล่า"
-          },
-          "k_value": {
-            "name": "ค่า k"
-          },
-          "name": {
-            "name": "ชื่อ"
-          },
-          "nozzle_temp_min": {
-            "name": "อุณหภูมิของหัวฉีด"
-          },
-          "nozzle_temp_max": {
-            "name": "อุณหภูมิสูงสุดของหัวฉีด"
-          },
-          "remain": {
-            "name": "เส้นใยที่เหลืออยู่"
-          },
-          "tag_uid": {
-            "name": "หมายเลขซีเรียล"
-          },
-          "type": {
-            "name": "พิมพ์"
-          },
-          "filament_id": {
-            "name": "รหัสเส้นใย"
-          },
-          "tray_weight": {
-            "name": "น้ำหนักสูงสุดของเส้นใย"
-          },
-          "remain_enabled": {
-            "name": "เปิดใช้งานการประมาณค่าเส้นใยที่เหลืออยู่"
-          },
-          "bed_temp": {
-            "name": "อุณหภูมิเตียง"
-          },
-          "ctype": {
-            "name": "ประเภทสี"
-          },
-          "dry_temp": {
-            "name": "อุณหภูมิการอบแห้ง"
-          },
-          "dry_time": {
-            "name": "เวลาในการอบแห้ง"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "ถาด 3",
-        "state_attributes": {
-          "active": {
-            "name": "คล่องแคล่ว"
-          },
-          "color": {
-            "name": "สี"
-          },
-          "cols": {
-            "name": "สี"
-          },
-          "empty": {
-            "name": "ว่างเปล่า"
-          },
-          "k_value": {
-            "name": "ค่า k"
-          },
-          "name": {
-            "name": "ชื่อ"
-          },
-          "nozzle_temp_min": {
-            "name": "อุณหภูมิของหัวฉีด"
-          },
-          "nozzle_temp_max": {
-            "name": "อุณหภูมิสูงสุดของหัวฉีด"
-          },
-          "remain": {
-            "name": "เส้นใยที่เหลืออยู่"
-          },
-          "tag_uid": {
-            "name": "หมายเลขซีเรียล"
-          },
-          "type": {
-            "name": "พิมพ์"
-          },
-          "filament_id": {
-            "name": "รหัสเส้นใย"
-          },
-          "tray_weight": {
-            "name": "น้ำหนักสูงสุดของเส้นใย"
-          },
-          "remain_enabled": {
-            "name": "เปิดใช้งานการประมาณค่าเส้นใยที่เหลืออยู่"
-          },
-          "bed_temp": {
-            "name": "อุณหภูมิเตียง"
-          },
-          "ctype": {
-            "name": "ประเภทสี"
-          },
-          "dry_temp": {
-            "name": "อุณหภูมิการอบแห้ง"
-          },
-          "dry_time": {
-            "name": "เวลาในการอบแห้ง"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "ถาด 4",
-        "state_attributes": {
-          "active": {
-            "name": "คล่องแคล่ว"
-          },
-          "color": {
-            "name": "สี"
-          },
-          "cols": {
-            "name": "สี"
-          },
-          "empty": {
-            "name": "ว่างเปล่า"
-          },
-          "k_value": {
-            "name": "ค่า k"
-          },
-          "name": {
-            "name": "ชื่อ"
-          },
-          "nozzle_temp_min": {
-            "name": "อุณหภูมิของหัวฉีด"
-          },
-          "nozzle_temp_max": {
-            "name": "อุณหภูมิสูงสุดของหัวฉีด"
-          },
-          "remain": {
-            "name": "เส้นใยที่เหลืออยู่"
-          },
-          "tag_uid": {
-            "name": "หมายเลขซีเรียล"
-          },
-          "type": {
-            "name": "พิมพ์"
-          },
-          "filament_id": {
-            "name": "รหัสเส้นใย"
-          },
-          "tray_weight": {
-            "name": "น้ำหนักสูงสุดของเส้นใย"
-          },
-          "remain_enabled": {
-            "name": "เปิดใช้งานการประมาณค่าเส้นใยที่เหลืออยู่"
-          },
-          "bed_temp": {
-            "name": "อุณหภูมิเตียง"
-          },
-          "ctype": {
-            "name": "ประเภทสี"
-          },
-          "dry_temp": {
-            "name": "อุณหภูมิการอบแห้ง"
-          },
-          "dry_time": {
-            "name": "เวลาในการอบแห้ง"
-          }
-        }
-      },
       "gcode_file_downloaded": {
         "name": "ดาวน์โหลดไฟล์ gcode"
       },
@@ -916,6 +680,65 @@
       },
       "serial": {
         "name": "หมายเลขซีเรียล"
+      },
+      "tray": {
+        "name": "ถาด {tray_number}",
+        "state_attributes": {
+          "active": {
+            "name": "คล่องแคล่ว"
+          },
+          "color": {
+            "name": "สี"
+          },
+          "cols": {
+            "name": "สี"
+          },
+          "empty": {
+            "name": "ว่างเปล่า"
+          },
+          "k_value": {
+            "name": "ค่า k"
+          },
+          "name": {
+            "name": "ชื่อ"
+          },
+          "nozzle_temp_min": {
+            "name": "อุณหภูมิของหัวฉีด"
+          },
+          "nozzle_temp_max": {
+            "name": "อุณหภูมิสูงสุดของหัวฉีด"
+          },
+          "remain": {
+            "name": "เส้นใยที่เหลืออยู่"
+          },
+          "tag_uid": {
+            "name": "หมายเลขซีเรียล"
+          },
+          "type": {
+            "name": "พิมพ์"
+          },
+          "remain_enabled": {
+            "name": "เปิดใช้งานการประมาณเส้นใยที่เหลืออยู่"
+          },
+          "filament_id": {
+            "name": "รหัสเส้นใย"
+          },
+          "tray_weight": {
+            "name": "น้ำหนักสูงสุดของเส้นใย"
+          },
+          "bed_temp": {
+            "name": "อุณหภูมิเตียง"
+          },
+          "ctype": {
+            "name": "ประเภทสี"
+          },
+          "dry_temp": {
+            "name": "อุณหภูมิการอบแห้ง"
+          },
+          "dry_time": {
+            "name": "เวลาในการอบแห้ง"
+          }
+        }
       }
     },
     "camera": {

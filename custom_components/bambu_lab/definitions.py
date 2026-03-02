@@ -740,7 +740,8 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     ),
     BambuLabAMSSensorEntityDescription(
         key="tray_1",
-        translation_key="tray_1",
+        translation_key="tray",
+        translation_placeholders={"tray_number": "1"},
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[0].name,
         extra_attributes=lambda self:
@@ -768,7 +769,8 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     ),
     BambuLabAMSSensorEntityDescription(
         key="tray_2",
-        translation_key="tray_2",
+        translation_key="tray",
+        translation_placeholders={"tray_number": "2"},
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[1].name,
         extra_attributes=lambda self:
@@ -797,7 +799,8 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     ),
     BambuLabAMSSensorEntityDescription(
         key="tray_3",
-        translation_key="tray_3",
+        translation_key="tray",
+        translation_placeholders={"tray_number": "3"},
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[2].name,
         extra_attributes=lambda self:
@@ -826,7 +829,8 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     ),
     BambuLabAMSSensorEntityDescription(
         key="tray_4",
-        translation_key="tray_4",
+        translation_key="tray",
+        translation_placeholders={"tray_number": "4"},
         icon="mdi:printer-3d-nozzle",
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].tray[3].name,
         extra_attributes=lambda self:

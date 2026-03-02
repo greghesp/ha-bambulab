@@ -605,242 +605,6 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Bandeja 1",
-        "state_attributes": {
-          "active": {
-            "name": "Ativo"
-          },
-          "color": {
-            "name": "Cor"
-          },
-          "cols": {
-            "name": "Cores"
-          },
-          "empty": {
-            "name": "Vazio"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nome"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima do bico"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima do bico"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de série do carretel"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "remain_enabled": {
-            "name": "Estimativa de filamento restante habilitada"
-          },
-          "filament_id": {
-            "name": "ID do filamento"
-          },
-          "tray_weight": {
-            "name": "Peso máximo de filamento"
-          },
-          "bed_temp": {
-            "name": "Temperatura da cama"
-          },
-          "ctype": {
-            "name": "Tipo de cor"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secagem"
-          },
-          "dry_time": {
-            "name": "Tempo de secagem"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Bandeja 2",
-        "state_attributes": {
-          "active": {
-            "name": "Ativo"
-          },
-          "color": {
-            "name": "Cor"
-          },
-          "cols": {
-            "name": "Cores"
-          },
-          "empty": {
-            "name": "Vazio"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nome"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima do bico"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima do bico"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de série do carretel"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "ID do filamento"
-          },
-          "tray_weight": {
-            "name": "Peso máximo de filamento"
-          },
-          "remain_enabled": {
-            "name": "Estimativa de filamento restante habilitada"
-          },
-          "bed_temp": {
-            "name": "Temperatura da cama"
-          },
-          "ctype": {
-            "name": "Tipo de cor"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secagem"
-          },
-          "dry_time": {
-            "name": "Tempo de secagem"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Bandeja 3",
-        "state_attributes": {
-          "active": {
-            "name": "Ativo"
-          },
-          "color": {
-            "name": "Cor"
-          },
-          "cols": {
-            "name": "Cores"
-          },
-          "empty": {
-            "name": "Vazio"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nome"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima do bico"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima do bico"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de série do carretel"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "ID do filamento"
-          },
-          "tray_weight": {
-            "name": "Peso máximo de filamento"
-          },
-          "remain_enabled": {
-            "name": "Estimativa de filamento restante habilitada"
-          },
-          "bed_temp": {
-            "name": "Temperatura da cama"
-          },
-          "ctype": {
-            "name": "Tipo de cor"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secagem"
-          },
-          "dry_time": {
-            "name": "Tempo de secagem"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Bandeja 4",
-        "state_attributes": {
-          "active": {
-            "name": "Ativo"
-          },
-          "color": {
-            "name": "Cor"
-          },
-          "cols": {
-            "name": "Cores"
-          },
-          "empty": {
-            "name": "Vazio"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nome"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima do bico"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima do bico"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de série do carretel"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "ID do filamento"
-          },
-          "tray_weight": {
-            "name": "Peso máximo de filamento"
-          },
-          "remain_enabled": {
-            "name": "Estimativa de filamento restante habilitada"
-          },
-          "bed_temp": {
-            "name": "Temperatura da cama"
-          },
-          "ctype": {
-            "name": "Tipo de cor"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secagem"
-          },
-          "dry_time": {
-            "name": "Tempo de secagem"
-          }
-        }
-      },
       "ip_address": {
         "name": "Endereço IP"
       },
@@ -916,6 +680,65 @@
       },
       "serial": {
         "name": "Número de série"
+      },
+      "tray": {
+        "name": "Bandeja {tray_number}",
+        "state_attributes": {
+          "active": {
+            "name": "Ativo"
+          },
+          "color": {
+            "name": "Cor"
+          },
+          "cols": {
+            "name": "Cores"
+          },
+          "empty": {
+            "name": "Vazio"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nome"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima do bico"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura máxima do bico"
+          },
+          "remain": {
+            "name": "Filamento restante"
+          },
+          "tag_uid": {
+            "name": "Número de série do carretel"
+          },
+          "type": {
+            "name": "Tipo"
+          },
+          "remain_enabled": {
+            "name": "Estimativa de filamento restante habilitada"
+          },
+          "filament_id": {
+            "name": "ID do filamento"
+          },
+          "tray_weight": {
+            "name": "Peso máximo de filamento"
+          },
+          "bed_temp": {
+            "name": "Temperatura da cama"
+          },
+          "ctype": {
+            "name": "Tipo de cor"
+          },
+          "dry_temp": {
+            "name": "Temperatura de secagem"
+          },
+          "dry_time": {
+            "name": "Tempo de secagem"
+          }
+        }
       }
     },
     "camera": {
