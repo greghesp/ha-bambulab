@@ -605,242 +605,6 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Bandeja 1",
-        "state_attributes": {
-          "active": {
-            "name": "Activa"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "cols": {
-            "name": "Colores"
-          },
-          "empty": {
-            "name": "Vacía"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nombre"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima de la boquilla"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima de la boquilla"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de serie del rollo"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "remain_enabled": {
-            "name": "Estimación de filamentos restante habilitada"
-          },
-          "filament_id": {
-            "name": "Filamento ID"
-          },
-          "tray_weight": {
-            "name": "Peso máximo del filamento"
-          },
-          "bed_temp": {
-            "name": "temperatura de la cama"
-          },
-          "ctype": {
-            "name": "tipo de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secado"
-          },
-          "dry_time": {
-            "name": "tiempo de secado"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Bandeja 2",
-        "state_attributes": {
-          "active": {
-            "name": "Activa"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "cols": {
-            "name": "Colores"
-          },
-          "empty": {
-            "name": "Vacía"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nombre"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima de la boquilla"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima de la boquilla"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de serie del rollo"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "Filamento ID"
-          },
-          "tray_weight": {
-            "name": "Peso máximo del filamento"
-          },
-          "remain_enabled": {
-            "name": "Estimación de filamentos restante habilitada"
-          },
-          "bed_temp": {
-            "name": "temperatura de la cama"
-          },
-          "ctype": {
-            "name": "tipo de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secado"
-          },
-          "dry_time": {
-            "name": "tiempo de secado"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Bandeja 3",
-        "state_attributes": {
-          "active": {
-            "name": "Activa"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "cols": {
-            "name": "Colores"
-          },
-          "empty": {
-            "name": "Vacía"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nombre"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima de la boquilla"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima de la boquilla"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de serie del rollo"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "Filamento ID"
-          },
-          "tray_weight": {
-            "name": "Peso máximo del filamento"
-          },
-          "remain_enabled": {
-            "name": "Estimación de filamentos restante habilitada"
-          },
-          "bed_temp": {
-            "name": "temperatura de la cama"
-          },
-          "ctype": {
-            "name": "tipo de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secado"
-          },
-          "dry_time": {
-            "name": "tiempo de secado"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Bandeja 4",
-        "state_attributes": {
-          "active": {
-            "name": "Activa"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "cols": {
-            "name": "Colores"
-          },
-          "empty": {
-            "name": "Vacía"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nombre"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima de la boquilla"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura máxima de la boquilla"
-          },
-          "remain": {
-            "name": "Filamento restante"
-          },
-          "tag_uid": {
-            "name": "Número de serie del rollo"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "Filamento ID"
-          },
-          "tray_weight": {
-            "name": "Peso máximo del filamento"
-          },
-          "remain_enabled": {
-            "name": "Estimación de filamentos restante habilitada"
-          },
-          "bed_temp": {
-            "name": "temperatura de la cama"
-          },
-          "ctype": {
-            "name": "tipo de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura de secado"
-          },
-          "dry_time": {
-            "name": "tiempo de secado"
-          }
-        }
-      },
       "ip_address": {
         "name": "dirección IP"
       },
@@ -916,6 +680,65 @@
       },
       "serial": {
         "name": "Número de serie"
+      },
+      "tray": {
+        "name": "Bandeja {tray_number}",
+        "state_attributes": {
+          "active": {
+            "name": "Activa"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "cols": {
+            "name": "Colores"
+          },
+          "empty": {
+            "name": "Vacía"
+          },
+          "k_value": {
+            "name": "Valor K"
+          },
+          "name": {
+            "name": "Nombre"
+          },
+          "nozzle_temp_min": {
+            "name": "Temperatura mínima de la boquilla"
+          },
+          "nozzle_temp_max": {
+            "name": "Temperatura máxima de la boquilla"
+          },
+          "remain": {
+            "name": "Filamento restante"
+          },
+          "tag_uid": {
+            "name": "Número de serie del rollo"
+          },
+          "type": {
+            "name": "Tipo"
+          },
+          "remain_enabled": {
+            "name": "Estimación de filamentos restante habilitada"
+          },
+          "filament_id": {
+            "name": "Filamento ID"
+          },
+          "tray_weight": {
+            "name": "Peso máximo del filamento"
+          },
+          "bed_temp": {
+            "name": "temperatura de la cama"
+          },
+          "ctype": {
+            "name": "tipo de color"
+          },
+          "dry_temp": {
+            "name": "Temperatura de secado"
+          },
+          "dry_time": {
+            "name": "tiempo de secado"
+          }
+        }
       }
     },
     "camera": {
