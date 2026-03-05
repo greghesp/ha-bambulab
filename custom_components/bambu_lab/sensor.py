@@ -13,11 +13,14 @@ from .definitions import (
     PRINTER_SENSORS,
     VIRTUAL_TRAY_SENSORS,
     AMS_SENSORS,
+    HOTEND_RACK_SENSORS,
+    HOTEND_RACK_HOTEND_SENSORS,
     BambuLabAMSSensorEntityDescription,
+    BambuLabHotendRackSensorEntityDescription,
     BambuLabSensorEntityDescription,
 )
 from .coordinator import BambuDataUpdateCoordinator
-from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity
+from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
 from .pybambu.const import Features
 
 
@@ -44,6 +47,14 @@ async def async_setup_entry(
         for index in coordinator.get_model().ams.data.keys():
             if sensor.exists_fn(coordinator, index):
                 async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
+
+    if coordinator.get_model().supports_feature(Features.HOTEND_RACK):
+        for sensor in HOTEND_RACK_SENSORS:
+            if sensor.exists_fn(coordinator):
+                async_add_entities([BambuLabHotendRackSensor(coordinator, sensor)])
+        for sensor in HOTEND_RACK_HOTEND_SENSORS:
+            if sensor.exists_fn(coordinator):
+                async_add_entities([BambuLabHotendSensor(coordinator, sensor)])
 
     for sensor in PRINTER_SENSORS:
         if sensor.exists_fn(coordinator):
@@ -206,4 +217,56 @@ class BambuLabVirtualTraySensor(VirtualTrayEntity, SensorEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
+        return self.entity_description.available_fn(self)
+
+
+class BambuLabHotendRackSensor(HotendRackEntity, SensorEntity):
+    """Sensor for Hotend Rack system-level data."""
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            description: BambuLabHotendRackSensorEntityDescription,
+    ) -> None:
+        super().__init__(coordinator=coordinator)
+        self.entity_description = description
+        printer = coordinator.get_model().info
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_HotendRack_{description.key}"
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return self.entity_description.extra_attributes(self)
+
+    @property
+    def native_value(self) -> datetime | StateType:
+        return self.entity_description.value_fn(self)
+
+    @property
+    def available(self) -> bool:
+        return self.entity_description.available_fn(self)
+
+
+class BambuLabHotendSensor(HotendRackEntity, SensorEntity):
+    """Sensor for an individual hotend in the Hotend Rack."""
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            description: BambuLabHotendRackSensorEntityDescription,
+    ) -> None:
+        super().__init__(coordinator=coordinator)
+        self.entity_description = description
+        printer = coordinator.get_model().info
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_HotendRack_{description.key}"
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return self.entity_description.extra_attributes(self)
+
+    @property
+    def native_value(self) -> datetime | StateType:
+        return self.entity_description.value_fn(self)
+
+    @property
+    def available(self) -> bool:
         return self.entity_description.available_fn(self)

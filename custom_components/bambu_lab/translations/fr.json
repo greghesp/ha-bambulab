@@ -841,6 +841,129 @@
           }
         }
       },
+      "hotend_rack_active_hotend": {
+        "name": "Tête active",
+        "state": {
+          "standard_0_2": "0.2mm Standard",
+          "standard_0_4": "0.4mm Standard",
+          "standard_0_6": "0.6mm Standard",
+          "standard_0_8": "0.8mm Standard",
+          "high_flow_0_2": "0.2mm Haut débit",
+          "high_flow_0_4": "0.4mm Haut débit",
+          "high_flow_0_6": "0.6mm Haut débit",
+          "high_flow_0_8": "0.8mm Haut débit",
+          "unknown": "Inconnu"
+        },
+        "state_attributes": {
+          "id": {
+            "name": "ID"
+          },
+          "source_hotend": {
+            "name": "Tête source"
+          },
+          "diameter": {
+            "name": "Diamètre"
+          },
+          "type": {
+            "name": "Type"
+          },
+          "type_code": {
+            "name": "Code type"
+          },
+          "serial": {
+            "name": "Numéro de série"
+          },
+          "max_temp": {
+            "name": "Température maximale"
+          },
+          "wear": {
+            "name": "Usure"
+          },
+          "status": {
+            "name": "Statut"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "filament_id": {
+            "name": "ID filament"
+          },
+          "filament_name": {
+            "name": "Nom du filament"
+          }
+        }
+      },
+      "hotend_rack_holder_position": {
+        "name": "Position du support",
+        "state": {
+          "unknown": "Inconnu",
+          "a_top": "Position A",
+          "b_top": "Position B",
+          "centre": "Centre"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "État du support",
+        "state": {
+          "unknown": "Inconnu",
+          "idle": "Inactif",
+          "hotend_centre": "Centrage tête",
+          "toolhead_centre": "Centrage chariot",
+          "calibrate_hotend_rack": "Calibration du rack",
+          "cut_material": "Coupe du filament",
+          "unlock_hotend": "Déverrouillage tête",
+          "lift_hotend_rack": "Levage du rack",
+          "place_hotend": "Placement tête",
+          "pick_hotend": "Prise tête",
+          "lock_hotend": "Verrouillage tête"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Tête {hotend_id}",
+        "state": {
+          "standard_0_2": "0.2mm Standard",
+          "standard_0_4": "0.4mm Standard",
+          "standard_0_6": "0.6mm Standard",
+          "standard_0_8": "0.8mm Standard",
+          "high_flow_0_2": "0.2mm Haut débit",
+          "high_flow_0_4": "0.4mm Haut débit",
+          "high_flow_0_6": "0.6mm Haut débit",
+          "high_flow_0_8": "0.8mm Haut débit",
+          "empty": "Vide"
+        },
+        "state_attributes": {
+          "diameter": {
+            "name": "Diamètre"
+          },
+          "type": {
+            "name": "Type"
+          },
+          "type_code": {
+            "name": "Code type"
+          },
+          "serial": {
+            "name": "Numéro de série"
+          },
+          "max_temp": {
+            "name": "Température maximale"
+          },
+          "wear": {
+            "name": "Usure"
+          },
+          "status": {
+            "name": "Statut"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "filament_id": {
+            "name": "ID de filament"
+          },
+          "filament_name": {
+            "name": "Nom du filament"
+          }
+        }
+      },
       "ip_address": {
         "name": "Adresse IP"
       },

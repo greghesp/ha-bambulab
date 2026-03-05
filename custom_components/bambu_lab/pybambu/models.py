@@ -88,6 +88,7 @@ class Device:
         self.home_flag = HomeFlag(client=client)
         self.extruder = Extruder(client=client)
         self.extruder_tool = ExtruderTool(client=client)
+        self.hotend_rack = HotendRack(client=client)
         self.push_all_data = None
         self.get_version_data = None
         self.chamber_image = ChamberImage(client = client)
@@ -115,6 +116,7 @@ class Device:
         send_event = send_event | self.home_flag.print_update(data = data)
         send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
+        send_event = send_event | self.hotend_rack.print_update(data = data)
 
         if data.get("command") == "push_status":
             if data.get("msg", 0) == 0:
@@ -273,6 +275,8 @@ class Device:
             return model in h2_printers
         elif feature == Features.SECONDARY_AUX_FAN:
             return model in p2_printers
+        elif feature == Features.HOTEND_RACK:
+            return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -2365,6 +2369,137 @@ class Info:
             "05": "tungsten_carbide",
         }
         return flow_prefix + _MATERIALS.get(material_code, "unknown")
+
+
+class Hotend:
+    """Represents a single hotend in the Hotend Rack."""
+
+    def __init__(self, hotend_id: int):
+        self.id = hotend_id
+        self.diameter: float = 0.0
+        self.type_code: str = ""
+        self.type_name: str = "unknown"
+        self.serial: str = ""
+        self.tm: int = 0
+        self.wear: int = 0
+        self.stat: int = 0
+        self.color_m: str = "00000000"
+        self.fila_id: str = ""
+        self._active: bool = False
+
+    @property
+    def active(self) -> bool:
+        return self._active
+
+    @active.setter
+    def active(self, value: bool):
+        self._active = value
+
+    @property
+    def flow_type(self) -> str:
+        if not self.type_code or len(self.type_code) < 2:
+            return "Unknown"
+        return "High Flow" if self.type_code[1] == "H" else "Standard"
+
+    @property
+    def status_name(self) -> str:
+        status_bits = (self.stat >> 1) & 0x3
+        return {0: "normal", 1: "abnormal", 2: "unknown"}.get(status_bits, "unknown")
+
+    def print_update(self, data: dict) -> bool:
+        old_data = f"{self.__dict__}"
+        self.diameter = data.get("diameter", self.diameter)
+        type_code = data.get("type", self.type_code)
+        if type_code != self.type_code:
+            self.type_code = type_code
+            self.type_name = Info._nozzle_type_name(type_code) if type_code else "unknown"
+        self.serial = data.get("sn", self.serial)
+        self.tm = data.get("tm", self.tm)
+        self.wear = data.get("wear", self.wear)
+        self.stat = data.get("stat", self.stat)
+        self.color_m = data.get("color_m", self.color_m)
+        self.fila_id = data.get("fila_id", self.fila_id)
+        return old_data != f"{self.__dict__}"
+
+
+class HotendRack:
+    """Manages the Hotend Rack (Vortek tool changer) system."""
+
+    RACK_SLOT_IDS = range(16, 22)  # IDs 16-21
+
+    def __init__(self, client):
+        self._client = client
+        self.hotends: dict[int, Hotend] = {}
+        self.exist_bitmask: int = 0
+        self.state: int = 0
+        self.src_id: int = 0
+        self.tar_id: int = 0
+        self.holder_pos: int = 0
+        self.holder_stat: int = 0
+
+    def is_slot_occupied(self, slot_id: int) -> bool:
+        """Check if a rack slot physically has a hotend."""
+        return bool(self.exist_bitmask & (1 << slot_id))
+
+    def _is_vortek_system(self, exist_bitmask: int, nozzle_info: list | None) -> bool:
+        """Check if any hotend ID >= 16 exists in the bitmask or info array."""
+        if exist_bitmask >= (1 << 16):
+            return True
+        if nozzle_info is not None and isinstance(nozzle_info, list):
+            return any(entry.get("id", 0) >= 16 for entry in nozzle_info)
+        return False
+
+    def print_update(self, data) -> bool:
+        changed = False
+
+        nozzle_data = data.get("device", {}).get("nozzle", {})
+        if not nozzle_data:
+            return False
+
+        exist = nozzle_data.get("exist", self.exist_bitmask)
+        nozzle_info = nozzle_data.get("info")
+
+        if not self._is_vortek_system(exist, nozzle_info):
+            return False
+
+        if self.exist_bitmask != exist:
+            self.exist_bitmask = exist
+            changed = True
+
+        for attr, key in [("state", "state"), ("src_id", "src_id"), ("tar_id", "tar_id")]:
+            value = nozzle_data.get(key)
+            if value is not None and value != getattr(self, attr):
+                setattr(self, attr, value)
+                changed = True
+
+        # Initialize rack slots that don't exist yet
+        for slot_id in self.RACK_SLOT_IDS:
+            if slot_id not in self.hotends:
+                self.hotends[slot_id] = Hotend(slot_id)
+
+        # Update hotend data from info array
+        if nozzle_info is not None and isinstance(nozzle_info, list):
+            for entry in nozzle_info:
+                nid = entry.get("id")
+                if nid is not None and nid in self.hotends:
+                    # Rack slot data (IDs 16-21)
+                    if self.hotends[nid].print_update(entry):
+                        changed = True
+                elif nid is not None and nid < 16 and entry.get("type") and entry.get("sn", "N/A") != "N/A" and self.tar_id in self.hotends:
+                    # Extruder nozzle with valid serial — update the mounted hotend's rack slot
+                    if self.hotends[self.tar_id].print_update(entry):
+                        changed = True
+
+        # Holder data
+        holder_data = data.get("device", {}).get("holder", {})
+        if holder_data:
+            for attr, key in [("holder_pos", "pos"), ("holder_stat", "stat")]:
+                value = holder_data.get(key)
+                if value is not None and value != getattr(self, attr):
+                    setattr(self, attr, value)
+                    changed = True
+
+        return changed
 
 
 @dataclass
