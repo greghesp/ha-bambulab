@@ -870,8 +870,8 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
 )
 
 HOTEND_OPTIONS = [
-    f"{d}_{f}"
-    for d in ["0.2", "0.4", "0.6", "0.8"]
+    f"{f}_{d}"
+    for d in ["0_2", "0_4", "0_6", "0_8"]
     for f in ["standard", "high_flow"]
 ] + ["empty"]
 
@@ -884,7 +884,7 @@ HOTEND_RACK_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = (
         options=HOTEND_OPTIONS + ["unknown"],
         value_fn=lambda self: (
             lambda rack: (
-                lambda h: f"{h.diameter}_{h.flow_type.lower().replace(' ', '_')}" if h and h.type_code else "unknown"
+                lambda h: f"{h.flow_type.lower().replace(' ', '_')}_{str(h.diameter).replace('.', '_')}" if h and h.type_code else "unknown"
             )(rack.hotends.get(rack.tar_id))
         )(self.coordinator.get_model().hotend_rack),
         extra_attributes=lambda self: (
@@ -960,7 +960,7 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
         hotend_id=slot_id,
         value_fn=lambda self: (
             lambda rack, sid: (
-                f"{rack.hotends[sid].diameter}_{rack.hotends[sid].flow_type.lower().replace(' ', '_')}"
+                f"{rack.hotends[sid].flow_type.lower().replace(' ', '_')}_{str(rack.hotends[sid].diameter).replace('.', '_')}"
                 if rack.is_slot_occupied(sid) and rack.hotends[sid].type_code else "empty"
             )
         )(self.coordinator.get_model().hotend_rack, self.entity_description.hotend_id),
