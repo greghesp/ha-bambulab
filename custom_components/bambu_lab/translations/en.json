@@ -916,6 +916,109 @@
             "name": "Maximum weight of filament"
           }
         }
+      },
+      "hotend_rack_active_hotend": {
+        "name": "Active hotend",
+        "state": {
+          "0.2_standard": "0.2mm Standard",
+          "0.4_standard": "0.4mm Standard",
+          "0.6_standard": "0.6mm Standard",
+          "0.8_standard": "0.8mm Standard",
+          "0.2_high_flow": "0.2mm High Flow",
+          "0.4_high_flow": "0.4mm High Flow",
+          "0.6_high_flow": "0.6mm High Flow",
+          "0.8_high_flow": "0.8mm High Flow",
+          "unknown": "Unknown"
+        },
+        "state_attributes": {
+          "id": {
+            "name": "ID"
+          },
+          "source_hotend": {
+            "name": "Source hotend"
+          },
+          "diameter": {
+            "name": "Diameter"
+          },
+          "type": {
+            "name": "Type"
+          },
+          "type_code": {
+            "name": "Type code"
+          },
+          "serial": {
+            "name": "Serial number"
+          },
+          "max_temp": {
+            "name": "Max temperature"
+          },
+          "wear": {
+            "name": "Wear"
+          },
+          "status": {
+            "name": "Status"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "filament_name": {
+            "name": "Filament name"
+          }
+        }
+      },
+      "hotend_rack_holder_position": {
+        "name": "Holder position",
+        "state": {
+          "unknown": "Unknown",
+          "a_top": "Position A",
+          "b_top": "Position B",
+          "centre": "Centre"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Holder state",
+        "state": {
+          "unknown": "Unknown",
+          "idle": "Idle",
+          "hotend_centre": "Centering hotend",
+          "toolhead_centre": "Centering toolhead",
+          "calibrate_hotend_rack": "Calibrating rack",
+          "cut_material": "Cutting material",
+          "unlock_hotend": "Unlocking hotend",
+          "lift_hotend_rack": "Lifting rack",
+          "place_hotend": "Placing hotend",
+          "pick_hotend": "Picking hotend",
+          "lock_hotend": "Locking hotend"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "0.2_standard": "0.2mm Standard",
+          "0.4_standard": "0.4mm Standard",
+          "0.6_standard": "0.6mm Standard",
+          "0.8_standard": "0.8mm Standard",
+          "0.2_high_flow": "0.2mm High Flow",
+          "0.4_high_flow": "0.4mm High Flow",
+          "0.6_high_flow": "0.6mm High Flow",
+          "0.8_high_flow": "0.8mm High Flow",
+          "empty": "Empty"
+        },
+        "state_attributes": {
+          "diameter": { "name": "Diameter" },
+          "type": { "name": "Type" },
+          "type_code": { "name": "Type code" },
+          "serial": { "name": "Serial number" },
+          "max_temp": { "name": "Max temperature" },
+          "wear": { "name": "Wear" },
+          "status": { "name": "Status" },
+          "color": { "name": "Color" },
+          "filament_id": { "name": "Filament ID" },
+          "filament_name": { "name": "Filament name" }
+        }
       }
     },
     "camera": {

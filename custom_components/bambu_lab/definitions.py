@@ -43,6 +43,7 @@ from .pybambu.const import (
     FansEnum,
     Features,
 )
+from .pybambu.utils import get_filament_name
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
@@ -83,6 +84,19 @@ class BambuLabAMSSensorEntityDescription(
     exists_fn: Callable[[BambuDataUpdateCoordinator, int], bool] = lambda coordinator, index: True
     extra_attributes: Callable[..., dict] = lambda _: {}
     icon_fn: Callable[..., str] = lambda _: None
+
+
+@dataclass
+class BambuLabHotendRackSensorEntityDescription(
+    SensorEntityDescription, BambuLabSensorEntityDescriptionMixin
+):
+    """Sensor entity description for Bambu Lab Hotend Rack."""
+
+    available_fn: Callable[..., bool] = lambda _: True
+    exists_fn: Callable[..., bool] = lambda _: True
+    extra_attributes: Callable[..., dict] = lambda _: {}
+    icon_fn: Callable[..., str] = lambda _: None
+    hotend_id: int | None = None
 
 
 @dataclass
@@ -853,4 +867,133 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         },
         exists_fn=lambda coordinator, index: coordinator.get_model().ams.data[index].model != "AMS HT",
     ),
+)
+
+HOTEND_OPTIONS = [
+    f"{d}_{f}"
+    for d in ["0.2", "0.4", "0.6", "0.8"]
+    for f in ["standard", "high_flow"]
+] + ["empty"]
+
+HOTEND_RACK_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = (
+    BambuLabHotendRackSensorEntityDescription(
+        key="active_hotend",
+        translation_key="hotend_rack_active_hotend",
+        icon="mdi:printer-3d-nozzle",
+        device_class=SensorDeviceClass.ENUM,
+        options=HOTEND_OPTIONS + ["unknown"],
+        value_fn=lambda self: (
+            lambda rack: (
+                lambda h: f"{h.diameter}_{h.flow_type.lower().replace(' ', '_')}" if h and h.type_code else "unknown"
+            )(rack.hotends.get(rack.tar_id))
+        )(self.coordinator.get_model().hotend_rack),
+        extra_attributes=lambda self: (
+            lambda rack, cf: (
+                lambda h: {
+                    "id": rack.tar_id - 15 if rack.tar_id >= 16 else rack.tar_id,
+                    "source_hotend": rack.src_id - 15 if rack.src_id >= 16 else rack.src_id,
+                    **(
+                        {
+                            "diameter": h.diameter,
+                            "type": h.type_name,
+                            "type_code": h.type_code,
+                            "serial": h.serial,
+                            "max_temp": h.tm,
+                            "wear": h.wear,
+                            "status": h.status_name,
+                            "color": f"#{h.color_m}",
+                            "filament_id": h.fila_id,
+                            "filament_name": get_filament_name(h.fila_id, cf),
+                        }
+                        if h and h.type_code else {
+                            "diameter": None,
+                            "type": None,
+                            "type_code": None,
+                            "serial": None,
+                            "max_temp": None,
+                            "wear": None,
+                            "status": None,
+                            "color": None,
+                            "filament_id": None,
+                            "filament_name": None,
+                        }
+                    ),
+                }
+            )(rack.hotends.get(rack.tar_id))
+        )(self.coordinator.get_model().hotend_rack, self.coordinator.client.slicer_settings.custom_filaments),
+    ),
+    BambuLabHotendRackSensorEntityDescription(
+        key="holder_position",
+        translation_key="hotend_rack_holder_position",
+        icon="mdi:robot-industrial",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=SensorDeviceClass.ENUM,
+        options=["unknown", "a_top", "b_top", "centre"],
+        value_fn=lambda self: {0: "unknown", 1: "a_top", 2: "b_top", 3: "centre"}.get(
+            self.coordinator.get_model().hotend_rack.holder_pos, "unknown"
+        ),
+    ),
+    BambuLabHotendRackSensorEntityDescription(
+        key="holder_state",
+        translation_key="hotend_rack_holder_state",
+        icon="mdi:robot-industrial",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=SensorDeviceClass.ENUM,
+        options=["unknown", "idle", "hotend_centre", "toolhead_centre", "calibrate_hotend_rack",
+                 "cut_material", "unlock_hotend", "lift_hotend_rack", "place_hotend", "pick_hotend", "lock_hotend"],
+        value_fn=lambda self: {
+            -1: "unknown", 0: "idle", 1: "hotend_centre", 2: "toolhead_centre",
+            3: "calibrate_hotend_rack", 4: "cut_material", 5: "unlock_hotend",
+            6: "lift_hotend_rack", 7: "place_hotend", 8: "pick_hotend", 9: "lock_hotend",
+        }.get(self.coordinator.get_model().hotend_rack.holder_stat, "unknown"),
+    ),
+)
+
+def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEntityDescription:
+    return BambuLabHotendRackSensorEntityDescription(
+        key=f"hotend_{slot_id}",
+        translation_key="hotend_rack_hotend",
+        translation_placeholders={"hotend_id": str(display_id)},
+        icon="mdi:printer-3d-nozzle",
+        device_class=SensorDeviceClass.ENUM,
+        options=HOTEND_OPTIONS,
+        hotend_id=slot_id,
+        value_fn=lambda self: (
+            lambda rack, sid: (
+                f"{rack.hotends[sid].diameter}_{rack.hotends[sid].flow_type.lower().replace(' ', '_')}"
+                if rack.is_slot_occupied(sid) and rack.hotends[sid].type_code else "empty"
+            )
+        )(self.coordinator.get_model().hotend_rack, self.entity_description.hotend_id),
+        extra_attributes=lambda self: (
+            lambda rack, sid, cf: (
+                {
+                    "diameter": rack.hotends[sid].diameter,
+                    "type": rack.hotends[sid].type_name,
+                    "type_code": rack.hotends[sid].type_code,
+                    "serial": rack.hotends[sid].serial,
+                    "max_temp": rack.hotends[sid].tm,
+                    "wear": rack.hotends[sid].wear,
+                    "status": rack.hotends[sid].status_name,
+                    "color": f"#{rack.hotends[sid].color_m}",
+                    "filament_id": rack.hotends[sid].fila_id,
+                    "filament_name": get_filament_name(rack.hotends[sid].fila_id, cf),
+                } if rack.is_slot_occupied(sid) else {
+                    "diameter": None,
+                    "type": None,
+                    "type_code": None,
+                    "serial": None,
+                    "max_temp": None,
+                    "wear": None,
+                    "status": None,
+                    "color": None,
+                    "filament_id": None,
+                    "filament_name": None,
+                }
+            )
+        )(self.coordinator.get_model().hotend_rack, self.entity_description.hotend_id,
+          self.coordinator.client.slicer_settings.custom_filaments),
+    )
+
+HOTEND_RACK_HOTEND_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = tuple(
+    _hotend_sensor(slot_id, slot_id - 15) for slot_id in range(16, 22)
 )
