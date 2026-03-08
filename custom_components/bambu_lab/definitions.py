@@ -869,19 +869,11 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     ),
 )
 
-HOTEND_OPTIONS = [
-    f"{f}_{d}"
-    for d in ["0_2", "0_4", "0_6", "0_8"]
-    for f in ["standard", "high_flow"]
-] + ["empty"]
-
 HOTEND_RACK_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = (
     BambuLabHotendRackSensorEntityDescription(
         key="active_hotend",
         translation_key="hotend_rack_active_hotend",
         icon="mdi:printer-3d-nozzle",
-        device_class=SensorDeviceClass.ENUM,
-        options=HOTEND_OPTIONS + ["unknown"],
         value_fn=lambda self: (
             lambda rack: (
                 lambda h: f"{h.flow_type.lower().replace(' ', '_')}_{str(h.diameter).replace('.', '_')}" if h and h.type_code else "unknown"
@@ -957,8 +949,6 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
         translation_key="hotend_rack_hotend",
         translation_placeholders={"hotend_id": str(display_id)},
         icon="mdi:printer-3d-nozzle",
-        device_class=SensorDeviceClass.ENUM,
-        options=HOTEND_OPTIONS,
         hotend_id=slot_id,
         value_fn=lambda self: (
             lambda rack, sid: (
