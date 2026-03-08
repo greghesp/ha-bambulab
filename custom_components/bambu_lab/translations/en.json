@@ -940,6 +940,9 @@
           "diameter": {
             "name": "Diameter"
           },
+          "flow_type": {
+            "name": "Flow type"
+          },
           "type": {
             "name": "Type"
           },
@@ -1009,6 +1012,7 @@
         },
         "state_attributes": {
           "diameter": { "name": "Diameter" },
+          "flow_type": { "name": "Flow type" },
           "type": { "name": "Type" },
           "type_code": { "name": "Type code" },
           "serial": { "name": "Serial number" },

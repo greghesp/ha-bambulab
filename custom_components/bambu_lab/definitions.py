@@ -895,6 +895,7 @@ HOTEND_RACK_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = (
                     **(
                         {
                             "diameter": h.diameter,
+                            "flow_type": h.flow_type,
                             "type": h.type_name,
                             "type_code": h.type_code,
                             "serial": h.serial,
@@ -907,6 +908,7 @@ HOTEND_RACK_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = (
                         }
                         if h and h.type_code else {
                             "diameter": None,
+                            "flow_type": None,
                             "type": None,
                             "type_code": None,
                             "serial": None,
@@ -968,6 +970,7 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
             lambda rack, sid, cf: (
                 {
                     "diameter": rack.hotends[sid].diameter,
+                    "flow_type": rack.hotends[sid].flow_type,
                     "type": rack.hotends[sid].type_name,
                     "type_code": rack.hotends[sid].type_code,
                     "serial": rack.hotends[sid].serial,
@@ -979,6 +982,7 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
                     "filament_name": get_filament_name(rack.hotends[sid].fila_id, cf),
                 } if rack.is_slot_occupied(sid) else {
                     "diameter": None,
+                    "flow_type": None,
                     "type": None,
                     "type_code": None,
                     "serial": None,

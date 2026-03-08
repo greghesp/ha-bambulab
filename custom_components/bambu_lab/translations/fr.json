@@ -864,6 +864,9 @@
           "diameter": {
             "name": "Diamètre"
           },
+          "flow_type": {
+            "name": "Type de débit"
+          },
           "type": {
             "name": "Type"
           },
@@ -934,6 +937,9 @@
         "state_attributes": {
           "diameter": {
             "name": "Diamètre"
+          },
+          "flow_type": {
+            "name": "Type de débit"
           },
           "type": {
             "name": "Type"
