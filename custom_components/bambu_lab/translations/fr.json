@@ -870,7 +870,7 @@
         "name": "Tête {hotend_id}",
         "state": {
           "mounted": "Monté",
-          "occupied": "Occupé",
+          "docked": "Rangé",
           "empty": "Vide"
         },
         "state_attributes": {

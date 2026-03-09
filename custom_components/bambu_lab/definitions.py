@@ -904,12 +904,12 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
         translation_placeholders={"hotend_id": str(display_id)},
         icon="mdi:printer-3d-nozzle",
         device_class=SensorDeviceClass.ENUM,
-        options=["mounted", "occupied", "empty"],
+        options=["mounted", "docked", "empty"],
         hotend_id=slot_id,
         value_fn=lambda self: (
             lambda rack, sid: (
                 "mounted" if sid == rack.tar_id
-                else "occupied" if rack.is_slot_occupied(sid)
+                else "docked" if rack.is_slot_occupied(sid)
                 else "empty"
             )
         )(self.coordinator.get_model().hotend_rack, self.entity_description.hotend_id),

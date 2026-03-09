@@ -946,7 +946,7 @@
         "name": "Hotend {hotend_id}",
         "state": {
           "mounted": "Mounted",
-          "occupied": "Occupied",
+          "docked": "Docked",
           "empty": "Empty"
         },
         "state_attributes": {
