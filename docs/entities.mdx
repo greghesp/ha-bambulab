@@ -134,15 +134,13 @@ H2C only (Vortek system).
 
 | Sensor         | Notes                                                      |
 | -------------- | ---------------------------------------------------------- |
-| Hotend 1-6     | Nozzle type per rack slot (e.g. "0.4mm Standard") or Empty |
-| Active hotend  | Currently mounted hotend                                   |
+| Hotend 1-6     | Mounted, Occupied, or Empty |
 
 | Hotend attributes: | Notes                            |
 | ------------------ | -------------------------------- |
-| Diameter           |                                  |
-| Flow type          | Standard or High Flow            |
-| Type               |                                  |
-| Type code          |                                  |
+| Slot               | Slot number (1-6)                |
+| Nozzle type        | e.g. Hardened steel, High flow stainless steel |
+| Nozzle diameter    |                                  |
 | Serial             |                                  |
 | Max temperature    |                                  |
 | Wear               |                                  |
@@ -152,13 +150,6 @@ H2C only (Vortek system).
 | Filament name      |                                  |
 
 When a slot is empty, all attributes are set to `None`.
-
-Active hotend has additional attributes:
-
-| Attribute      | Notes                            |
-| -------------- | -------------------------------- |
-| ID             | Hotend number (1-6)              |
-| Source hotend  | Previously mounted hotend number |
 
 | Diagnostic sensor  | Notes                                                                    |
 | ------------------ | ------------------------------------------------------------------------ |

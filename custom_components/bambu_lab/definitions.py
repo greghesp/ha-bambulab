@@ -871,52 +871,6 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
 
 HOTEND_RACK_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = (
     BambuLabHotendRackSensorEntityDescription(
-        key="active_hotend",
-        translation_key="hotend_rack_active_hotend",
-        icon="mdi:printer-3d-nozzle",
-        value_fn=lambda self: (
-            lambda rack: (
-                lambda h: f"{h.flow_type.lower().replace(' ', '_')}_{str(h.diameter).replace('.', '_')}" if h and h.type_code else "unknown"
-            )(rack.hotends.get(rack.tar_id))
-        )(self.coordinator.get_model().hotend_rack),
-        extra_attributes=lambda self: (
-            lambda rack, cf: (
-                lambda h: {
-                    "id": rack.tar_id - 15 if rack.tar_id >= 16 else rack.tar_id,
-                    "source_hotend": rack.src_id - 15 if rack.src_id >= 16 else rack.src_id,
-                    **(
-                        {
-                            "diameter": h.diameter,
-                            "flow_type": h.flow_type,
-                            "type": h.type_name,
-                            "type_code": h.type_code,
-                            "serial": h.serial,
-                            "max_temp": h.tm,
-                            "wear": h.wear,
-                            "status": h.status_name,
-                            "color": f"#{h.color_m}",
-                            "filament_id": h.fila_id,
-                            "filament_name": get_filament_name(h.fila_id, cf),
-                        }
-                        if h and h.type_code else {
-                            "diameter": None,
-                            "flow_type": None,
-                            "type": None,
-                            "type_code": None,
-                            "serial": None,
-                            "max_temp": None,
-                            "wear": None,
-                            "status": None,
-                            "color": None,
-                            "filament_id": None,
-                            "filament_name": None,
-                        }
-                    ),
-                }
-            )(rack.hotends.get(rack.tar_id))
-        )(self.coordinator.get_model().hotend_rack, self.coordinator.client.slicer_settings.custom_filaments),
-    ),
-    BambuLabHotendRackSensorEntityDescription(
         key="holder_position",
         translation_key="hotend_rack_holder_position",
         icon="mdi:robot-industrial",
@@ -949,42 +903,47 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
         translation_key="hotend_rack_hotend",
         translation_placeholders={"hotend_id": str(display_id)},
         icon="mdi:printer-3d-nozzle",
+        device_class=SensorDeviceClass.ENUM,
+        options=["mounted", "occupied", "empty"],
         hotend_id=slot_id,
         value_fn=lambda self: (
             lambda rack, sid: (
-                f"{rack.hotends[sid].flow_type.lower().replace(' ', '_')}_{str(rack.hotends[sid].diameter).replace('.', '_')}"
-                if rack.is_slot_occupied(sid) and rack.hotends[sid].type_code else "empty"
+                "mounted" if sid == rack.tar_id
+                else "occupied" if rack.is_slot_occupied(sid)
+                else "empty"
             )
         )(self.coordinator.get_model().hotend_rack, self.entity_description.hotend_id),
         extra_attributes=lambda self: (
-            lambda rack, sid, cf: (
-                {
-                    "diameter": rack.hotends[sid].diameter,
-                    "flow_type": rack.hotends[sid].flow_type,
-                    "type": rack.hotends[sid].type_name,
-                    "type_code": rack.hotends[sid].type_code,
-                    "serial": rack.hotends[sid].serial,
-                    "max_temp": rack.hotends[sid].tm,
-                    "wear": rack.hotends[sid].wear,
-                    "status": rack.hotends[sid].status_name,
-                    "color": f"#{rack.hotends[sid].color_m}",
-                    "filament_id": rack.hotends[sid].fila_id,
-                    "filament_name": get_filament_name(rack.hotends[sid].fila_id, cf),
-                } if rack.is_slot_occupied(sid) else {
-                    "diameter": None,
-                    "flow_type": None,
-                    "type": None,
-                    "type_code": None,
-                    "serial": None,
-                    "max_temp": None,
-                    "wear": None,
-                    "status": None,
-                    "color": None,
-                    "filament_id": None,
-                    "filament_name": None,
+            lambda rack, sid, did, cf: (
+                lambda has_data: {
+                    "slot": did,
+                    **(
+                        {
+                            "nozzle_type": rack.hotends[sid].type_name,
+                            "nozzle_diameter": rack.hotends[sid].diameter,
+                            "serial": rack.hotends[sid].serial,
+                            "max_temp": rack.hotends[sid].tm,
+                            "wear": rack.hotends[sid].wear,
+                            "status": rack.hotends[sid].status_name,
+                            "color": f"#{rack.hotends[sid].color_m}",
+                            "filament_id": rack.hotends[sid].fila_id,
+                            "filament_name": get_filament_name(rack.hotends[sid].fila_id, cf),
+                        } if has_data else {
+                            "nozzle_type": None,
+                            "nozzle_diameter": None,
+                            "serial": None,
+                            "max_temp": None,
+                            "wear": None,
+                            "status": None,
+                            "color": None,
+                            "filament_id": None,
+                            "filament_name": None,
+                        }
+                    ),
                 }
-            )
+            )(rack.is_slot_occupied(sid) or sid == rack.tar_id)
         )(self.coordinator.get_model().hotend_rack, self.entity_description.hotend_id,
+          int(self.entity_description.translation_placeholders["hotend_id"]),
           self.coordinator.client.slicer_settings.custom_filaments),
     )
 

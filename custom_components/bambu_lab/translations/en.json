@@ -917,61 +917,6 @@
           }
         }
       },
-      "hotend_rack_active_hotend": {
-        "name": "Active hotend",
-        "state": {
-          "standard_0_2": "0.2mm Standard",
-          "standard_0_4": "0.4mm Standard",
-          "standard_0_6": "0.6mm Standard",
-          "standard_0_8": "0.8mm Standard",
-          "high_flow_0_2": "0.2mm High Flow",
-          "high_flow_0_4": "0.4mm High Flow",
-          "high_flow_0_6": "0.6mm High Flow",
-          "high_flow_0_8": "0.8mm High Flow",
-          "unknown": "Unknown"
-        },
-        "state_attributes": {
-          "id": {
-            "name": "ID"
-          },
-          "source_hotend": {
-            "name": "Source hotend"
-          },
-          "diameter": {
-            "name": "Diameter"
-          },
-          "flow_type": {
-            "name": "Flow type"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "type_code": {
-            "name": "Type code"
-          },
-          "serial": {
-            "name": "Serial number"
-          },
-          "max_temp": {
-            "name": "Max temperature"
-          },
-          "wear": {
-            "name": "Wear"
-          },
-          "status": {
-            "name": "Status"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "filament_id": {
-            "name": "Filament ID"
-          },
-          "filament_name": {
-            "name": "Filament name"
-          }
-        }
-      },
       "hotend_rack_holder_position": {
         "name": "Holder position",
         "state": {
@@ -1000,25 +945,36 @@
       "hotend_rack_hotend": {
         "name": "Hotend {hotend_id}",
         "state": {
-          "standard_0_2": "0.2mm Standard",
-          "standard_0_4": "0.4mm Standard",
-          "standard_0_6": "0.6mm Standard",
-          "standard_0_8": "0.8mm Standard",
-          "high_flow_0_2": "0.2mm High Flow",
-          "high_flow_0_4": "0.4mm High Flow",
-          "high_flow_0_6": "0.6mm High Flow",
-          "high_flow_0_8": "0.8mm High Flow",
+          "mounted": "Mounted",
+          "occupied": "Occupied",
           "empty": "Empty"
         },
         "state_attributes": {
-          "diameter": { "name": "Diameter" },
-          "flow_type": { "name": "Flow type" },
-          "type": { "name": "Type" },
-          "type_code": { "name": "Type code" },
+          "slot": { "name": "Slot" },
+          "nozzle_type": {
+            "name": "Nozzle type",
+            "state": {
+              "hardened_steel": "Hardened steel",
+              "stainless_steel": "Stainless steel",
+              "tungsten_carbide": "Tungsten carbide",
+              "high_flow_hardened_steel": "High flow hardened steel",
+              "high_flow_stainless_steel": "High flow stainless steel",
+              "high_flow_tungsten_carbide": "High flow tungsten carbide",
+              "unknown": "Unknown"
+            }
+          },
+          "nozzle_diameter": { "name": "Nozzle diameter" },
           "serial": { "name": "Serial number" },
           "max_temp": { "name": "Max temperature" },
           "wear": { "name": "Wear" },
-          "status": { "name": "Status" },
+          "status": {
+            "name": "Status",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Abnormal",
+              "unknown": "Unknown"
+            }
+          },
           "color": { "name": "Color" },
           "filament_id": { "name": "Filament ID" },
           "filament_name": { "name": "Filament name" }

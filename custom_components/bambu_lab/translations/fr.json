@@ -841,61 +841,6 @@
           }
         }
       },
-      "hotend_rack_active_hotend": {
-        "name": "Tête active",
-        "state": {
-          "standard_0_2": "0.2mm Standard",
-          "standard_0_4": "0.4mm Standard",
-          "standard_0_6": "0.6mm Standard",
-          "standard_0_8": "0.8mm Standard",
-          "high_flow_0_2": "0.2mm Haut débit",
-          "high_flow_0_4": "0.4mm Haut débit",
-          "high_flow_0_6": "0.6mm Haut débit",
-          "high_flow_0_8": "0.8mm Haut débit",
-          "unknown": "Inconnu"
-        },
-        "state_attributes": {
-          "id": {
-            "name": "ID"
-          },
-          "source_hotend": {
-            "name": "Tête source"
-          },
-          "diameter": {
-            "name": "Diamètre"
-          },
-          "flow_type": {
-            "name": "Type de débit"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "type_code": {
-            "name": "Code type"
-          },
-          "serial": {
-            "name": "Numéro de série"
-          },
-          "max_temp": {
-            "name": "Température maximale"
-          },
-          "wear": {
-            "name": "Usure"
-          },
-          "status": {
-            "name": "Statut"
-          },
-          "color": {
-            "name": "Couleur"
-          },
-          "filament_id": {
-            "name": "ID filament"
-          },
-          "filament_name": {
-            "name": "Nom du filament"
-          }
-        }
-      },
       "hotend_rack_holder_position": {
         "name": "Position du support",
         "state": {
@@ -924,28 +869,28 @@
       "hotend_rack_hotend": {
         "name": "Tête {hotend_id}",
         "state": {
-          "standard_0_2": "0.2mm Standard",
-          "standard_0_4": "0.4mm Standard",
-          "standard_0_6": "0.6mm Standard",
-          "standard_0_8": "0.8mm Standard",
-          "high_flow_0_2": "0.2mm Haut débit",
-          "high_flow_0_4": "0.4mm Haut débit",
-          "high_flow_0_6": "0.6mm Haut débit",
-          "high_flow_0_8": "0.8mm Haut débit",
+          "mounted": "Monté",
+          "occupied": "Occupé",
           "empty": "Vide"
         },
         "state_attributes": {
-          "diameter": {
-            "name": "Diamètre"
+          "slot": {
+            "name": "Emplacement"
           },
-          "flow_type": {
-            "name": "Type de débit"
+          "nozzle_type": {
+            "name": "Type de buse",
+            "state": {
+              "hardened_steel": "Acier trempé",
+              "stainless_steel": "Acier inoxydable",
+              "tungsten_carbide": "Carbure de tungstène",
+              "high_flow_hardened_steel": "Haut débit acier trempé",
+              "high_flow_stainless_steel": "Haut débit acier inoxydable",
+              "high_flow_tungsten_carbide": "Haut débit carbure de tungstène",
+              "unknown": "Inconnu"
+            }
           },
-          "type": {
-            "name": "Type"
-          },
-          "type_code": {
-            "name": "Code type"
+          "nozzle_diameter": {
+            "name": "Diamètre de buse"
           },
           "serial": {
             "name": "Numéro de série"
@@ -957,7 +902,12 @@
             "name": "Usure"
           },
           "status": {
-            "name": "Statut"
+            "name": "Statut",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Anormal",
+              "unknown": "Inconnu"
+            }
           },
           "color": {
             "name": "Couleur"
