@@ -273,6 +273,17 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_TEMPERATURE)
     ),
     BambuLabSensorEntityDescription(
+        key="target_chamber_temp",
+        translation_key="target_chamber_temp",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.get_model().temperature.target_chamber_temp,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.ACTIVE_CHAMBER_HEATER)
+    ),
+    BambuLabSensorEntityDescription(
         key="nozzle_temp",
         translation_key="nozzle_temp",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,

@@ -68,6 +68,13 @@ def set_temperature_to_gcode(temp: TempEnum, temperature: int):
         tempCommand = "M104"
     elif temp == TempEnum.HEATBED:
         tempCommand = "M140"
+    elif temp == TempEnum.CHAMBER:
+        command = SEND_GCODE_TEMPLATE
+        if temperature > 40:
+            command['print']['param'] = f"M145 P1\nM141 S{temperature}\n"
+        else:
+            command['print']['param'] = f"M141 S{temperature}\nM145 P0\n"
+        return command
 
     command = SEND_GCODE_TEMPLATE
     command['print']['param'] = f"{tempCommand} S{temperature}\n"

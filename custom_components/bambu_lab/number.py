@@ -30,6 +30,7 @@ class BambuLabNumberEntityDescriptionMixin:
 @dataclass
 class BambuLabNumberEntityDescription(NumberEntityDescription, BambuLabNumberEntityDescriptionMixin):
     """Sensor entity description for Bambu Lab."""
+    exists_fn: Callable[..., bool] = lambda _: True
 
 
 NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
@@ -58,6 +59,20 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().temperature.target_bed_temp,
         set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.HEATBED, value),
     ),
+    BambuLabNumberEntityDescription(
+        key="target_chamber_temperature",
+        translation_key="target_chamber_temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=NumberDeviceClass.TEMPERATURE,
+        icon="mdi:radiator",
+        mode=NumberMode.BOX,
+        native_min_value=0,
+        native_max_value=65,
+        native_step=1,
+        value_fn=lambda self: self.coordinator.get_model().temperature.target_chamber_temp,
+        set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.CHAMBER, value),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.ACTIVE_CHAMBER_HEATER),
+    ),
 )
 
 
@@ -75,7 +90,8 @@ async def async_setup_entry(
 
     if not coordinator.get_model().info.is_hybrid_mode_blocking and not coordinator.get_model().print_fun.mqtt_signature_required:
         for description in NUMBERS:
-            async_add_entities([BambuLabNumber(coordinator, description, entry)])
+            if description.exists_fn(coordinator):
+                async_add_entities([BambuLabNumber(coordinator, description, entry)])
 
     LOGGER.debug("NUMBER::async_setup_entry DONE")
 

@@ -50,6 +50,7 @@ class Features(IntEnum):
     AIRDUCT_MODE = 23,
     SUPPORTS_EARLY_FTP_DOWNLOAD = 24,
     SECONDARY_AUX_FAN = 25,
+    ACTIVE_CHAMBER_HEATER = 26,
 
 
 class FansEnum(IntEnum):
@@ -62,7 +63,8 @@ class FansEnum(IntEnum):
 
 class TempEnum(IntEnum):
     HEATBED = 1,
-    NOZZLE = 2
+    NOZZLE = 2,
+    CHAMBER = 3
 
 
 CURRENT_STAGE_IDS = {

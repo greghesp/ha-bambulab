@@ -273,6 +273,8 @@ class Device:
             return model in h2_printers
         elif feature == Features.SECONDARY_AUX_FAN:
             return model in p2_printers
+        elif feature == Features.ACTIVE_CHAMBER_HEATER:
+            return model in ({Printers.X1E} | h2_printers)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -446,6 +448,7 @@ class Temperature:
         self.bed_temp = 0
         self.target_bed_temp = 0
         self.chamber_temp = 0
+        self.target_chamber_temp = 0
         self.nozzle_temps = { 0: 0, 1: 0, 15: 0}
         self.target_nozzle_temps = { 0:0, 1: 0, 15: 0}
 
@@ -508,6 +511,7 @@ class Temperature:
         chamber_temp = data.get("device", {}).get("ctc", {}).get("info", {}).get("temp", None)
         if chamber_temp is not None:
             self.chamber_temp = chamber_temp & 0xFFFF
+            self.target_chamber_temp = (chamber_temp >> 16) & 0xFFFF
         else:
             self.chamber_temp = round(data.get("chamber_temper", self.chamber_temp))
 

@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Nozzle target temperature"
+      },
+      "target_chamber_temperature": {
+        "name": "Chamber target temperature"
       }
     },
     "select": {
@@ -348,6 +351,9 @@
       },
       "chamber_temp": {
         "name": "Chamber temperature"
+      },
+      "target_chamber_temp": {
+        "name": "Chamber target temperature"
       },
       "target_nozzle_temp": {
         "name": "Nozzle target temperature"
