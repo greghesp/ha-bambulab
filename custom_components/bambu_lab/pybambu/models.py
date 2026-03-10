@@ -547,7 +547,7 @@ class Temperature:
         return (old_data != f"{self.__dict__}")
 
     def set_target_temp(self, temp: TempEnum, temperature: int):
-        command = set_temperature_to_gcode(temp, temperature)
+        command = set_temperature_to_gcode(temp, temperature, self._client._device.info.device_type)
 
         # if type == TempEnum.HEATBED:
         #     self.bed_temp = temperature

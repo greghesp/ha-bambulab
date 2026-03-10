@@ -62,7 +62,7 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
     return command
 
 
-def set_temperature_to_gcode(temp: TempEnum, temperature: int):
+def set_temperature_to_gcode(temp: TempEnum, temperature: int, device_type: Printers | str = ""):
     """Converts a temperature to the gcode command to set that"""
     if temp == TempEnum.NOZZLE:
         tempCommand = "M104"
@@ -70,7 +70,10 @@ def set_temperature_to_gcode(temp: TempEnum, temperature: int):
         tempCommand = "M140"
     elif temp == TempEnum.CHAMBER:
         command = SEND_GCODE_TEMPLATE
-        if temperature > 40:
+        if device_type == Printers.X1E:
+            # X1E has no airduct; M141 alone controls the chamber heater.
+            command['print']['param'] = f"M141 S{temperature}\n"
+        elif temperature > 40:
             command['print']['param'] = f"M145 P1\nM141 S{temperature}\n"
         else:
             command['print']['param'] = f"M141 S{temperature}\nM145 P0\n"
