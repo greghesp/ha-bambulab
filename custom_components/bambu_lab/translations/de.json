@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Zieltemperatur der Düse"
+      },
+      "target_chamber_temperature": {
+        "name": "Zieltemperatur der Kammer"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Seriennummer"
+      },
+      "target_chamber_temp": {
+        "name": "Zieltemperatur der Kammer"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Halterposition",
+        "state": {
+          "unknown": "Unbekannt",
+          "a_top": "Position A",
+          "b_top": "Position B",
+          "centre": "Center"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Inhaberstaat",
+        "state": {
+          "unknown": "Unbekannt",
+          "idle": "Leerlauf",
+          "hotend_centre": "Zentrierung des Hotends",
+          "toolhead_centre": "Zentrierwerkzeugkopf",
+          "calibrate_hotend_rack": "Kalibriergestell",
+          "cut_material": "Schneidmaterial",
+          "unlock_hotend": "Hotend entsperren",
+          "lift_hotend_rack": "Hebegestell",
+          "place_hotend": "Hotend platzieren",
+          "pick_hotend": "Hotend auswählen",
+          "lock_hotend": "Hotend sperren"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Montiert",
+          "docked": "Angedockt",
+          "empty": "Leer"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Slot"
+          },
+          "nozzle_type": {
+            "name": "Düsentyp",
+            "state": {
+              "hardened_steel": "Gehärteter Stahl",
+              "stainless_steel": "Edelstahl",
+              "tungsten_carbide": "Wolframcarbid",
+              "high_flow_hardened_steel": "Gehärteter Stahl mit hoher Fließfähigkeit",
+              "high_flow_stainless_steel": "Edelstahl mit hohem Durchfluss",
+              "high_flow_tungsten_carbide": "Hochfließfähiges Wolframkarbid",
+              "unknown": "Unbekannt"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Düsendurchmesser"
+          },
+          "serial": {
+            "name": "Seriennummer"
+          },
+          "max_temp": {
+            "name": "Maximale Temperatur"
+          },
+          "wear": {
+            "name": "Tragen"
+          },
+          "status": {
+            "name": "Status",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Abnormal",
+              "unknown": "Unbekannt"
+            }
+          },
+          "color": {
+            "name": "Farbe"
+          },
+          "filament_id": {
+            "name": "Filament-ID"
+          },
+          "filament_name": {
+            "name": "Filamentname"
+          }
+        }
       }
     },
     "camera": {

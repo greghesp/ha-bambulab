@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Cieľová teplota trysky"
+      },
+      "target_chamber_temperature": {
+        "name": "Cieľová teplota komory"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Sériové číslo"
+      },
+      "target_chamber_temp": {
+        "name": "Cieľová teplota komory"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Pozícia držiteľa",
+        "state": {
+          "unknown": "Neznámy",
+          "a_top": "Pozícia A",
+          "b_top": "Pozícia B",
+          "centre": "centrum"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Stav držiteľa",
+        "state": {
+          "unknown": "Neznámy",
+          "idle": "Nečinný",
+          "hotend_centre": "Strediaci hotend",
+          "toolhead_centre": "Centrovacia hlava nástroja",
+          "calibrate_hotend_rack": "Kalibračný stojan",
+          "cut_material": "Rezanie materiálu",
+          "unlock_hotend": "Odblokovanie hotendu",
+          "lift_hotend_rack": "Zdvíhací stojan",
+          "place_hotend": "Umiestnenie hotendu",
+          "pick_hotend": "Vyberáme hotend",
+          "lock_hotend": "Zamykanie hotendu"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Namontované",
+          "docked": "Ukotvený",
+          "empty": "Prázdny"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Slot"
+          },
+          "nozzle_type": {
+            "name": "Typ trysky",
+            "state": {
+              "hardened_steel": "Kalená oceľ",
+              "stainless_steel": "Nehrdzavejúca oceľ",
+              "tungsten_carbide": "Karbid volfrámu",
+              "high_flow_hardened_steel": "Kalená oceľ s vysokým prietokom",
+              "high_flow_stainless_steel": "Nerezová oceľ s vysokým prietokom",
+              "high_flow_tungsten_carbide": "Vysoko prietokový karbid volfrámu",
+              "unknown": "Neznámy"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Priemer dýzy"
+          },
+          "serial": {
+            "name": "Sériové číslo"
+          },
+          "max_temp": {
+            "name": "Maximálna teplota"
+          },
+          "wear": {
+            "name": "Opotrebenie"
+          },
+          "status": {
+            "name": "Stav",
+            "state": {
+              "normal": "Normálne",
+              "abnormal": "Abnormálne",
+              "unknown": "Neznámy"
+            }
+          },
+          "color": {
+            "name": "Farba"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "filament_name": {
+            "name": "Názov vlákna"
+          }
+        }
       }
     },
     "camera": {

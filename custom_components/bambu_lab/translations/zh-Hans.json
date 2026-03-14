@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "喷嘴目标温度"
+      },
+      "target_chamber_temperature": {
+        "name": "室目标温度"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "序列号"
+      },
+      "target_chamber_temp": {
+        "name": "室目标温度"
+      },
+      "hotend_rack_holder_position": {
+        "name": "支架位置",
+        "state": {
+          "unknown": "未知",
+          "a_top": "位置A",
+          "b_top": "位置B",
+          "centre": "中心"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "持有者状态",
+        "state": {
+          "unknown": "未知",
+          "idle": "闲置的",
+          "hotend_centre": "定心热端",
+          "toolhead_centre": "定心工具头",
+          "calibrate_hotend_rack": "检定架",
+          "cut_material": "切割材料",
+          "unlock_hotend": "解锁热端",
+          "lift_hotend_rack": "升降架",
+          "place_hotend": "放置热端",
+          "pick_hotend": "采摘热端",
+          "lock_hotend": "锁定热端"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "热端 {hotend_id}",
+        "state": {
+          "mounted": "已安装",
+          "docked": "停靠",
+          "empty": "空的"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "投币口"
+          },
+          "nozzle_type": {
+            "name": "喷嘴类型",
+            "state": {
+              "hardened_steel": "淬火钢",
+              "stainless_steel": "不锈钢",
+              "tungsten_carbide": "碳化钨",
+              "high_flow_hardened_steel": "高流动硬化钢",
+              "high_flow_stainless_steel": "高流动不锈钢",
+              "high_flow_tungsten_carbide": "高流动碳化钨",
+              "unknown": "未知"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "喷嘴直径"
+          },
+          "serial": {
+            "name": "序列号"
+          },
+          "max_temp": {
+            "name": "最高温度"
+          },
+          "wear": {
+            "name": "穿"
+          },
+          "status": {
+            "name": "地位",
+            "state": {
+              "normal": "普通的",
+              "abnormal": "异常",
+              "unknown": "未知"
+            }
+          },
+          "color": {
+            "name": "颜色"
+          },
+          "filament_id": {
+            "name": "灯丝内径"
+          },
+          "filament_name": {
+            "name": "灯丝名称"
+          }
+        }
       }
     },
     "camera": {

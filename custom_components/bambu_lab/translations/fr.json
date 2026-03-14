@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Température cible de la buse"
+      },
+      "target_chamber_temperature": {
+        "name": "Température cible de la chambre"
       }
     },
     "select": {
@@ -995,6 +998,9 @@
       },
       "serial": {
         "name": "Numéro de série"
+      },
+      "target_chamber_temp": {
+        "name": "Température cible de la chambre"
       }
     },
     "camera": {

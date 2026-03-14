@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Docelowa temperatura dyszy"
+      },
+      "target_chamber_temperature": {
+        "name": "Docelowa temperatura komory"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Numer seryjny"
+      },
+      "target_chamber_temp": {
+        "name": "Docelowa temperatura komory"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Pozycja uchwytu",
+        "state": {
+          "unknown": "Nieznany",
+          "a_top": "Pozycja A",
+          "b_top": "Pozycja B",
+          "centre": "Centrum"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Stan posiadacza",
+        "state": {
+          "unknown": "Nieznany",
+          "idle": "Bezczynny",
+          "hotend_centre": "Centrowanie hotendu",
+          "toolhead_centre": "Głowica centrująca",
+          "calibrate_hotend_rack": "Stojak kalibracyjny",
+          "cut_material": "Materiał do cięcia",
+          "unlock_hotend": "Odblokowanie hotendu",
+          "lift_hotend_rack": "Podnośnik",
+          "place_hotend": "Umieszczenie hotendu",
+          "pick_hotend": "Wybieranie hotendu",
+          "lock_hotend": "Blokowanie hotendu"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Zmontowany",
+          "docked": "Zadokowany",
+          "empty": "Pusty"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Szczelina"
+          },
+          "nozzle_type": {
+            "name": "Typ dyszy",
+            "state": {
+              "hardened_steel": "Stal hartowana",
+              "stainless_steel": "Stal nierdzewna",
+              "tungsten_carbide": "Węglik wolframu",
+              "high_flow_hardened_steel": "Stal hartowana o wysokiej płynności",
+              "high_flow_stainless_steel": "Stal nierdzewna o wysokim przepływie",
+              "high_flow_tungsten_carbide": "Węglik wolframu o wysokiej płynności",
+              "unknown": "Nieznany"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Średnica dyszy"
+          },
+          "serial": {
+            "name": "Numer seryjny"
+          },
+          "max_temp": {
+            "name": "Maksymalna temperatura"
+          },
+          "wear": {
+            "name": "Nosić"
+          },
+          "status": {
+            "name": "Status",
+            "state": {
+              "normal": "Normalna",
+              "abnormal": "Nieprawidłowy",
+              "unknown": "Nieznany"
+            }
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "filament_id": {
+            "name": "Identyfikator włókna"
+          },
+          "filament_name": {
+            "name": "Nazwa włókna"
+          }
+        }
       }
     },
     "camera": {

@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Måletemperatur for dyse"
+      },
+      "target_chamber_temperature": {
+        "name": "Kammerets måltemperatur"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Serienummer"
+      },
+      "target_chamber_temp": {
+        "name": "Kammerets måltemperatur"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Holderens position",
+        "state": {
+          "unknown": "Ukendt",
+          "a_top": "Position A",
+          "b_top": "Stilling B",
+          "centre": "Centrum"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Indehaverens tilstand",
+        "state": {
+          "unknown": "Ukendt",
+          "idle": "Ledig",
+          "hotend_centre": "Centrerende hotend",
+          "toolhead_centre": "Centrerende værktøjshoved",
+          "calibrate_hotend_rack": "Kalibreringsstativ",
+          "cut_material": "Skære materiale",
+          "unlock_hotend": "Låser hotend op",
+          "lift_hotend_rack": "Løftestativ",
+          "place_hotend": "Placering af hotend",
+          "pick_hotend": "Picking hotend",
+          "lock_hotend": "Låsende hotend"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Monteret",
+          "docked": "Docket",
+          "empty": "Tom"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Slot"
+          },
+          "nozzle_type": {
+            "name": "Dyse type",
+            "state": {
+              "hardened_steel": "Hærdet stål",
+              "stainless_steel": "Rustfrit stål",
+              "tungsten_carbide": "Wolframcarbid",
+              "high_flow_hardened_steel": "Højflow hærdet stål",
+              "high_flow_stainless_steel": "Højflow i rustfrit stål",
+              "high_flow_tungsten_carbide": "Højflow wolframcarbid",
+              "unknown": "Ukendt"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Dyse diameter"
+          },
+          "serial": {
+            "name": "Serienummer"
+          },
+          "max_temp": {
+            "name": "Max temperatur"
+          },
+          "wear": {
+            "name": "Slid"
+          },
+          "status": {
+            "name": "Status",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Abnorm",
+              "unknown": "Ukendt"
+            }
+          },
+          "color": {
+            "name": "Farve"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "filament_name": {
+            "name": "Filament navn"
+          }
+        }
       }
     },
     "camera": {
