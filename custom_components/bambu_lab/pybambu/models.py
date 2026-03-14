@@ -1406,6 +1406,10 @@ class PrintJob:
                         return file[1]
 
         return None
+
+    async def async_prune_print_history_files(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.prune_print_history_files)
     
     def prune_print_history_files(self):
         if self._client._test_mode:
@@ -1415,6 +1419,10 @@ class PrintJob:
                               extensions=['.3mf'],
                               keep=self._client._print_cache_count,
                               extra_extensions=['.jpg', '.png', '.slice_info.config', '.gcode'])
+
+    async def async_prune_timelapse_files(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.prune_timelapse_files)
 
     def prune_timelapse_files(self):
         if self._client._test_mode:
