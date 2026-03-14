@@ -841,6 +841,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug("Removing stale AMS.")
             dev_reg.async_remove_device(device)
 
+        # Clean up orphaned Hotend Rack device if printer no longer has one.
+        if not self.get_model().supports_feature(Features.HOTEND_RACK):
+            for device in dev_reg.devices.values():
+                if config_entry_id in device.config_entries:
+                    if device.model == 'Hotend Rack':
+                        LOGGER.debug("Removing stale Hotend Rack device.")
+                        dev_reg.async_remove_device(device.id)
+
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
         self.hass.async_create_task(self._reinitialize_sensors())
 
@@ -903,6 +911,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             via_device=(DOMAIN, printer_serial),
             name=device_name,
             model="External Spool",
+            manufacturer=BRAND,
+            hw_version="",
+            sw_version=""
+        )
+
+    def get_hotend_rack_device(self):
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
+        device_name = f"{device_type}_{printer_serial}_HotendRack"
+
+        return DeviceInfo(
+            identifiers={(DOMAIN, f"{printer_serial}_HotendRack")},
+            via_device=(DOMAIN, printer_serial),
+            name=device_name,
+            model="Hotend Rack",
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
