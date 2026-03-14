@@ -472,8 +472,8 @@ class BambuClient:
         self._mqtt = MqttThread(self)
         self._mqtt.start()
 
-        self._device.print_job.prune_print_history_files()
-        self._device.print_job.prune_timelapse_files()
+        await self._device.print_job.async_prune_print_history_files()
+        await self._device.print_job.async_prune_timelapse_files()
 
     def subscribe_and_request_info(self):
         LOGGER.debug("Now subscribing...")
