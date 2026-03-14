@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Στόχος θερμοκρασίας ακροφυσίου"
+      },
+      "target_chamber_temperature": {
+        "name": "Θερμοκρασία στόχου θαλάμου"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Αύξων αριθμός"
+      },
+      "target_chamber_temp": {
+        "name": "Θερμοκρασία στόχου θαλάμου"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Θέση κατόχου",
+        "state": {
+          "unknown": "Αγνωστος",
+          "a_top": "Θέση Α",
+          "b_top": "Θέση Β",
+          "centre": "Κέντρο"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Κράτος κατόχου",
+        "state": {
+          "unknown": "Αγνωστος",
+          "idle": "Αεργος",
+          "hotend_centre": "Κεντράρισμα hotend",
+          "toolhead_centre": "Κεντράρισμα εργαλειοθήκης",
+          "calibrate_hotend_rack": "Ράφι βαθμονόμησης",
+          "cut_material": "Υλικό κοπής",
+          "unlock_hotend": "Ξεκλείδωμα hotend",
+          "lift_hotend_rack": "Σχάρα ανύψωσης",
+          "place_hotend": "Τοποθέτηση hotend",
+          "pick_hotend": "Επιλογή hotend",
+          "lock_hotend": "Κλείδωμα hotend"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Εφιππος",
+          "docked": "Ελλιμενισμένο",
+          "empty": "Αδειάζω"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Σχισμή"
+          },
+          "nozzle_type": {
+            "name": "Τύπος ακροφυσίου",
+            "state": {
+              "hardened_steel": "Σκληρυμένος χάλυβας",
+              "stainless_steel": "Ανοξείδωτο ατσάλι",
+              "tungsten_carbide": "Καρβίδιο βολφραμίου",
+              "high_flow_hardened_steel": "Σκληρυμένος χάλυβας υψηλής ροής",
+              "high_flow_stainless_steel": "Ανοξείδωτο χάλυβα υψηλής ροής",
+              "high_flow_tungsten_carbide": "Καρβίδιο βολφραμίου υψηλής ροής",
+              "unknown": "Αγνωστος"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Διάμετρος ακροφυσίου"
+          },
+          "serial": {
+            "name": "Αύξων αριθμός"
+          },
+          "max_temp": {
+            "name": "Μέγιστη θερμοκρασία"
+          },
+          "wear": {
+            "name": "Φθορά"
+          },
+          "status": {
+            "name": "Κατάσταση",
+            "state": {
+              "normal": "Κανονικός",
+              "abnormal": "Ανώμαλος",
+              "unknown": "Αγνωστος"
+            }
+          },
+          "color": {
+            "name": "Χρώμα"
+          },
+          "filament_id": {
+            "name": "Αναγνωριστικό νήματος"
+          },
+          "filament_name": {
+            "name": "Όνομα νήματος"
+          }
+        }
       }
     },
     "camera": {

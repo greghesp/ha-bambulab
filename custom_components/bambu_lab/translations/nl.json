@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Doeltemperatuur nozzle"
+      },
+      "target_chamber_temperature": {
+        "name": "Doeltemperatuur kamer"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Serienummer"
+      },
+      "target_chamber_temp": {
+        "name": "Doeltemperatuur kamer"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Houder positie",
+        "state": {
+          "unknown": "Onbekend",
+          "a_top": "Positie A",
+          "b_top": "Positie B",
+          "centre": "Centrum"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Houder staat",
+        "state": {
+          "unknown": "Onbekend",
+          "idle": "Inactief",
+          "hotend_centre": "Centrerende hotend",
+          "toolhead_centre": "Centreer gereedschapskop",
+          "calibrate_hotend_rack": "Kalibratie rek",
+          "cut_material": "Snijmateriaal",
+          "unlock_hotend": "Hotend ontgrendelen",
+          "lift_hotend_rack": "Hefrek",
+          "place_hotend": "Hotend plaatsen",
+          "pick_hotend": "Hotend kiezen",
+          "lock_hotend": "Vergrendelende hotend"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Gemonteerd",
+          "docked": "Aangemeerd",
+          "empty": "Leeg"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Sleuf"
+          },
+          "nozzle_type": {
+            "name": "Type mondstuk",
+            "state": {
+              "hardened_steel": "Gehard staal",
+              "stainless_steel": "Roestvrij staal",
+              "tungsten_carbide": "Wolfraamcarbide",
+              "high_flow_hardened_steel": "Gehard staal met hoge vloei",
+              "high_flow_stainless_steel": "Roestvrij staal met hoge stroming",
+              "high_flow_tungsten_carbide": "Wolfraamcarbide met hoog debiet",
+              "unknown": "Onbekend"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Diameter mondstuk"
+          },
+          "serial": {
+            "name": "Serienummer"
+          },
+          "max_temp": {
+            "name": "Maximale temperatuur"
+          },
+          "wear": {
+            "name": "Dragen"
+          },
+          "status": {
+            "name": "Status",
+            "state": {
+              "normal": "Normaal",
+              "abnormal": "Abnormaal",
+              "unknown": "Onbekend"
+            }
+          },
+          "color": {
+            "name": "Kleur"
+          },
+          "filament_id": {
+            "name": "Gloeidraad-ID"
+          },
+          "filament_name": {
+            "name": "Naam van het filament"
+          }
+        }
       }
     },
     "camera": {

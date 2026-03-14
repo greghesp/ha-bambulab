@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "อุณหภูมิเป้าหมายของหัวฉีด"
+      },
+      "target_chamber_temperature": {
+        "name": "อุณหภูมิเป้าหมายห้อง"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "หมายเลขซีเรียล"
+      },
+      "target_chamber_temp": {
+        "name": "อุณหภูมิเป้าหมายห้อง"
+      },
+      "hotend_rack_holder_position": {
+        "name": "ตำแหน่งผู้ถือ",
+        "state": {
+          "unknown": "ไม่ทราบ",
+          "a_top": "ตำแหน่ง ก",
+          "b_top": "ตำแหน่ง ข",
+          "centre": "ศูนย์"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "รัฐผู้ถือ",
+        "state": {
+          "unknown": "ไม่ทราบ",
+          "idle": "ไม่ได้ใช้งาน",
+          "hotend_centre": "การตั้งศูนย์ hotend",
+          "toolhead_centre": "หัวเครื่องมืออยู่ตรงกลาง",
+          "calibrate_hotend_rack": "ชั้นวางปรับเทียบ",
+          "cut_material": "วัสดุตัด",
+          "unlock_hotend": "กำลังปลดล็อกฮอตเอนด์",
+          "lift_hotend_rack": "ชั้นยก",
+          "place_hotend": "กำลังวางฮอตเอนด์",
+          "pick_hotend": "กำลังเลือก hotend",
+          "lock_hotend": "กำลังล็อคฮอตเอนด์"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "ฮอตเอนด์ {hotend_id}",
+        "state": {
+          "mounted": "ติด",
+          "docked": "เทียบท่าแล้ว",
+          "empty": "ว่างเปล่า"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "สล็อต"
+          },
+          "nozzle_type": {
+            "name": "ประเภทหัวฉีด",
+            "state": {
+              "hardened_steel": "เหล็กชุบแข็ง",
+              "stainless_steel": "สแตนเลส",
+              "tungsten_carbide": "ทังสเตนคาร์ไบด์",
+              "high_flow_hardened_steel": "เหล็กชุบแข็งไหลสูง",
+              "high_flow_stainless_steel": "สแตนเลสไหลสูง",
+              "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ไหลสูง",
+              "unknown": "ไม่ทราบ"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "เส้นผ่านศูนย์กลางหัวฉีด"
+          },
+          "serial": {
+            "name": "หมายเลขซีเรียล"
+          },
+          "max_temp": {
+            "name": "อุณหภูมิสูงสุด"
+          },
+          "wear": {
+            "name": "สวมใส่"
+          },
+          "status": {
+            "name": "สถานะ",
+            "state": {
+              "normal": "ปกติ",
+              "abnormal": "ผิดปกติ",
+              "unknown": "ไม่ทราบ"
+            }
+          },
+          "color": {
+            "name": "สี"
+          },
+          "filament_id": {
+            "name": "รหัสเส้นใย"
+          },
+          "filament_name": {
+            "name": "ชื่อเส้นใย"
+          }
+        }
       }
     },
     "camera": {

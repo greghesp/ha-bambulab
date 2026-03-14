@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Cílová teplota trysky"
+      },
+      "target_chamber_temperature": {
+        "name": "Cílová teplota komory"
       }
     },
     "select": {
@@ -914,6 +917,88 @@
           },
           "dry_time": {
             "name": "Doba schnutí"
+          }
+        }
+      },
+      "target_chamber_temp": {
+        "name": "Cílová teplota komory"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Pozice držáku",
+        "state": {
+          "unknown": "Neznámý",
+          "a_top": "Pozice A",
+          "b_top": "Pozice B",
+          "centre": "Centrum"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Stav držitele",
+        "state": {
+          "unknown": "Neznámý",
+          "idle": "Líný",
+          "hotend_centre": "Centrovací hotend",
+          "toolhead_centre": "Centrovací hlava nástroje",
+          "calibrate_hotend_rack": "Kalibrační stojan",
+          "cut_material": "Řezný materiál",
+          "unlock_hotend": "Odblokování hotendu",
+          "lift_hotend_rack": "Zvedací stojan",
+          "place_hotend": "Umístění hotendu",
+          "pick_hotend": "Vybíráme hotend",
+          "lock_hotend": "Uzamykání hotendu"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Jízdní",
+          "docked": "Ukotveno",
+          "empty": "Prázdný"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Slot"
+          },
+          "nozzle_type": {
+            "name": "Typ trysky",
+            "state": {
+              "hardened_steel": "Kalená ocel",
+              "stainless_steel": "Nerez",
+              "tungsten_carbide": "Karbid wolframu",
+              "high_flow_hardened_steel": "Kalená ocel s vysokým průtokem",
+              "high_flow_stainless_steel": "Nerezová ocel s vysokým průtokem",
+              "high_flow_tungsten_carbide": "Vysoce tekutý karbid wolframu",
+              "unknown": "Neznámý"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Průměr trysky"
+          },
+          "serial": {
+            "name": "Sériové číslo"
+          },
+          "max_temp": {
+            "name": "Maximální teplota"
+          },
+          "wear": {
+            "name": "Nosit"
+          },
+          "status": {
+            "name": "Postavení",
+            "state": {
+              "normal": "Normální",
+              "abnormal": "Abnormální",
+              "unknown": "Neznámý"
+            }
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "filament_name": {
+            "name": "Název vlákna"
           }
         }
       }

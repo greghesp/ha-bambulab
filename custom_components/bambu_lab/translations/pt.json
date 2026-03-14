@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura alvo do bico"
+      },
+      "target_chamber_temperature": {
+        "name": "Temperatura alvo da câmara"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Número de série"
+      },
+      "target_chamber_temp": {
+        "name": "Temperatura alvo da câmara"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Posição do suporte",
+        "state": {
+          "unknown": "Desconhecido",
+          "a_top": "Posição A",
+          "b_top": "Posição B",
+          "centre": "Centro"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Estado do titular",
+        "state": {
+          "unknown": "Desconhecido",
+          "idle": "Parado",
+          "hotend_centre": "Centralização do hotend",
+          "toolhead_centre": "Centralização do cabeçote",
+          "calibrate_hotend_rack": "Rack de calibração",
+          "cut_material": "Material de corte",
+          "unlock_hotend": "Desbloqueando hotend",
+          "lift_hotend_rack": "Rack de elevação",
+          "place_hotend": "Colocando hotend",
+          "pick_hotend": "Escolhendo hotend",
+          "lock_hotend": "Bloqueando hotend"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Montado",
+          "docked": "Ancorado",
+          "empty": "Vazio"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Slot"
+          },
+          "nozzle_type": {
+            "name": "Tipo de bico",
+            "state": {
+              "hardened_steel": "Aço endurecido",
+              "stainless_steel": "Aço inoxidável",
+              "tungsten_carbide": "Carboneto de tungstênio",
+              "high_flow_hardened_steel": "Aço temperado de alto fluxo",
+              "high_flow_stainless_steel": "Aço inoxidável de alto fluxo",
+              "high_flow_tungsten_carbide": "Carboneto de tungstênio de alto fluxo",
+              "unknown": "Desconhecido"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Diâmetro do bico"
+          },
+          "serial": {
+            "name": "Número de série"
+          },
+          "max_temp": {
+            "name": "Temperatura máxima"
+          },
+          "wear": {
+            "name": "Vestir"
+          },
+          "status": {
+            "name": "Status",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Anormal",
+              "unknown": "Desconhecido"
+            }
+          },
+          "color": {
+            "name": "Cor"
+          },
+          "filament_id": {
+            "name": "ID do filamento"
+          },
+          "filament_name": {
+            "name": "Nome do filamento"
+          }
+        }
       }
     },
     "camera": {

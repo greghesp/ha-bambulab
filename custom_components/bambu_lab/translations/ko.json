@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "노즐 목표 온도"
+      },
+      "target_chamber_temperature": {
+        "name": "챔버 목표 온도"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "일련번호"
+      },
+      "target_chamber_temp": {
+        "name": "챔버 목표 온도"
+      },
+      "hotend_rack_holder_position": {
+        "name": "홀더 위치",
+        "state": {
+          "unknown": "알려지지 않은",
+          "a_top": "위치 A",
+          "b_top": "포지션 B",
+          "centre": "센터"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "보유자 상태",
+        "state": {
+          "unknown": "알려지지 않은",
+          "idle": "게으른",
+          "hotend_centre": "센터링 핫엔드",
+          "toolhead_centre": "센터링 툴헤드",
+          "calibrate_hotend_rack": "교정 랙",
+          "cut_material": "절단재료",
+          "unlock_hotend": "핫엔드 잠금 해제",
+          "lift_hotend_rack": "리프팅 랙",
+          "place_hotend": "핫엔드 배치",
+          "pick_hotend": "핫엔드 따기",
+          "lock_hotend": "핫엔드 잠금"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "핫엔드 {hotend_id}",
+        "state": {
+          "mounted": "탑재",
+          "docked": "도킹됨",
+          "empty": "비어 있는"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "슬롯"
+          },
+          "nozzle_type": {
+            "name": "노즐 유형",
+            "state": {
+              "hardened_steel": "경화강",
+              "stainless_steel": "스테인레스 스틸",
+              "tungsten_carbide": "텅스텐 카바이드",
+              "high_flow_hardened_steel": "고유량 경화강",
+              "high_flow_stainless_steel": "고유량 스테인레스 스틸",
+              "high_flow_tungsten_carbide": "고유량 텅스텐 카바이드",
+              "unknown": "알려지지 않은"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "노즐 직경"
+          },
+          "serial": {
+            "name": "일련번호"
+          },
+          "max_temp": {
+            "name": "최대 온도"
+          },
+          "wear": {
+            "name": "입다"
+          },
+          "status": {
+            "name": "상태",
+            "state": {
+              "normal": "정상",
+              "abnormal": "이상",
+              "unknown": "알려지지 않은"
+            }
+          },
+          "color": {
+            "name": "색상"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "filament_name": {
+            "name": "필라멘트 이름"
+          }
+        }
       }
     },
     "camera": {

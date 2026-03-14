@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura objetivo de la boquilla"
+      },
+      "target_chamber_temperature": {
+        "name": "Temperatura objetivo de la cámara"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Número de serie"
+      },
+      "target_chamber_temp": {
+        "name": "Temperatura objetivo de la cámara"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Posición del titular",
+        "state": {
+          "unknown": "Desconocido",
+          "a_top": "Posición A",
+          "b_top": "Posición B",
+          "centre": "Centro"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Estado titular",
+        "state": {
+          "unknown": "Desconocido",
+          "idle": "Inactivo",
+          "hotend_centre": "Hotend de centrado",
+          "toolhead_centre": "Cabezal de herramienta de centrado",
+          "calibrate_hotend_rack": "Bastidor de calibración",
+          "cut_material": "Material de corte",
+          "unlock_hotend": "Desbloqueo del hotend",
+          "lift_hotend_rack": "estante de elevación",
+          "place_hotend": "Colocando hotend",
+          "pick_hotend": "Selección de hotend",
+          "lock_hotend": "Hotend de bloqueo"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Montado",
+          "docked": "Atracado",
+          "empty": "Vacío"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Ranura"
+          },
+          "nozzle_type": {
+            "name": "Tipo de boquilla",
+            "state": {
+              "hardened_steel": "Acero endurecido",
+              "stainless_steel": "Acero inoxidable",
+              "tungsten_carbide": "Carburo de tungsteno",
+              "high_flow_hardened_steel": "Acero endurecido de alto flujo",
+              "high_flow_stainless_steel": "Acero inoxidable de alto flujo",
+              "high_flow_tungsten_carbide": "Carburo de tungsteno de alto flujo",
+              "unknown": "Desconocido"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Diámetro de la boquilla"
+          },
+          "serial": {
+            "name": "Número de serie"
+          },
+          "max_temp": {
+            "name": "temperatura máxima"
+          },
+          "wear": {
+            "name": "Tener puesto"
+          },
+          "status": {
+            "name": "Estado",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Anormal",
+              "unknown": "Desconocido"
+            }
+          },
+          "color": {
+            "name": "Color"
+          },
+          "filament_id": {
+            "name": "ID de filamento"
+          },
+          "filament_name": {
+            "name": "Nombre del filamento"
+          }
+        }
       }
     },
     "camera": {

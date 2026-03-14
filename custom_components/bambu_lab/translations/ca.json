@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura objectiu del broquet"
+      },
+      "target_chamber_temperature": {
+        "name": "Temperatura objectiu de la cambra"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Número de sèrie"
+      },
+      "target_chamber_temp": {
+        "name": "Temperatura objectiu de la cambra"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Posició del titular",
+        "state": {
+          "unknown": "Desconegut",
+          "a_top": "Posició A",
+          "b_top": "Posició B",
+          "centre": "Centre"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Estat titular",
+        "state": {
+          "unknown": "Desconegut",
+          "idle": "Inactiu",
+          "hotend_centre": "Hotend centrat",
+          "toolhead_centre": "Cap d'eina de centratge",
+          "calibrate_hotend_rack": "Bastidor de calibratge",
+          "cut_material": "Material de tall",
+          "unlock_hotend": "S'està desbloquejant hotend",
+          "lift_hotend_rack": "Bastidor elevador",
+          "place_hotend": "Col·locació hotend",
+          "pick_hotend": "Escollint hotend",
+          "lock_hotend": "Hotend de bloqueig"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Muntat",
+          "docked": "Acoblat",
+          "empty": "Buit"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Ranura"
+          },
+          "nozzle_type": {
+            "name": "Tipus de broquet",
+            "state": {
+              "hardened_steel": "Acer endurit",
+              "stainless_steel": "Acer inoxidable",
+              "tungsten_carbide": "Carbur de tungstè",
+              "high_flow_hardened_steel": "Acer endurit d'alt flux",
+              "high_flow_stainless_steel": "Acer inoxidable d'alt flux",
+              "high_flow_tungsten_carbide": "Carbur de tungstè d'alt flux",
+              "unknown": "Desconegut"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Diàmetre del broquet"
+          },
+          "serial": {
+            "name": "Número de sèrie"
+          },
+          "max_temp": {
+            "name": "Temperatura màxima"
+          },
+          "wear": {
+            "name": "Desgast"
+          },
+          "status": {
+            "name": "Estat",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Anormal",
+              "unknown": "Desconegut"
+            }
+          },
+          "color": {
+            "name": "Color"
+          },
+          "filament_id": {
+            "name": "ID del filament"
+          },
+          "filament_name": {
+            "name": "Nom del filament"
+          }
+        }
       }
     },
     "camera": {

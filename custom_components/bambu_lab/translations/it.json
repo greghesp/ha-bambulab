@@ -314,6 +314,9 @@
       },
       "target_nozzle_temperature": {
         "name": "Temperatura Target Ugello"
+      },
+      "target_chamber_temperature": {
+        "name": "Temperatura target della camera"
       }
     },
     "select": {
@@ -916,6 +919,88 @@
       },
       "serial": {
         "name": "Numero di serie"
+      },
+      "target_chamber_temp": {
+        "name": "Temperatura target della camera"
+      },
+      "hotend_rack_holder_position": {
+        "name": "Posizione del titolare",
+        "state": {
+          "unknown": "Sconosciuto",
+          "a_top": "Posizione A",
+          "b_top": "Posizione B",
+          "centre": "Centro"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Stato del titolare",
+        "state": {
+          "unknown": "Sconosciuto",
+          "idle": "Oziare",
+          "hotend_centre": "Hotend di centratura",
+          "toolhead_centre": "Testa portautensili di centraggio",
+          "calibrate_hotend_rack": "Rastrelliera di calibrazione",
+          "cut_material": "Materiale da taglio",
+          "unlock_hotend": "Sblocco dell'hotend",
+          "lift_hotend_rack": "Cremagliera di sollevamento",
+          "place_hotend": "Posizionamento dell'hotend",
+          "pick_hotend": "Scegliere l'hotend",
+          "lock_hotend": "Hotend bloccato"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Montato",
+          "docked": "Attraccato",
+          "empty": "Vuoto"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Scanalatura"
+          },
+          "nozzle_type": {
+            "name": "Tipo di ugello",
+            "state": {
+              "hardened_steel": "Acciaio temprato",
+              "stainless_steel": "Acciaio inossidabile",
+              "tungsten_carbide": "Carburo di tungsteno",
+              "high_flow_hardened_steel": "Acciaio temprato ad alta fluidità",
+              "high_flow_stainless_steel": "Acciaio inossidabile ad alto flusso",
+              "high_flow_tungsten_carbide": "Carburo di tungsteno ad alto flusso",
+              "unknown": "Sconosciuto"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Diametro dell'ugello"
+          },
+          "serial": {
+            "name": "Numero di serie"
+          },
+          "max_temp": {
+            "name": "Temperatura massima"
+          },
+          "wear": {
+            "name": "Indossare"
+          },
+          "status": {
+            "name": "Stato",
+            "state": {
+              "normal": "Normale",
+              "abnormal": "Anormale",
+              "unknown": "Sconosciuto"
+            }
+          },
+          "color": {
+            "name": "Colore"
+          },
+          "filament_id": {
+            "name": "ID del filamento"
+          },
+          "filament_name": {
+            "name": "Nome del filamento"
+          }
+        }
       }
     },
     "camera": {
