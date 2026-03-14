@@ -277,6 +277,8 @@ class Device:
             return model in p2_printers
         elif feature == Features.HOTEND_RACK:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
+        elif feature == Features.ACTIVE_CHAMBER_HEATER:
+            return model in ({Printers.X1E} | h2_printers)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -450,6 +452,7 @@ class Temperature:
         self.bed_temp = 0
         self.target_bed_temp = 0
         self.chamber_temp = 0
+        self.target_chamber_temp = 0
         self.nozzle_temps = { 0: 0, 1: 0, 15: 0}
         self.target_nozzle_temps = { 0:0, 1: 0, 15: 0}
 
@@ -512,6 +515,7 @@ class Temperature:
         chamber_temp = data.get("device", {}).get("ctc", {}).get("info", {}).get("temp", None)
         if chamber_temp is not None:
             self.chamber_temp = chamber_temp & 0xFFFF
+            self.target_chamber_temp = (chamber_temp >> 16) & 0xFFFF
         else:
             self.chamber_temp = round(data.get("chamber_temper", self.chamber_temp))
 
@@ -547,7 +551,7 @@ class Temperature:
         return (old_data != f"{self.__dict__}")
 
     def set_target_temp(self, temp: TempEnum, temperature: int):
-        command = set_temperature_to_gcode(temp, temperature)
+        command = set_temperature_to_gcode(temp, temperature, self._client._device.info.device_type)
 
         # if type == TempEnum.HEATBED:
         #     self.bed_temp = temperature

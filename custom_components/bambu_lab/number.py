@@ -18,7 +18,7 @@ from .const import (
 
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity
-from .pybambu.const import Features, TempEnum
+from .pybambu.const import Features, Printers, TempEnum
 
 
 @dataclass
@@ -30,6 +30,8 @@ class BambuLabNumberEntityDescriptionMixin:
 @dataclass
 class BambuLabNumberEntityDescription(NumberEntityDescription, BambuLabNumberEntityDescriptionMixin):
     """Sensor entity description for Bambu Lab."""
+    exists_fn: Callable[..., bool] = lambda _: True
+    max_value_fn: Callable[..., float | None] = lambda _: None
 
 
 NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
@@ -58,6 +60,21 @@ NUMBERS: tuple[BambuLabNumberEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().temperature.target_bed_temp,
         set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.HEATBED, value),
     ),
+    BambuLabNumberEntityDescription(
+        key="target_chamber_temperature",
+        translation_key="target_chamber_temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=NumberDeviceClass.TEMPERATURE,
+        icon="mdi:radiator",
+        mode=NumberMode.BOX,
+        native_min_value=0,
+        native_max_value=60,  # Default to X1E limit; overridden per-model at init
+        native_step=1,
+        value_fn=lambda self: self.coordinator.get_model().temperature.target_chamber_temp,
+        set_value_fn=lambda self, value: self.coordinator.get_model().temperature.set_target_temp(TempEnum.CHAMBER, value),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.ACTIVE_CHAMBER_HEATER),
+        max_value_fn=lambda coordinator: 60 if coordinator.get_model().info.device_type == Printers.X1E else 65,
+    ),
 )
 
 
@@ -75,7 +92,8 @@ async def async_setup_entry(
 
     if not coordinator.get_model().info.is_hybrid_mode_blocking and not coordinator.get_model().print_fun.mqtt_signature_required:
         for description in NUMBERS:
-            async_add_entities([BambuLabNumber(coordinator, description, entry)])
+            if description.exists_fn(coordinator):
+                async_add_entities([BambuLabNumber(coordinator, description, entry)])
 
     LOGGER.debug("NUMBER::async_setup_entry DONE")
 
@@ -95,6 +113,10 @@ class BambuLabNumber(BambuLabEntity, NumberEntity):
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
         self._attr_native_value = description.value_fn(self)
+
+        max_value = description.max_value_fn(coordinator)
+        if max_value is not None:
+            self._attr_native_max_value = max_value
 
         super().__init__(coordinator=coordinator)
 
