@@ -37,3 +37,14 @@ class VirtualTrayEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     def device_info(self) -> DeviceInfo:
         """Return device information about this AMS entity."""
         return self.coordinator.get_virtual_tray_device(self.suffix)
+
+
+class HotendRackEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
+    """Defines a base Hotend Rack entity."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this Hotend Rack entity."""
+        return self.coordinator.get_hotend_rack_device()

@@ -922,6 +922,69 @@
             "name": "Maximum weight of filament"
           }
         }
+      },
+      "hotend_rack_holder_position": {
+        "name": "Holder position",
+        "state": {
+          "unknown": "Unknown",
+          "a_top": "Position A",
+          "b_top": "Position B",
+          "centre": "Centre"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Holder state",
+        "state": {
+          "unknown": "Unknown",
+          "idle": "Idle",
+          "hotend_centre": "Centering hotend",
+          "toolhead_centre": "Centering toolhead",
+          "calibrate_hotend_rack": "Calibrating rack",
+          "cut_material": "Cutting material",
+          "unlock_hotend": "Unlocking hotend",
+          "lift_hotend_rack": "Lifting rack",
+          "place_hotend": "Placing hotend",
+          "pick_hotend": "Picking hotend",
+          "lock_hotend": "Locking hotend"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Mounted",
+          "docked": "Docked",
+          "empty": "Empty"
+        },
+        "state_attributes": {
+          "slot": { "name": "Slot" },
+          "nozzle_type": {
+            "name": "Nozzle type",
+            "state": {
+              "hardened_steel": "Hardened steel",
+              "stainless_steel": "Stainless steel",
+              "tungsten_carbide": "Tungsten carbide",
+              "high_flow_hardened_steel": "High flow hardened steel",
+              "high_flow_stainless_steel": "High flow stainless steel",
+              "high_flow_tungsten_carbide": "High flow tungsten carbide",
+              "unknown": "Unknown"
+            }
+          },
+          "nozzle_diameter": { "name": "Nozzle diameter" },
+          "serial": { "name": "Serial number" },
+          "max_temp": { "name": "Max temperature" },
+          "wear": { "name": "Wear" },
+          "status": {
+            "name": "Status",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Abnormal",
+              "unknown": "Unknown"
+            }
+          },
+          "color": { "name": "Color" },
+          "filament_id": { "name": "Filament ID" },
+          "filament_name": { "name": "Filament name" }
+        }
       }
     },
     "camera": {

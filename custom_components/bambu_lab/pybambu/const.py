@@ -50,7 +50,8 @@ class Features(IntEnum):
     AIRDUCT_MODE = 23,
     SUPPORTS_EARLY_FTP_DOWNLOAD = 24,
     SECONDARY_AUX_FAN = 25,
-    ACTIVE_CHAMBER_HEATER = 26,
+    HOTEND_RACK = 26,
+    ACTIVE_CHAMBER_HEATER = 27,
 
 
 class FansEnum(IntEnum):

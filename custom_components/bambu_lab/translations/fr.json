@@ -19,7 +19,7 @@
       "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible."
     },
     "error": {
-      "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
+      "cannot_connect": "Échec de la connexion. Vérifiez les informations d’identification.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
       "code_needed": "Le code de vérification doit être fourni.",
@@ -72,8 +72,8 @@
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
-          "print_cache_count": "Nombre de modèles à cache à l'assistant à domicile (-1 pour illimité):",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):",
+          "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
         },
         "sections": {
@@ -95,8 +95,8 @@
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
-          "print_cache_count": "Nombre de modèles à cache à l'assistant à domicile (-1 pour illimité):",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):"
+          "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
         },
         "sections": {
           "advanced": {
@@ -117,7 +117,7 @@
       "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible."
     },
     "error": {
-      "cannot_connect": "Echec de la connexion. Vérifiez les informations d’identification.",
+      "cannot_connect": "Échec de la connexion. Vérifiez les informations d’identification.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
       "code_needed": "Le code de vérification doit être fourni.",
@@ -166,8 +166,8 @@
           "access_code": "Code d'accès :",
           "local_mqtt": "Connectez-vous directement à l'imprimante mqtt :",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
-          "print_cache_count": "Nombre de modèles à cache à l'assistant à domicile (-1 pour illimité):",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):",
+          "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
         },
         "sections": {
@@ -188,8 +188,8 @@
           "host": "Adresse IP de l’imprimante locale :",
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
-          "print_cache_count": "Nombre de modèles à cache à l'assistant à domicile (-1 pour illimité):",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à cache à l'assistant à domicile (-1 pour illimité):"
+          "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
         },
         "sections": {
           "advanced": {
@@ -219,7 +219,7 @@
         "name": "Erreur d'impression"
       },
       "online": {
-        "name": "État"
+        "name": "En ligne"
       },
       "firmware_update": {
         "name": "Mise à jour du micrologiciel"
@@ -294,7 +294,7 @@
         "name": "Image du modèle"
       },
       "pick_image": {
-        "name": "Image des pièces selectionnées"
+        "name": "Image des pièces sélectionnées"
       }
     },
     "light": {
@@ -305,7 +305,7 @@
         "name": "Lumière de la caméra"
       },
       "heatbed_light": {
-        "name": "Léger"
+        "name": "Lumière du lit chauffant"
       }
     },
     "number": {
@@ -399,7 +399,7 @@
           "calibrating_extrusion": "Calibration de l'extrusion",
           "scanning_bed_surface": "Numérisation de la surface du lit",
           "inspecting_first_layer": "Inspection de la première couche",
-          "identifying_build_plate_type": "Identification du type de plateaun",
+          "identifying_build_plate_type": "Identification du type de plateau",
           "calibrating_micro_lidar": "Calibration du lidar",
           "homing_toolhead": "Recentrage de la tête d'impression",
           "cleaning_nozzle_tip": "Nettoyage de la buse",
@@ -418,7 +418,7 @@
           "paused_chamber_temperature_control_error": "En pause en raison d'une erreur de contrôle de la température de la chambre",
           "cooling_chamber": "Chambre de refroidissement",
           "paused_user_gcode": "Suspendu par l'utilisateur qui a ajouté l'instruction de pause Gcode",
-          "motor_noise_showoff": "Le bruit du moteur s'exhibe",
+          "motor_noise_showoff": "Démonstration du bruit moteur",
           "paused_nozzle_filament_covered_detected": "En pause en raison d'un filament de buse recouvert détecté",
           "paused_cutter_error": "En pause en raison d'une erreur de coupe",
           "paused_first_layer_error": "Suspendu en raison d'une erreur de première couche",
@@ -434,16 +434,16 @@
           "laser_calibration": "Étalonnage laser",
           "check_plaform": "Vérification automatique: plate-forme",
           "check_birdeye_camera_position": "Vérification automatique: position de caméra Birdeye",
-          "calibrate_birdeye_camera": "Caméra calibreux Birdeye",
+          "calibrate_birdeye_camera": "Calibrage de la caméra Birdeye",
           "bed_level_phase_1": "Nivellement de lit automatique - Phase 1",
           "bed_level_phase_2": "Nivellement de lit automatique - Phase 2",
           "heating_chamber": "Chambre de chauffage",
-          "heated_bedcooling": "Refroidissement au lit chauffé",
+          "heated_bedcooling": "Refroidissement du lit chauffant",
           "print_calibration_lines": "Lignes d'étalonnage d'impression",
-          "check_material": "Vérification automatique : Matériau",
+          "check_material": "Vérification automatique : matériau",
           "calibrating_live_view_camera": "Étalonnage de la caméra Live View",
           "waiting_for_heatbed_temperature": "En attente que le lit chauffant atteigne la température cible",
-          "check_material_position": "Vérification automatique : position du matériau",
+          "check_material_position": "Vérification automatique : position du matériau",
           "calibrating_cutter_model_offset": "Étalonnage du décalage du module de coupe",
           "measuring_surface": "Surface de mesure",
           "thermal_preconditioning": "Préconditionnement thermique pour l'optimisation de la première couche"
@@ -474,7 +474,7 @@
         }
       },
       "gcode_file": {
-        "name": "Ficher G-code"
+        "name": "Fichier G-code"
       },
       "print_bed_type": {
         "name": "Type de plaque",
@@ -537,9 +537,9 @@
           "hardened_steel": "Acier trempé",
           "stainless_steel": "Acier inoxydable",
           "tungsten_carbide": "Carbure de tungstène",
-          "high_flow_hardened_steel": "Acier durci avec un grand débit",
-          "high_flow_stainless_steel": "acier inoxydable avec un grand débit",
-          "high_flow_tungsten_carbide": "carbure de tungstène avec un grand débit",
+          "high_flow_hardened_steel": "Acier trempé avec un grand débit",
+          "high_flow_stainless_steel": "Acier inoxydable avec un grand débit",
+          "high_flow_tungsten_carbide": "Carbure de tungstène avec un grand débit",
           "unknown": "Inconnu"
         }
       },
@@ -841,6 +841,85 @@
           }
         }
       },
+      "hotend_rack_holder_position": {
+        "name": "Position du support",
+        "state": {
+          "unknown": "Inconnu",
+          "a_top": "Position A",
+          "b_top": "Position B",
+          "centre": "Centre"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "État du support",
+        "state": {
+          "unknown": "Inconnu",
+          "idle": "Inactif",
+          "hotend_centre": "Centrage tête",
+          "toolhead_centre": "Centrage chariot",
+          "calibrate_hotend_rack": "Calibration du rack",
+          "cut_material": "Coupe du filament",
+          "unlock_hotend": "Déverrouillage tête",
+          "lift_hotend_rack": "Levage du rack",
+          "place_hotend": "Placement tête",
+          "pick_hotend": "Prise tête",
+          "lock_hotend": "Verrouillage tête"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Tête {hotend_id}",
+        "state": {
+          "mounted": "Monté",
+          "docked": "Rangé",
+          "empty": "Vide"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "Emplacement"
+          },
+          "nozzle_type": {
+            "name": "Type de buse",
+            "state": {
+              "hardened_steel": "Acier trempé",
+              "stainless_steel": "Acier inoxydable",
+              "tungsten_carbide": "Carbure de tungstène",
+              "high_flow_hardened_steel": "Haut débit acier trempé",
+              "high_flow_stainless_steel": "Haut débit acier inoxydable",
+              "high_flow_tungsten_carbide": "Haut débit carbure de tungstène",
+              "unknown": "Inconnu"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "Diamètre de buse"
+          },
+          "serial": {
+            "name": "Numéro de série"
+          },
+          "max_temp": {
+            "name": "Température maximale"
+          },
+          "wear": {
+            "name": "Usure"
+          },
+          "status": {
+            "name": "Statut",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Anormal",
+              "unknown": "Inconnu"
+            }
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "filament_id": {
+            "name": "ID de filament"
+          },
+          "filament_name": {
+            "name": "Nom du filament"
+          }
+        }
+      },
       "ip_address": {
         "name": "Adresse IP"
       },
@@ -854,7 +933,7 @@
         "name": "Fichier G-code téléchargé"
       },
       "remaining_drying_time": {
-        "name": "Temps de chauffage restant"
+        "name": "Temps de séchage restant"
       },
       "ams_temp": {
         "name": "Température"
@@ -878,9 +957,9 @@
         "name": "Statut de carte SD",
         "state": {
           "missing": "Manquant",
-          "normal": "Normale",
+          "normal": "Normal",
           "abnormal": "Anormal",
-          "readonly": "Lire uniquement"
+          "readonly": "Lecture seule"
         }
       },
       "left_nozzle_diameter": {
@@ -889,26 +968,26 @@
       "left_nozzle_type": {
         "name": "Type de buse gauche",
         "state": {
-          "hardened_steel": "Acier durci",
+          "hardened_steel": "Acier trempé",
           "stainless_steel": "Acier inoxydable",
           "tungsten_carbide": "Carbure de tungstène",
-          "high_flow_hardened_steel": "Acier durci avec un grand débit",
-          "high_flow_stainless_steel": "acier inoxydable avec un grand débit",
-          "high_flow_tungsten_carbide": "carbure de tungstène avec un grand débit"
+          "high_flow_hardened_steel": "Acier trempé avec un grand débit",
+          "high_flow_stainless_steel": "Acier inoxydable avec un grand débit",
+          "high_flow_tungsten_carbide": "Carbure de tungstène avec un grand débit"
         }
       },
       "right_nozzle_diameter": {
         "name": "Taille de la buse droite"
       },
       "right_nozzle_type": {
-        "name": "Type de buse droit",
+        "name": "Type de buse droite",
         "state": {
-          "hardened_steel": "Acier durci",
+          "hardened_steel": "Acier trempé",
           "stainless_steel": "Acier inoxydable",
           "tungsten_carbide": "Carbure de tungstène",
-          "high_flow_hardened_steel": "Acier durci avec un grand débit",
-          "high_flow_stainless_steel": "acier inoxydable avec un grand débit",
-          "high_flow_tungsten_carbide": "carbure de tungstène avec un grand débit"
+          "high_flow_hardened_steel": "Acier trempé avec un grand débit",
+          "high_flow_stainless_steel": "Acier inoxydable avec un grand débit",
+          "high_flow_tungsten_carbide": "Carbure de tungstène avec un grand débit"
         }
       },
       "model_download_percentage": {
@@ -928,7 +1007,7 @@
         "name": "Activer la caméra"
       },
       "imagecamera": {
-        "name": "Utiliser une camera de type image"
+        "name": "Utiliser une caméra de type image"
       },
       "prompt_sound": {
         "name": "Autoriser le son d'invite"
