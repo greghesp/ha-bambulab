@@ -218,9 +218,6 @@
       "door_open": {
         "name": "Door"
       },
-      "airduct_mode": {
-        "name": "Air duct mode"
-      },
       "timelapse": {
         "name": "Timelapse"
       },
@@ -328,9 +325,24 @@
           "sport": "Sport",
           "ludicrous": "Ludicrous"
         }
+      },
+      "airduct_mode": {
+        "name": "Airduct mode",
+        "state": {
+          "cooling": "Cooling",
+          "heating": "Heating"
+        }
       }
     },
     "sensor": {
+      "airduct_mode": {
+        "name": "Airduct mode",
+        "state": {
+          "cooling": "Cooling",
+          "heating": "Heating",
+          "laser": "Laser"
+        }
+      },
       "tool_module": {
         "name": "Tool module",
         "state": {
@@ -1004,9 +1016,6 @@
       },
       "prompt_sound": {
         "name": "Prompt sound"
-      },
-      "airduct_mode": {
-        "name": "Air duct mode"
       }
     },
     "update": {

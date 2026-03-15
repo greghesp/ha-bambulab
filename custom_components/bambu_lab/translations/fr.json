@@ -239,9 +239,6 @@
       "drying": {
         "name": "Séchage"
       },
-      "airduct_mode": {
-        "name": "Mode conduit d'air"
-      },
       "hybrid_mode_blocks_control": {
         "name": "Contrôle MQTT hybride bloqué"
       }
@@ -328,9 +325,24 @@
           "sport": "Sport",
           "ludicrous": "Insensé"
         }
+      },
+      "airduct_mode": {
+        "name": "Mode de ventilation",
+        "state": {
+          "cooling": "Refroidissement",
+          "heating": "Chauffage"
+        }
       }
     },
     "sensor": {
+      "airduct_mode": {
+        "name": "Mode de ventilation",
+        "state": {
+          "cooling": "Refroidissement",
+          "heating": "Chauffage",
+          "laser": "Laser"
+        }
+      },
       "tool_module": {
         "name": "Module d’outil",
         "state": {
@@ -1020,9 +1032,6 @@
       },
       "ftp": {
         "name": "Chargement des modèles"
-      },
-      "airduct_mode": {
-        "name": "Mode conduit d'air"
       }
     },
     "update": {
