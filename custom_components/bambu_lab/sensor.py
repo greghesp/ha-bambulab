@@ -75,6 +75,8 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         self.entity_description = description
         printer = coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
+        if description.options_fn is not None:
+            self._attr_options = description.options_fn(coordinator)
 
     @property
     def extra_state_attributes(self) -> dict:

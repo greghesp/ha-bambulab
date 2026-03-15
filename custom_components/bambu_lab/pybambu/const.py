@@ -163,6 +163,12 @@ SPEED_PROFILE = {
     4: "ludicrous"
 }
 
+AIRDUCT_MODES = {
+    0: "cooling",
+    1: "heating",
+    2: "laser",
+}
+
 PRINT_TYPE_OPTIONS = {
     "cloud",
     "local",
