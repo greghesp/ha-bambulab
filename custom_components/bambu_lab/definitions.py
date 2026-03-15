@@ -40,6 +40,7 @@ from .pybambu.const import (
     CURRENT_STAGE_OPTIONS,
     GCODE_STATE_OPTIONS,
     SDCARD_STATUS,
+    AIRDUCT_MODES,
     FansEnum,
     Features,
 )
@@ -195,14 +196,6 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         is_on_fn=lambda self: self.coordinator.get_model().info.door_open,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DOOR_SENSOR),
-    ),
-    BambuLabBinarySensorEntityDescription(
-        key="airduct_mode",
-        translation_key="airduct_mode",
-        device_class=BinarySensorDeviceClass.OPENING,
-        entity_category=EntityCategory.DIAGNOSTIC,
-        is_on_fn=lambda self: self.coordinator.get_model().info.airduct_mode == 0,
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AIRDUCT_MODE),
     ),
     BambuLabBinarySensorEntityDescription(
         key="developer_lan_mode",
@@ -417,6 +410,15 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         extra_attributes=lambda self: {"modifier": self.coordinator.get_model().speed.modifier},
         device_class=SensorDeviceClass.ENUM,
         options=[speed for i, speed in SPEED_PROFILE.items()]
+    ),
+    BambuLabSensorEntityDescription(
+        key="airduct_mode",
+        translation_key="airduct_mode",
+        icon="mdi:air-filter",
+        device_class=SensorDeviceClass.ENUM,
+        options=list(AIRDUCT_MODES.values()),
+        value_fn=lambda self: AIRDUCT_MODES.get(self.coordinator.get_model().info.airduct_mode, AIRDUCT_MODES[0]),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AIRDUCT_MODE),
     ),
     BambuLabSensorEntityDescription(
         key="stage",

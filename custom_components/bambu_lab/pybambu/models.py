@@ -50,6 +50,7 @@ from .const import (
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
+    AIRDUCT_MODES,
     TempEnum, Print_Fun_Values,
 )
 from .commands import (
@@ -59,8 +60,7 @@ from .commands import (
     CHAMBER_LIGHT_2_OFF,
     PROMPT_SOUND_ENABLE,
     PROMPT_SOUND_DISABLE,
-    AIRDUCT_SET_COOLING,
-    AIRDUCT_SET_HEATING_FILTER,
+    AIRDUCT_SET_MODE_TEMPLATE,
     SPEED_PROFILE_TEMPLATE,
     BUZZER_SET_SILENT,
     BUZZER_SET_ALARM,
@@ -196,11 +196,8 @@ class Device:
                 return self.supports_sw_version("01.07.50.18")
             return True
         elif feature == Features.AIRDUCT_MODE:
-            # Airduct mode (Filter/Heating and Cooling) is currently only present on P2S
-            if model in {Printers.P2S, Printers.H2C}:
-                # CHECK H2C SUPPORT FOR THIS
-                return True
-            return False
+            # Airduct mode (Filter/Heating and Cooling) is present on P2S and H2 series
+            return model in (h2_printers | p2_printers)
         elif feature == Features.HYBRID_MODE_BLOCKS_CONTROL:
             if model in p1_printers:
                 # Not sure what the first version that did this was. At least this - could be earlier.
@@ -2083,6 +2080,7 @@ class Info:
         self.extruder_filament_state = False
         self.door_open = False
         self.airduct_mode = 0
+        self.airduct_modes_available = []
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)                
 
@@ -2279,10 +2277,16 @@ class Info:
 
 
         # Airduct mode is provided under print/device/airduct
-        # P2S example:
-        #   "modeCur": 0, // 0 = Cooling only, 1 = Heating/Filter
-        #   "modeFunc": 0, // 0 = Cooling only, 1 = Heating/Filter        
-        self.airduct_mode = data.get("device", {}).get("airduct", {}).get("modeCur", self.airduct_mode)
+        airduct_data = data.get("device", {}).get("airduct", {})
+        self.airduct_mode = airduct_data.get("modeCur", self.airduct_mode)
+
+        mode_list = airduct_data.get("modeList")
+        if mode_list is not None:
+            self.airduct_modes_available = [
+                AIRDUCT_MODES[entry["modeId"]]
+                for entry in mode_list
+                if entry.get("modeId") in AIRDUCT_MODES
+            ]
 
         # Compute if there's a delta before we check the wifi_signal value.
         changed = (old_data != f"{self.__dict__}")
@@ -2345,11 +2349,11 @@ class Info:
         else:
             self._client.publish(PROMPT_SOUND_DISABLE)
             
-    def set_airduct_mode(self, enable: bool):
-        if enable:
-            self._client.publish(AIRDUCT_SET_COOLING)            
-        else:
-            self._client.publish(AIRDUCT_SET_HEATING_FILTER)            
+    def set_airduct_mode(self, option: str):
+        mode_id = next((k for k, v in AIRDUCT_MODES.items() if v == option), 0)
+        command = AIRDUCT_SET_MODE_TEMPLATE.copy()
+        command["print"] = {**command["print"], "modeId": mode_id}
+        self._client.publish(command)
             
 
     def buzzer_silence(self):
