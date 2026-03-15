@@ -19,18 +19,18 @@
       "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible."
     },
     "error": {
-      "cannot_connect": "Échec de la connexion. Vérifiez les informations d’identification.",
+      "cannot_connect": "Échec de la connexion. Vérifiez les identifiants.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
       "code_needed": "Le code de vérification doit être fourni.",
-      "verifyCode": "Un code de vérification est requis. Vérifiez votre courrier électronique ou votre téléphone.",
-      "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre courrier électronique ou votre téléphone.",
-      "code_incorrect": "Le code de vérification était incorrect. ",
-      "tfaCode": "Le code 2FA est requis. ",
+      "verifyCode": "Un code de vérification est requis. Vérifiez votre e-mail ou votre téléphone.",
+      "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre e-mail ou votre téléphone.",
+      "code_incorrect": "Le code de vérification était incorrect.",
+      "tfaCode": "Le code 2FA est requis.",
       "cannot_connect_local_timeout": "Échec de la connexion. La connexion a expiré.",
-      "cannot_connect_local_access_denied": "Échec de la connexion. Accès refusé - vérifiez le code d'accès.",
-      "cannot_connect_local_incorrect_serial": "Échec de la connexion. La connexion a été fermée par l'imprimante - vérifiez le numéro de série.",
-      "cannot_connect_local_incorrect_address": "Échec de la connexion. Connexion refusée - vérifiez l'adresse IP.",
+      "cannot_connect_local_access_denied": "Échec de la connexion. Accès refusé - vérifiez le code d’accès.",
+      "cannot_connect_local_incorrect_serial": "Échec de la connexion. La connexion a été fermée par l’imprimante - vérifiez le numéro de série.",
+      "cannot_connect_local_incorrect_address": "Échec de la connexion. Connexion refusée - vérifiez l’adresse IP.",
       "cannot_connect_local_address_unreachable": "Échec de la connexion. Adresse inaccessible - vérifiez la connexion réseau.",
       "cannot_connect_cloud_timeout": "Le délai a expiré lors de la tentative de connexion au cloud Bambu Lab.",
       "cannot_connect_cloud_access_denied": "Accès refusé par le cloud Bambu Lab.",
@@ -41,14 +41,14 @@
     },
     "step": {
       "user": {
-        "description": "La configuration via le cloud Bambu Lab est la plus simple et la plus rapide. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge.\n\rVous pouvez également réutiliser les informations d'authentification fonctionnelles d'autres imprimantes. S'ils sont trouvés, ils seront répertoriés par adresse e-mail.\n\rVous pouvez également vous connecter en fournissant manuellement les détails de connexion locale de l'imprimante. Ceci est requis pour une imprimante en mode Lan.",
+        "description": "La configuration via le cloud Bambu Lab est la plus simple et la plus rapide. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge.\n\rVous pouvez également réutiliser les informations d’authentification fonctionnelles d’autres imprimantes. S’ils sont trouvés, ils seront répertoriés par adresse e-mail.\n\rVous pouvez également vous connecter en fournissant manuellement les détails de connexion locale de l’imprimante. Ceci est requis pour une imprimante en mode Lan.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
       },
       "Bambu": {
         "title": "Connexion au cloud du Bambu Lab",
-        "description": "Veuillez fournir vos informations d’identification Bambu Lab :",
+        "description": "Veuillez fournir vos identifiants Bambu Lab :",
         "data": {
           "region": "Région du compte :",
           "email": "Adresse e-mail ou numéro de téléphone",
@@ -117,18 +117,18 @@
       "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible."
     },
     "error": {
-      "cannot_connect": "Échec de la connexion. Vérifiez les informations d’identification.",
+      "cannot_connect": "Échec de la connexion. Vérifiez les identifiants.",
       "invalid_auth": "Authentification invalide.",
       "unknown": "Erreur inattendue.",
       "code_needed": "Le code de vérification doit être fourni.",
-      "verifyCode": "Un code de vérification est requis. Vérifiez votre courrier électronique ou votre téléphone.",
-      "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre courrier électronique ou votre téléphone.",
-      "code_incorrect": "Le code de vérification était incorrect. ",
-      "tfaCode": "Le code 2FA est requis. ",
+      "verifyCode": "Un code de vérification est requis. Vérifiez votre e-mail ou votre téléphone.",
+      "code_expired": "Le code de vérification a expiré. Nouveau code demandé. Vérifiez votre e-mail ou votre téléphone.",
+      "code_incorrect": "Le code de vérification était incorrect.",
+      "tfaCode": "Le code 2FA est requis.",
       "cannot_connect_local_timeout": "Échec de la connexion. La connexion a expiré.",
-      "cannot_connect_local_access_denied": "Échec de la connexion. Accès refusé - vérifiez le code d'accès.",
-      "cannot_connect_local_incorrect_serial": "Échec de la connexion. La connexion a été fermée par l'imprimante - vérifiez le numéro de série.",
-      "cannot_connect_local_incorrect_address": "Échec de la connexion. Connexion refusée - vérifiez l'adresse IP.",
+      "cannot_connect_local_access_denied": "Échec de la connexion. Accès refusé - vérifiez le code d’accès.",
+      "cannot_connect_local_incorrect_serial": "Échec de la connexion. La connexion a été fermée par l’imprimante - vérifiez le numéro de série.",
+      "cannot_connect_local_incorrect_address": "Échec de la connexion. Connexion refusée - vérifiez l’adresse IP.",
       "cannot_connect_local_address_unreachable": "Échec de la connexion. Adresse inaccessible - vérifiez la connexion réseau.",
       "cannot_connect_cloud_timeout": "Le délai a expiré lors de la tentative de connexion au cloud Bambu Lab.",
       "cannot_connect_cloud_access_denied": "Accès refusé par le cloud Bambu Lab.",
@@ -140,14 +140,14 @@
     "step": {
       "init": {
         "title": "Ajuster les paramètres de connexion",
-        "description": "La configuration via le cloud Bambu Lab est la plus simple et la plus rapide. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge.\n\rVous pouvez également réutiliser les informations d'authentification fonctionnelles d'autres imprimantes. S'ils sont trouvés, ils seront répertoriés par adresse e-mail.\n\rVous pouvez également vous connecter en fournissant manuellement les détails de connexion locale de l'imprimante. Ceci est requis pour une imprimante en mode Lan.",
+        "description": "La configuration via le cloud Bambu Lab est la plus simple et la plus rapide. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge.\n\rVous pouvez également réutiliser les informations d’authentification fonctionnelles d’autres imprimantes. S’ils sont trouvés, ils seront répertoriés par adresse e-mail.\n\rVous pouvez également vous connecter en fournissant manuellement les détails de connexion locale de l’imprimante. Ceci est requis pour une imprimante en mode Lan.",
         "data": {
           "printer_mode": "Mode de configuration de l’imprimante :"
         }
       },
       "Bambu": {
         "title": "Connexion au cloud du Bambu Lab",
-        "description": "Veuillez fournir vos informations d’identification Bambu Lab :",
+        "description": "Veuillez fournir vos identifiants Bambu Lab :",
         "data": {
           "region": "Région du compte :",
           "email": "Adresse e-mail ou numéro de téléphone",
@@ -222,16 +222,16 @@
         "name": "En ligne"
       },
       "firmware_update": {
-        "name": "Mise à jour du micrologiciel"
+        "name": "Micrologiciel"
       },
       "extruder_filament_state": {
-        "name": "État de filament extrudeur"
+        "name": "Filament extrudeur"
       },
       "developer_lan_mode": {
         "name": "Mode LAN développeur"
       },
       "mqtt_encryption": {
-        "name": "Firmware de cryptage MQTT"
+        "name": "Chiffrement MQTT"
       },
       "active_ams": {
         "name": "Actif"
@@ -243,21 +243,21 @@
         "name": "Mode conduit d'air"
       },
       "hybrid_mode_blocks_control": {
-        "name": "Le MQTT hybride bloque le contrôle"
+        "name": "Contrôle MQTT hybride bloqué"
       }
     },
     "button": {
       "pause": {
-        "name": "Mettre en pause l'impression"
+        "name": "Pause"
       },
       "resume": {
-        "name": "Reprendre l'impression"
+        "name": "Reprise"
       },
       "stop": {
-        "name": "Arrêter l'impression"
+        "name": "Arrêt"
       },
       "refresh": {
-        "name": "Forcer l'actualisation des données"
+        "name": "Forcer l'actualisation"
       },
       "dev": {
         "name": "Déboguer"
@@ -397,7 +397,7 @@
           "sweeping_xy_mech_mode": "Mode balayage XY mécanique",
           "changing_filament": "Changement de filament",
           "m400_pause": "Pause M400",
-          "paused_filament_runout": "Pause à cause d'une fin de filament",
+          "paused_filament_runout": "En pause : fin de filament",
           "heating_hotend": "Préchauffage de l'extrudeur",
           "calibrating_extrusion": "Calibration de l'extrusion",
           "scanning_bed_surface": "Numérisation de la surface du lit",
@@ -407,49 +407,49 @@
           "homing_toolhead": "Recentrage de la tête d'impression",
           "cleaning_nozzle_tip": "Nettoyage de la buse",
           "checking_extruder_temperature": "Vérification de la température de l'extrudeur",
-          "paused_user": "Pause par l'utilisateur",
-          "paused_front_cover_falling": "Pause en raison de la chute du couvercle avant",
+          "paused_user": "En pause par l'utilisateur",
+          "paused_front_cover_falling": "En pause : couvercle avant",
           "calibrating_extrusion_flow": "Calibration du débit de l'extrusion",
-          "paused_nozzle_temperature_malfunction": "Pause en raison d'un dysfonctionnement de la température de la buse",
-          "paused_heat_bed_temperature_malfunction": "Pause en raison d'un dysfonctionnement de la température du lit",
-          "filament_unloading": "Déchargement de filaments",
-          "paused_skipped_step": "Suspendu en raison d'étapes sautées",
-          "filament_loading": "Chargement des filaments",
-          "calibrating_motor_noise": "Calibrage du bruit du moteur",
-          "paused_ams_lost": "Suspendu en raison de la perte d'AMS",
-          "paused_low_fan_speed_heat_break": "En pause en raison d'une faible vitesse du ventilateur de coupure thermique",
-          "paused_chamber_temperature_control_error": "En pause en raison d'une erreur de contrôle de la température de la chambre",
-          "cooling_chamber": "Chambre de refroidissement",
-          "paused_user_gcode": "Suspendu par l'utilisateur qui a ajouté l'instruction de pause Gcode",
-          "motor_noise_showoff": "Démonstration du bruit moteur",
-          "paused_nozzle_filament_covered_detected": "En pause en raison d'un filament de buse recouvert détecté",
-          "paused_cutter_error": "En pause en raison d'une erreur de coupe",
-          "paused_first_layer_error": "Suspendu en raison d'une erreur de première couche",
-          "paused_nozzle_clog": "En pause en raison d'une buse obstruée",
+          "paused_nozzle_temperature_malfunction": "En pause : dysfonctionnement temp. buse",
+          "paused_heat_bed_temperature_malfunction": "En pause : dysfonctionnement temp. plateau",
+          "filament_unloading": "Déchargement du filament",
+          "paused_skipped_step": "En pause : étapes sautées",
+          "filament_loading": "Chargement du filament",
+          "calibrating_motor_noise": "Calibration du bruit du moteur",
+          "paused_ams_lost": "En pause : AMS perdu",
+          "paused_low_fan_speed_heat_break": "En pause : ventilateur heatbreak faible",
+          "paused_chamber_temperature_control_error": "En pause : erreur temp. chambre",
+          "cooling_chamber": "Refroidissement de la chambre",
+          "paused_user_gcode": "En pause : instruction G-code",
+          "motor_noise_showoff": "Démonstration bruit moteur",
+          "paused_nozzle_filament_covered_detected": "En pause : buse recouverte",
+          "paused_cutter_error": "En pause : erreur de coupe",
+          "paused_first_layer_error": "En pause : erreur première couche",
+          "paused_nozzle_clog": "En pause : buse obstruée",
           "idle": "Inactif",
-          "check_absolute_accuracy_before_calibration": "Vérifier la précision absolue de l'imprimante avant l'étalonnage",
-          "absolute_accuracy_calibration": "Étalonnage de précision absolue",
-          "check_absolute_accuracy_after_calibration": "Vérifier la précision absolue de l'imprimante après l'étalonnage",
-          "calibrate_nozzle_offset": "Étalonnage de décalage de buse",
+          "check_absolute_accuracy_before_calibration": "Vérification précision avant calibration",
+          "absolute_accuracy_calibration": "Calibration de précision absolue",
+          "check_absolute_accuracy_after_calibration": "Vérification précision après calibration",
+          "calibrate_nozzle_offset": "Calibration décalage de buse",
           "bed_level_high_temperature": "Nivellement de lit automatique à haute température",
           "check_quick_release": "Vérification automatique: levier de libération rapide",
           "check_door_and_cover": "Vérification automatique: porte et couverture supérieure",
-          "laser_calibration": "Étalonnage laser",
+          "laser_calibration": "Calibration laser",
           "check_plaform": "Vérification automatique: plate-forme",
           "check_birdeye_camera_position": "Vérification automatique: position de caméra Birdeye",
-          "calibrate_birdeye_camera": "Calibrage de la caméra Birdeye",
+          "calibrate_birdeye_camera": "Calibration caméra Birdeye",
           "bed_level_phase_1": "Nivellement de lit automatique - Phase 1",
           "bed_level_phase_2": "Nivellement de lit automatique - Phase 2",
-          "heating_chamber": "Chambre de chauffage",
+          "heating_chamber": "Chauffage de la chambre",
           "heated_bedcooling": "Refroidissement du lit chauffant",
-          "print_calibration_lines": "Lignes d'étalonnage d'impression",
+          "print_calibration_lines": "Impression des lignes de calibration",
           "check_material": "Vérification automatique : matériau",
-          "calibrating_live_view_camera": "Étalonnage de la caméra Live View",
-          "waiting_for_heatbed_temperature": "En attente que le lit chauffant atteigne la température cible",
+          "calibrating_live_view_camera": "Calibration caméra Live View",
+          "waiting_for_heatbed_temperature": "Attente température du plateau",
           "check_material_position": "Vérification automatique : position du matériau",
-          "calibrating_cutter_model_offset": "Étalonnage du décalage du module de coupe",
-          "measuring_surface": "Surface de mesure",
-          "thermal_preconditioning": "Préconditionnement thermique pour l'optimisation de la première couche"
+          "calibrating_cutter_model_offset": "Calibration décalage module de coupe",
+          "measuring_surface": "Mesure de la surface",
+          "thermal_preconditioning": "Préconditionnement thermique"
         }
       },
       "print_progress": {
@@ -540,9 +540,9 @@
           "hardened_steel": "Acier trempé",
           "stainless_steel": "Acier inoxydable",
           "tungsten_carbide": "Carbure de tungstène",
-          "high_flow_hardened_steel": "Acier trempé avec un grand débit",
-          "high_flow_stainless_steel": "Acier inoxydable avec un grand débit",
-          "high_flow_tungsten_carbide": "Carbure de tungstène avec un grand débit",
+          "high_flow_hardened_steel": "Haut débit acier trempé",
+          "high_flow_stainless_steel": "Haut débit acier inoxydable",
+          "high_flow_tungsten_carbide": "Haut débit carbure de tungstène",
           "unknown": "Inconnu"
         }
       },
@@ -974,9 +974,9 @@
           "hardened_steel": "Acier trempé",
           "stainless_steel": "Acier inoxydable",
           "tungsten_carbide": "Carbure de tungstène",
-          "high_flow_hardened_steel": "Acier trempé avec un grand débit",
-          "high_flow_stainless_steel": "Acier inoxydable avec un grand débit",
-          "high_flow_tungsten_carbide": "Carbure de tungstène avec un grand débit"
+          "high_flow_hardened_steel": "Haut débit acier trempé",
+          "high_flow_stainless_steel": "Haut débit acier inoxydable",
+          "high_flow_tungsten_carbide": "Haut débit carbure de tungstène"
         }
       },
       "right_nozzle_diameter": {
@@ -988,9 +988,9 @@
           "hardened_steel": "Acier trempé",
           "stainless_steel": "Acier inoxydable",
           "tungsten_carbide": "Carbure de tungstène",
-          "high_flow_hardened_steel": "Acier trempé avec un grand débit",
-          "high_flow_stainless_steel": "Acier inoxydable avec un grand débit",
-          "high_flow_tungsten_carbide": "Carbure de tungstène avec un grand débit"
+          "high_flow_hardened_steel": "Haut débit acier trempé",
+          "high_flow_stainless_steel": "Haut débit acier inoxydable",
+          "high_flow_tungsten_carbide": "Haut débit carbure de tungstène"
         }
       },
       "model_download_percentage": {
@@ -1010,19 +1010,19 @@
     },
     "switch": {
       "camera": {
-        "name": "Activer la caméra"
+        "name": "Caméra"
       },
       "imagecamera": {
-        "name": "Utiliser une caméra de type image"
+        "name": "Caméra image"
       },
       "prompt_sound": {
-        "name": "Autoriser le son d'invite"
+        "name": "Son de notification"
       },
       "ftp": {
-        "name": "Charger le modèle depuis l'imprimante"
+        "name": "Chargement des modèles"
       },
       "airduct_mode": {
-        "name": "Mode refroidissement ou mode chauffage/filtrage"
+        "name": "Mode conduit d'air"
       }
     },
     "update": {
@@ -1042,7 +1042,7 @@
   "issues": {
     "authentication_failed": {
       "title": "Échec de l'authentification",
-      "description": "La tentative de connexion à Bambu Lab a échoué pour {device}. Veuillez reconfigurer l'intégration et fournir de nouvelles informations d'identification."
+      "description": "La tentative de connexion à Bambu Lab a échoué pour {device}. Veuillez reconfigurer l'intégration et fournir de nouveaux identifiants."
     },
     "no_external_storage": {
       "title": "Aucune carte USB ou SD détectée",
@@ -1053,11 +1053,11 @@
       "description": "{device} a l'affichage en direct désactivé dans les paramètres de l'imprimante. Veuillez l'activer pour utiliser les fonctionnalités de l'appareil photo."
     },
     "mqtt_encryption_enabled": {
-      "title": "Cryptage MQTT activé",
-      "description": "{device} est connecté au cloud avec le cryptage mqtt activé. Seule la lumière peut être contrôlée par cette intégration. Tous les autres contrôles ne sont pas disponibles. L'imprimante doit être réglée en mode LAN développeur afin de permettre le contrôle depuis Home Assistant."
+      "title": "Chiffrement MQTT activé",
+      "description": "{device} est connecté au cloud avec le chiffrement MQTT activé. Seule la lumière peut être contrôlée par cette intégration. Tous les autres contrôles ne sont pas disponibles. L'imprimante doit être réglée en mode LAN développeur afin de permettre le contrôle depuis Home Assistant."
     },
     "hybrid_mode_blocking": {
-      "title": "Contrôle des blocs de connexion hybrides",
+      "title": "La connexion hybride bloque le contrôle",
       "description": "{device} est connecté au cloud mais avec une connexion mqtt locale par l'intégration. Cela bloque le réglage des températures et la réimpression de l'historique. Basculez la connexion vers le cloud pur pour permettre un contrôle total."
     }
   }
