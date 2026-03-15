@@ -213,13 +213,13 @@
         "name": "Drying"
       },
       "developer_lan_mode": {
-        "name": "Developer Lan Mode"
+        "name": "Developer LAN mode"
       },
       "door_open": {
-        "name": "Enclosure door"
+        "name": "Door"
       },
       "timelapse": {
-        "name": "Recording timelapse"
+        "name": "Timelapse"
       },
       "hms_errors": {
         "name": "HMS errors"
@@ -231,30 +231,30 @@
         "name": "Online"
       },
       "mqtt_encryption": {
-        "name": "MQTT encryption firmware"
+        "name": "MQTT encryption"
       },
       "hybrid_mode_blocks_control": {
-        "name": "Hybrid MQTT blocks control"
+        "name": "Hybrid MQTT control blocked"
       },
       "firmware_update": {
-        "name": "Firmware update"
+        "name": "Firmware"
       },
       "extruder_filament_state": {
-        "name": "Extruder filament state"
+        "name": "Extruder filament"
       }
     },
     "button": {
       "pause": {
-        "name": "Pause printing"
+        "name": "Pause"
       },
       "resume": {
-        "name": "Resume printing"
+        "name": "Resume"
       },
       "stop": {
-        "name": "Stop printing"
+        "name": "Stop"
       },
       "refresh": {
-        "name": "Force refresh data"
+        "name": "Force refresh"
       },
       "dev": {
         "name": "Debug"
@@ -288,7 +288,7 @@
         "name": "Camera"
       },
       "cover_image": {
-        "name": "Cover Image"
+        "name": "Cover image"
       },
       "pick_image": {
         "name": "Pick image"
@@ -427,7 +427,7 @@
           "sweeping_xy_mech_mode": "Sweeping XY mech mode",
           "changing_filament": "Changing filament",
           "m400_pause": "M400 pause",
-          "paused_filament_runout": "Paused due to filament runout",
+          "paused_filament_runout": "Paused: filament runout",
           "heating_hotend": "Heating hotend",
           "calibrating_extrusion": "Calibrating extrusion",
           "scanning_bed_surface": "Scanning bed surface",
@@ -437,48 +437,48 @@
           "homing_toolhead": "Homing toolhead",
           "cleaning_nozzle_tip": "Cleaning nozzle tip",
           "checking_extruder_temperature": "Checking extruder temperature",
-          "paused_user": "Printing was paused by the user",
-          "paused_front_cover_falling": "Pause of front cover falling",
+          "paused_user": "Paused by user",
+          "paused_front_cover_falling": "Paused: front cover",
           "calibrating_extrusion_flow": "Calibrating extrusion flow",
-          "paused_nozzle_temperature_malfunction": "Paused due to nozzle temperature malfunction",
-          "paused_heat_bed_temperature_malfunction": "Paused due to heat bed temperature malfunction",
+          "paused_nozzle_temperature_malfunction": "Paused: nozzle temp malfunction",
+          "paused_heat_bed_temperature_malfunction": "Paused: bed temp malfunction",
           "filament_unloading": "Filament unloading",
-          "paused_skipped_step": "Paused due to skipped steps",
+          "paused_skipped_step": "Paused: skipped steps",
           "filament_loading": "Filament loading",
           "calibrating_motor_noise": "Calibrating motor noise",
-          "paused_ams_lost": "Paused due to AMS lost",
-          "paused_low_fan_speed_heat_break": "Paused due to low heat break fan speed",
-          "paused_chamber_temperature_control_error": "Paused due to chamber temperature control error",
+          "paused_ams_lost": "Paused: AMS lost",
+          "paused_low_fan_speed_heat_break": "Paused: low heatbreak fan",
+          "paused_chamber_temperature_control_error": "Paused: chamber temp error",
           "cooling_chamber": "Cooling chamber",
-          "paused_user_gcode": "Paused by user added gcode pause instruction",
+          "paused_user_gcode": "Paused: G-code instruction",
           "motor_noise_showoff": "Motor noise show off",
-          "paused_nozzle_filament_covered_detected": "Paused due to nozzle filament covered detected",
-          "paused_cutter_error": "Paused due to cutter error",
-          "paused_first_layer_error": "Paused due to first layer error",
-          "paused_nozzle_clog": "Paused due to nozzle clog",
-          "check_absolute_accuracy_before_calibration": "Check printer absolute accuracy before calibration",
+          "paused_nozzle_filament_covered_detected": "Paused: nozzle covered",
+          "paused_cutter_error": "Paused: cutter error",
+          "paused_first_layer_error": "Paused: first layer error",
+          "paused_nozzle_clog": "Paused: nozzle clog",
+          "check_absolute_accuracy_before_calibration": "Check accuracy before calibration",
           "absolute_accuracy_calibration": "Absolute accuracy calibration",
-          "check_absolute_accuracy_after_calibration": "Check printer absolute accuracy after calibration",
+          "check_absolute_accuracy_after_calibration": "Check accuracy after calibration",
           "calibrate_nozzle_offset": "Nozzle offset calibration",
           "bed_level_high_temperature": "High temperature auto bed levelling",
-          "check_quick_release": "Auto Check: Quick Release Lever",
-          "check_door_and_cover": "Auto Check: Door and Upper Cover",
-          "laser_calibration": "Laser Calibration",
-          "check_plaform": "Auto Check: Platform",
-          "check_birdeye_camera_position": "Auto Check: Birdeye Camera Position",
-          "calibrate_birdeye_camera": "Calibrate Birdeye Camera",
+          "check_quick_release": "Auto check: quick release lever",
+          "check_door_and_cover": "Auto check: door and upper cover",
+          "laser_calibration": "Laser calibration",
+          "check_plaform": "Auto check: platform",
+          "check_birdeye_camera_position": "Auto check: birdeye camera",
+          "calibrate_birdeye_camera": "Calibrate birdeye camera",
           "bed_level_phase_1": "Auto bed leveling - phase 1",
           "bed_level_phase_2": "Auto bed leveling - phase 2",
           "heating_chamber": "Heating chamber",
           "heated_bedcooling": "Heated bed cooling",
           "print_calibration_lines": "Printing calibration lines",
-          "check_material": "Auto Check: Material",
+          "check_material": "Auto check: material",
           "calibrating_live_view_camera": "Live View camera calibration",
-          "waiting_for_heatbed_temperature": "Waiting for heatbed to reach target temperature",
-          "check_material_position": "Auto Check: Material position",
+          "waiting_for_heatbed_temperature": "Waiting for bed temperature",
+          "check_material_position": "Auto check: material position",
           "calibrating_cutter_model_offset": "Cutter module offset calibration",
           "measuring_surface": "Measuring surface",
-          "thermal_preconditioning": "Thermal preconditioning for first layer optimization",
+          "thermal_preconditioning": "Thermal preconditioning",
           "idle": "Idle"
         }
       },
@@ -498,14 +498,14 @@
         "name": "Print status",
         "state": {
           "failed": "Failed",
-          "finish": "Finish",
+          "finish": "Finished",
           "idle": "Idle",
           "offline": "Offline",
-          "prepare": "Prepare",
+          "prepare": "Preparing",
           "running": "Running",
-          "pause": "Pause",
+          "pause": "Paused",
           "slicing": "Slicing",
-          "init": "Init"
+          "init": "Initializing"
         }
       },
       "printable_objects": {
@@ -1006,16 +1006,16 @@
     },
     "switch": {
       "camera": {
-        "name": "Enable camera"
+        "name": "Camera"
       },
       "imagecamera": {
-        "name": "Use image sensor camera"
+        "name": "Image sensor camera"
       },
       "ftp": {
-        "name": "Load model data from printer"
+        "name": "Model data loading"
       },
       "prompt_sound": {
-        "name": "Allow Prompt Sound"
+        "name": "Prompt sound"
       }
     },
     "update": {
