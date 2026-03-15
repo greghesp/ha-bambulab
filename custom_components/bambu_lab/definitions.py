@@ -73,6 +73,7 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     extra_attributes: Callable[..., dict] = lambda _: {}
     icon_fn: Callable[..., str] = lambda _: None
     is_restoring: bool = False
+    options_fn: Callable[..., list[str]] | None = None
 
 
 @dataclass
@@ -416,7 +417,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="airduct_mode",
         icon="mdi:air-filter",
         device_class=SensorDeviceClass.ENUM,
-        options=list(AIRDUCT_MODES.values()),
+        options_fn=lambda coordinator: coordinator.get_model().info.airduct_modes_available or ["cooling", "heating"],
         value_fn=lambda self: AIRDUCT_MODES.get(self.coordinator.get_model().info.airduct_mode, AIRDUCT_MODES[0]),
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AIRDUCT_MODE),
     ),
