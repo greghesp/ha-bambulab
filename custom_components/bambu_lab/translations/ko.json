@@ -608,17 +608,32 @@
           }
         }
       },
-      "tray_1": {
-        "name": "트레이 1",
+      "tray": {
+        "name": "트레이 {tray_number}",
         "state_attributes": {
+          "slot": {
+            "name": "슬롯"
+          },
           "active": {
             "name": "활성"
+          },
+          "bed_temp": {
+            "name": "침대 온도"
           },
           "color": {
             "name": "색상"
           },
           "cols": {
             "name": "색상들"
+          },
+          "ctype": {
+            "name": "색상 유형"
+          },
+          "dry_temp": {
+            "name": "건조 온도"
+          },
+          "dry_time": {
+            "name": "건조시간"
           },
           "empty": {
             "name": "빈"
@@ -638,67 +653,14 @@
           "remain": {
             "name": "남은 필라멘트"
           },
-          "tag_uid": {
-            "name": "필라멘트 시리얼 번호"
-          },
-          "type": {
-            "name": "유형"
-          },
           "remain_enabled": {
             "name": "나머지 필라멘트 추정이 활성화되었습니다"
           },
-          "filament_id": {
-            "name": "필라멘트 ID"
-          },
-          "tray_weight": {
-            "name": "필라멘트의 최대 무게"
-          },
-          "bed_temp": {
-            "name": "침대 온도"
-          },
-          "ctype": {
-            "name": "색상 유형"
-          },
-          "dry_temp": {
-            "name": "건조 온도"
-          },
-          "dry_time": {
-            "name": "건조시간"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "트레이 2",
-        "state_attributes": {
-          "active": {
-            "name": "활성"
-          },
-          "color": {
-            "name": "색상"
-          },
-          "cols": {
-            "name": "색상들"
-          },
-          "empty": {
-            "name": "빈"
-          },
-          "k_value": {
-            "name": "K 값"
-          },
-          "name": {
-            "name": "이름"
-          },
-          "nozzle_temp_min": {
-            "name": "노즐 최소 온도"
-          },
-          "nozzle_temp_max": {
-            "name": "노즐 최대 온도"
-          },
-          "remain": {
-            "name": "남은 필라멘트"
-          },
           "tag_uid": {
             "name": "필라멘트 시리얼 번호"
+          },
+          "tray_uuid": {
+            "name": "Tray UUID"
           },
           "type": {
             "name": "유형"
@@ -708,139 +670,6 @@
           },
           "tray_weight": {
             "name": "필라멘트의 최대 무게"
-          },
-          "remain_enabled": {
-            "name": "나머지 필라멘트 추정이 활성화되었습니다"
-          },
-          "bed_temp": {
-            "name": "침대 온도"
-          },
-          "ctype": {
-            "name": "색상 유형"
-          },
-          "dry_temp": {
-            "name": "건조 온도"
-          },
-          "dry_time": {
-            "name": "건조시간"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "트레이 3",
-        "state_attributes": {
-          "active": {
-            "name": "활성"
-          },
-          "color": {
-            "name": "색상"
-          },
-          "cols": {
-            "name": "색상들"
-          },
-          "empty": {
-            "name": "빈"
-          },
-          "k_value": {
-            "name": "K 값"
-          },
-          "name": {
-            "name": "이름"
-          },
-          "nozzle_temp_min": {
-            "name": "노즐 최소 온도"
-          },
-          "nozzle_temp_max": {
-            "name": "노즐 최대 온도"
-          },
-          "remain": {
-            "name": "남은 필라멘트"
-          },
-          "tag_uid": {
-            "name": "필라멘트 시리얼 번호"
-          },
-          "type": {
-            "name": "유형"
-          },
-          "filament_id": {
-            "name": "필라멘트 ID"
-          },
-          "tray_weight": {
-            "name": "필라멘트의 최대 무게"
-          },
-          "remain_enabled": {
-            "name": "나머지 필라멘트 추정이 활성화되었습니다"
-          },
-          "bed_temp": {
-            "name": "침대 온도"
-          },
-          "ctype": {
-            "name": "색상 유형"
-          },
-          "dry_temp": {
-            "name": "건조 온도"
-          },
-          "dry_time": {
-            "name": "건조시간"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "트레이 4",
-        "state_attributes": {
-          "active": {
-            "name": "활성"
-          },
-          "color": {
-            "name": "색상"
-          },
-          "cols": {
-            "name": "색상들"
-          },
-          "empty": {
-            "name": "빈"
-          },
-          "k_value": {
-            "name": "K 값"
-          },
-          "name": {
-            "name": "이름"
-          },
-          "nozzle_temp_min": {
-            "name": "노즐 최소 온도"
-          },
-          "nozzle_temp_max": {
-            "name": "노즐 최대 온도"
-          },
-          "remain": {
-            "name": "남은 필라멘트"
-          },
-          "tag_uid": {
-            "name": "필라멘트 시리얼 번호"
-          },
-          "type": {
-            "name": "유형"
-          },
-          "filament_id": {
-            "name": "필라멘트 ID"
-          },
-          "tray_weight": {
-            "name": "필라멘트의 최대 무게"
-          },
-          "remain_enabled": {
-            "name": "나머지 필라멘트 추정이 활성화되었습니다"
-          },
-          "bed_temp": {
-            "name": "침대 온도"
-          },
-          "ctype": {
-            "name": "색상 유형"
-          },
-          "dry_temp": {
-            "name": "건조 온도"
-          },
-          "dry_time": {
-            "name": "건조시간"
           }
         }
       },

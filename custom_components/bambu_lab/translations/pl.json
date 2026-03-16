@@ -620,17 +620,32 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Slot 1",
+      "tray": {
+        "name": "Slot {tray_number}",
         "state_attributes": {
+          "slot": {
+            "name": "Szczelina"
+          },
           "active": {
             "name": "Aktywna"
+          },
+          "bed_temp": {
+            "name": "Temperatura łóżka"
           },
           "color": {
             "name": "Kolor"
           },
           "cols": {
             "name": "Kolory"
+          },
+          "ctype": {
+            "name": "Rodzaj koloru"
+          },
+          "dry_temp": {
+            "name": "Temperatura suszenia"
+          },
+          "dry_time": {
+            "name": "Czas suszenia"
           },
           "empty": {
             "name": "Pusty"
@@ -656,64 +671,8 @@
           "tag_uid": {
             "name": "Numer seryjny szpuli"
           },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "ID filamentu"
-          },
-          "tray_weight": {
-            "name": "Maksymalna waga filamentu"
-          },
-          "bed_temp": {
-            "name": "Temperatura łóżka"
-          },
-          "ctype": {
-            "name": "Rodzaj koloru"
-          },
-          "dry_temp": {
-            "name": "Temperatura suszenia"
-          },
-          "dry_time": {
-            "name": "Czas suszenia"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Slot 2",
-        "state_attributes": {
-          "active": {
-            "name": "Aktywna"
-          },
-          "color": {
-            "name": "Kolor"
-          },
-          "cols": {
-            "name": "Kolory"
-          },
-          "empty": {
-            "name": "Pusty"
-          },
-          "k_value": {
-            "name": "Wartość K"
-          },
-          "name": {
-            "name": "Nazwa"
-          },
-          "nozzle_temp_min": {
-            "name": "Minimalna temperatura dyszy"
-          },
-          "nozzle_temp_max": {
-            "name": "Maksymalna temperatura dyszy"
-          },
-          "remain": {
-            "name": "Pozostały filament"
-          },
-          "remain_enabled": {
-            "name": "Szacowanie pozostałego filamentu włączone"
-          },
-          "tag_uid": {
-            "name": "Numer seryjny szpuli"
+          "tray_uuid": {
+            "name": "Tray UUID"
           },
           "type": {
             "name": "Typ"
@@ -723,136 +682,6 @@
           },
           "tray_weight": {
             "name": "Maksymalna waga filamentu"
-          },
-          "bed_temp": {
-            "name": "Temperatura łóżka"
-          },
-          "ctype": {
-            "name": "Rodzaj koloru"
-          },
-          "dry_temp": {
-            "name": "Temperatura suszenia"
-          },
-          "dry_time": {
-            "name": "Czas suszenia"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Slot 3",
-        "state_attributes": {
-          "active": {
-            "name": "Aktywna"
-          },
-          "color": {
-            "name": "Kolor"
-          },
-          "cols": {
-            "name": "Kolory"
-          },
-          "empty": {
-            "name": "Pusty"
-          },
-          "k_value": {
-            "name": "Wartość K"
-          },
-          "name": {
-            "name": "Nazwa"
-          },
-          "nozzle_temp_min": {
-            "name": "Minimalna temperatura dyszy"
-          },
-          "nozzle_temp_max": {
-            "name": "Maksymalna temperatura dyszy"
-          },
-          "remain": {
-            "name": "Pozostały filament"
-          },
-          "remain_enabled": {
-            "name": "Szacowanie pozostałego filamentu włączone"
-          },
-          "tag_uid": {
-            "name": "Numer seryjny szpuli"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "ID filamentu"
-          },
-          "tray_weight": {
-            "name": "Maksymalna waga filamentu"
-          },
-          "bed_temp": {
-            "name": "Temperatura łóżka"
-          },
-          "ctype": {
-            "name": "Rodzaj koloru"
-          },
-          "dry_temp": {
-            "name": "Temperatura suszenia"
-          },
-          "dry_time": {
-            "name": "Czas suszenia"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Slot 4",
-        "state_attributes": {
-          "active": {
-            "name": "Aktywna"
-          },
-          "color": {
-            "name": "Kolor"
-          },
-          "cols": {
-            "name": "Kolory"
-          },
-          "empty": {
-            "name": "Pusty"
-          },
-          "k_value": {
-            "name": "Wartość K"
-          },
-          "name": {
-            "name": "Nazwa"
-          },
-          "nozzle_temp_min": {
-            "name": "Minimalna temperatura dyszy"
-          },
-          "nozzle_temp_max": {
-            "name": "Maksymalna temperatura dyszy"
-          },
-          "remain": {
-            "name": "Pozostały filament"
-          },
-          "remain_enabled": {
-            "name": "Szacowanie pozostałego filamentu włączone"
-          },
-          "tag_uid": {
-            "name": "Numer seryjny szpuli"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "ID filamentu"
-          },
-          "tray_weight": {
-            "name": "Maksymalna waga filamentu"
-          },
-          "bed_temp": {
-            "name": "Temperatura łóżka"
-          },
-          "ctype": {
-            "name": "Rodzaj koloru"
-          },
-          "dry_temp": {
-            "name": "Temperatura suszenia"
-          },
-          "dry_time": {
-            "name": "Czas suszenia"
           }
         }
       },

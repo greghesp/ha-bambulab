@@ -608,17 +608,32 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Safata 1",
+      "tray": {
+        "name": "Safata {tray_number}",
         "state_attributes": {
+          "slot": {
+            "name": "Ranura"
+          },
           "active": {
             "name": "Activa"
+          },
+          "bed_temp": {
+            "name": "Temperatura del llit"
           },
           "color": {
             "name": "Color"
           },
           "cols": {
             "name": "Colors"
+          },
+          "ctype": {
+            "name": "Tipus de color"
+          },
+          "dry_temp": {
+            "name": "Temperatura d'assecat"
+          },
+          "dry_time": {
+            "name": "Temps d'assecat"
           },
           "empty": {
             "name": "Buida"
@@ -644,61 +659,8 @@
           "tag_uid": {
             "name": "Número de sèrie de la bobina"
           },
-          "type": {
-            "name": "Tipus"
-          },
-          "filament_id": {
-            "name": "ID del filament"
-          },
-          "tray_weight": {
-            "name": "Pes màxim del filament"
-          },
-          "bed_temp": {
-            "name": "Temperatura del llit"
-          },
-          "ctype": {
-            "name": "Tipus de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura d'assecat"
-          },
-          "dry_time": {
-            "name": "Temps d'assecat"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Safata 2",
-        "state_attributes": {
-          "active": {
-            "name": "Activa"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "cols": {
-            "name": "Colors"
-          },
-          "empty": {
-            "name": "Buida"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nom"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima del broquet"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura màxima del broquet"
-          },
-          "remain": {
-            "name": "Filament restant"
-          },
-          "tag_uid": {
-            "name": "Número de sèrie de la bobina"
+          "tray_uuid": {
+            "name": "Tray UUID"
           },
           "type": {
             "name": "Tipus"
@@ -708,139 +670,6 @@
           },
           "tray_weight": {
             "name": "Pes màxim del filament"
-          },
-          "remain_enabled": {
-            "name": "L'estimació del filament restant ha activat"
-          },
-          "bed_temp": {
-            "name": "Temperatura del llit"
-          },
-          "ctype": {
-            "name": "Tipus de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura d'assecat"
-          },
-          "dry_time": {
-            "name": "Temps d'assecat"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Safata 3",
-        "state_attributes": {
-          "active": {
-            "name": "Activa"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "cols": {
-            "name": "Colors"
-          },
-          "empty": {
-            "name": "Buida"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nom"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima del broquet"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura màxima del broquet"
-          },
-          "remain": {
-            "name": "Filament restant"
-          },
-          "tag_uid": {
-            "name": "Número de sèrie de la bobina"
-          },
-          "type": {
-            "name": "Tipus"
-          },
-          "filament_id": {
-            "name": "ID del filament"
-          },
-          "tray_weight": {
-            "name": "Pes màxim del filament"
-          },
-          "remain_enabled": {
-            "name": "L'estimació del filament restant ha activat"
-          },
-          "bed_temp": {
-            "name": "Temperatura del llit"
-          },
-          "ctype": {
-            "name": "Tipus de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura d'assecat"
-          },
-          "dry_time": {
-            "name": "Temps d'assecat"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Safata 4",
-        "state_attributes": {
-          "active": {
-            "name": "Activa"
-          },
-          "color": {
-            "name": "Color"
-          },
-          "cols": {
-            "name": "Colors"
-          },
-          "empty": {
-            "name": "Buida"
-          },
-          "k_value": {
-            "name": "Valor K"
-          },
-          "name": {
-            "name": "Nom"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura mínima del broquet"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura màxima del broquet"
-          },
-          "remain": {
-            "name": "Filament restant"
-          },
-          "tag_uid": {
-            "name": "Número de sèrie de la bobina"
-          },
-          "type": {
-            "name": "Tipus"
-          },
-          "filament_id": {
-            "name": "ID del filament"
-          },
-          "tray_weight": {
-            "name": "Pes màxim del filament"
-          },
-          "remain_enabled": {
-            "name": "L'estimació del filament restant ha activat"
-          },
-          "bed_temp": {
-            "name": "Temperatura del llit"
-          },
-          "ctype": {
-            "name": "Tipus de color"
-          },
-          "dry_temp": {
-            "name": "Temperatura d'assecat"
-          },
-          "dry_time": {
-            "name": "Temps d'assecat"
           }
         }
       },

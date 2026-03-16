@@ -620,17 +620,32 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Emplacement 1",
+      "tray": {
+        "name": "Emplacement {tray_number}",
         "state_attributes": {
+          "slot": {
+            "name": "Emplacement"
+          },
           "active": {
             "name": "Actif"
+          },
+          "bed_temp": {
+            "name": "Température du lit"
           },
           "color": {
             "name": "Couleur"
           },
           "cols": {
             "name": "Couleurs"
+          },
+          "ctype": {
+            "name": "Type de couleur"
+          },
+          "dry_temp": {
+            "name": "Température de séchage"
+          },
+          "dry_time": {
+            "name": "Temps de séchage"
           },
           "empty": {
             "name": "Vide"
@@ -650,67 +665,14 @@
           "remain": {
             "name": "Filament restant"
           },
-          "tag_uid": {
-            "name": "Numéro de série du filament"
-          },
-          "type": {
-            "name": "Type"
-          },
           "remain_enabled": {
             "name": "Estimation du filament restant activée"
           },
-          "filament_id": {
-            "name": "ID de filament"
-          },
-          "tray_weight": {
-            "name": "Poids maximum de filament"
-          },
-          "bed_temp": {
-            "name": "Température du lit"
-          },
-          "ctype": {
-            "name": "Type de couleur"
-          },
-          "dry_temp": {
-            "name": "Température de séchage"
-          },
-          "dry_time": {
-            "name": "Temps de séchage"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Emplacement 2",
-        "state_attributes": {
-          "active": {
-            "name": "Actif"
-          },
-          "color": {
-            "name": "Couleur"
-          },
-          "cols": {
-            "name": "Couleurs"
-          },
-          "empty": {
-            "name": "Vide"
-          },
-          "k_value": {
-            "name": "Valeur K"
-          },
-          "name": {
-            "name": "Nom"
-          },
-          "nozzle_temp_min": {
-            "name": "Température minimale de la buse"
-          },
-          "nozzle_temp_max": {
-            "name": "Température maximale de la buse"
-          },
-          "remain": {
-            "name": "Filament restant"
-          },
           "tag_uid": {
             "name": "Numéro de série du filament"
+          },
+          "tray_uuid": {
+            "name": "Tray UUID"
           },
           "type": {
             "name": "Type"
@@ -720,139 +682,6 @@
           },
           "tray_weight": {
             "name": "Poids maximum de filament"
-          },
-          "remain_enabled": {
-            "name": "Estimation du filament restant activée"
-          },
-          "bed_temp": {
-            "name": "Température du lit"
-          },
-          "ctype": {
-            "name": "Type de couleur"
-          },
-          "dry_temp": {
-            "name": "Température de séchage"
-          },
-          "dry_time": {
-            "name": "Temps de séchage"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Emplacement 3",
-        "state_attributes": {
-          "active": {
-            "name": "Actif"
-          },
-          "color": {
-            "name": "Couleur"
-          },
-          "cols": {
-            "name": "Couleurs"
-          },
-          "empty": {
-            "name": "Vide"
-          },
-          "k_value": {
-            "name": "Valeur K"
-          },
-          "name": {
-            "name": "Nom"
-          },
-          "nozzle_temp_min": {
-            "name": "Température minimale de la buse"
-          },
-          "nozzle_temp_max": {
-            "name": "Température maximale de la buse"
-          },
-          "remain": {
-            "name": "Filament restant"
-          },
-          "tag_uid": {
-            "name": "Numéro de série du filament"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "filament_id": {
-            "name": "ID de filament"
-          },
-          "tray_weight": {
-            "name": "Poids maximum de filament"
-          },
-          "remain_enabled": {
-            "name": "Estimation du filament restant activée"
-          },
-          "bed_temp": {
-            "name": "Température du lit"
-          },
-          "ctype": {
-            "name": "Type de couleur"
-          },
-          "dry_temp": {
-            "name": "Température de séchage"
-          },
-          "dry_time": {
-            "name": "Temps de séchage"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Emplacement 4",
-        "state_attributes": {
-          "active": {
-            "name": "Actif"
-          },
-          "color": {
-            "name": "Couleur"
-          },
-          "cols": {
-            "name": "Couleurs"
-          },
-          "empty": {
-            "name": "Vide"
-          },
-          "k_value": {
-            "name": "Valeur K"
-          },
-          "name": {
-            "name": "Nom"
-          },
-          "nozzle_temp_min": {
-            "name": "Température minimale de la buse"
-          },
-          "nozzle_temp_max": {
-            "name": "Température maximale de la buse"
-          },
-          "remain": {
-            "name": "Filament restant"
-          },
-          "tag_uid": {
-            "name": "Numéro de série du filament"
-          },
-          "type": {
-            "name": "Type"
-          },
-          "filament_id": {
-            "name": "ID de filament"
-          },
-          "tray_weight": {
-            "name": "Poids maximum de filament"
-          },
-          "remain_enabled": {
-            "name": "Estimation du filament restant activée"
-          },
-          "bed_temp": {
-            "name": "Température du lit"
-          },
-          "ctype": {
-            "name": "Type de couleur"
-          },
-          "dry_temp": {
-            "name": "Température de séchage"
-          },
-          "dry_time": {
-            "name": "Temps de séchage"
           }
         }
       },

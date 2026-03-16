@@ -608,9 +608,12 @@
           }
         }
       },
-      "tray_1": {
-        "name": "料盘 1",
+      "tray": {
+        "name": "料盘 {tray_number}",
         "state_attributes": {
+          "slot": {
+            "name": "投币口"
+          },
           "active": {
             "name": "激活"
           },
@@ -637,68 +640,15 @@
           },
           "remain": {
             "name": "剩余耗材"
-          },
-          "tag_uid": {
-            "name": "耗材序列号"
-          },
-          "type": {
-            "name": "类型"
           },
           "remain_enabled": {
             "name": "启用剩余的耗材估计"
           },
-          "filament_id": {
-            "name": "耗材ID"
-          },
-          "tray_weight": {
-            "name": "耗材的最大重量"
-          },
-          "bed_temp": {
-            "name": "床温"
-          },
-          "ctype": {
-            "name": "颜色类型"
-          },
-          "dry_temp": {
-            "name": "干燥温度"
-          },
-          "dry_time": {
-            "name": "干燥时间"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "料盘 2",
-        "state_attributes": {
-          "active": {
-            "name": "激活"
-          },
-          "color": {
-            "name": "颜色"
-          },
-          "cols": {
-            "name": "颜色"
-          },
-          "empty": {
-            "name": "空"
-          },
-          "k_value": {
-            "name": "K 值"
-          },
-          "name": {
-            "name": "名称"
-          },
-          "nozzle_temp_min": {
-            "name": "喷嘴最低温度"
-          },
-          "nozzle_temp_max": {
-            "name": "喷嘴最高温度"
-          },
-          "remain": {
-            "name": "剩余耗材"
-          },
           "tag_uid": {
             "name": "耗材序列号"
+          },
+          "tray_uuid": {
+            "name": "Tray UUID"
           },
           "type": {
             "name": "类型"
@@ -708,127 +658,6 @@
           },
           "tray_weight": {
             "name": "耗材的最大重量"
-          },
-          "remain_enabled": {
-            "name": "启用了剩余的耗材估计"
-          },
-          "bed_temp": {
-            "name": "床温"
-          },
-          "ctype": {
-            "name": "颜色类型"
-          },
-          "dry_temp": {
-            "name": "干燥温度"
-          },
-          "dry_time": {
-            "name": "干燥时间"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "料盘 3",
-        "state_attributes": {
-          "active": {
-            "name": "激活"
-          },
-          "color": {
-            "name": "颜色"
-          },
-          "cols": {
-            "name": "颜色"
-          },
-          "empty": {
-            "name": "空"
-          },
-          "k_value": {
-            "name": "K 值"
-          },
-          "name": {
-            "name": "名称"
-          },
-          "nozzle_temp_min": {
-            "name": "喷嘴最低温度"
-          },
-          "nozzle_temp_max": {
-            "name": "喷嘴最高温度"
-          },
-          "remain": {
-            "name": "剩余耗材"
-          },
-          "tag_uid": {
-            "name": "耗材序列号"
-          },
-          "type": {
-            "name": "类型"
-          },
-          "filament_id": {
-            "name": "耗材ID"
-          },
-          "tray_weight": {
-            "name": "耗材的最大重量"
-          },
-          "remain_enabled": {
-            "name": "启用了剩余的耗材估计"
-          },
-          "bed_temp": {
-            "name": "床温"
-          },
-          "ctype": {
-            "name": "颜色类型"
-          },
-          "dry_temp": {
-            "name": "干燥温度"
-          },
-          "dry_time": {
-            "name": "干燥时间"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "料盘 4",
-        "state_attributes": {
-          "active": {
-            "name": "激活"
-          },
-          "color": {
-            "name": "颜色"
-          },
-          "cols": {
-            "name": "颜色"
-          },
-          "empty": {
-            "name": "空"
-          },
-          "k_value": {
-            "name": "K 值"
-          },
-          "name": {
-            "name": "名称"
-          },
-          "nozzle_temp_min": {
-            "name": "喷嘴最低温度"
-          },
-          "nozzle_temp_max": {
-            "name": "喷嘴最高温度"
-          },
-          "remain": {
-            "name": "剩余耗材"
-          },
-          "tag_uid": {
-            "name": "耗材序列号"
-          },
-          "type": {
-            "name": "类型"
-          },
-          "filament_id": {
-            "name": "耗材ID"
-          },
-          "tray_weight": {
-            "name": "耗材的最大重量"
-          },
-          "remain_enabled": {
-            "name": "启用了剩余的耗材估计"
           },
           "bed_temp": {
             "name": "床温"

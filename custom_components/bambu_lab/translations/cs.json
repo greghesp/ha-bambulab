@@ -684,17 +684,32 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Slot 1",
+      "tray": {
+        "name": "Slot {tray_number}",
         "state_attributes": {
+          "slot": {
+            "name": "Slot"
+          },
           "active": {
             "name": "Aktivní"
+          },
+          "bed_temp": {
+            "name": "Teplota postele"
           },
           "color": {
             "name": "Barva"
           },
           "cols": {
             "name": "Barvy"
+          },
+          "ctype": {
+            "name": "Typ barvy"
+          },
+          "dry_temp": {
+            "name": "Teplota sušení"
+          },
+          "dry_time": {
+            "name": "Doba schnutí"
           },
           "empty": {
             "name": "Prázdná"
@@ -720,64 +735,8 @@
           "tag_uid": {
             "name": "Sériové číslo cívky"
           },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "ID Filamentu"
-          },
-          "tray_weight": {
-            "name": "Maximální hmotnost filamentu"
-          },
-          "bed_temp": {
-            "name": "Teplota postele"
-          },
-          "ctype": {
-            "name": "Typ barvy"
-          },
-          "dry_temp": {
-            "name": "Teplota sušení"
-          },
-          "dry_time": {
-            "name": "Doba schnutí"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Slot 2",
-        "state_attributes": {
-          "active": {
-            "name": "Aktivní"
-          },
-          "color": {
-            "name": "Barva"
-          },
-          "cols": {
-            "name": "Barvy"
-          },
-          "empty": {
-            "name": "Prázdná"
-          },
-          "k_value": {
-            "name": "Hodnota K"
-          },
-          "name": {
-            "name": "Název"
-          },
-          "nozzle_temp_min": {
-            "name": "Min. teplota trysky"
-          },
-          "nozzle_temp_max": {
-            "name": "Max. teplota trysky"
-          },
-          "remain": {
-            "name": "Zbývající filament"
-          },
-          "remain_enabled": {
-            "name": "Odhad zbývajícího filamentu povolen"
-          },
-          "tag_uid": {
-            "name": "Sériové číslo cívky"
+          "tray_uuid": {
+            "name": "Tray UUID"
           },
           "type": {
             "name": "Typ"
@@ -787,136 +746,6 @@
           },
           "tray_weight": {
             "name": "Maximální hmotnost filamentu"
-          },
-          "bed_temp": {
-            "name": "Teplota postele"
-          },
-          "ctype": {
-            "name": "Typ barvy"
-          },
-          "dry_temp": {
-            "name": "Teplota sušení"
-          },
-          "dry_time": {
-            "name": "Doba schnutí"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Slot 3",
-        "state_attributes": {
-          "active": {
-            "name": "Aktivní"
-          },
-          "color": {
-            "name": "Barva"
-          },
-          "cols": {
-            "name": "Barvy"
-          },
-          "empty": {
-            "name": "Prázdná"
-          },
-          "k_value": {
-            "name": "Hodnota K"
-          },
-          "name": {
-            "name": "Název"
-          },
-          "nozzle_temp_min": {
-            "name": "Min. teplota trysky"
-          },
-          "nozzle_temp_max": {
-            "name": "Max. teplota trysky"
-          },
-          "remain": {
-            "name": "Zbývající filament"
-          },
-          "remain_enabled": {
-            "name": "Odhad zbývajícího filamentu povolen"
-          },
-          "tag_uid": {
-            "name": "Sériové číslo cívky"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "ID Filamentu"
-          },
-          "tray_weight": {
-            "name": "Maximální hmotnost filamentu"
-          },
-          "bed_temp": {
-            "name": "Teplota postele"
-          },
-          "ctype": {
-            "name": "Typ barvy"
-          },
-          "dry_temp": {
-            "name": "Teplota sušení"
-          },
-          "dry_time": {
-            "name": "Doba schnutí"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Slot 4",
-        "state_attributes": {
-          "active": {
-            "name": "Aktivní"
-          },
-          "color": {
-            "name": "Barva"
-          },
-          "cols": {
-            "name": "Barvy"
-          },
-          "empty": {
-            "name": "Prázdná"
-          },
-          "k_value": {
-            "name": "Hodnota K"
-          },
-          "name": {
-            "name": "Název"
-          },
-          "nozzle_temp_min": {
-            "name": "Min. teplota trysky"
-          },
-          "nozzle_temp_max": {
-            "name": "Max. teplota trysky"
-          },
-          "remain": {
-            "name": "Zbývající filament"
-          },
-          "remain_enabled": {
-            "name": "Odhad zbývajícího filamentu povolen"
-          },
-          "tag_uid": {
-            "name": "Sériové číslo cívky"
-          },
-          "type": {
-            "name": "Typ"
-          },
-          "filament_id": {
-            "name": "ID Filamentu"
-          },
-          "tray_weight": {
-            "name": "Maximální hmotnost filamentu"
-          },
-          "bed_temp": {
-            "name": "Teplota postele"
-          },
-          "ctype": {
-            "name": "Typ barvy"
-          },
-          "dry_temp": {
-            "name": "Teplota sušení"
-          },
-          "dry_time": {
-            "name": "Doba schnutí"
           }
         }
       },
