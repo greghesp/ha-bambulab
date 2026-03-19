@@ -502,6 +502,12 @@
       "gcode_file_downloaded": {
         "name": "Gcode file downloaded"
       },
+      "gcode_user": {
+        "name": "Gcode user"
+      },
+      "gcode_secret": {
+        "name": "Gcode secret"
+      },
       "remaining_drying_time": {
         "name": "Remaining drying time"
       },

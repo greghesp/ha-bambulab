@@ -510,6 +510,20 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
     ),
     BambuLabSensorEntityDescription(
+        key="gcode_user",
+        translation_key="gcode_user",
+        icon="mdi:account",
+        available_fn=lambda self: self.coordinator.get_model().print_job.gcode_user != "",
+        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_user,
+    ),
+    BambuLabSensorEntityDescription(
+        key="gcode_secret",
+        translation_key="gcode_secret",
+        icon="mdi:key",
+        available_fn=lambda self: self.coordinator.get_model().print_job.gcode_secret != "",
+        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_secret,
+    ),
+    BambuLabSensorEntityDescription(
         key="subtask_name",
         translation_key="subtask_name",
         value_fn=lambda self: self.coordinator.get_model().print_job.subtask_name,

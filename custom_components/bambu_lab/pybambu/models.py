@@ -843,6 +843,8 @@ class PrintJob:
     file_type_icon: str
     gcode_file: str
     gcode_file_downloaded: str
+    gcode_user: str
+    gcode_secret: str
     _subtask_name: str
     start_time: datetime
     end_time: datetime
@@ -870,6 +872,8 @@ class PrintJob:
         self.gcode_state = "unknown"
         self.gcode_file = ""
         self.gcode_file_downloaded = ""
+        self.gcode_user = ""
+        self.gcode_secret = ""
         self._subtask_name = ""
         self.start_time = None
         self.end_time = None
@@ -1690,6 +1694,23 @@ class PrintJob:
                             with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(gcode_path, "wb") as target_path:
                                 shutil.copyfileobj(gcode_entry, target_path)
                                 self.gcode_file_downloaded = gcode_filename
+
+                            # Extract User and Secret from the first few lines of the gcode file
+                            self.gcode_user = ""
+                            self.gcode_secret = ""
+                            try:
+                                with open(gcode_path, 'r', encoding='utf-8') as gcode_file:
+                                    for line in gcode_file:
+                                        if line.startswith('; User:'):
+                                            self.gcode_user = line.split('; User:')[1].strip()
+                                        elif line.startswith('; Secret:'):
+                                            self.gcode_secret = line.split('; Secret:')[1].strip()
+                                        elif line.startswith('; model printing time:') or line.startswith('; total estimated time:') or line.startswith('; total layer number:'):
+                                            # User and Secret are near the top, stop reading early
+                                            break
+                            except Exception as parse_error:
+                                LOGGER.error(f"Error parsing gcode for user/secret: {parse_error}")
+
                         except Exception as e:
                             self.gcode_file_downloaded = "ERROR"
                             LOGGER.error(f"Error while extracting gcode zip entry to target path. {repr(e)}")
