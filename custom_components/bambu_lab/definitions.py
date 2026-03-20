@@ -102,6 +102,18 @@ class BambuLabHotendRackSensorEntityDescription(
 
 
 @dataclass
+class BambuLabFireExtinguisherSensorEntityDescription(
+    SensorEntityDescription, BambuLabSensorEntityDescriptionMixin
+):
+    """Sensor entity description for Bambu Lab Fire Extinguisher."""
+
+    available_fn: Callable[..., bool] = lambda _: True
+    exists_fn: Callable[..., bool] = lambda _: True
+    extra_attributes: Callable[..., dict] = lambda _: {}
+    icon_fn: Callable[..., str] = lambda _: None
+
+
+@dataclass
 class BambuLabBinarySensorEntityDescriptionMixIn:
     """Mixin for required keys."""
     is_on_fn: Callable[..., bool]
@@ -236,7 +248,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="tool_module",
         icon="mdi:printer-3d-nozzle",
         device_class=SensorDeviceClass.ENUM,
-        options=["none", "laser10", "laser40", "cutter"],
+        options=["none", "laser10", "laser40", "cutter", "unknown"],
         value_fn=lambda self: self.coordinator.get_model().extruder_tool.state,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRUDER_TOOL),
     ),
@@ -920,4 +932,86 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
 
 HOTEND_RACK_HOTEND_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = tuple(
     _hotend_sensor(slot_id, slot_id - 15) for slot_id in range(16, 22)
+)
+
+
+# Fire Extinguisher sensors (on Fire Extinguisher device)
+FIRE_EXTINGUISHER_SENSORS: tuple[BambuLabFireExtinguisherSensorEntityDescription, ...] = (
+    BambuLabFireExtinguisherSensorEntityDescription(
+        key="fire_ext_status",
+        translation_key="fire_ext_status",
+        icon="mdi:fire-extinguisher",
+        device_class=SensorDeviceClass.ENUM,
+        options=["standby", "active"],
+        value_fn=lambda self: self.coordinator.get_model().fire_extinguisher.status,
+        available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
+    ),
+    BambuLabFireExtinguisherSensorEntityDescription(
+        key="fire_ext_remaining_time",
+        translation_key="fire_ext_remaining_time",
+        icon="mdi:timer-outline",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.get_model().fire_extinguisher.remaining_time,
+        available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
+    ),
+)
+
+# Fire Extinguisher binary sensors (on Fire Extinguisher device)
+FIRE_EXTINGUISHER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
+    BambuLabBinarySensorEntityDescription(
+        key="fire_ext_error",
+        translation_key="fire_ext_error",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().fire_extinguisher.error,
+        available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
+    ),
+)
+
+# Laser Module sensors (on Laser device)
+LASER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabSensorEntityDescription(
+        key="laser_temperature",
+        translation_key="laser_temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        suggested_display_precision=0,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.get_model().extruder_tool.th_temp,
+        available_fn=lambda self: self.module_serial == self.coordinator.get_model().extruder_tool.active_laser_serial
+            and self.coordinator.get_model().extruder_tool.state in ("laser10", "laser40"),
+    ),
+)
+
+# Laser Module binary sensors (on Laser device)
+LASER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
+    BambuLabBinarySensorEntityDescription(
+        key="laser_mounted",
+        translation_key="laser_mounted",
+        icon="mdi:laser-pointer",
+        is_on_fn=lambda self: self.module_serial == self.coordinator.get_model().extruder_tool.active_laser_serial
+            and self.coordinator.get_model().extruder_tool.state in ("laser10", "laser40"),
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="laser_low_precision",
+        translation_key="laser_low_precision",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().extruder_tool.low_prec,
+        available_fn=lambda self: self.module_serial == self.coordinator.get_model().extruder_tool.active_laser_serial
+            and self.coordinator.get_model().extruder_tool.state in ("laser10", "laser40"),
+    ),
+)
+
+# Rotary Attachment binary sensors (on Rotary device)
+ROTARY_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
+    BambuLabBinarySensorEntityDescription(
+        key="rotary_mounted",
+        translation_key="rotary_mounted",
+        icon="mdi:rotate-3d-variant",
+        is_on_fn=lambda self: self.module_serial == self.coordinator.get_model().extruder_tool.active_rotary_serial
+            and self.coordinator.get_model().extruder_tool.mount_3d == 1,
+    ),
 )

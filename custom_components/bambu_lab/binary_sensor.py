@@ -12,12 +12,17 @@ from .definitions import (
     AMS_BINARY_SENSORS,
     PRINTER_BINARY_SENSORS,
     VIRTUAL_TRAY_BINARY_SENSORS,
+    FIRE_EXTINGUISHER_BINARY_SENSORS,
+    LASER_BINARY_SENSORS,
+    ROTARY_BINARY_SENSORS,
     BambuLabAMSBinarySensorEntityDescription,
     BambuLabBinarySensorEntityDescription,
 )
 from .models import (
     AMSEntity,
     BambuLabEntity,
+    FireExtinguisherEntity,
+    ToolModuleEntity,
     VirtualTrayEntity,
 )
 from .pybambu.const import Features
@@ -34,7 +39,22 @@ async def async_setup_entry(
     if not coordinator.get_model().has_full_printer_data:
         return
 
-    for sensor in PRINTER_BINARY_SENSORS:    
+    if coordinator.get_model().supports_feature(Features.FIRE_EXTINGUISHER):
+        for sensor in FIRE_EXTINGUISHER_BINARY_SENSORS:
+            if sensor.exists_fn(coordinator):
+                async_add_entities([BambuLabFireExtinguisherBinarySensor(coordinator, sensor)])
+
+    for module in coordinator.get_model().extruder_tool.get_modules_by_type("laser"):
+        for sensor in LASER_BINARY_SENSORS:
+            if sensor.exists_fn(coordinator):
+                async_add_entities([BambuLabToolModuleBinarySensor(coordinator, sensor, module.serial)])
+
+    for module in coordinator.get_model().extruder_tool.get_modules_by_type("rotary"):
+        for sensor in ROTARY_BINARY_SENSORS:
+            if sensor.exists_fn(coordinator):
+                async_add_entities([BambuLabToolModuleBinarySensor(coordinator, sensor, module.serial)])
+
+    for sensor in PRINTER_BINARY_SENSORS:
         if sensor.exists_fn(coordinator):
             async_add_entities([BambuLabBinarySensor(coordinator, sensor)])
 
@@ -72,6 +92,11 @@ class BambuLabBinarySensor(BambuLabEntity, BinarySensorEntity):
     def is_on(self) -> bool:
         """Return if binary sensor is on."""
         return self.entity_description.is_on_fn(self)
+
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        return self.entity_description.available_fn(self)
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -114,3 +139,35 @@ class BambuLabExternalSpoolBinarySensor(VirtualTrayEntity, BambuLabBinarySensor)
         self.suffix = suffix
         self.entity_description = description
         self._attr_unique_id = f"{printer.device_type}_{printer.serial}_ExternalSpool{suffix}_{description.key}"
+
+
+class BambuLabFireExtinguisherBinarySensor(FireExtinguisherEntity, BambuLabBinarySensor):
+    """Representation of a BambuLab Fire Extinguisher binary sensor."""
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            description: BambuLabBinarySensorEntityDescription,
+    ) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator=coordinator, description=description)
+        printer = coordinator.get_model().info
+        self.entity_description = description
+        self._attr_unique_id = f"{printer.device_type}_{printer.serial}_FireExtinguisher_{description.key}"
+
+
+class BambuLabToolModuleBinarySensor(ToolModuleEntity, BambuLabBinarySensor):
+    """Representation of a BambuLab Tool Module binary sensor."""
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            description: BambuLabBinarySensorEntityDescription,
+            module_serial: str,
+    ) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator=coordinator, description=description)
+        self.module_serial = module_serial
+        printer = coordinator.get_model().info
+        self.entity_description = description
+        self._attr_unique_id = f"{printer.device_type}_{module_serial}_{description.key}"

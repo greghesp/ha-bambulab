@@ -241,6 +241,18 @@
       },
       "extruder_filament_state": {
         "name": "Extruder filament"
+      },
+      "fire_ext_error": {
+        "name": "Fire extinguisher error"
+      },
+      "laser_mounted": {
+        "name": "Mounted"
+      },
+      "laser_low_precision": {
+        "name": "Low precision"
+      },
+      "rotary_mounted": {
+        "name": "Mounted"
       }
     },
     "button": {
@@ -349,8 +361,22 @@
           "none": "Not mounted",
           "laser10": "Laser (10W)",
           "laser40": "Laser (40W)",
-          "cutter": "Cutter"
+          "cutter": "Cutter",
+          "unknown": "Unknown"
         }
+      },
+      "laser_temperature": {
+        "name": "Temperature"
+      },
+      "fire_ext_status": {
+        "name": "Status",
+        "state": {
+          "standby": "Standby",
+          "active": "Active"
+        }
+      },
+      "fire_ext_remaining_time": {
+        "name": "Remaining time"
       },
       "wifi_signal": {
         "name": "Wi-Fi signal"

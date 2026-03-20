@@ -945,6 +945,38 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             sw_version=""
         )
 
+    def get_fire_extinguisher_device(self):
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
+        fire_ext = self.get_model().fire_extinguisher
+        device_name = f"{device_type}_{printer_serial}_FireExtinguisher"
+
+        return DeviceInfo(
+            identifiers={(DOMAIN, fire_ext.serial)},
+            via_device=(DOMAIN, printer_serial),
+            name=device_name,
+            model="Auto Fire Extinguishing System",
+            manufacturer=BRAND,
+            hw_version=fire_ext.hw_version,
+            sw_version=fire_ext.sw_version
+        )
+
+    def get_tool_module_device(self, serial: str):
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
+        module = self.get_model().extruder_tool.get_module(serial)
+        device_name = f"{device_type}_{printer_serial}_{module.product_name}"
+
+        return DeviceInfo(
+            identifiers={(DOMAIN, serial)},
+            via_device=(DOMAIN, printer_serial),
+            name=device_name,
+            model=module.product_name,
+            manufacturer=BRAND,
+            hw_version=module.hw_version,
+            sw_version=module.sw_version
+        )
+
     def get_option_enabled(self, option: Options):
         options = dict(self.config_entry.options)
 
