@@ -85,6 +85,23 @@ SKIP_OBJECTS_TEMPLATE = {
     }
 }
 
+RETRY_LOAD_FILAMENT_TEMPLATE = {
+    "print": {
+        "sequence_id": "0",
+        "command": "ams_control",
+        "param": "resume"
+    }
+}
+
+
+DONE_LOAD_FILAMENT_TEMPLATE = {
+    "print": {
+        "sequence_id": "0",
+        "command": "ams_control",
+        "param": "done"
+    }
+}
+
 SWITCH_AMS_TEMPLATE = {
     "print": {
         "command": "ams_change_filament",
