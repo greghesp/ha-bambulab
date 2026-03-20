@@ -1012,6 +1012,6 @@ ROTARY_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         translation_key="rotary_mounted",
         icon="mdi:rotate-3d-variant",
         is_on_fn=lambda self: self.module_serial == self.coordinator.get_model().extruder_tool.active_rotary_serial
-            and self.coordinator.get_model().extruder_tool.mount_3d == 1,
+            and self.coordinator.get_model().extruder_tool.fourth_axis_connected,
     ),
 )

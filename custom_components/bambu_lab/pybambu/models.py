@@ -3664,6 +3664,7 @@ class ExtruderTool:
         self.calib = 0
         self.low_prec = False
         self.mount_3d = 0
+        self.fourth_axis_connected = False
         # All tool modules ever seen, keyed by serial number
         self.modules: dict[str, ToolModule] = {}
         # Currently active module serial (from latest get_version)
@@ -3739,6 +3740,11 @@ class ExtruderTool:
                 self.low_prec = ext_tool["low_prec"]
             if "mount_3d" in ext_tool:
                 self.mount_3d = ext_tool["mount_3d"]
+
+        # Parse fourth_axis connection state (rotary tool physical connection)
+        fourth_axis = data.get("device", {}).get("fourth_axis", {})
+        if "connect_flag" in fourth_axis:
+            self.fourth_axis_connected = fourth_axis["connect_flag"] == 1
 
         return (old_data != f"{self.__dict__}")
     
