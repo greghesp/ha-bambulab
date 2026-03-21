@@ -57,6 +57,8 @@ from .pybambu.commands import (
     AMS_READ_RFID_TEMPLATE,
     AMS_READ_RFID_GCODE,
     AMS_FILAMENT_DRYING_TEMPLATE,
+    RETRY_LOAD_FILAMENT_TEMPLATE,
+    DONE_LOAD_FILAMENT_TEMPLATE
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -272,6 +274,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_extrude_retract(data)
             case "load_filament":
                 result = self._service_call_load_filament(data)
+            case "retry_load_filament":
+                result = self._service_call_retry_load_filament(data)
+            case "done_load_filament":
+                result = self._service_call_done_load_filament(data)
             case "unload_filament":
                 result = self._service_call_unload_filament(data)
             case "set_filament":
@@ -573,6 +579,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 combined_data[filament_id] = filament_data
         
         return combined_data
+
+    def _service_call_retry_load_filament(self, data: dict):
+        command = RETRY_LOAD_FILAMENT_TEMPLATE
+        self.client.publish(command)
+    
+    def _service_call_done_load_filament(self, data: dict):
+        command = DONE_LOAD_FILAMENT_TEMPLATE
+        self.client.publish(command)
 
     def _service_call_load_filament(self, data: dict):
         ams_device, entity_id = self._get_ams_device_and_tray(data)
