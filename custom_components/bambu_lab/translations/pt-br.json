@@ -239,9 +239,6 @@
       "drying": {
         "name": "Secagem"
       },
-      "airduct_mode": {
-        "name": "Modo Airduct"
-      },
       "hybrid_mode_blocks_control": {
         "name": "Controle de blocos MQTT híbridos"
       }
@@ -327,6 +324,13 @@
           "standard": "Padrão",
           "sport": "Esportivo",
           "ludicrous": "Loucura"
+        }
+      },
+      "airduct_mode": {
+        "name": "Modo duto de ar",
+        "state": {
+          "cooling": "Resfriamento",
+          "heating": "Aquecimento"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "Verificação automática: posição do material",
           "calibrating_cutter_model_offset": "Calibração de deslocamento do módulo cortador",
           "measuring_surface": "Superfície de medição",
-          "thermal_preconditioning": "Pré-condicionamento térmico para otimização da primeira camada"
+          "thermal_preconditioning": "Pré-condicionamento térmico para otimização da primeira camada",
+          "homing_blade_holder": "Suporte de lâmina de retorno",
+          "calibrating_camera_offset": "Calibrando o deslocamento da câmera",
+          "calibrating_blade_holder_position": "Calibrando a posição do suporte da lâmina",
+          "hotend_pick_place_test": "Teste de escolha e colocação de Hotend",
+          "waiting_chamber_temperature_equalize": "Aguardando que a temperatura da câmara se equalize",
+          "preparing_hotend": "Preparando hotend",
+          "calibrating_detection_nozzle_clumping": "Calibrando a posição de detecção de aglomeração de bico",
+          "purifying_chamber_air": "Purificar o ar da câmara",
+          "preparing_ams": "Preparando AMS"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "Nome do filamento"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "Modo duto de ar",
+        "state": {
+          "cooling": "Resfriamento",
+          "heating": "Aquecimento",
+          "laser": "Laser"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "ftp": {
         "name": "Carregar dados do modelo de impressora"
-      },
-      "airduct_mode": {
-        "name": "Modo de resfriamento ou modo de aquecimento/filtro"
       }
     },
     "update": {

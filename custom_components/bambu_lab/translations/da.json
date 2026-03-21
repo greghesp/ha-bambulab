@@ -239,9 +239,6 @@
       "drying": {
         "name": "Tørring"
       },
-      "airduct_mode": {
-        "name": "Airduct Mode"
-      },
       "hybrid_mode_blocks_control": {
         "name": "Hybrid MQTT blokerer kontrol"
       }
@@ -327,6 +324,13 @@
           "standard": "Standard",
           "sport": "Sport",
           "ludicrous": "Ekstrem"
+        }
+      },
+      "airduct_mode": {
+        "name": "Airduct-tilstand",
+        "state": {
+          "cooling": "Køling",
+          "heating": "Opvarmning"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "Auto Check: Materialeposition",
           "calibrating_cutter_model_offset": "Kuttermodul offset kalibrering",
           "measuring_surface": "Måleoverflade",
-          "thermal_preconditioning": "Termisk forkonditionering til optimering af første lag"
+          "thermal_preconditioning": "Termisk forkonditionering til optimering af første lag",
+          "homing_blade_holder": "Homing klingeholder",
+          "calibrating_camera_offset": "Kalibrerende kamera offset",
+          "calibrating_blade_holder_position": "Kalibrerende knivholderposition",
+          "hotend_pick_place_test": "Hotend pick and place test",
+          "waiting_chamber_temperature_equalize": "Venter på, at kammertemperaturen er udlignet",
+          "preparing_hotend": "Forbereder hotend",
+          "calibrating_detection_nozzle_clumping": "Kalibrering af detekteringspositionen for dyseklumpning",
+          "purifying_chamber_air": "Rensende kammerluft",
+          "preparing_ams": "Forberedelse af AMS"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "Filament navn"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "Airduct-tilstand",
+        "state": {
+          "cooling": "Køling",
+          "heating": "Opvarmning",
+          "laser": "Laser"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "ftp": {
         "name": "Indlæsningsmodeldata fra printer"
-      },
-      "airduct_mode": {
-        "name": "Køletilstand eller Opvarmning/Filtertilstand"
       }
     },
     "update": {

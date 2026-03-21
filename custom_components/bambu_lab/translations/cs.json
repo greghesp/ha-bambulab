@@ -218,9 +218,6 @@
       "door_open": {
         "name": "Dvířka krytu"
       },
-      "airduct_mode": {
-        "name": "Režim vzduchového kanálu"
-      },
       "timelapse": {
         "name": "Nahrávání časosběru"
       },
@@ -327,6 +324,13 @@
           "standard": "Standardní",
           "sport": "Sportovní",
           "ludicrous": "Šílená"
+        }
+      },
+      "airduct_mode": {
+        "name": "Režim vzduchovodu",
+        "state": {
+          "cooling": "Chlazení",
+          "heating": "Topení"
         }
       }
     },
@@ -464,7 +468,16 @@
           "check_material_position": "Automatická kontrola: Poloha materiálu",
           "calibrating_cutter_model_offset": "Kalibrace offsetu řezacího modulu",
           "measuring_surface": "Měřicí plocha",
-          "thermal_preconditioning": "Tepelná předúprava pro optimalizaci první vrstvy"
+          "thermal_preconditioning": "Tepelná předúprava pro optimalizaci první vrstvy",
+          "homing_blade_holder": "Držák naváděcí čepele",
+          "calibrating_camera_offset": "Kalibrace offsetu kamery",
+          "calibrating_blade_holder_position": "Kalibrace polohy držáku čepele",
+          "hotend_pick_place_test": "Test výběru a umístění hotendu",
+          "waiting_chamber_temperature_equalize": "Čekání na vyrovnání teploty komory",
+          "preparing_hotend": "Příprava hotendu",
+          "calibrating_detection_nozzle_clumping": "Kalibrace polohy detekce shlukování trysky",
+          "purifying_chamber_air": "Čistící komorový vzduch",
+          "preparing_ams": "Příprava AMS"
         }
       },
       "sdcard_status": {
@@ -1001,6 +1014,14 @@
             "name": "Název vlákna"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "Režim vzduchovodu",
+        "state": {
+          "cooling": "Chlazení",
+          "heating": "Topení",
+          "laser": "Laser"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "prompt_sound": {
         "name": "Povolit zvukové upozornění"
-      },
-      "airduct_mode": {
-        "name": "Režim chlazení nebo vytápění/filtrace"
       }
     },
     "update": {

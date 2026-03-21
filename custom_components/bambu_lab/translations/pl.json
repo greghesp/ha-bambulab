@@ -239,9 +239,6 @@
       "drying": {
         "name": "Suszenie"
       },
-      "airduct_mode": {
-        "name": "Tryb przewodu powietrznego"
-      },
       "hybrid_mode_blocks_control": {
         "name": "Hybrydowe MQTT blokuje kontrolę"
       }
@@ -327,6 +324,13 @@
           "standard": "Standardowy",
           "sport": "Sportowy",
           "ludicrous": "Ekstremalny"
+        }
+      },
+      "airduct_mode": {
+        "name": "Tryb kanałowy",
+        "state": {
+          "cooling": "Chłodzenie",
+          "heating": "Ogrzewanie"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "Automatyczna kontrola: pozycja materiału",
           "calibrating_cutter_model_offset": "Kalibracja przesunięcia modułu tnącego",
           "measuring_surface": "Powierzchnia pomiarowa",
-          "thermal_preconditioning": "Wstępne kondycjonowanie termiczne w celu optymalizacji pierwszej warstwy"
+          "thermal_preconditioning": "Wstępne kondycjonowanie termiczne w celu optymalizacji pierwszej warstwy",
+          "homing_blade_holder": "Uchwyt ostrza samonaprowadzającego",
+          "calibrating_camera_offset": "Kalibracja przesunięcia kamery",
+          "calibrating_blade_holder_position": "Kalibracja położenia uchwytu ostrza",
+          "hotend_pick_place_test": "Test typu pick and place hotendu",
+          "waiting_chamber_temperature_equalize": "Czekamy aż temperatura w komorze się wyrówna",
+          "preparing_hotend": "Przygotowanie hotendu",
+          "calibrating_detection_nozzle_clumping": "Kalibracja pozycji wykrywania zlepiania się dysz",
+          "purifying_chamber_air": "Oczyszczanie powietrza w komorze",
+          "preparing_ams": "Przygotowanie AMS-u"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "Nazwa włókna"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "Tryb kanałowy",
+        "state": {
+          "cooling": "Chłodzenie",
+          "heating": "Ogrzewanie",
+          "laser": "Laser"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "prompt_sound": {
         "name": "Włącz dźwięk powiadomień"
-      },
-      "airduct_mode": {
-        "name": "Tryb chłodzenia lub tryb ogrzewania/filtrowania"
       }
     },
     "update": {

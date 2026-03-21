@@ -239,9 +239,6 @@
       "drying": {
         "name": "Asciugatura"
       },
-      "airduct_mode": {
-        "name": "Modalità condotto d'aria"
-      },
       "hybrid_mode_blocks_control": {
         "name": "Controllo dei blocchi MQTT ibrido"
       }
@@ -327,6 +324,13 @@
           "standard": "Standard",
           "sport": "Sport",
           "ludicrous": "Ridicola"
+        }
+      },
+      "airduct_mode": {
+        "name": "Modalità condotto d'aria",
+        "state": {
+          "cooling": "Raffreddamento",
+          "heating": "Riscaldamento"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "Controllo automatico: posizione del materiale",
           "calibrating_cutter_model_offset": "Calibrazione offset del modulo taglierina",
           "measuring_surface": "Superficie di misurazione",
-          "thermal_preconditioning": "Precondizionamento termico per l'ottimizzazione del primo strato"
+          "thermal_preconditioning": "Precondizionamento termico per l'ottimizzazione del primo strato",
+          "homing_blade_holder": "Porta lama homing",
+          "calibrating_camera_offset": "Calibrazione dell'offset della fotocamera",
+          "calibrating_blade_holder_position": "Calibrazione della posizione del supporto lama",
+          "hotend_pick_place_test": "Prova pick and place dell'hotend",
+          "waiting_chamber_temperature_equalize": "In attesa che la temperatura della camera si equalizzi",
+          "preparing_hotend": "Preparazione dell'hotend",
+          "calibrating_detection_nozzle_clumping": "Calibrazione della posizione di rilevamento dell'aggregazione degli ugelli",
+          "purifying_chamber_air": "Purificazione dell'aria della camera",
+          "preparing_ams": "Preparazione dell'AMS"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "Nome del filamento"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "Modalità condotto d'aria",
+        "state": {
+          "cooling": "Raffreddamento",
+          "heating": "Riscaldamento",
+          "laser": "Laser"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "ftp": {
         "name": "Carica i dati del modello dalla stampante"
-      },
-      "airduct_mode": {
-        "name": "Modalità di raffreddamento o modalità di riscaldamento/filtro"
       }
     },
     "update": {

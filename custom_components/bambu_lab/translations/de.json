@@ -209,9 +209,6 @@
       "door_open": {
         "name": "Gehäusetür"
       },
-      "airduct_mode": {
-        "name": "Luftkanalmodus"
-      },
       "timelapse": {
         "name": "Aufnahme von Zeitraffern"
       },
@@ -327,6 +324,13 @@
           "standard": "Standard",
           "sport": "Sport",
           "ludicrous": "Verrückt"
+        }
+      },
+      "airduct_mode": {
+        "name": "Luftkanalmodus",
+        "state": {
+          "cooling": "Kühlung",
+          "heating": "Heizung"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "Automatische Prüfung: Materialposition",
           "calibrating_cutter_model_offset": "Offsetkalibrierung des Schneidmoduls",
           "measuring_surface": "Messfläche",
-          "thermal_preconditioning": "Thermische Vorkonditionierung zur Optimierung der ersten Schicht"
+          "thermal_preconditioning": "Thermische Vorkonditionierung zur Optimierung der ersten Schicht",
+          "homing_blade_holder": "Referenzmesserhalter",
+          "calibrating_camera_offset": "Kamera-Offset kalibrieren",
+          "calibrating_blade_holder_position": "Kalibrieren der Position des Klingenhalters",
+          "hotend_pick_place_test": "Hotend-Pick-and-Place-Test",
+          "waiting_chamber_temperature_equalize": "Warten auf den Temperaturausgleich in der Kammer",
+          "preparing_hotend": "Hotend wird vorbereitet",
+          "calibrating_detection_nozzle_clumping": "Kalibrieren der Erkennungsposition der Düsenverklumpung",
+          "purifying_chamber_air": "Kammerluft reinigen",
+          "preparing_ams": "AMS vorbereiten"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "Filamentname"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "Luftkanalmodus",
+        "state": {
+          "cooling": "Kühlung",
+          "heating": "Heizung",
+          "laser": "Laser"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "ftp": {
         "name": "Modelldaten vom Drucker laden"
-      },
-      "airduct_mode": {
-        "name": "Aktiviere Kühlluftmodus oder Heizluft-/Filtermodus"
       }
     },
     "update": {

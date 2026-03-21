@@ -239,9 +239,6 @@
       "drying": {
         "name": "การอาบแห้ง"
       },
-      "airduct_mode": {
-        "name": "โหมดท่ออากาศ"
-      },
       "hybrid_mode_blocks_control": {
         "name": "ไฮบริด MQTT บล็อกการควบคุม"
       }
@@ -327,6 +324,13 @@
           "standard": "มาตรฐาน",
           "sport": "กีฬา",
           "ludicrous": "น่าหัวเราะ"
+        }
+      },
+      "airduct_mode": {
+        "name": "โหมดท่ออากาศ",
+        "state": {
+          "cooling": "ระบายความร้อน",
+          "heating": "เครื่องทำความร้อน"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "ตรวจสอบอัตโนมัติ: ตำแหน่งวัสดุ",
           "calibrating_cutter_model_offset": "การสอบเทียบออฟเซ็ตโมดูลเครื่องตัด",
           "measuring_surface": "พื้นผิวการวัด",
-          "thermal_preconditioning": "การปรับสภาพความร้อนล่วงหน้าเพื่อการเพิ่มประสิทธิภาพชั้นแรก"
+          "thermal_preconditioning": "การปรับสภาพความร้อนล่วงหน้าเพื่อการเพิ่มประสิทธิภาพชั้นแรก",
+          "homing_blade_holder": "ที่ยึดใบมีดกลับบ้าน",
+          "calibrating_camera_offset": "การปรับเทียบออฟเซ็ตกล้อง",
+          "calibrating_blade_holder_position": "การปรับเทียบตำแหน่งตัวยึดใบมีด",
+          "hotend_pick_place_test": "การทดสอบการเลือกและวาง Hotend",
+          "waiting_chamber_temperature_equalize": "กำลังรออุณหภูมิห้องเพาะเลี้ยงให้เท่ากัน",
+          "preparing_hotend": "กำลังเตรียมฮอตเอนด์",
+          "calibrating_detection_nozzle_clumping": "การปรับเทียบตำแหน่งการตรวจจับการเกาะตัวของหัวฉีด",
+          "purifying_chamber_air": "ฟอกอากาศในห้อง",
+          "preparing_ams": "เตรียมความพร้อมเอเอ็มเอส"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "ชื่อเส้นใย"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "โหมดท่ออากาศ",
+        "state": {
+          "cooling": "ระบายความร้อน",
+          "heating": "เครื่องทำความร้อน",
+          "laser": "เลเซอร์"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "prompt_sound": {
         "name": "ปล่อยให้เสียงที่รวดเร็ว"
-      },
-      "airduct_mode": {
-        "name": "โหมดทำความเย็นหรือโหมดทำความร้อน/ตัวกรอง"
       }
     },
     "update": {

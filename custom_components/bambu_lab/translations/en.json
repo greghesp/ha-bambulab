@@ -479,6 +479,15 @@
           "calibrating_cutter_model_offset": "Cutter module offset calibration",
           "measuring_surface": "Measuring surface",
           "thermal_preconditioning": "Thermal preconditioning",
+          "homing_blade_holder": "Homing blade holder",
+          "calibrating_camera_offset": "Calibrating camera offset",
+          "calibrating_blade_holder_position": "Calibrating blade holder position",
+          "hotend_pick_place_test": "Hotend pick and place test",
+          "waiting_chamber_temperature_equalize": "Waiting for chamber temperature to equalize",
+          "preparing_hotend": "Preparing hotend",
+          "calibrating_detection_nozzle_clumping": "Calibrating the detection position of nozzle clumping",
+          "purifying_chamber_air": "Purifying chamber air",
+          "preparing_ams": "Preparing AMS",
           "idle": "Idle"
         }
       },

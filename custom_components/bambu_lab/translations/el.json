@@ -239,9 +239,6 @@
       "drying": {
         "name": "Ξήρανση"
       },
-      "airduct_mode": {
-        "name": "Λειτουργία Airduct"
-      },
       "hybrid_mode_blocks_control": {
         "name": "Το υβριδικό MQTT αποκλείει τον έλεγχο"
       }
@@ -327,6 +324,13 @@
           "standard": "Κανονική",
           "sport": "Γρήγορη",
           "ludicrous": "Υπερβολική"
+        }
+      },
+      "airduct_mode": {
+        "name": "Λειτουργία αεραγωγού",
+        "state": {
+          "cooling": "Ψύξη",
+          "heating": "Θέρμανση"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "Αυτόματος Έλεγχος: Θέση υλικού",
           "calibrating_cutter_model_offset": "Βαθμονόμηση μετατόπισης μονάδας κοπής",
           "measuring_surface": "Επιφάνεια μέτρησης",
-          "thermal_preconditioning": "Θερμική προετοιμασία για βελτιστοποίηση πρώτης στρώσης"
+          "thermal_preconditioning": "Θερμική προετοιμασία για βελτιστοποίηση πρώτης στρώσης",
+          "homing_blade_holder": "Στήριγμα λεπίδας υποδοχής",
+          "calibrating_camera_offset": "Βαθμονόμηση όφσετ κάμερας",
+          "calibrating_blade_holder_position": "Βαθμονόμηση θέσης συγκράτησης λεπίδας",
+          "hotend_pick_place_test": "Hotend pick and place test",
+          "waiting_chamber_temperature_equalize": "Αναμονή για εξισορρόπηση της θερμοκρασίας του θαλάμου",
+          "preparing_hotend": "Προετοιμασία hotend",
+          "calibrating_detection_nozzle_clumping": "Βαθμονόμηση της θέσης ανίχνευσης της συσσώρευσης ακροφυσίων",
+          "purifying_chamber_air": "Καθαρισμός του αέρα του θαλάμου",
+          "preparing_ams": "Προετοιμασία AMS"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "Όνομα νήματος"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "Λειτουργία αεραγωγού",
+        "state": {
+          "cooling": "Ψύξη",
+          "heating": "Θέρμανση",
+          "laser": "Λέιζερ"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "ftp": {
         "name": "Φόρτωση δεδομένων μοντέλου από εκτυπωτή"
-      },
-      "airduct_mode": {
-        "name": "Λειτουργία ψύξης ή λειτουργία θέρμανσης/φίλτρου"
       }
     },
     "update": {
