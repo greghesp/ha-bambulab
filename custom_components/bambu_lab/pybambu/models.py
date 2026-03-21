@@ -3728,6 +3728,8 @@ class ExtruderTool:
                 self.state = "laser40"
             elif mount == 1 and tool_type == "CP00":
                 self.state = "cutter"
+            elif mount == 1 and tool_type == "F000":
+                self.state = "cooling_fan"
             elif mount == 1 and tool_type:
                 self.state = "unknown"
 
