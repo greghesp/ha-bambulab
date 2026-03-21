@@ -138,9 +138,6 @@ CURRENT_STAGE_IDS = {
     65: "calibrating_detection_nozzle_clumping",
     66: "purifying_chamber_air",
     77: "preparing_ams",
-    # "Preparing Hotend"
-    # "Calibrating the detection position of nozzle clumping"
-    # "Purifying the chamber air"
     # X1 returns -1 for idle
     -1: "idle",  # DUPLICATED
     # P1 returns 255 for idle
