@@ -129,6 +129,15 @@ CURRENT_STAGE_IDS = {
     56: "calibrating_cutter_model_offset",
     57: "measuring_surface",
     58: "thermal_preconditioning",
+    59: "homing_blade_holder",
+    60: "calibrating_camera_offset",
+    61: "calibrating_blade_holder_position",
+    62: "hotend_pick_place_test",
+    63: "waiting_chamber_temperature_equalize",
+    64: "preparing_hotend",
+    65: "calibrating_detection_nozzle_clumping",
+    66: "purifying_chamber_air",
+    77: "preparing_ams",
     # X1 returns -1 for idle
     -1: "idle",  # DUPLICATED
     # P1 returns 255 for idle

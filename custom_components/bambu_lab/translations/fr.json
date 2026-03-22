@@ -461,7 +461,16 @@
           "check_material_position": "Vérification automatique : position du matériau",
           "calibrating_cutter_model_offset": "Calibration décalage module de coupe",
           "measuring_surface": "Mesure de la surface",
-          "thermal_preconditioning": "Préconditionnement thermique"
+          "thermal_preconditioning": "Préconditionnement thermique",
+          "homing_blade_holder": "Support de lame à tête chercheuse",
+          "calibrating_camera_offset": "Calibrage du décalage de la caméra",
+          "calibrating_blade_holder_position": "Calibrage de la position du porte-lame",
+          "hotend_pick_place_test": "Test de sélection et de placement Hotend",
+          "waiting_chamber_temperature_equalize": "En attente que la température de la chambre s'égalise",
+          "preparing_hotend": "Préparation du hotend",
+          "calibrating_detection_nozzle_clumping": "Calibrage de la position de détection de l'agglutination des buses",
+          "purifying_chamber_air": "Purifier l'air de la chambre",
+          "preparing_ams": "Préparation de l'AMS"
         }
       },
       "print_progress": {

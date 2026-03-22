@@ -239,9 +239,6 @@
       "drying": {
         "name": "건조"
       },
-      "airduct_mode": {
-        "name": "에어덕트 모드"
-      },
       "hybrid_mode_blocks_control": {
         "name": "하이브리드 MQTT 블록 제어"
       }
@@ -327,6 +324,13 @@
           "standard": "표준",
           "sport": "스포츠",
           "ludicrous": "아주 빠름"
+        }
+      },
+      "airduct_mode": {
+        "name": "에어덕트 모드",
+        "state": {
+          "cooling": "냉각",
+          "heating": "난방"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "자동 확인: 재료 위치",
           "calibrating_cutter_model_offset": "커터 모듈 오프셋 교정",
           "measuring_surface": "측정면",
-          "thermal_preconditioning": "첫 번째 레이어 최적화를 위한 열 사전 조정"
+          "thermal_preconditioning": "첫 번째 레이어 최적화를 위한 열 사전 조정",
+          "homing_blade_holder": "호밍 블레이드 홀더",
+          "calibrating_camera_offset": "카메라 오프셋 보정",
+          "calibrating_blade_holder_position": "블레이드 홀더 위치 교정",
+          "hotend_pick_place_test": "핫엔드 픽 앤 플레이스 테스트",
+          "waiting_chamber_temperature_equalize": "챔버 온도가 같아질 때까지 기다리는 중",
+          "preparing_hotend": "핫엔드 준비 중",
+          "calibrating_detection_nozzle_clumping": "노즐 뭉침 감지 위치 교정",
+          "purifying_chamber_air": "챔버 공기 정화",
+          "preparing_ams": "AMS 준비"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "필라멘트 이름"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "에어덕트 모드",
+        "state": {
+          "cooling": "냉각",
+          "heating": "난방",
+          "laser": "원자 램프"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "ftp": {
         "name": "프린터에서 모델 데이터 로드"
-      },
-      "airduct_mode": {
-        "name": "냉각 모드 또는 가열/필터 모드"
       }
     },
     "update": {

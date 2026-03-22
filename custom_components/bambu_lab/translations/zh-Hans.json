@@ -239,9 +239,6 @@
       "drying": {
         "name": "干燥"
       },
-      "airduct_mode": {
-        "name": "风道模式"
-      },
       "hybrid_mode_blocks_control": {
         "name": "混合 MQTT 块控制"
       }
@@ -327,6 +324,13 @@
           "standard": "标准模式",
           "sport": "运动模式",
           "ludicrous": "狂暴模式"
+        }
+      },
+      "airduct_mode": {
+        "name": "风道模式",
+        "state": {
+          "cooling": "冷却",
+          "heating": "加热"
         }
       }
     },
@@ -449,7 +453,16 @@
           "check_material_position": "自动检查：材料位置",
           "calibrating_cutter_model_offset": "刀具模块偏移校准",
           "measuring_surface": "测量面",
-          "thermal_preconditioning": "第一层优化的热预处理"
+          "thermal_preconditioning": "第一层优化的热预处理",
+          "homing_blade_holder": "归位刀架",
+          "calibrating_camera_offset": "校准相机偏移",
+          "calibrating_blade_holder_position": "校准刀架位置",
+          "hotend_pick_place_test": "热端拾放测试",
+          "waiting_chamber_temperature_equalize": "等待腔室温度均衡",
+          "preparing_hotend": "准备热端",
+          "calibrating_detection_nozzle_clumping": "校准喷嘴结块检测位置",
+          "purifying_chamber_air": "净化室空气",
+          "preparing_ams": "准备AMS"
         }
       },
       "print_progress": {
@@ -1001,6 +1014,14 @@
             "name": "灯丝名称"
           }
         }
+      },
+      "airduct_mode": {
+        "name": "风道模式",
+        "state": {
+          "cooling": "冷却",
+          "heating": "加热",
+          "laser": "激光"
+        }
       }
     },
     "camera": {
@@ -1020,9 +1041,6 @@
       },
       "ftp": {
         "name": "打印机加载模型数据"
-      },
-      "airduct_mode": {
-        "name": "冷却模式或加热/过滤模式"
       }
     },
     "update": {
