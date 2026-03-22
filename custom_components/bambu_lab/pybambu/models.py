@@ -156,7 +156,8 @@ class Device:
         h2_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.H2S}
         p1_printers = {Printers.P1P, Printers.P1S}
         p2_printers = {Printers.P2S}
-        x1_printers = {Printers.X1, Printers.X1C, Printers.X1E}
+        x1_printer  = {Printers.X1, Printers.X1C}
+        x1e_printer = {Printers.X1E} # Firmware versioning is independent of X1/X1C.
         dual_nozzle_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO}
         model = self.info.device_type
 
@@ -164,7 +165,7 @@ class Device:
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
         # the very first payload.
         if feature == Features.CAMERA_RTSP:
-            return model in (h2_printers | p2_printers | x1_printers)
+            return model in (h2_printers | p2_printers | x1_printer | x1e_printer)
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
@@ -184,7 +185,7 @@ class Device:
             # flag would largely be good though but not accessible here.
             return model not in a1_printers
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return model in (h2_printers | p2_printers | x1_printers)
+            return model in (h2_printers | p2_printers | x1_printer | x1e_printer)
         elif feature == Features.AMS:
             return len(self.ams.data) != 0
         elif feature == Features.K_VALUE:
@@ -192,7 +193,7 @@ class Device:
         elif feature == Features.AMS_TEMPERATURE:
             if model in a1_printers:
                 return self.supports_sw_version("01.06.10.33")
-            elif model in p1_printers:
+            if model in p1_printers:
                 return self.supports_sw_version("01.07.50.18")
             return True
         elif feature == Features.AIRDUCT_MODE:
@@ -207,7 +208,9 @@ class Device:
         elif feature == Features.DOOR_SENSOR:
             if model in (h2_printers | p2_printers):
                 return True
-            if model in x1_printers:
+            if model in x1e_printer:
+                return self.supports_sw_version("01.01.02.00")
+            if model in x1_printer:
                 return self.supports_sw_version("01.07.00.00")
             return False
         elif feature == Features.AMS_READ_RFID_COMMAND:
@@ -215,7 +218,10 @@ class Device:
                 return self.supports_sw_version("01.06.00.00")
             if model in p1_printers:
                 return self.supports_sw_version("01.08.01.00")
-            if model in x1_printers:
+            if model in x1e_printer:
+                # Do not know if the X1E supports this, or at what version support was added.
+                return False
+            if model in x1_printer:
                 return self.supports_sw_version("01.09.00.00")
             return True
         elif feature == Features.AMS_FILAMENT_REMAINING:
@@ -231,23 +237,32 @@ class Device:
         elif feature == Features.AMS_SWITCH_COMMAND:
             if model in p1_printers:
                 return self.supports_sw_version("01.02.99.10")
-            elif model in x1_printers:
+            if model in x1e_printer:
+                # Do not know if the X1E supports this, or at what version support was added.
+                return False
+            if model in x1_printer:
                 return self.supports_sw_version("01.05.06.01")
             return True
         elif feature == Features.AMS_HUMIDITY:
             if model in a1_printers:
                 return self.supports_sw_version("01.06.10.33")
-            elif model in p1_printers:
+            if model in p1_printers:
                 return self.supports_sw_version("01.07.50.18")
-            elif model in x1_printers:
+            if model in x1e_printer:
+                # Do not know if the X1E supports this, or at what version support was added.
+                return False
+            if model in x1_printer:
                 return self.supports_sw_version("01.08.50.18")
             return True
         elif feature == Features.AMS_DRYING:
             if model in a1_printers:
                 return self.supports_sw_version("01.06.10.33")
-            elif model in p1_printers:
+            if model in p1_printers:
                 return self.supports_sw_version("01.07.50.18")
-            elif model in x1_printers:
+            if model in x1e_printer:
+                # Do not know if the X1E supports this, or at what version support was added.
+                return False
+            if model in x1_printer:
                 return self.supports_sw_version("01.08.50.18")
             return True
         elif feature == Features.CHAMBER_LIGHT_2:
@@ -259,11 +274,14 @@ class Device:
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             if model in a1_printers:
                 return self.supports_sw_version("01.05.00.00")
-            elif model in {Printers.H2D, Printers.H2DPRO}:
+            if model in {Printers.H2D, Printers.H2DPRO}:
                 return self.supports_sw_version("01.01.00.00")
-            elif model in p1_printers:
+            if model in p1_printers:
                 return self.supports_sw_version("01.08.02.00")
-            elif model in x1_printers:
+            if model in x1e_printer:
+                # Do not know if the X1E requires this, or at what version support was added.
+                return False
+            if model in x1_printer:
                 return self.supports_sw_version("01.08.50.32")
             return True
         elif feature == Features.FIRE_ALARM_BUZZER:
@@ -275,7 +293,7 @@ class Device:
         elif feature == Features.HOTEND_RACK:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         elif feature == Features.ACTIVE_CHAMBER_HEATER:
-            return model in ({Printers.X1E} | h2_printers)
+            return model in {x1e_printer | h2_printers}
         return False
     
     def supports_sw_version(self, version: str) -> bool:
