@@ -274,7 +274,7 @@ class Device:
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             if model in a1_printers:
                 return self.supports_sw_version("01.05.00.00")
-            if model in {Printers.H2D, Printers.H2DPRO}:
+            if model in (Printers.H2D, Printers.H2DPRO):
                 return self.supports_sw_version("01.01.00.00")
             if model in p1_printers:
                 return self.supports_sw_version("01.08.02.00")
@@ -293,7 +293,7 @@ class Device:
         elif feature == Features.HOTEND_RACK:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         elif feature == Features.ACTIVE_CHAMBER_HEATER:
-            return model in {x1e_printer | h2_printers}
+            return model in (x1e_printer | h2_printers)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
