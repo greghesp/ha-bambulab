@@ -621,17 +621,32 @@
           }
         }
       },
-      "tray_1": {
-        "name": "Slot 1",
+      "tray": {
+        "name": "Slot {tray_number}",
         "state_attributes": {
+          "slot": {
+            "name": "Scanalatura"
+          },
           "active": {
             "name": "Attiva"
+          },
+          "bed_temp": {
+            "name": "Temperatura del letto"
           },
           "color": {
             "name": "Colore"
           },
           "cols": {
             "name": "Colori"
+          },
+          "ctype": {
+            "name": "Tipo di colore"
+          },
+          "dry_temp": {
+            "name": "Temperatura di asciugatura"
+          },
+          "dry_time": {
+            "name": "Tempo di asciugatura"
           },
           "empty": {
             "name": "Vuota"
@@ -651,67 +666,14 @@
           "remain": {
             "name": "Filamento Rimanente"
           },
-          "tag_uid": {
-            "name": "Numero di Serie Filamento"
-          },
-          "type": {
-            "name": "Tipo"
-          },
           "remain_enabled": {
             "name": "Stima del filamento rimanente abilitato"
           },
-          "filament_id": {
-            "name": "Filamento id"
-          },
-          "tray_weight": {
-            "name": "Peso massimo del filamento"
-          },
-          "bed_temp": {
-            "name": "Temperatura del letto"
-          },
-          "ctype": {
-            "name": "Tipo di colore"
-          },
-          "dry_temp": {
-            "name": "Temperatura di asciugatura"
-          },
-          "dry_time": {
-            "name": "Tempo di asciugatura"
-          }
-        }
-      },
-      "tray_2": {
-        "name": "Slot 2",
-        "state_attributes": {
-          "active": {
-            "name": "Attiva"
-          },
-          "color": {
-            "name": "Colore"
-          },
-          "cols": {
-            "name": "Colori"
-          },
-          "empty": {
-            "name": "Vuota"
-          },
-          "k_value": {
-            "name": "Valore k"
-          },
-          "name": {
-            "name": "Nome"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura Minimia Ugello"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura Massima Ugello"
-          },
-          "remain": {
-            "name": "Filamento Rimanente"
-          },
           "tag_uid": {
             "name": "Numero di Serie Filamento"
+          },
+          "tray_uuid": {
+            "name": "Tray UUID"
           },
           "type": {
             "name": "Tipo"
@@ -721,139 +683,6 @@
           },
           "tray_weight": {
             "name": "Peso massimo del filamento"
-          },
-          "remain_enabled": {
-            "name": "Stima del filamento rimanente abilitato"
-          },
-          "bed_temp": {
-            "name": "Temperatura del letto"
-          },
-          "ctype": {
-            "name": "Tipo di colore"
-          },
-          "dry_temp": {
-            "name": "Temperatura di asciugatura"
-          },
-          "dry_time": {
-            "name": "Tempo di asciugatura"
-          }
-        }
-      },
-      "tray_3": {
-        "name": "Slot 3",
-        "state_attributes": {
-          "active": {
-            "name": "Attiva"
-          },
-          "color": {
-            "name": "Colore"
-          },
-          "cols": {
-            "name": "Colori"
-          },
-          "empty": {
-            "name": "Vuota"
-          },
-          "k_value": {
-            "name": "Valore k"
-          },
-          "name": {
-            "name": "Nome"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura Minimia Ugello"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura Massima Ugello"
-          },
-          "remain": {
-            "name": "Filamento Rimanente"
-          },
-          "tag_uid": {
-            "name": "Numero di Serie Filamento"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "Filamento id"
-          },
-          "tray_weight": {
-            "name": "Peso massimo del filamento"
-          },
-          "remain_enabled": {
-            "name": "Stima del filamento rimanente abilitato"
-          },
-          "bed_temp": {
-            "name": "Temperatura del letto"
-          },
-          "ctype": {
-            "name": "Tipo di colore"
-          },
-          "dry_temp": {
-            "name": "Temperatura di asciugatura"
-          },
-          "dry_time": {
-            "name": "Tempo di asciugatura"
-          }
-        }
-      },
-      "tray_4": {
-        "name": "Slot 4",
-        "state_attributes": {
-          "active": {
-            "name": "Attiva"
-          },
-          "color": {
-            "name": "Colore"
-          },
-          "cols": {
-            "name": "Colori"
-          },
-          "empty": {
-            "name": "Vuota"
-          },
-          "k_value": {
-            "name": "Valore k"
-          },
-          "name": {
-            "name": "Nome"
-          },
-          "nozzle_temp_min": {
-            "name": "Temperatura Minimia Ugello"
-          },
-          "nozzle_temp_max": {
-            "name": "Temperatura Massima Ugello"
-          },
-          "remain": {
-            "name": "Filamento Rimanente"
-          },
-          "tag_uid": {
-            "name": "Numero di Serie Filamento"
-          },
-          "type": {
-            "name": "Tipo"
-          },
-          "filament_id": {
-            "name": "Filamento id"
-          },
-          "tray_weight": {
-            "name": "Peso massimo del filamento"
-          },
-          "remain_enabled": {
-            "name": "Stima del filamento rimanente abilitato"
-          },
-          "bed_temp": {
-            "name": "Temperatura del letto"
-          },
-          "ctype": {
-            "name": "Tipo di colore"
-          },
-          "dry_temp": {
-            "name": "Temperatura di asciugatura"
-          },
-          "dry_time": {
-            "name": "Tempo di asciugatura"
           }
         }
       },
