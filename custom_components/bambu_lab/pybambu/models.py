@@ -2268,7 +2268,7 @@ class Info:
         # H2 example:
         #   "stat": "46258008",  # closed
         #   "stat": "46A58008",  # open
-        if self.device_type in [Printers.X1, Printers.X1C]:
+        if self.device_type in [Printers.X1, Printers.X1C, Printers.X1E]:
             if "home_flag" in data:
                 self.door_open = (data["home_flag"] & Home_Flag_Values.DOOR_OPEN) != 0
         elif "stat" in data:
