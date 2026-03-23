@@ -22,6 +22,7 @@ from .const import (
     BAMBU_URL,
     FansEnum,
     Printers,
+    WikiPrinterTag,
     TempEnum
 )
 from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
@@ -424,3 +425,9 @@ def safe_json_loads(raw_bytes):
         LOGGER.error(f"Failed to decode JSON payload: '{text}'")
         LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
         raise
+
+def get_wiki_url_for_hms_error(hms_code: str, device_type: Printers):
+    wiki_tag = WikiPrinterTag[device_type]
+    lang = "en" # Only English wiki content seems to exist
+    return f"https://wiki.bambulab.com/{lang}/{wiki_tag}/troubleshooting/hmscode/{hms_code}"
+

@@ -39,6 +39,7 @@ from .utils import (
     set_temperature_to_gcode,
     get_upgrade_url,
     upgrade_template,
+    get_wiki_url_for_hms_error,
 )
 from .const import (
     LOGGER,
@@ -3258,8 +3259,7 @@ class HMSNotification:
     @property
     def wiki_url(self):
         if self.attr > 0 and self.code > 0:
-            # Only English wiki content seems to exist
-            return f"https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/{self.hms_code}"
+            return get_wiki_url_for_hms_error(self.hms_code, self._device_type)
         return ""
 
 
