@@ -2,7 +2,7 @@
   "device_automation": {
     "trigger_type": {
       "event_print_canceled": "Drukowanie anulowane",
-      "event_print_failed": "Błąd drukowania",
+      "event_print_failed": "Niepowodzenie drukowania",
       "event_print_finished": "Drukowanie zakończone",
       "event_print_started": "Rozpoczęto drukowanie",
       "event_print_error": "Błąd drukowania",
