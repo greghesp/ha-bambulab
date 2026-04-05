@@ -476,6 +476,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="start_time",
         translation_key="start_time",
         icon="mdi:clock",
+        device_class=SensorDeviceClass.TIMESTAMP,
         available_fn=lambda self: self._start_time_avail_fn(),
         value_fn=lambda self: self._start_time_value_fn(),
         is_restoring=True,
@@ -494,8 +495,9 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="end_time",
         translation_key="end_time",
         icon="mdi:clock",
+        device_class=SensorDeviceClass.TIMESTAMP,
         available_fn=lambda self: self.coordinator.get_model().print_job.end_time is not None,
-        value_fn=lambda self: dt_util.as_local(self.coordinator.get_model().print_job.end_time).replace(tzinfo=None),
+        value_fn=lambda self: dt_util.as_utc(self.coordinator.get_model().print_job.end_time),
     ),
     BambuLabSensorEntityDescription(
         key="total_usage_hours",
