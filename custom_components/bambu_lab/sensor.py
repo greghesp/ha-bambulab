@@ -135,23 +135,23 @@ class BambuLabRestoreSensor(BambuLabSensor, RestoreEntity):
         model = self.coordinator.get_model()
         live_value = model.print_job.start_time
         if live_value is not None:
-            return dt_util.as_local(live_value).replace(tzinfo=None)
+            return dt_util.as_utc(live_value)
         job = model.print_job
         is_printing = job.gcode_state.lower() in ("running", "pause")
         has_end_time = job.end_time is not None
         is_lan_mode = model.info.mqtt_mode == "local"
         if is_printing and is_lan_mode and has_end_time and self._restored_state is not None:
-            if isinstance(self._restored_state, str):
-                try:
-                    dt_value = dt_util.parse_datetime(self._restored_state)
-                    if dt_value.tzinfo is None:
-                        dt_value = dt_value.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
-                    job.start_time = dt_value
-                    LOGGER.debug(f"LAN Mode: Injected restored start_time into pybambu: {dt_value}")
-                except (ValueError, TypeError):
-                    LOGGER.error("Failed to parse restored start_time string for pybambu")
-                    return None
-            return self._restored_state
+            try:
+                dt_value = dt_util.parse_datetime(str(self._restored_state))
+                if dt_value.tzinfo is None:
+                    dt_value = dt_value.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+                dt_value = dt_util.as_utc(dt_value)
+                job.start_time = dt_value
+                LOGGER.debug(f"LAN Mode: Injected restored start_time into pybambu: {dt_value}")
+            except (ValueError, TypeError, AttributeError):
+                LOGGER.error("Failed to parse restored start_time string for pybambu")
+                return None
+            return dt_value
         return None
 
 
