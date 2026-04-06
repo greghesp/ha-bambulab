@@ -74,7 +74,8 @@
           "access_code": "Přístupový kód:",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -96,7 +97,8 @@
           "access_code": "Přístupový kód:",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,7 +170,8 @@
           "skip_local_mqtt": "Přeskočit test místního připojení MQTT (nedoporučuje se):",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -189,7 +192,8 @@
           "access_code": "Přístupový kód:",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -634,6 +638,9 @@
       },
       "serial": {
         "name": "Sériové číslo"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "humidity_index": {
         "name": "Index vlhkosti"

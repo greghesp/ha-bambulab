@@ -74,7 +74,8 @@
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -96,7 +97,8 @@
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,7 +170,8 @@
           "skip_local_mqtt": "Skip local mqtt connection test (not recommended):",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -189,7 +192,8 @@
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -539,15 +543,6 @@
       "remaining_drying_time": {
         "name": "Remaining drying time"
       },
-      "drying_temperature": {
-        "name": "Drying temperature"
-      },
-      "drying_duration": {
-        "name": "Drying duration"
-      },
-      "drying_filament": {
-        "name": "Drying filament"
-      },
       "ams_temp": {
         "name": "Temperature"
       },
@@ -654,6 +649,9 @@
       },
       "serial": {
         "name": "Serial number"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "humidity_index": {
         "name": "Humidity index"

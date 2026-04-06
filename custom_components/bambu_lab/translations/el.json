@@ -74,6 +74,7 @@
           "usage_hours": "Ώρες Χρήσης (προαιρετικά):",
           "print_cache_count": "Αριθμός μοντέλων για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
           "timelapse_cache_count": "Αριθμός βίντεο TimeLapse για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Παράβλεψη τοπικής δοκιμής σύνδεσης mqtt (δεν συνιστάται):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Κωδικός Πρόσβασης:",
           "usage_hours": "Ώρες Χρήσης (προαιρετικά):",
           "print_cache_count": "Αριθμός μοντέλων για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
-          "timelapse_cache_count": "Αριθμός βίντεο TimeLapse για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):"
+          "timelapse_cache_count": "Αριθμός βίντεο TimeLapse για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Ώρες Χρήσης (προαιρετικά):",
           "print_cache_count": "Αριθμός μοντέλων για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
           "timelapse_cache_count": "Αριθμός βίντεο TimeLapse για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Παράβλεψη τοπικής δοκιμής σύνδεσης mqtt (δεν συνιστάται):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Κωδικός Πρόσβασης:",
           "usage_hours": "Ώρες Χρήσης (προαιρετικά):",
           "print_cache_count": "Αριθμός μοντέλων για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
-          "timelapse_cache_count": "Αριθμός βίντεο TimeLapse για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):"
+          "timelapse_cache_count": "Αριθμός βίντεο TimeLapse για την προσωρινή μνήμη στον βοηθό στο σπίτι (-1 για απεριόριστο):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "Αύξων αριθμός"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Θερμοκρασία στόχου θαλάμου"

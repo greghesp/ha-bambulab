@@ -375,6 +375,7 @@ class BambuClient:
         self._port = 8883
         self._refreshed = False
         self._last_error_code = 0
+        self._suppress_offline_warnings = False
 
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(
@@ -423,6 +424,10 @@ class BambuClient:
             self.start_camera()
         else:
             self.stop_camera()
+
+    def set_suppress_offline_warnings(self, suppress: bool):
+        """Suppress offline disconnect warnings when the printer is intentionally powered off."""
+        self._suppress_offline_warnings = suppress
 
     @property
     def ftp_enabled(self):
@@ -533,7 +538,10 @@ class BambuClient:
             LOGGER.debug(f"On Disconnect: Printer disconnected cleanly")
         else:
             if self._last_error_code != result_code:
-                LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
+                if self._suppress_offline_warnings:
+                    LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code} (suppressed - printer powered off)")
+                else:
+                    LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
             else:
                 LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._last_error_code = result_code

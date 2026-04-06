@@ -15,6 +15,7 @@ from homeassistant.helpers import (
     device_registry,
     entity_registry
 )
+from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.core import Event, HomeAssistant, callback
@@ -93,11 +94,52 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, self._async_shutdown)
         self._service_call_listener = self.hass.bus.async_listen(SERVICE_CALL_EVENT, self._handle_service_call_event)
 
+        # Set up power switch state tracking
+        self._power_switch_listener = None
+        self._setup_power_switch_listener()
+
     @callback
     def _async_shutdown(self, event: Event) -> None:
         """Call when Home Assistant is stopping."""
         LOGGER.debug("HOME ASSISTANT IS SHUTTING DOWN")
         self.shutdown()
+
+    def get_printer_power_switch(self) -> str:
+        """Return the configured power switch entity_id, or empty string if none."""
+        return self.config_entry.options.get('printer_power_switch', '')
+
+    def is_printer_powered_on(self) -> bool:
+        """Return True if the printer is powered on (or no switch is configured)."""
+        entity_id = self.get_printer_power_switch()
+        if not entity_id:
+            return True
+        state = self._hass.states.get(entity_id)
+        if state is None:
+            return True
+        return state.state != 'off'
+
+    def _setup_power_switch_listener(self) -> None:
+        """Register a state-change listener for the configured power switch."""
+        entity_id = self.get_printer_power_switch()
+        if not entity_id:
+            return
+        # Suppress warnings immediately if the switch is already off
+        self.client.set_suppress_offline_warnings(not self.is_printer_powered_on())
+        self._power_switch_listener = async_track_state_change_event(
+            self._hass,
+            [entity_id],
+            self._on_power_switch_state_changed,
+        )
+
+    @callback
+    def _on_power_switch_state_changed(self, event: Event) -> None:
+        """Called whenever the power switch entity changes state."""
+        new_state = event.data.get('new_state')
+        if new_state is None:
+            return
+        suppress = new_state.state == 'off'
+        LOGGER.debug(f"Power switch state changed to '{new_state.state}', suppress_offline_warnings={suppress}")
+        self.client.set_suppress_offline_warnings(suppress)
 
     def event_handler(self, event: str):
         if self._shutdown:
@@ -180,10 +222,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def shutdown(self) -> None:
         """ Halt the MQTT listener thread """
         self._shutdown = True
-        
+
         # Remove event listeners
         self._service_call_listener()
-        
+        if self._power_switch_listener is not None:
+            self._power_switch_listener()
+            self._power_switch_listener = None
+
         # Disconnect client - this will handle its own thread cleanup
         self.client.disconnect()
 

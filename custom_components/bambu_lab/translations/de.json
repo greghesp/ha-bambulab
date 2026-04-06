@@ -74,6 +74,7 @@
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
           "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Zugangscode",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
-          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):"
+          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
           "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Zugangscode",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
-          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):"
+          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "Seriennummer"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Zieltemperatur der Kammer"

@@ -74,6 +74,7 @@
           "usage_hours": "Cantidad de horas de uso (opcional):",
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
           "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Omita la prueba de conexión mqtt local (no recomendado):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Código de Acceso:",
           "usage_hours": "Cantidad de horas de uso (opcional):",
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Cantidad de horas de uso (opcional):",
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
           "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Omita la prueba de conexión mqtt local (no recomendado):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Código de Acceso:",
           "usage_hours": "Cantidad de horas de uso (opcional):",
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "Número de serie"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Temperatura objetivo de la cámara"

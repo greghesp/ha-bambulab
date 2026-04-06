@@ -74,6 +74,7 @@
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
           "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
-          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
           "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
-          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "Serienummer"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Kammerets måltemperatur"

@@ -74,6 +74,7 @@
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -788,15 +792,6 @@
       "remaining_drying_time": {
         "name": "Temps de séchage restant"
       },
-      "drying_temperature": {
-        "name": "Température de séchage"
-      },
-      "drying_duration": {
-        "name": "Durée de séchage"
-      },
-      "drying_filament": {
-        "name": "Filament en séchage"
-      },
       "ams_temp": {
         "name": "Température"
       },
@@ -857,6 +852,9 @@
       },
       "serial": {
         "name": "Numéro de série"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Température cible de la chambre"

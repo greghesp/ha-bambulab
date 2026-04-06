@@ -74,6 +74,7 @@
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
           "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
-          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):"
+          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
           "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):"
+          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "Numer seryjny"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Docelowa temperatura komory"

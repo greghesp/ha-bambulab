@@ -74,6 +74,7 @@
           "usage_hours": "현재 사용 시간 (선택 사항):",
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
           "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "로컬 mqtt 연결 테스트 건너뛰기(권장되지 않음):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "접근 코드:",
           "usage_hours": "현재 사용 시간 (선택 사항):",
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
-          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "현재 사용 시간 (선택 사항):",
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
           "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "로컬 mqtt 연결 테스트 건너뛰기(권장되지 않음):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "접근 코드:",
           "usage_hours": "현재 사용 시간 (선택 사항):",
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
-          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :"
+          "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "일련번호"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "챔버 목표 온도"

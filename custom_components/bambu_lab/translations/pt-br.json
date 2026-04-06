@@ -74,6 +74,7 @@
           "usage_hours": "Horas de utilização atuais (opcional):",
           "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Ignore o teste de conexão mqtt local (não recomendado):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Código de Acesso:",
           "usage_hours": "Horas de utilização atuais (opcional):",
           "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Horas de utilização atuais (opcional):",
           "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Ignore o teste de conexão mqtt local (não recomendado):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Código de Acesso:",
           "usage_hours": "Horas de utilização atuais (opcional):",
           "print_cache_count": "Número de modelos para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
-          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):"
+          "timelapse_cache_count": "Número de vídeos de timelapse para armazenar em cache para o assistente doméstico (-1 para ilimitado):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "Número de série"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Temperatura alvo da câmara"

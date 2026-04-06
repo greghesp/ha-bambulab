@@ -74,6 +74,7 @@
           "usage_hours": "Quantitat d'hores d'ús (opcional):",
           "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
           "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Omet la prova de connexió mqtt local (no recomanat):"
         },
         "sections": {
@@ -96,7 +97,8 @@
           "access_code": "Codi d'accés:",
           "usage_hours": "Quantitat d'hores d'ús (opcional):",
           "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
-          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):"
+          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -168,6 +170,7 @@
           "usage_hours": "Quantitat d'hores d'ús (opcional):",
           "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
           "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):",
           "skip_local_mqtt": "Omet la prova de connexió mqtt local (no recomanat):"
         },
         "sections": {
@@ -189,7 +192,8 @@
           "access_code": "Codi d'accés:",
           "usage_hours": "Quantitat d'hores d'ús (opcional):",
           "print_cache_count": "Nombre de models a la memòria cau a l'assistent domèstic (-1 per a il·limitada):",
-          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):"
+          "timelapse_cache_count": "Nombre de vídeos de Timelapse a Cache to Home Assistant (-1 per a il·limitats):",
+          "printer_power_switch": "Power switch (optional - suppresses offline warnings when off):"
         },
         "sections": {
           "advanced": {
@@ -761,6 +765,9 @@
       },
       "serial": {
         "name": "Número de sèrie"
+      },
+      "printer_power_switch": {
+        "name": "Power switch"
       },
       "target_chamber_temp": {
         "name": "Temperatura objectiu de la cambra"

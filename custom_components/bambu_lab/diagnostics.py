@@ -97,6 +97,14 @@ async def async_get_config_entry_diagnostics(
     
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
+    # Collect power switch info
+    printer_power_switch = coordinator.get_printer_power_switch()
+    power_switch_state = None
+    if printer_power_switch:
+        state_obj = hass.states.get(printer_power_switch)
+        if state_obj is not None:
+            power_switch_state = state_obj.state
+
     # Must convert this to a dict for redaction to work correctly. Redaction leaves empty values as empty so we know if a value was present or not.
     entry = coordinator.config_entry.as_dict()
 
@@ -123,6 +131,10 @@ async def async_get_config_entry_diagnostics(
 
     return {
         "config_entry": async_redact_data(entry, TO_REDACT),
+        "power_switch": {
+            "entity_id": printer_power_switch,
+            "state": power_switch_state,
+        },
         "pushall": {
             "print": async_redact_data(coordinator.data.push_all_data, TO_REDACT)
         },
