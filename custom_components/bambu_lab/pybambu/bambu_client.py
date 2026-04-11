@@ -499,7 +499,6 @@ class BambuClient:
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
         LOGGER.debug(f"On Connect: Connected to printer: {result_code}")
-        LOGGER.debug(f"MQTT connect -> host={self.client.host} local={self._local_mqtt} port={self.client._port} mock={self._mock}")
         self._on_connect()
 
     def start_camera(self):
