@@ -171,7 +171,7 @@ class MockMQTTClient:
         LOGGER.debug(f"MQTTMOCK: Stopping network loop")
         pass
 
-    def loop_forever(self) -> None:
+    def loop_forever(self, retry_first_connection: bool = True) -> None:
         """Mock running the network loop forever."""
         LOGGER.debug(f"MQTTMOCK: Running network loop forever - NOT IMPLEMENTED")
         pass

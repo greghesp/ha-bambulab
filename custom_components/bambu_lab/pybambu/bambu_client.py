@@ -231,14 +231,20 @@ class MqttThread(threading.Thread):
         LOGGER.debug("MQTT listener thread started.")
 
         exceptionSeen = ""
+        connectionSuccessful = False
         while not self._stop_event.is_set():
             try:
                 host = self._client.host if self._client._local_mqtt else self._client.bambu_cloud.cloud_mqtt_host
-                LOGGER.debug(f"Connect: Attempting Connection to {host}")
+                if connectionSuccessful:
+                    # Only log if we did successfully connect. A printer that is off will fail all connection attempts
+                    # so this avoids repetitive debug spew.
+                    LOGGER.debug(f"Connect: Attempting Connection to {host}")
+                connectionSuccessful = False
                 self._client.client.connect(host, self._client._port, keepalive=5)
+                connectionSuccessful = True
 
                 LOGGER.debug("Starting listen loop")
-                self._client.client.loop_forever()
+                self._client.client.loop_forever(retry_first_connection=False)
                 LOGGER.debug("Ended listen loop.")
                 break
             except TimeoutError as e:
@@ -275,6 +281,10 @@ class MqttThread(threading.Thread):
                 break
 
             try:
+                if connectionSuccessful:
+                    # Only log if we did successfully connect. A printer that is off will fail all connection attempts
+                    # so this avoids repetitive debug spew.
+                    LOGGER.debug("Sleeping for 5 seconds before trying to reconnect MQTT client.")
                 self._client.client.disconnect()
             except Exception:
                 pass
@@ -372,6 +382,7 @@ class BambuClient:
         self._cache_path = config.get('file_cache_path', f'/config/www/media/ha-bambulab/{self._serial}')
 
         self._connected = False
+        self._device_confirmed = False
         self._port = 8883
         self._refreshed = False
         self._last_error_code = 0
@@ -456,8 +467,8 @@ class BambuClient:
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
-        # Set aggressive reconnect polling.
-        self.client.reconnect_delay_set(min_delay=1, max_delay=1)
+        # Set reconnect polling back off. Starting at 1s doubling up to 30s between connection attempts.
+        self.client.reconnect_delay_set(min_delay=1, max_delay=30)
 
         # Run the blocking tls_set method in a separate thread
         loop = asyncio.get_event_loop()
@@ -476,11 +487,8 @@ class BambuClient:
         await self._device.print_job.async_prune_timelapse_files()
 
     def subscribe_and_request_info(self):
-        LOGGER.debug("Now subscribing...")
         self.subscribe()
-        LOGGER.debug("On Connect: Getting version info")
         self.publish(GET_VERSION)
-        LOGGER.debug("On Connect: Request push all")
         self.publish(PUSH_ALL)
 
     def on_connect(self,
@@ -490,7 +498,8 @@ class BambuClient:
                    result_code: int,
                    properties: mqtt.Properties | None = None, ):
         """Handle connection"""
-        LOGGER.debug("On Connect: Connected to printer")
+        LOGGER.debug(f"On Connect: Connected to printer: {result_code}")
+        LOGGER.debug(f"MQTT connect -> host={self.client.host} local={self._local_mqtt} port={self.client._port} mock={self._mock}")
         self._on_connect()
 
     def start_camera(self):
@@ -506,20 +515,28 @@ class BambuClient:
 
     def stop_camera(self):
         if self._camera is not None:
-            LOGGER.debug("Stopping camera thread")
+            LOGGER.debug("Stopping Chamber Image thread")
             self._camera.stop()
             self._camera.join()
             self._camera = None
 
     def _on_connect(self):
         self._connected = True
+        self._device_confirmed = False
+
+        self.subscribe_and_request_info()
+
+    def _on_device_confirmed(self):
+        """Called on first data payload received from the printer after connection."""
+        if self._device_confirmed:
+            return
+        self._device_confirmed = True
+        LOGGER.debug("Device confirmed: first data payload received from printer")
 
         if self._device.info.ip_address != "" and self._device.info.ip_address != "0.0.0.0":
             LOGGER.debug("Starting watchdog thread")
             self._watchdog = WatchdogThread(self)
             self._watchdog.start()
-
-        self.subscribe_and_request_info()
 
         # Start camera if enabled
         self.start_camera()
@@ -533,16 +550,23 @@ class BambuClient:
             LOGGER.debug(f"On Disconnect: Printer disconnected cleanly")
         else:
             if self._last_error_code != result_code:
-                LOGGER.warning(f"On Disconnect: Printer disconnected with error code: {result_code}")
+                if result_code == 5:
+                    LOGGER.error(f"On Disconnect: Printer disconnected with Access Denied error. Check serial, access code and IP address.")
+                else:
+                    LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
             else:
                 LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._last_error_code = result_code
         self._on_disconnect()
+        if self._last_error_code == 5:
+            # Error code 5 is access denied. This is not likely to resolve itself. Do not loop forever.
+            self.client.disconnect()
 
     def _on_disconnect(self):
         LOGGER.debug("_on_disconnect: Lost connection to the printer")
         self._loaded_slicer_settings = False
         self._connected = False
+        self._device_confirmed = False
         self._device.info.set_online(False)
         if self._watchdog is not None:
             LOGGER.debug("Stopping watchdog thread")
@@ -592,6 +616,7 @@ class BambuClient:
                     self._on_disconnect()
             else:
                 self._device.info.set_online(True)
+                self._on_device_confirmed()
                 if self._watchdog is not None:
                     self._watchdog.received_data()
                 if json_data.get("print"):
