@@ -831,9 +831,10 @@ def create_local_ssl_context():
     script_path = os.path.abspath(__file__)
     directory_path = os.path.dirname(script_path)
     context = ssl.create_default_context()
-    for filename in ("bambu.cert", "bambu_p2s_250626.cert", "bambu_h2c_251122.cert"):
-        path = os.path.join(directory_path, filename)
-        context.load_verify_locations(cafile=path)
+    certs_dir = os.path.join(directory_path, "certs")
+    for filename in os.listdir(certs_dir):
+        if filename.endswith(".cert"):
+            context.load_verify_locations(cafile=os.path.join(certs_dir, filename))
 
     # Ignore "CA cert does not include key usage extension" error since python 3.13
     # See note in https://docs.python.org/3/library/ssl.html#ssl.create_default_context

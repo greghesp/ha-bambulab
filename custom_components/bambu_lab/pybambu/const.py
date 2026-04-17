@@ -19,9 +19,22 @@ class Printers(StrEnum):
     H2D = "H2D"
     H2DPRO = "H2DPRO"
     H2S = "H2S"
+    X2D = "X2D"
     X1E = "X1E"
     X1C = "X1C"
     X1 = "X1"
+
+# Printers that use file:///sdcard/ URL format for print jobs.
+# All other printers default to ftp:/// format.
+LEGACY_SDCARD_PRINTERS = [
+    Printers.X1,
+    Printers.X1C,
+    Printers.X1E,
+    Printers.P1P,
+    Printers.P1S,
+    Printers.A1,
+    Printers.A1MINI,
+]
 
 class Features(IntEnum):
     AUX_FAN = 1,

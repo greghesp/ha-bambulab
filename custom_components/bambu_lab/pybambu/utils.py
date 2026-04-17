@@ -269,6 +269,9 @@ def get_printer_type(modules, default):
     # }
     # X1E = AP02
 
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab X2D")):
+      return 'X2D'
+
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab A1")):
       return 'A1'
 
