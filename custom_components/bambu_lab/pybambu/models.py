@@ -166,7 +166,7 @@ class Device:
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
         # the very first payload.
         if feature == Features.CAMERA_RTSP:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer)
+            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | {Printers.X2D})
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
@@ -186,7 +186,7 @@ class Device:
             # flag would largely be good though but not accessible here.
             return model not in a1_printers
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer)
+            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | {Printers.X2D})
         elif feature == Features.AMS:
             return len(self.ams.data) != 0
         elif feature == Features.K_VALUE:

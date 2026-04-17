@@ -22,6 +22,7 @@ class Printers(StrEnum):
     X1E = "X1E"
     X1C = "X1C"
     X1 = "X1"
+    X2D = "X2D"
 
 class WikiPrinterTag(StrEnum):
     A1 = "a1"
@@ -36,6 +37,7 @@ class WikiPrinterTag(StrEnum):
     X1E = "x1"
     X1C = "x1"
     X1 = "x1"
+    X2D = "x2"
 
 class Features(IntEnum):
     AUX_FAN = 1,

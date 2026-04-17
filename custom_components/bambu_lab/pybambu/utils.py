@@ -294,6 +294,9 @@ def get_printer_type(modules, default):
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2S")):
       return 'H2S'
 
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab X2D")):
+      return 'X2D'
+
     apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
     if len(apNode.keys()) > 1:
         hw_ver = apNode['hw_ver']
@@ -307,6 +310,8 @@ def get_printer_type(modules, default):
                 return 'P1P'
             if project_name == 'C12':
                 return 'P1S'
+            if project_name == '':
+                return 'X2D'  # X2D reports AP04 with empty project_name via local MQTT
         elif hw_ver == 'AP05':
             if project_name == 'N2S':
                 return 'A1'
