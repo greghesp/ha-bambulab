@@ -193,11 +193,11 @@ unload_filament:
   name: Unload filament
   description: Unload the filament currently loaded into the extruder
   fields:
-    device_id:
-      name: AMS or External Spool device
+    entity_id:
+      name: AMS Tray or External Spool entity
       required: true
       selector:
-        device:
+        entity:
           integration: bambu_lab
 
 load_filament:
