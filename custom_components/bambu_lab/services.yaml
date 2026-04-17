@@ -86,6 +86,13 @@ print_project_file:
       required: true
       selector:
         text:
+    skip_objects:
+      name: Skip Objects
+      description: Comma-separated list of object IDs to skip
+      required: false
+      example: "1,3,5"
+      selector:
+        text:
 
 skip_objects:
   name: Skip objects

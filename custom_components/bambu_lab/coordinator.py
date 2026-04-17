@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import copy
 import functools
 import os
 import re
@@ -43,6 +44,7 @@ from .pybambu.const import (
     AMS_DRYING_MODELS,
     AMS_MODELS_AND_EXTERNAL_SPOOL,
     Features,
+    LEGACY_SDCARD_PRINTERS,
     Printers
 )
 from .pybambu.commands import (
@@ -303,7 +305,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         future.set_result(result)
         
     def _service_call_skip_objects(self, data: dict):
-        command = SKIP_OBJECTS_TEMPLATE
+        command = copy.deepcopy(SKIP_OBJECTS_TEMPLATE)
         objects = data.get("objects")
 
         # normalize to list[int]
@@ -685,7 +687,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client.publish(command)
 
     def _service_call_print_project_file(self, data: dict):
-        command = PRINT_PROJECT_FILE_TEMPLATE
+        command = copy.deepcopy(PRINT_PROJECT_FILE_TEMPLATE)
         filepath = data.get("filepath")
         plate = data.get("plate", 1)
         timelapse = data.get("timelapse", False)
@@ -695,15 +697,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         layer_inspect = data.get("layer_inspect", False)
         use_ams = data.get("use_ams", False)
         ams_mapping = data.get("ams_mapping")
+        skip_objects = data.get("skip_objects")
 
         command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
         if '//' in filepath:
             command["print"]["url"] = filepath
         else:
-            if self.config_entry.data["device_type"] in [Printers.H2S, Printers.H2D]:
-                command["print"]["url"] = f"ftp:///{filepath}"
-            else:
+            if self.config_entry.data["device_type"] in LEGACY_SDCARD_PRINTERS:
                 command["print"]["url"] = f"file:///sdcard/{filepath}"
+            else:
+                command["print"]["url"] = f"ftp:///{filepath}"
 
         command["print"]["timelapse"] = timelapse
         command["print"]["bed_leveling"] = bed_leveling
@@ -713,6 +716,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         command["print"]["use_ams"] = use_ams
         if use_ams:
             command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
+        if skip_objects:
+            command["print"]["skip_objects"] = [int(x) for x in skip_objects.split(',')]
         command["print"]["subtask_name"] = os.path.basename(filepath)
 
         self.client.publish(command)
