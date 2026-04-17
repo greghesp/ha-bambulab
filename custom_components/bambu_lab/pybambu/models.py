@@ -159,6 +159,7 @@ class Device:
         p2_printers = {Printers.P2S}
         x1_printer  = {Printers.X1, Printers.X1C}
         x1e_printer = {Printers.X1E} # Firmware versioning is independent of X1/X1C.
+        x2_printers = {Printers.X2D}
         dual_nozzle_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO}
         model = self.info.device_type
 
@@ -166,7 +167,7 @@ class Device:
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
         # the very first payload.
         if feature == Features.CAMERA_RTSP:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer)
+            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
@@ -186,7 +187,7 @@ class Device:
             # flag would largely be good though but not accessible here.
             return model not in a1_printers
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer)
+            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.AMS:
             return len(self.ams.data) != 0
         elif feature == Features.K_VALUE:
@@ -199,7 +200,7 @@ class Device:
             return True
         elif feature == Features.AIRDUCT_MODE:
             # Airduct mode (Filter/Heating and Cooling) is present on P2S and H2 series
-            return model in (h2_printers | p2_printers)
+            return model in (h2_printers | p2_printers | x2_printers)
         elif feature == Features.HYBRID_MODE_BLOCKS_CONTROL:
             if model in p1_printers:
                 # Not sure what the first version that did this was. At least this - could be earlier.
@@ -207,7 +208,7 @@ class Device:
             # Only the P1 firmware did this as far as I know. Not the A1.
             return False
         elif feature == Features.DOOR_SENSOR:
-            if model in (h2_printers | p2_printers):
+            if model in (h2_printers | p2_printers | x2_printers):
                 return True
             if model in x1e_printer:
                 return self.supports_sw_version("01.01.02.00")
@@ -232,7 +233,7 @@ class Device:
                 return self.supports_sw_version("01.06.10.33")
             return True
         elif feature == Features.PROMPT_SOUND:
-            if model in (a1_printers | h2_printers | p2_printers):
+            if model in (a1_printers | h2_printers | p2_printers | x2_printers):
                 return not self.print_fun.mqtt_signature_required
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -271,11 +272,11 @@ class Device:
                 return self.supports_sw_version("01.01.50.40")
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
-            return model in h2_printers
+            return model in (h2_printers | x2_printers)
         elif feature == Features.DUAL_NOZZLES:
-            return model in dual_nozzle_printers
+            return model in (dual_nozzle_printers | x2_printers)
         elif feature == Features.EXTRUDER_TOOL:
-            return model in h2_printers
+            return model in (h2_printers | x2_printers)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             if model in a1_printers:
                 return self.supports_sw_version("01.05.00.00")
@@ -290,11 +291,11 @@ class Device:
                 return self.supports_sw_version("01.08.50.32")
             return True
         elif feature == Features.FIRE_ALARM_BUZZER:
-            return model in h2_printers
+            return model in (h2_printers | x2_printers)
         elif feature == Features.HEATBED_LIGHT:
-            return model in h2_printers
+            return model in (h2_printers | x2_printers)
         elif feature == Features.SECONDARY_AUX_FAN:
-            return model in p2_printers
+            return model in (p2_printers | x2_printers)
         elif feature == Features.HOTEND_RACK:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         elif feature == Features.ACTIVE_CHAMBER_HEATER:
@@ -734,7 +735,8 @@ class Upgrade:
             Printers.A1MINI: "a1-mini",
             Printers.A1: "a1",
             Printers.X1C: "x1",
-            Printers.X1E: "x1e"
+            Printers.X1E: "x1e",
+            Printers.X2D: "x2",
         }
         self.printer_name = device_mapping.get(self._client._device.info.device_type)
         if self.printer_name is None:
