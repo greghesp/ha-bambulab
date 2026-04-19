@@ -3632,6 +3632,18 @@ class FireExtinguisher:
         return 0
 
     @property
+    def countdown(self) -> int:
+        return self._cd
+
+    @property
+    def countdown_init(self) -> int:
+        return self._cd_init
+
+    @property
+    def drill_flag(self) -> bool:
+        return self._drill_flag != 0
+
+    @property
     def error(self) -> bool:
         return self._bot_err != 0
 

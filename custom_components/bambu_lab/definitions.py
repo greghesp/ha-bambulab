@@ -955,6 +955,24 @@ FIRE_EXTINGUISHER_SENSORS: tuple[BambuLabFireExtinguisherSensorEntityDescription
         value_fn=lambda self: self.coordinator.get_model().fire_extinguisher.remaining_time,
         available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
     ),
+    BambuLabFireExtinguisherSensorEntityDescription(
+        key="fire_ext_countdown",
+        translation_key="fire_ext_countdown",
+        icon="mdi:timer-sand",
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.get_model().fire_extinguisher.countdown,
+        available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
+    ),
+    BambuLabFireExtinguisherSensorEntityDescription(
+        key="fire_ext_countdown_init",
+        translation_key="fire_ext_countdown_init",
+        icon="mdi:timer-sand",
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda self: self.coordinator.get_model().fire_extinguisher.countdown_init,
+        available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
+    ),
 )
 
 # Fire Extinguisher binary sensors (on Fire Extinguisher device)
@@ -965,6 +983,14 @@ FIRE_EXTINGUISHER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, .
         device_class=BinarySensorDeviceClass.PROBLEM,
         entity_category=EntityCategory.DIAGNOSTIC,
         is_on_fn=lambda self: self.coordinator.get_model().fire_extinguisher.error,
+        available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="fire_ext_drill",
+        translation_key="fire_ext_drill",
+        icon="mdi:fire-alert",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().fire_extinguisher.drill_flag,
         available_fn=lambda self: self.coordinator.get_model().fire_extinguisher.connected,
     ),
 )

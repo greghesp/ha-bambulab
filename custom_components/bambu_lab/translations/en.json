@@ -245,6 +245,9 @@
       "fire_ext_error": {
         "name": "Fire extinguisher error"
       },
+      "fire_ext_drill": {
+        "name": "Fire extinguisher drill"
+      },
       "laser_mounted": {
         "name": "Mounted"
       },
@@ -377,6 +380,12 @@
       },
       "fire_ext_remaining_time": {
         "name": "Remaining time"
+      },
+      "fire_ext_countdown": {
+        "name": "Countdown"
+      },
+      "fire_ext_countdown_init": {
+        "name": "Countdown initial"
       },
       "wifi_signal": {
         "name": "Wi-Fi signal"
