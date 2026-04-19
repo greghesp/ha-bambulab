@@ -3727,8 +3727,9 @@ class ExtruderTool:
         # Handle ext_tool update
         old_data = f"{self.__dict__}"
 
-        if "device" in data and "ext_tool" in data["device"]:
-            ext_tool = data["device"]["ext_tool"]
+        device = data.get("device", {})
+
+        if ext_tool := device.get("ext_tool"):
             mount = ext_tool.get("mount")
             tool_type = ext_tool.get("type")
             prev_state = self.state
@@ -3746,17 +3747,12 @@ class ExtruderTool:
                 self.state = "unknown"
 
             # Parse additional fields
-            if "th_temp" in ext_tool:
-                self.th_temp = ext_tool["th_temp"]
-            if "calib" in ext_tool:
-                self.calib = ext_tool["calib"]
-            if "low_prec" in ext_tool:
-                self.low_prec = ext_tool["low_prec"]
-            if "mount_3d" in ext_tool:
-                self.mount_3d = ext_tool["mount_3d"]
+            for attr in ("th_temp", "calib", "low_prec", "mount_3d"):
+                if attr in ext_tool:
+                    setattr(self, attr, ext_tool[attr])
 
         # Parse fourth_axis connection state (rotary tool physical connection)
-        fourth_axis = data.get("device", {}).get("fourth_axis", {})
+        fourth_axis = device.get("fourth_axis", {})
         if "connect_flag" in fourth_axis:
             self.fourth_axis_connected = fourth_axis["connect_flag"] == 1
 
