@@ -462,7 +462,17 @@
           "preparing_hotend": "Príprava hotendu",
           "calibrating_detection_nozzle_clumping": "Kalibrácia polohy detekcie zhlukovania trysky",
           "purifying_chamber_air": "Čistiaci vzduch v komore",
-          "preparing_ams": "Príprava AMS"
+          "preparing_ams": "Príprava AMS",
+          "measuring_rotary_attachment": "Merací otočný nástavec",
+          "moving_toolhead_above_purge_chute": "Presúvanie nástrojovej hlavy nad čistiacim žľabom",
+          "cooling_nozzle": "Chladiaca tryska",
+          "moving_toolhead_to_center_of_heatbed": "Presúvanie nástrojovej hlavy do stredu vyhrievaného lôžka",
+          "active_arc_fitting": "Aktívne oblúkové kovanie",
+          "hotend_type_detection": "Detekcia typu Hotend",
+          "build_plate_alignment_detection": "Detekcia zarovnania doštičiek",
+          "heatbed_surface_foreign_object_detection": "Detekcia cudzích predmetov na povrchu vyhrievanej podložky",
+          "heatbed_underside_foreign_object_detection": "Detekcia cudzích predmetov na spodnej strane vyhrievacieho lôžka",
+          "pre_extrusion_before_printing": "Predtlačenie pred tlačou"
         }
       },
       "print_progress": {

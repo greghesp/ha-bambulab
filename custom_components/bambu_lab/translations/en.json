@@ -487,6 +487,16 @@
           "preparing_hotend": "Preparing hotend",
           "calibrating_detection_nozzle_clumping": "Calibrating the detection position of nozzle clumping",
           "purifying_chamber_air": "Purifying chamber air",
+          "measuring_rotary_attachment": "Measuring rotary attachment",
+          "moving_toolhead_above_purge_chute": "Moving toolhead above purge chute",
+          "cooling_nozzle": "Cooling nozzle",
+          "moving_toolhead_to_center_of_heatbed": "Moving toolhead to center of heatbed",
+          "active_arc_fitting": "Active arc fitting",
+          "hotend_type_detection": "Hotend type detection",
+          "build_plate_alignment_detection" : "Build plate alignment detection",
+          "heatbed_surface_foreign_object_detection": "Heatbed surface foreign object detection",
+          "heatbed_underside_foreign_object_detection": "Heatbed underside foreign object detection",
+          "pre_extrusion_before_printing": "Pre-extrusion before printing",
           "preparing_ams": "Preparing AMS",
           "idle": "Idle"
         }

@@ -462,7 +462,17 @@
           "preparing_hotend": "핫엔드 준비 중",
           "calibrating_detection_nozzle_clumping": "노즐 뭉침 감지 위치 교정",
           "purifying_chamber_air": "챔버 공기 정화",
-          "preparing_ams": "AMS 준비"
+          "preparing_ams": "AMS 준비",
+          "measuring_rotary_attachment": "측정 회전식 부착물",
+          "moving_toolhead_above_purge_chute": "퍼지 슈트 위로 툴헤드 이동",
+          "cooling_nozzle": "냉각 노즐",
+          "moving_toolhead_to_center_of_heatbed": "툴헤드를 히트베드 중앙으로 이동",
+          "active_arc_fitting": "액티브 아크 피팅",
+          "hotend_type_detection": "핫엔드 유형 감지",
+          "build_plate_alignment_detection": "빌드 플레이트 정렬 감지",
+          "heatbed_surface_foreign_object_detection": "히트베드 표면 이물질 감지",
+          "heatbed_underside_foreign_object_detection": "히트베드 밑면 이물질 감지",
+          "pre_extrusion_before_printing": "인쇄 전 사전 압출"
         }
       },
       "print_progress": {

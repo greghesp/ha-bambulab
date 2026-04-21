@@ -462,7 +462,17 @@
           "preparing_hotend": "กำลังเตรียมฮอตเอนด์",
           "calibrating_detection_nozzle_clumping": "การปรับเทียบตำแหน่งการตรวจจับการเกาะตัวของหัวฉีด",
           "purifying_chamber_air": "ฟอกอากาศในห้อง",
-          "preparing_ams": "เตรียมความพร้อมเอเอ็มเอส"
+          "preparing_ams": "เตรียมความพร้อมเอเอ็มเอส",
+          "measuring_rotary_attachment": "การวัดสิ่งที่แนบมาแบบหมุน",
+          "moving_toolhead_above_purge_chute": "การเคลื่อนย้ายหัวเครื่องมือเหนือรางล้าง",
+          "cooling_nozzle": "หัวฉีดระบายความร้อน",
+          "moving_toolhead_to_center_of_heatbed": "ย้ายหัวเครื่องมือไปที่กึ่งกลางของเตียงทำความร้อน",
+          "active_arc_fitting": "ข้อต่อส่วนโค้งที่ใช้งานอยู่",
+          "hotend_type_detection": "การตรวจจับประเภท Hotend",
+          "build_plate_alignment_detection": "สร้างการตรวจจับการจัดตำแหน่งแผ่น",
+          "heatbed_surface_foreign_object_detection": "การตรวจจับวัตถุแปลกปลอมบนพื้นผิวเตียงทำความร้อน",
+          "heatbed_underside_foreign_object_detection": "แผ่นทำความร้อนใต้การตรวจจับวัตถุแปลกปลอม",
+          "pre_extrusion_before_printing": "การอัดขึ้นรูปก่อนพิมพ์"
         }
       },
       "print_progress": {

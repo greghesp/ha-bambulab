@@ -462,7 +462,17 @@
           "preparing_hotend": "准备热端",
           "calibrating_detection_nozzle_clumping": "校准喷嘴结块检测位置",
           "purifying_chamber_air": "净化室空气",
-          "preparing_ams": "准备AMS"
+          "preparing_ams": "准备AMS",
+          "measuring_rotary_attachment": "测量旋转附件",
+          "moving_toolhead_above_purge_chute": "将工具头移动到清理溜槽上方",
+          "cooling_nozzle": "冷却喷嘴",
+          "moving_toolhead_to_center_of_heatbed": "将工具头移至热床中心",
+          "active_arc_fitting": "主动弧形拟合",
+          "hotend_type_detection": "热端类型检测",
+          "build_plate_alignment_detection": "构建板对齐检测",
+          "heatbed_surface_foreign_object_detection": "热床表面异物检测",
+          "heatbed_underside_foreign_object_detection": "热床底部异物检测",
+          "pre_extrusion_before_printing": "印刷前预挤出"
         }
       },
       "print_progress": {

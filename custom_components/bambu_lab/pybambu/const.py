@@ -151,6 +151,16 @@ CURRENT_STAGE_IDS = {
     64: "preparing_hotend",
     65: "calibrating_detection_nozzle_clumping",
     66: "purifying_chamber_air",
+    67: "measuring_rotary_attachment",
+    68: "moving_toolhead_above_purge_chute",
+    69: "cooling_nozzle",
+    70: "moving_toolhead_to_center_of_heatbed",
+    71: "active_arc_fitting",
+    72: "hotend_type_detection",
+    73: "build_plate_alignment_detection",
+    74: "heatbed_surface_foreign_object_detection",
+    75: "heatbed_underside_foreign_object_detection",
+    76: "pre_extrusion_before_printing",
     77: "preparing_ams",
     # X1 returns -1 for idle
     -1: "idle",  # DUPLICATED

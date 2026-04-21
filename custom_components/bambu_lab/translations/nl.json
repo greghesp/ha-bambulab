@@ -462,7 +462,17 @@
           "preparing_hotend": "Hotend voorbereiden",
           "calibrating_detection_nozzle_clumping": "Kalibreren van de detectiepositie van klontvorming in de spuitmond",
           "purifying_chamber_air": "Kamerlucht zuiveren",
-          "preparing_ams": "AMS voorbereiden"
+          "preparing_ams": "AMS voorbereiden",
+          "measuring_rotary_attachment": "Roterend opzetstuk meten",
+          "moving_toolhead_above_purge_chute": "Bewegende gereedschapskop boven de zuiveringsgoot",
+          "cooling_nozzle": "Koelmondstuk",
+          "moving_toolhead_to_center_of_heatbed": "Gereedschapskop naar het midden van het verwarmingsbed verplaatsen",
+          "active_arc_fitting": "Actieve boogfitting",
+          "hotend_type_detection": "Detectie van hotend-type",
+          "build_plate_alignment_detection": "Detectie van uitlijning van bouwplaten",
+          "heatbed_surface_foreign_object_detection": "Detectie van vreemde voorwerpen op het verwarmingsbedoppervlak",
+          "heatbed_underside_foreign_object_detection": "Detectie van vreemde voorwerpen aan de onderkant van het verwarmingsbed",
+          "pre_extrusion_before_printing": "Pre-extrusie vóór het afdrukken"
         }
       },
       "print_progress": {

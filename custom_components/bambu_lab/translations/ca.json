@@ -462,7 +462,17 @@
           "preparing_hotend": "Preparant hotend",
           "calibrating_detection_nozzle_clumping": "Calibració de la posició de detecció de l'aglomeració del broquet",
           "purifying_chamber_air": "Purificant l'aire de la cambra",
-          "preparing_ams": "Preparant AMS"
+          "preparing_ams": "Preparant AMS",
+          "measuring_rotary_attachment": "Acoblament rotatiu de mesura",
+          "moving_toolhead_above_purge_chute": "Cap d'eina en moviment per sobre del canal de purga",
+          "cooling_nozzle": "Broquet de refrigeració",
+          "moving_toolhead_to_center_of_heatbed": "Moveu el cap d'eina al centre del llit calent",
+          "active_arc_fitting": "Encaix d'arc actiu",
+          "hotend_type_detection": "Detecció de tipus hotend",
+          "build_plate_alignment_detection": "Construeix detecció d'alineació de plaques",
+          "heatbed_surface_foreign_object_detection": "Detecció d'objectes estranys a la superfície del llit calent",
+          "heatbed_underside_foreign_object_detection": "Detecció d'objectes estranys a la part inferior del llit calent",
+          "pre_extrusion_before_printing": "Pre-extrusió abans de la impressió"
         }
       },
       "print_progress": {

@@ -462,7 +462,17 @@
           "preparing_hotend": "Przygotowanie hotendu",
           "calibrating_detection_nozzle_clumping": "Kalibracja pozycji wykrywania zlepiania się dysz",
           "purifying_chamber_air": "Oczyszczanie powietrza w komorze",
-          "preparing_ams": "Przygotowanie AMS-u"
+          "preparing_ams": "Przygotowanie AMS-u",
+          "measuring_rotary_attachment": "Pomiar mocowania obrotowego",
+          "moving_toolhead_above_purge_chute": "Ruchoma głowica narzędziowa nad rynną oczyszczającą",
+          "cooling_nozzle": "Dysza chłodząca",
+          "moving_toolhead_to_center_of_heatbed": "Przesuwanie głowicy narzędziowej na środek podgrzewanego stołu",
+          "active_arc_fitting": "Aktywne dopasowanie łuku",
+          "hotend_type_detection": "Wykrywanie typu hotendu",
+          "build_plate_alignment_detection": "Wykrywanie wyrównania płyty konstrukcyjnej",
+          "heatbed_surface_foreign_object_detection": "Wykrywanie ciał obcych na powierzchni podgrzewanego stołu",
+          "heatbed_underside_foreign_object_detection": "Wykrywanie ciał obcych pod podgrzewanym spodem stołu",
+          "pre_extrusion_before_printing": "Wstępne wytłaczanie przed drukiem"
         }
       },
       "print_progress": {

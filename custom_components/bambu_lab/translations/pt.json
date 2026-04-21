@@ -488,7 +488,17 @@
           "calibrating_detection_nozzle_clumping": "A calibrar deteção de nozzle sujo",
           "purifying_chamber_air": "A purificar ar do compartimento",
           "preparing_ams": "A preparar AMS",
-          "idle": "Inativo"
+          "idle": "Inativo",
+          "measuring_rotary_attachment": "Medição de acessório rotativo",
+          "moving_toolhead_above_purge_chute": "Movendo o cabeçote acima da calha de purga",
+          "cooling_nozzle": "Bocal de resfriamento",
+          "moving_toolhead_to_center_of_heatbed": "Movendo o cabeçote para o centro da base térmica",
+          "active_arc_fitting": "Ajuste de arco ativo",
+          "hotend_type_detection": "Detecção de tipo de hotend",
+          "build_plate_alignment_detection": "Detecção de alinhamento de placa de construção",
+          "heatbed_surface_foreign_object_detection": "Detecção de objetos estranhos na superfície do colchão térmico",
+          "heatbed_underside_foreign_object_detection": "Detecção de objetos estranhos na parte inferior da cama térmica",
+          "pre_extrusion_before_printing": "Pré-extrusão antes da impressão"
         }
       },
       "sdcard_status": {

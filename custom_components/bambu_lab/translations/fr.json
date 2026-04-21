@@ -470,7 +470,17 @@
           "preparing_hotend": "Préparation du hotend",
           "calibrating_detection_nozzle_clumping": "Calibrage de la position de détection de l'agglutination des buses",
           "purifying_chamber_air": "Purifier l'air de la chambre",
-          "preparing_ams": "Préparation de l'AMS"
+          "preparing_ams": "Préparation de l'AMS",
+          "measuring_rotary_attachment": "Accessoire rotatif de mesure",
+          "moving_toolhead_above_purge_chute": "Déplacement de la tête d'outil au-dessus de la goulotte de purge",
+          "cooling_nozzle": "Buse de refroidissement",
+          "moving_toolhead_to_center_of_heatbed": "Déplacer la tête d'outil au centre du lit chauffant",
+          "active_arc_fitting": "Raccord à arc actif",
+          "hotend_type_detection": "Détection du type de hotend",
+          "build_plate_alignment_detection": "Détection de l'alignement des plaques de construction",
+          "heatbed_surface_foreign_object_detection": "Détection de corps étrangers à la surface du lit chauffant",
+          "heatbed_underside_foreign_object_detection": "Détection de corps étrangers sous le lit chauffant",
+          "pre_extrusion_before_printing": "Pré-extrusion avant impression"
         }
       },
       "print_progress": {

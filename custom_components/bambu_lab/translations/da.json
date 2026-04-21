@@ -462,7 +462,17 @@
           "preparing_hotend": "Forbereder hotend",
           "calibrating_detection_nozzle_clumping": "Kalibrering af detekteringspositionen for dyseklumpning",
           "purifying_chamber_air": "Rensende kammerluft",
-          "preparing_ams": "Forberedelse af AMS"
+          "preparing_ams": "Forberedelse af AMS",
+          "measuring_rotary_attachment": "Måling af roterende tilbehør",
+          "moving_toolhead_above_purge_chute": "Bevægelse af værktøjshoved over skylleskakt",
+          "cooling_nozzle": "Kølemundstykke",
+          "moving_toolhead_to_center_of_heatbed": "Flytning af værktøjshovedet til midten af ​​heatbed",
+          "active_arc_fitting": "Aktiv lysbue fitting",
+          "hotend_type_detection": "Hotend type detektion",
+          "build_plate_alignment_detection": "Detektion af byggepladejustering",
+          "heatbed_surface_foreign_object_detection": "Detektering af fremmedlegemer på varmebedets overflade",
+          "heatbed_underside_foreign_object_detection": "Detektering af fremmedlegemer under varmebed",
+          "pre_extrusion_before_printing": "Præ-ekstrudering før trykning"
         }
       },
       "print_progress": {

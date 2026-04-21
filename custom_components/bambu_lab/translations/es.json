@@ -462,7 +462,17 @@
           "preparing_hotend": "Preparando el hotend",
           "calibrating_detection_nozzle_clumping": "Calibración de la posición de detección de aglomeración de boquillas",
           "purifying_chamber_air": "Purificación del aire de la cámara",
-          "preparing_ams": "Preparando AMS"
+          "preparing_ams": "Preparando AMS",
+          "measuring_rotary_attachment": "Accesorio giratorio de medición",
+          "moving_toolhead_above_purge_chute": "Mover el cabezal de la herramienta por encima del conducto de purga",
+          "cooling_nozzle": "Boquilla de enfriamiento",
+          "moving_toolhead_to_center_of_heatbed": "Mover el cabezal de la herramienta al centro de la base térmica",
+          "active_arc_fitting": "Ajuste de arco activo",
+          "hotend_type_detection": "Detección de tipo de hotend",
+          "build_plate_alignment_detection": "Detección de alineación de la placa de construcción",
+          "heatbed_surface_foreign_object_detection": "Detección de objetos extraños en la superficie del lecho térmico",
+          "heatbed_underside_foreign_object_detection": "Detección de objetos extraños en la parte inferior de la base térmica",
+          "pre_extrusion_before_printing": "Preextrusión antes de imprimir"
         }
       },
       "print_progress": {

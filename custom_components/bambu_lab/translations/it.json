@@ -462,7 +462,17 @@
           "preparing_hotend": "Preparazione dell'hotend",
           "calibrating_detection_nozzle_clumping": "Calibrazione della posizione di rilevamento dell'aggregazione degli ugelli",
           "purifying_chamber_air": "Purificazione dell'aria della camera",
-          "preparing_ams": "Preparazione dell'AMS"
+          "preparing_ams": "Preparazione dell'AMS",
+          "measuring_rotary_attachment": "Dispositivo rotante di misurazione",
+          "moving_toolhead_above_purge_chute": "Spostamento della testa utensile sopra lo scivolo di spurgo",
+          "cooling_nozzle": "Ugello di raffreddamento",
+          "moving_toolhead_to_center_of_heatbed": "Spostamento della testa utensile al centro del piano riscaldato",
+          "active_arc_fitting": "Adattamento dell'arco attivo",
+          "hotend_type_detection": "Rilevamento del tipo di hotend",
+          "build_plate_alignment_detection": "Costruisci il rilevamento dell'allineamento della piastra",
+          "heatbed_surface_foreign_object_detection": "Rilevamento di oggetti estranei sulla superficie del piano riscaldato",
+          "heatbed_underside_foreign_object_detection": "Rilevamento di oggetti estranei nella parte inferiore del piano riscaldato",
+          "pre_extrusion_before_printing": "Pre-estrusione prima della stampa"
         }
       },
       "print_progress": {

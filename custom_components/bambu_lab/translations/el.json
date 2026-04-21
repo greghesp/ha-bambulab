@@ -462,7 +462,17 @@
           "preparing_hotend": "Προετοιμασία hotend",
           "calibrating_detection_nozzle_clumping": "Βαθμονόμηση της θέσης ανίχνευσης της συσσώρευσης ακροφυσίων",
           "purifying_chamber_air": "Καθαρισμός του αέρα του θαλάμου",
-          "preparing_ams": "Προετοιμασία AMS"
+          "preparing_ams": "Προετοιμασία AMS",
+          "measuring_rotary_attachment": "Περιστροφικό εξάρτημα μέτρησης",
+          "moving_toolhead_above_purge_chute": "Κινούμενη εργαλειοθήκη πάνω από τον αγωγό καθαρισμού",
+          "cooling_nozzle": "Ακροφύσιο ψύξης",
+          "moving_toolhead_to_center_of_heatbed": "Μετακίνηση εργαλειοκεφαλής στο κέντρο της θερμότητας",
+          "active_arc_fitting": "Εφαρμογή ενεργού τόξου",
+          "hotend_type_detection": "Ανίχνευση τύπου hotend",
+          "build_plate_alignment_detection": "Ανίχνευση ευθυγράμμισης πλακών κατασκευής",
+          "heatbed_surface_foreign_object_detection": "Ανίχνευση ξένων αντικειμένων επιφάνειας θερμότητας",
+          "heatbed_underside_foreign_object_detection": "Ανίχνευση ξένου αντικειμένου κάτω από την θέρμανση",
+          "pre_extrusion_before_printing": "Προεξώθηση πριν από την εκτύπωση"
         }
       },
       "print_progress": {

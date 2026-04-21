@@ -462,7 +462,17 @@
           "preparing_hotend": "Hotend wird vorbereitet",
           "calibrating_detection_nozzle_clumping": "Kalibrieren der Erkennungsposition der Düsenverklumpung",
           "purifying_chamber_air": "Kammerluft reinigen",
-          "preparing_ams": "AMS vorbereiten"
+          "preparing_ams": "AMS vorbereiten",
+          "measuring_rotary_attachment": "Messdrehaufsatz",
+          "moving_toolhead_above_purge_chute": "Beweglicher Werkzeugkopf über dem Spülschacht",
+          "cooling_nozzle": "Kühldüse",
+          "moving_toolhead_to_center_of_heatbed": "Bewegen des Werkzeugkopfes in die Mitte des Heizbetts",
+          "active_arc_fitting": "Aktive Lichtbogenanpassung",
+          "hotend_type_detection": "Erkennung des Hotend-Typs",
+          "build_plate_alignment_detection": "Erkennung der Ausrichtung der Bauplatte",
+          "heatbed_surface_foreign_object_detection": "Erkennung von Fremdkörpern auf der Heizbettoberfläche",
+          "heatbed_underside_foreign_object_detection": "Erkennung von Fremdkörpern an der Unterseite des Heizbetts",
+          "pre_extrusion_before_printing": "Vorextrusion vor dem Drucken"
         }
       },
       "print_progress": {
