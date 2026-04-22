@@ -1,0 +1,1929 @@
+{
+  "0300010000010003": {
+    "/en/x1/troubleshooting/hmscode/0300_0100_0001_0003": []
+  },
+  "0300010000010006": {
+    "/en/x1/troubleshooting/hmscode/0300_0100_0001_0006": []
+  },
+  "0300010000010007": {
+    "/en/h2/troubleshooting/hmscode/0300_0100_0001_0007": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0100_0001_0007": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0100_0001_0007": [],
+    "/en/x2d/troubleshooting/hmscode/0300_0100_0001_0007": [
+      "X2D"
+    ]
+  },
+  "0300010000010008": {
+    "/en/a1/troubleshooting/hmscode/0300_0100_0001_0008": [],
+    "/en/p2s/troubleshooting/hmscode/0300_0100_0001_0008": [
+      "P2S"
+    ]
+  },
+  "030001000001000A": {
+    "/en/x1/troubleshooting/hmscode/0300_0100_0001_000A": []
+  },
+  "030001000001000C": {
+    "/en/a1/troubleshooting/hmscode/0300_0100_0001_000C": []
+  },
+  "030001000001000D": {
+    "/en/a1/troubleshooting/hmscode/0300_0100_0001_000D": []
+  },
+  "030001000001000E": {
+    "/en/h2d/troubleshooting/hmscode/0300_0100_0001_000E": []
+  },
+  "0300010000030008": {
+    "/en/x1/troubleshooting/hmscode/0300_0100_0003_0008": []
+  },
+  "0300020000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_0200_0001_0001": [
+      "H2D",
+      "H2DPRO"
+    ],
+    "/en/h2c/troubleshooting/hmscode/0300_0200_0001_0001": [
+      "H2C"
+    ],
+    "/en/h2s/troubleshooting/hmscode/0300_0200_0001_0001": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0200_0001_0001": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0200_0001_0001": []
+  },
+  "0300020000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_0200_0001_0002": [
+      "H2D",
+      "H2DPRO"
+    ],
+    "/en/h2c/troubleshooting/hmscode/0300_0200_0001_0002": [
+      "H2C"
+    ],
+    "/en/h2s/troubleshooting/hmscode/0300_0200_0001_0002": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0200_0001_0002": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0200_0001_0002": []
+  },
+  "0300020000010003": {
+    "/en/h2/troubleshooting/hmscode/0300_0200_0001_0003": [
+      "H2D",
+      "H2DPRO"
+    ],
+    "/en/h2c/troubleshooting/hmscode/0300_0200_0001_0003": [
+      "H2C"
+    ],
+    "/en/h2s/troubleshooting/hmscode/0300_0200_0001_0003": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0200_0001_0003": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0200_0001_0003": []
+  },
+  "0300020000010004": {
+    "/en/h2c/troubleshooting/hmscode/0300_0200_0001_0004": []
+  },
+  "0300020000010006": {
+    "/en/h2/troubleshooting/hmscode/0300_0200_0001_0006": [
+      "H2D",
+      "H2DPRO"
+    ],
+    "/en/h2s/troubleshooting/hmscode/0300_0200_0001_0006": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0200_0001_0006": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0200_0001_0006": []
+  },
+  "0300020000010007": {
+    "/en/h2/troubleshooting/hmscode/0300_0200_0001_0007": [
+      "H2C",
+      "H2D",
+      "H2DPRO"
+    ],
+    "/en/h2s/troubleshooting/hmscode/0300_0200_0001_0007": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0200_0001_0007": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0200_0001_0007": [],
+    "/en/x2d/troubleshooting/hmscode/0300_0200_0001_0007": [
+      "X2D"
+    ]
+  },
+  "0300020000010008": {
+    "/en/h2c/troubleshooting/hmscode/0300_0200_0001_0008": []
+  },
+  "0300020000010009": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_0200_0001_0009": [],
+    "/en/h2/troubleshooting/hmscode/0300_0200_0001_0009": [
+      "H2D",
+      "H2DPRO"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_0200_0001_0009": [
+      "X2D"
+    ]
+  },
+  "030002000001000B": {
+    "/en/h2c/troubleshooting/hmscode/0300_0200_0001_000B": []
+  },
+  "0300030000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_0300_0001_0001": [],
+    "/en/h2s/troubleshooting/hmscode/0300_0300_0001_0001": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0300_0001_0001": [
+      "P2S"
+    ]
+  },
+  "0300030000020002": {
+    "/en/x1/troubleshooting/hmscode/0300_0300_0002_0002": []
+  },
+  "0300040000020001": {
+    "/en/h2/troubleshooting/hmscode/0300_0400_0002_0001": [
+      "H2C",
+      "H2D",
+      "H2DPRO"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0400_0002_0001": []
+  },
+  "0300060000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_0600_0001_0001": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0600_0001_0001": []
+  },
+  "0300060000010002": {
+    "/en/p2s/troubleshooting/hmscode/0300_0600_0001_0002": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0600_0001_0002": []
+  },
+  "0300060000010003": {
+    "/en/p2s/troubleshooting/hmscode/0300_0600_0001_0003": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_0600_0001_0003": []
+  },
+  "0300070000010001": {
+    "/en/p2s/troubleshooting/hmscode/0300_0700_0001_0001": []
+  },
+  "0300070000010002": {
+    "/en/p2s/troubleshooting/hmscode/0300_0700_0001_0002": []
+  },
+  "0300070000010003": {
+    "/en/p2s/troubleshooting/hmscode/0300_0700_0001_0003": []
+  },
+  "0300080000010002": {
+    "/en/p2s/troubleshooting/hmscode/0300_0800_0001_0002": []
+  },
+  "0300080000010003": {
+    "/en/p2s/troubleshooting/hmscode/0300_0800_0001_0003": []
+  },
+  "0300090000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_0900_0001_0001": [],
+    "/en/h2s/troubleshooting/hmscode/0300_0900_0001_0001": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0001_0001": [
+      "P2S"
+    ]
+  },
+  "0300090000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_0900_0001_0002": [],
+    "/en/h2s/troubleshooting/hmscode/0300_0900_0001_0002": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0001_0002": [
+      "P2S"
+    ]
+  },
+  "0300090000010003": {
+    "/en/h2/troubleshooting/hmscode/0300_0900_0001_0003": [],
+    "/en/h2s/troubleshooting/hmscode/0300_0900_0001_0003": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0001_0003": [
+      "P2S"
+    ]
+  },
+  "0300090000020001": {
+    "/en/h2/troubleshooting/hmscode/0300_0900_0002_0001": [],
+    "/en/h2S/troubleshooting/hmscode/0300_0900_0002_0001": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0002_0001": [
+      "P2S"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_0900_0002_0001": [
+      "X2D"
+    ]
+  },
+  "0300090000020002": {
+    "/en/h2/troubleshooting/hmscode/0300_0900_0002_0002": [],
+    "/en/h2s/troubleshooting/hmscode/0300_0900_0002_0002": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0002_0002": [
+      "P2S"
+    ]
+  },
+  "0300090000020003": {
+    "/en/h2/troubleshooting/hmscode/0300_0900_0002_0003": [],
+    "/en/h2s/troubleshooting/hmscode/0300_0900_0002_0003": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0002_0003": [
+      "P2S"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_0900_0002_0003": [
+      "X2D"
+    ]
+  },
+  "0300090000020004": {
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0002_0004": []
+  },
+  "0300090000020005": {
+    "/en/p2s/troubleshooting/hmscode/0300_0900_0002_0005": []
+  },
+  "03000A0000010001": {
+    "/en/x1/troubleshooting/hmscode/0300_0A00_0001_0001": []
+  },
+  "03000A0000010002": {
+    "/en/x1/troubleshooting/hmscode/0300_0A00_0001_0002": []
+  },
+  "03000A0000010003": {
+    "/en/x1/troubleshooting/hmscode/0300_0A00_0001_0003": []
+  },
+  "03000A0000010004": {
+    "/en/x1/troubleshooting/hmscode/0300_0A00_0001_0004": []
+  },
+  "03000A0000010005": {
+    "/en/x1/troubleshooting/hmscode/0300_0A00_0001_0005": []
+  },
+  "03000D0000010003": {
+    "/en/x1/troubleshooting/hmscode/0300_0D00_0001_0003": []
+  },
+  "03000D000001000B": {
+    "/en/x1/troubleshooting/hmscode/0300_0D00_0001_000B": []
+  },
+  "03000D0000020001": {
+    "/en/x1/troubleshooting/hmscode/0300_0D00_0002_0001": []
+  },
+  "03000F0000010001": {
+    "/en/x1/troubleshooting/hmscode/0300_0F00_0001_0001": []
+  },
+  "03000d000001000c": {
+    "/en/x1/troubleshooting/hmscode/0300-0d00-0001-000c": []
+  },
+  "0300100000020001": {
+    "/en/p2s/troubleshooting/hmscode/0300_1000_0002_0001": [
+      "P2S",
+      "X2D"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_1000_0002_0001": []
+  },
+  "0300100000020002": {
+    "/en/h2d/troubleshooting/hmscode/0300_1000_0002_0002": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_1000_0002_0002": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_1000_0002_0002": []
+  },
+  "0300110000020001": {
+    "/en/p2s/troubleshooting/hmscode/0300_1100_0002_0001": []
+  },
+  "0300110000020002": {
+    "/en/p2s/troubleshooting/hmscode/0300_1100_0002_0002": []
+  },
+  "0300120000020001": {
+    "/en/p2s/troubleshooting/hmscode/0300_1200_0002_0001": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_1200_0002_0001": []
+  },
+  "0300130000010001": {
+    "/en/p2s/troubleshooting/hmscode/0300_1300_0001_0001": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_1300_0001_0001": []
+  },
+  "0300160000010001": {
+    "/en/p2s/troubleshooting/hmscode/0300_1600_0001_0001": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_1600_0001_0001": []
+  },
+  "0300180000010001": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1800_0001_0001": [],
+    "/en/h2s/troubleshooting/hmscode/0300_1800_0001_0001": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_0001": [
+      "P2S"
+    ]
+  },
+  "0300180000010002": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1800_0001_0002": []
+  },
+  "0300180000010003": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1800_0001_0003": [],
+    "/en/h2s/troubleshooting/hmscode/0300_1800_0001_0003": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_0003": [
+      "P2S"
+    ]
+  },
+  "0300180000010004": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1800_0001_0004": [],
+    "/en/h2s/troubleshooting/hmscode/0300_1800_0001_0004": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_0004": [
+      "P2S"
+    ]
+  },
+  "0300180000010005": {
+    "/en/a1/troubleshooting/hmscode/0300_1800_0001_0005": [],
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_0005": [
+      "P2S"
+    ]
+  },
+  "0300180000010006": {
+    "/en/h2/troubleshooting/hmscode/0300_1800_0001_0006": [],
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_0006": [
+      "P2S"
+    ]
+  },
+  "0300180000010007": {
+    "/en/h2s/troubleshooting/hmscode/0300_1800_0001_0007": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_0007": []
+  },
+  "0300180000010008": {
+    "/en/h2s/troubleshooting/hmscode/0300_1800_0001_0008": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_0008": []
+  },
+  "030018000001000B": {
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_000B": []
+  },
+  "030018000001000C": {
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_000C": []
+  },
+  "030018000001000D": {
+    "/en/p2s/troubleshooting/hmscode/0300_1800_0001_000D": []
+  },
+  "0300180000030009": {
+    "/en/h2d/troubleshooting/hmscode/0300_1800_0003_0009": []
+  },
+  "0300190000010001": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1900_0001_0001": []
+  },
+  "0300190000020002": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1900_0002_0002": []
+  },
+  "03001A0000020001": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1A00_0002_0001": []
+  },
+  "03001A0000020002": {
+    "/en/a1-mini/troubleshooting/hmscode/0300_1A00_0002_0002": []
+  },
+  "03001B0000010001": {
+    "/en/a1/troubleshooting/hmscode/0300_1B00_0001_0001": []
+  },
+  "03001B0000010002": {
+    "/en/x1/troubleshooting/hmscode/0300_1B00_0001_0002": []
+  },
+  "03001C0000010001": {
+    "/en/p2s/troubleshooting/hmscode/0300_1C00_0001_0001": []
+  },
+  "03001D0000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_1D00_0001_0001": [],
+    "/en/h2s/troubleshooting/hmscode/0300_1D00_0001_0001": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0300_1D00_0001_0001": [
+      "P2S"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_1D00_0001_0001": [
+      "X2D"
+    ]
+  },
+  "03001E0000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_1E00_0001_0001": []
+  },
+  "03001E0000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_1E00_0001_0002": []
+  },
+  "03001E0000010003": {
+    "/en/h2/troubleshooting/hmscode/0300_1E00_0001_0003": []
+  },
+  "03001E0000010006": {
+    "/en/h2/troubleshooting/hmscode/0300_1E00_0001_0006": []
+  },
+  "03001E0000010007": {
+    "/en/h2/troubleshooting/hmscode/0300_1E00_0001_0007": [],
+    "/en/x2d/troubleshooting/hmscode/0300_1E00_0001_0007": [
+      "X2D"
+    ]
+  },
+  "03001E0000010009": {
+    "/en/h2/troubleshooting/hmscode/0300_1E00_0001_0009": [],
+    "/en/x2d/troubleshooting/hmscode/0300_1E00_0001_0009": [
+      "X2D"
+    ]
+  },
+  "0300200000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_2000_0001_0001": [],
+    "/en/p2s/troubleshooting/hmscode/0300_2000_0001_0001": [
+      "P2S"
+    ]
+  },
+  "0300200000010002": {
+    "/en/p2s/troubleshooting/hmscode/0300_2000_0001_0002": []
+  },
+  "0300200000010003": {
+    "/en/p2s/troubleshooting/hmscode/0300_2000_0001_0003": []
+  },
+  "0300200000010004": {
+    "/en/p2s/troubleshooting/hmscode/0300_2000_0001_0004": []
+  },
+  "0300210000010001": {
+    "/en/x2d/troubleshooting/hmscode/0300_2100_0001_0001": []
+  },
+  "0300250000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0300_2500_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0300250000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_0002": []
+  },
+  "0300250000010003": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_0003": []
+  },
+  "0300250000010004": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_0004": []
+  },
+  "0300250000010005": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_0005": []
+  },
+  "0300250000010007": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_0007": []
+  },
+  "0300250000010008": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_0008": [],
+    "/en/x2d/troubleshooting/hmscode/0300_2500_0001_0008": [
+      "X2D"
+    ]
+  },
+  "030025000001000A": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_000A": []
+  },
+  "030025000001000B": {
+    "/en/h2/troubleshooting/hmscode/0300_2500_0001_000B": []
+  },
+  "030025000001000C": {
+    "/en/h2d/troubleshooting/hmscode/0300_2500_0001_000C": []
+  },
+  "0300260000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_2600_0001_0001": []
+  },
+  "0300260000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_2600_0001_0002": []
+  },
+  "0300260000010007": {
+    "/en/h2/troubleshooting/hmscode/0300_2600_0001_0007": []
+  },
+  "030026000001000B": {
+    "/en/h2/troubleshooting/hmscode/0300_2600_0001_000B": []
+  },
+  "0300270000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_2700_0001_0001": []
+  },
+  "0300270000010004": {
+    "/en/h2/troubleshooting/hmscode/0300_2700_0001_0004": []
+  },
+  "0300270000010006": {
+    "/en/h2d/troubleshooting/hmscode/0300_2700_0001_0006": []
+  },
+  "0300270000010007": {
+    "/en/h2/troubleshooting/hmscode/0300_2700_0001_0007": []
+  },
+  "0300270000010008": {
+    "/en/h2d/troubleshooting/hmscode/0300_2700_0001_0008": []
+  },
+  "0300280000010004": {
+    "/en/h2d/troubleshooting/hmscode/0300_2800_0001_0004": []
+  },
+  "0300290000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_2900_0001_0001": []
+  },
+  "03002A0000010001": {
+    "/en/x2d/troubleshooting/hmscode/0300_2A00_0001_0001": []
+  },
+  "03002A0000020002": {
+    "/en/x2d/troubleshooting/hmscode/0300_2A00_0002_0002": []
+  },
+  "03002B0000020001": {
+    "/en/p2s/troubleshooting/hmscode/0300_2B00_0002_0001": []
+  },
+  "03002D0000010006": {
+    "/en/h2c/troubleshooting/hmscode/0300_2D00_0001_0006": []
+  },
+  "0300310000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_3100_0001_0001": [],
+    "/en/p2s/troubleshooting/hmscode/0300_3100_0001_0001": [
+      "P2S"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_3100_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0300320000010001": {
+    "/en/p2s/troubleshooting/hmscode/0300_3200_0001_0001": [
+      "P2S"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_3200_0001_0001": []
+  },
+  "0300320000010002": {
+    "/en/p2s/troubleshooting/hmscode/0300_3200_0001_0002": []
+  },
+  "0300350000010001": {
+    "/en/h2d/troubleshooting/hmscode/0300_3500_0001_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0300_3500_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0300360000010001": {
+    "/en/h2/troubleshooting/hmscode/0300-3600-0001-0001": []
+  },
+  "03003A0000010001": {
+    "/en/p2s/troubleshooting/hmscode/0300_3A00_0001_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0300_3A00_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0300400000020001": {
+    "/en/x1/troubleshooting/hmscode/0300_4000_0002_0001": []
+  },
+  "0300410000010001": {
+    "/en/x1/troubleshooting/hmscode/0300_4100_0001_0001": []
+  },
+  "0300900000010001": {
+    "/en/x1/troubleshooting/hmscode/0300_9000_0001_0001": []
+  },
+  "0300900000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_9000_0001_0002": [],
+    "/en/x1/troubleshooting/hmscode/0300_9000_0001_0002": [
+      "X1",
+      "X1C",
+      "X1E",
+      "X2D"
+    ]
+  },
+  "0300900000010003": {
+    "/en/x1/troubleshooting/hmscode/0300_9000_0001_0003": []
+  },
+  "0300900000010004": {
+    "/en/x1/troubleshooting/hmscode/0300_9000_0001_0004": []
+  },
+  "0300900000010005": {
+    "/en/x1/troubleshooting/hmscode/0300_9000_0001_0005": []
+  },
+  "0300910000010001": {
+    "/en/x1/troubleshooting/hmscode/0300_9100_0001_0001": []
+  },
+  "0300910000010002": {
+    "/en/x1/troubleshooting/hmscode/0300-9100-0001-0002": []
+  },
+  "0300910000010003": {
+    "/en/h2d/troubleshooting/hmscode/0300_9100_0001_0003": [],
+    "/en/x1/troubleshooting/hmscode/0300_9100_0001_0003": [
+      "X1E"
+    ]
+  },
+  "0300910000010006": {
+    "/en/x1/troubleshooting/hmscode/0300_9100_0001_0006": []
+  },
+  "0300910000010007": {
+    "/en/x1/troubleshooting/hmscode/0300_9100_0001_0007": []
+  },
+  "0300910000010008": {
+    "/en/h2d/troubleshooting/hmscode/0300_9100_0001_0008": [],
+    "/en/x1/troubleshooting/hmscode/0300_9100_0001_0008": [
+      "X1E"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_9100_0001_0008": [
+      "X2D"
+    ]
+  },
+  "030091000001000A": {
+    "/en/x1/troubleshooting/hmscode/0300_9100_0001_000A": []
+  },
+  "030091000001000C": {
+    "/en/x1/troubleshooting/hmscode/0300_9100_0001_000C": []
+  },
+  "030091000001000E": {
+    "/en/h2d/troubleshooting/hmscode/0300_9100_0001_000E": []
+  },
+  "0300930000010001": {
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0001": []
+  },
+  "0300930000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_9300_0001_0002": [],
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0002": [
+      "X1",
+      "X1C",
+      "X1E"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_9300_0001_0002": [
+      "X2D"
+    ]
+  },
+  "0300930000010003": {
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0003": []
+  },
+  "0300930000010004": {
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0004": [],
+    "/en/x2d/troubleshooting/hmscode/0300_9300_0001_0004": [
+      "X2D"
+    ]
+  },
+  "0300930000010005": {
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0005": []
+  },
+  "0300930000010006": {
+    "/en/h2/troubleshooting/hmscode/0300_9300_0001_0006": [],
+    "/en/p2s/troubleshooting/hmscode/0300_9300_0001_0006": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0006": [
+      "X1E"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_9300_0001_0006": [
+      "X2D"
+    ]
+  },
+  "0300930000010007": {
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0007": []
+  },
+  "0300930000010008": {
+    "/en/x1/troubleshooting/hmscode/0300_9300_0001_0008": []
+  },
+  "0300940000020003": {
+    "/en/h2/troubleshooting/hmscode/0300_9400_0002_0003": []
+  },
+  "0300940000030001": {
+    "/en/x1/troubleshooting/hmscode/0300_9400_0003_0001": []
+  },
+  "0300950000010003": {
+    "/en/h2d/troubleshooting/hmscode/0300_9500_0001_0003": []
+  },
+  "0300950000010005": {
+    "/en/h2d/troubleshooting/hmscode/0300_9500_0001_0005": []
+  },
+  "0300950000010006": {
+    "/en/h2d/troubleshooting/hmscode/0300_9500_0001_0006": []
+  },
+  "030095000001000A": {
+    "/en/h2d/troubleshooting/hmscode/0300_9500_0001_000A": []
+  },
+  "0300960000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_9600_0001_0001": []
+  },
+  "0300960000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_9600_0001_0002": []
+  },
+  "0300970000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_9700_0001_0001": []
+  },
+  "0300970000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_9700_0001_0002": []
+  },
+  "0300970000010004": {
+    "/en/h2d/troubleshooting/hmscode/0300_9700_0001_0004": []
+  },
+  "0300980000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_9800_0001_0002": []
+  },
+  "0300990000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_9900_0001_0002": []
+  },
+  "03009D0000020001": {
+    "/en/h2/troubleshooting/hmscode/0300_9D00_0002_0001": []
+  },
+  "0300A10000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_A100_0001_0001": [],
+    "/en/p2s/troubleshooting/hmscode/0300_A100_0001_0001": [
+      "P2S",
+      "X2D"
+    ]
+  },
+  "0300A20000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_A200_0001_0001": [],
+    "/en/p2s/troubleshooting/hmscode/0300_A200_0001_0001": [
+      "P2S"
+    ]
+  },
+  "0300A60000010001": {
+    "/en/h2d-pro/troubleshooting/hmscode/0300_A600_0001_0001": []
+  },
+  "0300A60000010002": {
+    "/en/h2d-pro/troubleshooting/hmscode/0300_A600_0001_0002": []
+  },
+  "0300A80000010001": {
+    "/en/p2s/troubleshooting/hmscode/0300_A800_0001_0001": []
+  },
+  "0300AB0000010001": {
+    "/en/h2c/troubleshooting/hmscode/0300_AB00_0001_0001": []
+  },
+  "0300AB0000020002": {
+    "/en/h2c/troubleshooting/hmscode/0300_AB00_0002_0002": []
+  },
+  "0300AB0000020003": {
+    "/en/h2c/troubleshooting/hmscode/0300_AB00_0002_0003": []
+  },
+  "0300C00000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_C000_0001_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0300_C000_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0300C00000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_C000_0001_0002": [],
+    "/en/p2s/troubleshooting/hmscode/0300_C000_0001_0002": [
+      "P2S",
+      "X2D"
+    ]
+  },
+  "0300C00000010003": {
+    "/en/h2/troubleshooting/hmscode/0300_C000_0001_0003": []
+  },
+  "0300C10000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_C100_0001_0001": [],
+    "/en/p2s/troubleshooting/hmscode/0300_C100_0001_0001": [
+      "P2S"
+    ],
+    "/en/x2d/troubleshooting/hmscode/0300_C100_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0300C20000010001": {
+    "/en/x2d/troubleshooting/hmscode/0300_C200_0001_0001": []
+  },
+  "0300C20000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_C200_0001_0002": [],
+    "/en/p2s/troubleshooting/hmscode/0300_C200_0001_0002": [
+      "P2S",
+      "X2D"
+    ]
+  },
+  "0300C30000010001": {
+    "/en/h2/troubleshooting/hmscode/0300_C300_0001_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0300_C300_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0300C30000010002": {
+    "/en/h2/troubleshooting/hmscode/0300_C300_0001_0002": [],
+    "/en/p2s/troubleshooting/hmscode/0300_C300_0001_0002": [
+      "P2S",
+      "X2D"
+    ]
+  },
+  "0300DA0000020001": {
+    "/en/h2c/troubleshooting/hmscode/0300_DA00_0002_0001": []
+  },
+  "0300E00000010001": {
+    "/en/h2c/troubleshooting/hmscode/0300_E000_0001_0001": []
+  },
+  "0300E00000010002": {
+    "/en/h2c/troubleshooting/hmscode/0300_E000_0001_0002": []
+  },
+  "0300E00000010003": {
+    "/en/h2c/troubleshooting/hmscode/0300_E000_0001_0003": []
+  },
+  "0300E00000010004": {
+    "/en/h2c/troubleshooting/hmscode/0300_E000_0001_0004": []
+  },
+  "0300E10000010001": {
+    "/en/h2c/troubleshooting/hmscode/0300_E100_0001_0001": []
+  },
+  "0300E20000020001": {
+    "/en/h2c/troubleshooting/hmscode/0300_E200_0002_0001": []
+  },
+  "0300E30000010001": {
+    "/en/h2c/troubleshooting/hmscode/0300_E300_0001_0001": []
+  },
+  "0300E30000010002": {
+    "/en/h2c/troubleshooting/hmscode/0300_E300_0001_0002": []
+  },
+  "0500010000020001": {
+    "/en/h2/troubleshooting/hmscode/0500_0100_0002_0001": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0500_0100_0002_0001": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0500_0100_0002_0001": []
+  },
+  "0500010000020002": {
+    "/en/x1/troubleshooting/hmscode/0500_0100_0002_0002": [],
+    "/en/x2d/troubleshooting/hmscode/0500_0100_0002_0002": [
+      "X2D"
+    ]
+  },
+  "0500010000020003": {
+    "/en/x1/troubleshooting/hmscode/0500_0100_0002_0003": []
+  },
+  "0500010000030004": {
+    "/en/x1/troubleshooting/hmscode/0500_0100_0003_0004": []
+  },
+  "0500010000030005": {
+    "/en/x1/troubleshooting/hmscode/0500_0100_0003_0005": []
+  },
+  "0500010000030006": {
+    "/en/h2/troubleshooting/hmscode/0500_0100_0003_0006": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0500_0100_0003_0006": []
+  },
+  "0500020000020001": {
+    "/en/x1/troubleshooting/hmscode/0500_0200_0002_0001": []
+  },
+  "0500020000020004": {
+    "/en/x1/troubleshooting/hmscode/0500_0200_0002_0004": []
+  },
+  "0500020000020006": {
+    "/en/x1/troubleshooting/hmscode/0500_0200_0002_0006": []
+  },
+  "0500020000020008": {
+    "/en/x1/troubleshooting/hmscode/0500_0200_0002_0008": []
+  },
+  "0500030000010001": {
+    "/en/h2/troubleshooting/hmscode/0500_0300_0001_0001": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0500_0300_0001_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0500_0300_0001_0001": [
+      "X2D"
+    ]
+  },
+  "0500030000010002": {
+    "/en/x1/troubleshooting/hmscode/0500_0300_0001_0002": []
+  },
+  "0500030000010003": {
+    "/en/x1/troubleshooting/hmscode/0500_0300_0001_0003": []
+  },
+  "0500030000010004": {
+    "/en/h2/troubleshooting/hmscode/0500_0300_0001_0004": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S",
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0500_0300_0001_0004": []
+  },
+  "0500030000010007": {
+    "/en/h2d/troubleshooting/hmscode/0500_0300_0001_0007": []
+  },
+  "050003000001000A": {
+    "/en/x1/troubleshooting/hmscode/0500_0300_0001_000A": []
+  },
+  "050003000001000B": {
+    "/en/x1/troubleshooting/hmscode/0500_0300_0001_000B": []
+  },
+  "050003000001000C": {
+    "/en/h2d/troubleshooting/hmscode/0500_0300_0001_000C": [],
+    "/en/p2s/troubleshooting/hmscode/0500_0300_0001_000C": [
+      "P2S"
+    ]
+  },
+  "050003000001000D": {
+    "/en/h2c/troubleshooting/hmscode/0500_0300_0001_000D": []
+  },
+  "0500030000010021": {
+    "/en/x1/troubleshooting/hmscode/0500_0300_0001_0021": []
+  },
+  "050003000002000C": {
+    "/en/x1/troubleshooting/hmscode/0500_0300_0002_000C": []
+  },
+  "050003000002000E": {
+    "/en/h2/troubleshooting/hmscode/0500_0300_0002_000E": []
+  },
+  "0500030000020020": {
+    "/en/h2d/troubleshooting/hmscode/0500_0300_0002_0020": []
+  },
+  "0500040000010001": {
+    "/en/x1/troubleshooting/hmscode/0500_0400_0001_0001": []
+  },
+  "0500040000010002": {
+    "/en/x1/troubleshooting/hmscode/0500_0400_0001_0002": []
+  },
+  "0500040000010003": {
+    "/en/x1/troubleshooting/hmscode/0500_0400_0001_0003": []
+  },
+  "0500040000010004": {
+    "/en/x1/troubleshooting/hmscode/0500_0400_0001_0004": []
+  },
+  "0500040000010006": {
+    "/en/x1/troubleshooting/hmscode/0500_0400_0001_0006": []
+  },
+  "0500040000010025": {
+    "/en/a1/troubleshooting/hmscode/0500-0400-0001-0025": []
+  },
+  "0500040000010051": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0001_0051": []
+  },
+  "0500040000010052": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0001_0052": []
+  },
+  "0500040000020007": {
+    "/en/x1/troubleshooting/hmscode/0500_0400_0002_0007": []
+  },
+  "0500040000020030": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0030": []
+  },
+  "0500040000020031": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0031": []
+  },
+  "0500040000020032": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0032": []
+  },
+  "0500040000020033": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0033": []
+  },
+  "0500040000020034": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0034": []
+  },
+  "0500040000020035": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0035": []
+  },
+  "0500040000020037": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0037": []
+  },
+  "0500040000020038": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0038": []
+  },
+  "0500040000020041": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0041": []
+  },
+  "0500040000020042": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0042": []
+  },
+  "0500040000020050": {
+    "/en/h2/troubleshooting/hmscode/0500_0400_0002_0050": []
+  },
+  "0500050000010007": {
+    "/en/x1/troubleshooting/hmscode/0500_0500_0001_0007": []
+  },
+  "0500050000010014": {
+    "/en/h2d/troubleshooting/hmscode/0500_0500_0001_0014": []
+  },
+  "0500050000010015": {
+    "/en/h2c/troubleshooting/hmscode/0500_0500_0001_0015": []
+  },
+  "050005000001001A": {
+    "/en/x2d/troubleshooting/hmscode/0500_0500_0001_001A": []
+  },
+  "0500050000010020": {
+    "/en/h2c/troubleshooting/hmscode/0500_0500_0001_0020": []
+  },
+  "0500060000020001": {
+    "/en/h2/troubleshooting/hmscode/0500_0600_0002_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0500_0600_0002_0001": [
+      "X2D"
+    ]
+  },
+  "0500060000020002": {
+    "/en/h2/troubleshooting/hmscode/0500_0600_0002_0002": []
+  },
+  "0500060000020004": {
+    "/en/h2/troubleshooting/hmscode/0500_0600_0002_0004": [],
+    "/en/p2s/troubleshooting/hmscode/0500_0600_0002_0004": [
+      "P2S"
+    ]
+  },
+  "0500060000020031": {
+    "/en/h2/troubleshooting/hmscode/0500_0600_0002_0031": []
+  },
+  "0500060000020032": {
+    "/en/h2/troubleshooting/hmscode/0500_0600_0002_0032": []
+  },
+  "0500060000020034": {
+    "/en/p2s/troubleshooting/hmscode/0500_0600_0002_0034": []
+  },
+  "0501040000030005": {
+    "/en/h2c/troubleshooting/hmscode/0501_0400_0003_0005": []
+  },
+  "0501040000030006": {
+    "/en/h2c/troubleshooting/hmscode/0501_0400_0003_0006": []
+  },
+  "0580050000010017": {
+    "/en/h2d/troubleshooting/hmscode/0580_0500_0001_0017": []
+  },
+  "0700010000010001": {
+    "/en/x1/troubleshooting/hmscode/0700_0100_0001_0001": []
+  },
+  "0700010000010003": {
+    "/en/x1/troubleshooting/hmscode/0700_0100_0001_0003": []
+  },
+  "0700010000010004": {
+    "/en/x1/troubleshooting/hmscode/0700_0100_0001_0004": []
+  },
+  "0700010000010005": {
+    "/en/h2/troubleshooting/hmscode/0700_0100_0001_0005": []
+  },
+  "0700010000020002": {
+    "/en/h2/troubleshooting/hmscode/0700_0100_0002_0002": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S",
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_0100_0002_0002": []
+  },
+  "0700010000020006": {
+    "/en/h2/troubleshooting/hmscode/0700_0100_0002_0006": []
+  },
+  "0700010000020007": {
+    "/en/h2d/troubleshooting/hmscode/0700_0100_0002_0007": []
+  },
+  "0700010000020008": {
+    "/en/h2/troubleshooting/hmscode/0700_0100_0002_0008": []
+  },
+  "0700010000020009": {
+    "/en/h2/troubleshooting/hmscode/0700_0100_0002_0009": []
+  },
+  "0700010000020010": {
+    "/en/h2/troubleshooting/hmscode/0700_0100_0002_0010": []
+  },
+  "0700010000020011": {
+    "/en/h2/troubleshooting/hmscode/0700_0100_0002_0011": []
+  },
+  "0700020000010001": {
+    "/en/x1/troubleshooting/hmscode/0700_0200_0001_0001": []
+  },
+  "0700020000020002": {
+    "/en/h2/troubleshooting/hmscode/0700_0200_0002_0002": []
+  },
+  "0700020000020003": {
+    "/en/x2d/troubleshooting/hmscode/0700_0200_0002_0003": []
+  },
+  "0700100000010001": {
+    "/en/x1/troubleshooting/hmscode/0700_1000_0001_0001": []
+  },
+  "0700100000010003": {
+    "/en/x1/troubleshooting/hmscode/0700_1000_0001_0003": []
+  },
+  "0700100000020002": {
+    "/en/x1/troubleshooting/hmscode/0700_1000_0002_0002": []
+  },
+  "0700100000020004": {
+    "/en/h2/troubleshooting/hmscode/0700_1000_0002_0004": []
+  },
+  "0700200000010081": {
+    "/en/h2d/troubleshooting/hmscode/0700_2000_0001_0081": []
+  },
+  "0700200000010083": {
+    "/en/h2d/troubleshooting/hmscode/0700_2000_0001_0083": []
+  },
+  "0700200000010084": {
+    "/en/h2d/troubleshooting/hmscode/0700_2000_0001_0084": []
+  },
+  "0700200000010086": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0001_0086": []
+  },
+  "0700200000020001": {
+    "/en/x1/troubleshooting/hmscode/0700_2000_0002_0001": []
+  },
+  "0700200000020002": {
+    "/en/x1/troubleshooting/hmscode/0700_2000_0002_0002": []
+  },
+  "0700200000020003": {
+    "/en/x1/troubleshooting/hmscode/0700_2000_0002_0003": []
+  },
+  "0700200000020004": {
+    "/en/h2s/troubleshooting/hmscode/0700_2000_0002_0004": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0700_2000_0002_0004": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_2000_0002_0004": []
+  },
+  "0700200000020005": {
+    "/en/x1/troubleshooting/hmscode/0700_2000_0002_0005": []
+  },
+  "0700200000020006": {
+    "/en/x1/troubleshooting/hmscode/0700_2000_0002_0006": []
+  },
+  "0700200000020007": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0007": []
+  },
+  "0700200000020008": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0008": []
+  },
+  "0700200000020009": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0009": [],
+    "/en/p2s/troubleshooting/hmscode/0700_2000_0002_0009": [
+      "P2S"
+    ]
+  },
+  "070020000002000A": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_000A": []
+  },
+  "0700200000020010": {
+    "/en/h2d/troubleshooting/hmscode/0700_2000_0002_0010": []
+  },
+  "0700200000020011": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0011": []
+  },
+  "0700200000020012": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0012": []
+  },
+  "0700200000020013": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0013": []
+  },
+  "0700200000020014": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0014": []
+  },
+  "0700200000020015": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0015": []
+  },
+  "0700200000020016": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0016": []
+  },
+  "0700200000020017": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0017": []
+  },
+  "0700200000020018": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0018": []
+  },
+  "0700200000020019": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0019": []
+  },
+  "0700200000020021": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0021": []
+  },
+  "0700200000020022": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0022": []
+  },
+  "0700200000020023": {
+    "/en/h2d/troubleshooting/hmscode/0700_2000_0002_0023": []
+  },
+  "0700200000020024": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0024": []
+  },
+  "0700200000020025": {
+    "/en/h2/troubleshooting/hmscode/0700_2000_0002_0025": []
+  },
+  "0700200000020026": {
+    "/en/x2d/troubleshooting/hmscode/0700_2000_0002_0026": []
+  },
+  "0700200000020027": {
+    "/en/x2d/troubleshooting/hmscode/0700_2000_0002_0027": []
+  },
+  "0700200000030001": {
+    "/en/x1/troubleshooting/hmscode/0700_2000_0003_0001": []
+  },
+  "0700200000030002": {
+    "/en/x1/troubleshooting/hmscode/0700_2000_0003_0002": []
+  },
+  "0700250000020001": {
+    "/en/h2/troubleshooting/hmscode/0700_2500_0002_0001": []
+  },
+  "0700260000020001": {
+    "/en/h2c/troubleshooting/hmscode/0700_2600_0002_0001": []
+  },
+  "0700300000010001": {
+    "/en/h2/troubleshooting/hmscode/0700_3000_0001_0001": []
+  },
+  "0700350000010002": {
+    "/en/h2/troubleshooting/hmscode/0700_3500_0001_0002": []
+  },
+  "0700400000020001": {
+    "/en/h2/troubleshooting/hmscode/0700_4000_0002_0001": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0700_4000_0002_0001": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_4000_0002_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0700_4000_0002_0001": [
+      "X2D"
+    ]
+  },
+  "0700400000020002": {
+    "/en/p2s/troubleshooting/hmscode/0700_4000_0002_0002": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_4000_0002_0002": []
+  },
+  "0700400000020003": {
+    "/en/p2s/troubleshooting/hmscode/0700_4000_0002_0003": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_4000_0002_0003": []
+  },
+  "0700400000020004": {
+    "/en/h2/troubleshooting/hmscode/0700_4000_0002_0004": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0700_4000_0002_0004": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_4000_0002_0004": []
+  },
+  "0700450000020001": {
+    "/en/x1/troubleshooting/hmscode/0700_4500_0002_0001": []
+  },
+  "0700450000020002": {
+    "/en/h2s/troubleshooting/hmscode/0700_4500_0002_0002": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0700_4500_0002_0002": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_4500_0002_0002": []
+  },
+  "0700450000020003": {
+    "/en/h2s/troubleshooting/hmscode/0700_4500_0002_0003": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0700_4500_0002_0003": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_4500_0002_0003": []
+  },
+  "0700500000020001": {
+    "/en/x1/troubleshooting/hmscode/0700_5000_0002_0001": []
+  },
+  "0700510000030001": {
+    "/en/x1/troubleshooting/hmscode/0700_5100_0003_0001": []
+  },
+  "0700550000010002": {
+    "/en/h2/troubleshooting/hmscode/0700_5500_0001_0002": [],
+    "/en/x2d/troubleshooting/hmscode/0700_5500_0001_0002": [
+      "X2D"
+    ]
+  },
+  "0700550000010003": {
+    "/en/h2d/troubleshooting/hmscode/0700_5500_0001_0003": []
+  },
+  "0700550000010004": {
+    "/en/h2/troubleshooting/hmscode/0700_5500_0001_0004": []
+  },
+  "0700550000020001": {
+    "/en/h2/troubleshooting/hmscode/0700_5500_0002_0001": []
+  },
+  "0700600000020001": {
+    "/en/h2/troubleshooting/hmscode/0700_6000_0002_0001": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_6000_0002_0001": []
+  },
+  "0700700000020001": {
+    "/en/p2s/troubleshooting/hmscode/0700_7000_0002_0001": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0001": [],
+    "/en/x2d/troubleshooting/hmscode/0700_7000_0002_0001": [
+      "X2D"
+    ]
+  },
+  "0700700000020002": {
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0002": []
+  },
+  "0700700000020003": {
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0003": [],
+    "/en/x2d/troubleshooting/hmscode/0700_7000_0002_0003": [
+      "X2D"
+    ]
+  },
+  "0700700000020004": {
+    "/en/p2s/troubleshooting/hmscode/0700_7000_0002_0004": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0004": []
+  },
+  "0700700000020005": {
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0005": []
+  },
+  "0700700000020006": {
+    "/en/p2s/troubleshooting/hmscode/0700_7000_0002_0006": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0006": []
+  },
+  "0700700000020007": {
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0007": []
+  },
+  "0700700000020008": {
+    "/en/x1/troubleshooting/hmscode/0700_7000_0002_0008": []
+  },
+  "070070000002000A": {
+    "/en/h2c/troubleshooting/hmscode/0700_7000_0002_000A": []
+  },
+  "0700740000010001": {
+    "/en/x2d/troubleshooting/hmscode/0700_7400_0001_0001": []
+  },
+  "0700740000020006": {
+    "/en/x2d/troubleshooting/hmscode/0700_7400_0002_0006": []
+  },
+  "0700740000020007": {
+    "/en/x2d/troubleshooting/hmscode/0700_7400_0002_0007": []
+  },
+  "0700750000010005": {
+    "/en/x2d/troubleshooting/hmscode/0700_7500_0001_0005": []
+  },
+  "0700750000010008": {
+    "/en/x2d/troubleshooting/hmscode/0700_7500_0001_0008": []
+  },
+  "0700800000010001": {
+    "/en/h2d/troubleshooting/hmscode/0700_8000_0001_0001": []
+  },
+  "0700800000010002": {
+    "/en/h2d/troubleshooting/hmscode/0700_8000_0001_0002": []
+  },
+  "0700800000010003": {
+    "/en/h2d/troubleshooting/hmscode/0700_8000_0001_0003": []
+  },
+  "0700800000010004": {
+    "/en/h2d/troubleshooting/hmscode/0700_8000_0001_0004": []
+  },
+  "0700860000010004": {
+    "/en/x2d/troubleshooting/hmscode/0700_8600_0001_0004": []
+  },
+  "0700860000020002": {
+    "/en/x2d/troubleshooting/hmscode/0700_8600_0002_0002": []
+  },
+  "0700870000020001": {
+    "/en/x2d/troubleshooting/hmscode/0700_8700_0002_0001": []
+  },
+  "0700870000020003": {
+    "/en/x2d/troubleshooting/hmscode/0700_8700_0002_0003": []
+  },
+  "0700870000020009": {
+    "/en/x2d/troubleshooting/hmscode/0700_8700_0002_0009": []
+  },
+  "0700880000020003": {
+    "/en/x2d/troubleshooting/hmscode/0700_8800_0002_0003": []
+  },
+  "0700890000020004": {
+    "/en/x2d/troubleshooting/hmscode/0700_8900_0002_0004": []
+  },
+  "07008A0000020005": {
+    "/en/x2d/troubleshooting/hmscode/0700_8A00_0002_0005": []
+  },
+  "07008B0000020006": {
+    "/en/x2d/troubleshooting/hmscode/0700_8B00_0002_0006": []
+  },
+  "07008C0000020007": {
+    "/en/x2d/troubleshooting/hmscode/0700_8C00_0002_0007": []
+  },
+  "07008D0000020008": {
+    "/en/x2d/troubleshooting/hmscode/0700_8D00_0002_0008": []
+  },
+  "07008E0000020009": {
+    "/en/x2d/troubleshooting/hmscode/0700_8E00_0002_0009": []
+  },
+  "07008F0000020002": {
+    "/en/x2d/troubleshooting/hmscode/0700_8F00_0002_0002": []
+  },
+  "0700900000010003": {
+    "/en/h2d/troubleshooting/hmscode/0700_9000_0001_0003": []
+  },
+  "0700900000010004": {
+    "/en/ams-2-pro/troubleshooting/hmscode/0700-9000-0001-0004": []
+  },
+  "0700900000020001": {
+    "/en/h2d/troubleshooting/hmscode/0700_9000_0002_0001": []
+  },
+  "0700920000010001": {
+    "/en/ams/troubleshooting/hmscode/0700_9200_0001_0001": []
+  },
+  "0700920000020002": {
+    "/en/h2d/troubleshooting/hmscode/0700_9200_0002_0002": []
+  },
+  "0700920000020003": {
+    "/en/h2c/troubleshooting/hmscode/0700_9200_0002_0003": []
+  },
+  "0700940000010001": {
+    "/en/h2c/troubleshooting/hmscode/0700_9400_0001_0001": []
+  },
+  "0700960000010001": {
+    "/en/h2d/troubleshooting/hmscode/0700_9600_0001_0001": []
+  },
+  "0700960000010003": {
+    "/en/h2/troubleshooting/hmscode/0700_9600_0001_0003": []
+  },
+  "0700960000020002": {
+    "/en/h2d/troubleshooting/hmscode/0700_9600_0002_0002": []
+  },
+  "0700970000030001": {
+    "/en/h2d/troubleshooting/hmscode/0700_9700_0003_0001": []
+  },
+  "0700980000020001": {
+    "/en/h2d/troubleshooting/hmscode/0700_9800_0002_0001": []
+  },
+  "0700F00000020001": {
+    "/en/h2c/troubleshooting/hmscode/0700_F000_0002_0001": []
+  },
+  "07FE200000020001": {
+    "/en/h2/troubleshooting/hmscode/07FE_2000_0002_0001": [],
+    "/en/x2d/troubleshooting/hmscode/07FE_2000_0002_0001": [
+      "X2D"
+    ]
+  },
+  "07FE200000020002": {
+    "/en/h2/troubleshooting/hmscode/07FE_2000_0002_0002": [],
+    "/en/x2d/troubleshooting/hmscode/07FE_2000_0002_0002": [
+      "X2D"
+    ]
+  },
+  "07FE200000020004": {
+    "/en/h2/troubleshooting/hmscode/07FE_2000_0002_0004": [],
+    "/en/x2d/troubleshooting/hmscode/07FE_2000_0002_0004": [
+      "X2D"
+    ]
+  },
+  "07FE450000020002": {
+    "/en/h2/troubleshooting/hmscode/07FE_4500_0002_0002": []
+  },
+  "07FE450000020003": {
+    "/en/h2/troubleshooting/hmscode/07FE_4500_0002_0003": []
+  },
+  "07FE600000020001": {
+    "/en/h2/troubleshooting/hmscode/07FE_6000_0002_0001": [],
+    "/en/x2d/troubleshooting/hmscode/07FE_6000_0002_0001": [
+      "X2D"
+    ]
+  },
+  "07FE700000020003": {
+    "/en/h2/troubleshooting/hmscode/07FE_7000_0002_0003": []
+  },
+  "07FE800000010001": {
+    "/en/x2d/troubleshooting/hmscode/07FE_8000_0001_0001": []
+  },
+  "07FE800000010002": {
+    "/en/h2/troubleshooting/hmscode/07FE_8000_0001_0002": []
+  },
+  "07FE800000010003": {
+    "/en/h2/troubleshooting/hmscode/07FE_8000_0001_0003": []
+  },
+  "07FE800000010004": {
+    "/en/h2/troubleshooting/hmscode/07FE_8000_0001_0004": []
+  },
+  "07FE800000010005": {
+    "/en/x2d/troubleshooting/hmscode/07FE_8000_0001_0005": []
+  },
+  "07FE800000020001": {
+    "/en/h2/troubleshooting/hmscode/07FE_8000_0002_0001": []
+  },
+  "07FE800000020002": {
+    "/en/h2/troubleshooting/hmscode/07FE_8000_0002_0002": [],
+    "/en/x2d/troubleshooting/hmscode/07FE_8000_0002_0002": [
+      "X2D"
+    ]
+  },
+  "07FE810000010001": {
+    "/en/h2/troubleshooting/hmscode/07FE_8100_0001_0001": []
+  },
+  "07FE810000010002": {
+    "/en/h2/troubleshooting/hmscode/07FE_8100_0001_0002": []
+  },
+  "07FE810000010003": {
+    "/en/h2/troubleshooting/hmscode/07FE_8100_0001_0003": []
+  },
+  "07FE810000010004": {
+    "/en/h2/troubleshooting/hmscode/07FE_8100_0001_0004": []
+  },
+  "07FE810000020001": {
+    "/en/h2/troubleshooting/hmscode/07FE_8100_0002_0001": []
+  },
+  "07FEA00000020001": {
+    "/en/h2/troubleshooting/hmscode/07FE_A000_0002_0001": []
+  },
+  "07FF200000020002": {
+    "/en/p2s/troubleshooting/hmscode/07FF_2000_0002_0002": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/07FF_2000_0002_0002": []
+  },
+  "07FF200000020004": {
+    "/en/p2s/troubleshooting/hmscode/07FF_2000_0002_0004": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/07FF_2000_0002_0004": []
+  },
+  "07FF200000020008": {
+    "/en/x2d/troubleshooting/hmscode/07FF_2000_0002_0008": []
+  },
+  "07FF200000020009": {
+    "/en/x2d/troubleshooting/hmscode/07FF_2000_0002_0009": []
+  },
+  "07FF450000020001": {
+    "/en/h2/troubleshooting/hmscode/07FF_4500_0002_0001": [],
+    "/en/h2s/troubleshooting/hmscode/07FF_4500_0002_0001": [
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/07FF_4500_0002_0001": [
+      "P2S"
+    ]
+  },
+  "07FF700000020003": {
+    "/en/p2s/troubleshooting/hmscode/07FF_7000_0002_0003": []
+  },
+  "07FF700000020009": {
+    "/en/x2d/troubleshooting/hmscode/07FF_7000_0002_0009": []
+  },
+  "07FFA00000020001": {
+    "/en/p2s/troubleshooting/hmscode/07FF_A000_0002_0001": []
+  },
+  "0C00010000010001": {
+    "/en/h2/troubleshooting/hmscode/0C00_0100_0001_0001": [],
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0001_0001": [
+      "X1",
+      "X1C",
+      "X1E"
+    ]
+  },
+  "0C00010000010003": {
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0001_0003": []
+  },
+  "0C00010000010004": {
+    "/en/h2/troubleshooting/hmscode/0C00_0100_0001_0004": [],
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0001_0004": [
+      "X1",
+      "X1C",
+      "X1E"
+    ]
+  },
+  "0C00010000010005": {
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0001_0005": []
+  },
+  "0C0001000001000A": {
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0001_000A": []
+  },
+  "0C0001000001000B": {
+    "/en/h2/troubleshooting/hmscode/0C00_0100_0001_000B": [],
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0001_000B": [
+      "X1",
+      "X1C",
+      "X1E"
+    ]
+  },
+  "0C00010000010011": {
+    "/en/p2s/troubleshooting/hmscode/0C00_0100_0001_0011": []
+  },
+  "0C00010000020002": {
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0002_0002": []
+  },
+  "0C00010000020007": {
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0002_0007": []
+  },
+  "0C00010000020008": {
+    "/en/h2/troubleshooting/hmscode/0C00_0100_0002_0008": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/p2s/troubleshooting/hmscode/0C00_0100_0002_0008": [
+      "P2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0C00_0100_0002_0008": [],
+    "/en/x2d/troubleshooting/hmscode/0C00_0100_0002_0008": [
+      "X2D"
+    ]
+  },
+  "0C00010000020017": {
+    "/en/h2/troubleshooting/hmscode/0C00_0100_0002_0017": []
+  },
+  "0C00020000010001": {
+    "/en/h2/troubleshooting/hmscode/0C00_0200_0001_0001": [],
+    "/en/x1/troubleshooting/hmscode/0C00_0200_0001_0001": [
+      "X1",
+      "X1C",
+      "X1E"
+    ]
+  },
+  "0C00020000010005": {
+    "/en/x1/troubleshooting/hmscode/0C00_0200_0001_0005": []
+  },
+  "0C00020000020002": {
+    "/en/x1/troubleshooting/hmscode/0C00_0200_0002_0002": []
+  },
+  "0C00020000020003": {
+    "/en/x1/troubleshooting/hmscode/0C00_0200_0002_0003": []
+  },
+  "0C00020000020004": {
+    "/en/x1/troubleshooting/hmscode/0C00_0200_0002_0004": []
+  },
+  "0C00020000020006": {
+    "/en/x1/troubleshooting/hmscode/0C00_0200_0002_0006": []
+  },
+  "0C00030000010009": {
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0001_0009": []
+  },
+  "0C00030000020001": {
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0002_0001": []
+  },
+  "0C00030000020002": {
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0002_0002": []
+  },
+  "0C00030000020004": {
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0002_0004": []
+  },
+  "0C00030000020005": {
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0002_0005": []
+  },
+  "0C0003000002000C": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_000C": [],
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0002_000C": [
+      "X1",
+      "X1C",
+      "X1E"
+    ]
+  },
+  "0C0003000002000E": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_000E": []
+  },
+  "0C00030000020011": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_0011": []
+  },
+  "0C00030000020012": {
+    "/en/p2s/troubleshooting/hmscode/0C00_0300_0002_0012": []
+  },
+  "0C00030000020013": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_0013": [],
+    "/en/p2s/troubleshooting/hmscode/0C00_0300_0002_0013": [
+      "P2S"
+    ]
+  },
+  "0C00030000020014": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_0014": [],
+    "/en/p2s/troubleshooting/hmscode/0C00_0300_0002_0014": [
+      "P2S"
+    ]
+  },
+  "0C00030000020015": {
+    "/en/p2s/troubleshooting/hmscode/0C00_0300_0002_0015": []
+  },
+  "0C00030000020017": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_0017": []
+  },
+  "0C00030000020018": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_0018": [],
+    "/en/p2s/troubleshooting/hmscode/0C00_0300_0002_0018": [
+      "P2S"
+    ]
+  },
+  "0C0003000002001C": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0002_001C": [],
+    "/en/x2d/troubleshooting/hmscode/0C00_0300_0002_001C": [
+      "X2D"
+    ]
+  },
+  "0C00030000030006": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0003_0006": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0003_0006": []
+  },
+  "0C00030000030007": {
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0003_0007": []
+  },
+  "0C00030000030008": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0003_0008": [
+      "H2C",
+      "H2D",
+      "H2DPRO",
+      "H2S"
+    ],
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0003_0008": []
+  },
+  "0C0003000003000B": {
+    "/en/x1/troubleshooting/hmscode/0C00_0300_0003_000B": []
+  },
+  "0C00030000030010": {
+    "/en/h2/troubleshooting/hmscode/0C00_0300_0003_0010": []
+  },
+  "0C00040000010005": {
+    "/en/h2/troubleshooting/hmscode/0C00_0400_0001_0005": []
+  },
+  "0C00040000020007": {
+    "/en/h2/troubleshooting/hmscode/0C00_0400_0002_0007": []
+  },
+  "0C00040000020019": {
+    "/en/h2/troubleshooting/hmscode/0C00_0400_0002_0019": []
+  },
+  "0C00040000020023": {
+    "/en/h2/troubleshooting/hmscode/0C00_0400_0002_0023": []
+  },
+  "0C00040000020026": {
+    "/en/h2/troubleshooting/hmscode/0C00_0400_0002_0026": []
+  },
+  "1200100000020002": {
+    "/en/a1-mini/troubleshooting/hmscode/1200_1000_0002_0002": []
+  },
+  "1200120000010001": {
+    "/en/a1/troubleshooting/hmscode/1200_1200_0001_0001": []
+  },
+  "1200200000020003": {
+    "/en/a1-mini/troubleshooting/hmscode/1200_2000_0002_0003": []
+  },
+  "1200200000020006": {
+    "/en/a1-mini/troubleshooting/hmscode/1200_2000_0002_0006": []
+  },
+  "1200450000020003": {
+    "/en/a1-mini/troubleshooting/hmscode/1200-4500-0002-0003": []
+  },
+  "1200800000020001": {
+    "/en/a1-mini/troubleshooting/hmscode/1200_8000_0002_0001": []
+  },
+  "12FF200000020007": {
+    "/en/a1-mini/troubleshooting/hmscode/12FF_2000_0002_0007": []
+  },
+  "1800200000020026": {
+    "/en/x2d/troubleshooting/hmscode/1800_2000_0002_0026": []
+  },
+  "1800200000020027": {
+    "/en/x2d/troubleshooting/hmscode/1800_2000_0002_0027": []
+  },
+  "1800240000010007": {
+    "/en/h2/troubleshooting/hmscode/1800_2400_0001_0007": []
+  },
+  "1800240000020009": {
+    "/en/h2/troubleshooting/hmscode/1800_2400_0002_0009": []
+  },
+  "1800700000020007": {
+    "/en/ams-ht/troubleshooting/hmscode/1800_7000_0002_0007": []
+  },
+  "1800860000010004": {
+    "/en/x2d/troubleshooting/hmscode/1800_8600_0001_0004": []
+  },
+  "1800900000010004": {
+    "/en/ams-ht/troubleshooting/hmscode/1800-9000-0001-0004": []
+  },
+  "1A00010000020003": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0003": []
+  },
+  "1A00010000020004": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0004": []
+  },
+  "1A00010000020020": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0020": []
+  },
+  "1A00010000020021": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0021": []
+  },
+  "1A00010000020022": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0022": []
+  },
+  "1A00010000020023": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0023": []
+  },
+  "1A00010000020024": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0024": []
+  },
+  "1A00010000020025": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0025": []
+  },
+  "1A00010000020026": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0026": []
+  },
+  "1A00010000020027": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0027": []
+  },
+  "1A00010000020030": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0030": []
+  },
+  "1A00010000020031": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0031": []
+  },
+  "1A00010000020032": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0032": []
+  },
+  "1A00010000020033": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0033": []
+  },
+  "1A00010000020034": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0034": []
+  },
+  "1A00010000020035": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0035": []
+  },
+  "1A00010000020036": {
+    "/en/h2c/troubleshooting/hmscode/1A00_0100_0002_0036": []
+  },
+  "1A00100000020001": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1000_0002_0001": []
+  },
+  "1A00110000020002": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1100_0002_0002": []
+  },
+  "1A00110000020003": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1100_0002_0003": []
+  },
+  "1A00120000020001": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0001": []
+  },
+  "1A00120000020002": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0002": []
+  },
+  "1A00120000020003": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0003": []
+  },
+  "1A00120000020004": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0004": []
+  },
+  "1A00120000020007": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0007": []
+  },
+  "1A00120000020008": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0008": []
+  },
+  "1A00120000020009": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0009": []
+  },
+  "1A00120000020010": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0010": []
+  },
+  "1A00120000020011": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1200_0002_0011": []
+  },
+  "1A00130000020001": {
+    "/en/h2c/troubleshooting/hmscode/1A00_1300_0002_0001": []
+  },
+  "1A00200000020001": {
+    "/en/h2c/troubleshooting/hmscode/1A00_2000_0002_0001": []
+  },
+  "1A00210000010001": {
+    "/en/h2c/troubleshooting/hmscode/1A00_2100_0001_0001": []
+  },
+  "1A00210000010002": {
+    "/en/h2c/troubleshooting/hmscode/1A00_2100_0001_0002": []
+  },
+  "1A00210000020001": {
+    "/en/h2c/troubleshooting/hmscode/1A00_2100_0002_0001": []
+  },
+  "1A00210000020002": {
+    "/en/h2c/troubleshooting/hmscode/1A00_2100_0002_0002": []
+  },
+  "1A00E00000010005": {
+    "/en/h2c/troubleshooting/hmscode/1A00_E000_0001_0005": []
+  },
+  "1A00E00000010006": {
+    "/en/h2c/troubleshooting/hmscode/1A00_E000_0001_0006": []
+  }
+}
