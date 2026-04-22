@@ -80,9 +80,10 @@ def process_json(bambu_data: dict, language: str) -> dict[str, dict[str, str]]:
     """Process the JSON data and prep it for adding to the merged data."""
     error_data = {"device_hms": {}, "device_error": {}}
 
-    # Identify the correct language key (case insensitive match)
+    # Identify the correct language key (case insensitive prefix match)
     data_language_keys = [
-        key for key in bambu_data["data"]["device_hms"].keys() if language.lower() == key.lower()
+        key for key in bambu_data["data"]["device_hms"].keys()
+        if language.lower() == key.lower()
     ]
     if len(data_language_keys) != 1:
         logging.error("Unexpected language keys in HMS data")
