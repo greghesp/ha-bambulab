@@ -22,7 +22,6 @@ from .const import (
     BAMBU_URL,
     FansEnum,
     Printers,
-    WikiPrinterTag,
     TempEnum
 )
 from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
@@ -186,14 +185,17 @@ def _get_error_text(error_type: str, error_code: str, device_type: Printers | st
 
     return 'unknown'
 
-def _load_error_data(language: str) -> dict:
-    filename = Path(__file__).parent / "hms_error_text" / f"hms_{language}.json.gz"
-    if not filename.exists():
-        LOGGER.debug(f"No HMS error data for {language=}")
+def _load_compressed_json(filename: str) -> dict:
+    file_path = Path(__file__).parent / "hms_error_text" / filename
+    if not file_path.exists():
+        LOGGER.debug(f"No data for {filename=}")
         return {}
 
-    with gzip.open(filename, "rt", encoding="utf-8") as f:
+    with gzip.open(file_path, "rt", encoding="utf-8") as f:
         return json.load(f)
+
+def _load_error_data(language: str) -> dict:
+    return _load_compressed_json(f"hms_{language}.json.gz")
     
 def get_HMS_severity(code: int) -> str:
     uint_code = code >> 16
@@ -426,8 +428,19 @@ def safe_json_loads(raw_bytes):
         LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
         raise
 
+@functools.lru_cache(maxsize=8)
 def get_wiki_url_for_hms_error(hms_code: str, device_type: Printers):
-    wiki_tag = WikiPrinterTag[device_type]
-    lang = "en" # Only English wiki content seems to exist
-    return f"https://wiki.bambulab.com/{lang}/{wiki_tag}/troubleshooting/hmscode/{hms_code}"
+
+    error_code = hms_code.replace("_", "")
+    wiki_data = _load_compressed_json("wiki_links.json.gz")
+    code_entry = wiki_data.get(error_code)
+    if not code_entry:
+        return "https://wiki.bambulab.com/en/hms/home"
+
+    # Pick message matching device_type or default (empty list)
+    for wiki_path, models in code_entry.items():
+        if not models or str(device_type) in models:
+            return f"https://wiki.bambulab.com{wiki_path}"
+
+    return "https://wiki.bambulab.com/en/hms/home"
 

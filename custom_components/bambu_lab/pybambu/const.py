@@ -23,20 +23,6 @@ class Printers(StrEnum):
     X1C = "X1C"
     X1 = "X1"
 
-class WikiPrinterTag(StrEnum):
-    A1 = "a1"
-    A1MINI = "a1-mini"
-    P1P = "p1"
-    P1S = "p1"
-    P2S = "p2"
-    H2C = "h2"
-    H2D = "h2"
-    H2DPRO = "h2"
-    H2S = "h2"
-    X1E = "x1"
-    X1C = "x1"
-    X1 = "x1"
-
 class Features(IntEnum):
     AUX_FAN = 1,
     CHAMBER_FAN = 2,

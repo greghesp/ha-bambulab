@@ -275,21 +275,23 @@ class TestHms(unittest.TestCase):
             })
 
     def test_error_unknown_printer(self):
-        """When the printer is unknown, messages from the H2D are used; the user language is honored."""
+        """When the printer is unknown, the most common message and URL are returned."""
         self.client._device.info.device_type = "Z-1000"
         self.client.user_language = "es"
-        data = {"hms": [{"attr": 419307520, "code": 131076}]}
+        data = {"hms": [{"attr": 50332160, "code": 65537}]}
 
         result = self.hms.print_update(data)
         self.assertTrue(result)
         self.client.callback.assert_called_once_with("event_printer_error")
         self.assertEqual(1, self.hms.error_count)
+        self.maxDiff = None
+
         self.assertDictEqual(self.hms.errors, {
             "Count": 1,
-            "1-Code": "HMS_18FE_2000_0002_0004",
-            "1-Error": "Retire el filamento externo del extrusor izquierdo.",
-            "1-Wiki": "https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/18FE_2000_0002_0004",
-            "1-Severity": "serious"
+            "1-Code": "HMS_0300_0200_0001_0001",
+            "1-Error": "La medición de la temperatura de la boquilla es anormal. El sensor de temperatura de la boquilla puede estar roto.",
+            "1-Wiki": "https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/0300_0200_0001_0001",
+            "1-Severity": "fatal"
             })
 
 
@@ -311,7 +313,7 @@ class TestHms(unittest.TestCase):
             "1-Severity": "fatal",
             "2-Code": "HMS_07FF_7000_0002_0003",
             "2-Error": "Please check if the filament is coming out of the nozzle. If not, gently push the material and try to extrude again.",
-            "2-Wiki": "https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/07FF_7000_0002_0003",
+            "2-Wiki": "https://wiki.bambulab.com/en/p2s/troubleshooting/hmscode/07FF_7000_0002_0003",
             "2-Severity": "serious"
             })
 
@@ -331,7 +333,7 @@ class TestHms(unittest.TestCase):
             "Count": 1,
             "1-Code": "HMS_07FF_7000_0002_0003",
             "1-Error": "Please check if the filament is coming out of the nozzle. If not, gently push the material and try to extrude again.",
-            "1-Wiki": "https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/07FF_7000_0002_0003",
+            "1-Wiki": "https://wiki.bambulab.com/en/p2s/troubleshooting/hmscode/07FF_7000_0002_0003",
             "1-Severity": "serious"
             })
 
