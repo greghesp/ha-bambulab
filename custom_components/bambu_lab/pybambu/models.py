@@ -160,7 +160,7 @@ class Device:
         x1_printer  = {Printers.X1, Printers.X1C}
         x1e_printer = {Printers.X1E} # Firmware versioning is independent of X1/X1C.
         x2_printers = {Printers.X2D}
-        dual_nozzle_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO}
+        dual_nozzle_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.X2C}
         model = self.info.device_type
 
         # First check known early feature check scenarios. These are features that can be checked as part of
@@ -274,7 +274,7 @@ class Device:
         elif feature == Features.CHAMBER_LIGHT_2:
             return model in (h2_printers | x2_printers)
         elif feature == Features.DUAL_NOZZLES:
-            return model in (dual_nozzle_printers | x2_printers)
+            return model in dual_nozzle_printers
         elif feature == Features.EXTRUDER_TOOL:
             return model in (h2_printers | x2_printers)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
