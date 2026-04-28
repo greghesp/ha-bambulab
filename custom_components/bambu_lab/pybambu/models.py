@@ -89,6 +89,7 @@ class Device:
         self.home_flag = HomeFlag(client=client)
         self.extruder = Extruder(client=client)
         self.extruder_tool = ExtruderTool(client=client)
+        self.fire_extinguisher = FireExtinguisher(client=client)
         self.hotend_rack = HotendRack(client=client)
         self.push_all_data = None
         self.get_version_data = None
@@ -117,6 +118,7 @@ class Device:
         send_event = send_event | self.home_flag.print_update(data = data)
         send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
+        send_event = send_event | self.fire_extinguisher.print_update(data = data)
         send_event = send_event | self.hotend_rack.print_update(data = data)
 
         if data.get("command") == "push_status":
@@ -138,6 +140,8 @@ class Device:
         self.info.info_update(data = data)
         self.home_flag.info_update(data = data)
         self.ams.info_update(data = data)
+        self.fire_extinguisher.info_update(data = data)
+        self.extruder_tool.info_update(data = data)
 
         if data.get("command") == "get_version":
             send_ready_event = self.get_version_data is None and self.push_all_data is not None
@@ -300,6 +304,8 @@ class Device:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         elif feature == Features.ACTIVE_CHAMBER_HEATER:
             return model in (x1e_printer | h2_printers)
+        elif feature == Features.FIRE_EXTINGUISHER:
+            return model in h2_printers and self.fire_extinguisher.serial != ""
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -3552,20 +3558,180 @@ class SlicerSettings:
             else:
                 self._load_custom_filaments(slicer_settings)
 
+class FireExtinguisher:
+    """Parses device.fire_ext data from the MQTT payload."""
+
+    def __init__(self, client):
+        self._client = client
+        self._state = 0
+        self._connect_flag = 0
+        self._remain_time = 0
+        self._rm_init = 0
+        self._bot_err = 0
+        self._cd = 0
+        self._cd_init = 0
+        self._drill_flag = 0
+        self.serial = ""
+        self.hw_version = ""
+        self.sw_version = ""
+
+    def info_update(self, data):
+        """Parse get_version module list for 'afp' entry."""
+        for module in data.get("module", []):
+            if module.get("name") == "afp":
+                sn = module.get("sn", "")
+                if sn:
+                    self.serial = sn
+                    self.hw_version = module.get("hw_ver", "")
+                    self.sw_version = module.get("sw_ver", "")
+
+    def print_update(self, data) -> bool:
+        old_data = f"{self.__dict__}"
+
+        if "device" in data and "fire_ext" in data["device"]:
+            fire_ext = data["device"]["fire_ext"]
+            for attr, key in [
+                ("_state", "state"),
+                ("_connect_flag", "connect_flag"),
+                ("_remain_time", "remain_time"),
+                ("_rm_init", "rm_init"),
+                ("_bot_err", "bot_err"),
+                ("_cd", "cd"),
+                ("_cd_init", "cd_init"),
+                ("_drill_flag", "drill_flag"),
+            ]:
+                value = fire_ext.get(key)
+                if value is not None:
+                    setattr(self, attr, value)
+
+        return old_data != f"{self.__dict__}"
+
+    @property
+    def connected(self) -> bool:
+        return self._connect_flag == 1
+
+    @property
+    def status(self) -> str:
+        if not self.connected:
+            return "disconnected"
+        # state: 0=standby, 1=active, 2=standby(armed), based on observed data
+        if self._state == 0:
+            return "standby"
+        elif self._state == 1:
+            return "active"
+        elif self._state == 2:
+            return "standby"
+        return "standby"
+
+    @property
+    def remaining_time(self) -> int:
+        return self._remain_time
+
+    @property
+    def remaining_pct(self) -> int:
+        if self._rm_init > 0:
+            return round((self._remain_time / self._rm_init) * 100)
+        return 0
+
+    @property
+    def countdown(self) -> int:
+        return self._cd
+
+    @property
+    def countdown_init(self) -> int:
+        return self._cd_init
+
+    @property
+    def drill_flag(self) -> bool:
+        return self._drill_flag != 0
+
+    @property
+    def error(self) -> bool:
+        return self._bot_err != 0
+
+
+class ToolModule:
+    """Represents a tool module (laser, rotary, cutter) identified by serial number."""
+
+    def __init__(self, serial: str, module_type: str, product_name: str, hw_version: str, sw_version: str):
+        self.serial = serial
+        self.module_type = module_type  # "laser", "rotary", "cutter"
+        self.product_name = product_name
+        self.hw_version = hw_version
+        self.sw_version = sw_version
+
+
 class ExtruderTool:
     """Contains parsed _values from the ext_tool sensor"""
     state: str
 
+    # get_version module name -> tool type
+    MODULE_TYPES = {
+        "lc": "laser",
+        "lfa": "rotary",
+    }
+
     def __init__(self, client):
         self._client = client
         self.state = None
+        self.th_temp = 0
+        self.calib = 0
+        self.low_prec = False
+        self.mount_3d = 0
+        self.fourth_axis_connected = False
+        # All tool modules ever seen, keyed by serial number
+        self.modules: dict[str, ToolModule] = {}
+        # Currently active module serial (from latest get_version)
+        self.active_laser_serial = ""
+        self.active_rotary_serial = ""
+
+    def info_update(self, data):
+        """Parse get_version module list for tool module entries."""
+        for module in data.get("module", []):
+            name = module.get("name", "")
+            sn = module.get("sn", "")
+            if not sn or name not in self.MODULE_TYPES:
+                continue
+            module_type = self.MODULE_TYPES[name]
+            product_name = module.get("product_name", "")
+            hw_ver = module.get("hw_ver", "")
+            sw_ver = module.get("sw_ver", "")
+
+            if sn not in self.modules:
+                self.modules[sn] = ToolModule(sn, module_type, product_name, hw_ver, sw_ver)
+            else:
+                # Update version info in case of firmware update
+                self.modules[sn].hw_version = hw_ver
+                self.modules[sn].sw_version = sw_ver
+                if product_name:
+                    self.modules[sn].product_name = product_name
+
+            if module_type == "laser":
+                self.active_laser_serial = sn
+            elif module_type == "rotary":
+                self.active_rotary_serial = sn
+
+    @property
+    def has_laser(self) -> bool:
+        return any(m.module_type == "laser" for m in self.modules.values())
+
+    @property
+    def has_rotary(self) -> bool:
+        return any(m.module_type == "rotary" for m in self.modules.values())
+
+    def get_module(self, serial: str) -> ToolModule | None:
+        return self.modules.get(serial)
+
+    def get_modules_by_type(self, module_type: str) -> list[ToolModule]:
+        return [m for m in self.modules.values() if m.module_type == module_type]
 
     def print_update (self, data):
         # Handle ext_tool update
         old_data = f"{self.__dict__}"
 
-        if "device" in data and "ext_tool" in data["device"]:
-            ext_tool = data["device"]["ext_tool"]
+        device = data.get("device", {})
+
+        if ext_tool := device.get("ext_tool"):
             mount = ext_tool.get("mount")
             tool_type = ext_tool.get("type")
             prev_state = self.state
@@ -3577,9 +3743,21 @@ class ExtruderTool:
                 self.state = "laser40"
             elif mount == 1 and tool_type == "CP00":
                 self.state = "cutter"
+            elif mount == 1 and tool_type == "F000":
+                self.state = "cooling_fan"
             elif mount == 1 and tool_type:
-                self.state = None
-        
+                self.state = "unknown"
+
+            # Parse additional fields
+            for attr in ("th_temp", "calib", "low_prec", "mount_3d"):
+                if attr in ext_tool:
+                    setattr(self, attr, ext_tool[attr])
+
+        # Parse fourth_axis connection state (rotary tool physical connection)
+        fourth_axis = device.get("fourth_axis", {})
+        if "connect_flag" in fourth_axis:
+            self.fourth_axis_connected = fourth_axis["connect_flag"] == 1
+
         return (old_data != f"{self.__dict__}")
     
 class Extruder:

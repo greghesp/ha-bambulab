@@ -65,6 +65,7 @@ class Features(IntEnum):
     HOTEND_RACK = 26,
     ACTIVE_CHAMBER_HEATER = 27,
     AMS_DRYING_SETTINGS = 28,
+    FIRE_EXTINGUISHER = 29,
 
 
 class FansEnum(IntEnum):

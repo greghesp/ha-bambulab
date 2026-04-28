@@ -39,6 +39,28 @@ class VirtualTrayEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
         return self.coordinator.get_virtual_tray_device(self.suffix)
 
 
+class FireExtinguisherEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
+    """Defines a base Fire Extinguisher entity."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this Fire Extinguisher entity."""
+        return self.coordinator.get_fire_extinguisher_device()
+
+
+class ToolModuleEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
+    """Defines a base Tool Module entity (laser, rotary, cutter)."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information about this Tool Module entity."""
+        return self.coordinator.get_tool_module_device(self.module_serial)
+
+
 class HotendRackEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
     """Defines a base Hotend Rack entity."""
 
