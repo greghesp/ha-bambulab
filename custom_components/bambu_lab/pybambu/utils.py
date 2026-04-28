@@ -434,16 +434,19 @@ def safe_json_loads(raw_bytes):
 @functools.lru_cache(maxsize=8)
 def get_wiki_url_for_hms_error(hms_code: str, device_type: Printers):
 
+    default_url = "https://wiki.bambulab.com/en/hms/home"
     error_code = hms_code.replace("_", "")
     wiki_data = _load_compressed_json("wiki_links.json.gz")
     code_entry = wiki_data.get(error_code)
     if not code_entry:
-        return "https://wiki.bambulab.com/en/hms/home"
+        return default_url
 
     # Pick message matching device_type or default (empty list)
     for wiki_path, models in code_entry.items():
-        if not models or str(device_type) in models:
+        if str(device_type) in models:
             return f"https://wiki.bambulab.com{wiki_path}"
+        if not models:
+            default_url = f"https://wiki.bambulab.com{wiki_path}"
 
-    return "https://wiki.bambulab.com/en/hms/home"
+    return default_url
 
