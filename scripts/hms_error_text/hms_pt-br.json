@@ -51,17 +51,50 @@
     "03004014": {
       "Falha no eixo Z de homing: anormalidade no controle de temperatura.": []
     },
+    "03004015": {
+      "Falha na calibração da detecção de aglomeração do bico. Consulte o 'Assistente' para solução de problemas.": []
+    },
     "03004016": {
       "Falha na limpeza do bicos. Clique no Assistente para solução de problemas.": []
     },
     "0300401F": {
-      "O hotend correto não está instalado e o cabeçote não consegue realizar o retorno à posição inicial. Instale o hotend e continue.": []
+      "O hotend correto não está instalado e o cabeçote não consegue realizar o retorno à posição inicial. Instale o hotend e continue.": [
+        "H2D"
+      ],
+      "O hotend não está instalado e o cabeçote não consegue realizar o homing. Instale o hotend e continue.": []
     },
     "03004020": {
       "A detecção da presença do bocal falhou. Consulte o Assistente para obter detalhes.": []
     },
     "03004021": {
       "Anormalidade detectada no sinal do sensor de calibração do offset do bico. Por favor, verifique o sensor e tente novamente.": []
+    },
+    "03004030": {
+      "Z-axis homing failed. Remove the heated bed slider fixing screws and ensure no obstructions are blocking the heated bed's vertical movement. After resolving the issue, recalibrate the system.": []
+    },
+    "03004031": {
+      "O bico não foi instalado. Instale o bico e recalibre.": []
+    },
+    "03004032": {
+      "A calibração XY falhou. Remova quaisquer objetos estranhos que estejam obstruindo o movimento da cabeça de medição e recalibre.": []
+    },
+    "03004033": {
+      "Z-axis homing failed due to a temperature control abnormality. Scan the QR code for assistance. After resolving the issue, recalibrate the device.": []
+    },
+    "03004035": {
+      "Nozzle cleaning failed. Please scan the QR code for assistance. After resolving the issue, recalibrate.": []
+    },
+    "03004036": {
+      "Nozzle offset calibration failed. Please scan the QR code for assistance. After resolving the issue, recalibrate.": []
+    },
+    "03004037": {
+      "Nozzle clumping detection calibration failed. Please scan the QR code for assistance. After resolving the issue, recalibrate.": []
+    },
+    "03004038": {
+      "Falha no nivelamento da cama aquecida. Por favor, consulte as instruções de ajuda para resolver o problema e então recoloque a calibração no dispositivo.": []
+    },
+    "03004039": {
+      "A detecção da presença do bico falhou. Consulte as instruções de ajuda para resolver o problema e, em seguida, recalibre o dispositivo.": []
     },
     "03004042": {
       "A janela de segurança do laser não está instalada corretamente. A tarefa foi interrompida.": []
@@ -80,6 +113,12 @@
     },
     "03004052": {
       "Falha no posicionamento do eixo Z do Blade": []
+    },
+    "03004057": {
+      "Perda de passos no eixo Z detectada. A tarefa foi interrompida. Verifique se há alguma obstrução sob a mesa aquecida.": []
+    },
+    "03004059": {
+      "A peça no acessório rotativo colidiu com o Toolhead. A tarefa foi interrompida.": []
     },
     "03004066": {
       "A calibração da precisão do movimento falhou.": []
@@ -246,6 +285,15 @@
     "03008055": {
       "O módulo montado no cabeçote da ferramenta não corresponde à tarefa. Por favor, instale o módulo correto.": []
     },
+    "03008057": {
+      "O acessório rotativo está desconectado. Certifique-se de que esteja instalado corretamente e que o cabo esteja firmemente conectado.": []
+    },
+    "03008058": {
+      "O acessório rotativo foi detectado. Remova-o antes de continuar.": []
+    },
+    "03008059": {
+      "Perda de passo do motor detectada. Por favor, verifique a qualidade do processamento. Se a qualidade for aceitável, continue; caso contrário, interrompa a tarefa.": []
+    },
     "03008061": {
       "O modo do sistema de fluxo de ar falhou ao ser ativado; verifique a condição da porta de ar.": []
     },
@@ -260,6 +308,15 @@
     },
     "03008065": {
       "A temperatura do módulo MC está muito alta. Consulte o Wiki para obter possíveis explicações.": []
+    },
+    "0300806E": {
+      "Controle anormal de temperatura do bico detectado; o módulo de aquecimento pode estar danificado. Por favor, desligue imediatamente a alimentação e pare de usar o dispositivo.": []
+    },
+    "0300806F": {
+      "Foi detectado um aumento anormal de temperatura na mesa aquecida. O módulo de aquecimento pode estar danificado. Desligue o aparelho imediatamente e pare de usá-lo.": []
+    },
+    "03008070": {
+      "A temperatura do aquecedor da câmara está aumentando anormalmente e o módulo de aquecimento pode estar danificado. Desligue o aparelho imediatamente e pare de usá-lo.": []
     },
     "03008071": {
       "O módulo do ventilador de resfriamento aprimorado do cabeçote de ferramentas está com defeito.": []
@@ -472,6 +529,9 @@
     "0500403B": {
       "As tarefas de laser/corte não podem ser iniciadas na máquina no momento. Use o software do computador para iniciar a tarefa.": []
     },
+    "0500403C": {
+      "A configuração atual do bico não corresponde ao arquivo de fatiamento. Continuar imprimindo pode afetar a qualidade da impressão. Recomenda-se fatiar novamente antes de iniciar a impressão.": []
+    },
     "0500403D": {
       "Verifique se o cabeçote da ferramenta não está inicializado. Inicie a tarefa de impressão/gravação depois que a cabeça da ferramenta for inicializada.": []
     },
@@ -499,8 +559,23 @@
     "05004045": {
       "Verificação do Hotend em andamento. Esta operação está temporariamente indisponível. Aguarde.": []
     },
+    "05004046": {
+      "A impressão foi interrompida porque o arquivo 3MF é inválido. Verifique se o modelo de impressora correto foi selecionado durante o fatiamento ou atualize o Studio e fatie o arquivo novamente.": []
+    },
+    "05004047": {
+      "A impressão foi interrompida porque a quantidade ou o modelo do hotend disponível não corresponde ao arquivo fatiado. Verifique o modelo e a quantidade do hotend antes de reiniciar o trabalho de impressão.": []
+    },
+    "05004048": {
+      "O módulo alimentador está offline. Por favor, verifique se o cabo de conexão do módulo alimentador está solto.": []
+    },
+    "05004049": {
+      "Um módulo alimentador de reposição foi detectado. Por favor, assegure-se de que o engrenamento de extrusão correspondente e o bico tenham sido substituídos, e atualize manualmente o tipo de bico na impressora.": []
+    },
     "05004050": {
       "Erro detectado na placa de impressão.": []
+    },
+    "05004051": {
+      "Falha na adaptação dinâmica do arco. Por favor, fatie o modelo novamente antes de iniciar a impressão.": []
     },
     "05004052": {
       "Erro detectado na extremidade quente.": []
@@ -508,11 +583,26 @@
     "05004054": {
       "Erro detectado no tapete.": []
     },
+    "05004055": {
+      "Usar filamento não TPU com a hotend TPU de alto fluxo pode danificar a hotend. Por favor, verifique a compatibilidade entre o filamento e a hotend antes de iniciar a impressão.": []
+    },
+    "05004056": {
+      "O extrusor esquerdo não é compatível com o hotend de alto fluxo para TPU. Por favor, instale um hotend compatível e tente novamente.": []
+    },
+    "05004057": {
+      "O filament selecionado no slicer requer um bico mais resistente. Por favor, substitua o bico ou ajuste as configurações do filament antes de reimprimir.": []
+    },
     "0500405D": {
       "Erro no número de série do módulo laser: não é possível calibrar ou fazer o projeto.": []
     },
+    "0500405F": {
+      "Câmera BirdsEye não instalada. A calibração do módulo laser não pode ser realizada.": []
+    },
     "05004065": {
       "A tarefa requer uma plataforma a laser, mas a atual é uma plataforma de corte. Substitua-o, meça a espessura do material no software e reinicie a tarefa.": []
+    },
+    "05004066": {
+      "A calibração de deslocamento do bico de alta precisão suporta apenas PLA. O hotend atual para TPU não é compatível. Por favor, troque para um hotend compatível com PLA e tente novamente.": []
     },
     "05004070": {
       "O dispositivo foi conectado ao módulo laser ou cortador e não pode iniciar uma tarefa de impressão 3D.": []
@@ -523,6 +613,9 @@
     "05004076": {
       "Coloque a plataforma a laser corretamente e certifique-se de que os marcadores traseiros não estejam bloqueados e, em seguida, reinicie a medição de espessura no software antes de iniciar a tarefa.": []
     },
+    "05004095": {
+      "Nenhuma placa de impressão detectada. Por favor, posicione-a corretamente e recalibre.": []
+    },
     "05004097": {
       "Módulo laser não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo do módulo ou reinicie a impressora.": []
     },
@@ -530,16 +623,16 @@
       "AMS A não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS ou reinicie a impressora.": []
     },
     "05004099": {
-      "O firmware do Módulo de Corte não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do Módulo de Corte não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "0500409A": {
-      "O firmware da bomba de ar não corresponde ao da impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware da bomba de ar não corresponde ao da impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "0500409B": {
-      "O firmware do Módulo Laser não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do Módulo Laser não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "0500409D": {
-      "O firmware do AMS A não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS A não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "0500409E": {
       "Módulo de corte não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -548,10 +641,13 @@
       "Bomba de ar não certificada detectada; o dispositivo não pode continuar funcionando. Reconecte o cabo do módulo ou reinicie a impressora.": []
     },
     "050040A0": {
-      "Quarto eixo de laser não certificado detectado; o dispositivo não pode continuar funcionando.  Reconecte o cabo do módulo ou reinicie a impressora.": []
+      "O módulo de acessório rotativo não foi detectado. Reconecte o cabo ou reinicie a impressora.": []
     },
     "050040A1": {
       "Detectado extintor de incêndio não certificado; o dispositivo não pode continuar funcionando.  Reconecte o cabo do módulo ou reinicie a impressora.": []
+    },
+    "050040A2": {
+      "O dispositivo não consegue detectar o Ventilador de Exaustão Externo. Por favor, reinicie a impressora ou reconecte o cabo do ventilador.": []
     },
     "050040A3": {
       "A comunicação do AMS (ou AMS Lite) A está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -562,6 +658,18 @@
     "050040A5": {
       "O firmware atual suporta apenas AMS, AMS 2 Pro e AMS HT. Remova todas as unidades AMS antes de reconectar os dispositivos suportados.": []
     },
+    "050040A6": {
+      "O download do arquivo falhou devido à falta de certificados. Verifique a configuração do certificado do Fleet Hub e reinicie a impressora antes de tentar novamente.": []
+    },
+    "050040A7": {
+      "O dispositivo não consegue detectar o Ventilador de Exaustão Externo. Por favor, reinicie a impressora ou reconecte o cabo do ventilador.": []
+    },
+    "050040A8": {
+      "O firmware do dispositivo requer uma atualização de reparo e a operação atual não pode ser realizada. Atualize-o na página 'Firmware'.": []
+    },
+    "050040C0": {
+      "Erro de comunicação detectado com AMS, AMS Lite ou AMS HT. Por favor, reconecte o cabo do módulo ou reinicie a impressora quando ela estiver inativa.": []
+    },
     "05008013": {
       "O arquivo de impressão não está disponível. Verifique se a mídia de armazenamento foi removida.": []
     },
@@ -571,11 +679,17 @@
     "05008036": {
       "Seu arquivo fatiado não é consistente com o modelo atual da impressora. Continuar?": []
     },
+    "0500803C": {
+      "A configuração atual do bico não corresponde ao arquivo de fatiamento. Continuar imprimindo pode afetar a qualidade da impressão. Recomenda-se fatiar novamente antes de iniciar a impressão.": []
+    },
     "05008040": {
       "A tampa frontal do cabeçote está solta. Mover o cabeçote pode danificar a impressora. Deseja continuar?": []
     },
     "05008041": {
       "O filamento no hotend está muito frio. A extrusão pode danificar o extrusor. Deseja continuar alimentando o filamento para dentro/fora?": []
+    },
+    "05008048": {
+      "O módulo no toolhead não está calibrado. Por favor, cancele a tarefa para realizar a calibração ou alterne para um módulo calibrado.": []
     },
     "05008051": {
       "A placa de construção atual não é a mesma do G-code. Pare o trabalho de impressão e substitua a placa de construção. Você também pode tocar em “Retomar” para forçar a retomada do trabalho de impressão.": []
@@ -586,11 +700,17 @@
         "H2D"
       ]
     },
+    "05008054": {
+      "O extrusor esquerdo não suporta o hotend de alto fluxo TPU. Por favor, substitua-o por um hotend compatível antes de continuar a impressão. Atenção: o hotend está quente.": []
+    },
     "05008055": {
       "Tipo de plataforma incorreto. Por favor, coloque a plataforma de corte para calibração a laser.": []
     },
     "05008056": {
       "Tipo de plataforma incorreto. Por favor, coloque a plataforma de corte para calibração de corte.": []
+    },
+    "05008057": {
+      "A dureza do filamento selecionada no fatiador excede a dureza atual do bico. Continuar a impressão pode causar desgaste do bico, levando a vazamentos e fluxo instável. Proceda com cautela.": []
     },
     "05008058": {
       "Coloque o tapete de corte Light Grip corretamente e certifique-se de que o marcador esteja exposto.": []
@@ -624,6 +744,9 @@
     },
     "05008064": {
       "Coloque a plataforma a laser corretamente e certifique-se de que os marcadores traseiros não estejam bloqueados para calibração a laser.": []
+    },
+    "05008065": {
+      "O extrusor esquerdo não é compatível com hotends de alto fluxo de TPU. A instalação forçada pode causar falha na troca do hotend. Substitua-o por outro hotend compatível.": []
     },
     "05008066": {
       "O tipo de almofada não corresponde; por favor, coloque uma almofada de corte.": []
@@ -751,8 +874,32 @@
     "05008093": {
       "A capa de silicone do bico não está instalada; há risco de falha no controle de temperatura. Por favor, instale corretamente e tente novamente.": []
     },
+    "05008096": {
+      "A configuração da Câmera BirdsEye falhou. Por favor, certifique-se de que a Câmera BirdsEye está instalada corretamente e remova quaisquer obstruções que possam bloquear a visão da câmera.": []
+    },
+    "05008097": {
+      "Falha na inicialização da BirdsEye Camera. A câmera do toolhead não detectou as características da mesa aquecida.": []
+    },
+    "05008098": {
+      "Material não detectado. Confirme a colocação do material e continue.": []
+    },
+    "05008099": {
+      "A IA detectou um possível deslocamento ou colapso da impressão. Verifique o estado da impressão e tome as medidas adequadas imediatamente.": []
+    },
+    "0500809A": {
+      "Substitua a placa do codificador de visão pela placa de impressão para evitar danos durante a calibração.": []
+    },
+    "0500809B": {
+      "A plataforma de impressão não está posicionada corretamente e pode colidir com o tubo de descarte de resíduos. Por favor, reposicione a plataforma de impressão e alinhe-a com a mesa aquecida.": []
+    },
     "050080A0": {
       "A placa codificadora de visão não foi detectada. Confirme se ele está posicionado corretamente na cama térmica.": []
+    },
+    "050080A6": {
+      "O acessório rotativo foi detectado. Remova-o antes de continuar.": []
+    },
+    "050080A7": {
+      "O acessório rotativo está desconectado. Certifique-se de que ele esteja instalado corretamente e que o cabo esteja firmemente conectado.": []
     },
     "0500C010": {
       "Exceção de leitura e gravação da unidade flash USB; reinsira-a ou substitua-a.": [
@@ -775,8 +922,32 @@
     "0500C036": {
       "Essa é uma tarefa de impressão. Por favor, desconecte o módulo de laser/corte da cabeça da ferramenta.": []
     },
+    "0500C04A": {
+      "AMS está calibrando, lendo RFID ou carregando/descarregando material, incapaz de iniciar o processo de secagem, por favor aguarde.": []
+    },
+    "0500C04B": {
+      "Filamento na saída do AMS, a alta temperatura de secagem pode causar bloqueio do AMS. A secagem não pode ser iniciada. Por favor, descarregue o filamento primeiro.": []
+    },
+    "0500C04C": {
+      "O AMS está atualmente secando. Por favor, não reinicie o processo.": []
+    },
+    "0500C04D": {
+      "O dispositivo está atualmente no modo laser ou corte e não pode iniciar a secagem. Por favor, não inicie o processo de secagem.": []
+    },
+    "0500C04E": {
+      "Por favor, conecte um adaptador de energia ao AMS-HT antes de iniciar o processo de secagem.": []
+    },
+    "0500C04F": {
+      "O AMS está secando e não pode realizar esta operação no momento.": []
+    },
+    "0500C059": {
+      "O dispositivo está apagando um incêndio. Por favor, aguarde antes de operá-lo.": []
+    },
     "0500C07F": {
       "O dispositivo está ocupado e não pode realizar essa operação. Para continuar, pause ou interrompa a tarefa atual.": []
+    },
+    "0500C080": {
+      "A extrusora está em funcionamento e não pode executar esta operação. Para prosseguir, pause ou interrompa a tarefa atual.": []
     },
     "05014017": {
       "Falha na vinculação. Tente novamente ou reinicie a impressora e tente novamente.": []
@@ -860,7 +1031,7 @@
       "AMS B não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS ou reinicie a impressora.": []
     },
     "0501409D": {
-      "O firmware do AMS B não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS B não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "050140A3": {
       "A comunicação do AMS (ou AMS Lite) B está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -883,6 +1054,24 @@
     "05024006": {
       "Módulo desconhecido detectado, tente atualizar o firmware para a versão mais recente.": []
     },
+    "05024007": {
+      "": []
+    },
+    "05024008": {
+      "": []
+    },
+    "05024009": {
+      "": []
+    },
+    "0502400A": {
+      "": []
+    },
+    "0502400B": {
+      "": []
+    },
+    "0502400C": {
+      "": []
+    },
     "0502400D": {
       "Falha ao iniciar uma nova tarefa: o carregamento/descarregamento do filamento não foi concluído.": []
     },
@@ -892,11 +1081,26 @@
     "05024013": {
       "Este dispositivo não é compatível com o módulo laser de 40 W. Substitua-o por um módulo laser de 10 W ou remova-o.": []
     },
+    "05024027": {
+      "O AMS atual não suporta secagem durante a impressão. Por favor, conecte-se à rede e atualize o firmware do AMS na página 'Firmware'.": []
+    },
+    "0502402D": {
+      "A impressão foi interrompida porque a impressora não conseguiu analisar o arquivo. Por favor, envie seu trabalho de impressão novamente.": []
+    },
+    "0502402E": {
+      "A impressão foi interrompida porque a impressora não conseguiu analisar o arquivo. Por favor, envie seu trabalho de impressão novamente.": []
+    },
+    "0502402F": {
+      "A impressão foi interrompida porque a impressora não conseguiu analisar o arquivo. Por favor, envie seu trabalho de impressão novamente.": []
+    },
+    "05024030": {
+      "A impressão foi interrompida porque a impressora não conseguiu analisar o arquivo. Por favor, envie seu trabalho de impressão novamente.": []
+    },
     "05024098": {
       "Detectado AMS C não certificado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS ou reinicie a impressora.": []
     },
     "0502409D": {
-      "O firmware do AMS C não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS C não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "050240A3": {
       "A comunicação do AMS (ou AMS Lite) C está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -916,20 +1120,44 @@
     "0502C014": {
       "A estimativa de filamento restante do AMS é habilitada por padrão e não pode ser desabilitada.": []
     },
+    "0502C024": {
+      "Os registros de calibração da dinâmica de fluxo excederam o limite de armazenamento. Exclua alguns registros antigos no software de fatiamento antes de adicionar novos dados de calibração.": []
+    },
+    "0502C026": {
+      "O dispositivo está ocupado com a tarefa atual e não pode realizar esta operação no momento. Por favor, tente novamente mais tarde.": []
+    },
+    "0502C028": {
+      "O filamento atualmente carregado no extrusor não suporta alimentação manual.": []
+    },
+    "0502C031": {
+      "Verifique e remova quaisquer peças impressas ou detritos da superfície da mesa aquecida antes de prosseguir com a prensagem a frio.": []
+    },
+    "0502C032": {
+      "Verifique e remova quaisquer partes impressas ou detritos da superfície e da parte inferior da mesa aquecida antes de continuar o processo de secagem.": []
+    },
+    "0502C034": {
+      "Falha na troca da extrusora e a ação atual não foi executada. Por favor, vá até a tela da extrusora, verifique e complete a troca da extrusora, e então tente novamente.": []
+    },
     "05034098": {
       "AMS D não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS ou reinicie a impressora.": []
     },
     "0503409D": {
-      "O firmware do AMS D não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS D não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "050340A3": {
       "A comunicação do AMS (ou AMS Lite) D está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
+    },
+    "05104098": {
+      "O dispositivo não consegue detectar o AMS Lite. Por favor, reconecte o cabo do AMS Lite ou reinicie a impressora.": []
+    },
+    "0510409D": {
+      "O firmware do AMS lite não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "05804096": {
       "AMS-HT A não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0580409C": {
-      "O firmware do AMS-HT A não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT A não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058040A2": {
       "A comunicação do AMS-HT A está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -938,7 +1166,7 @@
       "AMS-HT B não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0581409C": {
-      "O firmware do AMS-HT B não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT B não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058140A2": {
       "A comunicação do AMS-HT B está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -947,7 +1175,7 @@
       "AMS-HT C não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0582409C": {
-      "O firmware do AMS-HT C não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT C não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058240A2": {
       "A comunicação do AMS-HT C está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -956,7 +1184,7 @@
       "AMS-HT D não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0583409C": {
-      "O firmware do AMS-HT D não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT D não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058340A2": {
       "A comunicação do AMS-HT D está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -965,7 +1193,7 @@
       "AMS-HT F não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0584409C": {
-      "O firmware do AMS-HT E não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT E não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058440A2": {
       "A comunicação do AMS-HT E está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -974,7 +1202,7 @@
       "AMS-HT E não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0585409C": {
-      "O firmware do AMS-HT F não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT F não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058540A2": {
       "A comunicação do AMS-HT F está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -983,7 +1211,7 @@
       "AMS-HT G não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0586409C": {
-      "O firmware do AMS-HT G não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT G não corresponde à impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058640A2": {
       "A comunicação do AMS-HT G está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
@@ -992,10 +1220,13 @@
       "AMS-HT H não certificado detectado; o dispositivo não pode continuar funcionando. Reconecte o cabo AMS-HT ou reinicie a impressora.": []
     },
     "0587409C": {
-      "O firmware do AMS-HT H não é compatível com a impressora; o dispositivo não pode continuar funcionando. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do AMS-HT H não é compatível com a impressora; o dispositivo não pode continuar funcionando. Atualize-o na página 'Firmware'.": []
     },
     "058740A2": {
       "A comunicação do AMS-HT H está anormal. Por favor, reconecte o cabo do módulo ou reinicie a impressora.": []
+    },
+    "05FE4094": {
+      "O hotend esquerdo não está instalado. Instale o hotend e recalibre.": []
     },
     "05FE8053": {
       "O bocal esquerdo não combina com a lima de corte. Inicie a impressão após fatiar novamente ou continue imprimindo após substituir o bico correto. Cuidado: a temperatura da extremidade quente está alta.": []
@@ -1011,6 +1242,12 @@
     },
     "05FE8081": {
       "O hotend esquerdo não está instalado.": []
+    },
+    "05FF4094": {
+      "O hotend correto não está instalado. Instale o hotend e recalibre.": [
+        "H2D"
+      ],
+      "O hotend não está instalado. Instale o hotend e recalibre-o.": []
     },
     "05FF8053": {
       "O bocal direito não combina com a lima de corte. Inicie a impressão após fatiar novamente ou continue imprimindo após substituir o bico correto. Cuidado: a temperatura da extremidade quente está alta.": []
@@ -1094,6 +1331,9 @@
     "07008023": {
       "Falha no resfriamento da AMS A. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "0700C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "0700C069": {
       "Ocorreu um erro durante a secagem do AMS A. Acesse o Assistente para obter mais detalhes.": []
     },
@@ -1174,6 +1414,9 @@
     "07018023": {
       "Falha no resfriamento do AMS B. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "0701C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "0701C069": {
       "Ocorreu um erro durante a secagem do AMS B. Acesse o Assistente para obter mais detalhes.": []
     },
@@ -1231,7 +1474,7 @@
       "Desconexão do tubo de PTFE detectada. Verifique se o tubo de PTFE da AMS C à extrusora está conectado corretamente.": []
     },
     "07028010": {
-      "O motor auxiliar AMS está sobrecarregado. Verifique se o carretel ou o filamento estão presos. Após a solução de problemas, clique no botão &quot;Tentar novamente&quot;.": []
+      "O motor auxiliar AMS está sobrecarregado. Verifique se o carretel ou o filamento estão presos. Após a solução de problemas, clique no botão 'Tentar novamente'.": []
     },
     "07028011": {
       "O filamento AMS acabou. Por favor, coloque um novo filamento no AMS e clique no botão “Repetir”.": []
@@ -1258,6 +1501,9 @@
     },
     "07028023": {
       "Falha no resfriamento do AMS C. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "0702C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "0702C069": {
       "Ocorreu um erro durante a secagem do AMS C. Acesse o Assistente para obter mais detalhes.": []
@@ -1344,6 +1590,9 @@
     "07038023": {
       "Falha no resfriamento do AMS D. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "0703C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "0703C069": {
       "Ocorreu um erro durante a secagem do AMS D. Acesse o Assistente para obter mais detalhes.": []
     },
@@ -1412,6 +1661,9 @@
     "07048023": {
       "Falha no resfriamento do AMS E. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "0704C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "07054025": {
       "Falha ao ler as informações do filamento.": []
     },
@@ -1461,6 +1713,9 @@
     },
     "07058023": {
       "Falha no resfriamento do AMS F. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "0705C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "07064025": {
       "Falha ao ler as informações do filamento.": []
@@ -1512,6 +1767,9 @@
     "07068023": {
       "Falha no resfriamento do AMS G. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "0706C008": {
+      "O AMS utilizado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "07074025": {
       "Falha ao ler as informações do filamento.": []
     },
@@ -1561,6 +1819,9 @@
     },
     "07078023": {
       "Falha no resfriamento do AMS H. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "0707C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "07FE8001": {
       "Falha ao cortar o filamento da extrusora esquerda. Por favor, verifique o cortador.": []
@@ -1634,6 +1895,9 @@
     "07FEC012": {
       "Pressione o acoplador de tubo de PTFE preto e desconecte o tubo de PTFE. Depois de concluir a operação, clique em “Continuar”.": []
     },
+    "07FEC030": {
+      "O filamento especificado no fatiador acabou. A impressão foi pausada. Por favor, vá até a impressora para substituir o material e retomar a impressão.": []
+    },
     "07FF4001": {
       "O filamento ainda é carregado a partir do AMS depois de ter sido desativado. Descarregue o filamento, carregue do suporte do carretel e reinicie a impressão.": []
     },
@@ -1671,7 +1935,7 @@
       ]
     },
     "07FF8007": {
-      "Observe o bico. Se o filamento tiver sido extrudado, selecione &quot;Concluído&quot;; se não, empurre o filamento para frente levemente e selecione &quot;Tentar novamente&quot;.": [],
+      "Observe o bico. Se o filamento tiver sido extrudado, selecione 'Concluído'; se não, empurre o filamento para frente levemente e selecione 'Tentar novamente'.": [],
       "Observe o bocal da extrusora correta. Se o filamento tiver sido extrudado, selecione “Continuar”; se não estiver, empurre o filamento ligeiramente para frente e selecione “Tentar novamente”.": [
         "H2D"
       ],
@@ -1741,7 +2005,7 @@
       ]
     },
     "07FFC00A": {
-      "Observe o bico. Se o filamento tiver sido extrudado, selecione &quot;Continuar&quot;; caso contrário, empurre o filamento para frente levemente e selecione &quot;Tentar novamente&quot;.": [],
+      "Observe o bico. Se o filamento tiver sido extrudado, selecione 'Continuar'; caso contrário, empurre o filamento para frente levemente e selecione 'Tentar novamente'.": [],
       "Observe o bocal da extrusora correta. Se o filamento tiver sido extrudado, selecione “Continuar”; caso contrário, empurre o filamento ligeiramente para frente e selecione “Tentar novamente”.": [
         "H2D"
       ]
@@ -1751,15 +2015,18 @@
     },
     "07FFC011": {
       "Retire manualmente e lentamente o filamento da extrusora. Em seguida, clique em “Continuar”.": [],
-      "Segure o suporte da roda motriz, puxe lentamente o filamento do extrusor e pressione &quot;Continuar&quot;.": [
+      "Segure o suporte da roda motriz, puxe lentamente o filamento do extrusor e pressione 'Continuar'.": [
         "H2S"
       ]
     },
     "07FFC012": {
       "Pressione o acoplador de tubo de PTFE preto e desconecte o tubo de PTFE. Depois de concluir a operação, clique em “Continuar”.": [],
-      "Remova a tampa frontal e pendure-a no eixo X. Pressione o acoplador preto do tubo de PTFE e desconecte o tubo de PTFE. Após concluir a operação, clique em &quot;Continuar&quot;.": [
+      "Remova a tampa frontal e pendure-a no eixo X. Pressione o acoplador preto do tubo de PTFE e desconecte o tubo de PTFE. Após concluir a operação, clique em 'Continuar'.": [
         "P2S"
       ]
+    },
+    "07FFC030": {
+      "O filamento especificado no fatiador acabou. A impressão foi pausada. Por favor, vá até a impressora para substituir o material e retomar a impressão.": []
     },
     "0C004020": {
       "A configuração da câmera BirdsEye falhou. Limpe todos os objetos e remova o tapete. Certifique-se de que o marcador não esteja obstruído.": []
@@ -1847,6 +2114,12 @@
     },
     "0C008043": {
       "A IA detectou aglomeração de bicos. Verifique a condição do bico. Consulte o assistente para obter soluções.": []
+    },
+    "0C008053": {
+      "The rotary attachment is placed incorrectly. Please follow the illustration to place the rotary attachment correctly.": []
+    },
+    "0C008054": {
+      "Não foram detectadas as características de posicionamento do acessório rotativo. Certifique-se de que o posicionamento esteja correto e que as marcas de posicionamento estejam visíveis. Se confirmado, você pode ignorar este erro e continuar com a medição da foto.": []
     },
     "0C00C003": {
       "Possíveis defeitos foram detectados na primeira camada.": []
@@ -2100,6 +2373,9 @@
     "12FFC006": {
       "Por favor, alimente do suporte da bobina até que o sensor de filamento do cabeçote seja acionado.": []
     },
+    "12FFC030": {
+      "O filamento especificado no fatiador foi usado. A impressão está pausada. Por favor, vá até a máquina para substituir o material e retomar a impressão.": []
+    },
     "18004025": {
       "Falha ao ler as informações do filamento.": []
     },
@@ -2139,7 +2415,7 @@
       "Falha ao obter a tabela de mapeamento do AMS; selecione “Continuar” para tentar novamente.": []
     },
     "18008013": {
-      "Tempo limite de purga do filamento antigo: verifique se o filamento está preso ou se a extrusora está entupida.": []
+      "Tempo limite para purgar filamento antigo: verifique se o filamento está preso ou se a extrusora está entupida.": []
     },
     "18008016": {
       "A extrusora não está extrudando normalmente; consulte o Assistente. Depois de solucionar problemas. Se os defeitos forem aceitáveis, retome.": []
@@ -2152,6 +2428,9 @@
     },
     "18008023": {
       "Falha no resfriamento do AMS-HT A. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "1800C008": {
+      "O AMS utilizado na impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1800C069": {
       "Ocorreu um erro durante a secagem do AMS-HT A. Acesse o Assistente para obter mais detalhes.": []
@@ -2224,6 +2503,9 @@
     "18018023": {
       "Falha no resfriamento do AMS-HT B. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "1801C008": {
+      "O AMS usado na impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "1801C069": {
       "Ocorreu um erro durante a secagem do AMS-HT B. Acesse o Assistente para obter mais detalhes.": []
     },
@@ -2281,7 +2563,7 @@
       "Falha ao obter a tabela de mapeamento do AMS; selecione “Continuar” para tentar novamente.": []
     },
     "18028013": {
-      "Tempo limite de purga do filamento antigo: verifique se o filamento está preso ou se a extrusora está entupida.": []
+      "Tempo limite para purgar filamento antigo: verifique se o filamento está preso ou se a extrusora está entupida.": []
     },
     "18028016": {
       "A extrusora não está extrudando normalmente; consulte o Assistente. Depois de solucionar problemas. Se os defeitos forem aceitáveis, retome.": []
@@ -2294,6 +2576,9 @@
     },
     "18028023": {
       "Falha no resfriamento do AMS-HT C. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "1802C008": {
+      "O AMS utilizado na impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1802C069": {
       "Ocorreu um erro durante a secagem do AMS-HT C. Acesse o Assistente para obter mais detalhes.": []
@@ -2352,7 +2637,7 @@
       "Falha ao obter a tabela de mapeamento do AMS; selecione “Continuar” para tentar novamente.": []
     },
     "18038013": {
-      "Tempo limite de purga do filamento antigo: verifique se o filamento está preso ou se a extrusora está entupida.": []
+      "Tempo limite para purga do filamento antigo: verifique se o filamento está preso ou se a extrusora está entupida.": []
     },
     "18038016": {
       "A extrusora não está extrudando normalmente; consulte o Assistente. Depois de solucionar problemas. Se os defeitos forem aceitáveis, retome.": []
@@ -2365,6 +2650,9 @@
     },
     "18038023": {
       "Falha no resfriamento do AMS-HT D. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "1803C008": {
+      "O AMS utilizado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1803C069": {
       "Ocorreu um erro durante a secagem do AMS-HT D. Acesse o Assistente para obter mais detalhes.": []
@@ -2434,6 +2722,9 @@
     "18048023": {
       "Falha no resfriamento do AMS-HT E. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "1804C008": {
+      "O AMS usado na impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "1804C069": {
       "Ocorreu um erro durante a secagem do AMS-HT E. Acesse o Assistente para obter mais detalhes.": []
     },
@@ -2501,6 +2792,9 @@
     },
     "18058023": {
       "Falha no resfriamento do AMS-HT F. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "1805C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1805C069": {
       "Ocorreu um erro durante a secagem do AMS-HT F. Acesse o Assistente para obter mais detalhes.": []
@@ -2570,6 +2864,9 @@
     "18068023": {
       "Falha no resfriamento do AMS-HT G. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
     },
+    "1806C008": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "1806C069": {
       "Ocorreu um erro durante a secagem do AMS-HT G. Acesse o Assistente para obter mais detalhes.": []
     },
@@ -2637,6 +2934,9 @@
     },
     "18078023": {
       "Falha no resfriamento do AMS-HT H. A temperatura ambiente pode estar muito alta. Opere o dispositivo em um ambiente adequado.": []
+    },
+    "1807C008": {
+      "O AMS utilizado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1807C069": {
       "Ocorreu um erro durante a secagem do AMS-HT H. Acesse o Assistente para obter mais detalhes.": []
@@ -2778,6 +3078,9 @@
     "0300010000010003": {
       "A temperatura da mesa aquecida é anormal; o aquecedor está acima da temperatura.": []
     },
+    "0300010000010005": {
+      "Foi detectado um problema no controle da temperatura da mesa aquecida e o módulo de aquecimento pode estar danificado. Desligue o dispositivo imediatamente e siga as instruções do Wiki para substituir a placa AC.": []
+    },
     "0300010000010006": {
       "A temperatura da mesa aquecida está anormal; o sensor pode ter um curto-circuito.": []
     },
@@ -2826,6 +3129,12 @@
       ],
       "A temperatura do bico é anormal; o aquecedor está acima da temperatura.": []
     },
+    "0300020000010005": {
+      "Foi detectado um controle anormal da temperatura do bico; o módulo de aquecimento pode estar danificado. Desconecte imediatamente a alimentação e pare de usar o dispositivo. Entre em contato com o suporte ao cliente para obter ajuda na resolução do problema.": [],
+      "Foi detectado um controle de temperatura anormal no bico extrusor direito; o módulo de aquecimento pode estar danificado. Desconecte imediatamente a alimentação e pare de usar o dispositivo. Entre em contato com o suporte ao cliente para obter ajuda na resolução do problema.": [
+        "H2D"
+      ]
+    },
     "0300020000010006": {
       "A temperatura correta do bico da extrusora está anormal; o sensor pode estar em curto-circuito. Verifique se o conector está conectado corretamente.": [
         "H2D"
@@ -2837,6 +3146,12 @@
         "H2D"
       ],
       "A temperatura do bico está anormal; o sensor pode ter um circuito aberto.": []
+    },
+    "0300020000010008": {
+      "A temperatura do bico da extrusora está anormal e não atinge o valor definido. Isso pode ser causado por uma luva de silicone do bico instalada incorretamente.": [],
+      "A temperatura do bico extrusor direito está anormal e não atinge o valor definido. Isso pode ser causado por uma luva de silicone no bico instalada incorretamente.": [
+        "H2D"
+      ]
     },
     "0300020000010009": {
       "O controle correto da temperatura do bico da extrusora é anormal; a extremidade quente pode não estar instalada. Se você quiser aquecer o hot end sem que ele seja instalado, ative o modo de manutenção na página de configurações.": [
@@ -2906,6 +3221,12 @@
     },
     "0300090000020005": {
       "A extrusora está extrudando de forma anormal. Ela pode estar obstruída, ou o filamento pode estar muito fino, fazendo com que a extrusora escorregue, ou o filamento montado externamente pode estar emaranhado.": []
+    },
+    "0300090000030007": {
+      "Anomalia na extrusão do filamento detectada. Tentando recuperar automaticamente, aguarde.": []
+    },
+    "0300090000030008": {
+      "Anomalia na extrusão do filamento detectada. Tentando recuperar automaticamente, aguarde.": []
     },
     "03000A0000010001": {
       "O sensor de força da mesa aquecida 1 é muito sensível. Ele pode estar preso entre o braço de tensão e o suporte da mesa aquecida ou o parafuso de ajuste pode estar muito apertado.": []
@@ -3104,6 +3425,15 @@
     "030018000001000C": {
       "Foi detectado um salto anômalo nos dados do sensor de força de extrusão do extrusor, possivelmente causado por mau contato do sensor ou sensor com defeito.": []
     },
+    "030018000001000D": {
+      "Falha na calibração da detecção de aglomeração do bico. Força excessiva detectada no bico. Certifique-se de que o bico esteja instalado corretamente.": []
+    },
+    "030018000001000E": {
+      "Falha na calibração da detecção de aglomeração do bico. O bico não alcançou a chapa metálica na parte traseira direita da mesa de aquecimento. Limpe o bico e remova quaisquer resíduos da chapa.": [
+        "H2S"
+      ],
+      "Falha na calibração da detecção de aglomeração do bico. O bico não tocou na parede interna do furo. Limpe o bico e o furo da placa de aço na parte traseira direita da mesa de aquecimento.": []
+    },
     "0300180000030009": {
       "Realizando nivelamento inicial da mesa em alta temperatura.": []
     },
@@ -3134,6 +3464,9 @@
     "03001D0000010001": {
       "O sensor de posição do motor de extrusão está anormal. O fio de sinal do sensor pode não estar conectado corretamente.": []
     },
+    "03001D000001000A": {
+      "Sobrecarga no motor do extrusor detectada. O motor pode estar com defeito.": []
+    },
     "03001E0000010001": {
       "A temperatura do bico esquerdo da extrusora está anormal; o aquecedor pode ter um curto-circuito.": []
     },
@@ -3143,11 +3476,17 @@
     "03001E0000010003": {
       "A temperatura do bico esquerdo da extrusora está anormal; o aquecedor está acima da temperatura.": []
     },
+    "03001E0000010005": {
+      "Foi detectado um controle de temperatura anormal no bico extrusor esquerdo; o módulo de aquecimento pode estar danificado. Desconecte imediatamente a alimentação e pare de usar o dispositivo. Entre em contato com o suporte ao cliente para obter ajuda na resolução do problema.": []
+    },
     "03001E0000010006": {
       "A temperatura do bico esquerdo da extrusora está anormal; o sensor pode estar em curto-circuito, verifique se o conector está conectado corretamente.": []
     },
     "03001E0000010007": {
       "A temperatura do bico esquerdo da extrusora está anormal; o sensor pode ter um circuito aberto.": []
+    },
+    "03001E0000010008": {
+      "A temperatura do bico extrusor esquerdo está anormal e não atinge o valor definido. Isso pode ser causado por uma luva de silicone no bico instalada incorretamente.": []
     },
     "03001E0000010009": {
       "O controle de temperatura do bico esquerdo da extrusora está anormal; a extremidade quente pode não estar instalada. Se você quiser aquecer o hot end sem que ele seja instalado, ative o modo de manutenção na página de configurações.": []
@@ -3292,6 +3631,9 @@
     "03002D0000030009": {
       "Realizando o nivelamento inicial da mesa em alta temperatura.": []
     },
+    "03002E0000030001": {
+      "Os dados de cancelamento de ruído do motor precisam ser atualizados; por favor, recalibre.": []
+    },
     "0300310000010001": {
       "A velocidade do ventilador de resfriamento parcial está muito lenta ou parada. Ele pode estar preso ou o conector pode não estar conectado corretamente.": []
     },
@@ -3343,6 +3685,9 @@
     "0300400000020001": {
       "A transmissão de dados pela porta serial está anormal; o sistema de software pode estar com defeito.": []
     },
+    "0300400000020002": {
+      "Erro nos dados do código G detectado. O sistema recarregou automaticamente o código G e retomou a impressão.": []
+    },
     "0300410000010001": {
       "A tensão do sistema é instável, acionando a função de proteção contra falha de energia.": []
     },
@@ -3364,6 +3709,9 @@
     "0300900000010005": {
       "Falha no aquecimento da câmara. A resistência térmica é muito alta.": []
     },
+    "0300900000010007": {
+      "Alta temperatura detectada na câmara. Se o bico extrusor estiver superaquecendo ou emitindo fumaça, desligue a impressora imediatamente. Consulte o Wiki para obter instruções detalhadas de solução de problemas.": []
+    },
     "0300900000010010": {
       "A comunicação do controlador de temperatura da câmara está anormal.": []
     },
@@ -3375,6 +3723,9 @@
     },
     "0300910000010003": {
       "A temperatura do aquecedor da câmara 1 está anormal. O aquecedor está acima da temperatura.": []
+    },
+    "0300910000010005": {
+      "Foi detectado um problema no controle de temperatura do aquecedor da câmara e o módulo de aquecimento pode estar danificado. Desligue o dispositivo imediatamente e siga as instruções do Wiki para substituir a placa AC.": []
     },
     "0300910000010006": {
       "A temperatura do aquecedor de câmara 1 está anormal. O sensor pode ter um curto-circuito.": []
@@ -3408,6 +3759,9 @@
     },
     "0300920000010007": {
       "A temperatura do aquecedor da câmara 2 está anormal. O sensor pode ter um circuito aberto.": []
+    },
+    "0300920000010008": {
+      "O aquecedor de câmara 2 não conseguiu atingir a temperatura alvo.": []
     },
     "030092000001000A": {
       "A temperatura do aquecedor da câmara 2 está anormal. A placa AC pode estar quebrada.": []
@@ -3626,6 +3980,9 @@
     "0300A80000010001": {
       "Anormalidade na fonte de alimentação do AMS, possivelmente devido a danos no AMS ou a um curto-circuito na interface do AMS, ou a muitas conexões do AMS. Verifique se está conectado corretamente.": []
     },
+    "0300AD0000030001": {
+      "A temperatura da câmara está alta; a função do filtro foi desligada automaticamente para evitar uma pausa na impressão.": []
+    },
     "0300C00000010001": {
       "Avaria na porta de ar de exaustão da câmara ativa: pode estar presa.": []
     },
@@ -3689,17 +4046,26 @@
     "0300D60000010007": {
       "O reset do motor do extintor de incêndio está travado. Gire suavemente o volante de emergência para a esquerda e para a direita até que a resistência diminua. Em seguida, desligue o extintor de incêndio e ligue-o novamente.": []
     },
+    "0300D70000010003": {
+      "A peça de trabalho no acessório rotativo colidiu com a cabeça de ferramenta. Substitua por uma peça de trabalho com tamanho adequado e tente novamente. Veja a Wiki para os intervalos de tamanho suportados.": []
+    },
     "0300D70000020001": {
-      "O quarto eixo do laser não está conectado": []
+      "O acessório rotativo está desconectado. Certifique-se de que esteja instalado corretamente e que o cabo esteja firmemente conectado.": []
+    },
+    "0300D70000020002": {
+      "O acessório rotativo foi detectado. Remova-o antes de continuar.": []
     },
     "0300D80000010001": {
-      "O motor do quarto eixo do laser está com circuito aberto. Pode haver uma conexão solta ou o motor pode ter falhado.": []
+      "O motor do acessório rotativo apresenta um circuito aberto. Pode haver uma conexão solta ou o motor pode ter falhado.": []
     },
     "0300D80000010002": {
-      "Erro no motor do quarto eixo do laser. Desligue e ligue novamente para reiniciar o motor do quarto eixo do laser.": []
+      "Ocorreu um erro no motor do acessório rotativo. Desligue e ligue novamente o aparelho para reiniciar o acessório rotativo.": []
     },
     "0300D90000020001": {
-      "Erro de comunicação entre o motor do quarto eixo do laser e o sensor de posição. Se a reinicialização falhar, entre em contato com o suporte ao cliente.": []
+      "Erro de comunicação entre o motor do acessório rotativo e o sensor de posição. Se a reinicialização não resolver o problema, entre em contato com o suporte ao cliente.": []
+    },
+    "0300DB0000020001": {
+      "Módulo laser detectado. Instale o bico corretamente para garantir a calibração adequada da montagem do módulo laser.": []
     },
     "050001000001000A": {
       "": []
@@ -3754,6 +4120,9 @@
     "0500010000030009": {
       "": []
     },
+    "0500010000030015": {
+      "O armazenamento interno da impressora está baixo e a gravação em timelapse pode falhar. Exclua arquivos do armazenamento interno para liberar espaço e tente gravar novamente.": []
+    },
     "0500020000020001": {
       "Falha na conexão com a Internet. Verifique a conexão de rede.": []
     },
@@ -3778,8 +4147,29 @@
     "0500020000020008": {
       "Falha na sincronização de horário.": []
     },
+    "0500020000020009": {
+      "": []
+    },
+    "050002000002000A": {
+      "": []
+    },
+    "050002000002000B": {
+      "": []
+    },
+    "0500020000030009": {
+      "": []
+    },
+    "050002000003000A": {
+      "": []
+    },
+    "050002000003000B": {
+      "": []
+    },
+    "050002000003000C": {
+      "": []
+    },
     "0500030000010001": {
-      "O módulo MC está com defeito; reinicie o dispositivo ou verifique a conexão do cabo do dispositivo.": []
+      "O módulo MC está com defeito; reinicie o dispositivo ou verifique a conexão do cabo do dispositivo": []
     },
     "0500030000010002": {
       "O cabeçote da ferramenta está com defeito. Reinicie o dispositivo.": []
@@ -3815,7 +4205,7 @@
       "O módulo controlador do motor MC está com defeito. Desligue, verifique a conexão e reinicie o dispositivo.": []
     },
     "050003000001000E": {
-      "Alguns módulos externos são incompatíveis com a versão de firmware da impressora, o que pode afetar o funcionamento normal. Acesse a página &quot;Firmware&quot; enquanto estiver conectado à internet para atualizar.": []
+      "Alguns módulos externos são incompatíveis com a versão de firmware da impressora, o que pode afetar o funcionamento normal. Acesse a página 'Firmware' enquanto estiver conectado à internet para atualizar.": []
     },
     "0500030000010021": {
       "Hardware incompatível; Por favor, verifique o laser.": [
@@ -3837,6 +4227,9 @@
     "0500030000010026": {
       "O módulo de expansão Toolhead está com defeito. Desligue, verifique a conexão e reinicie o dispositivo.": []
     },
+    "0500030000010053": {
+      "": []
+    },
     "050003000002000C": {
       "Erro de hardware sem fio: desligue/ligue o WiFi ou reinicie o dispositivo.": []
     },
@@ -3844,7 +4237,7 @@
       "O controlador do cartão SD está com defeito.": []
     },
     "050003000002000E": {
-      "Alguns módulos externos são incompatíveis com a versão de firmware da impressora, o que pode afetar o funcionamento normal. Acesse a página &quot;Firmware&quot; enquanto estiver conectado à internet para atualizar.": []
+      "Alguns módulos externos são incompatíveis com a versão de firmware da impressora, o que pode afetar o funcionamento normal. Acesse a página 'Firmware' enquanto estiver conectado à internet para atualizar.": []
     },
     "0500030000020010": {
       "": []
@@ -3873,6 +4266,9 @@
     "0500030000020018": {
       "": []
     },
+    "0500030000020019": {
+      "": []
+    },
     "0500030000020020": {
       "A capacidade da unidade flash USB é insuficiente para armazenar em cache os arquivos de impressão.": [
         "P2S",
@@ -3880,6 +4276,21 @@
         "H2D"
       ],
       "A capacidade do cartão Micro SD é insuficiente para armazenar em cache os arquivos de impressão.": []
+    },
+    "0500030000020050": {
+      "": []
+    },
+    "0500030000020051": {
+      "": []
+    },
+    "0500030000020052": {
+      "": []
+    },
+    "0500030000020053": {
+      "": []
+    },
+    "0500030000020054": {
+      "": []
     },
     "0500030000020055": {
       "As informações do usuário expiraram, faça login novamente.": []
@@ -3905,17 +4316,20 @@
     "0500040000010006": {
       "Falha ao retomar a impressão anterior.": []
     },
+    "0500040000010025": {
+      "Foi detectada uma conexão anormal entre o AMS/AMS Lite e o dispositivo. Consulte o Wiki para fazer o ajuste.": []
+    },
     "0500040000010044": {
       "O firmware do AMS A não corresponde à impressora. Atualize-o na página “Firmware”.": []
     },
     "0500040000010046": {
-      "O firmware do Módulo Laser não corresponde à impressora. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do Módulo Laser não corresponde à impressora. Atualize-o na página 'Firmware'.": []
     },
     "0500040000010047": {
-      "O firmware da bomba de ar não corresponde ao da impressora. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware da bomba de ar não corresponde ao da impressora. Atualize-o na página 'Firmware'.": []
     },
     "0500040000010048": {
-      "O firmware do Módulo de Corte não corresponde à impressora. Atualize-o na página &quot;Firmware&quot;.": []
+      "O firmware do Módulo de Corte não corresponde à impressora. Atualize-o na página 'Firmware'.": []
     },
     "0500040000010049": {
       "Erro de comunicação detectado com AMS, AMS Lite ou AMS HT. Por favor, reconecte o cabo do módulo ou reinicie a impressora quando ela estiver inativa.": []
@@ -3928,6 +4342,15 @@
     },
     "0500040000010052": {
       "A chave de segurança não está inserida. Siga o Wiki para instalá-lo.": []
+    },
+    "0500040000010056": {
+      "": []
+    },
+    "0500040000010060": {
+      "": []
+    },
+    "0500040000010061": {
+      "": []
     },
     "0500040000020007": {
       "A temperatura da mesa excede a temperatura de vitrificação do filamento, o que pode causar um entupimento no bico. Mantenha a porta frontal da impressora aberta ou diminua a temperatura da mesa.": []
@@ -4013,6 +4436,9 @@
     "0500040000020039": {
       "Por favor, conecte o conector do módulo": []
     },
+    "0500040000020040": {
+      "O hotend específico para TPU não é compatível com o extrusor esquerdo. Por favor, substitua-o por outro hotend compatível.": []
+    },
     "0500040000020041": {
       "O módulo laser é usado há muito tempo. Limpe-o imediatamente para evitar afetar o processamento a laser.": []
     },
@@ -4033,6 +4459,9 @@
     },
     "0500040000030054": {
       "Sistema automático de extinção de incêndio detectado. Recomenda-se realizar um simulado de incêndio para familiarizar com o processo de operação.": []
+    },
+    "0500040000030057": {
+      "A impressão foi concluída. A purificação automática do ar está em andamento.": []
     },
     "0500050000010001": {
       "Os dados de fábrica da placa AP são anormais; substitua a placa AP por uma nova.": []
@@ -4089,13 +4518,25 @@
       "Falha na certificação do módulo de corte. Reconecte o cabo ou reinicie a impressora.": []
     },
     "0500050000010018": {
-      "Falha na certificação do módulo Laser Fourth Axis. Reconecte o cabo do módulo ou reinicie a impressora.": []
+      "A certificação do módulo de fixação rotativa falhou. Reconecte o cabo ou reinicie a impressora.": []
     },
     "0500050000010019": {
       "Falha na certificação do módulo extintor de incêndio. Reconecte o cabo do módulo ou reinicie a impressora.": []
     },
+    "050005000001001A": {
+      "Falha na certificação do módulo laser. Reconecte o cabo ou reinicie a impressora.": []
+    },
+    "050005000001001B": {
+      "Erro de comunicação com o acessório Ethernet. Reinicie o dispositivo.": []
+    },
     "0500050000010021": {
       "Falha na autenticação do kit de lapso de tempo. Reconecte o cabo ou reinicie a impressora.": []
+    },
+    "0500050000010022": {
+      "A certificação do Ventilador de Exaustão Externo falhou. Por favor, reinicie a impressora ou reconecte o cabo do ventilador.": []
+    },
+    "0500050000020023": {
+      "": []
     },
     "0500050000020030": {
       "": []
@@ -4127,6 +4568,9 @@
     "0500060000020008": {
       "": []
     },
+    "0500060000020009": {
+      "": []
+    },
     "0500060000020011": {
       "": []
     },
@@ -4137,6 +4581,9 @@
       "": []
     },
     "0500060000020014": {
+      "": []
+    },
+    "0500060000020015": {
       "": []
     },
     "0500060000020021": {
@@ -4151,6 +4598,9 @@
     "0500060000020024": {
       "": []
     },
+    "0500060000020025": {
+      "": []
+    },
     "0500060000020031": {
       "A encadernação da câmera Toolhead falhou. Verifique as conexões do hardware e dos cabos.": []
     },
@@ -4163,6 +4613,9 @@
     "0500060000020034": {
       "A câmera Live View não está conectada. Verifique as conexões do hardware e dos cabos.": []
     },
+    "0500060000020035": {
+      "": []
+    },
     "0500060000020041": {
       "": []
     },
@@ -4173,6 +4626,9 @@
       "": []
     },
     "0500060000020044": {
+      "": []
+    },
+    "0500060000020045": {
       "": []
     },
     "0500060000020051": {
@@ -4193,11 +4649,38 @@
     "0500060000020062": {
       "": []
     },
+    "0500060000020070": {
+      "": []
+    },
+    "0500060000020071": {
+      "": []
+    },
     "05000600000200A0": {
       "": []
     },
     "05000600000200A1": {
       "": []
+    },
+    "0500070000020001": {
+      "": []
+    },
+    "0500070000020002": {
+      "": []
+    },
+    "0500070000020003": {
+      "": []
+    },
+    "0500070000020101": {
+      "": []
+    },
+    "0500070000020201": {
+      "": []
+    },
+    "05001A0000010001": {
+      "O módulo alimentador está offline. Por favor, verifique se o cabo de conexão do módulo alimentador está solto.": []
+    },
+    "05001A0000010002": {
+      "Foi detectada a substituição do módulo de alimentação. Por favor, certifique-se de que o engrenagem de extrusão correspondente e o bico foram substituídos, e atualize manualmente o tipo de bico na impressora.": []
     },
     "0500400000010039": {
       "Erro no número de série do módulo laser": []
@@ -4223,6 +4706,9 @@
         "H2D"
       ]
     },
+    "0501040000030007": {
+      "Por favor, limpe ou substitua o filtro de ar.": []
+    },
     "0501040000030010": {
       "O módulo a laser está empoeirado e precisa ser limpo agora.": []
     },
@@ -4240,6 +4726,15 @@
     },
     "0502050000010014": {
       "Falha na certificação AMS C. Reconecte o cabo ou reinicie a impressora.": []
+    },
+    "0503000000030027": {
+      "": []
+    },
+    "0503000000030028": {
+      "": []
+    },
+    "0503000000030029": {
+      "": []
     },
     "0503040000010044": {
       "O firmware do AMS D não corresponde à impressora. Atualize-o na página “Firmware”.": []
@@ -4261,6 +4756,12 @@
     },
     "0507050000010010": {
       "O AMS H não certificado foi detectado ou o firmware do AMS H não foi atualizado. Não é possível operar com esta impressora.": []
+    },
+    "0510040000010044": {
+      "O firmware da bomba de ar não corresponde ao da impressora. Atualize-o na página 'Firmware'.": []
+    },
+    "0510050000010014": {
+      "Falha na certificação AMS D. Reconecte o cabo ou reinicie a impressora.": []
     },
     "0580040000010045": {
       "O firmware do AMS-HT A não corresponde à impressora. Atualize-o na página “Firmware”.": []
@@ -4520,6 +5021,9 @@
     "0700200000020025": {
       "A resistência de alimentação do slot 1 do AMS A está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
     },
+    "0700200000020057": {
+      "A etiqueta RFID no slot 1 do AMS A não pôde ser identificada.": []
+    },
     "0700200000030001": {
       "O filamento AMS A Slot 1 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -4622,6 +5126,9 @@
     "0700210000020025": {
       "A resistência de alimentação do slot 2 do AMS A está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
     },
+    "0700210000020057": {
+      "A etiqueta RFID no slot 2 do AMS A não pôde ser identificada.": []
+    },
     "0700210000030001": {
       "O filamento AMS A Slot 2 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -4716,13 +5223,16 @@
       "AMS Um motor de assistência com ranhura 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0700220000020023": {
-      "O slot 3 do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "O slot 3 do AMS está quebrado, ou o tubo dentro do AMS está danificado, ou o sensor hall de alimentação está com defeito e não consegue detectar o filament.": []
     },
     "0700220000020024": {
       "AMS Um slot 3 não conseguiu girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
     },
     "0700220000020025": {
       "A resistência de alimentação do slot 3 do AMS A está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente dobrado.": []
+    },
+    "0700220000020057": {
+      "A etiqueta RFID no slot 3 do AMS A não pôde ser identificada.": []
     },
     "0700220000030001": {
       "O filamento AMS A Slot 3 acabou. Aguarde enquanto o filamento antigo é purgado.": []
@@ -4818,13 +5328,16 @@
       "AMS Um motor de assistência com ranhura 4 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0700230000020023": {
-      "O slot 4 do tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "O slot 4 do tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "0700230000020024": {
       "AMS Um slot 4 não conseguiu girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
     },
     "0700230000020025": {
       "A resistência de alimentação do slot 4 do AMS A está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente dobrado.": []
+    },
+    "0700230000020057": {
+      "A etiqueta RFID no slot 4 do AMS A não pôde ser identificada.": []
     },
     "0700230000030001": {
       "O filamento AMS A Slot 4 acabou. Aguarde enquanto o filamento antigo é purgado.": []
@@ -4883,6 +5396,12 @@
     "0700400000020004": {
       "O sinal do buffer do filamento está anormal; a mola pode estar presa ou o filamento pode estar emaranhado.": []
     },
+    "0700400000020005": {
+      "O sensor Hall de detecção de emaranhamento de filamentos está danificado. Consulte o Wiki para obter instruções de substituição.": []
+    },
+    "0700400000020006": {
+      "Foi detectado um curto-circuito no sensor Hall de detecção de emaranhamento de filamentos. Consulte o Wiki para obter instruções de substituição.": []
+    },
     "0700450000020001": {
       "O sensor do cortador de filamento está com defeito; verifique se o conector está conectado corretamente.": []
     },
@@ -4895,8 +5414,14 @@
     "0700500000020001": {
       "A comunicação AMS A está anormal; verifique o cabo de conexão.": []
     },
+    "0700500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "0700510000030001": {
       "O AMS está desativado; carregue o filamento do suporte do carretel.": []
+    },
+    "0700520000030001": {
+      "Foi detectado um número ou tipo anormal de unidades AMS conectadas. Consulte o Wiki para obter informações sobre as combinações de AMS suportadas e ajuste a conexão atual.": []
     },
     "0700550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -5080,8 +5605,14 @@
     "0700940000010001": {
       "AMS A O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0700940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS A apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "0700950000010001": {
       "AMS A O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0700950000010002": {
+      "O sensor de temperatura 2 do aquecedor AMS A apresentou falha, resultando em leituras anormais de temperatura.": []
     },
     "0700960000010001": {
       "AMS A O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -5290,6 +5821,9 @@
     "0701200000020025": {
       "A resistência de alimentação do slot 1 do AMS B está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
     },
+    "0701200000020057": {
+      "A etiqueta RFID no slot 1 do AMS B não pôde ser identificada.": []
+    },
     "0701200000030001": {
       "O filamento AMS B Slot 1 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -5391,6 +5925,9 @@
     },
     "0701210000020025": {
       "A resistência de alimentação do slot 2 do AMS B está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
+    },
+    "0701210000020057": {
+      "A etiqueta RFID no slot 2 do AMS B não pôde ser identificada.": []
     },
     "0701210000030001": {
       "O filamento AMS B Slot 2 acabou. Aguarde enquanto o filamento antigo é purgado.": []
@@ -5494,6 +6031,9 @@
     "0701220000020025": {
       "A resistência de alimentação do slot 3 do AMS B está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
     },
+    "0701220000020057": {
+      "A etiqueta RFID no slot 3 do AMS B não pôde ser identificada.": []
+    },
     "0701220000030001": {
       "O filamento AMS B Slot 3 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -5596,6 +6136,9 @@
     "0701230000020025": {
       "A resistência de alimentação do slot 4 do AMS B está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
     },
+    "0701230000020057": {
+      "A etiqueta RFID no slot 4 do AMS B não pôde ser identificada.": []
+    },
     "0701230000030001": {
       "O filamento AMS B Slot 4 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -5646,6 +6189,9 @@
     },
     "0701500000020001": {
       "A comunicação AMS B está anormal; verifique o cabo de conexão.": []
+    },
+    "0701500000020002": {
+      "O AMS utilizado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "0701550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -5826,8 +6372,14 @@
     "0701940000010001": {
       "AMS B O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0701940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS B apresentou falha, resultando em leituras de temperatura anormais.": []
+    },
     "0701950000010001": {
       "AMS B O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0701950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS B apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "0701960000010001": {
       "AMS B O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -6036,6 +6588,9 @@
     "0702200000020025": {
       "A resistência de alimentação do slot 1 do AMS C está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
     },
+    "0702200000020057": {
+      "A etiqueta RFID no slot 1 do AMS C não pôde ser identificada.": []
+    },
     "0702200000030001": {
       "O filamento AMS C Slot 1 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -6138,6 +6693,9 @@
     "0702210000020025": {
       "A resistência de alimentação do slot 2 do AMS C está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
     },
+    "0702210000020057": {
+      "A etiqueta RFID no slot 2 do AMS C não pôde ser identificada.": []
+    },
     "0702210000030001": {
       "O filamento AMS C Slot 2 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -6232,13 +6790,16 @@
       "O motor de assistência AMS C slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0702220000020023": {
-      "Slot 3 do AMS C: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 3 do AMS C: o tubo dentro do AMS está quebrado ou o sensor Hall de alimentação está com defeito e não consegue detectar o filamento.": []
     },
     "0702220000020024": {
       "O slot 3 do AMS C falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
     },
     "0702220000020025": {
       "A resistência de alimentação do slot 3 do AMS C está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
+    },
+    "0702220000020057": {
+      "A etiqueta RFID no slot 3 do AMS C não pôde ser identificada.": []
     },
     "0702220000030001": {
       "O filamento AMS C Slot 3 acabou. Aguarde enquanto o filamento antigo é purgado.": []
@@ -6334,13 +6895,16 @@
       "O motor de assistência AMS C slot 4 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0702230000020023": {
-      "Slot 4 do AMS C: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 4 do AMS C: o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filament.": []
     },
     "0702230000020024": {
       "O slot 4 do AMS C falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
     },
     "0702230000020025": {
       "A resistência de alimentação do slot 4 do AMS C está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente dobrado.": []
+    },
+    "0702230000020057": {
+      "A etiqueta RFID no slot 4 do AMS C não pôde ser identificada.": []
     },
     "0702230000030001": {
       "O filamento AMS C Slot 4 acabou. Aguarde enquanto o filamento antigo é purgado.": []
@@ -6392,6 +6956,9 @@
     },
     "0702500000020001": {
       "A comunicação AMS C está anormal; verifique o cabo de conexão.": []
+    },
+    "0702500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "0702550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -6572,8 +7139,14 @@
     "0702940000010001": {
       "AMS C O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0702940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS C apresentou falha, resultando em leituras de temperatura anormais.": []
+    },
     "0702950000010001": {
       "AMS C O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0702950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS C apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "0702960000010001": {
       "AMS C O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -6782,6 +7355,9 @@
     "0703200000020025": {
       "A resistência de alimentação do slot 1 do AMS D está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente dobrado.": []
     },
+    "0703200000020057": {
+      "A etiqueta RFID no slot 1 do AMS D não pôde ser identificada.": []
+    },
     "0703200000030001": {
       "O filamento AMS D Slot 1 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -6884,6 +7460,9 @@
     "0703210000020025": {
       "A resistência de alimentação do slot 2 do AMS D está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente dobrado.": []
     },
+    "0703210000020057": {
+      "A etiqueta RFID no slot 2 do AMS D não pôde ser identificada.": []
+    },
     "0703210000030001": {
       "O filamento AMS D Slot 2 acabou. Aguarde enquanto o filamento antigo é purgado.": []
     },
@@ -6978,13 +7557,16 @@
       "O motor de assistência AMS D slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0703220000020023": {
-      "Slot 3 do AMS D: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 3 do AMS D: o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "0703220000020024": {
       "O slot 3 do AMS D falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
     },
     "0703220000020025": {
       "A resistência de alimentação do slot 3 do AMS D está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente curvado.": []
+    },
+    "0703220000020057": {
+      "A etiqueta RFID no slot 3 do AMS D não pôde ser identificada.": []
     },
     "0703220000030001": {
       "O filamento AMS D Slot 3 acabou. Aguarde enquanto o filamento antigo é purgado.": []
@@ -7080,13 +7662,16 @@
       "O motor de assistência AMS D slot 4 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0703230000020023": {
-      "Slot 4 do AMS D: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot D 4 do AMS, o tubo interno está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "0703230000020024": {
       "O slot 4 do AMS D falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
     },
     "0703230000020025": {
       "A resistência de alimentação do slot 4 do AMS D está muito alta. Reduza a resistência de alimentação, diminua a resistência à rotação do carretel e evite que o tubo do filamento fique muito longo e excessivamente dobrado.": []
+    },
+    "0703230000020057": {
+      "A etiqueta RFID no slot 4 do AMS D não pôde ser identificada.": []
     },
     "0703230000030001": {
       "O filamento AMS D Slot 4 acabou. Aguarde enquanto o filamento antigo é purgado.": []
@@ -7138,6 +7723,9 @@
     },
     "0703500000020001": {
       "A comunicação AMS D está anormal; verifique o cabo de conexão.": []
+    },
+    "0703500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "0703550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -7318,8 +7906,14 @@
     "0703940000010001": {
       "AMS D O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0703940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS D apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "0703950000010001": {
       "AMS D O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0703950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS D apresentou mau funcionamento, resultando em leituras anormais de temperatura.": []
     },
     "0703960000010001": {
       "AMS D O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -7826,7 +8420,7 @@
       "O motor de assistência AMS E slot 4 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0704230000020023": {
-      "Slot AMS E 4: o tubo dentro do AMS está quebrado.": []
+      "No slot E 4 do AMS, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "0704230000020024": {
       "O slot 4 do AMS E falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -7884,6 +8478,9 @@
     },
     "0704500000020001": {
       "A comunicação AMS E está anormal; verifique o cabo de conexão.": []
+    },
+    "0704500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "0704550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -8064,8 +8661,14 @@
     "0704940000010001": {
       "AMS E O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0704940000010002": {
+      "O sensor de temperatura 1 no aquecedor E do AMS apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "0704950000010001": {
       "AMS E O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0704950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS E apresentou falha, resultando em leituras de temperatura anormais.": []
     },
     "0704960000010001": {
       "AMS E O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -8266,7 +8869,7 @@
       "O motor de assistência AMS F slot 1 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0705200000020023": {
-      "Slot 1 do AMS F: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot F 1 do AMS: o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "0705200000020024": {
       "O slot 1 do AMS F falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -8631,6 +9234,9 @@
     "0705500000020001": {
       "A comunicação AMS F está anormal; verifique o cabo de conexão.": []
     },
+    "0705500000020002": {
+      "O AMS utilizado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "0705550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
     },
@@ -8810,8 +9416,14 @@
     "0705940000010001": {
       "AMS F O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0705940000010002": {
+      "O sensor de temperatura 1 do aquecedor AMS F apresentou mau funcionamento, resultando em leituras anormais de temperatura.": []
+    },
     "0705950000010001": {
       "AMS F O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0705950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS F apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "0705960000010001": {
       "AMS F O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -9012,7 +9624,7 @@
       "O motor de assistência AMS G slot 1 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0706200000020023": {
-      "Slot 1 do AMS G: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 1 do AMS G: o tubo dentro do AMS está quebrado ou o sensor Hall de alimentação está com defeito e não consegue detectar o filamento.": []
     },
     "0706200000020024": {
       "O slot 1 do AMS G falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -9216,7 +9828,7 @@
       "O motor de assistência AMS G slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0706220000020023": {
-      "Slot 3 do AMS G: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 3 do AMS G: o tubo dentro do AMS está quebrado, ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "0706220000020024": {
       "O slot 3 do AMS G falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -9376,6 +9988,9 @@
     },
     "0706500000020001": {
       "A comunicação AMS G está anormal; verifique o cabo de conexão.": []
+    },
+    "0706500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "0706550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -9556,8 +10171,14 @@
     "0706940000010001": {
       "AMS G O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0706940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS G apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "0706950000010001": {
       "AMS G O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0706950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS G apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "0706960000010001": {
       "AMS G O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -9962,7 +10583,7 @@
       "O motor de assistência AMS H slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "0707220000020023": {
-      "Slot AMS H 3: o tubo dentro do AMS está quebrado.": []
+      "No slot H 3 do AMS, o tubo interno está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "0707220000020024": {
       "O slot 3 do AMS H falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -10122,6 +10743,9 @@
     },
     "0707500000020001": {
       "A comunicação AMS H está anormal; verifique o cabo de conexão.": []
+    },
+    "0707500000020002": {
+      "O AMS utilizado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "0707550000010002": {
       "O tubo PTFE está conectado incorretamente entre o cabeçote da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -10302,8 +10926,14 @@
     "0707940000010001": {
       "AMS H O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "0707940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS H apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "0707950000010001": {
       "AMS H O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "0707950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS H apresentou falha, resultando em leituras de temperatura anormais.": []
     },
     "0707960000010001": {
       "AMS H O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -10388,6 +11018,9 @@
     },
     "07FE810000010004": {
       "O sensor hall de posição do motor de comutação da extrusora está em curto-circuito; verifique se o sensor Hall está com defeito.": []
+    },
+    "07FE810000010006": {
+      "A placa TH foi desconectada durante o processo de comutação da extrusora. Verifique se o cabo de conexão está solto.": []
     },
     "07FE810000020001": {
       "A ação de comutação da extrusora é anormal. Verifique se há algo preso na cabeça da ferramenta.": []
@@ -10476,6 +11109,9 @@
     "07FF810000010004": {
       "O sensor hall de posição do motor de comutação da extrusora está em curto-circuito; verifique se o sensor Hall está com defeito.": []
     },
+    "07FF810000010006": {
+      "A placa TH foi desconectada durante o processo de comutação da extrusora. Verifique se o cabo de conexão está solto.": []
+    },
     "07FF810000020001": {
       "A ação de comutação da extrusora é anormal. Verifique se há algo preso na cabeça da ferramenta.": []
     },
@@ -10483,7 +11119,7 @@
       "O processo correto de extração a frio do bocal atingiu o tempo limite. Clique em “Tentar novamente” e, em seguida, retire manualmente o filamento.": [
         "H2D"
       ],
-      "O processo de extração a frio do bico expirou. Clique em &quot;Repetir&quot; e retire o filamento manualmente.": []
+      "O processo de extração a frio do bico expirou. Clique em 'Repetir' e retire o filamento manualmente.": []
     },
     "0C00010000010001": {
       "A Toolhead Camera está offline. Verifique a conexão do hardware.": [
@@ -10549,6 +11185,9 @@
     },
     "0C00010000020008": {
       "Falha ao obter imagem da câmera Live View. A detecção de acúmulo de espaguete e acumulo na calha não estão disponível no momento.": []
+    },
+    "0C0001000002000E": {
+      "": []
     },
     "0C00010000020014": {
       "A câmera do bocal está com defeito. Se esse problema ocorrer várias vezes durante a impressão, entre em contato com o suporte ao cliente.": []
@@ -10674,6 +11313,9 @@
     "0C0003000002001C": {
       "Seu bocal parece estar coberto com material atolado ou entupido.": []
     },
+    "0C0003000002001D": {
+      "A detecção de objeto estranho não está funcionando e as imagens não podem ser obtidas. Por favor, verifique a conexão da câmera ao vivo.": []
+    },
     "0C00030000030006": {
       "O filamento purgado pode ter se acumulado em execesso na calha. Verifique e limpe o excesso de calha.": []
     },
@@ -10693,10 +11335,7 @@
       "Sua impressora parece estar imprimindo sem extrusão.": []
     },
     "0C0003000003001A": {
-      "A detecção de objetos estranhos não funcionou, possivelmente devido a uma interrupção manual (por exemplo, ao pressionar &quot;parar&quot; ou ao abrir a porta no modo laser). Você pode ignorar isso se for o caso. Caso contrário, tente reiniciar a impressora ou atualizar o firmware para restaurar a função.": [],
-      "Falha na detecção de objetos estranhos, possivelmente devido a uma interrupção manual (por exemplo, ao clicar em &quot;Parar&quot;). Caso contrário, tente reiniciar a impressora ou atualizar o firmware.": [
-        "P2S"
-      ]
+      "": []
     },
     "0C0003000003001B": {
       "Possíveis defeitos de espaguete foram detectados. Verifique a qualidade da impressão e decida se o trabalho deve ser interrompido.": []
@@ -10740,6 +11379,9 @@
     "0C00040000020004": {
       "O tipo de plataforma não é compatível com essa tarefa. Use a plataforma correta para continuar.": []
     },
+    "0C00040000020006": {
+      "": []
+    },
     "0C00040000020007": {
       "A câmera BirdsEye está sendo configurada. Limpe todos os objetos e remova o tapete. Certifique-se de que o marcador não esteja obstruído.": []
     },
@@ -10763,6 +11405,24 @@
     },
     "0C00040000020029": {
       "O módulo a laser ou de corte não foi calibrado. Por favor, calibre-o primeiro na impressora.": []
+    },
+    "0C00040000020030": {
+      "A câmera de visualização ao vivo não está funcionando corretamente. Por favor, reinicie a máquina e tente novamente.": []
+    },
+    "0C00040000020031": {
+      "A câmera Live View pode estar suja ou obstruída. Verifique e limpe-a, por favor.": []
+    },
+    "0C00040000020032": {
+      "A câmera BirdsEye está inicializando. Por favor, certifique-se de que os marcadores no tapete de corte não estejam obstruídos, limpe tanto a câmera BirdsEye quanto a câmera Toolhead, e remova quaisquer objetos estranhos que possam bloquear as câmeras.": []
+    },
+    "0C00040000020033": {
+      "O objeto no acessório rotativo é muito pequeno para medir ou não está instalado. Por favor, posicione o objeto corretamente no acessório rotativo.": []
+    },
+    "0C00040000020034": {
+      "A captura da imagem falhou. Por favor, inicie a medição novamente.": []
+    },
+    "0C00040000020035": {
+      "O acessório rotativo está instalado, portanto, a função de medição de espessura não pode ser executada. Remova o acessório rotativo primeiro e tente novamente.": []
     },
     "0C00040000030018": {
       "A calibração do deslocamento da lâmina de corte falhou. Isso pode afetar a precisão do corte. Consulte o Wiki para verificar se a ponta da lâmina está gasta.": []
@@ -10807,13 +11467,13 @@
       "O motor AMS1 slot4 escorregou. A roda de extrusão pode estar com defeito ou o filamento pode estar muito fino.": []
     },
     "1200130000010003": {
-      "O controle de torque do motor AMS1 slot4 está com defeito. O sensor de corrente pode estar com defeito.": []
+      "O controle de torque do motor AMS Lite A Slot4 está com mau funcionamento. O sensor de corrente pode estar com defeito.": []
     },
     "1200130000020002": {
-      "O motor AMS1 Slot4 está sobrecarregado. O filamento pode estar emaranhado ou preso.": []
+      "O motor AMS Lite A Slot4 está sobrecarregado. O filamento pode estar emaranhado ou preso.": []
     },
     "1200200000020001": {
-      "O filamento do slot 1 do AMS1 acabou; insira um novo filamento.": []
+      "O filamento do slot 1 da impressora AMS Lite acabou; insira um novo filamento.": []
     },
     "1200200000020002": {
       "AMS1 Slot1 está vazio; insira um novo filamento.": []
@@ -10917,6 +11577,9 @@
     "1200300000020002": {
       "A etiqueta RFID no AMS1 Slot1 está danificada.": []
     },
+    "1200300000020059": {
+      "A etiqueta RFID no slot 1 do AMS Lite não pôde ser identificada.": []
+    },
     "1200300000030003": {
       "O RFID AMS1 Slot1 não pode ser lido devido a um erro estrutural.": []
     },
@@ -10925,6 +11588,9 @@
     },
     "1200310000020002": {
       "A etiqueta RFID no Slot2 AMS1 está danificada.": []
+    },
+    "1200310000020059": {
+      "A etiqueta RFID no slot 2 do AMS Lite não pôde ser identificada.": []
     },
     "1200310000030003": {
       "O RFID AMS1 Slot2 não pode ser lido devido a um erro estrutural.": []
@@ -10935,6 +11601,9 @@
     "1200320000020002": {
       "A etiqueta RFID no Slot3 AMS1 está danificada.": []
     },
+    "1200320000020059": {
+      "A etiqueta RFID no slot 3 do AMS Lite não pôde ser identificada.": []
+    },
     "1200320000030003": {
       "O RFID AMS1 Slot3 não pode ser lido devido a um erro estrutural.": []
     },
@@ -10944,8 +11613,17 @@
     "1200330000020002": {
       "A etiqueta RFID no AMS1 Slot4 está danificada.": []
     },
+    "1200330000020059": {
+      "A etiqueta RFID no slot 4 do AMS Lite não pôde ser identificada.": []
+    },
     "1200330000030003": {
       "O RFID AMS1 Slot4 não pode ser lido devido a um erro estrutural.": []
+    },
+    "1200400000020005": {
+      "O sensor Hall de detecção de emaranhamento de filamentos está danificado. Consulte o Wiki para obter instruções de substituição.": []
+    },
+    "1200400000020006": {
+      "Foi detectado um curto-circuito no sensor Hall de detecção de emaranhamento de filamentos. Consulte o Wiki para obter instruções de substituição.": []
     },
     "1200450000020001": {
       "O sensor do cortador de filamento está com defeito. Verifique se o conector está conectado corretamente.": []
@@ -10965,14 +11643,26 @@
     "1200700000010001": {
       "Erro de velocidade e comprimento do filamento no AMS1: A odometria do filamento do slot 1 pode estar com defeito.": []
     },
+    "1200700000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1200710000010001": {
       "Erro de velocidade e comprimento do filamento no AMS1: A odometria do filamento do slot 2 pode estar com defeito.": []
+    },
+    "1200710000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1200720000010001": {
       "Erro de velocidade e comprimento do filamento no AMS1: A odometria do filamento do slot 3 pode estar com defeito.": []
     },
+    "1200720000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1200730000010001": {
       "Erro de velocidade e comprimento do filamento no AMS1: A odometria do filamento do slot 4 pode estar com defeito.": []
+    },
+    "1200730000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1200800000020001": {
       "O filamento AMS1 Slot1 pode estar emaranhado ou preso.": []
@@ -11014,10 +11704,10 @@
       "O motor AMS2 Slot3 está sobrecarregado. O filamento pode estar emaranhado ou preso.": []
     },
     "1201130000010001": {
-      "O motor AMS2 slot4 escorregou. A roda de extrusão pode estar com defeito ou o filamento pode estar muito fino.": []
+      "O motor AMS Lite B Slot4 deslizou. A roda de extrusão pode estar com defeito, ou o filamento pode estar muito fino.": []
     },
     "1201130000010003": {
-      "O controle de torque do motor AMS2 slot4 está com defeito. O sensor de corrente pode estar com defeito.": []
+      "O controle de torque do motor AMS Lite B Slot4 está com defeito. O sensor de corrente pode estar com defeito.": []
     },
     "1201130000020002": {
       "O motor AMS2 Slot4 está sobrecarregado. O filamento pode estar emaranhado ou preso.": []
@@ -11127,6 +11817,9 @@
     "1201300000020002": {
       "A etiqueta RFID no AMS2 Slot1 está danificada.": []
     },
+    "1201300000020059": {
+      "A etiqueta RFID no slot 1 do AMS Lite B não pôde ser identificada.": []
+    },
     "1201300000030003": {
       "O RFID AMS2 Slot1 não pode ser lido devido a um erro estrutural.": []
     },
@@ -11135,6 +11828,9 @@
     },
     "1201310000020002": {
       "A etiqueta RFID no Slot2 AMS2 está danificada.": []
+    },
+    "1201310000020059": {
+      "A etiqueta RFID no slot 2 do AMS Lite B não pôde ser identificada.": []
     },
     "1201310000030003": {
       "O RFID AMS2 Slot2 não pode ser lido devido a um erro estrutural.": []
@@ -11145,6 +11841,9 @@
     "1201320000020002": {
       "A etiqueta RFID no Slot3 AMS2 está danificada.": []
     },
+    "1201320000020059": {
+      "A etiqueta RFID no slot 3 do AMS Lite B não pôde ser identificada.": []
+    },
     "1201320000030003": {
       "O RFID AMS2 Slot3 não pode ser lido devido a um erro estrutural.": []
     },
@@ -11153,6 +11852,9 @@
     },
     "1201330000020002": {
       "A etiqueta RFID no Slot4 AMS2 está danificada.": []
+    },
+    "1201330000020059": {
+      "A etiqueta RFID no slot 4 do AMS Lite B não pôde ser identificada.": []
     },
     "1201330000030003": {
       "O RFID AMS2 Slot4 não pode ser lido devido a um erro estrutural.": []
@@ -11163,14 +11865,26 @@
     "1201700000010001": {
       "Erro de velocidade e comprimento do filamento AMS2: A odometria do filamento do slot 1 pode estar com defeito.": []
     },
+    "1201700000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1201710000010001": {
       "Erro de velocidade e comprimento do filamento AMS2: A odometria do filamento do slot 2 pode estar com defeito.": []
+    },
+    "1201710000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1201720000010001": {
       "Erro de velocidade e comprimento do filamento AMS2: A odometria do filamento do slot 3 pode estar com defeito.": []
     },
+    "1201720000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1201730000010001": {
-      "Erro de velocidade e comprimento do filamento AMS2: A odometria do filamento do slot 4 pode estar com defeito.": []
+      "Erro de velocidade e comprimento do filamento AMS Lite B: A odometria do filamento do slot 4 pode estar com defeito.": []
+    },
+    "1201730000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1201800000020001": {
       "O filamento AMS2 Slot1 pode estar emaranhado ou preso.": []
@@ -11224,13 +11938,13 @@
       "O filamento AMS3 Slot1 acabou; insira um novo filamento.": []
     },
     "1202200000020002": {
-      "AMS3 Slot1 está vazio; insira um novo filamento.": []
+      "O compartimento 1 do AMS Lite C está vazio; insira um novo filament.": []
     },
     "1202200000020003": {
-      "O filamento AMS3 Slot1 pode ser quebrado no tubo de PTFE.": []
+      "O filamento AMS Lite C Slot1 pode estar quebrado no tubo de PTFE.": []
     },
     "1202200000020004": {
-      "O filamento AMS3 Slot1 pode estar quebrado na cabeça da ferramenta.": []
+      "O filamento AMS Lite C Slot1 pode estar quebrado na cabeça da ferramenta.": []
     },
     "1202200000020005": {
       "O filamento do AMS3 Slot1 acabou e a purga do filamento antigo ocorreu de forma anormal; verifique se o filamento está preso no cabeçote.": []
@@ -11299,7 +12013,7 @@
       "O AMS3 Slot4 está vazio; insira um novo filamento.": []
     },
     "1202230000020003": {
-      "O filamento AMS3 Slot4 pode ser quebrado no tubo de PTFE.": []
+      "O filamento do AMS Lite C Slot4 pode estar quebrado no tubo de PTFE.": []
     },
     "1202230000020004": {
       "O filamento AMS3 Slot4 pode estar quebrado no cabeçote da ferramenta.": []
@@ -11325,6 +12039,9 @@
     "1202300000020002": {
       "A etiqueta RFID no AMS3 Slot1 está danificada.": []
     },
+    "1202300000020059": {
+      "A etiqueta RFID no slot 1 do AMS Lite C não pôde ser identificada.": []
+    },
     "1202300000030003": {
       "O RFID AMS3 Slot1 não pode ser lido devido a um erro estrutural.": []
     },
@@ -11333,6 +12050,9 @@
     },
     "1202310000020002": {
       "A etiqueta RFID no Slot2 AMS3 está danificada.": []
+    },
+    "1202310000020059": {
+      "A etiqueta RFID no slot 2 do AMS Lite C não pôde ser identificada.": []
     },
     "1202310000030003": {
       "O RFID AMS3 Slot2 não pode ser lido devido a um erro estrutural.": []
@@ -11343,6 +12063,9 @@
     "1202320000020002": {
       "A etiqueta RFID no Slot3 AMS3 está danificada.": []
     },
+    "1202320000020059": {
+      "A etiqueta RFID no slot 3 do AMS Lite C não pôde ser identificada.": []
+    },
     "1202320000030003": {
       "O RFID AMS3 Slot3 não pode ser lido devido a um erro estrutural.": []
     },
@@ -11351,6 +12074,9 @@
     },
     "1202330000020002": {
       "A etiqueta RFID no Slot4 AMS3 está danificada.": []
+    },
+    "1202330000020059": {
+      "A etiqueta RFID no slot 4 do AMS Lite C não pôde ser identificada.": []
     },
     "1202330000030003": {
       "O RFID AMS3 Slot4 não pode ser lido devido a um erro estrutural.": []
@@ -11361,14 +12087,26 @@
     "1202700000010001": {
       "Erro de velocidade e comprimento do filamento AMS3: A odometria do filamento do slot 1 pode estar com defeito.": []
     },
+    "1202700000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1202710000010001": {
       "Erro de velocidade e comprimento do filamento AMS3: A odometria do filamento do slot 2 pode estar com defeito.": []
+    },
+    "1202710000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1202720000010001": {
       "Erro de velocidade e comprimento do filamento AMS3: A odometria do filamento do slot 3 pode estar com defeito.": []
     },
+    "1202720000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1202730000010001": {
       "Erro de velocidade e comprimento do filamento AMS3: A odometria do filamento do slot 4 pode estar com defeito.": []
+    },
+    "1202730000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1202800000020001": {
       "O filamento do AMS3 Slot1 pode estar emaranhado ou preso.": []
@@ -11431,13 +12169,13 @@
       "O filamento AMS4 Slot1 pode estar quebrado no cabeçote da ferramenta.": []
     },
     "1203200000020005": {
-      "O filamento AMS4 Slot1 acabou e a purga do filamento antigo ocorreu de forma anormal; verifique se o filamento está preso no cabeçote.": []
+      "O filamento AMS Lite D Slot1 acabou e a purga do filamento antigo ocorreu de forma anormal; por favor, verifique se o filamento está preso no cabeçote.": []
     },
     "1203200000020006": {
-      "Falha na extrusão do filamento AMS4 Slot1; a extrusora pode estar entupida ou o filamento pode estar muito fino, fazendo com que a extrusora escorregue.": []
+      "Falha ao extrudar o filamento AMS Lite D Slot1; o extrusor pode estar entupido ou o filamento pode estar muito fino, causando escorregamento do extrusor.": []
     },
     "1203200000030001": {
-      "O filamento AMS4 Slot1 acabou. Limpando o filamento antigo; aguarde.": []
+      "O filamento do Slot1 do AMS Lite acabou. Fazendo a purga do filamento antigo; por favor, aguarde.": []
     },
     "1203200000030002": {
       "O filamento no AMS4 Slot1 acabou e foi automaticamente trocado para o slot com o mesmo filamento.": []
@@ -11523,6 +12261,9 @@
     "1203300000020002": {
       "A etiqueta RFID no Slot1 AMS4 está danificada.": []
     },
+    "1203300000020059": {
+      "A etiqueta RFID no slot 1 do AMS Lite D não pôde ser identificada.": []
+    },
     "1203300000030003": {
       "O RFID AMS4 Slot1 não pode ser lido devido a um erro estrutural.": []
     },
@@ -11531,6 +12272,9 @@
     },
     "1203310000020002": {
       "A etiqueta RFID no Slot2 AMS4 está danificada.": []
+    },
+    "1203310000020059": {
+      "A etiqueta RFID no slot 2 do AMS Lite D não pôde ser identificada.": []
     },
     "1203310000030003": {
       "O RFID AMS4 Slot2 não pode ser lido devido a um erro estrutural.": []
@@ -11541,6 +12285,9 @@
     "1203320000020002": {
       "A etiqueta RFID no Slot3 AMS4 está danificada.": []
     },
+    "1203320000020059": {
+      "A etiqueta RFID no slot 3 do AMS Lite D não pôde ser identificada.": []
+    },
     "1203320000030003": {
       "O RFID AMS4 Slot3 não pode ser lido devido a um erro estrutural.": []
     },
@@ -11549,6 +12296,9 @@
     },
     "1203330000020002": {
       "A etiqueta RFID no Slot4 AMS4 está danificada.": []
+    },
+    "1203330000020059": {
+      "A etiqueta RFID no slot 4 do AMS Lite D não pôde ser identificada.": []
     },
     "1203330000030003": {
       "O RFID AMS4 Slot4 não pode ser lido devido a um erro estrutural.": []
@@ -11559,14 +12309,26 @@
     "1203700000010001": {
       "Erro de velocidade e comprimento do filamento AMS4: A odometria do filamento do slot 1 pode estar com defeito.": []
     },
+    "1203700000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1203710000010001": {
       "Erro de velocidade e comprimento do filamento AMS4: A odometria do filamento do slot 2 pode estar com defeito.": []
+    },
+    "1203710000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1203720000010001": {
       "Erro de velocidade e comprimento do filamento AMS4: A odometria do filamento do slot 3 pode estar com defeito.": []
     },
+    "1203720000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
+    },
     "1203730000010001": {
       "Erro de velocidade e comprimento do filamento AMS4: A odometria do filamento do slot 4 pode estar com defeito.": []
+    },
+    "1203730000020001": {
+      "Falha ao puxar o filamento da extrusora. Possíveis causas: extrusora entupida ou filamento rompido.": []
     },
     "1203800000020001": {
       "O filamento do AMS4 Slot1 pode estar emaranhado ou preso.": []
@@ -11782,7 +12544,7 @@
       "AMS-HT Um motor de assistência com ranhura 1 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1800200000020023": {
-      "Slot 1 do AMS-HT A, o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot 1 do AMS-HT, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1800200000020024": {
       "AMS-HT Um slot 1 não conseguiu girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -12159,6 +12921,12 @@
     "1800400000020004": {
       "O sinal do buffer do filamento está anormal; a mola pode estar presa ou o filamento pode estar emaranhado.": []
     },
+    "1800400000020005": {
+      "O sensor Hall de detecção de emaranhamento de filamentos está danificado. Consulte o Wiki para obter instruções de substituição.": []
+    },
+    "1800400000020006": {
+      "Foi detectado um curto-circuito no sensor Hall de detecção de emaranhamento de filamentos. Consulte o Wiki para obter instruções de substituição.": []
+    },
     "1800450000020001": {
       "O sensor do cortador de filamento está com defeito; verifique se o conector está conectado corretamente.": []
     },
@@ -12170,6 +12938,9 @@
     },
     "1800500000020001": {
       "AMS-HT A comunicação está anormal; verifique o cabo de conexão.": []
+    },
+    "1800500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1800510000030001": {
       "O AMS está desativado; carregue o filamento do suporte do carretel.": []
@@ -12356,8 +13127,14 @@
     "1800940000010001": {
       "AMS-HT A O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1800940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT A apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "1800950000010001": {
       "AMS-HT A O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1800950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS-HT A apresentou mau funcionamento, resultando em leituras anormais de temperatura.": []
     },
     "1800960000010001": {
       "AMS-HT A O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -12762,7 +13539,7 @@
       "O motor de assistência AMS-HT B slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1801220000020023": {
-      "Slot 3 do AMS-HT B: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 3 do AMS-HT B: o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filament.": []
     },
     "1801220000020024": {
       "O slot 3 do AMS-HT B falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -12864,7 +13641,7 @@
       "O motor de assistência AMS-HT B slot 4 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1801230000020023": {
-      "Slot 4 do AMS-HT B: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot 4 do AMS-HT B, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1801230000020024": {
       "O slot 4 do AMS-HT B falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -12928,6 +13705,9 @@
     },
     "1801500000020001": {
       "A comunicação AMS-HT B está anormal; verifique o cabo de conexão.": []
+    },
+    "1801500000020002": {
+      "O AMS utilizado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1801550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -13108,8 +13888,14 @@
     "1801940000010001": {
       "AMS-HT B O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1801940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT B apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "1801950000010001": {
       "AMS-HT B O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1801950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS-HT B apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "1801960000010001": {
       "AMS-HT B O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -13514,7 +14300,7 @@
       "O motor de assistência AMS-HT C slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1802220000020023": {
-      "Slot 3 do AMS-HT C: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 3 do AMS-HT C: o tubo dentro do AMS está quebrado ou o sensor Hall de alimentação está com defeito e não consegue detectar o filamento.": []
     },
     "1802220000020024": {
       "O slot 3 do AMS-HT C falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -13680,6 +14466,9 @@
     },
     "1802500000020001": {
       "A comunicação AMS-HT C está anormal; verifique o cabo de conexão.": []
+    },
+    "1802500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1802550000010002": {
       "O tubo de PTFE está conectado incorretamente entre o cabeçote da ferramenta e o buffer. Conecte a parte superior do buffer ao extrusor direito e a parte inferior ao extrusor esquerdo.": []
@@ -13860,8 +14649,14 @@
     "1802940000010001": {
       "AMS-HT C O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1802940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT C apresentou mau funcionamento, resultando em leituras anormais de temperatura.": []
+    },
     "1802950000010001": {
       "AMS-HT C O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1802950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS-HT C apresentou falha, resultando em leituras anormais de temperatura.": []
     },
     "1802960000010001": {
       "AMS-HT C O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -14266,7 +15061,7 @@
       "O motor de assistência AMS-HT D slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1803220000020023": {
-      "Slot 3 do AMS-HT D o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot D 3 do AMS, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1803220000020024": {
       "O slot 3 do AMS-HT D falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -14432,6 +15227,9 @@
     },
     "1803500000020001": {
       "A comunicação AMS-HT D está anormal; verifique o cabo de conexão.": []
+    },
+    "1803500000020002": {
+      "O sistema AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1803550000010002": {
       "O tubo PTFE está conectado incorretamente entre o cabeçote da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -14612,8 +15410,14 @@
     "1803940000010001": {
       "AMS-HT D O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1803940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT D apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "1803950000010001": {
       "AMS-HT D O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1803950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS-HT D apresentou mal funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "1803960000010001": {
       "AMS-HT D O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -14814,7 +15618,7 @@
       "O motor de assistência AMS-HT E slot 1 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1804200000020023": {
-      "Slot 1 do AMS-HT E o tubo dentro do AMS está quebrado ou o sensor de saída do hall está com defeito e não consegue detectar o filamento.": []
+      "No slot 1 do AMS-HT E, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1804200000020024": {
       "O slot 1 do AMS-HT E falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -15185,6 +15989,9 @@
     "1804500000020001": {
       "A comunicação AMS-HT E está anormal; verifique o cabo de conexão.": []
     },
+    "1804500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
+    },
     "1804550000010002": {
       "O tubo PTFE está conectado incorretamente entre o cabeçote da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
     },
@@ -15364,8 +16171,14 @@
     "1804940000010001": {
       "AMS-HT E O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1804940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT E apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "1804950000010001": {
       "AMS-HT E O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1804950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS-HT E apresentou mau funcionamento, resultando em leituras anormais de temperatura.": []
     },
     "1804960000010001": {
       "AMS-HT E O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -15566,7 +16379,7 @@
       "O motor de assistência AMS-HT F slot 1 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1805200000020023": {
-      "Slot 1 do AMS-HT F: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot F 1 do AMS-HT, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1805200000020024": {
       "O slot 1 do AMS-HT F falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -15668,7 +16481,7 @@
       "O motor de assistência AMS-HT F slot 2 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1805210000020023": {
-      "Slot 2 do AMS-HT F: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot 2 do AMS-HT F, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1805210000020024": {
       "O slot 2 do AMS-HT F falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -15770,7 +16583,7 @@
       "O motor de assistência AMS-HT F slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1805220000020023": {
-      "Slot 3 do AMS-HT F: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 3 do AMS-HT F: o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1805220000020024": {
       "O slot 3 do AMS-HT F não conseguiu girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -15936,6 +16749,9 @@
     },
     "1805500000020001": {
       "A comunicação AMS-HT F está anormal; verifique o cabo de conexão.": []
+    },
+    "1805500000020002": {
+      "O AMS usado na impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1805550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -16116,8 +16932,14 @@
     "1805940000010001": {
       "AMS-HT F O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1805940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT F apresentou mau funcionamento, resultando em leituras anormais de temperatura.": []
+    },
     "1805950000010001": {
       "AMS-HT F O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1805950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS-HT F apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "1805960000010001": {
       "AMS-HT F O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -16318,7 +17140,7 @@
       "O motor de assistência AMS-HT G slot 1 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1806200000020023": {
-      "Slot 1 do AMS-HT G: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot 1 do AMS-HT G, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1806200000020024": {
       "O slot 1 do AMS-HT G falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -16420,7 +17242,7 @@
       "O motor de assistência AMS-HT G slot 2 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1806210000020023": {
-      "Slot 2 do AMS-HT G: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "No slot 2 do AMS-HT G, o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1806210000020024": {
       "O slot 2 do AMS-HT G falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -16624,7 +17446,7 @@
       "O motor de assistência AMS-HT G slot 4 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1806230000020023": {
-      "Slot 4 do AMS-HT G o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 4 do AMS-HT G: o tubo dentro do AMS está quebrado, ou o sensor Hall de saída está com defeito e não consegue detectar o filamento.": []
     },
     "1806230000020024": {
       "O slot 4 do AMS-HT G falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -16688,6 +17510,9 @@
     },
     "1806500000020001": {
       "A comunicação AMS-HT G está anormal; verifique o cabo de conexão.": []
+    },
+    "1806500000020002": {
+      "O AMS usado na impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1806550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -16868,8 +17693,14 @@
     "1806940000010001": {
       "AMS-HT G O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1806940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT G apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "1806950000010001": {
       "AMS-HT G O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1806950000010002": {
+      "O sensor de temperatura 2 no aquecedor AMS-HT G apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
     },
     "1806960000010001": {
       "AMS-HT G O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -17070,7 +17901,7 @@
       "O motor de assistência AMS-HT H slot 1 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1807200000020023": {
-      "Slot 1 do AMS-HT H: o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 1 do AMS-HT H: o tubo dentro do AMS está quebrado ou o sensor Hall de alimentação está com defeito e não consegue detectar o filamento.": []
     },
     "1807200000020024": {
       "O slot 1 do AMS-HT H falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -17274,7 +18105,7 @@
       "O motor de assistência AMS-HT H slot 3 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1807220000020023": {
-      "Slot 3 do AMS-HT H o tubo dentro do AMS está quebrado ou o sensor de saída do filtro está com defeito e não consegue detectar o filamento.": []
+      "Slot 3 do AMS-HT H o tubo dentro do AMS está quebrado ou o sensor Hall de saída está com defeito e não consegue detectar o filament.": []
     },
     "1807220000020024": {
       "O slot 3 do AMS-HT H falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -17376,7 +18207,7 @@
       "O motor de assistência AMS-HT H slot 4 está parado devido à resistência excessiva no tubo próximo à cabeça da ferramenta.": []
     },
     "1807230000020023": {
-      "Ranhura AMS-HT H 4: o tubo dentro do AMS está quebrado.": []
+      "Ranhura AMS-HT H 4: o tubo dentro do AMS está quebrado ou o sensor Hall de alimentação está com defeito e não consegue detectar o filamento.": []
     },
     "1807230000020024": {
       "O slot 4 do AMS-HT H falhou ao girar o carretel de filamento ao puxar o filamento de volta para o AMS.": []
@@ -17440,6 +18271,9 @@
     },
     "1807500000020001": {
       "A comunicação AMS-HT H está anormal; verifique o cabo de conexão.": []
+    },
+    "1807500000020002": {
+      "O AMS usado para a impressão atual está desconectado. Verifique a conexão. A impressão será retomada automaticamente após a reconexão.": []
     },
     "1807550000010002": {
       "O tubo de PTFE está conectado incorretamente entre a cabeça da ferramenta e o buffer. Conecte a parte superior do buffer à extrusora direita e a parte inferior à extrusora esquerda.": []
@@ -17620,8 +18454,14 @@
     "1807940000010001": {
       "AMS-HT H O sensor de temperatura do aquecedor 1 está com defeito, o que pode ser devido ao mau contato do conector.": []
     },
+    "1807940000010002": {
+      "O sensor de temperatura 1 no aquecedor AMS-HT H apresentou mau funcionamento, resultando em leituras de temperatura anormais.": []
+    },
     "1807950000010001": {
       "AMS-HT H O sensor de temperatura do aquecedor 2 está com defeito, o que pode ser devido ao mau contato do conector.": []
+    },
+    "1807950000010002": {
+      "O sensor de temperatura 2 do aquecedor AMS-HT H apresentou falha, resultando em leituras anormais de temperatura.": []
     },
     "1807960000010001": {
       "AMS-HT H O processo de secagem pode sofrer fuga térmica. Por favor, desligue a fonte de alimentação AMS.": []
@@ -17643,6 +18483,30 @@
     },
     "1807980000020002": {
       "AMS-HT H A tensão do adaptador de energia está muito alta, o que pode danificar o circuito do aquecedor. Substitua o adaptador de energia.": []
+    },
+    "1880200000020058": {
+      "A etiqueta RFID no AMS-HT A não pôde ser identificada.": []
+    },
+    "1881200000020058": {
+      "A etiqueta RFID no AMS-HT B não pôde ser identificada.": []
+    },
+    "1882200000020058": {
+      "A etiqueta RFID no AMS-HT C não pôde ser identificada.": []
+    },
+    "1883200000020058": {
+      "A etiqueta RFID no AMS-HT D não pôde ser identificada.": []
+    },
+    "1884200000020058": {
+      "A etiqueta RFID no AMS-HT E não pôde ser identificada.": []
+    },
+    "1885200000020058": {
+      "A etiqueta RFID no AMS-HT F não pôde ser identificada.": []
+    },
+    "1886200000020058": {
+      "A etiqueta RFID no AMS-HT G não pôde ser identificada.": []
+    },
+    "1887200000020058": {
+      "A etiqueta RFID no AMS-HT H não pôde ser identificada.": []
     },
     "18FE200000020001": {
       "O filamento externo da extrusora esquerda acabou; por favor, carregue um novo filamento.": []
@@ -17690,7 +18554,7 @@
       "A posição do hotend esquerdo é anormal durante a impressão. Verifique se o bloqueador de fluxo risca o modelo impresso.": []
     },
     "18FE800000020003": {
-      "": []
+      "O desvio no valor de calibração de posicionamento da extrusora é muito grande; recalibre.": []
     },
     "18FE810000010001": {
       "O motor de comutação da extrusora está funcionando de forma anormal. Verifique se o cabo de conexão está solto.": []
@@ -17703,6 +18567,9 @@
     },
     "18FE810000010004": {
       "O sensor hall de posição do motor de comutação da extrusora está em curto-circuito; verifique se o sensor Hall está com defeito.": []
+    },
+    "18FE810000010006": {
+      "A placa TH foi desconectada durante o processo de troca da extrusora. Verifique se o cabo de conexão está solto.": []
     },
     "18FE810000020001": {
       "A ação de comutação da extrusora é anormal. Verifique se há algo preso na cabeça da ferramenta.": []
@@ -17778,6 +18645,9 @@
     },
     "18FF810000010004": {
       "O sensor hall de posição do motor de comutação da extrusora está em curto-circuito; verifique se o sensor Hall está com defeito.": []
+    },
+    "18FF810000010006": {
+      "A placa TH foi desconectada durante o processo de troca da extrusora. Por favor, verifique se o cabo de conexão está solto.": []
     },
     "18FF810000020001": {
       "A ação de comutação da extrusora é anormal. Verifique se há algo preso na cabeça da ferramenta.": []

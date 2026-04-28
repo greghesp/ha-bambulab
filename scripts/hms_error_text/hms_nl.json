@@ -31,7 +31,7 @@
       "De taak is geannuleerd.": []
     },
     "0300400D": {
-      "Hervatten na strooerbreking is mislukt.": []
+      "Hervatten na stroomuitval is mislukt.": []
     },
     "0300400E": {
       "De motor zelf-test is mislukt.": []
@@ -52,13 +52,13 @@
       "Homing Z-as mislukt: temperatuurregeling abnormaal.": []
     },
     "03004015": {
-      "Kalibratie van detectie van verstopping van sproeikop mislukt. Ga naar 'Assistent' voor probleemoplossing.": []
+      "Kalibratie van detectie van klontvorming in de nozzle mislukt. Ga naar 'Assistent' voor probleemoplossing.": []
     },
     "03004016": {
       "Het schoonmaken van de spuitmond is mislukt. Klik op de Assistent voor hulp bij het oplossen van problemen.": []
     },
     "0300401F": {
-      "De hotend is niet geïnstalleerd en de toolhead kan geen homing uitvoeren. Installeer de hotend en ga verder.": [],
+      "De hot-end is niet geïnstalleerd en de printkop kan geen homing uitvoeren. Installeer de hot-end en ga dan verder.": [],
       "De juiste hotend is niet geïnstalleerd en de gereedschapskop kan geen homing uitvoeren. Installeer de hotend en ga dan verder.": [
         "H2D"
       ]
@@ -68,6 +68,33 @@
     },
     "03004021": {
       "Er is een probleem met het signaal van de sensor voor het kalibreren van de nozzle-offset. Check de sensor en probeer het nog eens.": []
+    },
+    "03004030": {
+      "Z-as homepositie mislukt. Verwijder de schroeven van de verwarmde bed-schuif en zorg dat er geen obstakels zijn die de verticale beweging van het verwarmde bed blokkeren. Herkalibreer het systeem na het oplossen van het probleem.": []
+    },
+    "03004031": {
+      "De nozzle is niet geïnstalleerd. Installeer de nozzle en kalibreer opnieuw.": []
+    },
+    "03004032": {
+      "XY-homepositie mislukt. Verwijder alstublieft eventuele vreemde voorwerpen die de beweging van de gereedschapskop belemmeren en kalibreer opnieuw.": []
+    },
+    "03004033": {
+      "Z-as homepositie mislukt door een afwijking in temperatuurregeling. Scan de QR-code voor assistentie. Kalibreer het apparaat opnieuw na het oplossen van het probleem.": []
+    },
+    "03004035": {
+      "Nozzle-reiniging mislukt. Scan de QR-code voor assistentie. Kalibreer opnieuw na het oplossen van het probleem.": []
+    },
+    "03004036": {
+      "Kalibratie nozzle-offset mislukt. Scan de QR-code voor assistentie. Kalibreer opnieuw na het oplossen van het probleem.": []
+    },
+    "03004037": {
+      "Kalibratie voor het detecteren van nozzle-klontering mislukt. Scan de QR-code voor assistentie. Kalibreer opnieuw na het oplossen van het probleem.": []
+    },
+    "03004038": {
+      "Leveling van het verwarmde bed mislukt. Scan de QR-code voor assistentie. Kalibreer opnieuw na het oplossen van het probleem.": []
+    },
+    "03004039": {
+      "De detectie van de aanwezigheid van de nozzle is mislukt. Raadpleeg de helpinstructies om het probleem op te lossen en kalibreer het apparaat vervolgens opnieuw.": []
     },
     "03004042": {
       "Het Laser Safety Window is niet goed geïnstalleerd. De taak is gestopt.": []
@@ -86,6 +113,12 @@
     },
     "03004052": {
       "Lokalisatie Z-as blad mislukt": []
+    },
+    "03004057": {
+      "Stapverlies op de Z-as gedetecteerd. De taak is gestopt. Controleer of er geen obstructies onder het verwarmingsbed zijn.": []
+    },
+    "03004059": {
+      "Het werkstuk op de Rotary-accessoire is in botsing gekomen met de printkop. De taak is gestopt.": []
     },
     "03004066": {
       "Kalibratie van de bewegingsprecisie is mislukt.": []
@@ -151,7 +184,7 @@
       "De gedetecteerde printplaat is niet hetzelfde als het Gcode-bestand. Pas de slicerinstellingen aan of gebruik de juiste plaat.": []
     },
     "03008013": {
-      "Het afdrukken is gepauzeerd vanwege de pauzeopdracht die aan het afdrukbestand is toegevoegd.": []
+      "Het afdrukken is gepauzeerd door de gebruiker. U kunt 'Hervatten' selecteren om het afdrukken voort te zetten.": []
     },
     "03008014": {
       "Het stuk is bedekt met filament of de bouwplaat is verkeerd geïnstalleerd. Annuleer deze afdruk en reinig het stuk of pas de bouwplaat aan volgens de werkelijke status. U kunt ook op de knop 'Hervatten' tikken om de afdruktaak te hervatten.": []
@@ -184,7 +217,7 @@
       "De positiesensor van de extruderservomotor werkt niet goed. Schakel eerst de printer uit en controleer of de aansluitkabel los zit.": []
     },
     "0300801E": {
-      "De extrusiemotor is overbelast, controleer of de extruder verstopt is of dat het filament vastzit in de gereedschapskop.": []
+      "De extrusiemotor is overbelast, controleer of de extruder verstopt is of dat het filament vastzit in de printkop.": []
     },
     "03008021": {
       "De nozzle is mogelijk niet of niet goed geïnstalleerd. Zorg ervoor dat het mondstuk correct is geïnstalleerd voordat u verdergaat.": []
@@ -252,6 +285,15 @@
     "03008055": {
       "De module op de gereedschapskop komt niet overeen met de taak. Installeer de juiste module.": []
     },
+    "03008057": {
+      "De Rotary-accessoire is losgekoppeld. Zorg ervoor dat deze correct is geïnstalleerd en dat de kabel stevig is aangesloten.": []
+    },
+    "03008058": {
+      "De Rotary-accessoire is gedetecteerd. Verwijder deze alstublieft voordat u verdergaat.": []
+    },
+    "03008059": {
+      "Motorsprapverlies gedetecteerd. Controleer de verwerkingskwaliteit. Als de kwaliteit acceptabel is, ga door; anders stop de taak.": []
+    },
     "03008061": {
       "De modus van het luchtstroomsysteem kon niet worden geactiveerd; Controleer de toestand van de luchtdeur.": []
     },
@@ -266,6 +308,15 @@
     },
     "03008065": {
       "De temperatuur van de MC module is te hoog. Kijk op de Wiki voor mogelijke uitleg.": []
+    },
+    "0300806E": {
+      "Abnormale temperatuurregeling gedetecteerd; de verwarmingsmodule kan beschadigd zijn. Schakel onmiddellijk de stroom uit en stop met het gebruik van het apparaat en neem contact op met de klantenservice voor hulp bij het oplossen van het probleem.": []
+    },
+    "0300806F": {
+      "Abnormale temperatuurstijging gedetecteerd op het warmtebed. De verwarmingsmodule kan beschadigd zijn. Schakel het apparaat onmiddellijk uit en stop met het gebruik ervan.": []
+    },
+    "03008070": {
+      "De temperatuur van de kamerverwarming stijgt abnormaal en de verwarmingsmodule is mogelijk beschadigd. Schakel het apparaat onmiddellijk uit en stop met het gebruik ervan.": []
     },
     "03008071": {
       "De Toolhead Enhanced Cooling Fan module werkt niet goed.": []
@@ -361,7 +412,7 @@
       "Er is niet genoeg vrije opslagruimte voor de printopdracht. Formatteer of wis bestanden van de MicroSD-kaart om ruimte vrij te maken.": []
     },
     "05004016": {
-      "De microSD-kaart is beschermd tegen schrijven. Vervang de microSD-kaart": []
+      "De microSD-kaart is beschermd tegen schrijven. Vervang de microSD-kaart.": []
     },
     "05004017": {
       "Binden is mislukt. Probeer het opnieuw of start de printer opnieuw.": []
@@ -479,7 +530,7 @@
       "Laser-/snijtaken kunnen momenteel niet worden gestart op de machine. Gebruik de computersoftware om de taak te starten.": []
     },
     "0500403C": {
-      "De huidige nozzle-instelling komt niet overeen met het slicingbestand. Doorgaan met printen kan de printkwaliteit beïnvloeden. Het is raadzaam om opnieuw te slicen voordat u begint met printen.": []
+      "De huidige nozzle-instelling komt niet overeen met het slicebestand. Doorgaan met printen kan de printkwaliteit beïnvloeden. Het wordt aanbevolen om opnieuw te slicen voordat u met het printen begint.": []
     },
     "0500403D": {
       "De gereedschapskop-module is niet ingesteld. Stel het in voordat u de taak start.": []
@@ -508,8 +559,23 @@
     "05004045": {
       "Hotend-controle wordt uitgevoerd. Deze bewerking is tijdelijk niet beschikbaar. Even geduld.": []
     },
+    "05004046": {
+      "Het printen is gestopt omdat het 3MF-bestand niet goed is. Check even of je tijdens het slicen het juiste printermodel hebt gekozen, of update Studio en slice het bestand opnieuw.": []
+    },
+    "05004047": {
+      "Het printen is gestopt omdat het aantal beschikbare hotends of het model niet klopt met het geslicede bestand. Check even het hotendmodel en het aantal voordat je de printklus opnieuw start.": []
+    },
+    "05004048": {
+      "De invoermodule is offline. Controleer of de aansluitkabel van de invoermodule loszit.": []
+    },
+    "05004049": {
+      "Er is een vervanging van de invoermodule gedetecteerd. Zorg ervoor dat het bijbehorende extrusie-tandwiel en de nozzle zijn vervangen en werk het nozzletype handmatig bij in de printer.": []
+    },
     "05004050": {
       "Fout gedetecteerd op de printplaat.": []
+    },
+    "05004051": {
+      "Dynamische boogvorming mislukt. Gelieve het model opnieuw te slicen voordat u de print start.": []
     },
     "05004052": {
       "Fout gedetecteerd op de hot-end.": []
@@ -517,11 +583,26 @@
     "05004054": {
       "Fout gedetecteerd op de mat.": []
     },
+    "05004055": {
+      "Het gebruik van niet-TPU-filament met de TPU high-flow hotend kan de hotend beschadigen. Controleer de compatibiliteit van het filament en de hotend voordat u begint met printen.": []
+    },
+    "05004056": {
+      "De linker extruder ondersteunt de TPU high-flow hot-end niet. Installeer een compatibele hot-end en probeer het opnieuw.": []
+    },
+    "05004057": {
+      "Het filament dat is geselecteerd in de slicer vereist een hardere nozzle. Vervang de nozzle of pas de filamentinstellingen aan voordat u opnieuw gaat printen.": []
+    },
     "0500405D": {
       "Fout serienummer lasermodule: kan niet kalibreren of project maken.": []
     },
+    "0500405F": {
+      "Vogelperspectiefcamera niet geïnstalleerd. Kalibratie van het lasermodule kan niet worden uitgevoerd.": []
+    },
     "05004065": {
       "De taak vereist een laserplatform, maar het huidige platform is een snijplatform. Vervang het, meet de materiaaldikte in de software en start de taak opnieuw.": []
+    },
+    "05004066": {
+      "Hoge precisie nozzle-offsetkalibratie wordt alleen ondersteund voor PLA. De huidige TPU hot-end is niet compatibel. Schakel over naar een PLA-compatibele hot-end en probeer het opnieuw.": []
     },
     "05004070": {
       "De laser- of snijmodule is aangesloten, zodat het apparaat geen 3D-printtaak kan starten.": []
@@ -531,6 +612,9 @@
     },
     "05004076": {
       "Plaats het laserplatform correct en zorg ervoor dat de achterste markeringen niet worden geblokkeerd, start vervolgens de diktemeting opnieuw in de software voordat u de taak start.": []
+    },
+    "05004095": {
+      "Geen printplaat gedetecteerd. Plaats deze correct en kalibreer opnieuw.": []
     },
     "05004097": {
       "Niet-gecertificeerde lasermodule gedetecteerd; Het apparaat kan niet verder werken. Sluit de modulekabel opnieuw aan of start de printer opnieuw op.": []
@@ -557,10 +641,13 @@
       "Niet-gecertificeerde luchtpomp gedetecteerd; Het apparaat kan niet verder werken.  Sluit de modulekabel opnieuw aan of start de printer opnieuw op.": []
     },
     "050040A0": {
-      "Niet-gecertificeerde Laser Vierde As gedetecteerd; het apparaat kan niet verder werken. Sluit de kabel van de module opnieuw aan of start de printer opnieuw op.": []
+      "De Rotary-accessoire wordt niet gedetecteerd. Sluit de kabel opnieuw aan of start de printer opnieuw op.": []
     },
     "050040A1": {
       "Niet-gecertificeerd brandblusapparaat gedetecteerd; het apparaat kan niet verder werken.  Sluit de kabel van de module opnieuw aan of start de printer opnieuw op.": []
+    },
+    "050040A2": {
+      "Het apparaat kan de externe afzuigventilator niet detecteren. Start de printer opnieuw op of sluit de ventilatorkabel opnieuw aan.": []
     },
     "050040A3": {
       "AMS (of AMS lite) Er is iets mis met de communicatie. Probeer de modulekabel opnieuw aan te sluiten of start de printer opnieuw op.": []
@@ -570,6 +657,18 @@
     },
     "050040A5": {
       "De huidige firmware werkt alleen met AMS, AMS 2 Pro en AMS HT. Haal alle AMS-apparaten weg voordat je de ondersteunde apparaten weer aansluit.": []
+    },
+    "050040A6": {
+      "Het downloaden van het bestand is mislukt vanwege ontbrekende certificaten. Controleer de certificaatconfiguratie van Fleet Hub en start de printer opnieuw op voordat u het opnieuw probeert.": []
+    },
+    "050040A7": {
+      "Het apparaat kan de filamentwisselaar niet detecteren. Start de printer opnieuw op of sluit de kabel opnieuw aan.": []
+    },
+    "050040A8": {
+      "De firmware van het apparaat vereist een reparatie-upgrade en de huidige bewerking kan niet worden uitgevoerd. Voer de upgrade uit op de pagina 'Firmware'.": []
+    },
+    "050040C0": {
+      "Er is een communicatiefout gedetecteerd met AMS, AMS lite of AMS HT. Sluit de modulekabel opnieuw aan of start de printer opnieuw op wanneer deze idle is.": []
     },
     "05008013": {
       "Het printbestand is niet beschikbaar. Controleer of het opslagmedium is verwijderd.": []
@@ -581,13 +680,16 @@
       "Het gesegmenteerde bestand is niet consistent met het huidige printermodel. Doorgaan?": []
     },
     "0500803C": {
-      "De huidige nozzle-instelling komt niet overeen met het slicingbestand. Doorgaan met printen kan de printkwaliteit beïnvloeden. Het is raadzaam om opnieuw te slicen voordat u begint met printen.": []
+      "De huidige nozzle-instelling komt niet overeen met het slicebestand. Doorgaan met printen kan de printkwaliteit beïnvloeden. Het wordt aanbevolen om opnieuw te slicen voordat u met het printen begint.": []
     },
     "05008040": {
       "De voorkant van de printkop is los. Als je de printkop verplaatst, kan de printer kapot gaan. Wil je doorgaan?": []
     },
     "05008041": {
       "Het filament in de hotend is te koud. Extrusie kan de extruder beschadigen. Wordt het filament nog steeds in- of uitgevoerd?": []
+    },
+    "05008048": {
+      "De module op de printkop is niet gekalibreerd. Annuleer de taak om kalibratie uit te voeren of schakel over naar een gekalibreerde module.": []
     },
     "05008051": {
       "Gedetecteerde printplaat is niet hetzelfde als het Gcode-bestand. Pas de instellingen van de snijmachine aan of gebruik de juiste plaat.": []
@@ -598,11 +700,17 @@
       ],
       "Tijdens het afdrukken is gedetecteerd dat de nozzles niet overeenkomen. Start de afdruk na het opnieuw slicen of ga door met afdrukken nadat u de juiste nozzle hebt vervangen. Let op: de hotend-temperatuur is hoog.": []
     },
+    "05008054": {
+      "De linker extruder ondersteunt de TPU high-flow hot-end niet. Vervang deze alstublieft door een compatibele hot-end voordat u doorgaat met het printen. Let op: de hot-end is heet.": []
+    },
     "05008055": {
       "Er is een lasermodule geïnstalleerd, maar er wordt een snijplatform gedetecteerd. Plaats een laserplatform en voer de laserkalibratie uit.": []
     },
     "05008056": {
       "De snijmodule is geïnstalleerd, maar het laserplatform wordt gedetecteerd. Plaats het snijplatform voor kalibratie.": []
+    },
+    "05008057": {
+      "De in de slicer geselecteerde filamenthardheid overschrijdt de huidige nozzlehardheid. Doorgaan met de print kan nozzle slijtage veroorzaken, wat leidt tot lekkage en onstabiele doorstroming. Ga alstublieft voorzichtig te werk.": []
     },
     "05008058": {
       "Plaats de snijmat met lichte grip op de juiste manier en zorg ervoor dat de marker zichtbaar is.": []
@@ -636,6 +744,9 @@
     },
     "05008064": {
       "Plaats het laserplatform correct en zorg ervoor dat de achterste markeringen niet worden geblokkeerd voor laserkalibratie.": []
+    },
+    "05008065": {
+      "De linker extruder ondersteunt geen TPU hot-end met hoge stroom doorvoer. Geforceerde installatie kan leiden tot defecten bij het wisselen van het hot-end. Vervang deze alstublieft door een ander compatibel hot-end.": []
     },
     "05008066": {
       "De taak vereist een snijplatform, maar het huidige is een laserplatform. Vervang het door een snijplatform (snijbeschermingsbasis + LightGrip-snijmat).": []
@@ -763,8 +874,32 @@
     "05008093": {
       "De siliconen huls van het nozzle is niet geïnstalleerd; er bestaat een risico op een storing in de temperatuurregeling. Installeer de huls correct en probeer het opnieuw.": []
     },
+    "05008096": {
+      "De installatie van de BirdsEye-camera is mislukt. Zorg ervoor dat de BirdsEye-camera correct is geïnstalleerd en verwijder eventuele obstakels die het zicht van de camera kunnen belemmeren.": []
+    },
+    "05008097": {
+      "Initialisatie van de BirdsEye-camera is mislukt. De camera op de gereedschapskop heeft de verwarmingselementen niet gedetecteerd.": []
+    },
+    "05008098": {
+      "Geen materiaal gedetecteerd. Bevestig de plaatsing van het materiaal en ga verder.": []
+    },
+    "05008099": {
+      "AI heeft een mogelijke verschuiving of instorting van de print gedetecteerd. Controleer de printstatus en onderneem zo snel mogelijk de juiste actie.": []
+    },
+    "0500809A": {
+      "Vervang de Vision Encoder printplaat om schade tijdens het kalibreren te voorkomen.": []
+    },
+    "0500809B": {
+      "Bouwplaat niet correct gepositioneerd, kan botsen met de afvaluitlaat. Plaats de bouwplaat opnieuw en lijn deze uit met het verwarmingsbed.": []
+    },
     "050080A0": {
       "De vision-encoderplaat werd niet gedetecteerd. Controleer of het correct op het warmtebed is geplaatst.": []
+    },
+    "050080A6": {
+      "De Rotary-accessoire is gedetecteerd. Verwijder deze alstublieft voordat u verdergaat.": []
+    },
+    "050080A7": {
+      "De Rotary-accessoire is losgekoppeld. Zorg ervoor dat deze correct is geïnstalleerd en dat de kabel stevig is aangesloten.": []
     },
     "0500C010": {
       "MicroSD-kaart lees-/schrijfuitzondering: plaats de MicroSD-kaart opnieuw of vervang deze.": [],
@@ -787,8 +922,32 @@
     "0500C036": {
       "Dit is een printtaak. Maak de laser/snijmodule los van de gereedschapskop.": []
     },
+    "0500C04A": {
+      "AMS is bezig met kalibreren, het lezen van RFID of het laden/lossen van materiaal, kan het droogproces niet starten, even geduld alstublieft.": []
+    },
+    "0500C04B": {
+      "Filament in AMS-uitvoer, de hoge droogtemperatuur kan verstopping van de AMS veroorzaken. Drogen kan niet worden gestart. Verwijder eerst het filament.": []
+    },
+    "0500C04C": {
+      "Het AMS is momenteel aan het drogen. Start het proces alstublieft niet opnieuw.": []
+    },
+    "0500C04D": {
+      "Het apparaat bevindt zich momenteel in de laser- of snijmodus en kan niet beginnen met drogen. Start het droogproces alstublieft niet.": []
+    },
+    "0500C04E": {
+      "Sluit de voedingsadapter aan op de AMS-HT voordat u met het droogproces begint.": []
+    },
+    "0500C04F": {
+      "De AMS is bezig met drogen en kan deze bewerking momenteel niet uitvoeren.": []
+    },
+    "0500C059": {
+      "Het apparaat blust een brand. Wacht alstublieft voordat u het bedient.": []
+    },
     "0500C07F": {
       "Het apparaat is bezet en kan deze bewerking niet uitvoeren. Om verder te gaan, pauzeert of stopt u de huidige taak.": []
+    },
+    "0500C080": {
+      "De extruder is momenteel actief en kan deze bewerking niet uitvoeren. Om verder te gaan, pauzeert of stopt je eerst de huidige taak.": []
     },
     "05014017": {
       "Koppeling is mislukt. Probeer het opnieuw of start de printer opnieuw.": []
@@ -895,6 +1054,24 @@
     "05024006": {
       "Onbekende module gedetecteerd, probeer de firmware bij te werken naar de nieuwste versie.": []
     },
+    "05024007": {
+      "": []
+    },
+    "05024008": {
+      "": []
+    },
+    "05024009": {
+      "": []
+    },
+    "0502400A": {
+      "": []
+    },
+    "0502400B": {
+      "": []
+    },
+    "0502400C": {
+      "": []
+    },
     "0502400D": {
       "Kan een nieuwe taak niet starten: filament laden/ontladen niet voltooid.": []
     },
@@ -903,6 +1080,21 @@
     },
     "05024013": {
       "Dit apparaat is niet compatibel met de 40W lasermodule. Vervang deze door een 10W lasermodule of verwijder deze.": []
+    },
+    "05024027": {
+      "De huidige AMS ondersteunt geen droging tijdens het printen. Verbind met het netwerk en werk de AMS-firmware bij op de pagina 'Firmware'.": []
+    },
+    "0502402D": {
+      "Het printen is gestopt omdat de printer het 3mf-bestand niet kon verwerken. Verstuur je printtaak opnieuw.": []
+    },
+    "0502402E": {
+      "Het printen is gestopt omdat de printer het 3mf-bestand niet kon verwerken. Verstuur je printtaak opnieuw.": []
+    },
+    "0502402F": {
+      "Het printen is gestopt omdat de printer het 3mf-bestand niet kon verwerken. Verstuur je printtaak opnieuw.": []
+    },
+    "05024030": {
+      "Het printen is gestopt omdat de printer het 3mf-bestand niet kon verwerken. Verstuur je printtaak opnieuw.": []
     },
     "05024098": {
       "Niet-gecertificeerde AMS C gedetecteerd; Het apparaat kan niet verder werken. Sluit de AMS-kabel opnieuw aan of start de printer opnieuw op.": []
@@ -917,7 +1109,7 @@
       "Het apparaat is bezig en kan geen nozzle-identificatie uitvoeren.": []
     },
     "0502C010": {
-      "Vanwege de vermogensbeperkingen van de printer kunnen afdrukken, kalibreren, controles en andere handelingen niet worden uitgevoerd tijdens het drogen van de AMS. Stop het droogproces voordat u verdergaat met andere bewerkingen.": []
+      "Vanwege stroombeperkingen kunnen prints of kalibratie niet worden uitgevoerd tijdens het drogen van AMS. Stop het drogen of sluit een stroomadapter aan om door te gaan.": []
     },
     "0502C011": {
       "Nu in 2D-productiemodus. Ga gewoon door met de printer.": []
@@ -928,6 +1120,24 @@
     "0502C014": {
       "De AMS-schatting van resterende filament is standaard aan en kan niet worden uitgeschakeld.": []
     },
+    "0502C024": {
+      "De kalibratiegegevens van de stroomdynamiek hebben de opslaglimiet overschreden. Verwijder enkele historische gegevens uit de slicersoftware voordat u nieuwe kalibratiegegevens toevoegt.": []
+    },
+    "0502C026": {
+      "Het apparaat is momenteel bezig met de lopende taak en kan deze bewerking nu niet uitvoeren. Probeer het later opnieuw.": []
+    },
+    "0502C028": {
+      "Het filament dat momenteel in de extruder is geladen, ondersteunt geen handmatige extrusie.": []
+    },
+    "0502C031": {
+      "Controleer en verwijder eventuele geprinte onderdelen of resten van het warmtebed voordat u doorgaat met de koude trek.": []
+    },
+    "0502C032": {
+      "Controleer en verwijder alle geprinte onderdelen of vuil van het oppervlak en de onderzijde van het warmtebed, voordat je verdergaat met het droogproces.": []
+    },
+    "0502C034": {
+      "Fout bij het wisselen van de extruder en de huidige actie is niet uitgevoerd. Ga naar het extruder scherm, controleer en voltooi de wissel van de extruder en probeer het daarna opnieuw.": []
+    },
     "05034098": {
       "Niet-gecertificeerde AMS D gedetecteerd; Het apparaat kan niet verder werken. Sluit de AMS-kabel opnieuw aan of start de printer opnieuw op.": []
     },
@@ -936,6 +1146,12 @@
     },
     "050340A3": {
       "De AMS (of AMS lite) D-communicatie is niet goed. Sluit de modulekabel opnieuw aan of start de printer opnieuw op.": []
+    },
+    "05104098": {
+      "Het apparaat kan AMS lite niet detecteren. Sluit de AMS lite-kabel opnieuw aan of start de printer opnieuw op.": []
+    },
+    "0510409D": {
+      "De firmware van AMS lite komt niet overeen met de printer, het apparaat kan niet verder werken. Werk het bij op de pagina 'Firmware'.": []
     },
     "05804096": {
       "Niet-gecertificeerde AMS-HT A gedetecteerd; Het apparaat kan niet verder werken. Sluit de AMS-HT-kabel opnieuw aan of start de printer opnieuw op.": []
@@ -1009,6 +1225,9 @@
     "058740A2": {
       "De AMS-HT H-communicatie is niet goed. Sluit de modulekabel opnieuw aan of start de printer opnieuw op.": []
     },
+    "05FE4094": {
+      "De linker hot-end is niet geïnstalleerd. Installeer de hot-end en kalibreer opnieuw.": []
+    },
     "05FE8053": {
       "Tijdens het afdrukken is gedetecteerd dat de linker nozzle niet overeenkomt. Start de afdruk na het opnieuw slicen of ga door met afdrukken nadat u de juiste nozzle hebt vervangen. Let op: de hotend-temperatuur is hoog.": []
     },
@@ -1023,6 +1242,12 @@
     },
     "05FE8081": {
       "De linker hotend is niet geïnstalleerd.": []
+    },
+    "05FF4094": {
+      "De hot-end is niet geïnstalleerd. Installeer de hot-end en kalibreer opnieuw.": [],
+      "De rechter hot-end is niet geïnstalleerd. Installeer de hot-end en kalibreer opnieuw.": [
+        "H2D"
+      ]
     },
     "05FF8053": {
       "Tijdens het printen is gedetecteerd dat de juiste nozzle niet overeenkomt. Start de afdruk na het opnieuw slicen of ga door met afdrukken nadat u de juiste nozzle hebt vervangen. Let op: de hotend-temperatuur is hoog.": []
@@ -1105,6 +1330,9 @@
     },
     "07008023": {
       "Koeling AMS A is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "0700C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0700C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS A. Ga naar de Assistent voor meer informatie.": []
@@ -1191,6 +1419,9 @@
     "07018023": {
       "Koeling AMS B is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
     },
+    "0701C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "0701C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS B. Ga naar de Assistent voor meer informatie.": []
     },
@@ -1275,6 +1506,9 @@
     },
     "07028023": {
       "Koeling AMS C is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "0702C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0702C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS C. Ga naar de Assistent voor meer informatie.": []
@@ -1361,6 +1595,9 @@
     "07038023": {
       "Koeling AMS D mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
     },
+    "0703C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "0703C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS D. Ga naar de Assistent voor meer informatie.": []
     },
@@ -1429,6 +1666,9 @@
     "07048023": {
       "Koeling AMS E is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
     },
+    "0704C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "07054025": {
       "De filamentinformatie is niet gelezen.": []
     },
@@ -1478,6 +1718,9 @@
     },
     "07058023": {
       "Koeling AMS F mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "0705C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "07064025": {
       "De filamentinformatie is niet gelezen.": []
@@ -1529,6 +1772,9 @@
     "07068023": {
       "Koeling AMS G is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
     },
+    "0706C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "07074025": {
       "De filamentinformatie is niet gelezen.": []
     },
@@ -1578,6 +1824,9 @@
     },
     "07078023": {
       "Koeling AMS H mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "0707C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "07FE8001": {
       "Het filament van de linker extruder is niet doorgesneden. Controleer de snijplotter. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
@@ -1650,6 +1899,9 @@
     },
     "07FEC012": {
       "Druk op de zwarte PTFE-buiskoppeling en koppel de PTFE-buis los. Klik op 'Doorgaan' nadat u de bewerking hebt voltooid": []
+    },
+    "07FEC030": {
+      "Het filament dat in de slicer is ingesteld, is op. Het printen is even gestopt. Ga naar de printer om het materiaal te vervangen en ga verder met printen.": []
     },
     "07FF4001": {
       "Er wordt nog steeds filament geladen vanuit het AMS nadat dit is uitgeschakeld. Verwijder het filament, laad het vanuit de spoelhouder en begin opnieuw met printen.": []
@@ -1762,10 +2014,10 @@
       "Voer het filament in de PTFE-buis totdat het niet verder kan worden geduwd.": []
     },
     "07FFC00A": {
-      "Let op de nozzle van de rechter extruder. Als het filament geëxtrudeerd is, selecteer dan &quot;Doorgaan&quot;; als dat niet zo is, duw het filament dan iets naar voren en selecteer dan &quot;Opnieuw proberen&quot;.": [
+      "Let op de nozzle van de rechter extruder. Als het filament geëxtrudeerd is, selecteer dan 'Doorgaan'; als dat niet zo is, duw het filament dan iets naar voren en selecteer dan 'Opnieuw proberen'.": [
         "H2D"
       ],
-      "Let op de nozzle. Als het filament is geëxtrudeerd, selecteert u &quot;Doorgaan&quot;; als dat niet het geval is, duwt u het filament iets naar voren en selecteert u vervolgens &quot;Opnieuw proberen&quot;.": []
+      "Let op de nozzle. Als het filament is geëxtrudeerd, selecteert u 'Doorgaan' als dat niet het geval is, duwt u het filament iets naar voren en selecteert u vervolgens 'Opnieuw proberen'.": []
     },
     "07FFC010": {
       "Steek de filament erin tot hij niet verder kan. Er kan lichte rookontwikkeling zijn tijdens het doorspoelen, dus sluit de voorklep en bovenklep na het plaatsen.": []
@@ -1781,6 +2033,9 @@
       "Verwijder de voorklep en hang hem aan de X-as. Druk op de zwarte PTFE-buiskoppeling en koppel de PTFE-buis los. Klik op 'Doorgaan' nadat de bewerking is voltooid": [
         "P2S"
       ]
+    },
+    "07FFC030": {
+      "Het filament dat in de slicer is ingesteld, is op. Het printen is even gestopt. Ga naar de printer om het materiaal te vervangen en ga verder met printen.": []
     },
     "0C004020": {
       "De installatie van de BirdsEye Camera is mislukt. Ruim alle voorwerpen op en verwijder de mat. Zorg ervoor dat de marker niet wordt belemmerd. Maak ondertussen zowel de BirdsEye-camera als de Toolhead-camera schoon en verwijder alle vreemde voorwerpen die hun zicht belemmeren.": []
@@ -1810,7 +2065,7 @@
       "De visuele marker is niet gedetecteerd. Plak het papier opnieuw op de juiste positie.": []
     },
     "0C00402C": {
-      "Fout in de verbinding met apparaatgegevens. Start de printer opnieuw op": []
+      "Fout in de verbinding met apparaatgegevens. Start de printer opnieuw op.": []
     },
     "0C00402D": {
       "De camera van de gereedschapskop werkt niet goed; Start het apparaat opnieuw op.": []
@@ -1868,6 +2123,12 @@
     },
     "0C008043": {
       "AI detecteerde klontering van de nozzle. Controleer de nozzleconditie. Raadpleeg de assistent voor oplossingen.": []
+    },
+    "0C008053": {
+      "De Rotary-accessoire is onjuist geplaatst. Volg de illustratie voor correcte plaatsing van de roterende bevestiging.": []
+    },
+    "0C008054": {
+      "Positioneringskenmerken van de Rotary-accessoire zijn niet gedetecteerd. Zorg voor correcte plaatsing en zuivere positioneringsmarkeringen. Als dit klopt, kunt u deze fout negeren en doorgaan met fotometing.": []
     },
     "0C00C003": {
       "Mogelijke defecten werden gedetecteerd in de eerste laag.": []
@@ -2121,6 +2382,9 @@
     "12FFC006": {
       "Voer het filament in de PTFE-buis totdat het niet verder kan worden geschoven.": []
     },
+    "12FFC030": {
+      "Het filament dat in de slicer is ingesteld, is op. Het printen is gepauzeerd. Ga naar de machine om het materiaal te vervangen en hervat het printen.": []
+    },
     "18004025": {
       "De filamentinformatie is niet gelezen.": []
     },
@@ -2160,7 +2424,7 @@
       "Kan de AMS-mappingtabel niet krijgen; selecteer 'Hervatten' om het opnieuw te proberen.": []
     },
     "18008013": {
-      "Time-out voor het doorspoelen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
+      "Time-out bij het verwijderen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
     },
     "18008016": {
       "De extruder extrudeert niet normaal; neem dan contact op met de Assistent. Na het oplossen van problemen. Als de defecten acceptabel zijn, klikt u op de knop 'Opnieuw proberen'.": []
@@ -2173,6 +2437,9 @@
     },
     "18008023": {
       "AMS-HT A koeling mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "1800C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1800C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT A. Ga naar de Assistent voor meer informatie.": []
@@ -2231,7 +2498,7 @@
       "Kan de AMS-mappingtabel niet krijgen; selecteer 'Hervatten' om het opnieuw te proberen.": []
     },
     "18018013": {
-      "Time-out voor het doorspoelen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
+      "Time-out bij het verwijderen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
     },
     "18018016": {
       "De extruder extrudeert niet normaal; neem dan contact op met de Assistent. Na het oplossen van problemen. Als de defecten acceptabel zijn, klikt u op de knop 'Opnieuw proberen'.": []
@@ -2244,6 +2511,9 @@
     },
     "18018023": {
       "Koeling AMS-HT B is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "1801C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1801C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT B. Ga naar de Assistent voor meer informatie.": []
@@ -2302,7 +2572,7 @@
       "Kan de AMS-mappingtabel niet krijgen; selecteer 'Hervatten' om het opnieuw te proberen.": []
     },
     "18028013": {
-      "Time-out voor het doorspoelen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
+      "Time-out bij het verwijderen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
     },
     "18028016": {
       "De extruder extrudeert niet normaal; raadpleeg de Assistent. Na het oplossen van problemen. Als de defecten aanvaardbaar zijn, klik dan op de knop 'Opnieuw proberen'.": []
@@ -2315,6 +2585,9 @@
     },
     "18028023": {
       "Koeling AMS-HT C is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "1802C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1802C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT C. Ga naar de Assistent voor meer informatie.": []
@@ -2373,7 +2646,7 @@
       "Kan de AMS-mappingtabel niet krijgen; selecteer 'Hervatten' om het opnieuw te proberen.": []
     },
     "18038013": {
-      "Time-out voor het doorspoelen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
+      "Time-out bij het verwijderen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
     },
     "18038016": {
       "De extruder extrudeert niet normaal; neem dan contact op met de Assistent. Na het oplossen van problemen. Als de defecten acceptabel zijn, klikt u op de knop 'Opnieuw proberen'.": []
@@ -2386,6 +2659,9 @@
     },
     "18038023": {
       "Koeling AMS-HT D mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "1803C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1803C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT D. Ga naar de Assistent voor meer informatie.": []
@@ -2444,7 +2720,7 @@
       "Kan de AMS-mappingtabel niet krijgen; selecteer 'Hervatten' om het opnieuw te proberen.": []
     },
     "18048013": {
-      "Time-out voor het doorspoelen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
+      "Time-out bij het verwijderen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
     },
     "18048016": {
       "De extruder extrudeert niet normaal; neem dan contact op met de Assistent. Na het oplossen van problemen. Als de defecten acceptabel zijn, klikt u op de knop 'Opnieuw proberen'.": []
@@ -2454,6 +2730,9 @@
     },
     "18048023": {
       "Koeling AMS-HT E mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "1804C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1804C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT E. Ga naar de Assistent voor meer informatie.": []
@@ -2512,7 +2791,7 @@
       "Kan de AMS-mappingtabel niet krijgen; selecteer 'Hervatten' om het opnieuw te proberen.": []
     },
     "18058013": {
-      "Time-out voor het doorspoelen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
+      "Time-out bij het verwijderen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
     },
     "18058016": {
       "De extruder extrudeert niet normaal; neem dan contact op met de Assistent. Na het oplossen van problemen. Als de defecten acceptabel zijn, klikt u op de knop 'Opnieuw proberen'.": []
@@ -2522,6 +2801,9 @@
     },
     "18058023": {
       "Koeling AMS-HT F mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "1805C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1805C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT F. Ga naar de Assistent voor meer informatie.": []
@@ -2591,6 +2873,9 @@
     "18068023": {
       "Koeling AMS-HT G is mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
     },
+    "1806C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "1806C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT G. Ga naar de Assistent voor meer informatie.": []
     },
@@ -2648,7 +2933,7 @@
       "Kan de AMS-mappingtabel niet krijgen; selecteer 'Hervatten' om het opnieuw te proberen.": []
     },
     "18078013": {
-      "Time-out voor het doorspoelen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
+      "Time-out bij het verwijderen van oud filament: Controleer of het filament vastzit of dat de extruder verstopt is. Klik na het oplossen van het probleem op de knop 'Opnieuw proberen'.": []
     },
     "18078016": {
       "De extruder extrudeert niet normaal; neem dan contact op met de Assistent. Na het oplossen van problemen. Als de defecten acceptabel zijn, klikt u op de knop 'Opnieuw proberen'.": []
@@ -2658,6 +2943,9 @@
     },
     "18078023": {
       "Koeling AMS-HT H mislukt. De omgevingstemperatuur is mogelijk te hoog. Gebruik het apparaat in een geschikte omgeving.": []
+    },
+    "1807C008": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1807C069": {
       "Er is een fout opgetreden tijdens het drogen van AMS-HT H. Ga naar de Assistent voor meer informatie.": []
@@ -2799,6 +3087,9 @@
     "0300010000010003": {
       "De temperatuur van het printbed is abnormaal; het verwarmingselement is oververhit.": []
     },
+    "0300010000010005": {
+      "Er is een probleem gedetecteerd met de temperatuurregeling van de kamerverwarmer en het verwarmingsmodule kan beschadigd zijn. Schakel het apparaat onmiddellijk uit en volg de Wiki om het AC-bord te vervangen.": []
+    },
     "0300010000010006": {
       "De temperatuur van het printbed is abnormaal; de sensor kan een kortsluiting hebben.": []
     },
@@ -2847,6 +3138,12 @@
         "H2D"
       ]
     },
+    "0300020000010005": {
+      "Abnormale temperatuurregeling gedetecteerd op de rechter extruder nozzle; de verwarmingsmodule kan beschadigd zijn. Schakel onmiddellijk de stroom uit en stop met het gebruik van het apparaat en neem contact op met de klantenservice voor hulp bij het oplossen van het probleem.": [
+        "H2D"
+      ],
+      "Abnormale temperatuurregeling gedetecteerd; de verwarmingsmodule kan beschadigd zijn. Schakel onmiddellijk de stroom uit en stop met het gebruik van het apparaat en neem contact op met de klantenservice voor hulp bij het oplossen van het probleem.": []
+    },
     "0300020000010006": {
       "De temperatuur van de juiste nozzle is abnormaal; De sensor kan kortsluiting hebben, controleer of de connector goed is aangesloten.": [
         "H2D"
@@ -2858,6 +3155,12 @@
         "H2D"
       ],
       "De temperatuur van de nozzle is abnormaal; de sensor kan een open circuit hebben.": []
+    },
+    "0300020000010008": {
+      "De temperatuur van de extruder-nozzle is abnormaal en kan de ingestelde waarde niet bereiken. Dit kan worden veroorzaakt door een verkeerd geïnstalleerde silicone sok rond de nozzle.": [],
+      "De temperatuur van de rechter extruder-nozzle is abnormaal en kan de ingestelde waarde niet bereiken. Dit kan worden veroorzaakt door een verkeerd geïnstalleerde siliconen sok rond de nozzle.": [
+        "H2D"
+      ]
     },
     "0300020000010009": {
       "De temperatuurregeling van de juiste nozzle is abnormaal. De hot-end is mogelijk niet geïnstalleerd. Om de verwarmingseenheid zonder de hotend te verwarmen, schakelt u de onderhoudsmodus in de instellingen in.": [
@@ -2927,6 +3230,12 @@
     },
     "0300090000020005": {
       "De extruder werkt niet goed. Misschien zit hij verstopt, of is het filament te dun, waardoor de extruder wegglijdt, of is het filament dat je eraan hebt vastgemaakt in de knoop geraakt.": []
+    },
+    "0300090000030007": {
+      "Anomalie bij filamentextrusie gedetecteerd. Automatisch proberen te herstellen, even geduld alstublieft.": []
+    },
+    "0300090000030008": {
+      "Afwijking bij filamentextrusie gedetecteerd. Automatisch proberen te herstellen, even geduld alstublieft.": []
     },
     "03000A0000010001": {
       "De gevoeligheid van printbed druksensor 1 is te hoog. Het kan zijn dat het vast zit tussen de spanarm en het printbed support, of de afstelschroef zit te strak.": []
@@ -3126,13 +3435,13 @@
       "Er is een rare sprong in de extruder extrusion force sensor-gegevens gevonden, waarschijnlijk door een slecht contact of een kapotte sensor.": []
     },
     "030018000001000D": {
-      "Kalibratie voor detectie van verstopping van spuitmond mislukt. Er is overmatige kracht op de spuitmond gedetecteerd. Zorg ervoor dat de spuitmond correct is geïnstalleerd.": []
+      "Kalibratie van de verstoppingsdetectie van de nozzle is mislukt. Overmatige kracht gedetecteerd op het mondstuk. Zorg ervoor dat de nozzle correct is geïnstalleerd.": []
     },
     "030018000001000E": {
-      "Kalibratie van nozzle-klonteringdetectie mislukt. De nozzle heeft de metalen plaat rechtsachter op het verwarmingsbed niet bereikt. Reinig de nozzle en verwijder eventueel vuil van die plaat.": [
+      "Kalibratie van de detectie van klontering van de npzzle mislukt. De nozzle raakte de binnenwand van het gat niet. Reinig de spuitmond en het gat in de stalen plaat rechtsachter op het verwarmde bed.": [],
+      "Kalibratie van nozzle-klonteringdetectie mislukt. De nozzle heeft het metalen plaatje achter rechts op het verwarmingsbed niet bereikt. Maak de nozzle schoon en verwijder eventuele resten van dat plaatje.": [
         "H2S"
-      ],
-      "Kalibratie voor detectie van verstopping van Nozzle mislukt. De Nozzle raakte de binnenwand van het gat niet. Reinig de Nozzle en het gat in de stalen plaat aan de rechterachterkant van het verwarmingsbed.": []
+      ]
     },
     "0300180000030009": {
       "Uitvoeren van de eerste hogetemperatuurbednivellering.": []
@@ -3164,6 +3473,9 @@
     "03001D0000010001": {
       "De positiesensor van de extrusiemotor is abnormaal. De verbinding met de sensor kan los zitten.": []
     },
+    "03001D000001000A": {
+      "Overbelasting van de extrudermotor gedetecteerd. De motor kan defect zijn.": []
+    },
     "03001E0000010001": {
       "De temperatuur van de linker nozzle is abnormaal; De kachel kan kortsluiting hebben.": []
     },
@@ -3173,11 +3485,17 @@
     "03001E0000010003": {
       "De temperatuur van de linker nozzle is abnormaal; de verwarming is oververhit.": []
     },
+    "03001E0000010005": {
+      "Abnormale temperatuurregeling gedetecteerd op de linker extruder nozzle; de verwarmingsmodule kan beschadigd zijn. Schakel onmiddellijk de stroom uit en stop met het gebruik van het apparaat, en neem contact op met de klantenservice voor hulp bij het oplossen van het probleem.": []
+    },
     "03001E0000010006": {
       "De temperatuur van de linker nozzle is abnormaal; De sensor kan kortsluiting hebben, controleer of de connector goed is aangesloten.": []
     },
     "03001E0000010007": {
       "De temperatuur van de linker nozzle is abnormaal; De sensor heeft mogelijk een open circuit.": []
+    },
+    "03001E0000010008": {
+      "De temperatuur van de linker extruder-nozzle is abnormaal en kan de ingestelde waarde niet bereiken. Dit kan worden veroorzaakt door een verkeerd geïnstalleerde siliconen sok rond de nozzle.": []
     },
     "03001E0000010009": {
       "De temperatuurregeling van de linker nozzle is abnormaal; De hot-end is mogelijk niet geïnstalleerd. Als u de hot-end wilt verwarmen zonder dat deze is geïnstalleerd, schakelt u de onderhoudsmodus in op de instellingenpagina.": []
@@ -3322,6 +3640,9 @@
     "03002D0000030009": {
       "Uitvoeren van de eerste hogetemperatuurbednivellering.": []
     },
+    "03002E0000030001": {
+      "De motor-geluidsonderdrukkingsgegevens moeten worden bijgewerkt; kalibreer alstublieft opnieuw.": []
+    },
     "0300310000010001": {
       "De snelheid van de ventilator voor het koelen van het onderdeel is te laag of gestopt. Het kan zijn dat het vastzit of dat de connector niet goed is aangesloten.": []
     },
@@ -3373,6 +3694,9 @@
     "0300400000020001": {
       "Gegevensoverdracht via de seriële poort is abnormaal; het softwaresysteem is mogelijk defect.": []
     },
+    "0300400000020002": {
+      "Fout in G-code gegevens ontdekt. Het systeem heeft automatisch de G-code opnieuw geladen en het printen hervat.": []
+    },
     "0300410000010001": {
       "De systeemspanning is onstabiel; hierdoor wordt de stroomuitvalbeveiligingsfunctie geactiveerd.": []
     },
@@ -3394,6 +3718,9 @@
     "0300900000010005": {
       "Het verwarmen van de kamer werkt niet. De thermische weerstand is te hoog.": []
     },
+    "0300900000010007": {
+      "Hoge kamertemperatuur gedetecteerd. Als de hot-end oververhit raakt of rook afgeeft, schakel dan onmiddellijk de printer uit. Raadpleeg de Wiki voor gedetailleerde instructies voor probleemoplossing.": []
+    },
     "0300900000010010": {
       "De communicatie van de kamertemperatuurregelaar is abnormaal.": []
     },
@@ -3405,6 +3732,9 @@
     },
     "0300910000010003": {
       "De verwarming heeft mogelijk een kortsluiting of de thermische zekering is mogelijk in werking getreden. De temperatuur van de verwarming is te hoog.": []
+    },
+    "0300910000010005": {
+      "Er is een probleem gedetecteerd met de temperatuurregeling van de kamerverwarmer en het verwarmingsmodule kan beschadigd zijn. Schakel het apparaat onmiddellijk uit en volg de Wiki om het AC-bord te vervangen.": []
     },
     "0300910000010006": {
       "De temperatuur van kamerverwarming 1 is abnormaal. De sensor heeft mogelijk een kortsluiting.": []
@@ -3438,6 +3768,9 @@
     },
     "0300920000010007": {
       "De temperatuur van kamerverwarming 2 is abnormaal. De sensor heeft mogelijk een kortsluiting.": []
+    },
+    "0300920000010008": {
+      "Kamerverwarming 2 kon niet naar de doeltemperatuur stijgen.": []
     },
     "030092000001000A": {
       "De temperatuur van kamerverwarmer 2 is abnormaal. De AC-kaart is mogelijk kapot.": []
@@ -3656,6 +3989,9 @@
     "0300A80000010001": {
       "AMS-voedingsstoring, mogelijk door schade aan het AMS of kortsluiting in de AMS-interface, of te veel AMS-aansluitingen. Controleer of deze correct is aangesloten.": []
     },
+    "0300AD0000030001": {
+      "De temperatuur in de kamer is hoog; de filterfunctie is automatisch uitgeschakeld om een onderbreking van het printen te voorkomen.": []
+    },
     "0300C00000010001": {
       "Actieve kamer Storing in de afvoerluchtdeur: deze zit mogelijk vast.": []
     },
@@ -3719,17 +4055,26 @@
     "0300D60000010007": {
       "De resetknop van de brandblusser zit vast. Draai het noodwiel voorzichtig naar links en rechts totdat je minder weerstand voelt. Zet daarna de brandblusser uit en weer aan.": []
     },
+    "0300D70000010003": {
+      "Het werkstuk op de Rotary-accessoire botste tegen de prinkop. Vervang dit door een werkstuk met de juiste afmetingen en probeer het opnieuw. Zie de Wiki voor de ondersteunde afmetingsbereiken.": []
+    },
     "0300D70000020001": {
-      "De vierde as van de laser is niet aangesloten": []
+      "De Rotary-accessoire is losgekoppeld. Zorg ervoor dat deze correct is geïnstalleerd en dat de kabel stevig is aangesloten.": []
+    },
+    "0300D70000020002": {
+      "De Rotary-accessoire is gedetecteerd. Verwijder deze alstublieft voordat u doorgaat.": []
     },
     "0300D80000010001": {
-      "De vierde-asmotor van de laser heeft een open circuit. Mogelijk is er een losse verbinding of is de motor defect.": []
+      "De motor van de Rotary-accessoire heeft een open circuit. Er kan een losse verbinding zijn of de motor kan defect zijn.": []
     },
     "0300D80000010002": {
-      "Motorfout in de vierde as van de laser. Schakel de vierde as van de laser uit en vervolgens weer in om hem opnieuw te starten.": []
+      "De motorfout van de Rotary-accessoire. Schakel de stroom uit en daarna weer in om de Rotary-accessoire opnieuw te starten.": []
     },
     "0300D90000020001": {
-      "Er is een communicatiefout tussen de motor van de vierde laser-as en de positiesensor. Als het opnieuw opstarten niet lukt, neem dan even contact op met de klantenservice.": []
+      "Communicatiefout tussen de Rotary-accessoire motor en de posititiesensor. Neem contact op met de klantenservice als het herstarten mislukt.": []
+    },
+    "0300DB0000020001": {
+      "Lasermodule gedetecteerd. Installeer de juiste nozzle correct om een ​​correcte kalibratie van de lasermodule te garanderen.": []
     },
     "050001000001000A": {
       "": []
@@ -3784,6 +4129,9 @@
     "0500010000030009": {
       "": []
     },
+    "0500010000030015": {
+      "De interne opslag van de printer is bijna vol en het opnemen van een timelapse kan mislukken. Verwijder bestanden uit de interne opslag om ruimte vrij te maken en probeer het opnemen daarna opnieuw.": []
+    },
     "0500020000020001": {
       "Kan geen verbinding maken met internet. Controleer de netwerkverbinding.": []
     },
@@ -3808,8 +4156,29 @@
     "0500020000020008": {
       "Tijdsynchronisatie mislukt": []
     },
+    "0500020000020009": {
+      "": []
+    },
+    "050002000002000A": {
+      "": []
+    },
+    "050002000002000B": {
+      "": []
+    },
+    "0500020000030009": {
+      "": []
+    },
+    "050002000003000A": {
+      "": []
+    },
+    "050002000003000B": {
+      "": []
+    },
+    "050002000003000C": {
+      "": []
+    },
     "0500030000010001": {
-      "De MC-module werkt niet goed. Start het apparaat opnieuw op of controleer de kabelverbinding van het apparaat.": []
+      "De MC-module werkt niet goed. Start het apparaat opnieuw op of controleer de kabelverbinding van het apparaat": []
     },
     "0500030000010002": {
       "De printkop werk niet goed. Herstart de printer.": []
@@ -3867,11 +4236,14 @@
     "0500030000010026": {
       "De uitbreidingsmodule van de gereedschapskop werkt niet goed. Schakel het apparaat uit, controleer de verbinding en start het apparaat opnieuw op.": []
     },
+    "0500030000010053": {
+      "": []
+    },
     "050003000002000C": {
       "Draadloze hardwarefout: schakel wifi in/uit of start het apparaat opnieuw op.": []
     },
     "050003000002000D": {
-      "De SD-kaartcontroller werkt niet goed": []
+      "De SD-kaartcontroller werkt niet goed.": []
     },
     "050003000002000E": {
       "Sommige modules zijn niet compatibel met de firmwareversie van de printer, wat het gebruik kan beïnvloeden. Ga naar de pagina 'Firmware' om te updaten nadat u verbinding hebt gemaakt met internet, of u kunt offline updaten volgens wiki.": []
@@ -3903,6 +4275,9 @@
     "0500030000020018": {
       "": []
     },
+    "0500030000020019": {
+      "": []
+    },
     "0500030000020020": {
       "De capaciteit van de SD-kaart is onvoldoende om afdrukbestanden in de cache op te slaan.": [],
       "De capaciteit van een USB-stick is onvoldoende om afdrukbestanden in de cache op te slaan.": [
@@ -3910,6 +4285,21 @@
         "H2S",
         "H2D"
       ]
+    },
+    "0500030000020050": {
+      "": []
+    },
+    "0500030000020051": {
+      "": []
+    },
+    "0500030000020052": {
+      "": []
+    },
+    "0500030000020053": {
+      "": []
+    },
+    "0500030000020054": {
+      "": []
     },
     "0500030000020055": {
       "Gebruikersinformatie is verlopen, log opnieuw in.": []
@@ -3961,6 +4351,15 @@
     },
     "0500040000010052": {
       "Veiligheidssleutel is niet ingestoken. Volg de Wiki om het te installeren.": []
+    },
+    "0500040000010056": {
+      "": []
+    },
+    "0500040000010060": {
+      "": []
+    },
+    "0500040000010061": {
+      "": []
     },
     "0500040000020007": {
       "De bedtemperatuur overschrijdt de verglazingstemperatuur van het filament, wat een verstopping van de nozzle kan veroorzaken. Houd de voorklep van de printer open of verlaag de bedtemperatuur.": []
@@ -4046,6 +4445,9 @@
     "0500040000020039": {
       "Sluit a.u.b. de moduleconnector aan": []
     },
+    "0500040000020040": {
+      "De TPU-specifieke hot-end is niet compatibel met de linker extruder. Vervang deze alstublieft door een andere compatibele hot-end.": []
+    },
     "0500040000020041": {
       "De lasermodule is lange tijd gebruikt. Reinig deze onmiddellijk om te voorkomen dat de laserbewerking wordt beïnvloed.": []
     },
@@ -4066,6 +4468,9 @@
     },
     "0500040000030054": {
       "Automatisch brandblussysteem gedetecteerd. Het is een goed idee om een brandoefening te doen om te weten hoe alles werkt.": []
+    },
+    "0500040000030057": {
+      "De printtaak is voltooid. Automatische luchtzuivering is bezig.": []
     },
     "0500050000010001": {
       "De fabrieksgegevens van het AP-bord zijn abnormaal; vervang de AP-kaart door een nieuwe.": []
@@ -4122,13 +4527,25 @@
       "Certificering van snijmodule is mislukt. Sluit de kabel opnieuw aan of start de printer opnieuw op.": []
     },
     "0500050000010018": {
-      "De certificering van de Laser Fourth Axis module is mislukt. Sluit de kabel van de module opnieuw aan of start de printer opnieuw op.": []
+      "De certificering van de Rotary-accessoire is mislukt. Sluit de kabel opnieuw aan of start de printer opnieuw op.": []
     },
     "0500050000010019": {
       "De certificering van de brandblusmodule is mislukt. Sluit de kabel van de module opnieuw aan of start de printer opnieuw op.": []
     },
+    "050005000001001A": {
+      "Certificering van de filamentwisselaar is mislukt. Sluit de kabel opnieuw aan of start de printer opnieuw op.": []
+    },
+    "050005000001001B": {
+      "Communicatiefout met Ethernet-accessoire. Herstart de printer alstublieft.": []
+    },
     "0500050000010021": {
       "Authenticatie van time-lapse kit mislukt. Sluit de kabel opnieuw aan of start de printer opnieuw op.": []
+    },
+    "0500050000010022": {
+      "De certificering van de externe afzuigventilator is mislukt. Start de printer opnieuw op of sluit de ventilatorkabel opnieuw aan.": []
+    },
+    "0500050000020023": {
+      "": []
     },
     "0500050000020030": {
       "": []
@@ -4160,6 +4577,9 @@
     "0500060000020008": {
       "": []
     },
+    "0500060000020009": {
+      "": []
+    },
     "0500060000020011": {
       "": []
     },
@@ -4170,6 +4590,9 @@
       "": []
     },
     "0500060000020014": {
+      "": []
+    },
+    "0500060000020015": {
       "": []
     },
     "0500060000020021": {
@@ -4184,6 +4607,9 @@
     "0500060000020024": {
       "": []
     },
+    "0500060000020025": {
+      "": []
+    },
     "0500060000020031": {
       "Gereedschapskop-camera is niet verbonden. Controleer de hardware en kabelaansluitingen.": []
     },
@@ -4196,6 +4622,9 @@
     "0500060000020034": {
       "Live View-camera is niet aangesloten. Controleer de hardware en kabelaansluitingen.": []
     },
+    "0500060000020035": {
+      "": []
+    },
     "0500060000020041": {
       "": []
     },
@@ -4206,6 +4635,9 @@
       "": []
     },
     "0500060000020044": {
+      "": []
+    },
+    "0500060000020045": {
       "": []
     },
     "0500060000020051": {
@@ -4226,11 +4658,38 @@
     "0500060000020062": {
       "": []
     },
+    "0500060000020070": {
+      "": []
+    },
+    "0500060000020071": {
+      "": []
+    },
     "05000600000200A0": {
       "": []
     },
     "05000600000200A1": {
       "": []
+    },
+    "0500070000020001": {
+      "": []
+    },
+    "0500070000020002": {
+      "": []
+    },
+    "0500070000020003": {
+      "": []
+    },
+    "0500070000020101": {
+      "": []
+    },
+    "0500070000020201": {
+      "": []
+    },
+    "05001A0000010001": {
+      "De invoermodule is offline. Controleer of de verbindingskabel van de invoermodule los zit.": []
+    },
+    "05001A0000010002": {
+      "Een vervanging van de aanvoermodule is gedetecteerd. Zorg ervoor dat het bijbehorende extrusiewiel en de nozzle zijn vervangen en werk het nozzletype handmatig bij in de printer.": []
     },
     "0500400000010039": {
       "Fout in serienummer van de lasermodule": []
@@ -4239,7 +4698,7 @@
       "Fout in serienummer van de snijmodule": []
     },
     "0501040000010044": {
-      "De firmware van AMS B komt niet overeen met die van de printer. Werk deze bij op de pagina &quot;Firmware&quot;.": []
+      "De firmware van AMS B komt niet overeen met die van de printer. Werk deze bij op de pagina 'Firmware'.": []
     },
     "0501040000030001": {
       "De koolstofstaven moeten nu schoongemaakt worden.": []
@@ -4255,6 +4714,9 @@
       "Maak de lineaire rail van de X-as, de lineaire stangen van de YZ-as en de lineaire rail van de extruderlift schoon en smeer ze in.": [
         "H2D"
       ]
+    },
+    "0501040000030007": {
+      "Reinig of vervang het luchtfilter.": []
     },
     "0501040000030010": {
       "De lasermodule is stoffig en moet nu schoongemaakt worden.": []
@@ -4277,6 +4739,12 @@
     "0503000000030027": {
       "": []
     },
+    "0503000000030028": {
+      "": []
+    },
+    "0503000000030029": {
+      "": []
+    },
     "0503040000010044": {
       "De firmware van AMS D komt niet overeen met de printer. Werk het bij op de pagina 'Firmware'.": []
     },
@@ -4297,6 +4765,12 @@
     },
     "0507050000010010": {
       "De firmware van AMS H komt niet overeen met de printer. Upgrade het op de pagina 'Firmware'.": []
+    },
+    "0510040000010044": {
+      "De firmware van AMS lite komt niet overeen met die van de printer. Werk deze bij op de pagina 'Firmware'.": []
+    },
+    "0510050000010014": {
+      "AMS lite-certificering is mislukt. Sluit de kabel opnieuw aan of start de printer opnieuw op.": []
     },
     "0580040000010045": {
       "De firmware van AMS-HT A komt niet overeen met de printer. Werk het bij op de pagina 'Firmware'.": []
@@ -4556,6 +5030,9 @@
     "0700200000020025": {
       "AMS A slot 1 voedingsweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
     },
+    "0700200000020057": {
+      "De RFID-tag op AMS A slot 1 kan niet worden geïdentificeerd.": []
+    },
     "0700200000030001": {
       "AMS A Slot 1 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
     },
@@ -4650,13 +5127,16 @@
       "AMS Een slot 2-assistentiemotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0700210000020023": {
-      "AMS A slot 2 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS A slot 2 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0700210000020024": {
       "AMS A slot 2 kon de filamentspoel niet draaien wanneer er filament werd teruggetrokken naar AMS.": []
     },
     "0700210000020025": {
       "AMS A slot 2 voerweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0700210000020057": {
+      "De RFID-tag op AMS A slot 2 kan niet worden geïdentificeerd.": []
     },
     "0700210000030001": {
       "AMS A Slot 2 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -4752,13 +5232,16 @@
       "AMS Een hulpmotor met sleuf 3 is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0700220000020023": {
-      "AMS A slot 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS A slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0700220000020024": {
       "AMS A slot 3 kon de filamentspoel niet draaien wanneer er filament werd teruggetrokken naar AMS.": []
     },
     "0700220000020025": {
       "AMS A slot 3 voerweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0700220000020057": {
+      "De RFID-tag op AMS A slot 3 kan niet worden geïdentificeerd.": []
     },
     "0700220000030001": {
       "AMS A Slot 3 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -4854,13 +5337,16 @@
       "AMS Een hulpmotor met sleuf 4 is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0700230000020023": {
-      "AMS A slot 4 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS A slot 4 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0700230000020024": {
       "AMS A slot 4 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
     },
     "0700230000020025": {
       "AMS A slot 4 voedingsweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0700230000020057": {
+      "De RFID-tag op AMS A slot 4 kan niet worden geïdentificeerd.": []
     },
     "0700230000030001": {
       "AMS A Slot 4 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -4919,6 +5405,12 @@
     "0700400000020004": {
       "Het filamentbuffersignaal is abnormaal. Mogelijk zit de veer vast of is het filament in de knoop geraakt.": []
     },
+    "0700400000020005": {
+      "De Hall-sensor voor het detecteren van filamentverstrengeling is beschadigd. Raadpleeg de Wiki voor vervangingsinstructies.": []
+    },
+    "0700400000020006": {
+      "Er is een kortsluiting gedetecteerd in de Hall-sensor voor het detecteren van filamentverstrengeling. Raadpleeg de Wiki voor vervangingsinstructies.": []
+    },
     "0700450000020001": {
       "De sensor van de filamentsnijder werkt niet goed; controleer of de connector goed is aangesloten.": []
     },
@@ -4931,8 +5423,14 @@
     "0700500000020001": {
       "AMS A-communicatie is abnormaal. Controleer de verbindingskabel.": []
     },
+    "0700500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "0700510000030001": {
       "De AMS is uitgeschakeld; laad het filament van de spoelhouder.": []
+    },
+    "0700520000030001": {
+      "Abnormaal aantal of type aangesloten AMS-units gedetecteerd. Raadpleeg de Wiki voor ondersteunde AMS-combinaties en pas de huidige verbinding aan.": []
     },
     "0700550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -5116,8 +5614,14 @@
     "0700940000010001": {
       "AMS A De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "0700940000010002": {
+      "Temperatuursensor 1 op de AMS A-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0700950000010001": {
       "AMS A De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0700950000010002": {
+      "Temperatuursensor 2 op de AMS A-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0700960000010001": {
       "AMS A Het droogproces kan een thermische runaway ervaren. Schakel a.u.b. de AMS-voeding uit.": []
@@ -5326,6 +5830,9 @@
     "0701200000020025": {
       "AMS B slot 1 voerweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
     },
+    "0701200000020057": {
+      "De RFID-tag op AMS B slot 1 kan niet worden geïdentificeerd.": []
+    },
     "0701200000030001": {
       "AMS B Slot 1 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
     },
@@ -5427,6 +5934,9 @@
     },
     "0701210000020025": {
       "De invoerweerstand van AMS B slot 2 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0701210000020057": {
+      "De RFID-tag op AMS B slot 2 kan niet worden geïdentificeerd.": []
     },
     "0701210000030001": {
       "AMS B Slot 2 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -5530,6 +6040,9 @@
     "0701220000020025": {
       "De invoerweerstand van AMS B slot 3 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
     },
+    "0701220000020057": {
+      "De RFID-tag op AMS B slot 3 kan niet worden geïdentificeerd.": []
+    },
     "0701220000030001": {
       "Het filament van AMS B Slot 3 is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
     },
@@ -5632,6 +6145,9 @@
     "0701230000020025": {
       "AMS B slot 4 de voedingsweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
     },
+    "0701230000020057": {
+      "De RFID-tag op AMS B slot 4 kan niet worden geïdentificeerd.": []
+    },
     "0701230000030001": {
       "AMS B Slot 4 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
     },
@@ -5682,6 +6198,9 @@
     },
     "0701500000020001": {
       "AMS B-communicatie is abnormaal. Controleer de verbindingskabel.": []
+    },
+    "0701500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0701550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -5862,8 +6381,14 @@
     "0701940000010001": {
       "AMS B De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "0701940000010002": {
+      "Temperatuursensor 1 op de AMS B-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0701950000010001": {
       "AMS B De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0701950000010002": {
+      "Temperatuursensor 2 op de AMS B-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0701960000010001": {
       "AMS B Het droogproces kan te maken krijgen met thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -6072,6 +6597,9 @@
     "0702200000020025": {
       "De voedingsweerstand van AMS C slot 1 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
     },
+    "0702200000020057": {
+      "De RFID-tag op AMS C slot 1 kan niet worden geïdentificeerd.": []
+    },
     "0702200000030001": {
       "AMS C Slot 1 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
     },
@@ -6174,6 +6702,9 @@
     "0702210000020025": {
       "De voedingsweerstand van AMS C slot 2 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
     },
+    "0702210000020057": {
+      "De RFID-tag op AMS C slot 2 kan niet worden geïdentificeerd.": []
+    },
     "0702210000030001": {
       "AMS C Slot 2 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
     },
@@ -6268,13 +6799,16 @@
       "AMS C slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0702220000020023": {
-      "AMS C-sleuf 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS C slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0702220000020024": {
       "AMS C slot 3 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
     },
     "0702220000020025": {
       "De voedingsweerstand van AMS C slot 3 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0702220000020057": {
+      "De RFID-tag op AMS C slot 3 kan niet worden geïdentificeerd.": []
     },
     "0702220000030001": {
       "AMS C Slot 3 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -6370,13 +6904,16 @@
       "AMS C slot 4 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0702230000020023": {
-      "AMS C-sleuf 4 de buis in de AMS is kapot of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS C slot 4 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0702230000020024": {
       "AMS C-sleuf 4 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
     },
     "0702230000020025": {
       "AMS C slot 4 de voedingsweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0702230000020057": {
+      "De RFID-tag op AMS C slot 4 kan niet worden geïdentificeerd.": []
     },
     "0702230000030001": {
       "AMS C Slot 4 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -6428,6 +6965,9 @@
     },
     "0702500000020001": {
       "AMS C-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "0702500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0702550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -6608,8 +7148,14 @@
     "0702940000010001": {
       "AMS C De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "0702940000010002": {
+      "Temperatuursensor 1 op de AMS C-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0702950000010001": {
       "AMS C De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0702950000010002": {
+      "Temperatuursensor 2 op de AMS C-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0702960000010001": {
       "AMS C Het droogproces kan te maken krijgen met thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -6810,13 +7356,16 @@
       "AMS D slot 1 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0703200000020023": {
-      "AMS D-sleuf 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS D slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0703200000020024": {
       "AMS D slot 1 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
     },
     "0703200000020025": {
       "AMS D slot 1 de voedingsweerstand is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0703200000020057": {
+      "De RFID-tag op AMS D slot 1 kan niet worden geïdentificeerd.": []
     },
     "0703200000030001": {
       "AMS D Slot 1 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -6920,6 +7469,9 @@
     "0703210000020025": {
       "De voedingsweerstand van AMS D slot 2 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
     },
+    "0703210000020057": {
+      "De RFID-tag op AMS D slot 2 kan niet worden geïdentificeerd.": []
+    },
     "0703210000030001": {
       "AMS D Slot 2 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
     },
@@ -7014,13 +7566,16 @@
       "AMS D slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0703220000020023": {
-      "AMS D-sleuf 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS D slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0703220000020024": {
       "AMS D slot 3 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
     },
     "0703220000020025": {
       "De invoerweerstand van AMS D sleuf 3 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0703220000020057": {
+      "De RFID-tag op AMS D slot 3 kan niet worden geïdentificeerd.": []
     },
     "0703220000030001": {
       "AMS D Slot 3 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -7116,13 +7671,16 @@
       "AMS D slot 4 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0703230000020023": {
-      "AMS D slot 4 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS D slot 4 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0703230000020024": {
       "AMS D slot 4 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
     },
     "0703230000020025": {
       "De voedingsweerstand van AMS D slot 4 is te hoog. Verminder de voedingsweerstand, verlaag de rotatieweerstand van de spoel en vermijd dat de filamentbuis te lang en te veel gebogen is.": []
+    },
+    "0703230000020057": {
+      "De RFID-tag op AMS A slot 4 kan niet worden geïdentificeerd.": []
     },
     "0703230000030001": {
       "AMS D Slot 4 filament is op. Even geduld a.u.b. terwijl het oude filament wordt gezuiverd.": []
@@ -7174,6 +7732,9 @@
     },
     "0703500000020001": {
       "AMS D-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "0703500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0703550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -7354,8 +7915,14 @@
     "0703940000010001": {
       "AMS D De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "0703940000010002": {
+      "Temperatuursensor 1 op de AMS D-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0703950000010001": {
       "AMS D De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0703950000010002": {
+      "Temperatuursensor 2 op de AMS D-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0703960000010001": {
       "AMS D Het droogproces kan te maken krijgen met thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -7658,7 +8225,7 @@
       "AMS E slot 2 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0704210000020023": {
-      "AMS E-sleuf 2 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS E slot 2 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0704210000020024": {
       "AMS E slot 2 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
@@ -7760,7 +8327,7 @@
       "AMS E slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0704220000020023": {
-      "AMS E-sleuf 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS E slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0704220000020024": {
       "AMS E slot 3 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
@@ -7862,7 +8429,7 @@
       "AMS E slot 4 assistentiemotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0704230000020023": {
-      "AMS E-sleuf 4 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS E slot 4 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0704230000020024": {
       "AMS E slot 4 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
@@ -7920,6 +8487,9 @@
     },
     "0704500000020001": {
       "AMS E-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "0704500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0704550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -8100,8 +8670,14 @@
     "0704940000010001": {
       "AMS E De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "0704940000010002": {
+      "Temperatuursensor 1 op de AMS-E-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0704950000010001": {
       "AMS E De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0704950000010002": {
+      "Temperatuursensor 2 op de AMS E-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0704960000010001": {
       "AMS E Het droogproces kan te maken krijgen met thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -8302,7 +8878,7 @@
       "AMS F slot 1 assistentiemotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0705200000020023": {
-      "AMS F-sleuf 1 de buis in de AMS is kapot of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS F slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0705200000020024": {
       "AMS F slot 1 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
@@ -8667,6 +9243,9 @@
     "0705500000020001": {
       "AMS F-communicatie is abnormaal; Controleer de aansluitkabel.": []
     },
+    "0705500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "0705550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
     },
@@ -8846,8 +9425,14 @@
     "0705940000010001": {
       "AMS F De temperatuursensor van verwarming 1 werkt niet goed en dit kan te wijten zijn aan een slecht contact met de connector.": []
     },
+    "0705940000010002": {
+      "Temperatuursensor 1 op de AMS F-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0705950000010001": {
       "AMS F De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0705950000010002": {
+      "Temperatuursensor 2 op de AMS F-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0705960000010001": {
       "AMS F Tijdens het droogproces kan er een thermische afvloeiing optreden. Schakel de AMS-voeding uit.": []
@@ -9048,7 +9633,7 @@
       "AMS G slot 1 assistentiemotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0706200000020023": {
-      "AMS G-sleuf 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS G slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0706200000020024": {
       "AMS G slot 1 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
@@ -9252,7 +9837,7 @@
       "AMS G slot 3 assistentiemotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0706220000020023": {
-      "AMS G-sleuf 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS G slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0706220000020024": {
       "G-sleuf 3 van de AMS kon de filamentspoel niet draaien bij het terugtrekken van draad naar de AMS.": []
@@ -9412,6 +9997,9 @@
     },
     "0706500000020001": {
       "AMS G-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "0706500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0706550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -9592,8 +10180,14 @@
     "0706940000010001": {
       "AMS G De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "0706940000010002": {
+      "Temperatuursensor 1 op de AMS G-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0706950000010001": {
       "AMS G De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0706950000010002": {
+      "Temperatuursensor 2 op de AMS G-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0706960000010001": {
       "AMS G Het droogproces kan een thermische runaway ervaren. Schakel a.u.b. de AMS-voeding uit.": []
@@ -9794,7 +10388,7 @@
       "AMS H slot 1 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0707200000020023": {
-      "AMS H-slot 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS H slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0707200000020024": {
       "AMS H slot 1 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
@@ -9998,7 +10592,7 @@
       "AMS H slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "0707220000020023": {
-      "AMS H-sleuf 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS H slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "0707220000020024": {
       "AMS H slot 3 kon de filamentspoel niet draaien bij het terugtrekken van draad naar AMS.": []
@@ -10158,6 +10752,9 @@
     },
     "0707500000020001": {
       "AMS H-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "0707500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "0707550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -10338,8 +10935,14 @@
     "0707940000010001": {
       "AMS H De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "0707940000010002": {
+      "Temperatuursensor 1 op de AMS H-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "0707950000010001": {
       "AMS H De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "0707950000010002": {
+      "Temperatuursensor 2 op de AMS H-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "0707960000010001": {
       "AMS H Het droogproces kan een thermische runaway ervaren. Schakel a.u.b. de AMS-voeding uit.": []
@@ -10424,6 +11027,9 @@
     },
     "07FE810000010004": {
       "De Hall-sensor van de motor voor de omschakeling van de extruder heeft kortsluiting; controleer of de Hall-sensor defect is.": []
+    },
+    "07FE810000010006": {
+      "De TH-printplaat is losgekoppeld tijdens het omschakelen van de extruder. Controleer of de verbindingskabel los zit.": []
     },
     "07FE810000020001": {
       "De schakelactie van de extruder is abnormaal. Controleer of er iets vastzit in de gereedschapskop.": []
@@ -10512,6 +11118,9 @@
     "07FF810000010004": {
       "De Hall-sensor van de motor voor de omschakeling van de extruder heeft kortsluiting; controleer of de Hall-sensor defect is.": []
     },
+    "07FF810000010006": {
+      "De TH-printplaat is losgekoppeld tijdens het omschakelen van de extruder. Controleer of de verbindingskabel los zit.": []
+    },
     "07FF810000020001": {
       "De schakelactie van de extruder is abnormaal. Controleer of er iets vastzit in de gereedschapskop.": []
     },
@@ -10582,6 +11191,9 @@
     "0C00010000020008": {
       "Kan geen beeld krijgen van Live View Camera. Detectie van opstapeling van spaghetti en afvalstortkokers is op dit moment niet beschikbaar.": []
     },
+    "0C0001000002000E": {
+      "": []
+    },
     "0C00010000020014": {
       "Nozzle Camera werkt niet goed. Als dit probleem zich meerdere keren voordoet tijdens het afdrukken, neem dan contact op met de klantenservice.": []
     },
@@ -10608,7 +11220,7 @@
     },
     "0C00020000010001": {
       "De horizontale laser brandt niet. Controleer of het gedekt is of dat er een probleem is met de hardwareverbinding.": [],
-      "De laser voor hoogtemeting brandt niet. Controleer op obstakels of een losse camerakabel van de gereedschapskop.": [
+      "De laser voor hoogtemeting brandt niet. Controleer op obstakels of een losse camerakabel van de prinkop.": [
         "H2S",
         "H2D"
       ]
@@ -10641,7 +11253,7 @@
       "De inspectie van de eerste laag is niet correct afgerond. Het kan zijn dat het resultaat van de inspectie niet correct is.": []
     },
     "0C0003000001000A": {
-      "Uw printer staat in de fabrieksmodus. Neem contact op met de technische ondersteuning": []
+      "Uw printer staat in de fabrieksmodus. Neem contact op met de technische ondersteuning.": []
     },
     "0C00030000020001": {
       "De belichtingsmeting van het filament is mislukt omdat de laserreflectie te zwak is op dit materiaal. Hierdoor kan de inspectie van de eerste laag onnauwkeurig zijn.": []
@@ -10656,7 +11268,7 @@
       "Het Lidar scan proces is onjuist afgesloten, het kan zijn dat de huidige resultaten, niet accuraat zijn.": []
     },
     "0C0003000002000C": {
-      "De lokalisatiemarkering van de printplaat werd niet gedetecteerd. Controleer of de printplaat correct is uitgelijnd": []
+      "De lokalisatiemarkering van de printplaat werd niet gedetecteerd. Controleer of de printplaat correct is uitgelijnd.": []
     },
     "0C0003000002000E": {
       "De nozzle lijkt bedekt te zijn met vastgelopen of verstopt materiaal.": []
@@ -10706,6 +11318,9 @@
     "0C0003000002001C": {
       "Het lijkt erop dat uw nozzle bedekt is met vastgelopen of verstopt materiaal.": []
     },
+    "0C0003000002001D": {
+      "Detectie van vreemde voorwerpen werkt niet en er kunnen geen beelden worden verkregen. Controleer de verbinding met de live camera.": []
+    },
     "0C00030000030006": {
       "Er kan zich te veel filament hebben opgestapeld in de stortkoker. Controleer en reinig de stortkoker.": []
     },
@@ -10725,10 +11340,7 @@
       "Uw printer lijkt af te drukken zonder te extruderen.": []
     },
     "0C0003000003001A": {
-      "De detectie van vreemde voorwerpen werkte niet, mogelijk als gevolg van handmatige onderbreking (bijv. tikken, stoppen of openen van de deur in lasermodus). Je kunt dit negeren als dat het geval is. Probeer anders de printer opnieuw op te starten of de firmware bij te werken om de functie te herstellen.": [],
-      "Detectie van vreemde voorwerpen mislukt, mogelijk door een handmatige onderbreking (bijvoorbeeld door op &quot;Stop&quot; te klikken). Zo niet, probeer dan de printer opnieuw op te starten of de firmware bij te werken.": [
-        "P2S"
-      ]
+      "": []
     },
     "0C0003000003001B": {
       "Mogelijke spaghettidefecten werden gedetecteerd. Controleer de afdrukkwaliteit en beslis of de taak moet worden stopgezet.": []
@@ -10772,6 +11384,9 @@
     "0C00040000020004": {
       "Het type platform wordt niet ondersteund voor deze taak. Gebruik het juiste platform om door te gaan.": []
     },
+    "0C00040000020006": {
+      "": []
+    },
     "0C00040000020007": {
       "BirdsEye Camera is aan het instellen. Ruim alle voorwerpen op en verwijder de mat. Zorg ervoor dat de marker niet wordt belemmerd. Maak ondertussen zowel de BirdsEye-camera als de gereedschapskop-camera schoon en verwijder alle vreemde voorwerpen die hun zicht belemmeren.": []
     },
@@ -10795,6 +11410,24 @@
     },
     "0C00040000020029": {
       "De laser- of snijmodule is niet gekalibreerd. Kalibreer deze eerst op de printer.": []
+    },
+    "0C00040000020030": {
+      "De liveview-camera functioneert niet correct. Herstart de machine en probeer het opnieuw.": []
+    },
+    "0C00040000020031": {
+      "De Live View-camera is mogelijk vuil of verstopt. Controleer dit en maak hem schoon.": []
+    },
+    "0C00040000020032": {
+      "De BirdsEye-camera wordt geïnitialiseerd. Zorg ervoor dat de markeringen op de snijmat niet worden geblokkeerd, reinig zowel de BirdsEye-camera als de Toolhead-camera en verwijder eventuele vreemde voorwerpen die de camera's kunnen blokkeren.": []
+    },
+    "0C00040000020033": {
+      "Het object op de Rotary-accessoire is te klein om te meten of is niet gemonteerd. Plaats het object correct op de draaibare houder.": []
+    },
+    "0C00040000020034": {
+      "Het vastleggen van de afbeelding is mislukt. Start de meting opnieuw.": []
+    },
+    "0C00040000020035": {
+      "De rotary-accessoire is geïnstalleerd, dus de functie voor het meten van de dikte kan niet worden uitgevoerd. Verwijder eerst de rotary-accessoire en probeer het daarna opnieuw.": []
     },
     "0C00040000030018": {
       "De kalibratie van de snijbladoffset is mislukt. Dit kan de snijnauwkeurigheid beïnvloeden. Raadpleeg de Wiki om te controleren of de bladpunt versleten is.": []
@@ -10949,6 +11582,9 @@
     "1200300000020002": {
       "De RFID-tag op AMS A Slot 1 is beschadigd.": []
     },
+    "1200300000020059": {
+      "De RFID-tag op AMS Lite slot 1 kan niet worden geïdentificeerd.": []
+    },
     "1200300000030003": {
       "AMS A Slot1 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -10957,6 +11593,9 @@
     },
     "1200310000020002": {
       "De RFID-tag op AMS A Slot 2 is beschadigd.": []
+    },
+    "1200310000020059": {
+      "De RFID-tag op AMS Lite slot 2 kan niet worden geïdentificeerd.": []
     },
     "1200310000030003": {
       "AMS A Slot2 RFID kan niet worden gelezen vanwege een structurele fout.": []
@@ -10967,6 +11606,9 @@
     "1200320000020002": {
       "De RFID-tag op AMS A Slot 3 is beschadigd.": []
     },
+    "1200320000020059": {
+      "De RFID-tag op AMS Lite slot 3 kan niet worden geïdentificeerd.": []
+    },
     "1200320000030003": {
       "AMS A Slot3 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -10976,8 +11618,17 @@
     "1200330000020002": {
       "De RFID-tag op AMS A Slot 4 is beschadigd.": []
     },
+    "1200330000020059": {
+      "De RFID-tag op AMS Lite slot 4 kan niet worden geïdentificeerd.": []
+    },
     "1200330000030003": {
       "AMS A Slot4 RFID kan niet worden gelezen vanwege een structurele fout.": []
+    },
+    "1200400000020005": {
+      "De Hall-sensor voor het detecteren van filamentverstrengeling is beschadigd. Raadpleeg de Wiki voor vervangingsinstructies.": []
+    },
+    "1200400000020006": {
+      "Er is een kortsluiting gedetecteerd in de Hall-sensor voor het detecteren van filamentverstrengeling. Raadpleeg de Wiki voor vervangingsinstructies.": []
     },
     "1200450000020001": {
       "De sensor van de filamentsnijder werkt niet goed; controleer of de connector goed is aangesloten.": []
@@ -10997,14 +11648,26 @@
     "1200700000010001": {
       "AMS A Fout in snelheid en lengte van het filament: De odometrie van het slot 1 filament is mogelijk defect.": []
     },
+    "1200700000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1200710000010001": {
       "AMS A Filament snelheid en lengte fout: De odometrie van het slot 2 filament is mogelijk defect.": []
+    },
+    "1200710000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1200720000010001": {
       "AMS A Filament snelheid en lengte fout: De odometrie van het slot 3 filament is mogelijk defect.": []
     },
+    "1200720000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1200730000010001": {
       "AMS A Filament snelheids- en lengtefout: De odometrie van het slot 4 filament is mogelijk defect.": []
+    },
+    "1200730000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1200800000020001": {
       "AMS Een Slot1-filament kan in de knoop raken of vastzitten.": []
@@ -11159,6 +11822,9 @@
     "1201300000020002": {
       "De RFID-tag op AMS B Slot 1 is beschadigd.": []
     },
+    "1201300000020059": {
+      "De RFID-tag op AMS Lite B slot 1 kan niet worden geïdentificeerd.": []
+    },
     "1201300000030003": {
       "AMS B Slot1 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -11167,6 +11833,9 @@
     },
     "1201310000020002": {
       "De RFID-tag op AMS B Slot 2 is beschadigd.": []
+    },
+    "1201310000020059": {
+      "De RFID-tag op AMS Lite B slot 2 kan niet worden geïdentificeerd.": []
     },
     "1201310000030003": {
       "AMS B Slot2 RFID kan niet worden gelezen vanwege een structurele fout.": []
@@ -11177,6 +11846,9 @@
     "1201320000020002": {
       "De RFID-tag op AMS B Slot 3 is beschadigd.": []
     },
+    "1201320000020059": {
+      "De RFID-tag op AMS Lite B slot 3 kan niet worden geïdentificeerd.": []
+    },
     "1201320000030003": {
       "AMS B Slot3 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -11185,6 +11857,9 @@
     },
     "1201330000020002": {
       "De RFID-tag op AMS B Slot 4 is beschadigd.": []
+    },
+    "1201330000020059": {
+      "De RFID-tag op AMS Lite B slot 4 kan niet worden geïdentificeerd.": []
     },
     "1201330000030003": {
       "AMS B Slot4 RFID kan niet worden gelezen vanwege een structurele fout.": []
@@ -11195,14 +11870,26 @@
     "1201700000010001": {
       "AMS B Fout in snelheid en lengte van het filament: De odometrie van het slot 1 filament is mogelijk defect.": []
     },
+    "1201700000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1201710000010001": {
       "AMS B Filament snelheid en lengtefout: De odometrie van het slot 2 filament is mogelijk defect.": []
+    },
+    "1201710000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1201720000010001": {
       "AMS B Filament snelheid en lengte fout: De odometrie van het slot 3 filament is mogelijk defect.": []
     },
+    "1201720000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1201730000010001": {
       "AMS B Filament snelheid en lengte fout: De odometrie van het slot 4 filament is mogelijk defect.": []
+    },
+    "1201730000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1201800000020001": {
       "AMS B Slot1 filament kan in de knoop raken of vastzitten.": []
@@ -11357,6 +12044,9 @@
     "1202300000020002": {
       "De RFID-tag op AMS C Slot 1 is beschadigd.": []
     },
+    "1202300000020059": {
+      "De RFID-tag op AMS Lite C slot 1 kan niet worden geïdentificeerd.": []
+    },
     "1202300000030003": {
       "AMS C Slot1 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -11365,6 +12055,9 @@
     },
     "1202310000020002": {
       "De RFID-tag op AMS C Slot 2 is beschadigd.": []
+    },
+    "1202310000020059": {
+      "De RFID-tag op AMS Lite C slot 2 kan niet worden geïdentificeerd.": []
     },
     "1202310000030003": {
       "AMS C Slot2 RFID kan niet worden gelezen vanwege een structurele fout.": []
@@ -11375,6 +12068,9 @@
     "1202320000020002": {
       "De RFID-tag op AMS C Slot 3 is beschadigd.": []
     },
+    "1202320000020059": {
+      "De RFID-tag op AMS Lite C slot 3 kan niet worden geïdentificeerd.": []
+    },
     "1202320000030003": {
       "AMS C Slot3 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -11383,6 +12079,9 @@
     },
     "1202330000020002": {
       "De RFID-tag op AMS C Slot 4 is beschadigd.": []
+    },
+    "1202330000020059": {
+      "De RFID-tag op AMS Lite C slot 4 kan niet worden geïdentificeerd.": []
     },
     "1202330000030003": {
       "AMS C Slot4 RFID kan niet worden gelezen vanwege een structurele fout.": []
@@ -11393,14 +12092,26 @@
     "1202700000010001": {
       "AMS C Filament snelheid en lengtefout: De odometrie van het slot 1 filament is mogelijk defect.": []
     },
+    "1202700000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1202710000010001": {
       "AMS C Filament snelheid en lengtefout: De odometrie van het slot 2 filament is mogelijk defect.": []
+    },
+    "1202710000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1202720000010001": {
       "AMS C Filament snelheid en lengtefout: De odometrie van het slot 3 filament is mogelijk defect.": []
     },
+    "1202720000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1202730000010001": {
       "AMS C Filament snelheid en lengtefout: De odometrie van het slot 4 filament is mogelijk defect.": []
+    },
+    "1202730000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1202800000020001": {
       "AMS C Slot1 filament kan in de knoop raken of vastzitten.": []
@@ -11555,6 +12266,9 @@
     "1203300000020002": {
       "De RFID-tag op AMS D Slot 1 is beschadigd.": []
     },
+    "1203300000020059": {
+      "De RFID-tag op AMS Lite D slot 1 kan niet worden geïdentificeerd.": []
+    },
     "1203300000030003": {
       "AMS D Slot1 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -11563,6 +12277,9 @@
     },
     "1203310000020002": {
       "De RFID-tag op AMS D Slot 2 is beschadigd.": []
+    },
+    "1203310000020059": {
+      "De RFID-tag op AMS Lite D slot 2 kan niet worden geïdentificeerd.": []
     },
     "1203310000030003": {
       "AMS D Slot2 RFID kan niet worden gelezen vanwege een structurele fout.": []
@@ -11573,6 +12290,9 @@
     "1203320000020002": {
       "De RFID-tag op AMS D Slot 3 is beschadigd.": []
     },
+    "1203320000020059": {
+      "De RFID-tag op AMS Lite D slot 3 kan niet worden geïdentificeerd.": []
+    },
     "1203320000030003": {
       "AMS D Slot3 RFID kan niet worden gelezen vanwege een structurele fout.": []
     },
@@ -11581,6 +12301,9 @@
     },
     "1203330000020002": {
       "De RFID-tag op AMS D Slot 4 is beschadigd.": []
+    },
+    "1203330000020059": {
+      "De RFID-tag op AMS Lite D slot 4 kan niet worden geïdentificeerd.": []
     },
     "1203330000030003": {
       "AMS D Slot4 RFID kan niet worden gelezen vanwege een structurele fout.": []
@@ -11591,14 +12314,26 @@
     "1203700000010001": {
       "AMS D Filament snelheids- en lengtefout: De odometrie van het slot 1 filament is mogelijk defect.": []
     },
+    "1203700000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1203710000010001": {
       "AMS D Filament snelheid en lengte fout: De odometrie van het slot 2 filament is mogelijk defect.": []
+    },
+    "1203710000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1203720000010001": {
       "AMS D Filament snelheid en lengte fout: De odometrie van het slot 3 filament is mogelijk defect.": []
     },
+    "1203720000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
+    },
     "1203730000010001": {
       "AMS D Filament snelheids- en lengtefout: De odometrie van het slot 4 filament is mogelijk defect.": []
+    },
+    "1203730000020001": {
+      "Kan het filament niet uit de extruder trekken. Mogelijke oorzaken: verstopte extruder of kapot filament.": []
     },
     "1203800000020001": {
       "AMS D Slot1 filament kan in de knoop raken of vastzitten.": []
@@ -11814,7 +12549,7 @@
       "AMS-HT De hulpmotor van sleuf 1 is vastgelopen door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1800200000020023": {
-      "AMS-HT A slot 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT A slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1800200000020024": {
       "AMS-HT A slot 1 kan de filamentspoel niet draaien wanneer de draad wordt teruggetrokken naar de AMS.": []
@@ -12018,7 +12753,7 @@
       "AMS-HT De hulpmotor van sleuf 3 is vastgelopen door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1800220000020023": {
-      "AMS-HT A slot 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT A slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1800220000020024": {
       "AMS-HT A sleuf 3 kon de filamentspel niet draaien bij het terugtrekken van de nozzle naar de AMS.": []
@@ -12191,6 +12926,12 @@
     "1800400000020004": {
       "Het signaal van de filamentbuffer is abnormaal; De veer kan vastzitten of het filament kan in de knoop raken.": []
     },
+    "1800400000020005": {
+      "De Hall-sensor voor het detecteren van filamentverstrengeling is beschadigd. Raadpleeg de Wiki voor vervangingsinstructies.": []
+    },
+    "1800400000020006": {
+      "Er is een kortsluiting gedetecteerd in de Hall-sensor voor het detecteren van filamentverstrengeling. Raadpleeg de Wiki voor vervangingsinstructies.": []
+    },
     "1800450000020001": {
       "De sensor van de filamentsnijder werkt niet goed; Controleer of de connector goed is aangesloten.": []
     },
@@ -12202,6 +12943,9 @@
     },
     "1800500000020001": {
       "AMS-HT A-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "1800500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1800510000030001": {
       "De AMS is uitgeschakeld; Laad het filament uit de spoelhouder.": []
@@ -12388,8 +13132,14 @@
     "1800940000010001": {
       "AMS-HT A De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "1800940000010002": {
+      "Temperatuursensor 1 op de AMS-HT A-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1800950000010001": {
       "AMS-HT A De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1800950000010002": {
+      "Temperatuursensor 2 op de AMS-HT A-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1800960000010001": {
       "AMS-HT A Het droogproces kan last hebben van thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -12590,7 +13340,7 @@
       "AMS-HT B slot 1 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1801200000020023": {
-      "AMS-HT B sleuf 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT B slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1801200000020024": {
       "AMS-HT B slot 1 kon de filamentspel niet draaien bij het terugtrekken van nozzle naar AMS.": []
@@ -12794,7 +13544,7 @@
       "AMS-HT B slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1801220000020023": {
-      "AMS-HT B slot 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT B slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1801220000020024": {
       "AMS-HT B slot 3 kon de filamentspel niet draaien bij het terugtrekken van nozzle naar AMS.": []
@@ -12896,7 +13646,7 @@
       "AMS-HT B slot 4 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1801230000020023": {
-      "AMS-HT B slot 4 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT B slot 4 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1801230000020024": {
       "AMS-HT B slot 4 draaide de filamentspel niet bij het terugtrekken van nozzle naar AMS.": []
@@ -12960,6 +13710,9 @@
     },
     "1801500000020001": {
       "AMS-HT B-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "1801500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1801550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -13140,8 +13893,14 @@
     "1801940000010001": {
       "AMS-HT B De temperatuursensor van verwarmingselement 1 functioneert niet goed, wat kan komen door een slecht connectorcontact.": []
     },
+    "1801940000010002": {
+      "Temperatuursensor 1 op de AMS-HT B-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1801950000010001": {
       "AMS-HT B De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1801950000010002": {
+      "Temperatuursensor 2 op de AMS-HT B-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1801960000010001": {
       "AMS-HT B Het droogproces kan te maken krijgen met thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -13546,7 +14305,7 @@
       "AMS-HT C slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1802220000020023": {
-      "AMS-HT C slot 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT C slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1802220000020024": {
       "AMS-HT C slot 3 kon de filamentspel niet draaien bij het terugtrekken van nozzle naar AMS.": []
@@ -13712,6 +14471,9 @@
     },
     "1802500000020001": {
       "AMS-HT C-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "1802500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1802550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -13892,8 +14654,14 @@
     "1802940000010001": {
       "AMS-HT C De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "1802940000010002": {
+      "Temperatuursensor 1 op de AMS-HT C-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1802950000010001": {
       "AMS-HT C De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1802950000010002": {
+      "Temperatuursensor 2 op de AMS-HT C-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1802960000010001": {
       "AMS-HT C Het droogproces kan een thermische runaway ervaren. Schakel a.u.b. de AMS-voeding uit.": []
@@ -14298,7 +15066,7 @@
       "AMS-HT D slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1803220000020023": {
-      "AMS-HT D slot 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT D slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1803220000020024": {
       "AMS-HT D slot 3 kon de filamentspoel niet draaien bij het terugtrekken van nozzle naar AMS.": []
@@ -14464,6 +15232,9 @@
     },
     "1803500000020001": {
       "AMS-HT D communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "1803500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1803550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -14644,8 +15415,14 @@
     "1803940000010001": {
       "AMS-HT D De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "1803940000010002": {
+      "Temperatuursensor 1 op de AMS-HT D-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1803950000010001": {
       "AMS-HT D De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1803950000010002": {
+      "Temperatuursensor 2 op de AMS-HT D-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1803960000010001": {
       "AMS-HT D Het droogproces kan last hebben van thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -14846,7 +15623,7 @@
       "AMS-HT E slot 1 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1804200000020023": {
-      "AMS-HT E slot 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT E slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1804200000020024": {
       "AMS-HT E slot 1 kon de filamentspoel niet draaien bij het terugtrekken van nozzle naar AMS.": []
@@ -15217,6 +15994,9 @@
     "1804500000020001": {
       "AMS-HT E-communicatie is abnormaal; Controleer de aansluitkabel.": []
     },
+    "1804500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
+    },
     "1804550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
     },
@@ -15396,8 +16176,14 @@
     "1804940000010001": {
       "AMS-HT E De temperatuursensor van verwarmingselement 1 functioneert niet goed, wat kan worden veroorzaakt door een slecht connectorcontact.": []
     },
+    "1804940000010002": {
+      "Temperatuursensor 1 op de AMS-HT E-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1804950000010001": {
       "AMS-HT E De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1804950000010002": {
+      "Temperatuursensor 2 op de AMS-HT E-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1804960000010001": {
       "AMS-HT E Het droogproces kan een thermische runaway ervaren. Schakel a.u.b. de AMS-voeding uit.": []
@@ -15598,7 +16384,7 @@
       "AMS-HT F slot 1 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1805200000020023": {
-      "AMS-HT F-sleuf 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT F slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1805200000020024": {
       "AMS-HT F slot 1 kan de filamentspoel niet draaien wanneer de nozzle wordt teruggetrokken naar AMS.": []
@@ -15700,7 +16486,7 @@
       "De hulpmotor AMS-HT F sleuf 2 is vastgelopen door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1805210000020023": {
-      "AMS-HT F-sleuf 2 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT F slot 2 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1805210000020024": {
       "AMS-HT F-sleuf 2 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
@@ -15802,7 +16588,7 @@
       "AMS-HT F slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1805220000020023": {
-      "AMS-HT F slot 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT F slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1805220000020024": {
       "AMS-HT F slot 3 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
@@ -15968,6 +16754,9 @@
     },
     "1805500000020001": {
       "AMS-HT F-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "1805500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1805550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -16148,8 +16937,14 @@
     "1805940000010001": {
       "AMS-HT F De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "1805940000010002": {
+      "Temperatuursensor 1 op de AMS-HT F-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1805950000010001": {
       "AMS-HT F De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1805950000010002": {
+      "Temperatuursensor 2 op de AMS-HT F-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1805960000010001": {
       "AMS-HT F Het droogproces kan een thermische runaway ervaren. Schakel a.u.b. de AMS-voeding uit.": []
@@ -16350,7 +17145,7 @@
       "De hulpmotor AMS-HT G sleuf 1 is vastgelopen door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1806200000020023": {
-      "AMS-HT G-sleuf 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT G slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1806200000020024": {
       "AMS-HT G slot 1 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
@@ -16452,7 +17247,7 @@
       "De hulpmotor AMS-HT G sleuf 2 is vastgelopen door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1806210000020023": {
-      "AMS-HT G-sleuf 2 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT G slot 2 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1806210000020024": {
       "AMS-HT G slot 2 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
@@ -16656,7 +17451,7 @@
       "De hulpmotor AMS-HT G sleuf 4 is vastgelopen door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1806230000020023": {
-      "AMS-HT G-sleuf 4 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT G slot 4 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1806230000020024": {
       "AMS-HT G slot 4 kon de gloeispoel niet draaien bij het terugtrekken van de filament naar AMS.": []
@@ -16720,6 +17515,9 @@
     },
     "1806500000020001": {
       "AMS-HT G-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "1806500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1806550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -16900,8 +17698,14 @@
     "1806940000010001": {
       "AMS-HT G De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "1806940000010002": {
+      "Temperatuursensor 1 op de AMS-HT G-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1806950000010001": {
       "AMS-HT G De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1806950000010002": {
+      "Temperatuursensor 2 op de AMS-HT G-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1806960000010001": {
       "AMS-HT G Het droogproces kan te maken krijgen met thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -17102,7 +17906,7 @@
       "AMS-HT H slot 1 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1807200000020023": {
-      "AMS-HT H slot 1 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT H slot 1 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1807200000020024": {
       "AMS-HT H slot 1 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
@@ -17306,7 +18110,7 @@
       "AMS-HT H slot 3 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1807220000020023": {
-      "AMS-HT H slot 3 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT H slot 3 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1807220000020024": {
       "AMS-HT H slot 3 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
@@ -17408,7 +18212,7 @@
       "AMS-HT H slot 4 hulpmotor is vastgelopen, door te veel weerstand in de buis bij de gereedschapskop.": []
     },
     "1807230000020023": {
-      "AMS-HT H slot 4 de buis in de AMS is kapot, of de sensor van de uitvoerhal is defect en kan het filament niet detecteren.": []
+      "De PTFE-buis van AMS-HT H slot 4 is kapot, of de hall-sensor van de uitvoer is defect en kan het filament niet detecteren.": []
     },
     "1807230000020024": {
       "AMS-HT H slot 4 kon de filamentspoel niet draaien bij het terugtrekken van filament naar AMS.": []
@@ -17472,6 +18276,9 @@
     },
     "1807500000020001": {
       "AMS-HT H-communicatie is abnormaal; Controleer de aansluitkabel.": []
+    },
+    "1807500000020002": {
+      "AMS dat voor de huidige print wordt gebruikt, is losgekoppeld. Controleer de verbinding. Het printen wordt automatisch hervat na opnieuw verbinden.": []
     },
     "1807550000010002": {
       "De PTFE-slang is verkeerd aangesloten tussen de gereedschapskop en de buffer. Sluit de bovenkant van de buffer aan op de rechter extruder en de onderkant op de linker extruder.": []
@@ -17652,8 +18459,14 @@
     "1807940000010001": {
       "AMS-HT H De temperatuursensor van verwarming 1 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
     },
+    "1807940000010002": {
+      "Temperatuursensor 1 op de AMS-HT H-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
+    },
     "1807950000010001": {
       "AMS-HT H De temperatuursensor van verwarming 2 werkt niet goed, wat te wijten kan zijn aan een slecht contact met de connector.": []
+    },
+    "1807950000010002": {
+      "Temperatuursensor 2 op de AMS-HT H-verwarming functioneert niet correct, wat resulteert in abnormale temperatuursmetingen.": []
     },
     "1807960000010001": {
       "AMS-HT H Het droogproces kan last hebben van thermal runaway. Schakel a.u.b. de AMS-voeding uit.": []
@@ -17675,6 +18488,30 @@
     },
     "1807980000020002": {
       "AMS-HT H De spanning van de voedingsadapter is te hoog, waardoor het verwarmingscircuit kan worden beschadigd. Vervang de voedingsadapter.": []
+    },
+    "1880200000020058": {
+      "De RFID-tag op AMS-HT A kan niet worden geïdentificeerd.": []
+    },
+    "1881200000020058": {
+      "De RFID-tag op AMS-HT B kan niet worden geïdentificeerd.": []
+    },
+    "1882200000020058": {
+      "De RFID-tag op AMS-HT C kan niet worden geïdentificeerd.": []
+    },
+    "1883200000020058": {
+      "De RFID-tag op AMS-HT D kan niet worden geïdentificeerd.": []
+    },
+    "1884200000020058": {
+      "De RFID-tag op AMS-HT E kan niet worden geïdentificeerd.": []
+    },
+    "1885200000020058": {
+      "De RFID-tag op AMS-HT F kan niet worden geïdentificeerd.": []
+    },
+    "1886200000020058": {
+      "De RFID-tag op AMS-HT G kan niet worden geïdentificeerd.": []
+    },
+    "1887200000020058": {
+      "De RFID-tag op AMS-HT H kan niet worden geïdentificeerd.": []
     },
     "18FE200000020001": {
       "Het externe filament van de linker extruder is op; Laad a.u.b. een nieuw filament.": []
@@ -17735,6 +18572,9 @@
     },
     "18FE810000010004": {
       "De Hall-sensor van de motor voor de omschakeling van de extruder heeft kortsluiting; controleer of de Hall-sensor defect is.": []
+    },
+    "18FE810000010006": {
+      "Het TH-bord is losgekoppeld tijdens het schakelen van de extruder. Controleer of de verbindingskabel los zit.": []
     },
     "18FE810000020001": {
       "De schakelactie van de extruder is abnormaal. Controleer of er iets vastzit in de gereedschapskop.": []
@@ -17810,6 +18650,9 @@
     },
     "18FF810000010004": {
       "De Hall-sensor van de motor voor de omschakeling van de extruder heeft kortsluiting; controleer of de Hall-sensor defect is.": []
+    },
+    "18FF810000010006": {
+      "Het TH-bord is losgekoppeld tijdens het schakelen van de extruder. Controleer of de verbindingskabel los zit.": []
     },
     "18FF810000020001": {
       "De schakelactie van de extruder is abnormaal. Controleer of er iets vastzit in de gereedschapskop.": []

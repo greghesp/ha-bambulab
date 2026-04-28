@@ -31,7 +31,7 @@
       "La tâche a été annulée.": []
     },
     "0300400D": {
-      "La reprise a échoué après une coupure de courant.": []
+      "La reprise a échoué après une panne de courant.": []
     },
     "0300400E": {
       "L'auto-vérification du moteur a échoué.": []
@@ -43,7 +43,7 @@
       "L'étalonnage du décalage de la buse a échoué.": []
     },
     "03004011": {
-      "L'étalonnage de la dynamique de débit a échoué ; veuillez relancer l'impression ou l'étalonnage.": []
+      "L'étalonnage de la dynamique des flux a échoué ; veuillez relancer l'impression ou l'étalonnage.": []
     },
     "03004013": {
       "L'impression ne peut pas être lancée pendant le séchage de l'AMS.": []
@@ -52,22 +52,49 @@
       "Échec du retour 0 de l'axe Z : anomalie de contrôle de la température.": []
     },
     "03004015": {
-      "Échec de l'étalonnage de la détection d'agglutination des buses. Veuillez vous rendre dans « Assistant » pour le dépannage.": []
+      "Échec de l'étalonnage de la détection d'encrassement de buse. Veuillez accéder à l'Assistant pour résoudre le problème.": []
     },
     "03004016": {
       "Le nettoyage de la buse a échoué. Cliquez sur l'Assistant pour voir comment régler le problème.": []
     },
     "0300401F": {
-      "La tête d'impression n'est pas installée et la tête d'outil ne peut pas faire le retour à l'origine. Mets la tête d'impression en place et continue.": [],
       "Le hotend droit n'est pas installé et la tête d'outil ne peut pas effectuer le retour à l'origine. Installez le hotend, puis continuez.": [
         "H2D"
-      ]
+      ],
+      "Le hotend n'est pas installé et la tête d'outil ne peut pas effectuer le retour à l'origine. Installez le hotend, puis continuez.": []
     },
     "03004020": {
       "La détection de la présence de la buse a échoué. La buse n'est peut-être pas montée sur l'extrudeur ou le capteur peut être endommagé.": []
     },
     "03004021": {
       "Anomalie du signal du capteur d'étalonnage du décalage de buse détectée. Veuillez vérifier le capteur et réessayer.": []
+    },
+    "03004030": {
+      "La recherche d'origine de l'axe Z a échoué. Retirez les vis de fixation du coulisseau du plateau chauffant et assurez-vous qu'aucune obstruction ne bloque le mouvement vertical du plateau chauffant. Après avoir résolu le problème, recalibrez le système.": []
+    },
+    "03004031": {
+      "La buse n’a pas été installée. Veuillez installer la buse et recalibrer.": []
+    },
+    "03004032": {
+      "La recherche des origines XY a échoué. Veuillez retirer tout objet étranger bloquant le mouvement de la Tête d'outil et recalibrer.": []
+    },
+    "03004033": {
+      "La recherche d’origine de l’axe Z a échoué en raison d’une anomalie de contrôle de température. Scannez le code QR pour obtenir de l’aide. Après résolution du problème, recalibrez l'appareil.": []
+    },
+    "03004035": {
+      "Le nettoyage de la buse a échoué. Veuillez scanner le code QR pour obtenir de l’aide. Après résolution du problème, recalibrez.": []
+    },
+    "03004036": {
+      "La calibration du décalage de la buse a échoué. Veuillez scanner le code QR pour obtenir de l’aide. Après résolution du problème, recalibrez.": []
+    },
+    "03004037": {
+      "La calibration de détection de l’encrassement de la buse a échoué. Veuillez scanner le code QR pour obtenir de l’aide. Après résolution du problème, recalibrez.": []
+    },
+    "03004038": {
+      "Le nivellement du plateau chauffant a échoué. Veuillez scanner le code QR pour obtenir de l’aide. Après résolution du problème, recalibrez.": []
+    },
+    "03004039": {
+      "La détection de la présence de la buse a échoué. Veuillez consulter les instructions d'aide pour résoudre le problème, puis recalibrer l'appareil.": []
     },
     "03004042": {
       "La fenêtre de sécurité laser n'est pas correctement installée. La tâche a été interrompue.": []
@@ -86,6 +113,12 @@
     },
     "03004052": {
       "Échec de l’origine de l'axe Z de la lame": []
+    },
+    "03004057": {
+      "Perte de pas sur l'axe Z détectée. La tâche a été interrompue. Veuillez vérifier la présence d'obstacles sous le plateau chauffant.": []
+    },
+    "03004059": {
+      "La pièce sur l'accessoire rotatif est entrée en collision avec la tête d'outil. La tâche a été arrêtée.": []
     },
     "03004066": {
       "L'étalonnage de la précision du mouvement a échoué.": []
@@ -151,7 +184,7 @@
       "La plaque d'impression détectée n'est pas la même que celle du Gcode. Veuillez modifier les réglages du trancheur ou utiliser la plaque appropriée.": []
     },
     "03008013": {
-      "Impression interrompue en raison de la commande de pause ajoutée au fichier d'impression.": []
+      "L'impression a été interrompue par l'utilisateur. Vous pouvez sélectionner « Reprendre » pour poursuivre l'impression.": []
     },
     "03008014": {
       "La buse est recouverte de filaments ou la plaque d’impression est mal installée. Annulez cette impression et nettoyez la buse ou ajustez la plaque d’impression en fonction de l'état. Vous pouvez également sélectionner « Reprendre » pour reprendre le travail d'impression.": []
@@ -184,7 +217,7 @@
       "Le capteur de position du servomoteur de l'extrudeuse fonctionne mal. Veuillez d'abord mettre l'imprimante hors tension et vérifier si le câble de connexion est desserré.": []
     },
     "0300801E": {
-      "Le moteur d'extrusion est surchargé, veuillez vérifier si l'extrudeur est obstruée ou si le filament est coincé dans la tête de l'outil.": []
+      "Le moteur d'extrusion est surchargé, veuillez consulter l'Assistant pour plus de détails.": []
     },
     "03008021": {
       "Il se peut que la buse ne soit pas installée ou qu'elle ne soit pas correctement installée. Veuillez vous assurer que la buse est correctement installée avant de continuer.": []
@@ -252,6 +285,15 @@
     "03008055": {
       "Le module monté sur la tête d'outil ne correspond pas à la tâche. Veuillez installer le module correct.": []
     },
+    "03008057": {
+      "L'accessoire rotatif est déconnecté. Veuillez vérifier qu'il est correctement installé et que le câble est bien branché.": []
+    },
+    "03008058": {
+      "L'accessoire rotatif est détecté. Veuillez le retirer avant de continuer.": []
+    },
+    "03008059": {
+      "Perte d'étape du moteur détectée. Veuillez vérifier la qualité de la tâche en cours. Si la qualité est acceptable, continuez ; sinon, arrêtez la tâche.": []
+    },
     "03008061": {
       "Le mode Adaptive Airflow n'a pas pu être activé ; vérifiez l'état de la porte d'aération.": []
     },
@@ -266,6 +308,15 @@
     },
     "03008065": {
       "La température du module MC est trop élevée. Veuillez consulter le Wiki pour des raisons spécifiques.": []
+    },
+    "0300806E": {
+      "Contrôle anormal de la température de la buse détecté ; le module de chauffage peut être endommagé. Veuillez débrancher immédiatement l'alimentation et cesser d'utiliser l'appareil, puis contacter le service client pour obtenir des conseils de dépannage.": []
+    },
+    "0300806F": {
+      "Une hausse anormale de température a été détectée sur le plateau chauffant. Le module chauffant est peut-être endommagé. Veuillez éteindre immédiatement l'appareil et cesser de l'utiliser.": []
+    },
+    "03008070": {
+      "La température du chauffage de l’enceinte augmente de façon anormale. Le module de chauffe est peut-être endommagé. Veuillez éteindre immédiatement l’appareil et cesser de l’utiliser.": []
     },
     "03008071": {
       "Le module du ventilateur de refroidissement amélioré de la tête d'outil fonctionne mal.": []
@@ -361,7 +412,7 @@
       "L'espace de stockage disponible est insuffisant pour le travail d'impression. Veuillez formater ou nettoyer la carte SD pour libérer de l'espace disponible.": []
     },
     "05004016": {
-      "La carte SD est en lecture seule. Veuillez autoriser l'écriture ou la remplacer": []
+      "La carte SD est en lecture seule. Veuillez autoriser l'écriture ou la remplacer.": []
     },
     "05004017": {
       "La liaison a échoué. Veuillez réessayer sinon redémarrer et réessayer.": []
@@ -479,7 +530,7 @@
       "Les tâches de laser/découpe ne peuvent pas être lancées sur la machine pour le moment. Veuillez utiliser le logiciel de l'ordinateur pour lancer la tâche.": []
     },
     "0500403C": {
-      "Le réglage actuel de la buse ne correspond pas au fichier de découpage. Continuer l'impression peut affecter la qualité d'impression. Il est recommandé de procéder à un nouveau découpage avant de lancer l'impression.": []
+      "Le réglage actuel ne correspond pas au fichier de découpage. La poursuite de l'impression peut affecter la qualité d'impression. Il est recommandé de re-découper avant de lancer l'impression.": []
     },
     "0500403D": {
       "Le module Toolhead n'est pas configuré. Veuillez le configurer avant de lancer la tâche.": []
@@ -508,8 +559,23 @@
     "05004045": {
       "Vérification du Hotend en cours. Cette opération est temporairement indisponible. Veuillez patienter.": []
     },
+    "05004046": {
+      "L'impression s'est arrêtée car le fichier 3MF n'est pas valide. Veuillez vérifier que le modèle d'imprimante correct a été sélectionné lors du découpage, ou mettez à jour Studio et découpez à nouveau le fichier.": []
+    },
+    "05004047": {
+      "L'impression s'est arrêtée car la quantité ou le modèle de hotend disponible ne correspond pas au fichier découpé. Veuillez vérifier le modèle et la quantité de hotend avant de relancer la tâche d'impression.": []
+    },
+    "05004048": {
+      "Le module d'alimentation est hors ligne. Veuillez vérifier si le câble de connexion du module d'alimentation est déconnecté.": []
+    },
+    "05004049": {
+      "Un remplacement du module d'alimentation a été détecté. Veuillez vous assurer que la roue d'entraînement d'extrusion et la buse correspondantes ont été remplacées, puis mettez manuellement à jour le type de buse dans l'imprimante.": []
+    },
     "05004050": {
       "Une erreur a été détectée sur la carte d'impression.": []
+    },
+    "05004051": {
+      "L'ajustement d'arc dynamique a échoué. Veuillez re-découper le modèle avant de lancer l'impression.": []
     },
     "05004052": {
       "Erreur détectée sur le hotend.": []
@@ -517,11 +583,26 @@
     "05004054": {
       "Erreur détectée sur le tapis.": []
     },
+    "05004055": {
+      "L'utilisation d'un filament non TPU avec la tête d'impression haut débit TPU peut endommager cette dernière. Veuillez vérifier la compatibilité du filament et de la tête d'impression avant de lancer l'impression.": []
+    },
+    "05004056": {
+      "L'extrudeur gauche ne prend pas en charge le hotend haute-débit TPU. Veuillez installer un hotend compatible et réessayer.": []
+    },
+    "05004057": {
+      "Le filament sélectionné dans la trancheuse nécessite une buse plus résistante. Veuillez remplacer la buse ou ajuster les paramètres du filament avant de relancer l'impression.": []
+    },
     "0500405D": {
       "Erreur de numéro de série du module laser : impossible de calibrer ou de réaliser un projet.": []
     },
+    "0500405F": {
+      "Caméra BirdsEyes non installée. La calibration du module laser ne peut pas être effectuée.": []
+    },
     "05004065": {
       "La tâche nécessite une plate-forme laser, mais la plate-forme actuelle est une plate-forme de découpe. Veuillez la remplacer, mesurer l'épaisseur du matériau dans le logiciel, puis relancer la tâche.": []
+    },
+    "05004066": {
+      "La calibration du décalage de buse de haute précision ne prend en charge que le PLA. Le hotend TPU actuel n'est pas compatible. Veuillez passer à un hotend compatible PLA et réessayer.": []
     },
     "05004070": {
       "Le module laser ou de découpe étant connecté, l'appareil ne peut pas lancer de tâche d'impression 3D.": []
@@ -531,6 +612,9 @@
     },
     "05004076": {
       "Placez correctement la Plate-forme Laser et assurez-vous que les marqueurs arrière ne sont pas bloqués, puis redémarrez la mesure de l'épaisseur dans le logiciel avant de lancer la tâche.": []
+    },
+    "05004095": {
+      "Aucune plaque d'impression détectée. Veuillez la placer correctement puis recalibrer.": []
     },
     "05004097": {
       "L'appareil ne détecte pas le module laser. Veuillez reconnecter le câble du module ou redémarrer l'imprimante.": []
@@ -557,19 +641,34 @@
       "L'appareil ne détecte pas la Pompe à Air. Veuillez reconnecter le câble du module ou redémarrer l'imprimante.": []
     },
     "050040A0": {
-      "L'appareil ne détecte pas le Laser 4 Axes.  Veuillez reconnecter le câble du module ou redémarrer l'imprimante.": []
+      "Le module d’Axe Rotatif n’est pas détecté. Veuillez reconnecter le câble ou redémarrer l’imprimante.": []
     },
     "050040A1": {
       "L'appareil ne détecte pas l'Extincteur. Veuillez reconnecter le câble du module ou redémarrer l'imprimante.": []
+    },
+    "050040A2": {
+      "L'appareil ne détecte pas le ventilateur d'extraction externe. Veuillez redémarrer l'imprimante ou reconnecter le câble du ventilateur.": []
     },
     "050040A3": {
       "La communication de l'AMS (ou AMS lite) A est anormale. Veuillez reconnecter le câble du module ou redémarrer l'imprimante.": []
     },
     "050040A4": {
-      "Le micrologiciel actuel ne prend en charge qu’un seul AMS Lite. Veuillez retirer tous les modules AMS avant de reconnecter l’appareil AMS Lite pris en charge.": []
+      "Le firmware actuel ne prend en charge qu'un seul AMS Lite. Veuillez retirer tous les AMS avant de reconnecter l'appareil AMS Lite compatible.": []
     },
     "050040A5": {
-      "Le micrologiciel actuel ne prend en charge que les modèles AMS/AMS 2 Pro/AMS HT, avec un maximum de 4 unités. Veuillez retirer toutes les unités AMS avant de reconnecter celle qui est prise en charge.": []
+      "Le firmware actuel ne prend en charge que les AMS/AMS 2 Pro/AMS HT, avec un maximum de 4 unités. Veuillez retirer toutes les unités AMS avant de reconnecter l'unité prise en charge.": []
+    },
+    "050040A6": {
+      "Le téléchargement du fichier a échoué en raison de certificats manquants. Veuillez vérifier la configuration des certificats du Fleet Hub et redémarrer l'imprimante avant de réessayer": []
+    },
+    "050040A7": {
+      "L'appareil ne détecte pas le Filament Track Switch. Veuillez redémarrer l'imprimante ou reconnecter le câble.": []
+    },
+    "050040A8": {
+      "Le firmware nécessite une mise à jour corrective, l'opération en cours ne peut donc pas être effectuée. Veuillez procéder à sa mise à jour sur la page 'Firmware'.": []
+    },
+    "050040C0": {
+      "Erreur de communication détectée avec l'AMS, AMS Lite ou AMS HT. Veuillez reconnecter le câble du module ou redémarrer l'imprimante lorsqu'elle est inactive.": []
     },
     "05008013": {
       "Le fichier d'impression n'est pas disponible. Vérifiez si le support de stockage a été retiré.": []
@@ -581,13 +680,16 @@
       "Votre fichier découpé n'est pas compatible avec le modèle d'imprimante actuel. Poursuivre ?": []
     },
     "0500803C": {
-      "Le réglage actuel de la buse ne correspond pas au fichier de découpage. Continuer l'impression peut affecter la qualité d'impression. Il est recommandé de procéder à un nouveau découpage avant de lancer l'impression.": []
+      "Le réglage actuel ne correspond pas au fichier de découpage. La poursuite de l'impression peut affecter la qualité d'impression. Il est recommandé de re-découper avant de lancer l'impression.": []
     },
     "05008040": {
       "Le capot avant de la tête d'impression est détaché. Déplacer la tête d'impression pourrait endommager l'imprimante. Voulez-vous continuer ?": []
     },
     "05008041": {
       "Le filament dans la tête d’impression est trop froid. L’extrusion pourrait endommager l’extrudeur. Voulez-vous tout de même continuer à insérer/retirer le filament ?": []
+    },
+    "05008048": {
+      "Le module sur la tête d'outil n'est pas calibré. Veuillez annuler la tâche pour effectuer la calibration ou passer à un module calibré.": []
     },
     "05008051": {
       "La plaque d'impression détectée n'est pas la même que celle du Gcode. Veuillez modifier les réglages du trancheur ou utiliser la plaque appropriée.": []
@@ -598,11 +700,17 @@
         "H2D"
       ]
     },
+    "05008054": {
+      "L'extrudeur gauche ne prend pas en charge le hotend haute-débit TPU. Veuillez le remplacer par un hotend compatible avant de continuer l'impression. Attention : le hotend est chaud.": []
+    },
     "05008055": {
       "Le module laser est installé, mais une plate-forme de découpe est détectée. Veuillez placer une plate-forme laser et effectuer un étalonnage laser.": []
     },
     "05008056": {
       "Le module de découpe est installé, mais la plate-forme laser est détectée. Veuillez placer la plate-forme de découpe pour l'étalonnage.": []
+    },
+    "05008057": {
+      "La dureté du filament sélectionnée dans le logiciel de découpe est supérieure à la dureté actuelle de la buse. La poursuite de l'impression risque d'user prématurément la buse, ce qui peut entraîner des fuites et un débit irrégulier. Veuillez procéder avec précaution.": []
     },
     "05008058": {
       "Placez correctement le tapis de découpe à prise légère et assurez-vous que le marqueur est exposé.": []
@@ -636,6 +744,9 @@
     },
     "05008064": {
       "Placez correctement la plate-forme laser et assurez-vous que les marqueurs arrière ne sont pas bloqués pour l'étalonnage laser.": []
+    },
+    "05008065": {
+      "L'extrudeur gauche ne prend pas en charge le hotend haute vitesse TPU. L'installation forcée peut provoquer une panne de changement de tension. Veuillez le remplacer par un autre hotend compatible.": []
     },
     "05008066": {
       "La tâche nécessite une plate-forme de découpe, mais la plate-forme actuelle est une plate-forme laser. Veuillez le remplacer par une plate-forme de coupe (base de protection contre les coupures + tapis de découpe LightGrip).": []
@@ -763,8 +874,32 @@
     "05008093": {
       "La chaussette en silicone de la buse n'est pas installé ; il existe un risque de dysfonctionnement du contrôle de température. Veuillez l'installer correctement et réessayer.": []
     },
+    "05008096": {
+      "La configuration de la caméra BirdsEye a échoué. Veuillez vous assurer que la caméra BirdsEye est correctement installée et éliminer tout obstacle pouvant bloquer son champ de vision.": []
+    },
+    "05008097": {
+      "L'initialisation de la caméra BirdsEye a échoué. La caméra de la tête d'outil n'a pas détecté les caractéristiques du plateau chauffant.": []
+    },
+    "05008098": {
+      "Aucun matériau détecté. Veuillez confirmer la position du matériau et continuer.": []
+    },
+    "05008099": {
+      "L'IA a détecté un possible décalage ou effondrement de l'impression. Veuillez vérifier l'état d'impression et prendre les mesures appropriées rapidement.": []
+    },
+    "0500809A": {
+      "Veuillez remplacer la carte Vision Encoder par la plaque d'impression pour éviter tout dommage lors de l'étalonnage.": []
+    },
+    "0500809B": {
+      "Le plateau d'impression est mal positionné et risque de heurter la goulotte d'évacuation des déchets. Veuillez le repositionner sur le plateau chauffant.": []
+    },
     "050080A0": {
       "La carte de l'encodeur visuel n'a pas été détectée. Veuillez vérifier que la carte est correctement placée et alignée aux quatre coins, et que les marques de positionnement sont claires et exemptes d'usure.": []
+    },
+    "050080A6": {
+      "L'accessoire rotatif est détecté. Veuillez le retirer avant de continuer.": []
+    },
+    "050080A7": {
+      "Le module rotatif est déconnecté. Veuillez vérifier qu’il est correctement installé et que le câble est bien branché.": []
     },
     "0500C010": {
       "Erreur de lecture/écriture sur carte SD. Veuillez la réinsérer ou la remplacer.": [],
@@ -787,8 +922,32 @@
     "0500C036": {
       "Il s'agit d'une tâche d'impression. Veuillez détacher le module de découpe laser de la tête d'impression.": []
     },
+    "0500C04A": {
+      "L'AMS est en cours de calibration, lecture RFID ou chargement/déchargement du matériau, impossible d'initier le processus de séchage, veuillez patienter.": []
+    },
+    "0500C04B": {
+      "Filament présent dans la sortie de l'AMS, la température élevée du séchage peut provoquer un blocage de l'AMS. Le séchage ne peut pas démarrer. Veuillez d'abord décharger le filament.": []
+    },
+    "0500C04C": {
+      "L'AMS est en cours de séchage. Veuillez ne pas relancer le processus.": []
+    },
+    "0500C04D": {
+      "L'appareil est actuellement en mode laser ou découpe et ne peut pas démarrer le séchage. Veuillez ne pas lancer le processus de séchage.": []
+    },
+    "0500C04E": {
+      "Veuillez connecter un adaptateur secteur à l'AMS-HT avant de démarrer le processus de séchage.": []
+    },
+    "0500C04F": {
+      "L'AMS est en cours de séchage et ne peut pas effectuer cette opération pour le moment.": []
+    },
+    "0500C059": {
+      "L'appareil éteint un incendie. Veuillez patienter avant de l'utiliser.": []
+    },
     "0500C07F": {
       "L'appareil est occupé et ne peut pas effectuer cette opération. Pour continuer, veuillez suspendre ou arrêter la tâche en cours.": []
+    },
+    "0500C080": {
+      "L'extrudeur est actuellement en fonctionnement et ne peut pas effectuer cette opération. Pour continuer, veuillez d'abord suspendre ou arrêter la tâche en cours.": []
     },
     "05014017": {
       "La liaison a échoué. Veuillez réessayer sinon redémarrer et réessayer.": []
@@ -895,6 +1054,24 @@
     "05024006": {
       "Module inconnu détecté, veuillez essayer de mettre à jour le firmware vers la dernière version.": []
     },
+    "05024007": {
+      "": []
+    },
+    "05024008": {
+      "": []
+    },
+    "05024009": {
+      "": []
+    },
+    "0502400A": {
+      "": []
+    },
+    "0502400B": {
+      "": []
+    },
+    "0502400C": {
+      "": []
+    },
     "0502400D": {
       "Échec du démarrage d'une nouvelle tâche : le chargement/déchargement du filament n'est pas terminé.": []
     },
@@ -903,6 +1080,21 @@
     },
     "05024013": {
       "Cet appareil n'est pas compatible avec le module laser 40 W. Veuillez le remplacer par un module laser 10 W ou le retirer.": []
+    },
+    "05024027": {
+      "L'AMS actuel ne prend pas en charge le séchage pendant l'impression. Veuillez vous connecter au réseau et mettre à jour le firmware de l'AMS sur la page « Firmware ».": []
+    },
+    "0502402D": {
+      "L'impression s'est arrêtée car l'imprimante n'a pas pu analyser le fichier 3mf. Veuillez renvoyer votre travail d'impression.": []
+    },
+    "0502402E": {
+      "L'impression s'est arrêtée car l'imprimante n'a pas pu analyser le fichier 3mf. Veuillez renvoyer votre travail d'impression.": []
+    },
+    "0502402F": {
+      "L'impression s'est arrêtée car l'imprimante n'a pas pu analyser le fichier 3mf. Veuillez renvoyer votre travail d'impression.": []
+    },
+    "05024030": {
+      "L'impression s'est arrêtée car l'imprimante n'a pas pu analyser le fichier 3mf. Veuillez renvoyer votre travail d'impression.": []
     },
     "05024098": {
       "L'appareil ne peut pas détecter AMS C. Veuillez reconnecter le câble AMS ou redémarrer l'imprimante.": []
@@ -917,7 +1109,7 @@
       "L'appareil est occupé et ne peut pas identifier les buses.": []
     },
     "0502C010": {
-      "En raison des limites de puissance de l'imprimante, l'impression, l'étalonnage, les commandes et autres actions ne peuvent pas être effectués pendant le séchage AMS. Veuillez arrêter le processus de séchage avant de procéder à toute autre opération.": []
+      "En raison des limitations de puissance, l'impression ou l'étalonnage sont impossibles pendant le séchage AMS. Arrêtez le séchage ou branchez un adaptateur secteur pour continuer.": []
     },
     "0502C011": {
       "Actuellement en mode de production 2D. Veuillez poursuivre l'opération sur l'imprimante": []
@@ -928,6 +1120,24 @@
     "0502C014": {
       "L'estimation de la quantité de filament restante de l'AMS est activée par défaut et ne peut pas être désactivée.": []
     },
+    "0502C024": {
+      "Les enregistrements de calibration de la dynamique de flux ont dépassé la limite de stockage. Veuillez supprimer certains enregistrements historiques dans le logiciel de tranchage avant d’ajouter de nouvelles données de calibration.": []
+    },
+    "0502C026": {
+      "L'appareil est occupé avec la tâche en cours et ne peut pas effectuer cette opération pour le moment. Veuillez réessayer plus tard.": []
+    },
+    "0502C028": {
+      "Le filament actuellement chargé dans l'extrudeur ne prend pas en charge l'alimentation manuelle.": []
+    },
+    "0502C031": {
+      "Veuillez vérifier et retirer toute pièce imprimée ou débris de la surface du plateau chauffant avant de poursuivre le retrait à froid.": []
+    },
+    "0502C032": {
+      "Veuillez vérifier et retirer toute pièce imprimée ou débris de la surface et du dessous du plateau chauffant avant de poursuivre le processus de séchage.": []
+    },
+    "0502C034": {
+      "La commutation de l'extrudeur a échoué et l'action en cours n'a pas été exécutée. Veuillez aller à l'écran Extrudeur, vérifier et terminer la commutation, puis réessayer.": []
+    },
     "05034098": {
       "L'appareil ne peut pas détecter AMS D. Veuillez reconnecter le câble AMS ou redémarrer l'imprimante.": []
     },
@@ -936,6 +1146,12 @@
     },
     "050340A3": {
       "La communication de l'AMS (ou AMS lite) D est anormale. Veuillez reconnecter le câble du module ou redémarrer l'imprimante.": []
+    },
+    "05104098": {
+      "L'appareil ne peut pas détecter AMS lite. Veuillez reconnecter le câble AMS lite ou redémarrer l'imprimante.": []
+    },
+    "0510409D": {
+      "Le micrologiciel de l'AMS lite ne correspond pas à l'imprimante, l'appareil ne peut pas continuer à fonctionner. Veuillez le mettre à jour sur la page 'Firmware'.": []
     },
     "05804096": {
       "L'appareil ne peut pas détecter AMS-HT A. Veuillez reconnecter le câble AMS-HT ou redémarrer l'imprimante.": []
@@ -1009,6 +1225,9 @@
     "058740A2": {
       "La communication AMS-HT C est anormale, veuillez reconnecter le câble du module ou redémarrer l'imprimante.": []
     },
+    "05FE4094": {
+      "Le Hotend gauche n’est pas installé. Veuillez installer le Hotend et recalibrer.": []
+    },
     "05FE8053": {
       "Une erreur de correspondance de buse gauche a été détectée pendant l'impression. Veuillez lancer l'impression après le re-découpage ou continuer l'impression après avoir remplacé la buse correcte. Attention : la température de la tête d'impression est élevée.": []
     },
@@ -1023,6 +1242,12 @@
     },
     "05FE8081": {
       "Le hotend gauche n'est pas installé.": []
+    },
+    "05FF4094": {
+      "Le Hotend droit n’est pas installé. Veuillez installer le Hotend et recalibrer.": [
+        "H2D"
+      ],
+      "Le Hotend n’est pas installé. Veuillez installer le Hotend et recalibrer.": []
     },
     "05FF8053": {
       "Une erreur de correspondance de buse droite a été détectée pendant l'impression. Veuillez lancer l'impression après le re-découpage ou continuer l'impression après avoir remplacé la buse correcte. Attention : la température de la tête d'impression est élevée.": []
@@ -1067,12 +1292,12 @@
       ]
     },
     "07008007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "0700800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS A à l'extrudeur est correctement connecté.": []
@@ -1105,6 +1330,9 @@
     },
     "07008023": {
       "Le refroidissement de l'AMS A a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "0700C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "0700C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS A. Accédez à l'Assistant pour plus de détails.": []
@@ -1152,12 +1380,12 @@
       ]
     },
     "07018007": {
-      "Impossible d'extruder le filament. Vérifiez si l'extrudeur est obstruée.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": []
+      ]
     },
     "0701800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS B à l'extrudeur est correctement connecté.": []
@@ -1190,6 +1418,9 @@
     },
     "07018023": {
       "Le refroidissement de l'AMS B a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "0701C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "0701C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS B. Accédez à l'Assistant pour plus de détails.": []
@@ -1237,12 +1468,12 @@
       ]
     },
     "07028007": {
-      "Impossible d'extruder le filament. Vérifiez si l'extrudeur est obstruée.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "0702800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS C à l'extrudeur est correctement connecté.": []
@@ -1275,6 +1506,9 @@
     },
     "07028023": {
       "Le refroidissement de l'AMS C a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "0702C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "0702C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS C. Accédez à l'Assistant pour plus de détails.": []
@@ -1322,12 +1556,12 @@
       ]
     },
     "07038007": {
-      "Impossible d'extruder le filament. Vérifiez si l'extrudeur est obstruée.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "0703800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS D à l'extrudeur est correctement connecté.": []
@@ -1360,6 +1594,9 @@
     },
     "07038023": {
       "Le refroidissement de l'AMS D a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "0703C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "0703C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS D. Accédez à l'Assistant pour plus de détails.": []
@@ -1398,12 +1635,12 @@
       ]
     },
     "07048007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "0704800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS E à l'extrudeur est correctement connecté.": []
@@ -1429,6 +1666,9 @@
     "07048023": {
       "Le refroidissement de l'AMS E a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
     },
+    "0704C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "07054025": {
       "Échec de la lecture des informations sur le filament.": []
     },
@@ -1448,12 +1688,12 @@
       ]
     },
     "07058007": {
-      "Impossible d'extruder le filament. Vérifiez si l'extrudeur est obstruée. Après le dépannage, cliquez sur le bouton « Réessayer ».": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "0705800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS F à l'extrudeur est correctement connecté.": []
@@ -1479,6 +1719,9 @@
     "07058023": {
       "Le refroidissement de l'AMS F a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
     },
+    "0705C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "07064025": {
       "Échec de la lecture des informations sur le filament.": []
     },
@@ -1498,12 +1741,12 @@
       ]
     },
     "07068007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": []
+      ]
     },
     "0706800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS G à l'extrudeur est correctement connecté.": []
@@ -1529,6 +1772,9 @@
     "07068023": {
       "Le refroidissement de l'AMS G a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
     },
+    "0706C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "07074025": {
       "Échec de la lecture des informations sur le filament.": []
     },
@@ -1548,12 +1794,12 @@
       ]
     },
     "07078007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "0707800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS H à l'extrudeur est correctement connecté.": []
@@ -1578,6 +1824,9 @@
     },
     "07078023": {
       "Le refroidissement de l'AMS H a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "0707C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "07FE8001": {
       "Impossible de couper le filament de l'extrudeur gauche. Veuillez vérifier le cutter. Après le dépannage, cliquez sur le bouton « Réessayer ».": []
@@ -1650,6 +1899,9 @@
     },
     "07FEC012": {
       "Appuyez sur le coupleur noir du tube en PTFE et débranchez le tube en PTFE. Une fois l'opération terminée, cliquez sur 'Continuer'": []
+    },
+    "07FEC030": {
+      "Le filament spécifié dans le trancheur est épuisé. L'impression est suspendue. Veuillez vous rendre sur la machine pour remplacer le matériau et reprendre l'impression.": []
     },
     "07FF4001": {
       "Le filament est toujours chargé à partir d'AMS lorsque l'AMS est désactivé. Veuillez décharger le filament, le charger à partir du porte-bobine et recommencer l'impression.": []
@@ -1782,6 +2034,9 @@
         "P2S"
       ]
     },
+    "07FFC030": {
+      "Le filament spécifié dans le trancheur est épuisé. L'impression est suspendue. Veuillez vous rendre sur la machine pour remplacer le matériau et reprendre l'impression.": []
+    },
     "0C004020": {
       "La configuration de la caméra BirdsEye a échoué. Nettoyez tous les objets et retirez le tapis. Assurez-vous que le marqueur n'est pas obstrué. Pendant ce temps, nettoyez la caméra BirdsEye et la caméra Toolhead, et retirez tout objet étranger bloquant leur vue.": []
     },
@@ -1810,7 +2065,7 @@
       "Le marqueur visuel n'a pas été détecté. Veuillez recoller le papier dans la bonne position.": []
     },
     "0C00402C": {
-      "Erreur de liaison de données de l'appareil. Redémarrez l'imprimante": []
+      "Erreur de liaison de données de l'appareil. Redémarrez l'imprimante.": []
     },
     "0C00402D": {
       "La caméra Toolhead ne fonctionne pas correctement ; redémarrez l'appareil.": []
@@ -1868,6 +2123,12 @@
     },
     "0C008043": {
       "L'IA a détecté une agglomération de la buse. Veuillez vérifier l'état de la buse. Se référer à l'assistant pour les solutions.": []
+    },
+    "0C008053": {
+      "L’Axe de Rotation est mal placé. Veuillez suivre l’illustration pour positionner correctement l’Axe de Rotation.": []
+    },
+    "0C008054": {
+      "Les caractéristiques de positionnement de l’Axe de Rotation n’ont pas été détectées. Veuillez vérifier le bon placement et la clarté des marqueurs de positionnement. Si confirmé, vous pouvez ignorer cette erreur et continuer la mesure photo.": []
     },
     "0C00C003": {
       "Des défauts possibles ont été détectés dans la première couche.": []
@@ -2121,6 +2382,9 @@
     "12FFC006": {
       "Veuillez introduire le filament dans le tube en PTFE jusqu'à ce qu'il arrive en butée.": []
     },
+    "12FFC030": {
+      "Le filament spécifié dans le trancheur est épuisé. L'impression est suspendue. Veuillez vous rendre sur la machine pour remplacer le matériau et reprendre l'impression.": []
+    },
     "18004025": {
       "Échec de la lecture des informations sur le filament.": []
     },
@@ -2140,12 +2404,12 @@
       ]
     },
     "18008007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "1800800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT A à l'extrudeur est correctement connecté.": []
@@ -2173,6 +2437,9 @@
     },
     "18008023": {
       "Le refroidissement de l'AMS-HT A a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1800C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1800C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT A. Accédez à l'Assistant pour plus de détails.": []
@@ -2211,12 +2478,12 @@
       ]
     },
     "18018007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "1801800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT B à l'extrudeur est correctement connecté.": []
@@ -2244,6 +2511,9 @@
     },
     "18018023": {
       "Le refroidissement de l'AMS-HT B a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1801C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1801C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT B. Accédez à l'Assistant pour plus de détails.": []
@@ -2282,12 +2552,12 @@
       ]
     },
     "18028007": {
-      "Impossible d'extruder le filament. Vérifiez si l'extrudeur est obstruée. Après le dépannage, cliquez sur le bouton « Réessayer ».": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "1802800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT C à l'extrudeur est correctement connecté.": []
@@ -2315,6 +2585,9 @@
     },
     "18028023": {
       "Le refroidissement de l'AMS-HT C a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1802C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1802C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT C. Accédez à l'Assistant pour plus de détails.": []
@@ -2353,12 +2626,12 @@
       ]
     },
     "18038007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": []
+      ]
     },
     "1803800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT D à l'extrudeur est correctement connecté.": []
@@ -2386,6 +2659,9 @@
     },
     "18038023": {
       "Le refroidissement de l'AMS-HT D a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1803C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1803C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT D. Accédez à l'Assistant pour plus de détails.": []
@@ -2424,12 +2700,12 @@
       ]
     },
     "18048007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": []
+      ]
     },
     "1804800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT E à l'extrudeur est correctement connecté.": []
@@ -2454,6 +2730,9 @@
     },
     "18048023": {
       "Le refroidissement de l'AMS-HT E a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1804C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1804C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT E. Accédez à l'Assistant pour plus de détails.": []
@@ -2492,12 +2771,12 @@
       ]
     },
     "18058007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "1805800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT F à l'extrudeur est correctement connecté.": []
@@ -2522,6 +2801,9 @@
     },
     "18058023": {
       "Le refroidissement de l'AMS-HT F a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1805C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1805C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT F. Accédez à l'Assistant pour plus de détails.": []
@@ -2560,12 +2842,12 @@
       ]
     },
     "18068007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstrué.": []
+      ]
     },
     "1806800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT G à l'extrudeur est correctement connecté.": []
@@ -2590,6 +2872,9 @@
     },
     "18068023": {
       "Le refroidissement de l'AMS-HT G a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1806C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1806C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT G. Accédez à l'Assistant pour plus de détails.": []
@@ -2628,12 +2913,12 @@
       ]
     },
     "18078007": {
-      "Impossible d'extruder le filament. Veuillez vérifier si l'extrudeur est bouché, après le dépannage, appuyez sur 'Réessayer'.": [
+      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": [],
+      "Échec de l'extrusion du filament. Veuillez consulter l'Assistant pour plus de détails.": [
         "P2S",
         "H2S",
         "H2D"
-      ],
-      "Le filament d'extrusion a échoué. L'extrudeur est peut-être obstruée.": []
+      ]
     },
     "1807800A": {
       "Déconnexion du tube en PTFE détectée. Vérifiez si le tube en PTFE de l'AMS HT H à l'extrudeur est correctement connecté.": []
@@ -2658,6 +2943,9 @@
     },
     "18078023": {
       "Le refroidissement de l'AMS-HT H a échoué. La température ambiante est peut-être trop élevée. Veuillez utiliser l'appareil dans un environnement approprié.": []
+    },
+    "1807C008": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1807C069": {
       "Une erreur s'est produite lors du séchage avec l'AMS HT H. Accédez à l'Assistant pour plus de détails.": []
@@ -2799,6 +3087,9 @@
     "0300010000010003": {
       "La température du plateau est anormale, la chauffe dépasse la consigne.": []
     },
+    "0300010000010005": {
+      "Un problème de contrôle de la température du plateau chauffant a été détecté. Le module de chauffe est peut-être endommagé. Veuillez éteindre immédiatement l’appareil et suivre le Wiki pour remplacer la Carte AC.": []
+    },
     "0300010000010006": {
       "La température du plateau est anormale, le capteur pourrait être un court-circuit.": []
     },
@@ -2847,6 +3138,12 @@
       ],
       "La température de la buse est anormale, la chauffe dépasse la consigne.": []
     },
+    "0300020000010005": {
+      "Contrôle anormal de la température de la buse détecté ; le module de chauffage peut être endommagé. Veuillez débrancher immédiatement l'alimentation et cesser d'utiliser l'appareil, puis contacter le service client pour obtenir des conseils de dépannage.": [],
+      "Contrôle anormal de la température détecté sur la buse extrudeuse droite ; le module de chauffage peut être endommagé. Veuillez débrancher immédiatement l'alimentation et cesser d'utiliser l'appareil, puis contacter le service client pour obtenir des conseils de dépannage.": [
+        "H2D"
+      ]
+    },
     "0300020000010006": {
       "La température de la buse droite est anormale ; le capteur est peut-être en court-circuit, veuillez vérifier si le connecteur est correctement branché.": [
         "H2D"
@@ -2858,6 +3155,12 @@
         "H2D"
       ],
       "La température de la buse est anormale, le circuit de mesure est peut être interrompu.": []
+    },
+    "0300020000010008": {
+      "La température de la buse de l'extrudeur droit est anormale et ne peut pas atteindre la valeur définie. Cela peut être dû à une chaussette en silicone de buse mal installée.": [
+        "H2D"
+      ],
+      "La température de la buse de l'extrudeur est anormale et ne peut pas atteindre la valeur définie. Cela peut être dû à une chaussette en silicone de buse mal installée.": []
     },
     "0300020000010009": {
       "La régulation de la température de la buse droite est anormale. L'extrémité chaude n'est peut-être pas installée. Pour chauffer l'ensemble de chauffage sans le hotend, activez le mode Maintenance dans les paramètres.": [
@@ -2927,6 +3230,12 @@
     },
     "0300090000020005": {
       "L'extrusion est anormale. L'extrudeur est peut-être obstrué, le filament est peut-être trop fin ce qui entraîne un patinage des roues de l'extrudeuse, ou le filament est peut-être emmêlé dans la bobine.": []
+    },
+    "0300090000030007": {
+      "Anomalie d'extrusion de filament détectée. Tentative de récupération automatique, veuillez patienter.": []
+    },
+    "0300090000030008": {
+      "Anomalie d'extrusion de filament détectée. Tentative de récupération automatique, veuillez patienter.": []
     },
     "03000A0000010001": {
       "La sensibilité du capteur de force du lit chauffant 1 est trop élevée. Il est peut-être coincé entre le bras de tension et le support du lit chauffant, ou la vis de réglage est peut-être trop serrée.": []
@@ -3126,13 +3435,13 @@
       "Une variation anormale a été détectée dans les données du capteur de force d’extrusion de l’extrudeur, possiblement due à un mauvais contact du capteur ou à un capteur défectueux.": []
     },
     "030018000001000D": {
-      "Échec de l'étalonnage de la détection d'agglutination de la buse. Force excessive détectée sur la buse. Veuillez vous assurer que la buse est correctement installée.": []
+      "Échec de la calibration de détection d'encrassement de buse. Force excessive détectée sur la buse. Veuillez vérifier que la buse est correctement installée.": []
     },
     "030018000001000E": {
-      "Échec de l'étalonnage de détection d'agglomération de la buse. La buse n'a pas atteint la feuille métallique située à l'arrière droit du plateau chauffant. Veuillez nettoyer la buse et retirer tous les débris de cette feuille.": [
+      "Échec de l'étalonnage de la détection d'encrassement de la buse. La buse n'a pas touché la paroi intérieure de l'orifice. Veuillez nettoyer la buse et l'orifice de la plaque d'acier à l'arrière droit du plateau chauffant.": [],
+      "Échec de la calibration de détection de l'encrassement de la buse. La buse n'a pas atteint la plaque métallique située à l'arrière à droite du plateau chauffant. Veuillez nettoyer la buse et retirer tout débris de cette plaque.": [
         "H2S"
-      ],
-      "Échec de l'étalonnage de la détection d'agglutination de la buse. La buse n'a pas touché la paroi interne du trou. Veuillez nettoyer la buse et le trou de la plaque en acier situé à l'arrière droit du plateau chauffant.": []
+      ]
     },
     "0300180000030009": {
       "Nivellement Haute Température du plateau en cours.": []
@@ -3164,6 +3473,9 @@
     "03001D0000010001": {
       "Le capteur de position du moteur d'extrusion est anormal. Le câble du capteur n'est peut-être pas correctement branché.": []
     },
+    "03001D000001000A": {
+      "Surcharge du moteur extrudeur détectée. Le moteur peut être défectueux.": []
+    },
     "03001E0000010001": {
       "La température de la buse de l'extrudeur gauche est anormale, la cartouche chauffante est peut-être en court-circuit.": []
     },
@@ -3173,11 +3485,17 @@
     "03001E0000010003": {
       "La température de la buse gauche est anormale ; la cartouche chauffante est en surchauffe.": []
     },
+    "03001E0000010005": {
+      "Contrôle anormal de la température détecté sur la buse extrudeuse gauche ; le module de chauffage peut être endommagé. Veuillez débrancher immédiatement l'alimentation et cesser d'utiliser l'appareil, puis contacter le service client pour obtenir des conseils de dépannage.": []
+    },
     "03001E0000010006": {
       "La température de la buse gauche est anormale ; le capteur est peut-être en court-circuit, veuillez vérifier si le connecteur est correctement branché.": []
     },
     "03001E0000010007": {
       "La température de la buse gauche est anormale ; le capteur est peut-être en circuit ouvert.": []
+    },
+    "03001E0000010008": {
+      "La température de la buse de l'extrudeur gauche est anormale et ne peut pas atteindre la valeur définie. Cela peut être causé par une chaussette en silicone de buse mal installée.": []
     },
     "03001E0000010009": {
       "Le contrôle de la température de la buse gauche de l'extrudeur est anormal ; le hotend n'est peut-être pas installée. Si vous souhaitez chauffer hotend sans l'installer, veuillez activer le mode maintenance sur la page des paramètres.": []
@@ -3322,6 +3640,9 @@
     "03002D0000030009": {
       "Nivellement Haute Température du plateau en cours.": []
     },
+    "03002E0000030001": {
+      "Les données d'annulation du bruit du moteur doivent être mises à jour ; veuillez recalibrer.": []
+    },
     "0300310000010001": {
       "La vitesse du ventilateur de refroidissement des pièces est trop lente ou arrêtée. Il est peut-être bloqué ou le connecteur n'est peut-être pas correctement branché.": []
     },
@@ -3373,6 +3694,9 @@
     "0300400000020001": {
       "La transmission de données via le port série est anormale, peut-être que le système logiciel est défectueux.": []
     },
+    "0300400000020002": {
+      "Erreur détectée dans les données G-code. Le système a automatiquement rechargé le G-code et repris l'impression.": []
+    },
     "0300410000010001": {
       "La tension du système est instable et déclenche la fonction de protection contre les pannes de courant.": []
     },
@@ -3394,6 +3718,9 @@
     "0300900000010005": {
       "Le chauffage de la chambre a échoué. La résistance thermique est trop élevée.": []
     },
+    "0300900000010007": {
+      "Température élevée dans la chambre détectée. Si le hotend surchauffe ou dégage de la fumée, éteignez immédiatement l'imprimante. Veuillez consulter le Wiki pour des instructions détaillées de dépannage.": []
+    },
     "0300900000010010": {
       "La communication du régulateur de température de la chambre est anormale.": []
     },
@@ -3405,6 +3732,9 @@
     },
     "0300910000010003": {
       "La température du réchauffeur de chambre 1 est anormale. Le réchauffeur est en surchauffe.": []
+    },
+    "0300910000010005": {
+      "Un problème de contrôle de la température du chauffage de la chambre a été détecté. Le module de chauffe est peut-être endommagé. Veuillez éteindre immédiatement l’appareil et suivre le Wiki pour remplacer la Carte AC.": []
     },
     "0300910000010006": {
       "La température du réchauffeur de chambre 1 est anormale. Le capteur peut présenter un court-circuit.": []
@@ -3438,6 +3768,9 @@
     },
     "0300920000010007": {
       "La température du réchauffeur de chambre 2 est anormale. Le capteur peut présenter un circuit ouvert.": []
+    },
+    "0300920000010008": {
+      "Le réchauffeur de chambre 2 n'a pas atteint la température cible.": []
     },
     "030092000001000A": {
       "La température du chauffage de la chambre 2 est anormale. La carte AC peut être endommagée.": []
@@ -3531,7 +3864,7 @@
       "La porte avant est ouverte.": []
     },
     "0300970000010001": {
-      "Le capot supérieur semble ouvert ; la tâche a été suspendue": []
+      "Le capot supérieur semble ouvert, la tâche a été suspendue": []
     },
     "0300970000010002": {
       "Le capteur Hall du capot supérieur (avant droit) est anormal ; veuillez vérifier si le fil de connexion n'est pas desserré.": []
@@ -3656,6 +3989,9 @@
     "0300A80000010001": {
       "Anomalie de l'alimentation AMS, probablement due à un endommagement de l'AMS ou à un court-circuit dans l'interface AMS, ou à un trop grand nombre de connexions AMS. Vérifiez s'il est correctement connecté.": []
     },
+    "0300AD0000030001": {
+      "La température de la chambre est élevée ; la fonction de filtre a été automatiquement désactivée pour éviter une interruption d'impression.": []
+    },
     "0300C00000010001": {
       "Dysfonctionnement de la porte d'Extraction Active de la Chambre : elle est peut-être bloquée.": []
     },
@@ -3719,17 +4055,26 @@
     "0300D60000010007": {
       "Le réarmement du moteur de l'extincteur est bloqué. Tournez doucement le volant de secours vers la gauche et vers la droite jusqu'à ce que la résistance diminue. Ensuite, éteignez puis rallumez l'extincteur.": []
     },
+    "0300D70000010003": {
+      "La pièce sur l'accessoire rotatif est entrée en collision avec la tête d'outil. Veuillez la remplacer par une pièce de taille appropriée et réessayer. Consultez le Wiki pour les plages de tailles supportées.": []
+    },
     "0300D70000020001": {
-      "Le quatrième axe laser n'est pas branché.": []
+      "Le module rotatif est déconnecté. Veuillez vérifier qu’il est correctement installé et que le câble est bien branché.": []
+    },
+    "0300D70000020002": {
+      "L'accessoire rotatif est détecté. Veuillez le retirer avant de continuer.": []
     },
     "0300D80000010001": {
-      "Le moteur du laser 4 axes est en circuit ouvert. Il peut s’agir d’une connexion desserrée ou d’une panne du moteur.": []
+      "Le moteur du module rotatif est en circuit ouvert. Il peut s’agir d’une connexion desserrée ou d’une défaillance du moteur.": []
     },
     "0300D80000010002": {
-      "Erreur du moteur du laser 4 axes. Veuillez éteindre puis rallumer pour redémarrer le laser 4 axes.": []
+      "Erreur du moteur du module rotatif. Veuillez éteindre puis rallumer afin de redémarrer le module rotatif.": []
     },
     "0300D90000020001": {
-      "Erreur de communication entre le moteur du quatrième axe laser et le capteur de position. En cas d'échec du redémarrage, veuillez contacter le service client.": []
+      "Erreur de communication entre le moteur du module rotatif et le capteur de position. Si le redémarrage ne résout pas le problème, veuillez contacter l’assistance clientèle.": []
+    },
+    "0300DB0000020001": {
+      "Module laser détecté. Veuillez installer correctement la buse droite pour garantir un étalonnage correct du Montage du Module Laser.": []
     },
     "050001000001000A": {
       "": []
@@ -3779,6 +4124,9 @@
     "0500010000030009": {
       "": []
     },
+    "0500010000030015": {
+      "L'espace de stockage interne de l'imprimante est faible et l'enregistrement de Timelapse risque d'échouer. Veuillez supprimer des fichiers pour libérer de l'espace, puis réessayer.": []
+    },
     "0500020000020001": {
       "Impossible de se connecter à Internet. Vérifiez la connexion réseau.": []
     },
@@ -3802,6 +4150,27 @@
     },
     "0500020000020008": {
       "La synchronisation de l'heure a échoué": []
+    },
+    "0500020000020009": {
+      "": []
+    },
+    "050002000002000A": {
+      "": []
+    },
+    "050002000002000B": {
+      "": []
+    },
+    "0500020000030009": {
+      "": []
+    },
+    "050002000003000A": {
+      "": []
+    },
+    "050002000003000B": {
+      "": []
+    },
+    "050002000003000C": {
+      "": []
     },
     "0500030000010001": {
       "Le module MC ne fonctionne pas correctement. Redémarrez l'appareil ou vérifiez la connexion des câbles de l'appareil.": []
@@ -3862,11 +4231,14 @@
     "0500030000010026": {
       "Le module d'extension Tête d'outil ne fonctionne pas correctement. Éteignez l'appareil, vérifiez la connexion et redémarrez l'appareil.": []
     },
+    "0500030000010053": {
+      "": []
+    },
     "050003000002000C": {
       "Erreur matérielle sans fil : veuillez activer/désactiver le Wi-Fi ou redémarrer l'appareil.": []
     },
     "050003000002000D": {
-      "Le contrôleur de la carte SD ne fonctionne pas correctement": []
+      "Le contrôleur de la carte SD ne fonctionne pas correctement.": []
     },
     "050003000002000E": {
       "Certains modules ne sont pas compatibles avec la version du microprogramme de l'imprimante, ce qui peut affecter son utilisation. Veuillez vous rendre sur la page « Micrologiciel » pour effectuer la mise à jour après vous être connecté à Internet, ou vous pouvez effectuer la mise à jour hors ligne selon le wiki.": []
@@ -3898,6 +4270,9 @@
     "0500030000020018": {
       "": []
     },
+    "0500030000020019": {
+      "": []
+    },
     "0500030000020020": {
       "La capacité de la carte SD est insuffisante pour mettre en cache les fichiers d'impression.": [],
       "La capacité de la clé USB est insuffisante pour mettre en cache les fichiers d'impression.": [
@@ -3905,6 +4280,21 @@
         "H2S",
         "H2D"
       ]
+    },
+    "0500030000020050": {
+      "": []
+    },
+    "0500030000020051": {
+      "": []
+    },
+    "0500030000020052": {
+      "": []
+    },
+    "0500030000020053": {
+      "": []
+    },
+    "0500030000020054": {
+      "": []
     },
     "0500030000020055": {
       "Les informations de l'utilisateur ont expiré, veuillez-vous reconnecter.": []
@@ -3931,7 +4321,7 @@
       "Impossible de reprendre l'impression précédente": []
     },
     "0500040000010025": {
-      "Une connexion bizarre entre AMS/AMS Lite et l'appareil a été détectée. Va voir le Wiki pour savoir comment régler ça.": []
+      "Une connexion anormale a été détectée entre un AMS/AMS Lite et l'imprimante. Veuillez consulter le wiki pour la correction.": []
     },
     "0500040000010044": {
       "Le firmware de l'AMS A ne correspond pas à l'imprimante. Veuillez le mettre à jour sur la page 'Firmware'.": []
@@ -3956,6 +4346,15 @@
     },
     "0500040000010052": {
       "La Clé de Sécurité n'est pas insérée. Veuillez suivre le Wiki pour l'installer.": []
+    },
+    "0500040000010056": {
+      "": []
+    },
+    "0500040000010060": {
+      "": []
+    },
+    "0500040000010061": {
+      "": []
     },
     "0500040000020007": {
       "La température du lit dépasse la température de vitrification du filament, ce qui peut provoquer l'obstruction de la buse. Veuillez laisser la porte avant de l'imprimante ouverte ou réduire la température du lit.": []
@@ -4041,6 +4440,9 @@
     "0500040000020039": {
       "Veuillez brancher le connecteur du module": []
     },
+    "0500040000020040": {
+      "Le hotend spécifique au TPU n'est pas compatible avec l'extrudeuse gauche. Veuillez le remplacer par un autre hotend compatible.": []
+    },
     "0500040000020041": {
       "Le module laser a été utilisé pendant une longue période. Veuillez le nettoyer rapidement pour éviter d'affecter le traitement du laser.": []
     },
@@ -4061,6 +4463,9 @@
     },
     "0500040000030054": {
       "Système d'extinction automatique d'incendie détecté. Il est recommandé d'effectuer un exercice d'incendie pour se familiariser avec le fonctionnement.": []
+    },
+    "0500040000030057": {
+      "La tâche d'impression est terminée. La purification automatique de l'air est en cours.": []
     },
     "0500050000010001": {
       "Les données d'usine de la carte AP sont anormales ; veuillez remplacer la carte AP par une nouvelle.": []
@@ -4117,13 +4522,25 @@
       "La certification du module de coupe a échoué. Veuillez rebrancher le câble ou redémarrer l'imprimante.": []
     },
     "0500050000010018": {
-      "La certification du module Laser 4ième Axe a échoué. Reconnectez le câble du module ou redémarrez l'imprimante.": []
+      "La certification du module d’Axe Rotatif a échoué. Veuillez reconnecter le câble ou redémarrer l’imprimante.": []
     },
     "0500050000010019": {
       "La certification du module extincteur a échoué. Reconnectez le câble du module ou redémarrez l'imprimante.": []
     },
+    "050005000001001A": {
+      "La certification du Filament Track Switch a échoué. Veuillez rebrancher le câble ou redémarrer l'imprimante.": []
+    },
+    "050005000001001B": {
+      "Erreur de communication avec l'accessoire Ethernet. Veuillez redémarrer l'appareil.": []
+    },
     "0500050000010021": {
       "Échec de l'authentification du kit time-lapse. Veuillez reconnecter le câble ou redémarrer l'imprimante.": []
+    },
+    "0500050000010022": {
+      "La certification du ventilateur d'extraction externe a échoué. Veuillez redémarrer l'imprimante ou reconnecter le câble du ventilateur.": []
+    },
+    "0500050000020023": {
+      "": []
     },
     "0500050000020030": {
       "": []
@@ -4155,6 +4572,9 @@
     "0500060000020008": {
       "": []
     },
+    "0500060000020009": {
+      "": []
+    },
     "0500060000020011": {
       "": []
     },
@@ -4165,6 +4585,9 @@
       "": []
     },
     "0500060000020014": {
+      "": []
+    },
+    "0500060000020015": {
       "": []
     },
     "0500060000020021": {
@@ -4179,6 +4602,9 @@
     "0500060000020024": {
       "": []
     },
+    "0500060000020025": {
+      "": []
+    },
     "0500060000020031": {
       "La caméra ToolHead n'est pas connectée. Vérifiez le matériel et les connexions des câbles.": []
     },
@@ -4191,6 +4617,9 @@
     "0500060000020034": {
       "La caméra Live View n'est pas connectée. Vérifiez le matériel et les connexions des câbles.": []
     },
+    "0500060000020035": {
+      "": []
+    },
     "0500060000020041": {
       "": []
     },
@@ -4201,6 +4630,9 @@
       "": []
     },
     "0500060000020044": {
+      "": []
+    },
+    "0500060000020045": {
       "": []
     },
     "0500060000020051": {
@@ -4221,11 +4653,38 @@
     "0500060000020062": {
       "": []
     },
+    "0500060000020070": {
+      "": []
+    },
+    "0500060000020071": {
+      "": []
+    },
     "05000600000200A0": {
       "": []
     },
     "05000600000200A1": {
       "": []
+    },
+    "0500070000020001": {
+      "": []
+    },
+    "0500070000020002": {
+      "": []
+    },
+    "0500070000020003": {
+      "": []
+    },
+    "0500070000020101": {
+      "": []
+    },
+    "0500070000020201": {
+      "": []
+    },
+    "05001A0000010001": {
+      "Le module d'alimentation est hors ligne. Veuillez vérifier si le câble de connexion du module d'alimentation est déconnecté.": []
+    },
+    "05001A0000010002": {
+      "Un remplacement du module d'alimentation a été détecté. Veuillez vous assurer que la roue d'entraînement d'extrusion et la buse correspondantes ont été remplacées, puis mettez manuellement à jour le type de buse dans l'imprimante.": []
     },
     "0500400000010039": {
       "Erreur de numéro de série du module laser": []
@@ -4251,6 +4710,9 @@
         "H2D"
       ]
     },
+    "0501040000030007": {
+      "Veuillez nettoyer ou remplacer le filtre à air.": []
+    },
     "0501040000030010": {
       "Le module laser est poussiéreux et doit être nettoyé maintenant.": []
     },
@@ -4270,6 +4732,12 @@
       "La certification AMS C a échoué. Veuillez rebrancher le câble ou redémarrer l'imprimante.": []
     },
     "0503000000030027": {
+      "": []
+    },
+    "0503000000030028": {
+      "": []
+    },
+    "0503000000030029": {
       "": []
     },
     "0503040000010044": {
@@ -4292,6 +4760,12 @@
     },
     "0507050000010010": {
       "AMS H non certifié détecté ou firmware non mis à jour. Impossible d'utiliser avec cette imprimante.": []
+    },
+    "0510040000010044": {
+      "Le firmware de l'AMS lite n'est pas cohérente avec l'imprimante. Veuillez le mettre \u0000 jour sur la page 'Firmware'.": []
+    },
+    "0510050000010014": {
+      "La certification AMS lite a échoué. Veuillez rebrancher le câble ou redémarrer l'imprimante.": []
     },
     "0580040000010045": {
       "Le firmware de l'AMS-HT A ne correspond pas à l'imprimante. Veuillez le mettre à jour sur la page 'Firmware'.": []
@@ -4477,7 +4951,7 @@
       "Le filament 1 AMS A est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0700200000020002": {
-      "L'emplacement 1 AMS A est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS A est vide. Veuillez insérer un nouveau filament.": []
     },
     "0700200000020003": {
       "Le filament 1 AMS A pourrait être cassé dans l'AMS.": []
@@ -4550,6 +5024,9 @@
     },
     "0700200000020025": {
       "La résistance d'alimentation du slot 1 de l'AMS A est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
+    },
+    "0700200000020057": {
+      "Le tag RFID AMS A Slot 1 ne peut pas être identifié.": []
     },
     "0700200000030001": {
       "Le filament 1 AMS A est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
@@ -4653,6 +5130,9 @@
     "0700210000020025": {
       "La résistance d'alimentation du slot 2 de l'AMS A est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0700210000020057": {
+      "Le tag RFID AMS A Slot 2 ne peut pas être identifié.": []
+    },
     "0700210000030001": {
       "Le filament 2 AMS A est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -4747,13 +5227,16 @@
       "Le moteur d'assistance AMS H emplacement 3 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "0700220000020023": {
-      "AMS Une fente 3 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS A slot 3 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "0700220000020024": {
       "La fente 3 de l'AMS A n'a pas réussi à faire tourner la bobine de filament lorsqu'elle a tiré le filament vers l'AMS.": []
     },
     "0700220000020025": {
       "La résistance d'alimentation de l'emplacement 3 de l'AMS A est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
+    },
+    "0700220000020057": {
+      "Le tag RFID AMS A Slot 3 ne peut pas être identifié.": []
     },
     "0700220000030001": {
       "Le filament 3 AMS A est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
@@ -4783,7 +5266,7 @@
       "Le filament 4 AMS A est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0700230000020002": {
-      "L'emplacement 4 AMS A est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS A est vide. Veuillez insérer un nouveau filament.": []
     },
     "0700230000020003": {
       "Le filament 4 AMS A pourrait être cassé dans l'AMS.": []
@@ -4849,13 +5332,16 @@
       "Le moteur d'assistance AMS H emplacement 4 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "0700230000020023": {
-      "AMS A emplacement 4 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS A slot 4 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "0700230000020024": {
       "La fente 4 de l'AMS A n'a pas réussi à faire tourner la bobine de filament lorsqu'elle a tiré le filament vers l'AMS.": []
     },
     "0700230000020025": {
       "La résistance d'alimentation de l'emplacement 4 de l'AMS A est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
+    },
+    "0700230000020057": {
+      "Le tag RFID AMS A Slot 4 ne peut pas être identifié.": []
     },
     "0700230000030001": {
       "Le filament 4 AMS A est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
@@ -4914,6 +5400,12 @@
     "0700400000020004": {
       "Le signal du buffer filament est anormal ; le ressort est peut-être bloqué ou le filament peut être coincé.": []
     },
+    "0700400000020005": {
+      "Le capteur à effet Hall de détection d'emmêlement du filament est endommagé. Veuillez consulter le Wiki pour les instructions de remplacement.": []
+    },
+    "0700400000020006": {
+      "Un court-circuit a été détecté dans le capteur à effet Hall de détection d'emmêlement du filament. Veuillez consulter le Wiki pour les instructions de remplacement.": []
+    },
     "0700450000020001": {
       "Le capteur du coupe-filament ne fonctionne pas correctement. Vérifiez si le connecteur est correctement branché.": []
     },
@@ -4926,8 +5418,14 @@
     "0700500000020001": {
       "La communication AMS A est anormale, veuillez vérifier le câble de connexion.": []
     },
+    "0700500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "0700510000030001": {
       "L'AMS est désactivé ; veuillez charger le filament depuis le porte-bobine.": []
+    },
+    "0700520000030001": {
+      "Nombre ou type anormal d'unités AMS connectées détecté. Veuillez consulter le Wiki pour les combinaisons AMS prises en charge et ajuster la connexion actuelle.": []
     },
     "0700550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -5111,8 +5609,14 @@
     "0700940000010001": {
       "Le capteur de température du chauffage 1 AMS A fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0700940000010002": {
+      "Le capteur de température 1 du chauffage AMS A est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0700950000010001": {
       "Le capteur de température du chauffage 2 AMS A fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0700950000010002": {
+      "Le capteur de température 2 du chauffage AMS A est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0700960000010001": {
       "Le processus de séchage de l'AMS A pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -5247,7 +5751,7 @@
       "Le filament 1 AMS B est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0701200000020002": {
-      "L'emplacement 1 AMS B est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS B est vide. Veuillez insérer un nouveau filament.": []
     },
     "0701200000020003": {
       "Le filament 1 AMS B pourrait être cassé dans l'AMS.": []
@@ -5321,6 +5825,9 @@
     "0701200000020025": {
       "La résistance d'alimentation du slot 1 de l'AMS B est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0701200000020057": {
+      "Le tag RFID AMS B Slot 1 ne peut pas être identifié.": []
+    },
     "0701200000030001": {
       "Le filament 1 AMS B est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -5349,7 +5856,7 @@
       "Le filament 2 AMS B est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0701210000020002": {
-      "L'emplacement 2 AMS B est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS B est vide. Veuillez insérer un nouveau filament.": []
     },
     "0701210000020003": {
       "Le filament 2 AMS B pourrait être cassé dans l'AMS.": []
@@ -5422,6 +5929,9 @@
     },
     "0701210000020025": {
       "La résistance d'alimentation du slot 2 de l'AMS B est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
+    },
+    "0701210000020057": {
+      "Le tag RFID AMS B Slot 2 ne peut pas être identifié.": []
     },
     "0701210000030001": {
       "Le filament 2 AMS B est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
@@ -5525,6 +6035,9 @@
     "0701220000020025": {
       "La résistance d'alimentation du slot 3 de l'AMS B est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0701220000020057": {
+      "Le tag RFID AMS B Slot 3 ne peut pas être identifié.": []
+    },
     "0701220000030001": {
       "Le filament 3 AMS B est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -5627,6 +6140,9 @@
     "0701230000020025": {
       "La résistance d'alimentation du slot 4 de l'AMS B est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0701230000020057": {
+      "Le tag RFID AMS B Slot 4 ne peut pas être identifié.": []
+    },
     "0701230000030001": {
       "Le filament 4 AMS B est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -5677,6 +6193,9 @@
     },
     "0701500000020001": {
       "La communication AMS B est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "0701500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "0701550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -5857,8 +6376,14 @@
     "0701940000010001": {
       "Le capteur de température du chauffage 1 AMS B fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0701940000010002": {
+      "Le capteur de température 1 du chauffage AMS B est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0701950000010001": {
       "Le capteur de température du chauffage 2 AMS B fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0701950000010002": {
+      "Le capteur de température 2 du chauffage AMS B est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0701960000010001": {
       "Le processus de séchage de l'AMS B pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -5993,7 +6518,7 @@
       "Le filament 1 AMS C est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0702200000020002": {
-      "L'emplacement 1 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS C est vide. Veuillez insérer un nouveau filament.": []
     },
     "0702200000020003": {
       "Le filament 1 AMS C pourrait être cassé dans l'AMS.": []
@@ -6067,6 +6592,9 @@
     "0702200000020025": {
       "La résistance d'alimentation du slot 1 de l'AMS C est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0702200000020057": {
+      "Le tag RFID du filament 1 AMS C ne peut pas être identifié.": []
+    },
     "0702200000030001": {
       "Le filament 1 AMS C est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -6095,7 +6623,7 @@
       "Le filament 2 AMS C est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0702210000020002": {
-      "L'emplacement 2 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS C est vide. Veuillez insérer un nouveau filament.": []
     },
     "0702210000020003": {
       "Le filament 2 AMS C pourrait être cassé dans l'AMS.": []
@@ -6169,6 +6697,9 @@
     "0702210000020025": {
       "La résistance d'alimentation du slot 2 de l'AMS C est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0702210000020057": {
+      "Le tag RFID AMS C Slot 2 ne peut pas être identifié.": []
+    },
     "0702210000030001": {
       "Le filament 2 AMS C est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -6197,7 +6728,7 @@
       "Le filament 3 AMS C est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0702220000020002": {
-      "L'emplacement 3 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS C est vide. Veuillez insérer un nouveau filament.": []
     },
     "0702220000020003": {
       "Le filament 3 AMS C pourrait être cassé dans l'AMS.": []
@@ -6263,13 +6794,16 @@
       "Le moteur d'assistance de l'AMS C emplacement 3 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "0702220000020023": {
-      "AMS C emplacement 3 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS C slot 3 : le tube à l’intérieur de l’AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "0702220000020024": {
       "L'AMS C emplacement 3 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
     },
     "0702220000020025": {
       "La résistance d'alimentation du slot 3 de l'AMS C est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
+    },
+    "0702220000020057": {
+      "Le tag RFID AMS C Slot 3 ne peut pas être identifié.": []
     },
     "0702220000030001": {
       "Le filament 3 AMS C est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
@@ -6299,7 +6833,7 @@
       "Le filament 4 AMS C est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0702230000020002": {
-      "L'emplacement 4 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS C est vide. Veuillez insérer un nouveau filament.": []
     },
     "0702230000020003": {
       "Le filament 4 AMS C pourrait être cassé dans l'AMS.": []
@@ -6373,6 +6907,9 @@
     "0702230000020025": {
       "La résistance d'alimentation du slot 4 de l'AMS C est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0702230000020057": {
+      "Le tag RFID AMS C Slot 4 ne peut pas être identifié.": []
+    },
     "0702230000030001": {
       "Le filament 4 AMS C est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -6423,6 +6960,9 @@
     },
     "0702500000020001": {
       "La communication AMS C est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "0702500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "0702550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -6603,8 +7143,14 @@
     "0702940000010001": {
       "Le capteur de température du chauffage 1 AMS C fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0702940000010002": {
+      "Le capteur de température 1 du chauffage AMS C est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0702950000010001": {
       "Le capteur de température du chauffage 2 AMS C fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0702950000010002": {
+      "Le capteur de température 2 du chauffage AMS C est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0702960000010001": {
       "Le processus de séchage de l'AMS C pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -6739,7 +7285,7 @@
       "Le filament 1 AMS D est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0703200000020002": {
-      "L'emplacement 1 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS D est vide. Veuillez insérer un nouveau filament.": []
     },
     "0703200000020003": {
       "Le filament 1 AMS D pourrait être cassé dans l'AMS.": []
@@ -6813,6 +7359,9 @@
     "0703200000020025": {
       "La résistance d'alimentation du slot 1 de l'AMS D est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0703200000020057": {
+      "Le tag RFID AMS D Slot 1 ne peut pas être identifié.": []
+    },
     "0703200000030001": {
       "Le filament 1 AMS D est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -6841,7 +7390,7 @@
       "Le filament 2 AMS D est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0703210000020002": {
-      "L'emplacement 2 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS D est vide. Veuillez insérer un nouveau filament.": []
     },
     "0703210000020003": {
       "Le filament 2 AMS D pourrait être cassé dans l'AMS.": []
@@ -6915,6 +7464,9 @@
     "0703210000020025": {
       "La résistance d'alimentation du slot 2 de l'AMS D est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0703210000020057": {
+      "Le tag RFID AMS D Slot 2 ne peut pas être identifié.": []
+    },
     "0703210000030001": {
       "Le filament 2 AMS D est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -6943,7 +7495,7 @@
       "Le filament 3 AMS D est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0703220000020002": {
-      "L'emplacement 3 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS D est vide. Veuillez insérer un nouveau filament.": []
     },
     "0703220000020003": {
       "Le filament 3 AMS D pourrait être cassé dans l'AMS.": []
@@ -7009,13 +7561,16 @@
       "Le moteur d'assistance AMS D emplacement 3 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "0703220000020023": {
-      "AMS D slot 3 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS D slot 3 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "0703220000020024": {
       "L'AMS D emplacement 3 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
     },
     "0703220000020025": {
       "La résistance d'alimentation du slot 3 de l'AMS D est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
+    },
+    "0703220000020057": {
+      "Le tag RFID AMS D Slot 3 ne peut pas être identifié.": []
     },
     "0703220000030001": {
       "Le filament 3 AMS D est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
@@ -7045,7 +7600,7 @@
       "Le filament 4 AMS D est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0703230000020002": {
-      "L'emplacement 4 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS D est vide. Veuillez insérer un nouveau filament.": []
     },
     "0703230000020003": {
       "Le filament 4 AMS D pourrait être cassé dans l'AMS.": []
@@ -7119,6 +7674,9 @@
     "0703230000020025": {
       "La résistance d'alimentation du slot 4 de l'AMS D est trop élevée. Veuillez réduire la résistance d'alimentation, diminuer la résistance à la rotation de la bobine et éviter que le tube à filament soit trop long et trop plié.": []
     },
+    "0703230000020057": {
+      "Le tag RFID AMS D Slot 4 ne peut pas être identifié.": []
+    },
     "0703230000030001": {
       "Le filament 4 AMS D est épuisé. Veuillez patienter pendant la purge des restes du filament.": []
     },
@@ -7169,6 +7727,9 @@
     },
     "0703500000020001": {
       "La communication AMS D est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "0703500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "0703550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -7349,8 +7910,14 @@
     "0703940000010001": {
       "Le capteur de température du chauffage 1 AMS D fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0703940000010002": {
+      "Le capteur de température 1 du chauffage AMS D est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0703950000010001": {
       "Le capteur de température du chauffage 2 AMS D fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0703950000010002": {
+      "Le capteur de température 2 du chauffage AMS D est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0703960000010001": {
       "Le processus de séchage de l'AMS D pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -7485,7 +8052,7 @@
       "Le filament 1 AMS E est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0704200000020002": {
-      "L'emplacement 1 AMS E est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS E est vide. Veuillez insérer un nouveau filament.": []
     },
     "0704200000020003": {
       "Le filament 1 AMS E pourrait être cassé dans l'AMS.": []
@@ -7916,6 +8483,9 @@
     "0704500000020001": {
       "La communication AMS E est anormale, veuillez vérifier le câble de connexion.": []
     },
+    "0704500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "0704550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
     },
@@ -8095,8 +8665,14 @@
     "0704940000010001": {
       "Le capteur de température du chauffage 1 AMS E fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0704940000010002": {
+      "Le capteur de température 1 du chauffage AMS E est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0704950000010001": {
       "Le capteur de température du chauffage 2 AMS E fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0704950000010002": {
+      "Le capteur de température 2 du chauffage AMS E est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0704960000010001": {
       "Le processus de séchage de l'AMS E pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -8231,7 +8807,7 @@
       "Le filament 1 AMS F est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0705200000020002": {
-      "L'emplacement 1 AMS F est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS F est vide. Veuillez insérer un nouveau filament.": []
     },
     "0705200000020003": {
       "Le filament 1 AMS F pourrait être cassé dans l'AMS.": []
@@ -8297,7 +8873,7 @@
       "Le moteur d'assistance AMS F emplacement 1 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "0705200000020023": {
-      "AMS F emplacement 1 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS F slot 1 le tube à l’intérieur de l’AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "0705200000020024": {
       "L'AMS F emplacement 1 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
@@ -8662,6 +9238,9 @@
     "0705500000020001": {
       "La communication AMS F est anormale, veuillez vérifier le câble de connexion.": []
     },
+    "0705500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "0705550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
     },
@@ -8841,8 +9420,14 @@
     "0705940000010001": {
       "Le capteur de température du chauffage 1 AMS F fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0705940000010002": {
+      "Le capteur de température 1 du chauffage AMS F est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0705950000010001": {
       "Le capteur de température du chauffage 2 AMS F fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0705950000010002": {
+      "Le capteur de température 2 du chauffage AMS F est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0705960000010001": {
       "Le processus de séchage de l'AMS F pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -9181,7 +9766,7 @@
       "Le filament 3 AMS G est épuisé. Veuillez en insérer un nouveau.": []
     },
     "0706220000020002": {
-      "L'emplacement 3 AMS G est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS G est vide. Veuillez insérer un nouveau filament.": []
     },
     "0706220000020003": {
       "Le filament 3 AMS G pourrait être cassé dans l'AMS.": []
@@ -9408,6 +9993,9 @@
     "0706500000020001": {
       "La communication AMS G est anormale, veuillez vérifier le câble de connexion.": []
     },
+    "0706500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "0706550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
     },
@@ -9587,8 +10175,14 @@
     "0706940000010001": {
       "Le capteur de température du chauffage 1 AMS G fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0706940000010002": {
+      "Le capteur de température 1 du chauffage AMS G est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0706950000010001": {
       "Le capteur de température du chauffage 2 AMS G fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0706950000010002": {
+      "Le capteur de température 2 du chauffage AMS G est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0706960000010001": {
       "Le processus de séchage de l'AMS G pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -10154,6 +10748,9 @@
     "0707500000020001": {
       "La communication AMS H est anormale, veuillez vérifier le câble de connexion.": []
     },
+    "0707500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "0707550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
     },
@@ -10333,8 +10930,14 @@
     "0707940000010001": {
       "Le capteur de température du chauffage 1 AMS H fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "0707940000010002": {
+      "Le capteur de température 1 du chauffage AMS H est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "0707950000010001": {
       "Le capteur de température du chauffage 2 AMS H fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "0707950000010002": {
+      "Le capteur de température 2 du chauffage AMS H est défectueux, entraînant des relevés de température anormaux.": []
     },
     "0707960000010001": {
       "Le processus de séchage de l'AMS H pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -10419,6 +11022,9 @@
     },
     "07FE810000010004": {
       "Le capteur de position du moteur de commutation de l'extrudeuse présente un court-circuit ; veuillez vérifier si le capteur à effet Hall fonctionne mal.": []
+    },
+    "07FE810000010006": {
+      "La carte TH s'est déconnectée pendant le processus de commutation de l'extrudeuse. Veuillez vérifier si le câble de connexion est desserré.": []
     },
     "07FE810000020001": {
       "La commutation d’extrudeur est anormale. Veuillez vérifier s’il n’y a pas quelque chose de coincé dans la tête de l’outil.": []
@@ -10507,6 +11113,9 @@
     "07FF810000010004": {
       "Le capteur de position du moteur de commutation de l'extrudeuse présente un court-circuit ; veuillez vérifier si le capteur à effet Hall fonctionne mal.": []
     },
+    "07FF810000010006": {
+      "La carte TH s'est déconnectée pendant le processus de commutation de l'extrudeuse. Veuillez vérifier si le câble de connexion est desserré.": []
+    },
     "07FF810000020001": {
       "L'action de commutation de l'extrudeur est anormale. Vérifiez s'il y a quelque chose de coincé dans la tête de l'outil.": []
     },
@@ -10581,6 +11190,9 @@
     "0C00010000020008": {
       "Impossible d’obtenir l’image de la caméra LiveView. La détection des spaghettis et de l'accumulation dans la goulotte à déchets n’est pas disponible pour le moment.": []
     },
+    "0C0001000002000E": {
+      "": []
+    },
     "0C00010000020014": {
       "La caméra de la buse fonctionne incorrectement. Si ce problème se produit plusieurs fois pendant l'impression, veuillez contacter le service clientèle.": []
     },
@@ -10606,7 +11218,7 @@
       "La température de la caméra de la buse est trop élevée, ce qui entraîne une pause de la fonction de détection de l'IA. La fonction reprendra automatiquement une fois que la température sera revenue à la normale.": []
     },
     "0C00020000010001": {
-      "Le laser de mesure de hauteur n'est pas allumé. Vérifiez s'il y a des obstructions ou si le câble de la caméra de la tête d'outil est desserré.": [
+      "Le laser de mesure de hauteur n'est pas allumé. Veuillez vérifier s'il est bloqué ou si le câble de connexion est débranché.": [
         "H2S",
         "H2D"
       ],
@@ -10655,7 +11267,7 @@
       "L'analyse Micro Lidar a expiré anormalement et les résultats actuels peuvent être inexacts.": []
     },
     "0C0003000002000C": {
-      "Le marqueur de localisation de la plaque d'impression n'a pas été détecté. Vérifiez si la plaque est correctement alignée": []
+      "Le marqueur de localisation de la plaque d'impression n'a pas été détecté. Vérifiez si la plaque est correctement alignée.": []
     },
     "0C0003000002000E": {
       "Votre buse semble être recouverte de matériau ou bouché.": []
@@ -10705,6 +11317,9 @@
     "0C0003000002001C": {
       "Votre buse semble être recouverte de matériaux bloqués ou obstrués.": []
     },
+    "0C0003000002001D": {
+      "La détection d'objet étranger ne fonctionne pas et les images ne peuvent pas être obtenues. Veuillez vérifier la connexion de la caméra en direct.": []
+    },
     "0C00030000030006": {
       "Les filaments purgés se sont peut-être amassés dans la goulotte d'évacuation. Vérifiez et nettoyez la goulotte d'évacuation.": []
     },
@@ -10724,10 +11339,7 @@
       "Votre imprimante semble imprimer sans extruder.": []
     },
     "0C0003000003001A": {
-      "La détection de corps étrangers n'a pas fonctionné, peut-être en raison d'une interruption manuelle (par exemple, en appuyant sur stop ou en ouvrant la porte en mode laser). Vous pouvez ignorer ce message si c'est le cas. Sinon, essayez de redémarrer l'imprimante ou de mettre à jour le micrologiciel pour rétablir la fonction.": [],
-      "La détection d’objet étranger a échoué, possiblement en raison d’une interruption manuelle (par ex. en cliquant sur « Stop »). Dans le cas contraire, essayez de redémarrer l’imprimante ou de mettre à jour le firmware.": [
-        "P2S"
-      ]
+      "": []
     },
     "0C0003000003001B": {
       "Des défauts de spaghetti ont été détectés. Veuillez vérifier la qualité d'impression et décider si le travail doit être arrêté.": []
@@ -10771,6 +11383,9 @@
     "0C00040000020004": {
       "Le type de plateforme n'est pas pris en charge pour cette tâche. Veuillez utiliser la bonne plateforme pour continuer.": []
     },
+    "0C00040000020006": {
+      "": []
+    },
     "0C00040000020007": {
       "La caméra BirdsEye est en cours de configuration. Nettoyez tous les objets et retirez le tapis. Assurez-vous que le marqueur n'est pas obstrué. Pendant ce temps, nettoyez la caméra BirdsEye et la caméra Toolhead, et retirez tout objet étranger bloquant leur vue.": []
     },
@@ -10794,6 +11409,24 @@
     },
     "0C00040000020029": {
       "Le module laser ou de découpe n'a pas été calibré. Veuillez d'abord le calibrer sur l'imprimante.": []
+    },
+    "0C00040000020030": {
+      "La caméra en direct ne fonctionne pas correctement. Veuillez redémarrer la machine et réessayer.": []
+    },
+    "0C00040000020031": {
+      "La caméra en direct peut être sale ou obstruée. Veuillez la vérifier et la nettoyer.": []
+    },
+    "0C00040000020032": {
+      "La caméra BirdsEye est en cours d'initialisation. Veuillez vérifier que les marqueurs sur le tapis de découpe ne sont pas obstrués, nettoyer la caméra BirdsEye et la caméra de la tête d'outil, et enlever tout objet étranger pouvant bloquer les caméras.": []
+    },
+    "0C00040000020033": {
+      "L’objet sur le module rotatif est trop petit pour être mesuré ou n’est pas installé. Veuillez placer l’objet correctement sur le module.": []
+    },
+    "0C00040000020034": {
+      "La capture de l'image a échoué. Veuillez relancer la mesure.": []
+    },
+    "0C00040000020035": {
+      "Le module rotatif est installé, la fonction de mesure d'épaisseur ne peut donc pas être effectuée. Veuillez d'abord retirer le module rotatif, puis réessayez.": []
     },
     "0C00040000030018": {
       "L'étalonnage du décalage de la lame de coupe a échoué. Cela peut affecter la précision de coupe. Veuillez consulter le Wiki pour vérifier si le bout de la lame est usé.": []
@@ -10847,7 +11480,7 @@
       "Le filament 1 AMS A est épuisé, veuillez en insérer un nouveau.": []
     },
     "1200200000020002": {
-      "L'emplacement 1 AMS A est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS Lite A est vide. Veuillez insérer un nouveau filament.": []
     },
     "1200200000020003": {
       "AMS A Le filament 1 peut être cassé dans le tube PTFE.": []
@@ -10871,7 +11504,7 @@
       "Le filament 2 AMS A est épuisé, veuillez en insérer un nouveau.": []
     },
     "1200210000020002": {
-      "L'emplacement 2 AMS A est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS Lite A est vide. Veuillez insérer un nouveau filament.": []
     },
     "1200210000020003": {
       "AMS A Le filament 2 peut être cassé dans le tube PTFE.": []
@@ -10895,7 +11528,7 @@
       "Le filament 3 AMS A est épuisé, veuillez en insérer un nouveau.": []
     },
     "1200220000020002": {
-      "L'emplacement 3 AMS A est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS Lite A est vide. Veuillez insérer un nouveau filament.": []
     },
     "1200220000020003": {
       "AMS A Le filament 3 peut être cassé dans le tube PTFE.": []
@@ -10919,7 +11552,7 @@
       "Le filament 4 AMS A est épuisé, veuillez en insérer un nouveau.": []
     },
     "1200230000020002": {
-      "L'emplacement 4 AMS A est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS Lite A est vide. Veuillez insérer un nouveau filament.": []
     },
     "1200230000020003": {
       "AMS A Le filament 4 peut être cassé dans le tube PTFE.": []
@@ -10948,6 +11581,9 @@
     "1200300000020002": {
       "Le tag RFID filament 1 AMS A est endommagée.": []
     },
+    "1200300000020059": {
+      "Le tag RFID AMS Lite Slot 1 ne peut pas être identifié.": []
+    },
     "1200300000030003": {
       "Le RFID filament 1 AMS A ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -10956,6 +11592,9 @@
     },
     "1200310000020002": {
       "Le tag RFID filament 2 AMS A est endommagée.": []
+    },
+    "1200310000020059": {
+      "Le tag RFID AMS Lite Slot 2 ne peut pas être identifié.": []
     },
     "1200310000030003": {
       "Le RFID filament 2 AMS A ne peut pas être lu en raison d'une erreur structurelle.": []
@@ -10966,6 +11605,9 @@
     "1200320000020002": {
       "Le tag RFID filament 3 AMS A est endommagée.": []
     },
+    "1200320000020059": {
+      "Le tag RFID AMS Lite Slot 3 ne peut pas être identifié.": []
+    },
     "1200320000030003": {
       "Le RFID filament 3 AMS A ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -10975,8 +11617,17 @@
     "1200330000020002": {
       "Le tag RFID filament 4 AMS A est endommagée.": []
     },
+    "1200330000020059": {
+      "Le tag RFID AMS Lite Slot 4 ne peut pas être identifié.": []
+    },
     "1200330000030003": {
       "Le RFID filament 4 AMS A ne peut pas être lu en raison d'une erreur structurelle.": []
+    },
+    "1200400000020005": {
+      "Le capteur à effet Hall de détection d'emmêlement du filament est endommagé. Veuillez consulter le Wiki pour les instructions de remplacement.": []
+    },
+    "1200400000020006": {
+      "Un court-circuit a été détecté dans le capteur à effet Hall de détection d'emmêlement du filament. Veuillez consulter le Wiki pour les instructions de remplacement.": []
     },
     "1200450000020001": {
       "Le capteur du coupe-filament ne fonctionne pas correctement. Vérifiez si le connecteur est correctement branché.": []
@@ -10996,14 +11647,26 @@
     "1200700000010001": {
       "Erreur de vitesse et de longueur du filament AMS A : L'odométrie du filament 1 peut être défectueuse.": []
     },
+    "1200700000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
+    },
     "1200710000010001": {
       "Erreur de vitesse et de longueur du filament AMS A : L'odométrie du filament 2 peut être défectueuse.": []
+    },
+    "1200710000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
     },
     "1200720000010001": {
       "Erreur de vitesse et de longueur du filament AMS A : L'odométrie du filament 3 peut être défectueuse.": []
     },
+    "1200720000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
+    },
     "1200730000010001": {
       "Erreur de vitesse et de longueur du filament AMS A : L'odométrie du filament 4 peut être défectueuse.": []
+    },
+    "1200730000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
     },
     "1200800000020001": {
       "Le filament 1 de l'AMS A est peut-être emmêlé ou coincé.": []
@@ -11057,7 +11720,7 @@
       "Le filament 1 AMS B est épuisé, veuillez en insérer un nouveau.": []
     },
     "1201200000020002": {
-      "L'emplacement 1 AMS B est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS Lite B est vide. Veuillez insérer un nouveau filament.": []
     },
     "1201200000020003": {
       "AMS B Le filament 1 peut être cassé dans le tube PTFE.": []
@@ -11081,7 +11744,7 @@
       "Le filament 2 AMS B est épuisé, veuillez en insérer un nouveau.": []
     },
     "1201210000020002": {
-      "L'emplacement 2 AMS B est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS Lite B est vide. Veuillez insérer un nouveau filament.": []
     },
     "1201210000020003": {
       "AMS B Le filament 2 peut être cassé dans le tube PTFE.": []
@@ -11105,7 +11768,7 @@
       "Le filament 3 AMS B est épuisé, veuillez en insérer un nouveau.": []
     },
     "1201220000020002": {
-      "L'emplacement 3 AMS B est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS Lite B est vide. Veuillez insérer un nouveau filament.": []
     },
     "1201220000020003": {
       "AMS B Le filament 3 peut être cassé dans le tube PTFE.": []
@@ -11129,7 +11792,7 @@
       "Le filament 4 AMS B est épuisé, veuillez en insérer un nouveau.": []
     },
     "1201230000020002": {
-      "L'emplacement 4 AMS B est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS Lite B est vide. Veuillez insérer un nouveau filament.": []
     },
     "1201230000020003": {
       "AMS B Le filament 4 peut être cassé dans le tube PTFE.": []
@@ -11158,6 +11821,9 @@
     "1201300000020002": {
       "Le tag RFID filament 1 AMS B est endommagée.": []
     },
+    "1201300000020059": {
+      "Le tag RFID AMS Lite B Slot 1 ne peut être identifiée.": []
+    },
     "1201300000030003": {
       "Le RFID filament 1 AMS B ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -11166,6 +11832,9 @@
     },
     "1201310000020002": {
       "Le tag RFID filament 2 AMS B est endommagée.": []
+    },
+    "1201310000020059": {
+      "Le tag RFID AMS Lite B Slot 2 ne peut être identifiée.": []
     },
     "1201310000030003": {
       "Le RFID filament 2 AMS B ne peut pas être lu en raison d'une erreur structurelle.": []
@@ -11176,6 +11845,9 @@
     "1201320000020002": {
       "Le tag RFID filament 3 AMS B est endommagée.": []
     },
+    "1201320000020059": {
+      "Le tag RFID AMS Lite B Slot 3 ne peut être identifiée.": []
+    },
     "1201320000030003": {
       "Le RFID filament 3 AMS B ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -11184,6 +11856,9 @@
     },
     "1201330000020002": {
       "Le tag RFID filament 4 AMS B est endommagée.": []
+    },
+    "1201330000020059": {
+      "Le tag RFID AMS Lite B Slot 4 ne peut être identifiée.": []
     },
     "1201330000030003": {
       "Le RFID filament 4 AMS B ne peut pas être lu en raison d'une erreur structurelle.": []
@@ -11194,14 +11869,26 @@
     "1201700000010001": {
       "Erreur de vitesse et de longueur du filament AMS B : L'odométrie du filament 1 peut être défectueuse.": []
     },
+    "1201700000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
+    },
     "1201710000010001": {
       "Erreur de vitesse et de longueur du filament AMS B : L'odométrie du filament 2 peut être défectueuse.": []
+    },
+    "1201710000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
     },
     "1201720000010001": {
       "Erreur de vitesse et de longueur du filament AMS B : L'odométrie du filament 3 peut être défectueuse.": []
     },
+    "1201720000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
+    },
     "1201730000010001": {
       "Erreur de vitesse et de longueur du filament AMS B : L'odométrie du filament 4 peut être défectueuse.": []
+    },
+    "1201730000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur obstrué ou filament cassé.": []
     },
     "1201800000020001": {
       "Le filament 1 de l'AMS B est peut-être emmêlé ou coincé.": []
@@ -11255,7 +11942,7 @@
       "Le filament 1 AMS C est épuisé, veuillez en insérer un nouveau.": []
     },
     "1202200000020002": {
-      "L'emplacement 1 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS Lite C est vide. Veuillez insérer un nouveau filament.": []
     },
     "1202200000020003": {
       "AMS C Le filament 1 peut être cassé dans le tube PTFE.": []
@@ -11279,7 +11966,7 @@
       "Le filament 2 AMS C est épuisé, veuillez en insérer un nouveau.": []
     },
     "1202210000020002": {
-      "L'emplacement 2 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS Lite C est vide. Veuillez insérer un nouveau filament.": []
     },
     "1202210000020003": {
       "AMS C Le filament 2 peut être cassé dans le tube PTFE.": []
@@ -11303,7 +11990,7 @@
       "Le filament 3 AMS C est épuisé, veuillez en insérer un nouveau.": []
     },
     "1202220000020002": {
-      "L'emplacement 3 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS Lite C est vide. Veuillez insérer un nouveau filament.": []
     },
     "1202220000020003": {
       "AMS C Le filament 3 peut être cassé dans le tube PTFE.": []
@@ -11327,7 +12014,7 @@
       "Le filament 4 AMS C est épuisé, veuillez en insérer un nouveau.": []
     },
     "1202230000020002": {
-      "L'emplacement 4 AMS C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS Lite C est vide. Veuillez insérer un nouveau filament.": []
     },
     "1202230000020003": {
       "AMS C Le filament 4 peut être cassé dans le tube PTFE.": []
@@ -11356,6 +12043,9 @@
     "1202300000020002": {
       "Le tag RFID filament 1 AMS C est endommagée.": []
     },
+    "1202300000020059": {
+      "Le tag RFID AMS Lite C Slot 1 ne peut pas être identifié.": []
+    },
     "1202300000030003": {
       "Le RFID filament 1 AMS C ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -11364,6 +12054,9 @@
     },
     "1202310000020002": {
       "Le tag RFID filament 2 AMS C est endommagée.": []
+    },
+    "1202310000020059": {
+      "Le tag RFID AMS Lite C Slot 2 ne peut pas être identifié.": []
     },
     "1202310000030003": {
       "Le RFID filament 2 AMS C ne peut pas être lu en raison d'une erreur structurelle.": []
@@ -11374,6 +12067,9 @@
     "1202320000020002": {
       "Le tag RFID filament 3 AMS C est endommagée.": []
     },
+    "1202320000020059": {
+      "Le tag RFID AMS Lite C Slot 3 ne peut pas être identifié.": []
+    },
     "1202320000030003": {
       "Le RFID filament 3 AMS C ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -11382,6 +12078,9 @@
     },
     "1202330000020002": {
       "Le tag RFID filament 4 AMS C est endommagée.": []
+    },
+    "1202330000020059": {
+      "Le tag RFID AMS Lite C Slot 4 ne peut pas être identifiée.": []
     },
     "1202330000030003": {
       "Le RFID filament 4 AMS C ne peut pas être lu en raison d'une erreur structurelle.": []
@@ -11392,14 +12091,26 @@
     "1202700000010001": {
       "Erreur de vitesse et de longueur du filament AMS C : L'odométrie du filament 1 peut être défectueuse.": []
     },
+    "1202700000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
+    },
     "1202710000010001": {
       "Erreur de vitesse et de longueur du filament AMS C : L'odométrie du filament 2 peut être défectueuse.": []
+    },
+    "1202710000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
     },
     "1202720000010001": {
       "Erreur de vitesse et de longueur du filament AMS C : L'odométrie du filament 3 peut être défectueuse.": []
     },
+    "1202720000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
+    },
     "1202730000010001": {
       "Erreur de vitesse et de longueur du filament AMS C : L'odométrie du filament 4 peut être défectueuse.": []
+    },
+    "1202730000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
     },
     "1202800000020001": {
       "Le filament 1 de l'AMS C est peut-être emmêlé ou coincé.": []
@@ -11453,7 +12164,7 @@
       "Le filament 1 AMS D est épuisé, veuillez en insérer un nouveau.": []
     },
     "1203200000020002": {
-      "L'emplacement 1 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS Lite D est vide. Veuillez insérer un nouveau filament.": []
     },
     "1203200000020003": {
       "AMS D Le filament 1 peut être cassé dans le tube PTFE.": []
@@ -11477,7 +12188,7 @@
       "Le filament 2 AMS D est épuisé, veuillez en insérer un nouveau.": []
     },
     "1203210000020002": {
-      "L'emplacement 2 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS Lite D est vide. Veuillez insérer un nouveau filament.": []
     },
     "1203210000020003": {
       "AMS D Le filament 2 peut être cassé dans le tube PTFE.": []
@@ -11501,7 +12212,7 @@
       "Le filament 3 AMS D est épuisé, veuillez en insérer un nouveau.": []
     },
     "1203220000020002": {
-      "L'emplacement 3 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS Lite D est vide. Veuillez insérer un nouveau filament.": []
     },
     "1203220000020003": {
       "AMS D Le filament 3 peut être cassé dans le tube PTFE.": []
@@ -11525,7 +12236,7 @@
       "Le filament 4 AMS D est épuisé, veuillez en insérer un nouveau.": []
     },
     "1203230000020002": {
-      "L'emplacement 4 AMS D est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS Lite D est vide. Veuillez insérer un nouveau filament.": []
     },
     "1203230000020003": {
       "AMS D Le filament 4 peut être cassé dans le tube PTFE.": []
@@ -11554,6 +12265,9 @@
     "1203300000020002": {
       "Le tag RFID filament 1 AMS D est endommagée.": []
     },
+    "1203300000020059": {
+      "Le tag RFID AMS Lite D Slot 1 ne peut pas être identifié.": []
+    },
     "1203300000030003": {
       "Le RFID filament 1 AMS D ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -11562,6 +12276,9 @@
     },
     "1203310000020002": {
       "Le tag RFID filament 2 AMS D est endommagée.": []
+    },
+    "1203310000020059": {
+      "Le tag RFID AMS Lite D Slot 2 ne peut pas être identifié.": []
     },
     "1203310000030003": {
       "Le RFID filament 2 AMS D ne peut pas être lu en raison d'une erreur structurelle.": []
@@ -11572,6 +12289,9 @@
     "1203320000020002": {
       "Le tag RFID filament 3 AMS D est endommagée.": []
     },
+    "1203320000020059": {
+      "Le tag RFID AMS Lite D Slot 3 ne peut pas être identifié.": []
+    },
     "1203320000030003": {
       "Le RFID filament 3 AMS D ne peut pas être lu en raison d'une erreur structurelle.": []
     },
@@ -11580,6 +12300,9 @@
     },
     "1203330000020002": {
       "Le tag RFID filament 4 AMS D est endommagée.": []
+    },
+    "1203330000020059": {
+      "Le tag RFID AMS Lite D Slot 4 ne peut pas être identifié.": []
     },
     "1203330000030003": {
       "Le RFID filament 4 AMS D ne peut pas être lu en raison d'une erreur structurelle.": []
@@ -11590,14 +12313,26 @@
     "1203700000010001": {
       "Erreur de vitesse et de longueur du filament AMS D : L'odométrie du filament 1 peut être défectueuse.": []
     },
+    "1203700000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur obstrué ou filament cassé.": []
+    },
     "1203710000010001": {
       "Erreur de vitesse et de longueur du filament AMS D : L'odométrie du filament 2 peut être défectueuse.": []
+    },
+    "1203710000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
     },
     "1203720000010001": {
       "Erreur de vitesse et de longueur du filament AMS D : L'odométrie du filament 2 peut être défectueuse.": []
     },
+    "1203720000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
+    },
     "1203730000010001": {
       "Erreur de vitesse et de longueur du filament de l'AMS D : L'odomètre du filament 4 peut être défectueux.": []
+    },
+    "1203730000020001": {
+      "Impossible de retirer le filament de l'extrudeur. Causes possibles : extrudeur bouché ou filament cassé.": []
     },
     "1203800000020001": {
       "Le filament 1 de l'AMS D est peut-être emmêlé ou coincé.": []
@@ -11747,7 +12482,7 @@
       "Le filament 1 AMS HT A est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1800200000020002": {
-      "L'emplacement 1 AMS HT A est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS-HT A est vide. Veuillez insérer un nouveau filament.": []
     },
     "1800200000020003": {
       "Le filament 1 AMS HT A est peut être cassé dans l’AMS.": []
@@ -11813,7 +12548,7 @@
       "AMS-HT Un moteur d'assistance de l'emplacement 1 est bloqué， en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1800200000020023": {
-      "AMS-HT A emplacement 1 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT A slot 1 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1800200000020024": {
       "AMS-HT A emplacement 1 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers AMS.": []
@@ -12190,6 +12925,12 @@
     "1800400000020004": {
       "Le signal du tampon du filament est anormal ; le ressort est peut-être bloqué ou le filament est peut-être emmêlé.": []
     },
+    "1800400000020005": {
+      "Le capteur à effet Hall de détection d'emmêlement du filament est endommagé. Veuillez consulter le Wiki pour les instructions de remplacement.": []
+    },
+    "1800400000020006": {
+      "Un court-circuit a été détecté dans le capteur à effet Hall de détection d'emmêlement du filament. Veuillez consulter le Wiki pour les instructions de remplacement.": []
+    },
     "1800450000020001": {
       "Le capteur du coupe-filament ne fonctionne pas correctement. Vérifiez si le connecteur est correctement branché.": []
     },
@@ -12201,6 +12942,9 @@
     },
     "1800500000020001": {
       "La communication AMS HT A est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "1800500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1800510000030001": {
       "L'AMS est désactivé ; veuillez charger le filament à partir du porte-bobine.": []
@@ -12387,8 +13131,14 @@
     "1800940000010001": {
       "Le capteur de température du chauffage 1 AMS HT A fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1800940000010002": {
+      "Le capteur de température 1 du chauffage AMS-HT A est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "1800950000010001": {
       "Le capteur de température du chauffage 2 AMS HT A fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1800950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT A est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1800960000010001": {
       "Le processus de séchage de l'AMS HT A pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -12960,6 +13710,9 @@
     "1801500000020001": {
       "La communication AMS HT B est anormale, veuillez vérifier le câble de connexion.": []
     },
+    "1801500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
+    },
     "1801550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
     },
@@ -13139,8 +13892,14 @@
     "1801940000010001": {
       "Le capteur de température du chauffage 1 AMS HT B fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1801940000010002": {
+      "Le capteur de température 1 du chauffage AMS-HT B est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "1801950000010001": {
       "Le capteur de température du chauffage 2 AMS HT B fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1801950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT B est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1801960000010001": {
       "Le processus de séchage de l'AMS HT B pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -13479,7 +14238,7 @@
       "Le filament 3 AMS HT C est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1802220000020002": {
-      "L'emplacement 3 AMS HT C est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS-HT C est vide. Veuillez insérer un nouveau filament.": []
     },
     "1802220000020003": {
       "Le filament 3 AMS HT C est peut être cassé dans l’AMS.": []
@@ -13545,7 +14304,7 @@
       "Le moteur d'assistance AMS-HT C emplacement 3 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1802220000020023": {
-      "AMS-HT C slot 3 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT C slot 3 le tube à l'intérieur de l'AMS est endommagé, ou le capteur à effet Hall d'extraction est défectueux et ne peut pas détecter le filament.": []
     },
     "1802220000020024": {
       "AMS-HT C emplacement 3 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers AMS.": []
@@ -13711,6 +14470,9 @@
     },
     "1802500000020001": {
       "La communication AMS HT C est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "1802500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1802550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droit et le bas à l'extrudeur gauche.": []
@@ -13891,8 +14653,14 @@
     "1802940000010001": {
       "Le capteur de température du chauffage 1 AMS HT C fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1802940000010002": {
+      "Le capteur de température 1 sur le chauffage AMS-HT C est défectueux, ce qui entraîne des relevés de température anormaux.": []
+    },
     "1802950000010001": {
       "Le capteur de température du chauffage 2 AMS HT C fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1802950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT C est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1802960000010001": {
       "Le processus de séchage de l'AMS HT C pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -14297,7 +15065,7 @@
       "Le moteur d'assistance AMS-HT D emplacement 3 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1803220000020023": {
-      "AMS-HT D emplacement 3 le tube à l’intérieur de l’AMS est cassé, ou le capteur à effet Hall de sortie est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT D slot 3 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1803220000020024": {
       "AMS-HT D emplacement 3 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
@@ -14463,6 +15231,9 @@
     },
     "1803500000020001": {
       "La communication AMS HT D est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "1803500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1803550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -14643,8 +15414,14 @@
     "1803940000010001": {
       "Le capteur de température du chauffage 1 AMS HT D fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1803940000010002": {
+      "Le capteur de température 1 du chauffage AMS-HT D est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "1803950000010001": {
       "Le capteur de température du chauffage 2 AMS HT D fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1803950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT D est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1803960000010001": {
       "Le processus de séchage de l'AMS HT D pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -14779,7 +15556,7 @@
       "Le filament 1 AMS HT E est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1804200000020002": {
-      "L'emplacement 1 AMS HT E est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS-HT E est vide. Veuillez insérer un nouveau filament.": []
     },
     "1804200000020003": {
       "Le filament 1 AMS HT E est peut être cassé dans l’AMS.": []
@@ -14845,7 +15622,7 @@
       "Le moteur d'assistance AMS-HT E emplacement 1 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1804200000020023": {
-      "AMS-HT E emplacement 1 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT E slot 1 le tube à l’intérieur de l’AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1804200000020024": {
       "AMS-HT E emplacement 1 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
@@ -15085,7 +15862,7 @@
       "Le filament 4 AMS HT E est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1804230000020002": {
-      "L'emplacement 4 AMS HT E est vide. Veuillez en insérer un nouveau.": []
+      "La fente 4 AMS-HT E est vide. Veuillez insérer un nouveau filament.": []
     },
     "1804230000020003": {
       "Le filament 4 AMS HT E est peut être cassé dans l’AMS.": []
@@ -15215,6 +15992,9 @@
     },
     "1804500000020001": {
       "La communication AMS HT E est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "1804500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1804550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -15395,8 +16175,14 @@
     "1804940000010001": {
       "Le capteur de température du chauffage 1 AMS HT E fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1804940000010002": {
+      "Le capteur de température 1 du chauffage AMS-HT E est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "1804950000010001": {
       "Le capteur de température du chauffage 2 AMS HT E fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1804950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT E est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1804960000010001": {
       "Le processus de séchage de l'AMS HT E pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -15531,7 +16317,7 @@
       "Le filament 1 AMS HT F est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1805200000020002": {
-      "L'emplacement 1 AMS HT F est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS-HT F est vide. Veuillez insérer un nouveau filament.": []
     },
     "1805200000020003": {
       "Le filament 1 AMS HT F est peut être cassé dans l’AMS.": []
@@ -15699,7 +16485,7 @@
       "Le moteur d'assistance AMS-HT F emplacement 2 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1805210000020023": {
-      "AMS-HT F emplacement 2 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT F slot 2 : le tube à l’intérieur de l’AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1805210000020024": {
       "AMS-HT F emplacement 2 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
@@ -15735,7 +16521,7 @@
       "Le filament 3 AMS HT F est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1805220000020002": {
-      "L'emplacement 3 AMS HT F est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS-HT F est vide. Veuillez insérer un nouveau filament.": []
     },
     "1805220000020003": {
       "Le filament 3 AMS HT F est peut être cassé dans l’AMS.": []
@@ -15801,7 +16587,7 @@
       "Le moteur d'assistance AMS-HT F emplacement 3 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1805220000020023": {
-      "AMS-HT F emplacement 3 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de sortie est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT F slot 3 le tube à l’intérieur de l’AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1805220000020024": {
       "AMS-HT F emplacement 3 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
@@ -15967,6 +16753,9 @@
     },
     "1805500000020001": {
       "La communication AMS HT F est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "1805500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1805550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -16147,8 +16936,14 @@
     "1805940000010001": {
       "Le capteur de température du chauffage 1 AMS HT F fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1805940000010002": {
+      "Le capteur de température 1 du chauffage AMS-HT F est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "1805950000010001": {
       "Le capteur de température du chauffage 2 AMS HT F fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1805950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT F est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1805960000010001": {
       "Le processus de séchage de l'AMS HT F pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -16349,7 +17144,7 @@
       "Le moteur d'assistance AMS-HT G emplacement 1 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1806200000020023": {
-      "AMS-HT G emplacement 1 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT G slot 1 le tube à l’intérieur de l’AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1806200000020024": {
       "AMS-HT G emplacement 1 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers AMS.": []
@@ -16451,7 +17246,7 @@
       "Le moteur d'assistance AMS-HT G emplacement 2 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1806210000020023": {
-      "AMS-HT G slot 2 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT G slot 2 le tube à l’intérieur de l’AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1806210000020024": {
       "L'AMS-HT G emplacement 2 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
@@ -16487,7 +17282,7 @@
       "Le filament 3 AMS HT G est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1806220000020002": {
-      "L'emplacement 3 AMS HT G est vide. Veuillez en insérer un nouveau.": []
+      "La fente 3 AMS-HT G est vide. Veuillez insérer un nouveau filament.": []
     },
     "1806220000020003": {
       "Le filament 3 AMS HT G est peut être cassé dans l’AMS.": []
@@ -16655,7 +17450,7 @@
       "Le moteur d'assistance AMS-HT G emplacement 4 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1806230000020023": {
-      "AMS-HT G emplacement 4 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT G slot 4 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1806230000020024": {
       "L'emplacement 4 de l'AMS-HT G n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers l'AMS.": []
@@ -16719,6 +17514,9 @@
     },
     "1806500000020001": {
       "La communication AMS HT G est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "1806500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1806550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -16899,8 +17697,14 @@
     "1806940000010001": {
       "Le capteur de température du chauffage 1 AMS HT G fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1806940000010002": {
+      "Le capteur de température 1 du chauffage AMS-HT G est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "1806950000010001": {
       "Le capteur de température du chauffage 2 AMS HT G fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1806950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT G est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1806960000010001": {
       "Le processus de séchage de l'AMS HT G pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -17035,7 +17839,7 @@
       "Le filament 1 AMS HT H est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1807200000020002": {
-      "L'emplacement 1 AMS HT H est vide. Veuillez en insérer un nouveau.": []
+      "La fente 1 AMS-HT H est vide. Veuillez insérer un nouveau filament.": []
     },
     "1807200000020003": {
       "Le filament 1 AMS HT H est peut être cassé dans l’AMS.": []
@@ -17101,7 +17905,7 @@
       "Le moteur d'assistance AMS-HT H emplacement 1 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1807200000020023": {
-      "AMS-HT H slot 1 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall de feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT H slot 1 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1807200000020024": {
       "AMS-HT H emplacement 1 n'a pas réussi à faire tourner la bobine de filament lorsqu'il a tiré le filament vers AMS.": []
@@ -17137,7 +17941,7 @@
       "Le filament 2 AMS HT H est épuisé. Veuillez en insérer un nouveau.": []
     },
     "1807210000020002": {
-      "L'emplacement 2 AMS HT H est vide. Veuillez en insérer un nouveau.": []
+      "La fente 2 AMS-HT H est vide. Veuillez insérer un nouveau filament.": []
     },
     "1807210000020003": {
       "Le filament 2 AMS HT H est peut être cassé dans l’AMS.": []
@@ -17305,7 +18109,7 @@
       "Le moteur d'assistance AMS-HT H emplacement 3 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1807220000020023": {
-      "AMS-HT H emplacement 3 le tube à l’intérieur de l’AMS est cassé, ou le capteur à effet Hall de sortie est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT H slot 3 le tube à l'intérieur de l'AMS est endommagé, ou le capteur à effet Hall de sortie est défectueux et ne peut pas détecter le filament.": []
     },
     "1807220000020024": {
       "L'emplacement 3 de l'AMS-HT H n'a pas réussi à faire tourner la bobine de filament lors du retour du filament vers l'AMS.": []
@@ -17407,7 +18211,7 @@
       "Le moteur d'assistance AMS-HT H emplacement 4 est bloqué，en raison d'une résistance excessive dans le tube près de la tête de l'outil.": []
     },
     "1807230000020023": {
-      "AMS-HT H emplacement 4 le tube à l'intérieur de l'AMS est cassé, ou le capteur hall feed-out est défectueux et ne peut pas détecter le filament.": []
+      "AMS-HT H slot 4 le tube à l'intérieur de l'AMS est endommagé, ou le capteur Hall d’alimentation est défectueux et ne détecte pas le filament.": []
     },
     "1807230000020024": {
       "L'emplacement 4 de l'AMS-HT H n'a pas réussi à faire tourner la bobine de filament lors du retour du filament vers l'AMS.": []
@@ -17471,6 +18275,9 @@
     },
     "1807500000020001": {
       "La communication AMS HT H est anormale, veuillez vérifier le câble de connexion.": []
+    },
+    "1807500000020002": {
+      "Le système AMS utilisé pour l'impression en cours est déconnecté. Vérifiez la connexion. L'impression reprendra automatiquement après la reconnexion.": []
     },
     "1807550000010002": {
       "Le tube en PTFE n'est pas correctement connecté entre la tête d'outil et le tampon. Connectez le haut du tampon à l'extrudeur droite et le bas à l'extrudeur gauche.": []
@@ -17651,8 +18458,14 @@
     "1807940000010001": {
       "Le capteur de température du chauffage 1 AMS HT H fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
     },
+    "1807940000010002": {
+      "Le capteur de température 1 du chauffage AMS-HT H est défectueux, entraînant des relevés de température anormaux.": []
+    },
     "1807950000010001": {
       "Le capteur de température du chauffage 2 AMS HT H fonctionne mal, cela peut être dû à un mauvais contact avec le connecteur.": []
+    },
+    "1807950000010002": {
+      "Le capteur de température 2 du chauffage AMS-HT H est défectueux, entraînant des relevés de température anormaux.": []
     },
     "1807960000010001": {
       "Le processus de séchage de l'AMS HT H pourrait subir un emballement thermique. Veuillez couper l'alimentation électrique de l'AMS.": []
@@ -17674,6 +18487,30 @@
     },
     "1807980000020002": {
       "AMS-HT H La tension de l'adaptateur électrique est trop élevée, ce qui risque d'endommager le circuit de chauffage. Remplacer l'adaptateur électrique.": []
+    },
+    "1880200000020058": {
+      "Le tag RFID AMS-HT A ne peut pas être identifié.": []
+    },
+    "1881200000020058": {
+      "Le tag RFID AMS-HT B ne peut pas être identifiée.": []
+    },
+    "1882200000020058": {
+      "Le tag RFID AMS-HT C ne peut pas être identifié.": []
+    },
+    "1883200000020058": {
+      "Le tag RFID AMS-HT D ne peut pas être identifiée.": []
+    },
+    "1884200000020058": {
+      "La tag RFID AMS-HT E ne peut être identifiée.": []
+    },
+    "1885200000020058": {
+      "Le tag RFID AMS-HT F ne peut pas être identifiée.": []
+    },
+    "1886200000020058": {
+      "Le tag RFID AMS-HT G ne peut pas être identifiée.": []
+    },
+    "1887200000020058": {
+      "Le tag RFID AMS-HT H ne peut pas être identifié.": []
     },
     "18FE200000020001": {
       "Le filament externe de l'extrudeur gauche est épuisé ; veuillez charger un nouveau filament.": []
@@ -17734,6 +18571,9 @@
     },
     "18FE810000010004": {
       "Le capteur de position du moteur de commutation de l'extrudeuse présente un court-circuit ; veuillez vérifier si le capteur à effet Hall fonctionne mal.": []
+    },
+    "18FE810000010006": {
+      "La carte TH s'est déconnectée pendant le processus de commutation de l'extrudeuse. Veuillez vérifier si le câble de connexion est desserré.": []
     },
     "18FE810000020001": {
       "L'action de commutation de l'extrudeur est anormale. Veuillez vérifier si quelque chose est coincé dans la tête de l'outil.": []
@@ -17809,6 +18649,9 @@
     },
     "18FF810000010004": {
       "Le capteur de position du moteur de commutation de l'extrudeuse présente un court-circuit ; veuillez vérifier si le capteur à effet Hall fonctionne mal.": []
+    },
+    "18FF810000010006": {
+      "La carte TH s'est déconnectée pendant le processus de commutation de l'extrudeuse. Veuillez vérifier si le câble de connexion est desserré.": []
     },
     "18FF810000020001": {
       "La commutation d'extrudeur est anormale. Vérifiez s'il y a quelque chose de coincé dans la tête de l'outil.": []
