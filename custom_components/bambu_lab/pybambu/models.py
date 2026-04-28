@@ -3141,6 +3141,9 @@ class HMSList:
         self._client = client
         self._errors = {}
         self._errors["Count"] = 0
+        self._hms_list = []
+        self._device_type = None
+        self._user_language = None
         
     def print_update(self, data) -> bool:
         # Example payload:
@@ -3154,41 +3157,53 @@ class HMSList:
         # https://wiki.bambulab.com/en/x1/troubleshooting/hmscode/0300_0100_0001_0007
         # 'The heatbed temperature is abnormal; the sensor may have an open circuit.'
 
-        if 'hms' in data.keys():
-            hmsList = data.get('hms', [])
-            errors = {}
+        if 'hms' not in data.keys():
+            return False
+        
+        hms_list = data.get('hms', [])
+        device_type = self._client._device.info.device_type
+        user_language = self._client.user_language
+        if hms_list == self._hms_list and user_language == self._user_language and device_type == self._device_type:
+            # No change
+            return False
 
-            index: int = 0
-            for hms in hmsList:
-                attr = int(hms['attr'])
-                code = int(hms['code'])
-                hms_notif = HMSNotification(
-                    device_type=self._client._device.info.device_type,
-                    user_language=self._client.user_language,
-                    attr=attr,
-                    code=code
-                    )
-                if not hms_notif.hms_error:
-                    LOGGER.debug("Skipping HMS notification with code %s (no text).", hms_notif.hms_code)
-                    continue  # skip invalid entries
+        LOGGER.debug(f"Parsing {hms_list=}")
+        errors = {}
 
-                index = index + 1
-                errors[f"{index}-Code"] = f"HMS_{hms_notif.hms_code}"
-                errors[f"{index}-Error"] = hms_notif.hms_error
-                errors[f"{index}-Wiki"] = hms_notif.wiki_url
-                errors[f"{index}-Severity"] = hms_notif.severity
-                #LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
-                #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure
+        index: int = 0
+        for hms in hms_list:
+            attr = int(hms['attr'])
+            code = int(hms['code'])
+            hms_notif = HMSNotification(
+                device_type=device_type,
+                user_language=user_language,
+                attr=attr,
+                code=code
+                )
+            if not hms_notif.hms_error:
+                LOGGER.debug("Skipping HMS notification with code %s (no text).", hms_notif.hms_code)
+                continue  # skip invalid entries
 
-            errors["Count"] = index
+            index = index + 1
+            errors[f"{index}-Code"] = f"HMS_{hms_notif.hms_code}"
+            errors[f"{index}-Error"] = hms_notif.hms_error
+            errors[f"{index}-Wiki"] = hms_notif.wiki_url
+            errors[f"{index}-Severity"] = hms_notif.severity
+            #LOGGER.debug(f"HMS error for '{hms_notif.module}' and severity '{hms_notif.severity}': HMS_{hms_notif.hms_code}")
+            #errors[f"{index}-Module"] = hms_notif.module # commented out to avoid bloat with current structure
 
-            if self._errors != errors:
-                LOGGER.debug("Updating HMS error list.")
-                self._errors = errors
-                if self._errors["Count"] != 0:
-                    LOGGER.debug(f"HMS ERRORS: {errors}")
-                self._client.callback("event_printer_error")
-                return True
+        errors["Count"] = index
+        self._hms_list = hms_list
+        self._user_language = user_language
+        self._device_type = device_type
+
+        if self._errors != errors:
+            LOGGER.debug("Updating HMS error list.")
+            self._errors = errors
+            if self._errors["Count"] != 0:
+                LOGGER.debug(f"HMS ERRORS: {errors}")
+            self._client.callback("event_printer_error")
+            return True
         
         return False
     
