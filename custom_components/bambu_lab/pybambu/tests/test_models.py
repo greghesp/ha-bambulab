@@ -285,6 +285,7 @@ class TestHms(unittest.TestCase):
         self.assertTrue(result)
         self.client.callback.assert_called_once_with("event_printer_error")
         self.assertEqual(1, self.hms.error_count)
+
         self.assertDictEqual(self.hms.errors, {
             "Count": 1,
             "1-Code": "HMS_0300_0200_0001_0001",
@@ -352,6 +353,7 @@ class TestHms(unittest.TestCase):
         self.client._device.info.device_type = Printers.A1
         self.client.user_language = "en"
         data = {"hms": [{"attr": 50331904, "code": 65543}, {"attr": 134180864, "code": 131075}]}
+
         result = self.hms.print_update(data)
         self.assertTrue(result)
         self.client.callback.assert_called_once_with("event_printer_error")
