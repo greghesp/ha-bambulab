@@ -651,14 +651,20 @@ class Fans:
                 self._cooling_fan_speed_override_time = None
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self._heatbreak_fan_speed_percentage = fan_percentage(self._heatbreak_fan_speed)
-        if data.get('device') and data["device"].get('airduct') and data["device"]["airduct"].get('parts') and next((item for item in data["device"]["airduct"]["parts"] if item["id"] == 160), None):
-            fan_part = next(item for item in data["device"]["airduct"]["parts"] if item["id"] == 160)
-            self._secondary_aux_fan_speed = fan_part.get("value", self._secondary_aux_fan_speed)
-            self._secondary_aux_fan_speed_percentage = fan_percentage(self._secondary_aux_fan_speed)
+        airduct_parts = data.get("device", {}).get("airduct", {}).get("parts")
+        if airduct_parts:
+            fan_part = next((item for item in airduct_parts if item.get("id") == 160), None)
+            if fan_part is not None:
+                # airduct.parts[].state is already a percentage (0-100); write
+                # it directly into the percentage field. fan_percentage()
+                # expects a raw 0-15 PWM value and would multiply by ~6.67.
+                self._secondary_aux_fan_speed_percentage = fan_part.get(
+                    "state", self._secondary_aux_fan_speed_percentage
+                )
         if self._secondary_aux_fan_speed_override_time is not None:
             delta = datetime.now() - self._secondary_aux_fan_speed_override_time
             if delta.seconds > 5:
-                self._cooling_fan_speed_override_time = None
+                self._secondary_aux_fan_speed_override_time = None
 
         return (old_data != f"{self.__dict__}")
 
@@ -705,8 +711,8 @@ class Fans:
             return self._heatbreak_fan_speed_percentage
         elif fan == FansEnum.SECONDARY_AUXILIARY:
             if self._secondary_aux_fan_speed_override_time is not None:
-                return self._chamber_fan_speed_override
-            return self._chamber_fan_speed_percentage
+                return self._secondary_aux_fan_speed_override
+            return self._secondary_aux_fan_speed_percentage
 
 @dataclass
 class Upgrade:
