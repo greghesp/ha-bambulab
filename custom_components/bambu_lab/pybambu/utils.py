@@ -37,11 +37,20 @@ def search(lst, predicate, default={}):
 
 
 def fan_percentage(speed):
-    """Converts a fan speed to percentage"""
+    """Converts a fan speed to percentage.
+
+    Bambu fans report a raw 0-15 PWM-step value. The user-facing
+    setting moves in 10% increments, but the printer's reported
+    instantaneous value naturally oscillates between adjacent raw
+    integers when delivering an effective duty cycle (e.g. raw 2 and
+    raw 3 both serve a target around 20%). math.ceil keeps the
+    reported value pinned to the upper bucket so HA fan entities
+    don't flip 10% <-> 20% on every push.
+    """
     if not speed:
         return 0
     percentage = (int(speed) / 15) * 100
-    return round(percentage / 10) * 10
+    return math.ceil(percentage / 10) * 10
 
 
 def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
