@@ -270,6 +270,8 @@ class Device:
         elif feature == Features.AMS_DRYING_SETTINGS:
             if model in p2_printers:
                 return self.supports_sw_version("01.01.50.40")
+            if model == Printers.H2C:
+                return self.supports_sw_version("01.01.50.00")
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
             return model in (h2_printers | x2_printers)
