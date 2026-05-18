@@ -9,8 +9,8 @@ import json
 # Add the parent directory to the Python path to find pybambu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from pybambu.models import PrintJob, Info, AMSList, Extruder, HMSList, PrintError, Temperature
-from pybambu.const import Printers
+from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature
+from pybambu.const import FansEnum, Printers
 
 class TestPrintJob(unittest.TestCase):
     def setUp(self):
@@ -575,6 +575,69 @@ class TestH2D(unittest.TestCase):
         self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
 
 
+
+
+class TestFans(unittest.TestCase):
+    """Regression tests for the SECONDARY_AUXILIARY fan path.
+
+    The X2D's right auxiliary fan reports its speed in
+    device.airduct.parts[id=160].state (already a percentage). Live
+    capture used in this test mirrors that payload.
+    """
+
+    AIRDUCT_DATA = {
+        "device": {
+            "airduct": {
+                "parts": [
+                    {"func": 0, "id": 16,  "state": 20, "tar_state": 20},
+                    {"func": 5, "id": 32,  "state": 40, "tar_state": 40},
+                    {"func": 6, "id": 160, "state": 30, "tar_state": 30},
+                    {"func": 2, "id": 48,  "state": 10, "tar_state": 10},
+                ],
+            },
+        },
+    }
+
+    def setUp(self):
+        self.client = MagicMock()
+        self.fans = Fans(self.client)
+
+    def test_secondary_aux_reads_airduct_state(self):
+        # Field is read from .state (not the non-existent .value), and is
+        # written directly into _percentage rather than being run back
+        # through fan_percentage() which expects a 0-15 PWM value.
+        self.fans.print_update(self.AIRDUCT_DATA)
+        self.assertEqual(self.fans._secondary_aux_fan_speed_percentage, 30)
+        self.assertEqual(
+            self.fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY), 30
+        )
+
+    def test_secondary_aux_override_expiry_clears_correct_field(self):
+        # An expired override on the secondary aux fan must clear its
+        # own override-time. The buggy version cleared
+        # _cooling_fan_speed_override_time instead, so this exercise
+        # specifically asserts the secondary_aux field is the one
+        # nulled out.
+        from datetime import timedelta
+        self.fans._secondary_aux_fan_speed_override = 70
+        self.fans._secondary_aux_fan_speed_override_time = (
+            datetime.now() - timedelta(seconds=6)
+        )
+
+        self.fans.print_update(self.AIRDUCT_DATA)
+
+        self.assertIsNone(self.fans._secondary_aux_fan_speed_override_time)
+
+    def test_get_fan_speed_returns_secondary_override_not_chamber(self):
+        # While an override is fresh, get_fan_speed must return the
+        # secondary aux override value (not the chamber fan's override).
+        self.fans._secondary_aux_fan_speed_override = 70
+        self.fans._chamber_fan_speed_override = 99  # decoy
+        self.fans._secondary_aux_fan_speed_override_time = datetime.now()
+
+        self.assertEqual(
+            self.fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY), 70
+        )
 
 
 if __name__ == '__main__':
