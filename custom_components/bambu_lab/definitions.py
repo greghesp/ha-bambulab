@@ -396,6 +396,15 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.HEATBREAK)
     ),
     BambuLabSensorEntityDescription(
+        key="secondary_aux_fan_speed",
+        translation_key="secondary_aux_fan_speed",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY),
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SECONDARY_AUX_FAN),
+    ),
+    BambuLabSensorEntityDescription(
         key="model_download_percentage",
         translation_key="model_download_percentage",
         native_unit_of_measurement=PERCENTAGE,
