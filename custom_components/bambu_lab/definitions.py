@@ -477,7 +477,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="start_time",
         icon="mdi:clock",
         device_class=SensorDeviceClass.TIMESTAMP,
-        available_fn=lambda self: self._start_time_avail_fn(),
+        available_fn=lambda self: True,
         value_fn=lambda self: self._start_time_value_fn(),
         is_restoring=True,
     ),
@@ -496,8 +496,8 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="end_time",
         icon="mdi:clock",
         device_class=SensorDeviceClass.TIMESTAMP,
-        available_fn=lambda self: self.coordinator.get_model().print_job.end_time is not None,
-        value_fn=lambda self: dt_util.as_utc(self.coordinator.get_model().print_job.end_time),
+        available_fn=lambda self: True,
+        value_fn=lambda self: dt_util.as_utc(self.coordinator.get_model().print_job.end_time) if self.coordinator.get_model().print_job.end_time is not None else None,
     ),
     BambuLabSensorEntityDescription(
         key="total_usage_hours",
@@ -528,15 +528,15 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="gcode_file",
         translation_key="gcode_file",
-        available_fn=lambda self: self.coordinator.get_model().print_job.gcode_file != "",
-        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_file,
+        available_fn=lambda self: True,
+        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_file if self.coordinator.get_model().print_job.gcode_file != "" else None,
         icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
     ),
     BambuLabSensorEntityDescription(
         key="gcode_file_downloaded",
         translation_key="gcode_file_downloaded",
-        available_fn=lambda self: self.coordinator.get_model().print_job.gcode_file_downloaded != "",
-        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_file_downloaded,
+        available_fn=lambda self: True,
+        value_fn=lambda self: self.coordinator.get_model().print_job.gcode_file_downloaded if self.coordinator.get_model().print_job.gcode_file_downloaded != "" else None,
         icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon
     ),
     BambuLabSensorEntityDescription(
