@@ -397,6 +397,9 @@
       "heatbreak_fan_speed": {
         "name": "Heatbreak fan speed"
       },
+      "secondary_aux_fan_speed": {
+        "name": "Secondary aux fan speed"
+      },
       "model_download_percentage": {
         "name": "Model download"
       },
