@@ -2404,8 +2404,13 @@ class Info:
         if str == "":
             return "unknown"
 
-        # Second character indicates standard vs high flow
-        if nozzle_type_code[1] == "H":
+        # Second character indicates flow type (TPU high flow, high flow, standard)
+        # There is only one TPU High-Flow nozzle offered as of this writing, and
+        # Bambu Lab does not characterize the material.
+        if nozzle_type_code[1] == "U":
+            return "tpu_high_flow"
+
+        if nozzle_type_code[1] in ("H", "E"):
             flow_prefix = "high_flow_"
         else:
             flow_prefix = ""
@@ -2523,7 +2528,7 @@ class HotendRack:
 
         # Initialize rack slots that don't exist yet
         for slot_id in self.RACK_SLOT_IDS:
-            if slot_id not in self.hotends:
+            if slot_id not in self.hotends: 
                 self.hotends[slot_id] = Hotend(slot_id)
 
         # Update hotend data from info array
