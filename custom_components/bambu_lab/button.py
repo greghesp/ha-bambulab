@@ -138,7 +138,7 @@ class BambuLabResumeButton(BambuLabButton):
         return False
 
     async def async_press(self) -> None:
-        """ Pause the Print on button press"""
+        """ Resume the Print on button press"""
         self.coordinator.client.publish(RESUME)
 
 
