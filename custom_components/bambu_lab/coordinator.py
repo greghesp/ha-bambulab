@@ -734,6 +734,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _update_printer_error(self):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        if hadevice is None:
+            # Device not in the registry yet (HMS error can arrive during the initial
+            # connect, before the device entry exists). Skip this cycle to avoid
+            # AttributeError on hadevice.id.
+            LOGGER.debug("_update_printer_error: device not registered yet, skipping")
+            return
         device = self.get_model()
         if device.hms.error_count == 0:
             event_data = {
@@ -758,6 +764,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _update_print_error(self):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        if hadevice is None:
+            LOGGER.debug("_update_print_error: device not registered yet, skipping")
+            return
 
         device = self.get_model()
         if device.print_error.on == 0:
