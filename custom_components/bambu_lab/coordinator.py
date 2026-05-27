@@ -700,7 +700,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if '//' in filepath:
             command["print"]["url"] = filepath
         else:
-            if self.config_entry.data["device_type"] in [Printers.H2S, Printers.H2D]:
+            if self.config_entry.data["device_type"] in [Printers.H2C, Printers.H2S, Printers.H2D]:
                 command["print"]["url"] = f"ftp:///{filepath}"
             else:
                 command["print"]["url"] = f"file:///sdcard/{filepath}"
