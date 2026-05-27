@@ -40,6 +40,7 @@ from .utils import (
     get_upgrade_url,
     upgrade_template,
     get_wiki_url_for_hms_error,
+    ams_tray_spool_loaded,
 )
 from .const import (
     LOGGER,
@@ -53,6 +54,7 @@ from .const import (
     PRINT_TYPE_OPTIONS,
     AIRDUCT_MODES,
     TempEnum, Print_Fun_Values,
+    UNKNOWN_TRAY_LABEL,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -2855,6 +2857,7 @@ class AMSList:
 class AMSTray:
     """Return all AMS tray related info"""
     empty: bool
+    state: int
     idx: int
     name: str
     type: str
@@ -2877,6 +2880,7 @@ class AMSTray:
     def __init__(self, client):
         self._client = client
         self.empty = True
+        self.state = 8
         self.idx = ""
         self.name = ""
         self.type = ""
@@ -2897,13 +2901,18 @@ class AMSTray:
         self.bed_temp = 0
 
     @property
+    def unknown(self) -> bool:
+        """True when a spool is loaded but vendor/material/colour are not assigned."""
+        return not self.empty and self.name == UNKNOWN_TRAY_LABEL
+
+    @property
     def remain(self) -> int:
         return self._remain
 
     @property
     def active(self) -> bool:
         return self._active
-    
+
     @active.setter
     def active(self, value: bool):
         self._active = value
@@ -2912,47 +2921,49 @@ class AMSTray:
     def remain_enabled(self) -> bool:
         return self._client._device.supports_feature(Features.AMS_FILAMENT_REMAINING) and self._client._device.home_flag.ams_calibrate_remaining
 
+    def _reset_empty_slot(self) -> None:
+        """Clear tray fields when no spool is loaded."""
+        self.empty = True
+        self.idx = ""
+        self.name = "Empty"
+        self.type = "Empty"
+        self.sub_brands = ""
+        self.color = "00000000"
+        self.nozzle_temp_min = 0
+        self.nozzle_temp_max = 0
+        self._remain = -1
+        self.tag_uid = ""
+        self.tray_uuid = ""
+        self.k = 0
+        self.tray_weight = 0
+        self.cols = []
+        self.ctype = 0
+        self.dry_temp = 0
+        self.dry_time = 0
+        self.bed_temp = 0
+
+    def _resolve_tray_name(self, idx: str, tray_type: str) -> str:
+        """Human-readable tray name; empty tray_type means unknown (?)."""
+        if not tray_type or tray_type in ("", "Empty"):
+            return UNKNOWN_TRAY_LABEL
+        if idx:
+            name = get_filament_name(idx, self._client.slicer_settings.custom_filaments)
+            if name not in ("unknown", "Empty"):
+                return name
+        return tray_type
+
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
-        # Detect empty tray notifications by checking if payload contains ONLY metadata fields.
-        # Empty trays send just {"id": "X"} or {"id": "X", "state": Y} with no filament data.
-        # Any other field beyond id/state indicates filament data (works for both X1 full
-        # payloads and P1 delta payloads, and is future-proof if Bambu adds new fields).
-        METADATA_ONLY_FIELDS = {'id', 'state'}
-        payload_fields = set(data.keys())
-        is_empty_notification = ('id' in data) and payload_fields.issubset(METADATA_ONLY_FIELDS)
+        metadata_only = ('id' in data) and set(data.keys()).issubset({'id', 'state'})
 
-        if is_empty_notification:
-            # Tray is empty - reset all fields to defaults
-            self.empty = True
-            self.idx = ""
-            self.name = "Empty"
-            self.type = "Empty"
-            self.sub_brands = ""
-            self.color = "00000000"
-            self.nozzle_temp_min = 0
-            self.nozzle_temp_max = 0
-            self._remain = -1
-            self.tag_uid = ""
-            self.tray_uuid = ""
-            self.k = 0
-            self.tray_weight = 0
-            self.cols = []
-            self.ctype = 0
-            self.dry_temp = 0
-            self.dry_time = 0
-            self.bed_temp = 0
+        if metadata_only:
+            self.state = int(data['state']) if 'state' in data else 0
         else:
-            # Tray has filament data - update fields normally
-            # Using .get() preserves existing values for delta updates
-            self.empty = False
+            if 'state' in data:
+                self.state = int(data['state'])
             self.idx = data.get('tray_info_idx', self.idx)
-            self.name = get_filament_name(self.idx, self._client.slicer_settings.custom_filaments)
             self.type = data.get('tray_type', self.type)
-            if self.name == "unknown":
-                # Fallback to the type if the name is unknown
-                self.name = self.type
             self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
             self.color = data.get('tray_color', self.color)
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
@@ -2967,7 +2978,19 @@ class AMSTray:
             self.dry_temp = data.get('tray_temp', self.dry_temp)
             self.dry_time = data.get('tray_time', self.dry_time)
             self.bed_temp = data.get('bed_temp', self.bed_temp)
-        
+
+        if ams_tray_spool_loaded(self.state):
+            self.empty = False
+            name = self._resolve_tray_name(self.idx, self.type)
+            self.name = name
+            if name == UNKNOWN_TRAY_LABEL:
+                if not self.type or self.type in ("", "Empty"):
+                    self.type = UNKNOWN_TRAY_LABEL
+                if not self.sub_brands:
+                    self.sub_brands = UNKNOWN_TRAY_LABEL
+        else:
+            self._reset_empty_slot()
+
         return (old_data != f"{self.__dict__}")
 
 

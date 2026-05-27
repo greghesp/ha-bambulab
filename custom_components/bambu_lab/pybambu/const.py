@@ -311,3 +311,15 @@ BAMBU_URL = {
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
     BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
 }
+
+# AMS tray `state` — see docs/merge-request-ams-tray-state.md
+UNKNOWN_TRAY_LABEL = "?"
+
+AMS_TRAY_STATE_LEGACY_MAX = 3
+
+class AMSTrayStateFlags(IntEnum):
+    SPOOL = 0x01,
+    METADATA = 0x02,
+    MOTION = 0x04,
+    STEADY = 0x08,
+    RFID = 0x10,

@@ -110,14 +110,24 @@ nextTitle: Device Triggers
 | Tray attributes:    | Notes      |
 | ------------------- | ---------- |
 | Color               |            |
-| Empty               |            |
+| Empty               | `true` when no spool is in the slot, or the tray is loading / scanning (RFID motion). See note below. |
+| Unknown             | `true` when a spool is loaded but `tray_type` is not set — sensor state shows `?`, matching the printer UI. |
+| State               | Raw MQTT tray `state` integer (bitmask). Diagnostic; used internally. |
 | K Value             | P1/A1 only |
-| Name                |            |
+| Name                | Filament display name, `Empty`, or `?` |
 | Nozzle max temp     |            |
 | Nozzle min temp     |            |
 | Remaining Filament  |            |
 | Spool serial number |            |
-| Type                |            |
+| Type                | Filament type (e.g. `PLA`), `Empty`, or `?` |
+
+<Info>
+**Empty vs unknown:** These are different from the sensor **state** string.
+
+- **`empty: true`** — no usable spool (slot empty, feeding, or RFID scan in progress).
+- **`empty: false`, `unknown: true`** — spool is present but not configured (`?` on the printer). Typical after inserting an unprofiled spool or using **Clear** in filament settings while the spool stays loaded.
+- **`empty: false`, `unknown: false`** — spool present with a correct profile.
+</Info>
 
 ## External Spool
 
@@ -129,6 +139,8 @@ nextTitle: Device Triggers
 | --------------- | ---------- |
 | Color           |            |
 | Empty           |            |
+| Unknown         |            |
+| State           |            |
 | K Value         | P1/A1 only |
 | Name            |            |
 | Nozzle max temp |            |
