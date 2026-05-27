@@ -570,7 +570,8 @@ class BambuClient:
         if self._watchdog is not None:
             LOGGER.debug("Stopping watchdog thread")
             self._watchdog.stop()
-            self._watchdog.join()
+            if self._watchdog is not threading.current_thread():
+                self._watchdog.join()
         self.stop_camera()
 
     def _on_watchdog_fired(self):
