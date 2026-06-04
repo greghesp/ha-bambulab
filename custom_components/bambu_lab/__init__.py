@@ -23,9 +23,12 @@ from .const import (
     DOMAIN,
     LOGGER,
     PLATFORMS,
-    SERVICE_CALL_EVENT
+    SERVICE_CALL_EVENT,
+    OPTION_ENABLE_FILAMENT_INVENTORY,
+    OPTION_FILAMENT_INVENTORY_INTERVAL,
+    DEFAULT_FILAMENT_INVENTORY_INTERVAL,
 )
-from .coordinator import BambuDataUpdateCoordinator
+from .coordinator import BambuDataUpdateCoordinator, BambuFilamentCoordinator
 from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
 
@@ -356,6 +359,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
+    # Optionally set up the account-level filament inventory coordinator.
+    options = {**entry.data, **entry.options}
+    if options.get(OPTION_ENABLE_FILAMENT_INVENTORY, False):
+        interval = int(options.get(OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL))
+        filament_coordinator = BambuFilamentCoordinator(
+            hass, printer_coordinator=coordinator, interval_minutes=interval
+        )
+        hass.data[DOMAIN][f"{entry.entry_id}_filament"] = filament_coordinator
+        await filament_coordinator.async_config_entry_first_refresh()
+
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
     hass.http.register_view(VideoAPIView(hass))
@@ -412,6 +425,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "read_rfid": SupportsResponse.NONE,
         "start_filament_drying": SupportsResponse.NONE,
         "stop_filament_drying": SupportsResponse.NONE,
+        "force_filament_sync": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(
@@ -452,6 +466,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
+
+    # Remove the filament coordinator if present.
+    hass.data[DOMAIN].pop(f"{entry.entry_id}_filament", None)
 
     cards = BambuLabCardRegistration(hass)
     await cards.async_unregister()
