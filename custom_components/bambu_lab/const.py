@@ -52,6 +52,11 @@ OPTION_NAME = {
     Options.FIRMWAREUPDATE: "enable_firmware_update",
 }
 
+# Filament inventory ("Filament Manager") options.
+OPTION_ENABLE_FILAMENT_INVENTORY = "enable_filament_inventory"
+OPTION_FILAMENT_INVENTORY_INTERVAL = "filament_inventory_interval"
+DEFAULT_FILAMENT_INVENTORY_INTERVAL = 60  # minutes
+
 def load_dict(filename: str) -> dict:
     with open(filename) as f:
         return json.load(f);
