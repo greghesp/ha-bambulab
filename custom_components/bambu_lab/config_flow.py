@@ -830,6 +830,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["usage_hours"] = float(user_input['usage_hours'])
                     options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                     options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                    options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
+                    options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                     options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                     options["force_ip"] = force_ip
@@ -864,6 +866,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
+        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False)
+        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -879,6 +883,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
+                vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
+                vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -927,6 +933,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
+                options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
                 title = self._config_entry.data['serial']
@@ -960,6 +968,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
+        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False)
+        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
@@ -970,6 +980,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
+                vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
+                vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
         )
