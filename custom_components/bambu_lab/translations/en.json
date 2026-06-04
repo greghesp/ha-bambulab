@@ -84,7 +84,9 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -338,6 +346,9 @@
       }
     },
     "sensor": {
+      "filament_inventory": {
+        "name": "Filament inventory"
+      },
       "airduct_mode": {
         "name": "Airduct mode",
         "state": {
