@@ -866,8 +866,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
-        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False)
-        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60))
+        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
+        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -968,8 +968,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
-        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False)
-        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60))
+        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
+        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
