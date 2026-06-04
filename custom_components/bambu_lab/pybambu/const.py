@@ -299,6 +299,7 @@ class BambuUrl(IntEnum):
     PROJECTS = 8,
     USERDETAIL = 9,
     PREFERENCE = 10,
+    FILAMENTS = 11,
 
 BAMBU_URL = {
     BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
@@ -310,4 +311,5 @@ BAMBU_URL = {
     BambuUrl.TASKS: 'https://api.bambulab.com/v1/user-service/my/tasks',
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
     BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
+    BambuUrl.FILAMENTS: 'https://api.bambulab.com/v1/design-user-service/my/filament/v2',
 }

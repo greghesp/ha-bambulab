@@ -930,3 +930,18 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
 HOTEND_RACK_HOTEND_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = tuple(
     _hotend_sensor(slot_id, slot_id - 15) for slot_id in range(16, 22)
 )
+
+FILAMENT_INVENTORY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabSensorEntityDescription(
+        key="filament_inventory",
+        translation_key="filament_inventory",
+        icon="mdi:database",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.inventory.total_spool_count,
+        extra_attributes=lambda self: {
+            "spools": self.coordinator.inventory.spools,
+            "groups": self.coordinator.inventory.groups,
+            "total_remaining_g": self.coordinator.inventory.total_remaining_g,
+        },
+    ),
+)

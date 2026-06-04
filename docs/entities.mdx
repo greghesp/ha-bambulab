@@ -135,6 +135,71 @@ nextTitle: Device Triggers
 | Nozzle min temp |            |
 | Type            |            |
 
+## Filament Inventory
+
+| Sensor              | Notes                                                                 |
+| ------------------- | --------------------------------------------------------------------- |
+| Filament Inventory  | Opt-in sensor exposing account-level Bambu Filament Manager spools. Requires Bambu Cloud authentication. |
+
+The filament inventory sensor exposes your Bambu account's entire spool collection from the Filament Manager. State represents the total number of spools.
+
+| Attributes:         | Notes                                                              |
+| ------------------- | ------------------------------------------------------------------ |
+| spools              | List of all spools with detailed information (see below)           |
+| groups              | Spools grouped by vendor and name, mirroring slicer's grouped view |
+| total_remaining_g   | Total remaining grams across all spools                            |
+
+### Spool Attributes
+
+Each spool in the `spools` list contains:
+
+| Field            | Notes                                                                           |
+| ---------------- | ------------------------------------------------------------------------------- |
+| id               | Internal spool identifier                                                       |
+| rfid             | RFID tag value for Bambu-branded spools                                         |
+| vendor           | Filament vendor/manufacturer                                                    |
+| name             | Filament product name                                                           |
+| type             | Filament type (e.g., PLA, PETG, ABS)                                            |
+| filament_id      | Bambu's filament database ID                                                    |
+| color            | Hex color code (e.g., `#FFFFFFFF`)                                              |
+| colors           | List of hex color codes (empty list for manually-added spools)                  |
+| color_type       | `2` for solid colors, `0` for gradient/dual colors                              |
+| remaining_g      | Remaining filament weight in grams                                              |
+| total_g          | Original total weight in grams                                                  |
+| remaining_pct    | Remaining percentage (0-100)                                                    |
+| tray_id_name     | Associated tray identifier                                                      |
+| note             | Freeform user notes                                                             |
+| updated_at       | Unix timestamp of last update                                                   |
+
+### Group Attributes
+
+Each group in the `groups` list contains:
+
+| Field              | Notes                                           |
+| ------------------ | ----------------------------------------------- |
+| vendor             | Vendor name for this group                      |
+| name               | Product name for this group                     |
+| count              | Number of spools in this group                  |
+| total_remaining_g  | Total remaining grams for spools in this group  |
+| spools             | List of spool objects belonging to this group   |
+
+<Info>
+**Known data limitations:** The Bambu Cloud API does not provide filament diameter (e.g., 1.75mm), human-readable color names (e.g., "Grass Green"), or 5-digit SKU codes. Only hex color values are available.
+</Info>
+
+<Info>
+The integration does not create alert sensors for low filament. You can build custom template sensors for notifications. For example, to count spools below 100g:
+
+```yaml
+template:
+  - sensor:
+      - name: "Spools below 100g"
+        state: >-
+          {{ state_attr('sensor.x1c_filament_inventory', 'spools')
+             | selectattr('remaining_g', 'lt', 100) | list | count }}
+```
+</Info>
+
 ## Hotend Rack
 
 H2C only (Vortek system).
