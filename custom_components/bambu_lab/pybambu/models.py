@@ -3581,10 +3581,10 @@ class FilamentInventory:
     ('Filament Manager'). Driven by BambuFilamentCoordinator, not MQTT."""
 
     def __init__(self):
-        self.spools = []
-        self.groups = []
-        self.total_spool_count = 0
-        self.total_remaining_g = 0
+        self.spools: list[dict] = []
+        self.groups: list[dict] = []
+        self.total_spool_count: int = 0
+        self.total_remaining_g: int = 0
 
     @staticmethod
     def _str(hit: dict, key: str) -> str:
@@ -3610,7 +3610,7 @@ class FilamentInventory:
     def _parse_spool(cls, hit: dict) -> dict:
         remaining_g = cls._int(hit, "netWeight")
         total_g = cls._int(hit, "totalNetWeight")
-        remaining_pct = int(round((remaining_g / total_g) * 100)) if total_g > 0 else 0
+        remaining_pct = min(100, max(0, int(round((remaining_g / total_g) * 100)))) if total_g > 0 else 0
         return {
             "id": hit.get("id"),
             "rfid": cls._str(hit, "RFID"),

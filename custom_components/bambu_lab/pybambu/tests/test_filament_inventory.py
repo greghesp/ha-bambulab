@@ -65,6 +65,12 @@ class TestFilamentInventory(unittest.TestCase):
         self.assertEqual(spool["remaining_g"], 0)
         self.assertEqual(spool["remaining_pct"], 0)
 
+    def test_remaining_pct_clamped_to_100(self):
+        # Corrupt/over-reported data must not exceed 100%.
+        payload = {"hits": [{"id": 7, "filamentName": "PLA", "netWeight": 1500, "totalNetWeight": 1000}]}
+        self.inventory.update(payload)
+        self.assertEqual(self.inventory.spools[0]["remaining_pct"], 100)
+
     def test_multicolor(self):
         self.inventory.update(self.data)
         spool = next(s for s in self.inventory.spools if s["id"] == 1003)
