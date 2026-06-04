@@ -3575,6 +3575,93 @@ class SlicerSettings:
             else:
                 self._load_custom_filaments(slicer_settings)
 
+
+class FilamentInventory:
+    """Parsed account-level filament inventory from the Bambu cloud
+    ('Filament Manager'). Driven by BambuFilamentCoordinator, not MQTT."""
+
+    def __init__(self):
+        self.spools = []
+        self.groups = []
+        self.total_spool_count = 0
+        self.total_remaining_g = 0
+
+    @staticmethod
+    def _str(hit: dict, key: str) -> str:
+        # The API returns explicit JSON null for some fields (e.g. "colors":
+        # null on manual entries), and any field could plausibly be null. A
+        # plain .get(key, "") returns None when the key is present-but-null, so
+        # always coerce: missing OR null -> "".
+        value = hit.get(key)
+        return value if isinstance(value, str) else ""
+
+    @staticmethod
+    def _int(hit: dict, key: str, default: int = 0) -> int:
+        # Coerce missing/null/non-numeric to default; tolerate numeric strings.
+        value = hit.get(key, default)
+        if value is None:
+            return default
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
+
+    @classmethod
+    def _parse_spool(cls, hit: dict) -> dict:
+        remaining_g = cls._int(hit, "netWeight")
+        total_g = cls._int(hit, "totalNetWeight")
+        remaining_pct = int(round((remaining_g / total_g) * 100)) if total_g > 0 else 0
+        return {
+            "id": hit.get("id"),
+            "rfid": cls._str(hit, "RFID"),
+            "vendor": cls._str(hit, "filamentVendor"),
+            "name": cls._str(hit, "filamentName"),
+            "type": cls._str(hit, "filamentType"),
+            "filament_id": cls._str(hit, "filamentId"),
+            "color": cls._str(hit, "color"),
+            # Manual entries send "colors": null (key present, value null), so
+            # `.get("colors", [])` would return None. `or []` coerces both the
+            # missing-key and explicit-null cases to an empty list.
+            "colors": hit.get("colors") or [],
+            "color_type": cls._int(hit, "colorType"),
+            "remaining_g": remaining_g,
+            "total_g": total_g,
+            "remaining_pct": remaining_pct,
+            "tray_id_name": cls._str(hit, "trayIdName"),
+            "note": cls._str(hit, "note"),
+            "updated_at": cls._int(hit, "updatedAt"),
+        }
+
+    def update(self, payload: dict | None) -> None:
+        """Replace inventory from a raw cloud payload (or None on fetch failure)."""
+        hits = (payload or {}).get("hits", []) or []
+
+        # Skip any non-dict entry defensively (e.g. a null in the hits array).
+        spools = [self._parse_spool(h) for h in hits if isinstance(h, dict)]
+
+        groups_by_key = {}
+        for spool in spools:
+            key = (spool["vendor"], spool["name"])
+            group = groups_by_key.get(key)
+            if group is None:
+                group = {
+                    "vendor": spool["vendor"],
+                    "name": spool["name"],
+                    "count": 0,
+                    "total_remaining_g": 0,
+                    "spools": [],
+                }
+                groups_by_key[key] = group
+            group["count"] += 1
+            group["total_remaining_g"] += spool["remaining_g"]
+            group["spools"].append(spool)
+
+        self.spools = spools
+        self.groups = list(groups_by_key.values())
+        self.total_spool_count = len(spools)
+        self.total_remaining_g = sum(s["remaining_g"] for s in spools)
+
+
 class ExtruderTool:
     """Contains parsed _values from the ext_tool sensor"""
     state: str
