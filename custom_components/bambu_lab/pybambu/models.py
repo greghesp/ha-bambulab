@@ -2979,6 +2979,12 @@ class AMSTray:
             self.dry_time = data.get('tray_time', self.dry_time)
             self.bed_temp = data.get('bed_temp', self.bed_temp)
 
+        self._resolve_loaded_state(metadata_only)
+
+        return (old_data != f"{self.__dict__}")
+
+    def _resolve_loaded_state(self, metadata_only: bool) -> None:
+        """Determine empty/loaded status based on AMS tray state field."""
         if ams_tray_spool_loaded(self.state):
             self.empty = False
             name = self._resolve_tray_name(self.idx, self.type)
@@ -2991,8 +2997,6 @@ class AMSTray:
         else:
             self._reset_empty_slot()
 
-        return (old_data != f"{self.__dict__}")
-
 
 @dataclass
 class ExternalSpool(AMSTray):
@@ -3000,8 +3004,20 @@ class ExternalSpool(AMSTray):
     _index: int
 
     def __init__(self, client, index: int):
+        self._physically_empty = True
         super().__init__(client)
         self._index = index
+
+    @property
+    def empty(self) -> bool:
+        """True when no spool is mounted, or this external slot is not active."""
+        if self._physically_empty:
+            return True
+        return not self.active
+
+    @empty.setter
+    def empty(self, value: bool) -> None:
+        self._physically_empty = bool(value)
 
     @property
     def active(self) -> bool:
@@ -3021,6 +3037,42 @@ class ExternalSpool(AMSTray):
     @property
     def remain_enabled(self) -> bool:
         return False
+
+    def _reset_empty_slot(self) -> None:
+        """Clear tray fields when no external spool is mounted."""
+        self._physically_empty = True
+        self.idx = ""
+        self.name = "Empty"
+        self.type = "Empty"
+        self.sub_brands = ""
+        self.color = "00000000"
+        self.nozzle_temp_min = 0
+        self.nozzle_temp_max = 0
+        self._remain = -1
+        self.tag_uid = ""
+        self.tray_uuid = ""
+        self.k = 0
+        self.tray_weight = 0
+        self.cols = []
+        self.ctype = 0
+        self.dry_temp = 0
+        self.dry_time = 0
+        self.bed_temp = 0
+
+    def _resolve_loaded_state(self, metadata_only: bool) -> None:
+        """External spool: keep filament data; empty reflects active status."""
+        if metadata_only:
+            self._reset_empty_slot()
+            return
+
+        self._physically_empty = False
+        name = self._resolve_tray_name(self.idx, self.type)
+        self.name = name
+        if name == UNKNOWN_TRAY_LABEL:
+            if not self.type or self.type in ("", "Empty"):
+                self.type = UNKNOWN_TRAY_LABEL
+            if not self.sub_brands:
+                self.sub_brands = UNKNOWN_TRAY_LABEL
 
     def print_update(self, data) -> bool:
 
