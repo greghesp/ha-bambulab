@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 
+from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import (
     HomeAssistant,
@@ -26,6 +27,7 @@ from .const import (
     SERVICE_CALL_EVENT
 )
 from .coordinator import BambuDataUpdateCoordinator
+from .diagnostics import TO_REDACT
 from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
 
@@ -479,7 +481,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
     LOGGER.debug("config_entry migration from version %s", config_entry.version)
     if config_entry.version == 1:
         old_data = {**config_entry.data}
-        LOGGER.debug(f"OLD DATA: {old_data}")
+        LOGGER.debug(f"OLD DATA: {async_redact_data(old_data, TO_REDACT)}")
 
         # v1 data had just these entries:
         # "device_type": self.config_data["device_type"],
