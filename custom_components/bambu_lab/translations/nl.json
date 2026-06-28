@@ -718,16 +718,16 @@
         "name": "Vochtigheid"
       },
       "left_nozzle_temp": {
-        "name": "Linker mondstuktemperatuur"
+        "name": "Linker nozzle temperatuur"
       },
       "left_target_nozzle_temp": {
-        "name": "Verlof mondstuk doeltemperatuur"
+        "name": "Linker nozzle doeltemperatuur"
       },
       "right_nozzle_temp": {
-        "name": "Juiste mondstuktemperatuur"
+        "name": "Rechter nozzle temperatuur"
       },
       "right_target_nozzle_temp": {
-        "name": "Rechter mondstuk doeltemperatuur"
+        "name": "Rechter nozzle doeltemperatuur"
       },
       "sdcard_status": {
         "name": "SD -kaartstatus",
@@ -739,10 +739,10 @@
         }
       },
       "left_nozzle_diameter": {
-        "name": "Linker mondstukformaat"
+        "name": "Linker nozzle formaat"
       },
       "left_nozzle_type": {
-        "name": "Linker mondstuktype",
+        "name": "Linker nozzle type",
         "state": {
           "hardened_steel": "Gehard staal",
           "stainless_steel": "Roestvrij staal",
@@ -753,10 +753,10 @@
         }
       },
       "right_nozzle_diameter": {
-        "name": "Juiste mondstukformaat"
+        "name": "Rechter nozzle formaat"
       },
       "right_nozzle_type": {
-        "name": "Rechter mondstuktype",
+        "name": "Rechter nozzle type",
         "state": {
           "hardened_steel": "Gehard staal",
           "stainless_steel": "Roestvrij staal",
@@ -812,19 +812,19 @@
             "name": "Sleuf"
           },
           "nozzle_type": {
-            "name": "Type mondstuk",
+            "name": "Type nozzle",
             "state": {
               "hardened_steel": "Gehard staal",
               "stainless_steel": "Roestvrij staal",
               "tungsten_carbide": "Wolfraamcarbide",
               "high_flow_hardened_steel": "Gehard staal met hoge vloei",
-              "high_flow_stainless_steel": "Roestvrij staal met hoge stroming",
-              "high_flow_tungsten_carbide": "Wolfraamcarbide met hoog debiet",
+              "high_flow_stainless_steel": "Roestvrij staal met hoge vloei",
+              "high_flow_tungsten_carbide": "Wolfraamcarbide met hoge vloei",
               "unknown": "Onbekend"
             }
           },
           "nozzle_diameter": {
-            "name": "Diameter mondstuk"
+            "name": "Diameter nozzle"
           },
           "serial": {
             "name": "Serienummer"
