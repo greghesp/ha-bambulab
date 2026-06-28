@@ -816,7 +816,9 @@
           "empty": "Vazio"
         },
         "state_attributes": {
-          "slot": { "name": "Slot" },
+          "slot": {
+            "name": "Slot"
+          },
           "nozzle_type": {
             "name": "Tipo de nozzle",
             "state": {
@@ -829,10 +831,18 @@
               "unknown": "Desconhecido"
             }
           },
-          "nozzle_diameter": { "name": "Diâmetro do nozzle" },
-          "serial": { "name": "Número de série" },
-          "max_temp": { "name": "Temperatura máx" },
-          "wear": { "name": "Desgaste" },
+          "nozzle_diameter": {
+            "name": "Diâmetro do nozzle"
+          },
+          "serial": {
+            "name": "Número de série"
+          },
+          "max_temp": {
+            "name": "Temperatura máx"
+          },
+          "wear": {
+            "name": "Desgaste"
+          },
           "status": {
             "name": "Estado",
             "state": {
@@ -841,10 +851,28 @@
               "unknown": "Desconhecido"
             }
           },
-          "color": { "name": "Cor" },
-          "filament_id": { "name": "ID do filamento" },
-          "filament_name": { "name": "Nome do filamento" }
+          "color": {
+            "name": "Cor"
+          },
+          "filament_id": {
+            "name": "ID do filamento"
+          },
+          "filament_name": {
+            "name": "Nome do filamento"
+          }
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Velocidade do ventilador auxiliar secundário"
+      },
+      "drying_temperature": {
+        "name": "Temperatura de secagem"
+      },
+      "drying_duration": {
+        "name": "Duração da secagem"
+      },
+      "drying_filament": {
+        "name": "Filamento de secagem"
       }
     },
     "camera": {

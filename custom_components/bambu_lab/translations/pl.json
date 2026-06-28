@@ -861,6 +861,18 @@
           "heating": "Ogrzewanie",
           "laser": "Laser"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Prędkość dodatkowego wentylatora dodatkowego"
+      },
+      "drying_temperature": {
+        "name": "Temperatura suszenia"
+      },
+      "drying_duration": {
+        "name": "Czas suszenia"
+      },
+      "drying_filament": {
+        "name": "Suszenie włókna"
       }
     },
     "camera": {

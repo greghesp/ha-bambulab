@@ -861,6 +861,18 @@
           "heating": "Heizung",
           "laser": "Laser"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Geschwindigkeit des sekundären Hilfslüfters"
+      },
+      "drying_temperature": {
+        "name": "Trocknungstemperatur"
+      },
+      "drying_duration": {
+        "name": "Trocknungsdauer"
+      },
+      "drying_filament": {
+        "name": "Trocknendes Filament"
       }
     },
     "camera": {

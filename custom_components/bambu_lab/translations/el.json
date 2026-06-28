@@ -861,6 +861,18 @@
           "heating": "Θέρμανση",
           "laser": "Λέιζερ"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Δευτερεύουσα ταχύτητα ανεμιστήρα aux"
+      },
+      "drying_temperature": {
+        "name": "Θερμοκρασία στεγνώματος"
+      },
+      "drying_duration": {
+        "name": "Διάρκεια στεγνώματος"
+      },
+      "drying_filament": {
+        "name": "Νήμα ξήρανσης"
       }
     },
     "camera": {

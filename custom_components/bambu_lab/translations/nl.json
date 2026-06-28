@@ -861,6 +861,18 @@
           "heating": "Verwarming",
           "laser": "Laser"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Snelheid secundaire hulpventilator"
+      },
+      "drying_temperature": {
+        "name": "Droogtemperatuur"
+      },
+      "drying_duration": {
+        "name": "Droogduur"
+      },
+      "drying_filament": {
+        "name": "Drogend filament"
       }
     },
     "camera": {

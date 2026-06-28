@@ -861,6 +861,18 @@
           "heating": "Kúrenie",
           "laser": "Laser"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Rýchlosť sekundárneho pomocného ventilátora"
+      },
+      "drying_temperature": {
+        "name": "Teplota sušenia"
+      },
+      "drying_duration": {
+        "name": "Trvanie sušenia"
+      },
+      "drying_filament": {
+        "name": "Sušiace vlákno"
       }
     },
     "camera": {
