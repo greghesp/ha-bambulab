@@ -631,6 +631,7 @@
           "high_flow_hardened_steel": "High flow hardened steel",
           "high_flow_stainless_steel": "High flow stainless steel",
           "high_flow_tungsten_carbide": "High flow tungsten carbide",
+          "tpu_high_flow": "TPU High-Flow",
           "unknown": "Unknown"
         }
       },
