@@ -861,6 +861,18 @@
           "heating": "난방",
           "laser": "원자 램프"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "보조 보조 팬 속도"
+      },
+      "drying_temperature": {
+        "name": "건조 온도"
+      },
+      "drying_duration": {
+        "name": "건조시간"
+      },
+      "drying_filament": {
+        "name": "필라멘트 건조"
       }
     },
     "camera": {

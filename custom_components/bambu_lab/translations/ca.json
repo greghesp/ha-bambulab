@@ -861,6 +861,18 @@
           "heating": "Calefacció",
           "laser": "Làser"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Velocitat del ventilador auxiliar secundari"
+      },
+      "drying_temperature": {
+        "name": "Temperatura d'assecat"
+      },
+      "drying_duration": {
+        "name": "Durada de l'assecat"
+      },
+      "drying_filament": {
+        "name": "Filament d'assecat"
       }
     },
     "camera": {

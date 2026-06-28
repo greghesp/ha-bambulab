@@ -861,6 +861,18 @@
           "heating": "Opvarmning",
           "laser": "Laser"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Sekundær ekstra ventilatorhastighed"
+      },
+      "drying_temperature": {
+        "name": "Tørretemperatur"
+      },
+      "drying_duration": {
+        "name": "Tørretid"
+      },
+      "drying_filament": {
+        "name": "Tørring af filament"
       }
     },
     "camera": {

@@ -861,6 +861,18 @@
           "heating": "เครื่องทำความร้อน",
           "laser": "เลเซอร์"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "ความเร็วพัดลมเสริมรอง"
+      },
+      "drying_temperature": {
+        "name": "อุณหภูมิการอบแห้ง"
+      },
+      "drying_duration": {
+        "name": "ระยะเวลาการอบแห้ง"
+      },
+      "drying_filament": {
+        "name": "เส้นใยอบแห้ง"
       }
     },
     "camera": {

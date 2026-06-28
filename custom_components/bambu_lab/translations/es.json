@@ -861,6 +861,18 @@
           "heating": "Calefacción",
           "laser": "Láser"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Velocidad del ventilador auxiliar secundario"
+      },
+      "drying_temperature": {
+        "name": "Temperatura de secado"
+      },
+      "drying_duration": {
+        "name": "Duración del secado"
+      },
+      "drying_filament": {
+        "name": "Filamento de secado"
       }
     },
     "camera": {

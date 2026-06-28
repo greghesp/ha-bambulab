@@ -861,6 +861,18 @@
           "heating": "加热",
           "laser": "激光"
         }
+      },
+      "secondary_aux_fan_speed": {
+        "name": "辅助风扇转速"
+      },
+      "drying_temperature": {
+        "name": "干燥温度"
+      },
+      "drying_duration": {
+        "name": "干燥时间"
+      },
+      "drying_filament": {
+        "name": "干燥丝"
       }
     },
     "camera": {

@@ -870,6 +870,9 @@
       },
       "target_chamber_temp": {
         "name": "Température cible de la chambre"
+      },
+      "secondary_aux_fan_speed": {
+        "name": "Vitesse du ventilateur auxiliaire secondaire"
       }
     },
     "camera": {
