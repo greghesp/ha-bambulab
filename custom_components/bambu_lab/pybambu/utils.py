@@ -22,7 +22,9 @@ from .const import (
     BAMBU_URL,
     FansEnum,
     Printers,
-    TempEnum
+    TempEnum,
+    AMSTrayStateFlags,
+    AMS_TRAY_STATE_LEGACY_MAX,
 )
 from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
 
@@ -459,3 +461,11 @@ def get_wiki_url_for_hms_error(hms_code: str, device_type: Printers):
 
     return default_url
 
+
+def ams_tray_spool_loaded(state):
+    """Return True when a spool is in the slot and the tray is not loading / scanning."""
+    if not (state & AMSTrayStateFlags.SPOOL):
+        return False
+    if state <= AMS_TRAY_STATE_LEGACY_MAX:
+        return state == AMS_TRAY_STATE_LEGACY_MAX
+    return bool(state & AMSTrayStateFlags.STEADY)
