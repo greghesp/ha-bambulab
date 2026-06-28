@@ -12,6 +12,7 @@ LOGGER = logging.getLogger(__package__)
 class Printers(StrEnum):
     A1 = "A1"
     A1MINI = "A1MINI"
+    A2L = "A2L"
     P1P = "P1P"
     P1S = "P1S"
     P2S = "P2S"

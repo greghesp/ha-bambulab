@@ -280,23 +280,23 @@ def get_printer_type(modules, default):
     # }
     # X1E = AP02
 
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab X2D")):
-      return 'X2D'
-
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab A1")):
       return 'A1'
 
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab A1 mini")):
       return 'A1MINI'
 
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab A2L")):
+      return 'A2L'
+
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P1P")):
+      return 'P1P'
+
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P1S")):
       return 'P1S'
 
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P2S")):
       return 'P2S'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P1P")):
-      return 'P1P'
 
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2C")):
       return 'H2C'
@@ -310,6 +310,10 @@ def get_printer_type(modules, default):
     if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2S")):
       return 'H2S'
 
+    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab X2D")):
+      return 'X2D'
+
+    # Legacy identification logic that became unreliable as they started to re-use hw_ver for different models.
     apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
     if len(apNode.keys()) > 1:
         hw_ver = apNode['hw_ver']
