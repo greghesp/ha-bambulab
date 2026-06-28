@@ -13,7 +13,7 @@ jobs:
       contents: write
     steps:
       - name: 🛍️ Checkout the repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 🐍 Setup Python
         uses: actions/setup-python@v6
@@ -37,7 +37,7 @@ jobs:
           zip bambu_lab.zip -r ./
 
       - name: ☁️ Upload zip to release
-        uses: softprops/action-gh-release@v3.0.0
+        uses: softprops/action-gh-release@v3.0.1
         if: ${{ github.event_name == 'release' }}
         with:
           files: "${{ github.workspace }}/custom_components/bambu_lab/bambu_lab.zip"
