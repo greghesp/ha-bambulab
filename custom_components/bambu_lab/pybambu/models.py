@@ -156,6 +156,7 @@ class Device:
 
     def supports_feature(self, feature):
         a1_printers = {Printers.A1, Printers.A1MINI}
+        a2_printers = {Printers.A2L}
         h2_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.H2S}
         p1_printers = {Printers.P1P, Printers.P1S}
         p2_printers = {Printers.P2S}
@@ -171,9 +172,9 @@ class Device:
         if feature == Features.CAMERA_RTSP:
             return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.CAMERA_IMAGE:
-            return model in (a1_printers | p1_printers)
+            return model in (a1_printers | a2_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
-            return model in (a1_printers | p1_printers)
+            return model in (a1_printers | a2_printers | p1_printers)
 
         # Now check that we have a version. All tests after this are expected to only be called after the
         # first full set of data from the printer has been received and so version will be available.
@@ -183,17 +184,17 @@ class Device:
 
         # All following features should only be every checked after full initialization data is available.
         if feature == Features.AUX_FAN:
-            return model not in a1_printers
+            return model not in (a1_printers | a2_printers)
         elif feature == Features.CHAMBER_FAN:
             # The P1P may not have a fan but we don't have a perfectly reliable way to detect that. The p1s upgrade
             # flag would largely be good though but not accessible here.
-            return model not in a1_printers
+            return model not in (a1_printers | a2_printers)
         elif feature == Features.CHAMBER_TEMPERATURE:
             return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.AMS:
             return len(self.ams.data) != 0
         elif feature == Features.K_VALUE:
-            return model in (a1_printers | p1_printers)
+            return model in (a1_printers | a2_printers | p1_printers)
         elif feature == Features.AMS_TEMPERATURE:
             if model in a1_printers:
                 return self.supports_sw_version("01.06.10.33")
@@ -235,7 +236,7 @@ class Device:
                 return self.supports_sw_version("01.06.10.33")
             return True
         elif feature == Features.PROMPT_SOUND:
-            if model in (a1_printers | h2_printers | p2_printers | x2_printers):
+            if model in (a1_printers | a2_printers | h2_printers | p2_printers | x2_printers):
                 return not self.print_fun.mqtt_signature_required
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -315,7 +316,8 @@ class Device:
     @property
     def is_core_xy(self) -> bool:
         return (self.info.device_type != Printers.A1 and
-                self.info.device_type != Printers.A1MINI)
+                self.info.device_type != Printers.A1MINI and
+                self.info.device_type != Printers.A2L)
 
 @dataclass
 class Lights:
@@ -744,6 +746,7 @@ class Upgrade:
             Printers.P1S: "p1",
             Printers.A1MINI: "a1-mini",
             Printers.A1: "a1",
+            Printers.A2L: "a2",
             Printers.X1C: "x1",
             Printers.X1E: "x1e",
             Printers.X2D: "x2",
