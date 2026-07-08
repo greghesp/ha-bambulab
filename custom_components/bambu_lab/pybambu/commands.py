@@ -170,3 +170,24 @@ BUZZER_SET_BEEPING = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "
 
 AIRDUCT_SET_MODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "set_airduct", "modeId": 0, "submode": -1}}
 
+EXTRUSION_CALI_GET_TEMPLATE = {
+    "print": {
+        "sequence_id": "0",
+        "command": "extrusion_cali_get",
+        "filament_id": "",
+        "nozzle_diameter": "0.4",
+        "extruder_id": 0,
+    }
+}
+
+EXTRUSION_CALI_SEL_TEMPLATE = {
+    "print": {
+        "sequence_id": "0",
+        "command": "extrusion_cali_sel",
+        "tray_id": 0,
+        "cali_idx": -1,
+        "filament_id": "",
+        "nozzle_diameter": "0.4",
+    }
+}
+
