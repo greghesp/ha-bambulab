@@ -148,6 +148,8 @@ AMS_FILAMENT_DRYING_TEMPLATE = {
     "humidity": 0,
     "mode": 0,
     "rotate_tray": False,
+    "filament": "",
+    "close_power_conflict": False,
   }
 }
 
