@@ -18,6 +18,21 @@ All the cards can be configured using Dashboard UI editor.
   <Step>Find one of the _Custom: Bambu_ card in the list.</Step>
 </Steps>
 
+<Note>
+  The integration registers the card resource automatically only when your
+  Lovelace dashboards are in **storage** (UI managed) mode. If you run Lovelace
+  in **YAML** mode, the cards will not show up until you add the resource URL
+  yourself:
+
+  ```yaml
+  lovelace:
+    mode: yaml
+    resources:
+      - url: /bambu_lab/ha-bambulab-cards.js
+        type: module
+  ```
+</Note>
+
 ## Pre-made Dashboard
 
 You can find an amazing web configurator to easily create a Dashboard for your Bambu printer like the one below
