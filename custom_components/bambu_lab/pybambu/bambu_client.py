@@ -386,6 +386,8 @@ class BambuClient:
         self._port = 8883
         self._refreshed = False
         self._last_error_code = 0
+        self._pending_response: asyncio.Future | None = None
+        self._pending_response_command: str | None = None
 
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(
@@ -620,8 +622,10 @@ class BambuClient:
                 if self._watchdog is not None:
                     self._watchdog.received_data()
                 if json_data.get("print"):
-                    self._device.print_update(data=json_data.get("print"))
-                    if json_data.get("print").get("msg", 0) == 0:
+                    print_data = json_data["print"]
+                    self._try_resolve_pending_response(print_data)
+                    self._device.print_update(data=print_data)
+                    if print_data.get("msg", 0) == 0:
                         self._refreshed= False
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     self._device.info_update(data=json_data.get("info"))
@@ -632,6 +636,25 @@ class BambuClient:
         except Exception as e:
             LOGGER.error("An exception occurred processing a message:", exc_info=e)
             LOGGER.debug(message.payload)
+
+    def _try_resolve_pending_response(self, print_data: dict):
+        """Resolve pending response future if the incoming message matches the awaited command."""
+        if self._pending_response is None or self._pending_response_command is None:
+            return
+        command = print_data.get("command")
+        if command == self._pending_response_command and "result" in print_data:
+            future = self._pending_response
+            self._pending_response = None
+            self._pending_response_command = None
+            if not future.done():
+                future.get_loop().call_soon_threadsafe(future.set_result, print_data)
+
+    def setup_pending_response(self, command: str, loop: asyncio.AbstractEventLoop) -> asyncio.Future:
+        """Prepare a future that will be resolved when a response for the given command arrives."""
+        future = loop.create_future()
+        self._pending_response = future
+        self._pending_response_command = command
+        return future
 
     def subscribe(self):
         """Subscribe to report topic"""
