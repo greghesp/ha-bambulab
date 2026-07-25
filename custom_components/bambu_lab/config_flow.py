@@ -30,6 +30,7 @@ from .pybambu.bambu_cloud import (
     CodeRequiredError,
     CodeExpiredError,
     CodeIncorrectError,
+    CsrfError,
     TfaCodeRequiredError
 )
 
@@ -219,6 +220,21 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             except TfaCodeRequiredError:
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
+                # Fall through to form generation to ask for verification code
+            except CsrfError:
+                # The 2FA endpoint lives on the website host (bambulab.com), which now
+                # requires a CSRF cookie that the API host never issues, so the code is
+                # rejected before it is ever evaluated. The API host still accepts code
+                # login, so request a code and fall back to that flow.
+                LOGGER.warning("2FA endpoint blocked by CSRF. Falling back to code login.")
+                try:
+                    await self.hass.async_add_executor_job(
+                        self._bambu_cloud.request_new_code)
+                    self.authentication_type = 'verifyCode'
+                    errors['base'] = 'tfa_csrf_fallback'
+                except Exception as e:
+                    LOGGER.error(f"Fallback code request failed with error code {e.args}")
+                    errors['base'] = "cannot_connect"
                 # Fall through to form generation to ask for verification code
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")
@@ -708,6 +724,21 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             except TfaCodeRequiredError:
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
+                # Fall through to form generation to ask for verification code
+            except CsrfError:
+                # The 2FA endpoint lives on the website host (bambulab.com), which now
+                # requires a CSRF cookie that the API host never issues, so the code is
+                # rejected before it is ever evaluated. The API host still accepts code
+                # login, so request a code and fall back to that flow.
+                LOGGER.warning("2FA endpoint blocked by CSRF. Falling back to code login.")
+                try:
+                    await self.hass.async_add_executor_job(
+                        self._bambu_cloud.request_new_code)
+                    self.authentication_type = 'verifyCode'
+                    errors['base'] = 'tfa_csrf_fallback'
+                except Exception as e:
+                    LOGGER.error(f"Fallback code request failed with error code {e.args}")
+                    errors['base'] = "cannot_connect"
                 # Fall through to form generation to ask for verification code
             except Exception as e:
                 LOGGER.error(f"Failed to connect with error code {e.args}")

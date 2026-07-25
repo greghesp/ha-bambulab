@@ -37,7 +37,8 @@
       "verifyCode": "Verification code is required. Check your email or phone.",
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
-      "tfaCode": "2FA code is required. Please enter it now."
+      "tfaCode": "2FA code is required. Please enter it now.",
+      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
     },
     "step": {
       "user": {
@@ -135,7 +136,8 @@
       "verifyCode": "Verification code is required. Check your email or phone.",
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
-      "tfaCode": "2FA code is required. Please enter it now."
+      "tfaCode": "2FA code is required. Please enter it now.",
+      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
     },
     "step": {
       "init": {
