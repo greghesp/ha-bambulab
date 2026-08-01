@@ -30,20 +30,48 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback
 ) -> None:
-    
+
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    if not coordinator.get_model().has_full_printer_data:
-        return
 
     LOGGER.debug(f"CAMERA::async_setup_entry")
 
-    if coordinator.get_model().supports_feature(Features.CAMERA_RTSP) and coordinator.get_option_enabled(Options.CAMERA):
-        url = coordinator.get_model().camera.rtsp_url
-        if url != None and url != "disable":
-            async_add_entities([BambuLabRtspCamera(coordinator, entry)])
+    # NOTE: We intentionally do NOT gate on has_full_printer_data here.
+    #
+    # When HA restarts while the printer is offline, has_full_printer_data is False
+    # at setup time, causing camera entities to never be registered. When the printer
+    # later comes online, _reinitialize_sensors() unloads and reloads all platforms —
+    # but if async_setup_entry bails out early again, the camera entity is permanently
+    # lost from the registry until the integration is manually reloaded.
+    #
+    # The correct HA pattern is to always register entities and let them sit as
+    # `unavailable` until the device is reachable. The coordinator's
+    # _reinitialize_sensors() call (triggered by event_printer_ready) then causes
+    # async_setup_entry to run again with full data, at which point the entity
+    # transitions to a live state.
+    #
+    # For the RTSP camera we check the option flags (always available from config
+    # entry options) and register unconditionally; stream_source() handles the
+    # unavailable state gracefully by returning None.
+    #
+    # For the image-based camera, exists_fn still guards against printers that
+    # genuinely don't support the feature — but only once full data is available.
+    # Before that, we skip it rather than crashing; it will be registered on the
+    # next _reinitialize_sensors() pass after event_printer_ready fires.
 
-    if CHAMBER_CAMERA_SENSOR.exists_fn(coordinator):
-        async_add_entities([BambuLabImageCamera(coordinator, entry)])
+    if coordinator.get_option_enabled(Options.CAMERA):
+        if coordinator.get_model().supports_feature(Features.CAMERA_RTSP):
+            # Printer supports RTSP and camera option is enabled.
+            # Register the entity now; stream_source() will return None (gracefully)
+            # until the printer is online and rtsp_url is populated.
+            async_add_entities([BambuLabRtspCamera(coordinator, entry)])
+        elif coordinator.get_model().has_full_printer_data:
+            # Full printer data is available: we can reliably evaluate CAMERA_IMAGE
+            # support and the IMAGECAMERA option. Only register if the feature is
+            # actually present (some printers don't have a chamber camera at all).
+            if CHAMBER_CAMERA_SENSOR.exists_fn(coordinator):
+                async_add_entities([BambuLabImageCamera(coordinator, entry)])
+        # If neither branch matches (no full data yet, non-RTSP printer), the entity
+        # will be registered on the next _reinitialize_sensors() pass.
 
 
 class BambuLabRtspCamera(BambuLabEntity, Camera):
