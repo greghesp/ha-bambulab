@@ -1,4 +1,5 @@
 ### V2.1.4
+- Fix print weight/length attributes missing for AMS HT slots
 - ???
 
 ### V2.1.3
