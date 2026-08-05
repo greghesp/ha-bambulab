@@ -9,7 +9,7 @@ import json
 # Add the parent directory to the Python path to find pybambu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature
+from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, ams_slot_name
 from pybambu.const import FansEnum, Printers
 
 class TestPrintJob(unittest.TestCase):
@@ -31,6 +31,51 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.remaining_time, 759)
         self.assertEqual(self.print_job.current_layer, 1)
         self.assertEqual(self.print_job.total_layers, 70)
+
+    def test_ams_slot_name(self):
+        # Regular AMS units occupy slots 0-15, four trays each.
+        self.assertEqual(ams_slot_name(0), "AMS 1 Tray 1")
+        self.assertEqual(ams_slot_name(3), "AMS 1 Tray 4")
+        self.assertEqual(ams_slot_name(4), "AMS 2 Tray 1")
+        self.assertEqual(ams_slot_name(15), "AMS 4 Tray 4")
+        # AMS HT units follow on at slots 16-23, one spool each. Observed in a real
+        # amsDetailMapping entry pairing {'ams': 16} with {'amsId': 128, 'slotId': 0}.
+        self.assertEqual(ams_slot_name(16), "AMS HT 1")
+        self.assertEqual(ams_slot_name(23), "AMS HT 8")
+        # The AMS HT unit ids are also accepted, as reported by amsId and the active tray.
+        self.assertEqual(ams_slot_name(128), "AMS HT 1")
+        self.assertEqual(ams_slot_name(135), "AMS HT 8")
+        # Anything else is not a real slot - 255 is reported when no AMS is in use.
+        self.assertIsNone(ams_slot_name(24))
+        self.assertIsNone(ams_slot_name(127))
+        self.assertIsNone(ams_slot_name(136))
+        self.assertIsNone(ams_slot_name(255))
+        self.assertIsNone(ams_slot_name(-1))
+
+    def test_get_print_weights_includes_ams_ht(self):
+        self.client._device.external_spool[0].active = False
+        self.client._device.external_spool[1].active = False
+
+        # Mirrors a real two colour print across an AMS 2 Pro and an AMS HT.
+        self.print_job._ams_print_weights[3] = 1.38   # AMS 1 Tray 4
+        self.print_job._ams_print_weights[16] = 49.43 # AMS HT 1
+
+        self.assertEqual(
+            self.print_job.get_print_weights,
+            {"AMS 1 Tray 4": 1.38, "AMS HT 1": 49.43},
+        )
+
+    def test_get_print_lengths_includes_ams_ht(self):
+        self.client._device.external_spool[0].active = False
+        self.client._device.external_spool[1].active = False
+
+        self.print_job._ams_print_lengths[3] = 0.45   # AMS 1 Tray 4
+        self.print_job._ams_print_lengths[17] = 16.06 # AMS HT 2
+
+        self.assertEqual(
+            self.print_job.get_print_lengths,
+            {"AMS 1 Tray 4": 0.45, "AMS HT 2": 16.06},
+        )
 
 class TestInfo(unittest.TestCase):
     def setUp(self):
