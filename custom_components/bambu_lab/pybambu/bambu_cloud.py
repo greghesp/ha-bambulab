@@ -175,16 +175,16 @@ class BambuCloud:
             if not curl_available:
                 LOGGER.debug(f"Curl library is unavailable.")
                 raise CurlUnavailableError()
-            response = curl_requests.post(url, headers=headers, json=json, impersonate=IMPERSONATE_BROWSER)
+            response = curl_requests.post(url, headers=headers, json=json, timeout=10, impersonate=IMPERSONATE_BROWSER)
         elif CONNECTION_MECHANISM == ConnectionMechanismEnum.CLOUDSCRAPER:
             if len(headers) == 0:
                 headers = self._get_headers()
             scraper = cloudscraper.create_scraper()
-            response = scraper.post(url, headers=headers, json=json)
+            response = scraper.post(url, headers=headers, json=json, timeout=10)
         elif CONNECTION_MECHANISM == ConnectionMechanismEnum.REQUESTS:
             if len(headers) == 0:
                 headers = self._get_headers()
-            response = requests.post(url, headers=headers, json=json)
+            response = requests.post(url, headers=headers, json=json, timeout=10)
         else:
             raise NotImplementedError()
 
