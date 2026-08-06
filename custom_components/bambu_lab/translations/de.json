@@ -8,7 +8,8 @@
       "event_print_error": "Druckfehler",
       "event_print_error_cleared": "Druckfehler behoben",
       "event_printer_error": "HMS-Fehler",
-      "event_printer_error_cleared": "HMS-Fehler behoben"
+      "event_printer_error_cleared": "HMS-Fehler behoben",
+      "event_printer_missing_sdcard": "SD-Karte fehlt"
     }
   },
   "config": {
