@@ -1,3 +1,4 @@
+import copy
 import functools
 import gzip
 import json
@@ -68,7 +69,8 @@ def fan_percentage_to_gcode(fan: FansEnum, percentage: int):
 
     percentage = round(percentage / 10) * 10
     speed = math.ceil(255 * percentage / 100)
-    command = SEND_GCODE_TEMPLATE
+    # Deep copy the template - mutating the shared global corrupts concurrent callers.
+    command = copy.deepcopy(SEND_GCODE_TEMPLATE)
     command['print']['param'] = f"M106 {fanString} S{speed}\n"
     return command
 
@@ -80,7 +82,7 @@ def set_temperature_to_gcode(temp: TempEnum, temperature: int, device_type: Prin
     elif temp == TempEnum.HEATBED:
         tempCommand = "M140"
     elif temp == TempEnum.CHAMBER:
-        command = SEND_GCODE_TEMPLATE
+        command = copy.deepcopy(SEND_GCODE_TEMPLATE)
         if device_type == Printers.X1E:
             # X1E has no airduct; M141 alone controls the chamber heater.
             command['print']['param'] = f"M141 S{temperature}\n"
@@ -90,7 +92,7 @@ def set_temperature_to_gcode(temp: TempEnum, temperature: int, device_type: Prin
             command['print']['param'] = f"M141 S{temperature}\nM145 P0\n"
         return command
 
-    command = SEND_GCODE_TEMPLATE
+    command = copy.deepcopy(SEND_GCODE_TEMPLATE)
     command['print']['param'] = f"{tempCommand} S{temperature}\n"
     return command
 
@@ -417,13 +419,15 @@ def upgrade_template(url: str) -> dict:
         r"offline\/([\w-]+)\/([\d\.]+)\/([\w]+)\/"
         r"offline-([\w\-\.]+)\.zip"
     )
-    info = re.search(pattern, url).groups()
-    if not info:
+    match = re.search(pattern, url)
+    if match is None:
         LOGGER.warning(f"Could not parse firmware url: {url}")
         return None
-    
-    model, version, hash, stamp = info
-    template = UPGRADE_CONFIRM_TEMPLATE.copy()
+
+    model, version, hash, stamp = match.groups()
+    # Deep copy the template - a shallow copy shares the nested 'upgrade' dict, so the
+    # first call would bake its URL into the global and later calls would resend it.
+    template = copy.deepcopy(UPGRADE_CONFIRM_TEMPLATE)
     template["upgrade"]["url"] = template["upgrade"]["url"].format(
         model=model, version=version, hash=hash, stamp=stamp
     )

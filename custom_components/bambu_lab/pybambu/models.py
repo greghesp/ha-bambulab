@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import ftplib
 import json
 import math
@@ -130,7 +131,11 @@ class Device:
                 if send_ready_event:
                     self._client.callback("event_printer_ready")
 
-        self._client.callback("event_printer_data_update")
+        # Only notify Home Assistant when something actually changed. The printer pushes
+        # status roughly once a second; without this gate every push forces all entities
+        # to recompute and rewrite their state.
+        if send_event:
+            self._client.callback("event_printer_data_update")
 
     @property
     def has_full_printer_data(self):
@@ -1940,7 +1945,7 @@ class PrintJob:
                     if cloud_dt.tzinfo is None:
                         cloud_dt = cloud_dt.replace(tzinfo=tz.UTC)
                     # Convert everything to UTC-aware datetime
-                    self.start_time = cloud_dt.astimezone(tz.UTC)
+                    self.end_time = cloud_dt.astimezone(tz.UTC)
                     LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
     def _identify_objects_in_pick_image(self, image: Image) -> set:
@@ -3187,7 +3192,7 @@ class Speed:
             if option == speed:
                 self._id = id
                 self.name = speed
-                command = SPEED_PROFILE_TEMPLATE
+                command = copy.deepcopy(SPEED_PROFILE_TEMPLATE)
                 command['print']['param'] = f"{id}"
                 self._client.publish(command)
                 self._client.callback("event_speed_update")
