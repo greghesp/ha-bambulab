@@ -32,6 +32,43 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.current_layer, 1)
         self.assertEqual(self.print_job.total_layers, 70)
 
+    def test_late_subtask_name_reloads_model_data(self):
+        """Model data loaded by fallback is refreshed when the task name arrives."""
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Current print"})
+
+        self.print_job._clear_model_data.assert_called_once_with()
+        self.print_job._update_task_data.assert_called_once_with()
+
+    def test_known_subtask_name_does_not_reload_model_data(self):
+        """Repeated task-name updates do not restart model downloads."""
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._subtask_name = "Current print"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Current print"})
+
+        self.print_job._clear_model_data.assert_not_called()
+        self.print_job._update_task_data.assert_not_called()
+
+    def test_late_subtask_name_does_not_reload_finished_print(self):
+        """Late idle-state updates do not fetch model data for an old print."""
+        self.print_job.gcode_state = "FINISH"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Finished print"})
+
+        self.print_job._clear_model_data.assert_not_called()
+        self.print_job._update_task_data.assert_not_called()
+
 class TestInfo(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
