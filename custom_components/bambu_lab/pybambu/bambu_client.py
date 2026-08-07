@@ -842,6 +842,9 @@ def create_local_ssl_context():
     context.verify_flags &= ~ssl.VERIFY_X509_STRICT
     # Workaround because some users get this error despite SNI: "certificate verify failed: IP address mismatch"
     context.check_hostname = False
+    # P2S firmware 01.02.00.00 never responds to a TLS 1.3 ClientHello, hanging the
+    # handshake until timeout. TLS 1.2 is answered immediately, so cap it there.
+    context.maximum_version = ssl.TLSVersion.TLSv1_2
     return context
 
 @functools.lru_cache(maxsize=1)
@@ -849,4 +852,7 @@ def create_insecure_ssl_context():
     context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     context.check_hostname = False
     context.verify_mode = ssl.CERT_NONE
+    # P2S firmware 01.02.00.00 never responds to a TLS 1.3 ClientHello, hanging the
+    # handshake until timeout. TLS 1.2 is answered immediately, so cap it there.
+    context.maximum_version = ssl.TLSVersion.TLSv1_2
     return context
