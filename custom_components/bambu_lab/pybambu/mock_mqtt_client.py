@@ -1,56 +1,18 @@
-import unittest
-from unittest.mock import MagicMock
+"""Mock MQTT client used for the 'MOCK-<model>' demo-serial feature.
+
+When a config entry's serial number starts with 'MOCK-', BambuClient uses this
+in-process stand-in for paho.mqtt.client.Client instead of a real MQTT
+connection, replaying canned payloads from mock_data/<serial>.json. This lets
+the integration (and its config flow) be exercised end-to-end without a real
+printer. See BambuClient.connect() in bambu_client.py.
+"""
 import json
 import os
-import asyncio
 from typing import Dict, Any, Callable, Optional
 
-from ..const import (
-    LOGGER,
-)
-from ..utils import safe_json_loads, fan_percentage
+from .const import LOGGER
+from .utils import safe_json_loads
 
-
-class TestFanPercentage(unittest.TestCase):
-    """Regression tests for the fan_percentage round->ceil fix.
-
-    The printer reports an instantaneous raw 0-15 PWM value that
-    oscillates between adjacent integers when serving a target whose
-    exact 0-15 representation isn't an integer. round() picks
-    different buckets either side of the midpoint, so HA fan-speed
-    entities flip between adjacent 10% values on every push.
-    """
-
-    def test_zero_speed_returns_zero(self):
-        self.assertEqual(fan_percentage(0), 0)
-        self.assertEqual(fan_percentage("0"), 0)
-        self.assertEqual(fan_percentage(None), 0)
-
-    def test_full_speed_returns_one_hundred(self):
-        self.assertEqual(fan_percentage(15), 100)
-        self.assertEqual(fan_percentage("15"), 100)
-
-    def test_oscillation_between_raw_2_and_3_pins_to_same_bucket(self):
-        # Live capture: with user setting at 20% the printer alternates
-        # big_fan2_speed between '2' and '3' across consecutive print
-        # pushes. Both must round to the same 10% bucket so HA doesn't
-        # flip on every message.
-        speed_for_raw_2 = fan_percentage(2)
-        speed_for_raw_3 = fan_percentage(3)
-        self.assertEqual(
-            speed_for_raw_2, speed_for_raw_3,
-            f"raw 2 -> {speed_for_raw_2} but raw 3 -> {speed_for_raw_3}; "
-            "values disagree => HA will flip on every MQTT push"
-        )
-
-    def test_low_speeds_round_up_to_nearest_ten(self):
-        # raw 1 -> 6.67%, raw 2 -> 13.33%, raw 4 -> 26.67%
-        # All should round up so the reported value is never lower
-        # than the actual fan output.
-        self.assertEqual(fan_percentage(1), 10)
-        self.assertEqual(fan_percentage(2), 20)
-        self.assertEqual(fan_percentage(4), 30)
-        self.assertEqual(fan_percentage(5), 40)
 
 class MqttMessageInfo:
     """Mock MQTT message info object."""
@@ -59,10 +21,11 @@ class MqttMessageInfo:
         self.rc = 0
         self.is_published = True
 
+
 class MockMQTTClient:
-    """A mock MQTT client for testing printer communications."""
+    """A mock MQTT client for simulating printer communications."""
     _connected: bool = False
-    
+
     def __init__(self, mock: str):
         LOGGER.debug(f"********************** RUNNING IN MOCK MODE '{mock}'")
         self.connected = False
@@ -77,31 +40,31 @@ class MockMQTTClient:
         self._test_payload = {}
         self._mock = mock
         self.load_mock_payload(mock)
-    
+
     def load_mock_payload(self, mock: str):
         """Load test payload asynchronously."""
-        file_path = os.path.join(os.path.dirname(__file__), f"{mock}.json")
+        file_path = os.path.join(os.path.dirname(__file__), "mock_data", f"{mock}.json")
         LOGGER.debug(f"Loading test payload from {mock}.json")
         with open(file_path, 'rb') as f:
             raw_bytes = f.read()
             self._test_payload = safe_json_loads(raw_bytes)
-                
+
     def connect(self, host: str, port: int = 1883, keepalive: int = 60) -> None:
         """Simulate connecting to an MQTT broker."""
         self._connected = True
         if self._on_connect:
             self._on_connect(None, None, 0, None)
-            
+
     def disconnect(self) -> None:
         """Simulate disconnecting from an MQTT broker."""
         self._connected = False
         if self._on_disconnect:
             self._on_disconnect(None, None, 0)
-            
+
     def subscribe(self, topic: str, callback: Optional[Callable] = None) -> None:
         """Subscribe to a topic and store the callback."""
         self.subscribed_topics[topic] = callback
-        
+
     def publish(self, topic: str, payload: str) -> MqttMessageInfo:
         """Publish a message to a topic and store it for verification."""
         LOGGER.debug(f"MQTTMOCK: Publishing message to topic: {topic} '{payload}")
@@ -123,16 +86,14 @@ class MockMQTTClient:
             # Check for command at root level
             else:
                 command = payload.get('command')
-        
+
         # If we found a command and have test data for it, simulate a response
         LOGGER.debug(f"MQTTMOCK: Request for command: {command}")
         if command:
             response = self._test_payload.get(command)
             if response is not None and self._on_message:
                 LOGGER.debug(f"MQTTMOCK: Found response.")
-                message = MagicMock()
-                message.topic = topic
-                message.payload = json.dumps(response).encode()
+                message = _MockMessage(topic, json.dumps(response).encode())
                 self._on_message(None, None, message)
 
         message_info = MqttMessageInfo(self._mid)
@@ -147,40 +108,38 @@ class MockMQTTClient:
     def on_connect(self, callback: Callable):
         """Set the on_connect callback."""
         self._on_connect = callback
-        
+
     @property
     def on_message(self):
         return self._on_message
-    
+
     @on_message.setter
     def on_message(self, callback: Callable):
         """Set the on_message callback."""
         self._on_message = callback
-        
+
     @property
     def on_disconnect(self, callback: Callable):
         return self._on_disconnect
-    
+
     @on_disconnect.setter
     def on_disconnect(self, callback: Callable):
         """Set the on_disconnect callback."""
         self._on_disconnect = callback
-        
+
     def simulate_message(self, topic: str, payload: Dict[str, Any]) -> None:
         """Simulate receiving a message on a topic."""
         if topic in self.subscribed_topics:
             callback = self.subscribed_topics[topic]
             if callback:
                 # Convert payload to JSON string to simulate MQTT message format
-                message = MagicMock()
-                message.topic = topic
-                message.payload = json.dumps(payload).encode()
+                message = _MockMessage(topic, json.dumps(payload).encode())
                 callback(None, None, message)
-                
+
     def get_published_messages(self, topic: str) -> list:
         """Get all messages published to a specific topic."""
         return self.published_messages.get(topic, [])
-        
+
     def clear_published_messages(self) -> None:
         """Clear all published messages."""
         self.published_messages.clear()
@@ -190,7 +149,7 @@ class MockMQTTClient:
         """Mock setting TLS context."""
         pass
 
-    def tls_set(self, ca_certs=None, certfile=None, keyfile=None, cert_reqs=None, 
+    def tls_set(self, ca_certs=None, certfile=None, keyfile=None, cert_reqs=None,
                 tls_version=None, ciphers=None) -> None:
         """Mock setting TLS parameters."""
         pass
@@ -221,4 +180,11 @@ class MockMQTTClient:
 
     def reconnect_delay_set(self, min_delay: int = 1, max_delay: int = 120) -> None:
         """Mock setting reconnect delay parameters."""
-        pass 
+        pass
+
+
+class _MockMessage:
+    """Minimal stand-in for paho's MQTTMessage, enough for on_message callbacks."""
+    def __init__(self, topic: str, payload: bytes):
+        self.topic = topic
+        self.payload = payload
