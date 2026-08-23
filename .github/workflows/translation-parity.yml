@@ -1,0 +1,26 @@
+name: Translation parity
+
+# Informational only, by design - reports translation locales that are out
+# of sync with en.json (missing keys, or stale keys no longer in English),
+# but never fails the job. A PR that only changes English strings shouldn't
+# be blocked on every locale catching up before it can merge.
+
+on:
+  push:
+    paths:
+      - "custom_components/bambu_lab/translations/**"
+  pull_request:
+    paths:
+      - "custom_components/bambu_lab/translations/**"
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - run: python3 scripts/check_translation_parity.py
