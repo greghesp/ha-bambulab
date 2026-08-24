@@ -17,7 +17,7 @@ jobs:
   label-device:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         with:
           script: |
             // Keep in sync with the `device` dropdown options in
