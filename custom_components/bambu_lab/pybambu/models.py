@@ -1030,6 +1030,21 @@ class PrintJob:
         self._subtask_name = data.get("subtask_name", self._subtask_name)
         if old_subtask_name != self._subtask_name:
             LOGGER.debug(f"SUBTASK_NAME: {self._subtask_name}")
+
+        # Printer-initiated prints and reprints can reach RUNNING before the
+        # printer reports a subtask name. In that case model data is initially
+        # loaded using the newest 3mf on the printer as a fallback, which may
+        # belong to an older print. Resolve the model again once the real task
+        # name arrives so the cover image and metadata match the active print.
+        if (
+            old_subtask_name == ""
+            and self._subtask_name != ""
+            and self._loaded_model_data
+            and self.gcode_state not in ("IDLE", "FAILED", "FINISH", "unknown")
+        ):
+            LOGGER.debug("SUBTASK_NAME ARRIVED AFTER MODEL DATA; RELOADING MODEL")
+            self._clear_model_data()
+            self._update_task_data()
         self.file_type_icon = "mdi:file" if self._print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
