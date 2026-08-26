@@ -458,10 +458,10 @@ class Camera:
         #   "tutk_server": "disable"
         # }
 
-        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
-        self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
-        self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
-        self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
+        self.timelapse = (data.get("ipcam") or {}).get("timelapse", self.timelapse)
+        self.recording = (data.get("ipcam") or {}).get("ipcam_record", self.recording)
+        self.resolution = (data.get("ipcam") or {}).get("resolution", self.resolution)
+        self.rtsp_url = (data.get("ipcam") or {}).get("rtsp_url", self.rtsp_url)
         if self._client._enable_camera:
             if self.rtsp_url == "disable":
                 if not self._fired_camera_disabled_event:
@@ -2224,7 +2224,7 @@ class Info:
         #   },
 
         if not self._force_ip:
-            info = data.get('net', {}).get('info', [])
+            info = (data.get('net') or {}).get('info', [])
             for net in info:
                 ip_int = net.get("ip", 0)
                 if ip_int != 0:
@@ -2286,7 +2286,7 @@ class Info:
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
 
-        self.new_version_state = data.get("upgrade_state",{}).get("new_version_state", self.new_version_state)
+        self.new_version_state = (data.get("upgrade_state") or {}).get("new_version_state", self.new_version_state)
 
         # Nozzle data is provided differently for dual-nozzle printers (at least)
         # New (H2D):
@@ -3233,7 +3233,7 @@ class StageAction:
             self._print_type = "unknown"
 
         # New way it is presented
-        self._id = int(data.get("stage", {}).get("_id", self._id))
+        self._id = int((data.get("stage") or {}).get("_id", self._id))
         # Old way it's presented
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
