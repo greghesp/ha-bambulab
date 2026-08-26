@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import ftplib
 import json
 import math
@@ -130,7 +131,11 @@ class Device:
                 if send_ready_event:
                     self._client.callback("event_printer_ready")
 
-        self._client.callback("event_printer_data_update")
+        # Only notify Home Assistant when something actually changed. The printer pushes
+        # status roughly once a second; without this gate every push forces all entities
+        # to recompute and rewrite their state.
+        if send_event:
+            self._client.callback("event_printer_data_update")
 
     @property
     def has_full_printer_data(self):
@@ -453,10 +458,10 @@ class Camera:
         #   "tutk_server": "disable"
         # }
 
-        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
-        self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
-        self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
-        self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
+        self.timelapse = (data.get("ipcam") or {}).get("timelapse", self.timelapse)
+        self.recording = (data.get("ipcam") or {}).get("ipcam_record", self.recording)
+        self.resolution = (data.get("ipcam") or {}).get("resolution", self.resolution)
+        self.rtsp_url = (data.get("ipcam") or {}).get("rtsp_url", self.rtsp_url)
         if self._client._enable_camera:
             if self.rtsp_url == "disable":
                 if not self._fired_camera_disabled_event:
@@ -1062,6 +1067,21 @@ class PrintJob:
         self._subtask_name = data.get("subtask_name", self._subtask_name)
         if old_subtask_name != self._subtask_name:
             LOGGER.debug(f"SUBTASK_NAME: {self._subtask_name}")
+
+        # Printer-initiated prints and reprints can reach RUNNING before the
+        # printer reports a subtask name. In that case model data is initially
+        # loaded using the newest 3mf on the printer as a fallback, which may
+        # belong to an older print. Resolve the model again once the real task
+        # name arrives so the cover image and metadata match the active print.
+        if (
+            old_subtask_name == ""
+            and self._subtask_name != ""
+            and self._loaded_model_data
+            and self.gcode_state not in ("IDLE", "FAILED", "FINISH", "unknown")
+        ):
+            LOGGER.debug("SUBTASK_NAME ARRIVED AFTER MODEL DATA; RELOADING MODEL")
+            self._clear_model_data()
+            self._update_task_data()
         self.file_type_icon = "mdi:file" if self._print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
@@ -1973,7 +1993,7 @@ class PrintJob:
                     if cloud_dt.tzinfo is None:
                         cloud_dt = cloud_dt.replace(tzinfo=tz.UTC)
                     # Convert everything to UTC-aware datetime
-                    self.start_time = cloud_dt.astimezone(tz.UTC)
+                    self.end_time = cloud_dt.astimezone(tz.UTC)
                     LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
     def _identify_objects_in_pick_image(self, image: Image) -> set:
@@ -2237,7 +2257,7 @@ class Info:
         #   },
 
         if not self._force_ip:
-            info = data.get('net', {}).get('info', [])
+            info = (data.get('net') or {}).get('info', [])
             for net in info:
                 ip_int = net.get("ip", 0)
                 if ip_int != 0:
@@ -2299,7 +2319,7 @@ class Info:
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
 
-        self.new_version_state = data.get("upgrade_state",{}).get("new_version_state", self.new_version_state)
+        self.new_version_state = (data.get("upgrade_state") or {}).get("new_version_state", self.new_version_state)
 
         # Nozzle data is provided differently for dual-nozzle printers (at least)
         # New (H2D):
@@ -3220,7 +3240,7 @@ class Speed:
             if option == speed:
                 self._id = id
                 self.name = speed
-                command = SPEED_PROFILE_TEMPLATE
+                command = copy.deepcopy(SPEED_PROFILE_TEMPLATE)
                 command['print']['param'] = f"{id}"
                 self._client.publish(command)
                 self._client.callback("event_speed_update")
@@ -3246,7 +3266,7 @@ class StageAction:
             self._print_type = "unknown"
 
         # New way it is presented
-        self._id = int(data.get("stage", {}).get("_id", self._id))
+        self._id = int((data.get("stage") or {}).get("_id", self._id))
         # Old way it's presented
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):

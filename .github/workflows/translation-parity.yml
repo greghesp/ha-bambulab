@@ -1,0 +1,61 @@
+name: Translation parity
+
+# Informational only, by design - reports translation locales that are out
+# of sync with en.json (missing keys, or stale keys no longer in English),
+# but never fails the job. A PR that only changes English strings shouldn't
+# be blocked on every locale catching up before it can merge.
+
+on:
+  push:
+    paths:
+      - "custom_components/bambu_lab/translations/**"
+  pull_request:
+    paths:
+      - "custom_components/bambu_lab/translations/**"
+
+permissions:
+  # PR comments are served by the Issues API under the hood, so this - not
+  # pull-requests: write - is the scope that actually grants comment access.
+  issues: write
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - id: check
+        run: python3 scripts/check_translation_parity.py
+
+      # Comments are only meaningful in a PR context (push events - e.g. a
+      # merge to main - have no PR to comment on).
+      - if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require("fs");
+            const marker = "<!-- translation-parity-check -->";
+            const body = fs.readFileSync("translation_parity_comment.md", "utf8");
+            const drift = "${{ steps.check.outputs.drift }}" === "true";
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const existing = comments.data.find((c) => c.body.startsWith(marker));
+
+            if (!drift && !existing) {
+              // Common case: no drift, and we've never had anything to say. Stay silent.
+              return;
+            }
+            if (existing) {
+              // Update our previous comment in place, whether that's new drift
+              // details or flipping it over to "resolved".
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }

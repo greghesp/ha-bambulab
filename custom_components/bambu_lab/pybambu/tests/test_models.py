@@ -9,7 +9,7 @@ import json
 # Add the parent directory to the Python path to find pybambu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, ams_slot_name
+from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, Camera, StageAction, ams_slot_name
 from pybambu.const import FansEnum, Printers
 
 class TestPrintJob(unittest.TestCase):
@@ -77,6 +77,43 @@ class TestPrintJob(unittest.TestCase):
             {"AMS 1 Tray 4": 0.45, "AMS HT 2": 16.06},
         )
 
+    def test_late_subtask_name_reloads_model_data(self):
+        """Model data loaded by fallback is refreshed when the task name arrives."""
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Current print"})
+
+        self.print_job._clear_model_data.assert_called_once_with()
+        self.print_job._update_task_data.assert_called_once_with()
+
+    def test_known_subtask_name_does_not_reload_model_data(self):
+        """Repeated task-name updates do not restart model downloads."""
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._subtask_name = "Current print"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Current print"})
+
+        self.print_job._clear_model_data.assert_not_called()
+        self.print_job._update_task_data.assert_not_called()
+
+    def test_late_subtask_name_does_not_reload_finished_print(self):
+        """Late idle-state updates do not fetch model data for an old print."""
+        self.print_job.gcode_state = "FINISH"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Finished print"})
+
+        self.print_job._clear_model_data.assert_not_called()
+        self.print_job._update_task_data.assert_not_called()
+
 class TestInfo(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
@@ -106,6 +143,58 @@ class TestInfo(unittest.TestCase):
 
         self.assertEqual(self.info.active_nozzle_diameter, 0.4)
         self.assertEqual(self.info.active_nozzle_type, "hardened_steel")
+
+    def test_info_update_upgrade_state_none(self):
+        # Regression test for https://github.com/greghesp/ha-bambulab/issues/2057
+        # The printer can send "upgrade_state": null (rather than omitting the key)
+        # which must not raise AttributeError: 'NoneType' object has no attribute 'get'.
+        data = dict(self.test_data['push_all'])
+        data['upgrade_state'] = None
+
+        # Should not raise.
+        self.info.print_update(data)
+
+        # With upgrade_state explicitly null, new_version_state should be left unchanged
+        # (falls back to its previous value, same as if the key were absent).
+        self.assertEqual(self.info.new_version_state, 0)
+
+    def test_info_update_net_none(self):
+        # Same explicit-null issue can occur for the "net" key used for IP address discovery.
+        # Force the code path that reads "net" (it's skipped when force_ip is enabled).
+        self.info._force_ip = False
+        data = dict(self.test_data['push_all'])
+        data['net'] = None
+
+        # Should not raise.
+        self.info.print_update(data)
+
+class TestCamera(unittest.TestCase):
+    def setUp(self):
+        self.client = MagicMock()
+        self.camera = Camera(self.client)
+        self.client._enable_camera = False
+
+        # Load test data from P1P.json
+        with open(os.path.join(os.path.dirname(__file__), 'P1P.json'), 'r') as f:
+            self.test_data = json.load(f)
+
+    def test_camera_update_ipcam_none(self):
+        # Same explicit-null issue can occur for the "ipcam" key.
+        data = dict(self.test_data['push_all'])
+        data['ipcam'] = None
+
+        # Should not raise.
+        result = self.camera.print_update(data)
+        self.assertFalse(result)
+
+class TestStageAction(unittest.TestCase):
+    def test_stage_update_stage_none(self):
+        # Same explicit-null issue can occur for the "stage" key.
+        stage_action = StageAction()
+        data = {"print_type": "idle", "stage": None}
+
+        # Should not raise.
+        stage_action.print_update(data)
 
 class TestAMSList(unittest.TestCase):
     def setUp(self):
