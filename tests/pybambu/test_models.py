@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 import json
 
-from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature
+from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, Camera, StageAction, ams_slot_name
 from pybambu.const import FansEnum, Printers
 
 class TestPrintJob(unittest.TestCase):
@@ -27,6 +27,88 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.remaining_time, 759)
         self.assertEqual(self.print_job.current_layer, 1)
         self.assertEqual(self.print_job.total_layers, 70)
+
+    def test_ams_slot_name(self):
+        # Regular AMS units occupy slots 0-15, four trays each.
+        self.assertEqual(ams_slot_name(0), "AMS 1 Tray 1")
+        self.assertEqual(ams_slot_name(3), "AMS 1 Tray 4")
+        self.assertEqual(ams_slot_name(4), "AMS 2 Tray 1")
+        self.assertEqual(ams_slot_name(15), "AMS 4 Tray 4")
+        # AMS HT units follow on at slots 16-23, one spool each. Observed in a real
+        # amsDetailMapping entry pairing {'ams': 16} with {'amsId': 128, 'slotId': 0}.
+        self.assertEqual(ams_slot_name(16), "AMS HT 1")
+        self.assertEqual(ams_slot_name(23), "AMS HT 8")
+        # The AMS HT unit ids are also accepted, as reported by amsId and the active tray.
+        self.assertEqual(ams_slot_name(128), "AMS HT 1")
+        self.assertEqual(ams_slot_name(135), "AMS HT 8")
+        # Anything else is not a real slot - 255 is reported when no AMS is in use.
+        self.assertIsNone(ams_slot_name(24))
+        self.assertIsNone(ams_slot_name(127))
+        self.assertIsNone(ams_slot_name(136))
+        self.assertIsNone(ams_slot_name(255))
+        self.assertIsNone(ams_slot_name(-1))
+
+    def test_get_print_weights_includes_ams_ht(self):
+        self.client._device.external_spool[0].active = False
+        self.client._device.external_spool[1].active = False
+
+        # Mirrors a real two colour print across an AMS 2 Pro and an AMS HT.
+        self.print_job._ams_print_weights[3] = 1.38   # AMS 1 Tray 4
+        self.print_job._ams_print_weights[16] = 49.43 # AMS HT 1
+
+        self.assertEqual(
+            self.print_job.get_print_weights,
+            {"AMS 1 Tray 4": 1.38, "AMS HT 1": 49.43},
+        )
+
+    def test_get_print_lengths_includes_ams_ht(self):
+        self.client._device.external_spool[0].active = False
+        self.client._device.external_spool[1].active = False
+
+        self.print_job._ams_print_lengths[3] = 0.45   # AMS 1 Tray 4
+        self.print_job._ams_print_lengths[17] = 16.06 # AMS HT 2
+
+        self.assertEqual(
+            self.print_job.get_print_lengths,
+            {"AMS 1 Tray 4": 0.45, "AMS HT 2": 16.06},
+        )
+
+    def test_late_subtask_name_reloads_model_data(self):
+        """Model data loaded by fallback is refreshed when the task name arrives."""
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Current print"})
+
+        self.print_job._clear_model_data.assert_called_once_with()
+        self.print_job._update_task_data.assert_called_once_with()
+
+    def test_known_subtask_name_does_not_reload_model_data(self):
+        """Repeated task-name updates do not restart model downloads."""
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._subtask_name = "Current print"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Current print"})
+
+        self.print_job._clear_model_data.assert_not_called()
+        self.print_job._update_task_data.assert_not_called()
+
+    def test_late_subtask_name_does_not_reload_finished_print(self):
+        """Late idle-state updates do not fetch model data for an old print."""
+        self.print_job.gcode_state = "FINISH"
+        self.print_job._loaded_model_data = True
+        self.print_job._clear_model_data = MagicMock()
+        self.print_job._update_task_data = MagicMock()
+
+        self.print_job.print_update({"subtask_name": "Finished print"})
+
+        self.print_job._clear_model_data.assert_not_called()
+        self.print_job._update_task_data.assert_not_called()
 
 class TestInfo(unittest.TestCase):
     def setUp(self):
@@ -57,6 +139,58 @@ class TestInfo(unittest.TestCase):
 
         self.assertEqual(self.info.active_nozzle_diameter, 0.4)
         self.assertEqual(self.info.active_nozzle_type, "hardened_steel")
+
+    def test_info_update_upgrade_state_none(self):
+        # Regression test for https://github.com/greghesp/ha-bambulab/issues/2057
+        # The printer can send "upgrade_state": null (rather than omitting the key)
+        # which must not raise AttributeError: 'NoneType' object has no attribute 'get'.
+        data = dict(self.test_data['push_all'])
+        data['upgrade_state'] = None
+
+        # Should not raise.
+        self.info.print_update(data)
+
+        # With upgrade_state explicitly null, new_version_state should be left unchanged
+        # (falls back to its previous value, same as if the key were absent).
+        self.assertEqual(self.info.new_version_state, 0)
+
+    def test_info_update_net_none(self):
+        # Same explicit-null issue can occur for the "net" key used for IP address discovery.
+        # Force the code path that reads "net" (it's skipped when force_ip is enabled).
+        self.info._force_ip = False
+        data = dict(self.test_data['push_all'])
+        data['net'] = None
+
+        # Should not raise.
+        self.info.print_update(data)
+
+class TestCamera(unittest.TestCase):
+    def setUp(self):
+        self.client = MagicMock()
+        self.camera = Camera(self.client)
+        self.client._enable_camera = False
+
+        # Load test data from P1P.json
+        with open(os.path.join(os.path.dirname(__file__), 'P1P.json'), 'r') as f:
+            self.test_data = json.load(f)
+
+    def test_camera_update_ipcam_none(self):
+        # Same explicit-null issue can occur for the "ipcam" key.
+        data = dict(self.test_data['push_all'])
+        data['ipcam'] = None
+
+        # Should not raise.
+        result = self.camera.print_update(data)
+        self.assertFalse(result)
+
+class TestStageAction(unittest.TestCase):
+    def test_stage_update_stage_none(self):
+        # Same explicit-null issue can occur for the "stage" key.
+        stage_action = StageAction()
+        data = {"print_type": "idle", "stage": None}
+
+        # Should not raise.
+        stage_action.print_update(data)
 
 class TestAMSList(unittest.TestCase):
     def setUp(self):

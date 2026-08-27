@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import ftplib
 import json
 import math
@@ -130,7 +131,11 @@ class Device:
                 if send_ready_event:
                     self._client.callback("event_printer_ready")
 
-        self._client.callback("event_printer_data_update")
+        # Only notify Home Assistant when something actually changed. The printer pushes
+        # status roughly once a second; without this gate every push forces all entities
+        # to recompute and rewrite their state.
+        if send_event:
+            self._client.callback("event_printer_data_update")
 
     @property
     def has_full_printer_data(self):
@@ -453,10 +458,10 @@ class Camera:
         #   "tutk_server": "disable"
         # }
 
-        self.timelapse = data.get("ipcam", {}).get("timelapse", self.timelapse)
-        self.recording = data.get("ipcam", {}).get("ipcam_record", self.recording)
-        self.resolution = data.get("ipcam", {}).get("resolution", self.resolution)
-        self.rtsp_url = data.get("ipcam", {}).get("rtsp_url", self.rtsp_url)
+        self.timelapse = (data.get("ipcam") or {}).get("timelapse", self.timelapse)
+        self.recording = (data.get("ipcam") or {}).get("ipcam_record", self.recording)
+        self.resolution = (data.get("ipcam") or {}).get("resolution", self.resolution)
+        self.rtsp_url = (data.get("ipcam") or {}).get("rtsp_url", self.rtsp_url)
         if self._client._enable_camera:
             if self.rtsp_url == "disable":
                 if not self._fired_camera_disabled_event:
@@ -877,6 +882,40 @@ class Upgrade:
         return (old_data != f"{self.__dict__}")
 
 
+# Filament sources are identified two different ways and the numbering is not the same.
+#
+# A flat *slot* index is what print.ams_mapping and the cloud amsDetailMapping 'ams' field use.
+# The four regular AMS units reserve slots 0-15 as 'unit * 4 + tray', and AMS HT units follow
+# on from there at 16-23, one slot each. Observed in an amsDetailMapping entry pairing
+# {'ams': 16} with {'amsId': 128, 'slotId': 0}.
+#
+# A *unit* id is what the module names (n3s/128), amsDetailMapping 'amsId' and the active tray
+# report. Regular units are 0-3 and AMS HT units are 128-135.
+AMS_TRAYS_PER_UNIT = 4
+AMS_UNIT_COUNT = 4
+AMS_SLOT_COUNT = AMS_UNIT_COUNT * AMS_TRAYS_PER_UNIT
+AMS_HT_COUNT = 8
+AMS_HT_SLOT_BASE = AMS_SLOT_COUNT
+AMS_HT_SLOT_END = AMS_HT_SLOT_BASE + AMS_HT_COUNT
+AMS_HT_UNIT_BASE = 128
+AMS_HT_UNIT_END = AMS_HT_UNIT_BASE + AMS_HT_COUNT
+
+
+def ams_slot_name(index: int) -> str | None:
+    """Human readable name for an AMS slot index, or None if the index isn't a real slot."""
+    if 0 <= index < AMS_SLOT_COUNT:
+        return f"AMS {(index // AMS_TRAYS_PER_UNIT) + 1} Tray {(index % AMS_TRAYS_PER_UNIT) + 1}"
+
+    # An AMS HT holds a single spool so there is no tray number to disambiguate. Accept the unit
+    # id as well as the slot index since both numbering schemes appear in the payloads.
+    if AMS_HT_SLOT_BASE <= index < AMS_HT_SLOT_END:
+        return f"AMS HT {index - AMS_HT_SLOT_BASE + 1}"
+    if AMS_HT_UNIT_BASE <= index < AMS_HT_UNIT_END:
+        return f"AMS HT {index - AMS_HT_UNIT_BASE + 1}"
+
+    return None
+
+
 @dataclass
 class PrintJob:
     """Return all information related content"""
@@ -922,8 +961,8 @@ class PrintJob:
         self.print_error = 0
         self.print_weight = 0
         self.ams_mapping = []
-        self._ams_print_weights = [0.0] * 136 # TODO: Convert to a dict in the future?
-        self._ams_print_lengths = [0.0] * 136 # TODO: Convert to a dict in the future?
+        self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+        self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         self.print_length = 0
         self.print_bed_type = "unknown"
         self.file_type_icon = "mdi:file"
@@ -956,11 +995,10 @@ class PrintJob:
         elif self._client._device.external_spool[1].active:
             values["External Spool 2"] = self.print_weight
         else:
-            for i in range(16):
-                if self._ams_print_weights[i] != 0:
-                    ams_index = (i // 4) + 1
-                    ams_tray = (i % 4) + 1
-                    values[f"AMS {ams_index} Tray {ams_tray}"] = self._ams_print_weights[i]
+            for index, weight in enumerate(self._ams_print_weights):
+                name = ams_slot_name(index)
+                if weight != 0 and name is not None:
+                    values[name] = weight
         return values
 
     @property
@@ -971,11 +1009,10 @@ class PrintJob:
         elif self._client._device.external_spool[1].active:
             values["External Spool 2"] = self.print_length
         else:
-            for i in range(16):
-                if self._ams_print_lengths[i] != 0:
-                    ams_index = (i // 4) + 1
-                    ams_tray = (i % 4) + 1
-                    values[f"AMS {ams_index} Tray {ams_tray}"] = self._ams_print_lengths[i]
+            for index, length in enumerate(self._ams_print_lengths):
+                name = ams_slot_name(index)
+                if length != 0 and name is not None:
+                    values[name] = length
         return values
     
     @property
@@ -1030,6 +1067,21 @@ class PrintJob:
         self._subtask_name = data.get("subtask_name", self._subtask_name)
         if old_subtask_name != self._subtask_name:
             LOGGER.debug(f"SUBTASK_NAME: {self._subtask_name}")
+
+        # Printer-initiated prints and reprints can reach RUNNING before the
+        # printer reports a subtask name. In that case model data is initially
+        # loaded using the newest 3mf on the printer as a fallback, which may
+        # belong to an older print. Resolve the model again once the real task
+        # name arrives so the cover image and metadata match the active print.
+        if (
+            old_subtask_name == ""
+            and self._subtask_name != ""
+            and self._loaded_model_data
+            and self.gcode_state not in ("IDLE", "FAILED", "FINISH", "unknown")
+        ):
+            LOGGER.debug("SUBTASK_NAME ARRIVED AFTER MODEL DATA; RELOADING MODEL")
+            self._clear_model_data()
+            self._update_task_data()
         self.file_type_icon = "mdi:file" if self._print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
@@ -1710,8 +1762,8 @@ class PrintJob:
                 plate_filament_count = len(plate.findall('filament'))
 
                 # Reset filament data
-                self._ams_print_weights = [0.0] * 136 # TODO: Convert to a dict in the future?
-                self._ams_print_lengths = [0.0] * 136 # TODO: Convert to a dict in the future?
+                self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+                self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
 
                 for metadata in plate:
                     if (metadata.get('key') == 'index'):
@@ -1771,11 +1823,12 @@ class PrintJob:
                             # Filament count should be greater than the zero-indexed filament ID
                             if filament_count > filament_index:
                                 ams_index = self.ams_mapping[filament_index]
-                                if ams_index < 16: # BUG - This will not yet handle AMS HT devices
+                                ams_name = ams_slot_name(ams_index)
+                                if ams_name is not None:
                                     # We add the filament as you can map multiple slicer filaments to the same physical filament.
                                     self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
                                     self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
-                                    log_label = f"AMS Tray {ams_index + 1}"
+                                    log_label = ams_name
                                 else:
                                     LOGGER.debug(f"ams_mapping: {self.ams_mapping}")
                             elif plate_filament_count > 0:
@@ -1880,8 +1933,8 @@ class PrintJob:
             return
 
         self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
-        self._ams_print_weights = [0.0] * 136 # TODO: Convert to a dict in the future?
-        self._ams_print_lengths = [0.0] * 136 # TODO: Convert to a dict in the future?
+        self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+        self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         if self._task_data is None:
             LOGGER.debug("No bambu cloud task data found for printer.")
             self._client._device.cover_image.set_image(None)
@@ -1905,7 +1958,7 @@ class PrintJob:
                 for ams_data in ams_print_data:
                     index = ams_data['ams']
                     weight = ams_data['weight']
-                    if 0 <= index < len(self._ams_print_weights):
+                    if ams_slot_name(index) is not None:
                         self._ams_print_weights[index] = weight
                         self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
                     else:
@@ -1940,7 +1993,7 @@ class PrintJob:
                     if cloud_dt.tzinfo is None:
                         cloud_dt = cloud_dt.replace(tzinfo=tz.UTC)
                     # Convert everything to UTC-aware datetime
-                    self.start_time = cloud_dt.astimezone(tz.UTC)
+                    self.end_time = cloud_dt.astimezone(tz.UTC)
                     LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
 
     def _identify_objects_in_pick_image(self, image: Image) -> set:
@@ -2204,7 +2257,7 @@ class Info:
         #   },
 
         if not self._force_ip:
-            info = data.get('net', {}).get('info', [])
+            info = (data.get('net') or {}).get('info', [])
             for net in info:
                 ip_int = net.get("ip", 0)
                 if ip_int != 0:
@@ -2266,7 +2319,7 @@ class Info:
         # and new versions provided for each component. While the X1 lists only the new version
         # in separate string properties.
 
-        self.new_version_state = data.get("upgrade_state",{}).get("new_version_state", self.new_version_state)
+        self.new_version_state = (data.get("upgrade_state") or {}).get("new_version_state", self.new_version_state)
 
         # Nozzle data is provided differently for dual-nozzle printers (at least)
         # New (H2D):
@@ -3187,7 +3240,7 @@ class Speed:
             if option == speed:
                 self._id = id
                 self.name = speed
-                command = SPEED_PROFILE_TEMPLATE
+                command = copy.deepcopy(SPEED_PROFILE_TEMPLATE)
                 command['print']['param'] = f"{id}"
                 self._client.publish(command)
                 self._client.callback("event_speed_update")
@@ -3213,7 +3266,7 @@ class StageAction:
             self._print_type = "unknown"
 
         # New way it is presented
-        self._id = int(data.get("stage", {}).get("_id", self._id))
+        self._id = int((data.get("stage") or {}).get("_id", self._id))
         # Old way it's presented
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):

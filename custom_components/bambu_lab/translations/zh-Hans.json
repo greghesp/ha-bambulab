@@ -753,10 +753,10 @@
         }
       },
       "right_nozzle_diameter": {
-        "name": "正确的喷嘴大小"
+        "name": "右喷嘴大小"
       },
       "right_nozzle_type": {
-        "name": "正确的喷嘴类型",
+        "name": "右喷嘴类型",
         "state": {
           "hardened_steel": "硬化钢",
           "stainless_steel": "不锈钢",

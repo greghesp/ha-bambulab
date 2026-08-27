@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import copy
 import functools
 import os
 import re
@@ -15,6 +16,7 @@ from homeassistant.helpers import (
     device_registry,
     entity_registry
 )
+from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.core import Event, HomeAssistant, callback
@@ -148,12 +150,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     data=self.config_entry.data,
                     options=options)
 
+        # Image updates are dispatched directly to the affected image entity instead of
+        # refreshing the full entity set - chamber images arrive at up to a couple of
+        # frames per second and a full refresh per frame is needlessly expensive.
         elif event == "event_printer_chamber_image_update":
             if self.get_option_enabled(Options.IMAGECAMERA):
-                self._update_data()
+                async_dispatcher_send(self._hass, self.image_update_signal("chamber"))
 
         elif event == "event_printer_cover_image_update":
-            self._update_data()
+            async_dispatcher_send(self._hass, self.image_update_signal("cover"))
+
+        elif event == "event_printer_pick_image_update":
+            async_dispatcher_send(self._hass, self.image_update_signal("pick"))
+
+        elif event == "event_printer_missing_sdcard":
+            self.PublishDeviceTriggerEvent(event)
 
         elif event == "event_printer_error":
             self._update_printer_error()
@@ -303,7 +314,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         future.set_result(result)
         
     def _service_call_skip_objects(self, data: dict):
-        command = SKIP_OBJECTS_TEMPLATE
+        # All command templates are deep-copied before mutation - filling in the shared
+        # global corrupts concurrent service calls and later reuses of the template.
+        command = copy.deepcopy(SKIP_OBJECTS_TEMPLATE)
         objects = data.get("objects")
 
         # normalize to list[int]
@@ -333,7 +346,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client.publish(command)
 
     def _service_call_send_gcode(self, data: dict):
-        command = SEND_GCODE_TEMPLATE
+        command = copy.deepcopy(SEND_GCODE_TEMPLATE)
         command['print']['param'] = f"{data.get('command')}\n"
         self.client.publish(command)
 
@@ -345,7 +358,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error(f"Invalid axis '{axis}' or distance out of range '{distance}'")
             return False
         
-        command = SEND_GCODE_TEMPLATE
+        command = copy.deepcopy(SEND_GCODE_TEMPLATE)
         gcode = HOME_GCODE if axis == 'HOME' else MOVE_AXIS_GCODE
         speed = 900 if axis == 'Z' else 3000
         if axis != 'HOME':
@@ -372,7 +385,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return { "Success": False,
                      "Error": f"Nozzle temperature too low to perform extrusion: {nozzle_temp}ºC" }
 
-        command = SEND_GCODE_TEMPLATE
+        command = copy.deepcopy(SEND_GCODE_TEMPLATE)
         gcode = EXTRUDER_GCODE
         distance = (1 if move == 'EXTRUDE' else -1) * 10
 
@@ -460,7 +473,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return False
         
         ams_index = self._get_ams_index_from_device(ams_device)
-        command = AMS_FILAMENT_DRYING_TEMPLATE
+        command = copy.deepcopy(AMS_FILAMENT_DRYING_TEMPLATE)
         command['print']['ams_id'] = ams_index
         
         start_command = data['service'] == 'start_filament_drying'
@@ -504,11 +517,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
         
         if self.get_model().supports_feature(Features.AMS_READ_RFID_COMMAND):
-            command = AMS_READ_RFID_TEMPLATE
+            command = copy.deepcopy(AMS_READ_RFID_TEMPLATE)
             command['print']['ams_id'] = ams_index
             command['print']['slot_id'] = tray_index
         else:
-            command = SEND_GCODE_TEMPLATE
+            command = copy.deepcopy(SEND_GCODE_TEMPLATE)
             gcode = AMS_READ_RFID_GCODE
             gcode = gcode.format(global_tray_index = (ams_index*4) + tray_index)
             command['print']['param'] = gcode
@@ -557,7 +570,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # String must be upper case
         tray_color = tray_color.upper()
 
-        command = AMS_FILAMENT_SETTING_TEMPLATE
+        command = copy.deepcopy(AMS_FILAMENT_SETTING_TEMPLATE)
         command['print']['ams_id'] = ams_index
         command['print']['tray_info_idx'] = data.get('tray_info_idx', '')
         command['print']['tray_id'] = tray_index
@@ -653,7 +666,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error(f"An AMS tray or external spool is required")
             return False
 
-        command = SWITCH_AMS_TEMPLATE
+        command = copy.deepcopy(SWITCH_AMS_TEMPLATE)
         command['print']['ams_id'] = ams_index
         command['print']['slot_id'] = tray
         command['print']['target'] = target
@@ -678,14 +691,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error(f"Loading filament is not available for this printer's firmware version, please update it")
             return False
 
-        command = SWITCH_AMS_TEMPLATE
+        command = copy.deepcopy(SWITCH_AMS_TEMPLATE)
         command['print']['ams_id'] = ams_index
         command['print']['slot_id'] = 255
         command['print']['target'] = 255
         self.client.publish(command)
 
     def _service_call_print_project_file(self, data: dict):
-        command = PRINT_PROJECT_FILE_TEMPLATE
+        command = copy.deepcopy(PRINT_PROJECT_FILE_TEMPLATE)
         filepath = data.get("filepath")
         plate = data.get("plate", 1)
         timelapse = data.get("timelapse", False)
@@ -878,6 +891,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def PublishDeviceTriggerEvent(self, event: str):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        if hadevice is None:
+            # Events can arrive during initial connect, before the device entry exists.
+            LOGGER.debug(f"PublishDeviceTriggerEvent: device not registered yet, skipping {event}")
+            return
 
         event_data = {
             "device_id": hadevice.id,
@@ -886,6 +903,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         }
         LOGGER.debug(f"BUS EVENT: {event}: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
+
+    def image_update_signal(self, image_type: str) -> str:
+        """Dispatcher signal for targeted image entity updates."""
+        return f"{DOMAIN}_{self.config_entry.data['serial']}_{image_type}_image_update"
 
     def get_model(self):
         return self.client.get_device()
