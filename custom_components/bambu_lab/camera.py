@@ -5,11 +5,11 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
 from io import BytesIO
 from PIL import Image, ImageDraw
-from urllib.parse import urlparse
 
 from .const import DOMAIN, LOGGER, Options
 from .models import BambuLabEntity
 from .pybambu.const import Features, Printers, RTSP_CAMERA_PRINTERS
+from .pybambu.utils import get_authenticated_rtsp_url
 from .definitions import BambuLabSensorEntityDescription
 
 from homeassistant.components.camera import Camera, CameraEntityFeature
@@ -97,8 +97,8 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
         """Initialize the sensor."""
 
         self._attr_unique_id = f"{config_entry.data['serial']}_camera"
-        self._access_code = config_entry.options['access_code']
-        self._host = config_entry.options['host']
+        self._access_code = config_entry.options.get("access_code", "")
+        self._host = config_entry.options.get("host", "")
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
@@ -106,6 +106,11 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
     @property
     def is_streaming(self) -> bool:
         return self.available
+
+    @property
+    def available(self) -> bool:
+        """Return whether the printer has supplied a usable RTSP endpoint."""
+        return super().available and self._stream_source() is not None
 
     @property
     def is_recording(self) -> bool:
@@ -116,21 +121,14 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
         return True
 
     async def stream_source(self) -> str | None:
-        if self.available:
-            # rtsps://192.168.1.1/streaming/live/1
-            parsed_url = urlparse(self.coordinator.get_model().camera.rtsp_url)
-            split_host = parsed_url.netloc.split(':')
-            if self._host != "":
-                # For unknown reasons the returned rtsp URL sometimes has a completely incorrect IP address in it for the host.
-                # If we have the host IP (may not in bambu cloud mode), rewrite the URL to have that.
-                port = "322" if (len(split_host) == 1) else split_host[1]
-                url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{self._host}:{port}{parsed_url.path}"
-            else:
-                url = fr"{parsed_url.scheme}://bblp:{self._access_code}@{parsed_url.netloc}{parsed_url.path}"
-            LOGGER.debug(f"Adjusted RTSP URL: {url.replace(self._access_code, '**REDACTED**')}")
-            return str(url)
-        LOGGER.debug("No RTSP Feed available")
-        return None
+        return self._stream_source()
+
+    def _stream_source(self) -> str | None:
+        return get_authenticated_rtsp_url(
+            self.coordinator.get_model().camera.rtsp_url,
+            self._host,
+            self._access_code,
+        )
 
     def camera_image(self, width=None, height=None):
         """Return a still image placeholder if RTSP fails."""

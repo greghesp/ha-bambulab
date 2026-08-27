@@ -9,6 +9,7 @@ import socket
 import re
 
 from datetime import datetime, timedelta, timezone
+from urllib.parse import quote, urlparse, urlunparse
 from urllib3.exceptions import ReadTimeoutError
 from bs4 import BeautifulSoup
 from pathlib import Path
@@ -44,6 +45,32 @@ def get_ams_unit_name(index: int, model: str) -> str:
     if model == "AMS HT" and 128 <= index <= 135:
         return f"AMS HT {index - 127}"
     return f"AMS {index + 1}"
+
+
+def get_authenticated_rtsp_url(
+    reported_url: str | None,
+    configured_host: str,
+    access_code: str,
+) -> str | None:
+    """Build an authenticated RTSP URL, or None when LiveView is disabled."""
+    if not reported_url or reported_url == "disable" or not access_code:
+        return None
+
+    parsed_url = urlparse(reported_url)
+    if parsed_url.scheme not in ("rtsp", "rtsps") or not parsed_url.hostname:
+        return None
+
+    host = configured_host or parsed_url.hostname
+    if ":" in host and not host.startswith("["):
+        host = f"[{host}]"
+
+    try:
+        port = parsed_url.port or 322
+    except ValueError:
+        return None
+
+    credentials = f"bblp:{quote(access_code, safe='')}@"
+    return urlunparse(parsed_url._replace(netloc=f"{credentials}{host}:{port}"))
 
 
 def fan_percentage(speed):
