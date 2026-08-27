@@ -2493,6 +2493,8 @@ class Hotend:
         self.type_name: str = "unknown"
         self.serial: str = ""
         self.tm: int = 0
+        # Total nozzle printing time in seconds (the printer's ``p_t`` field).
+        self.print_time: int = 0
         self.wear: int = 0
         self.stat: int = 0
         self.color_m: str = "00000000"
@@ -2527,6 +2529,7 @@ class Hotend:
             self.type_name = Info._nozzle_type_name(type_code) if type_code else "unknown"
         self.serial = data.get("sn", self.serial)
         self.tm = data.get("tm", self.tm)
+        self.print_time = data.get("p_t", self.print_time)
         self.wear = data.get("wear", self.wear)
         self.stat = data.get("stat", self.stat)
         self.color_m = data.get("color_m", self.color_m)

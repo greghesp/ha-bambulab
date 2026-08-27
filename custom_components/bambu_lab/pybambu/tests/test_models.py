@@ -9,7 +9,21 @@ import json
 # Add the parent directory to the Python path to find pybambu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, Camera, StageAction, ams_slot_name
+from pybambu.models import (
+    AMSList,
+    Camera,
+    Extruder,
+    Fans,
+    HMSList,
+    Hotend,
+    HotendRack,
+    Info,
+    PrintError,
+    PrintJob,
+    StageAction,
+    Temperature,
+    ams_slot_name,
+)
 from pybambu.const import FansEnum, Printers
 
 class TestPrintJob(unittest.TestCase):
@@ -709,7 +723,45 @@ class TestH2D(unittest.TestCase):
         self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
 
 
+class TestH2CHotendRack(unittest.TestCase):
+    """Regression coverage for H2C Vortek telemetry."""
 
+    def setUp(self):
+        self.rack = HotendRack(MagicMock())
+
+    def test_print_time_is_parsed_in_seconds(self):
+        data = {
+            "device": {
+                "nozzle": {
+                    "exist": 1 << 16,
+                    "info": [{"id": 16, "p_t": 7384, "type": "NH01"}],
+                    "tar_id": 16,
+                }
+            }
+        }
+
+        self.assertTrue(self.rack.print_update(data))
+        self.assertEqual(self.rack.hotends[16].print_time, 7384)
+
+    def test_partial_update_preserves_print_time(self):
+        hotend = Hotend(16)
+        hotend.print_update({"p_t": 7384})
+
+        self.assertTrue(hotend.print_update({"wear": 1}))
+        self.assertEqual(hotend.print_time, 7384)
+
+    def test_non_vortek_payload_is_ignored(self):
+        data = {
+            "device": {
+                "nozzle": {
+                    "exist": 1,
+                    "info": [{"id": 0, "p_t": 7384, "type": "NH01"}],
+                }
+            }
+        }
+
+        self.assertFalse(self.rack.print_update(data))
+        self.assertEqual(self.rack.hotends, {})
 
 class TestFans(unittest.TestCase):
     """Regression tests for the SECONDARY_AUXILIARY fan path.
