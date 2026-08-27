@@ -10,7 +10,15 @@ import json
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, Camera, StageAction, ams_slot_name
-from pybambu.const import FansEnum, Printers
+from pybambu.const import FansEnum, Printers, RTSP_CAMERA_PRINTERS
+
+
+class TestRTSPCameraSupport(unittest.TestCase):
+    def test_h2c_is_known_before_runtime_model_initialization(self):
+        self.assertIn(Printers.H2C, RTSP_CAMERA_PRINTERS)
+
+    def test_image_camera_model_is_not_misclassified(self):
+        self.assertNotIn(Printers.A1, RTSP_CAMERA_PRINTERS)
 
 class TestPrintJob(unittest.TestCase):
     def setUp(self):

@@ -25,6 +25,18 @@ class Printers(StrEnum):
     X1C = "X1C"
     X1 = "X1"
 
+RTSP_CAMERA_PRINTERS = frozenset({
+    Printers.H2C,
+    Printers.H2D,
+    Printers.H2DPRO,
+    Printers.H2S,
+    Printers.P2S,
+    Printers.X1,
+    Printers.X1C,
+    Printers.X1E,
+    Printers.X2D,
+})
+
 # Printers that use file:///sdcard/ URL format for print jobs.
 # All other printers default to ftp:/// format.
 LEGACY_SDCARD_PRINTERS = [

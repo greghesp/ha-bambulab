@@ -50,6 +50,7 @@ from .const import (
     Home_Flag_Values,
     Stat_Flag_Values,
     Printers,
+    RTSP_CAMERA_PRINTERS,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
@@ -175,7 +176,7 @@ class Device:
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
         # the very first payload.
         if feature == Features.CAMERA_RTSP:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
+            return model in RTSP_CAMERA_PRINTERS
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | a2_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
