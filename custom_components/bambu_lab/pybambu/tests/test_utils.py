@@ -8,7 +8,17 @@ from typing import Dict, Any, Callable, Optional
 from ..const import (
     LOGGER,
 )
-from ..utils import safe_json_loads, fan_percentage
+from ..utils import safe_json_loads, fan_percentage, get_ams_unit_name
+
+
+class TestAMSUnitName(unittest.TestCase):
+    def test_regular_ams_uses_one_based_index(self):
+        self.assertEqual(get_ams_unit_name(0, "AMS 2 Pro"), "AMS 1")
+        self.assertEqual(get_ams_unit_name(3, "AMS"), "AMS 4")
+
+    def test_ams_ht_protocol_index_is_not_exposed(self):
+        self.assertEqual(get_ams_unit_name(128, "AMS HT"), "AMS HT 1")
+        self.assertEqual(get_ams_unit_name(135, "AMS HT"), "AMS HT 8")
 
 
 class TestFanPercentage(unittest.TestCase):
@@ -221,4 +231,4 @@ class MockMQTTClient:
 
     def reconnect_delay_set(self, min_delay: int = 1, max_delay: int = 120) -> None:
         """Mock setting reconnect delay parameters."""
-        pass 
+        pass

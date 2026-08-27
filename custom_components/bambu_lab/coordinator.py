@@ -62,6 +62,7 @@ from .pybambu.commands import (
     RETRY_LOAD_FILAMENT_TEMPLATE,
     DONE_LOAD_FILAMENT_TEMPLATE
 )
+from .pybambu.utils import get_ams_unit_name
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
@@ -925,15 +926,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def get_ams_device(self, index):
-        # Adjust indices to be 1-based for normal AMS, 128-based for HT.
-        ams_index = index
-        if ams_index < 128:
-            ams_index = index + 1
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
-        device_name = f"{device_type}_{printer_serial}_AMS_{ams_index}"
         ams_serial = self.get_model().ams.data[index].serial
         model = self.get_model().ams.data[index].model
+        ams_name = get_ams_unit_name(index, model).replace(" ", "_")
+        device_name = f"{device_type}_{printer_serial}_{ams_name}"
 
         return DeviceInfo(
             identifiers={(DOMAIN, ams_serial)},
