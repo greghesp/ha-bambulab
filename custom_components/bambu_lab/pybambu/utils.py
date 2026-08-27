@@ -39,6 +39,14 @@ def search(lst, predicate, default={}):
     return default
 
 
+def external_spool_device_name(device_type: str, serial: str, suffix: str) -> str:
+    """Return a stable display name for an external-spool device."""
+    if device_type == Printers.H2C:
+        side = {"": "Left", "2": "Right"}.get(suffix, suffix)
+        return f"{device_type}_{serial}_ExternalSpool_{side}"
+    return f"{device_type}_{serial}_ExternalSpool{suffix}"
+
+
 def fan_percentage(speed):
     """Converts a fan speed to percentage.
 

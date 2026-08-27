@@ -62,6 +62,7 @@ from .pybambu.commands import (
     RETRY_LOAD_FILAMENT_TEMPLATE,
     DONE_LOAD_FILAMENT_TEMPLATE
 )
+from .pybambu.utils import external_spool_device_name
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
@@ -948,7 +949,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def get_virtual_tray_device(self, suffix: str):
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
-        device_name=f"{device_type}_{printer_serial}_ExternalSpool{suffix}"
+        device_name = external_spool_device_name(
+            device_type, printer_serial, suffix
+        )
 
         return DeviceInfo(
             identifiers={(DOMAIN, f"{printer_serial}_ExternalSpool{suffix}")},

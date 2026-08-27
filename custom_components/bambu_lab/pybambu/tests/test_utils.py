@@ -7,8 +7,31 @@ from typing import Dict, Any, Callable, Optional
 
 from ..const import (
     LOGGER,
+    Printers,
 )
-from ..utils import safe_json_loads, fan_percentage
+from ..utils import external_spool_device_name, safe_json_loads, fan_percentage
+
+
+class TestExternalSpoolDeviceName(unittest.TestCase):
+    def test_h2c_spools_are_named_by_physical_side(self):
+        self.assertEqual(
+            external_spool_device_name(Printers.H2C, "SERIAL", ""),
+            "H2C_SERIAL_ExternalSpool_Left",
+        )
+        self.assertEqual(
+            external_spool_device_name(Printers.H2C, "SERIAL", "2"),
+            "H2C_SERIAL_ExternalSpool_Right",
+        )
+
+    def test_other_printer_names_remain_unchanged(self):
+        self.assertEqual(
+            external_spool_device_name(Printers.H2D, "SERIAL", ""),
+            "H2D_SERIAL_ExternalSpool",
+        )
+        self.assertEqual(
+            external_spool_device_name(Printers.H2D, "SERIAL", "2"),
+            "H2D_SERIAL_ExternalSpool2",
+        )
 
 
 class TestFanPercentage(unittest.TestCase):
@@ -221,4 +244,4 @@ class MockMQTTClient:
 
     def reconnect_delay_set(self, min_delay: int = 1, max_delay: int = 120) -> None:
         """Mock setting reconnect delay parameters."""
-        pass 
+        pass
