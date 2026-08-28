@@ -31,7 +31,7 @@ from .commands import (
     PUSH_ALL,
     START_PUSH,
 )
-from .tests import MockMQTTClient
+from .mock_mqtt_client import MockMQTTClient
 from .utils import safe_json_loads
 
 class WatchdogThread(threading.Thread):

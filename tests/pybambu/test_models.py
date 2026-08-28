@@ -2,12 +2,8 @@ import logging
 import unittest
 from unittest.mock import call, MagicMock
 from datetime import datetime
-import sys
 import os
 import json
-
-# Add the parent directory to the Python path to find pybambu
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, Camera, StageAction, ams_slot_name
 from pybambu.const import FansEnum, Printers

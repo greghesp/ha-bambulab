@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from ..bambu_cloud import (
+from pybambu.bambu_cloud import (
     BambuCloud,
     CloudflareError,
     CsrfError,
