@@ -8,7 +8,8 @@
       "event_print_error": "Chyba tlače",
       "event_print_error_cleared": "Odstránená chyba tlače",
       "event_printer_error": "Chyba HMS",
-      "event_printer_error_cleared": "Chyba HMS odstránená"
+      "event_printer_error_cleared": "Chyba HMS odstránená",
+      "event_printer_missing_sdcard": "Chýba SD karta"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Spojenie bolo odmietnuté cloudom Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Cloudová adresa Bambu Lab je nedostupná.",
       "cannot_connect_cloud_unknown": "Neznáma chyba pri pripájaní k cloudu Bambu Lab.",
-      "cannot_connect_local_unknown": "Nepodarilo sa pripojiť. Skontrolujte poskytnuté nastavenia."
+      "cannot_connect_local_unknown": "Nepodarilo sa pripojiť. Skontrolujte poskytnuté nastavenia.",
+      "tfa_csrf_fallback": "Koncový bod dvojfaktorovej autentifikácie Bambu Lab momentálne odmieta žiadosti. Namiesto toho bol na váš e-mail alebo telefón odoslaný overovací kód – zadajte ho nižšie."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Spojenie bolo odmietnuté cloudom Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Cloudová adresa Bambu Lab je nedostupná.",
       "cannot_connect_cloud_unknown": "Neznáma chyba pri pripájaní k cloudu Bambu Lab.",
-      "cannot_connect_local_unknown": "Nepodarilo sa pripojiť. Skontrolujte poskytnuté nastavenia."
+      "cannot_connect_local_unknown": "Nepodarilo sa pripojiť. Skontrolujte poskytnuté nastavenia.",
+      "tfa_csrf_fallback": "Koncový bod dvojfaktorovej autentifikácie Bambu Lab momentálne odmieta žiadosti. Namiesto toho bol na váš e-mail alebo telefón odoslaný overovací kód – zadajte ho nižšie."
     },
     "step": {
       "init": {
@@ -566,7 +569,8 @@
           "high_flow_hardened_steel": "kalená oceľ s veľkým prietokom",
           "high_flow_stainless_steel": "nehrdzavejúca oceľ s veľkým prietokom",
           "high_flow_tungsten_carbide": "karbid volfrámu s veľkým prietokom",
-          "unknown": "Neznámy"
+          "unknown": "Neznámy",
+          "tpu_high_flow": "TPU High-Flow"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Sušiace vlákno"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} využil čas"
       }
     },
     "camera": {

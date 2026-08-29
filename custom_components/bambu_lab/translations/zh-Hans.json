@@ -877,6 +877,9 @@
       },
       "drying_filament": {
         "name": "干燥丝"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} 使用时间"
       }
     },
     "camera": {

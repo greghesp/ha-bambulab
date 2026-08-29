@@ -8,7 +8,8 @@
       "event_print_error": "Error de impresión",
       "event_print_error_cleared": "Error de impresión borrado",
       "event_printer_error": "error de HMS",
-      "event_printer_error_cleared": "Error de HMS borrado"
+      "event_printer_error_cleared": "Error de HMS borrado",
+      "event_printer_missing_sdcard": "Falta tarjeta SD"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Conexión rechazada por la nube de Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Dirección de nube de Bambu Lab inalcanzable.",
       "cannot_connect_cloud_unknown": "Error desconocido al conectarse a la nube de Bambu Lab.",
-      "cannot_connect_local_unknown": "No se pudo conectar. Verifique la configuración proporcionada."
+      "cannot_connect_local_unknown": "No se pudo conectar. Verifique la configuración proporcionada.",
+      "tfa_csrf_fallback": "El punto final de autenticación de dos factores de Bambu Lab actualmente rechaza solicitudes. En su lugar, se envió un código de verificación a su correo electrónico o teléfono; ingréselo a continuación."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Conexión rechazada por la nube de Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Dirección de nube de Bambu Lab inalcanzable.",
       "cannot_connect_cloud_unknown": "Error desconocido al conectarse a la nube de Bambu Lab.",
-      "cannot_connect_local_unknown": "No se pudo conectar. Verifique la configuración proporcionada."
+      "cannot_connect_local_unknown": "No se pudo conectar. Verifique la configuración proporcionada.",
+      "tfa_csrf_fallback": "El punto final de autenticación de dos factores de Bambu Lab actualmente rechaza solicitudes. En su lugar, se envió un código de verificación a su correo electrónico o teléfono; ingréselo a continuación."
     },
     "step": {
       "init": {
@@ -566,7 +569,8 @@
           "high_flow_hardened_steel": "acero endurecido con flujo grande",
           "high_flow_stainless_steel": "acero inoxidable con flujo grande",
           "high_flow_tungsten_carbide": "Carburo de tungsteno con gran flujo",
-          "unknown": "Desconocido"
+          "unknown": "Desconocido",
+          "tpu_high_flow": "TPU de alto flujo"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Filamento de secado"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Tiempo de uso del hotend {hotend_id}"
       }
     },
     "camera": {

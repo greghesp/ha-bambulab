@@ -8,7 +8,8 @@
       "event_print_error": "Σφάλμα εκτύπωσης",
       "event_print_error_cleared": "Το σφάλμα εκτύπωσης διαγράφηκε",
       "event_printer_error": "Σφάλμα HMS",
-      "event_printer_error_cleared": "Το σφάλμα HMS διαγράφηκε"
+      "event_printer_error_cleared": "Το σφάλμα HMS διαγράφηκε",
+      "event_printer_missing_sdcard": "Λείπει κάρτα SD"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Η σύνδεση απορρίφθηκε από το σύννεφο Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Η διεύθυνση cloud του Bambu Lab δεν είναι προσβάσιμη.",
       "cannot_connect_cloud_unknown": "Άγνωστο σφάλμα σύνδεσης στο νέφος Bambu Lab.",
-      "cannot_connect_local_unknown": "Αποτυχία σύνδεσης. Ελέγξτε τις παρεχόμενες ρυθμίσεις."
+      "cannot_connect_local_unknown": "Αποτυχία σύνδεσης. Ελέγξτε τις παρεχόμενες ρυθμίσεις.",
+      "tfa_csrf_fallback": "Το τελικό σημείο ελέγχου ταυτότητας δύο παραγόντων της Bambu Lab απορρίπτει προς το παρόν αιτήματα. Ένας κωδικός επαλήθευσης έχει σταλεί στο email ή στο τηλέφωνό σας - πληκτρολογήστε τον παρακάτω."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Η σύνδεση απορρίφθηκε από το σύννεφο Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Η διεύθυνση cloud του Bambu Lab δεν είναι προσβάσιμη.",
       "cannot_connect_cloud_unknown": "Άγνωστο σφάλμα σύνδεσης στο νέφος Bambu Lab.",
-      "cannot_connect_local_unknown": "Αποτυχία σύνδεσης. Ελέγξτε τις παρεχόμενες ρυθμίσεις."
+      "cannot_connect_local_unknown": "Αποτυχία σύνδεσης. Ελέγξτε τις παρεχόμενες ρυθμίσεις.",
+      "tfa_csrf_fallback": "Το τελικό σημείο ελέγχου ταυτότητας δύο παραγόντων της Bambu Lab απορρίπτει προς το παρόν αιτήματα. Ένας κωδικός επαλήθευσης έχει σταλεί στο email ή στο τηλέφωνό σας - πληκτρολογήστε τον παρακάτω."
     },
     "step": {
       "init": {
@@ -566,7 +569,8 @@
           "high_flow_hardened_steel": "σκληρυμένος χάλυβας με μεγάλη ροή",
           "high_flow_stainless_steel": "από ανοξείδωτο χάλυβα με μεγάλη ροή",
           "high_flow_tungsten_carbide": "καρβίδιο βολφραμίου με μεγάλη ροή",
-          "unknown": "Αγνωστος"
+          "unknown": "Αγνωστος",
+          "tpu_high_flow": "TPU υψηλής ροής"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Νήμα ξήρανσης"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Χρόνος χρήσης του Hotend {hotend_id}"
       }
     },
     "camera": {

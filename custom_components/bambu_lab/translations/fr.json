@@ -8,7 +8,8 @@
       "event_print_error": "Erreur d'impression",
       "event_print_error_cleared": "Erreur d'impression effacée",
       "event_printer_error": "Erreur HMS",
-      "event_printer_error_cleared": "Erreur HMS effacée"
+      "event_printer_error_cleared": "Erreur HMS effacée",
+      "event_printer_missing_sdcard": "Carte SD manquante"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Connexion refusée par le cloud Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Adresse cloud de Bambu Lab inaccessible.",
       "cannot_connect_cloud_unknown": "Erreur inconnue lors de la connexion au cloud Bambu Lab.",
-      "cannot_connect_local_unknown": "Échec de la connexion. Vérifiez les paramètres fournis."
+      "cannot_connect_local_unknown": "Échec de la connexion. Vérifiez les paramètres fournis.",
+      "tfa_csrf_fallback": "Le point de terminaison d'authentification à deux facteurs de Bambu Lab rejette actuellement les demandes. Un code de vérification a été envoyé à votre adresse e-mail ou par téléphone - veuillez le saisir ci-dessous."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Connexion refusée par le cloud Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Adresse cloud de Bambu Lab inaccessible.",
       "cannot_connect_cloud_unknown": "Erreur inconnue lors de la connexion au cloud Bambu Lab.",
-      "cannot_connect_local_unknown": "Échec de la connexion. Vérifiez les paramètres fournis."
+      "cannot_connect_local_unknown": "Échec de la connexion. Vérifiez les paramètres fournis.",
+      "tfa_csrf_fallback": "Le point de terminaison d'authentification à deux facteurs de Bambu Lab rejette actuellement les demandes. Un code de vérification a été envoyé à votre adresse e-mail ou par téléphone - veuillez le saisir ci-dessous."
     },
     "step": {
       "init": {
@@ -574,7 +577,8 @@
           "high_flow_hardened_steel": "Haut débit acier trempé",
           "high_flow_stainless_steel": "Haut débit acier inoxydable",
           "high_flow_tungsten_carbide": "Haut débit carbure de tungstène",
-          "unknown": "Inconnu"
+          "unknown": "Inconnu",
+          "tpu_high_flow": "TPU haut débit"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "secondary_aux_fan_speed": {
         "name": "Vitesse du ventilateur auxiliaire secondaire"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} temps utilisé"
       }
     },
     "camera": {

@@ -8,7 +8,8 @@
       "event_print_error": "Print fejl",
       "event_print_error_cleared": "Print fejl ryddet",
       "event_printer_error": "HMS fejl",
-      "event_printer_error_cleared": "HMS fejl ryddet"
+      "event_printer_error_cleared": "HMS fejl ryddet",
+      "event_printer_missing_sdcard": "Mangler SD-kort"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Forbindelse nægtet af Bambu Lab-skyen.",
       "cannot_connect_cloud_address_unreachable": "Bambu Labs cloud-adresse kan ikke nås.",
       "cannot_connect_cloud_unknown": "Ukendt fejl ved forbindelse til Bambu Lab-skyen.",
-      "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger."
+      "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger.",
+      "tfa_csrf_fallback": "Bambu Labs tofaktorautentificeringsslutpunkt afviser i øjeblikket anmodninger. En bekræftelseskode er blevet sendt til din e-mail eller telefon i stedet - indtast den nedenfor."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Forbindelse nægtet af Bambu Lab-skyen.",
       "cannot_connect_cloud_address_unreachable": "Bambu Labs cloud-adresse kan ikke nås.",
       "cannot_connect_cloud_unknown": "Ukendt fejl ved forbindelse til Bambu Lab-skyen.",
-      "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger."
+      "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger.",
+      "tfa_csrf_fallback": "Bambu Labs tofaktorautentificeringsslutpunkt afviser i øjeblikket anmodninger. En bekræftelseskode er blevet sendt til din e-mail eller telefon i stedet - indtast den nedenfor."
     },
     "step": {
       "init": {
@@ -566,7 +569,8 @@
           "high_flow_hardened_steel": "hærdet stål med stor strømning",
           "high_flow_stainless_steel": "rustfrit stål med stor strømning",
           "high_flow_tungsten_carbide": "wolframcarbid med stor strømning",
-          "unknown": "Ukendt"
+          "unknown": "Ukendt",
+          "tpu_high_flow": "TPU High-Flow"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Tørring af filament"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} brugt tid"
       }
     },
     "camera": {

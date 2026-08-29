@@ -8,7 +8,8 @@
       "event_print_error": "Error d'impressió",
       "event_print_error_cleared": "Error d'impressió esborrat",
       "event_printer_error": "Error d'HMS",
-      "event_printer_error_cleared": "Error d'HMS esborrat"
+      "event_printer_error_cleared": "Error d'HMS esborrat",
+      "event_printer_missing_sdcard": "Falta la targeta SD"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Connexió rebutjada pel núvol de Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "L'adreça del núvol de Bambu Lab no és accessible.",
       "cannot_connect_cloud_unknown": "Error desconegut en connectar-se al núvol de Bambu Lab.",
-      "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada."
+      "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada.",
+      "tfa_csrf_fallback": "Actualment, el punt final d'autenticació de dos factors de Bambu Lab està rebutjant sol·licituds. S'ha enviat un codi de verificació al vostre correu electrònic o telèfon; introduïu-lo a continuació."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Connexió rebutjada pel núvol de Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "L'adreça del núvol de Bambu Lab no és accessible.",
       "cannot_connect_cloud_unknown": "Error desconegut en connectar-se al núvol de Bambu Lab.",
-      "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada."
+      "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada.",
+      "tfa_csrf_fallback": "Actualment, el punt final d'autenticació de dos factors de Bambu Lab està rebutjant sol·licituds. S'ha enviat un codi de verificació al vostre correu electrònic o telèfon; introduïu-lo a continuació."
     },
     "step": {
       "init": {
@@ -566,7 +569,8 @@
           "high_flow_hardened_steel": "Acer endurit amb un gran flux",
           "high_flow_stainless_steel": "Acer inoxidable amb un gran flux",
           "high_flow_tungsten_carbide": "Carbur de tungstè amb gran flux",
-          "unknown": "Desconegut"
+          "unknown": "Desconegut",
+          "tpu_high_flow": "TPU d'alt flux"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Filament d'assecat"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} temps utilitzat"
       }
     },
     "camera": {

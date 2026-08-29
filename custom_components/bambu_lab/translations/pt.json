@@ -8,7 +8,8 @@
       "event_print_error": "Erro de impressão",
       "event_print_error_cleared": "Erro de impressão resolvido",
       "event_printer_error": "Erro HMS",
-      "event_printer_error_cleared": "Erro HMS resolvido"
+      "event_printer_error_cleared": "Erro HMS resolvido",
+      "event_printer_missing_sdcard": "Cartão SD ausente"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "verifyCode": "O código de verificação é obrigatório. Verifica o teu e-mail ou telemóvel.",
       "code_expired": "Código de verificação expirado. Novo código solicitado. Verifica o e-mail ou telemóvel.",
       "code_incorrect": "O código de verificação está incorreto. Tenta de novo.",
-      "tfaCode": "O código 2FA é obrigatório. Introduz o código agora."
+      "tfaCode": "O código 2FA é obrigatório. Introduz o código agora.",
+      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "verifyCode": "O código de verificação é obrigatório. Verifica o teu e-mail ou telemóvel.",
       "code_expired": "Código de verificação expirado. Novo código solicitado. Verifica o e-mail ou telemóvel.",
       "code_incorrect": "O código de verificação está incorreto. Tenta de novo.",
-      "tfaCode": "O código 2FA é obrigatório. Introduz o código agora."
+      "tfaCode": "O código 2FA é obrigatório. Introduz o código agora.",
+      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo."
     },
     "step": {
       "init": {
@@ -619,7 +622,8 @@
           "high_flow_hardened_steel": "Aço endurecido High Flow",
           "high_flow_stainless_steel": "Aço inoxidável High Flow",
           "high_flow_tungsten_carbide": "Carboneto de tungsténio High Flow",
-          "unknown": "Desconhecido"
+          "unknown": "Desconhecido",
+          "tpu_high_flow": "TPU de alto fluxo"
         }
       },
       "left_nozzle_diameter": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Filamento de secagem"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} usou tempo"
       }
     },
     "camera": {

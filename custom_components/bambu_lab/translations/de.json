@@ -38,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Verbindung wurde von der Bambu Lab-Cloud abgelehnt.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-Cloud-Adresse nicht erreichbar.",
       "cannot_connect_cloud_unknown": "Unbekannter Fehler beim Herstellen der Verbindung zur Bambu Lab-Cloud.",
-      "cannot_connect_local_unknown": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen."
+      "cannot_connect_local_unknown": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
+      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein."
     },
     "step": {
       "user": {
@@ -136,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Verbindung wurde von der Bambu Lab-Cloud abgelehnt.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-Cloud-Adresse nicht erreichbar.",
       "cannot_connect_cloud_unknown": "Unbekannter Fehler beim Herstellen der Verbindung zur Bambu Lab-Cloud.",
-      "cannot_connect_local_unknown": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen."
+      "cannot_connect_local_unknown": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
+      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein."
     },
     "step": {
       "init": {
@@ -570,7 +572,8 @@
           "high_flow_hardened_steel": "hartem Stahl mit großem Fluss",
           "high_flow_stainless_steel": "Edelstahl mit großem Fluss",
           "high_flow_tungsten_carbide": "Wolframkarbid mit großem Fluss",
-          "unknown": "Unbekannt"
+          "unknown": "Unbekannt",
+          "tpu_high_flow": "TPU-High-Flow"
         }
       },
       "humidity_index": {
@@ -874,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Trocknendes Filament"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} verwendete Zeit"
       }
     },
     "camera": {

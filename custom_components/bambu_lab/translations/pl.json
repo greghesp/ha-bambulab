@@ -8,7 +8,8 @@
       "event_print_error": "Błąd drukowania",
       "event_print_error_cleared": "Błąd drukowania usunięty",
       "event_printer_error": "Błąd HMS",
-      "event_printer_error_cleared": "Błąd HMS usunięty"
+      "event_printer_error_cleared": "Błąd HMS usunięty",
+      "event_printer_missing_sdcard": "Brakująca karta SD"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Połączenie odrzucone przez chmurę Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Adres chmury Bambu Lab jest nieosiągalny.",
       "cannot_connect_cloud_unknown": "Nieznany błąd podczas łączenia z chmurą Bambu Lab.",
-      "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia."
+      "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia.",
+      "tfa_csrf_fallback": "Punkt końcowy uwierzytelniania dwuskładnikowego Bambu Lab aktualnie odrzuca żądania. Zamiast tego na Twój adres e-mail lub telefon został wysłany kod weryfikacyjny – wpisz go poniżej."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Połączenie odrzucone przez chmurę Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Adres chmury Bambu Lab jest nieosiągalny.",
       "cannot_connect_cloud_unknown": "Nieznany błąd podczas łączenia z chmurą Bambu Lab.",
-      "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia."
+      "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia.",
+      "tfa_csrf_fallback": "Punkt końcowy uwierzytelniania dwuskładnikowego Bambu Lab aktualnie odrzuca żądania. Zamiast tego na Twój adres e-mail lub telefon został wysłany kod weryfikacyjny – wpisz go poniżej."
     },
     "step": {
       "init": {
@@ -575,7 +578,8 @@
           "high_flow_hardened_steel": "stalowa stal z dużym przepływem",
           "high_flow_stainless_steel": "stal nierdzewna z dużym przepływem",
           "high_flow_tungsten_carbide": "Węglenie wolframowe z dużym przepływem",
-          "unknown": "Nieznany"
+          "unknown": "Nieznany",
+          "tpu_high_flow": "TPU o wysokim przepływie"
         }
       },
       "ip_address": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Suszenie włókna"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} wykorzystał czas"
       }
     },
     "camera": {

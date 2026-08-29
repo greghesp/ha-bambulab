@@ -8,7 +8,8 @@
       "event_print_error": "인쇄 오류",
       "event_print_error_cleared": "인쇄 오류가 해결되었습니다.",
       "event_printer_error": "HMS 오류",
-      "event_printer_error_cleared": "HMS 오류가 해결되었습니다."
+      "event_printer_error_cleared": "HMS 오류가 해결되었습니다.",
+      "event_printer_missing_sdcard": "SD 카드 없음"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Bambu Lab 클라우드에서 연결을 거부했습니다.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab 클라우드 주소에 연결할 수 없습니다.",
       "cannot_connect_cloud_unknown": "Bambu Lab 클라우드 연결에 알 수 없는 오류가 발생했습니다.",
-      "cannot_connect_local_unknown": "연결하지 못했습니다. 제공된 설정을 확인하세요."
+      "cannot_connect_local_unknown": "연결하지 못했습니다. 제공된 설정을 확인하세요.",
+      "tfa_csrf_fallback": "Bambu Lab의 2단계 인증 엔드포인트는 현재 요청을 거부하고 있습니다. 대신 이메일이나 휴대폰으로 인증코드가 전송되었습니다. 아래에 입력해주세요."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Bambu Lab 클라우드에서 연결을 거부했습니다.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab 클라우드 주소에 연결할 수 없습니다.",
       "cannot_connect_cloud_unknown": "Bambu Lab 클라우드 연결에 알 수 없는 오류가 발생했습니다.",
-      "cannot_connect_local_unknown": "연결하지 못했습니다. 제공된 설정을 확인하세요."
+      "cannot_connect_local_unknown": "연결하지 못했습니다. 제공된 설정을 확인하세요.",
+      "tfa_csrf_fallback": "Bambu Lab의 2단계 인증 엔드포인트는 현재 요청을 거부하고 있습니다. 대신 이메일이나 휴대폰으로 인증코드가 전송되었습니다. 아래에 입력해주세요."
     },
     "step": {
       "init": {
@@ -566,7 +569,8 @@
           "high_flow_hardened_steel": "큰 흐름이있는 강화 강철",
           "high_flow_stainless_steel": "큰 흐름이있는 스테인레스 스틸",
           "high_flow_tungsten_carbide": "큰 흐름이있는 텅스텐 카바이드",
-          "unknown": "알려지지 않은"
+          "unknown": "알려지지 않은",
+          "tpu_high_flow": "TPU 고유량"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "필라멘트 건조"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "핫엔드 {hotend_id} 사용 시간"
       }
     },
     "camera": {

@@ -8,7 +8,8 @@
       "event_print_error": "Printfout",
       "event_print_error_cleared": "Printfout gewist",
       "event_printer_error": "HMS-fout",
-      "event_printer_error_cleared": "HMS-fout gewist"
+      "event_printer_error_cleared": "HMS-fout gewist",
+      "event_printer_missing_sdcard": "Ontbrekende SD-kaart"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Verbinding geweigerd door Bambu Lab-cloud.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-cloudadres onbereikbaar.",
       "cannot_connect_cloud_unknown": "Onbekende fout bij het verbinden met de Bambu Lab-cloud.",
-      "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen."
+      "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen.",
+      "tfa_csrf_fallback": "Het tweefactorauthenticatie-eindpunt van Bambu Lab wijst momenteel verzoeken af. Er is in plaats daarvan een verificatiecode naar uw e-mailadres of telefoon verzonden. Voer deze hieronder in."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Verbinding geweigerd door Bambu Lab-cloud.",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-cloudadres onbereikbaar.",
       "cannot_connect_cloud_unknown": "Onbekende fout bij het verbinden met de Bambu Lab-cloud.",
-      "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen."
+      "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen.",
+      "tfa_csrf_fallback": "Het tweefactorauthenticatie-eindpunt van Bambu Lab wijst momenteel verzoeken af. Er is in plaats daarvan een verificatiecode naar uw e-mailadres of telefoon verzonden. Voer deze hieronder in."
     },
     "step": {
       "init": {
@@ -569,7 +572,8 @@
           "high_flow_hardened_steel": "gehard staal met grote stroom",
           "high_flow_stainless_steel": "roestvrij staal met grote stroom",
           "high_flow_tungsten_carbide": "wolfraamcarbide met grote stroom",
-          "unknown": "Onbekend"
+          "unknown": "Onbekend",
+          "tpu_high_flow": "TPU hoge stroom"
         }
       },
       "ip_address": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Drogend filament"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} gebruikte tijd"
       }
     },
     "camera": {
