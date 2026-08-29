@@ -8,7 +8,8 @@
       "event_print_error": "打印错误",
       "event_print_error_cleared": "打印错误已清除",
       "event_printer_error": "移动管理系统错误",
-      "event_printer_error_cleared": "HMS 错误已清除"
+      "event_printer_error_cleared": "HMS 错误已清除",
+      "event_printer_missing_sdcard": "缺少 SD 卡"
     }
   },
   "config": {
@@ -27,6 +28,7 @@
       "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
       "code_incorrect": "验证码不正确。",
       "tfaCode": "需要 2FA 代码。",
+      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或手机，请在下方输入。",
       "cannot_connect_local_timeout": "连接失败。连接超时。",
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
@@ -125,6 +127,7 @@
       "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
       "code_incorrect": "验证码不正确。",
       "tfaCode": "需要 2FA 代码。",
+      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或手机，请在下方输入。",
       "cannot_connect_local_timeout": "连接失败。连接超时。",
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
@@ -566,6 +569,7 @@
           "high_flow_hardened_steel": "硬化钢",
           "high_flow_stainless_steel": "不锈钢有大流动",
           "high_flow_tungsten_carbide": "碳化氢碳化物含量大",
+          "tpu_high_flow": "TPU 高流量",
           "unknown": "未知"
         }
       },
