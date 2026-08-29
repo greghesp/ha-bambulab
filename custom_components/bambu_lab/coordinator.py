@@ -62,7 +62,6 @@ from .pybambu.commands import (
     RETRY_LOAD_FILAMENT_TEMPLATE,
     DONE_LOAD_FILAMENT_TEMPLATE
 )
-from .pybambu.utils import get_ams_unit_name
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
@@ -926,12 +925,15 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def get_ams_device(self, index):
+        # Adjust indices to be 1-based for normal AMS, 128-based for HT.
+        ams_index = index
+        if ams_index < 128:
+            ams_index = index + 1
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
+        device_name = f"{device_type}_{printer_serial}_AMS_{ams_index}"
         ams_serial = self.get_model().ams.data[index].serial
         model = self.get_model().ams.data[index].model
-        ams_name = get_ams_unit_name(index, model).replace(" ", "_")
-        device_name = f"{device_type}_{printer_serial}_{ams_name}"
 
         return DeviceInfo(
             identifiers={(DOMAIN, ams_serial)},
@@ -1190,6 +1192,27 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         files.sort(key=lambda x: x['modified'], reverse=True)
         
         return files
+
+    @staticmethod
+    def _cache_sidecar_extensions(file_type: str) -> List[str]:
+        if file_type == 'prints':
+            return ['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode']
+        if file_type in ['gcode', 'timelapse']:
+            return ['.jpg', '.jpeg', '.png']
+        return []
+
+    @staticmethod
+    def _cache_part_patterns(file_type: str) -> List[str]:
+        type_patterns = {
+            'prints': ['*.3mf.part'],
+            'gcode': ['*.gcode.part'],
+            'timelapse': ['*.mp4.part', '*.avi.part', '*.mov.part'],
+        }
+        return type_patterns.get(file_type, [])
+
+    @staticmethod
+    def _cache_sidecar_paths(file_path: Path, file_type: str) -> List[Path]:
+        return [file_path.with_suffix(extension) for extension in BambuDataUpdateCoordinator._cache_sidecar_extensions(file_type)]
     
     async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:
         """Clear the file cache."""
@@ -1200,13 +1223,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             cache_path = Path(cache_dir)
             deleted_count = 0
+            deleted_paths = set()
+
+            def delete_path(file_path: Path) -> int:
+                if file_path in deleted_paths:
+                    return 0
+                if not file_path.is_file():
+                    return 0
+                file_path.unlink()
+                deleted_paths.add(file_path)
+                return 1
             
             if file_type == 'all':
                 # Delete all files in cache directory
                 for file_path in cache_path.rglob('*'):
-                    if file_path.is_file():
-                        file_path.unlink()
-                        deleted_count += 1
+                    deleted_count += delete_path(file_path)
             else:
                 # Delete only specific file type
                 type_patterns = {
@@ -1218,9 +1249,14 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 patterns = type_patterns.get(file_type, [])
                 for pattern in patterns:
                     for file_path in cache_path.rglob(pattern):
-                        if file_path.is_file():
-                            file_path.unlink()
-                            deleted_count += 1
+                        deleted_count += delete_path(file_path)
+                        for sidecar_path in self._cache_sidecar_paths(file_path, file_type):
+                            deleted_count += delete_path(sidecar_path)
+                        deleted_count += delete_path(Path(f"{file_path}.part"))
+
+                for pattern in self._cache_part_patterns(file_type):
+                    for file_path in cache_path.rglob(pattern):
+                        deleted_count += delete_path(file_path)
             
             return {
                 "success": True,

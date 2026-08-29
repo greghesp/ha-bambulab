@@ -50,7 +50,6 @@ from .const import (
     Home_Flag_Values,
     Stat_Flag_Values,
     Printers,
-    RTSP_CAMERA_PRINTERS,
     SPEED_PROFILE,
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
@@ -72,6 +71,19 @@ from .commands import (
     BUZZER_SET_BEEPING,
     HEATBED_LIGHT_ON,
     HEATBED_LIGHT_OFF,
+)
+from .media_sources import (
+    Ftps990MediaSource,
+    RemoteMediaError,
+    RemoteMediaFile,
+    RemoteMediaSource,
+    ProgressCallback,
+    Tcp6000MediaSource,
+    canonical_storage,
+    dedupe_remote_files,
+    sort_newest_first,
+    source_priority,
+    storage_cache_segment,
 )
 
 class Device:
@@ -176,7 +188,7 @@ class Device:
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
         # the very first payload.
         if feature == Features.CAMERA_RTSP:
-            return model in RTSP_CAMERA_PRINTERS
+            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | a2_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
@@ -1248,6 +1260,355 @@ class PrintJob:
     #     FILE: /cache/Lovers Valentine Day Shadowbox.3mf
     # 
 
+    def _remote_media_sources(self) -> list[RemoteMediaSource]:
+        if not self._client.ftp_enabled:
+            return []
+
+        try:
+            self._client.probe_remote_media_sources()
+        except Exception as e:
+            LOGGER.debug(f"Remote media source probe failed during media trigger: {type(e)} Args: {e}")
+
+        sources: list[RemoteMediaSource] = []
+        if self._client.tcp6000_media_supported is True:
+            sources.append(Tcp6000MediaSource(self._client))
+        sources.append(Ftps990MediaSource(self._client))
+        return sources
+
+    def _close_remote_media_sources(self, sources: list[RemoteMediaSource]) -> None:
+        for source in sources:
+            try:
+                source.close()
+            except Exception:
+                pass
+
+    def _collect_remote_files(
+        self,
+        sources: list[RemoteMediaSource],
+        media_type: str,
+        extensions: list[str],
+        ftps_search_paths: list[str] | None = None,
+    ) -> list[RemoteMediaFile]:
+        files: list[RemoteMediaFile] = []
+        for source in sources:
+            try:
+                source_files = source.list_files(
+                    media_type=media_type,
+                    extensions=extensions,
+                    search_paths=ftps_search_paths if source.name == Ftps990MediaSource.name else None,
+                )
+                LOGGER.debug(
+                    f"{source.name} found {len(source_files)} {media_type} candidate(s)"
+                )
+                files.extend(source_files)
+            except Exception as e:
+                LOGGER.debug(
+                    f"{source.name} failed listing {media_type}: {type(e)} Args: {e}"
+                )
+        return sort_newest_first(dedupe_remote_files(files))
+
+    def _download_remote_file_atomic(
+        self,
+        source: RemoteMediaSource,
+        remote_file: RemoteMediaFile,
+        final_path: Path,
+        progress_callback: ProgressCallback | None = None,
+    ) -> int:
+        final_path.parent.mkdir(parents=True, exist_ok=True)
+        part_path = Path(f"{final_path}.part")
+        try:
+            if part_path.exists():
+                part_path.unlink()
+        except Exception:
+            pass
+
+        try:
+            downloaded_size = source.download_file(
+                remote_file,
+                part_path,
+                progress_callback=progress_callback,
+            )
+            expected_size = int(remote_file.size or 0)
+            if expected_size > 0 and downloaded_size != expected_size:
+                raise RemoteMediaError(
+                    f"Remote download size mismatch for {remote_file.path}: "
+                    f"{downloaded_size} != {expected_size}"
+                )
+            os.replace(part_path, final_path)
+            return downloaded_size
+        except Exception:
+            try:
+                if part_path.exists():
+                    part_path.unlink()
+            except Exception:
+                pass
+            raise
+
+    def _same_remote_media_file(self, left: RemoteMediaFile, right: RemoteMediaFile) -> bool:
+        if left.media_type != right.media_type:
+            return False
+        if canonical_storage(left.storage) != canonical_storage(right.storage):
+            return False
+        left_path = left.path.replace("\\", "/").strip("/").lower()
+        right_path = right.path.replace("\\", "/").strip("/").lower()
+        if left_path and right_path and left_path == right_path:
+            return True
+        if left.size > 0 and right.size > 0 and left.size != right.size:
+            return False
+        return left.basename.lower() == right.basename.lower()
+
+    def _remote_file_aliases(
+        self,
+        remote_files: list[RemoteMediaFile],
+        selected: RemoteMediaFile,
+    ) -> list[RemoteMediaFile]:
+        aliases = [
+            file for file in remote_files
+            if self._same_remote_media_file(file, selected)
+        ]
+        return sorted(
+            aliases,
+            key=lambda file: (source_priority(file.source), file.sort_time, file.size),
+            reverse=True,
+        )
+
+    def _remote_file_is_stable(
+        self,
+        source: RemoteMediaSource,
+        remote_file: RemoteMediaFile,
+        media_type: str,
+        extensions: list[str],
+        ftps_search_paths: list[str] | None = None,
+        wait_seconds: float = 1.0,
+    ) -> bool:
+        expected_size = int(remote_file.size or 0)
+        if expected_size <= 0:
+            return True
+
+        time.sleep(wait_seconds)
+        try:
+            refreshed_files = source.list_files(
+                media_type=media_type,
+                extensions=extensions,
+                search_paths=ftps_search_paths if source.name == Ftps990MediaSource.name else None,
+            )
+        except Exception as e:
+            LOGGER.debug(
+                f"Could not confirm remote file stability for {remote_file.path}: {type(e)} Args: {e}"
+            )
+            return True
+
+        refreshed = next(
+            (file for file in refreshed_files if self._same_remote_media_file(file, remote_file)),
+            None,
+        )
+        if refreshed is None:
+            LOGGER.debug(f"Remote file disappeared before download: {remote_file.path}")
+            return False
+        if int(refreshed.size or 0) != expected_size:
+            LOGGER.debug(
+                f"Remote file is still changing: {remote_file.path} "
+                f"{expected_size} -> {refreshed.size}"
+            )
+            return False
+        return True
+
+    def _model_filenames_to_try(self) -> list[str]:
+        filenames_to_try = []
+
+        if self._subtask_name != '':
+            if self._subtask_name.endswith('.3mf'):
+                filenames_to_try.append(self._subtask_name)
+            else:
+                filenames_to_try.append(f"{self._subtask_name}.3mf")
+                filenames_to_try.append(f"{self._subtask_name}.gcode.3mf")
+
+        if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
+            if self.gcode_file.endswith('.3mf'):
+                filenames_to_try.append(self.gcode_file)
+            else:
+                filenames_to_try.append(f"{self.gcode_file}.3mf")
+                filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
+
+        return filenames_to_try
+
+    def _remote_model_matches(self, remote_file: RemoteMediaFile, candidate: str) -> bool:
+        candidate = candidate.replace("\\", "/").lstrip("/")
+        remote_path = remote_file.path.replace("\\", "/").lstrip("/")
+        remote_name = remote_file.basename.replace("\\", "/")
+        return remote_path == candidate or remote_name == candidate.rsplit("/", 1)[-1]
+
+    def _model_candidate_score(self, remote_file: RemoteMediaFile) -> tuple[int, datetime, int, int]:
+        path = remote_file.path.replace("\\", "/").lower()
+        name = remote_file.basename.lower()
+        in_cache = 1 if "/cache/" in path or path.startswith("cache/") else 0
+        gcode_3mf = 1 if name.endswith(".gcode.3mf") else 0
+        source_rank = 1 if remote_file.source == Tcp6000MediaSource.name else 0
+        return (in_cache, remote_file.sort_time, gcode_3mf, source_rank)
+
+    def _select_model_file(
+        self,
+        remote_files: list[RemoteMediaFile],
+        filenames_to_try: list[str],
+    ) -> RemoteMediaFile | None:
+        selected_files = self._select_model_files(remote_files, filenames_to_try)
+        return selected_files[0] if selected_files else None
+
+    def _select_model_files(
+        self,
+        remote_files: list[RemoteMediaFile],
+        filenames_to_try: list[str],
+    ) -> list[RemoteMediaFile]:
+        remote_files = [file for file in remote_files if "Metadata" not in file.path]
+        for filename in filenames_to_try:
+            matches = [
+                file for file in remote_files
+                if self._remote_model_matches(file, filename)
+            ]
+            if matches:
+                selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
+                LOGGER.debug(
+                    f"Selected model candidate {selected.path} from {selected.source}/{selected.storage}"
+                )
+                return self._remote_file_aliases(matches, selected)
+
+        if self._subtask_name == "":
+            LOGGER.debug("Falling back to newest remote 3mf file across media sources.")
+            sorted_files = sort_newest_first(remote_files)
+            if not sorted_files:
+                return []
+            return self._remote_file_aliases(remote_files, sorted_files[0])
+
+        return []
+
+    def _model_cache_paths(self, remote_file: RemoteMediaFile) -> tuple[Path, Path]:
+        cache_root = Path(self._client.cache_path) / "prints"
+        size = int(remote_file.size)
+        filename = remote_file.basename
+
+        if remote_file.source == Ftps990MediaSource.name:
+            relative_path = Path(remote_file.path.lstrip('/'))
+            subdir = relative_path.parent
+        else:
+            subdir = Path("cache")
+
+        if size <= 0:
+            cache_file_path = cache_root / subdir / filename
+            cache_file_path_legacy = cache_file_path
+        elif filename.startswith(f"{size}-"):
+            cache_file_path = cache_root / subdir / filename
+            cache_file_path_legacy = cache_root / subdir / filename.removeprefix(f"{size}-")
+        else:
+            cache_file_path = cache_root / subdir / f"{size}-{filename}"
+            cache_file_path_legacy = cache_root / subdir / filename
+
+        return cache_file_path, cache_file_path_legacy
+
+    def _download_model_file_from_remote(
+        self,
+        source: RemoteMediaSource,
+        remote_file: RemoteMediaFile,
+        progress_callback=None,
+    ) -> str | None:
+        cache_file_path, cache_file_path_legacy = self._model_cache_paths(remote_file)
+        size = int(remote_file.size)
+        cache_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if size > 0 and cache_file_path.exists() and cache_file_path.stat().st_size == size:
+            LOGGER.debug(f"File already in cache: {cache_file_path}")
+            os.utime(cache_file_path, None)
+            return str(cache_file_path)
+
+        if size > 0 and cache_file_path_legacy.exists() and cache_file_path_legacy.stat().st_size == size:
+            LOGGER.debug(f"File already in legacy cache: {cache_file_path_legacy}")
+            extensions = [
+                ".3mf",
+                ".gcode",
+                ".png",
+                ".slice_info.config",
+            ]
+            for extension in extensions:
+                src = cache_file_path_legacy.with_suffix("").with_suffix(extension)
+                dst = cache_file_path.with_suffix("").with_suffix(extension)
+                if src.exists():
+                    LOGGER.debug(f"Moving {src} -> {dst}")
+                    try:
+                        shutil.move(str(src), str(dst))
+                    except Exception as e:
+                        LOGGER.debug(f"Failed moving {src} -> {dst}: {e}")
+            os.utime(cache_file_path, None)
+            return str(cache_file_path)
+
+        total_start_time = time.time()
+        last_percentage = -1
+        self._ftp_download_percentage = 0
+
+        def download_progress_callback(percentage: int) -> None:
+            nonlocal last_percentage
+            if last_percentage == percentage:
+                return
+            LOGGER.debug(f"Remote model download progress: {percentage:.0f}%")
+            self._ftp_download_percentage = int(percentage)
+            last_percentage = percentage
+            self._client.callback("event_printer_data_update")
+            if progress_callback:
+                progress_callback(percentage)
+
+        try:
+            downloaded_size = self._download_remote_file_atomic(
+                source,
+                remote_file,
+                cache_file_path,
+                progress_callback=download_progress_callback,
+            )
+            self._ftp_download_percentage = 100
+            download_time = time.time() - total_start_time
+            download_speed = downloaded_size / download_time if download_time > 0 else 0
+            LOGGER.debug(
+                f"Successfully downloaded '{remote_file.path}' from {remote_file.source}/"
+                f"{remote_file.storage} to cache. Time: {download_time:.0f}s, "
+                f"Speed: {download_speed/1024:.0f} KB/s"
+            )
+            return str(cache_file_path)
+        except Exception as e:
+            LOGGER.debug(
+                f"Failed downloading model {remote_file.path} from {remote_file.source}/"
+                f"{remote_file.storage}: {type(e)} Args: {e}"
+            )
+            return None
+
+    def _attempt_remote_model_download(self, sources: list[RemoteMediaSource]) -> str | None:
+        filenames_to_try = self._model_filenames_to_try()
+        remote_files = self._collect_remote_files(
+            sources,
+            media_type="model",
+            extensions=['.3mf'],
+            ftps_search_paths=self.ftp_search_paths,
+        )
+        selected_files = self._select_model_files(remote_files, filenames_to_try)
+        if not selected_files:
+            return None
+
+        for selected in selected_files:
+            source = next((item for item in sources if item.name == selected.source), None)
+            if source is None:
+                LOGGER.debug(f"No media source object found for selected model source {selected.source}")
+                continue
+            if not self._remote_file_is_stable(
+                source,
+                selected,
+                media_type="model",
+                extensions=['.3mf'],
+                ftps_search_paths=self.ftp_search_paths,
+            ):
+                continue
+
+            result = self._download_model_file_from_remote(source, selected)
+            if result is not None:
+                return result
+
+        return None
+
     # The cached files also include the file size appended to them so that new prints of the same model
     # filename but different settings can be cached independently. This keeps the print history truer and
     # allows reprints of earlier prints that had the same name.
@@ -1506,7 +1867,7 @@ class PrintJob:
         self._prune_old_files(directory=cache_file_path,
                               extensions=['.3mf'],
                               keep=self._client._print_cache_count,
-                              extra_extensions=['.jpg', '.png', '.slice_info.config', '.gcode'])
+                              extra_extensions=['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode'])
 
     async def async_prune_timelapse_files(self):
         loop = asyncio.get_event_loop()
@@ -1518,27 +1879,49 @@ class PrintJob:
         LOGGER.debug("Pruning timelapse history")
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
         self._prune_old_files(directory=cache_file_path,
-                              extensions=['.mp4','.avi'],
+                              extensions=['.mp4','.avi','.mov'],
                               keep=self._client._timelapse_cache_count,
-                              extra_extensions=['.jpg', '.png'])
+                              extra_extensions=['.jpg', '.jpeg', '.png'])
             
-    def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=[]):
+    def _cleanup_stale_part_files(self, dir_path: Path, older_than_seconds: int = 24 * 60 * 60) -> int:
+        cutoff_time = time.time() - older_than_seconds
+        deleted_count = 0
+        for part_file in dir_path.rglob("*.part"):
+            if not part_file.is_file():
+                continue
+            try:
+                if os.path.getmtime(part_file) >= cutoff_time:
+                    continue
+                os.remove(part_file)
+                deleted_count += 1
+                LOGGER.debug(f"Deleted stale partial download: {part_file}")
+            except Exception as e:
+                LOGGER.error(f"Failed to delete stale partial download {part_file}: {e}")
+        return deleted_count
+
+    def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=None):
+        dir_path = Path(directory)
+        if not dir_path.is_dir():
+            return
+
+        self._cleanup_stale_part_files(dir_path)
 
         if keep == -1:
             # Cache pruning is disabled.
             LOGGER.debug("Skipping as pruning is disabled.")
             return
 
-        dir_path = Path(directory)
-        if not dir_path.is_dir():
-            return
+        if extra_extensions is None:
+            extra_extensions = []
         
         LOGGER.debug(f"{dir_path}")
+
+        extension_set = {extension.lower() for extension in extensions}
         
         # Get list of files matching the provided list of extensions
         matching_files = [
             f for f in dir_path.rglob('*')            
-            if f.is_file() and f.suffix in extensions
+            if f.is_file() and f.suffix.lower() in extension_set
         ]
         
         # Sort files by last modification time, newest first
@@ -1569,6 +1952,49 @@ class PrintJob:
                         LOGGER.debug(f"Deleted associated: {assoc_file}")
                     except Exception as e:
                         LOGGER.error(f"Failed to delete associated {assoc_file}: {e}")
+
+    def _timelapse_cache_path(self, remote_file: RemoteMediaFile) -> Path:
+        if remote_file.source == Ftps990MediaSource.name:
+            return Path(self._client.cache_path) / remote_file.path.lstrip('/')
+
+        storage_segment = storage_cache_segment(remote_file.storage)
+        return Path(self._client.cache_path) / "timelapse" / storage_segment / remote_file.basename
+
+    def _download_timelapse_thumbnail(
+        self,
+        source: RemoteMediaSource,
+        remote_file: RemoteMediaFile,
+        local_file_path: Path,
+    ) -> None:
+        filename_without_extension, _ = os.path.splitext(remote_file.basename)
+        thumbnail_filename = f"{filename_without_extension}.jpg"
+        thumbnail_local_path = local_file_path.parent / thumbnail_filename
+        if thumbnail_local_path.exists():
+            return
+
+        remote_dir = os.path.dirname(remote_file.path.replace("\\", "/"))
+        if remote_dir:
+            thumbnail_path = f"{remote_dir}/thumbnail/{thumbnail_filename}"
+        else:
+            thumbnail_path = f"thumbnail/{thumbnail_filename}"
+
+        thumbnail_remote = RemoteMediaFile(
+            name=thumbnail_filename,
+            path=thumbnail_path,
+            size=0,
+            media_type="timelapse",
+            source=remote_file.source,
+            storage=remote_file.storage,
+            modified=remote_file.modified,
+        )
+
+        try:
+            LOGGER.debug(f"Downloading timelapse thumbnail '{thumbnail_path}'")
+            self._download_remote_file_atomic(source, thumbnail_remote, thumbnail_local_path)
+        except Exception as e:
+            LOGGER.debug(
+                f"Failed to download timelapse thumbnail {thumbnail_path}: {type(e)} Args: {e}"
+            )
     
     def _download_timelapse(self):
         # If we are running in connection test mode, skip updating the last print task data.
@@ -1583,69 +2009,78 @@ class PrintJob:
         
     def _async_download_timelapse(self):
         current_thread = threading.current_thread()
-        current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
+        current_thread.setName(f"{self._client._device.info.device_type}-Media-{threading.get_native_id()}")
         start_time = datetime.now()
-        LOGGER.debug(f"Downloading latest timelapse by FTP")
+        LOGGER.debug("Downloading latest timelapse from remote media sources")
 
-        # Open the FTP connection
-        ftp = self._client.ftp_connection()
-        video_extensions = ['.mp4','.avi']
-        file_path = self._find_latest_file(ftp, ['/timelapse'], video_extensions)
-        if file_path is not None:
-            # timelapse_path is of form '/timelapse/foo.mp4'
-            local_file_path = os.path.join(self._client.cache_path, file_path.lstrip('/'))
-            directory_path = os.path.dirname(local_file_path)
-            os.makedirs(directory_path, exist_ok=True)
+        sources = self._remote_media_sources()
+        try:
+            video_extensions = ['.mp4','.avi','.mov']
+            candidates = self._collect_remote_files(
+                sources,
+                media_type="timelapse",
+                extensions=video_extensions,
+                ftps_search_paths=['/timelapse'],
+            )
+            if not candidates:
+                LOGGER.debug("No remote timelapse candidates found.")
+            else:
+                selected_aliases = self._remote_file_aliases(candidates, candidates[0])
+                for remote_file in selected_aliases:
+                    source = next((item for item in sources if item.name == remote_file.source), None)
+                    if source is None:
+                        LOGGER.debug(f"No media source object found for selected timelapse source {remote_file.source}")
+                        continue
+                    if not self._remote_file_is_stable(
+                        source,
+                        remote_file,
+                        media_type="timelapse",
+                        extensions=video_extensions,
+                        ftps_search_paths=['/timelapse'],
+                        wait_seconds=2.0,
+                    ):
+                        continue
 
-            try:
-                # Get the file size from FTP
-                size = ftp.size(file_path)
-                LOGGER.debug(f"Timelapse file exists. Size: {size} bytes.")
-                
-                # Check if file already exists with same size
-                should_download = False
-                if os.path.exists(local_file_path):
-                    local_file_size = os.path.getsize(local_file_path)
-                    if local_file_size == size:
-                        LOGGER.debug(f"Timelapse file found in cache.")
-                    else:
-                        LOGGER.debug(f"Timelapse file size differs (local: {local_file_size}, remote: {size}). Re-downloading.")
-                        should_download = True
-                else:
-                    LOGGER.debug(f"Timelapse file doesn't exist locally. Downloading.")
-                    should_download = True
-                
-                if should_download:
-                    # Download video
-                    with open(local_file_path, 'wb') as f:
-                        LOGGER.debug(f"Downloading '{file_path}'")
-                        ftp.retrbinary(f"RETR {file_path}", f.write)
-                        f.flush()
-                    
-                    # Download thumbnail
-                    filename = os.path.basename(file_path)
-                    filename_without_extension, _ = os.path.splitext(filename)
-                    thumbnail_filename = f"{filename_without_extension}.jpg"
-                    thumbnail_path = os.path.join(os.path.dirname(file_path), 'thumbnail', thumbnail_filename)
-                    thumbnail_local_path = os.path.join(os.path.dirname(local_file_path), thumbnail_filename)
-                    with open(thumbnail_local_path, 'wb') as f:
-                        LOGGER.info(f"Downloading '{thumbnail_path}'")
-                        ftp.retrbinary(f"RETR {thumbnail_path}", f.write)
-                        f.flush()
-                    
-            except ftplib.error_perm as e:
-                if '550' not in str(e.args): # 550 is unavailable.
-                    LOGGER.debug(f"Failed to download timelapse at '{file_path}': {e}")
-            except Exception as e:
-                LOGGER.debug(f"Unexpected exception downloading timelapse at '{file_path}': {type(e)} Args: {e}")
+                    try:
+                        local_file_path = self._timelapse_cache_path(remote_file)
+                        should_download = False
+                        if local_file_path.exists():
+                            local_file_size = local_file_path.stat().st_size
+                            if remote_file.size > 0 and local_file_size == remote_file.size:
+                                LOGGER.debug("Timelapse file found in cache.")
+                                os.utime(local_file_path, None)
+                            else:
+                                LOGGER.debug(
+                                    f"Timelapse file size differs (local: {local_file_size}, "
+                                    f"remote: {remote_file.size}). Re-downloading."
+                                )
+                                should_download = True
+                        else:
+                            LOGGER.debug("Timelapse file doesn't exist locally. Downloading.")
+                            should_download = True
 
-        ftp.quit()
+                        if should_download:
+                            LOGGER.debug(
+                                f"Downloading timelapse '{remote_file.path}' from "
+                                f"{remote_file.source}/{remote_file.storage}"
+                            )
+                            self._download_remote_file_atomic(source, remote_file, local_file_path)
+
+                        self._download_timelapse_thumbnail(source, remote_file, local_file_path)
+                        break
+                    except Exception as e:
+                        LOGGER.debug(
+                            f"Failed downloading timelapse {remote_file.path} from "
+                            f"{remote_file.source}/{remote_file.storage}: {type(e)} Args: {e}"
+                        )
+        finally:
+            self._close_remote_media_sources(sources)
 
         end_time = datetime.now()
 
         self.prune_timelapse_files()
 
-        LOGGER.debug(f"Done downloading timelapse by FTP. Elapsed time = {(end_time-start_time).seconds}s") 
+        LOGGER.debug(f"Done downloading timelapse from remote media. Elapsed time = {(end_time-start_time).seconds}s") 
 
     def _update_task_data(self):
         self._loaded_model_data = True
@@ -1661,11 +2096,11 @@ class PrintJob:
     def _download_task_data_from_printer(self):
         if self._ftpThread is None:
             # Only start a new thread if there
-            LOGGER.debug("Starting FTP thread.")
+            LOGGER.debug("Starting remote media thread.")
             self._ftpThread = threading.Thread(target=self._async_download_task_data_from_printer)
             self._ftpThread.start()
         else:
-            LOGGER.debug("FTP thread already running.")
+            LOGGER.debug("Remote media thread already running.")
             self._ftpRunAgain = True
 
     def _clear_model_data(self):
@@ -1681,8 +2116,8 @@ class PrintJob:
 
     def _async_download_task_data_from_printer(self):
         current_thread = threading.current_thread()
-        current_thread.setName(f"{self._client._device.info.device_type}-FTP-{threading.get_native_id()}")
-        LOGGER.debug(f"FTP thread starting.")
+        current_thread.setName(f"{self._client._device.info.device_type}-Media-{threading.get_native_id()}")
+        LOGGER.debug(f"Remote media thread starting.")
 
         try:
             while True:
@@ -1692,35 +2127,35 @@ class PrintJob:
                 if not self._ftpRunAgain:
                     break
                 end_time = datetime.now()
-                LOGGER.debug("FTP thread re-running. Elapsed time = {(end_time-start_time).seconds}s")
+                LOGGER.debug(f"Remote media thread re-running. Elapsed time = {(end_time-start_time).seconds}s")
         except Exception as e:
-            LOGGER.error(f"FTP thread failed with exception {e}")
+            LOGGER.error(f"Remote media thread failed with exception {e}")
 
         end_time = datetime.now()
-        LOGGER.info(f"FTP thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
+        LOGGER.info(f"Remote media thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
         self._ftpThread = None
 
     def _async_download_task_data_from_printer_worker(self):
-        # Open the FTP connection
-        ftp = self._client.ftp_connection()
+        model_file_path = None
+        sources = self._remote_media_sources()
+        try:
+            for i in range(1,13):
+                model_file_path = self._attempt_remote_model_download(sources)
+                if model_file_path is not None:
+                    break
 
-        for i in range(1,13):
-            model_file_path = self._attempt_ftp_download(ftp)
-            if model_file_path is not None:
-                break
-
-            if not self._client._device.supports_feature(Features.SUPPORTS_EARLY_FTP_DOWNLOAD):
-                # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
-                # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
-                # 5 seconds apart over 60s.
-                if i != 12:
-                    LOGGER.debug(f"Sleeping 5s for X1/H2/P2 retry")
-                    time.sleep(5)
-                    LOGGER.debug(f"Try #{i+1} for X1/H2/P2")
-            else:
-                break
-
-        ftp.quit()
+                if not self._client._device.supports_feature(Features.SUPPORTS_EARLY_FTP_DOWNLOAD):
+                    # The X1 has a weird behavior where the downloaded file doesn't exist for several seconds into the RUNNING phase and even
+                    # then it is still being downloaded in place so we might try to grab it mid-download and get a corrupt file. Try 13 times
+                    # 5 seconds apart over 60s.
+                    if i != 12:
+                        LOGGER.debug(f"Sleeping 5s for X1/H2/P2 retry")
+                        time.sleep(5)
+                        LOGGER.debug(f"Try #{i+1} for X1/H2/P2")
+                else:
+                    break
+        finally:
+            self._close_remote_media_sources(sources)
 
         if model_file_path is None:
             LOGGER.debug("No model file found.")

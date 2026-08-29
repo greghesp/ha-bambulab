@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 
 from .const import DOMAIN, LOGGER, Options
 from .models import BambuLabEntity
-from .pybambu.const import Features, Printers, RTSP_CAMERA_PRINTERS
+from .pybambu.const import Features
 from .pybambu.utils import get_authenticated_rtsp_url
 from .definitions import BambuLabSensorEntityDescription
 
@@ -59,14 +59,7 @@ async def async_setup_entry(
     # next _reinitialize_sensors() pass after event_printer_ready fires.
 
     if coordinator.get_option_enabled(Options.CAMERA):
-        configured_model = entry.data.get("device_type")
-        try:
-            configured_model = Printers(configured_model)
-        except ValueError:
-            configured_model = None
-
-        if (coordinator.get_model().supports_feature(Features.CAMERA_RTSP)
-                or configured_model in RTSP_CAMERA_PRINTERS):
+        if coordinator.get_model().supports_feature(Features.CAMERA_RTSP):
             # Printer supports RTSP and camera option is enabled.
             # Register the entity now; stream_source() will return None (gracefully)
             # until the printer is online and rtsp_url is populated.

@@ -40,13 +40,6 @@ def search(lst, predicate, default={}):
     return default
 
 
-def get_ams_unit_name(index: int, model: str) -> str:
-    """Return a human-readable AMS unit name without exposing protocol indices."""
-    if model == "AMS HT" and 128 <= index <= 135:
-        return f"AMS HT {index - 127}"
-    return f"AMS {index + 1}"
-
-
 def get_authenticated_rtsp_url(
     reported_url: str | None,
     configured_host: str,

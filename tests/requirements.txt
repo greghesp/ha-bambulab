@@ -1,3 +1,4 @@
+pytest>=8.0.0  # Test runner
 Pillow>=10.0.0  # For PIL (Python Imaging Library)
 paho-mqtt>=1.6.1  # For MQTT client
 requests>=2.31.0  # For HTTP requests

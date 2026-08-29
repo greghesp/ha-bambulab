@@ -31,7 +31,7 @@ from .commands import (
     PUSH_ALL,
     START_PUSH,
 )
-from .tests import MockMQTTClient
+from .mock_mqtt_client import MockMQTTClient
 from .utils import safe_json_loads
 
 class WatchdogThread(threading.Thread):
@@ -383,6 +383,9 @@ class BambuClient:
         self._timelapse_cache_count = max(-1, int(config.get('timelapse_cache_count', 0)))
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
         self._cache_path = config.get('file_cache_path', f'/config/www/media/ha-bambulab/{self._serial}')
+        self._tcp6000_media_supported = None
+        self._tcp6000_media_storages = []
+        self._tcp6000_media_probe_time = 0.0
 
         self._connected = False
         self._device_confirmed = False
@@ -449,6 +452,46 @@ class BambuClient:
         else:
             return create_local_ssl_context()
 
+    @property
+    def tcp6000_media_supported(self):
+        return self._tcp6000_media_supported
+
+    @property
+    def tcp6000_media_storages(self):
+        return self._tcp6000_media_storages
+
+    def probe_remote_media_sources(self, force: bool = False) -> bool:
+        """Probe TCP 6000 media support without listing or downloading files."""
+        from .media_sources import TCP6000_PROBE_TTL_SECONDS
+
+        now = time.time()
+        if not force and self._tcp6000_media_supported is not None and now - self._tcp6000_media_probe_time < TCP6000_PROBE_TTL_SECONDS:
+            return self._tcp6000_media_supported
+        if self._mock or not self.ftp_enabled:
+            self._tcp6000_media_supported = False
+            self._tcp6000_media_storages = []
+            self._tcp6000_media_probe_time = now
+            return False
+
+        try:
+            from .media_sources import Tcp6000MediaSource
+
+            source = Tcp6000MediaSource(self, connect_timeout=3.0, command_timeout=5.0)
+            try:
+                self._tcp6000_media_storages = source.probe()
+                self._tcp6000_media_supported = True
+                LOGGER.debug(f"TCP 6000 media probe succeeded: {self._tcp6000_media_storages}")
+                return True
+            finally:
+                source.close()
+        except Exception as e:
+            self._tcp6000_media_supported = False
+            self._tcp6000_media_storages = []
+            LOGGER.debug(f"TCP 6000 media probe failed: {type(e)} Args: {e}")
+            return False
+        finally:
+            self._tcp6000_media_probe_time = now
+
     def setup_tls(self):
         if self._local_mqtt:
             self.client.tls_set_context(self.local_tls_context)
@@ -482,12 +525,13 @@ class BambuClient:
         else:
             self.client.username_pw_set(self._username, password=self._auth_token)
 
+        await self._device.print_job.async_prune_print_history_files()
+        await self._device.print_job.async_prune_timelapse_files()
+        await loop.run_in_executor(None, self.probe_remote_media_sources)
+
         LOGGER.debug("Starting MQTT listener thread")
         self._mqtt = MqttThread(self)
         self._mqtt.start()
-
-        await self._device.print_job.async_prune_print_history_files()
-        await self._device.print_job.async_prune_timelapse_files()
 
     def subscribe_and_request_info(self):
         self.subscribe()

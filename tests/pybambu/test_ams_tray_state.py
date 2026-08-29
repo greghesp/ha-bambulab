@@ -1,11 +1,7 @@
 """Tests for AMS tray state interpretation."""
 
-import os
-import sys
 import unittest
 from unittest.mock import MagicMock
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from pybambu.utils import ams_tray_spool_loaded
 from pybambu.models import AMSTray
