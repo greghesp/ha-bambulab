@@ -19,7 +19,12 @@ def get_google_translation(to, content):
     # -Method Get `
     # -ContentType 'application/json'
   
-  json = response.json()
+  try:
+    json = response.json()
+  except:
+    print(f"Google JSON response failed for: {url}")
+    print(response.text)
+
   translation = ''
   for result in json[0]:
     translation += result[0]
