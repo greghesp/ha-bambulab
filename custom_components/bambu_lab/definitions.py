@@ -931,6 +931,39 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
           self.coordinator.client.slicer_settings.custom_filaments),
     )
 
+def _hotend_used_time_sensor(
+    slot_id: int, display_id: int
+) -> BambuLabHotendRackSensorEntityDescription:
+    """Create a usage sensor for one H2C Vortek hotend slot."""
+    return BambuLabHotendRackSensorEntityDescription(
+        key=f"hotend_{slot_id}_used_time",
+        translation_key="hotend_rack_hotend_used_time",
+        translation_placeholders={"hotend_id": str(display_id)},
+        icon="mdi:timer-outline",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        suggested_display_precision=1,
+        hotend_id=slot_id,
+        value_fn=lambda self: (
+            lambda rack, sid: (
+                round(rack.hotends[sid].print_time / 3600, 2)
+                if rack.is_slot_occupied(sid) or sid == rack.tar_id
+                else None
+            )
+        )(
+            self.coordinator.get_model().hotend_rack,
+            self.entity_description.hotend_id,
+        ),
+    )
+
+
 HOTEND_RACK_HOTEND_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = tuple(
-    _hotend_sensor(slot_id, slot_id - 15) for slot_id in range(16, 22)
+    sensor
+    for slot_id in range(16, 22)
+    for sensor in (
+        _hotend_sensor(slot_id, slot_id - 15),
+        _hotend_used_time_sensor(slot_id, slot_id - 15),
+    )
 )

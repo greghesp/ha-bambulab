@@ -861,6 +861,9 @@
           "filament_id": { "name": "Filament ID" },
           "filament_name": { "name": "Filament name" }
         }
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} used time"
       }
     },
     "camera": {
