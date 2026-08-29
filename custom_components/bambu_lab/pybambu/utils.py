@@ -309,38 +309,24 @@ def get_printer_type(modules, default):
     # }
     # X1E = AP02
 
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab A1")):
-      return 'A1'
+    # Data-driven mapping of reported product_name -> internal printer type code.
+    product_map = {
+            "Bambu Lab A1": "A1",
+            "Bambu Lab A1 mini": "A1MINI",
+            "Bambu Lab A2L": "A2L",
+            "Bambu Lab P1P": "P1P",
+            "Bambu Lab P1S": "P1S",
+            "Bambu Lab P2S": "P2S",
+            "Bambu Lab H2C": "H2C",
+            "Bambu Lab H2D": "H2D",
+            "Bambu Lab H2D Pro": "H2DPRO",
+            "Bambu Lab H2S": "H2S",
+            "Bambu Lab X2D": "X2D",
+    }
 
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab A1 mini")):
-      return 'A1MINI'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab A2L")):
-      return 'A2L'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P1P")):
-      return 'P1P'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P1S")):
-      return 'P1S'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab P2S")):
-      return 'P2S'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2C")):
-      return 'H2C'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2D")):
-      return 'H2D'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2D Pro")):
-      return 'H2DPRO'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab H2S")):
-      return 'H2S'
-
-    if len(search(modules, lambda x: x.get('product_name', "") == "Bambu Lab X2D")):
-      return 'X2D'
+    for product_name, code in product_map.items():
+            if search(modules, lambda x: x.get('product_name', "") == product_name):
+                    return code
 
     # Legacy identification logic that became unreliable as they started to re-use hw_ver for different models.
     apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
@@ -361,7 +347,8 @@ def get_printer_type(modules, default):
                 return 'A1'
             if project_name == '':
                 return 'X1C'
-        LOGGER.debug(f"UNKNOWN DEVICE: hw_ver='{hw_ver}' / project_name='{project_name}'")
+        
+    LOGGER.debug(f"UNKNOWN DEVICE: {modules}'")
     return default
 
 
