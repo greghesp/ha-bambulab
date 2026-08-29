@@ -1,6 +1,30 @@
 import unittest
 
-from pybambu.utils import fan_percentage
+from pybambu.utils import fan_percentage, get_authenticated_rtsp_url
+
+
+class TestAuthenticatedRTSPUrl(unittest.TestCase):
+    def test_disabled_liveview_has_no_stream_url(self):
+        self.assertIsNone(
+            get_authenticated_rtsp_url("disable", "192.0.2.10", "12345678")
+        )
+
+    def test_valid_url_uses_configured_host_and_escaped_access_code(self):
+        self.assertEqual(
+            get_authenticated_rtsp_url(
+                "rtsps://192.0.2.20:322/streaming/live/1",
+                "192.0.2.10",
+                "code@word",
+            ),
+            "rtsps://bblp:code%40word@192.0.2.10:322/streaming/live/1",
+        )
+
+    def test_invalid_scheme_is_rejected(self):
+        self.assertIsNone(
+            get_authenticated_rtsp_url(
+                "https://192.0.2.20/live", "", "12345678"
+            )
+        )
 
 
 class TestFanPercentage(unittest.TestCase):
