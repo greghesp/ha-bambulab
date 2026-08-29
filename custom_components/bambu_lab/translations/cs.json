@@ -8,7 +8,8 @@
       "event_print_error": "Chyba tisku",
       "event_print_error_cleared": "Chyba tisku vyřešena",
       "event_printer_error": "Chyba HMS",
-      "event_printer_error_cleared": "Chyba HMS vyřešena"
+      "event_printer_error_cleared": "Chyba HMS vyřešena",
+      "event_printer_missing_sdcard": "Chybí SD karta"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "verifyCode": "Je vyžadován ověřovací kód. Zkontrolujte svůj e-mail nebo telefon.",
       "code_expired": "Platnost ověřovacího kódu vypršela. Byl vyžádán nový kód. Zkontrolujte svůj e-mail nebo telefon.",
       "code_incorrect": "Ověřovací kód byl nesprávný. Zadejte jej prosím znovu.",
-      "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní."
+      "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní.",
+      "tfa_csrf_fallback": "Koncový bod dvoufaktorové autentizace společnosti Bambu Lab aktuálně odmítá požadavky. Místo toho byl na váš e-mail nebo telefon odeslán ověřovací kód – zadejte jej níže."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "verifyCode": "Je vyžadován ověřovací kód. Zkontrolujte svůj e-mail nebo telefon.",
       "code_expired": "Platnost ověřovacího kódu vypršela. Byl vyžádán nový kód. Zkontrolujte svůj e-mail nebo telefon.",
       "code_incorrect": "Ověřovací kód byl nesprávný. Zadejte jej prosím znovu.",
-      "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní."
+      "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní.",
+      "tfa_csrf_fallback": "Koncový bod dvoufaktorové autentizace společnosti Bambu Lab aktuálně odmítá požadavky. Místo toho byl na váš e-mail nebo telefon odeslán ověřovací kód – zadejte jej níže."
     },
     "step": {
       "init": {
@@ -608,7 +611,8 @@
           "high_flow_hardened_steel": "Tvrzená ocel High Flow",
           "high_flow_stainless_steel": "Nerezová ocel High Flow",
           "high_flow_tungsten_carbide": "Karbid wolframu High Flow",
-          "unknown": "Neznámý"
+          "unknown": "Neznámý",
+          "tpu_high_flow": "TPU High-Flow"
         }
       },
       "left_nozzle_diameter": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Sušící vlákno"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} využil čas"
       }
     },
     "camera": {

@@ -8,7 +8,8 @@
       "event_print_error": "พิมพ์ข้อผิดพลาด",
       "event_print_error_cleared": "ล้างข้อผิดพลาดการพิมพ์",
       "event_printer_error": "ข้อผิดพลาดของ HMS",
-      "event_printer_error_cleared": "เคลียร์ข้อผิดพลาด HMS"
+      "event_printer_error_cleared": "เคลียร์ข้อผิดพลาด HMS",
+      "event_printer_missing_sdcard": "การ์ด SD หายไป"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "การเชื่อมต่อถูกปฏิเสธโดยคลาวด์ Bambu Lab",
       "cannot_connect_cloud_address_unreachable": "ไม่สามารถเข้าถึงที่อยู่คลาวด์ของ Bambu Lab",
       "cannot_connect_cloud_unknown": "เกิดข้อผิดพลาดที่ไม่รู้จักในการเชื่อมต่อกับคลาวด์ Bambu Lab",
-      "cannot_connect_local_unknown": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้มา"
+      "cannot_connect_local_unknown": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้มา",
+      "tfa_csrf_fallback": "ขณะนี้จุดสิ้นสุดการตรวจสอบสิทธิ์แบบสองปัจจัยของ Bambu Lab กำลังปฏิเสธคำขอ รหัสยืนยันได้ถูกส่งไปยังอีเมลหรือโทรศัพท์ของคุณแล้ว - โปรดป้อนรหัสด้านล่าง"
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "การเชื่อมต่อถูกปฏิเสธโดยคลาวด์ Bambu Lab",
       "cannot_connect_cloud_address_unreachable": "ไม่สามารถเข้าถึงที่อยู่คลาวด์ของ Bambu Lab",
       "cannot_connect_cloud_unknown": "เกิดข้อผิดพลาดที่ไม่รู้จักในการเชื่อมต่อกับคลาวด์ Bambu Lab",
-      "cannot_connect_local_unknown": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้มา"
+      "cannot_connect_local_unknown": "ไม่สามารถเชื่อมต่อได้ ตรวจสอบการตั้งค่าที่ให้มา",
+      "tfa_csrf_fallback": "ขณะนี้จุดสิ้นสุดการตรวจสอบสิทธิ์แบบสองปัจจัยของ Bambu Lab กำลังปฏิเสธคำขอ รหัสยืนยันได้ถูกส่งไปยังอีเมลหรือโทรศัพท์ของคุณแล้ว - โปรดป้อนรหัสด้านล่าง"
     },
     "step": {
       "init": {
@@ -572,7 +575,8 @@
           "high_flow_hardened_steel": "เหล็กแข็งที่มีการไหลขนาดใหญ่",
           "high_flow_stainless_steel": "สแตนเลสที่มีการไหลขนาดใหญ่",
           "high_flow_tungsten_carbide": "ทังสเตนคาร์ไบด์ที่มีการไหลขนาดใหญ่",
-          "unknown": "ไม่ทราบ"
+          "unknown": "ไม่ทราบ",
+          "tpu_high_flow": "TPU ไหลสูง"
         }
       },
       "ip_address": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "เส้นใยอบแห้ง"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} ใช้เวลา"
       }
     },
     "camera": {

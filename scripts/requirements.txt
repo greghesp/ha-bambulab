@@ -1,1 +1,2 @@
 cloudscraper==1.2.71
+curl_cffi==0.8.0

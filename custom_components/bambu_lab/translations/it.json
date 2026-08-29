@@ -8,7 +8,8 @@
       "event_print_error": "Errore di stampa",
       "event_print_error_cleared": "Errore di stampa eliminato",
       "event_printer_error": "Errore HMS",
-      "event_printer_error_cleared": "Errore HMS cancellato"
+      "event_printer_error_cleared": "Errore HMS cancellato",
+      "event_printer_missing_sdcard": "Scheda SD mancante"
     }
   },
   "config": {
@@ -37,7 +38,8 @@
       "cannot_connect_cloud_connection_refused": "Connessione rifiutata dal cloud di Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Indirizzo cloud di Bambu Lab irraggiungibile.",
       "cannot_connect_cloud_unknown": "Errore sconosciuto durante la connessione al cloud Bambu Lab.",
-      "cannot_connect_local_unknown": "Impossibile connettersi. Controlla le impostazioni fornite."
+      "cannot_connect_local_unknown": "Impossibile connettersi. Controlla le impostazioni fornite.",
+      "tfa_csrf_fallback": "L'endpoint di autenticazione a due fattori di Bambu Lab sta attualmente rifiutando le richieste. Un codice di verifica è stato invece inviato al tuo indirizzo e-mail o al tuo telefono: inseriscilo di seguito."
     },
     "step": {
       "user": {
@@ -135,7 +137,8 @@
       "cannot_connect_cloud_connection_refused": "Connessione rifiutata dal cloud di Bambu Lab.",
       "cannot_connect_cloud_address_unreachable": "Indirizzo cloud di Bambu Lab irraggiungibile.",
       "cannot_connect_cloud_unknown": "Errore sconosciuto durante la connessione al cloud Bambu Lab.",
-      "cannot_connect_local_unknown": "Impossibile connettersi. Controlla le impostazioni fornite."
+      "cannot_connect_local_unknown": "Impossibile connettersi. Controlla le impostazioni fornite.",
+      "tfa_csrf_fallback": "L'endpoint di autenticazione a due fattori di Bambu Lab sta attualmente rifiutando le richieste. Un codice di verifica è stato invece inviato al tuo indirizzo e-mail o al tuo telefono: inseriscilo di seguito."
     },
     "step": {
       "init": {
@@ -566,7 +569,8 @@
           "high_flow_hardened_steel": "acciaio temprato con grande flusso",
           "high_flow_stainless_steel": "acciaio inossidabile con grande flusso",
           "high_flow_tungsten_carbide": "Carburo di tungsteno con grande flusso",
-          "unknown": "Sconosciuto"
+          "unknown": "Sconosciuto",
+          "tpu_high_flow": "TPU ad alto flusso"
         }
       },
       "humidity_index": {
@@ -873,6 +877,9 @@
       },
       "drying_filament": {
         "name": "Filamento di asciugatura"
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "L'hotend {hotend_id} ha utilizzato il tempo"
       }
     },
     "camera": {
