@@ -5,11 +5,6 @@ Correctness may be affected by an update to the error_text.json; if this occurs
 simply update the text or select a different locale, printer serial number, etc.
 """
 import unittest
-import os
-import sys
-
-# Add the parent directory to the Python path to find pybambu
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from pybambu.const import Printers
 from pybambu.utils import get_HMS_error_text, get_print_error_text
