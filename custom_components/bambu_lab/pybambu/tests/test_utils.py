@@ -5,7 +5,9 @@ import os
 import asyncio
 from typing import Dict, Any, Callable, Optional
 
-from ..const import LOGGER
+from ..const import (
+    LOGGER,
+)
 from ..utils import safe_json_loads, fan_percentage
 
 
@@ -219,4 +221,4 @@ class MockMQTTClient:
 
     def reconnect_delay_set(self, min_delay: int = 1, max_delay: int = 120) -> None:
         """Mock setting reconnect delay parameters."""
-        pass
+        pass 

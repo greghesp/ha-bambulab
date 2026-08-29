@@ -62,6 +62,7 @@ from .pybambu.commands import (
     RETRY_LOAD_FILAMENT_TEMPLATE,
     DONE_LOAD_FILAMENT_TEMPLATE
 )
+
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
     _updatedDevice: bool
