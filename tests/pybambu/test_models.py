@@ -4,6 +4,10 @@ from unittest.mock import call, MagicMock
 from datetime import datetime
 import os
 import json
+import tempfile
+import time
+
+from pathlib import Path
 
 from pybambu.models import PrintJob, Info, AMSList, Extruder, Fans, HMSList, PrintError, Temperature, Camera, StageAction, ams_slot_name
 from pybambu.const import FansEnum, Printers
@@ -109,6 +113,53 @@ class TestPrintJob(unittest.TestCase):
 
         self.print_job._clear_model_data.assert_not_called()
         self.print_job._update_task_data.assert_not_called()
+
+    def test_prune_cleans_stale_part_files_even_when_pruning_disabled(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            stale_part = Path(temp_dir) / "stale.3mf.part"
+            recent_part = Path(temp_dir) / "recent.3mf.part"
+            stale_part.write_bytes(b"partial")
+            recent_part.write_bytes(b"partial")
+            old_time = time.time() - (25 * 60 * 60)
+            os.utime(stale_part, (old_time, old_time))
+
+            self.print_job._prune_old_files(temp_dir, ['.3mf'], keep=-1)
+
+            self.assertFalse(stale_part.exists())
+            self.assertTrue(recent_part.exists())
+
+    def test_prune_deletes_model_sidecars(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            old_model = Path(temp_dir) / "old.3mf"
+            new_model = Path(temp_dir) / "new.3mf"
+            old_model.write_bytes(b"old")
+            new_model.write_bytes(b"new")
+            sidecars = [
+                Path(temp_dir) / "old.jpg",
+                Path(temp_dir) / "old.jpeg",
+                Path(temp_dir) / "old.png",
+                Path(temp_dir) / "old.slice_info.config",
+                Path(temp_dir) / "old.gcode",
+            ]
+            for sidecar in sidecars:
+                sidecar.write_bytes(b"sidecar")
+
+            old_time = time.time() - 60
+            new_time = time.time()
+            os.utime(old_model, (old_time, old_time))
+            os.utime(new_model, (new_time, new_time))
+
+            self.print_job._prune_old_files(
+                temp_dir,
+                ['.3mf'],
+                keep=1,
+                extra_extensions=['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode'],
+            )
+
+            self.assertFalse(old_model.exists())
+            for sidecar in sidecars:
+                self.assertFalse(sidecar.exists())
+            self.assertTrue(new_model.exists())
 
 class TestInfo(unittest.TestCase):
     def setUp(self):
