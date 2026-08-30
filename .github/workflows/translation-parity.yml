@@ -37,6 +37,18 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
+            // GitHub forces a read-only GITHUB_TOKEN for pull_request runs
+            // triggered from a fork, regardless of the `permissions:` block
+            // above - so createComment/updateComment always 403s here. Skip
+            // rather than let that throw and fail this "informational only,
+            // never fails the job" check for every external contributor.
+            const isFork = context.payload.pull_request.head.repo.full_name !==
+                            context.payload.pull_request.base.repo.full_name;
+            if (isFork) {
+              core.notice("Skipping PR comment: forked PRs get a read-only token, so this check can't comment here. See the step above for the parity results.");
+              return;
+            }
+
             const fs = require("fs");
             const marker = "<!-- translation-parity-check -->";
             const body = fs.readFileSync("translation_parity_comment.md", "utf8");
