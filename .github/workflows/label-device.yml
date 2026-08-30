@@ -23,8 +23,8 @@ jobs:
             // Keep in sync with the `device` dropdown options in
             // .github/ISSUE_TEMPLATE/bug_report.yml and feature_request.yml.
             const DEVICES = [
-              "A1 Mini", "A1", "H2C", "H2D", "H2S", "P1P", "P1S", "P2S",
-              "X1E", "X1C", "X1", "AMS 2 Pro", "AMS HT", "AMS Lite", "AMS",
+              "A1 Mini", "A1", "A2L", "H2C", "H2D", "H2S", "P1P", "P1S", "P2S",
+              "R1", "X1E", "X1C", "X1", "X2D", "AMS 2 Pro", "AMS HT", "AMS Lite", "AMS",
             ]; // longest-name-first so "A1 Mini" matches before "A1", etc.
 
             const body = context.payload.issue.body || "";

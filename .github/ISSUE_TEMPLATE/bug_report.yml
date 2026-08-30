@@ -52,15 +52,18 @@ body:
       options:
         - A1
         - A1 Mini
+        - A2L
         - H2C
         - H2D
         - H2S
         - P1P
         - P1S
         - P2S
+        - R1
         - X1
         - X1C
         - X1E
+        - X2D
         - AMS
         - AMS 2 Pro
         - AMS HT
