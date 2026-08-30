@@ -160,5 +160,58 @@ class TestAMSTrayState(unittest.TestCase):
         self.assertEqual(self.tray.state, 0)
 
 
+class TestAMSTrayNoStateFirmware(unittest.TestCase):
+    """Firmware that never reports a per-tray 'state' field.
+
+    The full tray payload carries filament metadata but no 'state', so
+    loaded/empty must be inferred from that metadata instead of the (never
+    updated) default state.
+    """
+
+    def setUp(self):
+        self.client = MagicMock()
+        self.client.slicer_settings.custom_filaments = {}
+        self.tray = AMSTray(self.client)
+
+    def test_full_payload_without_state_is_loaded(self):
+        self.tray.print_update({
+            "id": "0",
+            "remain": 43,
+            "tag_uid": "0000000000000000",
+            "tray_info_idx": "GFA01",
+            "tray_type": "PLA",
+            "tray_sub_brands": "PLA Matte",
+            "tray_color": "FFFFFFFF",
+        })
+        self.assertFalse(self.tray.empty)
+        self.assertEqual(self.tray.type, "PLA")
+
+    def test_empty_slot_without_state_is_empty(self):
+        self.tray.print_update({
+            "id": "1",
+            "tray_info_idx": "",
+            "tray_type": "",
+            "tray_color": "00000000",
+        })
+        self.assertTrue(self.tray.empty)
+
+    def test_type_only_without_state_is_loaded(self):
+        self.tray.print_update({
+            "id": "0",
+            "tray_info_idx": "",
+            "tray_type": "PETG",
+        })
+        self.assertFalse(self.tray.empty)
+        self.assertEqual(self.tray.name, "PETG")
+
+    def test_state_takes_over_once_reported(self):
+        # Loaded via metadata fallback first...
+        self.tray.print_update({"id": "0", "tray_type": "PLA", "tray_info_idx": "GFA01"})
+        self.assertFalse(self.tray.empty)
+        # ...then firmware starts reporting state: an empty state must win.
+        self.tray.print_update({"id": "0", "state": 8})
+        self.assertTrue(self.tray.empty)
+
+
 if __name__ == '__main__':
     unittest.main()
