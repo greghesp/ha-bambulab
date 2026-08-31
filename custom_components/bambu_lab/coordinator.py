@@ -40,6 +40,7 @@ from .const import (
 )
 
 from .pybambu import BambuClient
+from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
@@ -82,6 +83,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             
         self._updatedDevice = False
         self._shutdown = False
+        # Guards the access denied recovery so one failure episode triggers at most one
+        # cloud lookup. Reset once the printer connects successfully again.
+        self._access_denied_handled = False
         self.data = self.get_model()
         self._eventloop = asyncio.get_running_loop()
         # Pass LOGGERFORHA logger into HA as otherwise it generates a debug output line every single time we tell it we have an update
@@ -116,7 +120,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         if event == "event_printer_bambu_authentication_failed":
             self._report_authentication_issue()
-        
+
+        elif event == "event_printer_access_denied":
+            self._hass.async_create_task(self._async_handle_access_denied())
+
         elif event == "event_printer_no_external_storage":
             self._report_no_external_storage_issue()
 
@@ -127,6 +134,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._report_encryption_enabled_issue()
 
         elif event == "event_printer_ready":
+            # A successful connection ends any access denied episode.
+            self._access_denied_handled = False
             self._printer_ready()
 
         elif event == "event_light_update":
@@ -1065,6 +1074,53 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             translation_key=issue,
             translation_placeholders = {"device": f"'{self.config_entry.options.get('name', '')}'"},
         )
+
+    async def _async_handle_access_denied(self):
+        # The printer refused the MQTT connection with CONNACK code 5. The usual cause is a
+        # rotated LAN access code - a factory reset regenerates it - and retrying can never
+        # recover from that, so the client has already stopped. For cloud-linked printers
+        # Bambu Cloud already knows the new code (it's how Bambu Studio and Handy reconnect
+        # after a reset), so try to refresh it silently before asking the user for anything.
+        #
+        # Note code 5 is also seen when the printer is powered off (#1863), so the stored
+        # code is only replaced when the cloud reports a genuinely different one.
+        if self._access_denied_handled:
+            return
+        self._access_denied_handled = True
+
+        options = self.config_entry.options
+        auth_token = options.get('auth_token', '')
+        serial = self.config_entry.data['serial']
+        if auth_token != '':
+            bambu_cloud = BambuCloud(
+                options.get('region', ''),
+                options.get('email', ''),
+                options.get('username', ''),
+                auth_token)
+            devices = await self._hass.async_add_executor_job(bambu_cloud.get_device_list)
+            device = next((device for device in devices or [] if device.get('dev_id') == serial), None)
+            new_access_code = '' if device is None else device.get('dev_access_code', '')
+            if new_access_code != '' and new_access_code != options.get('access_code', ''):
+                LOGGER.info("Printer rejected the access code but Bambu Cloud reports a new one. Updating the config entry and reloading.")
+                new_options = dict(options)
+                new_options['access_code'] = new_access_code
+                self._hass.config_entries.async_update_entry(
+                    entry=self.config_entry,
+                    data=self.config_entry.data,
+                    options=new_options)
+                await self.hass.config_entries.async_reload(self.config_entry.entry_id)
+                return
+            if new_access_code != '' and new_access_code == options.get('access_code', ''):
+                # The stored code still matches the cloud - the rejection has another cause,
+                # such as the printer being powered off or mid-boot. Nothing to repair here.
+                LOGGER.debug("Printer rejected the access code but it matches Bambu Cloud. Not an access code problem.")
+                return
+        # LAN-only setup, or the cloud lookup failed - the user has to read the new code off
+        # the printer's screen, so tell them with a visible repair issue instead of a log line.
+        self._report_access_code_rejected_issue()
+
+    def _report_access_code_rejected_issue(self):
+        self._report_generic_issue("access_code_rejected", True)
 
     def _report_authentication_issue(self):
         # issue_id's are permanent - once ignored they will never show again so we need a unique id 
