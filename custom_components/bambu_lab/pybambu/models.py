@@ -3381,6 +3381,7 @@ class AMSTray:
         self._client = client
         self.empty = True
         self.state = 8
+        self._state_reported = False
         self.idx = ""
         self.name = ""
         self.type = ""
@@ -3457,6 +3458,9 @@ class AMSTray:
 
         metadata_only = ('id' in data) and set(data.keys()).issubset({'id', 'state'})
 
+        if 'state' in data:
+            self._state_reported = True
+
         if metadata_only:
             self.state = int(data['state']) if 'state' in data else 0
         else:
@@ -3483,9 +3487,29 @@ class AMSTray:
 
         return (old_data != f"{self.__dict__}")
 
+    def _has_filament_metadata(self) -> bool:
+        """True when tray metadata indicates a spool is present.
+
+        Fallback for firmware that never reports a per-tray ``state`` field:
+        presence of a filament profile id or a real material type means a
+        spool is loaded.
+        """
+        if self.idx:
+            return True
+        return bool(self.type) and self.type not in ("", "Empty")
+
     def _resolve_loaded_state(self, metadata_only: bool) -> None:
-        """Determine empty/loaded status based on AMS tray state field."""
-        if ams_tray_spool_loaded(self.state):
+        """Determine empty/loaded status.
+
+        Prefer the per-tray ``state`` bitfield when the printer reports one;
+        otherwise fall back to filament metadata so printers whose firmware
+        omits ``state`` still surface loaded spools instead of showing empty.
+        """
+        if self._state_reported:
+            loaded = ams_tray_spool_loaded(self.state)
+        else:
+            loaded = self._has_filament_metadata()
+        if loaded:
             self.empty = False
             name = self._resolve_tray_name(self.idx, self.type)
             self.name = name
