@@ -117,8 +117,15 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
         return self._stream_source()
 
     def _stream_source(self) -> str | None:
+        reported_url = self.coordinator.get_model().camera.rtsp_url
+        if isinstance(reported_url, bytes):
+            try:
+                reported_url = reported_url.decode()
+            except UnicodeDecodeError:
+                return None
+
         return get_authenticated_rtsp_url(
-            self.coordinator.get_model().camera.rtsp_url,
+            reported_url,
             self._host,
             self._access_code,
         )
