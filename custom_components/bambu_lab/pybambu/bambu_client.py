@@ -598,6 +598,10 @@ class BambuClient:
             if self._last_error_code != result_code:
                 if result_code == 5:
                     LOGGER.error(f"On Disconnect: Printer disconnected with Access Denied error. Check serial, access code and IP address.")
+                    # Tell the integration layer the printer rejected the access code. The usual cause is a
+                    # rotated code (a factory reset regenerates it), which the coordinator can recover from
+                    # Bambu Cloud for cloud-linked printers - or surface as a repair issue for LAN setups.
+                    self.callback("event_printer_access_denied")
                 else:
                     LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
             else:

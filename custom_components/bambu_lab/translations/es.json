@@ -920,6 +920,10 @@
       "title": "Error de autenticación",
       "description": "El intento de conectarse a Bambu Lab falló para {device}. Vuelva a configurar la integración y proporcione credenciales nuevas."
     },
+    "access_code_rejected": {
+      "title": "Código de acceso rechazado",
+      "description": "La impresora rechazó el código de acceso configurado para {device}. Esto suele significar que el código se regeneró, por ejemplo tras un restablecimiento de fábrica. Consulte el nuevo código de acceso en la pantalla de ajustes de red de la impresora y vuelva a configurar la integración con él."
+    },
     "no_external_storage": {
       "title": "No se detecta ninguna tarjeta USB o SD",
       "description": "{device} no tiene una tarjeta USB o SD conectada. Esto es necesario para todas las funciones que dependen de ftp para la impresora, como la imagen de portada, la omisión de objetos y el historial de impresión."
