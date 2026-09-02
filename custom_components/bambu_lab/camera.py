@@ -91,7 +91,6 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
         self._attr_unique_id = f"{config_entry.data['serial']}_camera"
         self._access_code = config_entry.options.get("access_code", "")
-        self._host = config_entry.options.get("host", "")
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
@@ -117,9 +116,18 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
         return self._stream_source()
 
     def _stream_source(self) -> str | None:
+        model = self.coordinator.get_model()
+        ip_address = model.info.ip_address
+        reported_url = model.camera.rtsp_url
+        if isinstance(reported_url, bytes):
+            try:
+                reported_url = reported_url.decode()
+            except UnicodeDecodeError:
+                return None
+
         return get_authenticated_rtsp_url(
-            self.coordinator.get_model().camera.rtsp_url,
-            self._host,
+            reported_url,
+            ip_address,
             self._access_code,
         )
 
