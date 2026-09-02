@@ -875,10 +875,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for device in dev_reg.devices.values():
             if config_entry_id in device.config_entries:
                 # This device is associated with this printer.
-                if device.model == 'AMS' or device.model == 'AMS Lite' or device.model == 'AMS 2 Pro' or device.model == 'AMS HT':
-                    # And it's an AMS device
+                is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT')
+                is_placeholder_ams = (
+                    device.model == 'Unknown'
+                    and (DOMAIN, "") in device.identifiers
+                    and (device.name or "").startswith(f"{self.config_entry.data['device_type']}_{self.config_entry.data['serial']}_AMS_")
+                )
+                if is_known_ams or is_placeholder_ams:
+                    # push_status can create an AMS placeholder before version metadata is
+                    # available. Older versions registered that placeholder with an empty
+                    # identifier; always discard it so the real serial can own the device.
                     ams_serial = list(device.identifiers)[0][1]
-                    if ams_serial not in existing_ams_devices:
+                    if is_placeholder_ams or ams_serial not in existing_ams_devices:
                         LOGGER.debug(f"Found stale attached AMS with serial {ams_serial}")
                         ams_devices_to_remove.append(device.id)
 
