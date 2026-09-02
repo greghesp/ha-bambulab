@@ -6,6 +6,7 @@ import os
 import json
 import tempfile
 import time
+from zipfile import ZipFile
 
 from pathlib import Path
 
@@ -127,6 +128,65 @@ class TestPrintJob(unittest.TestCase):
 
         self.print_job._clear_model_data.assert_not_called()
         self.print_job._update_task_data.assert_not_called()
+
+    def test_print_update_tracks_active_print_identity(self):
+        """MQTT job identifiers are retained for model-data validation."""
+        self.print_job.gcode_state = "RUNNING"
+
+        self.print_job.print_update({
+            "model_id": "US-current-model",
+            "task_id": "8291",
+            "plate_idx": 2,
+        })
+
+        self.assertEqual(self.print_job.model_id, "US-current-model")
+        self.assertEqual(self.print_job.task_id, "8291")
+        self.assertEqual(self.print_job.plate_idx, 2)
+
+    def test_local_print_does_not_apply_cloud_cover_when_ftp_available(self):
+        """A stale cloud task must not overwrite a local print's FTP cover."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = {
+            "cover": "https://example.invalid/stale.png",
+            "status": 2,
+        }
+        self.print_job._print_type = "local"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.client.bambu_cloud.download.assert_not_called()
+        self.client._device.cover_image.set_image.assert_not_called()
+
+    def test_ftp_cover_uses_active_mqtt_plate(self):
+        """The active MQTT plate wins when archive metadata points elsewhere."""
+        self.client.ftp_enabled = True
+        self.client._device.supports_feature.return_value = False
+        self.print_job.plate_idx = 2
+        self.print_job.ams_mapping = []
+        self.print_job.prune_print_history_files = MagicMock()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            model_path = os.path.join(temp_dir, "current.3mf")
+            with ZipFile(model_path, "w") as archive:
+                archive.writestr(
+                    "Metadata/slice_info.config",
+                    '<config><plate><metadata key="index" value="4" /></plate></config>',
+                )
+                archive.writestr("Metadata/plate_2.png", b"active-plate-cover")
+                archive.writestr("Metadata/plate_4.png", b"stale-plate-cover")
+                archive.writestr("Metadata/plate_4.gcode", b"gcode")
+                archive.writestr("Metadata/plate_4.json", '{"bed_type": "textured_plate"}')
+
+            sources = [MagicMock()]
+            self.print_job._remote_media_sources = MagicMock(return_value=sources)
+            self.print_job._attempt_remote_model_download = MagicMock(return_value=model_path)
+            self.print_job._close_remote_media_sources = MagicMock()
+
+            result = self.print_job._async_download_task_data_from_printer_worker()
+
+        self.assertTrue(result)
+        self.client._device.cover_image.set_image.assert_called_once_with(b"active-plate-cover")
 
     def test_prune_cleans_stale_part_files_even_when_pruning_disabled(self):
         with tempfile.TemporaryDirectory() as temp_dir:

@@ -939,6 +939,9 @@ class PrintJob:
     gcode_file: str
     gcode_file_downloaded: str
     _subtask_name: str
+    model_id: str
+    task_id: str
+    plate_idx: int
     start_time: datetime
     end_time: datetime
     remaining_time: int
@@ -966,6 +969,9 @@ class PrintJob:
         self.gcode_file = ""
         self.gcode_file_downloaded = ""
         self._subtask_name = ""
+        self.model_id = ""
+        self.task_id = ""
+        self.plate_idx = 0
         self.start_time = None
         self.end_time = None
         self.remaining_time = 0
@@ -1080,6 +1086,10 @@ class PrintJob:
         self._subtask_name = data.get("subtask_name", self._subtask_name)
         if old_subtask_name != self._subtask_name:
             LOGGER.debug(f"SUBTASK_NAME: {self._subtask_name}")
+
+        self.model_id = data.get("model_id", self.model_id)
+        self.task_id = data.get("task_id", self.task_id)
+        self.plate_idx = data.get("plate_idx", self.plate_idx)
 
         # Printer-initiated prints and reprints can reach RUNNING before the
         # printer reports a subtask name. In that case model data is initially
@@ -2207,16 +2217,20 @@ class PrintJob:
                         plate_number = metadata.get('value')
                         LOGGER.debug(f"Plate: {plate_number}")
                         
-                        # Now we have the plate number, extract the cover image from the archive
-                        self._client._device.cover_image.set_image(archive.read(f"Metadata/plate_{plate_number}.png"))
-                        LOGGER.debug(f"Cover image: Metadata/plate_{plate_number}.png")
+                        # MQTT is authoritative for the plate that is actively printing.
+                        # A printer can retain/reuse a 3mf whose slice_info points at a
+                        # different plate, which otherwise makes the cover image stale.
+                        active_plate_number = str(self.plate_idx) if self.plate_idx else plate_number
+                        cover_entry_name = f"Metadata/plate_{active_plate_number}.png"
+                        self._client._device.cover_image.set_image(archive.read(cover_entry_name))
+                        LOGGER.debug(f"Cover image: {cover_entry_name}")
 
                         # Save the cover image to the cache
                         try:
                             # Save the cover image directly to the cache
                             cover_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.png'
                             cover_path = os.path.join(model_dir, cover_filename)
-                            with archive.open(f"Metadata/plate_{plate_number}.png") as cover_entry, open(cover_path, "wb") as target_path:
+                            with archive.open(cover_entry_name) as cover_entry, open(cover_path, "wb") as target_path:
                                 shutil.copyfileobj(cover_entry, target_path)
                             LOGGER.debug(f"Cover image saved to: {cover_path}")
                         except Exception as e:
@@ -2381,8 +2395,12 @@ class PrintJob:
             self.end_time = None
         else:
             LOGGER.debug("Updating bambu cloud task data found for printer.")
+            # For local prints with FTP available, the printer's 3mf is the
+            # authoritative image source. Bambu Cloud's "latest task" can lag
+            # behind the active print and return a stale cover.
+            use_cloud_cover = not (self._print_type == "local" and self._client.ftp_enabled)
             url = self._task_data.get('cover', '')
-            if url != "":
+            if use_cloud_cover and url != "":
                 data = self._client.bambu_cloud.download(url)
                 self._client._device.cover_image.set_image(data)
 
