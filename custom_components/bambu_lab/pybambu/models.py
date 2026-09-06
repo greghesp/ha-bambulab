@@ -155,9 +155,10 @@ class Device:
         return (self.push_all_data != None) and (self.get_version_data != None)
 
     def info_update(self, data):
+        had_full_printer_data = self.has_full_printer_data
         self.info.info_update(data = data)
         self.home_flag.info_update(data = data)
-        self.ams.info_update(data = data)
+        ams_info_changed = self.ams.info_update(data = data)
 
         if data.get("command") == "get_version":
             send_ready_event = self.get_version_data is None and self.push_all_data is not None
@@ -165,6 +166,11 @@ class Device:
                 LOGGER.debug("Reached first push of version data.")
             self.get_version_data = data
             if send_ready_event:
+                self._client.callback("event_printer_ready")
+            elif had_full_printer_data and ams_info_changed:
+                # A later get_version response can fill in AMS identity metadata that was
+                # missing during initial startup. Re-run entity setup so placeholder AMS
+                # entries are replaced with entities using the real serial/model.
                 self._client.callback("event_printer_ready")
 
 
@@ -3132,7 +3138,7 @@ class AMSList:
         else:
             return self.data[self.active_ams_index].tray[self.active_tray_index]
 
-    def info_update(self, data):
+    def info_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
         # First determine if this the version info data or the json payload data. We use the version info to determine
@@ -3204,6 +3210,7 @@ class AMSList:
                 data_changed = True
 
         data_changed = data_changed or (old_data != f"{self.__dict__}")
+        return data_changed
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"

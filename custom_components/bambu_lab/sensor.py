@@ -45,6 +45,13 @@ async def async_setup_entry(
 
     for sensor in AMS_SENSORS:
         for index in coordinator.get_model().ams.data.keys():
+            ams_instance = coordinator.get_model().ams.data[index]
+            # push_status can arrive before complete get_version metadata and create
+            # a placeholder AMS with no serial. Device/entity identity depends on the
+            # real AMS serial, so wait for version metadata instead of registering a
+            # transient placeholder that HA cannot later reconcile cleanly.
+            if ams_instance is None or not ams_instance.serial:
+                continue
             if sensor.exists_fn(coordinator, index):
                 async_add_entities([BambuLabAMSSensor(coordinator, sensor, index)])
 

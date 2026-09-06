@@ -12,6 +12,7 @@ from pathlib import Path
 from pybambu.models import (
     AMSList,
     Camera,
+    Device,
     Extruder,
     Fans,
     HMSList,
@@ -282,6 +283,47 @@ class TestAMSList(unittest.TestCase):
         self.ams_list.info_update(data)
         self.assertIn(0, self.ams_list.data)
         self.assertEqual(self.ams_list.data[0].sw_version, "00.00.06.49")
+
+    def test_ams_info_update_reports_identity_changes(self):
+        data = self.test_data['get_version']
+
+        self.assertTrue(self.ams_list.info_update(data))
+        self.assertFalse(self.ams_list.info_update(data))
+
+    def test_late_ams_version_metadata_retriggers_ready(self):
+        """Complete AMS identity arriving after startup must rebuild HA entities."""
+        client = MagicMock()
+        device = Device(client)
+        client._device = device
+
+        # A full status push can arrive before version metadata and creates an AMS
+        # placeholder with no serial/model identity.
+        device.print_update(self.test_data['push_all'])
+        self.assertIn(0, device.ams.data)
+        self.assertEqual(device.ams.data[0].serial, "")
+        self.assertEqual(device.ams.data[0].model, "Unknown")
+
+        # Simulate the first get_version response being incomplete (printer module
+        # present, AMS module omitted). Startup still becomes ready at this point.
+        incomplete_version = json.loads(json.dumps(self.test_data['get_version']))
+        incomplete_version['module'] = [
+            module for module in incomplete_version.get('module', [])
+            if not module.get('name', '').startswith(('ams/', 'ams_f1/', 'n3f/', 'n3s/'))
+        ]
+        device.info_update(incomplete_version)
+        self.assertTrue(device.has_full_printer_data)
+        client.callback.assert_any_call("event_printer_ready")
+        ready_count = client.callback.call_args_list.count(call("event_printer_ready"))
+
+        # A later complete version response fills in the real AMS identity. This
+        # must fire ready again so the coordinator reruns entity registration.
+        device.info_update(self.test_data['get_version'])
+        self.assertNotEqual(device.ams.data[0].serial, "")
+        self.assertNotEqual(device.ams.data[0].model, "Unknown")
+        self.assertEqual(
+            client.callback.call_args_list.count(call("event_printer_ready")),
+            ready_count + 1,
+        )
 
     def test_ams_print_update(self):
         # Test AMS print update
