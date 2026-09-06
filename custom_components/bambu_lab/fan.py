@@ -69,7 +69,10 @@ async def async_setup_entry(
     
     LOGGER.debug("FAN::async_setup_entry")
     # Fans work in hybrid mode so we don't need to block entities on that.
-    if not coordinator.get_model().print_fun.mqtt_signature_required:
+    if (
+        not coordinator.get_model().print_fun.mqtt_signature_required
+        or coordinator.client.command_signer.configured
+    ):
         for description in FANS:
             if description.exists_fn(coordinator):
                 async_add_entities([BambuLabFan(coordinator, description, entry)])
@@ -96,6 +99,15 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         super().__init__(coordinator=coordinator)
 
     @property
+    def available(self) -> bool:
+        """Require a provisioned signer when firmware enforces signatures."""
+        if not super().available:
+            return False
+        if self.coordinator.get_model().print_fun.mqtt_signature_required:
+            return self.coordinator.client.command_signer.ready
+        return True
+
+    @property
     def is_on(self) -> bool:
         """Return the state of the fan"""
         if self.entity_description.value_fn(self.coordinator.data) > 0:
@@ -109,6 +121,8 @@ class BambuLabFan(BambuLabEntity, FanEntity):
 
     def _set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
+        if not self.available:
+            raise HomeAssistantError("Fan control is unavailable; command authorization is not ready")
         fan = {
             "cooling_fan": FansEnum.PART_COOLING,
             "aux_fan": FansEnum.AUXILIARY,

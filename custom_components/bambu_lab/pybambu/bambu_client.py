@@ -26,6 +26,7 @@ from .const import (
     Features,
 )
 from .models import Device, SlicerSettings
+from .signing import CommandSigner, CommandSigningError
 from .commands import (
     GET_VERSION,
     PUSH_ALL,
@@ -368,6 +369,14 @@ class BambuClient:
         self._device_type = config.get('device_type', 'unknown').upper()
         self._local_mqtt = config.get('local_mqtt', False)
         self._serial = config.get('serial', '')
+        try:
+            self.command_signer = CommandSigner(config.get('signing_path'))
+        except (CommandSigningError, OSError, ValueError) as error:
+            # Invalid optional signing files must never take down read-only
+            # printer telemetry. Leave controls fail-closed instead.
+            LOGGER.warning("Cloud command signer credentials were rejected (%s)", type(error).__name__)
+            self.command_signer = CommandSigner(None)
+        self._last_signer_provision_attempt = 0.0
         self._enable_camera = config.get('enable_camera', True) and (self.host != "")
         self._enable_ftp = (self.host != "")
         if self._serial.startswith('MOCK-'):
@@ -535,8 +544,32 @@ class BambuClient:
 
     def subscribe_and_request_info(self):
         self.subscribe()
+        self._request_signer_provisioning()
         self.publish(GET_VERSION)
         self.publish(PUSH_ALL)
+
+    def _request_signer_provisioning(self):
+        """Install app trust and request the printer's public certificate."""
+        if not self.command_signer.configured or self.command_signer.ready:
+            return False
+        now = time.monotonic()
+        if now - self._last_signer_provision_attempt < 15:
+            return False
+        self._last_signer_provision_attempt = now
+        try:
+            message = self.command_signer.build_provision_message()
+        except CommandSigningError as error:
+            LOGGER.warning("Cloud command signer provisioning is unavailable: %s", error)
+            return False
+        result = self.client.publish(
+            f"device/{self._serial}/request",
+            json.dumps(message, separators=(",", ":")),
+        )
+        if result.rc == 0:
+            LOGGER.debug("Cloud command signer provisioning request sent")
+            return True
+        LOGGER.warning("Cloud command signer provisioning publish failed")
+        return False
 
     def on_connect(self,
                    client_: mqtt.Client,
@@ -614,6 +647,8 @@ class BambuClient:
 
     def _on_disconnect(self):
         LOGGER.debug("_on_disconnect: Lost connection to the printer")
+        self.command_signer.reset_session()
+        self._last_signer_provision_attempt = 0.0
         self._loaded_slicer_settings = False
         self._connected = False
         self._device_confirmed = False
@@ -652,7 +687,8 @@ class BambuClient:
                     daemon=True,
                 ).start()
 
-            if self._refreshed:
+            json_data = safe_json_loads(message.payload)
+            if self._refreshed and not json_data.get("security"):
                 # X1 mqtt payload is inconsistent. Adjust it for consistent logging.
                 clean_msg = re.sub(r"\\n *", "", str(message.payload))
                 # And adjust all payload to be meet proper json syntax instead of being pythonized so I can feed it directly into an online json prettifier
@@ -661,7 +697,6 @@ class BambuClient:
                 clean_msg = re.sub(r"False", "false", str(clean_msg))
                 LOGGER.debug(f"Received data: {clean_msg}")
 
-            json_data = safe_json_loads(message.payload)
             if json_data.get("event"):
                 # These are events from the bambu cloud mqtt feed and allow us to detect when a local
                 # device has connected/disconnected (e.g. turned on/off)
@@ -678,18 +713,32 @@ class BambuClient:
                 if self._watchdog is not None:
                     self._watchdog.received_data()
                 if json_data.get("print"):
+                    if self.command_signer.handle_print_report(json_data["print"]):
+                        LOGGER.warning("Printer rejected command authorization; reprovisioning without replay")
+                        self._last_signer_provision_attempt = 0.0
+                        self.callback("event_printer_signer_unavailable")
                     self._device.print_update(data=json_data.get("print"))
+                    if (
+                        self._device.print_fun.mqtt_signature_required
+                        and not self.command_signer.ready
+                    ):
+                        self._request_signer_provisioning()
                     if json_data.get("print").get("msg", 0) == 0:
                         self._refreshed= False
                 elif json_data.get("info") and json_data.get("info").get("command") == "get_version":
                     self._device.info_update(data=json_data.get("info"))
                 elif json_data.get("system") and json_data.get("system").get("command"):
                     self._device.observe_system_command(data=json_data.get("system"))
+                elif json_data.get("security"):
+                    if self.command_signer.handle_security_report(json_data["security"]):
+                        LOGGER.info("Cloud command signer is ready for this printer session")
+                        self.callback("event_printer_signer_ready")
 
 
         except Exception as e:
-            LOGGER.error("An exception occurred processing a message:", exc_info=e)
-            LOGGER.debug(message.payload)
+            # MQTT security reports contain credential material. Never dump a
+            # raw frame or parser exception that can include its contents.
+            LOGGER.error("MQTT message processing failed (%s)", type(e).__name__)
 
     def subscribe(self):
         """Subscribe to report topic"""
@@ -698,10 +747,23 @@ class BambuClient:
 
     def publish(self, msg):
         """Publish a custom message"""
-        result = self.client.publish(f"device/{self._serial}/request", json.dumps(msg))
+        try:
+            if (
+                isinstance(msg, dict)
+                and isinstance(msg.get("print"), dict)
+                and self._device.print_fun.mqtt_signature_required
+            ):
+                payload = self.command_signer.sign_print_message(msg)
+            else:
+                payload = json.dumps(msg)
+        except CommandSigningError as error:
+            LOGGER.warning("Authorization-protected command blocked: %s", error)
+            self._request_signer_provisioning()
+            return False
+        result = self.client.publish(f"device/{self._serial}/request", payload)
         status = result.rc
         if status == 0:
-            LOGGER.debug(f"Sent {msg} to topic device/{self._serial}/request")
+            LOGGER.debug("MQTT command published")
             return True
 
         LOGGER.error(f"Failed to send message to topic device/{self._serial}/request")
