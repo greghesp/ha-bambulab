@@ -935,6 +935,10 @@
     "hybrid_mode_blocking": {
       "title": "Hybride verbinding blokkeert controle",
       "description": "{device} is verbonden met de cloud maar met lokale mqtt-verbinding door de integratie. Dit blokkeert het instellen van temperaturen en het opnieuw afdrukken van de geschiedenis. Schakel de verbinding over naar pure cloud om volledige controle mogelijk te maken."
+    },
+    "access_code_rejected": {
+      "title": "Toegangscode afgewezen",
+      "description": "De printer heeft de geconfigureerde toegangscode voor {device} afgewezen. Dit betekent meestal dat de code opnieuw is gegenereerd, bijvoorbeeld door een fabrieksreset. Lees de nieuwe toegangscode op het netwerkinstellingenscherm van de printer en configureer de integratie ermee opnieuw."
     }
   }
 }

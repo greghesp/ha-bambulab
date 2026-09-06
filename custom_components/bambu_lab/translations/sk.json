@@ -935,6 +935,10 @@
     "hybrid_mode_blocking": {
       "title": "Hybridné riadenie blokov pripojenia",
       "description": "{device} je pripojené ku cloudu, ale s lokálnym pripojením mqtt integráciou. Toto blokuje nastavenie teplôt a opätovnú tlač z histórie. Ak chcete získať plnú kontrolu, prepnite pripojenie na čistý cloud."
+    },
+    "access_code_rejected": {
+      "title": "Prístupový kód zamietnutý",
+      "description": "Tlačiareň odmietla nakonfigurovaný prístupový kód pre {device}. Zvyčajne to znamená, že kód bol vygenerovaný, napríklad obnovením továrenského nastavenia. Prečítajte si nový prístupový kód na obrazovke sieťových nastavení tlačiarne a prekonfigurujte s ním integráciu."
     }
   }
 }
