@@ -935,6 +935,10 @@
     "hybrid_mode_blocking": {
       "title": "Steuerung der Hybridverbindungsblöcke",
       "description": "{device} ist mit der Cloud verbunden, verfügt jedoch über eine lokale MQTT-Verbindung durch die Integration. Dadurch werden das Einstellen von Temperaturen und das Nachdrucken des Verlaufs blockiert. Stellen Sie die Verbindung auf reine Cloud um, um die vollständige Kontrolle zu ermöglichen."
+    },
+    "access_code_rejected": {
+      "title": "Zugangscode abgelehnt",
+      "description": "Der Drucker hat den konfigurierten Zugriffscode für {Gerät} abgelehnt. Dies bedeutet normalerweise, dass der Code neu generiert wurde, beispielsweise durch einen Werksreset. Lesen Sie den neuen Zugangscode auf dem Bildschirm mit den Netzwerkeinstellungen des Druckers ab und konfigurieren Sie die Integration damit neu."
     }
   }
 }
