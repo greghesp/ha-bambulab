@@ -698,13 +698,17 @@ class Fans:
 
         return (old_data != f"{self.__dict__}")
 
-    def set_fan_speed(self, fan: FansEnum, percentage: int):
+    def set_fan_speed(self, fan: FansEnum, percentage: int) -> bool:
         """Set fan speed"""
         percentage = round(percentage / 10) * 10
         command = fan_percentage_to_gcode(fan, percentage)
 
+        # Do not report a local override when the broker rejected the publish.
+        if not self._client.publish(command):
+            return False
+
         if fan == FansEnum.PART_COOLING:
-            self._cooling_fan_speed = percentage
+            self._cooling_fan_speed_override = percentage
             self._cooling_fan_speed_override_time = datetime.now()
         elif fan == FansEnum.AUXILIARY:
             self._aux_fan_speed_override = percentage
@@ -716,10 +720,8 @@ class Fans:
             self._secondary_aux_fan_speed_override = percentage
             self._secondary_aux_fan_speed_override_time = datetime.now()
 
-        LOGGER.debug(command)
-        self._client.publish(command)
-
         self._client.callback("event_printer_data_update")
+        return True
 
     def get_fan_speed(self, fan: FansEnum) -> int:
         if fan == FansEnum.PART_COOLING:
