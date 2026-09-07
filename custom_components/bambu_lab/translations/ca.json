@@ -935,6 +935,10 @@
     "hybrid_mode_blocking": {
       "title": "Control de blocs de connexió híbrid",
       "description": "{device} està connectat al núvol però amb connexió mqtt local per la integració. Això bloqueja la configuració de temperatures i la reimpressió de l'historial. Canvia la connexió al núvol pur per permetre el control total."
+    },
+    "access_code_rejected": {
+      "title": "Codi d'accés rebutjat",
+      "description": "La impressora ha rebutjat el codi d'accés configurat per a {dispositiu}. Això normalment significa que el codi s'ha regenerat, per exemple mitjançant un restabliment de fàbrica. Llegiu el nou codi d'accés des de la pantalla de configuració de xarxa de la impressora i torneu a configurar la integració amb ell."
     }
   }
 }

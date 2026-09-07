@@ -85,6 +85,28 @@ Other decisions before readiness:
 4. Whether any bounded stale-CRL policy is acceptable at all.
 5. Reboot/reconnect/rejection behavior and broader hardware coverage.
 
+### Concrete implementation gaps (7 September review)
+
+- Printer replies are correlated to the pending provisioning sequence, and the
+  returned certificate is checked for dates and an RSA key. This is **not**
+  certificate-chain validation or binding that certificate to the intended
+  printer identity. Define the trust anchor/identity policy and add negative
+  tests before treating provisioning as authenticated device trust.
+- Placing a bundle at the expected private path currently acts as opt-in.
+  There is no config/options flow for consent, supported-model selection,
+  credential import, renewal, or repair. File placement is a prototype setup
+  mechanism, not the proposed finished user experience.
+- The publication hook signs `print` messages generally, although this draft
+  only adds fan entities. Agree on a fan-only command boundary (including raw
+  G-code handling) or explicitly review the wider signing scope before release.
+- A stale-CRL receipt cannot prove current revocation status. Do not mark this
+  ready by simply rolling its deadline forward; renewal needs a supported
+  source and an explicit policy for when that source is unavailable.
+
+The independent fan correctness changes in #2120 have merged. This draft is
+synchronized with `main` after that merge; those fixes no longer form part of
+its feature diff. Synchronizing the branch does not resolve the gates above.
+
 ## Tests
 
 `python -m pytest tests/pybambu -q` exercises the existing regression suite and

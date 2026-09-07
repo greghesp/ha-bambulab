@@ -935,6 +935,10 @@
     "hybrid_mode_blocking": {
       "title": "Controllo dei blocchi di connessione ibridi",
       "description": "{device} è connesso al cloud ma con connessione mqtt locale tramite l'integrazione. Ciò blocca l'impostazione delle temperature e la ristampa dalla cronologia. Passa la connessione al cloud puro per consentire il controllo completo."
+    },
+    "access_code_rejected": {
+      "title": "Codice di accesso rifiutato",
+      "description": "La stampante ha rifiutato il codice di accesso configurato per {dispositivo}. Questo di solito significa che il codice è stato rigenerato, ad esempio mediante un ripristino delle impostazioni di fabbrica. Leggere il nuovo codice di accesso dalla schermata delle impostazioni di rete della stampante e riconfigurare l'integrazione con esso."
     }
   }
 }

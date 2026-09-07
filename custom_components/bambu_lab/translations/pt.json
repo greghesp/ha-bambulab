@@ -935,6 +935,10 @@
     "hybrid_mode_blocking": {
       "title": "Ligação híbrida bloqueia controlo",
       "description": "O dispositivo {device} está ligado à Cloud mas com ligação MQTT local pela integração. Isto bloqueia a definição de temperaturas e a reimpressão do histórico. Muda para uma ligação pura Cloud para ativar o controlo total."
+    },
+    "access_code_rejected": {
+      "title": "Código de acesso rejeitado",
+      "description": "A impressora rejeitou o código de acesso configurado para {device}. Isso geralmente significa que o código foi regenerado, por exemplo, por uma redefinição de fábrica. Leia o novo código de acesso na tela de configurações de rede da impressora e reconfigure a integração com ele."
     }
   }
 }

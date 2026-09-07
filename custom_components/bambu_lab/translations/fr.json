@@ -935,6 +935,10 @@
     "hybrid_mode_blocking": {
       "title": "La connexion hybride bloque le contrôle",
       "description": "{device} est connecté au cloud mais avec une connexion mqtt locale par l'intégration. Cela bloque le réglage des températures et la réimpression de l'historique. Basculez la connexion vers le cloud pur pour permettre un contrôle total."
+    },
+    "access_code_rejected": {
+      "title": "Code d'accès rejeté",
+      "description": "L'imprimante a rejeté le code d'accès configuré pour {device}. Cela signifie généralement que le code a été régénéré, par exemple par une réinitialisation d'usine. Lisez le nouveau code d'accès sur l'écran des paramètres réseau de l'imprimante et reconfigurez l'intégration avec celui-ci."
     }
   }
 }

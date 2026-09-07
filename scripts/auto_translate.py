@@ -81,16 +81,23 @@ def get_google_translation(to, content):
     # -UserAgent ([Microsoft.PowerShell.Commands.PSUserAgent]::Chrome) `
     # -Method Get `
     # -ContentType 'application/json'
-  
+
   try:
-    json = response.json()
-  except:
+    payload = response.json()
+  except ValueError:
     print(f"Google JSON response failed for: {url}")
     print(response.text)
+    return None
+
+  if not payload or not isinstance(payload, list):
+    print(f"Unexpected Google response for: {url}")
+    print(payload)
+    return None
 
   translation = ''
-  for result in json[0]:
-    translation += result[0]
+  for result in payload[0]:
+    if isinstance(result, list) and result:
+      translation += result[0] or ''
   translation = translation.replace("\\n", "\n")
   translation = translation.replace("\u003e", ">")
   return translation
@@ -107,8 +114,11 @@ def convert(old_source, new_source, target, language):
     else:
       # We have a string.
       if (not entry in target) or (not entry in old_source) or (old_source[entry] != new_source[entry]):
-        # String doesn't exist in the target. Translate it and insert it.
+        # Only translate when the English source text changed since the last release.
         translation = get_google_translation(language, new_source[entry])
+        if translation is None:
+          print(f"Skipping '{entry}' because Google throttled; keeping existing translation.")
+          continue
         print(f"{entry} = '{new_source[entry]}' -> '{translation}'")
         target[entry] = translation
 
@@ -119,10 +129,13 @@ def convert(old_source, new_source, target, language):
 
 
 def get_last_release_content():
+    workspace_dir = os.getenv('GITHUB_WORKSPACE', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    english_path = 'custom_components/bambu_lab/translations/en.json'
+
     # Check if running in GitHub Actions
     if not os.getenv('GITHUB_TOKEN'):
         # Fallback to local git if not in GitHub Actions
-        result = subprocess.run(['git', 'show', "HEAD:../custom_components/bambu_lab/translations/en.json"], 
+        result = subprocess.run(['git', '-C', workspace_dir, 'show', f'HEAD:{english_path}'],
                               capture_output=True, text=True)
         return result.stdout if result.returncode == 0 else '{}'
 
@@ -145,7 +158,7 @@ def get_last_release_content():
         ref = 'main'
 
     # Get the file content
-    content_url = f"https://api.github.com/repos/{repo}/contents/custom_components/bambu_lab/translations/en.json?ref={ref}"
+    content_url = f"https://api.github.com/repos/{repo}/contents/{english_path}?ref={ref}"
     response = send_request(HTTP_SESSION, "GET", content_url, headers=headers)
     if response.status_code != 200:
         print("Error: Could not fetch translation file")
