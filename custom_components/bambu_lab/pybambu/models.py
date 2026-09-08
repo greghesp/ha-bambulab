@@ -2259,7 +2259,11 @@ class PrintJob:
                         self.print_bed_type = json.loads(archive.read(f"Metadata/plate_{plate_number}.json")).get('bed_type')
                     elif (metadata.get('key') == 'weight'):
                         LOGGER.debug(f"Weight: {metadata.get('value')}")
-                        self.print_weight = metadata.get('value')
+                        try:
+                            # The XML attribute is a string; print_weight is a float everywhere else.
+                            self.print_weight = float(metadata.get('value'))
+                        except (TypeError, ValueError) as e:
+                            LOGGER.error(f"Failed to parse print weight: {e}")
                     elif (metadata.get('key') == 'prediction'):
                         # Estimated print length in seconds
                         LOGGER.debug(f"Print time: {metadata.get('value')}s")
