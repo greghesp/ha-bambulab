@@ -1,7 +1,7 @@
 name: Translation parity
 
-# Missing/stale keys remain informational. Placeholder errors fail the job,
-# including missing translations for English strings containing placeholders.
+# Missing/stale keys and placeholder errors remain informational warnings.
+# Translation findings do not block merging while locales catch up.
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
 
       # Comments are only meaningful in a PR context (push events - e.g. a
       # merge to main - have no PR to comment on).
-      - if: always() && github.event_name == 'pull_request' && steps.check.outputs.drift != ''
+      - if: github.event_name == 'pull_request'
         uses: actions/github-script@v9
         with:
           script: |

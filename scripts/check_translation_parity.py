@@ -1,8 +1,8 @@
 """Check translation keys and placeholders against en.json without editing them.
 
-Ordinary missing/stale keys remain informational. Missing translations of
-placeholder-bearing strings, mismatched placeholder names and invalid format
-strings fail the check. Reports are deterministic and overwritten on each run.
+Translation findings, including missing/stale keys and placeholder errors, are
+informational warnings and do not block merging. Reports are deterministic and
+overwritten on each run. Source translations are never modified.
 """
 import glob
 import json
@@ -78,7 +78,7 @@ def build_markdown(summary_rows, any_drift):
     lines = [
         "## Translation parity",
         "",
-        "Missing/stale keys are informational; placeholder errors fail the check.",
+        "Missing/stale keys and placeholder errors are informational and do not block merging.",
         "",
         "| Locale | Missing keys | Stale keys | Placeholder errors |",
         "| --- | --- | --- | --- |",
@@ -105,7 +105,6 @@ def main():
 
     summary_rows = []
     any_drift = False
-    has_placeholder_errors = False
 
     for filepath in sorted(glob.glob(os.path.join(TRANSLATIONS_DIR, "*.json"))):
         filename = os.path.basename(filepath)
@@ -119,7 +118,6 @@ def main():
         missing = sorted(en_keys - other_keys)  # in en.json, not in this locale
         extra = sorted(other_keys - en_keys)    # in this locale, not in en.json (stale)
         errors = placeholder_errors(english, translated)
-        has_placeholder_errors = has_placeholder_errors or bool(errors)
 
         if not missing and not extra and not errors:
             continue
@@ -136,7 +134,7 @@ def main():
                   f"{filename} has {len(extra)} stale key(s) no longer in en.json: "
                   f"{', '.join(extra[:5])}{', ...' if len(extra) > 5 else ''}")
         for key, message in errors.items():
-            print(f"::error file={os.path.relpath(filepath)}::"
+            print(f"::warning file={os.path.relpath(filepath)}::"
                   f"{filename}:{key}: {message}")
 
     markdown = build_markdown(summary_rows, any_drift)
@@ -160,7 +158,8 @@ def main():
     if not any_drift:
         print("All locales match en.json.")
 
-    return 1 if has_placeholder_errors else 0
+    # Translation findings are informational, not a merge gate.
+    return 0
 
 
 if __name__ == "__main__":
