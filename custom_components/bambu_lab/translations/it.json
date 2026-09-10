@@ -938,7 +938,7 @@
     },
     "access_code_rejected": {
       "title": "Codice di accesso rifiutato",
-      "description": "La stampante ha rifiutato il codice di accesso configurato per {dispositivo}. Questo di solito significa che il codice è stato rigenerato, ad esempio mediante un ripristino delle impostazioni di fabbrica. Leggere il nuovo codice di accesso dalla schermata delle impostazioni di rete della stampante e riconfigurare l'integrazione con esso."
+      "description": "La stampante ha rifiutato il codice di accesso configurato per {device}. Questo di solito significa che il codice è stato rigenerato, ad esempio mediante un ripristino delle impostazioni di fabbrica. Leggere il nuovo codice di accesso dalla schermata delle impostazioni di rete della stampante e riconfigurare l'integrazione con esso."
     }
   }
 }

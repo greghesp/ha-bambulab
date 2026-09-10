@@ -938,7 +938,7 @@
     },
     "access_code_rejected": {
       "title": "Kod dostępu odrzucony",
-      "description": "Drukarka odrzuciła skonfigurowany kod dostępu dla {urządzenia}. Zwykle oznacza to, że kod został zregenerowany, na przykład poprzez przywrócenie ustawień fabrycznych. Przeczytaj nowy kod dostępu z ekranu ustawień sieciowych drukarki i ponownie skonfiguruj z nim integrację."
+      "description": "Drukarka odrzuciła skonfigurowany kod dostępu dla {device}. Zwykle oznacza to, że kod został zregenerowany, na przykład poprzez przywrócenie ustawień fabrycznych. Przeczytaj nowy kod dostępu z ekranu ustawień sieciowych drukarki i ponownie skonfiguruj z nim integrację."
     }
   }
 }

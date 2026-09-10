@@ -1,17 +1,19 @@
 name: Translation parity
 
-# Informational only, by design - reports translation locales that are out
-# of sync with en.json (missing keys, or stale keys no longer in English),
-# but never fails the job. A PR that only changes English strings shouldn't
-# be blocked on every locale catching up before it can merge.
+# Missing/stale keys remain informational. Placeholder errors fail the job,
+# including missing translations for English strings containing placeholders.
 
 on:
   push:
     paths:
       - "custom_components/bambu_lab/translations/**"
+      - "scripts/check_translation_parity.py"
+      - ".github/workflows/translation-parity.yml"
   pull_request:
     paths:
       - "custom_components/bambu_lab/translations/**"
+      - "scripts/check_translation_parity.py"
+      - ".github/workflows/translation-parity.yml"
 
 permissions:
   # PR comments are served by the Issues API under the hood, so this - not
@@ -33,15 +35,14 @@ jobs:
 
       # Comments are only meaningful in a PR context (push events - e.g. a
       # merge to main - have no PR to comment on).
-      - if: github.event_name == 'pull_request'
+      - if: always() && github.event_name == 'pull_request' && steps.check.outputs.drift != ''
         uses: actions/github-script@v9
         with:
           script: |
             // GitHub forces a read-only GITHUB_TOKEN for pull_request runs
             // triggered from a fork, regardless of the `permissions:` block
             // above - so createComment/updateComment always 403s here. Skip
-            // rather than let that throw and fail this "informational only,
-            // never fails the job" check for every external contributor.
+            // rather than let reporting fail for every external contributor.
             const isFork = context.payload.pull_request.head.repo.full_name !==
                             context.payload.pull_request.base.repo.full_name;
             if (isFork) {

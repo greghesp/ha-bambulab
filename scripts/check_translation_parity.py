@@ -1,16 +1,14 @@
-"""Report translation keys that are missing or stale relative to en.json.
+"""Check translation keys and placeholders against en.json without editing them.
 
-Non-blocking by design: prints GitHub Actions ::warning:: annotations, writes
-a step-summary table, and writes a PR-comment body to
-COMMENT_OUTPUT_PATH - but always exits 0. The intent is visibility for
-reviewers/maintainers (and the PR submitter), not a merge gate - a PR that
-only touches English strings shouldn't be blocked on translations catching
-up.
+Ordinary missing/stale keys remain informational. Missing translations of
+placeholder-bearing strings, mismatched placeholder names and invalid format
+strings fail the check. Reports are deterministic and overwritten on each run.
 """
 import glob
 import json
 import os
 import sys
+from string import Formatter
 
 TRANSLATIONS_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..",
@@ -35,6 +33,44 @@ def flatten(d, prefix=""):
     return out
 
 
+def placeholder_names(text):
+    """Respect escaped braces and placeholders in nested format specs."""
+    names = set()
+    for _, field, format_spec, _ in Formatter().parse(text):
+        if field is not None:
+            names.add(field)
+            names.update(placeholder_names(format_spec))
+    return names
+
+
+def placeholder_errors(english, translated):
+    """Compare flattened strings; include missing placeholder-bearing keys."""
+    errors = {}
+    for key, value in sorted(english.items()):
+        if not isinstance(value, str):
+            continue
+        try:
+            expected = placeholder_names(value)
+        except ValueError as error:
+            errors[key] = f"invalid English format string: {error}"
+            continue
+        if key not in translated:
+            if expected:
+                errors[key] = f"missing translation with placeholders {sorted(expected)}"
+            continue
+        if not isinstance(translated[key], str):
+            errors[key] = "translation must be a string"
+            continue
+        try:
+            actual = placeholder_names(translated[key])
+        except ValueError as error:
+            errors[key] = f"invalid translated format string: {error}"
+            continue
+        if actual != expected:
+            errors[key] = f"expected {sorted(expected)}, got {sorted(actual)}"
+    return errors
+
+
 def build_markdown(summary_rows, any_drift):
     if not any_drift:
         return "## Translation parity\n\nAll locales match `en.json`. :white_check_mark:\n"
@@ -42,17 +78,21 @@ def build_markdown(summary_rows, any_drift):
     lines = [
         "## Translation parity",
         "",
-        "This is informational only and does not block merging.",
+        "Missing/stale keys are informational; placeholder errors fail the check.",
         "",
-        "| Locale | Missing keys | Stale keys |",
-        "| --- | --- | --- |",
+        "| Locale | Missing keys | Stale keys | Placeholder errors |",
+        "| --- | --- | --- | --- |",
     ]
-    for filename, missing, extra in summary_rows:
-        lines.append(f"| `{filename}` | {len(missing)} | {len(extra)} |")
+    for filename, missing, extra, errors in summary_rows:
+        lines.append(f"| `{filename}` | {len(missing)} | {len(extra)} | {len(errors)} |")
+    for filename, _, _, errors in summary_rows:
+        for key, message in errors.items():
+            lines.append(f"\n- `{filename}:{key}`: {message}")
     lines += [
         "",
         "Run `python3 scripts/auto_translate.py` to fill in missing keys "
-        "(requires network access to Google Translate).",
+        "(requires network access to Google Translate). Preserve placeholder names "
+        "exactly as in English and rerun this check afterwards.",
     ]
     return "\n".join(lines) + "\n"
 
@@ -60,10 +100,12 @@ def build_markdown(summary_rows, any_drift):
 def main():
     en_path = os.path.join(TRANSLATIONS_DIR, "en.json")
     with open(en_path, encoding="utf-8") as f:
-        en_keys = set(flatten(json.load(f)).keys())
+        english = flatten(json.load(f))
+    en_keys = set(english)
 
     summary_rows = []
     any_drift = False
+    has_placeholder_errors = False
 
     for filepath in sorted(glob.glob(os.path.join(TRANSLATIONS_DIR, "*.json"))):
         filename = os.path.basename(filepath)
@@ -71,16 +113,19 @@ def main():
             continue
 
         with open(filepath, encoding="utf-8") as f:
-            other_keys = set(flatten(json.load(f)).keys())
+            translated = flatten(json.load(f))
+        other_keys = set(translated)
 
         missing = sorted(en_keys - other_keys)  # in en.json, not in this locale
         extra = sorted(other_keys - en_keys)    # in this locale, not in en.json (stale)
+        errors = placeholder_errors(english, translated)
+        has_placeholder_errors = has_placeholder_errors or bool(errors)
 
-        if not missing and not extra:
+        if not missing and not extra and not errors:
             continue
 
         any_drift = True
-        summary_rows.append((filename, missing, extra))
+        summary_rows.append((filename, missing, extra, errors))
 
         if missing:
             print(f"::warning file={os.path.relpath(filepath)}::"
@@ -90,12 +135,15 @@ def main():
             print(f"::warning file={os.path.relpath(filepath)}::"
                   f"{filename} has {len(extra)} stale key(s) no longer in en.json: "
                   f"{', '.join(extra[:5])}{', ...' if len(extra) > 5 else ''}")
+        for key, message in errors.items():
+            print(f"::error file={os.path.relpath(filepath)}::"
+                  f"{filename}:{key}: {message}")
 
     markdown = build_markdown(summary_rows, any_drift)
 
     step_summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if step_summary:
-        with open(step_summary, "a", encoding="utf-8") as f:
+        with open(step_summary, "w", encoding="utf-8") as f:
             f.write(markdown)
 
     # Written every run (whether drift was found or not) so the workflow's
@@ -112,8 +160,7 @@ def main():
     if not any_drift:
         print("All locales match en.json.")
 
-    # Always succeed - this check is informational, not a merge gate.
-    return 0
+    return 1 if has_placeholder_errors else 0
 
 
 if __name__ == "__main__":
