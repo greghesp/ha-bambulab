@@ -376,8 +376,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         # Wait for the result from the second instance
         try:
             result = await asyncio.wait_for(future, timeout=15)
-            if (call.service == 'extrude_retract' or
-                call.service == 'get_filament_data'):
+            if call.service in ('extrude_retract', 'get_filament_data', 'get_pa_profiles'):
                 # Only report result for service calls that return a result to avoid confusion.
                 if isinstance(result, (list, dict, tuple)):
                     LOGGER.debug("Service call result: %s with length %d", type(result).__name__, len(result))
@@ -414,6 +413,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "read_rfid": SupportsResponse.NONE,
         "start_filament_drying": SupportsResponse.NONE,
         "stop_filament_drying": SupportsResponse.NONE,
+        "get_pa_profiles": SupportsResponse.ONLY,
+        "select_pa_profile": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(

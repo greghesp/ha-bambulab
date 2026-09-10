@@ -371,3 +371,96 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
       device_id: a1b2c3d4e5f6g7h8i9j0
     ```
 </Property>
+
+## Get PA Calibration Profiles
+<Property name="action" type="bambu_lab.get_pa_profiles" required>
+  Retrieves Pressure Advance (PA) calibration profiles stored on the printer.
+  Without `filament_id` returns all custom profiles. With `filament_id` filters to
+  profiles for that specific filament type.
+
+    ```yaml
+    action: bambu_lab.get_pa_profiles
+    data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
+    ```
+
+    ```yaml
+    action: bambu_lab.get_pa_profiles
+    data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
+      filament_id: "GFB99"
+    ```
+
+    Returns a `profiles` list with custom PA calibration profiles stored on the printer.
+    Each entry includes `cali_idx`, `filament_id`, `name`, `k_value`, and related fields.
+    The factory default profile is not included in this list.
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="device_id" type="string" required>
+      Device ID of the Bambu Lab printer.
+    </Property>
+
+    ---
+
+    <Property name="filament_id" type="string">
+      If provided, returns only profiles for this filament type (e.g. `"GFB99"`).
+      If omitted, returns all saved custom profiles.
+    </Property>
+  </Accordion>
+
+
+    Example automation usage:
+
+    ```yaml
+    - action: bambu_lab.get_pa_profiles
+      response_variable: pa_profiles
+      data:
+        device_id: a1b2c3d4e5f6g7h8i9j0
+        filament_id: "GFB99"
+    ```
+
+    The response is available as `pa_profiles.profiles`.
+
+    To determine which profile is active for a tray, compare the tray's `cali_idx` attribute
+    against the `cali_idx` values in the response. A match means that custom profile is active;
+    no match means the factory default is active.
+
+    Requires the printer to support PA calibration profiles.
+</Property>
+
+## Select PA Calibration Profile
+<Property name="action" type="bambu_lab.select_pa_profile" required>
+  Sets the active Pressure Advance calibration profile for the specified AMS tray or external spool.
+  Use `cali_idx: -1` to revert to the factory default profile.
+
+    ```yaml
+    action: bambu_lab.select_pa_profile
+    data:
+      entity_id: sensor.p2s_00m00a000000000_ams_0300a0000000000_tray_1
+      cali_idx: 1
+      filament_id: "GFB99"
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="entity_id" type="string" required>
+      Entity ID of the AMS tray or external spool sensor. Used to determine the tray_id.
+    </Property>
+
+    ---
+
+    <Property name="cali_idx" type="number" required>
+      The calibration profile index to activate. Use `-1` to select the factory default.
+      Get available profile indices from the `get_pa_profiles` action response.
+    </Property>
+
+    ---
+
+    <Property name="filament_id" type="string" required>
+      The filament type ID (e.g. `"GFB99"`) for which the profile is being selected.
+    </Property>
+  </Accordion>
+</Property>
