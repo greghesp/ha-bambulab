@@ -18,7 +18,6 @@ from homeassistant.helpers import entity_platform
 from homeassistant.components.http import HomeAssistantView
 from aiohttp import web
 import aiofiles
-from homeassistant.helpers import device_registry
 
 from .const import (
     DOMAIN,
@@ -69,8 +68,7 @@ class PrintHistoryAPIView(HomeAssistantView):
                     files = await coordinator.get_cached_files(file_type='prints')
                     
                     # Get the device ID from the device registry
-                    dev_reg = device_registry.async_get(self.hass)
-                    hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, printer_info.serial)})
+                    hadevice = coordinator.get_ha_printer_device()
                     device_id = hadevice.id if hadevice else None
                     
                     # Get printer name from device registry or use device_type as fallback
@@ -155,8 +153,7 @@ class VideoAPIView(HomeAssistantView):
                     files = await coordinator.get_cached_files(file_type='timelapse')
                     
                     # Get the device ID from the device registry
-                    dev_reg = device_registry.async_get(self.hass)
-                    hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, printer_info.serial)})
+                    hadevice = coordinator.get_ha_printer_device()
                     device_id = hadevice.id if hadevice else None
                     
                     # Get printer name from device registry or use device_type as fallback

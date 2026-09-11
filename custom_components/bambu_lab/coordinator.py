@@ -212,7 +212,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _is_service_call_for_me(self, data: dict):
         dev_reg = device_registry.async_get(self._hass)
-        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        hadevice = self.get_ha_printer_device()
 
         device_id = data.get('device_id')
         entity_id = data.get('entity_id')
@@ -460,8 +460,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_parent_device_id = ams_device.via_device_id
 
         # Get my device id
-        dr = device_registry.async_get(self._hass)
-        hadevice = dr.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        hadevice = self.get_ha_printer_device()
 
         if ams_parent_device_id != hadevice.id:
             return None
@@ -754,8 +753,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error(f"Exception data: {e}")
 
     def _update_printer_error(self):
-        dev_reg = device_registry.async_get(self._hass)
-        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        hadevice = self.get_ha_printer_device()
         if hadevice is None:
             # Device not in the registry yet (HMS error can arrive during the initial
             # connect, before the device entry exists). Skip this cycle to avoid
@@ -784,8 +782,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
     def _update_print_error(self):
-        dev_reg = device_registry.async_get(self._hass)
-        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        hadevice = self.get_ha_printer_device()
         if hadevice is None:
             LOGGER.debug("_update_print_error: device not registered yet, skipping")
             return
@@ -817,7 +814,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.debug(f"'{new_sw_ver}' '{new_hw_ver}'")
             if (new_sw_ver != "unknown"):
                 dev_reg = device_registry.async_get(self._hass)
-                hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+                hadevice = self.get_ha_printer_device()
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver, serial_number=self.config_entry.data["serial"])
                 self._updatedDevice = True
 
@@ -872,23 +869,22 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config_entry_id=self.config_entry.entry_id
         dev_reg = device_registry.async_get(self._hass)
         ams_devices_to_remove = []
-        for device in dev_reg.devices.values():
-            if config_entry_id in device.config_entries:
-                # This device is associated with this printer.
-                is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT')
-                is_placeholder_ams = (
-                    device.model == 'Unknown'
-                    and (DOMAIN, "") in device.identifiers
-                    and (device.name or "").startswith(f"{self.config_entry.data['device_type']}_{self.config_entry.data['serial']}_AMS_")
-                )
-                if is_known_ams or is_placeholder_ams:
-                    # push_status can create an AMS placeholder before version metadata is
-                    # available. Older versions registered that placeholder with an empty
-                    # identifier; always discard it so the real serial can own the device.
-                    ams_serial = list(device.identifiers)[0][1]
-                    if is_placeholder_ams or ams_serial not in existing_ams_devices:
-                        LOGGER.debug(f"Found stale attached AMS with serial {ams_serial}")
-                        ams_devices_to_remove.append(device.id)
+        for device in device_registry.async_entries_for_config_entry(dev_reg, config_entry_id):
+            # This device is associated with this printer.
+            is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT')
+            is_placeholder_ams = (
+                device.model == 'Unknown'
+                and (DOMAIN, "") in device.identifiers
+                and (device.name or "").startswith(f"{self.config_entry.data['device_type']}_{self.config_entry.data['serial']}_AMS_")
+            )
+            if is_known_ams or is_placeholder_ams:
+                # push_status can create an AMS placeholder before version metadata is
+                # available. Older versions registered that placeholder with an empty
+                # identifier; always discard it so the real serial can own the device.
+                ams_serial = list(device.identifiers)[0][1]
+                if is_placeholder_ams or ams_serial not in existing_ams_devices:
+                    LOGGER.debug(f"Found stale attached AMS with serial {ams_serial}")
+                    ams_devices_to_remove.append(device.id)
 
         for device in ams_devices_to_remove:
             LOGGER.debug("Removing stale AMS.")
@@ -896,18 +892,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         # Clean up orphaned Hotend Rack device if printer no longer has one.
         if not self.get_model().supports_feature(Features.HOTEND_RACK):
-            for device in dev_reg.devices.values():
-                if config_entry_id in device.config_entries:
-                    if device.model == 'Hotend Rack':
-                        LOGGER.debug("Removing stale Hotend Rack device.")
-                        dev_reg.async_remove_device(device.id)
+            for device in device_registry.async_entries_for_config_entry(dev_reg, config_entry_id):
+                if device.model == 'Hotend Rack':
+                    LOGGER.debug("Removing stale Hotend Rack device.")
+                    dev_reg.async_remove_device(device.id)
 
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
         self.hass.async_create_task(self._reinitialize_sensors())
 
     def PublishDeviceTriggerEvent(self, event: str):
-        dev_reg = device_registry.async_get(self._hass)
-        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, self.get_model().info.serial)})
+        hadevice = self.get_ha_printer_device()
         if hadevice is None:
             # Events can arrive during initial connect, before the device entry exists.
             LOGGER.debug(f"PublishDeviceTriggerEvent: device not registered yet, skipping {event}")
@@ -927,6 +921,31 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def get_model(self):
         return self.client.get_device()
+
+    def get_ha_printer_device(self):
+        """Find the printer's device registry entry.
+
+        async_get_device lookups by identifier are deprecated as of HA 2026.9
+        because identifiers are no longer unique across config entries, so scan
+        just this config entry's devices instead."""
+        dev_reg = device_registry.async_get(self._hass)
+        printer_identifier = (DOMAIN, self.get_model().info.serial)
+        for device in device_registry.async_entries_for_config_entry(dev_reg, self.config_entry.entry_id):
+            if printer_identifier in device.identifiers:
+                return device
+        return None
+
+    def _set_via_device(self, device_info: DeviceInfo):
+        """Link a device to its parent printer.
+
+        HA 2026.8 deprecated the via_device identifier tuple in favor of
+        via_device_id; older versions don't accept via_device_id at all."""
+        if "via_device_id" in DeviceInfo.__optional_keys__:
+            printer_device = self.get_ha_printer_device()
+            if printer_device is not None:
+                device_info["via_device_id"] = printer_device.id
+        else:
+            device_info["via_device"] = (DOMAIN, self.config_entry.data["serial"])
 
     def get_printer_device(self):
         printer_serial = self.config_entry.data["serial"]
@@ -952,45 +971,48 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_serial = self.get_model().ams.data[index].serial
         model = self.get_model().ams.data[index].model
 
-        return DeviceInfo(
+        device_info = DeviceInfo(
             identifiers={(DOMAIN, ams_serial)},
-            via_device=(DOMAIN, printer_serial),
             name=device_name,
             model=model,
             manufacturer=BRAND,
             hw_version=self.get_model().ams.data[index].hw_version,
             sw_version=self.get_model().ams.data[index].sw_version
         )
+        self._set_via_device(device_info)
+        return device_info
 
     def get_virtual_tray_device(self, suffix: str):
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
         device_name=f"{device_type}_{printer_serial}_ExternalSpool{suffix}"
 
-        return DeviceInfo(
+        device_info = DeviceInfo(
             identifiers={(DOMAIN, f"{printer_serial}_ExternalSpool{suffix}")},
-            via_device=(DOMAIN, printer_serial),
             name=device_name,
             model="External Spool",
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
         )
+        self._set_via_device(device_info)
+        return device_info
 
     def get_hotend_rack_device(self):
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
         device_name = f"{device_type}_{printer_serial}_HotendRack"
 
-        return DeviceInfo(
+        device_info = DeviceInfo(
             identifiers={(DOMAIN, f"{printer_serial}_HotendRack")},
-            via_device=(DOMAIN, printer_serial),
             name=device_name,
             model="Hotend Rack",
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
         )
+        self._set_via_device(device_info)
+        return device_info
 
     def get_option_enabled(self, option: Options):
         options = dict(self.config_entry.options)

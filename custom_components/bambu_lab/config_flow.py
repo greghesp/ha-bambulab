@@ -55,6 +55,18 @@ REGION_SELECTOR = SelectSelector(
 )
 
 
+def _async_get_printer_device(hass, serial: str):
+    """Find a registered printer's device entry by serial across all config
+    entries. async_get_device lookups by identifier are deprecated as of HA
+    2026.9 because identifiers are no longer unique across config entries."""
+    dev_reg = device_registry.async_get(hass)
+    for config_entry in hass.config_entries.async_entries(DOMAIN):
+        for device in device_registry.async_entries_for_config_entry(dev_reg, config_entry.entry_id):
+            if (DOMAIN, serial) in device.identifiers:
+                return device
+    return None
+
+
 class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = CONFIG_VERSION
     _bambu_cloud: None
@@ -278,8 +290,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         printer_list = []
         for device in device_list:
-            dev_reg = device_registry.async_get(self.hass)
-            hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, device['dev_id'])})
+            hadevice = _async_get_printer_device(self.hass, device['dev_id'])
             if hadevice is None:
                 LOGGER.debug(f"Printer {device['dev_id']} found.")
                 printer_list.append(SelectOptionDict(value = device['dev_id'], label = f"{device['name']}: {device['dev_id']}"))
@@ -391,8 +402,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 if result == 0:
                     if self._show_existing:
                         # Check to see if this device is already registered and delete it if so.
-                        dev_reg = device_registry.async_get(self.hass)
-                        hadevice = dev_reg.async_get_device(identifiers={(DOMAIN, device['dev_id'])})
+                        hadevice = _async_get_printer_device(self.hass, device['dev_id'])
                         if hadevice is not None:
                             for config_entry in hadevice.config_entries:
                                 LOGGER.debug(f"Removing existing config_entry: {config_entry}")
