@@ -19,6 +19,7 @@ from custom_components.bambu_lab.pybambu.const import FansEnum
 def fan():
     coordinator = MagicMock()
     coordinator.last_update_success = True
+    coordinator.get_model().print_fun.mqtt_signature_required = False
     coordinator.get_model().fans.set_fan_speed.return_value = True
     return BambuLabFan(coordinator, FANS[2], SimpleNamespace(data={"serial": "TESTSERIAL"}))
 
@@ -43,3 +44,16 @@ def test_failed_publish_raises_service_error(fan):
 def test_turn_off_requests_zero(fan):
     fan.turn_off()
     fan.coordinator.get_model().fans.set_fan_speed.assert_called_once_with(FansEnum.CHAMBER, 0)
+
+
+def test_signed_fan_requires_session_authorization(fan):
+    fan.coordinator.get_model().print_fun.mqtt_signature_required = True
+    fan.coordinator.client.command_signer.ready = False
+    assert not fan.available
+    with pytest.raises(HomeAssistantError, match="authorization is not ready"):
+        fan.set_percentage(20)
+    fan.coordinator.get_model().fans.set_fan_speed.assert_not_called()
+    fan.coordinator.client.command_signer.ready = True
+    assert fan.available
+    fan.coordinator.last_update_success = False
+    assert not fan.available

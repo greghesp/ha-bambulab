@@ -165,3 +165,12 @@ cython_debug/
 
 # Scratch output from scripts/check_translation_parity.py
 translation_parity_comment.md
+# Operator signing material is never part of source distributions.
+private/
+runtime/
+slicer_*.pem
+printer_cert.pem
+crl_compatibility.json
+sequence.json
+sequence.lock
+*.key
