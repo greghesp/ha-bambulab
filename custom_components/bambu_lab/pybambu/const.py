@@ -301,6 +301,7 @@ class BambuUrl(IntEnum):
     USERDETAIL = 9,
     PREFERENCE = 10,
     CSRF = 11,
+    FILAMENTS = 12,
 
 BAMBU_URL = {
     BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
@@ -313,6 +314,7 @@ BAMBU_URL = {
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
     BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
     BambuUrl.CSRF: 'https://bambulab.com/api/sign-in/csrf',
+    BambuUrl.FILAMENTS: 'https://api.bambulab.com/v1/design-user-service/my/filament/v2',
 }
 
 # AMS tray `state` — see docs/merge-request-ams-tray-state.md
