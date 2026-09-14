@@ -159,6 +159,34 @@ class TestPrintJob(unittest.TestCase):
         self.client.bambu_cloud.download.assert_not_called()
         self.client._device.cover_image.set_image.assert_not_called()
 
+    def test_active_cover_loads_from_current_gcode_metadata_path(self):
+        """The active plate thumbnail can be loaded without finding the full 3mf."""
+        self.print_job.gcode_file = "/data/Metadata/plate_1.gcode"
+        self.print_job.plate_idx = 1
+
+        source = MagicMock()
+        source.name = "tcp6000"
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+
+            def download_cover(_source, remote_file, local_path, progress_callback=None):
+                self.assertEqual(remote_file.path, "/data/Metadata/plate_1.png")
+                Path(local_path).parent.mkdir(parents=True, exist_ok=True)
+                Path(local_path).write_bytes(b"active-cover")
+                return len(b"active-cover")
+
+            self.print_job._download_remote_file_atomic = MagicMock(
+                side_effect=download_cover
+            )
+
+            result = self.print_job._try_active_cover_from_printer([source])
+
+        self.assertTrue(result)
+        self.client._device.cover_image.set_image.assert_called_once_with(
+            b"active-cover"
+        )
+
     def test_ftp_cover_uses_active_mqtt_plate(self):
         """The active MQTT plate wins when archive metadata points elsewhere."""
         self.client.ftp_enabled = True
