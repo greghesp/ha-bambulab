@@ -342,3 +342,58 @@ stop_filament_drying:
       selector:
         device:
           integration: bambu_lab
+
+get_pa_profiles:
+  name: Get PA Calibration Profiles
+  description: >-
+    Retrieves Pressure Advance calibration profiles stored on the printer.
+    Without filament_id returns all profiles. With filament_id filters to
+    profiles for that specific filament type.
+  fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
+    filament_id:
+      name: Filament ID
+      description: >-
+        If provided, returns only profiles for this filament type (e.g. "GFB99").
+        If omitted, returns all saved custom profiles.
+      required: false
+      example: "GFB99"
+      selector:
+        text:
+
+select_pa_profile:
+  name: Select PA Calibration Profile
+  description: >-
+    Sets the active Pressure Advance calibration profile for the specified AMS tray or external spool.
+    Use cali_idx = -1 to revert to the factory default profile.
+  fields:
+    entity_id:
+      name: Tray or External Spool entity
+      required: true
+      selector:
+        entity:
+          integration: bambu_lab
+    cali_idx:
+      name: Calibration Profile Index
+      description: >-
+        The cali_idx of the profile to activate. Use -1 to select the factory default.
+      required: true
+      example: -1
+      selector:
+        number:
+          min: -1
+          max: 999
+          step: 1
+    filament_id:
+      name: Filament ID
+      description: >-
+        The filament type ID (e.g. "GFB99") for which the profile is being selected.
+      required: true
+      example: "GFB99"
+      selector:
+        text:
