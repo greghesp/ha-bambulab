@@ -39,6 +39,7 @@ from .const import (
     FILAMENT_DATA,
 )
 
+from .makerworld import create_makerworld_coordinator
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.const import (
@@ -80,6 +81,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config['user_language'] = hass.config.language
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
         self.client = BambuClient(config)
+
+        # Account level MakerWorld stats. None when the entry has no cloud
+        # connection, or when another entry on the same account already owns them.
+        self.makerworld = create_makerworld_coordinator(hass, entry, self.client.bambu_cloud)
             
         self._updatedDevice = False
         self._shutdown = False
