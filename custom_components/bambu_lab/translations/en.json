@@ -338,6 +338,66 @@
       }
     },
     "sensor": {
+      "makerworld_boosts_received": {
+        "name": "Boosts received"
+      },
+      "makerworld_prints_total": {
+        "name": "Prints incl. print profiles"
+      },
+      "makerworld_downloads_total": {
+        "name": "Downloads incl. print profiles"
+      },
+      "makerworld_points": {
+        "name": "Points"
+      },
+      "makerworld_points_earned": {
+        "name": "Points earned"
+      },
+      "makerworld_points_spent": {
+        "name": "Points spent"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Exclusive points"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Boost tokens"
+      },
+      "makerworld_boosts_used": {
+        "name": "Boosts used"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Boosts expired"
+      },
+      "makerworld_downloads": {
+        "name": "Downloads"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Print profile downloads"
+      },
+      "makerworld_prints": {
+        "name": "Prints"
+      },
+      "makerworld_instance_prints": {
+        "name": "Print profile prints"
+      },
+      "makerworld_designs": {
+        "name": "Published models"
+      },
+      "makerworld_likes": {
+        "name": "Likes"
+      },
+      "makerworld_collections": {
+        "name": "Collects"
+      },
+      "makerworld_followers": {
+        "name": "Followers"
+      },
+      "makerworld_following": {
+        "name": "Following"
+      },
+      "makerworld_level": {
+        "name": "Level"
+      },
       "airduct_mode": {
         "name": "Airduct mode",
         "state": {

@@ -301,6 +301,10 @@ class BambuUrl(IntEnum):
     USERDETAIL = 9,
     PREFERENCE = 10,
     CSRF = 11,
+    USER_PROFILE = 12,
+    MY_PROFILE = 13,
+    POINT_BILL = 14,
+    BOOST_RIGHT = 15,
 
 BAMBU_URL = {
     BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
@@ -313,6 +317,15 @@ BAMBU_URL = {
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
     BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
     BambuUrl.CSRF: 'https://bambulab.com/api/sign-in/csrf',
+    # The account's own MakerWorld profile - everything in one authenticated
+    # response, including the points balance and boosts received.
+    BambuUrl.MY_PROFILE: 'https://api.bambulab.com/v1/design-user-service/my/profile',
+    # Public creator profile, used as a fallback. Takes a trailing /<uid>.
+    BambuUrl.USER_PROFILE: 'https://api.bambulab.com/v1/user-service/user/profile',
+    # MakerWorld points ledger. The totals in the response header are what we want,
+    # so ask for the smallest possible page of transactions.
+    BambuUrl.POINT_BILL: 'https://api.bambulab.com/v1/point-service/point-bill/my?offset=0&limit=1&filter=all',
+    BambuUrl.BOOST_RIGHT: 'https://api.bambulab.com/v1/point-service/boost/boostingright',
 }
 
 # AMS tray `state` — see docs/merge-request-ams-tray-state.md

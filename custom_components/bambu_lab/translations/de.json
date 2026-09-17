@@ -338,6 +338,66 @@
       }
     },
     "sensor": {
+      "makerworld_boosts_received": {
+        "name": "Erhaltene Boosts"
+      },
+      "makerworld_prints_total": {
+        "name": "Drucke inkl. Druckprofile"
+      },
+      "makerworld_downloads_total": {
+        "name": "Downloads inkl. Druckprofile"
+      },
+      "makerworld_points": {
+        "name": "Punkte"
+      },
+      "makerworld_points_earned": {
+        "name": "Punkte verdient"
+      },
+      "makerworld_points_spent": {
+        "name": "Punkte ausgegeben"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Exklusive Punkte"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Boost-Tokens"
+      },
+      "makerworld_boosts_used": {
+        "name": "Boosts verwendet"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Boosts verfallen"
+      },
+      "makerworld_downloads": {
+        "name": "Downloads"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Druckprofil-Downloads"
+      },
+      "makerworld_prints": {
+        "name": "Drucke"
+      },
+      "makerworld_instance_prints": {
+        "name": "Druckprofil-Drucke"
+      },
+      "makerworld_designs": {
+        "name": "Veröffentlichte Modelle"
+      },
+      "makerworld_likes": {
+        "name": "Likes"
+      },
+      "makerworld_collections": {
+        "name": "Sammlungen"
+      },
+      "makerworld_followers": {
+        "name": "Follower"
+      },
+      "makerworld_following": {
+        "name": "Folgt"
+      },
+      "makerworld_level": {
+        "name": "Level"
+      },
       "tool_module": {
         "name": "Werkzeugmodul",
         "state": {
