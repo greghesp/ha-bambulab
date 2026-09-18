@@ -1,0 +1,928 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "Baskı iptal edildi",
+      "event_print_failed": "Baskı başarısız oldu",
+      "event_print_finished": "Baskı tamamlandı",
+      "event_print_started": "Baskı başladı",
+      "event_print_error": "Baskı hatası",
+      "event_print_error_cleared": "Baskı hatası giderildi",
+      "event_printer_error": "HMS hatası",
+      "event_printer_error_cleared": "HMS hatası giderildi",
+      "event_printer_missing_sdcard": "SD kart eksik"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "Cihaz zaten yapılandırılmış",
+      "no_printers": "Hesapta yapılandırılmamış yazıcı bulunamadı.",
+      "cloudflare": "Cloudflare bağlantı denemesini engelledi.",
+      "curl_unavailable": "curl_cffi kütüphanesi kullanılamıyor."
+    },
+    "error": {
+      "cannot_connect": "Bağlantı kurulamadı. Kimlik bilgilerinizi kontrol edin.",
+      "cannot_connect_cloud_timeout": "Bambu Lab bulutuna bağlanmaya çalışırken zaman aşımı oluştu.",
+      "cannot_connect_cloud_access_denied": "Bambu Lab bulutu erişimi reddetti.",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab bulutu bağlantıyı reddetti.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab bulut adresine ulaşılamıyor.",
+      "cannot_connect_cloud_unknown": "Bambu Lab bulutuna bağlanırken bilinmeyen bir hata oluştu.",
+      "cannot_connect_local_timeout": "Bağlantı kurulamadı. Bağlantı zaman aşımına uğradı.",
+      "cannot_connect_local_access_denied": "Bağlantı kurulamadı. Erişim reddedildi - erişim kodunu kontrol edin.",
+      "cannot_connect_local_incorrect_serial": "Bağlantı kurulamadı. Bağlantı yazıcı tarafından kapatıldı - seri numarasını kontrol edin.",
+      "cannot_connect_local_incorrect_address": "Bağlantı kurulamadı. Bağlantı reddedildi - IP adresini kontrol edin.",
+      "cannot_connect_local_address_unreachable": "Bağlantı kurulamadı. Adrese ulaşılamıyor - ağ bağlantınızı kontrol edin.",
+      "cannot_connect_local_unknown": "Bağlantı kurulamadı. Girdiğiniz ayarları kontrol edin.",
+      "invalid_auth": "Kimlik doğrulama geçersiz.",
+      "unknown": "Beklenmeyen bir hata oluştu.",
+      "code_needed": "Doğrulama kodu girilmelidir.",
+      "verifyCode": "Doğrulama kodu gerekli. E-postanızı veya telefonunuzu kontrol edin.",
+      "code_expired": "Doğrulama kodunun süresi doldu. Yeni bir kod istendi. E-postanızı veya telefonunuzu kontrol edin.",
+      "code_incorrect": "Doğrulama kodu hatalı. Lütfen tekrar girin.",
+      "tfaCode": "2FA kodu gerekli. Lütfen şimdi girin.",
+      "tfa_csrf_fallback": "Bambu Lab'ın iki faktörlü kimlik doğrulama uç noktası şu anda istekleri reddediyor. Bunun yerine e-postanıza veya telefonunuza bir doğrulama kodu gönderildi - lütfen aşağıya girin."
+    },
+    "step": {
+      "user": {
+        "description": "Bambu Lab bulutu üzerinden yapılandırma en basit ve en hızlı yöntemdir. Şifresi olmayan sosyal medya hesapları desteklenmez.\n\rBaşka yazıcılara ait çalışan kimlik doğrulama bilgilerini de yeniden kullanabilirsiniz; bulunurlarsa e-posta adreslerine göre listelenir.\n\rYa da yazıcının yerel bağlantı bilgilerini elle girerek bağlanabilirsiniz. Bu, LAN Modundaki bir yazıcı için gereklidir.",
+        "data": {
+          "printer_mode": "Yazıcı yapılandırma modu:"
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Lab bulut bağlantısı",
+        "description": "Lütfen Bambu Lab kimlik bilgilerinizi girin:",
+        "data": {
+          "region": "Hesap bölgesi:",
+          "email": "E-posta adresi veya telefon numarası",
+          "password": "Şifre",
+          "newCode": "Yeni kod iste",
+          "verifyCode": "E-posta veya telefon doğrulama kodu",
+          "tfaCode": "İki faktörlü kimlik doğrulama kodu"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "Yazıcı seçimi",
+        "data": {
+          "serial": "Eklenecek yazıcıyı seçin:"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Yerel bağlantı kurulumu",
+        "description": "Bambu Lab bulutu yerine doğrudan yazıcının mqtt'sine bağlanmayı seçebilirsiniz. Bu, Bambu Lab bulut kesintilerine karşı dayanıklılık sağlar; ancak Bambu Lab bu hibrit moddayken yazıcı üzerindeki kontrolü kısıtladığından bazı kontroller kullanılamaz.\n\rBu seçiminizden bağımsız olarak entegrasyon, yazıcının IP adresini Bambu Lab bulutundan alır ve kamera, baskı geçmişi ile Timelapse desteği için gerekli olduğundan yazıcıya bağlanabildiğini doğrular. Yazıcınıza Home Assistant'ınız tarafından erişilemiyorsa bu kontrolü devre dışı bırakabilirsiniz, ancak bu durumda söz konusu özellikleri kaybedersiniz.",
+        "data": {
+          "local_mqtt": "Doğrudan yazıcı mqtt'sine bağlan:",
+          "skip_local_mqtt": "Yerel mqtt bağlantı testini atla (önerilmez):",
+          "host": "Yerel yazıcı IP adresi:",
+          "access_code": "Erişim kodu:",
+          "print_cache_count": "Home Assistant'a önbelleğe alınacak model sayısı (sınırsız için -1):",
+          "timelapse_cache_count": "Home Assistant'a önbelleğe alınacak Timelapse video sayısı (sınırsız için -1):",
+          "usage_hours": "Güncel kullanım saati (isteğe bağlı):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Gelişmiş seçenekler",
+            "description": "Bu seçenekler yalnızca standart olmayan bir kurulumunuz varsa gereklidir.",
+            "data": {
+              "disable_ssl_verify": "SSL doğrulamasını devre dışı bırak",
+              "enable_firmware_update": "Bellenim güncelleme desteğini etkinleştir"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "LAN Modu bağlantısı",
+        "description": "Lütfen yerel yazıcı IP adresinizi, seri numaranızı ve erişim kodunuzu girin. Erişim kodunu yazıcı ekranındaki ağ ayarlarında (WLAN) bulabilirsiniz. Seri numarasını (SN) ise cihaz ayarlarında bulabilirsiniz.",
+        "data": {
+          "serial": "Seri numarası:",
+          "host": "Yerel yazıcı IP adresi:",
+          "access_code": "Erişim kodu:",
+          "print_cache_count": "Home Assistant'a önbelleğe alınacak model sayısı (sınırsız için -1):",
+          "timelapse_cache_count": "Home Assistant'a önbelleğe alınacak Timelapse video sayısı (sınırsız için -1):",
+          "usage_hours": "Güncel kullanım saati (isteğe bağlı):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Gelişmiş seçenekler",
+            "description": "Bu seçenekler yalnızca standart olmayan bir kurulumunuz varsa gereklidir.",
+            "data": {
+              "disable_ssl_verify": "SSL doğrulamasını devre dışı bırak",
+              "enable_firmware_update": "Bellenim güncelleme desteğini etkinleştir"
+            }
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cloudflare": "Cloudflare bağlantı denemesini engelledi.",
+      "curl_unavailable": "curl_cffi kütüphanesi kullanılamıyor."
+    },
+    "error": {
+      "cannot_connect": "Bağlantı kurulamadı",
+      "cannot_connect_cloud_timeout": "Bambu Lab bulutuna bağlanmaya çalışırken zaman aşımı oluştu.",
+      "cannot_connect_cloud_access_denied": "Bambu Lab bulutu erişimi reddetti.",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab bulutu bağlantıyı reddetti.",
+      "cannot_connect_cloud_address_unreachable": "Bambu Lab bulut adresine ulaşılamıyor.",
+      "cannot_connect_cloud_unknown": "Bambu Lab bulutuna bağlanırken bilinmeyen bir hata oluştu.",
+      "cannot_connect_local_timeout": "Bağlantı kurulamadı. Bağlantı zaman aşımına uğradı.",
+      "cannot_connect_local_access_denied": "Bağlantı kurulamadı. Erişim reddedildi - erişim kodunu kontrol edin.",
+      "cannot_connect_local_incorrect_serial": "Bağlantı kurulamadı. Bağlantı yazıcı tarafından kapatıldı - seri numarasını kontrol edin.",
+      "cannot_connect_local_incorrect_address": "Bağlantı kurulamadı. Bağlantı reddedildi - IP adresini kontrol edin.",
+      "cannot_connect_local_address_unreachable": "Bağlantı kurulamadı. Adrese ulaşılamıyor - ağ bağlantınızı kontrol edin.",
+      "cannot_connect_local_unknown": "Bağlantı kurulamadı. Girdiğiniz ayarları kontrol edin.",
+      "invalid_auth": "Kimlik doğrulama geçersiz.",
+      "unknown": "Beklenmeyen bir hata oluştu.",
+      "code_needed": "Doğrulama kodu girilmelidir.",
+      "verifyCode": "Doğrulama kodu gerekli. E-postanızı veya telefonunuzu kontrol edin.",
+      "code_expired": "Doğrulama kodunun süresi doldu. Yeni bir kod istendi. E-postanızı veya telefonunuzu kontrol edin.",
+      "code_incorrect": "Doğrulama kodu hatalı. Lütfen tekrar girin.",
+      "tfaCode": "2FA kodu gerekli. Lütfen şimdi girin.",
+      "tfa_csrf_fallback": "Bambu Lab'ın iki faktörlü kimlik doğrulama uç noktası şu anda istekleri reddediyor. Bunun yerine e-postanıza veya telefonunuza bir doğrulama kodu gönderildi - lütfen aşağıya girin."
+    },
+    "step": {
+      "init": {
+        "title": "Bağlantı ayarlarını düzenle",
+        "description": "Bambu Lab bulutu üzerinden yapılandırma en basit ve en hızlı yöntemdir. Şifresi olmayan sosyal medya hesapları desteklenmez.\n\rBaşka yazıcılara ait çalışan kimlik doğrulama bilgilerini de yeniden kullanabilirsiniz; bulunurlarsa e-posta adreslerine göre listelenir.\n\rYa da yazıcının yerel bağlantı bilgilerini elle girerek bağlanabilirsiniz. Bu, LAN Modundaki bir yazıcı için gereklidir.",
+        "data": {
+          "printer_mode": "Yazıcı yapılandırma modu:"
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Lab bulut bağlantısı",
+        "description": "Lütfen Bambu Lab kimlik bilgilerinizi girin:",
+        "data": {
+          "region": "Hesap bölgesi:",
+          "email": "E-posta adresi veya telefon numarası",
+          "password": "Şifre",
+          "newCode": "Yeni kod iste",
+          "verifyCode": "E-posta veya telefon doğrulama kodu",
+          "tfaCode": "İki faktörlü kimlik doğrulama kodu"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "Yazıcı yapılandırmasını düzenle",
+        "description": "Bambu Lab bulutu yerine doğrudan yazıcının mqtt'sine bağlanmayı seçebilirsiniz. Bu, Bambu Lab bulut kesintilerine karşı dayanıklılık sağlar; ancak Bambu Lab bu hibrit moddayken yazıcı üzerindeki kontrolü kısıtladığından bazı kontroller kullanılamaz.\n\rBu seçiminizden bağımsız olarak entegrasyon, yazıcının IP adresini Bambu Lab bulutundan alır ve kamera, baskı geçmişi ile Timelapse desteği için gerekli olduğundan yazıcıya bağlanabildiğini doğrular. Yazıcınıza Home Assistant'ınız tarafından erişilemiyorsa bu kontrolü devre dışı bırakabilirsiniz, ancak bu durumda söz konusu özellikleri kaybedersiniz.",
+        "data": {
+          "serial": "Ayarları düzenlenecek yazıcı:",
+          "host": "Yerel yazıcı IP adresi:",
+          "access_code": "Erişim kodu:",
+          "local_mqtt": "Doğrudan yazıcı mqtt'sine bağlan:",
+          "skip_local_mqtt": "Yerel mqtt bağlantı testini atla (önerilmez):",
+          "print_cache_count": "Home Assistant'a önbelleğe alınacak model sayısı (sınırsız için -1):",
+          "timelapse_cache_count": "Home Assistant'a önbelleğe alınacak Timelapse video sayısı (sınırsız için -1):",
+          "usage_hours": "Güncel kullanım saati (isteğe bağlı):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Gelişmiş seçenekler",
+            "description": "Bu gelişmiş seçenekler erken aşamadaki veya riskli işlevlerdir. Belgelendirmeyi okuyun ve kendi sorumluluğunuzda kullanın.",
+            "data": {
+              "disable_ssl_verify": "SSL doğrulamasını devre dışı bırak",
+              "enable_firmware_update": "Bellenim güncelleme desteğini etkinleştir"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "LAN Modu bağlantısı",
+        "description": "Lütfen yerel yazıcı IP adresinizi ve erişim kodunuzu girin. Erişim kodunu yazıcı ekranındaki ağ ayarlarında (WLAN) bulabilirsiniz.",
+        "data": {
+          "host": "Yerel yazıcı IP adresi:",
+          "access_code": "Erişim kodu:",
+          "print_cache_count": "Home Assistant'a önbelleğe alınacak model sayısı (sınırsız için -1):",
+          "timelapse_cache_count": "Home Assistant'a önbelleğe alınacak Timelapse video sayısı (sınırsız için -1):",
+          "usage_hours": "Güncel kullanım saati (isteğe bağlı):"
+        },
+        "sections": {
+          "advanced": {
+            "name": "Gelişmiş seçenekler",
+            "description": "Bu gelişmiş seçenekler erken aşamadaki veya riskli işlevlerdir. Belgelendirmeyi okuyun ve kendi sorumluluğunuzda kullanın.",
+            "data": {
+              "disable_ssl_verify": "SSL doğrulamasını devre dışı bırak",
+              "enable_firmware_update": "Bellenim güncelleme desteğini etkinleştir"
+            }
+          }
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "active_ams": {
+        "name": "Etkin"
+      },
+      "drying": {
+        "name": "Kurutma"
+      },
+      "developer_lan_mode": {
+        "name": "Geliştirici LAN modu"
+      },
+      "door_open": {
+        "name": "Kapı"
+      },
+      "timelapse": {
+        "name": "Timelapse"
+      },
+      "hms_errors": {
+        "name": "HMS hataları"
+      },
+      "print_error": {
+        "name": "Baskı hatası"
+      },
+      "online": {
+        "name": "Çevrimiçi"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT şifrelemesi"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "Hibrit MQTT kontrolü engellendi"
+      },
+      "firmware_update": {
+        "name": "Bellenim"
+      },
+      "extruder_filament_state": {
+        "name": "Ekstruder filamenti"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "Duraklat"
+      },
+      "resume": {
+        "name": "Devam ettir"
+      },
+      "stop": {
+        "name": "Durdur"
+      },
+      "refresh": {
+        "name": "Zorla yenile"
+      },
+      "dev": {
+        "name": "Hata ayıklama"
+      },
+      "buzzer_silence": {
+        "name": "Buzzer - Sessize al"
+      },
+      "buzzer_fire_alarm": {
+        "name": "Buzzer - Yangın alarmı"
+      },
+      "buzzer_beeping": {
+        "name": "Buzzer - Bip sesi"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "Soğutma fanı"
+      },
+      "aux_fan": {
+        "name": "Yardımcı fan"
+      },
+      "chamber_fan": {
+        "name": "Oda fanı"
+      },
+      "secondary_aux_fan": {
+        "name": "İkincil yardımcı fan"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "Kamera"
+      },
+      "cover_image": {
+        "name": "Kapak görüntüsü"
+      },
+      "pick_image": {
+        "name": "Seçim görüntüsü"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "Oda ışığı"
+      },
+      "camera_light": {
+        "name": "Kamera ışığı"
+      },
+      "heatbed_light": {
+        "name": "Tabla ışığı"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "Tabla hedef sıcaklığı"
+      },
+      "target_nozzle_temperature": {
+        "name": "Nozul hedef sıcaklığı"
+      },
+      "target_chamber_temperature": {
+        "name": "Oda hedef sıcaklığı"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "Baskı hızı",
+        "state": {
+          "silent": "Sessiz",
+          "standard": "Standart",
+          "sport": "Spor",
+          "ludicrous": "Çılgın"
+        }
+      },
+      "airduct_mode": {
+        "name": "Hava kanalı modu",
+        "state": {
+          "cooling": "Soğutma",
+          "heating": "Isıtma"
+        }
+      }
+    },
+    "sensor": {
+      "airduct_mode": {
+        "name": "Hava kanalı modu",
+        "state": {
+          "cooling": "Soğutma",
+          "heating": "Isıtma",
+          "laser": "Lazer"
+        }
+      },
+      "tool_module": {
+        "name": "Alet modülü",
+        "state": {
+          "none": "Takılı değil",
+          "laser10": "Lazer (10W)",
+          "laser40": "Lazer (40W)",
+          "cutter": "Kesici"
+        }
+      },
+      "wifi_signal": {
+        "name": "Wi-Fi sinyali"
+      },
+      "bed_temp": {
+        "name": "Tabla sıcaklığı"
+      },
+      "target_bed_temp": {
+        "name": "Tabla hedef sıcaklığı"
+      },
+      "chamber_temp": {
+        "name": "Oda sıcaklığı"
+      },
+      "target_chamber_temp": {
+        "name": "Oda hedef sıcaklığı"
+      },
+      "target_nozzle_temp": {
+        "name": "Nozul hedef sıcaklığı"
+      },
+      "nozzle_temp": {
+        "name": "Nozul sıcaklığı"
+      },
+      "left_nozzle_temp": {
+        "name": "Sol nozul sıcaklığı"
+      },
+      "left_target_nozzle_temp": {
+        "name": "Sol nozul hedef sıcaklığı"
+      },
+      "right_nozzle_temp": {
+        "name": "Sağ nozul sıcaklığı"
+      },
+      "right_target_nozzle_temp": {
+        "name": "Sağ nozul hedef sıcaklığı"
+      },
+      "aux_fan_speed": {
+        "name": "Yardımcı fan hızı"
+      },
+      "cooling_fan_speed": {
+        "name": "Soğutma fanı hızı"
+      },
+      "chamber_fan_speed": {
+        "name": "Oda fanı hızı"
+      },
+      "heatbreak_fan_speed": {
+        "name": "Heatbreak fanı hızı"
+      },
+      "secondary_aux_fan_speed": {
+        "name": "İkincil yardımcı fan hızı"
+      },
+      "model_download_percentage": {
+        "name": "Model indirme"
+      },
+      "speed_profile": {
+        "name": "Hız profili",
+        "state": {
+          "silent": "Sessiz",
+          "standard": "Standart",
+          "sport": "Spor",
+          "ludicrous": "Çılgın"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "Değiştirici"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "Yazıcı adı"
+      },
+      "stage": {
+        "name": "Mevcut aşama",
+        "state": {
+          "offline": "Çevrimdışı",
+          "printing": "Yazdırılıyor",
+          "auto_bed_leveling": "Otomatik tabla seviyeleniyor",
+          "heatbed_preheating": "Tabla ön ısıtılıyor",
+          "sweeping_xy_mech_mode": "XY mekanizması taranıyor",
+          "changing_filament": "Filament değiştiriliyor",
+          "m400_pause": "M400 duraklatması",
+          "paused_filament_runout": "Duraklatıldı: filament bitti",
+          "heating_hotend": "Hotend ısıtılıyor",
+          "calibrating_extrusion": "Ekstrüzyon kalibre ediliyor",
+          "scanning_bed_surface": "Tabla yüzeyi taranıyor",
+          "inspecting_first_layer": "İlk katman inceleniyor",
+          "identifying_build_plate_type": "Plaka türü belirleniyor",
+          "calibrating_micro_lidar": "Mikro lidar kalibre ediliyor",
+          "homing_toolhead": "Yazıcı kafası sıfırlanıyor",
+          "cleaning_nozzle_tip": "Nozul ucu temizleniyor",
+          "checking_extruder_temperature": "Ekstruder sıcaklığı kontrol ediliyor",
+          "paused_user": "Kullanıcı tarafından duraklatıldı",
+          "paused_front_cover_falling": "Duraklatıldı: ön kapak",
+          "calibrating_extrusion_flow": "Ekstrüzyon akışı kalibre ediliyor",
+          "paused_nozzle_temperature_malfunction": "Duraklatıldı: nozul sıcaklık arızası",
+          "paused_heat_bed_temperature_malfunction": "Duraklatıldı: tabla sıcaklık arızası",
+          "filament_unloading": "Filament çıkarılıyor",
+          "paused_skipped_step": "Duraklatıldı: atlanan adımlar",
+          "filament_loading": "Filament yükleniyor",
+          "calibrating_motor_noise": "Motor gürültüsü kalibre ediliyor",
+          "paused_ams_lost": "Duraklatıldı: AMS bağlantısı kayboldu",
+          "paused_low_fan_speed_heat_break": "Duraklatıldı: düşük heatbreak fanı",
+          "paused_chamber_temperature_control_error": "Duraklatıldı: oda sıcaklık hatası",
+          "cooling_chamber": "Oda soğutuluyor",
+          "paused_user_gcode": "Duraklatıldı: G-code talimatı",
+          "motor_noise_showoff": "Motor gürültüsü gösterimi",
+          "paused_nozzle_filament_covered_detected": "Duraklatıldı: nozul filamentle kaplandı",
+          "paused_cutter_error": "Duraklatıldı: kesici hatası",
+          "paused_first_layer_error": "Duraklatıldı: ilk katman hatası",
+          "paused_nozzle_clog": "Duraklatıldı: nozul tıkanıklığı",
+          "check_absolute_accuracy_before_calibration": "Kalibrasyon öncesi doğruluk kontrolü",
+          "absolute_accuracy_calibration": "Mutlak doğruluk kalibrasyonu",
+          "check_absolute_accuracy_after_calibration": "Kalibrasyon sonrası doğruluk kontrolü",
+          "calibrate_nozzle_offset": "Nozul ofseti kalibrasyonu",
+          "bed_level_high_temperature": "Yüksek sıcaklıkta otomatik tabla seviyeleme",
+          "check_quick_release": "Otomatik kontrol: hızlı bırakma kolu",
+          "check_door_and_cover": "Otomatik kontrol: kapı ve üst kapak",
+          "laser_calibration": "Lazer kalibrasyonu",
+          "check_plaform": "Otomatik kontrol: platform",
+          "check_birdeye_camera_position": "Otomatik kontrol: kuşbakışı kamera",
+          "calibrate_birdeye_camera": "Kuşbakışı kamera kalibre ediliyor",
+          "bed_level_phase_1": "Otomatik tabla seviyeleme - aşama 1",
+          "bed_level_phase_2": "Otomatik tabla seviyeleme - aşama 2",
+          "heating_chamber": "Oda ısıtılıyor",
+          "heated_bedcooling": "Isıtmalı tabla soğutuluyor",
+          "print_calibration_lines": "Kalibrasyon çizgileri yazdırılıyor",
+          "check_material": "Otomatik kontrol: malzeme",
+          "calibrating_live_view_camera": "Canlı Görüntü kamerası kalibre ediliyor",
+          "waiting_for_heatbed_temperature": "Tabla sıcaklığı bekleniyor",
+          "check_material_position": "Otomatik kontrol: malzeme konumu",
+          "calibrating_cutter_model_offset": "Kesici modülü ofseti kalibre ediliyor",
+          "measuring_surface": "Yüzey ölçülüyor",
+          "thermal_preconditioning": "Termal ön hazırlık yapılıyor",
+          "homing_blade_holder": "Bıçak tutucusu sıfırlanıyor",
+          "calibrating_camera_offset": "Kamera ofseti kalibre ediliyor",
+          "calibrating_blade_holder_position": "Bıçak tutucusu konumu kalibre ediliyor",
+          "hotend_pick_place_test": "Hotend alma-yerleştirme testi yapılıyor",
+          "waiting_chamber_temperature_equalize": "Oda sıcaklığının dengelenmesi bekleniyor",
+          "preparing_hotend": "Hotend hazırlanıyor",
+          "calibrating_detection_nozzle_clumping": "Nozul yığılması tespit konumu kalibre ediliyor",
+          "purifying_chamber_air": "Oda havası arındırılıyor",
+          "measuring_rotary_attachment": "Döner aparat ölçülüyor",
+          "moving_toolhead_above_purge_chute": "Yazıcı kafası atık oluğunun üzerine taşınıyor",
+          "cooling_nozzle": "Nozul soğutuluyor",
+          "moving_toolhead_to_center_of_heatbed": "Yazıcı kafası tablanın merkezine taşınıyor",
+          "active_arc_fitting": "Etkin yay uydurma",
+          "hotend_type_detection": "Hotend türü tespit ediliyor",
+          "build_plate_alignment_detection": "Plaka hizalaması tespit ediliyor",
+          "heatbed_surface_foreign_object_detection": "Tabla yüzeyinde yabancı cisim tespiti yapılıyor",
+          "heatbed_underside_foreign_object_detection": "Tabla altında yabancı cisim tespiti yapılıyor",
+          "pre_extrusion_before_printing": "Baskı öncesi ön ekstrüzyon yapılıyor",
+          "preparing_ams": "AMS hazırlanıyor",
+          "idle": "Boşta"
+        }
+      },
+      "sdcard_status": {
+        "name": "SD kart durumu",
+        "state": {
+          "missing": "Takılı değil",
+          "normal": "Normal",
+          "abnormal": "Anormal",
+          "readonly": "Salt okunur"
+        }
+      },
+      "print_progress": {
+        "name": "Baskı ilerlemesi"
+      },
+      "print_status": {
+        "name": "Baskı durumu",
+        "state": {
+          "failed": "Başarısız",
+          "finish": "Tamamlandı",
+          "idle": "Boşta",
+          "offline": "Çevrimdışı",
+          "prepare": "Hazırlanıyor",
+          "running": "Çalışıyor",
+          "pause": "Duraklatıldı",
+          "slicing": "Dilimleniyor",
+          "init": "Başlatılıyor"
+        }
+      },
+      "printable_objects": {
+        "name": "Yazdırılabilir nesneler"
+      },
+      "skipped_objects": {
+        "name": "Atlanan nesneler"
+      },
+      "mqtt_mode": {
+        "name": "MQTT bağlantı modu",
+        "state": {
+          "local": "Yerel",
+          "bambu_cloud": "Bambu Lab bulutu"
+        }
+      },
+      "gcode_file": {
+        "name": "Gcode dosya adı"
+      },
+      "gcode_file_downloaded": {
+        "name": "Gcode dosyası indirildi"
+      },
+      "remaining_drying_time": {
+        "name": "Kalan kurutma süresi"
+      },
+      "drying_temperature": {
+        "name": "Kurutma sıcaklığı"
+      },
+      "drying_duration": {
+        "name": "Kurutma süresi"
+      },
+      "drying_filament": {
+        "name": "Kurutulan filament"
+      },
+      "ams_temp": {
+        "name": "Sıcaklık"
+      },
+      "humidity": {
+        "name": "Nem"
+      },
+      "print_bed_type": {
+        "name": "Baskı plakası türü",
+        "state": {
+          "textured_plate": "Dokulu plaka",
+          "cool_plate": "Cool Plate / PLA Plakası",
+          "hot_plate": "Smooth PEI Plate / Yüksek Sıcaklık Plakası",
+          "eng_plate": "Engineering Plate",
+          "supertack_plate": "Cool Plate SuperTack"
+        }
+      },
+      "print_length": {
+        "name": "Baskı uzunluğu"
+      },
+      "print_weight": {
+        "name": "Baskı ağırlığı"
+      },
+      "subtask_name": {
+        "name": "Baskı adı"
+      },
+      "print_type": {
+        "name": "Baskı türü",
+        "state": {
+          "local": "Yerel",
+          "cloud": "Bulut",
+          "idle": "Boşta",
+          "unknown": "Bilinmiyor"
+        }
+      },
+      "start_time": {
+        "name": "Başlangıç zamanı"
+      },
+      "remaining_time": {
+        "name": "Kalan süre"
+      },
+      "end_time": {
+        "name": "Bitiş zamanı"
+      },
+      "total_usage_hours": {
+        "name": "Toplam kullanım"
+      },
+      "current_layer": {
+        "name": "Mevcut katman"
+      },
+      "total_layers": {
+        "name": "Toplam katman sayısı"
+      },
+      "active_tray": {
+        "name": "Etkin hazne",
+        "state": {
+          "none": "Yok"
+        }
+      },
+      "nozzle_diameter": {
+        "name": "Nozul boyutu"
+      },
+      "nozzle_type": {
+        "name": "Nozul türü",
+        "state": {
+          "hardened_steel": "Sertleştirilmiş çelik",
+          "stainless_steel": "Paslanmaz çelik",
+          "tungsten_carbide": "Tungsten karbür",
+          "high_flow_hardened_steel": "Yüksek akışlı sertleştirilmiş çelik",
+          "high_flow_stainless_steel": "Yüksek akışlı paslanmaz çelik",
+          "high_flow_tungsten_carbide": "Yüksek akışlı tungsten karbür",
+          "tpu_high_flow": "TPU Yüksek Akış",
+          "unknown": "Bilinmiyor"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "Sol nozul boyutu"
+      },
+      "left_nozzle_type": {
+        "name": "Sol nozul türü",
+        "state": {
+          "hardened_steel": "Sertleştirilmiş çelik",
+          "stainless_steel": "Paslanmaz çelik",
+          "tungsten_carbide": "Tungsten karbür",
+          "high_flow_hardened_steel": "Yüksek akışlı sertleştirilmiş çelik",
+          "high_flow_stainless_steel": "Yüksek akışlı paslanmaz çelik",
+          "high_flow_tungsten_carbide": "Yüksek akışlı tungsten karbür"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "Sağ nozul boyutu"
+      },
+      "right_nozzle_type": {
+        "name": "Sağ nozul türü",
+        "state": {
+          "hardened_steel": "Sertleştirilmiş çelik",
+          "stainless_steel": "Paslanmaz çelik",
+          "tungsten_carbide": "Tungsten karbür",
+          "high_flow_hardened_steel": "Yüksek akışlı sertleştirilmiş çelik",
+          "high_flow_stainless_steel": "Yüksek akışlı paslanmaz çelik",
+          "high_flow_tungsten_carbide": "Yüksek akışlı tungsten karbür"
+        }
+      },
+      "ip_address": {
+        "name": "IP adresi"
+      },
+      "serial": {
+        "name": "Seri numarası"
+      },
+      "humidity_index": {
+        "name": "Nem indeksi"
+      },
+      "external_spool": {
+        "name": "Harici makara",
+        "state_attributes": {
+          "active": {
+            "name": "Etkin"
+          },
+          "bed_temp": {
+            "name": "Tabla sıcaklığı"
+          },
+          "color": {
+            "name": "Renk"
+          },
+          "cols": {
+            "name": "Renkler"
+          },
+          "ctype": {
+            "name": "Renk türü"
+          },
+          "dry_temp": {
+            "name": "Kurutma sıcaklığı"
+          },
+          "dry_time": {
+            "name": "Kurutma süresi"
+          },
+          "empty": {
+            "name": "Boş"
+          },
+          "k_value": {
+            "name": "K değeri"
+          },
+          "name": {
+            "name": "Ad"
+          },
+          "nozzle_temp_min": {
+            "name": "Nozul min. sıcaklığı"
+          },
+          "nozzle_temp_max": {
+            "name": "Nozul maks. sıcaklığı"
+          },
+          "remain": {
+            "name": "Kalan filament"
+          },
+          "remain_enabled": {
+            "name": "Kalan filament tahmini etkin"
+          },
+          "tag_uid": {
+            "name": "Makara seri numarası"
+          },
+          "type": {
+            "name": "Tür"
+          },
+          "filament_id": {
+            "name": "Filament kimliği"
+          },
+          "tray_weight": {
+            "name": "Azami filament ağırlığı"
+          }
+        }
+      },
+      "tray": {
+        "name": "Hazne {tray_number}",
+        "state_attributes": {
+          "slot": {
+            "name": "Yuva"
+          },
+          "active": {
+            "name": "Etkin"
+          },
+          "bed_temp": {
+            "name": "Tabla sıcaklığı"
+          },
+          "color": {
+            "name": "Renk"
+          },
+          "cols": {
+            "name": "Renkler"
+          },
+          "ctype": {
+            "name": "Renk türü"
+          },
+          "dry_temp": {
+            "name": "Kurutma sıcaklığı"
+          },
+          "dry_time": {
+            "name": "Kurutma süresi"
+          },
+          "empty": {
+            "name": "Boş"
+          },
+          "k_value": {
+            "name": "K değeri"
+          },
+          "name": {
+            "name": "Ad"
+          },
+          "nozzle_temp_min": {
+            "name": "Nozul min. sıcaklığı"
+          },
+          "nozzle_temp_max": {
+            "name": "Nozul maks. sıcaklığı"
+          },
+          "remain": {
+            "name": "Kalan filament"
+          },
+          "remain_enabled": {
+            "name": "Kalan filament tahmini etkin"
+          },
+          "tag_uid": {
+            "name": "Makara seri numarası"
+          },
+          "tray_uuid": {
+            "name": "Hazne UUID"
+          },
+          "type": {
+            "name": "Tür"
+          },
+          "filament_id": {
+            "name": "Filament kimliği"
+          },
+          "tray_weight": {
+            "name": "Azami filament ağırlığı"
+          }
+        }
+      },
+      "hotend_rack_holder_position": {
+        "name": "Tutucu konumu",
+        "state": {
+          "unknown": "Bilinmiyor",
+          "a_top": "Konum A",
+          "b_top": "Konum B",
+          "centre": "Merkez"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "Tutucu durumu",
+        "state": {
+          "unknown": "Bilinmiyor",
+          "idle": "Boşta",
+          "hotend_centre": "Hotend ortalanıyor",
+          "toolhead_centre": "Yazıcı kafası ortalanıyor",
+          "calibrate_hotend_rack": "Raf kalibre ediliyor",
+          "cut_material": "Malzeme kesiliyor",
+          "unlock_hotend": "Hotend kilidi açılıyor",
+          "lift_hotend_rack": "Raf kaldırılıyor",
+          "place_hotend": "Hotend yerleştiriliyor",
+          "pick_hotend": "Hotend alınıyor",
+          "lock_hotend": "Hotend kilitleniyor"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "Hotend {hotend_id}",
+        "state": {
+          "mounted": "Takılı",
+          "docked": "Yuvada",
+          "empty": "Boş"
+        },
+        "state_attributes": {
+          "slot": { "name": "Yuva" },
+          "nozzle_type": {
+            "name": "Nozul türü",
+            "state": {
+              "hardened_steel": "Sertleştirilmiş çelik",
+              "stainless_steel": "Paslanmaz çelik",
+              "tungsten_carbide": "Tungsten karbür",
+              "high_flow_hardened_steel": "Yüksek akışlı sertleştirilmiş çelik",
+              "high_flow_stainless_steel": "Yüksek akışlı paslanmaz çelik",
+              "high_flow_tungsten_carbide": "Yüksek akışlı tungsten karbür",
+              "unknown": "Bilinmiyor"
+            }
+          },
+          "nozzle_diameter": { "name": "Nozul çapı" },
+          "serial": { "name": "Seri numarası" },
+          "max_temp": { "name": "Maks. sıcaklık" },
+          "wear": { "name": "Aşınma" },
+          "status": {
+            "name": "Durum",
+            "state": {
+              "normal": "Normal",
+              "abnormal": "Anormal",
+              "unknown": "Bilinmiyor"
+            }
+          },
+          "color": { "name": "Renk" },
+          "filament_id": { "name": "Filament kimliği" },
+          "filament_name": { "name": "Filament adı" }
+        }
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "Hotend {hotend_id} kullanım süresi"
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Kamera"
+      }
+    },
+    "switch": {
+      "camera": {
+        "name": "Kamera"
+      },
+      "imagecamera": {
+        "name": "Görüntü sensörü kamerası"
+      },
+      "ftp": {
+        "name": "Model verisi yükleme"
+      },
+      "prompt_sound": {
+        "name": "Uyarı sesi"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "Bellenim güncellemesi"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Lab bulutu",
+        "lan": "LAN Modu"
+      }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "Kimlik doğrulama başarısız",
+      "description": "{device} için Bambu Lab'a bağlanma denemesi başarısız oldu. Lütfen entegrasyonu yeniden yapılandırıp güncel kimlik bilgilerinizi girin."
+    },
+    "access_code_rejected": {
+      "title": "Erişim kodu reddedildi",
+      "description": "Yazıcı, {device} için yapılandırılmış erişim kodunu reddetti. Bu genellikle kodun (örneğin fabrika ayarlarına sıfırlama sonucunda) yeniden oluşturulduğu anlamına gelir. Yeni erişim kodunu yazıcının ağ ayarları ekranından okuyup entegrasyonu bu kodla yeniden yapılandırın."
+    },
+    "no_external_storage": {
+      "title": "USB veya SD kart algılanamadı",
+      "description": "{device} cihazına bağlı bir USB veya SD kart yok. Kapak görüntüsü, nesne atlama ve baskı geçmişi gibi yazıcıya ftp bağlantısı gerektiren tüm özellikler için bu gereklidir."
+    },
+    "live_view_disabled": {
+      "title": "Canlı görüntü devre dışı",
+      "description": "{device} üzerinde yazıcı ayarlarındaki canlı görüntü özelliği devre dışı bırakılmış. Kamera özelliklerini kullanabilmek için lütfen bunu etkinleştirin."
+    },
+    "mqtt_encryption_enabled": {
+      "title": "MQTT şifrelemesi etkin",
+      "description": "{device} buluta bağlı ve mqtt şifrelemesi etkin durumda. Bu entegrasyonla yalnızca ışık kontrol edilebilir; diğer tüm kontroller kullanılamaz. Home Assistant üzerinden kontrol sağlanabilmesi için yazıcının geliştirici LAN moduna alınması gerekir."
+    },
+    "hybrid_mode_blocking": {
+      "title": "Hibrit bağlantı kontrolü engelliyor",
+      "description": "{device} buluta bağlı, ancak entegrasyon yerel mqtt bağlantısı kullanıyor. Bu durum sıcaklık ayarlamayı ve geçmişten yeniden baskı almayı engeller. Tam kontrol için bağlantıyı yalnızca buluta geçirin."
+    }
+  }
+}
