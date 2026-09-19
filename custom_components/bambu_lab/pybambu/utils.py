@@ -142,6 +142,24 @@ def get_filament_name(idx, custom_filaments: dict):
     return result
 
 
+def get_display_filament_type(filament_id: str | None, tray_type: str | None) -> str:
+    """Map MQTT tray_type / tray_info_idx to Bambu Studio display names.
+
+    Studio stores the chemical type in MQTT (often just ``PLA``) and remaps
+    support materials in ``AmsTray::get_display_filament_type`` /
+    ``DynamicPrintConfig::get_filament_type``:
+    GFS00 or PLA-S → Sup.PLA, GFS01 or PA-S → Sup.PA, GFS06 or ABS-S → Sup.ABS.
+    ``tray_info_idx`` is the filament_id.
+    """
+    if filament_id == "GFS00" or tray_type == "PLA-S":
+        return "Sup.PLA"
+    if filament_id == "GFS01" or tray_type == "PA-S":
+        return "Sup.PA"
+    if filament_id == "GFS06" or tray_type == "ABS-S":
+        return "Sup.ABS"
+    return tray_type or ""
+
+
 def get_ip_address_from_int(ip_int: int):
     packed_ip = ip_int.to_bytes(4, 'little')
     return socket.inet_ntoa(packed_ip)

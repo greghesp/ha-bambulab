@@ -26,6 +26,7 @@ from .utils import (
     fan_percentage_to_gcode,
     get_current_stage,
     get_filament_name,
+    get_display_filament_type,
     get_ip_address_from_int,
     get_printer_type,
     get_speed_name,
@@ -3498,7 +3499,9 @@ class AMSTray:
             if 'state' in data:
                 self.state = int(data['state'])
             self.idx = data.get('tray_info_idx', self.idx)
-            self.type = data.get('tray_type', self.type)
+            self.type = get_display_filament_type(
+                self.idx, data.get('tray_type', self.type)
+            )
             self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
             self.color = data.get('tray_color', self.color)
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)

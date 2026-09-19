@@ -1,6 +1,10 @@
 import unittest
 
-from pybambu.utils import fan_percentage, get_authenticated_rtsp_url
+from pybambu.utils import (
+    fan_percentage,
+    get_authenticated_rtsp_url,
+    get_display_filament_type,
+)
 
 
 class TestAuthenticatedRTSPUrl(unittest.TestCase):
@@ -67,6 +71,28 @@ class TestFanPercentage(unittest.TestCase):
         self.assertEqual(fan_percentage(2), 20)
         self.assertEqual(fan_percentage(4), 30)
         self.assertEqual(fan_percentage(5), 40)
+
+
+class TestDisplayFilamentType(unittest.TestCase):
+    """Bambu Studio display remapping for support materials."""
+
+    def test_gfs00_or_pla_s_is_sup_pla(self):
+        self.assertEqual(get_display_filament_type("GFS00", "PLA"), "Sup.PLA")
+        self.assertEqual(get_display_filament_type("", "PLA-S"), "Sup.PLA")
+        self.assertEqual(get_display_filament_type("GFS00", "PLA-S"), "Sup.PLA")
+
+    def test_gfs01_or_pa_s_is_sup_pa(self):
+        self.assertEqual(get_display_filament_type("GFS01", "PA"), "Sup.PA")
+        self.assertEqual(get_display_filament_type("", "PA-S"), "Sup.PA")
+
+    def test_gfs06_or_abs_s_is_sup_abs(self):
+        self.assertEqual(get_display_filament_type("GFS06", "ABS"), "Sup.ABS")
+        self.assertEqual(get_display_filament_type("", "ABS-S"), "Sup.ABS")
+
+    def test_regular_types_are_unchanged(self):
+        self.assertEqual(get_display_filament_type("GFA00", "PLA"), "PLA")
+        self.assertEqual(get_display_filament_type("GFS05", "PLA"), "PLA")
+        self.assertEqual(get_display_filament_type("", ""), "")
 
 
 if __name__ == '__main__':

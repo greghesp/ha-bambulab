@@ -212,6 +212,23 @@ class TestAMSTrayNoStateFirmware(unittest.TestCase):
         self.tray.print_update({"id": "0", "state": 8})
         self.assertTrue(self.tray.empty)
 
+    def test_support_filament_display_type(self):
+        self.tray.print_update({
+            "id": "0",
+            "state": 3,
+            "tray_type": "PLA",
+            "tray_info_idx": "GFS00",
+        })
+        self.assertEqual(self.tray.type, "Sup.PLA")
+
+        self.tray.print_update({
+            "id": "0",
+            "state": 3,
+            "tray_type": "PLA-S",
+            "tray_info_idx": "GFS02",
+        })
+        self.assertEqual(self.tray.type, "Sup.PLA")
+
 
 if __name__ == '__main__':
     unittest.main()
