@@ -4,6 +4,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -13,6 +14,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.32,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -22,6 +24,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.25,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -31,6 +34,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.32,
+    "filament_is_support": false,
     "nozzle_temperature": 230,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -40,6 +44,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.27,
+    "filament_is_support": false,
     "nozzle_temperature": 230,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -49,6 +54,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.22,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -58,6 +64,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -67,6 +74,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -76,6 +84,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.21,
+    "filament_is_support": false,
     "nozzle_temperature": 245,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 220
@@ -85,6 +94,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA-AERO",
     "filament_density": 1.21,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 260,
     "nozzle_temperature_range_low": 210
@@ -94,6 +104,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -103,6 +114,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -112,6 +124,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.19,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -121,6 +134,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.21,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -130,6 +144,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.22,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -139,6 +154,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.4,
+    "filament_is_support": false,
     "nozzle_temperature": 210,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -148,6 +164,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA-CF",
     "filament_density": 1.22,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 210
@@ -157,6 +174,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "ABS",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -166,6 +184,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "ASA",
     "filament_density": 1.05,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -175,6 +194,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "ASA-AERO",
     "filament_density": 0.99,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -184,6 +204,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "ABS-GF",
     "filament_density": 1.08,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -193,6 +214,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "ASA-CF",
     "filament_density": 1.02,
+    "filament_is_support": false,
     "nozzle_temperature": 275,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 250
@@ -202,6 +224,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "ABS",
     "filament_density": 1.03,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -211,6 +234,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "ASA",
     "filament_density": 1.02,
+    "filament_is_support": false,
     "nozzle_temperature": 260,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -220,6 +244,7 @@
     "filament_vendor": "Generic",
     "filament_type": "ASA",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 260,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -229,6 +254,7 @@
     "filament_vendor": "Generic",
     "filament_type": "ABS",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -238,6 +264,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PC",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 280,
     "nozzle_temperature_range_high": 290,
     "nozzle_temperature_range_low": 260
@@ -247,6 +274,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PC",
     "filament_density": 1.19,
+    "filament_is_support": false,
     "nozzle_temperature": 280,
     "nozzle_temperature_range_high": 290,
     "nozzle_temperature_range_low": 260
@@ -256,6 +284,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PC",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 280,
     "nozzle_temperature_range_high": 290,
     "nozzle_temperature_range_low": 260
@@ -265,6 +294,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PETG",
     "filament_density": 1.25,
+    "filament_is_support": false,
     "nozzle_temperature": 255,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 230
@@ -274,6 +304,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PETG",
     "filament_density": 1.25,
+    "filament_is_support": false,
     "nozzle_temperature": 245,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 230
@@ -283,6 +314,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PETG",
     "filament_density": 1.28,
+    "filament_is_support": false,
     "nozzle_temperature": 245,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 230
@@ -292,6 +324,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PETG-CF",
     "filament_density": 1.25,
+    "filament_is_support": false,
     "nozzle_temperature": 255,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 240
@@ -301,6 +334,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PETG",
     "filament_density": 1.27,
+    "filament_is_support": false,
     "nozzle_temperature": 255,
     "nozzle_temperature_range_high": 260,
     "nozzle_temperature_range_low": 220
@@ -310,6 +344,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PETG",
     "filament_density": 1.28,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 220
@@ -319,6 +354,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PCTG",
     "filament_density": 1.29,
+    "filament_is_support": false,
     "nozzle_temperature": 255,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 240
@@ -328,6 +364,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PETG-CF",
     "filament_density": 1.25,
+    "filament_is_support": false,
     "nozzle_temperature": 255,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 240
@@ -337,6 +374,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PETG",
     "filament_density": 1.27,
+    "filament_is_support": false,
     "nozzle_temperature": 255,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 220
@@ -346,6 +384,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PLA",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -355,6 +394,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PLA",
     "filament_density": 1.31,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -364,6 +404,7 @@
     "filament_vendor": "eSUN",
     "filament_type": "PLA",
     "filament_density": 1.25,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -373,6 +414,7 @@
     "filament_vendor": "Overture",
     "filament_type": "PLA",
     "filament_density": 1.2,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -382,6 +424,7 @@
     "filament_vendor": "Overture",
     "filament_type": "PLA",
     "filament_density": 1.22,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -391,6 +434,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PETG",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 290,
     "nozzle_temperature_range_low": 250
@@ -400,6 +444,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PA6-CF",
     "filament_density": 1.17,
+    "filament_is_support": false,
     "nozzle_temperature": 300,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 280
@@ -409,6 +454,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PA-GF",
     "filament_density": 1.2,
+    "filament_is_support": false,
     "nozzle_temperature": 300,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 280
@@ -418,6 +464,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PA-CF",
     "filament_density": 1.06,
+    "filament_is_support": false,
     "nozzle_temperature": 300,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -427,6 +474,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PA",
     "filament_density": 1.06,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -436,6 +484,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PET-CF",
     "filament_density": 1.34,
+    "filament_is_support": false,
     "nozzle_temperature": 300,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 270
@@ -445,6 +494,7 @@
     "filament_vendor": "Polymaker",
     "filament_type": "PETG-CF",
     "filament_density": 1.3,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 240
@@ -454,6 +504,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PLA",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -463,6 +514,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PLA",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -472,6 +524,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PLA-CF",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -481,6 +534,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PLA",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -490,6 +544,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PA-CF",
     "filament_density": 1.09,
+    "filament_is_support": false,
     "nozzle_temperature": 280,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -499,6 +554,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PA-CF",
     "filament_density": 1.06,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -508,6 +564,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PA6-CF",
     "filament_density": 1.1,
+    "filament_is_support": false,
     "nozzle_temperature": 275,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -517,6 +574,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PPA-CF",
     "filament_density": 1.17,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 320,
     "nozzle_temperature_range_low": 280
@@ -526,6 +584,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PA-GF",
     "filament_density": 1.14,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -535,6 +594,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PPA-GF",
     "filament_density": 1.17,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 320,
     "nozzle_temperature_range_low": 280
@@ -544,6 +604,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PPA-CF",
     "filament_density": 1.17,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 320,
     "nozzle_temperature_range_low": 280
@@ -553,6 +614,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PA-CF",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -562,6 +624,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PA",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 260,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -571,6 +634,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PP-GF",
     "filament_density": 1.05,
+    "filament_is_support": false,
     "nozzle_temperature": 235,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 220
@@ -580,6 +644,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PP-CF",
     "filament_density": 1.01,
+    "filament_is_support": false,
     "nozzle_temperature": 235,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 220
@@ -589,6 +654,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PP",
     "filament_density": 0.93,
+    "filament_is_support": false,
     "nozzle_temperature": 235,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 220
@@ -598,6 +664,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PE-CF",
     "filament_density": 0.95,
+    "filament_is_support": false,
     "nozzle_temperature": 210,
     "nozzle_temperature_range_high": 220,
     "nozzle_temperature_range_low": 175
@@ -607,6 +674,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PE",
     "filament_density": 0.95,
+    "filament_is_support": false,
     "nozzle_temperature": 210,
     "nozzle_temperature_range_high": 220,
     "nozzle_temperature_range_low": 175
@@ -616,6 +684,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PHA",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -625,6 +694,7 @@
     "filament_vendor": "Generic",
     "filament_type": "EVA",
     "filament_density": 0.94,
+    "filament_is_support": false,
     "nozzle_temperature": 210,
     "nozzle_temperature_range_high": 220,
     "nozzle_temperature_range_low": 175
@@ -634,6 +704,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.3,
+    "filament_is_support": true,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -643,6 +714,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PA",
     "filament_density": 1.22,
+    "filament_is_support": true,
     "nozzle_temperature": 280,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -652,6 +724,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.3,
+    "filament_is_support": true,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -661,6 +734,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PA",
     "filament_density": 1.22,
+    "filament_is_support": true,
     "nozzle_temperature": 280,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -670,6 +744,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PVA",
     "filament_density": 1.27,
+    "filament_is_support": true,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 210
@@ -679,6 +754,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PLA",
     "filament_density": 1.19,
+    "filament_is_support": true,
     "nozzle_temperature": 210,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -688,6 +764,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "ABS",
     "filament_density": 1.16,
+    "filament_is_support": true,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 240
@@ -697,6 +774,7 @@
     "filament_vendor": "Generic",
     "filament_type": "BVOH",
     "filament_density": 1.13,
+    "filament_is_support": true,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -706,6 +784,7 @@
     "filament_vendor": "Generic",
     "filament_type": "HIPS",
     "filament_density": 1.06,
+    "filament_is_support": true,
     "nozzle_temperature": 240,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 220
@@ -715,6 +794,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PVA",
     "filament_density": 1.24,
+    "filament_is_support": true,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -724,6 +804,7 @@
     "filament_vendor": "Generic",
     "filament_type": "ASA",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 260,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -733,6 +814,7 @@
     "filament_vendor": "Generic",
     "filament_type": "ABS",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -742,6 +824,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PC",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 280,
     "nozzle_temperature_range_high": 290,
     "nozzle_temperature_range_low": 260
@@ -751,6 +834,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PETG",
     "filament_density": 1.27,
+    "filament_is_support": false,
     "nozzle_temperature": 255,
     "nozzle_temperature_range_high": 270,
     "nozzle_temperature_range_low": 220
@@ -760,6 +844,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PLA-CF",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -769,6 +854,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PLA",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -778,6 +864,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PLA",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -787,6 +874,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PA",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 260,
     "nozzle_temperature_range_high": 280,
     "nozzle_temperature_range_low": 240
@@ -796,6 +884,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PA-CF",
     "filament_density": 1.04,
+    "filament_is_support": false,
     "nozzle_temperature": 290,
     "nozzle_temperature_range_high": 300,
     "nozzle_temperature_range_low": 260
@@ -805,6 +894,7 @@
     "filament_vendor": "Generic",
     "filament_type": "TPU",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 240,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 200
@@ -814,6 +904,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PVA",
     "filament_density": 1.24,
+    "filament_is_support": true,
     "nozzle_temperature": 220,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 190
@@ -823,6 +914,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PET-CF",
     "filament_density": 1.29,
+    "filament_is_support": false,
     "nozzle_temperature": 270,
     "nozzle_temperature_range_high": 290,
     "nozzle_temperature_range_low": 260
@@ -832,6 +924,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "PPS-CF",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 320,
     "nozzle_temperature_range_high": 340,
     "nozzle_temperature_range_low": 310
@@ -841,6 +934,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PPS",
     "filament_density": 1.36,
+    "filament_is_support": false,
     "nozzle_temperature": 320,
     "nozzle_temperature_range_high": 340,
     "nozzle_temperature_range_low": 300
@@ -850,6 +944,7 @@
     "filament_vendor": "Generic",
     "filament_type": "PPS-CF",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 320,
     "nozzle_temperature_range_high": 340,
     "nozzle_temperature_range_low": 310
@@ -859,6 +954,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "TPU",
     "filament_density": 1.22,
+    "filament_is_support": false,
     "nozzle_temperature": 230,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 200
@@ -868,6 +964,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "TPU",
     "filament_density": 1.22,
+    "filament_is_support": false,
     "nozzle_temperature": 230,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 200
@@ -877,6 +974,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "TPU-AMS",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 230,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 220
@@ -886,6 +984,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "TPU",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 225,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 200
@@ -895,6 +994,7 @@
     "filament_vendor": "Bambu Lab",
     "filament_type": "TPU",
     "filament_density": 1.18,
+    "filament_is_support": false,
     "nozzle_temperature": 225,
     "nozzle_temperature_range_high": 240,
     "nozzle_temperature_range_low": 200
@@ -904,6 +1004,7 @@
     "filament_vendor": "Generic",
     "filament_type": "TPU-AMS",
     "filament_density": 1.26,
+    "filament_is_support": false,
     "nozzle_temperature": 230,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 200
@@ -913,6 +1014,7 @@
     "filament_vendor": "Generic",
     "filament_type": "TPU",
     "filament_density": 1.24,
+    "filament_is_support": false,
     "nozzle_temperature": 240,
     "nozzle_temperature_range_high": 250,
     "nozzle_temperature_range_low": 200
