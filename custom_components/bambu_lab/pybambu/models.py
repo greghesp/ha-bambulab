@@ -2153,10 +2153,49 @@ class PrintJob:
         LOGGER.info(f"Remote media thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
         self._ftpThread = None
 
+    def _try_active_cover_from_printer(self, sources: list[RemoteMediaSource]) -> bool:
+        """Load the active print's plate thumbnail directly from the printer."""
+        if not self.gcode_file or not self.plate_idx:
+            return False
+
+        metadata_dir = self.gcode_file.replace("\\", "/").rsplit("/", 1)[0]
+        cover_path = f"{metadata_dir}/plate_{self.plate_idx}.png"
+
+        for source in sources:
+            if source.name != Tcp6000MediaSource.name:
+                continue
+
+            remote_file = RemoteMediaFile(
+                name=os.path.basename(cover_path),
+                path=cover_path,
+                size=0,
+                media_type="model",
+                source=source.name,
+                storage="",
+            )
+            local_path = Path(self._client.cache_path) / "prints" / "active-cover.png"
+
+            try:
+                self._download_remote_file_atomic(source, remote_file, local_path)
+                data = local_path.read_bytes()
+                if data:
+                    self._client._device.cover_image.set_image(data)
+                    LOGGER.debug(f"Loaded active cover directly from {cover_path}")
+                    return True
+            except Exception as e:
+                LOGGER.debug(
+                    f"Direct active cover lookup failed for {cover_path}: "
+                    f"{type(e)} Args: {e}"
+                )
+
+        return False
+
     def _async_download_task_data_from_printer_worker(self):
         model_file_path = None
+        cover_loaded = False
         sources = self._remote_media_sources()
         try:
+            cover_loaded = self._try_active_cover_from_printer(sources)
             for i in range(1,13):
                 model_file_path = self._attempt_remote_model_download(sources)
                 if model_file_path is not None:
@@ -2170,6 +2209,9 @@ class PrintJob:
                         LOGGER.debug(f"Sleeping 5s for X1/H2/P2 retry")
                         time.sleep(5)
                         LOGGER.debug(f"Try #{i+1} for X1/H2/P2")
+                        # Retry active cover if TCP 6000 wasn't available on first attempt
+                        if not cover_loaded:
+                            cover_loaded = self._try_active_cover_from_printer(sources)
                 else:
                     break
         finally:

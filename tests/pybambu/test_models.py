@@ -1,6 +1,6 @@
 import logging
 import unittest
-from unittest.mock import call, MagicMock
+from unittest.mock import call, MagicMock, patch
 from datetime import datetime
 import os
 import json
@@ -159,6 +159,34 @@ class TestPrintJob(unittest.TestCase):
         self.client.bambu_cloud.download.assert_not_called()
         self.client._device.cover_image.set_image.assert_not_called()
 
+    def test_active_cover_loads_from_current_gcode_metadata_path(self):
+        """The active plate thumbnail can be loaded without finding the full 3mf."""
+        self.print_job.gcode_file = "/data/Metadata/plate_1.gcode"
+        self.print_job.plate_idx = 1
+
+        source = MagicMock()
+        source.name = "tcp6000"
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+
+            def download_cover(_source, remote_file, local_path, progress_callback=None):
+                self.assertEqual(remote_file.path, "/data/Metadata/plate_1.png")
+                Path(local_path).parent.mkdir(parents=True, exist_ok=True)
+                Path(local_path).write_bytes(b"active-cover")
+                return len(b"active-cover")
+
+            self.print_job._download_remote_file_atomic = MagicMock(
+                side_effect=download_cover
+            )
+
+            result = self.print_job._try_active_cover_from_printer([source])
+
+        self.assertTrue(result)
+        self.client._device.cover_image.set_image.assert_called_once_with(
+            b"active-cover"
+        )
+
     def test_ftp_cover_uses_active_mqtt_plate(self):
         """The active MQTT plate wins when archive metadata points elsewhere."""
         self.client.ftp_enabled = True
@@ -188,6 +216,29 @@ class TestPrintJob(unittest.TestCase):
 
         self.assertTrue(result)
         self.client._device.cover_image.set_image.assert_called_once_with(b"active-plate-cover")
+
+    def test_active_cover_is_retried_when_x1c_media_is_not_ready(self):
+        """X1C retries the active cover while its media endpoint starts up."""
+        self.client._device.supports_feature.return_value = False
+        sources = [MagicMock()]
+        self.print_job._remote_media_sources = MagicMock(return_value=sources)
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._close_remote_media_sources = MagicMock()
+        self.print_job._try_active_cover_from_printer = MagicMock(
+            side_effect=[False, True]
+        )
+
+        with patch("pybambu.models.time.sleep") as sleep:
+            self.print_job._async_download_task_data_from_printer_worker()
+
+        self.print_job._try_active_cover_from_printer.assert_has_calls(
+            [call(sources), call(sources)]
+        )
+        self.assertEqual(
+            self.print_job._try_active_cover_from_printer.call_count,
+            2,
+        )
+        self.assertEqual(sleep.call_count, 11)
 
     def test_slice_info_weight_is_a_float(self):
         """The 3MF stores the weight as text; print_weight is a float everywhere else."""
