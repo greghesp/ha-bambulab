@@ -2192,9 +2192,10 @@ class PrintJob:
 
     def _async_download_task_data_from_printer_worker(self):
         model_file_path = None
+        cover_loaded = False
         sources = self._remote_media_sources()
         try:
-            self._try_active_cover_from_printer(sources)
+            cover_loaded = self._try_active_cover_from_printer(sources)
             for i in range(1,13):
                 model_file_path = self._attempt_remote_model_download(sources)
                 if model_file_path is not None:
@@ -2208,6 +2209,9 @@ class PrintJob:
                         LOGGER.debug(f"Sleeping 5s for X1/H2/P2 retry")
                         time.sleep(5)
                         LOGGER.debug(f"Try #{i+1} for X1/H2/P2")
+                        # Retry active cover if TCP 6000 wasn't available on first attempt
+                        if not cover_loaded:
+                            cover_loaded = self._try_active_cover_from_printer(sources)
                 else:
                     break
         finally:

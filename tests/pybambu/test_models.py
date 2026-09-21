@@ -1,6 +1,6 @@
 import logging
 import unittest
-from unittest.mock import call, MagicMock
+from unittest.mock import call, MagicMock, patch
 from datetime import datetime
 import os
 import json
@@ -216,6 +216,29 @@ class TestPrintJob(unittest.TestCase):
 
         self.assertTrue(result)
         self.client._device.cover_image.set_image.assert_called_once_with(b"active-plate-cover")
+
+    def test_active_cover_is_retried_when_x1c_media_is_not_ready(self):
+        """X1C retries the active cover while its media endpoint starts up."""
+        self.client._device.supports_feature.return_value = False
+        sources = [MagicMock()]
+        self.print_job._remote_media_sources = MagicMock(return_value=sources)
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._close_remote_media_sources = MagicMock()
+        self.print_job._try_active_cover_from_printer = MagicMock(
+            side_effect=[False, True]
+        )
+
+        with patch("pybambu.models.time.sleep") as sleep:
+            self.print_job._async_download_task_data_from_printer_worker()
+
+        self.print_job._try_active_cover_from_printer.assert_has_calls(
+            [call(sources), call(sources)]
+        )
+        self.assertEqual(
+            self.print_job._try_active_cover_from_printer.call_count,
+            2,
+        )
+        self.assertEqual(sleep.call_count, 11)
 
     def test_slice_info_weight_is_a_float(self):
         """The 3MF stores the weight as text; print_weight is a float everywhere else."""
