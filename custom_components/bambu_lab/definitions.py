@@ -30,6 +30,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.util import dt as dt_util
 
 from .const import (
+    FILAMENT_DATA,
     LOGGER,
     Options,
 )
@@ -624,7 +625,10 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "tag_uid": self.coordinator.get_model().ams.active_tray.tag_uid,
             "tray_index": self.coordinator.get_model().ams.active_tray_index,
             "tray_uuid": self.coordinator.get_model().ams.active_tray.tray_uuid,
-            "type": self.coordinator.get_model().ams.active_tray.type,
+            "type": _get_display_filament_type(
+                self.coordinator.get_model().ams.active_tray.idx,
+                self.coordinator.get_model().ams.active_tray.type,
+            ),
         },
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
     ),
@@ -733,7 +737,10 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             "remain_enabled": self.coordinator.get_model().external_spool[self.index].remain_enabled,
             "tag_uid": self.coordinator.get_model().external_spool[self.index].tag_uid,
             "tray_uuid": self.coordinator.get_model().external_spool[self.index].tray_uuid,
-            "type": self.coordinator.get_model().external_spool[self.index].type,
+            "type": _get_display_filament_type(
+                self.coordinator.get_model().external_spool[self.index].idx,
+                self.coordinator.get_model().external_spool[self.index].type,
+            ),
         },
     ),
 )
@@ -843,7 +850,10 @@ def _tray_sensor(tray_index: int, display_number: int) -> BambuLabAMSSensorEntit
             "remain_enabled": self.coordinator.get_model().ams.data[self.index].tray[idx].remain_enabled,
             "tag_uid": self.coordinator.get_model().ams.data[self.index].tray[idx].tag_uid,
             "tray_uuid": self.coordinator.get_model().ams.data[self.index].tray[idx].tray_uuid,
-            "type": self.coordinator.get_model().ams.data[self.index].tray[idx].type,
+            "type": _get_display_filament_type(
+                self.coordinator.get_model().ams.data[self.index].tray[idx].idx,
+                self.coordinator.get_model().ams.data[self.index].tray[idx].type,
+            ),
         },
         **({"exists_fn": lambda coordinator, index: coordinator.get_model().ams.data[index].model != "AMS HT"} if tray_index > 0 else {}),
     )
@@ -967,3 +977,25 @@ HOTEND_RACK_HOTEND_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...
         _hotend_used_time_sensor(slot_id, slot_id - 15),
     )
 )
+
+
+_MQTT_SUPPORT_TYPES = {
+    "PLA-S": "Sup.PLA",
+    "PA-S": "Sup.PA",
+    "ABS-S": "Sup.ABS",
+}
+_CHEMICAL_SUPPORT_TYPES = {
+    "PLA": "Sup.PLA",
+    "PA": "Sup.PA",
+    "ABS": "Sup.ABS",
+}
+
+
+def _get_display_filament_type(filament_id: str | None, tray_type: str | None) -> str:
+    """Map MQTT tray_type to Bambu Studio display names using FILAMENT_DATA."""
+    tray_type = tray_type or ""
+    if tray_type in _MQTT_SUPPORT_TYPES:
+        return _MQTT_SUPPORT_TYPES[tray_type]
+    if filament_id and FILAMENT_DATA.get(filament_id, {}).get("filament_is_support"):
+        return _CHEMICAL_SUPPORT_TYPES.get(tray_type, tray_type)
+    return tray_type
