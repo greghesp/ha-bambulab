@@ -38,7 +38,7 @@ def test_canonical_fan_only_ciphertext(ready, fan_id, percentage):
     (0, 20), (4, 20), (5, 20), (10, 20), (True, 20), ('3', 20),
     ('3 S0\nM104 S300', 20), (3, True), (3, -1), (3, 101),
     (3, float('nan')), (3, float('inf')), (3, float('-inf')),
-    (3, '20'), (3, '0\nG28'), (3, {'print': {'command': 'stop'}}),
+    (3, 10**400), (3, '20'), (3, '0\nG28'), (3, {'print': {'command': 'stop'}}),
 ])
 def test_invalid_request_reserves_no_sequence(ready, tmp_path, fan_id, percentage):
     signer, _ = ready

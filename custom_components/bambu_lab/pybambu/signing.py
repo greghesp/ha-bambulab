@@ -302,8 +302,8 @@ class CommandSigner:
             raise CommandSigningError("unsupported signed fan")
         if (
             type(percentage) not in (int, float)
-            or not math.isfinite(percentage)
             or not 0 <= percentage <= 100
+            or not math.isfinite(percentage)
         ):
             raise CommandSigningError("fan percentage must be finite and between 0 and 100")
         speed = math.ceil(255 * (round(percentage / 10) * 10) / 100)
