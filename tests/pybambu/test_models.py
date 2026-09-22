@@ -1,7 +1,7 @@
 import logging
 import unittest
 from unittest.mock import call, MagicMock
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 import json
 import tempfile
@@ -25,6 +25,11 @@ from pybambu.models import (
     StageAction,
     Temperature,
     ams_slot_name,
+)
+from pybambu.media_sources import (
+    Ftps990MediaSource,
+    RemoteMediaFile,
+    Tcp6000MediaSource,
 )
 from pybambu.const import FansEnum, Printers
 
@@ -265,6 +270,85 @@ class TestPrintJob(unittest.TestCase):
             for sidecar in sidecars:
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
+
+    def test_model_name_with_slash_matches_the_printers_encoded_filename(self):
+        """The printer stores '/' in a model name as '2f' on disk."""
+        remote_file = RemoteMediaFile(
+            name="Hase 2f Osterhase.gcode.3mf",
+            path="/cache/Hase 2f Osterhase.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 13, 38, tzinfo=timezone.utc),
+        )
+
+        self.assertTrue(
+            self.print_job._remote_model_matches(
+                remote_file, "Hase / Osterhase.gcode.3mf"
+            )
+        )
+
+    def test_candidate_with_slash_is_not_truncated_at_the_slash(self):
+        """A subtask name is a name, not a path: it must not be split on '/'."""
+        wrong_file = RemoteMediaFile(
+            name=" Osterhase.gcode.3mf",
+            path="/ Osterhase.gcode.3mf",
+            size=111,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 13, 0, tzinfo=timezone.utc),
+        )
+
+        self.assertFalse(
+            self.print_job._remote_model_matches(
+                wrong_file, "Hase / Osterhase.gcode.3mf"
+            )
+        )
+
+    def test_path_shaped_gcode_candidate_still_yields_its_basename(self):
+        """Dropping the rsplit must not lose the match it used to enable."""
+        self.print_job._subtask_name = ""
+        self.print_job.gcode_file = "/cache/widget.gcode.3mf"
+
+        candidates = self.print_job._model_filenames_to_try()
+
+        self.assertIn("/cache/widget.gcode.3mf", candidates)
+        self.assertIn("widget.gcode.3mf", candidates)
+
+    def test_plain_model_name_matching_is_unchanged(self):
+        """The common case must behave exactly as before."""
+        remote_file = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 22, 40, tzinfo=timezone.utc),
+        )
+
+        self.assertTrue(
+            self.print_job._remote_model_matches(remote_file, "dragon.gcode.3mf")
+        )
+        self.assertTrue(
+            self.print_job._remote_model_matches(remote_file, "/dragon.gcode.3mf")
+        )
+        self.assertFalse(
+            self.print_job._remote_model_matches(remote_file, "other.gcode.3mf")
+        )
+
+    def test_subtask_name_with_slash_yields_no_truncated_candidate(self):
+        """A slash in a project title must never produce a basename candidate."""
+        self.print_job._subtask_name = "Hase / Osterhase"
+        self.print_job.gcode_file = ""
+
+        candidates = self.print_job._model_filenames_to_try()
+
+        self.assertIn("Hase / Osterhase.gcode.3mf", candidates)
+        self.assertNotIn(" Osterhase.gcode.3mf", candidates)
+        self.assertNotIn(" Osterhase.3mf", candidates)
 
 class TestInfo(unittest.TestCase):
     def setUp(self):
