@@ -938,7 +938,7 @@
     },
     "access_code_rejected": {
       "title": "Codi d'accés rebutjat",
-      "description": "La impressora ha rebutjat el codi d'accés configurat per a {dispositiu}. Això normalment significa que el codi s'ha regenerat, per exemple mitjançant un restabliment de fàbrica. Llegiu el nou codi d'accés des de la pantalla de configuració de xarxa de la impressora i torneu a configurar la integració amb ell."
+      "description": "La impressora ha rebutjat el codi d'accés configurat per a {device}. Això normalment significa que el codi s'ha regenerat, per exemple mitjançant un restabliment de fàbrica. Llegiu el nou codi d'accés des de la pantalla de configuració de xarxa de la impressora i torneu a configurar la integració amb ell."
     }
   }
 }

@@ -189,6 +189,36 @@ class TestPrintJob(unittest.TestCase):
         self.assertTrue(result)
         self.client._device.cover_image.set_image.assert_called_once_with(b"active-plate-cover")
 
+    def test_slice_info_weight_is_a_float(self):
+        """The 3MF stores the weight as text; print_weight is a float everywhere else."""
+        self.client.ftp_enabled = True
+        self.client._device.supports_feature.return_value = False
+        self.client._device.external_spool[0].active = True
+        self.print_job.plate_idx = 1
+        self.print_job.ams_mapping = []
+        self.print_job.prune_print_history_files = MagicMock()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            model_path = os.path.join(temp_dir, "current.3mf")
+            with ZipFile(model_path, "w") as archive:
+                archive.writestr(
+                    "Metadata/slice_info.config",
+                    '<config><plate><metadata key="index" value="1" />'
+                    '<metadata key="weight" value="49.59" /></plate></config>',
+                )
+                archive.writestr("Metadata/plate_1.png", b"cover")
+                archive.writestr("Metadata/plate_1.gcode", b"gcode")
+                archive.writestr("Metadata/plate_1.json", '{"bed_type": "textured_plate"}')
+
+            self.print_job._remote_media_sources = MagicMock(return_value=[MagicMock()])
+            self.print_job._attempt_remote_model_download = MagicMock(return_value=model_path)
+            self.print_job._close_remote_media_sources = MagicMock()
+
+            self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+
+        self.assertEqual(self.print_job.print_weight, 49.59)
+        self.assertEqual(self.print_job.get_print_weights, {"External Spool": 49.59})
+
     def test_prune_cleans_stale_part_files_even_when_pruning_disabled(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             stale_part = Path(temp_dir) / "stale.3mf.part"

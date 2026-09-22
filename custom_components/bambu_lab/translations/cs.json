@@ -938,7 +938,7 @@
     },
     "access_code_rejected": {
       "title": "Přístupový kód zamítnut",
-      "description": "Tiskárna odmítla nakonfigurovaný přístupový kód pro {zařízení}. To obvykle znamená, že kód byl znovu vygenerován, například obnovením továrního nastavení. Přečtěte si nový přístupový kód z obrazovky nastavení sítě tiskárny a překonfigurujte s ním integraci."
+      "description": "Tiskárna odmítla nakonfigurovaný přístupový kód pro {device}. To obvykle znamená, že kód byl znovu vygenerován, například obnovením továrního nastavení. Přečtěte si nový přístupový kód z obrazovky nastavení sítě tiskárny a překonfigurujte s ním integraci."
     }
   }
 }

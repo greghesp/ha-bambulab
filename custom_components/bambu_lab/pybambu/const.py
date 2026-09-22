@@ -312,7 +312,7 @@ BAMBU_URL = {
     BambuUrl.TASKS: 'https://api.bambulab.com/v1/user-service/my/tasks',
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
     BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
-    BambuUrl.CSRF: 'https://bambulab.com/api/sign-in/csrf',
+    BambuUrl.CSRF: 'https://bambulab.com/api/csrf',
 }
 
 # AMS tray `state` — see docs/merge-request-ams-tray-state.md

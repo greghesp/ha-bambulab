@@ -938,7 +938,7 @@
     },
     "access_code_rejected": {
       "title": "Zugangscode abgelehnt",
-      "description": "Der Drucker hat den konfigurierten Zugriffscode für {Gerät} abgelehnt. Dies bedeutet normalerweise, dass der Code neu generiert wurde, beispielsweise durch einen Werksreset. Lesen Sie den neuen Zugangscode auf dem Bildschirm mit den Netzwerkeinstellungen des Druckers ab und konfigurieren Sie die Integration damit neu."
+      "description": "Der Drucker hat den konfigurierten Zugriffscode für {device} abgelehnt. Dies bedeutet normalerweise, dass der Code neu generiert wurde, beispielsweise durch einen Werksreset. Lesen Sie den neuen Zugangscode auf dem Bildschirm mit den Netzwerkeinstellungen des Druckers ab und konfigurieren Sie die Integration damit neu."
     }
   }
 }
