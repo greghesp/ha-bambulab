@@ -1,7 +1,7 @@
 import logging
 import unittest
 from unittest.mock import call, MagicMock
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 import json
 import tempfile
@@ -25,6 +25,11 @@ from pybambu.models import (
     StageAction,
     Temperature,
     ams_slot_name,
+)
+from pybambu.media_sources import (
+    Ftps990MediaSource,
+    RemoteMediaFile,
+    Tcp6000MediaSource,
 )
 from pybambu.const import FansEnum, Printers
 
@@ -265,6 +270,140 @@ class TestPrintJob(unittest.TestCase):
             for sidecar in sidecars:
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
+
+    def test_model_selection_keeps_other_storage_copies_as_fallback(self):
+        """A copy on another volume stays available when the preferred one cannot be read."""
+        emmc = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/userdata/model/history/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Tcp6000MediaSource.name,
+            storage="emmc",
+            modified=datetime(2026, 9, 21, 22, 42, tzinfo=timezone.utc),
+        )
+        sdcard = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 22, 40, tzinfo=timezone.utc),
+        )
+
+        selected = self.print_job._select_model_files(
+            [emmc, sdcard], ["dragon.gcode.3mf"]
+        )
+
+        self.assertEqual([emmc, sdcard], selected)
+
+    def test_model_selection_returns_every_match_exactly_once(self):
+        """The aliases/remaining split is a partition: nothing lost, nothing repeated."""
+        files = [
+            RemoteMediaFile(
+                name="widget.gcode.3mf",
+                path="/cache/widget.gcode.3mf",
+                size=1000,
+                media_type="model",
+                source=Tcp6000MediaSource.name,
+                storage="emmc",
+                modified=datetime(2026, 9, 22, 10, 0, tzinfo=timezone.utc),
+            ),
+            RemoteMediaFile(
+                name="widget.gcode.3mf",
+                path="/widget.gcode.3mf",
+                size=1000,
+                media_type="model",
+                source=Ftps990MediaSource.name,
+                storage="external",
+                modified=datetime(2026, 9, 22, 9, 0, tzinfo=timezone.utc),
+            ),
+            RemoteMediaFile(
+                name="widget.gcode.3mf",
+                path="/cache/widget.gcode.3mf",
+                size=1000,
+                media_type="model",
+                source=Ftps990MediaSource.name,
+                storage="external",
+                modified=datetime(2026, 9, 22, 8, 0, tzinfo=timezone.utc),
+            ),
+        ]
+
+        selected = self.print_job._select_model_files(files, ["widget.gcode.3mf"])
+
+        self.assertEqual(len(files), len(selected))
+        for file in files:
+            self.assertEqual(1, selected.count(file))
+
+    def test_model_download_falls_through_when_the_preferred_copy_fails(self):
+        """A failed download on the first candidate is retried on the next."""
+        emmc = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/userdata/model/history/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Tcp6000MediaSource.name,
+            storage="emmc",
+            modified=datetime(2026, 9, 21, 22, 42, tzinfo=timezone.utc),
+        )
+        sdcard = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 22, 40, tzinfo=timezone.utc),
+        )
+
+        tcp_source = MagicMock()
+        tcp_source.name = Tcp6000MediaSource.name
+        ftp_source = MagicMock()
+        ftp_source.name = Ftps990MediaSource.name
+
+        self.print_job._subtask_name = "dragon"
+        self.print_job.gcode_file = ""
+        self.print_job._collect_remote_files = MagicMock(return_value=[emmc, sdcard])
+        self.print_job._remote_file_is_stable = MagicMock(return_value=True)
+
+        def download(source, remote_file, progress_callback=None):
+            # Mirrors the real wrapper, which logs and returns None on failure.
+            return None if remote_file is emmc else "/cache/prints/dragon.gcode.3mf"
+
+        self.print_job._download_model_file_from_remote = MagicMock(side_effect=download)
+
+        result = self.print_job._attempt_remote_model_download([tcp_source, ftp_source])
+
+        self.assertEqual("/cache/prints/dragon.gcode.3mf", result)
+        self.assertEqual(2, self.print_job._download_model_file_from_remote.call_count)
+
+    def test_newest_file_fallback_still_returns_only_aliases(self):
+        """With no subtask name, the newest-file fallback must not fan out to unrelated models."""
+        newest = RemoteMediaFile(
+            name="newest.3mf",
+            path="/cache/newest.3mf",
+            size=100,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 22, 12, 0, tzinfo=timezone.utc),
+        )
+        unrelated = RemoteMediaFile(
+            name="unrelated.3mf",
+            path="/unrelated.3mf",
+            size=200,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 22, 11, 0, tzinfo=timezone.utc),
+        )
+
+        self.print_job._subtask_name = ""
+
+        selected = self.print_job._select_model_files([newest, unrelated], [])
+
+        self.assertEqual([newest], selected)
 
 class TestInfo(unittest.TestCase):
     def setUp(self):
