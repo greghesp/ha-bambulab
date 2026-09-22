@@ -79,6 +79,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config.update(entry.options.items())
         config['user_language'] = hass.config.language
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
+        config['signing_path'] = hass.config.path(
+            ".storage", "bambu_lab_signing", config['serial']
+        )
         self.client = BambuClient(config)
             
         self._updatedDevice = False
@@ -131,7 +134,20 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._report_live_view_disabled_issue()
         
         elif event == "event_printer_mqtt_encryption_enabled":
-            self._report_encryption_enabled_issue()
+            if not self.client.command_signer.configured:
+                self._report_encryption_enabled_issue()
+
+        elif event == "event_printer_signer_ready":
+            # Fan entities already exist; update availability without rebuilding platforms.
+            issue_registry.async_delete_issue(
+                hass=self._hass,
+                domain=DOMAIN,
+                issue_id=f"mqtt_encryption_enabled_{self.get_model().info.serial}",
+            )
+            self.async_set_updated_data(self.get_model())
+
+        elif event == "event_printer_signer_unavailable":
+            self.async_set_updated_data(self.get_model())
 
         elif event == "event_printer_ready":
             # A successful connection ends any access denied episode.

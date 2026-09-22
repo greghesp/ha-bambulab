@@ -18,7 +18,8 @@
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/greghesp/ha-bambulab/issues",
   "requirements": [
-    "beautifulsoup4"
+    "beautifulsoup4",
+    "cryptography>=43.0.0"
   ],
   "ssdp": [
     {

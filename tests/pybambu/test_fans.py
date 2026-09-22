@@ -19,6 +19,7 @@ CONTROLLABLE = (
 @pytest.mark.parametrize("fan", CONTROLLABLE)
 def test_successful_publish_sets_override(fan):
     client = MagicMock()
+    client.get_device().print_fun.mqtt_signature_required = False
     client.publish.return_value = True
     fans = Fans(client)
 
@@ -31,6 +32,7 @@ def test_successful_publish_sets_override(fan):
 @pytest.mark.parametrize("fan", CONTROLLABLE)
 def test_failed_publish_preserves_previous_override(fan):
     client = MagicMock()
+    client.get_device().print_fun.mqtt_signature_required = False
     client.publish.return_value = True
     fans = Fans(client)
     fans.set_fan_speed(fan, 20)
@@ -44,6 +46,7 @@ def test_failed_publish_preserves_previous_override(fan):
 
 def test_part_cooling_returns_to_printer_telemetry_after_override_expires():
     client = MagicMock()
+    client.get_device().print_fun.mqtt_signature_required = False
     client.publish.return_value = True
     fans = Fans(client)
     fans.print_update({"cooling_fan_speed": "0"})
