@@ -15,6 +15,7 @@ from cryptography.x509.oid import NameOID
 
 from pybambu.signing import CommandSigner, CommandSigningError
 from pybambu.bambu_client import BambuClient
+from pybambu.const import FansEnum
 
 
 def _certificate(key, common_name):
@@ -66,7 +67,7 @@ def test_missing_credentials_fail_closed(tmp_path):
     with pytest.raises(CommandSigningError):
         signer.build_provision_message()
     with pytest.raises(CommandSigningError):
-        signer.sign_print_message({"print": {"command": "pause"}})
+        signer.sign_fan_command(3, 20)
 
 
 def _review_vendor_crl(path, **changes):
@@ -142,15 +143,7 @@ def test_provision_sign_encrypt_and_reset(tmp_path):
     assert signer.ready
     assert not (tmp_path / "printer_cert.pem").exists()  # Session-only trust.
 
-    envelope_text = signer.sign_print_message(
-        {
-            "print": {
-                "sequence_id": "0",
-                "command": "gcode_line",
-                "param": "M106 P3 S26\n",
-            }
-        }
-    )
+    envelope_text = signer.sign_fan_command(3, 10)
     envelope = json.loads(envelope_text)
     assert "param" not in envelope["print"]
     assert envelope["header"]["sign_alg"] == "RSA_SHA256"
@@ -177,13 +170,7 @@ def test_provision_sign_encrypt_and_reset(tmp_path):
     signer.reset_session()
     assert not signer.ready
     with pytest.raises(CommandSigningError):
-        signer.sign_print_message({"print": {"command": "pause"}})
-
-
-def test_non_print_message_passes_through(tmp_path):
-    signer = CommandSigner(tmp_path)
-    text = signer.sign_print_message({"system": {"command": "ledctrl"}})
-    assert json.loads(text) == {"system": {"command": "ledctrl"}}
+        signer.sign_fan_command(3, 20)
 
 
 def test_bambu_client_publish_uses_signed_envelope(tmp_path):
@@ -223,15 +210,7 @@ def test_bambu_client_publish_uses_signed_envelope(tmp_path):
 
     mqtt = CaptureMqtt()
     client.client = mqtt
-    assert client.publish(
-        {
-            "print": {
-                "sequence_id": "0",
-                "command": "gcode_line",
-                "param": "M106 P2 S128\n",
-            }
-        }
-    )
+    assert client.publish_fan(FansEnum.AUXILIARY, 50)
     assert mqtt.topic == "device/TEST-SERIAL/request"
     assert "header" in json.loads(mqtt.payload)
 
@@ -308,31 +287,6 @@ def test_corrupt_or_exhausted_sequence_fails_closed(tmp_path, counter):
         CommandSigner(tmp_path).build_provision_message()
 
 
-def test_encryption_long_unicode_payload_and_no_input_mutation(tmp_path):
-    _write_credentials(tmp_path)
-    signer = CommandSigner(tmp_path)
-    key, _ = _make_ready(signer)
-    param = 'M106 P3 S26\n; ' + 'é' * 400
-    message = {"print": {"command": "gcode_line", "param": param}}
-    payload = json.loads(signer.sign_print_message(message))["print"]
-    encrypted = base64.b64decode(payload["param_enc"])
-    decoded = b''.join(key.decrypt(encrypted[i:i+256], padding.PKCS1v15()) for i in range(0, len(encrypted), 256))
-    assert decoded.decode() == param
-    assert "param" not in payload
-    assert message == {"print": {"command": "gcode_line", "param": param}}
-
-
-def test_non_gcode_params_remain_plain_and_preencrypted_gcode_is_rejected(tmp_path):
-    _write_credentials(tmp_path)
-    signer = CommandSigner(tmp_path)
-    _make_ready(signer)
-    payload = json.loads(signer.sign_print_message({"print": {"command": "print_speed", "param": "2"}}))
-    assert payload["print"]["param"] == "2"
-    assert "param_enc" not in payload["print"]
-    with pytest.raises(CommandSigningError):
-        signer.sign_print_message({"print": {"command": "gcode_line", "param_enc": "untrusted"}})
-
-
 def test_material_expiry_during_running_session_disables_controls(tmp_path):
     _write_credentials(tmp_path)
     signer = CommandSigner(tmp_path)
@@ -340,14 +294,14 @@ def test_material_expiry_during_running_session_disables_controls(tmp_path):
     signer._valid_until = datetime.now(timezone.utc) - timedelta(seconds=1)
     assert not signer.ready
     with pytest.raises(CommandSigningError):
-        signer.sign_print_message({"print": {"command": "gcode_line", "param": "M106 P3 S0"}})
+        signer.sign_fan_command(3, 0)
 
 
 def test_verification_rejection_invalidates_only_our_own_command(tmp_path):
     _write_credentials(tmp_path)
     signer = CommandSigner(tmp_path)
     _make_ready(signer)
-    payload = json.loads(signer.sign_print_message({"print": {"command": "gcode_line", "param": "M106 P3 S0"}}))
+    payload = json.loads(signer.sign_fan_command(3, 0))
     assert not signer.handle_print_report({"sequence_id": "unrelated", "err_code": 84033545})
     assert signer.ready
     assert signer.handle_print_report({"sequence_id": payload["print"]["sequence_id"], "err_code": 84033545})
@@ -368,14 +322,14 @@ def test_signed_fan_speed_is_not_optimistically_reported():
     from pybambu.models import Fans
     from pybambu.const import FansEnum
     client = MagicMock()
-    client.publish.return_value = True
+    client.publish_fan.return_value = True
     client.get_device.return_value.print_fun.mqtt_signature_required = True
     fans = Fans(client)
     before = fans.get_fan_speed(FansEnum.CHAMBER)
     assert fans.set_fan_speed(FansEnum.CHAMBER, 20)
     assert fans.get_fan_speed(FansEnum.CHAMBER) == before
     client.callback.assert_not_called()
-    client.publish.return_value = False
+    client.publish_fan.return_value = False
     assert fans.set_fan_speed(FansEnum.CHAMBER, 40) is False
     assert fans.get_fan_speed(FansEnum.CHAMBER) == before
 

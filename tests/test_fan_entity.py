@@ -57,3 +57,15 @@ def test_signed_fan_requires_session_authorization(fan):
     assert fan.available
     fan.coordinator.last_update_success = False
     assert not fan.available
+
+
+def test_signed_secondary_auxiliary_is_unavailable(fan):
+    fan.entity_description = FANS[3]
+    fan.coordinator.get_model().print_fun.mqtt_signature_required = True
+    fan.coordinator.client.command_signer.ready = True
+    assert not fan.available
+    with pytest.raises(HomeAssistantError):
+        fan.set_percentage(20)
+    fan.coordinator.get_model().fans.set_fan_speed.assert_not_called()
+    fan.coordinator.get_model().print_fun.mqtt_signature_required = False
+    assert fan.available

@@ -24,6 +24,7 @@ from .bambu_cloud import BambuCloud
 from .const import (
     LOGGER,
     Features,
+    FansEnum,
 )
 from .models import Device, SlicerSettings
 from .signing import CommandSigner, CommandSigningError
@@ -745,21 +746,33 @@ class BambuClient:
         LOGGER.debug(f"Subscribing: device/{self._serial}/report")
         self.client.subscribe(f"device/{self._serial}/report")
 
-    def publish(self, msg):
-        """Publish a custom message"""
+    def publish_fan(self, fan: FansEnum, percentage: float) -> bool:
+        """The only signed command entry point; no generic payload is accepted."""
+        if type(fan) is not FansEnum or fan not in (
+            FansEnum.PART_COOLING, FansEnum.AUXILIARY, FansEnum.CHAMBER
+        ):
+            return False
         try:
-            if (
-                isinstance(msg, dict)
-                and isinstance(msg.get("print"), dict)
-                and self._device.print_fun.mqtt_signature_required
-            ):
-                payload = self.command_signer.sign_print_message(msg)
-            else:
-                payload = json.dumps(msg)
+            payload = self.command_signer.sign_fan_command(int(fan), percentage)
         except CommandSigningError as error:
-            LOGGER.warning("Authorization-protected command blocked: %s", error)
+            LOGGER.warning("Signed fan command blocked: %s", error)
             self._request_signer_provisioning()
             return False
+        return self._publish_payload(payload)
+
+    def publish(self, msg):
+        """Publish ordinary unsigned traffic, never sign arbitrary print commands."""
+        if (
+            isinstance(msg, dict)
+            and "print" in msg
+            and self._device.print_fun.mqtt_signature_required
+        ):
+            LOGGER.warning("Generic print commands are outside signed fan scope")
+            return False
+        return self._publish_payload(json.dumps(msg))
+
+    def _publish_payload(self, payload):
+        """Broker acceptance is not confirmation of hardware execution."""
         result = self.client.publish(f"device/{self._serial}/request", payload)
         status = result.rc
         if status == 0:

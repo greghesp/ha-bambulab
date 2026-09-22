@@ -104,7 +104,10 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         if not super().available:
             return False
         if self.coordinator.get_model().print_fun.mqtt_signature_required:
-            return self.coordinator.client.command_signer.ready
+            return (
+                self.entity_description.key in ("cooling_fan", "aux_fan", "chamber_fan")
+                and self.coordinator.client.command_signer.ready
+            )
         return True
 
     @property

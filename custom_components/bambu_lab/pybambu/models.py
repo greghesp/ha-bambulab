@@ -700,18 +700,15 @@ class Fans:
 
     def set_fan_speed(self, fan: FansEnum, percentage: int) -> bool:
         """Set fan speed"""
-        if not isinstance(percentage, (int, float)) or not 0 <= percentage <= 100:
+        if type(percentage) not in (int, float) or not 0 <= percentage <= 100:
             raise ValueError("fan percentage must be between 0 and 100")
         percentage = round(percentage / 10) * 10
+        if self._client.get_device().print_fun.mqtt_signature_required:
+            # Typed signing boundary; do not report optimistic hardware state.
+            return self._client.publish_fan(fan, percentage)
         command = fan_percentage_to_gcode(fan, percentage)
-
-        # Do not report a local override when the broker rejected the publish.
         if not self._client.publish(command):
             return False
-
-        if self._client.get_device().print_fun.mqtt_signature_required:
-            # MQTT broker acceptance is not printer command acceptance.
-            return True
 
         if fan == FansEnum.PART_COOLING:
             self._cooling_fan_speed_override = percentage

@@ -9,7 +9,7 @@ place their own credential files in the configured directory.
 from __future__ import annotations
 
 import base64
-import copy
+import math
 import json
 import os
 import fcntl
@@ -291,33 +291,31 @@ class CommandSigner:
             self._valid_until = min(self._valid_until, certificate.not_valid_after_utc)
         return True
 
-    def sign_print_message(self, message: dict[str, Any]) -> str:
-        """Encrypt protected fields and return a byte-exact signed envelope."""
-        if "print" not in message or not isinstance(message["print"], dict):
-            return json.dumps(message, separators=(",", ":"), ensure_ascii=False)
-        if not self.ready:
-            raise CommandSigningError("command signer is not ready for this MQTT session")
+    def sign_fan_command(self, fan_id: int, percentage: float) -> str:
+        """Sign only a canonical fan command; never accept caller-supplied G-code.
 
+        IDs 1/2/3 are part cooling, auxiliary and chamber. Other fans have no
+        signed hardware evidence. Match HA's existing ten-percent rounding.
+        Validation precedes both sequence reservation and cryptographic work.
+        """
+        if type(fan_id) is not int or fan_id not in (1, 2, 3):
+            raise CommandSigningError("unsupported signed fan")
+        if (
+            type(percentage) not in (int, float)
+            or not math.isfinite(percentage)
+            or not 0 <= percentage <= 100
+        ):
+            raise CommandSigningError("fan percentage must be finite and between 0 and 100")
+        speed = math.ceil(255 * (round(percentage / 10) * 10) / 100)
         with self._lock:
             if not self.ready:
-                raise CommandSigningError("command signer session changed")
-            print_data = copy.deepcopy(message["print"])
-            print_data["sequence_id"] = self._next_sequence_id()
+                raise CommandSigningError("command signer is not ready for this MQTT session")
             assert self._device_public_key is not None
-            fields = {"gcode_line": ("param",), "project_file": ("url", "param")}.get(
-                print_data.get("command"), ()
-            )
-            for field in fields:
-                value = print_data.get(field)
-                encrypted_field = field + "_enc"
-                if encrypted_field in print_data:
-                    raise CommandSigningError("pre-encrypted command fields are not accepted")
-                if isinstance(value, str):
-                    print_data[encrypted_field] = _encrypt_blocks(
-                        self._device_public_key,
-                        value,
-                    )
-                    del print_data[field]
+            print_data = {
+                "sequence_id": self._next_sequence_id(),
+                "command": "gcode_line",
+                "param_enc": _encrypt_blocks(self._device_public_key, f"M106 P{fan_id} S{speed}\n"),
+            }
 
             print_text = json.dumps(
                 print_data,
