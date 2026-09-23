@@ -2189,7 +2189,15 @@ class PrintJob:
             # Open the 3mf zip archive
             with ZipFile(model_file_path) as archive:
                 # Extract the slicer XML config and parse the plate tree
-                plate = ElementTree.fromstring(archive.read('Metadata/slice_info.config')).find('plate')
+                slice_info = ElementTree.fromstring(archive.read('Metadata/slice_info.config'))
+                plate = slice_info.find('plate')
+                # "Export all sliced file" writes one <plate> per sliced plate. Use the one MQTT says is
+                # printing, falling back to the first plate as before when it isn't listed.
+                if self.plate_idx:
+                    for candidate in slice_info.findall('plate'):
+                        if candidate.find(f"metadata[@key='index'][@value='{self.plate_idx}']") is not None:
+                            plate = candidate
+                            break
                 
                 # Iterate through each config element and extract the data
                 # Example contents:
