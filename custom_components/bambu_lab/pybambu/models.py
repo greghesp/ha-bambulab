@@ -1484,11 +1484,21 @@ class PrintJob:
                 if self._remote_model_matches(file, filename)
             ]
             if matches:
-                selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
+                ranked = sorted(matches, key=self._model_candidate_score, reverse=True)
+                selected = ranked[0]
                 LOGGER.debug(
                     f"Selected model candidate {selected.path} from {selected.source}/{selected.storage}"
                 )
-                return self._remote_file_aliases(matches, selected)
+                # Aliases of the selected file first, then every other match as a
+                # fallback. A copy on a different storage volume is not an alias
+                # (_same_remote_media_file rejects it), but it is often the only
+                # copy the printer will actually serve.
+                aliases = self._remote_file_aliases(matches, selected)
+                remaining = [
+                    file for file in ranked
+                    if not self._same_remote_media_file(file, selected)
+                ]
+                return aliases + remaining
 
         if self._subtask_name == "":
             LOGGER.debug("Falling back to newest remote 3mf file across media sources.")
