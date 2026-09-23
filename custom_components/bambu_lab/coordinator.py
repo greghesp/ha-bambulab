@@ -552,7 +552,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         if entity_unique_id.endswith('_external_spool'):
             ams_index = 255
-            tray_index = 0
+            tray_index = 254
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
