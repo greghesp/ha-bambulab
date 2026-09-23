@@ -921,6 +921,12 @@ AMS_HT_SLOT_END = AMS_HT_SLOT_BASE + AMS_HT_COUNT
 AMS_HT_UNIT_BASE = 128
 AMS_HT_UNIT_END = AMS_HT_UNIT_BASE + AMS_HT_COUNT
 
+# The printer replaces a filesystem-illegal '/' in a model name with its hex
+# code and drops the '%', so "Hase / Osterhase" is stored as
+# "Hase 2f Osterhase.gcode.3mf". Only '/' has been observed; this is
+# deliberately not a general percent-decoder.
+MODEL_NAME_SLASH_ENCODING = "2f"
+
 
 def ams_slot_name(index: int) -> str | None:
     """Human readable name for an AMS slot index, or None if the index isn't a real slot."""
@@ -1441,20 +1447,47 @@ class PrintJob:
                 filenames_to_try.append(f"{self._subtask_name}.3mf")
                 filenames_to_try.append(f"{self._subtask_name}.gcode.3mf")
 
+        gcode_file_candidates = []
         if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
             if self.gcode_file.endswith('.3mf'):
-                filenames_to_try.append(self.gcode_file)
+                gcode_file_candidates.append(self.gcode_file)
             else:
-                filenames_to_try.append(f"{self.gcode_file}.3mf")
-                filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
+                gcode_file_candidates.append(f"{self.gcode_file}.3mf")
+                gcode_file_candidates.append(f"{self.gcode_file}.gcode.3mf")
+
+        filenames_to_try.extend(gcode_file_candidates)
+
+        # A gcode_file can be a path (X1/H2 report "/data/Metadata/plate_1.gcode")
+        # while a subtask_name is a bare name that may itself contain '/'. Emit the
+        # basename of any path-shaped gcode_file candidate explicitly, so the matcher
+        # never has to guess which kind it is holding. Basenames from subtask-derived
+        # candidates are not emitted — a project title containing '/' must never
+        # contribute a truncated form that would match an unrelated file.
+        for candidate in gcode_file_candidates:
+            if "/" in candidate or "\\" in candidate:
+                basename = candidate.replace("\\", "/").rsplit("/", 1)[-1]
+                if basename and basename not in filenames_to_try:
+                    filenames_to_try.append(basename)
 
         return filenames_to_try
+
+    @staticmethod
+    def _normalize_model_name(value: str) -> str:
+        """Normalize a bare model filename for comparison against the printer's.
+
+        Only '/' is substituted, because only '/' has been observed. A name
+        containing a literal '2f' is therefore ambiguous with one containing a
+        slash at the same position; that is accepted rather than guessed at
+        with a general percent-decoder.
+        """
+        return value.replace("\\", "/").replace("/", MODEL_NAME_SLASH_ENCODING)
 
     def _remote_model_matches(self, remote_file: RemoteMediaFile, candidate: str) -> bool:
         candidate = candidate.replace("\\", "/").lstrip("/")
         remote_path = remote_file.path.replace("\\", "/").lstrip("/")
-        remote_name = remote_file.basename.replace("\\", "/")
-        return remote_path == candidate or remote_name == candidate.rsplit("/", 1)[-1]
+        if remote_path == candidate:
+            return True
+        return self._normalize_model_name(remote_file.basename) == self._normalize_model_name(candidate)
 
     def _model_candidate_score(self, remote_file: RemoteMediaFile) -> tuple[int, datetime, int, int]:
         path = remote_file.path.replace("\\", "/").lower()
