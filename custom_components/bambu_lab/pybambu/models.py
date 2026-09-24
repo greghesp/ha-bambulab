@@ -2126,6 +2126,14 @@ class PrintJob:
         self._loaded_model_data = False
         self._client._device.cover_image.set_image(None)
         self._clear_pick_data()
+        # These figures describe one specific job. If they survive and the next
+        # print's 3mf is never found, the previous print's filament usage is
+        # reported as this one's.
+        self.print_weight = 0
+        self.print_length = 0
+        self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+        self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+        self.gcode_file_downloaded = ""
 
     def _clear_pick_data(self):
         LOGGER.debug("Clearing pick data")
@@ -2408,31 +2416,39 @@ class PrintJob:
         else:
             LOGGER.debug("Updating bambu cloud task data found for printer.")
             # For local prints with FTP available, the printer's 3mf is the
-            # authoritative image source. Bambu Cloud's "latest task" can lag
-            # behind the active print and return a stale cover.
-            use_cloud_cover = not (self._print_type == "local" and self._client.ftp_enabled)
+            # authoritative source. Bambu Cloud's "latest task" can lag behind
+            # the active print, and a print started from the printer's own
+            # touchscreen registers no cloud task at all, so the newest one can
+            # belong to an arbitrarily older job.
+            use_cloud_task = not (self._print_type == "local" and self._client.ftp_enabled)
             url = self._task_data.get('cover', '')
-            if use_cloud_cover and url != "":
+            if use_cloud_task and url != "":
                 data = self._client.bambu_cloud.download(url)
                 self._client._device.cover_image.set_image(data)
 
-            self.print_length = self._task_data.get('length', self.print_length * 100) / 100
             self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
-            self.print_weight = self._task_data.get('weight', self.print_weight)
-            ams_print_data = self._task_data.get('amsDetailMapping', [])
-            if self.print_weight != 0:
-                for ams_data in ams_print_data:
-                    index = ams_data['ams']
-                    weight = ams_data['weight']
-                    if ams_slot_name(index) is not None:
-                        self._ams_print_weights[index] = weight
-                        self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
-                    else:
-                        # Common case is this is a machine without an AMS and we get index == 255 (not 254 as might be expected)
-                        # And probably also a machine with an AMS but you did a print from the external spool.
-                        # This could also hit if you have reconfigured your printer and removed an AMS.
-                        LOGGER.debug(f"AMS tray {index} not found in _ams_print_weights")
-                        LOGGER.debug(f"ams_print_data: {ams_print_data}")
+
+            # The cover was already guarded against that staleness. The print
+            # figures need the same guard: filament usage attributed to another
+            # job, and to that job's trays, is silently wrong rather than
+            # visibly missing.
+            if use_cloud_task:
+                self.print_length = self._task_data.get('length', self.print_length * 100) / 100
+                self.print_weight = self._task_data.get('weight', self.print_weight)
+                ams_print_data = self._task_data.get('amsDetailMapping', [])
+                if self.print_weight != 0:
+                    for ams_data in ams_print_data:
+                        index = ams_data['ams']
+                        weight = ams_data['weight']
+                        if ams_slot_name(index) is not None:
+                            self._ams_print_weights[index] = weight
+                            self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
+                        else:
+                            # Common case is this is a machine without an AMS and we get index == 255 (not 254 as might be expected)
+                            # And probably also a machine with an AMS but you did a print from the external spool.
+                            # This could also hit if you have reconfigured your printer and removed an AMS.
+                            LOGGER.debug(f"AMS tray {index} not found in _ams_print_weights")
+                            LOGGER.debug(f"ams_print_data: {ams_print_data}")
 
             status = self._task_data['status']
             LOGGER.debug(f"CLOUD PRINT STATUS: {status}")

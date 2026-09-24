@@ -266,6 +266,87 @@ class TestPrintJob(unittest.TestCase):
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
 
+    # A stale Bambu Cloud task must never be presented as the running print's own
+    # figures. Observed on an H2C: a touchscreen print whose 3mf lookup failed
+    # reported the weight of a cloud send twelve minutes earlier.
+
+    @staticmethod
+    def _stale_cloud_task():
+        """A finished cloud task for an earlier, unrelated print."""
+        return {
+            "id": 1275849996,
+            "weight": 4.44,
+            "length": 145,
+            "bedType": "textured_plate",
+            "cover": "",
+            "status": 4,
+            "startTime": "2026-09-23T14:32:00Z",
+            "endTime": "2026-09-23T14:33:07Z",
+            "amsDetailMapping": [{"ams": 2, "weight": 4.44}],
+        }
+
+    def test_clearing_model_data_clears_the_previous_jobs_weight(self):
+        """The weight fields must not survive into the next print."""
+        self.print_job.print_weight = 4.44
+        self.print_job.print_length = 1.45
+        self.print_job._ams_print_weights[2] = 4.44
+        self.print_job._ams_print_lengths[2] = 1.45
+        self.print_job.gcode_file_downloaded = "959381-Hase 2f Osterhase.gcode.gcode"
+
+        self.print_job._clear_model_data()
+
+        self.assertEqual(0, self.print_job.print_weight)
+        self.assertEqual(0, self.print_job.print_length)
+        self.assertEqual([0.0] * len(self.print_job._ams_print_weights), self.print_job._ams_print_weights)
+        self.assertEqual([0.0] * len(self.print_job._ams_print_lengths), self.print_job._ams_print_lengths)
+        self.assertEqual("", self.print_job.gcode_file_downloaded)
+
+    def test_cloud_task_weight_is_not_applied_to_a_local_print_with_ftp(self):
+        """The printer's own 3mf is authoritative for a local print, as it already is for the cover."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+        self.print_job.print_weight = 0
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(0, self.print_job.print_weight)
+
+    def test_cloud_task_ams_weights_are_not_applied_to_a_local_print_with_ftp(self):
+        """A stale task's amsDetailMapping would charge the wrong tray."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual([0.0] * len(self.print_job._ams_print_weights), self.print_job._ams_print_weights)
+
+    def test_cloud_task_weight_is_still_applied_to_a_cloud_print(self):
+        """A sent job has no other weight source, so the cloud task must still be used."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "cloud"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(4.44, self.print_job.print_weight)
+        self.assertEqual(4.44, self.print_job._ams_print_weights[2])
+
+    def test_cloud_task_weight_is_still_applied_to_a_local_print_without_ftp(self):
+        """Without FTP there is no 3mf to read, so the cloud task remains the only source."""
+        self.client.ftp_enabled = False
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(4.44, self.print_job.print_weight)
+
 class TestInfo(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
