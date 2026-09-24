@@ -281,8 +281,21 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.print_bed_type, "cool_plate")
         self.assertEqual(gcode, b"plate-1-gcode")
 
+    def test_multi_plate_3mf_with_string_active_plate_uses_that_plate(self):
+        """A plate_idx sent as a string selects the same plate as the int."""
+        gcode = self._parse_multi_plate_3mf(plate_idx="3")
+
+        self.assertEqual(self.print_job.print_weight, 87.25)
+        self.assertEqual(self.print_job.print_bed_type, "textured_plate")
+        self.assertEqual(gcode, b"plate-3-gcode")
+
     def test_multi_plate_3mf_with_unlisted_active_plate_uses_first_plate(self):
-        """A plate_idx with no <plate> in slice_info falls back to the first plate instead of failing."""
+        """A plate_idx with no <plate> in slice_info selects the first plate's data.
+
+        Only the plate selection is pinned here. The cover lookup from #2112 still reads
+        plate_<plate_idx>.png, so the archive carries one; a real export has no cover for an
+        unlisted plate, and there the worker stops at that read on main as well.
+        """
         gcode = self._parse_multi_plate_3mf(plate_idx=2, extra_covers=("2",))
 
         self.client._device.cover_image.set_image.assert_called_once_with(b"plate-2-cover")
