@@ -219,6 +219,90 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.print_weight, 49.59)
         self.assertEqual(self.print_job.get_print_weights, {"External Spool": 49.59})
 
+    def _parse_multi_plate_3mf(self, plate_idx, extra_covers=()):
+        """Run the FTP worker over a two plate 3MF, as written by "Export all sliced file".
+
+        Bambu Studio writes one <plate> per sliced plate, so the indices need not be contiguous.
+        Returns the contents of the gcode file the worker extracted.
+        """
+        self.client.ftp_enabled = True
+        self.client._device.supports_feature.return_value = False
+        self.client._device.external_spool[0].active = False
+        self.print_job.plate_idx = plate_idx
+        self.print_job.ams_mapping = [2]
+        self.print_job.prune_print_history_files = MagicMock()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            model_path = os.path.join(temp_dir, "current.3mf")
+            with ZipFile(model_path, "w") as archive:
+                archive.writestr(
+                    "Metadata/slice_info.config",
+                    '<config>'
+                    '<plate><metadata key="index" value="1" /><metadata key="weight" value="12.5" />'
+                    '<filament id="1" type="PLA" used_m="4.2" used_g="12.5" /></plate>'
+                    '<plate><metadata key="index" value="3" /><metadata key="weight" value="87.25" />'
+                    '<filament id="1" type="PLA" used_m="29.1" used_g="87.25" /></plate>'
+                    '</config>',
+                )
+                for plate, bed_type in (("1", "cool_plate"), ("3", "textured_plate")):
+                    archive.writestr(f"Metadata/plate_{plate}.png", f"plate-{plate}-cover".encode())
+                    archive.writestr(f"Metadata/plate_{plate}.gcode", f"plate-{plate}-gcode".encode())
+                    archive.writestr(f"Metadata/plate_{plate}.json", json.dumps({"bed_type": bed_type}))
+                for plate in extra_covers:
+                    archive.writestr(f"Metadata/plate_{plate}.png", f"plate-{plate}-cover".encode())
+
+            self.print_job._remote_media_sources = MagicMock(return_value=[MagicMock()])
+            self.print_job._attempt_remote_model_download = MagicMock(return_value=model_path)
+            self.print_job._close_remote_media_sources = MagicMock()
+
+            self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+
+            with open(os.path.join(temp_dir, self.print_job.gcode_file_downloaded), "rb") as gcode:
+                return gcode.read()
+
+    def test_multi_plate_3mf_uses_active_plate_metadata(self):
+        """Weight, filaments, gcode and bed come from the plate MQTT says is printing, not plate 1."""
+        gcode = self._parse_multi_plate_3mf(plate_idx=3)
+
+        self.client._device.cover_image.set_image.assert_called_once_with(b"plate-3-cover")
+        self.assertEqual(self.print_job.print_weight, 87.25)
+        self.assertEqual(self.print_job.print_length, 29.1)
+        self.assertEqual(self.print_job.get_print_weights, {"AMS 1 Tray 3": 87.25})
+        self.assertEqual(self.print_job.get_print_lengths, {"AMS 1 Tray 3": 29.1})
+        self.assertEqual(self.print_job.print_bed_type, "textured_plate")
+        self.assertEqual(gcode, b"plate-3-gcode")
+
+    def test_multi_plate_3mf_without_active_plate_uses_first_plate(self):
+        """With no plate_idx from MQTT the first plate is used, as before."""
+        gcode = self._parse_multi_plate_3mf(plate_idx=0)
+
+        self.client._device.cover_image.set_image.assert_called_once_with(b"plate-1-cover")
+        self.assertEqual(self.print_job.print_weight, 12.5)
+        self.assertEqual(self.print_job.print_bed_type, "cool_plate")
+        self.assertEqual(gcode, b"plate-1-gcode")
+
+    def test_multi_plate_3mf_with_string_active_plate_uses_that_plate(self):
+        """A plate_idx sent as a string selects the same plate as the int."""
+        gcode = self._parse_multi_plate_3mf(plate_idx="3")
+
+        self.assertEqual(self.print_job.print_weight, 87.25)
+        self.assertEqual(self.print_job.print_bed_type, "textured_plate")
+        self.assertEqual(gcode, b"plate-3-gcode")
+
+    def test_multi_plate_3mf_with_unlisted_active_plate_uses_first_plate(self):
+        """A plate_idx with no <plate> in slice_info selects the first plate's data.
+
+        Only the plate selection is pinned here. The cover lookup from #2112 still reads
+        plate_<plate_idx>.png, so the archive carries one; a real export has no cover for an
+        unlisted plate, and there the worker stops at that read on main as well.
+        """
+        gcode = self._parse_multi_plate_3mf(plate_idx=2, extra_covers=("2",))
+
+        self.client._device.cover_image.set_image.assert_called_once_with(b"plate-2-cover")
+        self.assertEqual(self.print_job.print_weight, 12.5)
+        self.assertEqual(self.print_job.print_bed_type, "cool_plate")
+        self.assertEqual(gcode, b"plate-1-gcode")
+
     def test_prune_cleans_stale_part_files_even_when_pruning_disabled(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             stale_part = Path(temp_dir) / "stale.3mf.part"
