@@ -24,11 +24,11 @@
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
       "code_needed": "必须提供验证码。",
-      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
-      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
-      "code_incorrect": "验证码不正确。",
-      "tfaCode": "需要 2FA 代码。",
-      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或手机，请在下方输入。",
+      "verifyCode": "需要验证码。请查看您的邮箱或短信。",
+      "code_expired": "验证码已过期，已重新请求验证码。请查看您的邮箱或短信。",
+      "code_incorrect": "验证码不正确，请重新输入。",
+      "tfaCode": "需要 2FA 代码。请立即输入。",
+      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或短信，请在下方输入。",
       "cannot_connect_local_timeout": "连接失败。连接超时。",
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
@@ -56,8 +56,8 @@
           "email": "电子邮件地址或电话号码",
           "password": "密码",
           "newCode": "请求新代码",
-          "verifyCode": "邮箱或手机验证码",
-          "tfaCode": "二因素验证码"
+          "verifyCode": "邮箱或短信验证码",
+          "tfaCode": "2FA 代码"
         }
       },
       "Bambu_Choose_Device": {
@@ -123,11 +123,11 @@
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
       "code_needed": "必须提供验证码。",
-      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
-      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
-      "code_incorrect": "验证码不正确。",
-      "tfaCode": "需要 2FA 代码。",
-      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或手机，请在下方输入。",
+      "verifyCode": "需要验证码。请查看您的邮箱或短信。",
+      "code_expired": "验证码已过期，已重新请求验证码。请查看您的邮箱或短信。",
+      "code_incorrect": "验证码不正确，请重新输入。",
+      "tfaCode": "需要 2FA 代码。请立即输入。",
+      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或短信，请在下方输入。",
       "cannot_connect_local_timeout": "连接失败。连接超时。",
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
@@ -156,8 +156,8 @@
           "email": "电子邮件地址或电话号码",
           "password": "密码",
           "newCode": "请求新代码",
-          "verifyCode": "邮箱或手机验证码",
-          "tfaCode": "二因素验证码"
+          "verifyCode": "邮箱或短信验证码",
+          "tfaCode": "2FA 代码"
         }
       },
       "Bambu_Lan": {
@@ -879,7 +879,7 @@
         "name": "干燥丝"
       },
       "hotend_rack_hotend_used_time": {
-        "name": "Hotend {hotend_id} 使用时间"
+        "name": "热端 {hotend_id} 使用时间"
       }
     },
     "camera": {
@@ -937,8 +937,8 @@
       "description": "{device} 已连接云，但通过集成具有本地 mqtt 连接。这会阻止设置温度和重印历史记录。将连接切换到纯云以实现完全控制。"
     },
     "access_code_rejected": {
-      "title": "访问代码被拒绝",
-      "description": "打印机拒绝为 {device} 配置的访问代码。这通常意味着代码已重新生成，例如通过恢复出厂设置。从打印机的网络设置屏幕读取新的访问代码并重新配置与其集成。"
+      "title": "访问码被拒绝",
+      "description": "打印机拒绝了为 {device} 配置的访问码。这通常表示访问码已被重新生成（例如恢复出厂设置后）。请在打印机的网络设置界面查看新的访问码，并用它重新配置集成。"
     }
   }
 }
