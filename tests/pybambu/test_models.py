@@ -240,6 +240,33 @@ class TestPrintJob(unittest.TestCase):
         )
         self.assertEqual(sleep.call_count, 11)
 
+    def test_missing_active_cover_is_retried_after_initial_window(self):
+        """A failed initial download is retried on a later running update."""
+        self.client._device.supports_feature.return_value = False
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._loaded_model_data = True
+        self.print_job._remote_media_sources = MagicMock(return_value=[])
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._close_remote_media_sources = MagicMock()
+        self.print_job._try_active_cover_from_printer = MagicMock(return_value=False)
+
+        with patch("pybambu.models.time.sleep"), patch(
+            "pybambu.models.time.monotonic", return_value=1000
+        ):
+            self.print_job._async_download_task_data_from_printer_worker()
+
+        self.assertFalse(self.print_job._loaded_model_data)
+        self.assertEqual(self.print_job._next_model_retry_at, 1300)
+
+        self.print_job._update_task_data = MagicMock()
+        with patch("pybambu.models.time.monotonic", return_value=1299):
+            self.print_job.print_update({"gcode_state": "RUNNING"})
+        self.print_job._update_task_data.assert_not_called()
+
+        with patch("pybambu.models.time.monotonic", return_value=1300):
+            self.print_job.print_update({"gcode_state": "RUNNING"})
+        self.print_job._update_task_data.assert_called_once_with()
+
     def test_slice_info_weight_is_a_float(self):
         """The 3MF stores the weight as text; print_weight is a float everywhere else."""
         self.client.ftp_enabled = True

@@ -1001,6 +1001,7 @@ class PrintJob:
         self._ftpRunAgain = False
         self._ftpThread = None
         self._ftp_download_percentage = 100
+        self._next_model_retry_at = 0.0
 
     @property
     def model_download_percentage(self) -> int:
@@ -1189,6 +1190,12 @@ class PrintJob:
                 # jump to 100% at the same time we see the PREPARE phase start but if we try and download then, the model file
                 # is not present.
                 LOGGER.debug("REACHED RUNNING WITHOUT DOWNLOADING MODEL")
+                self._update_task_data()
+
+            # The printer can refuse media transfers for the entire initial
+            # X1 retry window. Try again later while the same job is running.
+            elif self.gcode_state == "RUNNING" and time.monotonic() >= self._next_model_retry_at:
+                LOGGER.debug("RETRYING MISSING ACTIVE PRINT MEDIA")
                 self._update_task_data()
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
@@ -2219,6 +2226,9 @@ class PrintJob:
 
         if model_file_path is None:
             LOGGER.debug("No model file found.")
+            if not cover_loaded:
+                self._next_model_retry_at = time.monotonic() + 300
+                self._loaded_model_data = False
             return
 
         result = False
