@@ -15,13 +15,14 @@ from .definitions import (
     AMS_SENSORS,
     HOTEND_RACK_SENSORS,
     HOTEND_RACK_HOTEND_SENSORS,
+    X2D_TRANSLATION_KEYS,
     BambuLabAMSSensorEntityDescription,
     BambuLabHotendRackSensorEntityDescription,
     BambuLabSensorEntityDescription,
 )
 from .coordinator import BambuDataUpdateCoordinator
 from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
-from .pybambu.const import Features
+from .pybambu.const import Features, Printers
 
 
 async def async_setup_entry(
@@ -82,6 +83,8 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         self.entity_description = description
         printer = coordinator.get_model().info
         self._attr_unique_id = f"{printer.serial}_{description.key}"
+        if printer.device_type == Printers.X2D and description.key in X2D_TRANSLATION_KEYS:
+            self._attr_translation_key = X2D_TRANSLATION_KEYS[description.key]
         if description.options_fn is not None:
             self._attr_options = description.options_fn(coordinator)
 

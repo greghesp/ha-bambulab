@@ -202,6 +202,15 @@ AIRDUCT_MODES = {
     2: "laser",
 }
 
+NOZZLE_SIDES = {
+    0: "right",
+    1: "left",
+}
+
+AMS_CONNECTED_NOZZLES = NOZZLE_SIDES | {
+    0xE: "track_switch",
+}
+
 PRINT_TYPE_OPTIONS = {
     "cloud",
     "local",

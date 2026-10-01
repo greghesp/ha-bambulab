@@ -16,6 +16,7 @@ from pybambu.models import (
     Device,
     Extruder,
     Fans,
+    FilamentTrackSwitch,
     HMSList,
     Hotend,
     HotendRack,
@@ -26,7 +27,7 @@ from pybambu.models import (
     Temperature,
     ams_slot_name,
 )
-from pybambu.const import FansEnum, Printers
+from pybambu.const import FansEnum, Features, Printers
 
 class TestPrintJob(unittest.TestCase):
     def setUp(self):
@@ -455,6 +456,25 @@ class TestAMSList(unittest.TestCase):
         self.assertEqual(tray0.color, "FFFFFFFF")
         self.assertEqual(tray0.tray_weight, "1000")
 
+    def test_h2d_ams_connected_nozzle(self):
+        data = self.h2d_data['push_all']
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+
+        self.assertEqual(self.ams_list.data[0].connected_nozzle, "left")
+        self.assertEqual(self.ams_list.data[128].connected_nozzle, "right")
+
+    def test_unloaded_active_nozzle_has_no_active_tray(self):
+        self.ams_list.print_update({"device": {"extruder": {"info": [
+            {"id": 0, "snow": 0xFFFF},
+            {"id": 1, "snow": 0xFEFF},
+        ]}}})
+
+        self.client._device.extruder.print_update({"device": {"extruder": {"state": 0x02}}})
+        self.assertIsNone(self.ams_list.active_tray)
+        self.client._device.extruder.print_update({"device": {"extruder": {"state": 0x12}}})
+        self.assertIsNone(self.ams_list.active_tray)
+
     def test_multi_ams_detection(self):
         # Test detection of 4 different AMS instances (2 AMS, 1 AMS 2 Pro, 1 AMS HT)
 
@@ -852,6 +872,13 @@ class TestH2D(unittest.TestCase):
         self.assertEqual(self.info.right_nozzle_diameter, 0.2)
         self.assertEqual(self.info.right_nozzle_type, "stainless_steel")
 
+    def test_h2d_extruder_filament_state(self):
+        self.info.print_update(self.h2d_data['push_all'])
+
+        self.assertTrue(self.info.extruder_filament_state)
+        self.assertFalse(self.info.left_extruder_filament_state)
+        self.assertTrue(self.info.right_extruder_filament_state)
+
     def test_h2d_door_open(self):
         data = self.h2d_data['push_all']
         result = self.info.print_update(data)
@@ -900,6 +927,96 @@ class TestH2D(unittest.TestCase):
         # Test left nozzle (index 1) temperatures
         self.assertEqual(self.temperature.left_nozzle_temperature, 40)
         self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
+
+
+class TestX2D(unittest.TestCase):
+    """X2D with an AMS 2 Pro and AMS HT feeding a Filament Track Switch."""
+
+    def setUp(self):
+        self.client = MagicMock()
+        self.client._device = MagicMock()
+        self.client._device.extruder = Extruder(self.client._device)
+
+        with open(os.path.join(os.path.dirname(__file__), 'X2D.json'), 'r') as f:
+            self.x2d_data = json.load(f)
+
+    def test_track_switch_one_input(self):
+        track_switch = FilamentTrackSwitch(self.client)
+        self.assertTrue(track_switch.print_update(self.x2d_data['push_ams_ht_left']))
+
+        self.assertTrue(track_switch.installed)
+        self.assertEqual(track_switch.input_nozzle(0), "left")
+        self.assertEqual(track_switch.input_tray(0), (128, 0))
+        self.assertEqual(track_switch.input_nozzle(1), "empty")
+        self.assertIsNone(track_switch.input_tray(1))
+
+    def test_track_switch_both_inputs(self):
+        track_switch = FilamentTrackSwitch(self.client)
+        track_switch.print_update(self.x2d_data['push_dual_nozzle'])
+
+        self.assertEqual(track_switch.input_nozzle(0), "left")
+        self.assertEqual(track_switch.input_tray(0), (128, 0))
+        self.assertEqual(track_switch.input_nozzle(1), "right")
+        self.assertEqual(track_switch.input_tray(1), (0, 2))
+
+    def test_track_switch_ams_nozzle(self):
+        track_switch = FilamentTrackSwitch(self.client)
+
+        track_switch.print_update(self.x2d_data['push_ams_ht_left'])
+        self.assertEqual(track_switch.ams_nozzle(128), "left")
+        self.assertIsNone(track_switch.ams_nozzle(0))
+
+        track_switch.print_update(self.x2d_data['push_dual_nozzle'])
+        self.assertEqual(track_switch.ams_nozzle(128), "left")
+        self.assertEqual(track_switch.ams_nozzle(0), "right")
+
+    def test_track_switch_removed(self):
+        track_switch = FilamentTrackSwitch(self.client)
+        track_switch.print_update(self.x2d_data['push_dual_nozzle'])
+        track_switch.print_update({"device": {"fila_switch": None}})
+
+        self.assertFalse(track_switch.installed)
+
+    def test_ams_connected_to_track_switch(self):
+        ams_list = AMSList(self.client)
+        data = self.x2d_data['push_dual_nozzle']
+        self.client._device.extruder.print_update(data)
+        ams_list.print_update(data)
+
+        self.assertEqual(ams_list.data[0].connected_nozzle, "track_switch")
+        self.assertEqual(ams_list.data[128].connected_nozzle, "track_switch")
+        self.assertEqual(ams_list.active_tray, ams_list.data[0].tray[2])
+
+    def test_extruder_filament_state(self):
+        info = Info(self.client)
+
+        info.print_update(self.x2d_data['push_ams_ht_left'])
+        self.assertTrue(info.extruder_filament_state)
+        self.assertTrue(info.left_extruder_filament_state)
+        self.assertFalse(info.right_extruder_filament_state)
+
+        info.print_update(self.x2d_data['push_dual_nozzle'])
+        self.assertTrue(info.left_extruder_filament_state)
+        self.assertTrue(info.right_extruder_filament_state)
+
+    def test_exhaust_fan_is_chamber_fan(self):
+        """The printer screen showed the exhaust at 70% and then 80% for these captures."""
+        fans = Fans(self.client)
+
+        fans.print_update(self.x2d_data['push_ams_ht_left'])
+        self.assertEqual(fans.get_fan_speed(FansEnum.CHAMBER), 70)
+
+        fans.print_update(self.x2d_data['push_dual_nozzle'])
+        self.assertEqual(fans.get_fan_speed(FansEnum.CHAMBER), 80)
+
+    def test_h2_only_features(self):
+        device = Device(self.client)
+        device.info.device_type = Printers.X2D
+        device.info.sw_ver = "01.02.00.00"
+
+        self.assertFalse(device.supports_feature(Features.CHAMBER_LIGHT_2))
+        self.assertFalse(device.supports_feature(Features.HEATBED_LIGHT))
+        self.assertFalse(device.supports_feature(Features.FIRE_ALARM_BUZZER))
 
 
 class TestH2CHotendRack(unittest.TestCase):

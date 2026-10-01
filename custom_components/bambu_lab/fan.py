@@ -13,8 +13,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
+from .definitions import X2D_TRANSLATION_KEYS
 from .models import BambuLabEntity
-from .pybambu.const import Features, FansEnum
+from .pybambu.const import Features, FansEnum, Printers
 
 
 @dataclass
@@ -88,6 +89,8 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         """Initialize the fan."""
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
+        if coordinator.get_model().info.device_type == Printers.X2D:
+            self._attr_translation_key = X2D_TRANSLATION_KEYS[description.key]
         self._attr_supported_features = (
             FanEntityFeature.SET_SPEED  
             | FanEntityFeature.TURN_ON  

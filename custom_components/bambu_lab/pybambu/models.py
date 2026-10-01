@@ -54,6 +54,8 @@ from .const import (
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
     AIRDUCT_MODES,
+    AMS_CONNECTED_NOZZLES,
+    NOZZLE_SIDES,
     TempEnum, Print_Fun_Values,
     UNKNOWN_TRAY_LABEL,
 )
@@ -106,6 +108,7 @@ class Device:
         self.extruder = Extruder(client=client)
         self.extruder_tool = ExtruderTool(client=client)
         self.hotend_rack = HotendRack(client=client)
+        self.track_switch = FilamentTrackSwitch(client=client)
         self.push_all_data = None
         self.get_version_data = None
         self.chamber_image = ChamberImage(client = client)
@@ -134,6 +137,7 @@ class Device:
         send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
         send_event = send_event | self.hotend_rack.print_update(data = data)
+        send_event = send_event | self.track_switch.print_update(data = data)
 
         if data.get("command") == "push_status":
             if data.get("msg", 0) == 0:
@@ -301,7 +305,7 @@ class Device:
                 return self.supports_sw_version("01.01.50.00")
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
-            return model in (h2_printers | x2_printers)
+            return model in h2_printers
         elif feature == Features.DUAL_NOZZLES:
             return model in dual_nozzle_printers
         elif feature == Features.EXTRUDER_TOOL:
@@ -2612,7 +2616,7 @@ class Info:
     nozzle_diameters: dict[int, float|None]
     nozzle_types: dict[int, str|None]
     usage_hours: float
-    extruder_filament_state: bool
+    hw_switch_state: int
     door_open: bool
     airduct_mode: int
         
@@ -2634,7 +2638,7 @@ class Info:
         self.nozzle_diameters = {0: None, 1: None, 15: None}
         self.nozzle_types = {0: None, 1: None, 15: None}
         self.usage_hours = client._usage_hours
-        self.extruder_filament_state = False
+        self.hw_switch_state = 0
         self.door_open = False
         self.airduct_mode = 0
         self.airduct_modes_available = []
@@ -2845,6 +2849,9 @@ class Info:
                 if entry.get("modeId") in AIRDUCT_MODES
             ]
 
+        # Bit 0 is the right (or only) extruder, bit 1 the left.
+        self.hw_switch_state = data.get("hw_switch_state", self.hw_switch_state)
+
         # Compute if there's a delta before we check the wifi_signal value.
         changed = (old_data != f"{self.__dict__}")
 
@@ -2858,11 +2865,20 @@ class Info:
                 # It's been long enough. We can send this one.
                 self.wifi_sent = datetime.now()
                 changed = True
-        
-        # "hw_switch_state": 1,
-        self.extruder_filament_state = bool(data.get("hw_switch_state", self.extruder_filament_state))
 
         return changed
+
+    @property
+    def extruder_filament_state(self) -> bool:
+        return self.hw_switch_state != 0
+
+    @property
+    def left_extruder_filament_state(self) -> bool:
+        return bool(self.hw_switch_state & 0x2)
+
+    @property
+    def right_extruder_filament_state(self) -> bool:
+        return bool(self.hw_switch_state & 0x1)
 
     @property
     def active_nozzle_diameter(self) -> float | None:
@@ -3101,6 +3117,7 @@ class AMSInstance:
     drying_temperature: int = 0
     drying_duration: int = 0
     drying_filament: str = ""
+    connected_nozzle: str | None = None
 
     def __init__(self, client, model, index):
         self.model = model
@@ -3306,7 +3323,7 @@ class AMSList:
                     if "snow" in entry:
                         tray_now = entry["snow"]
                         self._nozzle_ams_index[entry["id"]] = tray_now >> 8
-                        self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
+                        self._nozzle_tray_index[entry["id"]] = tray_now & 0xFF
         else:
             tray_now = ams_data.get('tray_now')
             if tray_now is not None:
@@ -3367,6 +3384,10 @@ class AMSList:
                     filament = dry_setting.get('dry_filament', "")
                     if self.data[index].drying_filament != filament:
                         self.data[index].drying_filament = filament
+
+                # Bits 8-11 of info identify the extruder this AMS feeds.
+                if "info" in ams:
+                    self.data[index].connected_nozzle = AMS_CONNECTED_NOZZLES.get((int(ams["info"], 16) >> 8) & 0xF)
 
                 tray_list = ams['tray']
                 for tray in tray_list:
@@ -4255,3 +4276,49 @@ class Extruder:
     @property
     def active_nozzle_index(self):
         return self._active_nozzle_index
+
+
+class FilamentTrackSwitch:
+    """Filament Track Switch routing two AMS inputs to either extruder."""
+
+    def __init__(self, client):
+        self._client = client
+        self.installed = False
+        self.inputs = [-1, -1]
+        self.outputs = [-1, -1]
+
+    def print_update(self, data) -> bool:
+        old_data = f"{self.__dict__}"
+
+        # "fila_switch": {
+        #   "in": [32768, 2],  // tray loaded at each input, encoded like extruder snow; -1 when empty
+        #   "out": [1, 0],     // extruder each input feeds
+        #   ...
+        # }
+        device_data = data.get("device", {})
+        if "fila_switch" in device_data:
+            fila_switch = device_data["fila_switch"] or {}
+            self.installed = bool(fila_switch)
+            self.inputs = fila_switch.get("in", self.inputs)
+            self.outputs = fila_switch.get("out", self.outputs)
+
+        return (old_data != f"{self.__dict__}")
+
+    def input_nozzle(self, index: int) -> str | None:
+        if self.inputs[index] < 0:
+            return "empty"
+        return NOZZLE_SIDES.get(self.outputs[index])
+
+    def input_tray(self, index: int) -> tuple[int, int] | None:
+        """Return the (ams index, tray index) loaded at an input."""
+        if self.inputs[index] < 0:
+            return None
+        return self.inputs[index] >> 8, self.inputs[index] & 0xFF
+
+    def ams_nozzle(self, ams_index: int) -> str | None:
+        """Return the nozzle an AMS is routed to, if its filament is at an input."""
+        for index in range(len(self.inputs)):
+            location = self.input_tray(index)
+            if location is not None and location[0] == ams_index:
+                return self.input_nozzle(index)
+        return None

@@ -41,6 +41,7 @@ from .pybambu.const import (
     GCODE_STATE_OPTIONS,
     SDCARD_STATUS,
     AIRDUCT_MODES,
+    AMS_CONNECTED_NOZZLES,
     FansEnum,
     Features,
 )
@@ -49,6 +50,17 @@ from .pybambu.utils import get_filament_name
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
     return math.ceil(percentage / 10) * 10
+
+X2D_TRANSLATION_KEYS = {
+    "cooling_fan": "part_fan",
+    "aux_fan": "left_aux_fan",
+    "secondary_aux_fan": "right_aux_fan",
+    "chamber_fan": "exhaust_fan",
+    "cooling_fan_speed": "part_fan_speed",
+    "aux_fan_speed": "left_aux_fan_speed",
+    "secondary_aux_fan_speed": "right_aux_fan_speed",
+    "chamber_fan_speed": "exhaust_fan_speed",
+}
 
 @dataclass
 class BambuLabUpdateEntityDescription(UpdateEntityDescription):
@@ -158,6 +170,18 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         key="extruder_filament_state",
         translation_key="extruder_filament_state",
         is_on_fn=lambda self: self.coordinator.get_model().info.extruder_filament_state,
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="left_extruder_filament_state",
+        translation_key="left_extruder_filament_state",
+        is_on_fn=lambda self: self.coordinator.get_model().info.left_extruder_filament_state,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="right_extruder_filament_state",
+        translation_key="right_extruder_filament_state",
+        is_on_fn=lambda self: self.coordinator.get_model().info.right_extruder_filament_state,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
     ),
     BambuLabBinarySensorEntityDescription(
         key="hms",
@@ -695,6 +719,39 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     )
 )
 
+
+def _track_switch_attributes(model, input_index: int) -> dict:
+    location = model.track_switch.input_tray(input_index)
+    if location is None:
+        return {}
+    ams_index, tray_index = location
+    attributes = {"ams_index": ams_index, "tray_index": tray_index}
+    ams = model.ams.data.get(ams_index)
+    if ams is not None and tray_index < len(ams.tray):
+        tray = ams.tray[tray_index]
+        attributes |= {"name": tray.name, "type": tray.type, "color": f"#{tray.color}"}
+    return attributes
+
+
+def _track_switch_sensor(input_index: int) -> BambuLabSensorEntityDescription:
+    return BambuLabSensorEntityDescription(
+        key=f"track_switch_input_{input_index + 1}",
+        translation_key="track_switch_input",
+        translation_placeholders={"input_number": str(input_index + 1)},
+        icon="mdi:source-branch",
+        device_class=SensorDeviceClass.ENUM,
+        options=["left", "right", "empty"],
+        value_fn=lambda self: self.coordinator.get_model().track_switch.input_nozzle(input_index),
+        extra_attributes=lambda self: _track_switch_attributes(self.coordinator.get_model(), input_index),
+        available_fn=lambda self: self.coordinator.get_model().track_switch.installed,
+        exists_fn=lambda coordinator: coordinator.get_model().track_switch.installed,
+    )
+
+
+PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = PRINTER_SENSORS + tuple(
+    _track_switch_sensor(input_index) for input_index in range(2)
+)
+
 VIRTUAL_TRAY_BINARY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabBinarySensorEntityDescription(
         key="active_ams",
@@ -737,6 +794,19 @@ VIRTUAL_TRAY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         },
     ),
 )
+
+def _ams_connected_nozzle(model, index: int) -> str | None:
+    connected_nozzle = model.ams.data[index].connected_nozzle
+    if connected_nozzle != "track_switch":
+        return connected_nozzle
+    if not model.track_switch.installed:
+        return None
+    return model.track_switch.ams_nozzle(index) or connected_nozzle
+
+
+def _ams_uses_track_switch(model, index: int) -> bool:
+    return model.track_switch.installed and model.ams.data[index].connected_nozzle == "track_switch"
+
 
 AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
     BambuLabAMSSensorEntityDescription(
@@ -809,6 +879,16 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].drying_filament or None,
         exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING_SETTINGS) and
                                              coordinator.get_model().ams.data[index].model in ["AMS 2 Pro", "AMS HT"],
+    ),
+    BambuLabAMSSensorEntityDescription(
+        key="connected_nozzle",
+        translation_key="connected_nozzle",
+        icon="mdi:printer-3d-nozzle",
+        device_class=SensorDeviceClass.ENUM,
+        options=list(AMS_CONNECTED_NOZZLES.values()),
+        value_fn=lambda self: _ams_connected_nozzle(self.coordinator.get_model(), self.index),
+        extra_attributes=lambda self: {"track_switch": _ams_uses_track_switch(self.coordinator.get_model(), self.index)},
+        exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
     ),
 )
 

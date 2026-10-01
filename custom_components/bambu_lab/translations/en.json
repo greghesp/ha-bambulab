@@ -244,6 +244,12 @@
       },
       "extruder_filament_state": {
         "name": "Extruder filament"
+      },
+      "left_extruder_filament_state": {
+        "name": "Left extruder filament"
+      },
+      "right_extruder_filament_state": {
+        "name": "Right extruder filament"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Secondary aux fan"
+      },
+      "part_fan": {
+        "name": "Part fan"
+      },
+      "left_aux_fan": {
+        "name": "Left aux fan"
+      },
+      "right_aux_fan": {
+        "name": "Right aux fan"
+      },
+      "exhaust_fan": {
+        "name": "Exhaust fan"
       }
     },
     "image": {
@@ -355,6 +373,22 @@
           "cutter": "Cutter"
         }
       },
+      "track_switch_input": {
+        "name": "Track switch input {input_number}",
+        "state": {
+          "left": "Left nozzle",
+          "right": "Right nozzle",
+          "empty": "Empty"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Connected nozzle",
+        "state": {
+          "left": "Left",
+          "right": "Right",
+          "track_switch": "Track switch"
+        }
+      },
       "wifi_signal": {
         "name": "Wi-Fi signal"
       },
@@ -402,6 +436,18 @@
       },
       "secondary_aux_fan_speed": {
         "name": "Secondary aux fan speed"
+      },
+      "part_fan_speed": {
+        "name": "Part fan speed"
+      },
+      "left_aux_fan_speed": {
+        "name": "Left aux fan speed"
+      },
+      "right_aux_fan_speed": {
+        "name": "Right aux fan speed"
+      },
+      "exhaust_fan_speed": {
+        "name": "Exhaust fan speed"
       },
       "model_download_percentage": {
         "name": "Model download"
