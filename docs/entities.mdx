@@ -200,3 +200,51 @@ When a slot is empty, all attributes are set to `None`.
 | ------- | --------------------------------------------------------------- |
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
+
+## MakerWorld
+
+A MakerWorld profile belongs to the same Bambu Lab account the cloud connection
+already signs into, so these are created automatically when the integration is
+set up with Bambu credentials and the account has a MakerWorld profile. They
+live on their own `MakerWorld (<name>)` device rather than on a printer, and are
+polled every 15 minutes.
+
+| Sensor           | Notes                                                                 |
+| ---------------- | --------------------------------------------------------------------- |
+| Points           | Your points balance, as shown on the MakerWorld points page            |
+| Points earned    | Lifetime points earned - use this one for daily/monthly statistics     |
+| Boosts received  | Boosts your models have been given, all time                            |
+| Boost tokens     | Boost tokens currently available to give out                           |
+| Downloads        | Downloads of your models, the figure your profile page shows           |
+| Prints           | Prints of your models, the figure your profile page shows              |
+| Published models | Number of models you have published                                    |
+| Likes            |                                                                       |
+| Collects         |                                                                       |
+| Followers        |                                                                       |
+| Level            | Attributes contain the profile name and URL                            |
+
+The following are disabled by default - enable them in Home Assistant if you
+want them: Points spent, Exclusive points, Boosts used, Boosts expired, Print
+profile downloads, Print profile prints, Downloads incl. print profiles, Prints
+incl. print profiles, Following.
+
+<Info>
+MakerWorld counts a print profile - which may sit on someone else's model -
+separately from the model itself, and your profile page shows only the model
+half. The default Downloads and Prints sensors match the page; the "incl. print
+profiles" sensors add the other half, a figure MakerWorld does not display
+anywhere.
+</Info>
+
+<Info>
+With several printers on one Bambu Lab account these sensors are created once,
+by whichever printer's config entry was added first - the numbers describe the
+account, not a printer.
+</Info>
+
+<Info>
+These come from the account's own MakerWorld profile, which needs the cloud
+token. If that call is rejected the integration falls back to the public
+creator profile, which carries the same counts but no points and no boosts -
+those sensors then report unavailable while the rest keep working.
+</Info>

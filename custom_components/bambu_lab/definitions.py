@@ -967,3 +967,178 @@ HOTEND_RACK_HOTEND_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...
         _hotend_used_time_sensor(slot_id, slot_id - 15),
     )
 )
+
+
+@dataclass
+class BambuLabMakerWorldSensorEntityDescription(
+    SensorEntityDescription, BambuLabSensorEntityDescriptionMixin
+):
+    """Sensor entity description for the account level MakerWorld stats."""
+
+    extra_attributes: Callable[..., dict] = lambda _: {}
+
+
+# Points and boost tokens come from the two authenticated endpoints and report
+# unavailable if those fail; everything else comes from the public profile.
+#
+# MakerWorld splits downloads and prints between designs (the model itself) and
+# instances (an individual print profile, which may sit on someone else's
+# model). The profile page counts only the design half, so that is what the
+# default sensors report - checked against a live profile, where a
+# myDesignDownloadCount of 4200 is the "4.2 k" the page prints. The instance half
+# and the combined total are available too, off by default.
+MAKERWORLD_SENSORS: tuple[BambuLabMakerWorldSensorEntityDescription, ...] = (
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_downloads",
+        translation_key="makerworld_downloads",
+        icon="mdi:download",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        value_fn=lambda self: self.profile.design_downloads,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_downloads_total",
+        translation_key="makerworld_downloads_total",
+        icon="mdi:download-multiple",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.total_downloads,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_instance_downloads",
+        translation_key="makerworld_instance_downloads",
+        icon="mdi:download",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.instance_downloads,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_prints",
+        translation_key="makerworld_prints",
+        icon="mdi:printer-3d",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        value_fn=lambda self: self.profile.design_prints,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_prints_total",
+        translation_key="makerworld_prints_total",
+        icon="mdi:printer-3d-nozzle",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.total_prints,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_instance_prints",
+        translation_key="makerworld_instance_prints",
+        icon="mdi:printer-3d",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.instance_prints,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_designs",
+        translation_key="makerworld_designs",
+        icon="mdi:cube-outline",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.profile.designs,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_likes",
+        translation_key="makerworld_likes",
+        icon="mdi:thumb-up",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.profile.likes,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_collections",
+        translation_key="makerworld_collections",
+        icon="mdi:bookmark-multiple",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.profile.collections,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_followers",
+        translation_key="makerworld_followers",
+        icon="mdi:account-group",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.profile.followers,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_following",
+        translation_key="makerworld_following",
+        icon="mdi:account-multiple-plus",
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.following,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_points",
+        translation_key="makerworld_points",
+        icon="mdi:cash-multiple",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.profile.points,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_points_earned",
+        translation_key="makerworld_points_earned",
+        icon="mdi:cash-plus",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        value_fn=lambda self: self.profile.points_earned,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_points_spent",
+        translation_key="makerworld_points_spent",
+        icon="mdi:cash-minus",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.points_spent,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_points_exclusive",
+        translation_key="makerworld_points_exclusive",
+        icon="mdi:cash-multiple",
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.points_exclusive,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_boosts_received",
+        translation_key="makerworld_boosts_received",
+        icon="mdi:rocket-launch-outline",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        value_fn=lambda self: self.profile.boosts_received,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_boost_tokens",
+        translation_key="makerworld_boost_tokens",
+        icon="mdi:rocket-launch",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.profile.boost_tokens,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_boosts_used",
+        translation_key="makerworld_boosts_used",
+        icon="mdi:rocket",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.boosts_used,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_boosts_expired",
+        translation_key="makerworld_boosts_expired",
+        icon="mdi:rocket-outline",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=False,
+        value_fn=lambda self: self.profile.boosts_expired,
+    ),
+    BambuLabMakerWorldSensorEntityDescription(
+        key="makerworld_level",
+        translation_key="makerworld_level",
+        icon="mdi:trophy-outline",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.profile.level,
+        extra_attributes=lambda self: {
+            "profile_name": self.profile.name,
+            "profile_url": self.profile.profile_url,
+        },
+    ),
+)
