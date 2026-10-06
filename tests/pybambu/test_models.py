@@ -348,6 +348,24 @@ class TestStageAction(unittest.TestCase):
         # Should not raise.
         stage_action.print_update(data)
 
+    def test_stage_resets_to_idle_after_cancel(self):
+        # A cancelled print reports gcode_state FAILED, but the printer keeps
+        # sending the stage it was in when the print was cancelled.
+        stage_action = StageAction()
+        stage_action.print_update({"print_type": "cloud", "gcode_state": "PREPARE", "stg_cur": 54})
+        self.assertEqual(stage_action.description, "waiting_for_heatbed_temperature")
+
+        stage_action.print_update({"print_type": "idle", "gcode_state": "FAILED", "stg_cur": 54})
+        self.assertEqual(stage_action.description, "idle")
+
+        # Later partial updates without gcode_state keep it idle.
+        stage_action.print_update({"stg_cur": 54})
+        self.assertEqual(stage_action.description, "idle")
+
+        # The next print reports its stages again.
+        stage_action.print_update({"print_type": "cloud", "gcode_state": "PREPARE", "stg_cur": 2})
+        self.assertEqual(stage_action.description, "heatbed_preheating")
+
 class TestAMSList(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
