@@ -3745,11 +3745,13 @@ class StageAction:
     """Return Stage Action information"""
     _id: int
     _print_type: str
+    _gcode_state: str
     description: str
 
     def __init__(self):
         self._id = 255
         self._print_type = ""
+        self._gcode_state = ""
         self.description = get_current_stage(self._id)
 
     def print_update(self, data) -> bool:
@@ -3758,6 +3760,7 @@ class StageAction:
         self._print_type = data.get("print_type", self._print_type)
         if self._print_type.lower() not in PRINT_TYPE_OPTIONS:
             self._print_type = "unknown"
+        self._gcode_state = data.get("gcode_state", self._gcode_state)
 
         # New way it is presented
         self._id = int((data.get("stage") or {}).get("_id", self._id))
@@ -3765,6 +3768,9 @@ class StageAction:
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
+            self._id = 255
+        if self._gcode_state == "FAILED":
+            # After a cancelled print the printer keeps reporting the stage it was in. Nothing is running.
             self._id = 255
         self.description = get_current_stage(self._id)
 
