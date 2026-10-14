@@ -937,6 +937,94 @@ def ams_slot_name(index: int) -> str | None:
     return None
 
 
+# Print-dialog names in Bambu Studio and Orca Slicer go through
+# filter_characters(), which deletes these characters and joins the pieces.
+# "TPU 85/95A" therefore becomes "TPU 8595A". Parentheses are allowed.
+_PRINT_NAME_ILLEGAL = '<>[]:/\\|?*"'
+_PRINT_NAME_MAX_BYTES = 100
+_GCODE_3MF_SUFFIX = ".gcode.3mf"
+_3MF_SUFFIX = ".3mf"
+
+
+def truncate_utf8(value: str, max_bytes: int = _PRINT_NAME_MAX_BYTES) -> str:
+    """Longest prefix whose UTF-8 encoding fits in max_bytes.
+
+    PrintJob::truncate_string cuts on a character boundary so the name sent to
+    the printer is at most 100 bytes.
+    """
+    if len(value.encode("utf-8")) <= max_bytes:
+        return value
+    size = 0
+    for index, char in enumerate(value):
+        size += len(char.encode("utf-8"))
+        if size > max_bytes:
+            return value[:index]
+    return value
+
+
+def dialog_print_name(name: str) -> str:
+    """Name the print dialog sends after filter_characters and truncation."""
+    filtered = "".join(char for char in name if char not in _PRINT_NAME_ILLEGAL)
+    return truncate_utf8(filtered)
+
+
+def makerworld_print_name(name: str) -> str:
+    """Name Orca sends when the 3MF has a MakerWorld Title.
+
+    Spaces and the illegal dialog characters become '_', runs of '_' collapse,
+    then the result is truncated. Bambu Studio builds this and then replaces it
+    with the dialog name, so it is the less common of the two forms.
+    """
+    replaced = [
+        "_" if char == " " or char in _PRINT_NAME_ILLEGAL else char
+        for char in name
+    ]
+    collapsed = re.sub(r"_+", "_", "".join(replaced))
+    return truncate_utf8(collapsed)
+
+
+def _print_name_stem(name: str) -> str:
+    """Name without a 3MF suffix.
+
+    A leading '/data/...' gcode path is reduced to its basename. A slash inside
+    the print name, as in "TPU 85/95A", stays: that is not a directory.
+    """
+    base = name.replace("\\", "/")
+    if base.startswith("/"):
+        base = base.rstrip("/").rsplit("/", 1)[-1]
+    lower = base.lower()
+    if lower.endswith(_GCODE_3MF_SUFFIX):
+        return base[: -len(_GCODE_3MF_SUFFIX)]
+    if lower.endswith(_3MF_SUFFIX):
+        return base[: -len(_3MF_SUFFIX)]
+    return base
+
+
+def print_filename_candidates(raw: str) -> list[str]:
+    """Printer filenames for one MQTT name, most likely first.
+
+    The dialog form (illegal characters deleted) comes before the MakerWorld
+    form (those characters and spaces become '_'). The raw name is last:
+    subtask_name often still contains characters the slicer removed from the file.
+    """
+    if not raw:
+        return []
+
+    stem = _print_name_stem(raw)
+    stems: list[str] = []
+    for variant in (dialog_print_name(stem), makerworld_print_name(stem), stem):
+        if variant and variant not in stems:
+            stems.append(variant)
+
+    filenames: list[str] = []
+    for variant in stems:
+        for suffix in (_3MF_SUFFIX, _GCODE_3MF_SUFFIX):
+            filename = variant + suffix
+            if filename not in filenames:
+                filenames.append(filename)
+    return filenames
+
+
 @dataclass
 class PrintJob:
     """Return all information related content"""
@@ -1432,29 +1520,43 @@ class PrintJob:
         return True
 
     def _model_filenames_to_try(self) -> list[str]:
-        filenames_to_try = []
+        filenames: list[str] = []
+        seen: set[str] = set()
+        sources = [self._subtask_name]
+        if self.gcode_file and self.gcode_file != self._subtask_name:
+            sources.append(self.gcode_file)
+        for raw in sources:
+            for filename in print_filename_candidates(raw):
+                if filename not in seen:
+                    seen.add(filename)
+                    filenames.append(filename)
+        return filenames
 
-        if self._subtask_name != '':
-            if self._subtask_name.endswith('.3mf'):
-                filenames_to_try.append(self._subtask_name)
-            else:
-                filenames_to_try.append(f"{self._subtask_name}.3mf")
-                filenames_to_try.append(f"{self._subtask_name}.gcode.3mf")
+    def _remote_model_match_rank(self, remote_file: RemoteMediaFile, candidate: str) -> int:
+        """2 when the whole candidate matches, 1 for its last path component, else 0.
 
-        if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
-            if self.gcode_file.endswith('.3mf'):
-                filenames_to_try.append(self.gcode_file)
-            else:
-                filenames_to_try.append(f"{self.gcode_file}.3mf")
-                filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
-
-        return filenames_to_try
-
-    def _remote_model_matches(self, remote_file: RemoteMediaFile, candidate: str) -> bool:
+        A slash in the print name (for example "TPU 85/95A") is part of the
+        filename. gcode_file can also be a real path, so the last component is
+        only a fallback and loses to a full-name match.
+        """
         candidate = candidate.replace("\\", "/").lstrip("/")
         remote_path = remote_file.path.replace("\\", "/").lstrip("/")
         remote_name = remote_file.basename.replace("\\", "/")
-        return remote_path == candidate or remote_name == candidate.rsplit("/", 1)[-1]
+        if (
+            remote_path == candidate
+            or remote_name == candidate
+            or remote_path.endswith("/" + candidate)
+        ):
+            return 2
+        candidate_name = candidate.rsplit("/", 1)[-1]
+        if candidate_name != candidate and (
+            remote_name == candidate_name or remote_path.endswith("/" + candidate_name)
+        ):
+            return 1
+        return 0
+
+    def _remote_model_matches(self, remote_file: RemoteMediaFile, candidate: str) -> bool:
+        return self._remote_model_match_rank(remote_file, candidate) > 0
 
     def _model_candidate_score(self, remote_file: RemoteMediaFile) -> tuple[int, datetime, int, int]:
         path = remote_file.path.replace("\\", "/").lower()
@@ -1479,10 +1581,12 @@ class PrintJob:
     ) -> list[RemoteMediaFile]:
         remote_files = [file for file in remote_files if "Metadata" not in file.path]
         for filename in filenames_to_try:
-            matches = [
-                file for file in remote_files
-                if self._remote_model_matches(file, filename)
+            ranked = [
+                (self._remote_model_match_rank(file, filename), file)
+                for file in remote_files
             ]
+            best = max((rank for rank, _file in ranked), default=0)
+            matches = [file for rank, file in ranked if rank == best and rank > 0]
             if matches:
                 selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
                 LOGGER.debug(
@@ -1502,7 +1606,8 @@ class PrintJob:
     def _model_cache_paths(self, remote_file: RemoteMediaFile) -> tuple[Path, Path]:
         cache_root = Path(self._client.cache_path) / "prints"
         size = int(remote_file.size)
-        filename = remote_file.basename
+        # Keep a slash that belongs to the print name from becoming a cache directory.
+        filename = remote_file.basename.replace("/", "_").replace("\\", "_")
 
         if remote_file.source == Ftps990MediaSource.name:
             relative_path = Path(remote_file.path.lstrip('/'))
@@ -1755,28 +1860,7 @@ class PrintJob:
         return None
 
     def _attempt_ftp_download(self, ftp) -> Union[str, None]:
-
-        filenames_to_try = []
-
-        # First test if the subtaskname exists as a 3mf
-        if self._subtask_name != '':
-            if self._subtask_name.endswith('.3mf'):
-                filenames_to_try.append(self._subtask_name)
-            else:
-                filenames_to_try.append(f"{self._subtask_name}.3mf")
-                filenames_to_try.append(f"{self._subtask_name}.gcode.3mf")
-
-
-        # If we didn't find it then try the gcode file
-        if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
-            if self.gcode_file.endswith('.3mf'):
-                filenames_to_try.append(self.gcode_file)
-            else:
-                filenames_to_try.append(f"{self.gcode_file}.3mf")
-                filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
-
-        # Try each candidate filename in order
-        for filename in filenames_to_try:
+        for filename in self._model_filenames_to_try():
             model_file = self._attempt_ftp_download_of_file_from_search_path(ftp, filename=filename)
             if model_file is not None:
                 return model_file
@@ -2176,7 +2260,7 @@ class PrintJob:
             self._close_remote_media_sources(sources)
 
         if model_file_path is None:
-            LOGGER.debug("No model file found.")
+            LOGGER.debug("No model file found. Tried %s", self._model_filenames_to_try())
             return
 
         result = False
