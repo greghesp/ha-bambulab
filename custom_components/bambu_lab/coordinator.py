@@ -7,7 +7,7 @@ import os
 import re
 import time
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Optional, List, Dict
 
 from homeassistant import config_entries
@@ -25,6 +25,7 @@ from homeassistant.const import (
     Platform
 )
 from homeassistant.helpers import issue_registry
+from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.helpers import entity_registry as er
 
 from .const import (
@@ -41,6 +42,7 @@ from .const import (
 
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
+from .pybambu.signing_store import signing_directory
 from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
@@ -79,10 +81,17 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config.update(entry.options.items())
         config['user_language'] = hass.config.language
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
+        # File placement alone must not enable privileged commands.
+        config['signing_path'] = (str(signing_directory(
+            hass.config.path(".storage"), config['serial']
+        )) if config.get('enable_signed_fans') is True
+            and config.get('device_type', '').upper() == 'X1C' else None)
         self.client = BambuClient(config)
             
         self._updatedDevice = False
         self._shutdown = False
+        self._signing_unsub = None
+        self._last_signing_issue = None
         # Guards the access denied recovery so one failure episode triggers at most one
         # cloud lookup. Reset once the printer connects successfully again.
         self._access_denied_handled = False
@@ -131,7 +140,22 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._report_live_view_disabled_issue()
         
         elif event == "event_printer_mqtt_encryption_enabled":
-            self._report_encryption_enabled_issue()
+            if not self.client.command_signer.configured:
+                self._report_encryption_enabled_issue()
+
+        elif event == "event_printer_signer_ready":
+            # Fan entities already exist; update availability without rebuilding platforms.
+            issue_registry.async_delete_issue(
+                hass=self._hass,
+                domain=DOMAIN,
+                issue_id=f"mqtt_encryption_enabled_{self.get_model().info.serial}",
+            )
+            self.async_set_updated_data(self.get_model())
+            self._sync_signing_issue()
+
+        elif event == "event_printer_signer_unavailable":
+            self.async_set_updated_data(self.get_model())
+            self._sync_signing_issue()
 
         elif event == "event_printer_ready":
             # A successful connection ends any access denied episode.
@@ -195,7 +219,45 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     async def start_mqtt(self) -> None:
         """Use MQTT for updates."""
         LOGGER.debug("Starting MQTT")
+        self._sync_signing_issue()
+        self._signing_unsub = async_track_time_interval(
+            self._hass, self._sync_signing_issue, timedelta(minutes=5)
+        )
         asyncio.create_task(self.listen())
+
+    @callback
+    def _sync_signing_issue(self, _now=None) -> None:
+        """One entry-scoped repair, including expiry while the printer is offline."""
+        if self._shutdown:
+            return
+        status = self.client.signing_status()
+        enabled = self._entry.options.get("enable_signed_fans") is True
+        reason = status["reason"] if enabled else "disabled"
+        if enabled and status.get("review_due") and status.get("configured"):
+            reason = "renewal_due"
+        state = (reason, status.get("valid_until"))
+        issue_id = f"signing_{self._entry.entry_id}"
+        # A completed repair flow removes its issue even if the subsequent
+        # printer exchange fails. Re-create it on the next check, not merely
+        # when status changes. Ignored-but-existing issues stay ignored.
+        if state == self._last_signing_issue and (
+            reason in ("ready", "disabled")
+            or issue_registry.async_get(self._hass).async_get_issue(DOMAIN, issue_id) is not None
+        ):
+            return
+        self._last_signing_issue = state
+        if reason in ("ready", "disabled"):
+            issue_registry.async_delete_issue(self._hass, DOMAIN, issue_id)
+            return
+        issue_registry.async_create_issue(
+            self._hass, DOMAIN, issue_id,
+            is_fixable=True,
+            severity=issue_registry.IssueSeverity.WARNING,
+            translation_key="signing_credentials",
+            translation_placeholders={"reason": reason.replace("_", " "),
+                                      "expires": status.get("valid_until") or "—"},
+            data={"entry_id": self._entry.entry_id},
+        )
 
     def shutdown(self) -> None:
         """ Halt the MQTT listener thread """
@@ -203,6 +265,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         # Remove event listeners
         self._service_call_listener()
+        if self._signing_unsub is not None:
+            self._signing_unsub()
+            self._signing_unsub = None
         
         # Disconnect client - this will handle its own thread cleanup
         self.client.disconnect()
