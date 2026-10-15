@@ -26,18 +26,11 @@ from cryptography import x509
 from cryptography.exceptions import InvalidSignature, UnsupportedAlgorithm
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from cryptography.x509.oid import NameOID
 
 
 class CommandSigningError(RuntimeError):
     """Raised when a privileged command cannot be signed safely."""
-
-
-def _first_certificate(pem: bytes) -> x509.Certificate:
-    marker = b"-----END CERTIFICATE-----"
-    end = pem.find(marker)
-    if end < 0:
-        raise CommandSigningError("certificate file contains no PEM certificate")
-    return x509.load_pem_x509_certificate(pem[: end + len(marker)] + b"\n")
 
 
 def _cert_id(certificate: x509.Certificate) -> str:
@@ -63,13 +56,21 @@ class CommandSigner:
     """Provision printer trust and sign authorization-protected commands."""
 
     def __init__(self, credentials_dir: str | os.PathLike[str] | None, *,
-                 trust_roots: bytes | None = None) -> None:
+                 trust_roots: bytes | None = None,
+                 expected_serial: str | None = None,
+                 device_trust_roots: bytes | None = None) -> None:
         self._credentials_dir = Path(credentials_dir) if credentials_dir else None
         # These anchors come from the integration's shipped vendor CA resource,
         # never from a credential bundle or a provisioning reply. Tests/tools
         # may explicitly supply an independently selected trust anchor instead.
         anchors = trust_roots if trust_roots is not None else (Path(__file__).parent / "certs" / "bambu.cert").read_bytes()
         self._trust_roots = x509.load_pem_x509_certificates(anchors)
+        self._device_trust_roots = x509.load_pem_x509_certificates(
+            device_trust_roots if device_trust_roots is not None
+            else (Path(__file__).parent / "certs" / "bambu.cert").read_bytes()
+        )
+        self._expected_serial = expected_serial
+        self._device_trust_failed = False
         self._lock = threading.RLock()
         self._private_key: rsa.RSAPrivateKey | None = None
         self._app_certificate_pem = ""
@@ -115,6 +116,8 @@ class CommandSigner:
                 reason = "credentials_missing"
             elif not self.configured:
                 reason = "credentials_expired"
+            elif self._device_trust_failed:
+                reason = "device_trust_failed"
             elif not self.ready:
                 reason = "provisioning_required"
             else:
@@ -135,15 +138,36 @@ class CommandSigner:
         key_path = self._credentials_dir / "slicer_key.pem"
         cert_path = self._credentials_dir / "slicer_cert.pem"
         crl_path = self._credentials_dir / "slicer_crl.pem"
-        if not all(path.exists() for path in (key_path, cert_path, crl_path)):
+        snapshot = self._credentials_dir / "credentials.json"
+        if not snapshot.exists() and not snapshot.is_symlink() and not all(path.exists() for path in (key_path, cert_path, crl_path)):
             return
-        if self._credentials_dir.is_symlink() or self._credentials_dir.stat().st_mode & 0o077:
+        if (self._credentials_dir.is_symlink()
+                or self._credentials_dir.stat().st_uid != os.geteuid()
+                or self._credentials_dir.stat().st_mode & 0o077):
             raise CommandSigningError("signing directory must be private and not a symlink")
 
-        key = serialization.load_pem_private_key(self._read_private(key_path), password=None)
+        if snapshot.exists() or snapshot.is_symlink():
+            # One atomic, complete credential generation. Never combine it with
+            # legacy PEMs or fall back if a managed snapshot is corrupt.
+            try:
+                bundle = json.loads(self._read_private(snapshot))
+                if not isinstance(bundle, dict):
+                    raise ValueError
+                files = bundle["files"]
+                if (not isinstance(files, dict)
+                        or type(bundle["version"]) is not int or bundle["version"] != 1
+                        or set(files) != {"slicer_key.pem", "slicer_cert.pem", "slicer_crl.pem"}
+                        or any(not isinstance(value, str) for value in files.values())):
+                    raise ValueError
+                key_bytes, cert_pem, crl_bytes = (files[name].encode("ascii") for name in
+                                               ("slicer_key.pem", "slicer_cert.pem", "slicer_crl.pem"))
+            except (ValueError, KeyError, TypeError):
+                raise CommandSigningError("invalid managed credential snapshot") from None
+        else:
+            key_bytes, cert_pem, crl_bytes = (self._read_private(path) for path in (key_path, cert_path, crl_path))
+        key = serialization.load_pem_private_key(key_bytes, password=None)
         if not isinstance(key, rsa.RSAPrivateKey):
             raise CommandSigningError("slicer key is not RSA")
-        cert_pem = self._read_private(cert_path)
         chain = x509.load_pem_x509_certificates(cert_pem)
         certificate = chain[0]
         chain = self._validate_app_chain(chain)
@@ -158,7 +182,6 @@ class CommandSigner:
         if key.public_key().public_numbers() != cert_public_key.public_numbers():
             raise CommandSigningError("slicer key does not match slicer certificate")
 
-        crl_bytes = self._read_private(crl_path)
         crl_pem = crl_bytes.decode("utf-8")
         crl_blocks = re.findall(
             r"-----BEGIN X509 CRL-----.*?-----END X509 CRL-----", crl_pem, re.DOTALL
@@ -186,6 +209,8 @@ class CommandSigner:
         crl_end = min(crl.next_update_utc for crl in crls)
         self.crl_stale = crl_end <= now
         if self.crl_stale:
+            if snapshot.exists():
+                raise CommandSigningError("managed credentials require a fresh CRL")
             # Current official clients can supply signed CRLs beyond nextUpdate;
             # firmware still consults their revocation entries. Default remains
             # strict. A reviewed, hash-pinned, time-bounded local exception is
@@ -203,10 +228,14 @@ class CommandSigner:
             self._cert_id = _cert_id(certificate)
             self._valid_from, self._valid_until = max(starts), min(ends)
 
-    def _validate_app_chain(self, chain: list[x509.Certificate]) -> list[x509.Certificate]:
+    def _validate_app_chain(self, chain: list[x509.Certificate], *,
+                            anchors: list[x509.Certificate] | None = None) -> list[x509.Certificate]:
         """Require a bounded, constrained path to an independently trusted CA."""
+        if not chain or len(chain) > 8:
+            raise CommandSigningError("invalid certificate chain length")
+        roots = self._trust_roots if anchors is None else anchors
         now = datetime.now(timezone.utc)
-        trusted = {cert.fingerprint(hashes.SHA256()) for cert in self._trust_roots}
+        trusted = {cert.fingerprint(hashes.SHA256()) for cert in roots}
         current = chain[0]
         path = []
         seen = set()
@@ -224,7 +253,7 @@ class CommandSigner:
                 raise CommandSigningError("application certificate chain is expired or not yet valid")
             if fingerprint in trusted:
                 return path
-            issuers = [cert for cert in chain[1:] + self._trust_roots
+            issuers = [cert for cert in chain[1:] + roots
                        if cert.subject == current.issuer and cert.fingerprint(hashes.SHA256()) not in seen]
             issuer = None
             for candidate in issuers:
@@ -345,9 +374,14 @@ class CommandSigner:
             }
 
     def handle_security_report(self, report: dict[str, Any]) -> bool:
-        """Harvest the printer certificate from a successful install reply."""
+        """Authenticate a correlated device reply before accepting its public key."""
         with self._lock:
-            return self._handle_security_report_locked(report)
+            try:
+                return self._handle_security_report_locked(report)
+            except (CommandSigningError, ValueError, TypeError, InvalidSignature, UnsupportedAlgorithm):
+                self.reset_session()
+                self._device_trust_failed = True
+                raise CommandSigningError("printer certificate trust validation failed") from None
 
     def _handle_security_report_locked(self, report: dict[str, Any]) -> bool:
         if report.get("command") != "app_cert_install":
@@ -360,20 +394,38 @@ class CommandSigner:
             self.reset_session()
             return False
 
-        printer_pem = str(report["printer_cert"]).encode("utf-8")
-        certificate = _first_certificate(printer_pem)
-        now = datetime.now(timezone.utc)
-        if not certificate.not_valid_before_utc <= now < certificate.not_valid_after_utc:
-            raise CommandSigningError("printer certificate is expired or not yet valid")
+        printer_pem = report["printer_cert"]
+        if not isinstance(printer_pem, str) or len(printer_pem) > 64 * 1024:
+            raise CommandSigningError("invalid printer certificate response")
+        chain = self._validate_app_chain(
+            x509.load_pem_x509_certificates(printer_pem.encode("ascii")),
+            anchors=self._device_trust_roots,
+        )
+        certificate = chain[0]
+        names = certificate.subject.get_attributes_for_oid(NameOID.COMMON_NAME)
+        if (not self._expected_serial or len(names) != 1
+                or names[0].value != self._expected_serial):
+            raise CommandSigningError("printer certificate identity mismatch")
+        try:
+            if certificate.extensions.get_extension_for_class(x509.BasicConstraints).value.ca:
+                raise CommandSigningError("printer certificate must be a leaf")
+        except x509.ExtensionNotFound:
+            pass
+        try:
+            if not certificate.extensions.get_extension_for_class(x509.KeyUsage).value.key_encipherment:
+                raise CommandSigningError("printer certificate cannot encrypt commands")
+        except x509.ExtensionNotFound:
+            pass
         public_key = certificate.public_key()
         if not isinstance(public_key, rsa.RSAPublicKey):
             raise CommandSigningError("printer certificate key is not RSA")
 
         with self._lock:
             self._device_public_key = public_key
+            self._device_trust_failed = False
             self._provisioned = True
             self._pending_sequence = None
-            self._valid_until = min(self._valid_until, certificate.not_valid_after_utc)
+            self._valid_until = min(self._valid_until, *(cert.not_valid_after_utc for cert in chain))
         return True
 
     def sign_fan_command(self, fan_id: int, percentage: float) -> str:

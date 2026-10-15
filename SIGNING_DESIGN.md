@@ -1,187 +1,176 @@
-# Signed cloud fan controls — experimental design for review
+# Experimental signed X1C fan controls
 
-This contribution implements opt-in signed/encrypted fan commands on cloud-paired
-X1C firmware. **It is open for normal review, not a draft.** It is not yet a turnkey HACS
-release; remaining trust, licensing and lifecycle limitations are documented
-below rather than used to defer implementation.
+This opt-in contribution is open for normal review. It adds part-cooling,
+auxiliary and chamber fan controls for secured X1C firmware. Telemetry, camera,
+ordinary light traffic and unsigned-printer behavior remain independent.
+It does not expose signed heaters, motion, jobs or arbitrary G-code.
 
-## Evidence and credit
+**Account login is not signing setup.** Logging into Bambu Cloud supplies an
+account token. Fan signing requires a separate operator-provided application
+key, certificate chain and current signed revocation list (CRL).
 
-The deployed development build used ha-bambulab 2.2.25, Home Assistant 2026.9.1
-on ARM64, and an X1C on firmware 01.12.00.00 with cloud MQTT and Developer LAN
-Mode off. An idle-printer chamber-fan test observed 0 → 20 → 0% in both the
-fan entity and the separate printer speed sensor. Restoration was confirmed.
-The part-cooling and auxiliary entities were available but were not separately
-actuated in that controlled test. The owner subsequently confirmed the controls
-worked in normal use. No claim is made for other printer models or firmware.
+## User workflow
 
-This review branch ports that implementation onto current `main`; it is not a
-snapshot of an installation. Its tests use generated fixtures and mocked
-clients. Software contract coverage is distinct from the historical hardware proof.
+### Account and printer connection
 
-Protocol credit belongs to [Open Bamboo Networking](https://github.com/ClusterM/open-bamboo-networking),
-particularly research/06.02-mqtt.md and research/10.02–10.04. Local credential
-acquisition used [BambuSlicerKeySaver](https://github.com/danielwoz/BambuSlicerKeySaver).
-No claim is made to have discovered Bambu's signing protocol.
+Add the printer normally, or choose **Configure → Account and printer connection**.
+The existing wizard requests region, email/phone and password; then an email/SMS
+verification code or 2FA code if the vendor requires it. It offers new-code
+requests and incorrect/expired-code handling. The user reads the code in their
+own mail/SMS/authenticator app; the integration does not access their mailbox.
 
-## Behavior
+A printer must match the configured serial exactly. An account without that
+printer aborts without updating the entry. Passwords are not put back into an
+error form, full entries/authentication responses are not logged, and entering
+a flow no longer forces global debug logging.
 
-- Native part-cooling, auxiliary and chamber fan controls and ordinary HA fan
-  actions; no heatbreak control or additional motion/heater entities.
-- Missing or invalid optional signing material leaves telemetry working.
-- `security.app_cert_install` provisioning correlates responses; device trust
-  is invalidated on disconnect and re-established for the next session.
-- G-code uses encrypted `param_enc` only, never plaintext `param` alongside it.
-  The exact serialized payload and byte length are signed with RSA/SHA-256.
-- Command IDs are reserved durably under a process lock before publication;
-  they do not reset at reconnect/restart or wrap at 30000.
-- Unavailable authorization and failed publication propagate errors to HA.
-  Authorization rejection triggers reprovisioning, **not command replay**.
-- Signed fan state comes from printer telemetry, not an optimistic override.
-  Slicer G-code may overwrite a requested speed during printing.
+### First-time signed controls
 
-## Credential and operational boundary
+1. After adding the printer, choose **Configure → Signed fan controls**. This
+   menu works without logging in again or re-testing cloud/LAN connectivity.
+2. Obtain an export from **your own licensed networking-plugin installation**.
+   [BambuSlicerKeySaver](https://github.com/danielwoz/BambuSlicerKeySaver) is the
+   external extraction tool used during development; its platform/version
+   support is independent of this integration. This PR does not run it,
+   distribute vendor keys/binaries, or promise that an export will contain a
+   current CRL. Follow the export tool's own instructions and verify its source.
+3. Make a ZIP with exactly `slicer_key.pem`, `slicer_cert.pem`, `slicer_crl.pem`
+   at its root. No directory wrappers, extra files, links or compatibility
+   receipts. Limits: 1 MiB ZIP, 256 KiB per PEM. Stored/Deflate ZIPs only.
+4. Open **Import or renew credentials**, select the ZIP and explicitly consent
+   to experimental signed fan controls. Use a trusted HTTPS connection to HA.
+5. HA validates the complete bundle before replacing any active credentials,
+   then reloads this printer entry to establish its signing session. No fan
+   command is sent as a test. The controls become available only after the
+   printer's certificate exchange succeeds. Observe normal telemetry after any
+   separately requested action; broker acceptance is not execution proof.
 
-The prototype reads operator-provided `slicer_key.pem`, `slicer_cert.pem` and
-`slicer_crl.pem` from `/config/.storage/bambu_lab_signing/PRINTER_SERIAL/`.
-It requires a private directory and regular owner-only, non-symlink files.
-Preserve `sequence.json` and its lock across restarts and credential rotation.
-`python tools/check_signer.py /path/to/private/bundle` validates offline and
-returns only status, not key contents. No account token, device identity,
-credential, proprietary binary, capture, or deployment receipt is supplied.
+Only **X1C** may opt in through this workflow/runtime path. Other models retain
+normal integration behavior and need independent signing/hardware validation.
 
-**Provisioning is not renewal.** Session provisioning is implemented, but
-vendor credential refresh, onboarding/repair UX and renewal are unresolved.
-Without acceptable material, controls remain unavailable.
+### Renewal and repair
 
-### Stale vendor CRL: explicit limitation
+The same **Import or renew** action installs a fresh export, preserving the
+existing command sequence counter. Account passwords/codes cannot renew these
+signing files. There is **no supported automatic vendor-renewal API in this PR**.
+If the export source still returns an expired CRL, renewal is unavailable: the
+import is rejected and signed controls remain unavailable once their current
+credentials expire. No deadline is extended and no stale-CRL bypass is offered
+by the UI.
 
-Two official Linux plugin versions supplied the same signed CRL beyond its
-`nextUpdate`. That is not evidence of fresh revocation status. Strict expiry
-validation is the default. The hardware proof used a private, explicitly
-reviewed compatibility receipt, pinning the exact certificate and CRL hashes
-for at most 30 days. Signature, certificate validity, key matching and known
-revocation checks still apply, but later revocations cannot be ruled out.
-No operator's receipt or hashes are included. This policy is included for
-honest review, **not proposed as an automatically renewed default**.
+A single entry-scoped HA Repair reports missing/invalid/expired material,
+failed printer trust, provisioning required, or expiry within seven days.
+The coordinator checks on setup/session changes and every five minutes, even
+while the printer is offline. Repairs offer the same import flow, **Retry with
+installed credentials**, and **Disable signed fan controls**. Retry validates
+current material before reloading; it never replays a fan command. Reload
+completion is not printer acceptance, and an unresolved repair is re-created
+on the next check. A ready non-expiring signer clears its own repair.
 
-## Licensing and maintainer decisions
+Disabling changes only the signing option, reloads the entry and preserves
+account/connection settings, camera, credentials and sequence storage. It does
+not change the printer's cloud/LAN mode or physical fan speed.
 
-The signing module, signing fixtures and standalone validator are supplied
-under AGPL-3.0-only (`COPYING.signing`). Existing upstream MIT notices remain
-intact; this contribution does not silently claim those additions are MIT or relicense
-the upstream project. Distribution of a combined work needs the corresponding
-AGPL obligations considered before merge.
+## Storage and failure behavior
 
-The preferred topic for maintainer feedback is an independently packaged AGPL
-signer companion with a narrow transport boundary, versus a separately
-maintained AGPL fork. A process boundary alone does not settle licensing.
-An in-process merge should wait for an explicitly acceptable licensing basis.
+HA's authenticated file-upload selector supplies an opaque ID, not an arbitrary
+server path. The upload is consumed/removed on the executor on success,
+rejection or declined consent. PEM contents and upload IDs are not put in
+config-entry data, options, diagnostics or logs. Cancelled/unsubmitted uploads
+are managed by HA's upload lifecycle.
 
-Other decisions before readiness:
+Validation stages files in an owner-only temporary directory. A complete
+`credentials.json` snapshot is flushed, fsynced and atomically replaced in
+`/config/.storage/bambu_lab_signing/PRINTER_SERIAL/`, with mode 0600 and private
+0700 directories. Readers load one generation, never mixed files. Rejected
+imports and failures before replacement preserve the previous snapshot;
+post-replacement directory-fsync failure is reported as a storage error (the
+new snapshot may already be active). The flow never deletes the prior legacy
+PEMs, `sequence.json` or its lock. Private HA backups can contain signing
+credentials and must be protected accordingly.
 
-1. Credential acquisition, rotation, revocation and repair ownership.
-2. Trust validation for device certificates and provisioning replies.
-3. Explicit user opt-in and supported-model/capability gating.
-4. Whether any bounded stale-CRL policy is acceptable at all.
-5. Reboot/reconnect/rejection behavior and broader hardware coverage.
+The existing three-PEM layout remains readable for older opt-in installations.
+Once a managed snapshot exists, it is authoritative: corruption cannot fall
+back to older credentials. Invalid optional material leaves read-only
+integration behavior intact and signing unavailable. The standalone
+`python tools/check_signer.py /path/to/private/bundle` checks either layout
+without network access or secret output.
 
-### Concrete implementation gaps (7 September review)
+## Cryptographic and command boundary
 
-- Printer replies are correlated to the pending provisioning sequence, and the
-  returned certificate is checked for dates and an RSA key. This is **not**
-  certificate-chain validation or binding that certificate to the intended
-  printer identity. Define the trust anchor/identity policy and add negative
-  tests before treating provisioning as authenticated device trust.
-- Placing a bundle at the expected private path currently acts as opt-in.
-  There is no config/options flow for consent, supported-model selection,
-  credential import, renewal, or repair. File placement is a prototype setup
-  mechanism, not the proposed finished user experience.
-- **Resolved in the 22 September revision:** the signer accepts only a fan ID
-  (part cooling, auxiliary, chamber) and a finite 0–100 percentage. It builds
-  the sole canonical M106 command internally. Generic `print` publication on
-  secured firmware is rejected without signing or publication; read-only and
-  light traffic, and unsigned-printer behavior, remain unchanged. Secondary
-  auxiliary and heatbreak fans are outside the signed capability set.
-- A stale-CRL receipt cannot prove current revocation status. Do not mark this
-  ready by simply rolling its deadline forward; renewal needs a supported
-  source and an explicit policy for when that source is unavailable.
+- Application chains must reach the independently shipped vendor CAs in
+  `pybambu/certs/bambu.cert`. An uploaded root cannot add trust. Dates,
+  signatures, CA/path-length and key-usage constraints are checked; unsupported
+  critical extensions are refused. Only the verified path supplies CRL issuers.
+- Provisioning replies must match the pending sequence, succeed, and carry a
+  bounded device chain to the independently shipped vendor CAs. Its RSA leaf's
+  single common name must exactly match the configured printer serial; CA
+  leaves and disallowed key encipherment are refused. This uses the documented
+  Bambu CN/serial profile, not a general-purpose hostname verifier. Unknown
+  profiles fail closed. Device revocation is not claimed without a device CRL.
+- Invalid replies reset session trust. Disconnect/rejection requires a fresh
+  correlated exchange; no automatic command replay. Printer-chain expiry also
+  caps the session's usable lifetime.
+- `publish_fan(FansEnum, percentage)` accepts only the three typed fans and a
+  finite 0–100 percentage. The signer constructs one canonical M106 internally,
+  preserves existing ten-percent rounding, encrypts `param_enc`, and signs the
+  exact serialized bytes. Raw payloads/compound G-code cannot enter this path.
+- Sequence IDs are reserved durably under a process lock before publication and
+  retained across restart, reconnect and rotation. Publication failure surfaces
+  to HA. Fan state comes from telemetry, not optimistic state.
 
-The independent fan correctness changes in #2120 have merged. This branch is
-synchronized with `main` after that merge; those fixes no longer form part of
-its feature diff. Synchronizing the branch does not resolve the gates above.
+### Historical stale-CRL compatibility
 
-## Tests
+Earlier hardware work encountered two official plugin versions supplying the
+same expired CRL. That is not fresh revocation evidence. A legacy, locally
+reviewed, exact-bundle-pinned receipt could permit at most 30 days, while still
+checking signatures, key matches, certificate validity and known revocations.
+The legacy validator retains that behavior for transparent compatibility;
+**managed imports and retries require a fresh CRL**, never create/import a
+receipt, and managed snapshots cannot use one after expiry. No private receipt
+or exception deadline is distributed or extended by this contribution.
 
-`python -m pytest tests/pybambu -q` exercises the existing regression suite and
-generated signing fixtures (encryption, signatures, CRLs, permissions,
-correlation, sequence persistence/concurrency, rejection and no replay).
-`python -m pytest tests/test_fan_entity.py -q` runs additional mocked entity
-checks when Home Assistant is installed; otherwise those checks skip.
-No test needs vendor credentials, makes a service call or controls a printer.
+## Validation and historical hardware evidence
 
-## Fan-only review contract (22 September)
+Tests generate all keys/certificates/CRLs and use mocked transports. Library
+coverage includes chain/identity rejection, signing/encryption, revocation,
+expiry, permissions, malformed ZIP/snapshot handling, failed atomic replacement,
+sequence continuity, correlation, broker errors and no replay. Real HA classes
+exercise consent, upload cleanup, options preservation, login challenges,
+wrong-account selection, repair ownership/reappearance, and entity behavior.
+CI runs the library suite plus HA contracts on the declared minimum HA version
+and the current tested HA version. No test needs vendor material or actuates
+hardware.
 
-`BambuClient.publish_fan(FansEnum, percentage)` is the only signed transport
-entry. `CommandSigner.sign_fan_command(fan_id, percentage)` constructs the
-payload internally and reserves a durable sequence only after input validation.
-No caller-supplied payload, G-code, encrypted field or extra command can enter
-that interface. Percentages retain the integration's ten-percent rounding.
-A broker error returns false; no automatic command retry is introduced.
-This is a scope boundary, not a sandbox against hostile code in the HA process.
+Commands:
 
-`tests/pybambu/test_fan_signing_boundary.py` is a credential-free contract suite
-using newly generated keys/certificates. It decrypts every supported fan's
-output at representative speeds and tests invalid/nonfinite/boolean values,
-unsupported fan IDs, compound commands, generic publication refusal, unsigned
-compatibility, broker failure and no replay. The existing signing suite covers
-reconnects, sequence persistence, expiry and rejection. These synthetic
-self-signed peers do **not** establish real-printer certificate trust.
+```sh
+python -m pytest tests/pybambu -q
+# In an environment with Home Assistant and the test requirements installed:
+python -m pytest tests/test_fan_entity.py tests/test_signing_opt_in.py tests/test_signing_flow.py tests/test_signing_repairs.py -q
+```
 
-Still blocked: independent trust anchors and device identity policy, complete
-application-chain validation, explicit setup/repair UX, a fresh revocation
-source, renewal, and acceptable licensing/architecture. No stale-CRL deadline
-was extended and no licensing notice was removed in this revision.
+An earlier build (ha-bambulab 2.2.25, HA 2026.9.1 ARM64, X1C firmware 01.12.00.00)
+passed an idle chamber-fan **0 → 20 → 0%** cloud test with independent telemetry
+and restoration. Other fans were not separately actuated in that test. It used
+the documented legacy CRL exception. That is historical evidence, **not a
+hardware test of this revision's trust/credential flow**. No live integration
+installation or printer command accompanies this PR update.
 
-## Explicit consent and lifecycle diagnostics (7 October)
+## Remaining external gates and licensing
 
-The options flow now exposes **Enable experimental signed fan controls** in
-Advanced options for both cloud and LAN entries. It is disabled by default,
-including upgrades of existing entries. Only the literal boolean `True` enables
-the credential path; directory/file presence, strings and numeric values do
-not count as consent. Disabling it reloads the entry and prevents further
-signed commands, while ordinary telemetry/light traffic remains unchanged.
+1. Fresh vendor material must actually be obtainable. Guided import/renewal
+   does not fix a vendor that supplies stale CRLs, nor does account login.
+2. Current-revision hardware proof of the stricter device profile, rotation and
+   reboot behavior is still needed; broader models are not enabled.
+3. Maintainers must agree to a distribution/licensing basis before merging.
+   Signing modules, credential flows, fixtures and validator retain
+   **AGPL-3.0-only** notices and `COPYING.signing`; original MIT notices remain.
+   This PR does not silently relicense either work. A separate process alone
+   would not settle the combined-work question. No maintainer acceptance is
+   implied by ready-for-review state or passing checks.
 
-The operator still supplies the private bundle at the documented fixed path.
-Configuration forms never accept or display PEMs, keys or arbitrary paths.
-Diagnostics export only allowlisted readiness, review deadline and stable
-reason codes: disabled, credentials_missing, credentials_invalid,
-credentials_expired, provisioning_required, ready. The private bundle path is
-redacted. A deadline within seven days is flagged; diagnostic generation does
-not renew credentials, extend compatibility receipts or replay commands.
-
-This closes the explicit-consent gap and provides lifecycle observability.
-Atomic credential replacement, supported renewal sourcing, authenticated
-device trust and final licensing/architecture still require further work.
-
-## Independently anchored application trust (7 October)
-
-Application certificate loading now requires a bounded (at most eight
-certificates), signature-verified path to the vendor CAs already shipped in
-`pybambu/certs/bambu.cert`. The bundle and provisioning reply cannot add
-trusted roots. Certificate dates, CA BasicConstraints/path lengths and issuer
-keyCertSign usage are enforced; leaf digitalSignature usage is enforced when
-present. Unsupported critical extensions are refused rather than silently
-ignored. Only the verified path may supply CRL verification issuers, preventing
-an unrelated appended certificate from authenticating a fabricated CRL.
-
-Generated tests explicitly select their own independent fixture anchor. The
-offline validator offers `--trust-root` for an explicitly chosen independent
-anchor, never automatically trusts a bundle root, and defaults to shipped
-vendor CAs. Existing vendor CA resources and licenses are unchanged.
-
-This closes the missing application-chain anchoring gap. It does **not** yet
-validate the provisioning device chain or bind its leaf to the intended printer;
-correlation is still not device authentication. No claim of universal PKIX
-profile support is made. No expiry policy or local compatibility review was
-extended.
+Protocol credit: [Open Bamboo Networking](https://github.com/ClusterM/open-bamboo-networking),
+particularly research/10.02–10.04 and the CN/serial device-certificate profile.
+Credential acquisition credit: BambuSlicerKeySaver. Independent fan correctness
+fixes #2120 were merged separately and are not part of this feature diff.

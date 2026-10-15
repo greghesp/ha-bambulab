@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import voluptuous as vol
 
 from typing import Any
@@ -23,6 +22,7 @@ from homeassistant.helpers.selector import (
 )
 
 from .const import DOMAIN, LOGGER
+from .signing_flow import SigningFlowMixin
 from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
     CloudflareError,
@@ -85,18 +85,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return BambuOptionsFlowHandler(config_entry)
 
     def __init__(self) -> None:
-        # Set logging level to DEBUG during the configuration flow
-        LOGGER.warning("Setting logging level to DEBUG")
-        self.__logging_level = LOGGER.getEffectiveLevel()
-        LOGGER.setLevel(logging.DEBUG)
-
         self._bambu_cloud = BambuCloud("", "", "", "")
         self._show_existing = False
-
-    def __del__(self) -> None:
-        # This isn't as immediate as I'd like it takes garbage collection but it'll kick in after a bit.
-        LOGGER.warning("Restoring logging level")
-        LOGGER.setLevel(self.__logging_level)
 
     async def async_step_user(
             self, user_input: dict[str, Any] | None = None
@@ -245,11 +235,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     self.authentication_type = 'verifyCode'
                     errors['base'] = 'tfa_csrf_fallback'
                 except Exception as e:
-                    LOGGER.error(f"Fallback code request failed with error code {e.args}")
+                    LOGGER.error("Fallback code request failed (%s)", type(e).__name__)
                     errors['base'] = "cannot_connect"
                 # Fall through to form generation to ask for verification code
             except Exception as e:
-                LOGGER.error(f"Failed to connect with error code {e.args}")
+                LOGGER.error("Failed to connect (%s)", type(e).__name__)
                 errors['base'] = "cannot_connect"
 
         # Build form
@@ -259,7 +249,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
             default_email = default_email if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
-            default_password = '' if user_input is None else user_input.get('password', '')
+            default_password = ''
             fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
             fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
@@ -577,7 +567,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return await self.async_step_user()
 
 
-class BambuOptionsFlowHandler(config_entries.OptionsFlow):
+class BambuOptionsFlowHandler(SigningFlowMixin, config_entries.OptionsFlow):
 
     region: str = ""
     email: str = ""
@@ -586,25 +576,19 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     _config_entry: config_entries.ConfigEntry = None
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        # Set logging level to DEBUG during the configuration flow
-        LOGGER.warning("Setting logging level to DEBUG")
-        self.__logging_level = LOGGER.getEffectiveLevel()
-        LOGGER.setLevel(logging.DEBUG)
-
         self._config_entry = config_entry
         self.region = self._config_entry.options.get('region', '')
         self.email = self._config_entry.options.get('email', '')
 
         self._bambu_cloud = BambuCloud("", "", "", "")
 
-        LOGGER.debug(self._config_entry)
-
-    def __del__(self) -> None:
-        # This isn't as immediate as I'd like it takes garbage collection but it'll kick in after a bit.
-        LOGGER.warning("Restoring logging level")
-        LOGGER.setLevel(self.__logging_level)
 
     async def async_step_init(self, user_input: None = None) -> FlowResult:
+        return self.async_show_menu(
+            step_id="init", menu_options=["connection", "signed_fans"]
+        )
+
+    async def async_step_connection(self, user_input=None) -> FlowResult:
         errors = {}
 
         if user_input is not None:
@@ -671,7 +655,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Required('printer_mode', default=default_option)] = selector
 
         return self.async_show_form(
-            step_id="init",
+            step_id="connection",
             data_schema=vol.Schema(fields),
             errors=errors or {},
             last_step=False,
@@ -747,11 +731,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     self.authentication_type = 'verifyCode'
                     errors['base'] = 'tfa_csrf_fallback'
                 except Exception as e:
-                    LOGGER.error(f"Fallback code request failed with error code {e.args}")
+                    LOGGER.error("Fallback code request failed (%s)", type(e).__name__)
                     errors['base'] = "cannot_connect"
                 # Fall through to form generation to ask for verification code
             except Exception as e:
-                LOGGER.error(f"Failed to connect with error code {e.args}")
+                LOGGER.error("Failed to connect (%s)", type(e).__name__)
                 errors['base'] = "cannot_connect"
 
         # Build form
@@ -761,7 +745,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             fields[vol.Required("region", default=default_region)] = REGION_SELECTOR
             default_email = self._config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
-            default_password = '' if user_input is None else user_input.get('password', '')
+            default_password = ''
             fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
             fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
@@ -787,10 +771,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             self._bambu_cloud.get_device_list)
 
         # Get the device we are working with.
-        device = None
-        for device in device_list:
-            if device['dev_id'] == self._config_entry.data['serial']:
-                break
+        device = next((device for device in device_list or []
+                       if device.get('dev_id') == self._config_entry.data['serial']), None)
 
         if device is None: 
             LOGGER.error(f"Unable to find device for serial: {self._config_entry.data['serial']}")
@@ -871,7 +853,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["usage_hours"] = float(user_input['usage_hours'])
                     options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                     options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
-                    options["enable_signed_fans"] = user_input['advanced'].get('enable_signed_fans', False)
                     options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                     options["force_ip"] = force_ip
@@ -921,7 +902,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Optional('enable_signed_fans', default=self._config_entry.options.get('enable_signed_fans', False) if user_input is None else user_input.get('advanced', {}).get('enable_signed_fans', False)): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -970,7 +950,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
-                options["enable_signed_fans"] = user_input['advanced'].get('enable_signed_fans', False)
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
                 title = self._config_entry.data['serial']
@@ -1014,7 +993,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Optional('enable_signed_fans', default=self._config_entry.options.get('enable_signed_fans', False) if user_input is None else user_input.get('advanced', {}).get('enable_signed_fans', False)): BOOLEAN_SELECTOR,
             }),
             {'collapsed': True},
         )

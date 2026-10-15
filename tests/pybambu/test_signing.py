@@ -33,6 +33,27 @@ def _certificate(key, common_name):
     )
 
 
+DEVICE_CA_KEY = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+DEVICE_CA_NAME = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "fixture-device-ca")])
+DEVICE_CA = (x509.CertificateBuilder().subject_name(DEVICE_CA_NAME).issuer_name(DEVICE_CA_NAME)
+    .public_key(DEVICE_CA_KEY.public_key()).serial_number(x509.random_serial_number())
+    .not_valid_before(datetime.now(timezone.utc) - timedelta(days=1))
+    .not_valid_after(datetime.now(timezone.utc) + timedelta(days=60))
+    .add_extension(x509.BasicConstraints(ca=True, path_length=0), critical=True)
+    .sign(DEVICE_CA_KEY, hashes.SHA256()))
+
+
+def _device_certificate(key, serial="TEST-SERIAL", *, expired=False):
+    return (x509.CertificateBuilder()
+        .subject_name(x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, serial)]))
+        .issuer_name(DEVICE_CA_NAME).public_key(key.public_key())
+        .serial_number(x509.random_serial_number())
+        .not_valid_before(datetime.now(timezone.utc) - timedelta(days=2))
+        .not_valid_after(datetime.now(timezone.utc) + timedelta(days=-1 if expired else 30))
+        .add_extension(x509.BasicConstraints(ca=False, path_length=None), critical=True)
+        .sign(DEVICE_CA_KEY, hashes.SHA256()))
+
+
 def _write_credentials(path, *, revoked=False, expired=False):
     app_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     app_cert = _certificate(app_key, "test-app")
@@ -62,7 +83,8 @@ def _write_credentials(path, *, revoked=False, expired=False):
 
 def _test_signer(path):
     cert_path = path / "slicer_cert.pem"
-    return CommandSigner(path, trust_roots=cert_path.read_bytes() if cert_path.exists() else None)
+    return CommandSigner(path, trust_roots=cert_path.read_bytes() if cert_path.exists() else None,
+                         expected_serial="TEST-SERIAL", device_trust_roots=DEVICE_CA.public_bytes(serialization.Encoding.PEM))
 
 
 def test_missing_credentials_fail_closed(tmp_path):
@@ -136,7 +158,7 @@ def test_provision_sign_encrypt_and_reset(tmp_path):
     assert "PRIVATE KEY" not in provision["app_cert"]
 
     device_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-    device_cert = _certificate(device_key, "test-printer")
+    device_cert = _device_certificate(device_key)
     assert signer.handle_security_report(
         {
             "command": "app_cert_install",
@@ -189,7 +211,7 @@ def test_bambu_client_publish_uses_signed_envelope(tmp_path):
     )
     client.command_signer = _test_signer(tmp_path)
     device_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-    device_cert = _certificate(device_key, "test-printer")
+    device_cert = _device_certificate(device_key)
     provision = client.command_signer.build_provision_message()["security"]
     client.command_signer.handle_security_report(
         {
@@ -225,7 +247,7 @@ def _make_ready(signer):
     request = signer.build_provision_message()["security"]
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     reply = {"command": "app_cert_install", "sequence_id": request["sequence_id"],
-             "result": "SUCCESS", "printer_cert": _certificate(key, "printer").public_bytes(serialization.Encoding.PEM).decode()}
+             "result": "SUCCESS", "printer_cert": _device_certificate(key).public_bytes(serialization.Encoding.PEM).decode()}
     assert signer.handle_security_report(reply)
     return key, reply
 

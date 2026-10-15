@@ -372,7 +372,7 @@ class BambuClient:
         self._serial = config.get('serial', '')
         self._signer_credentials_rejected = False
         try:
-            self.command_signer = CommandSigner(config.get('signing_path'))
+            self.command_signer = CommandSigner(config.get('signing_path'), expected_serial=self._serial)
         except (CommandSigningError, OSError, ValueError) as error:
             # Invalid optional signing files must never take down read-only
             # printer telemetry. Leave controls fail-closed instead.
@@ -742,6 +742,13 @@ class BambuClient:
             # MQTT security reports contain credential material. Never dump a
             # raw frame or parser exception that can include its contents.
             LOGGER.error("MQTT message processing failed (%s)", type(e).__name__)
+
+    def signing_status(self):
+        """Stable, secret-free status shared by diagnostics and repair handling."""
+        if self._signer_credentials_rejected:
+            return {"reason": "credentials_invalid", "configured": False, "ready": False,
+                    "review_due": False, "valid_until": None, "crl_stale": False}
+        return self.command_signer.status()
 
     def subscribe(self):
         """Subscribe to report topic"""

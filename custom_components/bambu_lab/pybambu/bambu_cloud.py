@@ -134,15 +134,13 @@ class BambuCloud:
             raise CsrfError()
         elif response.status_code == 429 and 'cloudflare' in response.text:
             LOGGER.error("TEMPORARY 429 BLOCK BY CLOUDFLARE")
-            raise CloudflareError(response.status_code, response.text)
+            raise CloudflareError(response.status_code)
         elif response.status_code == 400 and not return400:
             LOGGER.error(f"Connection failed with error code: {response.status_code}")
-            LOGGER.debug(f"Response: '{response.text}'")
-            raise PermissionError(response.status_code, response.text)
+            raise PermissionError(response.status_code)
         elif response.status_code > 400:
             LOGGER.error(f"Connection failed with error code: {response.status_code}")
-            LOGGER.debug(f"Response: '{response.text}'")
-            raise PermissionError(response.status_code, response.text)
+            raise PermissionError(response.status_code)
         
         LOGGER.debug(f"Response: {response.status_code}")
 
@@ -167,7 +165,7 @@ class BambuCloud:
             else:
                 raise NotImplementedError()
         except Exception as e:
-            LOGGER.error(f"Connection to Bambu Cloud failed: {e}")
+            LOGGER.error("Connection to Bambu Cloud failed (%s)", type(e).__name__)
             raise e
 
         self._test_response(response)
@@ -219,8 +217,8 @@ class BambuCloud:
         loginType = auth_json.get("loginType", None)
         if loginType is None:
             LOGGER.error(f"loginType not present")
-            LOGGER.error(f"Response not understood: '{response.text}'")
-            return ValueError(0) # FIXME
+            LOGGER.error("Authentication response not understood")
+            raise ValueError("Unsupported login response")
         elif loginType == 'verifyCode':
             LOGGER.debug(f"Received verifyCode response")
             raise CodeRequiredError()
@@ -230,9 +228,9 @@ class BambuCloud:
             self._tfaKey = auth_json.get("tfaKey")
             raise TfaCodeRequiredError()
         else:
-            LOGGER.debug(f"Did not understand json. loginType = '{loginType}'")
-            LOGGER.error(f"Response not understood: '{response.text}'")
-            return ValueError(1) # FIXME
+            LOGGER.debug("Unsupported login challenge")
+            LOGGER.error("Authentication response not understood")
+            raise ValueError("Unsupported login response")
         
     def _get_new_code(self):
         if '@' in self._email:
@@ -275,7 +273,7 @@ class BambuCloud:
         if status_code == 200:
             LOGGER.debug("Authentication successful.")
         elif status_code == 400:
-            LOGGER.debug(f"Received response: {response.json()}")           
+            LOGGER.debug("Verification code rejected")
             if response.json()['code'] == 1:
                 # Code has expired. Request a new one.
                 self._get_new_code()
@@ -284,8 +282,8 @@ class BambuCloud:
                 # Code was incorrect. Let the user try again.
                 raise CodeIncorrectError()
             else:
-                LOGGER.error(f"Response not understood: '{response.json()}'")
-                raise ValueError(response.json()['code'])
+                LOGGER.error("Verification response not understood")
+                raise ValueError("Verification code rejected")
 
         return response.json()['accessToken']
     
@@ -315,7 +313,6 @@ class BambuCloud:
 
         cookies = response.cookies.get_dict()
         token_from_tfa = cookies.get("token")
-        #LOGGER.debug(f"token_from_tfa: {token_from_tfa}")
 
         return token_from_tfa
     
@@ -346,7 +343,7 @@ class BambuCloud:
                 LOGGER.debug("Unable to decode authToken to json to retrieve username.")
 
         if username is None:
-            LOGGER.debug(f"Unable to decode authToken to retrieve username. AuthToken = {self._auth_token[:10]}xxxxx")
+            LOGGER.debug("Unable to retrieve username from authentication token")
 
         return username
     

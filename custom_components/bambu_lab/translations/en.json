@@ -68,7 +68,7 @@
       },
       "Bambu_Lan": {
         "title": "Setup Local Connection",
-        "description": "You can choose to connect directly to the printer mqtt instead of Bambu Lab cloud. This gives resilience to Bambu Lab cloud outages but Bambu Lab has restricted control of the printer when in this hybrid mode so some controls will be unavailable.\n\rRegardless of this choice, the integration will get the printer IP address from Bambu Lab cloud and confirm that it can connect to it as this is required for camera, print history and timelapse support. If your printer is inaccessible to your Home Assistant then you can disable this check but you will lose those features.",
+        "description": "You can choose to connect directly to the printer mqtt instead of Bambu Lab cloud. This gives resilience to Bambu Lab cloud outages but Bambu Lab has restricted control of the printer when in this hybrid mode so some controls will be unavailable.\n\rRegardless of this choice, the integration will get the printer IP address from Bambu Lab cloud and confirm that it can connect to it as this is required for camera, print history and timelapse support. If your printer is inaccessible to your Home Assistant then you can disable this check but you will lose those features.\n\nAfter adding an X1C, optional signed fan controls have their own setup under Configure → Signed fan controls. Account login alone does not enable them.",
         "data": {
           "local_mqtt": "Connect directly to printer mqtt:",
           "skip_local_mqtt": "Skip local mqtt connection test (not recommended):",
@@ -91,7 +91,7 @@
       },
       "Lan": {
         "title": "Lan Mode Connection",
-        "description": "Please provide your local printer IP address, serial number and access code. The access code can be found on the printer screen, in the network settings (WLAN). The serial number (SN) can be found in the device settings.",
+        "description": "Please provide your local printer IP address, serial number and access code. The access code can be found on the printer screen, in the network settings (WLAN). The serial number (SN) can be found in the device settings.\n\nAfter adding an X1C, optional signed fan controls have their own setup under Configure → Signed fan controls. Account login alone does not enable them.",
         "data": {
           "serial": "Serial Number:",
           "host": "Local Printer IP Address:",
@@ -116,7 +116,9 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare has blocked the connection attempt.",
-      "curl_unavailable": "curl_cffi library is not available."
+      "curl_unavailable": "curl_cffi library is not available.",
+      "signing_unsupported": "Signed controls are currently limited to X1C. Other printers keep their existing connection and controls.",
+      "device_not_found": "The selected printer is not in this account. Sign in to the correct account; no settings have been changed."
     },
     "error": {
       "cannot_connect": "Failed to connect",
@@ -138,14 +140,18 @@
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now.",
-      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
+      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below.",
+      "signing_invalid_archive": "Select a new ZIP with exactly the three named PEM files. Extra files, folders, links, encrypted ZIPs and oversized files are not accepted.",
+      "signing_credentials_rejected": "Credentials were rejected. Check that the key matches, the certificate chains to Bambu, and the certificate and signed revocation data are current and not revoked. Obtain a fresh export; account login cannot refresh these files. Existing credentials were not changed.",
+      "signing_storage_error": "Private signing storage is not writable or has unsafe ownership/permissions. Check the HA storage directory, then upload again.",
+      "signing_consent_required": "Explicit consent is required. Select the file again and confirm, or cancel to keep your current settings."
     },
     "step": {
       "init": {
-        "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
-        "data": {
-          "printer_mode": "Printer configuration mode:"
+        "title": "Bambu Lab settings",
+        "menu_options": {
+          "connection": "Account and printer connection",
+          "signed_fans": "Signed fan controls: setup, renew or repair"
         }
       },
       "Bambu": {
@@ -179,8 +185,7 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-                        "enable_signed_fans": "Enable experimental signed fan controls (requires a valid local bundle)"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -201,11 +206,45 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-                        "enable_signed_fans": "Enable experimental signed fan controls (requires a valid local bundle)"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
+      },
+      "connection": {
+        "title": "Adjust connection settings",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
+        "data": {
+          "printer_mode": "Printer configuration mode:"
+        }
+      },
+      "signed_fans": {
+        "title": "Signed fan controls",
+        "description": "Enabled: {enabled}. Credentials: {status}. Valid until: {expires}.\n\nAccount login and its verification code do not provide signing credentials. These optional, experimental X1C controls need a separate private export. Telemetry and camera do not need it. Importing or retrying does not test or move a fan.",
+        "menu_options": {
+          "signing_import": "Import or renew credentials",
+          "signing_retry": "Retry with installed credentials",
+          "signing_disable": "Disable signed fan controls"
+        }
+      },
+      "signing_import": {
+        "title": "Import or renew signing credentials",
+        "description": "Obtain a fresh export from your own licensed Bambu Studio networking installation using [BambuSlicerKeySaver](https://github.com/danielwoz/BambuSlicerKeySaver). This integration cannot renew it using your account password or email code.\n\nUpload a ZIP containing only slicer_key.pem, slicer_cert.pem and slicer_crl.pem at its root (maximum 1 MiB ZIP, 256 KiB per file). Do not include account tokens or compatibility receipts. Use a trusted, encrypted HA connection.\n\nAll three files must pass signature, issuer, key-match, expiry and revocation checks. Expired vendor revocation data is refused; if a fresh export is unavailable, keep controls disabled. A rejected import leaves existing credentials unchanged. See [setup and limitations](https://github.com/greghesp/ha-bambulab/blob/main/SIGNING_DESIGN.md).",
+        "data": {
+          "credential_bundle": "Private signing export (.zip)",
+          "consent": "I own this export and want to enable experimental signed fan controls"
+        }
+      },
+      "signing_retry": {
+        "title": "Retry signing setup",
+        "description": "Reload this printer entry and re-establish its signing session using the installed credentials. No fan command is sent or replayed. This does not renew expired credentials: use Import or renew for a fresh export. The printer must be online; successful reload is not proof of device acceptance.",
+        "data": {
+          "consent": "Enable experimental signed fan controls with these credentials"
+        }
+      },
+      "signing_disable": {
+        "title": "Disable signed fan controls",
+        "description": "Disable signing and reload this printer entry. Telemetry, camera and cloud account settings are retained. Private credentials and the sequence counter remain stored for a future import or retry. This does not change the printer mode or current fan speeds."
       }
     }
   },
@@ -501,7 +540,7 @@
           "moving_toolhead_to_center_of_heatbed": "Moving toolhead to center of heatbed",
           "active_arc_fitting": "Active arc fitting",
           "hotend_type_detection": "Hotend type detection",
-          "build_plate_alignment_detection" : "Build plate alignment detection",
+          "build_plate_alignment_detection": "Build plate alignment detection",
           "heatbed_surface_foreign_object_detection": "Heatbed surface foreign object detection",
           "heatbed_underside_foreign_object_detection": "Heatbed underside foreign object detection",
           "pre_extrusion_before_printing": "Pre-extrusion before printing",
@@ -834,7 +873,9 @@
           "empty": "Empty"
         },
         "state_attributes": {
-          "slot": { "name": "Slot" },
+          "slot": {
+            "name": "Slot"
+          },
           "nozzle_type": {
             "name": "Nozzle type",
             "state": {
@@ -847,10 +888,18 @@
               "unknown": "Unknown"
             }
           },
-          "nozzle_diameter": { "name": "Nozzle diameter" },
-          "serial": { "name": "Serial number" },
-          "max_temp": { "name": "Max temperature" },
-          "wear": { "name": "Wear" },
+          "nozzle_diameter": {
+            "name": "Nozzle diameter"
+          },
+          "serial": {
+            "name": "Serial number"
+          },
+          "max_temp": {
+            "name": "Max temperature"
+          },
+          "wear": {
+            "name": "Wear"
+          },
           "status": {
             "name": "Status",
             "state": {
@@ -859,9 +908,15 @@
               "unknown": "Unknown"
             }
           },
-          "color": { "name": "Color" },
-          "filament_id": { "name": "Filament ID" },
-          "filament_name": { "name": "Filament name" }
+          "color": {
+            "name": "Color"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "filament_name": {
+            "name": "Filament name"
+          }
         }
       },
       "hotend_rack_hotend_used_time": {
@@ -925,6 +980,51 @@
     "hybrid_mode_blocking": {
       "title": "Hybrid Connection Blocks Control",
       "description": "{device} is cloud connected but with local mqtt connection by the integration. This blocks setting temperatures and reprinting from history. Switch the connection to pure cloud to enable full control."
+    },
+    "signing_credentials": {
+      "title": "Signed fan controls need attention",
+      "description": "Status: {reason}. Credentials valid until: {expires}.\n\nOpen the repair to import a fresh private export, retry provisioning, or disable signing. Account login alone cannot renew signing credentials. Telemetry and camera remain independent.",
+      "fix_flow": {
+        "step": {
+          "signed_fans": {
+            "title": "Signed fan controls",
+            "description": "Enabled: {enabled}. Credentials: {status}. Valid until: {expires}.\n\nAccount login and its verification code do not provide signing credentials. These optional, experimental X1C controls need a separate private export. Telemetry and camera do not need it. Importing or retrying does not test or move a fan.",
+            "menu_options": {
+              "signing_import": "Import or renew credentials",
+              "signing_retry": "Retry with installed credentials",
+              "signing_disable": "Disable signed fan controls"
+            }
+          },
+          "signing_import": {
+            "title": "Import or renew signing credentials",
+            "description": "Obtain a fresh export from your own licensed Bambu Studio networking installation using [BambuSlicerKeySaver](https://github.com/danielwoz/BambuSlicerKeySaver). This integration cannot renew it using your account password or email code.\n\nUpload a ZIP containing only slicer_key.pem, slicer_cert.pem and slicer_crl.pem at its root (maximum 1 MiB ZIP, 256 KiB per file). Do not include account tokens or compatibility receipts. Use a trusted, encrypted HA connection.\n\nAll three files must pass signature, issuer, key-match, expiry and revocation checks. Expired vendor revocation data is refused; if a fresh export is unavailable, keep controls disabled. A rejected import leaves existing credentials unchanged. See [setup and limitations](https://github.com/greghesp/ha-bambulab/blob/main/SIGNING_DESIGN.md).",
+            "data": {
+              "credential_bundle": "Private signing export (.zip)",
+              "consent": "I own this export and want to enable experimental signed fan controls"
+            }
+          },
+          "signing_retry": {
+            "title": "Retry signing setup",
+            "description": "Reload this printer entry and re-establish its signing session using the installed credentials. No fan command is sent or replayed. This does not renew expired credentials: use Import or renew for a fresh export. The printer must be online; successful reload is not proof of device acceptance.",
+            "data": {
+              "consent": "Enable experimental signed fan controls with these credentials"
+            }
+          },
+          "signing_disable": {
+            "title": "Disable signed fan controls",
+            "description": "Disable signing and reload this printer entry. Telemetry, camera and cloud account settings are retained. Private credentials and the sequence counter remain stored for a future import or retry. This does not change the printer mode or current fan speeds."
+          }
+        },
+        "error": {
+          "signing_invalid_archive": "Select a new ZIP with exactly the three named PEM files. Extra files, folders, links, encrypted ZIPs and oversized files are not accepted.",
+          "signing_credentials_rejected": "Credentials were rejected. Check that the key matches, the certificate chains to Bambu, and the certificate and signed revocation data are current and not revoked. Obtain a fresh export; account login cannot refresh these files. Existing credentials were not changed.",
+          "signing_storage_error": "Private signing storage is not writable or has unsafe ownership/permissions. Check the HA storage directory, then upload again.",
+          "signing_consent_required": "Explicit consent is required. Select the file again and confirm, or cancel to keep your current settings."
+        },
+        "abort": {
+          "signing_unsupported": "Signed controls are currently limited to X1C. Other printers keep their existing connection and controls."
+        }
+      }
     }
   }
 }
