@@ -47,6 +47,8 @@ def test_options_menu_does_not_attempt_login(entry, tmp_path):
         result = await flow.async_step_init()
         assert result['type'] == FlowResultType.MENU
         assert result['menu_options'] == ['connection', 'signed_fans']
+        form = await flow.async_step_signing_import()
+        assert set(form['description_placeholders']) == {'extractor_url', 'docs_url'}
     asyncio.run(run())
 
 

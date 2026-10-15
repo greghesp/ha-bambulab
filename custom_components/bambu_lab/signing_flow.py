@@ -35,11 +35,15 @@ class SigningFlowMixin:
         actions = ["signing_import", "signing_retry", "signing_disable"]
         if not self._signing_supported():
             actions = ["signing_disable"]
+        display_status = "valid" if status["configured"] else status["reason"].replace("_", " ")
+        coordinator = self.hass.data.get(DOMAIN, {}).get(self._config_entry.entry_id)
+        if coordinator is not None and self._config_entry.options.get("enable_signed_fans") is True:
+            display_status = coordinator.client.signing_status()["reason"].replace("_", " ")
         return self.async_show_menu(
             step_id="signed_fans",
             menu_options=actions,
             description_placeholders={
-                "status": "valid" if status["configured"] else status["reason"].replace("_", " "),
+                "status": display_status,
                 "expires": status.get("valid_until") or "—",
                 "enabled": str(self._config_entry.options.get("enable_signed_fans") is True),
             },
@@ -68,6 +72,10 @@ class SigningFlowMixin:
                 return await self._finish_signing(True)
         return self.async_show_form(
             step_id="signing_import",
+            description_placeholders={
+                "extractor_url": "https://github.com/danielwoz/BambuSlicerKeySaver",
+                "docs_url": "https://github.com/greghesp/ha-bambulab/blob/main/SIGNING_DESIGN.md",
+            },
             data_schema=vol.Schema({
                 vol.Required("credential_bundle"): FileSelector(FileSelectorConfig(accept=".zip")),
                 vol.Required("consent", default=False): BooleanSelector(),

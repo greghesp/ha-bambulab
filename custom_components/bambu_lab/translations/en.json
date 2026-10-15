@@ -230,7 +230,7 @@
       },
       "signing_import": {
         "title": "Import or renew signing credentials",
-        "description": "Obtain a fresh export from your own licensed Bambu Studio networking installation using [BambuSlicerKeySaver](https://github.com/danielwoz/BambuSlicerKeySaver). This integration cannot renew it using your account password or email code.\n\nUpload a ZIP containing only slicer_key.pem, slicer_cert.pem and slicer_crl.pem at its root (maximum 1 MiB ZIP, 256 KiB per file). Do not include account tokens or compatibility receipts. Use a trusted, encrypted HA connection.\n\nAll three files must pass signature, issuer, key-match, expiry and revocation checks. Expired vendor revocation data is refused; if a fresh export is unavailable, keep controls disabled. A rejected import leaves existing credentials unchanged. See [setup and limitations](https://github.com/greghesp/ha-bambulab/blob/main/SIGNING_DESIGN.md).",
+        "description": "Obtain a fresh export from your own licensed Bambu Studio networking installation using [BambuSlicerKeySaver]({extractor_url}). This integration cannot renew it using your account password or email code.\n\nUpload a ZIP containing only slicer_key.pem, slicer_cert.pem and slicer_crl.pem at its root (maximum 1 MiB ZIP, 256 KiB per file). Do not include account tokens or compatibility receipts. Use a trusted, encrypted HA connection.\n\nAll three files must pass signature, issuer, key-match, expiry and revocation checks. Expired vendor revocation data is refused; if a fresh export is unavailable, keep controls disabled. A rejected import leaves existing credentials unchanged. See [setup and limitations]({docs_url}).",
         "data": {
           "credential_bundle": "Private signing export (.zip)",
           "consent": "I own this export and want to enable experimental signed fan controls"
@@ -984,7 +984,6 @@
     },
     "signing_credentials": {
       "title": "Signed fan controls need attention",
-      "description": "Status: {reason}. Credentials valid until: {expires}.\n\nOpen the repair to import a fresh private export, retry provisioning, or disable signing. Account login alone cannot renew signing credentials. Telemetry and camera remain independent.",
       "fix_flow": {
         "step": {
           "signed_fans": {
@@ -998,7 +997,7 @@
           },
           "signing_import": {
             "title": "Import or renew signing credentials",
-            "description": "Obtain a fresh export from your own licensed Bambu Studio networking installation using [BambuSlicerKeySaver](https://github.com/danielwoz/BambuSlicerKeySaver). This integration cannot renew it using your account password or email code.\n\nUpload a ZIP containing only slicer_key.pem, slicer_cert.pem and slicer_crl.pem at its root (maximum 1 MiB ZIP, 256 KiB per file). Do not include account tokens or compatibility receipts. Use a trusted, encrypted HA connection.\n\nAll three files must pass signature, issuer, key-match, expiry and revocation checks. Expired vendor revocation data is refused; if a fresh export is unavailable, keep controls disabled. A rejected import leaves existing credentials unchanged. See [setup and limitations](https://github.com/greghesp/ha-bambulab/blob/main/SIGNING_DESIGN.md).",
+            "description": "Obtain a fresh export from your own licensed Bambu Studio networking installation using [BambuSlicerKeySaver]({extractor_url}). This integration cannot renew it using your account password or email code.\n\nUpload a ZIP containing only slicer_key.pem, slicer_cert.pem and slicer_crl.pem at its root (maximum 1 MiB ZIP, 256 KiB per file). Do not include account tokens or compatibility receipts. Use a trusted, encrypted HA connection.\n\nAll three files must pass signature, issuer, key-match, expiry and revocation checks. Expired vendor revocation data is refused; if a fresh export is unavailable, keep controls disabled. A rejected import leaves existing credentials unchanged. See [setup and limitations]({docs_url}).",
             "data": {
               "credential_bundle": "Private signing export (.zip)",
               "consent": "I own this export and want to enable experimental signed fan controls"
