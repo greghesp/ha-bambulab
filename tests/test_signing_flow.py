@@ -28,6 +28,7 @@ def entry():
 
 def setup_flow(flow, tmp_path):
     hass = MagicMock()
+    hass.data = {}
     async def executor(fn, *args):
         return fn(*args)
     hass.async_add_executor_job = AsyncMock(side_effect=executor)
@@ -212,4 +213,23 @@ def test_unsupported_existing_entry_still_offers_disable(entry, tmp_path):
         flow._signing_status = AsyncMock(return_value={'configured': False, 'reason': 'credentials_missing'})
         result = await flow.async_step_signed_fans()
         assert result['menu_options'] == ['signing_disable']
+    asyncio.run(run())
+
+
+def test_failed_reload_is_reported_and_disable_applies_beforehand(entry, tmp_path):
+    async def run():
+        flow = BambuOptionsFlowHandler(entry)
+        hass = setup_flow(flow, tmp_path)
+        client = MagicMock()
+        hass.data = {'bambu_lab': {entry.entry_id: SimpleNamespace(client=client)}}
+        async def reload(entry_id):
+            client.disable_signing.assert_called_once()
+            return False
+        hass.config_entries.async_reload.side_effect = reload
+        with patch('custom_components.bambu_lab.signing_flow.ir.async_delete_issue'), patch('custom_components.bambu_lab.signing_flow.ir.async_create_issue') as create:
+            result = await flow.async_step_signing_disable({})
+        assert result['type'] == FlowResultType.ABORT
+        assert result['reason'] == 'signing_reload_failed'
+        assert create.call_args.kwargs['is_fixable']
+        client.publish.assert_not_called()
     asyncio.run(run())

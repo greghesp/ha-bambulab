@@ -322,6 +322,16 @@ class CommandSigner:
             self._device_public_key = None
             self._pending_commands.clear()
 
+    def disable(self) -> None:
+        """Stop future signing/provisioning even if an HA reload later fails."""
+        with self._lock:
+            self.reset_session()
+            self._credentials_dir = None
+            self._private_key = None
+            self._app_certificate_pem = ""
+            self._crl_pem = ""
+            self._cert_id = ""
+
     def _next_sequence_id(self) -> str:
         with self._lock:
             if self._credentials_dir is None:

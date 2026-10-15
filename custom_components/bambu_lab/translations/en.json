@@ -118,7 +118,8 @@
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available.",
       "signing_unsupported": "Signed controls are currently limited to X1C. Other printers keep their existing connection and controls.",
-      "device_not_found": "The selected printer is not in this account. Sign in to the correct account; no settings have been changed."
+      "device_not_found": "The selected printer is not in this account. Sign in to the correct account; no settings have been changed.",
+      "signing_reload_failed": "Settings were saved, but the printer integration could not reload. Check Home Assistant logs, then retry. Disabled signing stays blocked; no fan command was sent."
     },
     "error": {
       "cannot_connect": "Failed to connect",
@@ -1022,7 +1023,8 @@
           "signing_consent_required": "Explicit consent is required. Select the file again and confirm, or cancel to keep your current settings."
         },
         "abort": {
-          "signing_unsupported": "Signed controls are currently limited to X1C. Other printers keep their existing connection and controls."
+          "signing_unsupported": "Signed controls are currently limited to X1C. Other printers keep their existing connection and controls.",
+          "signing_reload_failed": "Settings were saved, but the printer integration could not reload. Check Home Assistant logs, then retry. Disabled signing stays blocked; no fan command was sent."
         }
       }
     }

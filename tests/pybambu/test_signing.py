@@ -395,3 +395,18 @@ def test_status_warns_before_review_deadline(tmp_path):
     signer = _test_signer(tmp_path)
     status = signer.status()
     assert status["configured"] and status["crl_stale"] and status["review_due"]
+
+
+def test_disable_refuses_future_provisioning_and_preserves_counter(tmp_path):
+    _write_credentials(tmp_path)
+    signer = _test_signer(tmp_path)
+    _make_ready(signer)
+    before = (tmp_path / 'sequence.json').read_bytes()
+    signer.disable()
+    assert signer.status()['reason'] == 'disabled'
+    assert not signer.configured and not signer.ready
+    with pytest.raises(CommandSigningError):
+        signer.build_provision_message()
+    with pytest.raises(CommandSigningError):
+        signer.sign_fan_command(3, 20)
+    assert (tmp_path / 'sequence.json').read_bytes() == before

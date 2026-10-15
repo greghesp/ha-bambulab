@@ -68,7 +68,7 @@ completion is not printer acceptance, and an unresolved repair is re-created
 on the next check. A ready non-expiring signer clears its own repair.
 
 Disabling changes only the signing option, reloads the entry and preserves
-account/connection settings, camera, credentials and sequence storage. It does
+account/connection settings, camera, credentials and sequence storage. It blocks future signing before attempting reload (including failed reloads) and does
 not change the printer's cloud/LAN mode or physical fan speed.
 
 ## Storage and failure behavior

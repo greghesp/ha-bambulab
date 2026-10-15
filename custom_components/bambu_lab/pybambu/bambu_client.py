@@ -750,6 +750,11 @@ class BambuClient:
                     "review_due": False, "valid_until": None, "crl_stale": False}
         return self.command_signer.status()
 
+    def disable_signing(self):
+        """Immediately refuse further signed commands without device actions."""
+        self.command_signer.disable()
+        self._signer_credentials_rejected = False
+
     def subscribe(self):
         """Subscribe to report topic"""
         LOGGER.debug(f"Subscribing: device/{self._serial}/report")

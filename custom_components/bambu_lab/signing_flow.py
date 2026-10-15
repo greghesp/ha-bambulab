@@ -104,7 +104,18 @@ class SigningFlowMixin:
         options["enable_signed_fans"] = enabled
         self.hass.config_entries.async_update_entry(self._config_entry, options=options)
         if not enabled:
+            coordinator = self.hass.data.get(DOMAIN, {}).get(self._config_entry.entry_id)
+            if coordinator is not None:
+                await self.hass.async_add_executor_job(coordinator.client.disable_signing)
             ir.async_delete_issue(self.hass, DOMAIN, f"signing_{self._config_entry.entry_id}")
         # Only re-establish certificate provisioning; never send/replay fan commands.
-        await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+        if not await self.hass.config_entries.async_reload(self._config_entry.entry_id):
+            ir.async_create_issue(
+                self.hass, DOMAIN, f"signing_{self._config_entry.entry_id}",
+                is_fixable=True, severity=ir.IssueSeverity.WARNING,
+                translation_key="signing_credentials",
+                translation_placeholders={"reason": "entry reload failed", "expires": "—"},
+                data={"entry_id": self._config_entry.entry_id},
+            )
+            return self.async_abort(reason="signing_reload_failed")
         return self.async_create_entry(title="", data=None)
