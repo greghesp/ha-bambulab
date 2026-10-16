@@ -5,6 +5,7 @@ import ftplib
 import json
 import math
 import os
+import html
 import re
 import threading
 import shutil
@@ -921,6 +922,83 @@ AMS_HT_SLOT_END = AMS_HT_SLOT_BASE + AMS_HT_COUNT
 AMS_HT_UNIT_BASE = 128
 AMS_HT_UNIT_END = AMS_HT_UNIT_BASE + AMS_HT_COUNT
 
+# Characters that cannot appear in a file name on the printer's storage. The printer stores
+# each one in a model name as its hex code with the '%' dropped: a project called
+# "Hase / Osterhase" is saved as "Hase 2f Osterhase.gcode.3mf". The MQTT payload still
+# carries the original name, so the two have to be reconciled before they can be compared.
+FILENAME_ILLEGAL_CHARS = '/\\:*?"<>|'
+
+
+def encode_illegal_filename_chars(name: str) -> str:
+    """The spelling the printer uses on disk for a model name: illegal characters as lowercase hex."""
+    return ''.join(format(ord(c), '02x') if c in FILENAME_ILLEGAL_CHARS else c for c in name)
+
+
+def has_illegal_filename_chars(name: str) -> bool:
+    return any(c in FILENAME_ILLEGAL_CHARS for c in name)
+
+
+# Characters that commonly differ between a task name and the file it was saved as: a file copied
+# by hand often has underscores where the title has spaces.
+FILENAME_SEPARATOR_CHARS = " _-"
+
+
+def task_name_variants(name: str) -> list[str]:
+    """The task name as reported, plus the same with XML character references decoded. The firmware
+    copies a 3mf title into the MQTT task name verbatim, so a title containing & < > or quotes
+    arrives as &amp; &lt; &gt; &quot; while the file on disk carries the real characters."""
+    variants = [name]
+    decoded = html.unescape(name)
+    if decoded != name:
+        variants.append(decoded)
+    return variants
+
+
+# Substitutions observed for a character that cannot appear in a file name: the printer's hex
+# code ("/" -> "2f"), an underscore, or nothing at all (Bambu Studio deletes it when saving to
+# the card). Anything broader lets an illegal character stand for unrelated text, which turns a
+# missed match into a wrong one.
+ILLEGAL_CHAR_SUBSTITUTION = "(?:[0-9a-f]{2}|_)?"
+
+
+def model_name_pattern(name: str) -> re.Pattern:
+    """A pattern matching any on-disk spelling of a model name.
+
+    A run of spaces, underscores, hyphens and illegal characters is treated as one gap: Bambu
+    Studio deletes the illegal characters and collapses the whitespace around them, so
+    "Mini Hase / Osterhase" is saved as "Mini_Hase_Osterhase". Within a gap each illegal
+    character may appear as one of the observed substitutions. Case is ignored.
+    """
+    separator = f"[{re.escape(FILENAME_SEPARATOR_CHARS)}]"
+    gap_chars = FILENAME_SEPARATOR_CHARS + FILENAME_ILLEGAL_CHARS
+    parts = []
+    i = 0
+    while i < len(name):
+        if name[i] not in gap_chars:
+            parts.append(re.escape(name[i]))
+            i += 1
+            continue
+        end = i
+        while end < len(name) and name[end] in gap_chars:
+            end += 1
+        illegal_count = sum(1 for c in name[i:end] if c in FILENAME_ILLEGAL_CHARS)
+        if illegal_count:
+            parts.append(f"{separator}*".join([""] + [ILLEGAL_CHAR_SUBSTITUTION] * illegal_count + [""]))
+        elif i == 0 or end == len(name):
+            parts.append(f"{separator}*")
+        else:
+            parts.append(f"{separator}+")
+        i = end
+    return re.compile("".join(parts), re.IGNORECASE)
+
+
+def strip_model_extension(filename: str) -> str:
+    lowered = filename.lower()
+    for extension in ('.gcode.3mf', '.3mf'):
+        if lowered.endswith(extension):
+            return filename[:-len(extension)]
+    return filename
+
 
 def ams_slot_name(index: int) -> str | None:
     """Human readable name for an AMS slot index, or None if the index isn't a real slot."""
@@ -1435,11 +1513,21 @@ class PrintJob:
         filenames_to_try = []
 
         if self._subtask_name != '':
-            if self._subtask_name.endswith('.3mf'):
-                filenames_to_try.append(self._subtask_name)
-            else:
-                filenames_to_try.append(f"{self._subtask_name}.3mf")
-                filenames_to_try.append(f"{self._subtask_name}.gcode.3mf")
+            # The raw name is only worth trying when it could be a file name at all. One containing
+            # a path separator never is, and its truncated basename could match an unrelated file.
+            names = []
+            for task_name in task_name_variants(self._subtask_name):
+                if '/' not in task_name and '\\' not in task_name:
+                    names.append(task_name)
+                if has_illegal_filename_chars(task_name):
+                    names.append(encode_illegal_filename_chars(task_name))
+            names = list(dict.fromkeys(names))
+            for name in names:
+                if name.endswith('.3mf'):
+                    filenames_to_try.append(name)
+                else:
+                    filenames_to_try.append(f"{name}.3mf")
+                    filenames_to_try.append(f"{name}.gcode.3mf")
 
         if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
             if self.gcode_file.endswith('.3mf'):
@@ -1487,6 +1575,22 @@ class PrintJob:
                 selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
                 LOGGER.debug(
                     f"Selected model candidate {selected.path} from {selected.source}/{selected.storage}"
+                )
+                return self._remote_file_aliases(matches, selected)
+
+        if self._subtask_name != "":
+            # No candidate spelling matched. Accept a file whose name matches the task name once
+            # case, separators and the substitution of illegal characters are allowed to differ.
+            pattern = model_name_pattern(html.unescape(self._subtask_name))
+            matches = [
+                file for file in remote_files
+                if pattern.fullmatch(strip_model_extension(file.basename))
+            ]
+            if matches:
+                selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
+                LOGGER.debug(
+                    f"Matched task name '{self._subtask_name}' to {selected.path} from "
+                    f"{selected.source}/{selected.storage} by pattern"
                 )
                 return self._remote_file_aliases(matches, selected)
 
