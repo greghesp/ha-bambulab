@@ -954,22 +954,41 @@ def task_name_variants(name: str) -> list[str]:
     return variants
 
 
+# Substitutions observed for a character that cannot appear in a file name: the printer's hex
+# code ("/" -> "2f"), an underscore, or nothing at all (Bambu Studio deletes it when saving to
+# the card). Anything broader lets an illegal character stand for unrelated text, which turns a
+# missed match into a wrong one.
+ILLEGAL_CHAR_SUBSTITUTION = "(?:[0-9a-f]{2}|_)?"
+
+
 def model_name_pattern(name: str) -> re.Pattern:
-    """A pattern matching any on-disk spelling of a model name: each illegal character may have
-    been replaced by up to three characters (its hex code, an underscore, nothing, ...), runs of
-    spaces, underscores and hyphens are interchangeable, and case is ignored."""
+    """A pattern matching any on-disk spelling of a model name.
+
+    A run of spaces, underscores, hyphens and illegal characters is treated as one gap: Bambu
+    Studio deletes the illegal characters and collapses the whitespace around them, so
+    "Mini Hase / Osterhase" is saved as "Mini_Hase_Osterhase". Within a gap each illegal
+    character may appear as one of the observed substitutions. Case is ignored.
+    """
+    separator = f"[{re.escape(FILENAME_SEPARATOR_CHARS)}]"
+    gap_chars = FILENAME_SEPARATOR_CHARS + FILENAME_ILLEGAL_CHARS
     parts = []
-    separator_pending = False
-    for char in name:
-        if char in FILENAME_SEPARATOR_CHARS:
-            separator_pending = True
+    i = 0
+    while i < len(name):
+        if name[i] not in gap_chars:
+            parts.append(re.escape(name[i]))
+            i += 1
             continue
-        if separator_pending:
-            parts.append(f"[{re.escape(FILENAME_SEPARATOR_CHARS)}]+")
-            separator_pending = False
-        parts.append(".{0,3}" if char in FILENAME_ILLEGAL_CHARS else re.escape(char))
-    if separator_pending:
-        parts.append(f"[{re.escape(FILENAME_SEPARATOR_CHARS)}]*")
+        end = i
+        while end < len(name) and name[end] in gap_chars:
+            end += 1
+        illegal_count = sum(1 for c in name[i:end] if c in FILENAME_ILLEGAL_CHARS)
+        if illegal_count:
+            parts.append(f"{separator}*".join([""] + [ILLEGAL_CHAR_SUBSTITUTION] * illegal_count + [""]))
+        elif i == 0 or end == len(name):
+            parts.append(f"{separator}*")
+        else:
+            parts.append(f"{separator}+")
+        i = end
     return re.compile("".join(parts), re.IGNORECASE)
 
 

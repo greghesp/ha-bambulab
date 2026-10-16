@@ -1116,6 +1116,37 @@ class TestModelNameMatching(unittest.TestCase):
 
         self.assertEqual([file.path for file in selected], ["/PUMPKIN_GHOST_CLICKER.gcode.3mf"])
 
+    def test_fallback_matches_a_studio_copy_where_the_slash_was_deleted_between_spaces(self):
+        # Bambu Studio deletes "/" and collapses the surrounding whitespace into one "_".
+        # Measured on an H2C: "Mini Hase / Osterhase" saved to the card as "Mini_Hase_Osterhase".
+        self.print_job._subtask_name = "Mini Hase / Osterhase"
+        self.print_job.gcode_file = ""
+        remote_files = [self.remote("/Mini_Hase_Osterhase.gcode.3mf")]
+
+        selected = self.print_job._select_model_files(remote_files, self.print_job._model_filenames_to_try())
+
+        self.assertEqual([file.path for file in selected], ["/Mini_Hase_Osterhase.gcode.3mf"])
+
+    def test_fallback_does_not_let_an_illegal_character_stand_for_arbitrary_text(self):
+        # A wrong match reports another job's weight, which is worse than no match.
+        self.print_job._subtask_name = "Part/1"
+        self.print_job.gcode_file = ""
+        remote_files = [self.remote("/Part_v21.gcode.3mf")]
+
+        selected = self.print_job._select_model_files(remote_files, self.print_job._model_filenames_to_try())
+
+        self.assertEqual(selected, [])
+
+    def test_fallback_accepts_every_observed_substitution_for_a_slash(self):
+        # The printer's hex code, an underscore, or the character deleted outright.
+        self.print_job._subtask_name = "Mini Hase / Osterhase"
+        self.print_job.gcode_file = ""
+        for on_disk in ("Mini Hase 2f Osterhase", "Mini_Hase_2f_Osterhase", "Mini_Hase_Osterhase", "mini hase osterhase"):
+            with self.subTest(on_disk=on_disk):
+                remote_files = [self.remote(f"/{on_disk}.gcode.3mf")]
+                selected = self.print_job._select_model_files(remote_files, self.print_job._model_filenames_to_try())
+                self.assertEqual([file.path for file in selected], [f"/{on_disk}.gcode.3mf"])
+
     def test_xml_character_references_in_the_task_name_are_decoded(self):
         # The firmware copies a 3mf title into the task name verbatim, references included.
         self.print_job._subtask_name = "Tom &amp; Jerry &lt;3"
