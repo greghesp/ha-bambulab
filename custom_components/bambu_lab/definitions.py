@@ -38,6 +38,7 @@ from .pybambu.const import (
     PRINT_TYPE_OPTIONS,
     SPEED_PROFILE,
     CURRENT_STAGE_OPTIONS,
+    AMS_STATUS_OPTIONS,
     GCODE_STATE_OPTIONS,
     SDCARD_STATUS,
     AIRDUCT_MODES,
@@ -746,6 +747,14 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda self: 6 - self.coordinator.get_model().ams.data[self.index].humidity_index
         # We subtract from 6 to match the new Bambu Handy/Studio presentation of 1 = dry, 5 = wet while the printer sends 1 = wet, 5 = dry
+    ),
+    BambuLabAMSSensorEntityDescription(
+        key="ams_status",
+        translation_key="ams_status",
+        icon="mdi:swap-horizontal",
+        device_class=SensorDeviceClass.ENUM,
+        options=AMS_STATUS_OPTIONS,
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].status
     ),
     BambuLabAMSSensorEntityDescription(
         key="humidity",

@@ -170,6 +170,39 @@ CURRENT_STAGE_IDS = {
 
 CURRENT_STAGE_OPTIONS = list(set(CURRENT_STAGE_IDS.values())) # Conversion to set first removes the duplicates
 
+# print.ams_status: high byte is the main AMS state, low byte the sub-step.
+# Values mirror BambuStudio's AmsStatusMain (DeviceCore/DevDefs.h).
+AMS_STATUS_MAIN_IDLE = 0x00
+AMS_STATUS_MAIN_FILAMENT_CHANGE = 0x01
+# AMS_STATUS_MAIN_ASSIST: reported whenever an AMS filament is loaded in the extruder, printing or not
+AMS_STATUS_MAIN_ASSIST = 0x03
+
+AMS_STATUS_MAIN = {
+    AMS_STATUS_MAIN_IDLE: "idle",
+    AMS_STATUS_MAIN_FILAMENT_CHANGE: "changing_filament",
+    0x02: "rfid_identifying",
+    AMS_STATUS_MAIN_ASSIST: "filament_loaded",
+    0x04: "calibration",
+    0x07: "cold_pull",
+    0x10: "self_check",
+    0x20: "debug",
+}
+
+# Filament change sub-steps, as interpreted by BambuStudio's StatusPanel for an AMS load/unload.
+# 0x09 is a "just wait" step and unknown sub-steps fall back to the generic "changing_filament".
+AMS_FILAMENT_CHANGE_STEPS = {
+    0x02: "heating_nozzle",
+    0x03: "cutting_filament",
+    0x04: "pulling_back_filament",
+    0x05: "pushing_new_filament",
+    0x06: "pushing_new_filament",
+    0x07: "purging_old_filament",
+    0x08: "checking_position",
+    0x0B: "checking_position",
+}
+
+AMS_STATUS_OPTIONS = sorted(set(AMS_STATUS_MAIN.values()) | set(AMS_FILAMENT_CHANGE_STEPS.values()) | {"unknown"})
+
 GCODE_STATE_OPTIONS = [
     "failed",
     "finish",
