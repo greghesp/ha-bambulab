@@ -584,6 +584,26 @@
       "humidity_index": {
         "name": "Indice d'humidité"
       },
+      "ams_status": {
+        "name": "Statut",
+        "state": {
+          "idle": "Inactif",
+          "changing_filament": "Changement de filament",
+          "heating_nozzle": "Chauffe de la buse",
+          "cutting_filament": "Coupe du filament",
+          "pulling_back_filament": "Retrait du filament actuel",
+          "pushing_new_filament": "Poussée du nouveau filament",
+          "purging_old_filament": "Purge de l'ancien filament",
+          "checking_position": "Vérification de la position du filament",
+          "rfid_identifying": "Identification RFID",
+          "filament_loaded": "Filament chargé",
+          "calibration": "Calibration",
+          "cold_pull": "Cold pull",
+          "self_check": "Auto-vérification",
+          "debug": "Débogage",
+          "unknown": "Inconnu"
+        }
+      },
       "external_spool": {
         "name": "Bobine externe",
         "state_attributes": {

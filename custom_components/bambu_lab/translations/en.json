@@ -675,6 +675,26 @@
       "humidity_index": {
         "name": "Humidity index"
       },
+      "ams_status": {
+        "name": "Status",
+        "state": {
+          "idle": "Idle",
+          "changing_filament": "Changing filament",
+          "heating_nozzle": "Heating nozzle",
+          "cutting_filament": "Cutting filament",
+          "pulling_back_filament": "Pulling back current filament",
+          "pushing_new_filament": "Pushing new filament",
+          "purging_old_filament": "Purging old filament",
+          "checking_position": "Checking filament position",
+          "rfid_identifying": "Identifying RFID",
+          "filament_loaded": "Filament loaded",
+          "calibration": "Calibration",
+          "cold_pull": "Cold pull",
+          "self_check": "Self check",
+          "debug": "Debug",
+          "unknown": "Unknown"
+        }
+      },
       "external_spool": {
         "name": "External spool",
         "state_attributes": {

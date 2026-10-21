@@ -56,6 +56,11 @@ from .const import (
     AIRDUCT_MODES,
     TempEnum, Print_Fun_Values,
     UNKNOWN_TRAY_LABEL,
+    AMS_STATUS_MAIN,
+    AMS_STATUS_MAIN_IDLE,
+    AMS_STATUS_MAIN_FILAMENT_CHANGE,
+    AMS_STATUS_MAIN_ASSIST,
+    AMS_FILAMENT_CHANGE_STEPS,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -3101,6 +3106,7 @@ class AMSInstance:
     drying_temperature: int = 0
     drying_duration: int = 0
     drying_filament: str = ""
+    status: str = "idle"
 
     def __init__(self, client, model, index):
         self.model = model
@@ -3127,13 +3133,28 @@ class AMSList:
 
     _nozzle_tray_index: dict
     _nozzle_ams_index: dict
+    _nozzle_target_ams_index: dict
+    _ams_status: int = 0
     _first_initialization_done: bool = False
 
     def __init__(self, client):
         self._client = client
         self._nozzle_tray_index = { 0: 0, 1: 0, 15: 0}
         self._nozzle_ams_index = { 0: 0, 1: 0, 15: 0}
+        self._nozzle_target_ams_index = { 0: 255, 1: 255, 15: 255}
         self.data = {}
+
+    @property
+    def target_ams_index(self):
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self._nozzle_target_ams_index[active_nozzle]
+
+    def _status_description(self) -> str:
+        main = (self._ams_status >> 8) & 0xFF
+        sub = self._ams_status & 0xFF
+        if main == AMS_STATUS_MAIN_FILAMENT_CHANGE:
+            return AMS_FILAMENT_CHANGE_STEPS.get(sub, AMS_STATUS_MAIN[main])
+        return AMS_STATUS_MAIN.get(main, "unknown")
 
     @property
     def active_ams_index(self):
@@ -3307,7 +3328,20 @@ class AMSList:
                         tray_now = entry["snow"]
                         self._nozzle_ams_index[entry["id"]] = tray_now >> 8
                         self._nozzle_tray_index[entry["id"]] = tray_now & 0x3
+                    if "star" in entry:
+                        self._nozzle_target_ams_index[entry["id"]] = entry["star"] >> 8
         else:
+            tray_tar = ams_data.get('tray_tar')
+            if tray_tar is not None:
+                tray_tar = int(tray_tar)
+                if tray_tar >= 254:
+                    # 255 = no target (unload), 254 = external spool
+                    self._nozzle_target_ams_index[0] = 255
+                elif tray_tar >= 80:
+                    self._nozzle_target_ams_index[0] = tray_tar
+                else:
+                    self._nozzle_target_ams_index[0] = tray_tar >> 2
+
             tray_now = ams_data.get('tray_now')
             if tray_now is not None:
                 tray_now = int(tray_now)
@@ -3373,9 +3407,21 @@ class AMSList:
                     tray_id = int(tray['id'])
                     self.data[index].tray[tray_id].print_update(tray)
 
+        if data.get("ams_status") is not None:
+            self._ams_status = int(data["ams_status"])
+
+        # ams_status is reported once per printer. A filament change or a loaded filament is attributed to
+        # the AMS units involved (current or target tray); other states can't be attributed so go to every unit.
+        status = self._status_description()
+        is_tray_specific = ((self._ams_status >> 8) & 0xFF) in (AMS_STATUS_MAIN_FILAMENT_CHANGE, AMS_STATUS_MAIN_ASSIST)
+
         # Now that we've populated the AMS/Trays (if this is first time through), we must
         # loop over all the ams and trays to set active states correctly.
         for index in self.data:
+            if is_tray_specific and index not in (self.active_ams_index, self.target_ams_index):
+                self.data[index].status = AMS_STATUS_MAIN[AMS_STATUS_MAIN_IDLE]
+            else:
+                self.data[index].status = status
             self.data[index]._active = (index == self.active_ams_index)
             for tray_id, tray in enumerate(self.data[index].tray):
                 active_tray = (index == self.active_ams_index) and (self.active_tray_index == tray_id)

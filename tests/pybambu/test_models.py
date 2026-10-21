@@ -424,6 +424,62 @@ class TestAMSList(unittest.TestCase):
         self.assertTrue(result)
         self.assertIn(0, self.ams_list.data)
 
+    def test_ams_status_from_push_all(self):
+        # P1P.json reports ams_status 768 (0x0300, "assist") with slot 1 of AMS 0 loaded and the print failed
+        data = self.test_data['push_all']
+
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+        self.assertEqual(self.ams_list.data[0].status, "filament_loaded")
+
+    def test_ams_status_filament_change_steps(self):
+        data = self.test_data['push_all']
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+
+        # Captured on a P1S mid print: swapping from slot 1 to slot 4 of AMS 0, cutting step
+        self.ams_list.print_update({"ams_status": 259, "ams": {"tray_now": "0", "tray_tar": "3"}})
+        self.assertEqual(self.ams_list.data[0].status, "cutting_filament")
+
+        self.assertTrue(self.ams_list.print_update({"ams_status": 0x0107}))
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+
+        # Delta payloads without ams_status keep the last known state
+        self.ams_list.print_update({"mc_percent": 74})
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+
+        # "Just wait" and unknown sub-steps fall back to the generic state
+        self.ams_list.print_update({"ams_status": 0x0109})
+        self.assertEqual(self.ams_list.data[0].status, "changing_filament")
+
+        self.ams_list.print_update({"ams_status": 0})
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+
+        self.ams_list.print_update({"ams_status": 0x4000})
+        self.assertEqual(self.ams_list.data[0].status, "unknown")
+
+    def test_ams_status_filament_change_only_on_involved_units(self):
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        # Unload from AMS 0 slot 2 and load AMS 1 slot 2: the other units stay idle
+        self.ams_list.print_update({"ams_status": 0x0107, "ams": {"tray_now": "1", "tray_tar": "5"}})
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+        self.assertEqual(self.ams_list.data[1].status, "purging_old_filament")
+        self.assertEqual(self.ams_list.data[2].status, "idle")
+        self.assertEqual(self.ams_list.data[128].status, "idle")
+
+        # Once loaded, only the unit feeding the extruder reports the filament as loaded
+        self.ams_list.print_update({"ams_status": 0x0300, "ams": {"tray_now": "5", "tray_tar": "5"}})
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+        self.assertEqual(self.ams_list.data[1].status, "filament_loaded")
+        self.assertEqual(self.ams_list.data[2].status, "idle")
+        self.assertEqual(self.ams_list.data[128].status, "idle")
+
+        # States that can't be tied to one unit are shown on all of them
+        self.ams_list.print_update({"ams_status": 0x0400})
+        self.assertEqual(self.ams_list.data[0].status, "calibration")
+        self.assertEqual(self.ams_list.data[128].status, "calibration")
+
     def test_h2d_ams_detection(self):
         # Test that two AMS files are properly detected from H2D.json
         data = self.h2d_data['push_all']
