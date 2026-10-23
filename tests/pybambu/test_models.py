@@ -901,6 +901,42 @@ class TestH2D(unittest.TestCase):
         self.assertEqual(self.temperature.left_nozzle_temperature, 40)
         self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
 
+    def test_legacy_payload_does_not_corrupt_right_nozzle_on_dual_nozzle_printer(self):
+        """Regression test: a partial MQTT payload with no device.extruder.info
+        block must not stomp the right nozzle's reading with the legacy
+        single-extruder fields, which mirror whichever nozzle is currently
+        active rather than the right nozzle specifically."""
+        data = self.h2d_data['push_all']
+        result = self.temperature.print_update(data)
+        self.assertTrue(result)
+        self.assertEqual(self.temperature.right_nozzle_temperature, 264)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 225)
+
+        # Dual-nozzle printer (mocked via supports_feature=True in setUp).
+        # A legacy-shaped payload naming the *left* nozzle's active temp
+        # must not be written into the right nozzle slot (index 0).
+        legacy_payload = {
+            "nozzle_temper": 79,
+            "nozzle_target_temper": 0,
+        }
+        result = self.temperature.print_update(legacy_payload)
+        self.assertEqual(self.temperature.right_nozzle_temperature, 264)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 225)
+
+    def test_legacy_payload_still_updates_single_nozzle_printer(self):
+        """Genuinely single-nozzle printers must keep using the legacy
+        nozzle_temper/nozzle_target_temper fallback."""
+        self.client._device.supports_feature.return_value = False
+
+        legacy_payload = {
+            "nozzle_temper": 79,
+            "nozzle_target_temper": 0,
+        }
+        result = self.temperature.print_update(legacy_payload)
+        self.assertTrue(result)
+        self.assertEqual(self.temperature.right_nozzle_temperature, 79)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 0)
+
 
 class TestH2CHotendRack(unittest.TestCase):
     """Regression coverage for H2C Vortek telemetry."""

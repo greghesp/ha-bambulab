@@ -595,7 +595,11 @@ class Temperature:
                     if "temp" in entry:
                         self.nozzle_temps[entry["id"]] = entry["temp"] & 0xFFFF
                         self.target_nozzle_temps[entry["id"]] = (entry["temp"] >> 16) & 0xFFFF
-        else:
+        elif not self._client._device.supports_feature(Features.DUAL_NOZZLES):
+            # Legacy single-extruder payload: only trust it for genuinely single-nozzle
+            # printers. On dual-nozzle machines (H2C/H2D/H2DPRO/X2D) these top-level keys
+            # report whichever nozzle is currently active, so applying them to index 0
+            # stomps the right nozzle's real (idle) temperature with the left nozzle's.
             self.nozzle_temps[0] = round(data.get("nozzle_temper", self.nozzle_temps[0]))
             self.target_nozzle_temps[0] = round(data.get("nozzle_target_temper", self.target_nozzle_temps[0]))
 
