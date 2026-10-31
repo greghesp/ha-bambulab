@@ -54,7 +54,7 @@ from .const import (
     GCODE_STATE_OPTIONS,
     PRINT_TYPE_OPTIONS,
     AIRDUCT_MODES,
-    TempEnum, Print_Fun_Values,
+    TempEnum, Print_Fun_Values, Print_Flag3_Values,
     UNKNOWN_TRAY_LABEL,
 )
 from .commands import (
@@ -4106,19 +4106,34 @@ class PrintFun:
     _int_value: int
     _encryption_enabled: bool
     _fired_encryption_enabled_event: bool
-    
+    _flag3_authorization_control: bool
+
     def __init__(self, client):
         self._value = ""
         self._client = client
         self._encryption_enabled = False
         self._int_value: int = 0
         self._fired_encryption_enabled_event = False
+        self._flag3_authorization_control = False
 
     def print_update(self, data: dict) -> bool:
         old_data = f"{self.__dict__}"
         self._value = data.get("fun", str(self._value))
         self._int_value = int(self._value, 16) if self._value else 0
-        self._encryption_enabled = (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+
+        # Some firmware reports an empty "fun" and signals the newer authorization
+        # control system through bit 16 of "flag3" instead. "flag3" is only present
+        # in full status frames, so latch the bit once it has been seen.
+        flag3 = data.get("flag3")
+        if isinstance(flag3, int) and (flag3 & Print_Flag3_Values.AUTHORIZATION_CONTROL) != 0:
+            self._flag3_authorization_control = True
+
+        if self._value:
+            # "fun" is authoritative whenever the printer reports it.
+            self._encryption_enabled = (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+        else:
+            self._encryption_enabled = self._flag3_authorization_control
+
         if self._encryption_enabled:
             if not self._fired_encryption_enabled_event:
                 self._fired_encryption_enabled_event = True
