@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Control de bloques híbridos MQTT"
+      },
+      "left_extruder_filament_state": {
+        "name": "Filamento del extrusor izquierdo"
+      },
+      "right_extruder_filament_state": {
+        "name": "Filamento extrusor derecho"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Ventilador auxiliar secundario"
+      },
+      "part_fan": {
+        "name": "ventilador parcial"
+      },
+      "left_aux_fan": {
+        "name": "ventilador auxiliar izquierdo"
+      },
+      "right_aux_fan": {
+        "name": "ventilador auxiliar derecho"
+      },
+      "exhaust_fan": {
+        "name": "Ventilador de escape"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Depurar",
           "unknown": "Desconocido"
         }
+      },
+      "track_switch_input": {
+        "name": "Entrada de cambio de pista {input_number}",
+        "state": {
+          "left": "Boquilla izquierda",
+          "right": "Boquilla derecha",
+          "empty": "Vacío"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Boquilla conectada",
+        "state": {
+          "left": "Izquierda",
+          "right": "Bien",
+          "track_switch": "Cambio de pista"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Velocidad del ventilador parcial"
+      },
+      "left_aux_fan_speed": {
+        "name": "Velocidad del ventilador auxiliar izquierdo"
+      },
+      "right_aux_fan_speed": {
+        "name": "Velocidad del ventilador auxiliar derecho"
+      },
+      "exhaust_fan_speed": {
+        "name": "Velocidad del ventilador de escape"
       }
     },
     "camera": {

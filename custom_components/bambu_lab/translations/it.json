@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Controllo dei blocchi MQTT ibrido"
+      },
+      "left_extruder_filament_state": {
+        "name": "Filamento dell'estrusore sinistro"
+      },
+      "right_extruder_filament_state": {
+        "name": "Filamento dell'estrusore destro"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Ventola ausiliaria secondaria"
+      },
+      "part_fan": {
+        "name": "Ventilatore in parte"
+      },
+      "left_aux_fan": {
+        "name": "Ventola ausiliaria sinistra"
+      },
+      "right_aux_fan": {
+        "name": "Ventola aux destra"
+      },
+      "exhaust_fan": {
+        "name": "Ventilatore di scarico"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Debug",
           "unknown": "Sconosciuto"
         }
+      },
+      "track_switch_input": {
+        "name": "Ingresso cambio traccia {input_number}",
+        "state": {
+          "left": "Ugello sinistro",
+          "right": "Ugello destro",
+          "empty": "Vuoto"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Ugello collegato",
+        "state": {
+          "left": "Sinistra",
+          "right": "Giusto",
+          "track_switch": "Cambio di traccia"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Velocità della ventola parziale"
+      },
+      "left_aux_fan_speed": {
+        "name": "Velocità ventola aux sinistra"
+      },
+      "right_aux_fan_speed": {
+        "name": "Velocità della ventola aux destra"
+      },
+      "exhaust_fan_speed": {
+        "name": "Velocità della ventola di scarico"
       }
     },
     "camera": {

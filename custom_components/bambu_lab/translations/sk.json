@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybridné MQTT blokuje riadenie"
+      },
+      "left_extruder_filament_state": {
+        "name": "Ľavé vlákno extrudéra"
+      },
+      "right_extruder_filament_state": {
+        "name": "Pravé vlákno extrudéra"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Sekundárny pomocný ventilátor"
+      },
+      "part_fan": {
+        "name": "Časť ventilátora"
+      },
+      "left_aux_fan": {
+        "name": "Ľavý pomocný ventilátor"
+      },
+      "right_aux_fan": {
+        "name": "Pravý pomocný ventilátor"
+      },
+      "exhaust_fan": {
+        "name": "Výfukový ventilátor"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Debug",
           "unknown": "Neznámy"
         }
+      },
+      "track_switch_input": {
+        "name": "Vstup prepínača koľaje {input_number}",
+        "state": {
+          "left": "Ľavá tryska",
+          "right": "Pravá tryska",
+          "empty": "Prázdny"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Pripojená tryska",
+        "state": {
+          "left": "Vľavo",
+          "right": "Správne",
+          "track_switch": "Traťový spínač"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Rýchlosť ventilátora časti"
+      },
+      "left_aux_fan_speed": {
+        "name": "Rýchlosť ľavého pomocného ventilátora"
+      },
+      "right_aux_fan_speed": {
+        "name": "Rýchlosť pravého pomocného ventilátora"
+      },
+      "exhaust_fan_speed": {
+        "name": "Rýchlosť výfukového ventilátora"
       }
     },
     "camera": {

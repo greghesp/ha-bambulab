@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Contrôle MQTT hybride bloqué"
+      },
+      "left_extruder_filament_state": {
+        "name": "Filament d'extrudeuse gauche"
+      },
+      "right_extruder_filament_state": {
+        "name": "Filament extrudeur droit"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Ventilateur auxiliaire secondaire"
+      },
+      "part_fan": {
+        "name": "Ventilateur partiel"
+      },
+      "left_aux_fan": {
+        "name": "Ventilateur auxiliaire gauche"
+      },
+      "right_aux_fan": {
+        "name": "Ventilateur auxiliaire droit"
+      },
+      "exhaust_fan": {
+        "name": "Ventilateur d'extraction"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "left": "Gauche",
           "right": "Droite"
         }
+      },
+      "track_switch_input": {
+        "name": "Entrée du commutateur de piste {input_number}",
+        "state": {
+          "left": "Buse gauche",
+          "right": "Buse droite",
+          "empty": "Vide"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Buse connectée",
+        "state": {
+          "left": "Gauche",
+          "right": "Droite",
+          "track_switch": "Commutateur de piste"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Vitesse du ventilateur partiel"
+      },
+      "left_aux_fan_speed": {
+        "name": "Vitesse du ventilateur auxiliaire gauche"
+      },
+      "right_aux_fan_speed": {
+        "name": "Vitesse du ventilateur auxiliaire droit"
+      },
+      "exhaust_fan_speed": {
+        "name": "Vitesse du ventilateur d'extraction"
       }
     },
     "camera": {

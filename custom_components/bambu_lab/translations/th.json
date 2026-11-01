@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "ไฮบริด MQTT บล็อกการควบคุม"
+      },
+      "left_extruder_filament_state": {
+        "name": "เส้นใยเครื่องอัดรีดด้านซ้าย"
+      },
+      "right_extruder_filament_state": {
+        "name": "เส้นใยเครื่องอัดรีดด้านขวา"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "พัดลมเสริมรอง"
+      },
+      "part_fan": {
+        "name": "ส่วนพัดลม"
+      },
+      "left_aux_fan": {
+        "name": "พัดลมเสริมด้านซ้าย"
+      },
+      "right_aux_fan": {
+        "name": "พัดลมเสริมด้านขวา"
+      },
+      "exhaust_fan": {
+        "name": "พัดลมดูดอากาศ"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "ดีบัก",
           "unknown": "ไม่ทราบ"
         }
+      },
+      "track_switch_input": {
+        "name": "อินพุตสวิตช์แทร็ก {input_number}",
+        "state": {
+          "left": "หัวฉีดด้านซ้าย",
+          "right": "หัวฉีดขวา",
+          "empty": "ว่างเปล่า"
+        }
+      },
+      "connected_nozzle": {
+        "name": "หัวฉีดที่เชื่อมต่อ",
+        "state": {
+          "left": "ซ้าย",
+          "right": "ขวา",
+          "track_switch": "สวิตช์ติดตาม"
+        }
+      },
+      "part_fan_speed": {
+        "name": "ความเร็วพัดลมบางส่วน"
+      },
+      "left_aux_fan_speed": {
+        "name": "ความเร็วพัดลม aux ซ้าย"
+      },
+      "right_aux_fan_speed": {
+        "name": "ความเร็วพัดลม aux ขวา"
+      },
+      "exhaust_fan_speed": {
+        "name": "ความเร็วพัดลมดูดอากาศ"
       }
     },
     "camera": {

@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Το υβριδικό MQTT αποκλείει τον έλεγχο"
+      },
+      "left_extruder_filament_state": {
+        "name": "Αριστερό νήμα εξωθητή"
+      },
+      "right_extruder_filament_state": {
+        "name": "Δεξί νήμα εξωθητή"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Δευτερεύων ανεμιστήρας aux"
+      },
+      "part_fan": {
+        "name": "Ανταλλακτικός ανεμιστήρας"
+      },
+      "left_aux_fan": {
+        "name": "Αριστερός ανεμιστήρας"
+      },
+      "right_aux_fan": {
+        "name": "Δεξιός ανεμιστήρας aux"
+      },
+      "exhaust_fan": {
+        "name": "Ανεμιστήρας εξάτμισης"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Εντοπισμός σφαλμάτων",
           "unknown": "Αγνωστος"
         }
+      },
+      "track_switch_input": {
+        "name": "Είσοδος διακόπτη παρακολούθησης {input_number}",
+        "state": {
+          "left": "Αριστερό ακροφύσιο",
+          "right": "Δεξί ακροφύσιο",
+          "empty": "Αδειάζω"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Συνδεδεμένο ακροφύσιο",
+        "state": {
+          "left": "Αριστερά",
+          "right": "Δικαίωμα",
+          "track_switch": "Διακόπτης τροχιάς"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Μερική ταχύτητα ανεμιστήρα"
+      },
+      "left_aux_fan_speed": {
+        "name": "Αριστερή ταχύτητα ανεμιστήρα aux"
+      },
+      "right_aux_fan_speed": {
+        "name": "Δεξιά ταχύτητα ανεμιστήρα aux"
+      },
+      "exhaust_fan_speed": {
+        "name": "Ταχύτητα ανεμιστήρα εξάτμισης"
       }
     },
     "camera": {

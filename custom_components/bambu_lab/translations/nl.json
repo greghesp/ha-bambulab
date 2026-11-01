@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybride MQTT blokkeert de controle"
+      },
+      "left_extruder_filament_state": {
+        "name": "Linker extruderfilament"
+      },
+      "right_extruder_filament_state": {
+        "name": "Rechter extruderfilament"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Secundaire hulpventilator"
+      },
+      "part_fan": {
+        "name": "Gedeeltelijk ventilator"
+      },
+      "left_aux_fan": {
+        "name": "Linker aux-ventilator"
+      },
+      "right_aux_fan": {
+        "name": "Rechter aux-ventilator"
+      },
+      "exhaust_fan": {
+        "name": "Afzuigventilator"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Foutopsporing",
           "unknown": "Onbekend"
         }
+      },
+      "track_switch_input": {
+        "name": "Spoorschakelaaringang {input_number}",
+        "state": {
+          "left": "Linker mondstuk",
+          "right": "Rechter mondstuk",
+          "empty": "Leeg"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Aangesloten mondstuk",
+        "state": {
+          "left": "Links",
+          "right": "Rechts",
+          "track_switch": "Baanschakelaar"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Gedeeltelijke ventilatorsnelheid"
+      },
+      "left_aux_fan_speed": {
+        "name": "Snelheid aux-ventilator links"
+      },
+      "right_aux_fan_speed": {
+        "name": "Snelheid aux-ventilator rechts"
+      },
+      "exhaust_fan_speed": {
+        "name": "Snelheid uitlaatventilator"
       }
     },
     "camera": {

@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "하이브리드 MQTT 블록 제어"
+      },
+      "left_extruder_filament_state": {
+        "name": "왼쪽 압출기 필라멘트"
+      },
+      "right_extruder_filament_state": {
+        "name": "오른쪽 압출기 필라멘트"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "보조 보조 팬"
+      },
+      "part_fan": {
+        "name": "부분 팬"
+      },
+      "left_aux_fan": {
+        "name": "왼쪽 보조 팬"
+      },
+      "right_aux_fan": {
+        "name": "오른쪽 보조 팬"
+      },
+      "exhaust_fan": {
+        "name": "배기팬"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "디버그",
           "unknown": "알려지지 않은"
         }
+      },
+      "track_switch_input": {
+        "name": "트랙 스위치 입력 {input_number}",
+        "state": {
+          "left": "왼쪽 노즐",
+          "right": "오른쪽 노즐",
+          "empty": "비어 있는"
+        }
+      },
+      "connected_nozzle": {
+        "name": "연결된 노즐",
+        "state": {
+          "left": "왼쪽",
+          "right": "오른쪽",
+          "track_switch": "트랙 스위치"
+        }
+      },
+      "part_fan_speed": {
+        "name": "부분 팬 속도"
+      },
+      "left_aux_fan_speed": {
+        "name": "왼쪽 보조 팬 속도"
+      },
+      "right_aux_fan_speed": {
+        "name": "오른쪽 보조 팬 속도"
+      },
+      "exhaust_fan_speed": {
+        "name": "배기 팬 속도"
       }
     },
     "camera": {

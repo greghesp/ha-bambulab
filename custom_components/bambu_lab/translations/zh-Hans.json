@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "混合 MQTT 块控制"
+      },
+      "left_extruder_filament_state": {
+        "name": "左挤出机丝"
+      },
+      "right_extruder_filament_state": {
+        "name": "右挤出机丝"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "辅助辅助风扇"
+      },
+      "part_fan": {
+        "name": "部分风扇"
+      },
+      "left_aux_fan": {
+        "name": "左辅助风扇"
+      },
+      "right_aux_fan": {
+        "name": "右辅助风扇"
+      },
+      "exhaust_fan": {
+        "name": "排气扇"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "调试",
           "unknown": "未知"
         }
+      },
+      "track_switch_input": {
+        "name": "轨道开关输入 {input_number}",
+        "state": {
+          "left": "左喷嘴",
+          "right": "右喷嘴",
+          "empty": "空的"
+        }
+      },
+      "connected_nozzle": {
+        "name": "连接喷嘴",
+        "state": {
+          "left": "左边",
+          "right": "正确的",
+          "track_switch": "轨道开关"
+        }
+      },
+      "part_fan_speed": {
+        "name": "零件风扇转速"
+      },
+      "left_aux_fan_speed": {
+        "name": "左辅助风扇转速"
+      },
+      "right_aux_fan_speed": {
+        "name": "右辅助风扇速度"
+      },
+      "exhaust_fan_speed": {
+        "name": "排风扇转速"
       }
     },
     "camera": {

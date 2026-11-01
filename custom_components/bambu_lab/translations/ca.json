@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Control híbrid de blocs MQTT"
+      },
+      "left_extruder_filament_state": {
+        "name": "Filament de l'extrusora esquerre"
+      },
+      "right_extruder_filament_state": {
+        "name": "Filament extrusor dret"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Ventilador auxiliar secundari"
+      },
+      "part_fan": {
+        "name": "Ventilador parcial"
+      },
+      "left_aux_fan": {
+        "name": "Ventilador auxiliar esquerre"
+      },
+      "right_aux_fan": {
+        "name": "Ventilador auxiliar dret"
+      },
+      "exhaust_fan": {
+        "name": "Ventilador d'escapament"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Depuració",
           "unknown": "Desconegut"
         }
+      },
+      "track_switch_input": {
+        "name": "Entrada de l'interruptor de pista {input_number}",
+        "state": {
+          "left": "Broquet esquerre",
+          "right": "Broquet dret",
+          "empty": "Buit"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Broquet connectat",
+        "state": {
+          "left": "Esquerra",
+          "right": "D'acord",
+          "track_switch": "Interruptor de pista"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Velocitat del ventilador parcial"
+      },
+      "left_aux_fan_speed": {
+        "name": "Velocitat del ventilador auxiliar esquerre"
+      },
+      "right_aux_fan_speed": {
+        "name": "Velocitat del ventilador auxiliar dret"
+      },
+      "exhaust_fan_speed": {
+        "name": "Velocitat del ventilador d'escapament"
       }
     },
     "camera": {

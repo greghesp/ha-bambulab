@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybrides MQTT blockiert die Kontrolle"
+      },
+      "left_extruder_filament_state": {
+        "name": "Linkes Extruderfilament"
+      },
+      "right_extruder_filament_state": {
+        "name": "Rechtes Extruderfilament"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Sekundärer Aux-Lüfter"
+      },
+      "part_fan": {
+        "name": "Teilweise Fan"
+      },
+      "left_aux_fan": {
+        "name": "Linker Aux-Lüfter"
+      },
+      "right_aux_fan": {
+        "name": "Rechter Aux-Lüfter"
+      },
+      "exhaust_fan": {
+        "name": "Abluftventilator"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Debuggen",
           "unknown": "Unbekannt"
         }
+      },
+      "track_switch_input": {
+        "name": "Gleisschalter-Eingabe {input_number}",
+        "state": {
+          "left": "Linke Düse",
+          "right": "Rechte Düse",
+          "empty": "Leer"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Verbundene Düse",
+        "state": {
+          "left": "Links",
+          "right": "Rechts",
+          "track_switch": "Gleisweiche"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Teilweise Lüftergeschwindigkeit"
+      },
+      "left_aux_fan_speed": {
+        "name": "Geschwindigkeit des linken Zusatzlüfters"
+      },
+      "right_aux_fan_speed": {
+        "name": "Rechte Aux-Lüftergeschwindigkeit"
+      },
+      "exhaust_fan_speed": {
+        "name": "Geschwindigkeit des Abluftventilators"
       }
     },
     "camera": {

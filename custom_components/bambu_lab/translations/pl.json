@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybrydowe MQTT blokuje kontrolę"
+      },
+      "left_extruder_filament_state": {
+        "name": "Lewy włókno wytłaczarki"
+      },
+      "right_extruder_filament_state": {
+        "name": "Prawy włókno wytłaczarki"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Dodatkowy wentylator pomocniczy"
+      },
+      "part_fan": {
+        "name": "Część fana"
+      },
+      "left_aux_fan": {
+        "name": "Lewy wentylator dodatkowy"
+      },
+      "right_aux_fan": {
+        "name": "Prawy wentylator dodatkowy"
+      },
+      "exhaust_fan": {
+        "name": "Wentylator wyciągowy"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Odpluskwić",
           "unknown": "Nieznany"
         }
+      },
+      "track_switch_input": {
+        "name": "Wejście przełącznika toru {input_number}",
+        "state": {
+          "left": "Lewa dysza",
+          "right": "Prawa dysza",
+          "empty": "Pusty"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Podłączona dysza",
+        "state": {
+          "left": "Lewy",
+          "right": "Prawidłowy",
+          "track_switch": "Przełącznik toru"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Częściowa prędkość wentylatora"
+      },
+      "left_aux_fan_speed": {
+        "name": "Prędkość lewego dodatkowego wentylatora"
+      },
+      "right_aux_fan_speed": {
+        "name": "Prędkość prawego wentylatora dodatkowego"
+      },
+      "exhaust_fan_speed": {
+        "name": "Prędkość wentylatora wyciągowego"
       }
     },
     "camera": {

@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybrid MQTT blokerer kontrol"
+      },
+      "left_extruder_filament_state": {
+        "name": "Venstre ekstruderfilament"
+      },
+      "right_extruder_filament_state": {
+        "name": "Højre ekstruderfilament"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Sekundær ekstra ventilator"
+      },
+      "part_fan": {
+        "name": "Delvis ventilator"
+      },
+      "left_aux_fan": {
+        "name": "Venstre ekstra ventilator"
+      },
+      "right_aux_fan": {
+        "name": "Højre ekstra ventilator"
+      },
+      "exhaust_fan": {
+        "name": "Udstødningsventilator"
       }
     },
     "image": {
@@ -967,6 +985,34 @@
           "debug": "Debug",
           "unknown": "Ukendt"
         }
+      },
+      "track_switch_input": {
+        "name": "Sporskiftindgang {input_number}",
+        "state": {
+          "left": "Venstre dyse",
+          "right": "Højre dyse",
+          "empty": "Tom"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Tilsluttet dyse",
+        "state": {
+          "left": "Venstre",
+          "right": "Højre",
+          "track_switch": "Sporskifter"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Delvis blæserhastighed"
+      },
+      "left_aux_fan_speed": {
+        "name": "Venstre ekstra blæserhastighed"
+      },
+      "right_aux_fan_speed": {
+        "name": "Højre ekstra blæserhastighed"
+      },
+      "exhaust_fan_speed": {
+        "name": "Udstødningsventilatorhastighed"
       }
     },
     "camera": {
