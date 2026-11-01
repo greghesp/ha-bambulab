@@ -68,6 +68,34 @@ class TestPrintJob(unittest.TestCase):
         self.assertIsNone(ams_slot_name(255))
         self.assertIsNone(ams_slot_name(-1))
 
+    def test_ams_mapping_from_tray_mapping(self):
+        # Real H2C job: AMS HT unit 129, then AMS unit 1 trays 1, 4 and 3, plus an unused filament.
+        self.print_job.print_update({"mapping": [33024, 256, 259, 258, 65535]})
+        self.assertEqual(self.print_job.get_ams_mapping, [
+            {"ams": 129, "tray": 0},
+            {"ams": 1, "tray": 0},
+            {"ams": 1, "tray": 3},
+            {"ams": 1, "tray": 2},
+            None,
+        ])
+
+    def test_ams_mapping_external_spool(self):
+        self.print_job.print_update({"mapping": [65280]})
+        self.assertEqual(self.print_job.get_ams_mapping, [{"ams": 255, "tray": 0}])
+
+    def test_ams_mapping_falls_back_to_slot_indexes(self):
+        # Printers without print.mapping only send ams_mapping with flat slot indexes.
+        self.print_job.print_update({"ams_mapping": [5, 16, 0]})
+        self.assertEqual(self.print_job.get_ams_mapping, [
+            {"ams": 1, "tray": 1},
+            {"ams": 128, "tray": 0},
+            {"ams": 0, "tray": 0},
+        ])
+
+    def test_ams_mapping_prefers_tray_mapping(self):
+        self.print_job.print_update({"ams_mapping": [0], "mapping": [32768]})
+        self.assertEqual(self.print_job.get_ams_mapping, [{"ams": 128, "tray": 0}])
+
     def test_get_print_weights_includes_ams_ht(self):
         self.client._device.external_spool[0].active = False
         self.client._device.external_spool[1].active = False
@@ -266,6 +294,87 @@ class TestPrintJob(unittest.TestCase):
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
 
+    # A stale Bambu Cloud task must never be presented as the running print's own
+    # figures. Observed on an H2C: a touchscreen print whose 3mf lookup failed
+    # reported the weight of a cloud send twelve minutes earlier.
+
+    @staticmethod
+    def _stale_cloud_task():
+        """A finished cloud task for an earlier, unrelated print."""
+        return {
+            "id": 1275849996,
+            "weight": 4.44,
+            "length": 145,
+            "bedType": "textured_plate",
+            "cover": "",
+            "status": 4,
+            "startTime": "2026-09-23T14:32:00Z",
+            "endTime": "2026-09-23T14:33:07Z",
+            "amsDetailMapping": [{"ams": 2, "weight": 4.44}],
+        }
+
+    def test_clearing_model_data_clears_the_previous_jobs_weight(self):
+        """The weight fields must not survive into the next print."""
+        self.print_job.print_weight = 4.44
+        self.print_job.print_length = 1.45
+        self.print_job._ams_print_weights[2] = 4.44
+        self.print_job._ams_print_lengths[2] = 1.45
+        self.print_job.gcode_file_downloaded = "959381-Hase 2f Osterhase.gcode.gcode"
+
+        self.print_job._clear_model_data()
+
+        self.assertEqual(0, self.print_job.print_weight)
+        self.assertEqual(0, self.print_job.print_length)
+        self.assertEqual([0.0] * len(self.print_job._ams_print_weights), self.print_job._ams_print_weights)
+        self.assertEqual([0.0] * len(self.print_job._ams_print_lengths), self.print_job._ams_print_lengths)
+        self.assertEqual("", self.print_job.gcode_file_downloaded)
+
+    def test_cloud_task_weight_is_not_applied_to_a_local_print_with_ftp(self):
+        """The printer's own 3mf is authoritative for a local print, as it already is for the cover."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+        self.print_job.print_weight = 0
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(0, self.print_job.print_weight)
+
+    def test_cloud_task_ams_weights_are_not_applied_to_a_local_print_with_ftp(self):
+        """A stale task's amsDetailMapping would charge the wrong tray."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual([0.0] * len(self.print_job._ams_print_weights), self.print_job._ams_print_weights)
+
+    def test_cloud_task_weight_is_still_applied_to_a_cloud_print(self):
+        """A sent job has no other weight source, so the cloud task must still be used."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "cloud"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(4.44, self.print_job.print_weight)
+        self.assertEqual(4.44, self.print_job._ams_print_weights[2])
+
+    def test_cloud_task_weight_is_still_applied_to_a_local_print_without_ftp(self):
+        """Without FTP there is no 3mf to read, so the cloud task remains the only source."""
+        self.client.ftp_enabled = False
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(4.44, self.print_job.print_weight)
+
 class TestInfo(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
@@ -348,6 +457,24 @@ class TestStageAction(unittest.TestCase):
         # Should not raise.
         stage_action.print_update(data)
 
+    def test_stage_resets_to_idle_after_cancel(self):
+        # A cancelled print reports gcode_state FAILED, but the printer keeps
+        # sending the stage it was in when the print was cancelled.
+        stage_action = StageAction()
+        stage_action.print_update({"print_type": "cloud", "gcode_state": "PREPARE", "stg_cur": 54})
+        self.assertEqual(stage_action.description, "waiting_for_heatbed_temperature")
+
+        stage_action.print_update({"print_type": "idle", "gcode_state": "FAILED", "stg_cur": 54})
+        self.assertEqual(stage_action.description, "idle")
+
+        # Later partial updates without gcode_state keep it idle.
+        stage_action.print_update({"stg_cur": 54})
+        self.assertEqual(stage_action.description, "idle")
+
+        # The next print reports its stages again.
+        stage_action.print_update({"print_type": "cloud", "gcode_state": "PREPARE", "stg_cur": 2})
+        self.assertEqual(stage_action.description, "heatbed_preheating")
+
 class TestAMSList(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
@@ -423,6 +550,62 @@ class TestAMSList(unittest.TestCase):
         result = self.ams_list.print_update(data)
         self.assertTrue(result)
         self.assertIn(0, self.ams_list.data)
+
+    def test_ams_status_from_push_all(self):
+        # P1P.json reports ams_status 768 (0x0300, "assist") with slot 1 of AMS 0 loaded and the print failed
+        data = self.test_data['push_all']
+
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+        self.assertEqual(self.ams_list.data[0].status, "filament_loaded")
+
+    def test_ams_status_filament_change_steps(self):
+        data = self.test_data['push_all']
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+
+        # Captured on a P1S mid print: swapping from slot 1 to slot 4 of AMS 0, cutting step
+        self.ams_list.print_update({"ams_status": 259, "ams": {"tray_now": "0", "tray_tar": "3"}})
+        self.assertEqual(self.ams_list.data[0].status, "cutting_filament")
+
+        self.assertTrue(self.ams_list.print_update({"ams_status": 0x0107}))
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+
+        # Delta payloads without ams_status keep the last known state
+        self.ams_list.print_update({"mc_percent": 74})
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+
+        # "Just wait" and unknown sub-steps fall back to the generic state
+        self.ams_list.print_update({"ams_status": 0x0109})
+        self.assertEqual(self.ams_list.data[0].status, "changing_filament")
+
+        self.ams_list.print_update({"ams_status": 0})
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+
+        self.ams_list.print_update({"ams_status": 0x4000})
+        self.assertEqual(self.ams_list.data[0].status, "unknown")
+
+    def test_ams_status_filament_change_only_on_involved_units(self):
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        # Unload from AMS 0 slot 2 and load AMS 1 slot 2: the other units stay idle
+        self.ams_list.print_update({"ams_status": 0x0107, "ams": {"tray_now": "1", "tray_tar": "5"}})
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+        self.assertEqual(self.ams_list.data[1].status, "purging_old_filament")
+        self.assertEqual(self.ams_list.data[2].status, "idle")
+        self.assertEqual(self.ams_list.data[128].status, "idle")
+
+        # Once loaded, only the unit feeding the extruder reports the filament as loaded
+        self.ams_list.print_update({"ams_status": 0x0300, "ams": {"tray_now": "5", "tray_tar": "5"}})
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+        self.assertEqual(self.ams_list.data[1].status, "filament_loaded")
+        self.assertEqual(self.ams_list.data[2].status, "idle")
+        self.assertEqual(self.ams_list.data[128].status, "idle")
+
+        # States that can't be tied to one unit are shown on all of them
+        self.ams_list.print_update({"ams_status": 0x0400})
+        self.assertEqual(self.ams_list.data[0].status, "calibration")
+        self.assertEqual(self.ams_list.data[128].status, "calibration")
 
     def test_h2d_ams_detection(self):
         # Test that two AMS files are properly detected from H2D.json
@@ -936,6 +1119,24 @@ class TestH2D(unittest.TestCase):
         self.assertTrue(result)
         self.assertEqual(self.temperature.right_nozzle_temperature, 79)
         self.assertEqual(self.temperature.right_nozzle_target_temperature, 0)
+    def test_h2d_active_nozzle(self):
+        extruder = self.client._device.extruder
+        self.assertIsNone(extruder.active_nozzle)
+
+        extruder.print_update(self.h2d_data['push_all'])
+        self.assertEqual(extruder.active_nozzle, "right")
+
+        extruder.print_update(self.h2d_data['push_left_extruder'])
+        self.assertEqual(extruder.active_nozzle, "left")
+
+    def test_h2d_active_nozzle_keeps_side_while_switching(self):
+        extruder = self.client._device.extruder
+        extruder.print_update(self.h2d_data['push_left_extruder'])
+
+        # Index 15 is reported mid-switch (#1815).
+        extruder.print_update({"device": {"extruder": {"state": 0xF2}}})
+        self.assertEqual(extruder.active_nozzle_index, 15)
+        self.assertEqual(extruder.active_nozzle, "left")
 
 
 class TestH2CHotendRack(unittest.TestCase):
