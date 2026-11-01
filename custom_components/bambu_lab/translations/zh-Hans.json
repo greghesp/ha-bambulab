@@ -24,11 +24,11 @@
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
       "code_needed": "必须提供验证码。",
-      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
-      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
-      "code_incorrect": "验证码不正确。",
-      "tfaCode": "需要 2FA 代码。",
-      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或手机，请在下方输入。",
+      "verifyCode": "需要验证码。请查看您的邮箱或短信。",
+      "code_expired": "验证码已过期，已重新请求验证码。请查看您的邮箱或短信。",
+      "code_incorrect": "验证码不正确，请重新输入。",
+      "tfaCode": "需要 2FA 代码。请立即输入。",
+      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或短信，请在下方输入。",
       "cannot_connect_local_timeout": "连接失败。连接超时。",
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
@@ -56,8 +56,8 @@
           "email": "电子邮件地址或电话号码",
           "password": "密码",
           "newCode": "请求新代码",
-          "verifyCode": "邮箱或手机验证码",
-          "tfaCode": "二因素验证码"
+          "verifyCode": "邮箱或短信验证码",
+          "tfaCode": "2FA 代码"
         }
       },
       "Bambu_Choose_Device": {
@@ -68,14 +68,14 @@
       },
       "Bambu_Lan": {
         "title": "设置本地连接",
-        "description": "您可以选择直接连接打印机 mqtt 而不是 Bambu Lab 云。这为 Bambu Lab 云中断提供了弹性，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。\n\r无论选择如何，集成都会从 Bambu Lab 云获取打印机 IP 地址，并确认它可以连接到它，因为这是相机、打印历史记录和延时摄影支持所必需的。如果您的家庭助理无法访问您的打印机，那么您可以禁用此检查，但您将失去这些功能。",
+        "description": "您可以选择直接连接打印机 mqtt 而不是 Bambu Lab 云。这为 Bambu Lab 云中断提供了弹性，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。\n\r无论选择如何，集成都会从 Bambu Lab 云获取打印机 IP 地址，并确认它可以连接到它，因为这是相机、打印历史记录和延时摄影支持所必需的。如果 Home Assistant 无法访问您的打印机，那么您可以禁用此检查，但您将失去这些功能。",
         "data": {
           "local_mqtt": "直接连接打印机 mqtt：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
           "usage_hours": "当前使用时间（可选）：",
-          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
-          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）：",
+          "print_cache_count": "缓存到 Home Assistant 的模型数量（-1 表示无限）：",
+          "timelapse_cache_count": "缓存到 Home Assistant 的延时摄影数量（-1 表示无限）：",
           "skip_local_mqtt": "跳过本地mqtt连接测试（不推荐）："
         },
         "sections": {
@@ -97,8 +97,8 @@
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
           "usage_hours": "当前使用时间（可选）：",
-          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
-          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
+          "print_cache_count": "缓存到 Home Assistant 的模型数量（-1 表示无限）：",
+          "timelapse_cache_count": "缓存到 Home Assistant 的延时摄影数量（-1 表示无限）："
         },
         "sections": {
           "advanced": {
@@ -123,11 +123,11 @@
       "invalid_auth": "无效的身份验证",
       "unknown": "意外错误",
       "code_needed": "必须提供验证码。",
-      "verifyCode": "需要验证码。检查您的电子邮件或电话。",
-      "code_expired": "验证码已过期。请求新代码。检查您的电子邮件或电话。",
-      "code_incorrect": "验证码不正确。",
-      "tfaCode": "需要 2FA 代码。",
-      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或手机，请在下方输入。",
+      "verifyCode": "需要验证码。请查看您的邮箱或短信。",
+      "code_expired": "验证码已过期，已重新请求验证码。请查看您的邮箱或短信。",
+      "code_incorrect": "验证码不正确，请重新输入。",
+      "tfaCode": "需要 2FA 代码。请立即输入。",
+      "tfa_csrf_fallback": "Bambu Lab 的双重身份验证端点目前拒绝请求。验证码已发送到您的邮箱或短信，请在下方输入。",
       "cannot_connect_local_timeout": "连接失败。连接超时。",
       "cannot_connect_local_access_denied": "连接失败。访问被拒绝 - 检查访问代码。",
       "cannot_connect_local_incorrect_serial": "连接失败。打印机关闭连接 - 检查序列号。",
@@ -156,21 +156,21 @@
           "email": "电子邮件地址或电话号码",
           "password": "密码",
           "newCode": "请求新代码",
-          "verifyCode": "邮箱或手机验证码",
-          "tfaCode": "二因素验证码"
+          "verifyCode": "邮箱或短信验证码",
+          "tfaCode": "2FA 代码"
         }
       },
       "Bambu_Lan": {
         "title": "调整打印机配置",
-        "description": "您可以选择直接连接打印机 mqtt 而不是 Bambu Lab 云。这为 Bambu Lab 云中断提供了弹性，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。\n\r无论选择如何，集成都会从 Bambu Lab 云获取打印机 IP 地址，并确认它可以连接到它，因为这是相机、打印历史记录和延时摄影支持所必需的。如果您的家庭助理无法访问您的打印机，那么您可以禁用此检查，但您将失去这些功能。",
+        "description": "您可以选择直接连接打印机 mqtt 而不是 Bambu Lab 云。这为 Bambu Lab 云中断提供了弹性，但 Bambu Lab 在这种混合模式下对打印机的控制受到限制，因此某些控制将不可用。\n\r无论选择如何，集成都会从 Bambu Lab 云获取打印机 IP 地址，并确认它可以连接到它，因为这是相机、打印历史记录和延时摄影支持所必需的。如果 Home Assistant 无法访问您的打印机，那么您可以禁用此检查，但您将失去这些功能。",
         "data": {
           "serial": "调整设置：",
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
           "local_mqtt": "直接连接打印机 mqtt：",
           "usage_hours": "当前使用时间（可选）：",
-          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
-          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）：",
+          "print_cache_count": "缓存到 Home Assistant 的模型数量（-1 表示无限）：",
+          "timelapse_cache_count": "缓存到 Home Assistant 的延时摄影数量（-1 表示无限）：",
           "skip_local_mqtt": "跳过本地mqtt连接测试（不推荐）："
         },
         "sections": {
@@ -191,8 +191,8 @@
           "host": "本地打印机 IP 地址：",
           "access_code": "访问码",
           "usage_hours": "当前使用时间（可选）：",
-          "print_cache_count": "缓存到家庭助理的模型数量（无限的-1）：",
-          "timelapse_cache_count": "缓存到家庭助理的及时视频数量（-1用于无限）："
+          "print_cache_count": "缓存到 Home Assistant 的模型数量（-1 表示无限）：",
+          "timelapse_cache_count": "缓存到 Home Assistant 的延时摄影数量（-1 表示无限）："
         },
         "sections": {
           "advanced": {
@@ -231,7 +231,7 @@
         "name": "挤出机耗材状态"
       },
       "developer_lan_mode": {
-        "name": "开发人员LAN模式"
+        "name": "开发者 LAN 模式"
       },
       "mqtt_encryption": {
         "name": "MQTT加密固件"
@@ -427,7 +427,7 @@
           "paused_low_fan_speed_heat_break": "由于散热风扇速度低而暂停",
           "paused_chamber_temperature_control_error": "由于腔室温度控制错误而暂停",
           "cooling_chamber": "冷却室",
-          "paused_user_gcode": "由用户添加的 gcode 暂停指令暂停",
+          "paused_user_gcode": "由于 Gcode 暂停指令而暂停",
           "motor_noise_showoff": "电机噪音标定结果展示",
           "paused_nozzle_filament_covered_detected": "由于检测到喷嘴裹头而暂停",
           "paused_cutter_error": "由于切刀错误而暂停",
@@ -508,11 +508,11 @@
       "print_bed_type": {
         "name": "打印板类型",
         "state": {
-          "textured_plate": "纹理PEI打印版",
+          "textured_plate": "纹理PEI打印板",
           "cool_plate": "低温打印板/PLA打印板",
           "hot_plate": "光面PEI打印板/高温打印板",
           "eng_plate": "工程材料打印板",
-          "supertack_plate": "凉爽的板supertack"
+          "supertack_plate": "低温打印板 SuperTack"
         }
       },
       "print_length": {
@@ -563,12 +563,12 @@
       "nozzle_type": {
         "name": "喷嘴类型",
         "state": {
-          "hardened_steel": "硬化钢喷嘴",
-          "stainless_steel": "不锈钢喷嘴",
+          "hardened_steel": "硬化钢",
+          "stainless_steel": "不锈钢",
           "tungsten_carbide": "碳化钨",
-          "high_flow_hardened_steel": "硬化钢",
-          "high_flow_stainless_steel": "不锈钢有大流动",
-          "high_flow_tungsten_carbide": "碳化氢碳化物含量大",
+          "high_flow_hardened_steel": "高流量硬化钢",
+          "high_flow_stainless_steel": "高流量不锈钢",
+          "high_flow_tungsten_carbide": "高流量碳化钨",
           "tpu_high_flow": "TPU 高流量",
           "unknown": "未知"
         }
@@ -710,7 +710,7 @@
         "name": "跳过对象"
       },
       "gcode_file_downloaded": {
-        "name": "GCODE文件下载"
+        "name": "Gcode 文件已下载"
       },
       "remaining_drying_time": {
         "name": "剩余的干燥时间"
@@ -751,9 +751,9 @@
           "hardened_steel": "硬化钢",
           "stainless_steel": "不锈钢",
           "tungsten_carbide": "碳化钨",
-          "high_flow_hardened_steel": "硬化钢",
-          "high_flow_stainless_steel": "不锈钢有大流动",
-          "high_flow_tungsten_carbide": "碳化氢碳化物含量大"
+          "high_flow_hardened_steel": "高流量硬化钢",
+          "high_flow_stainless_steel": "高流量不锈钢",
+          "high_flow_tungsten_carbide": "高流量碳化钨"
         }
       },
       "right_nozzle_diameter": {
@@ -765,9 +765,9 @@
           "hardened_steel": "硬化钢",
           "stainless_steel": "不锈钢",
           "tungsten_carbide": "碳化钨",
-          "high_flow_hardened_steel": "硬化钢",
-          "high_flow_stainless_steel": "不锈钢有大流动",
-          "high_flow_tungsten_carbide": "碳化氢碳化物含量大"
+          "high_flow_hardened_steel": "高流量硬化钢",
+          "high_flow_stainless_steel": "高流量不锈钢",
+          "high_flow_tungsten_carbide": "高流量碳化钨"
         }
       },
       "model_download_percentage": {
@@ -800,7 +800,7 @@
           "unlock_hotend": "解锁热端",
           "lift_hotend_rack": "升降架",
           "place_hotend": "放置热端",
-          "pick_hotend": "采摘热端",
+          "pick_hotend": "拾取热端",
           "lock_hotend": "锁定热端"
         }
       },
@@ -818,12 +818,12 @@
           "nozzle_type": {
             "name": "喷嘴类型",
             "state": {
-              "hardened_steel": "淬火钢",
+              "hardened_steel": "硬化钢",
               "stainless_steel": "不锈钢",
               "tungsten_carbide": "碳化钨",
-              "high_flow_hardened_steel": "高流动硬化钢",
-              "high_flow_stainless_steel": "高流动不锈钢",
-              "high_flow_tungsten_carbide": "高流动碳化钨",
+              "high_flow_hardened_steel": "高流量硬化钢",
+              "high_flow_stainless_steel": "高流量不锈钢",
+              "high_flow_tungsten_carbide": "高流量碳化钨",
               "unknown": "未知"
             }
           },
@@ -879,7 +879,7 @@
         "name": "干燥丝"
       },
       "hotend_rack_hotend_used_time": {
-        "name": "Hotend {hotend_id} 使用时间"
+        "name": "热端 {hotend_id} 使用时间"
       }
     },
     "camera": {
@@ -930,15 +930,15 @@
     },
     "mqtt_encryption_enabled": {
       "title": "启用 MQTT 加密",
-      "description": "{device} 已连接到云并启用了 mqtt 加密。这种集成只能控制光。所有其他控件均不可用。打印机必须设置为开发人员 LAN 模式才能允许家庭助理进行控制。"
+      "description": "{device} 已连接到云并启用了 mqtt 加密。此集成只能控制灯光，其他控制方式均不可用。必须将打印机设置为开发者 LAN 模式，Home Assistant 才能进行控制。"
     },
     "hybrid_mode_blocking": {
       "title": "混合连接块控制",
       "description": "{device} 已连接云，但通过集成具有本地 mqtt 连接。这会阻止设置温度和重印历史记录。将连接切换到纯云以实现完全控制。"
     },
     "access_code_rejected": {
-      "title": "访问代码被拒绝",
-      "description": "打印机拒绝为 {device} 配置的访问代码。这通常意味着代码已重新生成，例如通过恢复出厂设置。从打印机的网络设置屏幕读取新的访问代码并重新配置与其集成。"
+      "title": "访问码被拒绝",
+      "description": "打印机拒绝了为 {device} 配置的访问码。这通常表示访问码已被重新生成（例如恢复出厂设置后）。请在打印机的网络设置界面查看新的访问码，并用它重新配置集成。"
     }
   }
 }
