@@ -5,6 +5,7 @@ import ftplib
 import json
 import math
 import os
+import html
 import re
 import threading
 import shutil
@@ -56,8 +57,15 @@ from .const import (
     AIRDUCT_MODES,
     AMS_CONNECTED_NOZZLES,
     NOZZLE_SIDES,
-    TempEnum, Print_Fun_Values,
+    TempEnum,
+    Print_Fun_Values,
+    Print_Flag3_Values,
     UNKNOWN_TRAY_LABEL,
+    AMS_STATUS_MAIN,
+    AMS_STATUS_MAIN_IDLE,
+    AMS_STATUS_MAIN_FILAMENT_CHANGE,
+    AMS_STATUS_MAIN_ASSIST,
+    AMS_FILAMENT_CHANGE_STEPS,
 )
 from .commands import (
     CHAMBER_LIGHT_ON,
@@ -599,7 +607,11 @@ class Temperature:
                     if "temp" in entry:
                         self.nozzle_temps[entry["id"]] = entry["temp"] & 0xFFFF
                         self.target_nozzle_temps[entry["id"]] = (entry["temp"] >> 16) & 0xFFFF
-        else:
+        elif not self._client._device.supports_feature(Features.DUAL_NOZZLES):
+            # Legacy single-extruder payload: only trust it for genuinely single-nozzle
+            # printers. On dual-nozzle machines (H2C/H2D/H2DPRO/X2D) these top-level keys
+            # report whichever nozzle is currently active, so applying them to index 0
+            # stomps the right nozzle's real (idle) temperature with the left nozzle's.
             self.nozzle_temps[0] = round(data.get("nozzle_temper", self.nozzle_temps[0]))
             self.target_nozzle_temps[0] = round(data.get("nozzle_target_temper", self.target_nozzle_temps[0]))
 
@@ -925,6 +937,83 @@ AMS_HT_SLOT_END = AMS_HT_SLOT_BASE + AMS_HT_COUNT
 AMS_HT_UNIT_BASE = 128
 AMS_HT_UNIT_END = AMS_HT_UNIT_BASE + AMS_HT_COUNT
 
+# Characters that cannot appear in a file name on the printer's storage. The printer stores
+# each one in a model name as its hex code with the '%' dropped: a project called
+# "Hase / Osterhase" is saved as "Hase 2f Osterhase.gcode.3mf". The MQTT payload still
+# carries the original name, so the two have to be reconciled before they can be compared.
+FILENAME_ILLEGAL_CHARS = '/\\:*?"<>|'
+
+
+def encode_illegal_filename_chars(name: str) -> str:
+    """The spelling the printer uses on disk for a model name: illegal characters as lowercase hex."""
+    return ''.join(format(ord(c), '02x') if c in FILENAME_ILLEGAL_CHARS else c for c in name)
+
+
+def has_illegal_filename_chars(name: str) -> bool:
+    return any(c in FILENAME_ILLEGAL_CHARS for c in name)
+
+
+# Characters that commonly differ between a task name and the file it was saved as: a file copied
+# by hand often has underscores where the title has spaces.
+FILENAME_SEPARATOR_CHARS = " _-"
+
+
+def task_name_variants(name: str) -> list[str]:
+    """The task name as reported, plus the same with XML character references decoded. The firmware
+    copies a 3mf title into the MQTT task name verbatim, so a title containing & < > or quotes
+    arrives as &amp; &lt; &gt; &quot; while the file on disk carries the real characters."""
+    variants = [name]
+    decoded = html.unescape(name)
+    if decoded != name:
+        variants.append(decoded)
+    return variants
+
+
+# Substitutions observed for a character that cannot appear in a file name: the printer's hex
+# code ("/" -> "2f"), an underscore, or nothing at all (Bambu Studio deletes it when saving to
+# the card). Anything broader lets an illegal character stand for unrelated text, which turns a
+# missed match into a wrong one.
+ILLEGAL_CHAR_SUBSTITUTION = "(?:[0-9a-f]{2}|_)?"
+
+
+def model_name_pattern(name: str) -> re.Pattern:
+    """A pattern matching any on-disk spelling of a model name.
+
+    A run of spaces, underscores, hyphens and illegal characters is treated as one gap: Bambu
+    Studio deletes the illegal characters and collapses the whitespace around them, so
+    "Mini Hase / Osterhase" is saved as "Mini_Hase_Osterhase". Within a gap each illegal
+    character may appear as one of the observed substitutions. Case is ignored.
+    """
+    separator = f"[{re.escape(FILENAME_SEPARATOR_CHARS)}]"
+    gap_chars = FILENAME_SEPARATOR_CHARS + FILENAME_ILLEGAL_CHARS
+    parts = []
+    i = 0
+    while i < len(name):
+        if name[i] not in gap_chars:
+            parts.append(re.escape(name[i]))
+            i += 1
+            continue
+        end = i
+        while end < len(name) and name[end] in gap_chars:
+            end += 1
+        illegal_count = sum(1 for c in name[i:end] if c in FILENAME_ILLEGAL_CHARS)
+        if illegal_count:
+            parts.append(f"{separator}*".join([""] + [ILLEGAL_CHAR_SUBSTITUTION] * illegal_count + [""]))
+        elif i == 0 or end == len(name):
+            parts.append(f"{separator}*")
+        else:
+            parts.append(f"{separator}+")
+        i = end
+    return re.compile("".join(parts), re.IGNORECASE)
+
+
+def strip_model_extension(filename: str) -> str:
+    lowered = filename.lower()
+    for extension in ('.gcode.3mf', '.3mf'):
+        if lowered.endswith(extension):
+            return filename[:-len(extension)]
+    return filename
+
 
 def ams_slot_name(index: int) -> str | None:
     """Human readable name for an AMS slot index, or None if the index isn't a real slot."""
@@ -939,6 +1028,23 @@ def ams_slot_name(index: int) -> str | None:
         return f"AMS HT {index - AMS_HT_UNIT_BASE + 1}"
 
     return None
+
+
+def ams_slot_location(index: int) -> dict | None:
+    """AMS unit id and tray for a flat slot index, or None if the index isn't a real slot."""
+    if 0 <= index < AMS_SLOT_COUNT:
+        return {"ams": index // AMS_TRAYS_PER_UNIT, "tray": index % AMS_TRAYS_PER_UNIT}
+    if AMS_HT_SLOT_BASE <= index < AMS_HT_SLOT_END:
+        return {"ams": AMS_HT_UNIT_BASE + index - AMS_HT_SLOT_BASE, "tray": 0}
+    return None
+
+
+def tray_mapping_location(value: int) -> dict | None:
+    """AMS unit id and tray for a print.mapping entry, encoded like extruder 'snow' (unit << 8 | tray)."""
+    # 0xFFFF is a project filament the plate doesn't use. Units 254/255 are the external spools.
+    if value == 0xFFFF:
+        return None
+    return {"ams": value >> 8, "tray": value & 0xFF}
 
 
 @dataclass
@@ -992,6 +1098,7 @@ class PrintJob:
         self.print_error = 0
         self.print_weight = 0
         self.ams_mapping = []
+        self._tray_mapping = None
         self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         self.print_length = 0
@@ -1005,6 +1112,7 @@ class PrintJob:
         self._ftpRunAgain = False
         self._ftpThread = None
         self._ftp_download_percentage = 100
+        self._next_model_retry_at = 0.0
 
     @property
     def model_download_percentage(self) -> int:
@@ -1017,6 +1125,15 @@ class PrintJob:
     @property
     def get_skipped_objects(self) -> str:
         return self._skipped_objects
+
+    @property
+    def get_ams_mapping(self) -> list:
+        """AMS unit and tray per slicer filament, None for filaments without a known slot."""
+        # print.mapping is part of the full status on newer firmware. Older printers only send
+        # ams_mapping, once at the start of a print.
+        if self._tray_mapping is not None:
+            return [tray_mapping_location(value) for value in self._tray_mapping]
+        return [ams_slot_location(index) for index in self.ams_mapping or []]
     
     @property
     def get_print_weights(self) -> dict:
@@ -1121,6 +1238,7 @@ class PrintJob:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.ams_mapping = data.get("ams_mapping", self.ams_mapping)
+        self._tray_mapping = data.get("mapping", self._tray_mapping)
         self._skipped_objects = data.get("s_obj", self._skipped_objects)
 
         # Initialize task data at startup.
@@ -1193,6 +1311,12 @@ class PrintJob:
                 # jump to 100% at the same time we see the PREPARE phase start but if we try and download then, the model file
                 # is not present.
                 LOGGER.debug("REACHED RUNNING WITHOUT DOWNLOADING MODEL")
+                self._update_task_data()
+
+            # The printer can refuse media transfers for the entire initial
+            # X1 retry window. Try again later while the same job is running.
+            elif self.gcode_state == "RUNNING" and time.monotonic() >= self._next_model_retry_at:
+                LOGGER.debug("RETRYING MISSING ACTIVE PRINT MEDIA")
                 self._update_task_data()
 
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
@@ -1439,11 +1563,21 @@ class PrintJob:
         filenames_to_try = []
 
         if self._subtask_name != '':
-            if self._subtask_name.endswith('.3mf'):
-                filenames_to_try.append(self._subtask_name)
-            else:
-                filenames_to_try.append(f"{self._subtask_name}.3mf")
-                filenames_to_try.append(f"{self._subtask_name}.gcode.3mf")
+            # The raw name is only worth trying when it could be a file name at all. One containing
+            # a path separator never is, and its truncated basename could match an unrelated file.
+            names = []
+            for task_name in task_name_variants(self._subtask_name):
+                if '/' not in task_name and '\\' not in task_name:
+                    names.append(task_name)
+                if has_illegal_filename_chars(task_name):
+                    names.append(encode_illegal_filename_chars(task_name))
+            names = list(dict.fromkeys(names))
+            for name in names:
+                if name.endswith('.3mf'):
+                    filenames_to_try.append(name)
+                else:
+                    filenames_to_try.append(f"{name}.3mf")
+                    filenames_to_try.append(f"{name}.gcode.3mf")
 
         if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
             if self.gcode_file.endswith('.3mf'):
@@ -1488,9 +1622,35 @@ class PrintJob:
                 if self._remote_model_matches(file, filename)
             ]
             if matches:
-                selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
+                ranked = sorted(matches, key=self._model_candidate_score, reverse=True)
+                selected = ranked[0]
                 LOGGER.debug(
                     f"Selected model candidate {selected.path} from {selected.source}/{selected.storage}"
+                )
+                # Aliases of the selected file first, then every other match as a
+                # fallback. A copy on a different storage volume is not an alias
+                # (_same_remote_media_file rejects it), but it is often the only
+                # copy the printer will actually serve.
+                aliases = self._remote_file_aliases(matches, selected)
+                remaining = [
+                    file for file in ranked
+                    if not self._same_remote_media_file(file, selected)
+                ]
+                return aliases + remaining
+
+        if self._subtask_name != "":
+            # No candidate spelling matched. Accept a file whose name matches the task name once
+            # case, separators and the substitution of illegal characters are allowed to differ.
+            pattern = model_name_pattern(html.unescape(self._subtask_name))
+            matches = [
+                file for file in remote_files
+                if pattern.fullmatch(strip_model_extension(file.basename))
+            ]
+            if matches:
+                selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
+                LOGGER.debug(
+                    f"Matched task name '{self._subtask_name}' to {selected.path} from "
+                    f"{selected.source}/{selected.storage} by pattern"
                 )
                 return self._remote_file_aliases(matches, selected)
 
@@ -2130,6 +2290,14 @@ class PrintJob:
         self._loaded_model_data = False
         self._client._device.cover_image.set_image(None)
         self._clear_pick_data()
+        # These figures describe one specific job. If they survive and the next
+        # print's 3mf is never found, the previous print's filament usage is
+        # reported as this one's.
+        self.print_weight = 0
+        self.print_length = 0
+        self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+        self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+        self.gcode_file_downloaded = ""
 
     def _clear_pick_data(self):
         LOGGER.debug("Clearing pick data")
@@ -2157,10 +2325,49 @@ class PrintJob:
         LOGGER.info(f"Remote media thread exiting. Elapsed time = {(end_time-start_time).seconds}s")
         self._ftpThread = None
 
+    def _try_active_cover_from_printer(self, sources: list[RemoteMediaSource]) -> bool:
+        """Load the active print's plate thumbnail directly from the printer."""
+        if not self.gcode_file or not self.plate_idx:
+            return False
+
+        metadata_dir = self.gcode_file.replace("\\", "/").rsplit("/", 1)[0]
+        cover_path = f"{metadata_dir}/plate_{self.plate_idx}.png"
+
+        for source in sources:
+            if source.name != Tcp6000MediaSource.name:
+                continue
+
+            remote_file = RemoteMediaFile(
+                name=os.path.basename(cover_path),
+                path=cover_path,
+                size=0,
+                media_type="model",
+                source=source.name,
+                storage="",
+            )
+            local_path = Path(self._client.cache_path) / "prints" / "active-cover.png"
+
+            try:
+                self._download_remote_file_atomic(source, remote_file, local_path)
+                data = local_path.read_bytes()
+                if data:
+                    self._client._device.cover_image.set_image(data)
+                    LOGGER.debug(f"Loaded active cover directly from {cover_path}")
+                    return True
+            except Exception as e:
+                LOGGER.debug(
+                    f"Direct active cover lookup failed for {cover_path}: "
+                    f"{type(e)} Args: {e}"
+                )
+
+        return False
+
     def _async_download_task_data_from_printer_worker(self):
         model_file_path = None
+        cover_loaded = False
         sources = self._remote_media_sources()
         try:
+            cover_loaded = self._try_active_cover_from_printer(sources)
             for i in range(1,13):
                 model_file_path = self._attempt_remote_model_download(sources)
                 if model_file_path is not None:
@@ -2174,6 +2381,9 @@ class PrintJob:
                         LOGGER.debug(f"Sleeping 5s for X1/H2/P2 retry")
                         time.sleep(5)
                         LOGGER.debug(f"Try #{i+1} for X1/H2/P2")
+                        # Retry active cover if TCP 6000 wasn't available on first attempt
+                        if not cover_loaded:
+                            cover_loaded = self._try_active_cover_from_printer(sources)
                 else:
                     break
         finally:
@@ -2181,6 +2391,9 @@ class PrintJob:
 
         if model_file_path is None:
             LOGGER.debug("No model file found.")
+            if not cover_loaded:
+                self._next_model_retry_at = time.monotonic() + 300
+                self._loaded_model_data = False
             return
 
         result = False
@@ -2193,7 +2406,15 @@ class PrintJob:
             # Open the 3mf zip archive
             with ZipFile(model_file_path) as archive:
                 # Extract the slicer XML config and parse the plate tree
-                plate = ElementTree.fromstring(archive.read('Metadata/slice_info.config')).find('plate')
+                slice_info = ElementTree.fromstring(archive.read('Metadata/slice_info.config'))
+                plate = slice_info.find('plate')
+                # "Export all sliced file" writes one <plate> per sliced plate. Use the one MQTT says is
+                # printing, falling back to the first plate as before when it isn't listed.
+                if self.plate_idx:
+                    for candidate in slice_info.findall('plate'):
+                        if candidate.find(f"metadata[@key='index'][@value='{self.plate_idx}']") is not None:
+                            plate = candidate
+                            break
                 
                 # Iterate through each config element and extract the data
                 # Example contents:
@@ -2412,31 +2633,39 @@ class PrintJob:
         else:
             LOGGER.debug("Updating bambu cloud task data found for printer.")
             # For local prints with FTP available, the printer's 3mf is the
-            # authoritative image source. Bambu Cloud's "latest task" can lag
-            # behind the active print and return a stale cover.
-            use_cloud_cover = not (self._print_type == "local" and self._client.ftp_enabled)
+            # authoritative source. Bambu Cloud's "latest task" can lag behind
+            # the active print, and a print started from the printer's own
+            # touchscreen registers no cloud task at all, so the newest one can
+            # belong to an arbitrarily older job.
+            use_cloud_task = not (self._print_type == "local" and self._client.ftp_enabled)
             url = self._task_data.get('cover', '')
-            if use_cloud_cover and url != "":
+            if use_cloud_task and url != "":
                 data = self._client.bambu_cloud.download(url)
                 self._client._device.cover_image.set_image(data)
 
-            self.print_length = self._task_data.get('length', self.print_length * 100) / 100
             self.print_bed_type = self._task_data.get('bedType', self.print_bed_type)
-            self.print_weight = self._task_data.get('weight', self.print_weight)
-            ams_print_data = self._task_data.get('amsDetailMapping', [])
-            if self.print_weight != 0:
-                for ams_data in ams_print_data:
-                    index = ams_data['ams']
-                    weight = ams_data['weight']
-                    if ams_slot_name(index) is not None:
-                        self._ams_print_weights[index] = weight
-                        self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
-                    else:
-                        # Common case is this is a machine without an AMS and we get index == 255 (not 254 as might be expected)
-                        # And probably also a machine with an AMS but you did a print from the external spool.
-                        # This could also hit if you have reconfigured your printer and removed an AMS.
-                        LOGGER.debug(f"AMS tray {index} not found in _ams_print_weights")
-                        LOGGER.debug(f"ams_print_data: {ams_print_data}")
+
+            # The cover was already guarded against that staleness. The print
+            # figures need the same guard: filament usage attributed to another
+            # job, and to that job's trays, is silently wrong rather than
+            # visibly missing.
+            if use_cloud_task:
+                self.print_length = self._task_data.get('length', self.print_length * 100) / 100
+                self.print_weight = self._task_data.get('weight', self.print_weight)
+                ams_print_data = self._task_data.get('amsDetailMapping', [])
+                if self.print_weight != 0:
+                    for ams_data in ams_print_data:
+                        index = ams_data['ams']
+                        weight = ams_data['weight']
+                        if ams_slot_name(index) is not None:
+                            self._ams_print_weights[index] = weight
+                            self._ams_print_lengths[index] = self.print_length * weight / self.print_weight
+                        else:
+                            # Common case is this is a machine without an AMS and we get index == 255 (not 254 as might be expected)
+                            # And probably also a machine with an AMS but you did a print from the external spool.
+                            # This could also hit if you have reconfigured your printer and removed an AMS.
+                            LOGGER.debug(f"AMS tray {index} not found in _ams_print_weights")
+                            LOGGER.debug(f"ams_print_data: {ams_print_data}")
 
             status = self._task_data['status']
             LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
@@ -3118,6 +3347,7 @@ class AMSInstance:
     drying_duration: int = 0
     drying_filament: str = ""
     connected_nozzle: str | None = None
+    status: str = "idle"
 
     def __init__(self, client, model, index):
         self.model = model
@@ -3144,13 +3374,28 @@ class AMSList:
 
     _nozzle_tray_index: dict
     _nozzle_ams_index: dict
+    _nozzle_target_ams_index: dict
+    _ams_status: int = 0
     _first_initialization_done: bool = False
 
     def __init__(self, client):
         self._client = client
         self._nozzle_tray_index = { 0: 0, 1: 0, 15: 0}
         self._nozzle_ams_index = { 0: 0, 1: 0, 15: 0}
+        self._nozzle_target_ams_index = { 0: 255, 1: 255, 15: 255}
         self.data = {}
+
+    @property
+    def target_ams_index(self):
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self._nozzle_target_ams_index[active_nozzle]
+
+    def _status_description(self) -> str:
+        main = (self._ams_status >> 8) & 0xFF
+        sub = self._ams_status & 0xFF
+        if main == AMS_STATUS_MAIN_FILAMENT_CHANGE:
+            return AMS_FILAMENT_CHANGE_STEPS.get(sub, AMS_STATUS_MAIN[main])
+        return AMS_STATUS_MAIN.get(main, "unknown")
 
     @property
     def active_ams_index(self):
@@ -3324,7 +3569,20 @@ class AMSList:
                         tray_now = entry["snow"]
                         self._nozzle_ams_index[entry["id"]] = tray_now >> 8
                         self._nozzle_tray_index[entry["id"]] = tray_now & 0xFF
+                    if "star" in entry:
+                        self._nozzle_target_ams_index[entry["id"]] = entry["star"] >> 8
         else:
+            tray_tar = ams_data.get('tray_tar')
+            if tray_tar is not None:
+                tray_tar = int(tray_tar)
+                if tray_tar >= 254:
+                    # 255 = no target (unload), 254 = external spool
+                    self._nozzle_target_ams_index[0] = 255
+                elif tray_tar >= 80:
+                    self._nozzle_target_ams_index[0] = tray_tar
+                else:
+                    self._nozzle_target_ams_index[0] = tray_tar >> 2
+
             tray_now = ams_data.get('tray_now')
             if tray_now is not None:
                 tray_now = int(tray_now)
@@ -3394,9 +3652,21 @@ class AMSList:
                     tray_id = int(tray['id'])
                     self.data[index].tray[tray_id].print_update(tray)
 
+        if data.get("ams_status") is not None:
+            self._ams_status = int(data["ams_status"])
+
+        # ams_status is reported once per printer. A filament change or a loaded filament is attributed to
+        # the AMS units involved (current or target tray); other states can't be attributed so go to every unit.
+        status = self._status_description()
+        is_tray_specific = ((self._ams_status >> 8) & 0xFF) in (AMS_STATUS_MAIN_FILAMENT_CHANGE, AMS_STATUS_MAIN_ASSIST)
+
         # Now that we've populated the AMS/Trays (if this is first time through), we must
         # loop over all the ams and trays to set active states correctly.
         for index in self.data:
+            if is_tray_specific and index not in (self.active_ams_index, self.target_ams_index):
+                self.data[index].status = AMS_STATUS_MAIN[AMS_STATUS_MAIN_IDLE]
+            else:
+                self.data[index].status = status
             self.data[index]._active = (index == self.active_ams_index)
             for tray_id, tray in enumerate(self.data[index].tray):
                 active_tray = (index == self.active_ams_index) and (self.active_tray_index == tray_id)
@@ -3766,11 +4036,13 @@ class StageAction:
     """Return Stage Action information"""
     _id: int
     _print_type: str
+    _gcode_state: str
     description: str
 
     def __init__(self):
         self._id = 255
         self._print_type = ""
+        self._gcode_state = ""
         self.description = get_current_stage(self._id)
 
     def print_update(self, data) -> bool:
@@ -3779,6 +4051,7 @@ class StageAction:
         self._print_type = data.get("print_type", self._print_type)
         if self._print_type.lower() not in PRINT_TYPE_OPTIONS:
             self._print_type = "unknown"
+        self._gcode_state = data.get("gcode_state", self._gcode_state)
 
         # New way it is presented
         self._id = int((data.get("stage") or {}).get("_id", self._id))
@@ -3786,6 +4059,9 @@ class StageAction:
         self._id = int(data.get("stg_cur", self._id))
         if (self._print_type == "idle") and (self._id == 0):
             # On boot the printer reports stg_cur == 0 incorrectly instead of 255. Attempt to correct for this.
+            self._id = 255
+        if self._gcode_state == "FAILED":
+            # After a cancelled print the printer keeps reporting the stage it was in. Nothing is running.
             self._id = 255
         self.description = get_current_stage(self._id)
 
@@ -4127,19 +4403,34 @@ class PrintFun:
     _int_value: int
     _encryption_enabled: bool
     _fired_encryption_enabled_event: bool
-    
+    _flag3_authorization_control: bool
+
     def __init__(self, client):
         self._value = ""
         self._client = client
         self._encryption_enabled = False
         self._int_value: int = 0
         self._fired_encryption_enabled_event = False
+        self._flag3_authorization_control = False
 
     def print_update(self, data: dict) -> bool:
         old_data = f"{self.__dict__}"
         self._value = data.get("fun", str(self._value))
         self._int_value = int(self._value, 16) if self._value else 0
-        self._encryption_enabled = (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+
+        # Some firmware reports an empty "fun" and signals the newer authorization
+        # control system through bit 16 of "flag3" instead. "flag3" is only present
+        # in full status frames, so latch the bit once it has been seen.
+        flag3 = data.get("flag3")
+        if isinstance(flag3, int) and (flag3 & Print_Flag3_Values.AUTHORIZATION_CONTROL) != 0:
+            self._flag3_authorization_control = True
+
+        if self._value:
+            # "fun" is authoritative whenever the printer reports it.
+            self._encryption_enabled = (self._int_value & Print_Fun_Values.MQTT_SIGNATURE_REQUIRED) != 0
+        else:
+            self._encryption_enabled = self._flag3_authorization_control
+
         if self._encryption_enabled:
             if not self._fired_encryption_enabled_event:
                 self._fired_encryption_enabled_event = True
@@ -4258,10 +4549,12 @@ class ExtruderTool:
     
 class Extruder:
     _active_nozzle_index: int
+    _active_nozzle: str | None
 
     def __init__(self, client):
         self._client = client
         self._active_nozzle_index = 0
+        self._active_nozzle = None
 
     def print_update (self, data):
         # Handle ext_tool update
@@ -4270,6 +4563,9 @@ class Extruder:
         extruder_state = data.get("device", {}).get("extruder", {}).get("state")
         if extruder_state is not None:
             self._active_nozzle_index = (extruder_state >> 4) & 0xF
+            # Index is 15 while switching nozzles (#1815), keep the last known side.
+            if self._active_nozzle_index in (0, 1):
+                self._active_nozzle = "right" if self._active_nozzle_index == 0 else "left"
                         
         return (old_data != f"{self.__dict__}")
 
@@ -4277,6 +4573,9 @@ class Extruder:
     def active_nozzle_index(self):
         return self._active_nozzle_index
 
+    @property
+    def active_nozzle(self) -> str | None:
+        return self._active_nozzle
 
 class FilamentTrackSwitch:
     """Filament Track Switch routing two AMS inputs to either extruder."""
