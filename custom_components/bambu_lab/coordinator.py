@@ -585,7 +585,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if ams_index == 255:
             # Bambu Studio sends slot_id 0 here too, an X2D hangs without it
             command['print']['slot_id'] = 0
-        command['print']['tray_color'] = data.get('tray_color', '')
+        command['print']['tray_color'] = tray_color
         command['print']['tray_type'] = data.get('tray_type', '')
         command['print']['nozzle_temp_min'] = data.get('nozzle_temp_min', '200')
         command['print']['nozzle_temp_max'] = data.get('nozzle_temp_max', '240')

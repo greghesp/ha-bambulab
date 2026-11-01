@@ -405,7 +405,7 @@
           "changing_filament": "Cambiando Filamento",
           "m400_pause": "Pausa M400",
           "paused_filament_runout": "In pausa a causa dell'esaurimento del filamento",
-          "heating_hotend": "Riscaldando Hotetend",
+          "heating_hotend": "Riscaldando Hotend",
           "calibrating_extrusion": "Calibrando l'estrusore",
           "scanning_bed_surface": "Scansionando la superfice del piatto",
           "inspecting_first_layer": "Ispezionando primo strato",
@@ -728,7 +728,7 @@
         "name": "Temperatura target dell'ugello sinistro"
       },
       "right_nozzle_temp": {
-        "name": "Temperatura dell'ugello giusto"
+        "name": "Temperatura dell'ugello destro"
       },
       "right_target_nozzle_temp": {
         "name": "Temperatura target dell'ugello destro"
@@ -757,10 +757,10 @@
         }
       },
       "right_nozzle_diameter": {
-        "name": "Dimensione giusta dell'ugello"
+        "name": "Dimensione dell'ugello destro"
       },
       "right_nozzle_type": {
-        "name": "Tipo di ugello giusto",
+        "name": "Tipo di ugello destro",
         "state": {
           "hardened_steel": "Acciaio temprato",
           "stainless_steel": "Acciaio inossidabile",
