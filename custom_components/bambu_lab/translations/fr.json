@@ -900,6 +900,73 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} temps utilisé"
+      },
+      "makerworld_boosts_received": {
+        "name": "Boosts reçus"
+      },
+      "makerworld_prints_total": {
+        "name": "Impressions incl. profils d'impression"
+      },
+      "makerworld_downloads_total": {
+        "name": "Téléchargements inclus. profils d'impression"
+      },
+      "makerworld_points": {
+        "name": "Points"
+      },
+      "makerworld_points_earned": {
+        "name": "Points gagnés"
+      },
+      "makerworld_points_spent": {
+        "name": "Points dépensés"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Points exclusifs"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Jetons de boost"
+      },
+      "makerworld_boosts_used": {
+        "name": "Boosts utilisés"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Boosts expirés"
+      },
+      "makerworld_downloads": {
+        "name": "Téléchargements"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Imprimer les téléchargements de profils"
+      },
+      "makerworld_prints": {
+        "name": "Impressions"
+      },
+      "makerworld_instance_prints": {
+        "name": "Imprimer les impressions de profil"
+      },
+      "makerworld_designs": {
+        "name": "Modèles publiés"
+      },
+      "makerworld_likes": {
+        "name": "Goûts"
+      },
+      "makerworld_collections": {
+        "name": "Collecte"
+      },
+      "makerworld_followers": {
+        "name": "Abonnés"
+      },
+      "makerworld_following": {
+        "name": "Suivant"
+      },
+      "makerworld_level": {
+        "name": "Niveau"
+      },
+      "active_nozzle": {
+        "name": "Buse active",
+        "state": {
+          "left": "Gauche",
+          "right": "Droite"
+        }
       }
     },
     "camera": {

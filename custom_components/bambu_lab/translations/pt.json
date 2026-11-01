@@ -880,6 +880,93 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} usou tempo"
+      },
+      "makerworld_boosts_received": {
+        "name": "Reforços recebidos"
+      },
+      "makerworld_prints_total": {
+        "name": "Impressões incl. imprimir perfis"
+      },
+      "makerworld_downloads_total": {
+        "name": "Downloads incluídos. imprimir perfis"
+      },
+      "makerworld_points": {
+        "name": "Pontos"
+      },
+      "makerworld_points_earned": {
+        "name": "Pontos ganhos"
+      },
+      "makerworld_points_spent": {
+        "name": "Pontos gastos"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Pontos exclusivos"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Aumentar tokens"
+      },
+      "makerworld_boosts_used": {
+        "name": "Reforços usados"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Os reforços expiraram"
+      },
+      "makerworld_downloads": {
+        "name": "Transferências"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Imprimir downloads de perfil"
+      },
+      "makerworld_prints": {
+        "name": "Impressões"
+      },
+      "makerworld_instance_prints": {
+        "name": "Imprimir impressões de perfil"
+      },
+      "makerworld_designs": {
+        "name": "Modelos publicados"
+      },
+      "makerworld_likes": {
+        "name": "Curtidas"
+      },
+      "makerworld_collections": {
+        "name": "Coleta"
+      },
+      "makerworld_followers": {
+        "name": "Seguidores"
+      },
+      "makerworld_following": {
+        "name": "Seguindo"
+      },
+      "makerworld_level": {
+        "name": "Nível"
+      },
+      "active_nozzle": {
+        "name": "Bocal ativo",
+        "state": {
+          "left": "Esquerda",
+          "right": "Certo"
+        }
+      },
+      "ams_status": {
+        "name": "Status",
+        "state": {
+          "idle": "Parado",
+          "changing_filament": "Troca de filamento",
+          "heating_nozzle": "Bocal de aquecimento",
+          "cutting_filament": "Filamento de corte",
+          "pulling_back_filament": "Puxando o filamento atual",
+          "pushing_new_filament": "Empurrando novo filamento",
+          "purging_old_filament": "Purgando filamento antigo",
+          "checking_position": "Verificando a posição do filamento",
+          "rfid_identifying": "Identificando RFID",
+          "filament_loaded": "Filamento carregado",
+          "calibration": "Calibração",
+          "cold_pull": "Puxada a frio",
+          "self_check": "Autoverificação",
+          "debug": "Depurar",
+          "unknown": "Desconhecido"
+        }
       }
     },
     "camera": {

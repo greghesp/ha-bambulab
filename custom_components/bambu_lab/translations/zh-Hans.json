@@ -880,6 +880,93 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "热端 {hotend_id} 使用时间"
+      },
+      "makerworld_boosts_received": {
+        "name": "收到的奖励"
+      },
+      "makerworld_prints_total": {
+        "name": "印刷品包括。打印配置文件"
+      },
+      "makerworld_downloads_total": {
+        "name": "下载包括。打印配置文件"
+      },
+      "makerworld_points": {
+        "name": "积分"
+      },
+      "makerworld_points_earned": {
+        "name": "获得积分"
+      },
+      "makerworld_points_spent": {
+        "name": "花费积分"
+      },
+      "makerworld_points_exclusive": {
+        "name": "专属积分"
+      },
+      "makerworld_boost_tokens": {
+        "name": "提升代币"
+      },
+      "makerworld_boosts_used": {
+        "name": "使用的提升"
+      },
+      "makerworld_boosts_expired": {
+        "name": "奖励已过期"
+      },
+      "makerworld_downloads": {
+        "name": "下载"
+      },
+      "makerworld_instance_downloads": {
+        "name": "打印资料下载"
+      },
+      "makerworld_prints": {
+        "name": "印刷"
+      },
+      "makerworld_instance_prints": {
+        "name": "打印个人资料打印"
+      },
+      "makerworld_designs": {
+        "name": "已发布型号"
+      },
+      "makerworld_likes": {
+        "name": "喜欢"
+      },
+      "makerworld_collections": {
+        "name": "收藏"
+      },
+      "makerworld_followers": {
+        "name": "追随者"
+      },
+      "makerworld_following": {
+        "name": "下列的"
+      },
+      "makerworld_level": {
+        "name": "等级"
+      },
+      "active_nozzle": {
+        "name": "主动喷嘴",
+        "state": {
+          "left": "左边",
+          "right": "正确的"
+        }
+      },
+      "ams_status": {
+        "name": "地位",
+        "state": {
+          "idle": "闲置的",
+          "changing_filament": "更换灯丝",
+          "heating_nozzle": "加热喷嘴",
+          "cutting_filament": "切割灯丝",
+          "pulling_back_filament": "拉回电流灯丝",
+          "pushing_new_filament": "推新丝",
+          "purging_old_filament": "清除旧灯丝",
+          "checking_position": "检查灯丝位置",
+          "rfid_identifying": "识别射频识别",
+          "filament_loaded": "灯丝加载",
+          "calibration": "校准",
+          "cold_pull": "冷拉",
+          "self_check": "自检",
+          "debug": "调试",
+          "unknown": "未知"
+        }
       }
     },
     "camera": {

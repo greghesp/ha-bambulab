@@ -880,6 +880,93 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "L'hotend {hotend_id} ha utilizzato il tempo"
+      },
+      "makerworld_boosts_received": {
+        "name": "Boost ricevuti"
+      },
+      "makerworld_prints_total": {
+        "name": "Stampe incl. profili di stampa"
+      },
+      "makerworld_downloads_total": {
+        "name": "Download incl. profili di stampa"
+      },
+      "makerworld_points": {
+        "name": "Punti"
+      },
+      "makerworld_points_earned": {
+        "name": "Punti guadagnati"
+      },
+      "makerworld_points_spent": {
+        "name": "Punti spesi"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Punti esclusivi"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Aumenta i gettoni"
+      },
+      "makerworld_boosts_used": {
+        "name": "Potenziamenti utilizzati"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Boost scaduti"
+      },
+      "makerworld_downloads": {
+        "name": "Download"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Download dei profili di stampa"
+      },
+      "makerworld_prints": {
+        "name": "Stampe"
+      },
+      "makerworld_instance_prints": {
+        "name": "Il profilo di stampa viene stampato"
+      },
+      "makerworld_designs": {
+        "name": "Modelli pubblicati"
+      },
+      "makerworld_likes": {
+        "name": "Mi piace"
+      },
+      "makerworld_collections": {
+        "name": "Raccoglie"
+      },
+      "makerworld_followers": {
+        "name": "Seguaci"
+      },
+      "makerworld_following": {
+        "name": "Seguente"
+      },
+      "makerworld_level": {
+        "name": "Livello"
+      },
+      "active_nozzle": {
+        "name": "Ugello attivo",
+        "state": {
+          "left": "Sinistra",
+          "right": "Giusto"
+        }
+      },
+      "ams_status": {
+        "name": "Stato",
+        "state": {
+          "idle": "Oziare",
+          "changing_filament": "Cambiare filamento",
+          "heating_nozzle": "Ugello riscaldante",
+          "cutting_filament": "Taglio del filamento",
+          "pulling_back_filament": "Tirare indietro il filamento di corrente",
+          "pushing_new_filament": "Spingendo il nuovo filamento",
+          "purging_old_filament": "Eliminazione del vecchio filamento",
+          "checking_position": "Controllo della posizione del filamento",
+          "rfid_identifying": "Identificazione dell'RFID",
+          "filament_loaded": "Filamento caricato",
+          "calibration": "Calibrazione",
+          "cold_pull": "Tirata fredda",
+          "self_check": "Autocontrollo",
+          "debug": "Debug",
+          "unknown": "Sconosciuto"
+        }
       }
     },
     "camera": {

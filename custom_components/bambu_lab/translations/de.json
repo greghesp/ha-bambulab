@@ -940,6 +940,33 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} verwendete Zeit"
+      },
+      "active_nozzle": {
+        "name": "Aktive Düse",
+        "state": {
+          "left": "Links",
+          "right": "Rechts"
+        }
+      },
+      "ams_status": {
+        "name": "Status",
+        "state": {
+          "idle": "Leerlauf",
+          "changing_filament": "Filament wechseln",
+          "heating_nozzle": "Heizdüse",
+          "cutting_filament": "Filament schneiden",
+          "pulling_back_filament": "Zurückziehen des aktuellen Filaments",
+          "pushing_new_filament": "Neues Filament einschieben",
+          "purging_old_filament": "Altes Filament entfernen",
+          "checking_position": "Überprüfung der Filamentposition",
+          "rfid_identifying": "RFID identifizieren",
+          "filament_loaded": "Filament geladen",
+          "calibration": "Kalibrierung",
+          "cold_pull": "Kaltzug",
+          "self_check": "Selbstkontrolle",
+          "debug": "Debuggen",
+          "unknown": "Unbekannt"
+        }
       }
     },
     "camera": {

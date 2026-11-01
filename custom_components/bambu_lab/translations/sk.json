@@ -880,6 +880,93 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} využil čas"
+      },
+      "makerworld_boosts_received": {
+        "name": "Prijaté posilnenia"
+      },
+      "makerworld_prints_total": {
+        "name": "Výtlačky vrát. tlačové profily"
+      },
+      "makerworld_downloads_total": {
+        "name": "Sťahovanie vrátane tlačové profily"
+      },
+      "makerworld_points": {
+        "name": "Body"
+      },
+      "makerworld_points_earned": {
+        "name": "Získané body"
+      },
+      "makerworld_points_spent": {
+        "name": "Spotrebované body"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Exkluzívne body"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Zvýšiť tokeny"
+      },
+      "makerworld_boosts_used": {
+        "name": "Používané posilňovače"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Platnosť zosilnení vypršala"
+      },
+      "makerworld_downloads": {
+        "name": "sťahovanie"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Tlač profilov na stiahnutie"
+      },
+      "makerworld_prints": {
+        "name": "Výtlačky"
+      },
+      "makerworld_instance_prints": {
+        "name": "Tlač profilu"
+      },
+      "makerworld_designs": {
+        "name": "Publikované modely"
+      },
+      "makerworld_likes": {
+        "name": "Páči sa mi"
+      },
+      "makerworld_collections": {
+        "name": "Zbiera"
+      },
+      "makerworld_followers": {
+        "name": "Nasledovníci"
+      },
+      "makerworld_following": {
+        "name": "Sledovanie"
+      },
+      "makerworld_level": {
+        "name": "úroveň"
+      },
+      "active_nozzle": {
+        "name": "Aktívna tryska",
+        "state": {
+          "left": "Vľavo",
+          "right": "Správne"
+        }
+      },
+      "ams_status": {
+        "name": "Stav",
+        "state": {
+          "idle": "Nečinný",
+          "changing_filament": "Výmena vlákna",
+          "heating_nozzle": "Vyhrievacia tryska",
+          "cutting_filament": "Rezacie vlákno",
+          "pulling_back_filament": "Sťahovanie vlákna prúdu",
+          "pushing_new_filament": "Zatlačenie nového vlákna",
+          "purging_old_filament": "Čistenie starého vlákna",
+          "checking_position": "Kontrola polohy vlákna",
+          "rfid_identifying": "Identifikácia RFID",
+          "filament_loaded": "Nabité vlákno",
+          "calibration": "Kalibrácia",
+          "cold_pull": "Studený ťah",
+          "self_check": "Samokontrola",
+          "debug": "Debug",
+          "unknown": "Neznámy"
+        }
       }
     },
     "camera": {

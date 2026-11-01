@@ -880,6 +880,93 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Tiempo de uso del hotend {hotend_id}"
+      },
+      "makerworld_boosts_received": {
+        "name": "Impulsos recibidos"
+      },
+      "makerworld_prints_total": {
+        "name": "Impresiones incluidas. perfiles de impresión"
+      },
+      "makerworld_downloads_total": {
+        "name": "Descargas incl. perfiles de impresión"
+      },
+      "makerworld_points": {
+        "name": "Agujas"
+      },
+      "makerworld_points_earned": {
+        "name": "Puntos ganados"
+      },
+      "makerworld_points_spent": {
+        "name": "Puntos gastados"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Puntos exclusivos"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Fichas de impulso"
+      },
+      "makerworld_boosts_used": {
+        "name": "Impulsos usados"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Los aumentos expiraron"
+      },
+      "makerworld_downloads": {
+        "name": "Descargas"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Descargas de perfiles de impresión"
+      },
+      "makerworld_prints": {
+        "name": "Huellas dactilares"
+      },
+      "makerworld_instance_prints": {
+        "name": "Imprimir impresiones de perfil"
+      },
+      "makerworld_designs": {
+        "name": "Modelos publicados"
+      },
+      "makerworld_likes": {
+        "name": "Gustos"
+      },
+      "makerworld_collections": {
+        "name": "Colecciona"
+      },
+      "makerworld_followers": {
+        "name": "Seguidores"
+      },
+      "makerworld_following": {
+        "name": "Siguiente"
+      },
+      "makerworld_level": {
+        "name": "Nivel"
+      },
+      "active_nozzle": {
+        "name": "Boquilla activa",
+        "state": {
+          "left": "Izquierda",
+          "right": "Bien"
+        }
+      },
+      "ams_status": {
+        "name": "Estado",
+        "state": {
+          "idle": "Inactivo",
+          "changing_filament": "Cambiando de filamento",
+          "heating_nozzle": "Boquilla calefactora",
+          "cutting_filament": "Filamento de corte",
+          "pulling_back_filament": "Retirando el filamento actual",
+          "pushing_new_filament": "Empujando nuevo filamento",
+          "purging_old_filament": "Purgar filamento viejo",
+          "checking_position": "Comprobando la posición del filamento",
+          "rfid_identifying": "Identificación de RFID",
+          "filament_loaded": "filamento cargado",
+          "calibration": "Calibración",
+          "cold_pull": "tirón en frío",
+          "self_check": "Autocomprobación",
+          "debug": "Depurar",
+          "unknown": "Desconocido"
+        }
       }
     },
     "camera": {

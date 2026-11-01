@@ -880,6 +880,93 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Χρόνος χρήσης του Hotend {hotend_id}"
+      },
+      "makerworld_boosts_received": {
+        "name": "Ενισχύσεις ελήφθησαν"
+      },
+      "makerworld_prints_total": {
+        "name": "Εκτυπώσεις συμπεριλαμβάνονται. προφίλ εκτύπωσης"
+      },
+      "makerworld_downloads_total": {
+        "name": "Λήψεις συμ. προφίλ εκτύπωσης"
+      },
+      "makerworld_points": {
+        "name": "Πόντοι"
+      },
+      "makerworld_points_earned": {
+        "name": "Κερδισμένοι πόντοι"
+      },
+      "makerworld_points_spent": {
+        "name": "Πόντοι που ξοδεύτηκαν"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Αποκλειστικά σημεία"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Boost tokens"
+      },
+      "makerworld_boosts_used": {
+        "name": "Ενισχύσεις που χρησιμοποιούνται"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Οι ενισχύσεις έληξαν"
+      },
+      "makerworld_downloads": {
+        "name": "Λήψεις"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Εκτύπωση λήψεων προφίλ"
+      },
+      "makerworld_prints": {
+        "name": "Εκτυπώσεις"
+      },
+      "makerworld_instance_prints": {
+        "name": "Εκτυπώστε εκτυπώσεις προφίλ"
+      },
+      "makerworld_designs": {
+        "name": "Δημοσιευμένα μοντέλα"
+      },
+      "makerworld_likes": {
+        "name": "Μου αρέσει"
+      },
+      "makerworld_collections": {
+        "name": "Συλλέγει"
+      },
+      "makerworld_followers": {
+        "name": "Οπαδοί"
+      },
+      "makerworld_following": {
+        "name": "Εξής"
+      },
+      "makerworld_level": {
+        "name": "Επίπεδο"
+      },
+      "active_nozzle": {
+        "name": "Ενεργό ακροφύσιο",
+        "state": {
+          "left": "Αριστερά",
+          "right": "Δικαίωμα"
+        }
+      },
+      "ams_status": {
+        "name": "Κατάσταση",
+        "state": {
+          "idle": "Αεργος",
+          "changing_filament": "Αλλαγή νήματος",
+          "heating_nozzle": "Ακροφύσιο θέρμανσης",
+          "cutting_filament": "Νηματάκι κοπής",
+          "pulling_back_filament": "Τραβώντας προς τα πίσω το τρέχον νήμα",
+          "pushing_new_filament": "Σπρώξιμο νέου νήματος",
+          "purging_old_filament": "Καθαρισμός παλαιού νήματος",
+          "checking_position": "Έλεγχος της θέσης του νήματος",
+          "rfid_identifying": "Αναγνώριση RFID",
+          "filament_loaded": "Το νήμα έχει φορτωθεί",
+          "calibration": "Διαμέτρηση",
+          "cold_pull": "Ψυχρό τράβηγμα",
+          "self_check": "Αυτοέλεγχος",
+          "debug": "Εντοπισμός σφαλμάτων",
+          "unknown": "Αγνωστος"
+        }
       }
     },
     "camera": {
