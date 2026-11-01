@@ -1,7 +1,7 @@
 import logging
 import unittest
-from unittest.mock import call, MagicMock
-from datetime import datetime
+from unittest.mock import call, MagicMock, patch
+from datetime import datetime, timezone
 import os
 import json
 import tempfile
@@ -25,6 +25,11 @@ from pybambu.models import (
     StageAction,
     Temperature,
     ams_slot_name,
+)
+from pybambu.media_sources import (
+    Ftps990MediaSource,
+    RemoteMediaFile,
+    Tcp6000MediaSource,
 )
 from pybambu.const import FansEnum, Printers
 
@@ -67,6 +72,34 @@ class TestPrintJob(unittest.TestCase):
         self.assertIsNone(ams_slot_name(136))
         self.assertIsNone(ams_slot_name(255))
         self.assertIsNone(ams_slot_name(-1))
+
+    def test_ams_mapping_from_tray_mapping(self):
+        # Real H2C job: AMS HT unit 129, then AMS unit 1 trays 1, 4 and 3, plus an unused filament.
+        self.print_job.print_update({"mapping": [33024, 256, 259, 258, 65535]})
+        self.assertEqual(self.print_job.get_ams_mapping, [
+            {"ams": 129, "tray": 0},
+            {"ams": 1, "tray": 0},
+            {"ams": 1, "tray": 3},
+            {"ams": 1, "tray": 2},
+            None,
+        ])
+
+    def test_ams_mapping_external_spool(self):
+        self.print_job.print_update({"mapping": [65280]})
+        self.assertEqual(self.print_job.get_ams_mapping, [{"ams": 255, "tray": 0}])
+
+    def test_ams_mapping_falls_back_to_slot_indexes(self):
+        # Printers without print.mapping only send ams_mapping with flat slot indexes.
+        self.print_job.print_update({"ams_mapping": [5, 16, 0]})
+        self.assertEqual(self.print_job.get_ams_mapping, [
+            {"ams": 1, "tray": 1},
+            {"ams": 128, "tray": 0},
+            {"ams": 0, "tray": 0},
+        ])
+
+    def test_ams_mapping_prefers_tray_mapping(self):
+        self.print_job.print_update({"ams_mapping": [0], "mapping": [32768]})
+        self.assertEqual(self.print_job.get_ams_mapping, [{"ams": 128, "tray": 0}])
 
     def test_get_print_weights_includes_ams_ht(self):
         self.client._device.external_spool[0].active = False
@@ -159,6 +192,34 @@ class TestPrintJob(unittest.TestCase):
         self.client.bambu_cloud.download.assert_not_called()
         self.client._device.cover_image.set_image.assert_not_called()
 
+    def test_active_cover_loads_from_current_gcode_metadata_path(self):
+        """The active plate thumbnail can be loaded without finding the full 3mf."""
+        self.print_job.gcode_file = "/data/Metadata/plate_1.gcode"
+        self.print_job.plate_idx = 1
+
+        source = MagicMock()
+        source.name = "tcp6000"
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+
+            def download_cover(_source, remote_file, local_path, progress_callback=None):
+                self.assertEqual(remote_file.path, "/data/Metadata/plate_1.png")
+                Path(local_path).parent.mkdir(parents=True, exist_ok=True)
+                Path(local_path).write_bytes(b"active-cover")
+                return len(b"active-cover")
+
+            self.print_job._download_remote_file_atomic = MagicMock(
+                side_effect=download_cover
+            )
+
+            result = self.print_job._try_active_cover_from_printer([source])
+
+        self.assertTrue(result)
+        self.client._device.cover_image.set_image.assert_called_once_with(
+            b"active-cover"
+        )
+
     def test_ftp_cover_uses_active_mqtt_plate(self):
         """The active MQTT plate wins when archive metadata points elsewhere."""
         self.client.ftp_enabled = True
@@ -189,6 +250,56 @@ class TestPrintJob(unittest.TestCase):
         self.assertTrue(result)
         self.client._device.cover_image.set_image.assert_called_once_with(b"active-plate-cover")
 
+    def test_active_cover_is_retried_when_x1c_media_is_not_ready(self):
+        """X1C retries the active cover while its media endpoint starts up."""
+        self.client._device.supports_feature.return_value = False
+        sources = [MagicMock()]
+        self.print_job._remote_media_sources = MagicMock(return_value=sources)
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._close_remote_media_sources = MagicMock()
+        self.print_job._try_active_cover_from_printer = MagicMock(
+            side_effect=[False, True]
+        )
+
+        with patch("pybambu.models.time.sleep") as sleep:
+            self.print_job._async_download_task_data_from_printer_worker()
+
+        self.print_job._try_active_cover_from_printer.assert_has_calls(
+            [call(sources), call(sources)]
+        )
+        self.assertEqual(
+            self.print_job._try_active_cover_from_printer.call_count,
+            2,
+        )
+        self.assertEqual(sleep.call_count, 11)
+
+    def test_missing_active_cover_is_retried_after_initial_window(self):
+        """A failed initial download is retried on a later running update."""
+        self.client._device.supports_feature.return_value = False
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job._loaded_model_data = True
+        self.print_job._remote_media_sources = MagicMock(return_value=[])
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._close_remote_media_sources = MagicMock()
+        self.print_job._try_active_cover_from_printer = MagicMock(return_value=False)
+
+        with patch("pybambu.models.time.sleep"), patch(
+            "pybambu.models.time.monotonic", return_value=1000
+        ):
+            self.print_job._async_download_task_data_from_printer_worker()
+
+        self.assertFalse(self.print_job._loaded_model_data)
+        self.assertEqual(self.print_job._next_model_retry_at, 1300)
+
+        self.print_job._update_task_data = MagicMock()
+        with patch("pybambu.models.time.monotonic", return_value=1299):
+            self.print_job.print_update({"gcode_state": "RUNNING"})
+        self.print_job._update_task_data.assert_not_called()
+
+        with patch("pybambu.models.time.monotonic", return_value=1300):
+            self.print_job.print_update({"gcode_state": "RUNNING"})
+        self.print_job._update_task_data.assert_called_once_with()
+
     def test_slice_info_weight_is_a_float(self):
         """The 3MF stores the weight as text; print_weight is a float everywhere else."""
         self.client.ftp_enabled = True
@@ -218,6 +329,90 @@ class TestPrintJob(unittest.TestCase):
 
         self.assertEqual(self.print_job.print_weight, 49.59)
         self.assertEqual(self.print_job.get_print_weights, {"External Spool": 49.59})
+
+    def _parse_multi_plate_3mf(self, plate_idx, extra_covers=()):
+        """Run the FTP worker over a two plate 3MF, as written by "Export all sliced file".
+
+        Bambu Studio writes one <plate> per sliced plate, so the indices need not be contiguous.
+        Returns the contents of the gcode file the worker extracted.
+        """
+        self.client.ftp_enabled = True
+        self.client._device.supports_feature.return_value = False
+        self.client._device.external_spool[0].active = False
+        self.print_job.plate_idx = plate_idx
+        self.print_job.ams_mapping = [2]
+        self.print_job.prune_print_history_files = MagicMock()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            model_path = os.path.join(temp_dir, "current.3mf")
+            with ZipFile(model_path, "w") as archive:
+                archive.writestr(
+                    "Metadata/slice_info.config",
+                    '<config>'
+                    '<plate><metadata key="index" value="1" /><metadata key="weight" value="12.5" />'
+                    '<filament id="1" type="PLA" used_m="4.2" used_g="12.5" /></plate>'
+                    '<plate><metadata key="index" value="3" /><metadata key="weight" value="87.25" />'
+                    '<filament id="1" type="PLA" used_m="29.1" used_g="87.25" /></plate>'
+                    '</config>',
+                )
+                for plate, bed_type in (("1", "cool_plate"), ("3", "textured_plate")):
+                    archive.writestr(f"Metadata/plate_{plate}.png", f"plate-{plate}-cover".encode())
+                    archive.writestr(f"Metadata/plate_{plate}.gcode", f"plate-{plate}-gcode".encode())
+                    archive.writestr(f"Metadata/plate_{plate}.json", json.dumps({"bed_type": bed_type}))
+                for plate in extra_covers:
+                    archive.writestr(f"Metadata/plate_{plate}.png", f"plate-{plate}-cover".encode())
+
+            self.print_job._remote_media_sources = MagicMock(return_value=[MagicMock()])
+            self.print_job._attempt_remote_model_download = MagicMock(return_value=model_path)
+            self.print_job._close_remote_media_sources = MagicMock()
+
+            self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+
+            with open(os.path.join(temp_dir, self.print_job.gcode_file_downloaded), "rb") as gcode:
+                return gcode.read()
+
+    def test_multi_plate_3mf_uses_active_plate_metadata(self):
+        """Weight, filaments, gcode and bed come from the plate MQTT says is printing, not plate 1."""
+        gcode = self._parse_multi_plate_3mf(plate_idx=3)
+
+        self.client._device.cover_image.set_image.assert_called_once_with(b"plate-3-cover")
+        self.assertEqual(self.print_job.print_weight, 87.25)
+        self.assertEqual(self.print_job.print_length, 29.1)
+        self.assertEqual(self.print_job.get_print_weights, {"AMS 1 Tray 3": 87.25})
+        self.assertEqual(self.print_job.get_print_lengths, {"AMS 1 Tray 3": 29.1})
+        self.assertEqual(self.print_job.print_bed_type, "textured_plate")
+        self.assertEqual(gcode, b"plate-3-gcode")
+
+    def test_multi_plate_3mf_without_active_plate_uses_first_plate(self):
+        """With no plate_idx from MQTT the first plate is used, as before."""
+        gcode = self._parse_multi_plate_3mf(plate_idx=0)
+
+        self.client._device.cover_image.set_image.assert_called_once_with(b"plate-1-cover")
+        self.assertEqual(self.print_job.print_weight, 12.5)
+        self.assertEqual(self.print_job.print_bed_type, "cool_plate")
+        self.assertEqual(gcode, b"plate-1-gcode")
+
+    def test_multi_plate_3mf_with_string_active_plate_uses_that_plate(self):
+        """A plate_idx sent as a string selects the same plate as the int."""
+        gcode = self._parse_multi_plate_3mf(plate_idx="3")
+
+        self.assertEqual(self.print_job.print_weight, 87.25)
+        self.assertEqual(self.print_job.print_bed_type, "textured_plate")
+        self.assertEqual(gcode, b"plate-3-gcode")
+
+    def test_multi_plate_3mf_with_unlisted_active_plate_uses_first_plate(self):
+        """A plate_idx with no <plate> in slice_info selects the first plate's data.
+
+        Only the plate selection is pinned here. The cover lookup from #2112 still reads
+        plate_<plate_idx>.png, so the archive carries one; a real export has no cover for an
+        unlisted plate, and there the worker stops at that read on main as well.
+        """
+        gcode = self._parse_multi_plate_3mf(plate_idx=2, extra_covers=("2",))
+
+        self.client._device.cover_image.set_image.assert_called_once_with(b"plate-2-cover")
+        self.assertEqual(self.print_job.print_weight, 12.5)
+        self.assertEqual(self.print_job.print_bed_type, "cool_plate")
+        self.assertEqual(gcode, b"plate-1-gcode")
 
     def test_prune_cleans_stale_part_files_even_when_pruning_disabled(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -265,6 +460,220 @@ class TestPrintJob(unittest.TestCase):
             for sidecar in sidecars:
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
+
+    def test_model_selection_keeps_other_storage_copies_as_fallback(self):
+        """A copy on another volume stays available when the preferred one cannot be read."""
+        emmc = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/userdata/model/history/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Tcp6000MediaSource.name,
+            storage="emmc",
+            modified=datetime(2026, 9, 21, 22, 42, tzinfo=timezone.utc),
+        )
+        sdcard = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 22, 40, tzinfo=timezone.utc),
+        )
+
+        selected = self.print_job._select_model_files(
+            [emmc, sdcard], ["dragon.gcode.3mf"]
+        )
+
+        self.assertEqual([emmc, sdcard], selected)
+
+    def test_model_selection_returns_every_match_exactly_once(self):
+        """The aliases/remaining split is a partition: nothing lost, nothing repeated."""
+        files = [
+            RemoteMediaFile(
+                name="widget.gcode.3mf",
+                path="/cache/widget.gcode.3mf",
+                size=1000,
+                media_type="model",
+                source=Tcp6000MediaSource.name,
+                storage="emmc",
+                modified=datetime(2026, 9, 22, 10, 0, tzinfo=timezone.utc),
+            ),
+            RemoteMediaFile(
+                name="widget.gcode.3mf",
+                path="/widget.gcode.3mf",
+                size=1000,
+                media_type="model",
+                source=Ftps990MediaSource.name,
+                storage="external",
+                modified=datetime(2026, 9, 22, 9, 0, tzinfo=timezone.utc),
+            ),
+            RemoteMediaFile(
+                name="widget.gcode.3mf",
+                path="/cache/widget.gcode.3mf",
+                size=1000,
+                media_type="model",
+                source=Ftps990MediaSource.name,
+                storage="external",
+                modified=datetime(2026, 9, 22, 8, 0, tzinfo=timezone.utc),
+            ),
+        ]
+
+        selected = self.print_job._select_model_files(files, ["widget.gcode.3mf"])
+
+        self.assertEqual(len(files), len(selected))
+        for file in files:
+            self.assertEqual(1, selected.count(file))
+
+    def test_model_download_falls_through_when_the_preferred_copy_fails(self):
+        """A failed download on the first candidate is retried on the next."""
+        emmc = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/userdata/model/history/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Tcp6000MediaSource.name,
+            storage="emmc",
+            modified=datetime(2026, 9, 21, 22, 42, tzinfo=timezone.utc),
+        )
+        sdcard = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 22, 40, tzinfo=timezone.utc),
+        )
+
+        tcp_source = MagicMock()
+        tcp_source.name = Tcp6000MediaSource.name
+        ftp_source = MagicMock()
+        ftp_source.name = Ftps990MediaSource.name
+
+        self.print_job._subtask_name = "dragon"
+        self.print_job.gcode_file = ""
+        self.print_job._collect_remote_files = MagicMock(return_value=[emmc, sdcard])
+        self.print_job._remote_file_is_stable = MagicMock(return_value=True)
+
+        def download(source, remote_file, progress_callback=None):
+            # Mirrors the real wrapper, which logs and returns None on failure.
+            return None if remote_file is emmc else "/cache/prints/dragon.gcode.3mf"
+
+        self.print_job._download_model_file_from_remote = MagicMock(side_effect=download)
+
+        result = self.print_job._attempt_remote_model_download([tcp_source, ftp_source])
+
+        self.assertEqual("/cache/prints/dragon.gcode.3mf", result)
+        self.assertEqual(2, self.print_job._download_model_file_from_remote.call_count)
+
+    def test_newest_file_fallback_still_returns_only_aliases(self):
+        """With no subtask name, the newest-file fallback must not fan out to unrelated models."""
+        newest = RemoteMediaFile(
+            name="newest.3mf",
+            path="/cache/newest.3mf",
+            size=100,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 22, 12, 0, tzinfo=timezone.utc),
+        )
+        unrelated = RemoteMediaFile(
+            name="unrelated.3mf",
+            path="/unrelated.3mf",
+            size=200,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 22, 11, 0, tzinfo=timezone.utc),
+        )
+
+        self.print_job._subtask_name = ""
+
+        selected = self.print_job._select_model_files([newest, unrelated], [])
+
+        self.assertEqual([newest], selected)
+    # A stale Bambu Cloud task must never be presented as the running print's own
+    # figures. Observed on an H2C: a touchscreen print whose 3mf lookup failed
+    # reported the weight of a cloud send twelve minutes earlier.
+
+    @staticmethod
+    def _stale_cloud_task():
+        """A finished cloud task for an earlier, unrelated print."""
+        return {
+            "id": 1275849996,
+            "weight": 4.44,
+            "length": 145,
+            "bedType": "textured_plate",
+            "cover": "",
+            "status": 4,
+            "startTime": "2026-09-23T14:32:00Z",
+            "endTime": "2026-09-23T14:33:07Z",
+            "amsDetailMapping": [{"ams": 2, "weight": 4.44}],
+        }
+
+    def test_clearing_model_data_clears_the_previous_jobs_weight(self):
+        """The weight fields must not survive into the next print."""
+        self.print_job.print_weight = 4.44
+        self.print_job.print_length = 1.45
+        self.print_job._ams_print_weights[2] = 4.44
+        self.print_job._ams_print_lengths[2] = 1.45
+        self.print_job.gcode_file_downloaded = "959381-Hase 2f Osterhase.gcode.gcode"
+
+        self.print_job._clear_model_data()
+
+        self.assertEqual(0, self.print_job.print_weight)
+        self.assertEqual(0, self.print_job.print_length)
+        self.assertEqual([0.0] * len(self.print_job._ams_print_weights), self.print_job._ams_print_weights)
+        self.assertEqual([0.0] * len(self.print_job._ams_print_lengths), self.print_job._ams_print_lengths)
+        self.assertEqual("", self.print_job.gcode_file_downloaded)
+
+    def test_cloud_task_weight_is_not_applied_to_a_local_print_with_ftp(self):
+        """The printer's own 3mf is authoritative for a local print, as it already is for the cover."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+        self.print_job.print_weight = 0
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(0, self.print_job.print_weight)
+
+    def test_cloud_task_ams_weights_are_not_applied_to_a_local_print_with_ftp(self):
+        """A stale task's amsDetailMapping would charge the wrong tray."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual([0.0] * len(self.print_job._ams_print_weights), self.print_job._ams_print_weights)
+
+    def test_cloud_task_weight_is_still_applied_to_a_cloud_print(self):
+        """A sent job has no other weight source, so the cloud task must still be used."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "cloud"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(4.44, self.print_job.print_weight)
+        self.assertEqual(4.44, self.print_job._ams_print_weights[2])
+
+    def test_cloud_task_weight_is_still_applied_to_a_local_print_without_ftp(self):
+        """Without FTP there is no 3mf to read, so the cloud task remains the only source."""
+        self.client.ftp_enabled = False
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(4.44, self.print_job.print_weight)
 
 class TestInfo(unittest.TestCase):
     def setUp(self):
@@ -348,6 +757,24 @@ class TestStageAction(unittest.TestCase):
         # Should not raise.
         stage_action.print_update(data)
 
+    def test_stage_resets_to_idle_after_cancel(self):
+        # A cancelled print reports gcode_state FAILED, but the printer keeps
+        # sending the stage it was in when the print was cancelled.
+        stage_action = StageAction()
+        stage_action.print_update({"print_type": "cloud", "gcode_state": "PREPARE", "stg_cur": 54})
+        self.assertEqual(stage_action.description, "waiting_for_heatbed_temperature")
+
+        stage_action.print_update({"print_type": "idle", "gcode_state": "FAILED", "stg_cur": 54})
+        self.assertEqual(stage_action.description, "idle")
+
+        # Later partial updates without gcode_state keep it idle.
+        stage_action.print_update({"stg_cur": 54})
+        self.assertEqual(stage_action.description, "idle")
+
+        # The next print reports its stages again.
+        stage_action.print_update({"print_type": "cloud", "gcode_state": "PREPARE", "stg_cur": 2})
+        self.assertEqual(stage_action.description, "heatbed_preheating")
+
 class TestAMSList(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
@@ -423,6 +850,62 @@ class TestAMSList(unittest.TestCase):
         result = self.ams_list.print_update(data)
         self.assertTrue(result)
         self.assertIn(0, self.ams_list.data)
+
+    def test_ams_status_from_push_all(self):
+        # P1P.json reports ams_status 768 (0x0300, "assist") with slot 1 of AMS 0 loaded and the print failed
+        data = self.test_data['push_all']
+
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+        self.assertEqual(self.ams_list.data[0].status, "filament_loaded")
+
+    def test_ams_status_filament_change_steps(self):
+        data = self.test_data['push_all']
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+
+        # Captured on a P1S mid print: swapping from slot 1 to slot 4 of AMS 0, cutting step
+        self.ams_list.print_update({"ams_status": 259, "ams": {"tray_now": "0", "tray_tar": "3"}})
+        self.assertEqual(self.ams_list.data[0].status, "cutting_filament")
+
+        self.assertTrue(self.ams_list.print_update({"ams_status": 0x0107}))
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+
+        # Delta payloads without ams_status keep the last known state
+        self.ams_list.print_update({"mc_percent": 74})
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+
+        # "Just wait" and unknown sub-steps fall back to the generic state
+        self.ams_list.print_update({"ams_status": 0x0109})
+        self.assertEqual(self.ams_list.data[0].status, "changing_filament")
+
+        self.ams_list.print_update({"ams_status": 0})
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+
+        self.ams_list.print_update({"ams_status": 0x4000})
+        self.assertEqual(self.ams_list.data[0].status, "unknown")
+
+    def test_ams_status_filament_change_only_on_involved_units(self):
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        # Unload from AMS 0 slot 2 and load AMS 1 slot 2: the other units stay idle
+        self.ams_list.print_update({"ams_status": 0x0107, "ams": {"tray_now": "1", "tray_tar": "5"}})
+        self.assertEqual(self.ams_list.data[0].status, "purging_old_filament")
+        self.assertEqual(self.ams_list.data[1].status, "purging_old_filament")
+        self.assertEqual(self.ams_list.data[2].status, "idle")
+        self.assertEqual(self.ams_list.data[128].status, "idle")
+
+        # Once loaded, only the unit feeding the extruder reports the filament as loaded
+        self.ams_list.print_update({"ams_status": 0x0300, "ams": {"tray_now": "5", "tray_tar": "5"}})
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+        self.assertEqual(self.ams_list.data[1].status, "filament_loaded")
+        self.assertEqual(self.ams_list.data[2].status, "idle")
+        self.assertEqual(self.ams_list.data[128].status, "idle")
+
+        # States that can't be tied to one unit are shown on all of them
+        self.ams_list.print_update({"ams_status": 0x0400})
+        self.assertEqual(self.ams_list.data[0].status, "calibration")
+        self.assertEqual(self.ams_list.data[128].status, "calibration")
 
     def test_h2d_ams_detection(self):
         # Test that two AMS files are properly detected from H2D.json
@@ -900,6 +1383,60 @@ class TestH2D(unittest.TestCase):
         # Test left nozzle (index 1) temperatures
         self.assertEqual(self.temperature.left_nozzle_temperature, 40)
         self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
+
+    def test_legacy_payload_does_not_corrupt_right_nozzle_on_dual_nozzle_printer(self):
+        """Regression test: a partial MQTT payload with no device.extruder.info
+        block must not stomp the right nozzle's reading with the legacy
+        single-extruder fields, which mirror whichever nozzle is currently
+        active rather than the right nozzle specifically."""
+        data = self.h2d_data['push_all']
+        result = self.temperature.print_update(data)
+        self.assertTrue(result)
+        self.assertEqual(self.temperature.right_nozzle_temperature, 264)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 225)
+
+        # Dual-nozzle printer (mocked via supports_feature=True in setUp).
+        # A legacy-shaped payload naming the *left* nozzle's active temp
+        # must not be written into the right nozzle slot (index 0).
+        legacy_payload = {
+            "nozzle_temper": 79,
+            "nozzle_target_temper": 0,
+        }
+        result = self.temperature.print_update(legacy_payload)
+        self.assertEqual(self.temperature.right_nozzle_temperature, 264)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 225)
+
+    def test_legacy_payload_still_updates_single_nozzle_printer(self):
+        """Genuinely single-nozzle printers must keep using the legacy
+        nozzle_temper/nozzle_target_temper fallback."""
+        self.client._device.supports_feature.return_value = False
+
+        legacy_payload = {
+            "nozzle_temper": 79,
+            "nozzle_target_temper": 0,
+        }
+        result = self.temperature.print_update(legacy_payload)
+        self.assertTrue(result)
+        self.assertEqual(self.temperature.right_nozzle_temperature, 79)
+        self.assertEqual(self.temperature.right_nozzle_target_temperature, 0)
+    def test_h2d_active_nozzle(self):
+        extruder = self.client._device.extruder
+        self.assertIsNone(extruder.active_nozzle)
+
+        extruder.print_update(self.h2d_data['push_all'])
+        self.assertEqual(extruder.active_nozzle, "right")
+
+        extruder.print_update(self.h2d_data['push_left_extruder'])
+        self.assertEqual(extruder.active_nozzle, "left")
+
+    def test_h2d_active_nozzle_keeps_side_while_switching(self):
+        extruder = self.client._device.extruder
+        extruder.print_update(self.h2d_data['push_left_extruder'])
+
+        # Index 15 is reported mid-switch (#1815).
+        extruder.print_update({"device": {"extruder": {"state": 0xF2}}})
+        self.assertEqual(extruder.active_nozzle_index, 15)
+        self.assertEqual(extruder.active_nozzle, "left")
 
 
 class TestH2CHotendRack(unittest.TestCase):
