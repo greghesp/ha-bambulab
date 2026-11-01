@@ -682,6 +682,15 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
     ),
     BambuLabSensorEntityDescription(
+        key="active_nozzle",
+        translation_key="active_nozzle",
+        icon="mdi:printer-3d-nozzle",
+        device_class=SensorDeviceClass.ENUM,
+        options=["left", "right"],
+        value_fn=lambda self: self.coordinator.get_model().extruder.active_nozzle,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DUAL_NOZZLES),
+    ),
+    BambuLabSensorEntityDescription(
         key="ip_address",
         translation_key="ip_address",
         entity_category=EntityCategory.DIAGNOSTIC,

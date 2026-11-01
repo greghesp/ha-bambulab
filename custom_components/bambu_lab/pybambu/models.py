@@ -4286,10 +4286,12 @@ class ExtruderTool:
     
 class Extruder:
     _active_nozzle_index: int
+    _active_nozzle: str | None
 
     def __init__(self, client):
         self._client = client
         self._active_nozzle_index = 0
+        self._active_nozzle = None
 
     def print_update (self, data):
         # Handle ext_tool update
@@ -4298,9 +4300,16 @@ class Extruder:
         extruder_state = data.get("device", {}).get("extruder", {}).get("state")
         if extruder_state is not None:
             self._active_nozzle_index = (extruder_state >> 4) & 0xF
+            # Index is 15 while switching nozzles (#1815), keep the last known side.
+            if self._active_nozzle_index in (0, 1):
+                self._active_nozzle = "right" if self._active_nozzle_index == 0 else "left"
                         
         return (old_data != f"{self.__dict__}")
 
     @property
     def active_nozzle_index(self):
         return self._active_nozzle_index
+
+    @property
+    def active_nozzle(self) -> str | None:
+        return self._active_nozzle

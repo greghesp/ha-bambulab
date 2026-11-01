@@ -666,6 +666,13 @@
           "high_flow_tungsten_carbide": "High flow tungsten carbide"
         }
       },
+      "active_nozzle": {
+        "name": "Active nozzle",
+        "state": {
+          "left": "Left",
+          "right": "Right"
+        }
+      },
       "ip_address": {
         "name": "IP address"
       },

@@ -947,6 +947,25 @@ class TestH2D(unittest.TestCase):
         self.assertEqual(self.temperature.left_nozzle_temperature, 40)
         self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
 
+    def test_h2d_active_nozzle(self):
+        extruder = self.client._device.extruder
+        self.assertIsNone(extruder.active_nozzle)
+
+        extruder.print_update(self.h2d_data['push_all'])
+        self.assertEqual(extruder.active_nozzle, "right")
+
+        extruder.print_update(self.h2d_data['push_left_extruder'])
+        self.assertEqual(extruder.active_nozzle, "left")
+
+    def test_h2d_active_nozzle_keeps_side_while_switching(self):
+        extruder = self.client._device.extruder
+        extruder.print_update(self.h2d_data['push_left_extruder'])
+
+        # Index 15 is reported mid-switch (#1815).
+        extruder.print_update({"device": {"extruder": {"state": 0xF2}}})
+        self.assertEqual(extruder.active_nozzle_index, 15)
+        self.assertEqual(extruder.active_nozzle, "left")
+
 
 class TestH2CHotendRack(unittest.TestCase):
     """Regression coverage for H2C Vortek telemetry."""
