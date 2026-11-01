@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Control híbrid de blocs MQTT"
+      },
+      "left_extruder_filament_state": {
+        "name": "Filament de l'extrusora esquerre"
+      },
+      "right_extruder_filament_state": {
+        "name": "Filament extrusor dret"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Ventilador auxiliar secundari"
+      },
+      "part_fan": {
+        "name": "Ventilador parcial"
+      },
+      "left_aux_fan": {
+        "name": "Ventilador auxiliar esquerre"
+      },
+      "right_aux_fan": {
+        "name": "Ventilador auxiliar dret"
+      },
+      "exhaust_fan": {
+        "name": "Ventilador d'escapament"
       }
     },
     "image": {
@@ -880,6 +898,121 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} temps utilitzat"
+      },
+      "makerworld_boosts_received": {
+        "name": "Impuls rebuts"
+      },
+      "makerworld_prints_total": {
+        "name": "Impressions incl. imprimir perfils"
+      },
+      "makerworld_downloads_total": {
+        "name": "Descàrregues incl. imprimir perfils"
+      },
+      "makerworld_points": {
+        "name": "Punts"
+      },
+      "makerworld_points_earned": {
+        "name": "Punts guanyats"
+      },
+      "makerworld_points_spent": {
+        "name": "Punts gastats"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Punts exclusius"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Potenciar fitxes"
+      },
+      "makerworld_boosts_used": {
+        "name": "Impuls utilitzats"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Els impulsos han caducat"
+      },
+      "makerworld_downloads": {
+        "name": "Descàrregues"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Imprimeix descàrregues de perfils"
+      },
+      "makerworld_prints": {
+        "name": "Estampats"
+      },
+      "makerworld_instance_prints": {
+        "name": "Imprimeix impressions de perfil"
+      },
+      "makerworld_designs": {
+        "name": "Models publicats"
+      },
+      "makerworld_likes": {
+        "name": "M'agrada"
+      },
+      "makerworld_collections": {
+        "name": "Recull"
+      },
+      "makerworld_followers": {
+        "name": "Seguidors"
+      },
+      "makerworld_following": {
+        "name": "Seguint"
+      },
+      "makerworld_level": {
+        "name": "Nivell"
+      },
+      "active_nozzle": {
+        "name": "Broquet actiu",
+        "state": {
+          "left": "Esquerra",
+          "right": "D'acord"
+        }
+      },
+      "ams_status": {
+        "name": "Estat",
+        "state": {
+          "idle": "Inactiu",
+          "changing_filament": "Canvi de filament",
+          "heating_nozzle": "Broquet de calefacció",
+          "cutting_filament": "Filament de tall",
+          "pulling_back_filament": "Tirant enrere el filament actual",
+          "pushing_new_filament": "Empenyent filament nou",
+          "purging_old_filament": "Purga del filament vell",
+          "checking_position": "Comprovació de la posició del filament",
+          "rfid_identifying": "Identificació RFID",
+          "filament_loaded": "Filament carregat",
+          "calibration": "Calibració",
+          "cold_pull": "Tirada freda",
+          "self_check": "Autocontrol",
+          "debug": "Depuració",
+          "unknown": "Desconegut"
+        }
+      },
+      "track_switch_input": {
+        "name": "Entrada de l'interruptor de pista {input_number}",
+        "state": {
+          "left": "Broquet esquerre",
+          "right": "Broquet dret",
+          "empty": "Buit"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Broquet connectat",
+        "state": {
+          "left": "Esquerra",
+          "right": "D'acord",
+          "track_switch": "Interruptor de pista"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Velocitat del ventilador parcial"
+      },
+      "left_aux_fan_speed": {
+        "name": "Velocitat del ventilador auxiliar esquerre"
+      },
+      "right_aux_fan_speed": {
+        "name": "Velocitat del ventilador auxiliar dret"
+      },
+      "exhaust_fan_speed": {
+        "name": "Velocitat del ventilador d'escapament"
       }
     },
     "camera": {

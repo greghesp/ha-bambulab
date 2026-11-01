@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybrid MQTT blokerer kontrol"
+      },
+      "left_extruder_filament_state": {
+        "name": "Venstre ekstruderfilament"
+      },
+      "right_extruder_filament_state": {
+        "name": "Højre ekstruderfilament"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Sekundær ekstra ventilator"
+      },
+      "part_fan": {
+        "name": "Delvis ventilator"
+      },
+      "left_aux_fan": {
+        "name": "Venstre ekstra ventilator"
+      },
+      "right_aux_fan": {
+        "name": "Højre ekstra ventilator"
+      },
+      "exhaust_fan": {
+        "name": "Udstødningsventilator"
       }
     },
     "image": {
@@ -880,6 +898,121 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} brugt tid"
+      },
+      "makerworld_boosts_received": {
+        "name": "Boosts modtaget"
+      },
+      "makerworld_prints_total": {
+        "name": "Tryk inkl. udskrive profiler"
+      },
+      "makerworld_downloads_total": {
+        "name": "Downloads inkl. udskrive profiler"
+      },
+      "makerworld_points": {
+        "name": "Points"
+      },
+      "makerworld_points_earned": {
+        "name": "Optjente point"
+      },
+      "makerworld_points_spent": {
+        "name": "Point brugt"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Eksklusive point"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Boost tokens"
+      },
+      "makerworld_boosts_used": {
+        "name": "Boosts brugt"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Boosts udløb"
+      },
+      "makerworld_downloads": {
+        "name": "Downloads"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Udskriv profildownloads"
+      },
+      "makerworld_prints": {
+        "name": "Udskrifter"
+      },
+      "makerworld_instance_prints": {
+        "name": "Udskriv profiludskrifter"
+      },
+      "makerworld_designs": {
+        "name": "Udgivne modeller"
+      },
+      "makerworld_likes": {
+        "name": "Synes godt om"
+      },
+      "makerworld_collections": {
+        "name": "Samler"
+      },
+      "makerworld_followers": {
+        "name": "Tilhængere"
+      },
+      "makerworld_following": {
+        "name": "Følge"
+      },
+      "makerworld_level": {
+        "name": "Niveau"
+      },
+      "active_nozzle": {
+        "name": "Aktiv dyse",
+        "state": {
+          "left": "Venstre",
+          "right": "Højre"
+        }
+      },
+      "ams_status": {
+        "name": "Status",
+        "state": {
+          "idle": "Ledig",
+          "changing_filament": "Udskiftning af filament",
+          "heating_nozzle": "Varmemundstykke",
+          "cutting_filament": "Skære filament",
+          "pulling_back_filament": "Trækker nuværende glødetråd tilbage",
+          "pushing_new_filament": "Skub ny filament",
+          "purging_old_filament": "Udrensning af gammel filament",
+          "checking_position": "Kontrol af filamentposition",
+          "rfid_identifying": "Identifikation af RFID",
+          "filament_loaded": "Filament ladet",
+          "calibration": "Kalibrering",
+          "cold_pull": "Koldt træk",
+          "self_check": "Selvtjek",
+          "debug": "Debug",
+          "unknown": "Ukendt"
+        }
+      },
+      "track_switch_input": {
+        "name": "Sporskiftindgang {input_number}",
+        "state": {
+          "left": "Venstre dyse",
+          "right": "Højre dyse",
+          "empty": "Tom"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Tilsluttet dyse",
+        "state": {
+          "left": "Venstre",
+          "right": "Højre",
+          "track_switch": "Sporskifter"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Delvis blæserhastighed"
+      },
+      "left_aux_fan_speed": {
+        "name": "Venstre ekstra blæserhastighed"
+      },
+      "right_aux_fan_speed": {
+        "name": "Højre ekstra blæserhastighed"
+      },
+      "exhaust_fan_speed": {
+        "name": "Udstødningsventilatorhastighed"
       }
     },
     "camera": {

@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "하이브리드 MQTT 블록 제어"
+      },
+      "left_extruder_filament_state": {
+        "name": "왼쪽 압출기 필라멘트"
+      },
+      "right_extruder_filament_state": {
+        "name": "오른쪽 압출기 필라멘트"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "보조 보조 팬"
+      },
+      "part_fan": {
+        "name": "부분 팬"
+      },
+      "left_aux_fan": {
+        "name": "왼쪽 보조 팬"
+      },
+      "right_aux_fan": {
+        "name": "오른쪽 보조 팬"
+      },
+      "exhaust_fan": {
+        "name": "배기팬"
       }
     },
     "image": {
@@ -880,6 +898,121 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "핫엔드 {hotend_id} 사용 시간"
+      },
+      "makerworld_boosts_received": {
+        "name": "받은 부스트"
+      },
+      "makerworld_prints_total": {
+        "name": "인쇄물 포함 프로필 인쇄"
+      },
+      "makerworld_downloads_total": {
+        "name": "다음을 포함한 다운로드 프로필 인쇄"
+      },
+      "makerworld_points": {
+        "name": "전철기"
+      },
+      "makerworld_points_earned": {
+        "name": "적립된 포인트"
+      },
+      "makerworld_points_spent": {
+        "name": "사용한 포인트"
+      },
+      "makerworld_points_exclusive": {
+        "name": "독점 포인트"
+      },
+      "makerworld_boost_tokens": {
+        "name": "부스트 토큰"
+      },
+      "makerworld_boosts_used": {
+        "name": "사용된 부스트"
+      },
+      "makerworld_boosts_expired": {
+        "name": "부스트 만료됨"
+      },
+      "makerworld_downloads": {
+        "name": "다운로드"
+      },
+      "makerworld_instance_downloads": {
+        "name": "프로필 다운로드 인쇄"
+      },
+      "makerworld_prints": {
+        "name": "인쇄물"
+      },
+      "makerworld_instance_prints": {
+        "name": "프로필 인쇄 인쇄"
+      },
+      "makerworld_designs": {
+        "name": "게시된 모델"
+      },
+      "makerworld_likes": {
+        "name": "좋아요"
+      },
+      "makerworld_collections": {
+        "name": "수집"
+      },
+      "makerworld_followers": {
+        "name": "추종자"
+      },
+      "makerworld_following": {
+        "name": "수행원"
+      },
+      "makerworld_level": {
+        "name": "수준"
+      },
+      "active_nozzle": {
+        "name": "활성 노즐",
+        "state": {
+          "left": "왼쪽",
+          "right": "오른쪽"
+        }
+      },
+      "ams_status": {
+        "name": "상태",
+        "state": {
+          "idle": "게으른",
+          "changing_filament": "필라멘트 교체",
+          "heating_nozzle": "가열노즐",
+          "cutting_filament": "필라멘트 절단",
+          "pulling_back_filament": "현재 필라멘트를 뒤로 당기는 중",
+          "pushing_new_filament": "새 필라멘트 밀어넣기",
+          "purging_old_filament": "오래된 필라멘트 제거",
+          "checking_position": "필라멘트 위치 확인",
+          "rfid_identifying": "RFID 식별",
+          "filament_loaded": "필라멘트 로드됨",
+          "calibration": "구경 측정",
+          "cold_pull": "콜드 풀",
+          "self_check": "셀프체크",
+          "debug": "디버그",
+          "unknown": "알려지지 않은"
+        }
+      },
+      "track_switch_input": {
+        "name": "트랙 스위치 입력 {input_number}",
+        "state": {
+          "left": "왼쪽 노즐",
+          "right": "오른쪽 노즐",
+          "empty": "비어 있는"
+        }
+      },
+      "connected_nozzle": {
+        "name": "연결된 노즐",
+        "state": {
+          "left": "왼쪽",
+          "right": "오른쪽",
+          "track_switch": "트랙 스위치"
+        }
+      },
+      "part_fan_speed": {
+        "name": "부분 팬 속도"
+      },
+      "left_aux_fan_speed": {
+        "name": "왼쪽 보조 팬 속도"
+      },
+      "right_aux_fan_speed": {
+        "name": "오른쪽 보조 팬 속도"
+      },
+      "exhaust_fan_speed": {
+        "name": "배기 팬 속도"
       }
     },
     "camera": {

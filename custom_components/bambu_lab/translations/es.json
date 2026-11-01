@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Control de bloques híbridos MQTT"
+      },
+      "left_extruder_filament_state": {
+        "name": "Filamento del extrusor izquierdo"
+      },
+      "right_extruder_filament_state": {
+        "name": "Filamento extrusor derecho"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Ventilador auxiliar secundario"
+      },
+      "part_fan": {
+        "name": "ventilador parcial"
+      },
+      "left_aux_fan": {
+        "name": "ventilador auxiliar izquierdo"
+      },
+      "right_aux_fan": {
+        "name": "ventilador auxiliar derecho"
+      },
+      "exhaust_fan": {
+        "name": "Ventilador de escape"
       }
     },
     "image": {
@@ -880,6 +898,121 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Tiempo de uso del hotend {hotend_id}"
+      },
+      "makerworld_boosts_received": {
+        "name": "Impulsos recibidos"
+      },
+      "makerworld_prints_total": {
+        "name": "Impresiones incluidas. perfiles de impresión"
+      },
+      "makerworld_downloads_total": {
+        "name": "Descargas incl. perfiles de impresión"
+      },
+      "makerworld_points": {
+        "name": "Agujas"
+      },
+      "makerworld_points_earned": {
+        "name": "Puntos ganados"
+      },
+      "makerworld_points_spent": {
+        "name": "Puntos gastados"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Puntos exclusivos"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Fichas de impulso"
+      },
+      "makerworld_boosts_used": {
+        "name": "Impulsos usados"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Los aumentos expiraron"
+      },
+      "makerworld_downloads": {
+        "name": "Descargas"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Descargas de perfiles de impresión"
+      },
+      "makerworld_prints": {
+        "name": "Huellas dactilares"
+      },
+      "makerworld_instance_prints": {
+        "name": "Imprimir impresiones de perfil"
+      },
+      "makerworld_designs": {
+        "name": "Modelos publicados"
+      },
+      "makerworld_likes": {
+        "name": "Gustos"
+      },
+      "makerworld_collections": {
+        "name": "Colecciona"
+      },
+      "makerworld_followers": {
+        "name": "Seguidores"
+      },
+      "makerworld_following": {
+        "name": "Siguiente"
+      },
+      "makerworld_level": {
+        "name": "Nivel"
+      },
+      "active_nozzle": {
+        "name": "Boquilla activa",
+        "state": {
+          "left": "Izquierda",
+          "right": "Bien"
+        }
+      },
+      "ams_status": {
+        "name": "Estado",
+        "state": {
+          "idle": "Inactivo",
+          "changing_filament": "Cambiando de filamento",
+          "heating_nozzle": "Boquilla calefactora",
+          "cutting_filament": "Filamento de corte",
+          "pulling_back_filament": "Retirando el filamento actual",
+          "pushing_new_filament": "Empujando nuevo filamento",
+          "purging_old_filament": "Purgar filamento viejo",
+          "checking_position": "Comprobando la posición del filamento",
+          "rfid_identifying": "Identificación de RFID",
+          "filament_loaded": "filamento cargado",
+          "calibration": "Calibración",
+          "cold_pull": "tirón en frío",
+          "self_check": "Autocomprobación",
+          "debug": "Depurar",
+          "unknown": "Desconocido"
+        }
+      },
+      "track_switch_input": {
+        "name": "Entrada de cambio de pista {input_number}",
+        "state": {
+          "left": "Boquilla izquierda",
+          "right": "Boquilla derecha",
+          "empty": "Vacío"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Boquilla conectada",
+        "state": {
+          "left": "Izquierda",
+          "right": "Bien",
+          "track_switch": "Cambio de pista"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Velocidad del ventilador parcial"
+      },
+      "left_aux_fan_speed": {
+        "name": "Velocidad del ventilador auxiliar izquierdo"
+      },
+      "right_aux_fan_speed": {
+        "name": "Velocidad del ventilador auxiliar derecho"
+      },
+      "exhaust_fan_speed": {
+        "name": "Velocidad del ventilador de escape"
       }
     },
     "camera": {

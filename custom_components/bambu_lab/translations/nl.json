@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybride MQTT blokkeert de controle"
+      },
+      "left_extruder_filament_state": {
+        "name": "Linker extruderfilament"
+      },
+      "right_extruder_filament_state": {
+        "name": "Rechter extruderfilament"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Secundaire hulpventilator"
+      },
+      "part_fan": {
+        "name": "Gedeeltelijk ventilator"
+      },
+      "left_aux_fan": {
+        "name": "Linker aux-ventilator"
+      },
+      "right_aux_fan": {
+        "name": "Rechter aux-ventilator"
+      },
+      "exhaust_fan": {
+        "name": "Afzuigventilator"
       }
     },
     "image": {
@@ -880,6 +898,121 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} gebruikte tijd"
+      },
+      "makerworld_boosts_received": {
+        "name": "Boosts ontvangen"
+      },
+      "makerworld_prints_total": {
+        "name": "Afdrukken incl. profielen afdrukken"
+      },
+      "makerworld_downloads_total": {
+        "name": "Downloaden incl. profielen afdrukken"
+      },
+      "makerworld_points": {
+        "name": "Punten"
+      },
+      "makerworld_points_earned": {
+        "name": "Punten verdiend"
+      },
+      "makerworld_points_spent": {
+        "name": "Punten besteed"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Exclusieve punten"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Boost-tokens"
+      },
+      "makerworld_boosts_used": {
+        "name": "Boosts gebruikt"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Boosts zijn verlopen"
+      },
+      "makerworld_downloads": {
+        "name": "Downloads"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Profieldownloads afdrukken"
+      },
+      "makerworld_prints": {
+        "name": "Afdrukken"
+      },
+      "makerworld_instance_prints": {
+        "name": "Profielafdrukken afdrukken"
+      },
+      "makerworld_designs": {
+        "name": "Gepubliceerde modellen"
+      },
+      "makerworld_likes": {
+        "name": "Vind ik leuk"
+      },
+      "makerworld_collections": {
+        "name": "Verzamelt"
+      },
+      "makerworld_followers": {
+        "name": "Volgers"
+      },
+      "makerworld_following": {
+        "name": "Volgende"
+      },
+      "makerworld_level": {
+        "name": "Niveau"
+      },
+      "active_nozzle": {
+        "name": "Actief mondstuk",
+        "state": {
+          "left": "Links",
+          "right": "Rechts"
+        }
+      },
+      "ams_status": {
+        "name": "Status",
+        "state": {
+          "idle": "Inactief",
+          "changing_filament": "Wisselend filament",
+          "heating_nozzle": "Verwarmingsmondstuk",
+          "cutting_filament": "Filament snijden",
+          "pulling_back_filament": "Het terugtrekken van de huidige gloeidraad",
+          "pushing_new_filament": "Nieuw filament duwen",
+          "purging_old_filament": "Oud filament verwijderen",
+          "checking_position": "Positie van filament controleren",
+          "rfid_identifying": "RFID identificeren",
+          "filament_loaded": "Filament geladen",
+          "calibration": "Kalibratie",
+          "cold_pull": "Koude trek",
+          "self_check": "Zelfcontrole",
+          "debug": "Foutopsporing",
+          "unknown": "Onbekend"
+        }
+      },
+      "track_switch_input": {
+        "name": "Spoorschakelaaringang {input_number}",
+        "state": {
+          "left": "Linker mondstuk",
+          "right": "Rechter mondstuk",
+          "empty": "Leeg"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Aangesloten mondstuk",
+        "state": {
+          "left": "Links",
+          "right": "Rechts",
+          "track_switch": "Baanschakelaar"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Gedeeltelijke ventilatorsnelheid"
+      },
+      "left_aux_fan_speed": {
+        "name": "Snelheid aux-ventilator links"
+      },
+      "right_aux_fan_speed": {
+        "name": "Snelheid aux-ventilator rechts"
+      },
+      "exhaust_fan_speed": {
+        "name": "Snelheid uitlaatventilator"
       }
     },
     "camera": {

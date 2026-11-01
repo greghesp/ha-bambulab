@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "Hybrydowe MQTT blokuje kontrolę"
+      },
+      "left_extruder_filament_state": {
+        "name": "Lewy włókno wytłaczarki"
+      },
+      "right_extruder_filament_state": {
+        "name": "Prawy włókno wytłaczarki"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "Dodatkowy wentylator pomocniczy"
+      },
+      "part_fan": {
+        "name": "Część fana"
+      },
+      "left_aux_fan": {
+        "name": "Lewy wentylator dodatkowy"
+      },
+      "right_aux_fan": {
+        "name": "Prawy wentylator dodatkowy"
+      },
+      "exhaust_fan": {
+        "name": "Wentylator wyciągowy"
       }
     },
     "image": {
@@ -880,6 +898,121 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} wykorzystał czas"
+      },
+      "makerworld_boosts_received": {
+        "name": "Otrzymane wzmocnienia"
+      },
+      "makerworld_prints_total": {
+        "name": "Druki m.in. wydrukować profile"
+      },
+      "makerworld_downloads_total": {
+        "name": "Pliki do pobrania m.in. wydrukować profile"
+      },
+      "makerworld_points": {
+        "name": "Zwrotnica"
+      },
+      "makerworld_points_earned": {
+        "name": "Zdobyte punkty"
+      },
+      "makerworld_points_spent": {
+        "name": "Wydane punkty"
+      },
+      "makerworld_points_exclusive": {
+        "name": "Ekskluzywne punkty"
+      },
+      "makerworld_boost_tokens": {
+        "name": "Tokeny wzmocnienia"
+      },
+      "makerworld_boosts_used": {
+        "name": "Wykorzystane wzmocnienia"
+      },
+      "makerworld_boosts_expired": {
+        "name": "Boosty wygasły"
+      },
+      "makerworld_downloads": {
+        "name": "Pliki do pobrania"
+      },
+      "makerworld_instance_downloads": {
+        "name": "Drukuj pliki do pobrania profilu"
+      },
+      "makerworld_prints": {
+        "name": "Drukuje"
+      },
+      "makerworld_instance_prints": {
+        "name": "Drukuj wydruki profili"
+      },
+      "makerworld_designs": {
+        "name": "Opublikowane modele"
+      },
+      "makerworld_likes": {
+        "name": "Upodobania"
+      },
+      "makerworld_collections": {
+        "name": "Zbiera"
+      },
+      "makerworld_followers": {
+        "name": "Świta"
+      },
+      "makerworld_following": {
+        "name": "Następny"
+      },
+      "makerworld_level": {
+        "name": "Poziom"
+      },
+      "active_nozzle": {
+        "name": "Aktywna dysza",
+        "state": {
+          "left": "Lewy",
+          "right": "Prawidłowy"
+        }
+      },
+      "ams_status": {
+        "name": "Status",
+        "state": {
+          "idle": "Bezczynny",
+          "changing_filament": "Zmiana włókna",
+          "heating_nozzle": "Dysza grzewcza",
+          "cutting_filament": "Cięcie włókna",
+          "pulling_back_filament": "Odciąganie bieżącego żarnika",
+          "pushing_new_filament": "Wciskanie nowego żarnika",
+          "purging_old_filament": "Czyszczenie starego żarnika",
+          "checking_position": "Sprawdzanie położenia żarnika",
+          "rfid_identifying": "Identyfikacja RFID",
+          "filament_loaded": "Załadowano żarnik",
+          "calibration": "Kalibrowanie",
+          "cold_pull": "Zimne pociągnięcie",
+          "self_check": "Samokontrola",
+          "debug": "Odpluskwić",
+          "unknown": "Nieznany"
+        }
+      },
+      "track_switch_input": {
+        "name": "Wejście przełącznika toru {input_number}",
+        "state": {
+          "left": "Lewa dysza",
+          "right": "Prawa dysza",
+          "empty": "Pusty"
+        }
+      },
+      "connected_nozzle": {
+        "name": "Podłączona dysza",
+        "state": {
+          "left": "Lewy",
+          "right": "Prawidłowy",
+          "track_switch": "Przełącznik toru"
+        }
+      },
+      "part_fan_speed": {
+        "name": "Częściowa prędkość wentylatora"
+      },
+      "left_aux_fan_speed": {
+        "name": "Prędkość lewego dodatkowego wentylatora"
+      },
+      "right_aux_fan_speed": {
+        "name": "Prędkość prawego wentylatora dodatkowego"
+      },
+      "exhaust_fan_speed": {
+        "name": "Prędkość wentylatora wyciągowego"
       }
     },
     "camera": {

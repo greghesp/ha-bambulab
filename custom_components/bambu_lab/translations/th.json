@@ -244,6 +244,12 @@
       },
       "hybrid_mode_blocks_control": {
         "name": "ไฮบริด MQTT บล็อกการควบคุม"
+      },
+      "left_extruder_filament_state": {
+        "name": "เส้นใยเครื่องอัดรีดด้านซ้าย"
+      },
+      "right_extruder_filament_state": {
+        "name": "เส้นใยเครื่องอัดรีดด้านขวา"
       }
     },
     "button": {
@@ -284,6 +290,18 @@
       },
       "secondary_aux_fan": {
         "name": "พัดลมเสริมรอง"
+      },
+      "part_fan": {
+        "name": "ส่วนพัดลม"
+      },
+      "left_aux_fan": {
+        "name": "พัดลมเสริมด้านซ้าย"
+      },
+      "right_aux_fan": {
+        "name": "พัดลมเสริมด้านขวา"
+      },
+      "exhaust_fan": {
+        "name": "พัดลมดูดอากาศ"
       }
     },
     "image": {
@@ -880,6 +898,121 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} ใช้เวลา"
+      },
+      "makerworld_boosts_received": {
+        "name": "บูสต์ที่ได้รับ"
+      },
+      "makerworld_prints_total": {
+        "name": "รวมภาพพิมพ์ พิมพ์โปรไฟล์"
+      },
+      "makerworld_downloads_total": {
+        "name": "รวมการดาวน์โหลด พิมพ์โปรไฟล์"
+      },
+      "makerworld_points": {
+        "name": "คะแนน"
+      },
+      "makerworld_points_earned": {
+        "name": "คะแนนที่ได้รับ"
+      },
+      "makerworld_points_spent": {
+        "name": "คะแนนที่ใช้ไป"
+      },
+      "makerworld_points_exclusive": {
+        "name": "คะแนนพิเศษ"
+      },
+      "makerworld_boost_tokens": {
+        "name": "เพิ่มโทเค็น"
+      },
+      "makerworld_boosts_used": {
+        "name": "บูสต์ที่ใช้"
+      },
+      "makerworld_boosts_expired": {
+        "name": "บูสต์หมดอายุแล้ว"
+      },
+      "makerworld_downloads": {
+        "name": "ดาวน์โหลด"
+      },
+      "makerworld_instance_downloads": {
+        "name": "พิมพ์การดาวน์โหลดโปรไฟล์"
+      },
+      "makerworld_prints": {
+        "name": "พิมพ์"
+      },
+      "makerworld_instance_prints": {
+        "name": "พิมพ์โปรไฟล์การพิมพ์"
+      },
+      "makerworld_designs": {
+        "name": "รุ่นที่เผยแพร่"
+      },
+      "makerworld_likes": {
+        "name": "ชอบ"
+      },
+      "makerworld_collections": {
+        "name": "รวบรวม"
+      },
+      "makerworld_followers": {
+        "name": "ผู้ติดตาม"
+      },
+      "makerworld_following": {
+        "name": "กำลังติดตาม"
+      },
+      "makerworld_level": {
+        "name": "ระดับ"
+      },
+      "active_nozzle": {
+        "name": "หัวฉีดที่ใช้งานอยู่",
+        "state": {
+          "left": "ซ้าย",
+          "right": "ขวา"
+        }
+      },
+      "ams_status": {
+        "name": "สถานะ",
+        "state": {
+          "idle": "ไม่ได้ใช้งาน",
+          "changing_filament": "การเปลี่ยนไส้หลอด",
+          "heating_nozzle": "หัวฉีดความร้อน",
+          "cutting_filament": "เส้นใยตัด",
+          "pulling_back_filament": "ดึงไส้ปัจจุบันกลับ",
+          "pushing_new_filament": "ดันเส้นใยใหม่",
+          "purging_old_filament": "การล้างเส้นใยเก่า",
+          "checking_position": "การตรวจสอบตำแหน่งเส้นใย",
+          "rfid_identifying": "การระบุ RFID",
+          "filament_loaded": "โหลดฟิลาเมนต์แล้ว",
+          "calibration": "การสอบเทียบ",
+          "cold_pull": "ดึงเย็น",
+          "self_check": "ตรวจสอบด้วยตนเอง",
+          "debug": "ดีบัก",
+          "unknown": "ไม่ทราบ"
+        }
+      },
+      "track_switch_input": {
+        "name": "อินพุตสวิตช์แทร็ก {input_number}",
+        "state": {
+          "left": "หัวฉีดด้านซ้าย",
+          "right": "หัวฉีดขวา",
+          "empty": "ว่างเปล่า"
+        }
+      },
+      "connected_nozzle": {
+        "name": "หัวฉีดที่เชื่อมต่อ",
+        "state": {
+          "left": "ซ้าย",
+          "right": "ขวา",
+          "track_switch": "สวิตช์ติดตาม"
+        }
+      },
+      "part_fan_speed": {
+        "name": "ความเร็วพัดลมบางส่วน"
+      },
+      "left_aux_fan_speed": {
+        "name": "ความเร็วพัดลม aux ซ้าย"
+      },
+      "right_aux_fan_speed": {
+        "name": "ความเร็วพัดลม aux ขวา"
+      },
+      "exhaust_fan_speed": {
+        "name": "ความเร็วพัดลมดูดอากาศ"
       }
     },
     "camera": {
