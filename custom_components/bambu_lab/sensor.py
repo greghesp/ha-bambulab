@@ -16,11 +16,14 @@ from .definitions import (
     HOTEND_RACK_SENSORS,
     HOTEND_RACK_HOTEND_SENSORS,
     X2D_TRANSLATION_KEYS,
+    MAKERWORLD_SENSORS,
     BambuLabAMSSensorEntityDescription,
     BambuLabHotendRackSensorEntityDescription,
+    BambuLabMakerWorldSensorEntityDescription,
     BambuLabSensorEntityDescription,
 )
 from .coordinator import BambuDataUpdateCoordinator
+from .makerworld import MakerWorldDataUpdateCoordinator, MakerWorldEntity
 from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
 from .pybambu.const import Features, Printers
 
@@ -33,6 +36,14 @@ async def async_setup_entry(
     """Set up BambuLab sensor based on a config entry."""
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    # The MakerWorld stats belong to the cloud account rather than to the printer,
+    # so they are added before the printer data check below and stay available
+    # even while the printer itself hasn't reported in yet.
+    if coordinator.makerworld is not None:
+        for sensor in MAKERWORLD_SENSORS:
+            async_add_entities([BambuLabMakerWorldSensor(coordinator.makerworld, sensor)])
+
     if not coordinator.get_model().has_full_printer_data:
         return
 
@@ -282,3 +293,36 @@ class BambuLabHotendSensor(HotendRackEntity, SensorEntity):
     @property
     def available(self) -> bool:
         return self.entity_description.available_fn(self)
+
+
+class BambuLabMakerWorldSensor(MakerWorldEntity, SensorEntity):
+    """A MakerWorld creator stat for the linked Bambu Lab account."""
+
+    def __init__(
+            self,
+            coordinator: MakerWorldDataUpdateCoordinator,
+            description: BambuLabMakerWorldSensorEntityDescription,
+    ) -> None:
+        """Initialise the sensor."""
+        super().__init__(coordinator=coordinator)
+        self.entity_description = description
+        self._attr_unique_id = f"{coordinator.unique_id_prefix}_{description.key}"
+
+    @property
+    def native_value(self) -> StateType:
+        """Return the state of the sensor."""
+        if self.profile is None:
+            return None
+        return self.entity_description.value_fn(self)
+
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        return super().available and self.profile is not None
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return the state attributes."""
+        if self.profile is None:
+            return {}
+        return self.entity_description.extra_attributes(self)

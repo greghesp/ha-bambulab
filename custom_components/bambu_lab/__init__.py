@@ -355,6 +355,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
+    if coordinator.makerworld is not None:
+        # Deliberately not async_config_entry_first_refresh(): MakerWorld is a
+        # bonus, so a failure here must not hold up the printer. The sensors are
+        # created either way and report unavailable until a poll succeeds.
+        await coordinator.makerworld.async_refresh()
+
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
     hass.http.register_view(VideoAPIView(hass))
