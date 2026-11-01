@@ -19,6 +19,7 @@ FIELDS_TO_KEEP = [
     'filament_vendor',
     'filament_type',
     'filament_density',
+    'filament_is_support',
     'nozzle_temperature',
     'nozzle_temperature_range_high',
     'nozzle_temperature_range_low',
@@ -57,6 +58,9 @@ def resolve_inherited_value(name: str, field: str, raw_data: dict[str, any]) -> 
 def sanitize_field(field, value):
     if isinstance(value, list):
         value = value[0]
+
+    if field == 'filament_is_support':
+        return str(value).strip().lower() in ("1", "true", "yes") if value is not None else False
 
     if value is None:
         return None
