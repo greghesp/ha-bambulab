@@ -68,6 +68,34 @@ class TestPrintJob(unittest.TestCase):
         self.assertIsNone(ams_slot_name(255))
         self.assertIsNone(ams_slot_name(-1))
 
+    def test_ams_mapping_from_tray_mapping(self):
+        # Real H2C job: AMS HT unit 129, then AMS unit 1 trays 1, 4 and 3, plus an unused filament.
+        self.print_job.print_update({"mapping": [33024, 256, 259, 258, 65535]})
+        self.assertEqual(self.print_job.get_ams_mapping, [
+            {"ams": 129, "tray": 0},
+            {"ams": 1, "tray": 0},
+            {"ams": 1, "tray": 3},
+            {"ams": 1, "tray": 2},
+            None,
+        ])
+
+    def test_ams_mapping_external_spool(self):
+        self.print_job.print_update({"mapping": [65280]})
+        self.assertEqual(self.print_job.get_ams_mapping, [{"ams": 255, "tray": 0}])
+
+    def test_ams_mapping_falls_back_to_slot_indexes(self):
+        # Printers without print.mapping only send ams_mapping with flat slot indexes.
+        self.print_job.print_update({"ams_mapping": [5, 16, 0]})
+        self.assertEqual(self.print_job.get_ams_mapping, [
+            {"ams": 1, "tray": 1},
+            {"ams": 128, "tray": 0},
+            {"ams": 0, "tray": 0},
+        ])
+
+    def test_ams_mapping_prefers_tray_mapping(self):
+        self.print_job.print_update({"ams_mapping": [0], "mapping": [32768]})
+        self.assertEqual(self.print_job.get_ams_mapping, [{"ams": 128, "tray": 0}])
+
     def test_get_print_weights_includes_ams_ht(self):
         self.client._device.external_spool[0].active = False
         self.client._device.external_spool[1].active = False

@@ -937,6 +937,23 @@ def ams_slot_name(index: int) -> str | None:
     return None
 
 
+def ams_slot_location(index: int) -> dict | None:
+    """AMS unit id and tray for a flat slot index, or None if the index isn't a real slot."""
+    if 0 <= index < AMS_SLOT_COUNT:
+        return {"ams": index // AMS_TRAYS_PER_UNIT, "tray": index % AMS_TRAYS_PER_UNIT}
+    if AMS_HT_SLOT_BASE <= index < AMS_HT_SLOT_END:
+        return {"ams": AMS_HT_UNIT_BASE + index - AMS_HT_SLOT_BASE, "tray": 0}
+    return None
+
+
+def tray_mapping_location(value: int) -> dict | None:
+    """AMS unit id and tray for a print.mapping entry, encoded like extruder 'snow' (unit << 8 | tray)."""
+    # 0xFFFF is a project filament the plate doesn't use. Units 254/255 are the external spools.
+    if value == 0xFFFF:
+        return None
+    return {"ams": value >> 8, "tray": value & 0xFF}
+
+
 @dataclass
 class PrintJob:
     """Return all information related content"""
@@ -988,6 +1005,7 @@ class PrintJob:
         self.print_error = 0
         self.print_weight = 0
         self.ams_mapping = []
+        self._tray_mapping = None
         self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         self.print_length = 0
@@ -1013,6 +1031,15 @@ class PrintJob:
     @property
     def get_skipped_objects(self) -> str:
         return self._skipped_objects
+
+    @property
+    def get_ams_mapping(self) -> list:
+        """AMS unit and tray per slicer filament, None for filaments without a known slot."""
+        # print.mapping is part of the full status on newer firmware. Older printers only send
+        # ams_mapping, once at the start of a print.
+        if self._tray_mapping is not None:
+            return [tray_mapping_location(value) for value in self._tray_mapping]
+        return [ams_slot_location(index) for index in self.ams_mapping or []]
     
     @property
     def get_print_weights(self) -> dict:
@@ -1117,6 +1144,7 @@ class PrintJob:
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         self.ams_mapping = data.get("ams_mapping", self.ams_mapping)
+        self._tray_mapping = data.get("mapping", self._tray_mapping)
         self._skipped_objects = data.get("s_obj", self._skipped_objects)
 
         # Initialize task data at startup.
