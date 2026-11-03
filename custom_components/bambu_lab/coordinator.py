@@ -876,6 +876,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         config_entry_id=self.config_entry.entry_id
         dev_reg = device_registry.async_get(self._hass)
+        # Without a complete picture of the attached AMS units, a registered one that is missing
+        # from our data may simply not have been identified yet. A later version payload that
+        # fills in the serial fires event_printer_ready, which brings us back here.
+        ams_identities_resolved = self.get_model().ams_identities_resolved
         ams_devices_to_remove = []
         for device in device_registry.async_entries_for_config_entry(dev_reg, config_entry_id):
             # This device is associated with this printer.
@@ -890,7 +894,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 # available. Older versions registered that placeholder with an empty
                 # identifier; always discard it so the real serial can own the device.
                 ams_serial = list(device.identifiers)[0][1]
-                if is_placeholder_ams or ams_serial not in existing_ams_devices:
+                if is_placeholder_ams or (ams_identities_resolved and ams_serial not in existing_ams_devices):
                     LOGGER.debug(f"Found stale attached AMS with serial {ams_serial}")
                     ams_devices_to_remove.append(device.id)
 
