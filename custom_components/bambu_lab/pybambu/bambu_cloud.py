@@ -297,7 +297,13 @@ class BambuCloud:
             "tfaCode": code
         }
 
-        csrf_response = self._get(BambuUrl.CSRF)
+        try:
+            csrf_response = self._get(BambuUrl.CSRF)
+        except PermissionError as e:
+            # This endpoint is a website route that has already moved once. Report it as a
+            # CSRF failure so the config flow can fall back to code login.
+            LOGGER.error(f"Failed to retrieve CSRF token: {e.args[0] if e.args else e}")
+            raise CsrfObtainError() from e
 
         if csrf_response.status_code != 204 or csrf_response.cookies.get('bbl_csrf_token') is None:
             LOGGER.error(f"Failed to retrieve CSRF token: {csrf_response.status_code}")
