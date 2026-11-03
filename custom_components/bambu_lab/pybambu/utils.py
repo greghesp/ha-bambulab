@@ -1,3 +1,4 @@
+import asyncio
 import copy
 import functools
 import gzip
@@ -7,6 +8,7 @@ import math
 import requests
 import socket
 import re
+import time
 
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote, urlparse, urlunparse
@@ -491,3 +493,13 @@ def ams_tray_spool_loaded(state):
     if state <= AMS_TRAY_STATE_LEGACY_MAX:
         return state == AMS_TRAY_STATE_LEGACY_MAX
     return bool(state & AMSTrayStateFlags.STEADY)
+
+
+async def async_wait_until(condition, timeout: float, interval: float = 0.1) -> bool:
+    """Poll condition until it is true. Returns False if timeout seconds pass first."""
+    deadline = time.monotonic() + timeout
+    while not condition():
+        if time.monotonic() >= deadline:
+            return False
+        await asyncio.sleep(interval)
+    return True
