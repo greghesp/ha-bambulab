@@ -40,6 +40,29 @@ def search(lst, predicate, default={}):
     return default
 
 
+def normalize_service_target(data) -> dict:
+    """Return a copy of service call data with a single device_id/entity_id as a string.
+
+    A script's `target:` is validated with ensure_list, so these arrive as lists from YAML
+    but as plain strings from the UI. Raises ValueError unless there is a target, and for more
+    than one, because a service call acts on a single printer.
+    """
+    normalized = dict(data)
+    for key in ("device_id", "entity_id"):
+        value = normalized.get(key)
+        if not isinstance(value, (list, tuple)):
+            continue
+        if len(value) > 1:
+            raise ValueError(f"only one {key} can be targeted at a time, got {len(value)}")
+        if value:
+            normalized[key] = value[0]
+        else:
+            del normalized[key]
+    if "device_id" not in normalized and "entity_id" not in normalized:
+        raise ValueError("no device_id or entity_id provided")
+    return normalized
+
+
 def get_authenticated_rtsp_url(
     reported_url: str | None,
     configured_host: str,
