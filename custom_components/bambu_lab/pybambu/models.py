@@ -1562,6 +1562,11 @@ class PrintJob:
     def _model_filenames_to_try(self) -> list[str]:
         filenames_to_try = []
 
+        # The 3mf the printer says it is printing identifies this job. A task name doesn't: an
+        # older job with the same name can still be on the printer under a different file name.
+        if self.gcode_file.endswith('.3mf'):
+            filenames_to_try.append(self.gcode_file)
+
         if self._subtask_name != '':
             # The raw name is only worth trying when it could be a file name at all. One containing
             # a path separator never is, and its truncated basename could match an unrelated file.
@@ -1579,20 +1584,30 @@ class PrintJob:
                     filenames_to_try.append(f"{name}.3mf")
                     filenames_to_try.append(f"{name}.gcode.3mf")
 
-        if (self.gcode_file != '') and (self._subtask_name != self.gcode_file):
-            if self.gcode_file.endswith('.3mf'):
-                filenames_to_try.append(self.gcode_file)
-            else:
-                filenames_to_try.append(f"{self.gcode_file}.3mf")
-                filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
+        if (self.gcode_file != '') and not self.gcode_file.endswith('.3mf') and (self._subtask_name != self.gcode_file):
+            filenames_to_try.append(f"{self.gcode_file}.3mf")
+            filenames_to_try.append(f"{self.gcode_file}.gcode.3mf")
 
-        return filenames_to_try
+        return list(dict.fromkeys(filenames_to_try))
 
     def _remote_model_matches(self, remote_file: RemoteMediaFile, candidate: str) -> bool:
         candidate = candidate.replace("\\", "/").lstrip("/")
         remote_path = remote_file.path.replace("\\", "/").lstrip("/")
         remote_name = remote_file.basename.replace("\\", "/")
         return remote_path == candidate or remote_name == candidate.rsplit("/", 1)[-1]
+
+    def _rank_model_candidates(self, remote_files: list[RemoteMediaFile]) -> list[RemoteMediaFile]:
+        """Best candidate first. Newest wins so an older file in /cache can't beat the job that
+        was just sent, but that can only be judged if every candidate has a timestamp."""
+        all_dated = all(file.modified is not None for file in remote_files)
+
+        def score(remote_file: RemoteMediaFile) -> tuple:
+            in_cache, sort_time, gcode_3mf, source_rank = self._model_candidate_score(remote_file)
+            if all_dated:
+                return (sort_time, in_cache, gcode_3mf, source_rank)
+            return (in_cache, sort_time, gcode_3mf, source_rank)
+
+        return sorted(remote_files, key=score, reverse=True)
 
     def _model_candidate_score(self, remote_file: RemoteMediaFile) -> tuple[int, datetime, int, int]:
         path = remote_file.path.replace("\\", "/").lower()
@@ -1622,7 +1637,7 @@ class PrintJob:
                 if self._remote_model_matches(file, filename)
             ]
             if matches:
-                ranked = sorted(matches, key=self._model_candidate_score, reverse=True)
+                ranked = self._rank_model_candidates(matches)
                 selected = ranked[0]
                 LOGGER.debug(
                     f"Selected model candidate {selected.path} from {selected.source}/{selected.storage}"
@@ -1647,7 +1662,7 @@ class PrintJob:
                 if pattern.fullmatch(strip_model_extension(file.basename))
             ]
             if matches:
-                selected = sorted(matches, key=self._model_candidate_score, reverse=True)[0]
+                selected = self._rank_model_candidates(matches)[0]
                 LOGGER.debug(
                     f"Matched task name '{self._subtask_name}' to {selected.path} from "
                     f"{selected.source}/{selected.storage} by pattern"
