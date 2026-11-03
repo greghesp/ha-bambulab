@@ -948,7 +948,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         HA 2026.8 deprecated the via_device identifier tuple in favor of
         via_device_id; older versions don't accept via_device_id at all."""
-        if "via_device_id" in DeviceInfo.__optional_keys__:
+        if "via_device_id" in DeviceInfo.__annotations__:
             printer_device = self.get_ha_printer_device()
             if printer_device is not None:
                 device_info["via_device_id"] = printer_device.id
