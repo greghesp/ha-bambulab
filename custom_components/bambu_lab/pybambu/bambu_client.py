@@ -73,6 +73,23 @@ class WatchdogThread(threading.Thread):
         LOGGER.debug("Watchdog thread exited.")
 
 
+# Seconds to wait for a child thread to exit. Disconnect handling runs on paho's network
+# thread, so waiting indefinitely would also stop paho from reconnecting.
+THREAD_STOP_TIMEOUT = 5
+# Without a timeout, connecting to a host that silently drops packets can block for minutes.
+CHAMBER_CONNECT_TIMEOUT = 10
+
+
+def _stop_thread(thread: threading.Thread, name: str) -> None:
+    """Ask a child thread to stop and wait for it, but never indefinitely."""
+    thread.stop()
+    if thread is threading.current_thread():
+        return
+    thread.join(timeout=THREAD_STOP_TIMEOUT)
+    if thread.is_alive():
+        LOGGER.warning(f"{name} thread did not stop within {THREAD_STOP_TIMEOUT} seconds. Continuing without it.")
+
+
 class ChamberImageThread(threading.Thread):
     def __init__(self, client: BambuClient):
         self._client = client
@@ -132,7 +149,7 @@ class ChamberImageThread(threading.Thread):
         while connect_attempts < MAX_CONNECT_ATTEMPTS and not self._stop_event.is_set():
             connect_attempts += 1
             try:
-                with socket.create_connection((hostname, port)) as sock:
+                with socket.create_connection((hostname, port), timeout=CHAMBER_CONNECT_TIMEOUT) as sock:
                     try:
                         sslSock = ctx.wrap_socket(sock, server_hostname=hostname)
                         sslSock.write(auth_data)
@@ -199,7 +216,7 @@ class ChamberImageThread(threading.Thread):
                             raise RuntimeError(f"Unexpected data chunk size received: {len(dr)}")
 
             except OSError as e:
-                if e.errno == 113:
+                if e.errno == 113 or isinstance(e, TimeoutError):
                     LOGGER.debug("Host is unreachable")
                 else:
                     LOGGER.error("Chamber Image thread outer exception occurred:")
@@ -562,8 +579,7 @@ class BambuClient:
     def stop_camera(self):
         if self._camera is not None:
             LOGGER.debug("Stopping Chamber Image thread")
-            self._camera.stop()
-            self._camera.join()
+            _stop_thread(self._camera, "Chamber image")
             self._camera = None
 
     def _on_connect(self):
@@ -620,9 +636,7 @@ class BambuClient:
         self._device.info.set_online(False)
         if self._watchdog is not None:
             LOGGER.debug("Stopping watchdog thread")
-            self._watchdog.stop()
-            if self._watchdog is not threading.current_thread():
-                self._watchdog.join()
+            _stop_thread(self._watchdog, "Watchdog")
         self.stop_camera()
 
     def _on_watchdog_fired(self):
