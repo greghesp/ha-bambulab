@@ -3907,7 +3907,8 @@ class ExternalSpool(AMSTray):
 
     def _resolve_loaded_state(self, metadata_only: bool) -> None:
         """External spool: keep filament data; empty reflects active status."""
-        if metadata_only:
+        # The holder has no sensor, so blank filament fields mean nothing is mounted.
+        if metadata_only or not self._has_filament_metadata():
             self._reset_empty_slot()
             return
 
