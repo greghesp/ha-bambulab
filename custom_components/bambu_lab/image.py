@@ -107,6 +107,14 @@ class CoverImage(DispatchedImageEntity, ImageEntity, BambuLabEntity):
         return self.coordinator.get_model().cover_image.get_image()
 
     @property
+    def content_type(self) -> str:
+        """Return dynamic content type based on actual image bytes."""
+        data = self.image()
+        if data and data.startswith(b"\x89PNG"):
+            return "image/png"
+        return "image/jpeg"
+
+    @property
     def image_last_updated(self) -> datetime | None:
         """The time when the image was last updated."""
         return self.coordinator.get_model().cover_image.get_last_update_time()

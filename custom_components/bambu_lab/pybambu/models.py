@@ -5,6 +5,7 @@ import ftplib
 import json
 import math
 import os
+import io
 import html
 import re
 import threading
@@ -210,7 +211,7 @@ class Device:
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | a2_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
-            return model in (a1_printers | a2_printers | p1_printers)
+            return model in (a1_printers | a2_printers | p1_printers | p2_printers)
 
         # Now check that we have a version. All tests after this are expected to only be called after the
         # first full set of data from the printer has been received and so version will be available.
@@ -1302,15 +1303,12 @@ class PrintJob:
                     LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
                     self._update_task_data()
 
-            if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE"):
-                # We haven't yet downloaded model data off the printer. I've observed three scenarios where this happens:
-                # 1. This is a lan mode print where the gcode was pushed to the printer before the print ever started so
-                # 2. On the P1 I've observed a bug where the download completes but the gcode_file_prepare_percent never reaches 100.
-                # If we transition to the running gcode_state without observing 100% we assume the download did actually complete.
-                # 3. On the X1C for a local Bambu Studio slice sent via the cloud we see the download percentage immediately
-                # jump to 100% at the same time we see the PREPARE phase start but if we try and download then, the model file
-                # is not present.
-                LOGGER.debug("REACHED RUNNING WITHOUT DOWNLOADING MODEL")
+            if self.gcode_state in ("RUNNING", "PAUSE", "FINISH") and (previously_idle or previous_gcode_state in ("PREPARE", "unknown")):
+                # We haven't yet downloaded model data off the printer. Scenarios where this happens:
+                # 1. This is a lan mode print where the gcode was pushed to the printer before the print ever started
+                # 2. On the P1/P2/A1 download completes or prepare_percent never reaches 100
+                # 3. Home Assistant restarted mid-print or upon print completion without previous state
+                LOGGER.debug(f"REACHED {self.gcode_state} WITHOUT DOWNLOADING MODEL")
                 self._update_task_data()
 
             # The printer can refuse media transfers for the entire initial
@@ -1599,7 +1597,12 @@ class PrintJob:
         name = remote_file.basename.lower()
         in_cache = 1 if "/cache/" in path or path.startswith("cache/") else 0
         gcode_3mf = 1 if name.endswith(".gcode.3mf") else 0
-        source_rank = 1 if remote_file.source == Tcp6000MediaSource.name else 0
+        if remote_file.source == Ftps990MediaSource.name:
+            source_rank = 2
+        elif remote_file.source == Tcp6000MediaSource.name:
+            source_rank = 1
+        else:
+            source_rank = 0
         return (in_cache, remote_file.sort_time, gcode_3mf, source_rank)
 
     def _select_model_file(
@@ -1652,7 +1655,12 @@ class PrintJob:
                     f"Matched task name '{self._subtask_name}' to {selected.path} from "
                     f"{selected.source}/{selected.storage} by pattern"
                 )
-                return self._remote_file_aliases(matches, selected)
+                aliases = self._remote_file_aliases(matches, selected)
+                remaining = [
+                    file for file in sorted(matches, key=self._model_candidate_score, reverse=True)
+                    if not self._same_remote_media_file(file, selected)
+                ]
+                return aliases + remaining
 
         if self._subtask_name == "":
             LOGGER.debug("Falling back to newest remote 3mf file across media sources.")
@@ -2362,6 +2370,223 @@ class PrintJob:
 
         return False
 
+    def _parse_and_apply_model_metadata(
+        self,
+        slice_info_bytes: bytes,
+        cover_image_bytes: bytes | None = None,
+        plate_json_bytes: bytes | None = None,
+        pick_image_bytes: bytes | None = None,
+    ) -> bool:
+        try:
+            slice_info = ElementTree.fromstring(slice_info_bytes)
+            plate = slice_info.find('plate')
+            # "Export all sliced file" writes one <plate> per sliced plate. Use the one MQTT says is
+            # printing, falling back to the first plate as before when it isn't listed.
+            if self.plate_idx:
+                for candidate in slice_info.findall('plate'):
+                    if candidate.find(f"metadata[@key='index'][@value='{self.plate_idx}']") is not None:
+                        plate = candidate
+                        break
+
+            if plate is None:
+                LOGGER.debug("No <plate> element found in slice_info.config")
+                return False
+
+            print_length = 0
+            plate_number = None
+            _printable_objects = {}
+            filament_count = len(self.ams_mapping)
+            plate_filament_count = len(plate.findall('filament'))
+
+            # Reset filament data
+            self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+            self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+
+            if cover_image_bytes is not None:
+                self._client._device.cover_image.set_image(cover_image_bytes)
+                LOGGER.debug(f"Cover image set successfully ({len(cover_image_bytes)} bytes).")
+
+            for metadata in plate:
+                if (metadata.get('key') == 'index'):
+                    # Index is the plate number being printed
+                    plate_number = metadata.get('value')
+                    LOGGER.debug(f"Plate: {plate_number}")
+
+                    if plate_json_bytes is not None:
+                        try:
+                            self.print_bed_type = json.loads(plate_json_bytes.decode('utf-8')).get('bed_type')
+                        except Exception as e:
+                            LOGGER.debug(f"Failed to parse plate json bed_type: {e}")
+
+                elif (metadata.get('key') == 'weight'):
+                    LOGGER.debug(f"Weight: {metadata.get('value')}")
+                    try:
+                        # The XML attribute is a string; print_weight is a float everywhere else.
+                        self.print_weight = float(metadata.get('value'))
+                    except (TypeError, ValueError) as e:
+                        LOGGER.error(f"Failed to parse print weight: {e}")
+                elif (metadata.get('key') == 'prediction'):
+                    # Estimated print length in seconds
+                    LOGGER.debug(f"Print time: {metadata.get('value')}s")
+                elif (metadata.tag == 'object'):
+                    # Get the list of printable objects present on the plate before slicing.
+                    # This includes hidden objects which need to be filtered out later.
+                    if metadata.get('skipped') == "false":
+                        _printable_objects[metadata.get('identify_id')] = metadata.get('name')
+                elif (metadata.tag == 'filament'):
+                    try:
+                        # Filament used for the current print job. The plate info contains filaments
+                        # identified in the order they appear in the slicer. These IDs must be
+                        # mapped to the AMS tray mappings provided by MQTT print.ams_mapping
+
+                        # Zero-index the filament ID
+                        filament_index = int(metadata.get('id')) - 1
+                        log_label = "External spool"
+
+                        # Filament count should be greater than the zero-indexed filament ID
+                        if filament_count > filament_index:
+                            ams_index = self.ams_mapping[filament_index]
+                            ams_name = ams_slot_name(ams_index)
+                            if ams_name is not None:
+                                # We add the filament as you can map multiple slicer filaments to the same physical filament.
+                                self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
+                                self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
+                                log_label = ams_name
+                            else:
+                                LOGGER.debug(f"ams_mapping: {self.ams_mapping}")
+                        elif plate_filament_count > 0:
+                            # Multi filament print but the AMS mapping is unknown
+                            # The data is only sent in the mqtt payload once and isn't part of the 'full' data so the integration must be
+                            # live and listening to capture it.
+                            LOGGER.debug(f"filament_index: {filament_index}")
+                            log_label = "AMS Tray unknown"
+                        else:
+                            LOGGER.debug(f"plate_filament_count: {plate_filament_count}")
+
+                        LOGGER.debug(f"{log_label}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
+
+                        # Increase the total print length
+                        print_length += float(metadata.get('used_m'))
+                    except Exception as e:
+                        LOGGER.error(f"Failed to parse filament data: {e}")
+
+            self.print_length = print_length
+
+            if pick_image_bytes is not None and plate_number is not None:
+                try:
+                    self._client._device.pick_image.set_image(pick_image_bytes)
+                    pick_image = Image.open(io.BytesIO(pick_image_bytes))
+                    identify_ids = self._identify_objects_in_pick_image(image=pick_image)
+
+                    # Filter the printable objects from slice_info.config, removing
+                    # any that weren't identified in the pick image.
+                    self._printable_objects = {identify_id: _printable_objects[identify_id] for identify_id in identify_ids if identify_id in _printable_objects}
+                    self._update_printable_objects()
+                except Exception as e:
+                    LOGGER.error(f"Failed to extract pick image: {e}")
+
+            self._client.callback("event_printer_data_update")
+            return True
+        except Exception as e:
+            LOGGER.error(f"Error parsing slice_info.config metadata: {e}")
+            return False
+
+    def _attempt_direct_metadata_download(self) -> bool:
+        """Attempt to download slice_info.config and plate image directly via FTPS (e.g. for P1/P2/A1 printers in LAN mode)."""
+        ftp = None
+        try:
+            ftp = self._client.ftp_connection()
+            metadata_dirs = ["/data/Metadata", "/Metadata"]
+            target_dir = None
+            files = []
+
+            for mdir in metadata_dirs:
+                try:
+                    ftp.cwd(mdir)
+                    target_dir = mdir
+                    files = ftp.nlst()
+                    break
+                except Exception:
+                    continue
+
+            if not target_dir or not files:
+                LOGGER.debug("No Metadata directory found on printer via FTPS.")
+                return False
+
+            slice_info_file = next((f for f in files if f.endswith("slice_info.config")), None)
+            if not slice_info_file:
+                LOGGER.debug(f"slice_info.config not found in {target_dir}")
+                return False
+
+            slice_info_buf = io.BytesIO()
+            ftp.retrbinary(f"RETR {slice_info_file}", slice_info_buf.write)
+            slice_info_bytes = slice_info_buf.getvalue()
+
+            plate_elem = ElementTree.fromstring(slice_info_bytes).find('plate')
+            plate_number = None
+            if plate_elem is not None:
+                for meta in plate_elem:
+                    if meta.get('key') == 'index':
+                        plate_number = meta.get('value')
+                        break
+
+            active_plate = str(self.plate_idx) if self.plate_idx else plate_number
+            cover_png_file = None
+            if active_plate and f"plate_{active_plate}.png" in files:
+                cover_png_file = f"plate_{active_plate}.png"
+            elif plate_number and f"plate_{plate_number}.png" in files:
+                cover_png_file = f"plate_{plate_number}.png"
+            elif "plate_1.png" in files:
+                cover_png_file = "plate_1.png"
+            else:
+                cover_png_file = next((f for f in files if f.startswith("plate_") and f.endswith(".png")), None)
+
+            cover_image_bytes = None
+            if cover_png_file:
+                try:
+                    cover_buf = io.BytesIO()
+                    ftp.retrbinary(f"RETR {cover_png_file}", cover_buf.write)
+                    cover_image_bytes = cover_buf.getvalue()
+                except Exception as e:
+                    LOGGER.debug(f"Failed to download {cover_png_file}: {e}")
+
+            target_plate = plate_number or active_plate or "1"
+            plate_json_bytes = None
+            target_plate_json = f"plate_{target_plate}.json"
+            if target_plate_json in files:
+                try:
+                    pjson_buf = io.BytesIO()
+                    ftp.retrbinary(f"RETR {target_plate_json}", pjson_buf.write)
+                    plate_json_bytes = pjson_buf.getvalue()
+                except Exception as e:
+                    LOGGER.debug(f"Failed to download {target_plate_json}: {e}")
+
+            pick_image_bytes = None
+            target_pick = f"pick_{target_plate}.png"
+            if target_pick in files:
+                try:
+                    pick_buf = io.BytesIO()
+                    ftp.retrbinary(f"RETR {target_pick}", pick_buf.write)
+                    pick_image_bytes = pick_buf.getvalue()
+                except Exception as e:
+                    LOGGER.debug(f"Failed to download {target_pick}: {e}")
+
+            return self._parse_and_apply_model_metadata(
+                slice_info_bytes=slice_info_bytes,
+                cover_image_bytes=cover_image_bytes,
+                plate_json_bytes=plate_json_bytes,
+                pick_image_bytes=pick_image_bytes,
+            )
+        except Exception as e:
+            LOGGER.debug(f"Direct metadata download failed: {type(e)} Args: {e}")
+            return False
+        finally:
+            if ftp:
+                try:
+                    ftp.quit()
+                except Exception:
+                    pass
+
     def _async_download_task_data_from_printer_worker(self):
         model_file_path = None
         cover_loaded = False
@@ -2390,11 +2615,17 @@ class PrintJob:
             self._close_remote_media_sources(sources)
 
         if model_file_path is None:
-            LOGGER.debug("No model file found.")
+            LOGGER.debug("No model .3mf file found. Attempting direct metadata download from printer...")
+            if self._attempt_direct_metadata_download():
+                LOGGER.info("Direct metadata download from printer succeeded.")
+                self.prune_print_history_files()
+                return True
+            LOGGER.debug("Direct metadata download also failed.")
             if not cover_loaded:
                 self._next_model_retry_at = time.monotonic() + 300
                 self._loaded_model_data = False
-            return
+            self.prune_print_history_files()
+            return False
 
         result = False
         
@@ -2405,155 +2636,85 @@ class PrintJob:
 
             # Open the 3mf zip archive
             with ZipFile(model_file_path) as archive:
-                # Extract the slicer XML config and parse the plate tree
-                slice_info = ElementTree.fromstring(archive.read('Metadata/slice_info.config'))
+                slice_info_bytes = archive.read('Metadata/slice_info.config')
+                slice_info = ElementTree.fromstring(slice_info_bytes)
                 plate = slice_info.find('plate')
-                # "Export all sliced file" writes one <plate> per sliced plate. Use the one MQTT says is
-                # printing, falling back to the first plate as before when it isn't listed.
                 if self.plate_idx:
                     for candidate in slice_info.findall('plate'):
                         if candidate.find(f"metadata[@key='index'][@value='{self.plate_idx}']") is not None:
                             plate = candidate
                             break
-                
-                # Iterate through each config element and extract the data
-                # Example contents:
-                # {'key': 'index', 'value': '2'}
-                # {'key': 'printer_model_id', 'value': 'C12'}
-                # {'key': 'nozzle_diameters', 'value': '0.4'}
-                # {'key': 'timelapse_type', 'value': '0'}
-                # {'key': 'prediction', 'value': '5935'}
-                # {'key': 'weight', 'value': '20.91'}
-                # {'key': 'outside', 'value': 'false'}
-                # {'key': 'support_used', 'value': 'false'}
-                # {'key': 'label_object_enabled', 'value': 'true'}
-                # {'identify_id': '123', 'name': 'ModelObjectOne.stl', 'skipped': 'false'}
-                # {'identify_id': '394', 'name': 'ModelObjectTwo.stl', 'skipped': 'false'}
-                # {'id': '1', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#000000', 'used_m': '5.45', 'used_g': '17.32'}
-                # {'id': '2', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#8D8C8F', 'used_m': '0.84', 'used_g': '2.66'}
-                # {'id': '3', 'tray_info_idx': 'GFA01', 'type': 'PLA', 'color': '#FFFFFF', 'used_m': '0.29', 'used_g': '0.93'}
-                
-                # Start a total print length count to be compiled from each filament
-                print_length = 0
+
                 plate_number = None
-                _printable_objects = {}
-                filament_count = len(self.ams_mapping)
-                plate_filament_count = len(plate.findall('filament'))
+                if plate is not None:
+                    for meta in plate:
+                        if meta.get('key') == 'index':
+                            plate_number = meta.get('value')
+                            break
 
-                # Reset filament data
-                self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
-                self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+                active_plate_number = str(self.plate_idx) if self.plate_idx else plate_number
+                namelist_map = {name.lower(): name for name in archive.namelist()}
 
-                for metadata in plate:
-                    if (metadata.get('key') == 'index'):
-                        # Index is the plate number being printed
-                        plate_number = metadata.get('value')
-                        LOGGER.debug(f"Plate: {plate_number}")
-                        
-                        # MQTT is authoritative for the plate that is actively printing.
-                        # A printer can retain/reuse a 3mf whose slice_info points at a
-                        # different plate, which otherwise makes the cover image stale.
-                        active_plate_number = str(self.plate_idx) if self.plate_idx else plate_number
-                        cover_entry_name = f"Metadata/plate_{active_plate_number}.png"
-                        self._client._device.cover_image.set_image(archive.read(cover_entry_name))
-                        LOGGER.debug(f"Cover image: {cover_entry_name}")
+                candidates = []
+                if active_plate_number:
+                    candidates.append(f"Metadata/plate_{active_plate_number}.png")
+                if plate_number and plate_number != active_plate_number:
+                    candidates.append(f"Metadata/plate_{plate_number}.png")
+                candidates.append("Metadata/plate_1.png")
 
-                        # Save the cover image to the cache
-                        try:
-                            # Save the cover image directly to the cache
-                            cover_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.png'
-                            cover_path = os.path.join(model_dir, cover_filename)
-                            with archive.open(cover_entry_name) as cover_entry, open(cover_path, "wb") as target_path:
-                                shutil.copyfileobj(cover_entry, target_path)
-                            LOGGER.debug(f"Cover image saved to: {cover_path}")
-                        except Exception as e:
-                            LOGGER.error(f"Failed to save cover image: {e}")
+                cover_entry_name = None
+                for c in candidates:
+                    if c.lower() in namelist_map:
+                        cover_entry_name = namelist_map[c.lower()]
+                        break
 
-                        try:
-                            # Save the gcode file to the cache
+                if not cover_entry_name:
+                    for name in archive.namelist():
+                        nl = name.lower()
+                        if nl.endswith(".png") and ("plate" in nl or "cover" in nl) and "pick" not in nl:
+                            cover_entry_name = name
+                            break
+
+                cover_image_bytes = None
+                if cover_entry_name:
+                    try:
+                        cover_image_bytes = archive.read(cover_entry_name)
+                        LOGGER.debug(f"Read cover image ({len(cover_image_bytes)} bytes) from {cover_entry_name}")
+                        cover_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.png'
+                        cover_path = os.path.join(model_dir, cover_filename)
+                        with open(cover_path, "wb") as f:
+                            f.write(cover_image_bytes)
+                        LOGGER.debug(f"Cover image saved to: {cover_path}")
+                    except Exception as e:
+                        LOGGER.error(f"Failed to save cover image: {e}")
+
+                target_plate = plate_number or active_plate_number or "1"
+                plate_json_bytes = None
+                for jc in [f"Metadata/plate_{target_plate}.json", f"Metadata/plate_{active_plate_number}.json", "Metadata/plate_1.json"]:
+                    if jc and jc.lower() in namelist_map:
+                        plate_json_bytes = archive.read(namelist_map[jc.lower()])
+                        break
+
+                pick_image_bytes = None
+                for pc in [f"Metadata/pick_{target_plate}.png", f"Metadata/pick_{active_plate_number}.png", "Metadata/pick_1.png"]:
+                    if pc and pc.lower() in namelist_map:
+                        pick_image_bytes = archive.read(namelist_map[pc.lower()])
+                        break
+
+                if plate_number:
+                    try:
+                        gcode_entry = f"Metadata/plate_{plate_number}.gcode"
+                        if gcode_entry in archive.namelist():
                             gcode_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.gcode'
                             gcode_path = os.path.join(model_dir, gcode_filename)
-                            with archive.open(f"Metadata/plate_{plate_number}.gcode") as gcode_entry, open(gcode_path, "wb") as target_path:
-                                shutil.copyfileobj(gcode_entry, target_path)
+                            with archive.open(gcode_entry) as ge, open(gcode_path, "wb") as tp:
+                                shutil.copyfileobj(ge, tp)
                                 self.gcode_file_downloaded = gcode_filename
-                        except Exception as e:
-                            self.gcode_file_downloaded = "ERROR"
-                            LOGGER.error(f"Error while extracting gcode zip entry to target path. {repr(e)}")
-                        
-                        # And extract the plate type from the plate json.
-                        self.print_bed_type = json.loads(archive.read(f"Metadata/plate_{plate_number}.json")).get('bed_type')
-                    elif (metadata.get('key') == 'weight'):
-                        LOGGER.debug(f"Weight: {metadata.get('value')}")
-                        try:
-                            # The XML attribute is a string; print_weight is a float everywhere else.
-                            self.print_weight = float(metadata.get('value'))
-                        except (TypeError, ValueError) as e:
-                            LOGGER.error(f"Failed to parse print weight: {e}")
-                    elif (metadata.get('key') == 'prediction'):
-                        # Estimated print length in seconds
-                        LOGGER.debug(f"Print time: {metadata.get('value')}s")
-                    elif (metadata.tag == 'object'):
-                        # Get the list of printable objects present on the plate before slicing.
-                        # This includes hidden objects which need to be filtered out later.
-                        if metadata.get('skipped') == f"false":
-                            _printable_objects[metadata.get('identify_id')] = metadata.get('name')
-                    elif (metadata.tag == 'filament'):
-                        try:
-                            # Filament used for the current print job. The plate info contains filaments
-                            # identified in the order they appear in the slicer. These IDs must be
-                            # mapped to the AMS tray mappings provided by MQTT print.ams_mapping
+                    except Exception as e:
+                        self.gcode_file_downloaded = "ERROR"
+                        LOGGER.error(f"Error while extracting gcode zip entry to target path: {repr(e)}")
 
-                            # Zero-index the filament ID
-                            filament_index = int(metadata.get('id')) - 1
-                            log_label = f"External spool"
-                            
-                            # Filament count should be greater than the zero-indexed filament ID
-                            if filament_count > filament_index:
-                                ams_index = self.ams_mapping[filament_index]
-                                ams_name = ams_slot_name(ams_index)
-                                if ams_name is not None:
-                                    # We add the filament as you can map multiple slicer filaments to the same physical filament.
-                                    self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
-                                    self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
-                                    log_label = ams_name
-                                else:
-                                    LOGGER.debug(f"ams_mapping: {self.ams_mapping}")
-                            elif plate_filament_count > 0:
-                                # Multi filament print but the AMS mapping is unknown
-                                # The data is only sent in the mqtt payload once and isn't part of the 'full' data so the integration must be
-                                # live and listening to capture it.
-                                LOGGER.debug(f"filament_index: {filament_index}")
-                                log_label = f"AMS Tray unknown"
-                            else:
-                                LOGGER.debug(f"plate_filament_count: {plate_filament_count}")
-
-                            LOGGER.debug(f"{log_label}: {metadata.get('used_m')}m | {metadata.get('used_g')}g")
-
-                            # Increase the total print length
-                            print_length += float(metadata.get('used_m'))
-                        except Exception as e:
-                            LOGGER.error(f"Failed to parse filament data: {e}")
-                
-                self.print_length = print_length
-
-                if plate_number is not None:
-                    try:
-                        image = archive.read(f"Metadata/pick_{plate_number}.png")
-                        self._client._device.pick_image.set_image(image)
-                        # Process the pick image for objects
-                        pick_image = Image.open(archive.open(f"Metadata/pick_{plate_number}.png"))
-                        identify_ids = self._identify_objects_in_pick_image(image=pick_image)
-                        
-                        # Filter the printable objects from slice_info.config, removing
-                        # any that weren't detected in the pick image
-                        self._printable_objects = {k: _printable_objects[k] for k in identify_ids if k in _printable_objects}
-                    except:
-                        LOGGER.debug(f"Unable to load 'Metadata/pick_{plate_number}.png' from archive")
-
-                # Save the slice_info.config file only if file cache is enabled
                 try:
-                    slice_info_bytes = archive.read('Metadata/slice_info.config')
-                    # Save the slice_info.config in the same directory as the model file
                     slice_info_filename = os.path.splitext(os.path.basename(model_file_path))[0] + '.slice_info.config'
                     slice_info_path = os.path.join(model_dir, slice_info_filename)
                     with open(slice_info_path, "wb") as f:
@@ -2561,13 +2722,16 @@ class PrintJob:
                 except Exception as e:
                     LOGGER.error(f"Failed to save slice_info.config: {e}")
 
-            archive.close()
+                result = self._parse_and_apply_model_metadata(
+                    slice_info_bytes=slice_info_bytes,
+                    cover_image_bytes=cover_image_bytes,
+                    plate_json_bytes=plate_json_bytes,
+                    pick_image_bytes=pick_image_bytes,
+                )
 
-            self._client.callback("event_printer_data_update")
-            result = True
         except Exception as e:
             LOGGER.error(f"Unexpected error parsing model data: {e}")
-        
+
         self.prune_print_history_files()
 
         return result

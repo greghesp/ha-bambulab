@@ -419,6 +419,75 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.print_bed_type, "cool_plate")
         self.assertEqual(gcode, b"plate-1-gcode")
 
+    def test_direct_metadata_download_fallback(self):
+        """When no 3MF is found, fallback directly downloads slice_info and plate image from Metadata directory."""
+        self.client.ftp_enabled = True
+        self.client._device.supports_feature.return_value = True
+        self.client._device.external_spool[0].active = True
+        self.print_job.plate_idx = 2
+        self.print_job.ams_mapping = []
+        self.print_job.prune_print_history_files = MagicMock()
+
+        ftp_mock = MagicMock()
+        self.client.ftp_connection.return_value = ftp_mock
+
+        def mock_cwd(path):
+            if path == "/data/Metadata":
+                return
+            raise Exception(f"Directory {path} not found")
+
+        ftp_mock.cwd.side_effect = mock_cwd
+        ftp_mock.nlst.return_value = [
+            "slice_info.config",
+            "plate_2.png",
+            "plate_2.gcode",
+            "plate_2.json",
+        ]
+
+        def mock_retrbinary(cmd, callback):
+            if "slice_info.config" in cmd:
+                callback(
+                    b'<config><plate><metadata key="index" value="2" />'
+                    b'<metadata key="weight" value="32.85" /></plate></config>'
+                )
+            elif "plate_2.png" in cmd:
+                callback(b"direct-plate-cover-bytes")
+            elif "plate_2.json" in cmd:
+                callback(b'{"bed_type": "textured_plate"}')
+
+        ftp_mock.retrbinary.side_effect = mock_retrbinary
+
+        self.print_job._remote_media_sources = MagicMock(return_value=[MagicMock()])
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._close_remote_media_sources = MagicMock()
+
+        self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+        self.assertEqual(self.print_job.print_weight, 32.85)
+        self.assertEqual(self.print_job.print_bed_type, "textured_plate")
+        self.client._device.cover_image.set_image.assert_called_with(b"direct-plate-cover-bytes")
+
+    def test_select_model_files_prefers_ftps_and_retains_fallback(self):
+        ftps_file = RemoteMediaFile(
+            name="all_models.gcode.3mf",
+            path="/all_models.gcode.3mf",
+            size=1000,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+        )
+        tcp_file = RemoteMediaFile(
+            name="all_models.gcode.3mf",
+            path="/userdata/model/history/all_models.gcode.3mf",
+            size=1000,
+            media_type="model",
+            source=Tcp6000MediaSource.name,
+            storage="emmc",
+        )
+        selected = self.print_job._select_model_files([tcp_file, ftps_file], ["all_models.gcode.3mf"])
+        self.assertEqual(len(selected), 2)
+        self.assertEqual(selected[0].source, Ftps990MediaSource.name)
+        self.assertEqual(selected[1].source, Tcp6000MediaSource.name)
+
     def test_prune_cleans_stale_part_files_even_when_pruning_disabled(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             stale_part = Path(temp_dir) / "stale.3mf.part"
@@ -1478,7 +1547,7 @@ class TestX2D(unittest.TestCase):
         self.client._device = MagicMock()
         self.client._device.extruder = Extruder(self.client._device)
 
-        with open(os.path.join(os.path.dirname(__file__), 'X2D.json'), 'r') as f:
+        with open(os.path.join(os.path.dirname(__file__), 'X2D.json'), 'r', encoding='utf-8') as f:
             self.x2d_data = json.load(f)
 
     def test_track_switch_one_input(self):
