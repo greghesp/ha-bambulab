@@ -461,6 +461,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         translation_key="stage",
         icon="mdi:file-tree",
         value_fn=lambda self: "offline" if not self.coordinator.get_model().info.online else self.coordinator.get_model().stage.description,
+        extra_attributes=lambda self: self.coordinator.get_model().stage.attributes,
         device_class=SensorDeviceClass.ENUM,
         options=CURRENT_STAGE_OPTIONS + ["offline"]
     ),
