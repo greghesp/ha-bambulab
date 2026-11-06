@@ -586,7 +586,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 LOGGER.error("Unable to locate AMS.")
                 return
             ams_tray = self.get_model().ams.data[ams_index].tray[tray_index]
-            if ams_tray.empty:
+            # A spool without an RFID tag carries no filament metadata until
+            # set_filament writes it, so on firmware that omits the per-tray
+            # `state` field `empty` stays True for it. Trust the AMS presence bit
+            # in that case, or set_filament could never configure such a spool.
+            if ams_tray.empty and ams_tray.exists is not True:
                 LOGGER.error(f"AMS {ams_index + 1} tray {tray_index + 1} is empty")
                 return
         else:
