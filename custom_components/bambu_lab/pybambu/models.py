@@ -4652,7 +4652,7 @@ class PrintFun:
         # control system through bit 16 of "flag3" instead. "flag3" is only present
         # in full status frames, so latch the bit once it has been seen.
         flag3 = data.get("flag3")
-        if isinstance(flag3, int) and (flag3 & Print_Flag3_Values.AUTHORIZATION_CONTROL) != 0:
+        if isinstance(flag3, int) and (flag3 & Print_Flag3_Values.AUTHORIZATION_CONTROL_ENABLED) != 0:
             self._flag3_authorization_control = True
 
         if self._value:
