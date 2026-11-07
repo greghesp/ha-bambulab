@@ -31,6 +31,7 @@ from .pybambu.bambu_cloud import (
     CodeExpiredError,
     CodeIncorrectError,
     CsrfError,
+    CsrfObtainError,
     TfaCodeRequiredError
 )
 
@@ -233,7 +234,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
                 # Fall through to form generation to ask for verification code
-            except CsrfError:
+            except (CsrfError, CsrfObtainError):
                 # The 2FA endpoint lives on the website host (bambulab.com), which now
                 # requires a CSRF cookie that the API host never issues, so the code is
                 # rejected before it is ever evaluated. The API host still accepts code
@@ -735,7 +736,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
                 # Fall through to form generation to ask for verification code
-            except CsrfError:
+            except (CsrfError, CsrfObtainError):
                 # The 2FA endpoint lives on the website host (bambulab.com), which now
                 # requires a CSRF cookie that the API host never issues, so the code is
                 # rejected before it is ever evaluated. The API host still accepts code

@@ -5,6 +5,7 @@ from pybambu.bambu_cloud import (
     BambuCloud,
     CloudflareError,
     CsrfError,
+    CsrfObtainError,
 )
 
 
@@ -48,6 +49,37 @@ class TestCsrfDetection(unittest.TestCase):
 
     def test_success_response_does_not_raise(self):
         self.cloud._test_response(_response(200, '{"accessToken":"token"}'))
+
+
+class TestCsrfTokenFetch(unittest.TestCase):
+    """The config flow falls back to code login when the CSRF cookie can't be obtained, so
+    every way that fetch can fail must surface as CsrfObtainError (#2187)."""
+
+    def setUp(self):
+        self.cloud = BambuCloud("", "", "", "")
+        self.cloud._tfaKey = "key"
+        self.cloud._post = MagicMock()
+
+    def test_csrf_endpoint_404_raises_csrf_obtain_error(self):
+        self.cloud._get = MagicMock(side_effect=PermissionError(404, "<title>404 | Bambu Lab</title>"))
+
+        with self.assertRaises(CsrfObtainError):
+            self.cloud._get_authentication_token_with_2fa_code("123456")
+        self.cloud._post.assert_not_called()
+
+    def test_response_without_cookie_raises_csrf_obtain_error(self):
+        response = MagicMock(status_code=204)
+        response.cookies.get.return_value = None
+        self.cloud._get = MagicMock(return_value=response)
+
+        with self.assertRaises(CsrfObtainError):
+            self.cloud._get_authentication_token_with_2fa_code("123456")
+
+    def test_cloudflare_block_is_not_masked(self):
+        self.cloud._get = MagicMock(side_effect=CloudflareError())
+
+        with self.assertRaises(CloudflareError):
+            self.cloud._get_authentication_token_with_2fa_code("123456")
 
 
 if __name__ == '__main__':
