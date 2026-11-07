@@ -167,6 +167,18 @@ class Device:
     def has_full_printer_data(self):
         return (self.push_all_data != None) and (self.get_version_data != None)
 
+    @property
+    def ams_identities_resolved(self) -> bool:
+        """True when the serial of every AMS the printer reports is known.
+
+        Version payloads can arrive with a blank serial, and the first status push may not
+        include the AMS block. Until both are complete, a registered AMS missing from our
+        data has not been shown to be gone.
+        """
+        if not self.has_full_printer_data or "ams" not in self.push_all_data:
+            return False
+        return all(ams.serial for ams in self.ams.data.values())
+
     def info_update(self, data):
         had_full_printer_data = self.has_full_printer_data
         self.info.info_update(data = data)
