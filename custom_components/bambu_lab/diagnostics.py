@@ -13,7 +13,11 @@ from .const import DOMAIN
 from .coordinator import BambuDataUpdateCoordinator
 from .pybambu.commands import PUSH_ALL, GET_VERSION
 from .pybambu.const import Features
+from .pybambu.utils import async_wait_until
 
+
+# How long to wait for the printer to answer the refresh requested when diagnostics are downloaded.
+DIAGNOSTICS_REFRESH_TIMEOUT = 5
 
 TO_REDACT = [
     "access_code",
@@ -100,11 +104,22 @@ async def async_get_config_entry_diagnostics(
     # Must convert this to a dict for redaction to work correctly. Redaction leaves empty values as empty so we know if a value was present or not.
     entry = coordinator.config_entry.as_dict()
 
+    # Get the device object
+    device = coordinator.get_model()
+
+    previous_push_all = device.push_all_data
+    previous_version = device.get_version_data
     coordinator.client.publish(PUSH_ALL)
     coordinator.client.publish(GET_VERSION)
 
-    # Get the device object
-    device = coordinator.get_model()
+    # The responses arrive asynchronously over MQTT. Without waiting for them the report
+    # holds the previous payload, or none at all if this is the first request.
+    if device.info.online:
+        await async_wait_until(
+            lambda: device.push_all_data is not previous_push_all
+            and device.get_version_data is not previous_version,
+            timeout=DIAGNOSTICS_REFRESH_TIMEOUT,
+        )
     
     # Serialize the entire device state
     try:
