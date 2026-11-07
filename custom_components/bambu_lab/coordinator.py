@@ -218,6 +218,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _is_service_call_for_me(self, data: dict):
         dev_reg = device_registry.async_get(self._hass)
         hadevice = self.get_ha_printer_device()
+        if hadevice is None:
+            # This printer isn't registered yet so the call can't be for it.
+            return False
 
         device_id = data.get('device_id')
         entity_id = data.get('entity_id')
@@ -232,6 +235,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             if device_id == hadevice.id:
                 return True
             ams_device = dev_reg.async_get(device_id)
+            if ams_device is None:
+                return False
             via_device_id = ams_device.via_device_id
             if via_device_id is not None and (via_device_id == hadevice.id):
                 return True
@@ -268,10 +273,33 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _handle_service_call_event(self, event: Event) -> Any:
         data = event.data
-        if not self._is_service_call_for_me(data):
+        # handle_service_call waits on this future, so every path that handles the call must
+        # resolve it. Otherwise the caller only ever sees "Service call timed out".
+        try:
+            is_for_me = self._is_service_call_for_me(data)
+        except Exception:
+            # The future is shared between printers. Resolving it here could discard the
+            # result from the printer this call was actually meant for.
+            LOGGER.exception(f"Unable to determine the target of service call '{data.get('service')}'")
+            return
+        if not is_for_me:
             # Call is not for this instance.
             return
-        
+
+        try:
+            result = self._run_service_call(data)
+        except Exception:
+            LOGGER.exception(f"Service call '{data.get('service')}' failed")
+            result = False
+
+        future = self._hass.data[DOMAIN].get('service_call_future')
+        if future is None:
+            LOGGER.error("Future is None")
+            return
+        if not future.done():
+            future.set_result(False if result is None else result)
+
+    def _run_service_call(self, data: dict) -> Any:
         service_call_name = data['service']
         write_action = True
         if service_call_name == 'get_filament_data':
@@ -283,12 +311,6 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 self._report_encryption_enabled_issue(True)
                 return False
 
-        future = self._hass.data[DOMAIN]['service_call_future']
-        if future is None:
-            LOGGER.error("Future is None")
-            future.set_result(False)
-            return
-        
         result = None
         match service_call_name:
             case "skip_objects":
@@ -322,11 +344,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case _:
                 LOGGER.error(f"Unknown service call: {data}")
 
-        if result is None:
-            result = False
+        return result
 
-        future.set_result(result)
-        
     def _service_call_skip_objects(self, data: dict):
         # All command templates are deep-copied before mutation - filling in the shared
         # global corrupts concurrent service calls and later reuses of the template.

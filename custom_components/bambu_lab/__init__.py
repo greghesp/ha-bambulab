@@ -26,6 +26,7 @@ from .const import (
     SERVICE_CALL_EVENT
 )
 from .coordinator import BambuDataUpdateCoordinator
+from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
 from .frontend import BambuLabCardRegistration
 from .config_flow import CONFIG_VERSION
@@ -369,7 +370,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def handle_service_call(call: ServiceCall):
         LOGGER.debug(f"handle_service_call: {call.service}")
-        data = dict(call.data)
+        try:
+            data = normalize_service_target(call.data)
+        except ValueError as e:
+            LOGGER.error(f"Service call '{call.service}' rejected: {e}")
+            return None
         data['service'] = call.service
         
         future = asyncio.Future()
