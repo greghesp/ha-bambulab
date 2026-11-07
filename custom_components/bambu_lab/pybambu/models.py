@@ -4043,6 +4043,8 @@ class StageAction:
         self._id = 255
         self._print_type = ""
         self._gcode_state = ""
+        self.planned = []
+        self.step = None
         self.description = get_current_stage(self._id)
 
     def print_update(self, data) -> bool:
@@ -4063,9 +4065,41 @@ class StageAction:
         if self._gcode_state == "FAILED":
             # After a cancelled print the printer keeps reporting the stage it was in. Nothing is running.
             self._id = 255
+        self._update_step(data)
         self.description = get_current_stage(self._id)
 
         return (old_data != f"{self.__dict__}")
+
+    def _update_step(self, data) -> None:
+        # stg lists the stages the printer plans to run before it starts printing,
+        # e.g. [29, 2, 13, 11, 4, 8, 14, 3, 54, 1, 51]. stg_cur walks through it.
+        planned = data.get("stg")
+        if isinstance(planned, list):
+            planned = [int(stage) for stage in planned]
+            if planned != self.planned:
+                self.planned = planned
+                self.step = None
+        if self._id not in self.planned:
+            self.step = None
+            return
+        # Search forward from the current step so a stage that appears twice
+        # in the plan counts on rather than jumping back.
+        start = self.step - 1 if self.step else 0
+        if self._id in self.planned[start:]:
+            self.step = self.planned.index(self._id, start) + 1
+        else:
+            self.step = self.planned.index(self._id) + 1
+
+    @property
+    def attributes(self) -> dict:
+        """Planned pre-print stages and the 1-based position of the current one."""
+        if not self.planned:
+            return {}
+        return {
+            "planned_stages": [get_current_stage(stage) for stage in self.planned],
+            "step": self.step,
+            "total_steps": len(self.planned),
+        }
 
 @dataclass
 class HMSList:
