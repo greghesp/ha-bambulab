@@ -329,7 +329,8 @@ class Print_Fun_Values(IntEnum):
 class Print_Flag3_Values(IntEnum):
     # Set in full push_status/pushall frames by firmware that uses the newer
     # authorization control system (MQTT commands must be signed).
-    AUTHORIZATION_CONTROL               = 0x00010000
+    AUTHORIZATION_CONTROL_ENABLED       = 0x00000010
+    AUTHORIZATION_CONTROL_SUPPORTED     = 0x00010000
 
 class Stat_Flag_Values(IntEnum):
     # Gap
