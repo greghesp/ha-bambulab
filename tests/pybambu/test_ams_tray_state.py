@@ -213,5 +213,47 @@ class TestAMSTrayNoStateFirmware(unittest.TestCase):
         self.assertTrue(self.tray.empty)
 
 
+class TestAMSTrayWithoutStateField(unittest.TestCase):
+    """Firmware such as the A1 mini with a BMCU never reports a per-tray ``state``. It
+    signals an emptied slot with a bare ``{"id": n}`` object instead (#2164)."""
+
+    LOADED = {
+        "id": "0",
+        "tray_info_idx": "GFA00",
+        "tray_type": "PLA",
+        "tray_color": "FFFFFFFF",
+        "tray_uuid": "00000000000000000000000000000000",
+    }
+
+    def setUp(self):
+        self.client = MagicMock()
+        self.client.slicer_settings.custom_filaments = {}
+        self.tray = AMSTray(self.client)
+
+    def test_full_payload_is_loaded(self):
+        self.tray.print_update(self.LOADED)
+        self.assertFalse(self.tray.empty)
+
+    def test_bare_id_clears_a_previously_loaded_tray(self):
+        self.tray.print_update(self.LOADED)
+
+        changed = self.tray.print_update({"id": "0"})
+
+        self.assertTrue(changed)
+        self.assertTrue(self.tray.empty)
+        self.assertEqual(self.tray.name, "Empty")
+        self.assertEqual(self.tray.tray_uuid, "")
+        self.assertEqual(self.tray.idx, "")
+
+    def test_tray_can_be_reloaded_after_being_cleared(self):
+        self.tray.print_update(self.LOADED)
+        self.tray.print_update({"id": "0"})
+
+        self.tray.print_update(self.LOADED)
+
+        self.assertFalse(self.tray.empty)
+        self.assertEqual(self.tray.type, "PLA")
+
+
 if __name__ == '__main__':
     unittest.main()

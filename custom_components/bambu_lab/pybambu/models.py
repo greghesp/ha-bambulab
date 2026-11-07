@@ -4005,6 +4005,10 @@ class AMSTray:
         """
         if self._state_reported:
             loaded = ams_tray_spool_loaded(self.state)
+        elif metadata_only:
+            # Firmware without a state field reports an emptied slot as a bare {"id": n}.
+            # The fields from before the spool was removed must not keep it looking loaded.
+            loaded = False
         else:
             loaded = self._has_filament_metadata()
         if loaded:
