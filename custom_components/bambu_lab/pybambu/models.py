@@ -4708,6 +4708,7 @@ class HomeFlag:
         self._device_type = client._device_type
         self._fired_missing_sdcard_event = False
         self.reported_storage: list[dict] | None = None
+        self._external_storage_kib: dict[str, int | None] = {"total": None, "free": None}
 
     def info_update(self, data):
         modules = data.get("module", [])
@@ -4725,6 +4726,20 @@ class HomeFlag:
                 {key: entry[key] for key in ("name", "total", "used") if key in entry}
                 for entry in storage if isinstance(entry, dict)
             ]
+            if self.usb_connected is False:
+                self._external_storage_kib = {"total": None, "free": None}
+        cam = (data.get("device") or {}).get("cam") or {}
+        for metric in ("total", "free"):
+            key = f"tl_external_{metric}_kb"
+            if key in cam and self.usb_connected is not False:
+                value = cam[key]
+                try:
+                    # Bambu Studio's DevStorage reads these explicit KB fields;
+                    # leave device.storage's undocumented capacity units alone.
+                    capacity = int(value) if not isinstance(value, (bool, float)) else -1
+                    self._external_storage_kib[metric] = capacity if capacity >= 0 else None
+                except (TypeError, ValueError, OverflowError):
+                    self._external_storage_kib[metric] = None
         if self.sdcard_status == "missing":
             if not self._fired_missing_sdcard_event:
                 self._fired_missing_sdcard_event = True
@@ -4732,6 +4747,31 @@ class HomeFlag:
         else:
             self._fired_missing_sdcard_event = False
         return (old_data != f"{self.__dict__}")
+
+    @property
+    def usb_connected(self) -> bool | None:
+        """Presence reported by the storage list, not a writable/health test."""
+        if self.reported_storage is None:
+            return None
+        return any(entry.get("name") == "usb" for entry in self.reported_storage)
+
+    def usb_capacity_kib(self, metric: str) -> int | None:
+        """External timelapse storage counters, only attributed to a reported USB."""
+        if self.usb_connected is not True:
+            return None
+        total = self._external_storage_kib["total"]
+        free = self._external_storage_kib["free"]
+        if total is None or total <= 0:
+            return None
+        if metric == "total":
+            return total
+        if free is None or free > total:
+            return None
+        if metric == "free":
+            return free
+        if metric == "used":
+            return total - free
+        return None
 
     @property
     def sdcard_status(self) -> str:

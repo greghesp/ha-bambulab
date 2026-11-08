@@ -614,6 +614,22 @@
           "idle": "Idle"
         }
       },
+      "usb_connection": {
+        "name": "USB drive connection",
+        "state": {
+          "connected": "Connected",
+          "disconnected": "Disconnected"
+        }
+      },
+      "usb_storage_total": {
+        "name": "USB storage total"
+      },
+      "usb_storage_used": {
+        "name": "USB storage used"
+      },
+      "usb_storage_free": {
+        "name": "USB storage free"
+      },
       "sdcard_status": {
         "name": "SD card status",
         "state": {

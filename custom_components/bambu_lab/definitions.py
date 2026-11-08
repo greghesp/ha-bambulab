@@ -24,7 +24,8 @@ from homeassistant.const import (
     UnitOfTemperature,
     UnitOfMass,
     UnitOfLength,
-    UnitOfTime
+    UnitOfTime,
+    UnitOfInformation,
 )
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.util import dt as dt_util
@@ -505,6 +506,19 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         options=SDCARD_STATUS
     ),
     BambuLabSensorEntityDescription(
+        key="usb_connection",
+        translation_key="usb_connection",
+        icon="mdi:usb-flash-drive",
+        device_class=SensorDeviceClass.ENUM,
+        options=["connected", "disconnected"],
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == "H3C",
+        value_fn=lambda self: (
+            None if self.coordinator.get_model().home_flag.usb_connected is None
+            else "connected" if self.coordinator.get_model().home_flag.usb_connected
+            else "disconnected"
+        ),
+    ),
+    BambuLabSensorEntityDescription(
         key="skipped_objects",
         translation_key="skipped_objects",
         icon="mdi:cube-unfolded",
@@ -737,6 +751,24 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         icon="mdi:identifier",
         value_fn=lambda self: self.coordinator.get_model().info.serial
     )
+)
+
+
+PRINTER_SENSORS += tuple(
+    BambuLabSensorEntityDescription(
+        key=f"usb_storage_{metric}",
+        translation_key=f"usb_storage_{metric}",
+        icon="mdi:usb-flash-drive",
+        device_class=SensorDeviceClass.DATA_SIZE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfInformation.KIBIBYTES,
+        suggested_unit_of_measurement=UnitOfInformation.GIBIBYTES,
+        suggested_display_precision=2,
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == "H3C",
+        value_fn=lambda self, key=metric: self.coordinator.get_model().home_flag.usb_capacity_kib(key),
+        extra_attributes=lambda self: {"source": "device.cam.tl_external_*_kb"},
+    )
+    for metric in ("total", "used", "free")
 )
 
 

@@ -74,3 +74,58 @@ class TestH3CStorageDisplay(unittest.TestCase):
         for language, text in (("en", "Not applicable"), ("de", "Nicht zutreffend")):
             translations = json.loads((root / f"{language}.json").read_text())
             self.assertEqual(translations["entity"]["sensor"]["sdcard_status"]["state"]["not_applicable"], text)
+
+    def test_usb_presence_is_unknown_until_storage_is_reported(self):
+        self.assertIsNone(self.home.usb_connected)
+        self.home.print_update({"sdcard": True})
+        self.assertIsNone(self.home.usb_connected)
+        self.home.print_update({"device": {"storage": [{"name": "usb"}]}})
+        self.assertTrue(self.home.usb_connected)
+        self.home.print_update({"device": {"storage": [{"name": "internal"}]}})
+        self.assertFalse(self.home.usb_connected)
+
+    def test_capacities_use_explicit_camera_kb_counters(self):
+        self.home.print_update({"device": {
+            "storage": [{"name": "usb", "total": "999", "used": "1"}],
+            "cam": {"tl_external_total_kb": 104857600, "tl_external_free_kb": 31457280},
+        }})
+        self.assertEqual(self.home.usb_capacity_kib("total"), 104857600)
+        self.assertEqual(self.home.usb_capacity_kib("free"), 31457280)
+        self.assertEqual(self.home.usb_capacity_kib("used"), 73400320)
+        self.assertTrue(self.home.print_update({"device": {"cam": {"tl_external_free_kb": 20971520}}}))
+        self.assertEqual(self.home.usb_capacity_kib("used"), 83886080)
+
+    def test_detaching_usb_clears_capacity_counters(self):
+        self.home.print_update({"device": {"storage": [{"name": "usb"}], "cam": {
+            "tl_external_total_kb": 1000, "tl_external_free_kb": 500,
+        }}})
+        self.home.print_update({"device": {"storage": [], "cam": {
+            "tl_external_total_kb": 1000, "tl_external_free_kb": 500,
+        }}})
+        self.assertIsNone(self.home.usb_capacity_kib("total"))
+        self.home.print_update({"device": {"storage": [{"name": "usb"}]}})
+        self.assertIsNone(self.home.usb_capacity_kib("total"))
+
+    def test_counters_before_first_storage_report_are_preserved(self):
+        self.home.print_update({"device": {"cam": {"tl_external_total_kb": 1000, "tl_external_free_kb": 0}}})
+        self.assertIsNone(self.home.usb_capacity_kib("total"))
+        self.home.print_update({"device": {"storage": [{"name": "usb"}]}})
+        self.assertEqual(self.home.usb_capacity_kib("free"), 0)
+        self.assertEqual(self.home.usb_capacity_kib("used"), 1000)
+
+    def test_invalid_counters_do_not_create_misleading_capacities(self):
+        self.home.print_update({"device": {"storage": [{"name": "usb"}]}})
+        for bad in (-1, True, "NaN", None, 1.5):
+            with self.subTest(value=bad):
+                self.home.print_update({"device": {"cam": {"tl_external_total_kb": bad}}})
+                self.assertIsNone(self.home.usb_capacity_kib("total"))
+        self.home.print_update({"device": {"cam": {"tl_external_total_kb": 1000, "tl_external_free_kb": 2000}}})
+        self.assertIsNone(self.home.usb_capacity_kib("free"))
+        self.assertIsNone(self.home.usb_capacity_kib("used"))
+
+    def test_usb_sensor_translations_exist(self):
+        root = Path(__file__).resolve().parents[2] / "custom_components/bambu_lab/translations"
+        for language in ("en", "de"):
+            sensors = json.loads((root / f"{language}.json").read_text())["entity"]["sensor"]
+            for key in ("usb_connection", "usb_storage_total", "usb_storage_used", "usb_storage_free"):
+                self.assertIn(key, sensors)
