@@ -214,6 +214,17 @@ class Device:
         x2_printers = {Printers.X2D}
         dual_nozzle_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.X2D}
         model = self.info.device_type
+        if model == Printers.H3C:
+            # Explicit support for reported telemetry. The H3C has one extruder,
+            # so never enable the H2C's left/right nozzle entities.
+            if feature == Features.HOTEND_RACK:
+                return bool(self.hotend_rack.hotends)
+            if feature in (Features.AMS_READ_RFID_COMMAND, Features.AMS_SWITCH_COMMAND):
+                return False
+            if feature in (Features.SECONDARY_AUX_FAN, Features.AIRDUCT_MODE,
+                           Features.ACTIVE_CHAMBER_HEATER, Features.CHAMBER_TEMPERATURE,
+                           Features.CAMERA_RTSP):
+                return True
 
         # First check known early feature check scenarios. These are features that can be checked as part of
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
@@ -3402,6 +3413,9 @@ class Hotend:
         self.color_m: str = "00000000"
         self.fila_id: str = ""
         self._active: bool = False
+        self.temperature: int | None = None
+        self.target_temperature: int | None = None
+        self.filament_source: int | None = None
 
     @property
     def active(self) -> bool:
@@ -3436,6 +3450,13 @@ class Hotend:
         self.stat = data.get("stat", self.stat)
         self.color_m = data.get("color_m", self.color_m)
         self.fila_id = data.get("fila_id", self.fila_id)
+        source = data.get("snow")
+        if isinstance(source, int) and not isinstance(source, bool):
+            self.filament_source = source
+        packed_temp = data.get("temp")
+        if isinstance(packed_temp, int) and not isinstance(packed_temp, bool):
+            self.temperature = packed_temp & 0xFFFF
+            self.target_temperature = (packed_temp >> 16) & 0xFFFF
         return old_data != f"{self.__dict__}"
 
 
@@ -3453,6 +3474,41 @@ class HotendRack:
         self.tar_id: int = 0
         self.holder_pos: int = 0
         self.holder_stat: int = 0
+        self.mounted_slot_id: int | None = None
+
+    @property
+    def is_swaptek(self) -> bool:
+        return self._client._device.info.device_type == Printers.H3C
+
+    def linked_filament(self, slot_id: int):
+        """Return the nonempty spool explicitly linked by the printer."""
+        tool = self.hotends.get(slot_id)
+        if tool is None or tool.filament_source is None:
+            return None
+        ams_id, tray_id = tool.filament_source >> 8, tool.filament_source & 0xFF
+        unit = self._client._device.ams.data.get(ams_id)
+        if unit is None or not 0 <= tray_id < len(unit.tray):
+            return None
+        tray = unit.tray[tray_id]
+        return None if tray.empty else tray
+
+    def filament_diameter(self, slot_id: int) -> float | None:
+        """Reported spool diameter; never infer it from nozzle/tool type."""
+        tray = self.linked_filament(slot_id)
+        return tray.filament_diameter if tray is not None else None
+
+    def filament_attributes(self, slot_id: int) -> dict:
+        tray = self.linked_filament(slot_id)
+        source = self.hotends[slot_id].filament_source
+        return {
+            "filament_diameter": tray.filament_diameter if tray is not None else None,
+            "filament_name": tray.name if tray is not None else None,
+            "filament_type": tray.type if tray is not None else None,
+            "remaining_weight_g": tray.remaining_weight_g if tray is not None else None,
+            "remaining_percent": tray.remain if tray is not None and tray.remain >= 0 else None,
+            "ams_id": source >> 8 if tray is not None else None,
+            "ams_slot": (source & 0xFF) + 1 if tray is not None else None,
+        }
 
     def is_slot_occupied(self, slot_id: int) -> bool:
         """Check if a rack slot physically has a hotend."""
@@ -3490,7 +3546,7 @@ class HotendRack:
                 changed = True
 
         # Initialize rack slots that don't exist yet
-        for slot_id in self.RACK_SLOT_IDS:
+        for slot_id in (range(16, 25) if self.is_swaptek else self.RACK_SLOT_IDS):
             if slot_id not in self.hotends: 
                 self.hotends[slot_id] = Hotend(slot_id)
 
@@ -3498,6 +3554,24 @@ class HotendRack:
         if nozzle_info is not None and isinstance(nozzle_info, list):
             for entry in nozzle_info:
                 nid = entry.get("id")
+                if self.is_swaptek:
+                    # addr_id identifies the PrintTool even while its live id is 0
+                    # on the carriage. Parked ids are 16 + addr_id.
+                    address = entry.get("addr_id")
+                    if isinstance(address, int) and 0 <= address < 9:
+                        slot_id = 16 + address
+                        if isinstance(nid, int) and nid < 16:
+                            if self.mounted_slot_id != slot_id:
+                                self.mounted_slot_id = slot_id
+                                changed = True
+                        elif nid == slot_id and self.mounted_slot_id == slot_id:
+                            # Delta updates may report only the returned tool.
+                            self.mounted_slot_id = None
+                            changed = True
+                        normalized = dict(entry, id=slot_id)
+                        if self.hotends[slot_id].print_update(normalized):
+                            changed = True
+                    continue
                 if nid is not None and nid in self.hotends:
                     # Rack slot data (IDs 16-21)
                     if self.hotends[nid].print_update(entry):
@@ -3506,6 +3580,13 @@ class HotendRack:
                     # Extruder nozzle with valid serial — update the mounted hotend's rack slot
                     if self.hotends[self.tar_id].print_update(entry):
                         changed = True
+
+        if self.is_swaptek:
+            for slot_id, hotend in self.hotends.items():
+                active = slot_id == self.mounted_slot_id
+                if hotend.active != active:
+                    hotend.active = active
+                    changed = True
 
         # Holder data
         holder_data = data.get("device", {}).get("holder", {})
@@ -3524,6 +3605,7 @@ class AMSInstance:
     """Return all AMS instance related info"""
     model: str
     tray: list[AMSTray]
+    zones: dict[int, dict] = field(default_factory=dict)
 
     _active: bool = False
     serial: str = ""
@@ -3543,7 +3625,10 @@ class AMSInstance:
     def __init__(self, client, model, index):
         self.model = model
         self.index = index
-        if index >= 128:
+        self.zones = {}
+        if model == "AMS 3H":
+            self.tray = [AMSTray(client) for _ in range(9)]
+        elif index >= 128:
             self.tray = [None]
             self.tray[0] = AMSTray(client)
         else:
@@ -3649,7 +3734,13 @@ class AMSList:
             name = module["name"]
             index = -1
             model = ""
-            if name.startswith("ams/"):
+            if name == "n10a" or name.startswith("n10a/"):
+                model = "AMS 3H"
+                try:
+                    index = int(module["id"] if "id" in module else name.split("/", 1)[1])
+                except (KeyError, IndexError, TypeError, ValueError):
+                    continue
+            elif name.startswith("ams/"):
                 model = "AMS"
                 index = int(name[4:])
             elif name.startswith("ams_f1/"):
@@ -3673,6 +3764,9 @@ class AMSList:
                     if self.data[index].model != model:
                         data_changed = True
                         self.data[index].model = model
+                    if model == "AMS 3H":
+                        while len(self.data[index].tray) < 9:
+                            self.data[index].tray.append(AMSTray(self._client))
                     if self.data[index].serial != module['sn']:
                         data_changed = True
                         self.data[index].serial = module['sn']
@@ -3794,54 +3888,88 @@ class AMSList:
                     self._nozzle_ams_index[0] = tray_now >> 2
                     self._nozzle_tray_index[0] = tray_now & 0x3
 
-        if len(ams_data) != 0:
-            ams_list = ams_data.get("ams", [])
+        # Newer AMS payloads and incremental updates may omit legacy fields.
+        # Keep existing values when a field is absent/invalid; zone measurements
+        # must not be interpreted as a single legacy humidity/temperature value.
+        def optional_number(payload, key, converter):
+            value = payload.get(key)
+            if value is None or isinstance(value, bool):
+                return None
+            try:
+                result = converter(value)
+                return result if math.isfinite(result) else None
+            except (TypeError, ValueError, OverflowError):
+                return None
+
+        if isinstance(ams_data, dict):
+            ams_list = ams_data.get("ams") or []
             for ams in ams_list:
-                index = int(ams['id'])
-                # May get data before info so create entry if necessary
+                if not isinstance(ams, dict):
+                    continue
+                index = optional_number(ams, "id", int)
+                if index is None or index < 0:
+                    LOGGER.debug("Ignoring AMS update with invalid or missing id")
+                    continue
+                # Status can arrive before version metadata.
                 if index not in self.data:
                     self.data[index] = AMSInstance(self._client, "Unknown", index)
+                instance = self.data[index]
+                # Preserve each independently reported drying zone and its slot map.
+                for zone in ams.get("zone_info") or []:
+                    if not isinstance(zone, dict):
+                        continue
+                    zone_id = optional_number(zone, "zone_id", int)
+                    if zone_id is None or zone_id < 0:
+                        continue
+                    previous = instance.zones.setdefault(zone_id, {})
+                    previous.update(zone)
+                if ams.get("zone_info") and any(
+                    isinstance(t, dict) and optional_number(t, "id", int) in range(4, 9)
+                    for t in ams.get("tray") or []
+                ):
+                    while len(instance.tray) < 9:
+                        instance.tray.append(AMSTray(self._client))
 
-                # Sometimes when the AMS is being powered on it may send bogus humidity and temperature values.
-                # So ignore these values if they are out of a sensible range.
+                for key, attribute, converter, minimum, maximum in (
+                    ("humidity", "humidity_index", int, 1, 5),
+                    ("humidity_raw", "humidity", int, 1, 100),
+                    ("temp", "temperature", float, 0, 100),
+                    ("dry_time", "remaining_drying_time", int, 0, math.inf),
+                ):
+                    value = optional_number(ams, key, converter)
+                    if value is not None and minimum <= value <= maximum:
+                        setattr(instance, attribute, value)
 
-                humidity_index = int(ams['humidity'])
-                if 1 <= humidity_index <= 5 and self.data[index].humidity_index != humidity_index:
-                    self.data[index].humidity_index = humidity_index
+                dry_setting = ams.get("dry_setting")
+                if isinstance(dry_setting, dict):
+                    for key, attribute in (
+                        ("dry_temperature", "drying_temperature"),
+                        ("dry_duration", "drying_duration"),
+                    ):
+                        value = optional_number(dry_setting, key, int)
+                        if value is not None:
+                            setattr(instance, attribute, max(value, 0))
+                    filament = dry_setting.get("dry_filament")
+                    if isinstance(filament, str):
+                        instance.drying_filament = filament
 
-                humidity = int(ams.get("humidity_raw", 0))
-                if 1 <= humidity <= 100 and self.data[index].humidity != humidity:
-                    self.data[index].humidity = humidity
+                if ams.get("info") is not None:
+                    try:
+                        info = ams["info"]
+                        info = int(info, 16) if isinstance(info, str) else int(info)
+                    except (TypeError, ValueError, OverflowError):
+                        LOGGER.debug("Ignoring invalid AMS nozzle info: %r", ams["info"])
+                    else:
+                        instance.connected_nozzle = AMS_CONNECTED_NOZZLES.get((info >> 8) & 0xF)
 
-                temperature = float(ams['temp'])
-                if 0 <= temperature <= 100 and self.data[index].temperature != temperature:
-                    self.data[index].temperature = temperature
-
-                if self.data[index].remaining_drying_time != int(ams.get('dry_time', 0)):
-                    self.data[index].remaining_drying_time = int(ams.get('dry_time', 0))
-
-                dry_setting = ams.get('dry_setting', {})
-                if dry_setting:
-                    temp = dry_setting.get('dry_temperature', -1)
-                    if self.data[index].drying_temperature != max(temp, 0):
-                        self.data[index].drying_temperature = max(temp, 0)
-
-                    duration = dry_setting.get('dry_duration', -1)
-                    if self.data[index].drying_duration != max(duration, 0):
-                        self.data[index].drying_duration = max(duration, 0)
-
-                    filament = dry_setting.get('dry_filament', "")
-                    if self.data[index].drying_filament != filament:
-                        self.data[index].drying_filament = filament
-
-                # Bits 8-11 of info identify the extruder this AMS feeds.
-                if "info" in ams:
-                    self.data[index].connected_nozzle = AMS_CONNECTED_NOZZLES.get((int(ams["info"], 16) >> 8) & 0xF)
-
-                tray_list = ams['tray']
-                for tray in tray_list:
-                    tray_id = int(tray['id'])
-                    self.data[index].tray[tray_id].print_update(tray)
+                for tray in ams.get("tray") or []:
+                    if not isinstance(tray, dict):
+                        continue
+                    tray_id = optional_number(tray, "id", int)
+                    if tray_id is None or not 0 <= tray_id < len(instance.tray):
+                        LOGGER.debug("Ignoring unsupported AMS tray id: %r", tray.get("id"))
+                        continue
+                    instance.tray[tray_id].print_update(tray)
 
         if data.get("ams_status") is not None:
             self._ams_status = int(data["ams_status"])
@@ -3886,6 +4014,8 @@ class AMSTray:
     _active: bool
     cols: list
     ctype: int
+    filament_diameter: float | None
+    remaining_weight_g: float | None
     dry_temp = int
     dry_time = int
     bed_temp = int
@@ -3913,6 +4043,8 @@ class AMSTray:
         self.dry_temp = 0
         self.dry_time = 0
         self.bed_temp = 0
+        self.filament_diameter: float | None = None
+        self.remaining_weight_g: float | None = None
 
     @property
     def unknown(self) -> bool:
@@ -3955,6 +4087,8 @@ class AMSTray:
         self.dry_temp = 0
         self.dry_time = 0
         self.bed_temp = 0
+        self.filament_diameter = None
+        self.remaining_weight_g = None
 
     def _resolve_tray_name(self, idx: str, tray_type: str) -> str:
         """Human-readable tray name; empty tray_type means unknown (?)."""
@@ -3992,9 +4126,25 @@ class AMSTray:
             self.tray_weight = data.get('tray_weight', self.tray_weight)
             self.cols = data.get('cols', self.cols)
             self.ctype = data.get('ctype', self.ctype)
-            self.dry_temp = data.get('tray_temp', self.dry_temp)
-            self.dry_time = data.get('tray_time', self.dry_time)
+            self.dry_temp = data.get('drying_temp', data.get('tray_temp', self.dry_temp))
+            self.dry_time = data.get('drying_time', data.get('tray_time', self.dry_time))
             self.bed_temp = data.get('bed_temp', self.bed_temp)
+
+        if "tray_diameter" in data:
+            value = data["tray_diameter"]
+            try:
+                diameter = float(value) if not isinstance(value, bool) else math.nan
+                self.filament_diameter = diameter if math.isfinite(diameter) and diameter > 0 else None
+            except (TypeError, ValueError, OverflowError):
+                self.filament_diameter = None
+
+        if "remain_g" in data:
+            value = data["remain_g"]
+            try:
+                weight = float(value) if not isinstance(value, bool) else math.nan
+                self.remaining_weight_g = weight if math.isfinite(weight) and weight >= 0 else None
+            except (TypeError, ValueError, OverflowError):
+                self.remaining_weight_g = None
 
         self._resolve_loaded_state(metadata_only)
 
