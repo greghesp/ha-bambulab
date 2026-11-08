@@ -506,8 +506,8 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         options=SDCARD_STATUS
     ),
     BambuLabSensorEntityDescription(
-        key="usb_connection",
-        translation_key="usb_connection",
+        key="external_storage_connection",
+        translation_key="external_storage_connection",
         icon="mdi:usb-flash-drive",
         device_class=SensorDeviceClass.ENUM,
         options=["connected", "disconnected"],
@@ -756,8 +756,8 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
 
 PRINTER_SENSORS += tuple(
     BambuLabSensorEntityDescription(
-        key=f"usb_storage_{metric}",
-        translation_key=f"usb_storage_{metric}",
+        key=f"external_storage_{metric}",
+        translation_key=f"external_storage_{metric}",
         icon="mdi:usb-flash-drive",
         device_class=SensorDeviceClass.DATA_SIZE,
         state_class=SensorStateClass.MEASUREMENT,

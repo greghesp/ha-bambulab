@@ -127,5 +127,5 @@ class TestH3CStorageDisplay(unittest.TestCase):
         root = Path(__file__).resolve().parents[2] / "custom_components/bambu_lab/translations"
         for language in ("en", "de"):
             sensors = json.loads((root / f"{language}.json").read_text())["entity"]["sensor"]
-            for key in ("usb_connection", "usb_storage_total", "usb_storage_used", "usb_storage_free"):
+            for key in ("external_storage_connection", "external_storage_total", "external_storage_used", "external_storage_free"):
                 self.assertIn(key, sensors)

@@ -614,20 +614,20 @@
           "idle": "Idle"
         }
       },
-      "usb_connection": {
+      "external_storage_connection": {
         "name": "External Storage connection",
         "state": {
           "connected": "Connected",
           "disconnected": "Disconnected"
         }
       },
-      "usb_storage_total": {
+      "external_storage_total": {
         "name": "External Storage total"
       },
-      "usb_storage_used": {
+      "external_storage_used": {
         "name": "External Storage used"
       },
-      "usb_storage_free": {
+      "external_storage_free": {
         "name": "External Storage free"
       },
       "sdcard_status": {

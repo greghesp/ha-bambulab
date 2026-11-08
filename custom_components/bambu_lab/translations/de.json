@@ -812,20 +812,20 @@
       "right_target_nozzle_temp": {
         "name": "Rechte Düsenzieltemperatur"
       },
-      "usb_connection": {
+      "external_storage_connection": {
         "name": "External Storage Verbindung",
         "state": {
           "connected": "Verbunden",
           "disconnected": "Getrennt"
         }
       },
-      "usb_storage_total": {
+      "external_storage_total": {
         "name": "External Storage gesamt"
       },
-      "usb_storage_used": {
+      "external_storage_used": {
         "name": "External Storage belegt"
       },
-      "usb_storage_free": {
+      "external_storage_free": {
         "name": "External Storage frei"
       },
       "sdcard_status": {
