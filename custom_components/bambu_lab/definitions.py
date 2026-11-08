@@ -498,6 +498,10 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             self: self.coordinator.get_model().home_flag.sdcard_status,
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
+        extra_attributes=lambda self: (
+            {"reported_storage": self.coordinator.get_model().home_flag.reported_storage}
+            if self.coordinator.get_model().info.device_type == "H3C" else {}
+        ),
         options=SDCARD_STATUS
     ),
     BambuLabSensorEntityDescription(

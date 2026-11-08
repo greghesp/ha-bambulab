@@ -818,7 +818,8 @@
           "missing": "Fehlen",
           "normal": "Normal",
           "abnormal": "Abnormal",
-          "readonly": "Nur lesen"
+          "readonly": "Nur lesen",
+          "not_applicable": "Nicht zutreffend"
         }
       },
       "left_nozzle_diameter": {

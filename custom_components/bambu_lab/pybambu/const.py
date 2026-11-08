@@ -221,7 +221,8 @@ GCODE_STATE_OPTIONS = [
 SDCARD_STATUS = [
     "missing",
     "normal",
-    "abnormal"
+    "abnormal",
+    "not_applicable",
 ]
 
 SPEED_PROFILE = {

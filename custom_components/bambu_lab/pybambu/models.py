@@ -3639,6 +3639,13 @@ class AMSInstance:
             self.tray[3] = AMSTray(client)
 
     @property
+    def device_name_suffix(self) -> str:
+        """Use the model name for AMS 3H instead of treating its bus ID as a count."""
+        if self.model == "AMS 3H":
+            return "AMS_3H"
+        return f"AMS_{self.index + 1 if self.index < 128 else self.index}"
+
+    @property
     def active(self):
         return self._active
 
@@ -4698,8 +4705,9 @@ class HomeFlag:
         self._value = 0
         self._client = client
         self._sw_ver = ""
-        self._device_type = ""
+        self._device_type = client._device_type
         self._fired_missing_sdcard_event = False
+        self.reported_storage: list[dict] | None = None
 
     def info_update(self, data):
         modules = data.get("module", [])
@@ -4709,6 +4717,14 @@ class HomeFlag:
     def print_update(self, data: dict) -> bool:
         old_data = f"{self.__dict__}"
         self._value = int(data.get("home_flag", str(self._value)))
+        storage = (data.get("device") or {}).get("storage")
+        if isinstance(storage, list):
+            # Keep protocol values as reported; do not assume capacity units or
+            # infer an SD card from a USB device. Missing delta fields preserve it.
+            self.reported_storage = [
+                {key: entry[key] for key in ("name", "total", "used") if key in entry}
+                for entry in storage if isinstance(entry, dict)
+            ]
         if self.sdcard_status == "missing":
             if not self._fired_missing_sdcard_event:
                 self._fired_missing_sdcard_event = True
@@ -4719,6 +4735,9 @@ class HomeFlag:
 
     @property
     def sdcard_status(self) -> str:
+        if self._device_type == Printers.H3C:
+            # The legacy SD-card flag is not a USB/internal-storage health check.
+            return "not_applicable"
         if (self._value & Home_Flag_Values.SD_CARD_ABNORMAL) != 0:
             return "abnormal"
         if (self._value & Home_Flag_Values.SD_CARD_PRESENT) != 0:
