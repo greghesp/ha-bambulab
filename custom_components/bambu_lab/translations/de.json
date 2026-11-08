@@ -813,20 +813,20 @@
         "name": "Rechte Düsenzieltemperatur"
       },
       "external_storage_connection": {
-        "name": "External Storage Verbindung",
+        "name": "Externer Speicher Verbindung",
         "state": {
           "connected": "Verbunden",
           "disconnected": "Getrennt"
         }
       },
       "external_storage_total": {
-        "name": "External Storage gesamt"
+        "name": "Externer Speicher gesamt"
       },
       "external_storage_used": {
-        "name": "External Storage belegt"
+        "name": "Externer Speicher belegt"
       },
       "external_storage_free": {
-        "name": "External Storage frei"
+        "name": "Externer Speicher frei"
       },
       "sdcard_status": {
         "name": "SD -Kartenstatus",
