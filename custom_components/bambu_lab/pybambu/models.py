@@ -3843,6 +3843,22 @@ class AMSList:
                     tray_id = int(tray['id'])
                     self.data[index].tray[tray_id].print_update(tray)
 
+            # tray_exist_bits: hex bitmask of slots that physically hold a spool,
+            # bit (ams_index * 4 + tray_index) for 4-slot AMS units. Reported even
+            # by firmware (e.g. P1S) that never sends the per-tray `state` field.
+            exist_bits = ams_data.get("tray_exist_bits")
+            if exist_bits is not None:
+                try:
+                    bits = int(str(exist_bits), 16)
+                except ValueError:
+                    bits = None
+                if bits is not None:
+                    for ams_index, ams_instance in self.data.items():
+                        if ams_index >= 128:
+                            continue
+                        for tray_id, ams_tray in enumerate(ams_instance.tray):
+                            ams_tray.exists = bool((bits >> (ams_index * 4 + tray_id)) & 1)
+
         if data.get("ams_status") is not None:
             self._ams_status = int(data["ams_status"])
 
@@ -3895,6 +3911,11 @@ class AMSTray:
         self.empty = True
         self.state = 8
         self._state_reported = False
+        # Physical spool presence from the AMS-level tray_exist_bits mask.
+        # None = not reported (yet). Unlike `empty`, this does not depend on
+        # filament metadata, so it is True for a freshly inserted spool without
+        # an RFID tag on firmware that omits the per-tray `state` field.
+        self.exists = None
         self.idx = ""
         self.name = ""
         self.type = ""
