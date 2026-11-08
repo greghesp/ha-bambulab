@@ -4401,6 +4401,7 @@ class StageAction:
             self._print_type = "unknown"
         self._gcode_state = data.get("gcode_state", self._gcode_state)
 
+        old_stage_id = self._id
         # New way it is presented
         self._id = int((data.get("stage") or {}).get("_id", self._id))
         # Old way it's presented
@@ -4413,6 +4414,11 @@ class StageAction:
             self._id = 255
         self._update_step(data)
         self.description = get_current_stage(self._id)
+        if self.description == "unknown" and self._id not in (255, -1):
+            # Log only on a stage transition to identify new printer stages
+            # without flooding the logs with repeated MQTT updates.
+            if old_stage_id != self._id:
+                LOGGER.warning("Unknown printer stage ID: %s", self._id)
 
         return (old_data != f"{self.__dict__}")
 
