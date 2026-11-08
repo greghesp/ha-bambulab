@@ -163,6 +163,7 @@ CURRENT_STAGE_IDS = {
     75: "heatbed_underside_foreign_object_detection",
     76: "pre_extrusion_before_printing",
     77: "preparing_ams",
+    82: "heatbed_stabilizing",  # H3C: confirmed on-device as heatbed stabilization
     # X1 returns -1 for idle
     -1: "idle",  # DUPLICATED
     # P1 returns 255 for idle
