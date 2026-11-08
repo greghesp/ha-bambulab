@@ -1043,6 +1043,15 @@ def ams_slot_name(index: int) -> str | None:
     return None
 
 
+def normalize_ams_slot(index: int) -> int:
+    """A touchscreen-started print reports an AMS HT slot as 'unit * 4 + tray' (unit 129 -> 516).
+    Map that to the flat slot index used everywhere else (16 + unit - 128)."""
+    unit, tray = divmod(index, AMS_TRAYS_PER_UNIT)
+    if tray == 0 and AMS_HT_UNIT_BASE <= unit < AMS_HT_UNIT_END:
+        return AMS_HT_SLOT_BASE + unit - AMS_HT_UNIT_BASE
+    return index
+
+
 def ams_slot_location(index: int) -> dict | None:
     """AMS unit id and tray for a flat slot index, or None if the index isn't a real slot."""
     if 0 <= index < AMS_SLOT_COUNT:
@@ -1250,7 +1259,8 @@ class PrintJob:
         self.file_type_icon = "mdi:file" if self._print_type != "cloud" else "mdi:cloud-outline"
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
-        self.ams_mapping = data.get("ams_mapping", self.ams_mapping)
+        if "ams_mapping" in data:
+            self.ams_mapping = [normalize_ams_slot(index) for index in data["ams_mapping"]]
         self._tray_mapping = data.get("mapping", self._tray_mapping)
         self._skipped_objects = data.get("s_obj", self._skipped_objects)
 

@@ -26,6 +26,7 @@ from pybambu.models import (
     StageAction,
     Temperature,
     ams_slot_name,
+    normalize_ams_slot,
 )
 
 from pybambu.media_sources import (
@@ -57,6 +58,19 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.remaining_time, 759)
         self.assertEqual(self.print_job.current_layer, 1)
         self.assertEqual(self.print_job.total_layers, 70)
+
+    def test_normalize_ams_slot(self):
+        # Touchscreen-started print from the second AMS HT: ams_mapping [516] = unit 129, tray 0.
+        self.assertEqual(normalize_ams_slot(516), 17)
+        self.assertEqual(normalize_ams_slot(512), 16)
+        self.assertEqual(ams_slot_name(normalize_ams_slot(516)), "AMS HT 2")
+        # Regular trays, flat HT slots and the external spool are left alone.
+        for index in (0, 3, 15, 16, 23, 254, 255):
+            self.assertEqual(normalize_ams_slot(index), index)
+
+    def test_ams_mapping_is_normalized_on_receipt(self):
+        self.print_job.print_update({"ams_mapping": [3, 516]})
+        self.assertEqual(self.print_job.ams_mapping, [3, 17])
 
     def test_ams_slot_name(self):
         # Regular AMS units occupy slots 0-15, four trays each.
