@@ -4418,7 +4418,7 @@ class StageAction:
             # Log only on a stage transition to identify new printer stages
             # without flooding the logs with repeated MQTT updates.
             if old_stage_id != self._id:
-                LOGGER.warning("Unknown printer stage ID: %s", self._id)
+                LOGGER.debug("Unknown printer stage ID: %s", self._id)
 
         return (old_data != f"{self.__dict__}")
 
