@@ -536,6 +536,7 @@
           "printing": "Printing",
           "auto_bed_leveling": "Auto bed leveling",
           "heatbed_preheating": "Heatbed preheating",
+          "heatbed_stabilizing": "Stabilizing heatbed",
           "sweeping_xy_mech_mode": "Sweeping XY mech mode",
           "changing_filament": "Changing filament",
           "m400_pause": "M400 pause",
@@ -613,13 +614,30 @@
           "idle": "Idle"
         }
       },
+      "external_storage_connection": {
+        "name": "External Storage connection",
+        "state": {
+          "connected": "Connected",
+          "disconnected": "Disconnected"
+        }
+      },
+      "external_storage_total": {
+        "name": "External Storage total"
+      },
+      "external_storage_used": {
+        "name": "External Storage used"
+      },
+      "external_storage_free": {
+        "name": "External Storage free"
+      },
       "sdcard_status": {
         "name": "SD card status",
         "state": {
           "missing": "Missing",
           "normal": "Normal",
           "abnormal": "Abnormal",
-          "readonly": "Read only"
+          "readonly": "Read only",
+          "not_applicable": "Not applicable"
         }
       },
       "print_progress": {

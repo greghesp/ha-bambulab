@@ -17,6 +17,7 @@ class Printers(StrEnum):
     P1S = "P1S"
     P2S = "P2S"
     H2C = "H2C"
+    H3C = "H3C"
     H2D = "H2D"
     H2DPRO = "H2DPRO"
     H2S = "H2S"
@@ -162,6 +163,7 @@ CURRENT_STAGE_IDS = {
     75: "heatbed_underside_foreign_object_detection",
     76: "pre_extrusion_before_printing",
     77: "preparing_ams",
+    82: "heatbed_stabilizing",  # H3C: confirmed on-device as heatbed stabilization
     # X1 returns -1 for idle
     -1: "idle",  # DUPLICATED
     # P1 returns 255 for idle
@@ -219,7 +221,8 @@ GCODE_STATE_OPTIONS = [
 SDCARD_STATUS = [
     "missing",
     "normal",
-    "abnormal"
+    "abnormal",
+    "not_applicable",
 ]
 
 SPEED_PROFILE = {

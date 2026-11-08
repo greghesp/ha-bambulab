@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
@@ -24,7 +24,8 @@ from homeassistant.const import (
     UnitOfTemperature,
     UnitOfMass,
     UnitOfLength,
-    UnitOfTime
+    UnitOfTime,
+    UnitOfInformation,
 )
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.util import dt as dt_util
@@ -498,7 +499,24 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
             self: self.coordinator.get_model().home_flag.sdcard_status,
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
+        extra_attributes=lambda self: (
+            {"reported_storage": self.coordinator.get_model().home_flag.reported_storage}
+            if self.coordinator.get_model().info.device_type == "H3C" else {}
+        ),
         options=SDCARD_STATUS
+    ),
+    BambuLabSensorEntityDescription(
+        key="external_storage_connection",
+        translation_key="external_storage_connection",
+        icon="mdi:usb-flash-drive",
+        device_class=SensorDeviceClass.ENUM,
+        options=["connected", "disconnected"],
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == "H3C",
+        value_fn=lambda self: (
+            None if self.coordinator.get_model().home_flag.usb_connected is None
+            else "connected" if self.coordinator.get_model().home_flag.usb_connected
+            else "disconnected"
+        ),
     ),
     BambuLabSensorEntityDescription(
         key="skipped_objects",
@@ -736,6 +754,24 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
 )
 
 
+PRINTER_SENSORS += tuple(
+    BambuLabSensorEntityDescription(
+        key=f"external_storage_{metric}",
+        translation_key=f"external_storage_{metric}",
+        icon="mdi:usb-flash-drive",
+        device_class=SensorDeviceClass.DATA_SIZE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfInformation.KIBIBYTES,
+        suggested_unit_of_measurement=UnitOfInformation.GIBIBYTES,
+        suggested_display_precision=2,
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == "H3C",
+        value_fn=lambda self, key=metric: self.coordinator.get_model().home_flag.usb_capacity_kib(key),
+        extra_attributes=lambda self: {"source": "device.cam.tl_external_*_kb"},
+    )
+    for metric in ("total", "used", "free")
+)
+
+
 def _track_switch_attributes(model, input_index: int) -> dict:
     location = model.track_switch.input_tray(input_index)
     if location is None:
@@ -930,6 +966,8 @@ def _tray_sensor(tray_index: int, display_number: int) -> BambuLabAMSSensorEntit
         extra_attributes=lambda self, idx=tray_index, dnum=display_number:
         {
             "slot": dnum,
+            "filament_diameter": self.coordinator.get_model().ams.data[self.index].tray[idx].filament_diameter,
+            "remaining_weight_g": self.coordinator.get_model().ams.data[self.index].tray[idx].remaining_weight_g,
             "active": self.coordinator.get_model().ams.data[self.index].tray[idx].active,
             "bed_temp": self.coordinator.get_model().ams.data[self.index].tray[idx].bed_temp,
             "color": f"#{self.coordinator.get_model().ams.data[self.index].tray[idx].color}",
@@ -955,13 +993,52 @@ def _tray_sensor(tray_index: int, display_number: int) -> BambuLabAMSSensorEntit
                 self.coordinator.get_model().ams.data[self.index].tray[idx].type,
             ),
         },
-        **({"exists_fn": lambda coordinator, index: coordinator.get_model().ams.data[index].model != "AMS HT"} if tray_index > 0 else {}),
+        exists_fn=lambda coordinator, index, idx=tray_index: idx < len(coordinator.get_model().ams.data[index].tray),
     )
 
 
 AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = AMS_SENSORS + tuple(
-    _tray_sensor(tray_index, tray_index + 1) for tray_index in range(4)
+    _tray_sensor(tray_index, tray_index + 1) for tray_index in range(9)
 )
+
+
+# AMS 3H reports measurements per zone, never as one cabinet measurement.
+def _ams_zone_value(entity, zone_id, field, converter):
+    value = entity.coordinator.get_model().ams.data[entity.index].zones.get(zone_id, {}).get(field)
+    try:
+        return converter(value) if value is not None else None
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+AMS_SENSORS = tuple(
+    replace(description, exists_fn=lambda coordinator, index, fn=description.exists_fn:
+            coordinator.get_model().ams.data[index].model != "AMS 3H" and fn(coordinator, index))
+    if description.key in ("humidity", "humidity_index", "temperature", "remaining_drying_time")
+    else description
+    for description in AMS_SENSORS
+)
+
+for _zone in range(2):
+    for _field, _label, _unit, _device_class, _converter in (
+        ("temp", "Temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE, float),
+        ("humidity_raw", "Humidity", PERCENTAGE, SensorDeviceClass.HUMIDITY, int),
+        ("dry_time", "Remaining drying time", UnitOfTime.MINUTES, SensorDeviceClass.DURATION, int),
+    ):
+        AMS_SENSORS += (BambuLabAMSSensorEntityDescription(
+            key=f"zone_{_zone + 1}_{_field}",
+            name=f"Zone {_zone + 1} {_label}",
+            native_unit_of_measurement=_unit,
+            device_class=_device_class,
+            value_fn=lambda self, z=_zone, f=_field, c=_converter: _ams_zone_value(self, z, f, c),
+            exists_fn=lambda coordinator, index: coordinator.get_model().ams.data[index].model == "AMS 3H",
+            extra_attributes=lambda self, z=_zone: {
+                "zone_id": z,
+                "slots": [slot + 1 for slot in self.coordinator.get_model().ams.data[self.index].zones.get(z, {}).get("zone_slots", [])],
+                "dry_setting": self.coordinator.get_model().ams.data[self.index].zones.get(z, {}).get("dry_setting", {}),
+            },
+        ),)
+
 
 HOTEND_RACK_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = (
     BambuLabHotendRackSensorEntityDescription(
@@ -1071,12 +1148,86 @@ def _hotend_used_time_sensor(
 
 HOTEND_RACK_HOTEND_SENSORS: tuple[BambuLabHotendRackSensorEntityDescription, ...] = tuple(
     sensor
-    for slot_id in range(16, 22)
+    for slot_id in range(16, 25)
     for sensor in (
         _hotend_sensor(slot_id, slot_id - 15),
         _hotend_used_time_sensor(slot_id, slot_id - 15),
     )
 )
+
+
+
+def _is_h3c(coordinator):
+    return coordinator.get_model().info.device_type == "H3C"
+
+
+HOTEND_RACK_SENSORS = tuple(
+    replace(description, exists_fn=lambda coordinator: not _is_h3c(coordinator))
+    for description in HOTEND_RACK_SENSORS
+) + tuple(
+    BambuLabHotendRackSensorEntityDescription(
+        key=key, name=name, icon="mdi:robot-industrial",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        exists_fn=_is_h3c,
+        value_fn=lambda self, attr=attribute: getattr(self.coordinator.get_model().hotend_rack, attr),
+    )
+    for key, name, attribute in (
+        ("holder_position", "Swaptek position (raw)", "holder_pos"),
+        ("holder_state", "Swaptek status (raw)", "holder_stat"),
+    )
+)
+
+HOTEND_RACK_HOTEND_SENSORS = tuple(
+    replace(description, exists_fn=lambda coordinator, sid=description.hotend_id:
+            not _is_h3c(coordinator) and sid < 22)
+    for description in HOTEND_RACK_HOTEND_SENSORS
+)
+
+for _slot in range(16, 25):
+    _number = _slot - 15
+    HOTEND_RACK_HOTEND_SENSORS += (
+        BambuLabHotendRackSensorEntityDescription(
+            key=f"printtool_{_number}", name=f"PrintTool {_number}",
+            hotend_id=_slot, device_class=SensorDeviceClass.ENUM,
+            options=["mounted", "docked", "empty"], icon="mdi:printer-3d-nozzle",
+            exists_fn=_is_h3c,
+            value_fn=lambda self, sid=_slot: (
+                "mounted" if self.coordinator.get_model().hotend_rack.mounted_slot_id == sid
+                else "docked" if self.coordinator.get_model().hotend_rack.is_slot_occupied(sid)
+                else "empty"
+            ),
+            extra_attributes=lambda self, sid=_slot: {
+                "tool": sid - 15,
+                **self.coordinator.get_model().hotend_rack.filament_attributes(sid),
+                "nozzle_diameter": self.coordinator.get_model().hotend_rack.hotends[sid].diameter,
+                "nozzle_type": self.coordinator.get_model().hotend_rack.hotends[sid].type_name,
+                "nozzle_type_code": self.coordinator.get_model().hotend_rack.hotends[sid].type_code,
+                "max_temperature": self.coordinator.get_model().hotend_rack.hotends[sid].tm,
+                "serial": self.coordinator.get_model().hotend_rack.hotends[sid].serial,
+                "filament_id": self.coordinator.get_model().hotend_rack.hotends[sid].fila_id,
+                "color": "#" + self.coordinator.get_model().hotend_rack.hotends[sid].color_m,
+                "wear": self.coordinator.get_model().hotend_rack.hotends[sid].wear,
+                "status_raw": self.coordinator.get_model().hotend_rack.hotends[sid].stat,
+            },
+        ),
+    )
+    for _suffix, _label, _attribute, _unit, _class in (
+        ("temperature", "Temperature", "temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+        ("target_temperature", "Target temperature", "target_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+        ("used_time", "Print time", "print_time", UnitOfTime.HOURS, SensorDeviceClass.DURATION),
+    ):
+        HOTEND_RACK_HOTEND_SENSORS += (
+            BambuLabHotendRackSensorEntityDescription(
+                key=f"printtool_{_number}_{_suffix}", name=f"PrintTool {_number} {_label}",
+                hotend_id=_slot, native_unit_of_measurement=_unit, device_class=_class,
+                exists_fn=_is_h3c,
+                value_fn=lambda self, sid=_slot, attr=_attribute: (
+                    round(self.coordinator.get_model().hotend_rack.hotends[sid].print_time / 3600, 2)
+                    if attr == "print_time"
+                    else getattr(self.coordinator.get_model().hotend_rack.hotends[sid], attr)
+                ),
+            ),
+        )
 
 
 @dataclass

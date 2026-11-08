@@ -479,6 +479,7 @@
           "printing": "Drucken",
           "auto_bed_leveling": "Automatische Bettnivellierung",
           "heatbed_preheating": "Heizbettvorwärmung",
+          "heatbed_stabilizing": "Heizbett stabilisieren",
           "sweeping_xy_mech_mode": "Fegen im XY-Mechanik-Modus",
           "changing_filament": "Filament wechseln",
           "m400_pause": "M400 Pause",
@@ -811,13 +812,30 @@
       "right_target_nozzle_temp": {
         "name": "Rechte Düsenzieltemperatur"
       },
+      "external_storage_connection": {
+        "name": "Externer Speicher Verbindung",
+        "state": {
+          "connected": "Verbunden",
+          "disconnected": "Getrennt"
+        }
+      },
+      "external_storage_total": {
+        "name": "Externer Speicher gesamt"
+      },
+      "external_storage_used": {
+        "name": "Externer Speicher belegt"
+      },
+      "external_storage_free": {
+        "name": "Externer Speicher frei"
+      },
       "sdcard_status": {
         "name": "SD -Kartenstatus",
         "state": {
           "missing": "Fehlen",
           "normal": "Normal",
           "abnormal": "Abnormal",
-          "readonly": "Nur lesen"
+          "readonly": "Nur lesen",
+          "not_applicable": "Nicht zutreffend"
         }
       },
       "left_nozzle_diameter": {

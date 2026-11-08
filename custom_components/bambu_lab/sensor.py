@@ -6,6 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.helpers import entity_registry as er
 from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN, LOGGER
@@ -28,6 +29,35 @@ from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEnti
 from .pybambu.const import Features, Printers
 
 
+def _migrate_h3c_storage_entities(registry, entry_id, printer):
+    """Preserve existing registry entries while renaming the initial USB sensors."""
+    if printer.device_type != Printers.H3C:
+        return
+    keys = {
+        "usb_connection": "external_storage_connection",
+        "usb_storage_total": "external_storage_total",
+        "usb_storage_used": "external_storage_used",
+        "usb_storage_free": "external_storage_free",
+    }
+    for old_key, new_key in keys.items():
+        old_id = registry.async_get_entity_id("sensor", DOMAIN, f"{printer.serial}_{old_key}")
+        if old_id is None:
+            continue
+        old = registry.async_get(old_id)
+        if old.config_entry_id != entry_id:
+            continue
+        unique_id = f"{printer.serial}_{new_key}"
+        if registry.async_get_entity_id("sensor", DOMAIN, unique_id) is not None:
+            continue
+        new_id = f"sensor.h3c_{printer.serial.lower()}_{new_key}"
+        if registry.async_get(new_id) is not None:
+            # Keep a conflicting entity's ID; still migrate the unique ID so
+            # setup reuses this registry entry instead of creating a duplicate.
+            registry.async_update_entity(old_id, new_unique_id=unique_id)
+        else:
+            registry.async_update_entity(old_id, new_unique_id=unique_id, new_entity_id=new_id)
+
+
 async def async_setup_entry(
         hass: HomeAssistant,
         entry: ConfigEntry,
@@ -46,6 +76,8 @@ async def async_setup_entry(
 
     if not coordinator.get_model().has_full_printer_data:
         return
+
+    _migrate_h3c_storage_entities(er.async_get(hass), entry.entry_id, coordinator.get_model().info)
 
     for sensor in VIRTUAL_TRAY_SENSORS:
         if sensor.exists_fn(coordinator):

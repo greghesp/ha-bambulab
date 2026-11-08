@@ -343,6 +343,7 @@ def get_printer_type(modules, default):
             "Bambu Lab P1S": "P1S",
             "Bambu Lab P2S": "P2S",
             "Bambu Lab H2C": "H2C",
+            "Bambu Lab H3C": "H3C",
             "Bambu Lab H2D": "H2D",
             "Bambu Lab H2D Pro": "H2DPRO",
             "Bambu Lab H2S": "H2S",
@@ -352,6 +353,11 @@ def get_printer_type(modules, default):
     for product_name, code in product_map.items():
             if search(modules, lambda x: x.get('product_name', "") == product_name):
                     return code
+
+    # Keep a known H3C identity when a partial reply omits product_name.
+    # Its AP05 board would otherwise be mistaken for an X1C.
+    if default == "H3C":
+        return default
 
     # Legacy identification logic that became unreliable as they started to re-use hw_ver for different models.
     apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
