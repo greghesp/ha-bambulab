@@ -19,3 +19,22 @@ jobs:
 
       - name: Run pybambu unit tests
         run: python -m pytest tests/pybambu -v
+
+  home-assistant:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python: "3.13"
+            home-assistant: "2025.1.1"
+          - python: "3.14"
+            home-assistant: "2026.10.1"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Home Assistant and test dependencies
+        run: pip install "homeassistant==${{ matrix.home-assistant }}" -r tests/requirements.txt aiofiles async-upnp-client
+      - name: Run real HA entity, consent, options and repair contracts
+        run: python -m pytest tests/test_fan_entity.py tests/test_signing_opt_in.py tests/test_signing_flow.py tests/test_signing_repairs.py -v

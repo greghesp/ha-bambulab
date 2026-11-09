@@ -2,11 +2,13 @@
   "domain": "bambu_lab",
   "name": "Bambu Lab",
   "codeowners": [
-    "@greghesp", "@AdrianGarside"
+    "@greghesp",
+    "@AdrianGarside"
   ],
   "config_flow": true,
   "dependencies": [
     "device_automation",
+    "file_upload",
     "ffmpeg",
     "frontend",
     "http",
@@ -24,6 +26,6 @@
     {
       "st": "urn:bambulab-com:device:3dprinter:1"
     }
-  ],  
+  ],
   "version": "0.0.0"
 }
