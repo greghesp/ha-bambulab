@@ -119,6 +119,8 @@
       "curl_unavailable": "curl_cffi library is not available."
     },
     "error": {
+      "panda_breath_cannot_connect": "No Panda Breath answered at that address. Check the IP address or host name and that it is on the same network.",
+      "panda_breath_invalid_host": "Enter just the IP address or host name, for example 192.168.1.50 or PandaBreath.local.",
       "cannot_connect": "Failed to connect",
       "cannot_connect_cloud_timeout": "Timed out trying to connect to Bambu Lab cloud.",
       "cannot_connect_cloud_access_denied": "Access denied by Bambu Lab cloud.",
@@ -141,6 +143,13 @@
       "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
     },
     "step": {
+      "panda_breath": {
+        "title": "BIQU Panda Breath",
+        "description": "Enter the IP address or host name of a Panda Breath chamber heater to show and control it with this printer. Leave empty to unlink it.\n\nThe Panda Breath has no password on its local connection, so only use this on a network you trust.",
+        "data": {
+          "panda_breath_host": "IP address or host name"
+        }
+      },
       "init": {
         "title": "Adjust connection settings",
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
@@ -327,6 +336,18 @@
       }
     },
     "number": {
+      "panda_breath_target_temperature": {
+        "name": "Target temperature"
+      },
+      "panda_breath_auto_trigger_bed_temperature": {
+        "name": "Auto mode bed temperature trigger"
+      },
+      "panda_breath_drying_temperature": {
+        "name": "Drying temperature"
+      },
+      "panda_breath_drying_time": {
+        "name": "Drying time"
+      },
       "target_bed_temperature": {
         "name": "Bed target temperature"
       },
@@ -338,6 +359,14 @@
       }
     },
     "select": {
+      "panda_breath_mode": {
+        "name": "Mode",
+        "state": {
+          "auto": "Auto",
+          "always_on": "Always on",
+          "filament_drying": "Filament drying"
+        }
+      },
       "printing_speed": {
         "name": "Printing speed",
         "state": {
@@ -356,6 +385,23 @@
       }
     },
     "sensor": {
+      "panda_breath_chamber_temperature": {
+        "name": "Chamber temperature"
+      },
+      "panda_breath_heater_temperature": {
+        "name": "Heater element temperature"
+      },
+      "panda_breath_drying_remaining_time": {
+        "name": "Drying time remaining"
+      },
+      "panda_breath_heater_sensor_status": {
+        "name": "Heater sensor status",
+        "state": {
+          "ok": "OK",
+          "open_circuit": "Open circuit",
+          "short_circuit": "Short circuit"
+        }
+      },
       "makerworld_boosts_received": {
         "name": "Boosts received"
       },
@@ -1023,6 +1069,12 @@
       }
     },
     "switch": {
+      "panda_breath_power": {
+        "name": "Heater"
+      },
+      "panda_breath_drying": {
+        "name": "Filament drying"
+      },
       "camera": {
         "name": "Camera"
       },
@@ -1046,7 +1098,8 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab cloud",
-        "lan": "Lan Mode"
+        "lan": "Lan Mode",
+        "panda_breath": "BIQU Panda Breath chamber heater"
       }
     }
   },

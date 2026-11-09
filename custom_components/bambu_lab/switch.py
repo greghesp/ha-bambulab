@@ -15,6 +15,7 @@ from homeassistant.components.switch import (
 )
 
 from .coordinator import BambuDataUpdateCoordinator
+from . import panda_breath_entities
 
 
 PROMPT_SOUND_SWITCH_DESCRIPTION = SwitchEntityDescription(
@@ -53,6 +54,7 @@ async def async_setup_entry(
 ) -> None:
     
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    async_add_entities(panda_breath_entities.switch_entities(coordinator))
     if not coordinator.get_model().has_full_printer_data:
         return
     

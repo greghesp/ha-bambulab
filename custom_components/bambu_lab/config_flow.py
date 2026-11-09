@@ -22,7 +22,8 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
-from .const import DOMAIN, LOGGER
+from .const import CONF_PANDA_BREATH_HOST, DOMAIN, LOGGER
+from .panda_breath_client import async_test_connection
 from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
     CloudflareError,
@@ -36,6 +37,9 @@ from .pybambu.bambu_cloud import (
 )
 
 CONFIG_VERSION = 2
+
+# Options-flow menu choice for linking a BIQU Panda Breath chamber heater.
+PANDA_BREATH_MODE = "panda_breath"
 
 BOOLEAN_SELECTOR = BooleanSelector()
 NUMBER_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.NUMBER))
@@ -611,7 +615,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            if user_input['printer_mode'] == "lan":
+            if user_input['printer_mode'] == PANDA_BREATH_MODE:
+                return await self.async_step_panda_breath(None)
+            elif user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
             elif user_input['printer_mode'] == "bambu":
@@ -662,6 +668,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
             ]
+        modes.append(SelectOptionDict(value=PANDA_BREATH_MODE, label=""))
 
         selector = SelectSelector(
             SelectSelectorConfig(
@@ -1025,4 +1032,31 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema(fields),
             errors=errors or {},
             last_step=True,
+        )
+
+    async def async_step_panda_breath(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        """Link (or unlink, with an empty host) a BIQU Panda Breath chamber heater."""
+        errors = {}
+        current = self._config_entry.options.get(CONF_PANDA_BREATH_HOST, "")
+
+        if user_input is not None:
+            host = user_input.get(CONF_PANDA_BREATH_HOST, "").strip()
+            if host and ("/" in host or " " in host):
+                errors["base"] = "panda_breath_invalid_host"
+            elif host and not await async_test_connection(self.hass, host):
+                errors["base"] = "panda_breath_cannot_connect"
+            else:
+                options = dict(self._config_entry.options)
+                options[CONF_PANDA_BREATH_HOST] = host
+                self.hass.config_entries.async_update_entry(entry=self._config_entry, options=options)
+                await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+                return self.async_create_entry(title="", data=None)
+            current = host
+
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Optional(CONF_PANDA_BREATH_HOST, description={"suggested_value": current})] = TEXT_SELECTOR
+        return self.async_show_form(
+            step_id="panda_breath",
+            data_schema=vol.Schema(fields),
+            errors=errors,
         )

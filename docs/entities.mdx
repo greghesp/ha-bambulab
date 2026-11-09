@@ -183,6 +183,32 @@ When a slot is empty, all attributes are set to `None`.
 | Holder position    | Unknown, Position A, Position B, Centre                                  |
 | Holder state       | Idle, Centering hotend, Centering toolhead, Calibrating rack, Cutting material, Unlocking hotend, Lifting rack, Placing hotend, Picking hotend, Locking hotend |
 
+## BIQU Panda Breath
+
+A BIQU (BIGTREETECH) Panda Breath chamber heater can be linked to a printer. Open the integration's **Configure** dialog, pick **BIQU Panda Breath chamber heater**, and enter its IP address or host name (for example `PandaBreath.local`). Leave the field empty to unlink it.
+
+The integration talks to the Panda Breath directly over its local WebSocket (`ws://<host>/ws`). That connection has no password, so only use it on a network you trust. The protocol isn't officially documented. This support follows the [community reverse-engineered protocol](https://justinh-rahb.github.io/pandabreath-klipper/protocol/) for firmware V1.0.1 to V1.0.4.
+
+The entities belong to a **Panda Breath** device linked to the printer, and are unavailable while it isn't connected:
+
+| Entity                            | Notes |
+| --------------------------------- | ----- |
+| Chamber temperature               | Calibrated chamber reading when the device sends one. |
+| Heater element temperature        | Diagnostic. |
+| Heater sensor status              | Diagnostic: OK, open circuit or short circuit. |
+| Drying time remaining             | While filament drying runs. |
+| Heater                            | Turns the Panda Breath on or off. |
+| Mode                              | Auto (heats once the bed passes the trigger temperature), Always on, or Filament drying. Switching away from Filament drying stops a running dry. |
+| Target temperature                | 20–60 °C. Only in Auto or Always on mode. Drying uses the drying temperature. |
+| Auto mode bed temperature trigger | Bed temperature at which Auto mode starts heating. |
+| Filament drying                   | Starts or stops drying with the drying temperature and time below. |
+| Drying temperature                | 40–60 °C. |
+| Drying time                       | 1–12 hours. The firmware stops drying after 12 hours. |
+
+<Info>
+The Panda Breath doesn't report changes made with its own buttons or web page, and has no way to ask for its full state. Values show as unknown until the device reports them, and after a change made on the device itself they can be out of date until it next reports.
+</Info>
+
 ## Diagnostics
 
 | Sensor                    | Notes                                                          |
