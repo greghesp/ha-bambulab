@@ -1019,20 +1019,25 @@ AMS_SENSORS = tuple(
     for description in AMS_SENSORS
 )
 
+# The zone sensors use translation keys (with the zone as a placeholder) so they are named in
+# the user's language and the cards can find them without relying on entity ids. The keys stay
+# zone_<n>_<field> so existing entities keep their unique ids.
 for _zone in range(2):
-    for _field, _label, _unit, _device_class, _converter in (
-        ("temp", "Temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE, float),
-        ("humidity_raw", "Humidity", PERCENTAGE, SensorDeviceClass.HUMIDITY, int),
-        ("dry_time", "Remaining drying time", UnitOfTime.MINUTES, SensorDeviceClass.DURATION, int),
+    for _field, _translation_key, _unit, _device_class, _converter in (
+        ("temp", "zone_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE, float),
+        ("humidity_raw", "zone_humidity", PERCENTAGE, SensorDeviceClass.HUMIDITY, int),
+        ("dry_time", "zone_remaining_drying_time", UnitOfTime.MINUTES, SensorDeviceClass.DURATION, int),
     ):
         AMS_SENSORS += (BambuLabAMSSensorEntityDescription(
             key=f"zone_{_zone + 1}_{_field}",
-            name=f"Zone {_zone + 1} {_label}",
+            translation_key=_translation_key,
+            translation_placeholders={"zone_number": str(_zone + 1)},
             native_unit_of_measurement=_unit,
             device_class=_device_class,
             value_fn=lambda self, z=_zone, f=_field, c=_converter: _ams_zone_value(self, z, f, c),
             exists_fn=lambda coordinator, index: coordinator.get_model().ams.data[index].model == "AMS 3H",
             extra_attributes=lambda self, z=_zone: {
+                "zone": z + 1,
                 "zone_id": z,
                 "slots": [slot + 1 for slot in self.coordinator.get_model().ams.data[self.index].zones.get(z, {}).get("zone_slots", [])],
                 "dry_setting": self.coordinator.get_model().ams.data[self.index].zones.get(z, {}).get("dry_setting", {}),
