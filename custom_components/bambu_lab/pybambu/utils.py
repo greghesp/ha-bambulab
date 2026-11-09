@@ -5,6 +5,7 @@ import gzip
 import json
 import logging
 import math
+import os
 import requests
 import socket
 import re
@@ -29,8 +30,9 @@ from .const import (
     TempEnum,
     AMSTrayStateFlags,
     AMS_TRAY_STATE_LEGACY_MAX,
+    LEGACY_SDCARD_PRINTERS,
 )
-from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
+from .commands import PRINT_PROJECT_FILE_TEMPLATE, SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
 
 def search(lst, predicate, default={}):
     """Search an array for a string"""
@@ -63,6 +65,46 @@ def normalize_service_target(data) -> dict:
     if "device_id" not in normalized and "entity_id" not in normalized:
         raise ValueError("no device_id or entity_id provided")
     return normalized
+
+
+def build_print_project_file_command(device_type: Printers | str, data: dict) -> dict:
+    """Build the MQTT project_file command for the print_project_file service.
+
+    A filepath that already contains '//' is sent as-is. Otherwise the legacy printers
+    take file:///sdcard/<path> and every other printer takes ftp:///<path>.
+
+    Besides the bed_leveling / flow_cali booleans, the integer auto_bed_leveling and
+    extrude_cali_flag fields are sent the way Bambu Studio does: newer printers such
+    as the P2S decide from those and calibrate anyway when they are missing.
+    """
+    command = copy.deepcopy(PRINT_PROJECT_FILE_TEMPLATE)
+    filepath = data.get("filepath")
+    plate = data.get("plate", 1)
+    bed_leveling = data.get("bed_leveling", False)
+    flow_cali = data.get("flow_cali", False)
+    use_ams = data.get("use_ams", False)
+
+    if "//" in filepath:
+        url = filepath
+    elif device_type in LEGACY_SDCARD_PRINTERS:
+        url = f"file:///sdcard/{filepath}"
+    else:
+        url = f"ftp:///{filepath}"
+
+    command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
+    command["print"]["url"] = url
+    command["print"]["timelapse"] = data.get("timelapse", False)
+    command["print"]["bed_leveling"] = bed_leveling
+    command["print"]["auto_bed_leveling"] = 1 if bed_leveling else 0
+    command["print"]["flow_cali"] = flow_cali
+    command["print"]["extrude_cali_flag"] = 1 if flow_cali else 0
+    command["print"]["vibration_cali"] = data.get("vibration_cali", False)
+    command["print"]["layer_inspect"] = data.get("layer_inspect", False)
+    command["print"]["use_ams"] = use_ams
+    if use_ams:
+        command["print"]["ams_mapping"] = [int(x) for x in data.get("ams_mapping").split(',')]
+    command["print"]["subtask_name"] = os.path.basename(filepath)
+    return command
 
 
 def get_authenticated_rtsp_url(
