@@ -238,6 +238,13 @@ AIRDUCT_MODES = {
     2: "laser",
 }
 
+# Cameras the live view can show, by the id in ipcam.current_liveview / support_liveview_cams.
+# Printers with a BirdsEye camera stream one of them at a time (Bambu Studio's LiveviewCameraType).
+LIVEVIEW_CAMERAS = {
+    4: "main",
+    5: "birdseye",
+}
+
 NOZZLE_SIDES = {
     0: "right",
     1: "left",

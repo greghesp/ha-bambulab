@@ -119,12 +119,17 @@ A short tour. The complete list, with per-model notes, is in the
 | Bed, Nozzle and Chamber target temperature | Chamber on X1E and H2 only |
 | Printing speed | Silent / Standard / Sport / Ludicrous |
 | Airduct Mode | Cooling or heating (P2S, H2) |
+| Live view camera | Main or BirdsEye camera, on printers with a BirdsEye camera |
 | Buzzer, Prompt Sound | Model-specific extras (H2D, A1) |
 
 ### Camera
 A **chamber camera** entity on every model. On P1/A1 printers it needs the
 printer's IP; on X1 enable *LAN Mode Liveview*; on H2D, H2S and X2D enable
 *LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
+
+Printers with a **BirdsEye camera** stream one camera at a time and get a
+**Live view camera** select to switch the camera entity between the main
+and BirdsEye cameras ([details](https://docs.page/greghesp/ha-bambulab/entities#birdseye-camera)).
 
 ### Diagnostics
 HMS errors (with codes, descriptions and wiki links), print errors, online
