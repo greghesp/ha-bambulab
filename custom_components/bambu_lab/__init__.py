@@ -20,14 +20,13 @@ from aiohttp import web
 import aiofiles
 
 from .const import (
-    CONF_PANDA_BREATH_HOST,
     DOMAIN,
     LOGGER,
     PLATFORMS,
     SERVICE_CALL_EVENT
 )
 from .coordinator import BambuDataUpdateCoordinator
-from .panda_breath_client import PandaBreathClient
+from .panda_devices import async_setup_panda_devices
 from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
 from .frontend import BambuLabCardRegistration
@@ -358,16 +357,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
-    panda_breath_host = entry.options.get(CONF_PANDA_BREATH_HOST, "").strip()
-    if panda_breath_host:
-        coordinator.panda_breath = PandaBreathClient(hass, panda_breath_host)
-        entry.async_on_unload(
-            coordinator.panda_breath.async_add_listener(coordinator.async_update_panda_breath_device)
-        )
-        coordinator.panda_breath.async_start(entry)
-        entry.async_on_unload(coordinator.panda_breath.async_stop)
-    else:
-        coordinator.async_remove_unlinked_panda_breath_device()
+    coordinator.panda_devices = async_setup_panda_devices(hass, entry, coordinator)
 
     if coordinator.makerworld is not None:
         # Deliberately not async_config_entry_first_refresh(): MakerWorld is a

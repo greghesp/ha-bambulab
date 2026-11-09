@@ -10,7 +10,7 @@ from homeassistant.components.select import SelectEntity
 from .const import DOMAIN, LOGGER
 from .pybambu.const import Features, SPEED_PROFILE, AIRDUCT_MODES
 from .coordinator import BambuDataUpdateCoordinator
-from . import panda_breath_entities
+from . import panda_entities
 from .models import BambuLabEntity
 
 
@@ -22,7 +22,7 @@ async def async_setup_entry(
     """Set up BambuLab sensor based on a config entry."""
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities(panda_breath_entities.select_entities(coordinator))
+    async_add_entities(panda_entities.platform_entities("select", coordinator))
     if not coordinator.get_model().has_full_printer_data:
         return
 

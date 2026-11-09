@@ -19,8 +19,10 @@ LOGGERFORHA = logging.getLogger(f"{__package__}_HA")
 
 SERVICE_CALL_EVENT = "bambu_lab_service_call"
 
-# Options key holding the host name or IP of a BIQU Panda Breath linked to this printer.
+# Options keys holding the host name or IP of BIQU Panda devices linked to this printer.
 CONF_PANDA_BREATH_HOST = "panda_breath_host"
+CONF_PANDA_STATUS_HOST = "panda_status_host"
+CONF_PANDA_PWR_HOST = "panda_pwr_host"
 
 PLATFORMS = (
     Platform.BINARY_SENSOR,

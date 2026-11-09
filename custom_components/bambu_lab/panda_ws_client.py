@@ -1,4 +1,8 @@
-"""Home Assistant side of the BIQU Panda Breath link: a reconnecting WebSocket client."""
+"""Reconnecting WebSocket client shared by BIQU Panda devices (Panda Breath, Panda Status).
+
+Both serve unauthenticated JSON at ws://<host>/ws and push fields piecemeal; each
+device supplies its own immutable state type and apply function.
+"""
 from __future__ import annotations
 
 import asyncio
@@ -12,7 +16,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import LOGGER
-from .panda_breath import PandaBreathState, apply_message, parse_message
+from .panda_breath import parse_message
 
 CONNECT_TIMEOUT = 10
 HEARTBEAT_SECONDS = 30
@@ -25,7 +29,7 @@ def websocket_url(host: str) -> str:
 
 
 async def async_test_connection(hass: HomeAssistant, host: str) -> bool:
-    """Return True if a Panda Breath WebSocket answers at this host."""
+    """Return True if a Panda device WebSocket answers at this host."""
     session = async_get_clientsession(hass)
     try:
         async with asyncio.timeout(CONNECT_TIMEOUT):
@@ -35,23 +39,32 @@ async def async_test_connection(hass: HomeAssistant, host: str) -> bool:
             await ws.close()
         return True
     except (aiohttp.ClientError, asyncio.TimeoutError, OSError) as err:
-        LOGGER.debug("Panda Breath at %s not reachable: %s", host, err)
+        LOGGER.debug("Panda device at %s not reachable: %s", host, err)
         return False
 
 
-class PandaBreathClient:
-    """Keeps a WebSocket open to one Panda Breath and tracks its state."""
+class PandaWebSocketClient:
+    """Keeps a WebSocket open to one Panda device and tracks its state."""
 
-    def __init__(self, hass: HomeAssistant, host: str) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        host: str,
+        initial_state: Any,
+        apply_fn: Callable[[Any, dict[str, Any]], Any],
+        name: str,
+    ) -> None:
         self.hass = hass
         self.host = host.strip()
-        self._state = PandaBreathState()
+        self.name = name
+        self._apply = apply_fn
+        self._state = initial_state
         self._ws: aiohttp.ClientWebSocketResponse | None = None
         self._task: asyncio.Task | None = None
         self._listeners: list[Callable[[], None]] = []
 
     @property
-    def state(self) -> PandaBreathState:
+    def state(self) -> Any:
         return self._state
 
     @property
@@ -78,7 +91,7 @@ class PandaBreathClient:
     def async_start(self, entry) -> None:
         if self._task is None:
             self._task = entry.async_create_background_task(
-                self.hass, self._async_run(), f"panda_breath_{self.host}"
+                self.hass, self._async_run(), f"{self.name}_{self.host}"
             )
 
     async def async_stop(self) -> None:
@@ -103,15 +116,15 @@ class PandaBreathClient:
                 async with ws:
                     self._ws = ws
                     delay = RECONNECT_MIN_SECONDS
-                    LOGGER.debug("Panda Breath %s connected", self.host)
+                    LOGGER.debug("%s %s connected", self.name, self.host)
                     self._notify()
                     await self._async_receive(ws)
             except asyncio.CancelledError:
                 raise
             except (aiohttp.ClientError, asyncio.TimeoutError, OSError) as err:
-                LOGGER.debug("Panda Breath %s connection failed: %s", self.host, err)
+                LOGGER.debug("%s %s connection failed: %s", self.name, self.host, err)
             except Exception:  # noqa: BLE001 - never let one bad frame end the reconnect loop
-                LOGGER.exception("Panda Breath %s: unexpected error, reconnecting", self.host)
+                LOGGER.exception("%s %s: unexpected error, reconnecting", self.name, self.host)
             finally:
                 self._ws = None
                 self._notify()
@@ -129,9 +142,9 @@ class PandaBreathClient:
     def handle_text(self, raw: str) -> None:
         message = parse_message(raw)
         if message is None:
-            LOGGER.debug("Panda Breath %s: ignoring non-JSON frame", self.host)
+            LOGGER.debug("%s %s: ignoring non-JSON frame", self.name, self.host)
             return
-        new_state = apply_message(self._state, message)
+        new_state = self._apply(self._state, message)
         if new_state != self._state:
             self._state = new_state
             self._notify()
@@ -140,14 +153,14 @@ class PandaBreathClient:
         """Send commands and apply them to the local state (the device does not echo them)."""
         ws = self._ws
         if ws is None or ws.closed:
-            raise HomeAssistantError(f"Panda Breath at {self.host} is not connected")
+            raise HomeAssistantError(f"{self.name} at {self.host} is not connected")
         try:
             for message in messages:
                 await ws.send_json(message)
         except (aiohttp.ClientError, ConnectionResetError, asyncio.TimeoutError) as err:
-            raise HomeAssistantError(f"Could not send to Panda Breath at {self.host}: {err}") from err
+            raise HomeAssistantError(f"Could not send to {self.name} at {self.host}: {err}") from err
         new_state = self._state
         for message in messages:
-            new_state = apply_message(new_state, message)
+            new_state = self._apply(new_state, message)
         self._state = new_state
         self._notify()

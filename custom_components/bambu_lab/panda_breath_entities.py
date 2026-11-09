@@ -1,9 +1,4 @@
-"""Entities for a BIQU Panda Breath chamber heater linked to a printer.
-
-Each platform module calls the matching *_entities() helper from its
-async_setup_entry. The entities read PandaBreathClient.state and are
-unavailable while the WebSocket is disconnected.
-"""
+"""Entities for a BIQU Panda Breath chamber heater linked to a printer."""
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -21,8 +16,10 @@ from homeassistant.components.sensor import (
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.const import EntityCategory, UnitOfTemperature, UnitOfTime
 from homeassistant.exceptions import ServiceValidationError
-from homeassistant.helpers.entity import DeviceInfo, Entity
+from homeassistant.helpers.entity import Entity
 
+from .panda_devices import PANDA_BREATH
+from .panda_entity import PandaEntity
 from .panda_breath import (
     AUTO_TRIGGER_RANGE,
     DEFAULT_DRYING_HOURS,
@@ -46,32 +43,15 @@ from .panda_breath import (
 )
 
 
-class PandaBreathEntity(Entity):
-    """Base entity pushed by the Panda Breath client."""
+class PandaBreathEntity(PandaEntity):
+    """Base for Panda Breath entities."""
 
-    _attr_has_entity_name = True
-    _attr_should_poll = False
-
-    def __init__(self, coordinator, key: str) -> None:
-        self.coordinator = coordinator
-        self.client = coordinator.panda_breath
-        self._attr_unique_id = f"{coordinator.config_entry.data['serial']}_panda_breath_{key}"
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        return self.coordinator.get_panda_breath_device()
-
-    @property
-    def available(self) -> bool:
-        return self.client.connected
+    kind = PANDA_BREATH
+    unique_id_prefix = "panda_breath"
 
     @property
     def panda_state(self) -> PandaBreathState:
         return self.client.state
-
-    async def async_added_to_hass(self) -> None:
-        await super().async_added_to_hass()
-        self.async_on_remove(self.client.async_add_listener(self.async_write_ha_state))
 
     async def _send(self, messages: list[dict[str, Any]]) -> None:
         try:
@@ -295,25 +275,14 @@ class PandaBreathNumber(PandaBreathEntity, NumberEntity):
         await self._send(messages)
 
 
-# --- Platform helpers --------------------------------------------------------
-
-def _linked(coordinator) -> bool:
-    return getattr(coordinator, "panda_breath", None) is not None
-
-
-def sensor_entities(coordinator) -> list[Entity]:
-    return [PandaBreathSensor(coordinator, d) for d in PANDA_BREATH_SENSORS] if _linked(coordinator) else []
-
-
-def switch_entities(coordinator) -> list[Entity]:
-    if not _linked(coordinator):
-        return []
-    return [PandaBreathPowerSwitch(coordinator), PandaBreathDryingSwitch(coordinator)]
-
-
-def select_entities(coordinator) -> list[Entity]:
-    return [PandaBreathModeSelect(coordinator)] if _linked(coordinator) else []
-
-
-def number_entities(coordinator) -> list[Entity]:
-    return [PandaBreathNumber(coordinator, d) for d in PANDA_BREATH_NUMBERS] if _linked(coordinator) else []
+def breath_entities(platform: str, coordinator) -> list[Entity]:
+    """Entities for one platform; the caller checks that a Panda Breath is linked."""
+    if platform == "sensor":
+        return [PandaBreathSensor(coordinator, d) for d in PANDA_BREATH_SENSORS]
+    if platform == "switch":
+        return [PandaBreathPowerSwitch(coordinator), PandaBreathDryingSwitch(coordinator)]
+    if platform == "select":
+        return [PandaBreathModeSelect(coordinator)]
+    if platform == "number":
+        return [PandaBreathNumber(coordinator, d) for d in PANDA_BREATH_NUMBERS]
+    return []
