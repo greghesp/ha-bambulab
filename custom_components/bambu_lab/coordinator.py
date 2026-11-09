@@ -36,6 +36,8 @@ from .const import (
     OPTION_NAME,
     PLATFORMS,
     SERVICE_CALL_EVENT,
+    SERVICE_CALL_FUTURES,
+    SERVICE_CALL_ID,
     FILAMENT_DATA,
 )
 
@@ -278,7 +280,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             is_for_me = self._is_service_call_for_me(data)
         except Exception:
-            # The future is shared between printers. Resolving it here could discard the
+            # Every printer sees the call. Resolving its future here could discard the
             # result from the printer this call was actually meant for.
             LOGGER.exception(f"Unable to determine the target of service call '{data.get('service')}'")
             return
@@ -292,9 +294,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.exception(f"Service call '{data.get('service')}' failed")
             result = False
 
-        future = self._hass.data[DOMAIN].get('service_call_future')
+        futures = self._hass.data[DOMAIN].get(SERVICE_CALL_FUTURES) or {}
+        future = futures.get(data.get(SERVICE_CALL_ID))
         if future is None:
-            LOGGER.error("Future is None")
+            # The caller already timed out, or the integration was reloaded meanwhile.
+            LOGGER.error(f"No pending service call for '{data.get('service')}'")
             return
         if not future.done():
             future.set_result(False if result is None else result)
