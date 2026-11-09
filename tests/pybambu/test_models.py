@@ -3,12 +3,15 @@ import unittest
 from unittest.mock import call, MagicMock, patch
 from datetime import datetime, timezone
 import os
+import io
 import json
 import tempfile
 import time
 from zipfile import ZipFile
 
 from pathlib import Path
+
+from PIL import Image
 
 from pybambu.models import (
     AMSList,
@@ -348,6 +351,49 @@ class TestPrintJob(unittest.TestCase):
 
         self.assertEqual(self.print_job.print_weight, 49.59)
         self.assertEqual(self.print_job.get_print_weights, {"External Spool": 49.59})
+
+    def test_pick_image_sets_printable_objects_without_error(self):
+        """Objects found in the pick image are kept and nothing is logged as an error (#2218)."""
+        self.client.ftp_enabled = True
+        self.client._device.supports_feature.return_value = False
+        self.client._device.external_spool[0].active = True
+        self.print_job.plate_idx = 1
+        self.print_job.ams_mapping = []
+        self.print_job.prune_print_history_files = MagicMock()
+
+        # identify_id 1 is drawn as the colour (r=1, g=0, b=0); identify_id 2 is hidden.
+        pick = Image.new("RGBA", (2, 1), (0, 0, 0, 0))
+        pick.putpixel((0, 0), (1, 0, 0, 255))
+        pick_buf = io.BytesIO()
+        pick.save(pick_buf, format="PNG")
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            model_path = os.path.join(temp_dir, "current.3mf")
+            with ZipFile(model_path, "w") as archive:
+                archive.writestr(
+                    "Metadata/slice_info.config",
+                    '<config><plate><metadata key="index" value="1" />'
+                    '<object identify_id="1" name="Cube" skipped="false" />'
+                    '<object identify_id="2" name="Hidden" skipped="false" />'
+                    '</plate></config>',
+                )
+                archive.writestr("Metadata/plate_1.png", b"cover")
+                archive.writestr("Metadata/pick_1.png", pick_buf.getvalue())
+                archive.writestr("Metadata/plate_1.gcode", b"gcode")
+                archive.writestr("Metadata/plate_1.json", '{"bed_type": "textured_plate"}')
+
+            self.print_job._remote_media_sources = MagicMock(return_value=[MagicMock()])
+            self.print_job._attempt_remote_model_download = MagicMock(return_value=model_path)
+            self.print_job._close_remote_media_sources = MagicMock()
+
+            with patch("pybambu.models.LOGGER") as logger:
+                self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+
+        logged_errors = [str(c.args[0]) for c in logger.error.call_args_list]
+        self.assertFalse(
+            [m for m in logged_errors if "pick image" in m], logged_errors
+        )
+        self.assertEqual(self.print_job.get_printable_objects, {"1": "Cube"})
 
     def _parse_multi_plate_3mf(self, plate_idx, extra_covers=()):
         """Run the FTP worker over a two plate 3MF, as written by "Export all sliced file".
