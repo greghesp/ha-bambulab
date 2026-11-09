@@ -2529,7 +2529,6 @@ class PrintJob:
                     # Filter the printable objects from slice_info.config, removing
                     # any that weren't identified in the pick image.
                     self._printable_objects = {identify_id: _printable_objects[identify_id] for identify_id in identify_ids if identify_id in _printable_objects}
-                    self._update_printable_objects()
                 except Exception as e:
                     LOGGER.error(f"Failed to extract pick image: {e}")
 
