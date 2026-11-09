@@ -1,0 +1,45 @@
+---
+title: AMS 3H Card
+---
+
+# AMS 3H card
+
+## Description
+
+The AMS 3H Card shows the H3C's AMS 3H: its nine trays, grouped by the drying zone each tray is in.
+
+- Each zone has its own humidity, temperature and, while it is drying, remaining drying time. Tap one to open its history.
+- The trays in each zone come from the zone sensors' `slots` attribute, so the grouping follows what the printer reports.
+- Spools show the filament color and remaining amount, and the active spool is highlighted. Tap a spool to open the filament popup.
+- If the zone sensors aren't available (an older integration version), all nine trays are shown together.
+
+## Configuration
+
+All configuration should be done via the dashboard card editor. The configuration options available are:
+
+- AMS 3H selection (only AMS 3H devices are listed)
+- Show/hide the title, and a custom title (defaults to the AMS name)
+- Show/hide filament names
+- Spool animations for the active spool (reflection and wiggle)
+
+```yaml
+type: custom:ha-bambulab-ams-3h-card
+ams: <device id of the AMS 3H>
+show_title: true
+subtitle: ""
+show_type: true
+spool_anim_reflection: true
+spool_anim_wiggle: true
+```
+
+## Zone sensors
+
+The card uses these AMS 3H sensors, one of each per zone:
+
+| Sensor | Attributes |
+| --- | --- |
+| Zone *n* temperature | `zone`, `zone_id`, `slots`, `dry_setting` |
+| Zone *n* humidity | `zone`, `zone_id`, `slots`, `dry_setting` |
+| Zone *n* remaining drying time | `zone`, `zone_id`, `slots`, `dry_setting` |
+
+`zone` is 1-based, `zone_id` is the printer's 0-based zone id, and `slots` lists the 1-based tray numbers in the zone.

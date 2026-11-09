@@ -94,6 +94,11 @@
           "icon": "palette"
         },
         {
+          "title": "AMS 3H Card",
+          "href": "/frontend/cards/ams-3h-card",
+          "icon": "palette"
+        },
+        {
           "title": "Spool Card",
           "href": "/frontend/cards/spool-card",
           "icon": "circle"
