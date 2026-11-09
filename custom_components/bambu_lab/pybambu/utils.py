@@ -66,11 +66,17 @@ def normalize_service_target(data) -> dict:
 
 
 def get_authenticated_rtsp_url(
-    reported_url: str | None,
+    reported_url: str | bytes | bytearray | None,
     configured_host: str,
     access_code: str,
 ) -> str | None:
     """Build an authenticated RTSP URL, or None when LiveView is disabled."""
+    if isinstance(reported_url, (bytes, bytearray)):
+        # urlparse on bytes yields a bytes netloc, which the str handling below can't use.
+        try:
+            reported_url = bytes(reported_url).decode()
+        except UnicodeDecodeError:
+            return None
     if not reported_url or reported_url == "disable" or not access_code:
         return None
 

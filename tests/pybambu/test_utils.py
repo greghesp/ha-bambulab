@@ -19,6 +19,30 @@ class TestAuthenticatedRTSPUrl(unittest.TestCase):
             "rtsps://bblp:code%40word@192.0.2.10:322/streaming/live/1",
         )
 
+    def test_bytes_url_is_decoded(self):
+        self.assertEqual(
+            get_authenticated_rtsp_url(
+                b"rtsps://192.0.2.20:322/streaming/live/1", "192.0.2.10", "12345678"
+            ),
+            "rtsps://bblp:12345678@192.0.2.10:322/streaming/live/1",
+        )
+
+    def test_bytearray_url_is_decoded(self):
+        """bytearray must not reach urlparse, which then returns bytes netlocs (#2115)."""
+        self.assertEqual(
+            get_authenticated_rtsp_url(
+                bytearray(b"rtsps://192.0.2.20:322/streaming/live/1"),
+                "192.0.2.10",
+                "12345678",
+            ),
+            "rtsps://bblp:12345678@192.0.2.10:322/streaming/live/1",
+        )
+
+    def test_undecodable_url_has_no_stream_url(self):
+        self.assertIsNone(
+            get_authenticated_rtsp_url(bytearray([0xFF, 0xFE]), "192.0.2.10", "12345678")
+        )
+
     def test_invalid_scheme_is_rejected(self):
         self.assertIsNone(
             get_authenticated_rtsp_url(
