@@ -313,7 +313,12 @@ class BambuCloud:
         headers['x-bbl-csrf-token'] = csrf_response.cookies.get('bbl_csrf_token')
         headers['Cookie'] = f"bbl_csrf_token={csrf_response.cookies.get('bbl_csrf_token')}"
 
-        response = self._post(BambuUrl.TFA_LOGIN, headers=headers, json=data)
+        response = self._post(BambuUrl.TFA_LOGIN, headers=headers, json=data, return400=True)
+        if response.status_code == 400:
+            LOGGER.debug(f"Response: '{response.text}'")
+            if 'Incorrect code' in response.text:
+                raise CodeIncorrectError()
+            raise PermissionError(response.status_code, response.text)
 
         LOGGER.debug(f"Response: {response.status_code}")
         if response.status_code == 200:
