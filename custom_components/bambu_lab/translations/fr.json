@@ -501,7 +501,8 @@
           "build_plate_alignment_detection": "Détection de l'alignement des plaques de construction",
           "heatbed_surface_foreign_object_detection": "Détection de corps étrangers à la surface du lit chauffant",
           "heatbed_underside_foreign_object_detection": "Détection de corps étrangers sous le lit chauffant",
-          "pre_extrusion_before_printing": "Pré-extrusion avant impression"
+          "pre_extrusion_before_printing": "Pré-extrusion avant impression",
+          "heatbed_stabilizing": "Lit chauffant stabilisant"
         }
       },
       "print_progress": {
@@ -873,7 +874,8 @@
           "missing": "Manquant",
           "normal": "Normal",
           "abnormal": "Anormal",
-          "readonly": "Lecture seule"
+          "readonly": "Lecture seule",
+          "not_applicable": "Sans objet"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Vitesse du ventilateur d'extraction"
+      },
+      "external_storage_connection": {
+        "name": "Connexion au stockage externe",
+        "state": {
+          "connected": "Connecté",
+          "disconnected": "Déconnecté"
+        }
+      },
+      "external_storage_total": {
+        "name": "Total du stockage externe"
+      },
+      "external_storage_used": {
+        "name": "Stockage externe utilisé"
+      },
+      "external_storage_free": {
+        "name": "Stockage externe gratuit"
+      },
+      "zone_temperature": {
+        "name": "Température de la zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "ID de zone"
+          },
+          "slots": {
+            "name": "Machines à sous"
+          },
+          "dry_setting": {
+            "name": "Réglage de séchage"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Humidité de la zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "ID de zone"
+          },
+          "slots": {
+            "name": "Machines à sous"
+          },
+          "dry_setting": {
+            "name": "Réglage de séchage"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Temps de séchage restant dans la zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "ID de zone"
+          },
+          "slots": {
+            "name": "Machines à sous"
+          },
+          "dry_setting": {
+            "name": "Réglage de séchage"
+          }
+        }
       }
     },
     "camera": {

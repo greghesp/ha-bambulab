@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "빌드 플레이트 정렬 감지",
           "heatbed_surface_foreign_object_detection": "히트베드 표면 이물질 감지",
           "heatbed_underside_foreign_object_detection": "히트베드 밑면 이물질 감지",
-          "pre_extrusion_before_printing": "인쇄 전 사전 압출"
+          "pre_extrusion_before_printing": "인쇄 전 사전 압출",
+          "heatbed_stabilizing": "안정 히트베드"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "없어진",
           "normal": "정상",
           "abnormal": "이상",
-          "readonly": "만 읽으십시오"
+          "readonly": "만 읽으십시오",
+          "not_applicable": "해당 없음"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "배기 팬 속도"
+      },
+      "external_storage_connection": {
+        "name": "외부 저장소 연결",
+        "state": {
+          "connected": "연결됨",
+          "disconnected": "연결이 끊김"
+        }
+      },
+      "external_storage_total": {
+        "name": "외부 저장소 합계"
+      },
+      "external_storage_used": {
+        "name": "사용된 외부 저장소"
+      },
+      "external_storage_free": {
+        "name": "외부 저장소 무료"
+      },
+      "zone_temperature": {
+        "name": "구역 {zone_number} 온도",
+        "state_attributes": {
+          "zone": {
+            "name": "존"
+          },
+          "zone_id": {
+            "name": "구역 ID"
+          },
+          "slots": {
+            "name": "슬롯"
+          },
+          "dry_setting": {
+            "name": "건조 설정"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "구역 {zone_number} 습도",
+        "state_attributes": {
+          "zone": {
+            "name": "존"
+          },
+          "zone_id": {
+            "name": "구역 ID"
+          },
+          "slots": {
+            "name": "슬롯"
+          },
+          "dry_setting": {
+            "name": "건조 설정"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "구역 {zone_number} 남은 건조 시간",
+        "state_attributes": {
+          "zone": {
+            "name": "존"
+          },
+          "zone_id": {
+            "name": "구역 ID"
+          },
+          "slots": {
+            "name": "슬롯"
+          },
+          "dry_setting": {
+            "name": "건조 설정"
+          }
+        }
       }
     },
     "camera": {
