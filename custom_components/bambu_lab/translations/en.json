@@ -116,7 +116,8 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare has blocked the connection attempt.",
-      "curl_unavailable": "curl_cffi library is not available."
+      "curl_unavailable": "curl_cffi library is not available.",
+      "no_ams": "No AMS has been identified on this printer yet. Wait for the printer to connect and report its AMS units, then try again."
     },
     "error": {
       "cannot_connect": "Failed to connect",
@@ -141,6 +142,10 @@
       "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
     },
     "step": {
+      "ams_heater": {
+        "title": "External AMS heater",
+        "description": "Add-on heaters such as the SUNLU AMS Heater have no network connection, so Home Assistant controls one by switching the smart plug it is powered from.\n\nChoose that plug for each AMS that has a heater fitted, or leave it empty. Each linked AMS gets heater drying mode, heater power, humidity threshold, temperature cutoff and runtime limit entities.\n\nSet the heater itself to start heating when it is powered on, so switching the plug actually starts drying."
+      },
       "init": {
         "title": "Adjust connection settings",
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
@@ -335,6 +340,18 @@
       },
       "target_chamber_temperature": {
         "name": "Chamber target temperature"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Heater turn-on humidity"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Heater turn-off humidity"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Heater temperature cutoff"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Heater maximum runtime"
       }
     },
     "select": {
@@ -1034,6 +1051,12 @@
       },
       "prompt_sound": {
         "name": "Prompt sound"
+      },
+      "ams_heater_drying": {
+        "name": "Heater drying mode"
+      },
+      "ams_heater_power": {
+        "name": "Heater power"
       }
     },
     "update": {
@@ -1046,7 +1069,8 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab cloud",
-        "lan": "Lan Mode"
+        "lan": "Lan Mode",
+        "ams_heater": "External AMS heater (smart plug)"
       }
     }
   },

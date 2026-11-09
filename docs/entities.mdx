@@ -136,6 +136,23 @@ nextTitle: Device Triggers
 - **`empty: false`, `unknown: false`** — spool present with a correct profile.
 </Info>
 
+### External AMS heater (SUNLU AMS Heater)
+
+Add-on heated lids such as the [SUNLU AMS Heater](https://store.sunlu.com/products/sunlu-ams-heater-upgraded-your-bambu-ams-save-an-ams-2pro-for-you) have no network connection and never report to the printer. ha-bambulab can still run one by switching the smart plug it is powered from, using the AMS's own humidity and temperature readings.
+
+To set it up, plug the heater into a smart plug that Home Assistant can switch, and set the heater to start heating whenever it gets power. Then open the integration's **Configure** dialog, pick **External AMS heater (smart plug)**, and choose the plug for each AMS that has a heater fitted. These entities are added to that AMS:
+
+| Entity                    | Notes |
+| ------------------------- | ----- |
+| Heater drying mode        | While on, the plug is switched automatically. Turning it off switches the heater off and hands the plug back to manual control. Attributes: `heater_plug`, `last_reason`, `runtime_lockout`. |
+| Heater power              | Mirrors and switches the plug. While drying mode is on, the next printer update can override a manual change. |
+| Heater turn-on humidity   | Heating starts at or above this AMS humidity (default 40%). |
+| Heater turn-off humidity  | Heating stops at or below this AMS humidity (default 25%). Must be lower than the turn-on humidity. |
+| Heater temperature cutoff | The heater is switched off while the AMS temperature is at or above this (default 60 °C). Only added when the printer reports AMS temperature. |
+| Heater maximum runtime    | The heater is switched off after running this long (default 12 h, 0 = no limit). It then stays off until the AMS dries to the turn-off humidity or drying mode is switched on again. The runtime is counted from when the plug last turned on, so a Home Assistant restart or the plug dropping offline restarts the count. |
+
+The heater is also switched off whenever the printer is offline, the AMS humidity isn't reported, the plug is unlinked, or the integration is unloaded while drying. Automatic control needs the AMS **Humidity** sensor in percent, listed above. The heater's own thermostat still sets its heating temperature.
+
 ## External Spool
 
 | Sensor         | Notes |

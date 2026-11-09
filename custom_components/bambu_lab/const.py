@@ -19,6 +19,10 @@ LOGGERFORHA = logging.getLogger(f"{__package__}_HA")
 
 SERVICE_CALL_EVENT = "bambu_lab_service_call"
 
+# Options key mapping AMS serial -> switch entity_id of the smart plug powering an
+# external AMS heater (e.g. SUNLU AMS Heater).
+CONF_AMS_HEATERS = "ams_heaters"
+
 PLATFORMS = (
     Platform.BINARY_SENSOR,
     Platform.BUTTON,

@@ -3,11 +3,13 @@ from collections.abc import Awaitable, Callable
 
 from homeassistant.components.number import (
     NumberEntity,
-    NumberEntityDescription, NumberDeviceClass, NumberMode
+    NumberEntityDescription, NumberDeviceClass, NumberMode,
+    RestoreNumber,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfTemperature
+from homeassistant.const import PERCENTAGE, EntityCategory, UnitOfTemperature, UnitOfTime
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
@@ -17,7 +19,18 @@ from .const import (
 )
 
 from .coordinator import BambuDataUpdateCoordinator
-from .models import BambuLabEntity
+from .ams_heater import (
+    DEFAULT_HUMIDITY_OFF,
+    DEFAULT_HUMIDITY_ON,
+    DEFAULT_MAX_RUNTIME_HOURS,
+    DEFAULT_MAX_TEMPERATURE,
+    MAX_HUMIDITY,
+    MAX_RUNTIME_HOURS,
+    MAX_TEMPERATURE,
+    MIN_HUMIDITY,
+    MIN_TEMPERATURE,
+)
+from .models import AMSEntity, BambuLabEntity
 from .pybambu.const import Features, Printers, TempEnum
 
 
@@ -95,6 +108,17 @@ async def async_setup_entry(
             if description.exists_fn(coordinator):
                 async_add_entities([BambuLabNumber(coordinator, description, entry)])
 
+    heaters = getattr(coordinator, "ams_heaters", {})
+    for index, ams in coordinator.get_model().ams.data.items():
+        if ams is not None and ams.serial in heaters:
+            has_temperature = coordinator.get_model().supports_feature(Features.AMS_TEMPERATURE)
+            async_add_entities([
+                AmsHeaterNumber(coordinator, heaters[ams.serial], index, description)
+                for description in AMS_HEATER_NUMBERS
+                # The cutoff would do nothing without an AMS temperature reading.
+                if has_temperature or description.setting != "max_temperature"
+            ])
+
     LOGGER.debug("NUMBER::async_setup_entry DONE")
 
 
@@ -127,3 +151,115 @@ class BambuLabNumber(BambuLabEntity, NumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         self.entity_description.set_value_fn(self, round(value))
+
+
+@dataclass
+class AmsHeaterNumberEntityDescription(NumberEntityDescription):
+    """Describes a setting of an external AMS heater controller."""
+    setting: str = ""
+    default: float = 0.0
+
+
+AMS_HEATER_NUMBERS: tuple[AmsHeaterNumberEntityDescription, ...] = (
+    AmsHeaterNumberEntityDescription(
+        key="ams_heater_humidity_on",
+        translation_key="ams_heater_humidity_on",
+        setting="humidity_on",
+        default=DEFAULT_HUMIDITY_ON,
+        icon="mdi:water-percent-alert",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=NumberDeviceClass.HUMIDITY,
+        entity_category=EntityCategory.CONFIG,
+        mode=NumberMode.BOX,
+        native_min_value=MIN_HUMIDITY,
+        native_max_value=MAX_HUMIDITY,
+        native_step=1,
+    ),
+    AmsHeaterNumberEntityDescription(
+        key="ams_heater_humidity_off",
+        translation_key="ams_heater_humidity_off",
+        setting="humidity_off",
+        default=DEFAULT_HUMIDITY_OFF,
+        icon="mdi:water-percent",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=NumberDeviceClass.HUMIDITY,
+        entity_category=EntityCategory.CONFIG,
+        mode=NumberMode.BOX,
+        native_min_value=MIN_HUMIDITY,
+        native_max_value=MAX_HUMIDITY,
+        native_step=1,
+    ),
+    AmsHeaterNumberEntityDescription(
+        key="ams_heater_max_temperature",
+        translation_key="ams_heater_max_temperature",
+        setting="max_temperature",
+        default=DEFAULT_MAX_TEMPERATURE,
+        icon="mdi:thermometer-alert",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=NumberDeviceClass.TEMPERATURE,
+        entity_category=EntityCategory.CONFIG,
+        mode=NumberMode.BOX,
+        native_min_value=MIN_TEMPERATURE,
+        native_max_value=MAX_TEMPERATURE,
+        native_step=1,
+    ),
+    AmsHeaterNumberEntityDescription(
+        key="ams_heater_max_runtime",
+        translation_key="ams_heater_max_runtime",
+        setting="max_runtime_hours",
+        default=DEFAULT_MAX_RUNTIME_HOURS,
+        icon="mdi:timer-cog-outline",
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        device_class=NumberDeviceClass.DURATION,
+        entity_category=EntityCategory.CONFIG,
+        mode=NumberMode.BOX,
+        native_min_value=0,
+        native_max_value=MAX_RUNTIME_HOURS,
+        native_step=0.5,
+    ),
+)
+
+
+class AmsHeaterNumber(AMSEntity, RestoreNumber):
+    """A user setting of the external AMS heater controller, kept across restarts."""
+
+    entity_description: AmsHeaterNumberEntityDescription
+
+    def __init__(
+            self,
+            coordinator: BambuDataUpdateCoordinator,
+            controller,
+            index: int,
+            description: AmsHeaterNumberEntityDescription,
+    ) -> None:
+        super().__init__(coordinator)
+        self.index = index
+        self.controller = controller
+        self.entity_description = description
+        self._attr_unique_id = f"{controller.ams_serial}_{description.key}"
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        last = await self.async_get_last_number_data()
+        value = self.entity_description.default
+        if last is not None and last.native_value is not None:
+            value = min(max(float(last.native_value), self.native_min_value), self.native_max_value)
+        self.controller.async_restore_settings(**{self.entity_description.setting: value})
+
+    @property
+    def native_value(self) -> float:
+        return getattr(self.controller.settings, self.entity_description.setting)
+
+    async def async_set_native_value(self, value: float) -> None:
+        settings = self.controller.settings
+        setting = self.entity_description.setting
+        if setting == "humidity_on" and value <= settings.humidity_off:
+            raise ServiceValidationError(
+                f"The turn-on humidity must be above the turn-off humidity ({settings.humidity_off:g}%)."
+            )
+        if setting == "humidity_off" and value >= settings.humidity_on:
+            raise ServiceValidationError(
+                f"The turn-off humidity must be below the turn-on humidity ({settings.humidity_on:g}%)."
+            )
+        await self.controller.async_update_settings(**{setting: value})
+        self.async_write_ha_state()
