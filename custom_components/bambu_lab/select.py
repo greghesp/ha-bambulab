@@ -116,6 +116,16 @@ class BambuLabLiveviewCameraSelect(BambuLabEntity, SelectEntity):
         self._attr_unique_id = f"{printer.serial}_LiveviewCamera"
 
     @property
+    def available(self) -> bool:
+        """Unavailable until the printer reports a live camera, and while its live view is off."""
+        camera = self.coordinator.get_model().camera
+        return (
+            super().available
+            and camera.liveview_camera is not None
+            and camera.rtsp_url != "disable"
+        )
+
+    @property
     def options(self) -> list[str]:
         """Return the cameras the printer can show."""
         return self.coordinator.get_model().camera.liveview_camera_options

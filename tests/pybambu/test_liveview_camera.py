@@ -62,6 +62,7 @@ class TestLiveviewCamera(unittest.TestCase):
         self.assertEqual(command["camera"]["command"], "change_liveview_cam_idx")
         self.assertEqual(command["camera"]["camera_id"], 5)
         self.assertEqual(command["camera"]["version"], 1)
+        self.assertEqual(command["camera"]["peer_name"], "studio")
         # The template itself must not change.
         self.assertEqual(SWITCH_LIVEVIEW_CAMERA_TEMPLATE["camera"]["camera_id"], 4)
 

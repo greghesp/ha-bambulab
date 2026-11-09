@@ -63,6 +63,20 @@ def test_printer_with_birdseye_camera_gets_the_select():
     assert client.publish.call_args.args[0]["camera"]["camera_id"] == 5
 
 
+def test_select_is_unavailable_while_live_view_is_off_or_unreported():
+    entities, _ = _setup({"current_liveview": 4, "support_liveview_cams": [4, 5]})
+    [select] = _liveview_selects(entities)
+    camera = select.coordinator.get_model().camera
+    select.coordinator.last_update_success = True
+    assert select.available
+
+    camera.print_update({"ipcam": {"rtsp_url": "disable"}})
+    assert not select.available
+
+    camera.print_update({"ipcam": {"rtsp_url": "rtsps://192.0.2.10:322/streaming/live/1", "current_liveview": 7}})
+    assert not select.available
+
+
 def test_printer_without_birdseye_camera_gets_no_select():
     entities, _ = _setup({"rtsp_url": "rtsps://192.0.2.10:322/streaming/live/1"})
     assert _liveview_selects(entities) == []
