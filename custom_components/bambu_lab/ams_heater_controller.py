@@ -1,4 +1,4 @@
-"""Drive an external AMS heater (e.g. SUNLU AMS Heater) through a smart plug.
+"""Drive an external AMS heater or dryer (e.g. SUNLU AMS Heater, EIBOS Series X) through a smart plug.
 
 The user links a Home Assistant switch entity (the smart plug the heater is
 powered from) to an AMS in the integration options. While drying mode is on,

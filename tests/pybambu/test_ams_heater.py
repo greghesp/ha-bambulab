@@ -1,4 +1,4 @@
-"""Tests for the external AMS heater (e.g. SUNLU AMS Heater) control logic.
+"""Tests for the external AMS heater (e.g. SUNLU AMS Heater, EIBOS Series X) control logic.
 
 ams_heater.py has no Home Assistant imports, so it runs in the lightweight suite.
 """

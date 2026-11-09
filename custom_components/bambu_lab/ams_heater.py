@@ -1,6 +1,7 @@
 """Decision logic for an external AMS heater switched by a smart plug.
 
-Add-on heated lids such as the SUNLU AMS Heater have no data connection: they
+Add-on heated lids and dryers such as the SUNLU AMS Heater and the EIBOS
+Series X (Dyas/Tetras) have no data connection: they
 never report to the printer, so the only way Home Assistant can control one is
 by switching its power. This module decides when that power should be on,
 using the AMS's own humidity and temperature readings.

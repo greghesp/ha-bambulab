@@ -143,8 +143,8 @@
     },
     "step": {
       "ams_heater": {
-        "title": "External AMS heater",
-        "description": "Add-on heaters such as the SUNLU AMS Heater have no network connection, so Home Assistant controls one by switching the smart plug it is powered from.\n\nChoose that plug for each AMS that has a heater fitted, or leave it empty. Each linked AMS gets heater drying mode, heater power, humidity threshold, temperature cutoff and runtime limit entities.\n\nSet the heater itself to start heating when it is powered on, so switching the plug actually starts drying."
+        "title": "External AMS heater or dryer",
+        "description": "Add-on AMS heaters and dryers such as the SUNLU AMS Heater and EIBOS Series X (Dyas/Tetras) have no network connection, so Home Assistant controls one by switching the smart plug it is powered from.\n\nChoose that plug for each AMS that has a heater fitted, or leave it empty. Each linked AMS gets heater drying mode, heater power, humidity threshold, temperature cutoff and runtime limit entities.\n\nSet the heater or dryer itself to start heating when it is powered on, so switching the plug actually starts drying."
       },
       "init": {
         "title": "Adjust connection settings",
@@ -1070,7 +1070,7 @@
       "options": {
         "bambu": "Bambu Lab cloud",
         "lan": "Lan Mode",
-        "ams_heater": "External AMS heater (smart plug)"
+        "ams_heater": "External AMS heater or dryer (smart plug)"
       }
     }
   },

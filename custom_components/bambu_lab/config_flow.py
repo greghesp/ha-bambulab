@@ -1048,7 +1048,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         return choices
 
     async def async_step_ams_heater(self, user_input: dict[str, Any] | None = None) -> FlowResult:
-        """Link the smart plug that powers an external heater (e.g. SUNLU AMS Heater) to each AMS."""
+        """Link the smart plug that powers an external heater (e.g. SUNLU AMS Heater, EIBOS Series X) to each AMS."""
         choices = self._ams_heater_choices()
         if not choices:
             return self.async_abort(reason="no_ams")
