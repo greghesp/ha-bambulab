@@ -1031,6 +1031,57 @@
       },
       "exhaust_fan_speed": {
         "name": "Geschwindigkeit des Abluftventilators"
+      },
+      "zone_temperature": {
+        "name": "Temperatur der Zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zonen-ID"
+          },
+          "slots": {
+            "name": "Spielautomaten"
+          },
+          "dry_setting": {
+            "name": "Trocknungseinstellung"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Luftfeuchtigkeit der Zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zonen-ID"
+          },
+          "slots": {
+            "name": "Spielautomaten"
+          },
+          "dry_setting": {
+            "name": "Trocknungseinstellung"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Verbleibende Trocknungszeit der Zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zonen-ID"
+          },
+          "slots": {
+            "name": "Spielautomaten"
+          },
+          "dry_setting": {
+            "name": "Trocknungseinstellung"
+          }
+        }
       }
     },
     "camera": {

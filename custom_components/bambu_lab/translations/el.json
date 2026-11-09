@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "Ανίχνευση ευθυγράμμισης πλακών κατασκευής",
           "heatbed_surface_foreign_object_detection": "Ανίχνευση ξένων αντικειμένων επιφάνειας θερμότητας",
           "heatbed_underside_foreign_object_detection": "Ανίχνευση ξένου αντικειμένου κάτω από την θέρμανση",
-          "pre_extrusion_before_printing": "Προεξώθηση πριν από την εκτύπωση"
+          "pre_extrusion_before_printing": "Προεξώθηση πριν από την εκτύπωση",
+          "heatbed_stabilizing": "Σταθεροποιητικό κρεβάτι θέρμανσης"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "Απών",
           "normal": "Κανονικός",
           "abnormal": "Ανώμαλος",
-          "readonly": "Μόνο διαβάστε"
+          "readonly": "Μόνο διαβάστε",
+          "not_applicable": "Δεν ισχύει"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Ταχύτητα ανεμιστήρα εξάτμισης"
+      },
+      "external_storage_connection": {
+        "name": "Εξωτερική σύνδεση αποθήκευσης",
+        "state": {
+          "connected": "Συνδεδεμένος",
+          "disconnected": "Ασύνδετος"
+        }
+      },
+      "external_storage_total": {
+        "name": "Σύνολο εξωτερικής αποθήκευσης"
+      },
+      "external_storage_used": {
+        "name": "Χρησιμοποιείται εξωτερικός χώρος αποθήκευσης"
+      },
+      "external_storage_free": {
+        "name": "Εξωτερική αποθήκευση δωρεάν"
+      },
+      "zone_temperature": {
+        "name": "Θερμοκρασία ζώνης {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Ζώνη"
+          },
+          "zone_id": {
+            "name": "Ταυτότητα ζώνης"
+          },
+          "slots": {
+            "name": "Κουλοχέρηδες"
+          },
+          "dry_setting": {
+            "name": "Ρύθμιση στεγνώματος"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Ζώνη {zone_number} υγρασία",
+        "state_attributes": {
+          "zone": {
+            "name": "Ζώνη"
+          },
+          "zone_id": {
+            "name": "Ταυτότητα ζώνης"
+          },
+          "slots": {
+            "name": "Κουλοχέρηδες"
+          },
+          "dry_setting": {
+            "name": "Ρύθμιση στεγνώματος"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Χρόνος στεγνώματος ζώνης {zone_number} που απομένει",
+        "state_attributes": {
+          "zone": {
+            "name": "Ζώνη"
+          },
+          "zone_id": {
+            "name": "Ταυτότητα ζώνης"
+          },
+          "slots": {
+            "name": "Κουλοχέρηδες"
+          },
+          "dry_setting": {
+            "name": "Ρύθμιση στεγνώματος"
+          }
+        }
       }
     },
     "camera": {

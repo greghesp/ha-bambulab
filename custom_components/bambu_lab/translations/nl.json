@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "Detectie van uitlijning van bouwplaten",
           "heatbed_surface_foreign_object_detection": "Detectie van vreemde voorwerpen op het verwarmingsbedoppervlak",
           "heatbed_underside_foreign_object_detection": "Detectie van vreemde voorwerpen aan de onderkant van het verwarmingsbed",
-          "pre_extrusion_before_printing": "Pre-extrusie vóór het afdrukken"
+          "pre_extrusion_before_printing": "Pre-extrusie vóór het afdrukken",
+          "heatbed_stabilizing": "Stabiliserend verwarmingsbed"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "Ontbrekend",
           "normal": "Normaal",
           "abnormal": "Abnormaal",
-          "readonly": "Alleen lezen"
+          "readonly": "Alleen lezen",
+          "not_applicable": "Niet van toepassing"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Snelheid uitlaatventilator"
+      },
+      "external_storage_connection": {
+        "name": "Externe opslagverbinding",
+        "state": {
+          "connected": "Aangesloten",
+          "disconnected": "Verbinding verbroken"
+        }
+      },
+      "external_storage_total": {
+        "name": "Totaal externe opslag"
+      },
+      "external_storage_used": {
+        "name": "Externe opslag gebruikt"
+      },
+      "external_storage_free": {
+        "name": "Externe opslag gratis"
+      },
+      "zone_temperature": {
+        "name": "Zone {zone_number} temperatuur",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone-ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Drooginstelling"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Zone {zone_number} vochtigheid",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone-ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Drooginstelling"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Zone {zone_number} resterende droogtijd",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone-ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Drooginstelling"
+          }
+        }
       }
     },
     "camera": {

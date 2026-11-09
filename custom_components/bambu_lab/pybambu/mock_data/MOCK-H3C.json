@@ -1,0 +1,1343 @@
+{
+    "pushall": {
+      "print": {
+        "2D": {
+          "bs": {
+            "bi": [
+              {
+                "clock_in": false,
+                "est_time": 0,
+                "idx": 0,
+                "manual": true,
+                "print_then": false,
+                "proc_list": [],
+                "step_type": 1,
+                "tool_info": {
+                  "color": "",
+                  "diameter": 0.4000000059604645,
+                  "id": 8978432
+                },
+                "tool_pos": -1,
+                "type": 137
+              }
+            ],
+            "total_time": 0
+          },
+          "cond": 31,
+          "cur_stage": {
+            "clock_in_time": 0,
+            "idx": 0,
+            "left_time": 0,
+            "need_switch": [],
+            "process": 0,
+            "state": 0
+          },
+          "first_confirm": false,
+          "makeable": true,
+          "material": {
+            "cur_id_list": [],
+            "state": 0,
+            "tar_id": "",
+            "tar_name": ""
+          },
+          "offset_calib": {
+            "fail": []
+          },
+          "pm": 0,
+          "ptc_paper_notify": false
+        },
+        "3D": {
+          "enc_type": 0,
+          "layer_num": 133,
+          "print_cali_option": 142,
+          "total_layer_num": 133,
+          "uncalibrated_nozzles": [],
+          "ventobox": {
+            "enable": false,
+            "speed": 50,
+            "visable": false
+          }
+        },
+        "RefillInfo": [],
+        "ams": {
+          "ams": [
+            {
+              "dry_info": "1",
+              "id": "32",
+              "info": "240002006",
+              "tray": [
+                {
+                  "bed_temp": "0",
+                  "bed_temp_type": "0",
+                  "cali_idx": -1,
+                  "cols": [
+                    "000000FF"
+                  ],
+                  "ctype": 2,
+                  "drying_temp": "55",
+                  "drying_time": "8",
+                  "id": "0",
+                  "ins_cyc": 1,
+                  "nozzle_temp_max": "230",
+                  "nozzle_temp_min": "190",
+                  "print_status": 0,
+                  "remain": 34,
+                  "remain_g": 340,
+                  "state": 283,
+                  "tag_uid": "0000000000000001",
+                  "total_len": 330000,
+                  "tray_color": "000000FF",
+                  "tray_diameter": "1.75",
+                  "tray_id_name": "A00-K00",
+                  "tray_info_idx": "GFA00",
+                  "tray_sub_brands": "PLA Basic",
+                  "tray_type": "PLA",
+                  "tray_uuid": "00000000000000000000000000000002",
+                  "tray_weight": "1000",
+                  "xcam_info": "**REDACTED**"
+                },
+                {
+                  "bed_temp": "0",
+                  "bed_temp_type": "0",
+                  "cali_idx": -1,
+                  "cols": [
+                    "FFFFFFFF"
+                  ],
+                  "ctype": 2,
+                  "drying_temp": "55",
+                  "drying_time": "8",
+                  "id": "1",
+                  "ins_cyc": 1,
+                  "nozzle_temp_max": "230",
+                  "nozzle_temp_min": "190",
+                  "print_status": 0,
+                  "remain": 66,
+                  "remain_g": 669,
+                  "state": 283,
+                  "tag_uid": "0000000000000003",
+                  "total_len": 330000,
+                  "tray_color": "FFFFFFFF",
+                  "tray_diameter": "1.75",
+                  "tray_id_name": "A00-W1",
+                  "tray_info_idx": "GFA00",
+                  "tray_sub_brands": "PLA Basic",
+                  "tray_type": "PLA",
+                  "tray_uuid": "00000000000000000000000000000004",
+                  "tray_weight": "1000",
+                  "xcam_info": "**REDACTED**"
+                },
+                {
+                  "id": "2",
+                  "print_status": 0,
+                  "state": 160
+                },
+                {
+                  "id": "3",
+                  "print_status": 0,
+                  "state": 160
+                },
+                {
+                  "id": "4",
+                  "print_status": 0,
+                  "state": 160
+                },
+                {
+                  "id": "5",
+                  "print_status": 0,
+                  "state": 160
+                },
+                {
+                  "id": "6",
+                  "print_status": 0,
+                  "state": 160
+                },
+                {
+                  "id": "7",
+                  "print_status": 0,
+                  "state": 160
+                },
+                {
+                  "id": "8",
+                  "print_status": 0,
+                  "state": 160
+                }
+              ],
+              "zone_info": [
+                {
+                  "dry_setting": {
+                    "dry_duration": -1,
+                    "dry_filament": "",
+                    "dry_temperature": -1
+                  },
+                  "dry_sf_reason": [],
+                  "dry_time": 0,
+                  "humidity": "4",
+                  "humidity_raw": "27",
+                  "info": "240002006",
+                  "temp": "16.7",
+                  "zone_dry_info": "1",
+                  "zone_id": 0,
+                  "zone_slots": [
+                    5,
+                    7
+                  ]
+                },
+                {
+                  "dry_setting": {
+                    "dry_duration": -1,
+                    "dry_filament": "",
+                    "dry_temperature": -1
+                  },
+                  "dry_sf_reason": [],
+                  "dry_time": 0,
+                  "humidity": "2",
+                  "humidity_raw": "41",
+                  "info": "240002006",
+                  "temp": "16.2",
+                  "zone_dry_info": "0",
+                  "zone_id": 1,
+                  "zone_slots": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    6,
+                    8
+                  ]
+                }
+              ]
+            }
+          ],
+          "ams_exist_bits": "2000",
+          "ams_exist_bits_raw": "2000",
+          "cali_id": 255,
+          "cali_stat": 0,
+          "cfs": [
+            2,
+            5,
+            7
+          ],
+          "cfs_m": [],
+          "csl": [
+            8192
+          ],
+          "insert_flag": true,
+          "power_on_flag": false,
+          "stat": 0,
+          "tray_exist_bits": "30000000",
+          "tray_hall_out_bits": "30000000",
+          "tray_is_bbl_bits": "30000000",
+          "tray_now": "255",
+          "tray_pre": "255",
+          "tray_read_done_bits": "30000000",
+          "tray_reading_bits": "0",
+          "tray_tar": "255",
+          "unbind_ams_stat": 0,
+          "version": 193936
+        },
+        "ams_rfid_status": 0,
+        "ams_status": 0,
+        "ap_err": 0,
+        "aux": "2801004",
+        "aux_part_fan": false,
+        "batch_id": 0,
+        "bed_target_temper": 0.0,
+        "bed_temper": 19.0,
+        "big_fan1_speed": "0",
+        "big_fan2_speed": "0",
+        "cali_version": 0,
+        "canvas_id": 0,
+        "care": [
+          {
+            "id": "ls",
+            "info": "25C191C"
+          },
+          {
+            "id": "lr",
+            "info": "25C191C"
+          },
+          {
+            "id": "hr",
+            "info": "641864"
+          }
+        ],
+        "cfg": "7403007DA19",
+        "command": "push_status",
+        "cooling_fan_speed": "0",
+        "design_id": "**REDACTED**",
+        "device": {
+          "airduct": {
+            "modeCur": 0,
+            "modeFunc": 0,
+            "modeList": [
+              {
+                "ctrl": [
+                  16,
+                  32,
+                  160,
+                  48,
+                  240
+                ],
+                "modeId": 0,
+                "off": []
+              },
+              {
+                "ctrl": [
+                  16,
+                  160,
+                  240
+                ],
+                "modeId": 1,
+                "off": []
+              }
+            ],
+            "modeVisable": 7,
+            "parts": [
+              {
+                "func": 0,
+                "id": 16,
+                "range": 6553600,
+                "state": 0,
+                "tar_state": 0
+              },
+              {
+                "func": 6,
+                "id": 32,
+                "range": 6553600,
+                "state": 0,
+                "tar_state": 0
+              },
+              {
+                "func": 5,
+                "id": 160,
+                "range": 6553600,
+                "state": 0,
+                "tar_state": 0
+              },
+              {
+                "func": 2,
+                "id": 48,
+                "range": 6553600,
+                "state": 0,
+                "tar_state": 0
+              },
+              {
+                "func": 10,
+                "id": 240,
+                "range": 6553600,
+                "state": 0,
+                "tar_state": 0
+              }
+            ],
+            "subFunc": 0,
+            "subMode": 0,
+            "subVisable": 7,
+            "version": 1
+          },
+          "aps": {},
+          "bed": {
+            "info": {
+              "temp": 19
+            },
+            "state": 0
+          },
+          "bed_temp": 19,
+          "cam": {
+            "laser": {
+              "cond": 253,
+              "state": 0
+            },
+            "timelapse_path": "**REDACTED**",
+            "tl_external_free_kb": 34673280,
+            "tl_external_total_kb": 120111296,
+            "tl_internal_free_kb": 956522,
+            "tl_internal_total_kb": 962560
+          },
+          "ctc": {
+            "info": {
+              "temp": 16
+            },
+            "state": 0
+          },
+          "ext_tool": {
+            "calib": 0,
+            "low_prec": false,
+            "mount": 0,
+            "mount_3d": 0,
+            "th_temp": 0,
+            "type": ""
+          },
+          "extruder": {
+            "info": [
+              {
+                "hnow": 0,
+                "hpre": 0,
+                "htar": 0,
+                "id": 0,
+                "info": 1547,
+                "snow": 8192,
+                "spre": 8192,
+                "star": 8192,
+                "stat": 393984,
+                "temp": 17,
+                "z_bias": 0.0
+              }
+            ],
+            "state": 1
+          },
+          "fan": 0,
+          "fila_switch": null,
+          "fourth_axis": {
+            "connect_flag": 0,
+            "theta_pitch": -1
+          },
+          "holder": {
+            "info": 1,
+            "info2": 16355,
+            "job": 0,
+            "pos": 2,
+            "stat": 0,
+            "step": [
+              0
+            ]
+          },
+          "ht": null,
+          "laser": {
+            "power": 0
+          },
+          "nozzle": {
+            "exist": 33488896,
+            "hc": 511,
+            "info": [
+              {
+                "addr_id": 0,
+                "base_type": 0,
+                "bind_ams": [],
+                "c_t": 28,
+                "color_m": "000000FF",
+                "diameter": 0.4,
+                "fila_id": "GFA00",
+                "id": 16,
+                "p_t": 52131,
+                "rfid": 0,
+                "sn": "HOTEND1",
+                "snow": 8192,
+                "stat": 160,
+                "temp": 17,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 1,
+                "base_type": 0,
+                "c_t": 26,
+                "color_m": "FFFFFFFF",
+                "diameter": 0.4,
+                "fila_id": "GFA00",
+                "id": 17,
+                "p_t": 22287,
+                "rfid": 0,
+                "sn": "HOTEND2",
+                "snow": 8193,
+                "stat": 160,
+                "temp": 17,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 2,
+                "base_type": 0,
+                "c_t": 0,
+                "color_m": "00000000",
+                "diameter": 0.4,
+                "fila_id": "",
+                "id": 18,
+                "p_t": 0,
+                "rfid": 0,
+                "sn": "HOTEND3",
+                "snow": 65023,
+                "stat": 1,
+                "temp": 18,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 3,
+                "base_type": 0,
+                "c_t": 0,
+                "color_m": "00000000",
+                "diameter": 0.4,
+                "fila_id": "",
+                "id": 19,
+                "p_t": 0,
+                "rfid": 0,
+                "sn": "HOTEND4",
+                "snow": 64767,
+                "stat": 1,
+                "temp": 18,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 4,
+                "base_type": 0,
+                "c_t": 2,
+                "color_m": "00000000",
+                "diameter": 0.4,
+                "fila_id": "",
+                "id": 20,
+                "p_t": 4041,
+                "rfid": 0,
+                "sn": "HOTEND5",
+                "snow": 64511,
+                "stat": 1,
+                "temp": 18,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 5,
+                "base_type": 0,
+                "c_t": 0,
+                "color_m": "00000000",
+                "diameter": 0.4,
+                "fila_id": "",
+                "id": 21,
+                "p_t": 0,
+                "rfid": 0,
+                "sn": "HOTEND6",
+                "snow": 64255,
+                "stat": 1,
+                "temp": 18,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 6,
+                "base_type": 0,
+                "c_t": 0,
+                "color_m": "00000000",
+                "diameter": 0.4,
+                "fila_id": "",
+                "id": 22,
+                "p_t": 0,
+                "rfid": 0,
+                "sn": "HOTEND7",
+                "snow": 63999,
+                "stat": 1,
+                "temp": 18,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 7,
+                "base_type": 1,
+                "c_t": 0,
+                "color_m": "00000000",
+                "diameter": 0.4,
+                "fila_id": "",
+                "id": 23,
+                "p_t": 0,
+                "rfid": 0,
+                "sn": "HOTEND8",
+                "snow": 63488,
+                "stat": 1,
+                "temp": 17,
+                "tm": 350,
+                "type": "HT01",
+                "wear": 0.0
+              },
+              {
+                "addr_id": 8,
+                "base_type": 0,
+                "c_t": 0,
+                "color_m": "00000000",
+                "diameter": 0.4,
+                "fila_id": "",
+                "id": 24,
+                "p_t": 0,
+                "rfid": 0,
+                "sn": "HOTEND9",
+                "snow": 63487,
+                "stat": 1,
+                "temp": 18,
+                "tm": 350,
+                "type": "HS01",
+                "wear": 0.0
+              }
+            ],
+            "refresh_list": [],
+            "src_id": 255,
+            "state": 2101248,
+            "tar_id": 255
+          },
+          "plate": {
+            "base": 13,
+            "cali2d_id": "",
+            "cur_id": "P0103",
+            "mat": 1,
+            "tar_id": ""
+          },
+          "screen": {
+            "backlight": -1
+          },
+          "storage": [
+            {
+              "name": "usb",
+              "total": "120111296",
+              "used": "74952256"
+            }
+          ],
+          "type": 1
+        },
+        "err": "0",
+        "err2": {
+          "err_code": "0",
+          "img_id": "",
+          "remain_slot_info": [],
+          "run_out_slot_info": {
+            "color": {
+              "col": [],
+              "ctype": 2
+            },
+            "id": "",
+            "if_sup": false,
+            "pos": 65535,
+            "type": ""
+          }
+        },
+        "fail_reason": "0",
+        "fan_gear": 0,
+        "file": "**REDACTED**",
+        "force_upgrade": false,
+        "fun": "14021FD1BB0F9CB7",
+        "fun2": "19F833B7F",
+        "gcode_file": "**REDACTED**",
+        "gcode_file_prepare_percent": "100",
+        "gcode_state": "FINISH",
+        "heatbreak_fan_speed": "0",
+        "hms": [],
+        "home_flag": -1067104872,
+        "hw_switch_state": 3,
+        "info": {
+          "temp": 16
+        },
+        "ipcam": {
+          "agora_service": "disable",
+          "brtc_service": "enable",
+          "bs_state": 0,
+          "cam_present": [
+            1,
+            4
+          ],
+          "cap_pic_enable": "disable",
+          "current_liveview": 4,
+          "enable_record_cams": [
+            4
+          ],
+          "ipcam_dev": "1",
+          "ipcam_record": "enable",
+          "laser_preview_res": 7,
+          "liveview_preview": true,
+          "mode_bits": 2,
+          "resolution": "1080p",
+          "rtsp_url": "**REDACTED**",
+          "support_liveview_cams": [
+            4
+          ],
+          "support_record_cams": [
+            4
+          ],
+          "timelapse": "disable",
+          "tl_external_free_kb": 34673280,
+          "tl_external_total_kb": 120111296,
+          "tl_internal_free_kb": 956522,
+          "tl_internal_total_kb": 962560,
+          "tl_store_hpd_type": 2,
+          "tl_store_path_type": 2,
+          "tutk_server": "**REDACTED**"
+        },
+        "job": {
+          "cur_stage": {
+            "idx": 0,
+            "state": 0
+          },
+          "job_state": 8,
+          "stage": [
+            {
+              "clock_in": false,
+              "color": [
+                ""
+              ],
+              "diameter": [
+                0.4000000059604645
+              ],
+              "est_time": 0,
+              "heigh": 0.0,
+              "idx": 0,
+              "platform": "",
+              "print_then": false,
+              "proc_list": [],
+              "tool": [
+                "HS00"
+              ],
+              "type": 2
+            }
+          ]
+        },
+        "job_attr": 17,
+        "job_id": "**REDACTED**",
+        "lan_task_id": "0",
+        "layer_num": 133,
+        "lights_report": [
+          {
+            "mode": "off",
+            "node": "chamber_light"
+          },
+          {
+            "mode": "flashing",
+            "node": "work_light"
+          }
+        ],
+        "mapping": [
+          65535,
+          65535,
+          65535,
+          65535,
+          65535,
+          8192
+        ],
+        "mc_action": 255,
+        "mc_err": 0,
+        "mc_percent": 100,
+        "mc_print_error_code": "0",
+        "mc_print_stage": "1",
+        "mc_print_sub_stage": 0,
+        "mc_remaining_time": 0,
+        "mc_stage": 1,
+        "mc_task": {
+          "id": 0,
+          "step": 0
+        },
+        "model_id": "**REDACTED**",
+        "msg": 0,
+        "net": {
+          "conf": {},
+          "info": []
+        },
+        "nozzle_diameter": "0.4",
+        "nozzle_target_temper": 0.0,
+        "nozzle_temper": 17.0,
+        "nozzle_type": "HS01-0.4",
+        "obj_num": 0,
+        "online": {
+          "version": 15
+        },
+        "percent": 100,
+        "plate_cnt": 2,
+        "plate_id": 2,
+        "plate_idx": 2,
+        "prepare_per": 100,
+        "print_error": 0,
+        "print_gcode_action": 255,
+        "print_nozzle_list": [],
+        "print_nozzle_list_cur_idx": -1,
+        "print_real_action": 0,
+        "print_type": "cloud",
+        "printer": {
+          "info": "4",
+          "print_time": 21
+        },
+        "profile_id": "**REDACTED**",
+        "project_id": "**REDACTED**",
+        "queue": 0,
+        "queue_est": 0,
+        "queue_number": 0,
+        "queue_sts": 0,
+        "queue_total": 0,
+        "remain_time": 0,
+        "s_obj": [],
+        "sdcard": true,
+        "sequence_id": "128010",
+        "spd_lvl": 2,
+        "spd_mag": 100,
+        "stat": "625A000",
+        "state": 6,
+        "stg": [
+          13,
+          74,
+          29,
+          2,
+          72,
+          4,
+          8,
+          14,
+          3,
+          82,
+          39,
+          1,
+          51
+        ],
+        "stg_cd": 0,
+        "stg_cur": -1,
+        "subtask_id": "**REDACTED**",
+        "subtask_name": "**REDACTED**",
+        "t_utc": 1794203958871,
+        "task_id": "**REDACTED**",
+        "total_layer_num": 133,
+        "tray_read_done_bits": "0",
+        "tray_reading_bits": "0",
+        "upgrade_state": {
+          "ahb_new_version_number": "",
+          "ams_new_version_number": "",
+          "consistency_request": false,
+          "dis_state": 0,
+          "err_code": 0,
+          "ext_new_version_number": "",
+          "force_upgrade": false,
+          "idx": 15,
+          "idx2": 817684322,
+          "lower_limit": "00.00.00.00",
+          "message": "",
+          "module": "",
+          "new_version_state": 2,
+          "ota_new_version_number": "",
+          "progress": "0",
+          "rate": "0B/s",
+          "sequence_id": 0,
+          "sn": "**REDACTED**",
+          "status": "IDLE"
+        },
+        "upload": {
+          "file_size": 0,
+          "finish_size": 0,
+          "message": "**REDACTED**",
+          "oss_url": "",
+          "progress": 0,
+          "sequence_id": "0903",
+          "speed": 0,
+          "status": "idle",
+          "task_id": "",
+          "time_remaining": 0,
+          "trouble_id": ""
+        },
+        "ver": "20018",
+        "vir_slot": [
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "247",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "248",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "249",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "250",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "251",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "252",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "253",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "254",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          },
+          {
+            "bed_temp": "0",
+            "bed_temp_type": "0",
+            "cali_idx": -1,
+            "cols": [
+              "00000000"
+            ],
+            "ctype": 0,
+            "drying_temp": "0",
+            "drying_time": "0",
+            "id": "255",
+            "ins_cyc": 1,
+            "nozzle_temp_max": "0",
+            "nozzle_temp_min": "0",
+            "print_status": 0,
+            "remain": -1,
+            "remain_g": -1,
+            "state": 1,
+            "tag_uid": "0000000000000000",
+            "total_len": 330000,
+            "tray_color": "00000000",
+            "tray_diameter": "1.75",
+            "tray_id_name": "",
+            "tray_info_idx": "",
+            "tray_sub_brands": "",
+            "tray_type": "",
+            "tray_uuid": "00000000000000000000000000000000",
+            "tray_weight": "-1",
+            "xcam_info": "**REDACTED**"
+          }
+        ],
+        "wifi_signal": "-64dBm",
+        "xcam": {
+          "allow_skip_parts": false,
+          "buildplate_marker_detector": true,
+          "cfg": 3894711,
+          "first_layer_inspector": true,
+          "halt_print_sensitivity": "medium",
+          "print_halt": true,
+          "printing_monitor": true,
+          "spaghetti_detector": true
+        },
+        "xcam_status": "0"
+      }
+    },
+    "get_version": {
+      "info": {
+        "command": "get_version",
+        "module": [
+          {
+            "flag": 3,
+            "hw_ver": "N/A",
+            "id": 0,
+            "loader_ver": "00.00.00.00",
+            "module_name": "",
+            "name": "ota",
+            "product_name": "Bambu Lab H3C",
+            "sn": "MOCK-H3C",
+            "sw_ver": "01.01.03.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "N10A05",
+            "id": 32,
+            "loader_ver": "00.00.33.60",
+            "module_name": "N10A",
+            "name": "n10a",
+            "product_name": "AMS 3H",
+            "sn": "MOCK-H3C-AMS3H",
+            "sw_ver": "02.00.32.82",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he0",
+            "product_name": "Hotend (1)",
+            "sn": "HOTEND1",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he1",
+            "product_name": "Hotend (2)",
+            "sn": "HOTEND2",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he2",
+            "product_name": "Hotend (3)",
+            "sn": "HOTEND3",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he3",
+            "product_name": "Hotend (4)",
+            "sn": "HOTEND4",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he4",
+            "product_name": "Hotend (5)",
+            "sn": "HOTEND5",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he5",
+            "product_name": "Hotend (6)",
+            "sn": "HOTEND6",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he6",
+            "product_name": "Hotend (7)",
+            "sn": "HOTEND7",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he7",
+            "product_name": "Hotend (8)",
+            "sn": "HOTEND8",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HE06",
+            "id": 0,
+            "loader_ver": "00.00.33.64",
+            "module_name": "HE",
+            "name": "he8",
+            "product_name": "Hotend (9)",
+            "sn": "HOTEND9",
+            "sw_ver": "02.00.19.00",
+            "visible": true
+          },
+          {
+            "flag": 0,
+            "hw_ver": "HC09",
+            "id": 0,
+            "loader_ver": "00.00.33.66",
+            "module_name": "",
+            "name": "hc",
+            "product_name": "",
+            "sn": "**REDACTED**",
+            "sw_ver": "02.00.21.91",
+            "visible": false
+          },
+          {
+            "flag": 0,
+            "hw_ver": "TH07",
+            "id": 0,
+            "loader_ver": "00.00.33.49",
+            "module_name": "",
+            "name": "th",
+            "product_name": "",
+            "sn": "**REDACTED**",
+            "sw_ver": "02.00.31.04",
+            "visible": false
+          },
+          {
+            "flag": 0,
+            "hw_ver": "N/A",
+            "id": 0,
+            "loader_ver": "00.00.00.00",
+            "module_name": "",
+            "name": "ixmj",
+            "product_name": "",
+            "sn": "**REDACTED**",
+            "sw_ver": "00.00.66.66",
+            "visible": false
+          },
+          {
+            "flag": 0,
+            "hw_ver": "SMC07",
+            "id": 0,
+            "loader_ver": "00.00.33.45",
+            "module_name": "",
+            "name": "smc",
+            "product_name": "",
+            "sn": "**REDACTED**",
+            "sw_ver": "02.00.22.34",
+            "visible": false
+          },
+          {
+            "flag": 0,
+            "hw_ver": "TM07",
+            "id": 0,
+            "loader_ver": "00.00.33.63",
+            "module_name": "",
+            "name": "tm",
+            "product_name": "",
+            "sn": "**REDACTED**",
+            "sw_ver": "02.00.21.46",
+            "visible": false
+          },
+          {
+            "flag": 0,
+            "hw_ver": "MC08",
+            "id": 0,
+            "loader_ver": "00.01.33.49",
+            "module_name": "",
+            "name": "mc",
+            "product_name": "",
+            "sn": "**REDACTED**",
+            "sw_ver": "02.00.23.30",
+            "visible": false
+          },
+          {
+            "flag": 0,
+            "hw_ver": "AP05",
+            "id": 0,
+            "loader_ver": "00.00.01.02",
+            "module_name": "",
+            "name": "ap2",
+            "product_name": "",
+            "sn": "**REDACTED**",
+            "sw_ver": "00.00.66.66",
+            "visible": false
+          }
+        ],
+        "sequence_id": "0"
+      }
+    }
+}

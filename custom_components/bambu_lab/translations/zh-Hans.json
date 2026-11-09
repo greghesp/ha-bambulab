@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "构建板对齐检测",
           "heatbed_surface_foreign_object_detection": "热床表面异物检测",
           "heatbed_underside_foreign_object_detection": "热床底部异物检测",
-          "pre_extrusion_before_printing": "印刷前预挤出"
+          "pre_extrusion_before_printing": "印刷前预挤出",
+          "heatbed_stabilizing": "稳定热床"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "丢失的",
           "normal": "普通的",
           "abnormal": "异常",
-          "readonly": "只读"
+          "readonly": "只读",
+          "not_applicable": "不适用"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "排风扇转速"
+      },
+      "external_storage_connection": {
+        "name": "外部存储连接",
+        "state": {
+          "connected": "已连接",
+          "disconnected": "已断开连接"
+        }
+      },
+      "external_storage_total": {
+        "name": "外部存储总计"
+      },
+      "external_storage_used": {
+        "name": "使用的外部存储"
+      },
+      "external_storage_free": {
+        "name": "外部存储免费"
+      },
+      "zone_temperature": {
+        "name": "区域 {zone_number} 温度",
+        "state_attributes": {
+          "zone": {
+            "name": "区"
+          },
+          "zone_id": {
+            "name": "区域ID"
+          },
+          "slots": {
+            "name": "老虎机"
+          },
+          "dry_setting": {
+            "name": "烘干设定"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "区域 {zone_number} 湿度",
+        "state_attributes": {
+          "zone": {
+            "name": "区"
+          },
+          "zone_id": {
+            "name": "区域ID"
+          },
+          "slots": {
+            "name": "老虎机"
+          },
+          "dry_setting": {
+            "name": "烘干设定"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "区域 {zone_number} 剩余干燥时间",
+        "state_attributes": {
+          "zone": {
+            "name": "区"
+          },
+          "zone_id": {
+            "name": "区域ID"
+          },
+          "slots": {
+            "name": "老虎机"
+          },
+          "dry_setting": {
+            "name": "烘干设定"
+          }
+        }
       }
     },
     "camera": {
