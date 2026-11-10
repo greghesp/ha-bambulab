@@ -176,6 +176,8 @@ show above its two spools, and the five front spools below
 | AMS card (vector style) | AMS Graphic card (AMS 2 Pro, dark) |
 |---|---|
 | ![AMS card in vector style with info bar](docs/images/readme/ams-card-vector.png) | ![AMS Graphic card for an AMS 2 Pro](docs/images/readme/ams-card-graphic.png) |
+| **AMS 3H, dry box drying** | **AMS 3H, dry box idle** |
+| ![AMS 3H in the AMS card while its dry box is drying](docs/images/readme/ams-card-ams3h-drying.png) | ![AMS 3H in the AMS card with its dry box idle](docs/images/readme/ams-card-ams3h-idle.png) |
 
 ```yaml
 type: custom:ha-bambulab-ams-card
