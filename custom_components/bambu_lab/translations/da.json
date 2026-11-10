@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "Detektion af byggepladejustering",
           "heatbed_surface_foreign_object_detection": "Detektering af fremmedlegemer på varmebedets overflade",
           "heatbed_underside_foreign_object_detection": "Detektering af fremmedlegemer under varmebed",
-          "pre_extrusion_before_printing": "Præ-ekstrudering før trykning"
+          "pre_extrusion_before_printing": "Præ-ekstrudering før trykning",
+          "heatbed_stabilizing": "Stabiliserende varmeleje"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "Manglende",
           "normal": "Normal",
           "abnormal": "Abnorm",
-          "readonly": "Læs kun"
+          "readonly": "Læs kun",
+          "not_applicable": "Ikke relevant"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Udstødningsventilatorhastighed"
+      },
+      "external_storage_connection": {
+        "name": "Ekstern lagerforbindelse",
+        "state": {
+          "connected": "Forbundet",
+          "disconnected": "Afbrudt"
+        }
+      },
+      "external_storage_total": {
+        "name": "Eksternt lager i alt"
+      },
+      "external_storage_used": {
+        "name": "Eksternt lager brugt"
+      },
+      "external_storage_free": {
+        "name": "Ekstern opbevaring gratis"
+      },
+      "zone_temperature": {
+        "name": "Temperatur i zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Tørre indstilling"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Fugtighed i zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Tørre indstilling"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Zone {zone_number} resterende tørretid",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Tørre indstilling"
+          }
+        }
       }
     },
     "camera": {

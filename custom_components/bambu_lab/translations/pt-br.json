@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "Detecção de alinhamento de placa de construção",
           "heatbed_surface_foreign_object_detection": "Detecção de objetos estranhos na superfície do colchão térmico",
           "heatbed_underside_foreign_object_detection": "Detecção de objetos estranhos na parte inferior da cama térmica",
-          "pre_extrusion_before_printing": "Pré-extrusão antes da impressão"
+          "pre_extrusion_before_printing": "Pré-extrusão antes da impressão",
+          "heatbed_stabilizing": "Cama térmica estabilizadora"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "Ausente",
           "normal": "Normal",
           "abnormal": "Anormal",
-          "readonly": "Somente leitura"
+          "readonly": "Somente leitura",
+          "not_applicable": "Não aplicável"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Velocidade do exaustor"
+      },
+      "external_storage_connection": {
+        "name": "Conexão de armazenamento externo",
+        "state": {
+          "connected": "Conectado",
+          "disconnected": "Desconectado"
+        }
+      },
+      "external_storage_total": {
+        "name": "Total de armazenamento externo"
+      },
+      "external_storage_used": {
+        "name": "Armazenamento externo usado"
+      },
+      "external_storage_free": {
+        "name": "Armazenamento externo gratuito"
+      },
+      "zone_temperature": {
+        "name": "Temperatura da zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID da zona"
+          },
+          "slots": {
+            "name": "Caça-níqueis"
+          },
+          "dry_setting": {
+            "name": "Configuração de secagem"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Umidade da zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID da zona"
+          },
+          "slots": {
+            "name": "Caça-níqueis"
+          },
+          "dry_setting": {
+            "name": "Configuração de secagem"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Tempo de secagem restante da zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID da zona"
+          },
+          "slots": {
+            "name": "Caça-níqueis"
+          },
+          "dry_setting": {
+            "name": "Configuração de secagem"
+          }
+        }
       }
     },
     "camera": {

@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "Construeix detecció d'alineació de plaques",
           "heatbed_surface_foreign_object_detection": "Detecció d'objectes estranys a la superfície del llit calent",
           "heatbed_underside_foreign_object_detection": "Detecció d'objectes estranys a la part inferior del llit calent",
-          "pre_extrusion_before_printing": "Pre-extrusió abans de la impressió"
+          "pre_extrusion_before_printing": "Pre-extrusió abans de la impressió",
+          "heatbed_stabilizing": "Llit calent estabilitzador"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "Perduda",
           "normal": "Normal",
           "abnormal": "Anormal",
-          "readonly": "Llegiu només"
+          "readonly": "Llegiu només",
+          "not_applicable": "No aplicable"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Velocitat del ventilador d'escapament"
+      },
+      "external_storage_connection": {
+        "name": "Connexió d'emmagatzematge extern",
+        "state": {
+          "connected": "Connectat",
+          "disconnected": "Desconnectat"
+        }
+      },
+      "external_storage_total": {
+        "name": "Emmagatzematge extern total"
+      },
+      "external_storage_used": {
+        "name": "Emmagatzematge extern utilitzat"
+      },
+      "external_storage_free": {
+        "name": "Emmagatzematge extern gratuït"
+      },
+      "zone_temperature": {
+        "name": "Temperatura de la zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID de zona"
+          },
+          "slots": {
+            "name": "Ranures"
+          },
+          "dry_setting": {
+            "name": "Configuració d'assecat"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Humitat de la zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID de zona"
+          },
+          "slots": {
+            "name": "Ranures"
+          },
+          "dry_setting": {
+            "name": "Configuració d'assecat"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Zona {zone_number} temps d'assecat restant",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID de zona"
+          },
+          "slots": {
+            "name": "Ranures"
+          },
+          "dry_setting": {
+            "name": "Configuració d'assecat"
+          }
+        }
       }
     },
     "camera": {

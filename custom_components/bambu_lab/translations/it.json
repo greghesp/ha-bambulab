@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "Costruisci il rilevamento dell'allineamento della piastra",
           "heatbed_surface_foreign_object_detection": "Rilevamento di oggetti estranei sulla superficie del piano riscaldato",
           "heatbed_underside_foreign_object_detection": "Rilevamento di oggetti estranei nella parte inferiore del piano riscaldato",
-          "pre_extrusion_before_printing": "Pre-estrusione prima della stampa"
+          "pre_extrusion_before_printing": "Pre-estrusione prima della stampa",
+          "heatbed_stabilizing": "Piano riscaldato stabilizzante"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "Mancante",
           "normal": "Normale",
           "abnormal": "Anormale",
-          "readonly": "Solo lettura"
+          "readonly": "Solo lettura",
+          "not_applicable": "Non applicabile"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Velocità della ventola di scarico"
+      },
+      "external_storage_connection": {
+        "name": "Connessione di archiviazione esterna",
+        "state": {
+          "connected": "Collegato",
+          "disconnected": "Disconnesso"
+        }
+      },
+      "external_storage_total": {
+        "name": "Totale spazio di archiviazione esterno"
+      },
+      "external_storage_used": {
+        "name": "Memoria esterna utilizzata"
+      },
+      "external_storage_free": {
+        "name": "Archiviazione esterna gratuita"
+      },
+      "zone_temperature": {
+        "name": "Temperatura della zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "Identificativo della zona"
+          },
+          "slots": {
+            "name": "Slot"
+          },
+          "dry_setting": {
+            "name": "Impostazione dell'asciugatura"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Umidità della zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "Identificativo della zona"
+          },
+          "slots": {
+            "name": "Slot"
+          },
+          "dry_setting": {
+            "name": "Impostazione dell'asciugatura"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Tempo di asciugatura rimanente della zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "Identificativo della zona"
+          },
+          "slots": {
+            "name": "Slot"
+          },
+          "dry_setting": {
+            "name": "Impostazione dell'asciugatura"
+          }
+        }
       }
     },
     "camera": {
