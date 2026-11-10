@@ -111,6 +111,7 @@ A short tour. The complete list, with per-model notes, is in the
 | Active Tray | The slot feeding the nozzle right now |
 | External Spool | Filament on the external spool holder, same attributes as a tray |
 | Hotend Rack | Mounted/docked hotends, wear and usage time (H2C Vortek) |
+| External AMS heater | Runs a SUNLU AMS Heater or EIBOS Series X from the smart plug it's powered by, switching on and off at the AMS humidity you set, with a temperature cutoff and maximum runtime ([details](https://docs.page/greghesp/ha-bambulab/entities#external-ams-heater-or-dryer-sunlu-ams-heater-eibos-series-x)) |
 
 ### Controls
 | Control | Notes |
@@ -171,6 +172,13 @@ spool to see its details or change its filament.
 The H3C's **AMS 3H** uses the AMS card: its nine spools in two rows, and
 each drying zone's humidity, temperature and drying time left in the info
 bar ([details](https://docs.page/greghesp/ha-bambulab/frontend/cards/ams-card#ams-3h)).
+
+With an external AMS heater set up, the AMS card's info bar also shows the
+heater: **Off**, **On**, **Auto** (drying mode waiting for the humidity to
+rise), **Drying**, or **Limit** once it hits the maximum runtime. Tap it to
+open drying mode.
+
+![AMS card info bar with the external heater drying](docs/images/readme/ams-card-heater.png)
 
 | AMS card (vector style) | AMS Graphic card (AMS 2 Pro, dark) |
 |---|---|
