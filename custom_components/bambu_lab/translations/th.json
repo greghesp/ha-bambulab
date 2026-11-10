@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "สร้างการตรวจจับการจัดตำแหน่งแผ่น",
           "heatbed_surface_foreign_object_detection": "การตรวจจับวัตถุแปลกปลอมบนพื้นผิวเตียงทำความร้อน",
           "heatbed_underside_foreign_object_detection": "แผ่นทำความร้อนใต้การตรวจจับวัตถุแปลกปลอม",
-          "pre_extrusion_before_printing": "การอัดขึ้นรูปก่อนพิมพ์"
+          "pre_extrusion_before_printing": "การอัดขึ้นรูปก่อนพิมพ์",
+          "heatbed_stabilizing": "เตียงทำความร้อนที่มีเสถียรภาพ"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "หายไป",
           "normal": "ปกติ",
           "abnormal": "ผิดปกติ",
-          "readonly": "อ่านเท่านั้น"
+          "readonly": "อ่านเท่านั้น",
+          "not_applicable": "ไม่สามารถใช้ได้"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "ความเร็วพัดลมดูดอากาศ"
+      },
+      "external_storage_connection": {
+        "name": "การเชื่อมต่อที่จัดเก็บข้อมูลภายนอก",
+        "state": {
+          "connected": "เชื่อมต่อแล้ว",
+          "disconnected": "ตัดการเชื่อมต่อแล้ว"
+        }
+      },
+      "external_storage_total": {
+        "name": "พื้นที่จัดเก็บข้อมูลภายนอกทั้งหมด"
+      },
+      "external_storage_used": {
+        "name": "ที่จัดเก็บข้อมูลภายนอกที่ใช้"
+      },
+      "external_storage_free": {
+        "name": "ที่จัดเก็บข้อมูลภายนอกฟรี"
+      },
+      "zone_temperature": {
+        "name": "อุณหภูมิโซน {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "โซน"
+          },
+          "zone_id": {
+            "name": "รหัสโซน"
+          },
+          "slots": {
+            "name": "สล็อต"
+          },
+          "dry_setting": {
+            "name": "การตั้งค่าการอบแห้ง"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "ความชื้นโซน {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "โซน"
+          },
+          "zone_id": {
+            "name": "รหัสโซน"
+          },
+          "slots": {
+            "name": "สล็อต"
+          },
+          "dry_setting": {
+            "name": "การตั้งค่าการอบแห้ง"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "เวลาการอบแห้งที่เหลืออยู่ของโซน {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "โซน"
+          },
+          "zone_id": {
+            "name": "รหัสโซน"
+          },
+          "slots": {
+            "name": "สล็อต"
+          },
+          "dry_setting": {
+            "name": "การตั้งค่าการอบแห้ง"
+          }
+        }
       }
     },
     "camera": {

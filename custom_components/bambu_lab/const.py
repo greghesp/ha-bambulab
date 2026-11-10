@@ -18,6 +18,9 @@ LOGGER = logging.getLogger(__package__)
 LOGGERFORHA = logging.getLogger(f"{__package__}_HA")
 
 SERVICE_CALL_EVENT = "bambu_lab_service_call"
+# hass.data[DOMAIN] key holding the pending service calls, by the id sent in the event data.
+SERVICE_CALL_FUTURES = "service_call_futures"
+SERVICE_CALL_ID = "service_call_id"
 
 # Options keys holding the host name or IP of BIQU Panda devices linked to this printer.
 CONF_PANDA_BREATH_HOST = "panda_breath_host"
@@ -42,7 +45,7 @@ BAMBU_LAB_CARDS = [
     {
         'name': 'Bambu Lab Cards',
         'filename': 'ha-bambulab-cards.js',
-        'version': '0.7.1'
+        'version': '0.8.0'
     }
 ]
 

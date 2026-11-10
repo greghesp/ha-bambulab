@@ -493,7 +493,8 @@
           "build_plate_alignment_detection": "Detekcia zarovnania doštičiek",
           "heatbed_surface_foreign_object_detection": "Detekcia cudzích predmetov na povrchu vyhrievanej podložky",
           "heatbed_underside_foreign_object_detection": "Detekcia cudzích predmetov na spodnej strane vyhrievacieho lôžka",
-          "pre_extrusion_before_printing": "Predtlačenie pred tlačou"
+          "pre_extrusion_before_printing": "Predtlačenie pred tlačou",
+          "heatbed_stabilizing": "Stabilizačné vyhrievacie lôžko"
         }
       },
       "print_progress": {
@@ -757,7 +758,8 @@
           "missing": "Chýbajúci",
           "normal": "Normálny",
           "abnormal": "Neobvyklý",
-          "readonly": "Čítať"
+          "readonly": "Čítať",
+          "not_applicable": "Neuplatňuje sa"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1015,73 @@
       },
       "exhaust_fan_speed": {
         "name": "Rýchlosť výfukového ventilátora"
+      },
+      "external_storage_connection": {
+        "name": "Pripojenie externého úložiska",
+        "state": {
+          "connected": "Pripojené",
+          "disconnected": "Odpojené"
+        }
+      },
+      "external_storage_total": {
+        "name": "Externý ukladací priestor celkom"
+      },
+      "external_storage_used": {
+        "name": "Používa sa externé úložisko"
+      },
+      "external_storage_free": {
+        "name": "Externé úložisko zadarmo"
+      },
+      "zone_temperature": {
+        "name": "Teplota zóny {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zóna"
+          },
+          "zone_id": {
+            "name": "ID zóny"
+          },
+          "slots": {
+            "name": "Sloty"
+          },
+          "dry_setting": {
+            "name": "Nastavenie sušenia"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Vlhkosť zóny {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zóna"
+          },
+          "zone_id": {
+            "name": "ID zóny"
+          },
+          "slots": {
+            "name": "Sloty"
+          },
+          "dry_setting": {
+            "name": "Nastavenie sušenia"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "Zostávajúci čas sušenia zóny {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zóna"
+          },
+          "zone_id": {
+            "name": "ID zóny"
+          },
+          "slots": {
+            "name": "Sloty"
+          },
+          "dry_setting": {
+            "name": "Nastavenie sušenia"
+          }
+        }
       }
     },
     "camera": {

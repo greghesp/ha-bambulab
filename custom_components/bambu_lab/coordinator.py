@@ -36,6 +36,8 @@ from .const import (
     OPTION_NAME,
     PLATFORMS,
     SERVICE_CALL_EVENT,
+    SERVICE_CALL_FUTURES,
+    SERVICE_CALL_ID,
     FILAMENT_DATA,
 )
 
@@ -43,15 +45,14 @@ from .makerworld import create_makerworld_coordinator
 from .panda_devices import PANDA_KINDS, device_identifier, firmware_version
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
+from .pybambu.utils import build_print_project_file_command
 from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
     AMS_MODELS_AND_EXTERNAL_SPOOL,
     Features,
-    Printers
 )
 from .pybambu.commands import (
-    PRINT_PROJECT_FILE_TEMPLATE,
     SEND_GCODE_TEMPLATE,
     SKIP_OBJECTS_TEMPLATE,
     MOVE_AXIS_GCODE,
@@ -281,7 +282,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             is_for_me = self._is_service_call_for_me(data)
         except Exception:
-            # The future is shared between printers. Resolving it here could discard the
+            # Every printer sees the call. Resolving its future here could discard the
             # result from the printer this call was actually meant for.
             LOGGER.exception(f"Unable to determine the target of service call '{data.get('service')}'")
             return
@@ -295,9 +296,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.exception(f"Service call '{data.get('service')}' failed")
             result = False
 
-        future = self._hass.data[DOMAIN].get('service_call_future')
+        futures = self._hass.data[DOMAIN].get(SERVICE_CALL_FUTURES) or {}
+        future = futures.get(data.get(SERVICE_CALL_ID))
         if future is None:
-            LOGGER.error("Future is None")
+            # The caller already timed out, or the integration was reloaded meanwhile.
+            LOGGER.error(f"No pending service call for '{data.get('service')}'")
             return
         if not future.done():
             future.set_result(False if result is None else result)
@@ -740,36 +743,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client.publish(command)
 
     def _service_call_print_project_file(self, data: dict):
-        command = copy.deepcopy(PRINT_PROJECT_FILE_TEMPLATE)
-        filepath = data.get("filepath")
-        plate = data.get("plate", 1)
-        timelapse = data.get("timelapse", False)
-        bed_leveling = data.get("bed_leveling", False)
-        flow_cali = data.get("flow_cali", False)
-        vibration_cali = data.get("vibration_cali", False)
-        layer_inspect = data.get("layer_inspect", False)
-        use_ams = data.get("use_ams", False)
-        ams_mapping = data.get("ams_mapping")
-
-        command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
-        if '//' in filepath:
-            command["print"]["url"] = filepath
-        else:
-            if self.config_entry.data["device_type"] in [Printers.H2C, Printers.H2S, Printers.H2D]:
-                command["print"]["url"] = f"ftp:///{filepath}"
-            else:
-                command["print"]["url"] = f"file:///sdcard/{filepath}"
-
-        command["print"]["timelapse"] = timelapse
-        command["print"]["bed_leveling"] = bed_leveling
-        command["print"]["flow_cali"] = flow_cali
-        command["print"]["vibration_cali"] = vibration_cali
-        command["print"]["layer_inspect"] = layer_inspect
-        command["print"]["use_ams"] = use_ams
-        if use_ams:
-            command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
-        command["print"]["subtask_name"] = os.path.basename(filepath)
-
+        command = build_print_project_file_command(self.config_entry.data["device_type"], data)
         self.client.publish(command)
 
     async def _async_update_data(self):
