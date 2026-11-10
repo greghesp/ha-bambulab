@@ -168,9 +168,10 @@ it's enabled in the slicer for a Bambu spool. The **AMS Graphic card** draws
 the unit itself (AMS, AMS 2 Pro, AMS HT) with fill levels and labels. Tap a
 spool to see its details or change its filament.
 
-The H3C's **AMS 3H** uses the AMS card: its nine spools in two rows, and
-each drying zone's humidity, temperature and drying time left in the info
-bar ([details](https://docs.page/greghesp/ha-bambulab/frontend/cards/ams-card#ams-3h)).
+The H3C's **AMS 3H** uses the AMS card, laid out like the unit: two back
+spools beside the dry box, whose temperature, humidity and drying time left
+show above its two spools, and the five front spools below
+([details](https://docs.page/greghesp/ha-bambulab/frontend/cards/ams-card#ams-3h)).
 
 | AMS card (vector style) | AMS Graphic card (AMS 2 Pro, dark) |
 |---|---|

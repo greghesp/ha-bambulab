@@ -34,8 +34,10 @@ All configuration should be done via the dashboard card editor. The configuratio
 
 The H3C's AMS 3H uses the same card. It always uses the vector style, since there is no AMS 3H artwork for the graphic style.
 
-- Its nine spools are shown in two rows, with five spools in the first row and four in the second.
-- The AMS 3H has no single humidity or temperature reading. Instead, the info bar shows each drying zone's humidity, temperature and, while the zone is drying, the time left. Hover over a zone to see which trays it holds, and tap a reading to open its history.
+- Its nine spools are laid out like the unit. The back row has two spools beside the **dry box**, which is outlined around its two spools, and the five front spools are below.
+- The dry box shows its temperature and humidity above its spools. While it's drying, it also shows the time left and its outline turns orange.
+- The AMS 3H has no single humidity or temperature reading, so the info bar shows the other drying zone's humidity and temperature. Tap any reading to open its history.
+- The dry box is the drying zone with the fewest trays. The printer doesn't report which tray sits where, so the front row takes the five lowest-numbered of the other trays and the back row the rest.
 - The card editor offers a custom remaining sensor for each of the nine trays.
 
 The zone readings come from the AMS 3H's zone sensors (Zone *n* temperature, humidity and remaining drying time). Each one has `zone` (1-based), `zone_id` (the printer's 0-based id) and `slots` (the 1-based tray numbers in the zone) attributes.
