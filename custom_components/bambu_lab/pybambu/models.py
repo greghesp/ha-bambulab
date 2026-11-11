@@ -1336,7 +1336,7 @@ class PrintJob:
                     LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
                     self._update_task_data()
 
-            if self.gcode_state in ("RUNNING", "PAUSE", "FINISH") and (previously_idle or previous_gcode_state in ("PREPARE", "unknown")):
+            if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE"):
                 # We haven't yet downloaded model data off the printer. Scenarios where this happens:
                 # 1. This is a lan mode print where the gcode was pushed to the printer before the print ever started
                 # 2. On the P1/P2/A1 download completes or prepare_percent never reaches 100

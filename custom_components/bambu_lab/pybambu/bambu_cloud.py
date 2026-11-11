@@ -96,14 +96,14 @@ class BambuCloud:
 
     def _get_headers(self):
         return {
-            'User-Agent': 'bambu_network_agent/02.00.01.00',
-            'X-BBL-Client-Name': 'OrcaSlicer',
-            'X-BBL-Client-Type': 'slicer',
-            'X-BBL-Client-Version': '01.09.05.51',
+            'User-Agent': 'ha-bambulab/v1',
+            'X-BBL-Client-Name': 'ha-bambulab',
+            'X-BBL-Client-Type': 'homeautomation',
+            'X-BBL-Client-Version': '01.00.00.00',
             'X-BBL-Language': 'en-US',
             'X-BBL-OS-Type': 'linux',
             'X-BBL-OS-Version': '6.2.0',
-            'X-BBL-Agent-Version': '01.09.05.01',
+            'X-BBL-Agent-Version': '01.00.00.00',
             'X-BBL-Executable-info': '{}',
             'X-BBL-Agent-OS-Type': 'linux',
             'accept': 'application/json',
