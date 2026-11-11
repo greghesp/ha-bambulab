@@ -144,8 +144,9 @@ nextTitle: Device Triggers
 
 | Attributes:     | Notes      |
 | --------------- | ---------- |
+| Active          | `true` while this slot is feeding the printer |
 | Color           |            |
-| Empty           |            |
+| Empty           | `true` when no filament is set on the holder. A loaded spool that isn't feeding stays `false`; see Active. |
 | Unknown         |            |
 | State           |            |
 | K Value         | P1/A1 only |
