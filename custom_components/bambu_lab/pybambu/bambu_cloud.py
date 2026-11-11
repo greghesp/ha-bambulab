@@ -35,6 +35,7 @@ from dataclasses import dataclass
 
 from .const import (
      LOGGER,
+     USER_AGENT,
      BambuUrl,
      Printers
 )
@@ -96,7 +97,7 @@ class BambuCloud:
 
     def _get_headers(self):
         return {
-            'User-Agent': 'ha-bambulab/v1',
+            'User-Agent': USER_AGENT,
             'X-BBL-Client-Name': 'ha-bambulab',
             'X-BBL-Client-Type': 'homeautomation',
             'X-BBL-Client-Version': '01.00.00.00',
@@ -730,7 +731,7 @@ class BambuCloud:
         LOGGER.debug(f"Downloading cover image: {url}")
         try:
             # This is just a standard download from an unauthenticated end point.
-            response = requests.get(url)
+            response = requests.get(url, headers={'User-Agent': USER_AGENT})
         except:
             return None
         return response.content

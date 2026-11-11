@@ -282,6 +282,22 @@ def load_dict(filename: str) -> dict:
 
 FILAMENT_NAMES = load_dict(Path(__file__).with_name('filaments.json'))
 
+
+def _load_integration_version() -> str:
+    # The publish workflow stamps the release tag into manifest.json, so this
+    # tracks the shipped version automatically. Dev checkouts report 0.0.0.
+    try:
+        return load_dict(Path(__file__).parent.parent / 'manifest.json').get('version', 'unknown')
+    except Exception:
+        return 'unknown'
+
+
+INTEGRATION_VERSION = _load_integration_version()
+
+# Versioned so Bambu can rate limit or block one misbehaving release rather than
+# every ha-bambulab install. Keep the 'ha-bambulab/' prefix stable.
+USER_AGENT = f'ha-bambulab/v{INTEGRATION_VERSION}'
+
 HMS_SEVERITY_LEVELS = {
     "default": "unknown",
     1: "fatal",
