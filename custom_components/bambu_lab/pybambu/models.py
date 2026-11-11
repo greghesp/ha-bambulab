@@ -57,6 +57,7 @@ from .const import (
     PRINT_TYPE_OPTIONS,
     AIRDUCT_MODES,
     AMS_CONNECTED_NOZZLES,
+    LIVEVIEW_CAMERAS,
     NOZZLE_SIDES,
     TempEnum,
     Print_Fun_Values,
@@ -77,6 +78,7 @@ from .commands import (
     PROMPT_SOUND_DISABLE,
     AIRDUCT_SET_MODE_TEMPLATE,
     SPEED_PROFILE_TEMPLATE,
+    SWITCH_LIVEVIEW_CAMERA_TEMPLATE,
     BUZZER_SET_SILENT,
     BUZZER_SET_ALARM,
     BUZZER_SET_BEEPING,
@@ -490,6 +492,8 @@ class Camera:
     resolution: str
     rtsp_url: str
     timelapse: str
+    current_liveview: int | None
+    support_liveview_cams: list
     _fired_camera_disabled_event: bool
 
     def __init__(self, client):
@@ -498,6 +502,9 @@ class Camera:
         self.resolution = ''
         self.rtsp_url = None
         self.timelapse = ''
+        # Only reported by printers that can switch the live view between cameras (BirdsEye)
+        self.current_liveview = None
+        self.support_liveview_cams = []
         self._fired_camera_disabled_event = False
 
     def print_update(self, data) -> bool:
@@ -517,6 +524,7 @@ class Camera:
         self.recording = (data.get("ipcam") or {}).get("ipcam_record", self.recording)
         self.resolution = (data.get("ipcam") or {}).get("resolution", self.resolution)
         self.rtsp_url = (data.get("ipcam") or {}).get("rtsp_url", self.rtsp_url)
+        self._update_liveview_cameras(data.get("ipcam") or {})
         if self._client._enable_camera:
             if self.rtsp_url == "disable":
                 if not self._fired_camera_disabled_event:
@@ -524,6 +532,45 @@ class Camera:
                     self._client.callback("event_printer_live_view_disabled")
         
         return (old_data != f"{self.__dict__}")
+
+    def _update_liveview_cameras(self, ipcam: dict):
+        # "ipcam": {
+        #   "current_liveview": 4,
+        #   "support_liveview_cams": [4, 5],
+        #   ...
+        # }
+        current = ipcam.get("current_liveview", self.current_liveview)
+        if current is None or (isinstance(current, int) and not isinstance(current, bool)):
+            self.current_liveview = current
+        cams = ipcam.get("support_liveview_cams")
+        if isinstance(cams, list):
+            self.support_liveview_cams = [
+                cam for cam in cams if isinstance(cam, int) and not isinstance(cam, bool)
+            ]
+
+    @property
+    def liveview_camera(self) -> str | None:
+        """The camera feeding the live view ("main" or "birdseye"), or None if not reported."""
+        return LIVEVIEW_CAMERAS.get(self.current_liveview)
+
+    @property
+    def liveview_camera_options(self) -> list[str]:
+        """The known cameras the printer says it can show in the live view, in id order."""
+        return [LIVEVIEW_CAMERAS[cam] for cam in sorted(set(self.support_liveview_cams)) if cam in LIVEVIEW_CAMERAS]
+
+    @property
+    def supports_liveview_switch(self) -> bool:
+        """True when the printer has more than one known camera to show."""
+        return len(self.liveview_camera_options) > 1
+
+    def set_liveview_camera(self, option: str):
+        """Switch the live view to the named camera, if the printer has it."""
+        camera_id = next((k for k, v in LIVEVIEW_CAMERAS.items() if v == option), None)
+        if camera_id is None or camera_id not in self.support_liveview_cams:
+            LOGGER.error(f"Live view camera '{option}' isn't available on this printer")
+            return
+        command = {"camera": {**SWITCH_LIVEVIEW_CAMERA_TEMPLATE["camera"], "camera_id": camera_id}}
+        self._client.publish(command)
 
 @dataclass
 class Temperature:

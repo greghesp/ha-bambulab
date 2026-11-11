@@ -32,6 +32,10 @@ async def async_setup_entry(
         if coordinator.get_model().supports_feature(Features.AIRDUCT_MODE):
             async_add_entities([BambuLabAirductModeSelect(coordinator)])
 
+        # Printers with a BirdsEye camera report more than one live view camera
+        if coordinator.get_model().camera.supports_liveview_switch:
+            async_add_entities([BambuLabLiveviewCameraSelect(coordinator)])
+
 
 class BambuLabSpeedSelect(BambuLabEntity, SelectEntity):
     """Speed select options."""
@@ -94,3 +98,43 @@ class BambuLabAirductModeSelect(BambuLabEntity, SelectEntity):
     async def async_select_option(self, option: str) -> None:
         """Set airduct mode."""
         self.coordinator.get_model().info.set_airduct_mode(option)
+
+
+class BambuLabLiveviewCameraSelect(BambuLabEntity, SelectEntity):
+    """Which camera feeds the live view: the main camera or the BirdsEye camera.
+
+    The printer streams one camera at a time, so the camera entity shows whichever is chosen.
+    """
+
+    _attr_icon = "mdi:camera-switch"
+    _attr_translation_key = "liveview_camera"
+
+    def __init__(self, coordinator: BambuDataUpdateCoordinator) -> None:
+        """Initialize Live View Camera Select."""
+        super().__init__(coordinator=coordinator)
+        printer = self.coordinator.get_model().info
+        self._attr_unique_id = f"{printer.serial}_LiveviewCamera"
+
+    @property
+    def available(self) -> bool:
+        """Unavailable until the printer reports a live camera, and while its live view is off."""
+        camera = self.coordinator.get_model().camera
+        return (
+            super().available
+            and camera.liveview_camera is not None
+            and camera.rtsp_url != "disable"
+        )
+
+    @property
+    def options(self) -> list[str]:
+        """Return the cameras the printer can show."""
+        return self.coordinator.get_model().camera.liveview_camera_options
+
+    @property
+    def current_option(self) -> str | None:
+        """Return the camera feeding the live view."""
+        return self.coordinator.get_model().camera.liveview_camera
+
+    async def async_select_option(self, option: str) -> None:
+        """Switch the live view camera."""
+        self.coordinator.get_model().camera.set_liveview_camera(option)
