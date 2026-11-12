@@ -1027,7 +1027,6 @@ for _zone in range(2):
     for _field, _translation_key, _unit, _device_class, _converter in (
         ("temp", "zone_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE, float),
         ("humidity_raw", "zone_humidity", PERCENTAGE, SensorDeviceClass.HUMIDITY, int),
-        ("dry_time", "zone_remaining_drying_time", UnitOfTime.MINUTES, SensorDeviceClass.DURATION, int),
     ):
         AMS_SENSORS += (BambuLabAMSSensorEntityDescription(
             key=f"zone_{_zone + 1}_{_field}",
