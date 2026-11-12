@@ -24,6 +24,7 @@ EN = json.loads(
 ZONE_KEYS = {
     "zone_temperature": "temp",
     "zone_humidity": "humidity_raw",
+    "zone_remaining_drying_time": "dry_time",
 }
 
 
@@ -40,7 +41,7 @@ def _entity(zones):
 
 def test_zone_sensors_are_named_by_translation_key():
     descriptions = _zone_descriptions()
-    assert len(descriptions) == 4
+    assert len(descriptions) == 6
     for description in descriptions:
         assert description.translation_key in ZONE_KEYS, description.key
         assert description.name in (None, UNDEFINED), description.key
@@ -77,6 +78,7 @@ def test_zone_values_read_their_own_zone():
     values = {d.key: d.value_fn(entity) for d in _zone_descriptions()}
     assert values["zone_1_temp"] == 28.2
     assert values["zone_2_humidity_raw"] == 33
+    assert values["zone_2_dry_time"] == 95
 
 
 def test_ams_3h_has_no_remaining_drying_time_sensor():
