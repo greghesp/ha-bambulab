@@ -16,7 +16,7 @@ nextTitle: Device Triggers
 | Aux           |                   |
 | Chamber       | Not on A1/A1 Mini |
 | Cooling       |                   |
-| Secondary aux | P2S, X2D          |
+| Secondary aux | P2S, X2D, H3C     |
 
 <Info>On the X2D these are named to match the printer screen: Part fan, Left aux fan, Right aux fan (secondary aux) and Exhaust fan (chamber).</Info>
 
@@ -26,8 +26,8 @@ nextTitle: Device Triggers
 | ---------------- | ------- |
 | Bed              |         |
 | Target Bed       |         |
-| Chamber          | P2/X1/H2 only |
-| Target Chamber   | X1E/H2 only |
+| Chamber          | P2/X1/H2/H3C/X2D |
+| Target Chamber   | X1E/H2/H3C/X2D |
 | Nozzle(s)        | Three on dual-nozzle printers (left, right, and active nozzle) |
 | Target Nozzle(s) | Three on dual-nozzle printers (left, right, and active nozzle) |
 
@@ -65,7 +65,7 @@ nextTitle: Device Triggers
 | Timelapse Active         |       |
 | Extruder Filament Status | Also left and right on dual-nozzle printers |
 | Track Switch Input 1/2   | Filament Track Switch only. Nozzle each input feeds, with the loaded filament as attributes |
-| Airduct Mode             | Current airduct mode: Cooling, Heating, or Laser. P2S/H2 only |
+| Airduct Mode             | Current airduct mode: Cooling, Heating, or Laser. P2S/H2/H3C/X2D |
 | Tool Module State        | Current mounted tool (H2D exclusive): none, laser, cutter or unavailable |
 
 
@@ -74,16 +74,16 @@ nextTitle: Device Triggers
 | Control             | Notes                                                      |
 | ------------------- | ---------------------------------------------------------- |
 | Chamber Light       |                                                            |
-| Heatbed Light       | H2D only, initial state not known                          |
+| Heatbed Light       | H2 series and H3C; initial state unknown until a command is observed |
 | Pause               |                                                            |
 | Resume              |                                                            |
 | Stop                |                                                            |
 | Bed temperature     | On P1/A1 this is not available in hybrid connection mode\* |
-| Chamber temperature | X1E/H2 only. Max 60°C on X1E, 65°C on H2 series          |
+| Chamber temperature | X1E/H2/H3C/X2D. Integration limit: 60°C on X1E, 65°C on the others |
 | Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
 | Buzzer controls     | H2D only, allows to set one of 3 modes                     |
-| Airduct Mode        | Switch between Cooling and Heating modes. P2S/H2 only        |
-| Allow Prompt Sound  | A1 and H2D only, enables startup, print start and end sounds |
+| Airduct Mode        | Switch airduct modes on P2S/H2/H3C/X2D                     |
+| Allow Prompt Sound  | A1/A2L/H2/H3C/P2S/X2D                                    |
 
 <Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
 <Warning>If you are running the latest X1 firmware with Bambu Authorisation, the only functional control is the Chamber Light</Warning>
@@ -95,7 +95,7 @@ nextTitle: Device Triggers
 | ----------------- | -------------- |
 | Active tray       | If AMS present |
 | Active tray index | If AMS present |
-| Drying            | AMS 2 Pro/AMS HT only |
+| Drying            | AMS 2 Pro/AMS HT/AMS 3H |
 | Connected nozzle  | Dual-nozzle printers only: Left or Right. Through a Filament Track Switch, the nozzle its loaded filament is routed to, otherwise Track switch |
 
 
@@ -113,6 +113,11 @@ nextTitle: Device Triggers
 | Tray 2                |                       |
 | Tray 3                |                       |
 | Tray 4                |                       |
+
+AMS 3H also exposes its reported zone temperature, humidity and remaining drying
+time. Zone sensor attributes include the associated slots and drying settings.
+The AMS 3H drying binary sensor describes the whole AMS; MQTT zone entries do
+not necessarily represent separate heated zones. It exposes up to nine trays.
 
 | Tray attributes:    | Notes      |
 | ------------------- | ---------- |
@@ -157,7 +162,11 @@ nextTitle: Device Triggers
 
 ## Hotend Rack
 
-H2C only (Vortek system).
+H2C (Vortek system) and H3C (Swaptek system).
+
+The H3C exposes nine PrintTool sensors, each with temperature, target
+temperature and print-time sensors. Its Swaptek position and status are exposed
+as raw diagnostic values. The H2C entities are listed below.
 
 | Sensor                 | Notes                                      |
 | ---------------------- | ------------------------------------------ |
@@ -189,7 +198,7 @@ When a slot is empty, all attributes are set to `None`.
 | Sensor                    | Notes                                                          |
 | ------------------------- | -------------------------------------------------------------- |
 | Developer Lan Mode        | Does the printer have Developer Lan Mode enabled?              |
-| Enclosure Door            | X1/P2/H2 only                                                        |
+| Enclosure Door            | X1/P2/H2/H3C/X2D                               |
 | Firmware Update Available |                                                                |
 | Force Refresh             |                                                                |
 | HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
