@@ -1336,7 +1336,7 @@ class PrintJob:
                     LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
                     self._update_task_data()
 
-            if self.gcode_state in ("RUNNING", "PAUSE", "FINISH") and (previously_idle or previous_gcode_state in ("PREPARE", "unknown")):
+            if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE"):
                 # We haven't yet downloaded model data off the printer. Scenarios where this happens:
                 # 1. This is a lan mode print where the gcode was pushed to the printer before the print ever started
                 # 2. On the P1/P2/A1 download completes or prepare_percent never reaches 100
@@ -4238,10 +4238,8 @@ class ExternalSpool(AMSTray):
 
     @property
     def empty(self) -> bool:
-        """True when no spool is mounted, or this external slot is not active."""
-        if self._physically_empty:
-            return True
-        return not self.active
+        """True when no spool is mounted. Whether the slot is feeding is in `active`."""
+        return self._physically_empty
 
     @empty.setter
     def empty(self, value: bool) -> None:
@@ -4288,7 +4286,7 @@ class ExternalSpool(AMSTray):
         self.bed_temp = 0
 
     def _resolve_loaded_state(self, metadata_only: bool) -> None:
-        """External spool: keep filament data; empty reflects active status."""
+        """External spool: keep filament data; empty only when nothing is mounted."""
         # The holder has no sensor, so blank filament fields mean nothing is mounted.
         if metadata_only or not self._has_filament_metadata():
             self._reset_empty_slot()
