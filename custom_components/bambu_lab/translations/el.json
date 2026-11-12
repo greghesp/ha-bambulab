@@ -1065,23 +1065,6 @@
             "name": "Ρύθμιση στεγνώματος"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "Χρόνος στεγνώματος ζώνης {zone_number} που απομένει",
-        "state_attributes": {
-          "zone": {
-            "name": "Ζώνη"
-          },
-          "zone_id": {
-            "name": "Ταυτότητα ζώνης"
-          },
-          "slots": {
-            "name": "Κουλοχέρηδες"
-          },
-          "dry_setting": {
-            "name": "Ρύθμιση στεγνώματος"
-          }
-        }
       }
     },
     "camera": {
