@@ -3660,14 +3660,20 @@ class AMSInstance:
         return self._active
 
     @property
-    def is_drying(self) -> bool | None:
-        """Report AMS-wide drying activity from the available timers."""
+    def drying_time(self) -> int | None:
+        """Return the remaining drying time in minutes."""
         if self.model != "AMS 3H":
-            return self.remaining_drying_time > 0
+            return self.remaining_drying_time
 
         # Observed H3C reports put drying settings in zone 0 and repeat the timer in zone 1.
         value = self.zones.get(0, {}).get("dry_time")
-        return value > 0 if type(value) is int and value >= 0 else None
+        return value if type(value) is int and value >= 0 else None
+
+    @property
+    def is_drying(self) -> bool | None:
+        """Report AMS-wide drying activity from the available timer."""
+        remaining = self.drying_time
+        return remaining > 0 if remaining is not None else None
 
 
 @dataclass

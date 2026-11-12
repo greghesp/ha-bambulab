@@ -105,7 +105,7 @@ nextTitle: Device Triggers
 | Status                | Filament change step  |
 | Humidity              | P1/P2/X1/H2 only      |
 | Temperature           | P1/P2/X1/H2 only      |
-| Remaining drying time | AMS 2 Pro/AMS HT only |
+| Remaining drying time | AMS 2 Pro/AMS HT/AMS 3H |
 | Drying temperature    | AMS 2 Pro/AMS HT only |
 | Drying duration       | AMS 2 Pro/AMS HT only |
 | Drying filament       | AMS 2 Pro/AMS HT only |
@@ -114,10 +114,9 @@ nextTitle: Device Triggers
 | Tray 3                |                       |
 | Tray 4                |                       |
 
-AMS 3H also exposes its reported zone temperature, humidity and remaining
-drying time. Zone sensor attributes include the associated slots and drying
-settings. The drying binary sensor describes the whole AMS. It exposes up to
-nine trays.
+AMS 3H exposes temperature and humidity for both zones. Zone sensor attributes
+include the associated slots and drying settings. The remaining drying time and
+drying binary sensors describe the whole AMS. It exposes up to nine trays.
 
 | Tray attributes:    | Notes      |
 | ------------------- | ---------- |

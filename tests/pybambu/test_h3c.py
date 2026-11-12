@@ -105,6 +105,7 @@ class TestH3C(unittest.TestCase):
         self.load()
         ams = self.device.ams.data[32]
         self.assertFalse(ams.is_drying)
+        self.assertEqual(ams.drying_time, 0)
 
         def update_zones(zone_info):
             self.device.ams.print_update({"ams": {"ams": [{"id": "32", "zone_info": zone_info}]}})
@@ -116,6 +117,7 @@ class TestH3C(unittest.TestCase):
             {"zone_id": 1, "dry_time": 719},
         ])
         self.assertTrue(ams.is_drying)
+        self.assertEqual(ams.drying_time, 719)
         update_zones([{"zone_id": 0, "temp": "45.0"}])
         self.assertTrue(ams.is_drying)
         # The duplicate in zone 1 may lag behind a partial update.
@@ -134,11 +136,13 @@ class TestH3C(unittest.TestCase):
         for value in (None, True, False, -1, "1", "invalid", float("inf")):
             with self.subTest(value=value):
                 ams.zones[0]["dry_time"] = value
+                self.assertIsNone(ams.drying_time)
                 self.assertIsNone(ams.is_drying)
 
         legacy = AMSInstance(self.client, "AMS HT", 128)
         self.assertFalse(legacy.is_drying)
         legacy.remaining_drying_time = 1
+        self.assertEqual(legacy.drying_time, 1)
         self.assertTrue(legacy.is_drying)
 
     def test_weight_only_delta_signals_an_update(self):

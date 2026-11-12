@@ -24,7 +24,6 @@ EN = json.loads(
 ZONE_KEYS = {
     "zone_temperature": "temp",
     "zone_humidity": "humidity_raw",
-    "zone_remaining_drying_time": "dry_time",
 }
 
 
@@ -41,7 +40,7 @@ def _entity(zones):
 
 def test_zone_sensors_are_named_by_translation_key():
     descriptions = _zone_descriptions()
-    assert len(descriptions) == 6
+    assert len(descriptions) == 4
     for description in descriptions:
         assert description.translation_key in ZONE_KEYS, description.key
         assert description.name in (None, UNDEFINED), description.key
@@ -56,11 +55,11 @@ def test_zone_translation_strings_exist_with_their_placeholder():
         assert {"zone", "zone_id", "slots", "dry_setting"} <= set(attributes), key
 
 
-def test_zone_sensor_keys_and_unique_ids_are_unchanged():
-    # Existing entities keep their ids because the description keys don't change.
-    assert sorted(d.key for d in _zone_descriptions()) == sorted(
-        f"zone_{zone}_{field}" for zone in (1, 2) for field in ZONE_KEYS.values()
-    )
+def test_zone_sensor_keys():
+    assert {d.key for d in _zone_descriptions()} == {
+        "zone_1_temp", "zone_1_humidity_raw",
+        "zone_2_temp", "zone_2_humidity_raw",
+    }
 
 
 def test_zone_attributes_include_the_one_based_zone_and_slots():
@@ -73,20 +72,31 @@ def test_zone_attributes_include_the_one_based_zone_and_slots():
 
 
 def test_zone_values_read_their_own_zone():
-    entity = _entity({0: {"temp": "28.2", "humidity_raw": "24", "dry_time": 0},
-                      1: {"temp": "27.7", "humidity_raw": "33", "dry_time": 95}})
+    entity = _entity({0: {"temp": "28.2", "humidity_raw": "24", "dry_time": 95},
+                      1: {"temp": "27.7", "humidity_raw": "33", "dry_time": 0}})
     values = {d.key: d.value_fn(entity) for d in _zone_descriptions()}
     assert values["zone_1_temp"] == 28.2
     assert values["zone_2_humidity_raw"] == 33
-    assert values["zone_2_dry_time"] == 95
 
 
-def test_ams_3h_has_no_remaining_drying_time_sensor():
+def test_ams_3h_remaining_drying_time_sensor_uses_heated_zone():
     ams = AMSInstance(MagicMock(), "AMS 3H", 32)
     coordinator = MagicMock()
     coordinator.get_model().ams.data = {32: ams}
+    entity = SimpleNamespace(coordinator=coordinator, index=32)
     description = next(d for d in AMS_SENSORS if d.key == "remaining_drying_time")
-    assert not description.exists_fn(coordinator, 32)
+    assert description.exists_fn(coordinator, 32)
+    assert description.value_fn(entity) is None
+    ams.zones = {0: {"dry_time": 719}, 1: {"dry_time": 0}}
+    assert description.value_fn(entity) == 719
+    ams.zones[0]["dry_time"] = 0
+    assert description.value_fn(entity) == 0
+
+    for model in ("AMS 2 Pro", "AMS HT"):
+        ams.model = model
+        ams.remaining_drying_time = 42
+        assert description.exists_fn(coordinator, 32)
+        assert description.value_fn(entity) == 42
 
 
 def test_ams_3h_drying_binary_sensor_uses_heated_zone_timer():
