@@ -1,0 +1,1146 @@
+{
+  "device_automation": {
+    "trigger_type": {
+      "event_print_canceled": "列印已取消",
+      "event_print_failed": "列印失敗",
+      "event_print_finished": "列印完成",
+      "event_print_started": "列印開始",
+      "event_print_error": "列印錯誤",
+      "event_print_error_cleared": "列印錯誤已清除",
+      "event_printer_error": "HMS 錯誤",
+      "event_printer_error_cleared": "HMS 錯誤已清除",
+      "event_printer_missing_sdcard": "找不到 SD 卡"
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "裝置已設定",
+      "no_printers": "帳號中找不到尚未設定的印表機。",
+      "cloudflare": "Cloudflare 已封鎖連線嘗試。",
+      "curl_unavailable": "curl_cffi 函式庫無法使用。"
+    },
+    "error": {
+      "cannot_connect": "連線失敗，請檢查憑證。",
+      "cannot_connect_cloud_timeout": "連線至 Bambu Lab 雲端逾時。",
+      "cannot_connect_cloud_access_denied": "Bambu Lab 雲端拒絕存取。",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab 雲端拒絕連線。",
+      "cannot_connect_cloud_address_unreachable": "無法連上 Bambu Lab 雲端位址。",
+      "cannot_connect_cloud_unknown": "連線至 Bambu Lab 雲端時發生未知錯誤。",
+      "cannot_connect_local_timeout": "連線失敗，連線逾時。",
+      "cannot_connect_local_access_denied": "連線失敗，存取遭拒，請檢查存取碼。",
+      "cannot_connect_local_incorrect_serial": "連線失敗，連線已被印表機關閉，請檢查序號。",
+      "cannot_connect_local_incorrect_address": "連線失敗，連線遭拒，請檢查 IP 位址。",
+      "cannot_connect_local_address_unreachable": "連線失敗，無法連上該位址，請檢查網路連線。",
+      "cannot_connect_local_unknown": "連線失敗，請檢查所提供的設定。",
+      "invalid_auth": "驗證無效。",
+      "unknown": "發生未預期的錯誤。",
+      "code_needed": "必須提供驗證碼。",
+      "verifyCode": "需要驗證碼，請檢查您的電子郵件或手機。",
+      "code_expired": "驗證碼已過期，已重新申請新的驗證碼，請檢查您的電子郵件或手機。",
+      "code_incorrect": "驗證碼不正確，請重新輸入。",
+      "tfaCode": "需要兩步驟驗證碼，請立即輸入。",
+      "tfa_csrf_fallback": "Bambu Lab 的兩步驟驗證端點目前拒絕請求，已改為將驗證碼寄送至您的電子郵件或手機，請在下方輸入。"
+    },
+    "step": {
+      "user": {
+        "description": "透過 Bambu Lab 雲端設定最簡單也最快速。不支援沒有密碼的社群媒體帳號。\n\r您也可以重複使用其他印表機已可運作的驗證憑證，若有找到，將以電子郵件地址列出。\n\r或者，您也可以手動提供印表機的本機連線資訊進行連線。處於區域網路模式的印表機必須使用此方式。",
+        "data": {
+          "printer_mode": "印表機設定模式："
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Lab 雲端連線",
+        "description": "請提供您的 Bambu Lab 憑證：",
+        "data": {
+          "region": "帳號地區：",
+          "email": "電子郵件地址或手機號碼",
+          "password": "密碼",
+          "newCode": "申請新的驗證碼",
+          "verifyCode": "電子郵件或手機驗證碼",
+          "tfaCode": "兩步驟驗證碼"
+        }
+      },
+      "Bambu_Choose_Device": {
+        "title": "選擇印表機",
+        "data": {
+          "serial": "選擇要新增的印表機："
+        }
+      },
+      "Bambu_Lan": {
+        "title": "設定本機連線",
+        "description": "您可以選擇直接連線至印表機的 MQTT，而不經由 Bambu Lab 雲端。這能讓您在 Bambu Lab 雲端故障時仍可運作，但在此混合模式下 Bambu Lab 限制了對印表機的控制，因此部分控制功能將無法使用。\n\r無論如何選擇，整合都會從 Bambu Lab 雲端取得印表機的 IP 位址，並確認能否連線至該位址，因為相機、列印記錄與縮時攝影功能都需要此連線。如果您的 Home Assistant 無法存取印表機，可以停用此檢查，但將失去這些功能。",
+        "data": {
+          "local_mqtt": "直接連線至印表機 MQTT：",
+          "skip_local_mqtt": "略過本機 MQTT 連線測試（不建議）：",
+          "host": "印表機本機 IP 位址：",
+          "access_code": "存取碼：",
+          "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
+          "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
+          "usage_hours": "目前使用時數（選填）："
+        },
+        "sections": {
+          "advanced": {
+            "name": "進階選項",
+            "description": "只有在非標準設定的情況下才需要這些選項。",
+            "data": {
+              "disable_ssl_verify": "停用 SSL 驗證",
+              "enable_firmware_update": "啟用韌體更新支援"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "區域網路模式連線",
+        "description": "請提供印表機的本機 IP 位址、序號與存取碼。存取碼可在印表機螢幕的網路設定（WLAN）中找到，序號（SN）可在裝置設定中找到。",
+        "data": {
+          "serial": "序號：",
+          "host": "印表機本機 IP 位址：",
+          "access_code": "存取碼：",
+          "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
+          "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
+          "usage_hours": "目前使用時數（選填）："
+        },
+        "sections": {
+          "advanced": {
+            "name": "進階選項",
+            "description": "只有在非標準設定的情況下才需要這些選項。",
+            "data": {
+              "disable_ssl_verify": "停用 SSL 驗證",
+              "enable_firmware_update": "啟用韌體更新支援"
+            }
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cloudflare": "Cloudflare 已封鎖連線嘗試。",
+      "curl_unavailable": "curl_cffi 函式庫無法使用。"
+    },
+    "error": {
+      "cannot_connect": "連線失敗",
+      "cannot_connect_cloud_timeout": "連線至 Bambu Lab 雲端逾時。",
+      "cannot_connect_cloud_access_denied": "Bambu Lab 雲端拒絕存取。",
+      "cannot_connect_cloud_connection_refused": "Bambu Lab 雲端拒絕連線。",
+      "cannot_connect_cloud_address_unreachable": "無法連上 Bambu Lab 雲端位址。",
+      "cannot_connect_cloud_unknown": "連線至 Bambu Lab 雲端時發生未知錯誤。",
+      "cannot_connect_local_timeout": "連線失敗，連線逾時。",
+      "cannot_connect_local_access_denied": "連線失敗，存取遭拒，請檢查存取碼。",
+      "cannot_connect_local_incorrect_serial": "連線失敗，連線已被印表機關閉，請檢查序號。",
+      "cannot_connect_local_incorrect_address": "連線失敗，連線遭拒，請檢查 IP 位址。",
+      "cannot_connect_local_address_unreachable": "連線失敗，無法連上該位址，請檢查網路連線。",
+      "cannot_connect_local_unknown": "連線失敗，請檢查所提供的設定。",
+      "invalid_auth": "驗證無效。",
+      "unknown": "發生未預期的錯誤。",
+      "code_needed": "必須提供驗證碼。",
+      "verifyCode": "需要驗證碼，請檢查您的電子郵件或手機。",
+      "code_expired": "驗證碼已過期，已重新申請新的驗證碼，請檢查您的電子郵件或手機。",
+      "code_incorrect": "驗證碼不正確，請重新輸入。",
+      "tfaCode": "需要兩步驟驗證碼，請立即輸入。",
+      "tfa_csrf_fallback": "Bambu Lab 的兩步驟驗證端點目前拒絕請求，已改為將驗證碼寄送至您的電子郵件或手機，請在下方輸入。"
+    },
+    "step": {
+      "init": {
+        "title": "調整連線設定",
+        "description": "透過 Bambu Lab 雲端設定最簡單也最快速。不支援沒有密碼的社群媒體帳號。\n\r您也可以重複使用其他印表機已可運作的驗證憑證，若有找到，將以電子郵件地址列出。\n\r或者，您也可以手動提供印表機的本機連線資訊進行連線。處於區域網路模式的印表機必須使用此方式。",
+        "data": {
+          "printer_mode": "印表機設定模式："
+        }
+      },
+      "Bambu": {
+        "title": "Bambu Lab 雲端連線",
+        "description": "請提供您的 Bambu Lab 憑證：",
+        "data": {
+          "region": "帳號地區：",
+          "email": "電子郵件地址或手機號碼",
+          "password": "密碼",
+          "newCode": "申請新的驗證碼",
+          "verifyCode": "電子郵件或手機驗證碼",
+          "tfaCode": "兩步驟驗證碼"
+        }
+      },
+      "Bambu_Lan": {
+        "title": "調整印表機設定",
+        "description": "您可以選擇直接連線至印表機的 MQTT，而不經由 Bambu Lab 雲端。這能讓您在 Bambu Lab 雲端故障時仍可運作，但在此混合模式下 Bambu Lab 限制了對印表機的控制，因此部分控制功能將無法使用。\n\r無論如何選擇，整合都會從 Bambu Lab 雲端取得印表機的 IP 位址，並確認能否連線至該位址，因為相機、列印記錄與縮時攝影功能都需要此連線。如果您的 Home Assistant 無法存取印表機，可以停用此檢查，但將失去這些功能。",
+        "data": {
+          "serial": "調整下列裝置的設定：",
+          "host": "印表機本機 IP 位址：",
+          "access_code": "存取碼：",
+          "local_mqtt": "直接連線至印表機 MQTT：",
+          "skip_local_mqtt": "略過本機 MQTT 連線測試（不建議）：",
+          "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
+          "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
+          "usage_hours": "目前使用時數（選填）："
+        },
+        "sections": {
+          "advanced": {
+            "name": "進階選項",
+            "description": "這些進階選項屬於早期或有風險的功能，請閱讀文件並自行承擔使用風險。",
+            "data": {
+              "disable_ssl_verify": "停用 SSL 驗證",
+              "enable_firmware_update": "啟用韌體更新支援"
+            }
+          }
+        }
+      },
+      "Lan": {
+        "title": "區域網路模式連線",
+        "description": "請提供印表機的本機 IP 位址與存取碼。存取碼可在印表機螢幕的網路設定（WLAN）中找到。",
+        "data": {
+          "host": "印表機本機 IP 位址：",
+          "access_code": "存取碼：",
+          "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
+          "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
+          "usage_hours": "目前使用時數（選填）："
+        },
+        "sections": {
+          "advanced": {
+            "name": "進階選項",
+            "description": "這些進階選項屬於早期或有風險的功能，請閱讀文件並自行承擔使用風險。",
+            "data": {
+              "disable_ssl_verify": "停用 SSL 驗證",
+              "enable_firmware_update": "啟用韌體更新支援"
+            }
+          }
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "active_ams": {
+        "name": "啟用中"
+      },
+      "drying": {
+        "name": "乾燥中"
+      },
+      "developer_lan_mode": {
+        "name": "開發者區域網路模式"
+      },
+      "door_open": {
+        "name": "艙門"
+      },
+      "timelapse": {
+        "name": "縮時攝影"
+      },
+      "hms_errors": {
+        "name": "HMS 錯誤"
+      },
+      "print_error": {
+        "name": "列印錯誤"
+      },
+      "online": {
+        "name": "線上"
+      },
+      "mqtt_encryption": {
+        "name": "MQTT 加密"
+      },
+      "hybrid_mode_blocks_control": {
+        "name": "混合 MQTT 控制已被封鎖"
+      },
+      "firmware_update": {
+        "name": "韌體"
+      },
+      "extruder_filament_state": {
+        "name": "擠出機線材"
+      },
+      "left_extruder_filament_state": {
+        "name": "左擠出機線材"
+      },
+      "right_extruder_filament_state": {
+        "name": "右擠出機線材"
+      }
+    },
+    "button": {
+      "pause": {
+        "name": "暫停"
+      },
+      "resume": {
+        "name": "繼續"
+      },
+      "stop": {
+        "name": "停止"
+      },
+      "refresh": {
+        "name": "強制重新整理"
+      },
+      "dev": {
+        "name": "偵錯"
+      },
+      "buzzer_silence": {
+        "name": "蜂鳴器 - 靜音"
+      },
+      "buzzer_fire_alarm": {
+        "name": "蜂鳴器 - 火災警報"
+      },
+      "buzzer_beeping": {
+        "name": "蜂鳴器 - 嗶聲"
+      }
+    },
+    "fan": {
+      "cooling_fan": {
+        "name": "冷卻風扇"
+      },
+      "aux_fan": {
+        "name": "輔助風扇"
+      },
+      "chamber_fan": {
+        "name": "機箱風扇"
+      },
+      "secondary_aux_fan": {
+        "name": "第二輔助風扇"
+      },
+      "part_fan": {
+        "name": "零件風扇"
+      },
+      "left_aux_fan": {
+        "name": "左輔助風扇"
+      },
+      "right_aux_fan": {
+        "name": "右輔助風扇"
+      },
+      "exhaust_fan": {
+        "name": "排氣風扇"
+      }
+    },
+    "image": {
+      "p1p_camera": {
+        "name": "相機"
+      },
+      "cover_image": {
+        "name": "封面圖片"
+      },
+      "pick_image": {
+        "name": "挑選圖片"
+      }
+    },
+    "light": {
+      "chamber_light": {
+        "name": "機箱燈"
+      },
+      "camera_light": {
+        "name": "相機燈"
+      },
+      "heatbed_light": {
+        "name": "熱床燈"
+      }
+    },
+    "number": {
+      "target_bed_temperature": {
+        "name": "熱床目標溫度"
+      },
+      "target_nozzle_temperature": {
+        "name": "噴嘴目標溫度"
+      },
+      "target_chamber_temperature": {
+        "name": "機箱目標溫度"
+      }
+    },
+    "select": {
+      "printing_speed": {
+        "name": "列印速度",
+        "state": {
+          "silent": "靜音",
+          "standard": "標準",
+          "sport": "運動",
+          "ludicrous": "狂暴"
+        }
+      },
+      "airduct_mode": {
+        "name": "風道模式",
+        "state": {
+          "cooling": "製冷",
+          "heating": "加熱"
+        }
+      }
+    },
+    "sensor": {
+      "makerworld_boosts_received": {
+        "name": "收到的加速"
+      },
+      "makerworld_prints_total": {
+        "name": "列印次數（含列印設定檔）"
+      },
+      "makerworld_downloads_total": {
+        "name": "下載次數（含列印設定檔）"
+      },
+      "makerworld_points": {
+        "name": "點數"
+      },
+      "makerworld_points_earned": {
+        "name": "已獲得點數"
+      },
+      "makerworld_points_spent": {
+        "name": "已花費點數"
+      },
+      "makerworld_points_exclusive": {
+        "name": "專屬點數"
+      },
+      "makerworld_boost_tokens": {
+        "name": "加速令牌"
+      },
+      "makerworld_boosts_used": {
+        "name": "已使用的加速"
+      },
+      "makerworld_boosts_expired": {
+        "name": "已過期的加速"
+      },
+      "makerworld_downloads": {
+        "name": "下載次數"
+      },
+      "makerworld_instance_downloads": {
+        "name": "列印設定檔下載次數"
+      },
+      "makerworld_prints": {
+        "name": "列印次數"
+      },
+      "makerworld_instance_prints": {
+        "name": "列印設定檔列印次數"
+      },
+      "makerworld_designs": {
+        "name": "已發布的模型"
+      },
+      "makerworld_likes": {
+        "name": "按讚數"
+      },
+      "makerworld_collections": {
+        "name": "收藏數"
+      },
+      "makerworld_followers": {
+        "name": "粉絲"
+      },
+      "makerworld_following": {
+        "name": "追蹤中"
+      },
+      "makerworld_level": {
+        "name": "等級"
+      },
+      "airduct_mode": {
+        "name": "風道模式",
+        "state": {
+          "cooling": "製冷",
+          "heating": "加熱",
+          "laser": "雷射"
+        }
+      },
+      "tool_module": {
+        "name": "工具模組",
+        "state": {
+          "none": "未安裝",
+          "laser10": "雷射（10W）",
+          "laser40": "雷射（40W）",
+          "cutter": "切割刀"
+        }
+      },
+      "track_switch_input": {
+        "name": "軌道切換器輸入 {input_number}",
+        "state": {
+          "left": "左噴嘴",
+          "right": "右噴嘴",
+          "empty": "空"
+        }
+      },
+      "connected_nozzle": {
+        "name": "已連接的噴嘴",
+        "state": {
+          "left": "左",
+          "right": "右",
+          "track_switch": "軌道切換器"
+        }
+      },
+      "wifi_signal": {
+        "name": "Wi-Fi 訊號"
+      },
+      "bed_temp": {
+        "name": "熱床溫度"
+      },
+      "target_bed_temp": {
+        "name": "熱床目標溫度"
+      },
+      "chamber_temp": {
+        "name": "機箱溫度"
+      },
+      "target_chamber_temp": {
+        "name": "機箱目標溫度"
+      },
+      "target_nozzle_temp": {
+        "name": "噴嘴目標溫度"
+      },
+      "nozzle_temp": {
+        "name": "噴嘴溫度"
+      },
+      "left_nozzle_temp": {
+        "name": "左噴嘴溫度"
+      },
+      "left_target_nozzle_temp": {
+        "name": "左噴嘴目標溫度"
+      },
+      "right_nozzle_temp": {
+        "name": "右噴嘴溫度"
+      },
+      "right_target_nozzle_temp": {
+        "name": "右噴嘴目標溫度"
+      },
+      "aux_fan_speed": {
+        "name": "輔助風扇轉速"
+      },
+      "cooling_fan_speed": {
+        "name": "冷卻風扇轉速"
+      },
+      "chamber_fan_speed": {
+        "name": "機箱風扇轉速"
+      },
+      "heatbreak_fan_speed": {
+        "name": "散熱塊風扇轉速"
+      },
+      "secondary_aux_fan_speed": {
+        "name": "第二輔助風扇轉速"
+      },
+      "part_fan_speed": {
+        "name": "零件風扇轉速"
+      },
+      "left_aux_fan_speed": {
+        "name": "左輔助風扇轉速"
+      },
+      "right_aux_fan_speed": {
+        "name": "右輔助風扇轉速"
+      },
+      "exhaust_fan_speed": {
+        "name": "排氣風扇轉速"
+      },
+      "model_download_percentage": {
+        "name": "模型下載"
+      },
+      "speed_profile": {
+        "name": "速度模式",
+        "state": {
+          "silent": "靜音",
+          "standard": "標準",
+          "sport": "運動",
+          "ludicrous": "狂暴"
+        },
+        "state_attributes": {
+          "modifier": {
+            "name": "倍率"
+          }
+        }
+      },
+      "printer_name": {
+        "name": "印表機名稱"
+      },
+      "stage": {
+        "name": "目前階段",
+        "state": {
+          "offline": "離線",
+          "printing": "列印中",
+          "auto_bed_leveling": "自動熱床校平",
+          "heatbed_preheating": "熱床預熱",
+          "heatbed_stabilizing": "熱床溫度穩定中",
+          "sweeping_xy_mech_mode": "掃描 XY 機械模式",
+          "changing_filament": "更換線材",
+          "m400_pause": "M400 暫停",
+          "paused_filament_runout": "已暫停：線材耗盡",
+          "heating_hotend": "加熱熱端",
+          "calibrating_extrusion": "校準擠出",
+          "scanning_bed_surface": "掃描熱床表面",
+          "inspecting_first_layer": "檢查第一層",
+          "identifying_build_plate_type": "辨識列印板類型",
+          "calibrating_micro_lidar": "校準微型光達",
+          "homing_toolhead": "工具頭歸位",
+          "cleaning_nozzle_tip": "清潔噴嘴尖端",
+          "checking_extruder_temperature": "檢查擠出機溫度",
+          "paused_user": "使用者已暫停",
+          "paused_front_cover_falling": "已暫停：前蓋",
+          "calibrating_extrusion_flow": "校準擠出流量",
+          "paused_nozzle_temperature_malfunction": "已暫停：噴嘴溫度異常",
+          "paused_heat_bed_temperature_malfunction": "已暫停：熱床溫度異常",
+          "filament_unloading": "退出線材",
+          "paused_skipped_step": "已暫停：跳步",
+          "filament_loading": "進料線材",
+          "calibrating_motor_noise": "校準馬達噪音",
+          "paused_ams_lost": "已暫停：AMS 失去連線",
+          "paused_low_fan_speed_heat_break": "已暫停：散熱塊風扇轉速過低",
+          "paused_chamber_temperature_control_error": "已暫停：機箱溫度控制錯誤",
+          "cooling_chamber": "機箱降溫中",
+          "paused_user_gcode": "已暫停：G-code 指令",
+          "motor_noise_showoff": "馬達噪音展示",
+          "paused_nozzle_filament_covered_detected": "已暫停：噴嘴被線材包覆",
+          "paused_cutter_error": "已暫停：切刀錯誤",
+          "paused_first_layer_error": "已暫停：第一層錯誤",
+          "paused_nozzle_clog": "已暫停：噴嘴堵塞",
+          "check_absolute_accuracy_before_calibration": "校準前檢查精度",
+          "absolute_accuracy_calibration": "絕對精度校準",
+          "check_absolute_accuracy_after_calibration": "校準後檢查精度",
+          "calibrate_nozzle_offset": "噴嘴偏移校準",
+          "bed_level_high_temperature": "高溫自動熱床校平",
+          "check_quick_release": "自動檢查：快拆桿",
+          "check_door_and_cover": "自動檢查：艙門與上蓋",
+          "laser_calibration": "雷射校準",
+          "check_plaform": "自動檢查：平台",
+          "check_birdeye_camera_position": "自動檢查：鳥瞰相機",
+          "calibrate_birdeye_camera": "校準鳥瞰相機",
+          "bed_level_phase_1": "自動熱床校平 - 第 1 階段",
+          "bed_level_phase_2": "自動熱床校平 - 第 2 階段",
+          "heating_chamber": "機箱加熱中",
+          "heated_bedcooling": "熱床降溫中",
+          "print_calibration_lines": "列印校準線",
+          "check_material": "自動檢查：耗材",
+          "calibrating_live_view_camera": "即時影像相機校準",
+          "waiting_for_heatbed_temperature": "等待熱床溫度",
+          "check_material_position": "自動檢查：耗材位置",
+          "calibrating_cutter_model_offset": "切割模組偏移校準",
+          "measuring_surface": "測量表面",
+          "thermal_preconditioning": "熱預處理",
+          "homing_blade_holder": "刀架歸位",
+          "calibrating_camera_offset": "校準相機偏移",
+          "calibrating_blade_holder_position": "校準刀架位置",
+          "hotend_pick_place_test": "熱端取放測試",
+          "waiting_chamber_temperature_equalize": "等待機箱溫度均衡",
+          "preparing_hotend": "準備熱端",
+          "calibrating_detection_nozzle_clumping": "校準噴嘴結塊偵測位置",
+          "purifying_chamber_air": "淨化機箱空氣",
+          "measuring_rotary_attachment": "測量旋轉配件",
+          "moving_toolhead_above_purge_chute": "將工具頭移至排料槽上方",
+          "cooling_nozzle": "噴嘴降溫中",
+          "moving_toolhead_to_center_of_heatbed": "將工具頭移至熱床中央",
+          "active_arc_fitting": "啟用圓弧擬合",
+          "hotend_type_detection": "熱端類型偵測",
+          "build_plate_alignment_detection": "列印板對位偵測",
+          "heatbed_surface_foreign_object_detection": "熱床表面異物偵測",
+          "heatbed_underside_foreign_object_detection": "熱床底面異物偵測",
+          "pre_extrusion_before_printing": "列印前預擠出",
+          "preparing_ams": "準備 AMS",
+          "idle": "閒置"
+        }
+      },
+      "external_storage_connection": {
+        "name": "外部儲存裝置連線",
+        "state": {
+          "connected": "已連線",
+          "disconnected": "已中斷連線"
+        }
+      },
+      "external_storage_total": {
+        "name": "外部儲存裝置總容量"
+      },
+      "external_storage_used": {
+        "name": "外部儲存裝置已使用"
+      },
+      "external_storage_free": {
+        "name": "外部儲存裝置可用"
+      },
+      "sdcard_status": {
+        "name": "SD 卡狀態",
+        "state": {
+          "missing": "未插入",
+          "normal": "正常",
+          "abnormal": "異常",
+          "readonly": "唯讀",
+          "not_applicable": "不適用"
+        }
+      },
+      "print_progress": {
+        "name": "列印進度"
+      },
+      "print_status": {
+        "name": "列印狀態",
+        "state": {
+          "failed": "失敗",
+          "finish": "已完成",
+          "idle": "閒置",
+          "offline": "離線",
+          "prepare": "準備中",
+          "running": "執行中",
+          "pause": "已暫停",
+          "slicing": "切片中",
+          "init": "初始化中"
+        }
+      },
+      "printable_objects": {
+        "name": "可列印物件"
+      },
+      "skipped_objects": {
+        "name": "已跳過物件"
+      },
+      "mqtt_mode": {
+        "name": "MQTT 連線模式",
+        "state": {
+          "local": "本機",
+          "bambu_cloud": "Bambu Lab 雲端"
+        }
+      },
+      "gcode_file": {
+        "name": "G-code 檔名"
+      },
+      "gcode_file_downloaded": {
+        "name": "已下載 G-code 檔案"
+      },
+      "remaining_drying_time": {
+        "name": "剩餘乾燥時間"
+      },
+      "zone_temperature": {
+        "name": "區域 {zone_number} 溫度",
+        "state_attributes": {
+          "zone": {
+            "name": "區域"
+          },
+          "zone_id": {
+            "name": "區域 ID"
+          },
+          "slots": {
+            "name": "槽位"
+          },
+          "dry_setting": {
+            "name": "乾燥設定"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "區域 {zone_number} 濕度",
+        "state_attributes": {
+          "zone": {
+            "name": "區域"
+          },
+          "zone_id": {
+            "name": "區域 ID"
+          },
+          "slots": {
+            "name": "槽位"
+          },
+          "dry_setting": {
+            "name": "乾燥設定"
+          }
+        }
+      },
+      "zone_remaining_drying_time": {
+        "name": "區域 {zone_number} 剩餘乾燥時間",
+        "state_attributes": {
+          "zone": {
+            "name": "區域"
+          },
+          "zone_id": {
+            "name": "區域 ID"
+          },
+          "slots": {
+            "name": "槽位"
+          },
+          "dry_setting": {
+            "name": "乾燥設定"
+          }
+        }
+      },
+      "drying_temperature": {
+        "name": "乾燥溫度"
+      },
+      "drying_duration": {
+        "name": "乾燥時間長度"
+      },
+      "drying_filament": {
+        "name": "乾燥線材"
+      },
+      "ams_temp": {
+        "name": "溫度"
+      },
+      "humidity": {
+        "name": "濕度"
+      },
+      "print_bed_type": {
+        "name": "列印板類型",
+        "state": {
+          "textured_plate": "紋理板",
+          "cool_plate": "低溫列印板 / PLA 列印板",
+          "hot_plate": "光滑 PEI 板 / 高溫列印板",
+          "eng_plate": "工程板",
+          "supertack_plate": "低溫列印板 SuperTack"
+        }
+      },
+      "print_length": {
+        "name": "列印長度"
+      },
+      "print_weight": {
+        "name": "列印重量"
+      },
+      "subtask_name": {
+        "name": "任務名稱"
+      },
+      "print_type": {
+        "name": "列印類型",
+        "state": {
+          "local": "本機",
+          "cloud": "雲端",
+          "idle": "閒置",
+          "unknown": "未知"
+        }
+      },
+      "start_time": {
+        "name": "開始時間"
+      },
+      "remaining_time": {
+        "name": "剩餘時間"
+      },
+      "end_time": {
+        "name": "結束時間"
+      },
+      "total_usage_hours": {
+        "name": "總使用時數"
+      },
+      "current_layer": {
+        "name": "目前層數"
+      },
+      "total_layers": {
+        "name": "總層數"
+      },
+      "active_tray": {
+        "name": "使用中的料槽",
+        "state": {
+          "none": "無"
+        }
+      },
+      "nozzle_diameter": {
+        "name": "噴嘴尺寸"
+      },
+      "nozzle_type": {
+        "name": "噴嘴類型",
+        "state": {
+          "hardened_steel": "硬化鋼",
+          "stainless_steel": "不鏽鋼",
+          "tungsten_carbide": "碳化鎢",
+          "high_flow_hardened_steel": "高流量硬化鋼",
+          "high_flow_stainless_steel": "高流量不鏽鋼",
+          "high_flow_tungsten_carbide": "高流量碳化鎢",
+          "tpu_high_flow": "TPU 高流量",
+          "unknown": "未知"
+        }
+      },
+      "left_nozzle_diameter": {
+        "name": "左噴嘴尺寸"
+      },
+      "left_nozzle_type": {
+        "name": "左噴嘴類型",
+        "state": {
+          "hardened_steel": "硬化鋼",
+          "stainless_steel": "不鏽鋼",
+          "tungsten_carbide": "碳化鎢",
+          "high_flow_hardened_steel": "高流量硬化鋼",
+          "high_flow_stainless_steel": "高流量不鏽鋼",
+          "high_flow_tungsten_carbide": "高流量碳化鎢"
+        }
+      },
+      "right_nozzle_diameter": {
+        "name": "右噴嘴尺寸"
+      },
+      "right_nozzle_type": {
+        "name": "右噴嘴類型",
+        "state": {
+          "hardened_steel": "硬化鋼",
+          "stainless_steel": "不鏽鋼",
+          "tungsten_carbide": "碳化鎢",
+          "high_flow_hardened_steel": "高流量硬化鋼",
+          "high_flow_stainless_steel": "高流量不鏽鋼",
+          "high_flow_tungsten_carbide": "高流量碳化鎢"
+        }
+      },
+      "active_nozzle": {
+        "name": "使用中的噴嘴",
+        "state": {
+          "left": "左",
+          "right": "右"
+        }
+      },
+      "ip_address": {
+        "name": "IP 位址"
+      },
+      "serial": {
+        "name": "序號"
+      },
+      "humidity_index": {
+        "name": "濕度指數"
+      },
+      "ams_status": {
+        "name": "狀態",
+        "state": {
+          "idle": "閒置",
+          "changing_filament": "更換線材",
+          "heating_nozzle": "加熱噴嘴",
+          "cutting_filament": "切斷線材",
+          "pulling_back_filament": "回抽目前線材",
+          "pushing_new_filament": "推入新線材",
+          "purging_old_filament": "沖洗舊線材",
+          "checking_position": "檢查線材位置",
+          "rfid_identifying": "辨識 RFID",
+          "filament_loaded": "線材已進料",
+          "calibration": "校準",
+          "cold_pull": "冷拔",
+          "self_check": "自我檢查",
+          "debug": "偵錯",
+          "unknown": "未知"
+        }
+      },
+      "external_spool": {
+        "name": "外部線軸",
+        "state_attributes": {
+          "active": {
+            "name": "啟用中"
+          },
+          "bed_temp": {
+            "name": "熱床溫度"
+          },
+          "color": {
+            "name": "顏色"
+          },
+          "cols": {
+            "name": "多種顏色"
+          },
+          "ctype": {
+            "name": "顏色類型"
+          },
+          "dry_temp": {
+            "name": "乾燥溫度"
+          },
+          "dry_time": {
+            "name": "乾燥時間"
+          },
+          "empty": {
+            "name": "空"
+          },
+          "k_value": {
+            "name": "K 值"
+          },
+          "name": {
+            "name": "名稱"
+          },
+          "nozzle_temp_min": {
+            "name": "噴嘴最低溫度"
+          },
+          "nozzle_temp_max": {
+            "name": "噴嘴最高溫度"
+          },
+          "remain": {
+            "name": "剩餘線材"
+          },
+          "remain_enabled": {
+            "name": "已啟用剩餘線材估算"
+          },
+          "tag_uid": {
+            "name": "線軸序號"
+          },
+          "type": {
+            "name": "類型"
+          },
+          "filament_id": {
+            "name": "線材 ID"
+          },
+          "tray_weight": {
+            "name": "線材最大重量"
+          }
+        }
+      },
+      "tray": {
+        "name": "料槽 {tray_number}",
+        "state_attributes": {
+          "slot": {
+            "name": "槽位"
+          },
+          "active": {
+            "name": "啟用中"
+          },
+          "bed_temp": {
+            "name": "熱床溫度"
+          },
+          "color": {
+            "name": "顏色"
+          },
+          "cols": {
+            "name": "多種顏色"
+          },
+          "ctype": {
+            "name": "顏色類型"
+          },
+          "dry_temp": {
+            "name": "乾燥溫度"
+          },
+          "dry_time": {
+            "name": "乾燥時間"
+          },
+          "empty": {
+            "name": "空"
+          },
+          "k_value": {
+            "name": "K 值"
+          },
+          "name": {
+            "name": "名稱"
+          },
+          "nozzle_temp_min": {
+            "name": "噴嘴最低溫度"
+          },
+          "nozzle_temp_max": {
+            "name": "噴嘴最高溫度"
+          },
+          "remain": {
+            "name": "剩餘線材"
+          },
+          "remain_enabled": {
+            "name": "已啟用剩餘線材估算"
+          },
+          "tag_uid": {
+            "name": "線軸序號"
+          },
+          "tray_uuid": {
+            "name": "料槽 UUID"
+          },
+          "type": {
+            "name": "類型"
+          },
+          "filament_id": {
+            "name": "線材 ID"
+          },
+          "tray_weight": {
+            "name": "線材最大重量"
+          }
+        }
+      },
+      "hotend_rack_holder_position": {
+        "name": "托架位置",
+        "state": {
+          "unknown": "未知",
+          "a_top": "位置 A",
+          "b_top": "位置 B",
+          "centre": "中央"
+        }
+      },
+      "hotend_rack_holder_state": {
+        "name": "托架狀態",
+        "state": {
+          "unknown": "未知",
+          "idle": "閒置",
+          "hotend_centre": "置中熱端",
+          "toolhead_centre": "置中工具頭",
+          "calibrate_hotend_rack": "校準托架中",
+          "cut_material": "切斷耗材中",
+          "unlock_hotend": "解鎖熱端中",
+          "lift_hotend_rack": "抬升托架中",
+          "place_hotend": "放置熱端中",
+          "pick_hotend": "取用熱端中",
+          "lock_hotend": "鎖定熱端中"
+        }
+      },
+      "hotend_rack_hotend": {
+        "name": "熱端 {hotend_id}",
+        "state": {
+          "mounted": "已安裝",
+          "docked": "已停靠",
+          "empty": "空"
+        },
+        "state_attributes": {
+          "slot": {
+            "name": "槽位"
+          },
+          "nozzle_type": {
+            "name": "噴嘴類型",
+            "state": {
+              "hardened_steel": "硬化鋼",
+              "stainless_steel": "不鏽鋼",
+              "tungsten_carbide": "碳化鎢",
+              "high_flow_hardened_steel": "高流量硬化鋼",
+              "high_flow_stainless_steel": "高流量不鏽鋼",
+              "high_flow_tungsten_carbide": "高流量碳化鎢",
+              "unknown": "未知"
+            }
+          },
+          "nozzle_diameter": {
+            "name": "噴嘴直徑"
+          },
+          "serial": {
+            "name": "序號"
+          },
+          "max_temp": {
+            "name": "最高溫度"
+          },
+          "wear": {
+            "name": "磨損"
+          },
+          "status": {
+            "name": "狀態",
+            "state": {
+              "normal": "正常",
+              "abnormal": "異常",
+              "unknown": "未知"
+            }
+          },
+          "color": {
+            "name": "顏色"
+          },
+          "filament_id": {
+            "name": "線材 ID"
+          },
+          "filament_name": {
+            "name": "線材名稱"
+          }
+        }
+      },
+      "hotend_rack_hotend_used_time": {
+        "name": "熱端 {hotend_id} 使用時間"
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "相機"
+      }
+    },
+    "switch": {
+      "camera": {
+        "name": "相機"
+      },
+      "imagecamera": {
+        "name": "影像感測器相機"
+      },
+      "ftp": {
+        "name": "模型資料載入"
+      },
+      "prompt_sound": {
+        "name": "提示音"
+      }
+    },
+    "update": {
+      "firmware_update": {
+        "name": "韌體更新"
+      }
+    }
+  },
+  "selector": {
+    "configuration_type": {
+      "options": {
+        "bambu": "Bambu Lab 雲端",
+        "lan": "區域網路模式"
+      }
+    }
+  },
+  "issues": {
+    "authentication_failed": {
+      "title": "驗證失敗",
+      "description": "嘗試連線至 {device} 的 Bambu Lab 失敗。請重新設定整合並提供最新的憑證。"
+    },
+    "access_code_rejected": {
+      "title": "存取碼遭拒",
+      "description": "印表機拒絕了 {device} 所設定的存取碼。這通常表示存取碼已被重新產生，例如因為恢復原廠設定。請從印表機的網路設定畫面讀取新的存取碼，並以該存取碼重新設定整合。"
+    },
+    "no_external_storage": {
+      "title": "未偵測到 USB 或 SD 卡",
+      "description": "{device} 沒有連接 USB 或 SD 卡。所有需要透過 FTP 連線至印表機的功能都需要它，例如封面圖片、跳過物件與列印記錄。"
+    },
+    "live_view_disabled": {
+      "title": "即時影像已停用",
+      "description": "{device} 在印表機設定中停用了即時影像。若要使用相機功能，請將其啟用。"
+    },
+    "mqtt_encryption_enabled": {
+      "title": "已啟用 MQTT 加密",
+      "description": "{device} 已啟用 MQTT 加密，此整合只能控制燈光，其他控制功能皆無法使用。必須將印表機設為開發者區域網路模式，才能從 Home Assistant 進行控制。"
+    },
+    "hybrid_mode_blocking": {
+      "title": "混合連線封鎖了控制功能",
+      "description": "{device} 已連線至雲端，但整合同時使用本機 MQTT 連線。這會封鎖溫度設定與從歷史記錄重新列印。請將連線切換為純雲端模式以啟用完整控制。"
+    }
+  }
+}
