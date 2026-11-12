@@ -101,7 +101,7 @@ class TestH3C(unittest.TestCase):
         self.assertEqual(ams.zones[1]["humidity_raw"], "33")
         self.assertEqual(ams.zones[0]["zone_slots"], [5, 7])
 
-    def test_ams_drying_follows_observed_zone_timers(self):
+    def test_ams_drying_follows_heated_zone_timer(self):
         self.load()
         ams = self.device.ams.data[32]
         self.assertFalse(ams.is_drying)
@@ -110,26 +110,36 @@ class TestH3C(unittest.TestCase):
             self.device.ams.print_update({"ams": {"ams": [{"id": "32", "zone_info": zone_info}]}})
 
         update_zones([
-            {"zone_id": 0, "dry_time": 1079, "dry_setting": {
-                "dry_duration": 18, "dry_filament": "TPU", "dry_temperature": 75,
+            {"zone_id": 0, "dry_time": 719, "dry_setting": {
+                "dry_duration": 12, "dry_filament": "PLA", "dry_temperature": 55,
             }},
-            {"zone_id": 1, "dry_time": 1079},
+            {"zone_id": 1, "dry_time": 719},
         ])
         self.assertTrue(ams.is_drying)
         update_zones([{"zone_id": 0, "temp": "45.0"}])
         self.assertTrue(ams.is_drying)
-        update_zones([{"zone_id": 0, "dry_time": 0}, {"zone_id": 1, "dry_time": 0}])
+        # The duplicate in zone 1 may lag behind a partial update.
+        update_zones([{"zone_id": 0, "dry_time": 0}])
         self.assertFalse(ams.is_drying)
 
-    def test_ams_drying_is_unknown_without_complete_valid_timers(self):
+    def test_ams_drying_is_unknown_without_a_valid_heated_zone_timer(self):
         ams = AMSInstance(self.client, "AMS 3H", 32)
         self.assertIsNone(ams.is_drying)
-        ams.zones = {0: {"dry_time": 0}}
-        self.assertFalse(ams.is_drying)
-        ams.zones = {0: {"dry_time": 0}, 1: {"dry_time": "invalid"}}
+        ams.zones = {1: {"dry_time": 1}}
         self.assertIsNone(ams.is_drying)
-        ams.zones[0]["dry_time"] = 1
+        ams.zones[0] = {"dry_time": "0"}
+        self.assertFalse(ams.is_drying)
+        ams.zones[0]["dry_time"] = "1"
         self.assertTrue(ams.is_drying)
+        for value in (None, True, False, -1, "invalid", float("inf")):
+            with self.subTest(value=value):
+                ams.zones[0]["dry_time"] = value
+                self.assertIsNone(ams.is_drying)
+
+        legacy = AMSInstance(self.client, "AMS HT", 128)
+        self.assertFalse(legacy.is_drying)
+        legacy.remaining_drying_time = 1
+        self.assertTrue(legacy.is_drying)
 
     def test_weight_only_delta_signals_an_update(self):
         self.load()

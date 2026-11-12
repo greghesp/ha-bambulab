@@ -3665,24 +3665,15 @@ class AMSInstance:
         if self.model != "AMS 3H":
             return self.remaining_drying_time > 0
 
-        times = []
-        for zone in self.zones.values():
-            if "dry_time" not in zone:
-                continue
-            value = zone["dry_time"]
-            try:
-                if isinstance(value, bool) or value is None:
-                    raise ValueError
-                remaining = int(value)
-                if remaining < 0:
-                    raise ValueError
-            except (TypeError, ValueError, OverflowError):
-                times.append(None)
-            else:
-                times.append(remaining)
-        if any(value is not None and value > 0 for value in times):
-            return True
-        return False if times and all(value == 0 for value in times) else None
+        # Observed H3C reports put drying settings in zone 0 and repeat the timer in zone 1.
+        value = self.zones.get(0, {}).get("dry_time")
+        try:
+            if isinstance(value, bool):
+                return None
+            remaining = int(value)
+        except (TypeError, ValueError, OverflowError):
+            return None
+        return remaining > 0 if remaining >= 0 else None
 
 
 @dataclass

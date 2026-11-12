@@ -87,7 +87,7 @@ def test_ams_3h_has_no_remaining_drying_time_sensor():
     assert not description.exists_fn(coordinator, 32)
 
 
-def test_ams_3h_drying_binary_sensor_uses_zone_timers():
+def test_ams_3h_drying_binary_sensor_uses_heated_zone_timer():
     ams = AMSInstance(MagicMock(), "AMS 3H", 32)
     coordinator = MagicMock()
     coordinator.get_model().ams.data = {32: ams}
@@ -97,5 +97,5 @@ def test_ams_3h_drying_binary_sensor_uses_zone_timers():
     assert description.is_on_fn(entity) is None
     ams.zones = {0: {"dry_time": 1079}, 1: {"dry_time": 1079}}
     assert description.is_on_fn(entity) is True
-    ams.zones = {0: {"dry_time": 0}, 1: {"dry_time": 0}}
+    ams.zones = {0: {"dry_time": 0}, 1: {"dry_time": 1079}}
     assert description.is_on_fn(entity) is False
