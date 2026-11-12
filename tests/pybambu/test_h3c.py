@@ -56,6 +56,13 @@ class TestH3C(unittest.TestCase):
         self.device.info.print_update({"home_flag": -1067100737})
         self.assertFalse(self.device.info.door_open)
 
+    def test_prompt_sound_requires_unsigned_commands(self):
+        self.load()
+        self.device.print_fun.print_update({"fun": "0"})
+        self.assertTrue(self.device.supports_feature(Features.PROMPT_SOUND))
+        self.device.print_fun.print_update({"fun": "20000000"})
+        self.assertFalse(self.device.supports_feature(Features.PROMPT_SOUND))
+
     def test_zone_only_ams_telemetry_does_not_crash_in_either_order(self):
         for status_first in (True, False):
             with self.subTest(status_first=status_first):
