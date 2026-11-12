@@ -207,6 +207,7 @@ class Device:
         a1_printers = {Printers.A1, Printers.A1MINI}
         a2_printers = {Printers.A2L}
         h2_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.H2S}
+        h3_printers = {Printers.H3C}
         p1_printers = {Printers.P1P, Printers.P1S}
         p2_printers = {Printers.P2S}
         x1_printer  = {Printers.X1, Printers.X1C}
@@ -271,7 +272,7 @@ class Device:
             # Only the P1 firmware did this as far as I know. Not the A1.
             return False
         elif feature == Features.DOOR_SENSOR:
-            if model in (h2_printers | p2_printers | x2_printers):
+            if model in (h2_printers | h3_printers | p2_printers | x2_printers):
                 return True
             if model in x1e_printer:
                 return self.supports_sw_version("01.01.02.00")

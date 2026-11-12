@@ -40,6 +40,22 @@ class TestH3C(unittest.TestCase):
         self.assertEqual(self.device.info.device_type, Printers.H3C)
         self.assertEqual(self.device.home_flag._device_type, Printers.H3C)
 
+    def test_door_sensor_uses_stat_and_preserves_partial_updates(self):
+        self.load()
+        self.assertTrue(self.device.supports_feature(Features.DOOR_SENSOR))
+
+        # H3C firmware 01.01.03.00 reports door state in bit 23 of stat.
+        self.device.info.print_update({"stat": "104621A0F0"})
+        self.assertFalse(self.device.info.door_open)
+        self.device.info.print_update({"stat": "1046A1A0F0"})
+        self.assertTrue(self.device.info.door_open)
+        self.device.info.print_update({"home_flag": -1067100737})
+        self.assertTrue(self.device.info.door_open)
+        self.device.info.print_update({"stat": "104621A0F0"})
+        self.assertFalse(self.device.info.door_open)
+        self.device.info.print_update({"home_flag": -1067100737})
+        self.assertFalse(self.device.info.door_open)
+
     def test_zone_only_ams_telemetry_does_not_crash_in_either_order(self):
         for status_first in (True, False):
             with self.subTest(status_first=status_first):
