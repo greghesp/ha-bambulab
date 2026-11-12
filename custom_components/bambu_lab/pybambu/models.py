@@ -3667,13 +3667,7 @@ class AMSInstance:
 
         # Observed H3C reports put drying settings in zone 0 and repeat the timer in zone 1.
         value = self.zones.get(0, {}).get("dry_time")
-        try:
-            if isinstance(value, bool):
-                return None
-            remaining = int(value)
-        except (TypeError, ValueError, OverflowError):
-            return None
-        return remaining > 0 if remaining >= 0 else None
+        return value > 0 if type(value) is int and value >= 0 else None
 
 
 @dataclass

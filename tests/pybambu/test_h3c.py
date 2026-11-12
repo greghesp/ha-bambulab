@@ -127,11 +127,11 @@ class TestH3C(unittest.TestCase):
         self.assertIsNone(ams.is_drying)
         ams.zones = {1: {"dry_time": 1}}
         self.assertIsNone(ams.is_drying)
-        ams.zones[0] = {"dry_time": "0"}
+        ams.zones[0] = {"dry_time": 0}
         self.assertFalse(ams.is_drying)
-        ams.zones[0]["dry_time"] = "1"
+        ams.zones[0]["dry_time"] = 1
         self.assertTrue(ams.is_drying)
-        for value in (None, True, False, -1, "invalid", float("inf")):
+        for value in (None, True, False, -1, "1", "invalid", float("inf")):
             with self.subTest(value=value):
                 ams.zones[0]["dry_time"] = value
                 self.assertIsNone(ams.is_drying)
