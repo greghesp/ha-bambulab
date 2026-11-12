@@ -3659,6 +3659,31 @@ class AMSInstance:
     def active(self):
         return self._active
 
+    @property
+    def is_drying(self) -> bool | None:
+        """Report AMS-wide drying activity from the available timers."""
+        if self.model != "AMS 3H":
+            return self.remaining_drying_time > 0
+
+        times = []
+        for zone in self.zones.values():
+            if "dry_time" not in zone:
+                continue
+            value = zone["dry_time"]
+            try:
+                if isinstance(value, bool) or value is None:
+                    raise ValueError
+                remaining = int(value)
+                if remaining < 0:
+                    raise ValueError
+            except (TypeError, ValueError, OverflowError):
+                times.append(None)
+            else:
+                times.append(remaining)
+        if any(value is not None and value > 0 for value in times):
+            return True
+        return False if times and all(value == 0 for value in times) else None
+
 
 @dataclass
 class AMSList:

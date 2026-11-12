@@ -85,6 +85,36 @@ class TestH3C(unittest.TestCase):
         self.assertEqual(ams.zones[1]["humidity_raw"], "33")
         self.assertEqual(ams.zones[0]["zone_slots"], [5, 7])
 
+    def test_ams_drying_follows_observed_zone_timers(self):
+        self.load()
+        ams = self.device.ams.data[32]
+        self.assertFalse(ams.is_drying)
+
+        def update_zones(zone_info):
+            self.device.ams.print_update({"ams": {"ams": [{"id": "32", "zone_info": zone_info}]}})
+
+        update_zones([
+            {"zone_id": 0, "dry_time": 1079, "dry_setting": {
+                "dry_duration": 18, "dry_filament": "TPU", "dry_temperature": 75,
+            }},
+            {"zone_id": 1, "dry_time": 1079},
+        ])
+        self.assertTrue(ams.is_drying)
+        update_zones([{"zone_id": 0, "temp": "45.0"}])
+        self.assertTrue(ams.is_drying)
+        update_zones([{"zone_id": 0, "dry_time": 0}, {"zone_id": 1, "dry_time": 0}])
+        self.assertFalse(ams.is_drying)
+
+    def test_ams_drying_is_unknown_without_complete_valid_timers(self):
+        ams = AMSInstance(self.client, "AMS 3H", 32)
+        self.assertIsNone(ams.is_drying)
+        ams.zones = {0: {"dry_time": 0}}
+        self.assertFalse(ams.is_drying)
+        ams.zones = {0: {"dry_time": 0}, 1: {"dry_time": "invalid"}}
+        self.assertIsNone(ams.is_drying)
+        ams.zones[0]["dry_time"] = 1
+        self.assertTrue(ams.is_drying)
+
     def test_weight_only_delta_signals_an_update(self):
         self.load()
         delta = {"ams": {"ams": [{"id": "32", "tray": [{"id": "0", "remain_g": 611}]}]}}
