@@ -359,7 +359,7 @@ class Device:
         elif feature == Features.FIRE_ALARM_BUZZER:
             return model in h2_printers
         elif feature == Features.HEATBED_LIGHT:
-            return model in h2_printers
+            return model in (h2_printers | h3_printers)
         elif feature == Features.SECONDARY_AUX_FAN:
             return model in (p2_printers | x2_printers)
         elif feature == Features.HOTEND_RACK:

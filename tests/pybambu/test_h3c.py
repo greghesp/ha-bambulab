@@ -63,6 +63,22 @@ class TestH3C(unittest.TestCase):
         self.device.print_fun.print_update({"fun": "20000000"})
         self.assertFalse(self.device.supports_feature(Features.PROMPT_SOUND))
 
+    def test_heatbed_light_tracks_commands_despite_error_response(self):
+        self.load()
+        self.assertTrue(self.device.supports_feature(Features.HEATBED_LIGHT))
+        self.assertIsNone(self.device.lights.is_heatbed_light_on)
+
+        # H3C firmware reports failure even though these commands change the light.
+        for mode, expected in (("off", False), ("on", True)):
+            self.device.observe_system_command({
+                "command": "ledctrl",
+                "led_node": "heatbed_light",
+                "led_mode": mode,
+                "result": "fail",
+                "reason": "did not find the valid led: heatbed_light",
+            })
+            self.assertEqual(self.device.lights.is_heatbed_light_on, expected)
+
     def test_zone_only_ams_telemetry_does_not_crash_in_either_order(self):
         for status_first in (True, False):
             with self.subTest(status_first=status_first):
