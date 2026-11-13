@@ -170,7 +170,7 @@
                     "dry_temperature": -1
                   },
                   "dry_sf_reason": [],
-                  "dry_time": 0,
+                  "dry_time": 8,
                   "humidity": "4",
                   "humidity_raw": "27",
                   "info": "240002006",
@@ -189,7 +189,7 @@
                     "dry_temperature": -1
                   },
                   "dry_sf_reason": [],
-                  "dry_time": 0,
+                  "dry_time": 8,
                   "humidity": "2",
                   "humidity_raw": "41",
                   "info": "240002006",
