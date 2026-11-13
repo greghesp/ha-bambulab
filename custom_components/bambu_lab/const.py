@@ -22,6 +22,10 @@ SERVICE_CALL_EVENT = "bambu_lab_service_call"
 SERVICE_CALL_FUTURES = "service_call_futures"
 SERVICE_CALL_ID = "service_call_id"
 
+# Options key mapping AMS serial -> switch entity_id of the smart plug powering an
+# external AMS heater or dryer (e.g. SUNLU AMS Heater, EIBOS Series X).
+CONF_AMS_HEATERS = "ams_heaters"
+
 PLATFORMS = (
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
