@@ -127,6 +127,19 @@ A **chamber camera** entity on every model. On P1/A1 printers it needs the
 printer's IP; on X1 enable *LAN Mode Liveview*; on H2D, H2S, H3C and X2D
 enable *LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
 
+### BIQU Panda devices
+Link a **Panda Breath** chamber heater, **Panda PWR** smart power switch or
+**Panda Status / Aura** light to a printer from the integration's
+**Configure** dialog. Each appears as a device under the printer: the Panda
+Breath's heater, mode, target temperature and filament drying; the Panda
+PWR's outlets, voltage, current, power and energy; and the Panda Status
+light ([details](https://docs.page/greghesp/ha-bambulab/entities#biqu-panda-devices)).
+The Print Status card shows them as a row of chips: the chamber temperature
+(glowing while heating), drying time left, the PWR's power draw, and the
+light, which you can tap to switch.
+
+![Print Status card chips for a Panda Breath, Panda PWR and Panda Status](docs/images/readme/print-status-panda.png)
+
 ### Diagnostics
 HMS errors (with codes, descriptions and wiki links), print errors, online
 state, Wi-Fi signal, SD card status, enclosure door, firmware update

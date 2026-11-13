@@ -23,6 +23,7 @@ from homeassistant.helpers.selector import (
 )
 
 from .const import DOMAIN, LOGGER
+from .panda_devices import PANDA_KINDS, async_test_panda_connection
 from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
     CloudflareError,
@@ -36,6 +37,9 @@ from .pybambu.bambu_cloud import (
 )
 
 CONFIG_VERSION = 2
+
+# Options-flow menu choice for linking BIQU Panda devices (Breath, Status, PWR).
+PANDA_DEVICES_MODE = "panda_devices"
 
 BOOLEAN_SELECTOR = BooleanSelector()
 NUMBER_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.NUMBER))
@@ -611,7 +615,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            if user_input['printer_mode'] == "lan":
+            if user_input['printer_mode'] == PANDA_DEVICES_MODE:
+                return await self.async_step_panda_devices(None)
+            elif user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
             elif user_input['printer_mode'] == "bambu":
@@ -662,6 +668,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
             ]
+        modes.append(SelectOptionDict(value=PANDA_DEVICES_MODE, label=""))
 
         selector = SelectSelector(
             SelectSelectorConfig(
@@ -1025,4 +1032,41 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema(fields),
             errors=errors or {},
             last_step=True,
+        )
+
+    async def async_step_panda_devices(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        """Link (or unlink, with an empty field) BIQU Panda devices by IP address or host name."""
+        errors = {}
+        hosts = {spec.option: self._config_entry.options.get(spec.option, "") for spec in PANDA_KINDS.values()}
+
+        if user_input is not None:
+            saved = dict(hosts)
+            hosts = {option: str(user_input.get(option, "") or "").strip() for option in hosts}
+            in_use = [host.lower() for host in hosts.values() if host]
+            for kind, spec in PANDA_KINDS.items():
+                host = hosts[spec.option]
+                if not host:
+                    continue
+                if "/" in host or " " in host:
+                    errors[spec.option] = "panda_invalid_host"
+                elif in_use.count(host.lower()) > 1:
+                    errors[spec.option] = "panda_duplicate_host"
+                elif host != saved[spec.option] and not await async_test_panda_connection(self.hass, kind, host):
+                    # Only new or changed addresses are tested, so one device being
+                    # offline doesn't block changes to the others.
+                    errors[spec.option] = "panda_cannot_connect"
+            if not errors:
+                options = dict(self._config_entry.options)
+                options.update(hosts)
+                self.hass.config_entries.async_update_entry(entry=self._config_entry, options=options)
+                await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+                return self.async_create_entry(title="", data=None)
+
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        for option, host in hosts.items():
+            fields[vol.Optional(option, description={"suggested_value": host})] = TEXT_SELECTOR
+        return self.async_show_form(
+            step_id="panda_devices",
+            data_schema=vol.Schema(fields),
+            errors=errors,
         )

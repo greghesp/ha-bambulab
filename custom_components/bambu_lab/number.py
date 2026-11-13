@@ -17,6 +17,7 @@ from .const import (
 )
 
 from .coordinator import BambuDataUpdateCoordinator
+from . import panda_entities
 from .models import BambuLabEntity
 from .pybambu.const import Features, Printers, TempEnum
 
@@ -85,6 +86,7 @@ async def async_setup_entry(
 ) -> None:
 
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    async_add_entities(panda_entities.platform_entities("number", coordinator))
     if not coordinator.get_model().has_full_printer_data:
         return
         

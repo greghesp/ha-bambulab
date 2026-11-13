@@ -29,6 +29,7 @@ from .const import (
     SERVICE_CALL_ID,
 )
 from .coordinator import BambuDataUpdateCoordinator
+from .panda_devices import async_setup_panda_devices
 from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
 from .frontend import BambuLabCardRegistration
@@ -391,6 +392,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+
+    coordinator.panda_devices = async_setup_panda_devices(hass, entry, coordinator)
 
     if coordinator.makerworld is not None:
         # Deliberately not async_config_entry_first_refresh(): MakerWorld is a

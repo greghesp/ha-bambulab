@@ -42,6 +42,7 @@ from .const import (
 )
 
 from .makerworld import create_makerworld_coordinator
+from .panda_devices import PANDA_KINDS, device_identifier, firmware_version
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import build_print_project_file_command
@@ -74,6 +75,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, *, entry: ConfigEntry) -> None:
         self._hass = hass
         self._entry = entry
+        # Clients for BIQU Panda devices linked in the options, by kind (see panda_devices.py).
+        self.panda_devices = {}
         LOGGER.debug(f"ConfigEntry.Id: {entry.entry_id}")
 
         self.latest_usage_hours = float(entry.options.get('usage_hours', 0))
@@ -1000,6 +1003,24 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
+        )
+        self._set_via_device(device_info)
+        return device_info
+
+    def get_panda_device(self, kind: str):
+        """DeviceInfo for a BIQU Panda device linked to this printer (see panda_devices.py)."""
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
+        spec = PANDA_KINDS[kind]
+        client = self.panda_devices.get(kind)
+
+        device_info = DeviceInfo(
+            identifiers={device_identifier(self, kind)},
+            name=f"{device_type}_{printer_serial}_{spec.identifier_suffix}",
+            model=spec.model,
+            manufacturer="BIQU",
+            sw_version=(firmware_version(kind, client) if client else None) or "",
+            configuration_url=f"http://{client.host}/" if client else None,
         )
         self._set_via_device(device_info)
         return device_info

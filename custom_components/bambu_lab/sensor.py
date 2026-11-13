@@ -24,6 +24,7 @@ from .definitions import (
     BambuLabSensorEntityDescription,
 )
 from .coordinator import BambuDataUpdateCoordinator
+from . import panda_entities
 from .makerworld import MakerWorldDataUpdateCoordinator, MakerWorldEntity
 from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
 from .pybambu.const import Features, Printers
@@ -73,6 +74,10 @@ async def async_setup_entry(
     if coordinator.makerworld is not None:
         for sensor in MAKERWORLD_SENSORS:
             async_add_entities([BambuLabMakerWorldSensor(coordinator.makerworld, sensor)])
+
+    # Panda devices are on the network in their own right, so like MakerWorld their
+    # entities don't wait for the printer to report in.
+    async_add_entities(panda_entities.platform_entities("sensor", coordinator))
 
     if not coordinator.get_model().has_full_printer_data:
         return

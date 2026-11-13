@@ -22,6 +22,11 @@ SERVICE_CALL_EVENT = "bambu_lab_service_call"
 SERVICE_CALL_FUTURES = "service_call_futures"
 SERVICE_CALL_ID = "service_call_id"
 
+# Options keys holding the host name or IP of BIQU Panda devices linked to this printer.
+CONF_PANDA_BREATH_HOST = "panda_breath_host"
+CONF_PANDA_STATUS_HOST = "panda_status_host"
+CONF_PANDA_PWR_HOST = "panda_pwr_host"
+
 PLATFORMS = (
     Platform.BINARY_SENSOR,
     Platform.BUTTON,

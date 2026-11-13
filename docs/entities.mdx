@@ -192,6 +192,63 @@ When a slot is empty, all attributes are set to `None`.
 | Holder position    | Unknown, Position A, Position B, Centre                                  |
 | Holder state       | Idle, Centering hotend, Centering toolhead, Calibrating rack, Cutting material, Unlocking hotend, Lifting rack, Placing hotend, Picking hotend, Locking hotend |
 
+## BIQU Panda devices
+
+Networked BIQU (BIGTREETECH) Panda accessories can be linked to a printer. Open the integration's **Configure** dialog, pick **BIQU Panda devices (Breath, Status, PWR)**, and enter the IP address or host name of each one you have. Leave a field empty to unlink that device. Each linked device appears as its own device under the printer, and its entities are unavailable while it can't be reached.
+
+These devices have no password on their local connection, so only use them on a network you trust. BIQU doesn't document these protocols. The support here follows community projects, as noted for each device.
+
+Other Panda products aren't linked here:
+
+- **Panda Sense Pro**: it reports to Home Assistant itself over MQTT.
+- **Panda Touch** and **Panda Knomi**: they're screens that control the printer, with no API of their own.
+- **Panda Branch**, **Panda Revo** and other hardware parts: they have nothing on the network.
+
+### Panda Breath
+
+The integration talks to the Panda Breath chamber heater over its local WebSocket (`ws://<host>/ws`). It follows the [community reverse-engineered protocol](https://justinh-rahb.github.io/pandabreath-klipper/protocol/) for firmware V1.0.1 to V1.0.4.
+
+| Entity                            | Notes |
+| --------------------------------- | ----- |
+| Chamber temperature               | Calibrated chamber reading when the device sends one. |
+| Heater element temperature        | Diagnostic. |
+| Heater sensor status              | Diagnostic: OK, open circuit or short circuit. |
+| Drying time remaining             | While filament drying runs. |
+| Heater                            | Turns the Panda Breath on or off. |
+| Mode                              | Auto (heats once the bed passes the trigger temperature), Always on, or Filament drying. Switching away from Filament drying stops a running dry. |
+| Target temperature                | 20–60 °C. Only in Auto or Always on mode. Drying uses the drying temperature. |
+| Auto mode bed temperature trigger | Bed temperature at which Auto mode starts heating. |
+| Filament drying                   | Starts or stops drying with the drying temperature and time below. |
+| Drying temperature                | 40–60 °C. |
+| Drying time                       | 1–12 hours. The firmware stops drying after 12 hours. |
+
+<Info>
+The Panda Breath doesn't report changes made with its own buttons or web page, and has no way to ask for its full state. Values show as unknown until the device reports them, and after a change made on the device itself they can be out of date until it next reports.
+</Info>
+
+### Panda PWR
+
+The Panda PWR smart power switch is read every 30 seconds over its local HTTP interface, using the fields of the community [HA-Panda-PWR](https://github.com/juanillo62gm/HA-Panda-PWR) integration.
+
+| Entity       | Notes |
+| ------------ | ----- |
+| Power output | The mains outlet. This is usually the printer itself, so turning it off turns the printer off. |
+| USB output   | The USB port. |
+| Voltage      | V |
+| Current      | A |
+| Power        | W |
+| Energy       | kWh. Works with the Energy dashboard. |
+
+### Panda Status / Panda Aura
+
+The Panda Status and Panda Aura status lights use the same kind of local WebSocket as the Panda Breath. The fields follow the community [panda-status](https://github.com/ping-localhost/panda-status) integration.
+
+| Entity        | Notes |
+| ------------- | ----- |
+| Idle light    | Turns the light shown while the printer is idle on (full brightness) or off. |
+| Light effect  | Music or H2D. |
+| Printer state | Diagnostic: the printer state as the light sees it, useful for checking its link to the printer. |
+
 ## Diagnostics
 
 | Sensor                    | Notes                                                          |
