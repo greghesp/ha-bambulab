@@ -231,7 +231,7 @@ class Device:
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
         # the very first payload.
         if feature == Features.CAMERA_RTSP:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
+            return model in (h2_printers | h3_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | a2_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
@@ -251,7 +251,7 @@ class Device:
             # flag would largely be good though but not accessible here.
             return model not in (a1_printers | a2_printers)
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
+            return model in (h2_printers | h3_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.AMS:
             return len(self.ams.data) != 0
         elif feature == Features.K_VALUE:
@@ -264,7 +264,7 @@ class Device:
             return True
         elif feature == Features.AIRDUCT_MODE:
             # Airduct mode (Filter/Heating and Cooling) is present on P2S and H2 series
-            return model in (h2_printers | p2_printers | x2_printers)
+            return model in (h2_printers | h3_printers | p2_printers | x2_printers)
         elif feature == Features.HYBRID_MODE_BLOCKS_CONTROL:
             if model in p1_printers:
                 # Not sure what the first version that did this was. At least this - could be earlier.
@@ -336,13 +336,17 @@ class Device:
                 return self.supports_sw_version("01.01.50.40")
             if model == Printers.H2C:
                 return self.supports_sw_version("01.01.50.00")
+            if model in h2_printers:
+                return True # Don't know what version it was added to H2S and H2D and H2D Pro
+            if model in h3_printers:
+                return True
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
             return model in h2_printers
         elif feature == Features.DUAL_NOZZLES:
             return model in dual_nozzle_printers
         elif feature == Features.EXTRUDER_TOOL:
-            return model in (h2_printers | x2_printers)
+            return model in (h2_printers | h3_printers | x2_printers)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             if model in a1_printers:
                 return self.supports_sw_version("01.05.00.00")
@@ -365,7 +369,7 @@ class Device:
         elif feature == Features.HOTEND_RACK:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         elif feature == Features.ACTIVE_CHAMBER_HEATER:
-            return model in (x1e_printer | h2_printers | x2_printers)
+            return model in (x1e_printer | h2_printers | h3_printers | x2_printers)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
