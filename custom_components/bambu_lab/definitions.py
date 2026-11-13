@@ -151,11 +151,12 @@ AMS_BINARY_SENSORS: tuple[BambuLabAMSBinarySensorEntityDescription, ...] = (
         translation_key="drying",
         icon="mdi:heat-wave",
         device_class=BinarySensorDeviceClass.RUNNING,
-        is_on_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time > 0,
+        is_on_fn=lambda self: self.coordinator.get_model().ams.data[self.index].is_drying,
         exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING)
         and (
             coordinator.get_model().ams.data[index].model == "AMS 2 Pro"
             or coordinator.get_model().ams.data[index].model == "AMS HT"
+            or coordinator.get_model().ams.data[index].model == "AMS 3H"
         ),
     ),
 )
@@ -908,9 +909,9 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         suggested_display_precision=3,
         icon="mdi:fan-clock",
         device_class=SensorDeviceClass.DURATION,
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time,
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].drying_time,
         exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING) and
-                                             coordinator.get_model().ams.data[index].model in ["AMS 2 Pro", "AMS HT"],
+                                             coordinator.get_model().ams.data[index].model in ["AMS 2 Pro", "AMS HT", "AMS 3H"],
     ),
     BambuLabAMSSensorEntityDescription(
         key="drying_temperature",
@@ -1014,7 +1015,7 @@ def _ams_zone_value(entity, zone_id, field, converter):
 AMS_SENSORS = tuple(
     replace(description, exists_fn=lambda coordinator, index, fn=description.exists_fn:
             coordinator.get_model().ams.data[index].model != "AMS 3H" and fn(coordinator, index))
-    if description.key in ("humidity", "humidity_index", "temperature", "remaining_drying_time")
+    if description.key in ("humidity", "humidity_index", "temperature")
     else description
     for description in AMS_SENSORS
 )
@@ -1026,7 +1027,6 @@ for _zone in range(2):
     for _field, _translation_key, _unit, _device_class, _converter in (
         ("temp", "zone_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE, float),
         ("humidity_raw", "zone_humidity", PERCENTAGE, SensorDeviceClass.HUMIDITY, int),
-        ("dry_time", "zone_remaining_drying_time", UnitOfTime.MINUTES, SensorDeviceClass.DURATION, int),
     ):
         AMS_SENSORS += (BambuLabAMSSensorEntityDescription(
             key=f"zone_{_zone + 1}_{_field}",

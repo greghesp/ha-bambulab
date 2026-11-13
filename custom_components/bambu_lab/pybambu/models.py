@@ -207,6 +207,7 @@ class Device:
         a1_printers = {Printers.A1, Printers.A1MINI}
         a2_printers = {Printers.A2L}
         h2_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.H2S}
+        h3_printers = {Printers.H3C}
         p1_printers = {Printers.P1P, Printers.P1S}
         p2_printers = {Printers.P2S}
         x1_printer  = {Printers.X1, Printers.X1C}
@@ -271,7 +272,7 @@ class Device:
             # Only the P1 firmware did this as far as I know. Not the A1.
             return False
         elif feature == Features.DOOR_SENSOR:
-            if model in (h2_printers | p2_printers | x2_printers):
+            if model in (h2_printers | h3_printers | p2_printers | x2_printers):
                 return True
             if model in x1e_printer:
                 return self.supports_sw_version("01.01.02.00")
@@ -296,7 +297,7 @@ class Device:
                 return self.supports_sw_version("01.06.10.33")
             return True
         elif feature == Features.PROMPT_SOUND:
-            if model in (a1_printers | a2_printers | h2_printers | p2_printers | x2_printers):
+            if model in (a1_printers | a2_printers | h2_printers | h3_printers | p2_printers | x2_printers):
                 return not self.print_fun.mqtt_signature_required
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -358,7 +359,7 @@ class Device:
         elif feature == Features.FIRE_ALARM_BUZZER:
             return model in h2_printers
         elif feature == Features.HEATBED_LIGHT:
-            return model in h2_printers
+            return model in (h2_printers | h3_printers)
         elif feature == Features.SECONDARY_AUX_FAN:
             return model in (p2_printers | x2_printers)
         elif feature == Features.HOTEND_RACK:
@@ -3657,6 +3658,22 @@ class AMSInstance:
     @property
     def active(self):
         return self._active
+
+    @property
+    def drying_time(self) -> int | None:
+        """Return the remaining drying time in minutes."""
+        if self.model != "AMS 3H":
+            return self.remaining_drying_time
+
+        # Observed H3C reports put drying settings in zone 0 and repeat the timer in zone 1.
+        value = self.zones.get(0, {}).get("dry_time")
+        return value if type(value) is int and value >= 0 else None
+
+    @property
+    def is_drying(self) -> bool | None:
+        """Report AMS-wide drying activity from the available timer."""
+        remaining = self.drying_time
+        return remaining > 0 if remaining is not None else None
 
 
 @dataclass

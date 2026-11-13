@@ -1065,23 +1065,6 @@
             "name": "Nastavení sušení"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "Zbývající doba sušení zóny {zone_number}",
-        "state_attributes": {
-          "zone": {
-            "name": "Zóna"
-          },
-          "zone_id": {
-            "name": "ID zóny"
-          },
-          "slots": {
-            "name": "Sloty"
-          },
-          "dry_setting": {
-            "name": "Nastavení sušení"
-          }
-        }
       }
     },
     "camera": {

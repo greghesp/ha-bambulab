@@ -1065,23 +1065,6 @@
             "name": "Configuració d'assecat"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "Zona {zone_number} temps d'assecat restant",
-        "state_attributes": {
-          "zone": {
-            "name": "Zona"
-          },
-          "zone_id": {
-            "name": "ID de zona"
-          },
-          "slots": {
-            "name": "Ranures"
-          },
-          "dry_setting": {
-            "name": "Configuració d'assecat"
-          }
-        }
       }
     },
     "camera": {

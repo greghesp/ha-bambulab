@@ -1065,23 +1065,6 @@
             "name": "Ustawienie suszenia"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "Pozostały czas suszenia strefy {zone_number}",
-        "state_attributes": {
-          "zone": {
-            "name": "Strefa"
-          },
-          "zone_id": {
-            "name": "Identyfikator strefy"
-          },
-          "slots": {
-            "name": "Sloty"
-          },
-          "dry_setting": {
-            "name": "Ustawienie suszenia"
-          }
-        }
       }
     },
     "camera": {

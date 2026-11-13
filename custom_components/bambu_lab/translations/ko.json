@@ -1065,23 +1065,6 @@
             "name": "건조 설정"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "구역 {zone_number} 남은 건조 시간",
-        "state_attributes": {
-          "zone": {
-            "name": "존"
-          },
-          "zone_id": {
-            "name": "구역 ID"
-          },
-          "slots": {
-            "name": "슬롯"
-          },
-          "dry_setting": {
-            "name": "건조 설정"
-          }
-        }
       }
     },
     "camera": {

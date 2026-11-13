@@ -1065,23 +1065,6 @@
             "name": "Réglage de séchage"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "Temps de séchage restant dans la zone {zone_number}",
-        "state_attributes": {
-          "zone": {
-            "name": "Zone"
-          },
-          "zone_id": {
-            "name": "ID de zone"
-          },
-          "slots": {
-            "name": "Machines à sous"
-          },
-          "dry_setting": {
-            "name": "Réglage de séchage"
-          }
-        }
       }
     },
     "camera": {

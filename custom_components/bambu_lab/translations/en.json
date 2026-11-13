@@ -697,15 +697,6 @@
           "dry_setting": { "name": "Drying setting" }
         }
       },
-      "zone_remaining_drying_time": {
-        "name": "Zone {zone_number} remaining drying time",
-        "state_attributes": {
-          "zone": { "name": "Zone" },
-          "zone_id": { "name": "Zone ID" },
-          "slots": { "name": "Slots" },
-          "dry_setting": { "name": "Drying setting" }
-        }
-      },
       "drying_temperature": {
         "name": "Drying temperature"
       },

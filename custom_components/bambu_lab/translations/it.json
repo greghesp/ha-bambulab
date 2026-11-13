@@ -1065,23 +1065,6 @@
             "name": "Impostazione dell'asciugatura"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "Tempo di asciugatura rimanente della zona {zone_number}",
-        "state_attributes": {
-          "zone": {
-            "name": "Zona"
-          },
-          "zone_id": {
-            "name": "Identificativo della zona"
-          },
-          "slots": {
-            "name": "Slot"
-          },
-          "dry_setting": {
-            "name": "Impostazione dell'asciugatura"
-          }
-        }
       }
     },
     "camera": {

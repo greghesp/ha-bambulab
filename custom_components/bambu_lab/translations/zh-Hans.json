@@ -1065,23 +1065,6 @@
             "name": "烘干设定"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "区域 {zone_number} 剩余干燥时间",
-        "state_attributes": {
-          "zone": {
-            "name": "区"
-          },
-          "zone_id": {
-            "name": "区域ID"
-          },
-          "slots": {
-            "name": "老虎机"
-          },
-          "dry_setting": {
-            "name": "烘干设定"
-          }
-        }
       }
     },
     "camera": {

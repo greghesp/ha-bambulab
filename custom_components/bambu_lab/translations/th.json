@@ -1065,23 +1065,6 @@
             "name": "การตั้งค่าการอบแห้ง"
           }
         }
-      },
-      "zone_remaining_drying_time": {
-        "name": "เวลาการอบแห้งที่เหลืออยู่ของโซน {zone_number}",
-        "state_attributes": {
-          "zone": {
-            "name": "โซน"
-          },
-          "zone_id": {
-            "name": "รหัสโซน"
-          },
-          "slots": {
-            "name": "สล็อต"
-          },
-          "dry_setting": {
-            "name": "การตั้งค่าการอบแห้ง"
-          }
-        }
       }
     },
     "camera": {
