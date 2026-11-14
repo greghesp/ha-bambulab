@@ -848,6 +848,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         """Remove entities no longer created by the integration."""
 
         entity_registry = er.async_get(self.hass)
+        dev_reg = device_registry.async_get(self.hass)
         config_entry_id = self.config_entry.entry_id
 
         entities = [
@@ -858,6 +859,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for entity in entities:
             state = self.hass.states.get(entity.entity_id)
             if state is not None and state.attributes.get("restored") is True:
+                device = dev_reg.async_get(entity.device_id) if entity.device_id else None
+                if device is not None and device.model == "E1 Air Purifier":
+                    # The accessory may simply be unplugged or still awaiting version
+                    # metadata. Preserve its entities and user configuration.
+                    continue
                 LOGGER.debug(f"{entity.entity_id} is DEAD. Removing it.")
                 entity_registry.async_remove(entity.entity_id)
         
@@ -1016,6 +1022,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
+        )
+        self._set_via_device(device_info)
+        return device_info
+
+    def get_air_purifier_device(self):
+        purifier = self.get_model().air_purifier
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
+        device_info = DeviceInfo(
+            identifiers={(DOMAIN, purifier.serial)},
+            name=f"{device_type}_{printer_serial}_AirPurifier",
+            model=purifier.model or "E1 Air Purifier",
+            manufacturer=BRAND,
+            hw_version=purifier.hw_version,
+            sw_version=purifier.sw_version,
         )
         self._set_via_device(device_info)
         return device_info
