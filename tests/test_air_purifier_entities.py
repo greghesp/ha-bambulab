@@ -9,6 +9,8 @@ import pytest
 pytest.importorskip("homeassistant")
 
 from homeassistant.components.fan import FanEntityFeature
+from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
+from homeassistant.const import CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 from homeassistant.exceptions import HomeAssistantError
 
 from custom_components.bambu_lab.const import DOMAIN
@@ -64,6 +66,16 @@ def test_sensors_belong_to_purifier_and_follow_availability(coordinator):
     coordinator.get_model().air_purifier.connected = True
     coordinator.get_model().info.online = False
     assert not entity.available
+
+
+def test_particulate_sensor_is_pm25_with_existing_identity(coordinator):
+    description = next(sensor for sensor in AIR_PURIFIER_SENSORS if sensor.key == "particulate_matter")
+    sensor = BambuLabAirPurifierSensor(coordinator, description)
+    assert sensor.unique_id == "TEST-E1_particulate_matter"
+    assert sensor.device_class == SensorDeviceClass.PM25
+    assert sensor.native_unit_of_measurement == CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
+    assert sensor.state_class == SensorStateClass.MEASUREMENT
+    assert sensor.native_value == 3
 
 
 @pytest.mark.parametrize("gear,mode,on", [

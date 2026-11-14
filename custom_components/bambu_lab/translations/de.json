@@ -370,7 +370,7 @@
     },
     "sensor": {
       "air_purifier_particulate_matter": {
-        "name": "Feinstaub"
+        "name": "PM2.5"
       },
       "air_purifier_fan_speed": {
         "name": "Lüfterdrehzahl"
