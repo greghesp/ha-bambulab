@@ -253,6 +253,12 @@
       }
     },
     "button": {
+      "hotend_rack_raise": {
+        "name": "Raise rack"
+      },
+      "hotend_rack_lower": {
+        "name": "Lower rack"
+      },
       "pause": {
         "name": "Pause"
       },

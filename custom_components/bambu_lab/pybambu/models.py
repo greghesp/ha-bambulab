@@ -3101,6 +3101,8 @@ class Info:
     def set_online(self, online):
         if self.online != online:
             self.online = online
+            if not online:
+                self._client._device.hotend_rack.invalidate_control_state()
             self._client.callback("event_printer_data_update")
 
     def info_update(self, data):
@@ -3489,6 +3491,97 @@ class HotendRack:
         self.holder_pos: int = 0
         self.holder_stat: int = 0
         self.mounted_slot_id: int | None = None
+        self._holder_job = None
+        self._holder_stat_known = False
+        self._print_state_known = False
+        self._move_pending_at = None
+        self._move_seen_busy = False
+        self._move_lock = threading.RLock()
+
+    def invalidate_control_state(self):
+        """Require fresh printer and holder status after a disconnect."""
+        with self._move_lock:
+            self._holder_job = None
+            self._holder_stat_known = False
+            self._print_state_known = False
+            self._move_pending_at = None
+            self._move_seen_busy = False
+
+    @property
+    def can_move(self) -> bool:
+        """Only permit H3C rack movement when the reported state is safe."""
+        with self._move_lock:
+            device = self._client._device
+            return bool(
+                self.is_swaptek and device.has_full_printer_data and device.info.online
+                and device.supports_feature(Features.HOTEND_RACK)
+                and not device.print_fun.mqtt_signature_required
+                and self._print_state_known
+                and device.print_job.gcode_state in ("IDLE", "FINISH", "FAILED")
+                and self._holder_stat_known and self.holder_stat == 0
+                and self._holder_job == 0 and self._move_pending_at is None
+            )
+
+    def move(self, direction: str) -> bool:
+        """Publish an H3C rack movement request, not an assumed result."""
+        action = {"up": 1, "down": 2}.get(direction)
+        with self._move_lock:
+            if action is None or not self.can_move:
+                return False
+            self._move_pending_at = time.monotonic()
+            self._move_seen_busy = False
+            try:
+                published = self._client.publish({"print": {
+                    "command": "nozzle_holder_ctrl", "sequence_id": "0", "action": action,
+                }})
+            except Exception:
+                self._move_pending_at = None
+                raise
+            if not published:
+                self._move_pending_at = None
+            return bool(published)
+
+    def _update_holder(self, data) -> bool:
+        """Track holder-only reports and confirm completed movement."""
+        changed = False
+        with self._move_lock:
+            if isinstance(data.get("gcode_state"), str) and not self._print_state_known:
+                self._print_state_known = True
+                changed = True
+            device = data.get("device")
+            holder = device.get("holder") if isinstance(device, dict) else None
+            if not isinstance(holder, dict):
+                return changed
+            for attr, key in (("holder_pos", "pos"), ("holder_stat", "stat"), ("_holder_job", "job")):
+                value = holder.get(key)
+                if type(value) is int and value >= 0:
+                    if value != getattr(self, attr):
+                        setattr(self, attr, value)
+                        changed = True
+                    if key == "stat" and not self._holder_stat_known:
+                        self._holder_stat_known = True
+                        changed = True
+                elif key in holder and key in ("stat", "job"):
+                    if key == "stat" and self._holder_stat_known:
+                        self._holder_stat_known = False
+                        changed = True
+                    elif key == "job" and self._holder_job is not None:
+                        self._holder_job = None
+                        changed = True
+            if self._move_pending_at is not None:
+                # Status reports can be partial. Do not combine a post-move idle
+                # value with a cached pre-move value to declare the move complete.
+                if (self._holder_stat_known and self.holder_stat != 0) or (
+                    self._holder_job is not None and self._holder_job != 0
+                ):
+                    self._move_seen_busy = True
+                elif (type(holder.get("stat")) is int and holder["stat"] == 0
+                      and type(holder.get("job")) is int and holder["job"] == 0
+                      and (self._move_seen_busy or time.monotonic() - self._move_pending_at >= 30)):
+                    self._move_pending_at = None
+                    self._move_seen_busy = False
+                    changed = True
+        return changed
 
     @property
     def is_swaptek(self) -> bool:
@@ -3537,17 +3630,17 @@ class HotendRack:
         return False
 
     def print_update(self, data) -> bool:
-        changed = False
+        changed = self._update_holder(data)
 
         nozzle_data = data.get("device", {}).get("nozzle", {})
         if not nozzle_data:
-            return False
+            return changed
 
         exist = nozzle_data.get("exist", self.exist_bitmask)
         nozzle_info = nozzle_data.get("info")
 
         if not self._is_vortek_system(exist, nozzle_info):
-            return False
+            return changed
 
         if self.exist_bitmask != exist:
             self.exist_bitmask = exist
@@ -3600,15 +3693,6 @@ class HotendRack:
                 active = slot_id == self.mounted_slot_id
                 if hotend.active != active:
                     hotend.active = active
-                    changed = True
-
-        # Holder data
-        holder_data = data.get("device", {}).get("holder", {})
-        if holder_data:
-            for attr, key in [("holder_pos", "pos"), ("holder_stat", "stat")]:
-                value = holder_data.get(key)
-                if value is not None and value != getattr(self, attr):
-                    setattr(self, attr, value)
                     changed = True
 
         return changed
