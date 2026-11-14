@@ -47,6 +47,7 @@ from .pybambu.const import (
     AMS_CONNECTED_NOZZLES,
     FansEnum,
     Features,
+    Printers,
 )
 from .pybambu.utils import get_filament_name
 
@@ -63,6 +64,15 @@ X2D_TRANSLATION_KEYS = {
     "aux_fan_speed": "left_aux_fan_speed",
     "secondary_aux_fan_speed": "right_aux_fan_speed",
     "chamber_fan_speed": "exhaust_fan_speed",
+}
+
+H3C_FAN_ENTITY_KEYS = {
+    "cooling_fan": "part_fan",
+    "aux_fan": "right_aux_fan",
+    "secondary_aux_fan": "left_aux_fan",
+    "cooling_fan_speed": "part_fan_speed",
+    "aux_fan_speed": "right_aux_fan_speed",
+    "secondary_aux_fan_speed": "left_aux_fan_speed",
 }
 
 @dataclass
@@ -405,7 +415,26 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.CHAMBER),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type != Printers.H3C
+                                      and coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
+    ),
+    BambuLabSensorEntityDescription(
+        key="exhaust_fan_speed",
+        translation_key="exhaust_fan_speed",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
+    ),
+    BambuLabSensorEntityDescription(
+        key="h3c_chamber_fan_speed",
+        translation_key="chamber_fan_speed",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.H3C_CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
     ),
     BambuLabSensorEntityDescription(
         key="cooling_fan_speed",

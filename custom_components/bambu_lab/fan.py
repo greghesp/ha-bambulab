@@ -13,7 +13,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
-from .definitions import X2D_TRANSLATION_KEYS
+from .definitions import H3C_FAN_ENTITY_KEYS, X2D_TRANSLATION_KEYS
 from .models import BambuLabEntity
 from .pybambu.const import Features, FansEnum, Printers
 
@@ -47,14 +47,27 @@ FANS: tuple[FanEntityDescription, ...] = (
         key="chamber_fan",
         translation_key="chamber_fan",
         value_fn=lambda device: device.fans.get_fan_speed(FansEnum.CHAMBER),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type != Printers.H3C
+                                      and coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
     ),
     BambuLabFanEntityDescription(
         key="secondary_aux_fan",
         translation_key="secondary_aux_fan",
         value_fn=lambda device: device.fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY),
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SECONDARY_AUX_FAN)
-    )
+    ),
+    BambuLabFanEntityDescription(
+        key="exhaust_fan",
+        translation_key="exhaust_fan",
+        value_fn=lambda device: device.fans.get_fan_speed(FansEnum.CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
+    ),
+    BambuLabFanEntityDescription(
+        key="h3c_chamber_fan",
+        translation_key="chamber_fan",
+        value_fn=lambda device: device.fans.get_fan_speed(FansEnum.H3C_CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
+    ),
 )
 
 
@@ -88,8 +101,13 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     ) -> None:
         """Initialize the fan."""
         self.entity_description = description
-        self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
-        if coordinator.get_model().info.device_type == Printers.X2D:
+        printer_type = coordinator.get_model().info.device_type
+        key = description.key
+        if printer_type == Printers.H3C and key in H3C_FAN_ENTITY_KEYS:
+            key = H3C_FAN_ENTITY_KEYS[key]
+            self._attr_translation_key = key
+        self._attr_unique_id = f"{config_entry.data['serial']}_{key}"
+        if printer_type == Printers.X2D:
             self._attr_translation_key = X2D_TRANSLATION_KEYS[description.key]
         self._attr_supported_features = (
             FanEntityFeature.SET_SPEED  
@@ -99,14 +117,13 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         super().__init__(coordinator=coordinator)
 
     @property
-    def is_on(self) -> bool:
+    def is_on(self) -> bool | None:
         """Return the state of the fan"""
-        if self.entity_description.value_fn(self.coordinator.data) > 0:
-            return True
-        return False
+        speed = self.entity_description.value_fn(self.coordinator.get_model())
+        return speed > 0 if speed is not None else None
 
     @property
-    def percentage(self) -> int:
+    def percentage(self) -> int | None:
         """Return the current speed percentage."""
         return self.entity_description.value_fn(self.coordinator.get_model())
 
@@ -117,7 +134,11 @@ class BambuLabFan(BambuLabEntity, FanEntity):
             "aux_fan": FansEnum.AUXILIARY,
             "chamber_fan": FansEnum.CHAMBER,
             "secondary_aux_fan": FansEnum.SECONDARY_AUXILIARY,
+            "exhaust_fan": FansEnum.CHAMBER,
+            "h3c_chamber_fan": FansEnum.H3C_CHAMBER,
         }[self.entity_description.key]
+        if fan == FansEnum.H3C_CHAMBER and not self.coordinator.get_model().fans.h3c_chamber_fan_controllable:
+            raise HomeAssistantError("Chamber fan is not controllable in the current airduct mode")
         if not self.coordinator.get_model().fans.set_fan_speed(fan, percentage):
             raise HomeAssistantError("Fan command could not be published")
 
