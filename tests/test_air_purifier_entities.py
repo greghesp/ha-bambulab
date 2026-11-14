@@ -60,7 +60,7 @@ def test_sensors_belong_to_purifier_and_follow_availability(coordinator):
         assert entity.unique_id == f"TEST-E1_{description.key}"
         assert entity.available
         values[description.key] = entity.native_value
-    assert values == {"particulate_matter": 3, "fan_speed": 3509}
+    assert values == {"pm25": 3, "fan_speed": 3509}
     coordinator.get_model().air_purifier.connected = False
     assert not entity.available
     coordinator.get_model().air_purifier.connected = True
@@ -68,10 +68,11 @@ def test_sensors_belong_to_purifier_and_follow_availability(coordinator):
     assert not entity.available
 
 
-def test_particulate_sensor_is_pm25_with_existing_identity(coordinator):
-    description = next(sensor for sensor in AIR_PURIFIER_SENSORS if sensor.key == "particulate_matter")
+def test_particulate_sensor_is_pm25(coordinator):
+    description = next(sensor for sensor in AIR_PURIFIER_SENSORS if sensor.key == "pm25")
     sensor = BambuLabAirPurifierSensor(coordinator, description)
-    assert sensor.unique_id == "TEST-E1_particulate_matter"
+    assert sensor.unique_id == "TEST-E1_pm25"
+    assert sensor.translation_key == "air_purifier_pm25"
     assert sensor.device_class == SensorDeviceClass.PM25
     assert sensor.native_unit_of_measurement == CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
     assert sensor.state_class == SensorStateClass.MEASUREMENT
