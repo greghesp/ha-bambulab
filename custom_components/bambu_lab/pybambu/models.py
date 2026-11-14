@@ -702,6 +702,9 @@ class Fans:
         self._secondary_aux_fan_speed = 0
         self._secondary_aux_fan_speed_override = 0
         self._secondary_aux_fan_speed_override_time = None
+        self._h3c_chamber_fan_speed_percentage = None
+        self._airduct_mode = None
+        self._airduct_modes = {}
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -726,7 +729,13 @@ class Fans:
                 self._cooling_fan_speed_override_time = None
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self._heatbreak_fan_speed_percentage = fan_percentage(self._heatbreak_fan_speed)
-        airduct_parts = data.get("device", {}).get("airduct", {}).get("parts")
+        airduct = data.get("device", {}).get("airduct", {}) or {}
+        if "modeCur" in airduct:
+            self._airduct_mode = airduct["modeCur"]
+        for mode in airduct.get("modeList") or []:
+            if isinstance(mode, dict) and "modeId" in mode and isinstance(mode.get("ctrl"), list):
+                self._airduct_modes[mode["modeId"]] = mode
+        airduct_parts = airduct.get("parts")
         if airduct_parts:
             fan_part = next((item for item in airduct_parts if item.get("id") == 160), None)
             if fan_part is not None:
@@ -736,6 +745,11 @@ class Fans:
                 self._secondary_aux_fan_speed_percentage = fan_part.get(
                     "state", self._secondary_aux_fan_speed_percentage
                 )
+            chamber_part = next((item for item in airduct_parts if item.get("id") == 240), None)
+            if chamber_part is not None:
+                state = chamber_part.get("state")
+                if type(state) is int and state >= 0 and (state & 0xFF) <= 100:
+                    self._h3c_chamber_fan_speed_percentage = state & 0xFF
         if self._secondary_aux_fan_speed_override_time is not None:
             delta = datetime.now() - self._secondary_aux_fan_speed_override_time
             if delta.seconds > 5:
@@ -745,6 +759,13 @@ class Fans:
 
     def set_fan_speed(self, fan: FansEnum, percentage: int) -> bool:
         """Set fan speed"""
+        if fan == FansEnum.H3C_CHAMBER:
+            if not self.h3c_chamber_fan_controllable or not 0 <= percentage <= 100:
+                return False
+            percentage = round(percentage / 10) * 10
+            return bool(self._client.publish({"print": {
+                "command": "set_fan", "sequence_id": "0", "fan_index": 15, "speed": percentage,
+            }}))
         percentage = round(percentage / 10) * 10
         command = fan_percentage_to_gcode(fan, percentage)
 
@@ -768,7 +789,12 @@ class Fans:
         self._client.callback("event_printer_data_update")
         return True
 
-    def get_fan_speed(self, fan: FansEnum) -> int:
+    @property
+    def h3c_chamber_fan_controllable(self) -> bool:
+        mode = self._airduct_modes.get(self._airduct_mode, {})
+        return 240 in (mode.get("ctrl") or []) and 240 not in (mode.get("off") or [])
+
+    def get_fan_speed(self, fan: FansEnum) -> int | None:
         if fan == FansEnum.PART_COOLING:
             if self._cooling_fan_speed_override_time is not None:
                 return self._cooling_fan_speed_override
@@ -790,6 +816,8 @@ class Fans:
             if self._secondary_aux_fan_speed_override_time is not None:
                 return self._secondary_aux_fan_speed_override
             return self._secondary_aux_fan_speed_percentage
+        elif fan == FansEnum.H3C_CHAMBER:
+            return self._h3c_chamber_fan_speed_percentage
 
 @dataclass
 class Upgrade:

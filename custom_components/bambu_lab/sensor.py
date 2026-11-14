@@ -16,6 +16,7 @@ from .definitions import (
     AMS_SENSORS,
     HOTEND_RACK_SENSORS,
     HOTEND_RACK_HOTEND_SENSORS,
+    H3C_FAN_ENTITY_KEYS,
     X2D_TRANSLATION_KEYS,
     MAKERWORLD_SENSORS,
     BambuLabAMSSensorEntityDescription,
@@ -125,7 +126,11 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         super().__init__(coordinator=coordinator)
         self.entity_description = description
         printer = coordinator.get_model().info
-        self._attr_unique_id = f"{printer.serial}_{description.key}"
+        key = description.key
+        if printer.device_type == Printers.H3C and key in H3C_FAN_ENTITY_KEYS:
+            key = H3C_FAN_ENTITY_KEYS[key]
+            self._attr_translation_key = key
+        self._attr_unique_id = f"{printer.serial}_{key}"
         if printer.device_type == Printers.X2D and description.key in X2D_TRANSLATION_KEYS:
             self._attr_translation_key = X2D_TRANSLATION_KEYS[description.key]
         if description.options_fn is not None:

@@ -1791,6 +1791,61 @@ class TestFans(unittest.TestCase):
             self.fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY), 70
         )
 
+    def test_h3c_chamber_fan_reads_reported_speed_and_partial_updates(self):
+        self.assertIsNone(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER))
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 70}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 160, "state": 80}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 256 + 60}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 60)
+        for invalid in (None, -1, 101, "70", True):
+            self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": invalid}]}}})
+            self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 60)
+
+    def test_h3c_chamber_fan_sends_verified_mqtt_command(self):
+        self.fans.print_update({"device": {"airduct": {
+            "modeCur": 0,
+            "modeList": [{"modeId": 0, "ctrl": [16, 32, 160, 48, 240], "off": []}],
+            "parts": [{"id": 240, "state": 70}],
+        }}})
+        self.client.publish.return_value = True
+        self.assertTrue(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 60))
+        self.client.publish.assert_called_once_with({"print": {
+            "command": "set_fan", "sequence_id": "0", "fan_index": 15, "speed": 60,
+        }})
+        # A published command is not proof of a physical state change.
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 60}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 60)
+        self.assertTrue(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 70))
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 70}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+
+    def test_h3c_chamber_fan_requires_reported_manual_control(self):
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 60))
+        self.fans.print_update({"device": {"airduct": {"modeList": [
+            {"modeId": 0, "ctrl": [240], "off": []},
+            {"modeId": 1, "ctrl": [160], "off": []},
+        ], "modeCur": 0}}})
+        self.assertTrue(self.fans.h3c_chamber_fan_controllable)
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 101))
+        self.fans.print_update({"device": {"airduct": {"modeCur": 1}}})
+        self.assertFalse(self.fans.h3c_chamber_fan_controllable)
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 60))
+        self.fans.print_update({"device": {"airduct": {"modeCur": 0, "modeList": [
+            {"modeId": 0, "ctrl": [240], "off": [240]},
+        ]}}})
+        self.assertFalse(self.fans.h3c_chamber_fan_controllable)
+        self.client.publish.assert_not_called()
+
+    def test_h3c_chamber_fan_reports_publish_failure(self):
+        self.fans.print_update({"device": {"airduct": {
+            "modeCur": 0, "modeList": [{"modeId": 0, "ctrl": [240]}],
+        }}})
+        self.client.publish.return_value = False
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 70))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -75,6 +75,7 @@ class FansEnum(IntEnum):
     CHAMBER = 3,
     HEATBREAK = 4,
     SECONDARY_AUXILIARY = 5,
+    H3C_CHAMBER = 6,
 
 
 class TempEnum(IntEnum):
