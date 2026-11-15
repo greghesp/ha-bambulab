@@ -1092,7 +1092,7 @@
         "name": "Estado de Swaptek (sin procesar)"
       },
       "hotend_rack_printtool": {
-        "name": "Herramienta de impresión {número_herramienta}",
+        "name": "Herramienta de impresión {tool_number}",
         "state": {
           "mounted": "Montado",
           "docked": "Atracado",

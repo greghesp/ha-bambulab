@@ -1092,7 +1092,7 @@
         "name": "Stan Swaptek (surowy)"
       },
       "hotend_rack_printtool": {
-        "name": "Narzędzie do drukowania {numer_narzędzia}",
+        "name": "Narzędzie do drukowania {tool_number}",
         "state": {
           "mounted": "Zmontowany",
           "docked": "Zadokowany",
@@ -1151,7 +1151,7 @@
         }
       },
       "hotend_rack_printtool_temperature": {
-        "name": "Temperatura narzędzia PrintTool {numer_narzędzia}"
+        "name": "Temperatura narzędzia PrintTool {tool_number}"
       },
       "hotend_rack_printtool_target_temperature": {
         "name": "Temperatura docelowa PrintTool {tool_number}"

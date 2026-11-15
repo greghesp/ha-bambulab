@@ -1092,7 +1092,7 @@
         "name": "Statut Swaptek (brut)"
       },
       "hotend_rack_printtool": {
-        "name": "Outil d'impression {numéro_outil}",
+        "name": "Outil d'impression {tool_number}",
         "state": {
           "mounted": "Monté",
           "docked": "Amarré",

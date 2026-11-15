@@ -1092,7 +1092,7 @@
         "name": "Status Swaptek (bruto)"
       },
       "hotend_rack_printtool": {
-        "name": "Ferramenta de Impressão {número_da_ferramenta}",
+        "name": "Ferramenta de Impressão {tool_number}",
         "state": {
           "mounted": "Montado",
           "docked": "Ancorado",
@@ -1153,7 +1153,7 @@
         }
       },
       "hotend_rack_printtool_temperature": {
-        "name": "Temperatura do PrintTool {número_da_ferramenta}"
+        "name": "Temperatura do PrintTool {tool_number}"
       },
       "hotend_rack_printtool_target_temperature": {
         "name": "Temperatura alvo do PrintTool {tool_number}"

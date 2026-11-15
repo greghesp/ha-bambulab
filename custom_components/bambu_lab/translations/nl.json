@@ -1092,7 +1092,7 @@
         "name": "Swaptek-status (onbewerkt)"
       },
       "hotend_rack_printtool": {
-        "name": "PrintTool {tool_nummer}",
+        "name": "PrintTool {tool_number}",
         "state": {
           "mounted": "Gemonteerd",
           "docked": "Aangemeerd",

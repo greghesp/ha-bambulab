@@ -1092,7 +1092,7 @@
         "name": "Stato Swaptek (grezzo)"
       },
       "hotend_rack_printtool": {
-        "name": "Strumento di stampa {numero_utensile}",
+        "name": "Strumento di stampa {tool_number}",
         "state": {
           "mounted": "Montato",
           "docked": "Attraccato",
