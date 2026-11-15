@@ -1224,14 +1224,14 @@ HOTEND_RACK_SENSORS = tuple(
     for description in HOTEND_RACK_SENSORS
 ) + tuple(
     BambuLabHotendRackSensorEntityDescription(
-        key=key, name=name, icon="mdi:robot-industrial",
+        key=key, translation_key=translation_key, icon="mdi:robot-industrial",
         entity_category=EntityCategory.DIAGNOSTIC,
         exists_fn=_is_h3c,
         value_fn=lambda self, attr=attribute: getattr(self.coordinator.get_model().hotend_rack, attr),
     )
-    for key, name, attribute in (
-        ("holder_position", "Swaptek position (raw)", "holder_pos"),
-        ("holder_state", "Swaptek status (raw)", "holder_stat"),
+    for key, translation_key, attribute in (
+        ("holder_position", "hotend_rack_swaptek_holder_position", "holder_pos"),
+        ("holder_state", "hotend_rack_swaptek_holder_state", "holder_stat"),
     )
 )
 
@@ -1245,7 +1245,9 @@ for _slot in range(16, 25):
     _number = _slot - 15
     HOTEND_RACK_HOTEND_SENSORS += (
         BambuLabHotendRackSensorEntityDescription(
-            key=f"printtool_{_number}", name=f"PrintTool {_number}",
+            key=f"printtool_{_number}",
+            translation_key="hotend_rack_printtool",
+            translation_placeholders={"tool_number": str(_number)},
             hotend_id=_slot, device_class=SensorDeviceClass.ENUM,
             options=["mounted", "docked", "empty"], icon="mdi:printer-3d-nozzle",
             exists_fn=_is_h3c,
@@ -1269,14 +1271,16 @@ for _slot in range(16, 25):
             },
         ),
     )
-    for _suffix, _label, _attribute, _unit, _class in (
-        ("temperature", "Temperature", "temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
-        ("target_temperature", "Target temperature", "target_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
-        ("used_time", "Print time", "print_time", UnitOfTime.HOURS, SensorDeviceClass.DURATION),
+    for _suffix, _attribute, _unit, _class in (
+        ("temperature", "temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+        ("target_temperature", "target_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+        ("used_time", "print_time", UnitOfTime.HOURS, SensorDeviceClass.DURATION),
     ):
         HOTEND_RACK_HOTEND_SENSORS += (
             BambuLabHotendRackSensorEntityDescription(
-                key=f"printtool_{_number}_{_suffix}", name=f"PrintTool {_number} {_label}",
+                key=f"printtool_{_number}_{_suffix}",
+                translation_key=f"hotend_rack_printtool_{_suffix}",
+                translation_placeholders={"tool_number": str(_number)},
                 hotend_id=_slot, native_unit_of_measurement=_unit, device_class=_class,
                 exists_fn=_is_h3c,
                 value_fn=lambda self, sid=_slot, attr=_attribute: (

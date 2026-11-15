@@ -1029,6 +1029,12 @@
           "lock_hotend": "Locking hotend"
         }
       },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek position (raw)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek status (raw)"
+      },
       "hotend_rack_hotend": {
         "name": "Hotend {hotend_id}",
         "state": {
@@ -1069,6 +1075,42 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} used time"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Mounted",
+          "docked": "Docked",
+          "empty": "Empty"
+        },
+        "state_attributes": {
+          "tool": { "name": "Tool" },
+          "filament_diameter": { "name": "Filament diameter" },
+          "filament_name": { "name": "Filament name" },
+          "filament_type": { "name": "Filament type" },
+          "remaining_weight_g": { "name": "Remaining filament weight" },
+          "remaining_percent": { "name": "Remaining filament" },
+          "ams_id": { "name": "AMS ID" },
+          "ams_slot": { "name": "AMS slot" },
+          "nozzle_diameter": { "name": "Nozzle diameter" },
+          "nozzle_type": { "name": "Nozzle type" },
+          "nozzle_type_code": { "name": "Nozzle type code" },
+          "max_temperature": { "name": "Max temperature" },
+          "serial": { "name": "Serial number" },
+          "filament_id": { "name": "Filament ID" },
+          "color": { "name": "Color" },
+          "wear": { "name": "Wear" },
+          "status_raw": { "name": "Status (raw)" }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} temperature"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} target temperature"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} print time"
       }
     },
     "camera": {
