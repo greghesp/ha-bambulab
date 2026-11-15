@@ -1088,7 +1088,9 @@
       "hotend_rack_swaptek_holder_position": {
         "name": "Swaptek 位置（原始）"
       },
-      "hotend_rack_swaptek_holder_state": {},
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 狀態（原始）"
+      },
       "hotend_rack_printtool": {
         "name": "列印工具 {tool_number}",
         "state": {

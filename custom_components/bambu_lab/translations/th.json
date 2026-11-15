@@ -1079,7 +1079,9 @@
           }
         }
       },
-      "air_purifier_pm25": {},
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
       "air_purifier_fan_speed": {
         "name": "ความเร็วพัดลม"
       },

@@ -1132,7 +1132,9 @@
           "nozzle_type_code": {
             "name": "Kod typu dyszy"
           },
-          "max_temperature": {},
+          "max_temperature": {
+            "name": "Maksymalna temperatura"
+          },
           "serial": {
             "name": "Numer seryjny"
           },
