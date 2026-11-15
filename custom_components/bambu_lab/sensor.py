@@ -11,6 +11,7 @@ from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN, LOGGER
 from .definitions import (
+    AIR_PURIFIER_SENSORS,
     PRINTER_SENSORS,
     VIRTUAL_TRAY_SENSORS,
     AMS_SENSORS,
@@ -26,7 +27,7 @@ from .definitions import (
 )
 from .coordinator import BambuDataUpdateCoordinator
 from .makerworld import MakerWorldDataUpdateCoordinator, MakerWorldEntity
-from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
+from .models import AirPurifierEntity, BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
 from .pybambu.const import Features, Printers
 
 
@@ -80,6 +81,10 @@ async def async_setup_entry(
 
     _migrate_h3c_storage_entities(er.async_get(hass), entry.entry_id, coordinator.get_model().info)
 
+    if coordinator.get_model().air_purifier.ready:
+        for sensor in AIR_PURIFIER_SENSORS:
+            async_add_entities([BambuLabAirPurifierSensor(coordinator, sensor)])
+
     for sensor in VIRTUAL_TRAY_SENSORS:
         if sensor.exists_fn(coordinator):
             if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
@@ -112,6 +117,19 @@ async def async_setup_entry(
         if sensor.exists_fn(coordinator):
             sensor_class = BambuLabRestoreSensor if sensor.is_restoring else BambuLabSensor
             async_add_entities([sensor_class(coordinator, sensor)])
+
+
+class BambuLabAirPurifierSensor(AirPurifierEntity, SensorEntity):
+    """A measurement belonging to the attached air purifier."""
+
+    def __init__(self, coordinator, description):
+        super().__init__(coordinator)
+        self.entity_description = description
+        self._attr_unique_id = f"{self._purifier_serial}_{description.key}"
+
+    @property
+    def native_value(self):
+        return self.entity_description.value_fn(self)
 
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):

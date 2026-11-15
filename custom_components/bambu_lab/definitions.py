@@ -19,7 +19,9 @@ from homeassistant.components.update import (
     UpdateEntityDescription
 )
 from homeassistant.const import (
+    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
     UnitOfMass,
@@ -99,6 +101,28 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     icon_fn: Callable[..., str] = lambda _: None
     is_restoring: bool = False
     options_fn: Callable[..., list[str]] | None = None
+
+
+AIR_PURIFIER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabSensorEntityDescription(
+        key="pm25",
+        translation_key="air_purifier_pm25",
+        device_class=SensorDeviceClass.PM25,
+        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:air-filter",
+        value_fn=lambda self: self.coordinator.get_model().air_purifier.pm,
+    ),
+    BambuLabSensorEntityDescription(
+        key="fan_speed",
+        translation_key="air_purifier_fan_speed",
+        native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda self: self.coordinator.get_model().air_purifier.rpm,
+    ),
+)
 
 
 @dataclass

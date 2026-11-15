@@ -194,6 +194,15 @@ When a slot is empty, all attributes are set to `None`.
 | Holder position    | Unknown, Position A, Position B, Centre                                  |
 | Holder state       | Idle, Centering hotend, Centering toolhead, Calibrating rack, Cutting material, Unlocking hotend, Lifting rack, Placing hotend, Picking hotend, Locking hotend |
 
+## E1 Air Purifier
+
+When an E1 is connected, it appears as a separate device linked to the printer.
+It exposes an air purifier fan with Auto, Silent, Standard and Max modes, a
+PM2.5 sensor in µg/m³, and a fan speed sensor in rpm. The fan
+entity also exposes raw filter telemetry as attributes; their units have not
+been confirmed. Fan control requires unsigned MQTT commands. Use the preset
+selector to choose a mode; percentage-based fan speed control is not supported.
+
 ## Diagnostics
 
 | Sensor                    | Notes                                                          |
