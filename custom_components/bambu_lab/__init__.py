@@ -28,6 +28,7 @@ from .const import (
     SERVICE_CALL_FUTURES,
     SERVICE_CALL_ID,
 )
+from .ams_heater_controller import async_setup_ams_heaters
 from .coordinator import BambuDataUpdateCoordinator
 from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
@@ -391,6 +392,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+    coordinator.ams_heaters = async_setup_ams_heaters(hass, entry, coordinator)
 
     if coordinator.makerworld is not None:
         # Deliberately not async_config_entry_first_refresh(): MakerWorld is a
