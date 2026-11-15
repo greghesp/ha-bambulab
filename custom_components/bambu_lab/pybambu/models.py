@@ -947,6 +947,10 @@ class Upgrade:
             except ValueError:
                 # Prevents unexpected "" strings from being empty.
                 self.upgrade_progress = 0
+            if state.get("status") in ("UPGRADE_SUCCESS", "UPGRADE_FAIL"):
+                # The upgrade has finished, so don't leave a stale progress
+                # value behind or the update entity reports it as in progress.
+                self.upgrade_progress = 0
             self.new_version_state = state.get("new_version_state", self.new_version_state)
             self.cur_version = self._client._device.info.sw_ver
             self.new_version = self._client._device.info.sw_ver
