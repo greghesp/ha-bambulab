@@ -84,7 +84,9 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "부저 - 삐"
+      },
+      "hotend_rack_raise": {
+        "name": "랙 올리기"
+      },
+      "hotend_rack_lower": {
+        "name": "하단 랙"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "PrintTool {tool_number} 인쇄 시간"
+      },
+      "filament_inventory": {
+        "name": "필라멘트 재고"
       }
     },
     "camera": {

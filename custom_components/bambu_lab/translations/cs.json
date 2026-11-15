@@ -84,7 +84,9 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Bzučák - Pípání"
+      },
+      "hotend_rack_raise": {
+        "name": "Zvedněte stojan"
+      },
+      "hotend_rack_lower": {
+        "name": "Spodní stojan"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "Čas tisku PrintTool {tool_number}"
+      },
+      "filament_inventory": {
+        "name": "Inventář vláken"
       }
     },
     "camera": {

@@ -84,7 +84,9 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
+              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
+              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
+              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
+              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
+              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Zoemer - piepend"
+      },
+      "hotend_rack_raise": {
+        "name": "Breng het rek omhoog"
+      },
+      "hotend_rack_lower": {
+        "name": "Onderste rek"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "PrintTool {tool_number} afdruktijd"
+      },
+      "filament_inventory": {
+        "name": "Filamentinventaris"
       }
     },
     "camera": {

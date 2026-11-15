@@ -84,7 +84,9 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -1166,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "PrintTool {tool_number} Druckzeit"
+      },
+      "filament_inventory": {
+        "name": "Filamentbestand"
       }
     },
     "camera": {

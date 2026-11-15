@@ -84,7 +84,9 @@
             "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
             "data": {
               "disable_ssl_verify": "Désactiver la vérification SSL",
-              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
+              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel",
+              "enable_filament_inventory": "Activer l'inventaire des filaments (Filament Manager, nécessite Bambu Cloud)",
+              "filament_inventory_interval": "Intervalle d'actualisation de l'inventaire des filaments (minutes) :"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Ces options ne sont nécessaires que si vous avez une configuration non standard.",
             "data": {
               "disable_ssl_verify": "Désactiver la vérification SSL",
-              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
+              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel",
+              "enable_filament_inventory": "Activer l'inventaire des filaments (Filament Manager, nécessite Bambu Cloud)",
+              "filament_inventory_interval": "Intervalle d'actualisation de l'inventaire des filaments (minutes) :"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Ces options avancées sont des fonctionnalités précoces ou risquées. Lisez la documentation et utilisez-les à vos propres risques.",
             "data": {
               "disable_ssl_verify": "Désactiver la vérification SSL",
-              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
+              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel",
+              "enable_filament_inventory": "Activer l'inventaire des filaments (Filament Manager, nécessite Bambu Cloud)",
+              "filament_inventory_interval": "Intervalle d'actualisation de l'inventaire des filaments (minutes) :"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Ces options avancées sont des fonctionnalités précoces ou risquées. Lisez la documentation et utilisez-les à vos propres risques.",
             "data": {
               "disable_ssl_verify": "Désactiver la vérification SSL",
-              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel"
+              "enable_firmware_update": "Activer la prise en charge de la mise à jour du micrologiciel",
+              "enable_filament_inventory": "Activer l'inventaire des filaments (Filament Manager, nécessite Bambu Cloud)",
+              "filament_inventory_interval": "Intervalle d'actualisation de l'inventaire des filaments (minutes) :"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Buzzer - bip"
+      },
+      "hotend_rack_raise": {
+        "name": "Augmenter la grille"
+      },
+      "hotend_rack_lower": {
+        "name": "Panier inférieur"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "Heure d'impression de PrintTool {tool_number}"
+      },
+      "filament_inventory": {
+        "name": "Inventaire des filaments"
       }
     },
     "camera": {

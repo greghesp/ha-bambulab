@@ -84,7 +84,9 @@
             "description": "只有在非標準設定的情況下才需要這些選項。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援"
+              "enable_firmware_update": "啟用韌體更新支援",
+              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "只有在非標準設定的情況下才需要這些選項。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援"
+              "enable_firmware_update": "啟用韌體更新支援",
+              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "這些進階選項屬於早期或有風險的功能，請閱讀文件並自行承擔使用風險。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援"
+              "enable_firmware_update": "啟用韌體更新支援",
+              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "這些進階選項屬於早期或有風險的功能，請閱讀文件並自行承擔使用風險。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援"
+              "enable_firmware_update": "啟用韌體更新支援",
+              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "蜂鳴器 - 嗶聲"
+      },
+      "hotend_rack_raise": {
+        "name": "升高架"
+      },
+      "hotend_rack_lower": {
+        "name": "下機架"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "PrintTool {tool_number} 列印時間"
+      },
+      "filament_inventory": {
+        "name": "長絲庫存"
       }
     },
     "camera": {

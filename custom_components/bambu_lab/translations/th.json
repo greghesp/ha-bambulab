@@ -84,7 +84,9 @@
             "description": "ตัวเลือกเหล่านี้จำเป็นก็ต่อเมื่อคุณมีการตั้งค่าที่ไม่ได้มาตรฐาน",
             "data": {
               "disable_ssl_verify": "ปิดใช้งานการตรวจสอบ SSL",
-              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์"
+              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์",
+              "enable_filament_inventory": "เปิดใช้งานสินค้าคงคลังเส้นใย (Filament Manager ต้องใช้ Bambu Cloud)",
+              "filament_inventory_interval": "ช่วงเวลารีเฟรชสินค้าคงคลังของเส้นใย (นาที):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "ตัวเลือกเหล่านี้จำเป็นก็ต่อเมื่อคุณมีการตั้งค่าที่ไม่ได้มาตรฐาน",
             "data": {
               "disable_ssl_verify": "ปิดใช้งานการตรวจสอบ SSL",
-              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์"
+              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์",
+              "enable_filament_inventory": "เปิดใช้งานสินค้าคงคลังเส้นใย (Filament Manager ต้องใช้ Bambu Cloud)",
+              "filament_inventory_interval": "ช่วงเวลารีเฟรชสินค้าคงคลังของเส้นใย (นาที):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "ตัวเลือกขั้นสูงเหล่านี้เป็นฟังก์ชันการทำงานที่เร็วหรือมีความเสี่ยง อ่านเอกสารและใช้พวกเขาด้วยความเสี่ยงของคุณเอง",
             "data": {
               "disable_ssl_verify": "ปิดใช้งานการตรวจสอบ SSL",
-              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์"
+              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์",
+              "enable_filament_inventory": "เปิดใช้งานสินค้าคงคลังเส้นใย (Filament Manager ต้องใช้ Bambu Cloud)",
+              "filament_inventory_interval": "ช่วงเวลารีเฟรชสินค้าคงคลังของเส้นใย (นาที):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "ตัวเลือกขั้นสูงเหล่านี้เป็นฟังก์ชันการทำงานที่เร็วหรือมีความเสี่ยง อ่านเอกสารและใช้พวกเขาด้วยความเสี่ยงของคุณเอง",
             "data": {
               "disable_ssl_verify": "ปิดใช้งานการตรวจสอบ SSL",
-              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์"
+              "enable_firmware_update": "เปิดใช้งานการสนับสนุนการอัปเดตเฟิร์มแวร์",
+              "enable_filament_inventory": "เปิดใช้งานสินค้าคงคลังเส้นใย (Filament Manager ต้องใช้ Bambu Cloud)",
+              "filament_inventory_interval": "ช่วงเวลารีเฟรชสินค้าคงคลังของเส้นใย (นาที):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Buzzer - ส่งเสียงบี๊บ"
+      },
+      "hotend_rack_raise": {
+        "name": "ยกแร็ค"
+      },
+      "hotend_rack_lower": {
+        "name": "ตะแกรงล่าง"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "PrintTool {tool_number} เวลาในการพิมพ์"
+      },
+      "filament_inventory": {
+        "name": "สินค้าคงคลังเส้นใย"
       }
     },
     "camera": {

@@ -84,7 +84,9 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen, og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Buzzer - Biping"
+      },
+      "hotend_rack_raise": {
+        "name": "Hæv stativet"
+      },
+      "hotend_rack_lower": {
+        "name": "Nederste stativ"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "PrintTool {tool_number} udskrivningstid"
+      },
+      "filament_inventory": {
+        "name": "Filament inventar"
       }
     },
     "camera": {

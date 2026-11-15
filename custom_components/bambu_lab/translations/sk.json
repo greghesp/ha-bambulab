@@ -84,7 +84,9 @@
             "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_filament_inventory": "Povoliť inventár filamentov (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy zásob vlákna (minúty):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Tieto možnosti sú potrebné iba vtedy, ak máte neštandardné nastavenie.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_filament_inventory": "Povoliť inventár filamentov (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy zásob vlákna (minúty):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Tieto pokročilé možnosti sú včasnou alebo riskantnou funkciou. Prečítajte si dokumentáciu a použite ich na svoje vlastné riziko.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_filament_inventory": "Povoliť inventár filamentov (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy zásob vlákna (minúty):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Tieto pokročilé možnosti sú včasnou alebo riskantnou funkciou. Prečítajte si dokumentáciu a použite ich na svoje vlastné riziko.",
             "data": {
               "disable_ssl_verify": "Zakázať overenie SSL",
-              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru"
+              "enable_firmware_update": "Povoľte podporu aktualizácie firmvéru",
+              "enable_filament_inventory": "Povoliť inventár filamentov (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy zásob vlákna (minúty):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Bzučiak - pípnutie"
+      },
+      "hotend_rack_raise": {
+        "name": "Zdvihnite stojan"
+      },
+      "hotend_rack_lower": {
+        "name": "Spodný stojan"
       }
     },
     "fan": {
@@ -1160,6 +1174,9 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "Čas tlače PrintTool {tool_number}"
+      },
+      "filament_inventory": {
+        "name": "Súpis vlákien"
       }
     },
     "camera": {
