@@ -1481,3 +1481,19 @@ def _get_display_filament_type(filament_id: str | None, tray_type: str | None) -
     if filament_id and FILAMENT_DATA.get(filament_id, {}).get("filament_is_support"):
         return _CHEMICAL_SUPPORT_TYPES.get(tray_type, tray_type)
     return tray_type
+
+
+FILAMENT_INVENTORY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabSensorEntityDescription(
+        key="filament_inventory",
+        translation_key="filament_inventory",
+        icon="mdi:database",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.inventory.total_spool_count,
+        extra_attributes=lambda self: {
+            "spools": self.coordinator.inventory.spools,
+            "groups": self.coordinator.inventory.groups,
+            "total_remaining_g": self.coordinator.inventory.total_remaining_g,
+        },
+    ),
+)
