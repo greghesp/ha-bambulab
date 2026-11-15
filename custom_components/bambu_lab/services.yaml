@@ -342,3 +342,18 @@ stop_filament_drying:
       selector:
         device:
           integration: bambu_lab
+
+force_filament_sync:
+  name: Force Filament Inventory Sync
+  description: >-
+    Immediately refresh the account-level filament inventory ("Filament
+    Manager") from the Bambu cloud, instead of waiting for the next scheduled
+    poll. No effect if filament inventory is not enabled for the printer.
+  fields:
+    device_id:
+      name: Printer
+      description: The printer whose account filament inventory should be refreshed.
+      required: true
+      selector:
+        device:
+          integration: bambu_lab

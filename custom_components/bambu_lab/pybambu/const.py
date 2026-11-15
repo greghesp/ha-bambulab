@@ -75,6 +75,7 @@ class FansEnum(IntEnum):
     CHAMBER = 3,
     HEATBREAK = 4,
     SECONDARY_AUXILIARY = 5,
+    H3C_CHAMBER = 6,
 
 
 class TempEnum(IntEnum):
@@ -372,6 +373,7 @@ class BambuUrl(IntEnum):
     MY_PROFILE = 13,
     POINT_BILL = 14,
     BOOST_RIGHT = 15,
+    FILAMENTS = 16,
 
 BAMBU_URL = {
     BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
@@ -393,6 +395,7 @@ BAMBU_URL = {
     # so ask for the smallest possible page of transactions.
     BambuUrl.POINT_BILL: 'https://api.bambulab.com/v1/point-service/point-bill/my?offset=0&limit=1&filter=all',
     BambuUrl.BOOST_RIGHT: 'https://api.bambulab.com/v1/point-service/boost/boostingright',
+    BambuUrl.FILAMENTS: 'https://api.bambulab.com/v1/design-user-service/my/filament/v2',
 }
 
 # AMS tray `state` — see docs/merge-request-ams-tray-state.md

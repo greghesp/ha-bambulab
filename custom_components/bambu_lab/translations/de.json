@@ -253,6 +253,12 @@
       }
     },
     "button": {
+      "hotend_rack_raise": {
+        "name": "Rack anheben"
+      },
+      "hotend_rack_lower": {
+        "name": "Rack absenken"
+      },
       "pause": {
         "name": "Druckvorgang anhalten"
       },

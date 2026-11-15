@@ -3,7 +3,7 @@ from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, LOGGER, BRAND
-from .coordinator import BambuDataUpdateCoordinator
+from .coordinator import BambuDataUpdateCoordinator, BambuFilamentCoordinator
 
 
 class BambuLabEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
@@ -68,3 +68,15 @@ class AirPurifierEntity(CoordinatorEntity[BambuDataUpdateCoordinator]):
         printer = self.coordinator.get_model()
         purifier = printer.air_purifier
         return super().available and printer.info.online and purifier.ready and purifier.serial == self._purifier_serial
+
+
+class FilamentInventoryEntity(CoordinatorEntity[BambuFilamentCoordinator]):
+    """Defines a filament inventory entity. Subscribes to the filament
+    coordinator but attaches to the printer device."""
+
+    _attr_has_entity_name = True
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Attach to the printer device via the printer coordinator."""
+        return self.coordinator.printer_coordinator.get_printer_device()
