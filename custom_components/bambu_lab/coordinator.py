@@ -90,7 +90,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # Account level MakerWorld stats. None when the entry has no cloud
         # connection, or when another entry on the same account already owns them.
         self.makerworld = create_makerworld_coordinator(hass, entry, self.client.bambu_cloud)
-            
+
+        # Account level filament inventory ("Filament Manager"). None unless the
+        # entry has opted in. Kept here rather than in hass.data[DOMAIN], whose
+        # values are all expected to be printer coordinators.
+        self.filament_inventory = None
+        if config.get(OPTION_ENABLE_FILAMENT_INVENTORY, False):
+            self.filament_inventory = BambuFilamentCoordinator(
+                hass,
+                printer_coordinator=self,
+                interval_minutes=int(config.get(OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL)),
+            )
+
         self._updatedDevice = False
         self._shutdown = False
         # Guards the access denied recovery so one failure episode triggers at most one
@@ -339,7 +350,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             case "get_filament_data":
                 result = self._service_call_get_filament_data(data)
             case "force_filament_sync":
-                result = await self._service_call_force_filament_sync(data)
+                result = self._service_call_force_filament_sync(data)
             case "read_rfid":
                 result = self._service_call_read_rfid(data)
             case "print_project_file":
@@ -641,12 +652,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         return combined_data
 
-    async def _service_call_force_filament_sync(self, data: dict):
-        filament_coordinator = self._hass.data[DOMAIN].get(f"{self.config_entry.entry_id}_filament")
-        if filament_coordinator is None:
+    def _service_call_force_filament_sync(self, data: dict):
+        if self.filament_inventory is None:
             LOGGER.warning("force_filament_sync called but filament inventory is not enabled for this printer.")
             return False
-        await filament_coordinator.async_request_refresh()
+        self._hass.async_create_task(self.filament_inventory.async_request_refresh())
         return True
 
     def _service_call_retry_load_filament(self, data: dict):

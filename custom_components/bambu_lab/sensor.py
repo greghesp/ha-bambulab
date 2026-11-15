@@ -119,12 +119,9 @@ async def async_setup_entry(
             sensor_class = BambuLabRestoreSensor if sensor.is_restoring else BambuLabSensor
             async_add_entities([sensor_class(coordinator, sensor)])
 
-    filament_coordinator: BambuFilamentCoordinator | None = (
-        hass.data[DOMAIN].get(f"{entry.entry_id}_filament")
-    )
-    if filament_coordinator is not None:
+    if coordinator.filament_inventory is not None:
         for sensor in FILAMENT_INVENTORY_SENSORS:
-            async_add_entities([BambuLabFilamentInventorySensor(filament_coordinator, sensor)])
+            async_add_entities([BambuLabFilamentInventorySensor(coordinator.filament_inventory, sensor)])
 
 
 class BambuLabAirPurifierSensor(AirPurifierEntity, SensorEntity):

@@ -27,11 +27,8 @@ from .const import (
     SERVICE_CALL_EVENT,
     SERVICE_CALL_FUTURES,
     SERVICE_CALL_ID,
-    OPTION_ENABLE_FILAMENT_INVENTORY,
-    OPTION_FILAMENT_INVENTORY_INTERVAL,
-    DEFAULT_FILAMENT_INVENTORY_INTERVAL,
 )
-from .coordinator import BambuDataUpdateCoordinator, BambuFilamentCoordinator
+from .coordinator import BambuDataUpdateCoordinator
 from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
 from .frontend import BambuLabCardRegistration
@@ -401,17 +398,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         # created either way and report unavailable until a poll succeeds.
         await coordinator.makerworld.async_refresh()
 
-    # Optionally set up the account-level filament inventory coordinator.
-    options = {**entry.data, **entry.options}
-    if options.get(OPTION_ENABLE_FILAMENT_INVENTORY, False):
-        interval = int(options.get(OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL))
-        filament_coordinator = BambuFilamentCoordinator(
-            hass, printer_coordinator=coordinator, interval_minutes=interval
-        )
-        hass.data[DOMAIN][f"{entry.entry_id}_filament"] = filament_coordinator
+    if coordinator.filament_inventory is not None:
         # Same reasoning as MakerWorld above: a cloud failure must not block
         # printer setup, so don't use async_config_entry_first_refresh().
-        await filament_coordinator.async_refresh()
+        await coordinator.filament_inventory.async_refresh()
 
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
@@ -485,9 +475,6 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
-
-    # Remove the filament coordinator if present.
-    hass.data[DOMAIN].pop(f"{entry.entry_id}_filament", None)
 
     cards = BambuLabCardRegistration(hass)
     await cards.async_unregister()
