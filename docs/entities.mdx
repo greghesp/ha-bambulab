@@ -167,6 +167,10 @@ The H3C exposes nine PrintTool sensors, each with temperature, target
 temperature and print-time sensors. Its Swaptek position and status are exposed
 as raw diagnostic values. The H2C entities are listed below.
 
+The H3C rack has Raise rack and Lower rack buttons. They’re available when MQTT
+control is unsigned, the printer and rack report idle, and no move is pending.
+The printer may home the rack and move the toolhead before the requested move.
+
 | Sensor                 | Notes                                      |
 | ---------------------- | ------------------------------------------ |
 | Hotend 1-6             | Mounted, Docked, or Empty                  |
