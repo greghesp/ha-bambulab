@@ -279,6 +279,19 @@
       }
     },
     "fan": {
+      "air_purifier": {
+        "name": "Luftreiniger",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automatisch",
+              "silent": "Leise",
+              "standard": "Standard",
+              "max": "Maximum"
+            }
+          }
+        }
+      },
       "cooling_fan": {
         "name": "Druckkopflüfter"
       },
@@ -356,6 +369,12 @@
       }
     },
     "sensor": {
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Lüfterdrehzahl"
+      },
       "makerworld_boosts_received": {
         "name": "Erhaltene Boosts"
       },

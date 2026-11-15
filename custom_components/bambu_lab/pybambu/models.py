@@ -22,6 +22,7 @@ import xml.etree.ElementTree as ElementTree
 from PIL import Image
 import asyncio
 
+from .air_purifier import AirPurifier
 from .utils import (
     search,
     fan_percentage,
@@ -69,6 +70,7 @@ from .const import (
     AMS_FILAMENT_CHANGE_STEPS,
 )
 from .commands import (
+    GET_VERSION,
     CHAMBER_LIGHT_ON,
     CHAMBER_LIGHT_OFF,
     CHAMBER_LIGHT_2_ON,
@@ -118,6 +120,7 @@ class Device:
         self.extruder_tool = ExtruderTool(client=client)
         self.hotend_rack = HotendRack(client=client)
         self.track_switch = FilamentTrackSwitch(client=client)
+        self.air_purifier = AirPurifier(client=client)
         self.push_all_data = None
         self.get_version_data = None
         self.chamber_image = ChamberImage(client = client)
@@ -126,6 +129,9 @@ class Device:
         self.print_fun = PrintFun(client = client)
 
     def print_update(self, data) -> bool:
+        had_full_printer_data = self.has_full_printer_data
+        previous_purifier_identity = self.air_purifier.identity
+        previously_connected = self.air_purifier.connected
         send_event = False
         send_event = send_event | self.info.print_update(data = data)
         send_event = send_event | self.upgrade.print_update(data = data)
@@ -147,6 +153,7 @@ class Device:
         send_event = send_event | self.extruder_tool.print_update(data = data)
         send_event = send_event | self.hotend_rack.print_update(data = data)
         send_event = send_event | self.track_switch.print_update(data = data)
+        send_event = send_event | self.air_purifier.print_update(data = data)
 
         if data.get("command") == "push_status":
             if data.get("msg", 0) == 0:
@@ -156,6 +163,13 @@ class Device:
                 self.push_all_data = data
                 if send_ready_event:
                     self._client.callback("event_printer_ready")
+
+        if (self.has_full_printer_data and self.air_purifier.connected is True and
+            not self.air_purifier.ready and (previously_connected is not True or not had_full_printer_data)):
+            # A newly attached accessory needs a fresh serial number from get_version.
+            self._client.publish(GET_VERSION)
+        if had_full_printer_data and self.air_purifier.identity and self.air_purifier.identity != previous_purifier_identity:
+            self._client.callback("event_printer_ready")
 
         # Only notify Home Assistant when something actually changed. The printer pushes
         # status roughly once a second; without this gate every push forces all entities
@@ -181,18 +195,27 @@ class Device:
 
     def info_update(self, data):
         had_full_printer_data = self.has_full_printer_data
+        previous_purifier_identity = self.air_purifier.identity
         self.info.info_update(data = data)
         self.home_flag.info_update(data = data)
         ams_info_changed = self.ams.info_update(data = data)
+        purifier_info_changed = self.air_purifier.info_update(data = data)
 
         if data.get("command") == "get_version":
             send_ready_event = self.get_version_data is None and self.push_all_data is not None
             if self.get_version_data is None:
                 LOGGER.debug("Reached first push of version data.")
             self.get_version_data = data
+            if (not had_full_printer_data and self.has_full_printer_data and
+                self.air_purifier.connected is True and not self.air_purifier.ready):
+                # The initial version response may precede accessory identification.
+                self._client.publish(GET_VERSION)
             if send_ready_event:
                 self._client.callback("event_printer_ready")
-            elif had_full_printer_data and ams_info_changed:
+            elif had_full_printer_data and (ams_info_changed or (
+                purifier_info_changed and self.air_purifier.identity and
+                self.air_purifier.identity != previous_purifier_identity
+            )):
                 # A later get_version response can fill in AMS identity metadata that was
                 # missing during initial startup. Re-run entity setup so placeholder AMS
                 # entries are replaced with entities using the real serial/model.

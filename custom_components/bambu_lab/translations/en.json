@@ -279,6 +279,19 @@
       }
     },
     "fan": {
+      "air_purifier": {
+        "name": "Air purifier",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Silent",
+              "standard": "Standard",
+              "max": "Max"
+            }
+          }
+        }
+      },
       "cooling_fan": {
         "name": "Cooling fan"
       },
@@ -356,6 +369,12 @@
       }
     },
     "sensor": {
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Fan speed"
+      },
       "makerworld_boosts_received": {
         "name": "Boosts received"
       },
