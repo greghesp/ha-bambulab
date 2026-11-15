@@ -409,7 +409,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             hass, printer_coordinator=coordinator, interval_minutes=interval
         )
         hass.data[DOMAIN][f"{entry.entry_id}_filament"] = filament_coordinator
-        await filament_coordinator.async_config_entry_first_refresh()
+        # Same reasoning as MakerWorld above: a cloud failure must not block
+        # printer setup, so don't use async_config_entry_first_refresh().
+        await filament_coordinator.async_refresh()
 
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
