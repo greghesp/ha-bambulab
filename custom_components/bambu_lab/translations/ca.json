@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "Ventilador d'escapament"
+      },
+      "air_purifier": {
+        "name": "Purificador d'aire",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automàtic",
+              "silent": "En silenci",
+              "standard": "Estàndard",
+              "max": "Màx"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "Configuració d'assecat"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Velocitat del ventilador"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Posició Swaptek (en brut)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Estat de Swaptek (en brut)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Muntat",
+          "docked": "Acoblat",
+          "empty": "Buit"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Eina"
+          },
+          "filament_diameter": {
+            "name": "Diàmetre del filament"
+          },
+          "filament_name": {
+            "name": "Nom del filament"
+          },
+          "filament_type": {
+            "name": "Tipus de filament"
+          },
+          "remaining_weight_g": {
+            "name": "Pes del filament restant"
+          },
+          "remaining_percent": {
+            "name": "Filament restant"
+          },
+          "ams_id": {
+            "name": "ID d'AMS"
+          },
+          "ams_slot": {
+            "name": "Ranura AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Diàmetre del broquet"
+          },
+          "nozzle_type": {
+            "name": "Tipus de broquet"
+          },
+          "nozzle_type_code": {
+            "name": "Codi del tipus de broquet"
+          },
+          "max_temperature": {
+            "name": "Temperatura màxima"
+          },
+          "serial": {
+            "name": "Número de sèrie"
+          },
+          "filament_id": {
+            "name": "ID del filament"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "wear": {
+            "name": "Desgast"
+          },
+          "status_raw": {
+            "name": "Estat (en brut)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura de PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Temperatura objectiu PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} temps d'impressió"
       }
     },
     "camera": {

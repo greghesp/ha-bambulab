@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "排气扇"
+      },
+      "air_purifier": {
+        "name": "空气净化器",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "汽车",
+              "silent": "沉默的",
+              "standard": "标准",
+              "max": "最大限度"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "烘干设定"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "风扇转速"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 位置（原始）"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 状态（原始）"
+      },
+      "hotend_rack_printtool": {
+        "name": "打印工具 {tool_number}",
+        "state": {
+          "mounted": "已安装",
+          "docked": "停靠",
+          "empty": "空的"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "工具"
+          },
+          "filament_diameter": {
+            "name": "灯丝直径"
+          },
+          "filament_name": {
+            "name": "灯丝名称"
+          },
+          "filament_type": {
+            "name": "灯丝类型"
+          },
+          "remaining_weight_g": {
+            "name": "剩余灯丝重量"
+          },
+          "remaining_percent": {
+            "name": "剩余灯丝"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS插槽"
+          },
+          "nozzle_diameter": {
+            "name": "喷嘴直径"
+          },
+          "nozzle_type": {
+            "name": "喷嘴类型"
+          },
+          "nozzle_type_code": {
+            "name": "喷嘴类型代码"
+          },
+          "max_temperature": {
+            "name": "最高温度"
+          },
+          "serial": {
+            "name": "序列号"
+          },
+          "filament_id": {
+            "name": "灯丝内径"
+          },
+          "color": {
+            "name": "颜色"
+          },
+          "wear": {
+            "name": "穿"
+          },
+          "status_raw": {
+            "name": "状态（原始）"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 温度"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 目标温度"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 打印时间"
       }
     },
     "camera": {

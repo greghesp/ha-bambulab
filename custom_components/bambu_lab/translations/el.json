@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "Ανεμιστήρας εξάτμισης"
+      },
+      "air_purifier": {
+        "name": "Καθαριστής αέρα",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Αυτο",
+              "silent": "Σιωπηλός",
+              "standard": "Πρότυπο",
+              "max": "Μέγ"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "Ρύθμιση στεγνώματος"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Ταχύτητα ανεμιστήρα"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Θέση Swaptek (ακατέργαστη)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Κατάσταση Swaptek (ακατέργαστη)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Εφιππος",
+          "docked": "Ελλιμενισμένο",
+          "empty": "Αδειάζω"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Εργαλείο"
+          },
+          "filament_diameter": {
+            "name": "Διάμετρος νήματος"
+          },
+          "filament_name": {
+            "name": "Όνομα νήματος"
+          },
+          "filament_type": {
+            "name": "Τύπος νήματος"
+          },
+          "remaining_weight_g": {
+            "name": "Υπολειπόμενο βάρος νήματος"
+          },
+          "remaining_percent": {
+            "name": "Υπολειπόμενο νήμα"
+          },
+          "ams_id": {
+            "name": "Αναγνωριστικό AMS"
+          },
+          "ams_slot": {
+            "name": "υποδοχή AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Διάμετρος ακροφυσίου"
+          },
+          "nozzle_type": {
+            "name": "Τύπος ακροφυσίου"
+          },
+          "nozzle_type_code": {
+            "name": "Κωδικός τύπου ακροφυσίου"
+          },
+          "max_temperature": {
+            "name": "Μέγιστη θερμοκρασία"
+          },
+          "serial": {
+            "name": "Αύξων αριθμός"
+          },
+          "filament_id": {
+            "name": "Αναγνωριστικό νήματος"
+          },
+          "color": {
+            "name": "Χρώμα"
+          },
+          "wear": {
+            "name": "Φθορά"
+          },
+          "status_raw": {
+            "name": "Κατάσταση (ακατέργαστη)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Θερμοκρασία του PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} θερμοκρασία στόχου"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} χρόνος εκτύπωσης"
       }
     },
     "camera": {

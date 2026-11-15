@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "Výfukový ventilátor"
+      },
+      "air_purifier": {
+        "name": "Čistička vzduchu",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Tichý",
+              "standard": "Štandardné",
+              "max": "Max"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "Nastavenie sušenia"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Rýchlosť ventilátora"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Pozícia swapteku (surová)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Stav swaptek (nespracovaný)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Namontované",
+          "docked": "Ukotvený",
+          "empty": "Prázdny"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Nástroj"
+          },
+          "filament_diameter": {
+            "name": "Priemer vlákna"
+          },
+          "filament_name": {
+            "name": "Názov vlákna"
+          },
+          "filament_type": {
+            "name": "Typ vlákna"
+          },
+          "remaining_weight_g": {
+            "name": "Zostávajúca hmotnosť vlákna"
+          },
+          "remaining_percent": {
+            "name": "Zostávajúce vlákno"
+          },
+          "ams_id": {
+            "name": "ID AMS"
+          },
+          "ams_slot": {
+            "name": "Slot AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Priemer dýzy"
+          },
+          "nozzle_type": {
+            "name": "Typ trysky"
+          },
+          "nozzle_type_code": {
+            "name": "Kód typu trysky"
+          },
+          "max_temperature": {
+            "name": "Maximálna teplota"
+          },
+          "serial": {
+            "name": "Sériové číslo"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "color": {
+            "name": "Farba"
+          },
+          "wear": {
+            "name": "Opotrebenie"
+          },
+          "status_raw": {
+            "name": "Stav (surový)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Teplota PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Cieľová teplota PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "Čas tlače PrintTool {tool_number}"
       }
     },
     "camera": {

@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "Ventilatore di scarico"
+      },
+      "air_purifier": {
+        "name": "Purificatore d'aria",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Silenzioso",
+              "standard": "Standard",
+              "max": "Massimo"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "Impostazione dell'asciugatura"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Velocità della ventola"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Posizione Swaptek (grezza)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Stato Swaptek (grezzo)"
+      },
+      "hotend_rack_printtool": {
+        "name": "Strumento di stampa {numero_utensile}",
+        "state": {
+          "mounted": "Montato",
+          "docked": "Attraccato",
+          "empty": "Vuoto"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Attrezzo"
+          },
+          "filament_diameter": {
+            "name": "Diametro del filamento"
+          },
+          "filament_name": {
+            "name": "Nome del filamento"
+          },
+          "filament_type": {
+            "name": "Tipo di filamento"
+          },
+          "remaining_weight_g": {
+            "name": "Peso rimanente del filamento"
+          },
+          "remaining_percent": {
+            "name": "Filamento rimanente"
+          },
+          "ams_id": {
+            "name": "ID dell'AMS"
+          },
+          "ams_slot": {
+            "name": "Slot AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Diametro dell'ugello"
+          },
+          "nozzle_type": {
+            "name": "Tipo di ugello"
+          },
+          "nozzle_type_code": {
+            "name": "Codice tipo ugello"
+          },
+          "max_temperature": {
+            "name": "Temperatura massima"
+          },
+          "serial": {
+            "name": "Numero di serie"
+          },
+          "filament_id": {
+            "name": "ID del filamento"
+          },
+          "color": {
+            "name": "Colore"
+          },
+          "wear": {
+            "name": "Indossare"
+          },
+          "status_raw": {
+            "name": "Stato (grezzo)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Temperatura target PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} ora di stampa"
       }
     },
     "camera": {

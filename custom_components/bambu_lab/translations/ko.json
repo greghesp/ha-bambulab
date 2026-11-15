@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "배기팬"
+      },
+      "air_purifier": {
+        "name": "공기청정기",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "자동",
+              "silent": "조용한",
+              "standard": "기준",
+              "max": "맥스"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "건조 설정"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "팬 속도"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 포지션(원시)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 상태(원시)"
+      },
+      "hotend_rack_printtool": {
+        "name": "인쇄 도구 {tool_number}",
+        "state": {
+          "mounted": "탑재됨",
+          "docked": "도킹됨",
+          "empty": "비어 있는"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "도구"
+          },
+          "filament_diameter": {
+            "name": "필라멘트 직경"
+          },
+          "filament_name": {
+            "name": "필라멘트 이름"
+          },
+          "filament_type": {
+            "name": "필라멘트 유형"
+          },
+          "remaining_weight_g": {
+            "name": "남은 필라멘트 무게"
+          },
+          "remaining_percent": {
+            "name": "남은 필라멘트"
+          },
+          "ams_id": {
+            "name": "AMS 아이디"
+          },
+          "ams_slot": {
+            "name": "AMS 슬롯"
+          },
+          "nozzle_diameter": {
+            "name": "노즐 직경"
+          },
+          "nozzle_type": {
+            "name": "노즐 유형"
+          },
+          "nozzle_type_code": {
+            "name": "노즐 유형 코드"
+          },
+          "max_temperature": {
+            "name": "최대 온도"
+          },
+          "serial": {
+            "name": "일련번호"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "wear": {
+            "name": "입다"
+          },
+          "status_raw": {
+            "name": "상태(원시)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 온도"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 목표 온도"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 인쇄 시간"
       }
     },
     "camera": {

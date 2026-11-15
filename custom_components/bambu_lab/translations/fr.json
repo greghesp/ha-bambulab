@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "Ventilateur d'extraction"
+      },
+      "air_purifier": {
+        "name": "Purificateur d'air",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Silencieux",
+              "standard": "Standard",
+              "max": "Max."
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "Réglage de séchage"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Vitesse du ventilateur"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Position Swaptek (brute)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Statut Swaptek (brut)"
+      },
+      "hotend_rack_printtool": {
+        "name": "Outil d'impression {numéro_outil}",
+        "state": {
+          "mounted": "Monté",
+          "docked": "Amarré",
+          "empty": "Vide"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Outil"
+          },
+          "filament_diameter": {
+            "name": "Diamètre des filaments"
+          },
+          "filament_name": {
+            "name": "Nom du filament"
+          },
+          "filament_type": {
+            "name": "Type de filament"
+          },
+          "remaining_weight_g": {
+            "name": "Poids restant du filament"
+          },
+          "remaining_percent": {
+            "name": "Filament restant"
+          },
+          "ams_id": {
+            "name": "Identifiant AMS"
+          },
+          "ams_slot": {
+            "name": "Emplacement AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Diamètre de la buse"
+          },
+          "nozzle_type": {
+            "name": "Type de buse"
+          },
+          "nozzle_type_code": {
+            "name": "Code du type de buse"
+          },
+          "max_temperature": {
+            "name": "Température maximale"
+          },
+          "serial": {
+            "name": "Numéro de série"
+          },
+          "filament_id": {
+            "name": "Identifiant du filament"
+          },
+          "color": {
+            "name": "Couleur"
+          },
+          "wear": {
+            "name": "Porter"
+          },
+          "status_raw": {
+            "name": "Statut (brut)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Température du PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Température cible PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "Heure d'impression de PrintTool {tool_number}"
       }
     },
     "camera": {

@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "พัดลมดูดอากาศ"
+      },
+      "air_purifier": {
+        "name": "เครื่องฟอกอากาศ",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "อัตโนมัติ",
+              "silent": "เงียบ",
+              "standard": "มาตรฐาน",
+              "max": "สูงสุด"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,86 @@
             "name": "การตั้งค่าการอบแห้ง"
           }
         }
+      },
+      "air_purifier_pm25": {},
+      "air_purifier_fan_speed": {
+        "name": "ความเร็วพัดลม"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "ตำแหน่ง Swaptek (ดิบ)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "สถานะ Swaptek (ดิบ)"
+      },
+      "hotend_rack_printtool": {
+        "name": "เครื่องมือพิมพ์ {tool_number}",
+        "state": {
+          "mounted": "ติดแล้ว",
+          "docked": "เทียบท่าแล้ว",
+          "empty": "ว่างเปล่า"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "เครื่องมือ"
+          },
+          "filament_diameter": {
+            "name": "เส้นผ่านศูนย์กลางของเส้นใย"
+          },
+          "filament_name": {
+            "name": "ชื่อเส้นใย"
+          },
+          "filament_type": {
+            "name": "ประเภทเส้นใย"
+          },
+          "remaining_weight_g": {
+            "name": "น้ำหนักเส้นใยที่เหลืออยู่"
+          },
+          "remaining_percent": {
+            "name": "เส้นใยที่เหลืออยู่"
+          },
+          "ams_id": {
+            "name": "รหัสเอเอ็มเอส"
+          },
+          "ams_slot": {
+            "name": "สล็อต AMS"
+          },
+          "nozzle_diameter": {
+            "name": "เส้นผ่านศูนย์กลางหัวฉีด"
+          },
+          "nozzle_type": {
+            "name": "ประเภทหัวฉีด"
+          },
+          "nozzle_type_code": {
+            "name": "รหัสประเภทหัวฉีด"
+          },
+          "max_temperature": {
+            "name": "อุณหภูมิสูงสุด"
+          },
+          "serial": {
+            "name": "หมายเลขซีเรียล"
+          },
+          "filament_id": {
+            "name": "รหัสเส้นใย"
+          },
+          "color": {
+            "name": "สี"
+          },
+          "wear": {
+            "name": "สวมใส่"
+          },
+          "status_raw": {
+            "name": "สถานะ (ดิบ)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} อุณหภูมิ"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "อุณหภูมิเป้าหมาย PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} เวลาในการพิมพ์"
       }
     },
     "camera": {

@@ -1084,6 +1084,82 @@
             "name": "Trocknungseinstellung"
           }
         }
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek-Position (roh)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek-Status (roh)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Montiert",
+          "docked": "Angedockt",
+          "empty": "Leer"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Werkzeug"
+          },
+          "filament_diameter": {
+            "name": "Filamentdurchmesser"
+          },
+          "filament_name": {
+            "name": "Filamentname"
+          },
+          "filament_type": {
+            "name": "Filamenttyp"
+          },
+          "remaining_weight_g": {
+            "name": "Verbleibendes Filamentgewicht"
+          },
+          "remaining_percent": {
+            "name": "Restliches Filament"
+          },
+          "ams_id": {
+            "name": "AMS-ID"
+          },
+          "ams_slot": {
+            "name": "AMS-Steckplatz"
+          },
+          "nozzle_diameter": {
+            "name": "Düsendurchmesser"
+          },
+          "nozzle_type": {
+            "name": "Düsentyp"
+          },
+          "nozzle_type_code": {
+            "name": "Düsentypcode"
+          },
+          "max_temperature": {
+            "name": "Maximale Temperatur"
+          },
+          "serial": {
+            "name": "Seriennummer"
+          },
+          "filament_id": {
+            "name": "Filament-ID"
+          },
+          "color": {
+            "name": "Farbe"
+          },
+          "wear": {
+            "name": "Tragen"
+          },
+          "status_raw": {
+            "name": "Status (roh)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatur von PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} Zieltemperatur"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} Druckzeit"
       }
     },
     "camera": {

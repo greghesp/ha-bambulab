@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "Ventilador de escape"
+      },
+      "air_purifier": {
+        "name": "Purificador de aire",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Silencioso",
+              "standard": "Estándar",
+              "max": "máx."
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,88 @@
             "name": "Ajuste de secado"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Velocidad del ventilador"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Posición de Swaptek (sin procesar)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Estado de Swaptek (sin procesar)"
+      },
+      "hotend_rack_printtool": {
+        "name": "Herramienta de impresión {número_herramienta}",
+        "state": {
+          "mounted": "Montado",
+          "docked": "Atracado",
+          "empty": "Vacío"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Herramienta"
+          },
+          "filament_diameter": {
+            "name": "Diámetro del filamento"
+          },
+          "filament_name": {
+            "name": "Nombre del filamento"
+          },
+          "filament_type": {
+            "name": "tipo de filamento"
+          },
+          "remaining_weight_g": {
+            "name": "Peso restante del filamento"
+          },
+          "remaining_percent": {
+            "name": "Filamento restante"
+          },
+          "ams_id": {
+            "name": "ID de AMS"
+          },
+          "ams_slot": {
+            "name": "Ranura AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Diámetro de la boquilla"
+          },
+          "nozzle_type": {
+            "name": "Tipo de boquilla"
+          },
+          "nozzle_type_code": {
+            "name": "Código de tipo de boquilla"
+          },
+          "max_temperature": {
+            "name": "temperatura máxima"
+          },
+          "serial": {
+            "name": "Número de serie"
+          },
+          "filament_id": {
+            "name": "ID de filamento"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "wear": {
+            "name": "Tener puesto"
+          },
+          "status_raw": {
+            "name": "Estado (sin procesar)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura de PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} temperatura objetivo"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} tiempo de impresión"
       }
     },
     "camera": {

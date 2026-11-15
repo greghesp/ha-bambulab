@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "排氣風扇"
+      },
+      "air_purifier": {
+        "name": "空氣清淨機",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "汽車",
+              "silent": "沉默的",
+              "standard": "標準",
+              "max": "最大限度"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -713,23 +726,6 @@
           }
         }
       },
-      "zone_remaining_drying_time": {
-        "name": "區域 {zone_number} 剩餘乾燥時間",
-        "state_attributes": {
-          "zone": {
-            "name": "區域"
-          },
-          "zone_id": {
-            "name": "區域 ID"
-          },
-          "slots": {
-            "name": "槽位"
-          },
-          "dry_setting": {
-            "name": "乾燥設定"
-          }
-        }
-      },
       "drying_temperature": {
         "name": "乾燥溫度"
       },
@@ -1082,6 +1078,86 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "熱端 {hotend_id} 使用時間"
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "風扇轉速"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 位置（原始）"
+      },
+      "hotend_rack_swaptek_holder_state": {},
+      "hotend_rack_printtool": {
+        "name": "列印工具 {tool_number}",
+        "state": {
+          "mounted": "已安裝",
+          "docked": "停靠",
+          "empty": "空的"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "工具"
+          },
+          "filament_diameter": {
+            "name": "燈絲直徑"
+          },
+          "filament_name": {
+            "name": "燈絲名稱"
+          },
+          "filament_type": {
+            "name": "燈絲類型"
+          },
+          "remaining_weight_g": {
+            "name": "剩餘燈絲重量"
+          },
+          "remaining_percent": {
+            "name": "剩餘燈絲"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS插槽"
+          },
+          "nozzle_diameter": {
+            "name": "噴嘴直徑"
+          },
+          "nozzle_type": {
+            "name": "噴嘴類型"
+          },
+          "nozzle_type_code": {
+            "name": "噴嘴類型代碼"
+          },
+          "max_temperature": {
+            "name": "最高溫度"
+          },
+          "serial": {
+            "name": "序號"
+          },
+          "filament_id": {
+            "name": "燈絲內徑"
+          },
+          "color": {
+            "name": "顏色"
+          },
+          "wear": {
+            "name": "穿"
+          },
+          "status_raw": {
+            "name": "狀態（原始）"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 溫度"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 目標溫度"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 列印時間"
       }
     },
     "camera": {

@@ -302,6 +302,19 @@
       },
       "exhaust_fan": {
         "name": "Wentylator wyciągowy"
+      },
+      "air_purifier": {
+        "name": "Oczyszczacz powietrza",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automatyczny",
+              "silent": "Cichy",
+              "standard": "Standard",
+              "max": "Maks"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1065,6 +1078,86 @@
             "name": "Ustawienie suszenia"
           }
         }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Prędkość wentylatora"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Pozycja Swaptek (surowa)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Stan Swaptek (surowy)"
+      },
+      "hotend_rack_printtool": {
+        "name": "Narzędzie do drukowania {numer_narzędzia}",
+        "state": {
+          "mounted": "Zmontowany",
+          "docked": "Zadokowany",
+          "empty": "Pusty"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Narzędzie"
+          },
+          "filament_diameter": {
+            "name": "Średnica włókna"
+          },
+          "filament_name": {
+            "name": "Nazwa włókna"
+          },
+          "filament_type": {
+            "name": "Typ włókna"
+          },
+          "remaining_weight_g": {
+            "name": "Pozostała masa żarnika"
+          },
+          "remaining_percent": {
+            "name": "Pozostały włókno"
+          },
+          "ams_id": {
+            "name": "Identyfikator AMS"
+          },
+          "ams_slot": {
+            "name": "gniazdo AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Średnica dyszy"
+          },
+          "nozzle_type": {
+            "name": "Typ dyszy"
+          },
+          "nozzle_type_code": {
+            "name": "Kod typu dyszy"
+          },
+          "max_temperature": {},
+          "serial": {
+            "name": "Numer seryjny"
+          },
+          "filament_id": {
+            "name": "Identyfikator włókna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "wear": {
+            "name": "Nosić"
+          },
+          "status_raw": {
+            "name": "Stan (surowy)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura narzędzia PrintTool {numer_narzędzia}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Temperatura docelowa PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "Czas drukowania PrintTool {tool_number}"
       }
     },
     "camera": {
