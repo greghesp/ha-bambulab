@@ -9,7 +9,7 @@ from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers import entity_registry as er
 from homeassistant.util import dt as dt_util
 
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, ENTRY_TYPE, ENTRY_TYPE_MAKERWORLD, LOGGER, MAKERWORLD_DATA
 from .definitions import (
     AIR_PURIFIER_SENSORS,
     PRINTER_SENSORS,
@@ -68,14 +68,13 @@ async def async_setup_entry(
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
 
-    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-
-    # The MakerWorld stats belong to the cloud account rather than to the printer,
-    # so they are added before the printer data check below and stay available
-    # even while the printer itself hasn't reported in yet.
-    if coordinator.makerworld is not None:
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+        coordinator = hass.data[MAKERWORLD_DATA][entry.entry_id]
         for sensor in MAKERWORLD_SENSORS:
-            async_add_entities([BambuLabMakerWorldSensor(coordinator.makerworld, sensor)])
+            async_add_entities([BambuLabMakerWorldSensor(coordinator, sensor)])
+        return
+
+    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     if not coordinator.get_model().has_full_printer_data:
         return

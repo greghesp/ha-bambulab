@@ -16,6 +16,9 @@
     "abort": {
       "already_configured": "Device is already configured",
       "no_printers": "No unconfigured printers found in the account.",
+      "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
+      "reconfigure_not_supported": "Only MakerWorld account entries can be reconfigured this way.",
+      "reconfigure_successful": "MakerWorld credentials updated.",
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available."
     },
@@ -46,6 +49,13 @@
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
+        }
+      },
+      "makerworld": {
+        "title": "MakerWorld Account",
+        "description": "Use working Bambu Cloud credentials from an existing printer entry. No additional login is required.",
+        "data": {
+          "username": "Bambu account:"
         }
       },
       "Bambu": {
@@ -121,6 +131,7 @@
     "abort": {
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available.",
+      "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
       "no_ams": "No AMS has been identified on this printer yet. Wait for the printer to connect and report its AMS units, then try again."
     },
     "error": {
@@ -155,6 +166,14 @@
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
+        }
+      },
+      "makerworld": {
+        "title": "MakerWorld Account",
+        "description": "Use working Bambu Cloud credentials from an existing printer entry. No additional login is required.",
+        "data": {
+          "username": "Bambu account:",
+          "credential_source": "Bambu account:"
         }
       },
       "Bambu": {
@@ -1169,6 +1188,7 @@
       "options": {
         "bambu": "Bambu Lab cloud",
         "lan": "Lan Mode",
+        "makerworld": "MakerWorld account",
         "ams_heater": "External AMS heater or dryer (smart plug)"
       }
     }

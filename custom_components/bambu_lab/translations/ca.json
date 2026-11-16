@@ -17,7 +17,10 @@
       "already_configured": "El dispositiu ja estava configurat",
       "no_printers": "No s'han trobat impressores configurades al compte.",
       "cloudflare": "Cloudflare ha bloquejat l'intent de connexió.",
-      "curl_unavailable": "La llibreria curl_cffi no està disponible."
+      "curl_unavailable": "La llibreria curl_cffi no està disponible.",
+      "no_working_credentials": "No hi ha cap credencial d'impressora de Bambu Cloud disponible per a aquest compte.",
+      "reconfigure_not_supported": "Només es poden reconfigurar d'aquesta manera les entrades del compte MakerWorld.",
+      "reconfigure_successful": "S'han actualitzat les credencials de MakerWorld."
     },
     "error": {
       "cannot_connect": "Error de connexió. Revisa les credencials.",
@@ -114,13 +117,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Compte de MakerWorld",
+        "description": "Utilitzeu les credencials de Bambu Cloud que funcionin des d'una entrada d'impressora existent. No es requereix cap inici de sessió addicional.",
+        "data": {
+          "username": "Compte Bambu:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare ha bloquejat l'intent de connexió.",
-      "curl_unavailable": "La llibreria curl_cffi no està disponible."
+      "curl_unavailable": "La llibreria curl_cffi no està disponible.",
+      "no_working_credentials": "No hi ha cap credencial d'impressora de Bambu Cloud disponible per a aquest compte.",
+      "no_ams": "Encara no s'ha identificat cap AMS en aquesta impressora. Espereu que la impressora es connecti i informi de les seves unitats AMS i, a continuació, torneu-ho a provar."
     },
     "error": {
       "cannot_connect": "Error de connexió.",
@@ -212,6 +224,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Escalfador o assecador AMS extern",
+        "description": "Els escalfadors i assecadors AMS addicionals, com ara l'escalfador SUNLU AMS i EIBOS Sèrie X (Dyas/Tetras) no tenen connexió de xarxa, de manera que Home Assistant en controla un canviant l'endoll intel·ligent des del qual s'alimenta.\n\nTrieu aquest endoll per a cada AMS que tingui instal·lat un escalfador o deixeu-lo buit. Cada AMS enllaçat obté entitats de mode d'assecat de l'escalfador, potència de l'escalfador, llindar d'humitat, tall de temperatura i límit de temps d'execució.\n\nConfigureu l'escalfador o l'assecadora perquè comenci a escalfar quan estigui encès, de manera que canviar l'endoll comença a assecar-se."
+      },
+      "makerworld": {
+        "title": "Compte de MakerWorld",
+        "description": "Utilitzeu les credencials de Bambu Cloud que funcionin des d'una entrada d'impressora existent. No es requereix cap inici de sessió addicional.",
+        "data": {
+          "username": "Compte Bambu:",
+          "credential_source": "Compte Bambu:"
+        }
       }
     }
   },
@@ -258,6 +282,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Filament extrusor dret"
+      },
+      "top_cover_open": {
+        "name": "Coberta superior"
       }
     },
     "button": {
@@ -362,6 +389,18 @@
       },
       "target_chamber_temperature": {
         "name": "Temperatura objectiu de la cambra"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Humitat d'encesa de l'escalfador"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Humitat d'apagada de l'escalfador"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Tall de temperatura de l'escalfador"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Temps de funcionament màxim de l'escalfador"
       }
     },
     "select": {
@@ -1196,6 +1235,12 @@
       },
       "ftp": {
         "name": "Carregueu les dades del model de la impressora"
+      },
+      "ams_heater_drying": {
+        "name": "Mode d'assecat per escalfador"
+      },
+      "ams_heater_power": {
+        "name": "Potència de l'escalfador"
       }
     },
     "update": {
@@ -1208,7 +1253,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Núvol Bambu Lab",
-        "lan": "Mode LAN"
+        "lan": "Mode LAN",
+        "makerworld": "Compte de MakerWorld",
+        "ams_heater": "Escalfador o assecador AMS extern (endoll intel·ligent)"
       }
     }
   },

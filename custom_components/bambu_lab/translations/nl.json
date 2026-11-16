@@ -17,7 +17,10 @@
       "already_configured": "Apparaat is reeds ingesteld.",
       "no_printers": "Geen niet-ingestelde printers gevonden in het account.",
       "cloudflare": "Cloudflare heeft de verbindingspoging geblokkeerd.",
-      "curl_unavailable": "curl_cffi-library is niet beschikbaar."
+      "curl_unavailable": "curl_cffi-library is niet beschikbaar.",
+      "no_working_credentials": "Er zijn geen werkende Bambu Cloud-printergegevens beschikbaar voor dit account.",
+      "reconfigure_not_supported": "Alleen MakerWorld-accountgegevens kunnen op deze manier opnieuw worden geconfigureerd.",
+      "reconfigure_successful": "MakerWorld-inloggegevens bijgewerkt."
     },
     "error": {
       "cannot_connect": "Verbinding mislukt. Controleer de logingegevens.",
@@ -114,13 +117,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "MakerWorld-account",
+        "description": "Gebruik werkende Bambu Cloud-inloggegevens van een bestaand printeritem. Er is geen extra login vereist.",
+        "data": {
+          "username": "Bambu-account:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare heeft de verbindingspoging geblokkeerd.",
-      "curl_unavailable": "curl_cffi-library is niet beschikbaar."
+      "curl_unavailable": "curl_cffi-library is niet beschikbaar.",
+      "no_working_credentials": "Er zijn geen werkende Bambu Cloud-printergegevens beschikbaar voor dit account.",
+      "no_ams": "Er is nog geen AMS geïdentificeerd op deze printer. Wacht tot de printer verbinding heeft gemaakt en de AMS-eenheden heeft gerapporteerd en probeer het vervolgens opnieuw."
     },
     "error": {
       "cannot_connect": "Verbinden mislukt",
@@ -212,6 +224,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Externe AMS verwarming of droger",
+        "description": "Add-on AMS-verwarmers en -drogers zoals de SUNLU AMS Heater en EIBOS Series X (Dyas/Tetras) hebben geen netwerkverbinding, dus Home Assistant bestuurt er één door de slimme stekker te schakelen waarmee deze wordt gevoed.\n\nKies die stekker voor elke AMS waarop een verwarming is gemonteerd, of laat hem leeg. Elke gekoppelde AMS krijgt de droogmodus van de verwarming, het verwarmingsvermogen, de vochtigheidsdrempel, de temperatuuruitschakeling en de looptijdlimieten.\n\nStel de verwarming of droger zelf zo in dat deze begint te verwarmen wanneer deze aanstaat, zodat het schakelen van de stekker daadwerkelijk begint met drogen."
+      },
+      "makerworld": {
+        "title": "MakerWorld-account",
+        "description": "Gebruik werkende Bambu Cloud-inloggegevens van een bestaand printeritem. Er is geen extra login vereist.",
+        "data": {
+          "username": "Bambu-account:",
+          "credential_source": "Bambu-account:"
+        }
       }
     }
   },
@@ -258,6 +282,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Rechter extruderfilament"
+      },
+      "top_cover_open": {
+        "name": "Bovenklep"
       }
     },
     "button": {
@@ -362,6 +389,18 @@
       },
       "target_chamber_temperature": {
         "name": "Doeltemperatuur kamer"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Inschakelvochtigheid verwarming"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Verwarming uitschakelvochtigheid"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Uitschakeling verwarmingstemperatuur"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maximale looptijd verwarming"
       }
     },
     "select": {
@@ -1196,6 +1235,12 @@
       },
       "prompt_sound": {
         "name": "Toestaan van bevestigingsgeluiden"
+      },
+      "ams_heater_drying": {
+        "name": "Verwarmingsdroogmodus"
+      },
+      "ams_heater_power": {
+        "name": "Verwarming vermogen"
       }
     },
     "update": {
@@ -1208,7 +1253,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab-cloud",
-        "lan": "Lan-modus"
+        "lan": "Lan-modus",
+        "makerworld": "MakerWorld-account",
+        "ams_heater": "Externe AMS verwarming of droger (smart plug)"
       }
     }
   },

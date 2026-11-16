@@ -17,7 +17,10 @@
       "already_configured": "Zariadenie je už nakonfigurované",
       "no_printers": "Žiadna nenastavená tlačiareň nenájdená pod účtom.",
       "cloudflare": "Cloudflare zablokoval pokus o pripojenie.",
-      "curl_unavailable": "curl_cffi knižnica nie je k dispozícii."
+      "curl_unavailable": "curl_cffi knižnica nie je k dispozícii.",
+      "no_working_credentials": "Pre tento účet nie sú k dispozícii žiadne funkčné poverenia tlačiarne Bambu Cloud.",
+      "reconfigure_not_supported": "Týmto spôsobom je možné prekonfigurovať iba položky účtu MakerWorld.",
+      "reconfigure_successful": "Poverenia MakerWorld boli aktualizované."
     },
     "error": {
       "cannot_connect": "Nepodarilo sa pripojiť. Skontrolujte poverenia.",
@@ -114,13 +117,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Účet MakerWorld",
+        "description": "Použite funkčné poverenia Bambu Cloud z existujúcej položky tlačiarne. Nevyžaduje sa žiadne ďalšie prihlásenie.",
+        "data": {
+          "username": "Účet Bambu:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare zablokoval pokus o pripojenie.",
-      "curl_unavailable": "curl_cffi knižnica nie je k dispozícii."
+      "curl_unavailable": "curl_cffi knižnica nie je k dispozícii.",
+      "no_working_credentials": "Pre tento účet nie sú k dispozícii žiadne funkčné poverenia tlačiarne Bambu Cloud.",
+      "no_ams": "Na tejto tlačiarni zatiaľ nebol identifikovaný žiadny AMS. Počkajte, kým sa tlačiareň pripojí a nahlási svoje jednotky AMS, potom skúste znova."
     },
     "error": {
       "cannot_connect": "Nepodarilo sa pripojiť",
@@ -212,6 +224,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Externý ohrievač alebo sušička AMS",
+        "description": "Prídavné ohrievače a sušičky AMS, ako napríklad ohrievač SUNLU AMS a EIBOS Series X (Dyas/Tetras), nemajú žiadne sieťové pripojenie, takže Home Assistant ich ovláda prepnutím inteligentnej zástrčky, z ktorej je napájaný.\n\nVyberte túto zástrčku pre každý AMS, ktorý má namontovaný ohrievač, alebo ju nechajte prázdnu. Každý prepojený AMS dostane režim sušenia ohrievača, výkon ohrievača, prah vlhkosti, vypnutie teploty a obmedzenie doby chodu.\n\nNastavte ohrievač alebo sušičku tak, aby začala ohrievať, keď je zapnutá, takže prepnutím zástrčky skutočne začne sušenie."
+      },
+      "makerworld": {
+        "title": "Účet MakerWorld",
+        "description": "Použite funkčné poverenia Bambu Cloud z existujúcej položky tlačiarne. Nevyžaduje sa žiadne ďalšie prihlásenie.",
+        "data": {
+          "username": "Účet Bambu:",
+          "credential_source": "Účet Bambu:"
+        }
       }
     }
   },
@@ -258,6 +282,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Pravé vlákno extrudéra"
+      },
+      "top_cover_open": {
+        "name": "Vrchný kryt"
       }
     },
     "button": {
@@ -362,6 +389,18 @@
       },
       "target_chamber_temperature": {
         "name": "Cieľová teplota komory"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Vlhkosť pri zapnutí ohrievača"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Vlhkosť pri vypnutí ohrievača"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Vypnutie teploty ohrievača"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maximálna doba prevádzky ohrievača"
       }
     },
     "select": {
@@ -1196,6 +1235,12 @@
       },
       "ftp": {
         "name": "Načítať údaje o modeli z tlačiarne"
+      },
+      "ams_heater_drying": {
+        "name": "Režim sušenia ohrievača"
+      },
+      "ams_heater_power": {
+        "name": "Výkon ohrievača"
       }
     },
     "update": {
@@ -1208,7 +1253,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab cloud",
-        "lan": "Režim LAN"
+        "lan": "Režim LAN",
+        "makerworld": "Účet MakerWorld",
+        "ams_heater": "Externý ohrievač alebo sušička AMS (inteligentná zástrčka)"
       }
     }
   },

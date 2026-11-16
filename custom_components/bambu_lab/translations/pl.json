@@ -17,7 +17,10 @@
       "already_configured": "To urządzenie jest już dodane",
       "no_printers": "Nie znaleziono nieskonfigurowanych drukarek na koncie.",
       "cloudflare": "Cloudflare zablokował próbę połączenia.",
-      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna."
+      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna.",
+      "no_working_credentials": "Dla tego konta nie są dostępne żadne działające dane uwierzytelniające drukarki Bambu Cloud.",
+      "reconfigure_not_supported": "W ten sposób można ponownie skonfigurować tylko wpisy konta MakerWorld.",
+      "reconfigure_successful": "Zaktualizowano dane uwierzytelniające MakerWorld."
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć. Sprawdź dane logowania.",
@@ -114,13 +117,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Konto MakerWorld",
+        "description": "Użyj działających danych uwierzytelniających Bambu Cloud z istniejącego wpisu drukarki. Nie jest wymagane żadne dodatkowe logowanie.",
+        "data": {
+          "username": "Konto Bambu:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare zablokował próbę połączenia.",
-      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna."
+      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna.",
+      "no_working_credentials": "Dla tego konta nie są dostępne żadne działające dane uwierzytelniające drukarki Bambu Cloud.",
+      "no_ams": "W tej drukarce nie zidentyfikowano jeszcze żadnego modułu AMS. Poczekaj, aż drukarka połączy się i zgłosi swoje jednostki AMS, a następnie spróbuj ponownie."
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć",
@@ -212,6 +224,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Zewnętrzna nagrzewnica lub suszarka AMS",
+        "description": "Dodatkowe grzejniki i suszarki AMS, takie jak SUNLU AMS Heater i EIBOS Series X (Dyas/Tetras), nie mają połączenia sieciowego, więc Home Assistant steruje nimi, przełączając inteligentną wtyczkę, z której są zasilane.\n\nWybierz tę wtyczkę dla każdego modułu AMS wyposażonego w grzałkę lub pozostaw ją pustą. Każdy połączony AMS otrzymuje tryb suszenia grzejnika, moc grzejnika, próg wilgotności, odcięcie temperatury i elementy ograniczające czas pracy.\n\nUstaw grzejnik lub suszarkę tak, aby rozpoczynała ogrzewanie po włączeniu zasilania, tak aby włączenie wtyczki faktycznie rozpoczęło suszenie."
+      },
+      "makerworld": {
+        "title": "Konto MakerWorld",
+        "description": "Użyj działających danych uwierzytelniających Bambu Cloud z istniejącego wpisu drukarki. Nie jest wymagane żadne dodatkowe logowanie.",
+        "data": {
+          "username": "Konto Bambu:",
+          "credential_source": "Konto Bambu:"
+        }
       }
     }
   },
@@ -258,6 +282,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Prawy włókno wytłaczarki"
+      },
+      "top_cover_open": {
+        "name": "Górna pokrywa"
       }
     },
     "button": {
@@ -362,6 +389,18 @@
       },
       "target_chamber_temperature": {
         "name": "Docelowa temperatura komory"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Wilgotność po włączeniu grzejnika"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Wilgotność wyłączająca grzejnik"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Odcięcie temperatury grzejnika"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maksymalny czas pracy nagrzewnicy"
       }
     },
     "select": {
@@ -1196,6 +1235,12 @@
       },
       "prompt_sound": {
         "name": "Włącz dźwięk powiadomień"
+      },
+      "ams_heater_drying": {
+        "name": "Tryb suszenia grzejnikowego"
+      },
+      "ams_heater_power": {
+        "name": "Moc grzejnika"
       }
     },
     "update": {
@@ -1208,7 +1253,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Chmura Bambu Lab",
-        "lan": "Tryb Lan"
+        "lan": "Tryb Lan",
+        "makerworld": "Konto MakerWorld",
+        "ams_heater": "Zewnętrzny grzejnik lub suszarka AMS (inteligentna wtyczka)"
       }
     }
   },

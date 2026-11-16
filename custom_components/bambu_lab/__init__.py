@@ -10,6 +10,7 @@ from pathlib import Path
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import Platform
 from homeassistant.core import (
     HomeAssistant,
     ServiceCall,
@@ -22,7 +23,10 @@ import aiofiles
 
 from .const import (
     DOMAIN,
+    ENTRY_TYPE,
+    ENTRY_TYPE_MAKERWORLD,
     LOGGER,
+    MAKERWORLD_DATA,
     PLATFORMS,
     SERVICE_CALL_EVENT,
     SERVICE_CALL_FUTURES,
@@ -30,6 +34,8 @@ from .const import (
 )
 from .ams_heater_controller import async_setup_ams_heaters
 from .coordinator import BambuDataUpdateCoordinator
+from .makerworld import create_makerworld_coordinator
+from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
 from .frontend import BambuLabCardRegistration
@@ -388,17 +394,24 @@ async def async_call_service(hass: HomeAssistant, service: str, data: dict, time
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
     LOGGER.debug("async_setup_entry Start")
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+        cloud = BambuCloud(
+            entry.data["region"],
+            entry.data["email"],
+            entry.data["username"],
+            entry.data["auth_token"],
+        )
+        coordinator = create_makerworld_coordinator(hass, entry, cloud)
+        hass.data.setdefault(MAKERWORLD_DATA, {})[entry.entry_id] = coordinator
+        await coordinator.async_refresh()
+        await hass.config_entries.async_forward_entry_setups(entry, [Platform.SENSOR])
+        return True
+
     coordinator = BambuDataUpdateCoordinator(hass, entry=entry)
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     coordinator.ams_heaters = async_setup_ams_heaters(hass, entry, coordinator)
-
-    if coordinator.makerworld is not None:
-        # Deliberately not async_config_entry_first_refresh(): MakerWorld is a
-        # bonus, so a failure here must not hold up the printer. The sensors are
-        # created either way and report unavailable until a poll succeeds.
-        await coordinator.makerworld.async_refresh()
 
     if coordinator.filament_inventory is not None:
         # Same reasoning as MakerWorld above: a cloud failure must not block
@@ -466,6 +479,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload the Bambu Lab integration."""
     LOGGER.debug("async_unload_entry")
+
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+        unloaded = await hass.config_entries.async_unload_platforms(entry, [Platform.SENSOR])
+        coordinator = hass.data.get(MAKERWORLD_DATA, {}).pop(entry.entry_id, None)
+        if coordinator is not None:
+            await coordinator.async_shutdown()
+        return unloaded
 
     # Unload the platforms
     LOGGER.debug(f"async_unload_entry: {PLATFORMS}")

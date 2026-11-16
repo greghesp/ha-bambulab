@@ -44,9 +44,9 @@ from .const import (
     DEFAULT_FILAMENT_INVENTORY_INTERVAL,
 )
 
-from .makerworld import create_makerworld_coordinator
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
+from .makerworld import remove_legacy_makerworld_device
 from .pybambu.utils import build_print_project_file_command
 from .pybambu.models import FilamentInventory
 from .pybambu.const import (
@@ -86,10 +86,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config['user_language'] = hass.config.language
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
         self.client = BambuClient(config)
-
-        # Account level MakerWorld stats. None when the entry has no cloud
-        # connection, or when another entry on the same account already owns them.
-        self.makerworld = create_makerworld_coordinator(hass, entry, self.client.bambu_cloud)
+        remove_legacy_makerworld_device(hass, entry)
 
         # Account level filament inventory ("Filament Manager"). None unless the
         # entry has opted in. Kept here rather than in hass.data[DOMAIN], whose
@@ -895,7 +892,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 entity_registry.async_remove(entity.entity_id)
         
     def _printer_ready(self):
-        LOGGER.debug(f"_printer_ready: {self.config_entry.data["serial"]}")
+        LOGGER.debug(f"_printer_ready: {self.config_entry.data['serial']}")
 
         # First clean up orphaned AMS devices such as when an AMS is moved between printers.
         existing_ams_devices = []

@@ -17,7 +17,10 @@
       "already_configured": "Enhed er allerede konfigureret",
       "no_printers": "Ingen ukonfigurerede printere fundet på kontoen.",
       "cloudflare": "Cloudflare har blokeret forbindelsesforsøget.",
-      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt."
+      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt.",
+      "no_working_credentials": "Ingen fungerende Bambu Cloud-printerlegitimationsoplysninger er tilgængelige for denne konto.",
+      "reconfigure_not_supported": "Kun MakerWorld-kontoposter kan omkonfigureres på denne måde.",
+      "reconfigure_successful": "MakerWorld legitimationsoplysninger opdateret."
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes. Tjek legitimationsoplysninger.",
@@ -114,13 +117,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "MakerWorld-konto",
+        "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
+        "data": {
+          "username": "Bambu konto:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare har blokeret forbindelsesforsøget.",
-      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt."
+      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt.",
+      "no_working_credentials": "Ingen fungerende Bambu Cloud-printerlegitimationsoplysninger er tilgængelige for denne konto.",
+      "no_ams": "Ingen AMS er blevet identificeret på denne printer endnu. Vent på, at printeren har oprettet forbindelse og rapporterer sine AMS-enheder, og prøv derefter igen."
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes",
@@ -212,6 +224,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Ekstern AMS varmelegeme eller tørretumbler",
+        "description": "Ekstra AMS-varmere og -tørretumblere såsom SUNLU AMS Heater og EIBOS Series X (Dyas/Tetras) har ingen netværksforbindelse, så Home Assistant styrer en ved at skifte det smarte stik, den får strøm fra.\n\nVælg det stik til hver AMS, der har et varmelegeme monteret, eller lad det stå tomt. Hvert forbundet AMS får varmelegemetørringstilstand, varmelegemeeffekt, fugttærskel, temperaturafskæring og driftstidsgrænseenheder.\n\nIndstil selve varmeapparatet eller tørretumbleren til at starte opvarmning, når den er tændt, så at skifte stikket faktisk begynder at tørre."
+      },
+      "makerworld": {
+        "title": "MakerWorld-konto",
+        "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
+        "data": {
+          "username": "Bambu konto:",
+          "credential_source": "Bambu konto:"
+        }
       }
     }
   },
@@ -258,6 +282,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Højre ekstruderfilament"
+      },
+      "top_cover_open": {
+        "name": "Topdæksel"
       }
     },
     "button": {
@@ -362,6 +389,18 @@
       },
       "target_chamber_temperature": {
         "name": "Kammerets måltemperatur"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Varmelegeme tændt fugtighed"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Fugtighed fra varmeapparatet"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Varmetemperaturafbrydelse"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Varmeapparat maksimal driftstid"
       }
     },
     "select": {
@@ -1196,6 +1235,12 @@
       },
       "ftp": {
         "name": "Indlæsningsmodeldata fra printer"
+      },
+      "ams_heater_drying": {
+        "name": "Varmetørringstilstand"
+      },
+      "ams_heater_power": {
+        "name": "Varmekraft"
       }
     },
     "update": {
@@ -1208,7 +1253,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab sky",
-        "lan": "Lan-tilstand"
+        "lan": "Lan-tilstand",
+        "makerworld": "MakerWorld-konto",
+        "ams_heater": "Ekstern AMS varmelegeme eller tørretumbler (smart stik)"
       }
     }
   },

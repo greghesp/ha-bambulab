@@ -11,6 +11,9 @@ from homeassistant.const import Platform
 
 # Integration domain
 DOMAIN = "bambu_lab"
+ENTRY_TYPE = "entry_type"
+ENTRY_TYPE_MAKERWORLD = "makerworld"
+MAKERWORLD_DATA = f"{DOMAIN}_makerworld"
 BRAND = "Bambu Lab"
 URL_BASE = "/bambu_lab"
 
