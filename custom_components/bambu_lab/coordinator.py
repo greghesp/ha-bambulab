@@ -663,12 +663,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return True
 
     def _service_call_retry_load_filament(self, data: dict):
-        command = RETRY_LOAD_FILAMENT_TEMPLATE
-        self.client.publish(command)
-    
+        return self.client.publish(RETRY_LOAD_FILAMENT_TEMPLATE)
+
     def _service_call_done_load_filament(self, data: dict):
-        command = DONE_LOAD_FILAMENT_TEMPLATE
-        self.client.publish(command)
+        return self.client.publish(DONE_LOAD_FILAMENT_TEMPLATE)
 
     def _service_call_load_filament(self, data: dict):
         ams_device, entity_id = self._get_ams_device_and_tray(data)
