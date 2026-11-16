@@ -291,9 +291,12 @@ def _get_error_text(error_type: str, error_code: str, device_type: Printers | st
         if not code_entry:
             continue
 
-        # Pick message matching device_type or default (empty list)
+        # Prefer an explicit model match regardless of JSON key ordering.
         for msg, models in code_entry.items():
-            if not models or str(device_type) in models:
+            if str(device_type) in models:
+                return msg
+        for msg, models in code_entry.items():
+            if not models:
                 return msg
 
     return 'unknown'
