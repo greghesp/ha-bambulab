@@ -1,12 +1,13 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity import EntityCategory
 
 from .const import DOMAIN, LOGGER
-from .models import BambuLabEntity
+from .models import BambuLabEntity, HotendRackEntity
 from .pybambu.commands import PAUSE, RESUME, STOP, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING
-from .pybambu.const import Features
+from .pybambu.const import Features, Printers
 
 from homeassistant.components.button import (
     ButtonEntity,
@@ -38,6 +39,18 @@ FORCE_REFRESH_BUTTON_DESCRIPTION = ButtonEntityDescription(
     icon="mdi:refresh",
     translation_key="refresh",
     entity_category=EntityCategory.DIAGNOSTIC,
+)
+RACK_RAISE_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="hotend_rack_raise",
+    icon="mdi:arrow-up-bold",
+    translation_key="hotend_rack_raise",
+    entity_category=EntityCategory.CONFIG,
+)
+RACK_LOWER_BUTTON_DESCRIPTION = ButtonEntityDescription(
+    key="hotend_rack_lower",
+    icon="mdi:arrow-down-bold",
+    translation_key="hotend_rack_lower",
+    entity_category=EntityCategory.CONFIG,
 )
 
 # There is no reliable way to obtain state of the buzzer, so it is better to expose as buttons
@@ -90,6 +103,13 @@ async def async_setup_entry(
                 BambuLabBuzzerBeepingButton(coordinator, entry)
             ]
 
+        if (coordinator.get_model().info.device_type == Printers.H3C and
+                coordinator.get_model().supports_feature(Features.HOTEND_RACK)):
+            buttons += [
+                BambuLabHotendRackButton(coordinator, entry, RACK_RAISE_BUTTON_DESCRIPTION, "up"),
+                BambuLabHotendRackButton(coordinator, entry, RACK_LOWER_BUTTON_DESCRIPTION, "down"),
+            ]
+
         async_add_entities(buttons)
 
 
@@ -106,6 +126,25 @@ class BambuLabButton(BambuLabEntity, ButtonEntity):
         self._attr_unique_id = (
             f"{config_entry.data['serial']}_{self.entity_description.key}"
         )
+
+
+class BambuLabHotendRackButton(HotendRackEntity, ButtonEntity):
+    """Move the H3C rack when printer and holder telemetry are idle."""
+
+    def __init__(self, coordinator, config_entry, description, direction):
+        super().__init__(coordinator)
+        self.entity_description = description
+        self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
+        self._direction = direction
+
+    @property
+    def available(self) -> bool:
+        return super().available and self.coordinator.get_model().hotend_rack.can_move
+
+    async def async_press(self) -> None:
+        if not self.available or not self.coordinator.get_model().hotend_rack.move(self._direction):
+            raise HomeAssistantError("Hotend rack is not ready to move or the command could not be published")
+        self.coordinator.async_update_listeners()
 
 
 class BambuLabPauseButton(BambuLabButton):

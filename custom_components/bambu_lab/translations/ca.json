@@ -84,7 +84,9 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
+              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
+              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
+              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
+              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
+              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Buzzer: beeping"
+      },
+      "hotend_rack_raise": {
+        "name": "Aixecar el bastidor"
+      },
+      "hotend_rack_lower": {
+        "name": "Bastidor inferior"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "Ventilador d'escapament"
+      },
+      "air_purifier": {
+        "name": "Purificador d'aire",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automàtic",
+              "silent": "En silenci",
+              "standard": "Estàndard",
+              "max": "Màx"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -493,7 +520,8 @@
           "build_plate_alignment_detection": "Construeix detecció d'alineació de plaques",
           "heatbed_surface_foreign_object_detection": "Detecció d'objectes estranys a la superfície del llit calent",
           "heatbed_underside_foreign_object_detection": "Detecció d'objectes estranys a la part inferior del llit calent",
-          "pre_extrusion_before_printing": "Pre-extrusió abans de la impressió"
+          "pre_extrusion_before_printing": "Pre-extrusió abans de la impressió",
+          "heatbed_stabilizing": "Llit calent estabilitzador"
         }
       },
       "print_progress": {
@@ -757,7 +785,8 @@
           "missing": "Perduda",
           "normal": "Normal",
           "abnormal": "Anormal",
-          "readonly": "Llegiu només"
+          "readonly": "Llegiu només",
+          "not_applicable": "No aplicable"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1042,141 @@
       },
       "exhaust_fan_speed": {
         "name": "Velocitat del ventilador d'escapament"
+      },
+      "external_storage_connection": {
+        "name": "Connexió d'emmagatzematge extern",
+        "state": {
+          "connected": "Connectat",
+          "disconnected": "Desconnectat"
+        }
+      },
+      "external_storage_total": {
+        "name": "Emmagatzematge extern total"
+      },
+      "external_storage_used": {
+        "name": "Emmagatzematge extern utilitzat"
+      },
+      "external_storage_free": {
+        "name": "Emmagatzematge extern gratuït"
+      },
+      "zone_temperature": {
+        "name": "Temperatura de la zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID de zona"
+          },
+          "slots": {
+            "name": "Ranures"
+          },
+          "dry_setting": {
+            "name": "Configuració d'assecat"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Humitat de la zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID de zona"
+          },
+          "slots": {
+            "name": "Ranures"
+          },
+          "dry_setting": {
+            "name": "Configuració d'assecat"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Velocitat del ventilador"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Posició Swaptek (en brut)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Estat de Swaptek (en brut)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Muntat",
+          "docked": "Acoblat",
+          "empty": "Buit"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Eina"
+          },
+          "filament_diameter": {
+            "name": "Diàmetre del filament"
+          },
+          "filament_name": {
+            "name": "Nom del filament"
+          },
+          "filament_type": {
+            "name": "Tipus de filament"
+          },
+          "remaining_weight_g": {
+            "name": "Pes del filament restant"
+          },
+          "remaining_percent": {
+            "name": "Filament restant"
+          },
+          "ams_id": {
+            "name": "ID d'AMS"
+          },
+          "ams_slot": {
+            "name": "Ranura AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Diàmetre del broquet"
+          },
+          "nozzle_type": {
+            "name": "Tipus de broquet"
+          },
+          "nozzle_type_code": {
+            "name": "Codi del tipus de broquet"
+          },
+          "max_temperature": {
+            "name": "Temperatura màxima"
+          },
+          "serial": {
+            "name": "Número de sèrie"
+          },
+          "filament_id": {
+            "name": "ID del filament"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "wear": {
+            "name": "Desgast"
+          },
+          "status_raw": {
+            "name": "Estat (en brut)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura de PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Temperatura objectiu PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} temps d'impressió"
+      },
+      "filament_inventory": {
+        "name": "Inventari de filaments"
       }
     },
     "camera": {

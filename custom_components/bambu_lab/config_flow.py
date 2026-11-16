@@ -13,6 +13,8 @@ from homeassistant.data_entry_flow import FlowResult, section
 from homeassistant.helpers import device_registry
 from homeassistant.helpers.selector import (
     BooleanSelector,
+    EntitySelector,
+    EntitySelectorConfig,
     SelectOptionDict,
     SelectSelector,
     SelectSelectorConfig,
@@ -22,7 +24,7 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
-from .const import DOMAIN, LOGGER
+from .const import CONF_AMS_HEATERS, DOMAIN, LOGGER
 from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
     CloudflareError,
@@ -36,6 +38,9 @@ from .pybambu.bambu_cloud import (
 )
 
 CONFIG_VERSION = 2
+
+# Options-flow menu choice for linking a smart plug that powers an external AMS heater.
+AMS_HEATER_MODE = "ams_heater"
 
 BOOLEAN_SELECTOR = BooleanSelector()
 NUMBER_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.NUMBER))
@@ -611,7 +616,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            if user_input['printer_mode'] == "lan":
+            if user_input['printer_mode'] == AMS_HEATER_MODE:
+                return await self.async_step_ams_heater(None)
+            elif user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
             elif user_input['printer_mode'] == "bambu":
@@ -662,6 +669,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 SelectOptionDict(value="bambu", label=""),
                 SelectOptionDict(value="lan", label="")
             ]
+        if self._ams_heater_choices():
+            modes.append(SelectOptionDict(value=AMS_HEATER_MODE, label=""))
 
         selector = SelectSelector(
             SelectSelectorConfig(
@@ -876,6 +885,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["usage_hours"] = float(user_input['usage_hours'])
                     options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                     options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                    options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
+                    options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                     options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                     options["force_ip"] = force_ip
@@ -910,6 +921,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
+        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
+        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -925,6 +938,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
+                vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
+                vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -973,6 +988,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
+                options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
+                options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
                 title = self._config_entry.data['serial']
@@ -1006,6 +1023,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
+        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
+        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
@@ -1016,6 +1035,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
+                vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
+                vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -1025,4 +1046,51 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema(fields),
             errors=errors or {},
             last_step=True,
+        )
+
+    def _ams_heater_choices(self) -> dict[str, str]:
+        """Map a readable field label to each identified AMS serial on this printer."""
+        coordinator = self.hass.data.get(DOMAIN, {}).get(self._config_entry.entry_id)
+        if coordinator is None:
+            return {}
+        choices = {}
+        for ams in coordinator.get_model().ams.data.values():
+            if ams is not None and ams.serial:
+                choices[f"{ams.device_name_suffix} ({ams.model}, {ams.serial})"] = ams.serial
+        return choices
+
+    async def async_step_ams_heater(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        """Link the smart plug that powers an external heater (e.g. SUNLU AMS Heater, EIBOS Series X) to each AMS."""
+        choices = self._ams_heater_choices()
+        if not choices:
+            return self.async_abort(reason="no_ams")
+
+        if user_input is not None:
+            # Keep links for AMS units that are not reported right now; only the
+            # units shown in the form are updated or removed.
+            heaters = {
+                serial: plug
+                for serial, plug in self._config_entry.options.get(CONF_AMS_HEATERS, {}).items()
+                if serial not in choices.values()
+            }
+            heaters.update({
+                serial: user_input[label]
+                for label, serial in choices.items()
+                if user_input.get(label)
+            })
+            options = dict(self._config_entry.options)
+            options[CONF_AMS_HEATERS] = heaters
+            self.hass.config_entries.async_update_entry(entry=self._config_entry, options=options)
+            await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+            return self.async_create_entry(title="", data=None)
+
+        current = self._config_entry.options.get(CONF_AMS_HEATERS, {})
+        plug_selector = EntitySelector(EntitySelectorConfig(domain="switch"))
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        for label, serial in choices.items():
+            fields[vol.Optional(label, description={"suggested_value": current.get(serial)})] = plug_selector
+
+        return self.async_show_form(
+            step_id="ams_heater",
+            data_schema=vol.Schema(fields),
         )

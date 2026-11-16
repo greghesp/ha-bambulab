@@ -84,7 +84,9 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -253,6 +261,12 @@
       }
     },
     "button": {
+      "hotend_rack_raise": {
+        "name": "Rack anheben"
+      },
+      "hotend_rack_lower": {
+        "name": "Rack absenken"
+      },
       "pause": {
         "name": "Druckvorgang anhalten"
       },
@@ -279,6 +293,19 @@
       }
     },
     "fan": {
+      "air_purifier": {
+        "name": "Luftreiniger",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automatisch",
+              "silent": "Leise",
+              "standard": "Standard",
+              "max": "Maximum"
+            }
+          }
+        }
+      },
       "cooling_fan": {
         "name": "Druckkopflüfter"
       },
@@ -356,6 +383,12 @@
       }
     },
     "sensor": {
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Lüfterdrehzahl"
+      },
       "makerworld_boosts_received": {
         "name": "Erhaltene Boosts"
       },
@@ -1031,6 +1064,119 @@
       },
       "exhaust_fan_speed": {
         "name": "Geschwindigkeit des Abluftventilators"
+      },
+      "zone_temperature": {
+        "name": "Temperatur der Zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zonen-ID"
+          },
+          "slots": {
+            "name": "Spielautomaten"
+          },
+          "dry_setting": {
+            "name": "Trocknungseinstellung"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Luftfeuchtigkeit der Zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zonen-ID"
+          },
+          "slots": {
+            "name": "Spielautomaten"
+          },
+          "dry_setting": {
+            "name": "Trocknungseinstellung"
+          }
+        }
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek-Position (roh)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek-Status (roh)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Montiert",
+          "docked": "Angedockt",
+          "empty": "Leer"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Werkzeug"
+          },
+          "filament_diameter": {
+            "name": "Filamentdurchmesser"
+          },
+          "filament_name": {
+            "name": "Filamentname"
+          },
+          "filament_type": {
+            "name": "Filamenttyp"
+          },
+          "remaining_weight_g": {
+            "name": "Verbleibendes Filamentgewicht"
+          },
+          "remaining_percent": {
+            "name": "Restliches Filament"
+          },
+          "ams_id": {
+            "name": "AMS-ID"
+          },
+          "ams_slot": {
+            "name": "AMS-Steckplatz"
+          },
+          "nozzle_diameter": {
+            "name": "Düsendurchmesser"
+          },
+          "nozzle_type": {
+            "name": "Düsentyp"
+          },
+          "nozzle_type_code": {
+            "name": "Düsentypcode"
+          },
+          "max_temperature": {
+            "name": "Maximale Temperatur"
+          },
+          "serial": {
+            "name": "Seriennummer"
+          },
+          "filament_id": {
+            "name": "Filament-ID"
+          },
+          "color": {
+            "name": "Farbe"
+          },
+          "wear": {
+            "name": "Tragen"
+          },
+          "status_raw": {
+            "name": "Status (roh)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatur von PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} Zieltemperatur"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} Druckzeit"
+      },
+      "filament_inventory": {
+        "name": "Filamentbestand"
       }
     },
     "camera": {
@@ -1081,7 +1227,7 @@
     },
     "mqtt_encryption_enabled": {
       "title": "MQTT-Verschlüsselung aktiviert",
-      "description": "{device} ist mit der Cloud verbunden und die MQTT-Verschlüsselung ist aktiviert. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Der Drucker muss auf den Entwickler-LAN-Modus eingestellt sein, um die Steuerung über den Heimassistenten zu ermöglichen."
+      "description": "{device} ist mit der Cloud verbunden und die MQTT-Verschlüsselung ist aktiviert. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Der Drucker muss auf den Entwickler-LAN-Modus eingestellt sein, um die Steuerung über Home Assistant zu ermöglichen."
     },
     "hybrid_mode_blocking": {
       "title": "Steuerung der Hybridverbindungsblöcke",

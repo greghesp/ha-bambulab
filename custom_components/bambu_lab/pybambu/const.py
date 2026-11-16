@@ -75,6 +75,7 @@ class FansEnum(IntEnum):
     CHAMBER = 3,
     HEATBREAK = 4,
     SECONDARY_AUXILIARY = 5,
+    H3C_CHAMBER = 6,
 
 
 class TempEnum(IntEnum):
@@ -289,6 +290,22 @@ def load_dict(filename: str) -> dict:
 
 FILAMENT_NAMES = load_dict(Path(__file__).with_name('filaments.json'))
 
+
+def _load_integration_version() -> str:
+    # The publish workflow stamps the release tag into manifest.json, so this
+    # tracks the shipped version automatically. Dev checkouts report 0.0.0.
+    try:
+        return load_dict(Path(__file__).parent.parent / 'manifest.json').get('version', 'unknown')
+    except Exception:
+        return 'unknown'
+
+
+INTEGRATION_VERSION = _load_integration_version()
+
+# Versioned so Bambu can rate limit or block one misbehaving release rather than
+# every ha-bambulab install. Keep the 'ha-bambulab/' prefix stable.
+USER_AGENT = f'ha-bambulab/v{INTEGRATION_VERSION}'
+
 HMS_SEVERITY_LEVELS = {
     "default": "unknown",
     1: "fatal",
@@ -363,6 +380,7 @@ class BambuUrl(IntEnum):
     MY_PROFILE = 13,
     POINT_BILL = 14,
     BOOST_RIGHT = 15,
+    FILAMENTS = 16,
 
 BAMBU_URL = {
     BambuUrl.LOGIN: 'https://api.bambulab.com/v1/user-service/user/login',
@@ -384,6 +402,7 @@ BAMBU_URL = {
     # so ask for the smallest possible page of transactions.
     BambuUrl.POINT_BILL: 'https://api.bambulab.com/v1/point-service/point-bill/my?offset=0&limit=1&filter=all',
     BambuUrl.BOOST_RIGHT: 'https://api.bambulab.com/v1/point-service/boost/boostingright',
+    BambuUrl.FILAMENTS: 'https://api.bambulab.com/v1/design-user-service/my/filament/v2',
 }
 
 # AMS tray `state` — see docs/merge-request-ams-tray-state.md

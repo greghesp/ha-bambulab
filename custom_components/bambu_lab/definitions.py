@@ -19,7 +19,9 @@ from homeassistant.components.update import (
     UpdateEntityDescription
 )
 from homeassistant.const import (
+    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
     UnitOfMass,
@@ -47,6 +49,7 @@ from .pybambu.const import (
     AMS_CONNECTED_NOZZLES,
     FansEnum,
     Features,
+    Printers,
 )
 from .pybambu.utils import get_filament_name
 
@@ -63,6 +66,15 @@ X2D_TRANSLATION_KEYS = {
     "aux_fan_speed": "left_aux_fan_speed",
     "secondary_aux_fan_speed": "right_aux_fan_speed",
     "chamber_fan_speed": "exhaust_fan_speed",
+}
+
+H3C_FAN_ENTITY_KEYS = {
+    "cooling_fan": "part_fan",
+    "aux_fan": "right_aux_fan",
+    "secondary_aux_fan": "left_aux_fan",
+    "cooling_fan_speed": "part_fan_speed",
+    "aux_fan_speed": "right_aux_fan_speed",
+    "secondary_aux_fan_speed": "left_aux_fan_speed",
 }
 
 @dataclass
@@ -89,6 +101,28 @@ class BambuLabSensorEntityDescription(SensorEntityDescription, BambuLabSensorEnt
     icon_fn: Callable[..., str] = lambda _: None
     is_restoring: bool = False
     options_fn: Callable[..., list[str]] | None = None
+
+
+AIR_PURIFIER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabSensorEntityDescription(
+        key="pm25",
+        translation_key="air_purifier_pm25",
+        device_class=SensorDeviceClass.PM25,
+        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:air-filter",
+        value_fn=lambda self: self.coordinator.get_model().air_purifier.pm,
+    ),
+    BambuLabSensorEntityDescription(
+        key="fan_speed",
+        translation_key="air_purifier_fan_speed",
+        native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda self: self.coordinator.get_model().air_purifier.rpm,
+    ),
+)
 
 
 @dataclass
@@ -151,11 +185,12 @@ AMS_BINARY_SENSORS: tuple[BambuLabAMSBinarySensorEntityDescription, ...] = (
         translation_key="drying",
         icon="mdi:heat-wave",
         device_class=BinarySensorDeviceClass.RUNNING,
-        is_on_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time > 0,
+        is_on_fn=lambda self: self.coordinator.get_model().ams.data[self.index].is_drying,
         exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING)
         and (
             coordinator.get_model().ams.data[index].model == "AMS 2 Pro"
             or coordinator.get_model().ams.data[index].model == "AMS HT"
+            or coordinator.get_model().ams.data[index].model == "AMS 3H"
         ),
     ),
 )
@@ -404,7 +439,26 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:fan",
         value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.CHAMBER),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type != Printers.H3C
+                                      and coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
+    ),
+    BambuLabSensorEntityDescription(
+        key="exhaust_fan_speed",
+        translation_key="exhaust_fan_speed",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
+    ),
+    BambuLabSensorEntityDescription(
+        key="h3c_chamber_fan_speed",
+        translation_key="chamber_fan_speed",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:fan",
+        value_fn=lambda self: self.coordinator.get_model().fans.get_fan_speed(FansEnum.H3C_CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
     ),
     BambuLabSensorEntityDescription(
         key="cooling_fan_speed",
@@ -908,9 +962,9 @@ AMS_SENSORS: tuple[BambuLabAMSSensorEntityDescription, ...] = (
         suggested_display_precision=3,
         icon="mdi:fan-clock",
         device_class=SensorDeviceClass.DURATION,
-        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].remaining_drying_time,
+        value_fn=lambda self: self.coordinator.get_model().ams.data[self.index].drying_time,
         exists_fn=lambda coordinator, index: coordinator.get_model().supports_feature(Features.AMS_DRYING) and
-                                             coordinator.get_model().ams.data[index].model in ["AMS 2 Pro", "AMS HT"],
+                                             coordinator.get_model().ams.data[index].model in ["AMS 2 Pro", "AMS HT", "AMS 3H"],
     ),
     BambuLabAMSSensorEntityDescription(
         key="drying_temperature",
@@ -1014,7 +1068,7 @@ def _ams_zone_value(entity, zone_id, field, converter):
 AMS_SENSORS = tuple(
     replace(description, exists_fn=lambda coordinator, index, fn=description.exists_fn:
             coordinator.get_model().ams.data[index].model != "AMS 3H" and fn(coordinator, index))
-    if description.key in ("humidity", "humidity_index", "temperature", "remaining_drying_time")
+    if description.key in ("humidity", "humidity_index", "temperature")
     else description
     for description in AMS_SENSORS
 )
@@ -1026,7 +1080,6 @@ for _zone in range(2):
     for _field, _translation_key, _unit, _device_class, _converter in (
         ("temp", "zone_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE, float),
         ("humidity_raw", "zone_humidity", PERCENTAGE, SensorDeviceClass.HUMIDITY, int),
-        ("dry_time", "zone_remaining_drying_time", UnitOfTime.MINUTES, SensorDeviceClass.DURATION, int),
     ):
         AMS_SENSORS += (BambuLabAMSSensorEntityDescription(
             key=f"zone_{_zone + 1}_{_field}",
@@ -1171,14 +1224,14 @@ HOTEND_RACK_SENSORS = tuple(
     for description in HOTEND_RACK_SENSORS
 ) + tuple(
     BambuLabHotendRackSensorEntityDescription(
-        key=key, name=name, icon="mdi:robot-industrial",
+        key=key, translation_key=translation_key, icon="mdi:robot-industrial",
         entity_category=EntityCategory.DIAGNOSTIC,
         exists_fn=_is_h3c,
         value_fn=lambda self, attr=attribute: getattr(self.coordinator.get_model().hotend_rack, attr),
     )
-    for key, name, attribute in (
-        ("holder_position", "Swaptek position (raw)", "holder_pos"),
-        ("holder_state", "Swaptek status (raw)", "holder_stat"),
+    for key, translation_key, attribute in (
+        ("holder_position", "hotend_rack_swaptek_holder_position", "holder_pos"),
+        ("holder_state", "hotend_rack_swaptek_holder_state", "holder_stat"),
     )
 )
 
@@ -1192,7 +1245,9 @@ for _slot in range(16, 25):
     _number = _slot - 15
     HOTEND_RACK_HOTEND_SENSORS += (
         BambuLabHotendRackSensorEntityDescription(
-            key=f"printtool_{_number}", name=f"PrintTool {_number}",
+            key=f"printtool_{_number}",
+            translation_key="hotend_rack_printtool",
+            translation_placeholders={"tool_number": str(_number)},
             hotend_id=_slot, device_class=SensorDeviceClass.ENUM,
             options=["mounted", "docked", "empty"], icon="mdi:printer-3d-nozzle",
             exists_fn=_is_h3c,
@@ -1216,14 +1271,16 @@ for _slot in range(16, 25):
             },
         ),
     )
-    for _suffix, _label, _attribute, _unit, _class in (
-        ("temperature", "Temperature", "temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
-        ("target_temperature", "Target temperature", "target_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
-        ("used_time", "Print time", "print_time", UnitOfTime.HOURS, SensorDeviceClass.DURATION),
+    for _suffix, _attribute, _unit, _class in (
+        ("temperature", "temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+        ("target_temperature", "target_temperature", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+        ("used_time", "print_time", UnitOfTime.HOURS, SensorDeviceClass.DURATION),
     ):
         HOTEND_RACK_HOTEND_SENSORS += (
             BambuLabHotendRackSensorEntityDescription(
-                key=f"printtool_{_number}_{_suffix}", name=f"PrintTool {_number} {_label}",
+                key=f"printtool_{_number}_{_suffix}",
+                translation_key=f"hotend_rack_printtool_{_suffix}",
+                translation_placeholders={"tool_number": str(_number)},
                 hotend_id=_slot, native_unit_of_measurement=_unit, device_class=_class,
                 exists_fn=_is_h3c,
                 value_fn=lambda self, sid=_slot, attr=_attribute: (
@@ -1428,3 +1485,19 @@ def _get_display_filament_type(filament_id: str | None, tray_type: str | None) -
     if filament_id and FILAMENT_DATA.get(filament_id, {}).get("filament_is_support"):
         return _CHEMICAL_SUPPORT_TYPES.get(tray_type, tray_type)
     return tray_type
+
+
+FILAMENT_INVENTORY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
+    BambuLabSensorEntityDescription(
+        key="filament_inventory",
+        translation_key="filament_inventory",
+        icon="mdi:database",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.inventory.total_spool_count,
+        extra_attributes=lambda self: {
+            "spools": self.coordinator.inventory.spools,
+            "groups": self.coordinator.inventory.groups,
+            "total_remaining_g": self.coordinator.inventory.total_remaining_g,
+        },
+    ),
+)

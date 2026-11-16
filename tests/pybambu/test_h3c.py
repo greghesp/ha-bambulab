@@ -40,6 +40,45 @@ class TestH3C(unittest.TestCase):
         self.assertEqual(self.device.info.device_type, Printers.H3C)
         self.assertEqual(self.device.home_flag._device_type, Printers.H3C)
 
+    def test_door_sensor_uses_stat_and_preserves_partial_updates(self):
+        self.load()
+        self.assertTrue(self.device.supports_feature(Features.DOOR_SENSOR))
+
+        # H3C firmware 01.01.03.00 reports door state in bit 23 of stat.
+        self.device.info.print_update({"stat": "104621A0F0"})
+        self.assertFalse(self.device.info.door_open)
+        self.device.info.print_update({"stat": "1046A1A0F0"})
+        self.assertTrue(self.device.info.door_open)
+        self.device.info.print_update({"home_flag": -1067100737})
+        self.assertTrue(self.device.info.door_open)
+        self.device.info.print_update({"stat": "104621A0F0"})
+        self.assertFalse(self.device.info.door_open)
+        self.device.info.print_update({"home_flag": -1067100737})
+        self.assertFalse(self.device.info.door_open)
+
+    def test_prompt_sound_requires_unsigned_commands(self):
+        self.load()
+        self.device.print_fun.print_update({"fun": "0"})
+        self.assertTrue(self.device.supports_feature(Features.PROMPT_SOUND))
+        self.device.print_fun.print_update({"fun": "20000000"})
+        self.assertFalse(self.device.supports_feature(Features.PROMPT_SOUND))
+
+    def test_heatbed_light_tracks_commands_despite_error_response(self):
+        self.load()
+        self.assertTrue(self.device.supports_feature(Features.HEATBED_LIGHT))
+        self.assertIsNone(self.device.lights.is_heatbed_light_on)
+
+        # H3C firmware reports failure even though these commands change the light.
+        for mode, expected in (("off", False), ("on", True)):
+            self.device.observe_system_command({
+                "command": "ledctrl",
+                "led_node": "heatbed_light",
+                "led_mode": mode,
+                "result": "fail",
+                "reason": "did not find the valid led: heatbed_light",
+            })
+            self.assertEqual(self.device.lights.is_heatbed_light_on, expected)
+
     def test_zone_only_ams_telemetry_does_not_crash_in_either_order(self):
         for status_first in (True, False):
             with self.subTest(status_first=status_first):
@@ -61,6 +100,50 @@ class TestH3C(unittest.TestCase):
         self.assertEqual(ams.zones[1]["temp"], "29.5")
         self.assertEqual(ams.zones[1]["humidity_raw"], "33")
         self.assertEqual(ams.zones[0]["zone_slots"], [5, 7])
+
+    def test_ams_drying_follows_heated_zone_timer(self):
+        self.load()
+        ams = self.device.ams.data[32]
+        self.assertFalse(ams.is_drying)
+        self.assertEqual(ams.drying_time, 0)
+
+        def update_zones(zone_info):
+            self.device.ams.print_update({"ams": {"ams": [{"id": "32", "zone_info": zone_info}]}})
+
+        update_zones([
+            {"zone_id": 0, "dry_time": 719, "dry_setting": {
+                "dry_duration": 12, "dry_filament": "PLA", "dry_temperature": 55,
+            }},
+            {"zone_id": 1, "dry_time": 719},
+        ])
+        self.assertTrue(ams.is_drying)
+        self.assertEqual(ams.drying_time, 719)
+        update_zones([{"zone_id": 0, "temp": "45.0"}])
+        self.assertTrue(ams.is_drying)
+        # The duplicate in zone 1 may lag behind a partial update.
+        update_zones([{"zone_id": 0, "dry_time": 0}])
+        self.assertFalse(ams.is_drying)
+
+    def test_ams_drying_is_unknown_without_a_valid_heated_zone_timer(self):
+        ams = AMSInstance(self.client, "AMS 3H", 32)
+        self.assertIsNone(ams.is_drying)
+        ams.zones = {1: {"dry_time": 1}}
+        self.assertIsNone(ams.is_drying)
+        ams.zones[0] = {"dry_time": 0}
+        self.assertFalse(ams.is_drying)
+        ams.zones[0]["dry_time"] = 1
+        self.assertTrue(ams.is_drying)
+        for value in (None, True, False, -1, "1", "invalid", float("inf")):
+            with self.subTest(value=value):
+                ams.zones[0]["dry_time"] = value
+                self.assertIsNone(ams.drying_time)
+                self.assertIsNone(ams.is_drying)
+
+        legacy = AMSInstance(self.client, "AMS HT", 128)
+        self.assertFalse(legacy.is_drying)
+        legacy.remaining_drying_time = 1
+        self.assertEqual(legacy.drying_time, 1)
+        self.assertTrue(legacy.is_drying)
 
     def test_weight_only_delta_signals_an_update(self):
         self.load()

@@ -104,12 +104,14 @@ A short tour. The complete list, with per-model notes, is in the
 ### Filament
 | Entity | Description |
 |---|---|
-| AMS Tray 1–4 | Loaded filament per slot. Colour, type, remaining %, nozzle temperature range, K value and RFID serial as attributes |
+| AMS Tray 1–4 (1–9 on the AMS 3H) | Loaded filament per slot. Colour, type, remaining %, nozzle temperature range, K value and RFID serial as attributes |
 | AMS Humidity Index / Humidity / Temperature | Per AMS unit |
+| AMS 3H Zone Temperature / Humidity / Remaining Drying Time | Per drying zone of the H3C's AMS 3H, which has no unit-wide reading. The trays in each zone are an attribute |
 | AMS Drying | Drying state, time left, temperature and filament (AMS 2 Pro / AMS HT) |
 | Active Tray | The slot feeding the nozzle right now |
 | External Spool | Filament on the external spool holder, same attributes as a tray |
 | Hotend Rack | Mounted/docked hotends, wear and usage time (H2C Vortek) |
+| External AMS heater | Runs a SUNLU AMS Heater or EIBOS Series X from the smart plug it's powered by, switching on and off at the AMS humidity you set, with a temperature cutoff and maximum runtime ([details](https://docs.page/greghesp/ha-bambulab/entities#external-ams-heater-or-dryer-sunlu-ams-heater-eibos-series-x)) |
 
 ### Controls
 | Control | Notes |
@@ -124,8 +126,8 @@ A short tour. The complete list, with per-model notes, is in the
 
 ### Camera
 A **chamber camera** entity on every model. On P1/A1 printers it needs the
-printer's IP; on X1 enable *LAN Mode Liveview*; on H2D, H2S and X2D enable
-*LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
+printer's IP; on X1 enable *LAN Mode Liveview*; on H2D, H2S, H3C and X2D
+enable *LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
 
 Printers with a **BirdsEye camera** stream one camera at a time and get a
 **Live view camera** select to switch the camera entity between the main
@@ -172,9 +174,23 @@ it's enabled in the slicer for a Bambu spool. The **AMS Graphic card** draws
 the unit itself (AMS, AMS 2 Pro, AMS HT) with fill levels and labels. Tap a
 spool to see its details or change its filament.
 
+The H3C's **AMS 3H** uses the AMS card, laid out like the unit: two back
+spools beside the dry box, whose temperature, humidity and drying time left
+show above its two spools, and the five front spools below
+([details](https://docs.page/greghesp/ha-bambulab/frontend/cards/ams-card#ams-3h)).
+
+With an external AMS heater set up, the AMS card's info bar also shows the
+heater: **Off**, **On**, **Auto** (drying mode waiting for the humidity to
+rise), **Drying**, or **Limit** once it hits the maximum runtime. Tap it to
+open drying mode.
+
+![AMS card info bar with the external heater drying](docs/images/readme/ams-card-heater.png)
+
 | AMS card (vector style) | AMS Graphic card (AMS 2 Pro, dark) |
 |---|---|
 | ![AMS card in vector style with info bar](docs/images/readme/ams-card-vector.png) | ![AMS Graphic card for an AMS 2 Pro](docs/images/readme/ams-card-graphic.png) |
+| **AMS 3H, dry box drying** | **AMS 3H, dry box idle** |
+| ![AMS 3H in the AMS card while its dry box is drying](docs/images/readme/ams-card-ams3h-drying.png) | ![AMS 3H in the AMS card with its dry box idle](docs/images/readme/ams-card-ams3h-idle.png) |
 
 ```yaml
 type: custom:ha-bambulab-ams-card
@@ -189,7 +205,7 @@ show_info_bar: true
 |---|---|
 | ![Spool card showing the external spool](docs/images/readme/spool-card.png) | ![Print Control card with speed, pause, resume and stop](docs/images/readme/print-control-card.png) |
 
-- **Spool card**: one spool, the external spool or a single AMS slot.
+- **Spool card**: one spool, the external spool or a single AMS slot (any of the AMS 3H's nine).
 - **Print Control card**: printing speed plus Pause, Resume and Stop, and
   **skip objects** on the plate mid-print.
 
@@ -253,7 +269,7 @@ You need, from the printer:
 | Access code | Network / LAN settings |
 
 Some entities need an extra printer setting:
-- **Camera on H2D / H2S / X2D**: enable *LAN Only Liveview* (LAN mode itself is not required).
+- **Camera on H2D / H2S / H3C / X2D**: enable *LAN Only Liveview* (LAN mode itself is not required).
 - **Cover image, print weight and bed type on newer firmware** (e.g. H2D, H2S, P2S): enable
   *Store Sent Files on External Storage* and insert a USB drive / SD card.
 
@@ -359,7 +375,7 @@ Parameters and examples: [Actions](https://docs.page/greghesp/ha-bambulab/action
 |---|---|
 | Controls do nothing, only the light works | Your firmware enforces Bambu authorization. See [above](#bambu-lab-firmware-and-authorization) |
 | Can't sign in with a Google/Apple/Facebook account | Set a Bambu account password ([how](#signed-up-with-google-apple-or-facebook)) |
-| No camera image | P1/A1: add the printer's IP. X1: enable *LAN Mode Liveview*. H2D/H2S/X2D: enable *LAN Only Liveview* |
+| No camera image | P1/A1: add the printer's IP. X1: enable *LAN Mode Liveview*. H2D/H2S/H3C/X2D: enable *LAN Only Liveview* |
 | Cover image, print weight or bed type empty | Newer firmware: enable *Store Sent Files on External Storage* with a USB drive / SD card inserted |
 | Cards missing from the card picker | Hard-refresh the browser (Ctrl+Shift+R). YAML dashboards: add the resource ([above](#spool-and-print-control-cards)) |
 | Values look stale | Press the **Force Refresh** button on the printer device |

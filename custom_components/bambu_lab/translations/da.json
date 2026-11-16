@@ -84,7 +84,9 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen, og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
+              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
+              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Buzzer - Biping"
+      },
+      "hotend_rack_raise": {
+        "name": "Hæv stativet"
+      },
+      "hotend_rack_lower": {
+        "name": "Nederste stativ"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "Udstødningsventilator"
+      },
+      "air_purifier": {
+        "name": "Luftrenser",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Stille",
+              "standard": "Standard",
+              "max": "Maks"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -493,7 +520,8 @@
           "build_plate_alignment_detection": "Detektion af byggepladejustering",
           "heatbed_surface_foreign_object_detection": "Detektering af fremmedlegemer på varmebedets overflade",
           "heatbed_underside_foreign_object_detection": "Detektering af fremmedlegemer under varmebed",
-          "pre_extrusion_before_printing": "Præ-ekstrudering før trykning"
+          "pre_extrusion_before_printing": "Præ-ekstrudering før trykning",
+          "heatbed_stabilizing": "Stabiliserende varmeleje"
         }
       },
       "print_progress": {
@@ -757,7 +785,8 @@
           "missing": "Manglende",
           "normal": "Normal",
           "abnormal": "Abnorm",
-          "readonly": "Læs kun"
+          "readonly": "Læs kun",
+          "not_applicable": "Ikke relevant"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1042,141 @@
       },
       "exhaust_fan_speed": {
         "name": "Udstødningsventilatorhastighed"
+      },
+      "external_storage_connection": {
+        "name": "Ekstern lagerforbindelse",
+        "state": {
+          "connected": "Forbundet",
+          "disconnected": "Afbrudt"
+        }
+      },
+      "external_storage_total": {
+        "name": "Eksternt lager i alt"
+      },
+      "external_storage_used": {
+        "name": "Eksternt lager brugt"
+      },
+      "external_storage_free": {
+        "name": "Ekstern opbevaring gratis"
+      },
+      "zone_temperature": {
+        "name": "Temperatur i zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Tørre indstilling"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Fugtighed i zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Tørre indstilling"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Blæserhastighed"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek position (rå)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek-status (rå)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Monteret",
+          "docked": "Docket",
+          "empty": "Tom"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Værktøj"
+          },
+          "filament_diameter": {
+            "name": "Filament diameter"
+          },
+          "filament_name": {
+            "name": "Filament navn"
+          },
+          "filament_type": {
+            "name": "Filament type"
+          },
+          "remaining_weight_g": {
+            "name": "Resterende filamentvægt"
+          },
+          "remaining_percent": {
+            "name": "Resterende filament"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS slot"
+          },
+          "nozzle_diameter": {
+            "name": "Dyse diameter"
+          },
+          "nozzle_type": {
+            "name": "Dysetype"
+          },
+          "nozzle_type_code": {
+            "name": "Dysetypekode"
+          },
+          "max_temperature": {
+            "name": "Max temperatur"
+          },
+          "serial": {
+            "name": "Serienummer"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "color": {
+            "name": "Farve"
+          },
+          "wear": {
+            "name": "Slid"
+          },
+          "status_raw": {
+            "name": "Status (rå)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} temperatur"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} måltemperatur"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} udskrivningstid"
+      },
+      "filament_inventory": {
+        "name": "Filament inventar"
       }
     },
     "camera": {

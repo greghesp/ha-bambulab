@@ -84,7 +84,9 @@
             "description": "Estas opções só são necessárias se tiveres uma configuração não standard.",
             "data": {
               "disable_ssl_verify": "Desativar verificação SSL",
-              "enable_firmware_update": "Ativar suporte para atualização de firmware"
+              "enable_firmware_update": "Ativar suporte para atualização de firmware",
+              "enable_filament_inventory": "Ativar inventário de filamentos (Filament Manager, requer Bambu Cloud)",
+              "filament_inventory_interval": "Intervalo de atualização do inventário de filamentos (minutos):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Estas opções só são necessárias se tiveres uma configuração não standard.",
             "data": {
               "disable_ssl_verify": "Desativar verificação SSL",
-              "enable_firmware_update": "Ativar suporte para atualização de firmware"
+              "enable_firmware_update": "Ativar suporte para atualização de firmware",
+              "enable_filament_inventory": "Ativar inventário de filamentos (Filament Manager, requer Bambu Cloud)",
+              "filament_inventory_interval": "Intervalo de atualização do inventário de filamentos (minutos):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Estas opções avançadas são funcionalidades experimentais ou de risco. Lê a documentação e usa-as por tua conta e risco.",
             "data": {
               "disable_ssl_verify": "Desativar verificação SSL",
-              "enable_firmware_update": "Ativar suporte para atualização de firmware"
+              "enable_firmware_update": "Ativar suporte para atualização de firmware",
+              "enable_filament_inventory": "Ativar inventário de filamentos (Filament Manager, requer Bambu Cloud)",
+              "filament_inventory_interval": "Intervalo de atualização do inventário de filamentos (minutos):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Estas opções avançadas são funcionalidades experimentais ou de risco. Lê a documentação e usa-as por tua conta e risco.",
             "data": {
               "disable_ssl_verify": "Desativar verificação SSL",
-              "enable_firmware_update": "Ativar suporte para atualização de firmware"
+              "enable_firmware_update": "Ativar suporte para atualização de firmware",
+              "enable_filament_inventory": "Ativar inventário de filamentos (Filament Manager, requer Bambu Cloud)",
+              "filament_inventory_interval": "Intervalo de atualização do inventário de filamentos (minutos):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Sinal sonoro - A apitar"
+      },
+      "hotend_rack_raise": {
+        "name": "Levantar rack"
+      },
+      "hotend_rack_lower": {
+        "name": "Rack inferior"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "Exaustor"
+      },
+      "air_purifier": {
+        "name": "Purificador de ar",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Silencioso",
+              "standard": "Padrão",
+              "max": "Máx."
+            }
+          }
+        }
       }
     },
     "image": {
@@ -519,7 +546,8 @@
           "build_plate_alignment_detection": "Detecção de alinhamento de placa de construção",
           "heatbed_surface_foreign_object_detection": "Detecção de objetos estranhos na superfície do colchão térmico",
           "heatbed_underside_foreign_object_detection": "Detecção de objetos estranhos na parte inferior da cama térmica",
-          "pre_extrusion_before_printing": "Pré-extrusão antes da impressão"
+          "pre_extrusion_before_printing": "Pré-extrusão antes da impressão",
+          "heatbed_stabilizing": "Cama térmica estabilizadora"
         }
       },
       "sdcard_status": {
@@ -528,7 +556,8 @@
           "missing": "Ausente",
           "normal": "Normal",
           "abnormal": "Anormal",
-          "readonly": "Apenas leitura"
+          "readonly": "Apenas leitura",
+          "not_applicable": "Não aplicável"
         }
       },
       "print_progress": {
@@ -1013,6 +1042,141 @@
       },
       "exhaust_fan_speed": {
         "name": "Velocidade do exaustor"
+      },
+      "external_storage_connection": {
+        "name": "Conexão de armazenamento externo",
+        "state": {
+          "connected": "Conectado",
+          "disconnected": "Desconectado"
+        }
+      },
+      "external_storage_total": {
+        "name": "Total de armazenamento externo"
+      },
+      "external_storage_used": {
+        "name": "Armazenamento externo usado"
+      },
+      "external_storage_free": {
+        "name": "Armazenamento externo gratuito"
+      },
+      "zone_temperature": {
+        "name": "Temperatura da zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID da zona"
+          },
+          "slots": {
+            "name": "Caça-níqueis"
+          },
+          "dry_setting": {
+            "name": "Configuração de secagem"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Umidade da zona {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zona"
+          },
+          "zone_id": {
+            "name": "ID da zona"
+          },
+          "slots": {
+            "name": "Caça-níqueis"
+          },
+          "dry_setting": {
+            "name": "Configuração de secagem"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Velocidade do ventilador"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Posição Swaptek (bruto)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Status Swaptek (bruto)"
+      },
+      "hotend_rack_printtool": {
+        "name": "Ferramenta de Impressão {tool_number}",
+        "state": {
+          "mounted": "Montado",
+          "docked": "Ancorado",
+          "empty": "Vazio"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Ferramenta"
+          },
+          "filament_diameter": {
+            "name": "Diâmetro do filamento"
+          },
+          "filament_name": {
+            "name": "Nome do filamento"
+          },
+          "filament_type": {
+            "name": "Tipo de filamento"
+          },
+          "remaining_weight_g": {
+            "name": "Peso restante do filamento"
+          },
+          "remaining_percent": {
+            "name": "Filamento restante"
+          },
+          "ams_id": {
+            "name": "ID do AMS"
+          },
+          "ams_slot": {
+            "name": "Slot AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Diâmetro do bico"
+          },
+          "nozzle_type": {
+            "name": "Tipo de bico"
+          },
+          "nozzle_type_code": {
+            "name": "Código do tipo de bico"
+          },
+          "max_temperature": {
+            "name": "Temperatura máxima"
+          },
+          "serial": {
+            "name": "Número de série"
+          },
+          "filament_id": {
+            "name": "ID do filamento"
+          },
+          "color": {
+            "name": "Cor"
+          },
+          "wear": {
+            "name": "Vestir"
+          },
+          "status_raw": {
+            "name": "Status (bruto)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura do PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Temperatura alvo do PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} tempo de impressão"
+      },
+      "filament_inventory": {
+        "name": "Inventário de filamentos"
       }
     },
     "camera": {

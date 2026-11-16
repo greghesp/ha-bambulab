@@ -84,7 +84,9 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "부저 - 삐"
+      },
+      "hotend_rack_raise": {
+        "name": "랙 올리기"
+      },
+      "hotend_rack_lower": {
+        "name": "하단 랙"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "배기팬"
+      },
+      "air_purifier": {
+        "name": "공기청정기",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "자동",
+              "silent": "조용한",
+              "standard": "기준",
+              "max": "맥스"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -493,7 +520,8 @@
           "build_plate_alignment_detection": "빌드 플레이트 정렬 감지",
           "heatbed_surface_foreign_object_detection": "히트베드 표면 이물질 감지",
           "heatbed_underside_foreign_object_detection": "히트베드 밑면 이물질 감지",
-          "pre_extrusion_before_printing": "인쇄 전 사전 압출"
+          "pre_extrusion_before_printing": "인쇄 전 사전 압출",
+          "heatbed_stabilizing": "안정 히트베드"
         }
       },
       "print_progress": {
@@ -757,7 +785,8 @@
           "missing": "없어진",
           "normal": "정상",
           "abnormal": "이상",
-          "readonly": "만 읽으십시오"
+          "readonly": "만 읽으십시오",
+          "not_applicable": "해당 없음"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1042,141 @@
       },
       "exhaust_fan_speed": {
         "name": "배기 팬 속도"
+      },
+      "external_storage_connection": {
+        "name": "외부 저장소 연결",
+        "state": {
+          "connected": "연결됨",
+          "disconnected": "연결이 끊김"
+        }
+      },
+      "external_storage_total": {
+        "name": "외부 저장소 합계"
+      },
+      "external_storage_used": {
+        "name": "사용된 외부 저장소"
+      },
+      "external_storage_free": {
+        "name": "외부 저장소 무료"
+      },
+      "zone_temperature": {
+        "name": "구역 {zone_number} 온도",
+        "state_attributes": {
+          "zone": {
+            "name": "존"
+          },
+          "zone_id": {
+            "name": "구역 ID"
+          },
+          "slots": {
+            "name": "슬롯"
+          },
+          "dry_setting": {
+            "name": "건조 설정"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "구역 {zone_number} 습도",
+        "state_attributes": {
+          "zone": {
+            "name": "존"
+          },
+          "zone_id": {
+            "name": "구역 ID"
+          },
+          "slots": {
+            "name": "슬롯"
+          },
+          "dry_setting": {
+            "name": "건조 설정"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "팬 속도"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 포지션(원시)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 상태(원시)"
+      },
+      "hotend_rack_printtool": {
+        "name": "인쇄 도구 {tool_number}",
+        "state": {
+          "mounted": "탑재됨",
+          "docked": "도킹됨",
+          "empty": "비어 있는"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "도구"
+          },
+          "filament_diameter": {
+            "name": "필라멘트 직경"
+          },
+          "filament_name": {
+            "name": "필라멘트 이름"
+          },
+          "filament_type": {
+            "name": "필라멘트 유형"
+          },
+          "remaining_weight_g": {
+            "name": "남은 필라멘트 무게"
+          },
+          "remaining_percent": {
+            "name": "남은 필라멘트"
+          },
+          "ams_id": {
+            "name": "AMS 아이디"
+          },
+          "ams_slot": {
+            "name": "AMS 슬롯"
+          },
+          "nozzle_diameter": {
+            "name": "노즐 직경"
+          },
+          "nozzle_type": {
+            "name": "노즐 유형"
+          },
+          "nozzle_type_code": {
+            "name": "노즐 유형 코드"
+          },
+          "max_temperature": {
+            "name": "최대 온도"
+          },
+          "serial": {
+            "name": "일련번호"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "wear": {
+            "name": "입다"
+          },
+          "status_raw": {
+            "name": "상태(원시)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 온도"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 목표 온도"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 인쇄 시간"
+      },
+      "filament_inventory": {
+        "name": "필라멘트 재고"
       }
     },
     "camera": {

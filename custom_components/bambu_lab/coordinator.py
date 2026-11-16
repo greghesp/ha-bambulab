@@ -7,7 +7,7 @@ import os
 import re
 import time
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Optional, List, Dict
 
 from homeassistant import config_entries
@@ -18,7 +18,7 @@ from homeassistant.helpers import (
 )
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.entity import DeviceInfo
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
@@ -39,12 +39,16 @@ from .const import (
     SERVICE_CALL_FUTURES,
     SERVICE_CALL_ID,
     FILAMENT_DATA,
+    OPTION_ENABLE_FILAMENT_INVENTORY,
+    OPTION_FILAMENT_INVENTORY_INTERVAL,
+    DEFAULT_FILAMENT_INVENTORY_INTERVAL,
 )
 
 from .makerworld import create_makerworld_coordinator
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import build_print_project_file_command
+from .pybambu.models import FilamentInventory
 from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
@@ -86,7 +90,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # Account level MakerWorld stats. None when the entry has no cloud
         # connection, or when another entry on the same account already owns them.
         self.makerworld = create_makerworld_coordinator(hass, entry, self.client.bambu_cloud)
-            
+
+        # Account level filament inventory ("Filament Manager"). None unless the
+        # entry has opted in. Kept here rather than in hass.data[DOMAIN], whose
+        # values are all expected to be printer coordinators.
+        self.filament_inventory = None
+        if config.get(OPTION_ENABLE_FILAMENT_INVENTORY, False):
+            self.filament_inventory = BambuFilamentCoordinator(
+                hass,
+                printer_coordinator=self,
+                interval_minutes=int(config.get(OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL)),
+            )
+
         self._updatedDevice = False
         self._shutdown = False
         # Guards the access denied recovery so one failure episode triggers at most one
@@ -305,7 +320,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _run_service_call(self, data: dict) -> Any:
         service_call_name = data['service']
         write_action = True
-        if service_call_name == 'get_filament_data':
+        if service_call_name in ('get_filament_data', 'force_filament_sync'):
             write_action = False
 
         if write_action:
@@ -334,6 +349,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_set_filament(data)
             case "get_filament_data":
                 result = self._service_call_get_filament_data(data)
+            case "force_filament_sync":
+                result = self._service_call_force_filament_sync(data)
             case "read_rfid":
                 result = self._service_call_read_rfid(data)
             case "print_project_file":
@@ -626,14 +643,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _service_call_get_filament_data(self, data: dict):
         # Create a copy of FILAMENT_DATA
         combined_data = FILAMENT_DATA.copy()
-        
+
         # Only add entries from slicer_settings that don't exist in FILAMENT_DATA otherwise named custom settings entries
         # overwrite the default settings. We can only support one entry per filament id.
         for filament_id, filament_data in self.client.slicer_settings.filaments.items():
             if filament_id not in FILAMENT_DATA:
                 combined_data[filament_id] = filament_data
-        
+
         return combined_data
+
+    def _service_call_force_filament_sync(self, data: dict):
+        if self.filament_inventory is None:
+            LOGGER.warning("force_filament_sync called but filament inventory is not enabled for this printer.")
+            return False
+        self._hass.async_create_task(self.filament_inventory.async_request_refresh())
+        return True
 
     def _service_call_retry_load_filament(self, data: dict):
         command = RETRY_LOAD_FILAMENT_TEMPLATE
@@ -848,6 +872,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         """Remove entities no longer created by the integration."""
 
         entity_registry = er.async_get(self.hass)
+        dev_reg = device_registry.async_get(self.hass)
         config_entry_id = self.config_entry.entry_id
 
         entities = [
@@ -858,6 +883,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for entity in entities:
             state = self.hass.states.get(entity.entity_id)
             if state is not None and state.attributes.get("restored") is True:
+                device = dev_reg.async_get(entity.device_id) if entity.device_id else None
+                if device is not None and device.model == "E1 Air Purifier":
+                    # The accessory may simply be unplugged or still awaiting version
+                    # metadata. Preserve its entities and user configuration.
+                    continue
                 LOGGER.debug(f"{entity.entity_id} is DEAD. Removing it.")
                 entity_registry.async_remove(entity.entity_id)
         
@@ -1016,6 +1046,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
+        )
+        self._set_via_device(device_info)
+        return device_info
+
+    def get_air_purifier_device(self):
+        purifier = self.get_model().air_purifier
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
+        device_info = DeviceInfo(
+            identifiers={(DOMAIN, purifier.serial)},
+            name=f"{device_type}_{printer_serial}_AirPurifier",
+            model=purifier.model or "E1 Air Purifier",
+            manufacturer=BRAND,
+            hw_version=purifier.hw_version,
+            sw_version=purifier.sw_version,
         )
         self._set_via_device(device_info)
         return device_info
@@ -1359,3 +1404,39 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as e:
             LOGGER.error(f"Error clearing file cache: {e}")
             return {"success": False, "error": str(e)}
+
+
+class BambuFilamentCoordinator(DataUpdateCoordinator):
+    """Polls the account-level filament inventory ('Filament Manager') from the
+    Bambu cloud. Independent of the MQTT push coordinator."""
+
+    def __init__(self, hass: HomeAssistant, *, printer_coordinator: "BambuDataUpdateCoordinator", interval_minutes: int) -> None:
+        self._printer_coordinator = printer_coordinator
+        self.inventory = FilamentInventory()
+        super().__init__(
+            hass,
+            LOGGER,
+            name=f"{DOMAIN}_filament_inventory",
+            update_interval=timedelta(minutes=max(1, int(interval_minutes))),
+        )
+
+    @property
+    def printer_coordinator(self) -> "BambuDataUpdateCoordinator":
+        return self._printer_coordinator
+
+    async def _async_update_data(self):
+        client = self._printer_coordinator.client
+        if not client.bambu_cloud.bambu_connected:
+            LOGGER.debug("Filament inventory: cloud auth not available; skipping fetch.")
+            return self.inventory
+
+        payload = await self.hass.async_add_executor_job(client.bambu_cloud.get_filaments)
+        if payload is None:
+            # Fetch failed (Cloudflare/timeout/auth). Raise so HA marks the
+            # update failed and the sensor reflects unavailability; recovers
+            # on the next successful poll.
+            raise UpdateFailed("Failed to fetch filament inventory from Bambu cloud")
+
+        self.inventory.update(payload)
+        LOGGER.debug(f"Filament inventory updated: {self.inventory.total_spool_count} spools")
+        return self.inventory

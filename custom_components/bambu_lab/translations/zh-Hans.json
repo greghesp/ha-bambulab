@@ -84,7 +84,9 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "这些高级选项是早期或风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "这些高级选项是早期或有风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "蜂鸣器 - 蜂鸣器"
+      },
+      "hotend_rack_raise": {
+        "name": "升高架"
+      },
+      "hotend_rack_lower": {
+        "name": "下机架"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "排气扇"
+      },
+      "air_purifier": {
+        "name": "空气净化器",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "汽车",
+              "silent": "沉默的",
+              "standard": "标准",
+              "max": "最大限度"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -493,7 +520,8 @@
           "build_plate_alignment_detection": "构建板对齐检测",
           "heatbed_surface_foreign_object_detection": "热床表面异物检测",
           "heatbed_underside_foreign_object_detection": "热床底部异物检测",
-          "pre_extrusion_before_printing": "印刷前预挤出"
+          "pre_extrusion_before_printing": "印刷前预挤出",
+          "heatbed_stabilizing": "稳定热床"
         }
       },
       "print_progress": {
@@ -757,7 +785,8 @@
           "missing": "丢失的",
           "normal": "普通的",
           "abnormal": "异常",
-          "readonly": "只读"
+          "readonly": "只读",
+          "not_applicable": "不适用"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1042,141 @@
       },
       "exhaust_fan_speed": {
         "name": "排风扇转速"
+      },
+      "external_storage_connection": {
+        "name": "外部存储连接",
+        "state": {
+          "connected": "已连接",
+          "disconnected": "已断开连接"
+        }
+      },
+      "external_storage_total": {
+        "name": "外部存储总计"
+      },
+      "external_storage_used": {
+        "name": "使用的外部存储"
+      },
+      "external_storage_free": {
+        "name": "外部存储免费"
+      },
+      "zone_temperature": {
+        "name": "区域 {zone_number} 温度",
+        "state_attributes": {
+          "zone": {
+            "name": "区"
+          },
+          "zone_id": {
+            "name": "区域ID"
+          },
+          "slots": {
+            "name": "老虎机"
+          },
+          "dry_setting": {
+            "name": "烘干设定"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "区域 {zone_number} 湿度",
+        "state_attributes": {
+          "zone": {
+            "name": "区"
+          },
+          "zone_id": {
+            "name": "区域ID"
+          },
+          "slots": {
+            "name": "老虎机"
+          },
+          "dry_setting": {
+            "name": "烘干设定"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "风扇转速"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 位置（原始）"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 状态（原始）"
+      },
+      "hotend_rack_printtool": {
+        "name": "打印工具 {tool_number}",
+        "state": {
+          "mounted": "已安装",
+          "docked": "停靠",
+          "empty": "空的"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "工具"
+          },
+          "filament_diameter": {
+            "name": "灯丝直径"
+          },
+          "filament_name": {
+            "name": "灯丝名称"
+          },
+          "filament_type": {
+            "name": "灯丝类型"
+          },
+          "remaining_weight_g": {
+            "name": "剩余灯丝重量"
+          },
+          "remaining_percent": {
+            "name": "剩余灯丝"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS插槽"
+          },
+          "nozzle_diameter": {
+            "name": "喷嘴直径"
+          },
+          "nozzle_type": {
+            "name": "喷嘴类型"
+          },
+          "nozzle_type_code": {
+            "name": "喷嘴类型代码"
+          },
+          "max_temperature": {
+            "name": "最高温度"
+          },
+          "serial": {
+            "name": "序列号"
+          },
+          "filament_id": {
+            "name": "灯丝内径"
+          },
+          "color": {
+            "name": "颜色"
+          },
+          "wear": {
+            "name": "穿"
+          },
+          "status_raw": {
+            "name": "状态（原始）"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 温度"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 目标温度"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 打印时间"
+      },
+      "filament_inventory": {
+        "name": "长丝库存"
       }
     },
     "camera": {
