@@ -462,7 +462,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return ams_index
 
     def _get_ams_and_tray_index_from_entity_entry(self, ams_device, entity_entry):
-        match = re.search(r"tray_([1-4])$", entity_entry.unique_id)
+        match = re.search(r"tray_([1-9])$", entity_entry.unique_id)
         # Zero-index the tray ID and find the AMS index
         tray = int(match.group(1)) - 1
         # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
@@ -600,7 +600,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
-        elif re.search(r"tray_([1-4])$", entity_unique_id):
+        elif re.search(r"tray_([1-9])$", entity_unique_id):
             ams_index, tray_index = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
             if ams_index is None:
                 LOGGER.error("Unable to locate AMS.")
@@ -711,7 +711,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
-        elif re.search(r"tray_([1-4])$", entity_unique_id):
+        elif re.search(r"tray_([1-9])$", entity_unique_id):
             ams_index, tray = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
             if ams_index is None:
                 LOGGER.error("Unable to locate AMS.")
