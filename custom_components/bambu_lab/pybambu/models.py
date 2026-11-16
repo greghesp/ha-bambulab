@@ -842,6 +842,10 @@ class Fans:
         elif fan == FansEnum.H3C_CHAMBER:
             return self._h3c_chamber_fan_speed_percentage
 
+class FirmwareUpdateError(Exception):
+    """Raised when a firmware update can't be started."""
+
+
 @dataclass
 class Upgrade:
     """ Upgrade class """
@@ -879,18 +883,26 @@ class Upgrade:
         return f"https://bambulab.com/en/support/firmware-download/{self.printer_name}"
     
     def install(self):
-        """Install the update"""
+        """Install the update. Raises FirmwareUpdateError if it can't be started."""
         if self.printer_name is None:
-            LOGGER.error("Printer name not found for firmware update.")
-            return
+            # printer_name is resolved by release_url(), which may not have run yet.
+            self.release_url()
+        if self.printer_name is None:
+            raise FirmwareUpdateError(
+                f"No firmware download page is known for printer model {self._client._device.info.device_type}")
 
         url = get_upgrade_url(self.printer_name)
-        if url is not None:
-            template = upgrade_template(url)
-            if template is not None:
-                LOGGER.debug(template)
-                self._client.publish(template)
-                self._client.callback("event_printer_data_update")
+        if url is None:
+            raise FirmwareUpdateError(
+                "Could not retrieve the firmware download URL from bambulab.com")
+
+        template = upgrade_template(url)
+        if template is None:
+            raise FirmwareUpdateError(f"Could not parse the firmware download URL: {url}")
+
+        LOGGER.debug(template)
+        self._client.publish(template)
+        self._client.callback("event_printer_data_update")
                 
     def print_update(self, data) -> bool:
         """Update the upgrade state"""
