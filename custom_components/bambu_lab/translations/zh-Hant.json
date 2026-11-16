@@ -124,13 +124,6 @@
         "data": {
           "username": "班布帳號："
         }
-      },
-      "reconfigure": {
-        "title": "重新配置 MakerWorld 帳戶",
-        "data": {
-          "credential_source": "憑證來源："
-        },
-        "description": "選擇具有此 Bambu 帳戶的工作憑證的另一個現有印表機項目。"
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "調整連線設定",
         "description": "透過 Bambu Lab 雲端設定最簡單也最快速。不支援沒有密碼的社群媒體帳號。\n\r您也可以重複使用其他印表機已可運作的驗證憑證，若有找到，將以電子郵件地址列出。\n\r或者，您也可以手動提供印表機的本機連線資訊進行連線。處於區域網路模式的印表機必須使用此方式。",
         "data": {
-          "printer_mode": "印表機設定模式：",
-          "credential_source": "班布帳號："
+          "printer_mode": "印表機設定模式："
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "外部 AMS 加熱器或乾燥器",
         "description": "附加 AMS 加熱器和烘乾機，例如 SUNLU AMS 加熱器和 EIBOS X 系列（Dyas/Tetras）沒有網路連接，因此家庭助理透過切換其供電的智慧插頭來控制它們。\n\n為每個裝有加熱器的 AMS 選擇該插頭，或將其留空。每個連結的 AMS 均獲得加熱器乾燥模式、加熱器功率、濕度閾值、溫度截止和運行時間限制實體。\n\n將加熱器或烘乾機本身設定為在通電時開始加熱，因此切換插頭實際上開始烘乾。"
+      },
+      "makerworld": {
+        "title": "創客世界帳戶",
+        "description": "使用現有印表機條目中的有效 Bambu Cloud 憑證。無需額外登入。",
+        "data": {
+          "username": "班布帳號：",
+          "credential_source": "班布帳號："
+        }
       }
     }
   },

@@ -124,13 +124,6 @@
         "data": {
           "username": "Compte Bambu :"
         }
-      },
-      "reconfigure": {
-        "title": "Reconfigurer le compte MakerWorld",
-        "description": "Choisissez une autre entrée d'imprimante existante avec des informations d'identification fonctionnelles pour ce compte Bambu.",
-        "data": {
-          "credential_source": "Source des informations d'identification :"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Ajuster les paramètres de connexion",
         "description": "La configuration via le cloud Bambu Lab est la plus simple et la plus rapide. Les comptes de réseaux sociaux sans mot de passe ne sont pas pris en charge.\n\rVous pouvez également réutiliser les informations d’authentification fonctionnelles d’autres imprimantes. S’ils sont trouvés, ils seront répertoriés par adresse e-mail.\n\rVous pouvez également vous connecter en fournissant manuellement les détails de connexion locale de l’imprimante. Ceci est requis pour une imprimante en mode Lan.",
         "data": {
-          "printer_mode": "Mode de configuration de l’imprimante :",
-          "credential_source": "Compte Bambu :"
+          "printer_mode": "Mode de configuration de l’imprimante :"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Chauffage ou sèche-linge AMS externe",
         "description": "Les radiateurs et sèche-linge AMS supplémentaires tels que le radiateur SUNLU AMS et l'EIBOS série X (Dyas/Tetras) n'ont pas de connexion réseau, donc Home Assistant en contrôle un en commutant la prise intelligente à partir de laquelle il est alimenté.\n\nChoisissez cette prise pour chaque AMS équipé d’un chauffage ou laissez-la vide. Chaque AMS lié obtient les entités du mode de séchage du chauffage, de la puissance du chauffage, du seuil d'humidité, de la coupure de température et de la limite de durée de fonctionnement.\n\nRéglez le radiateur ou le sèche-linge lui-même pour qu'il commence à chauffer lorsqu'il est allumé, afin que le fait de changer la prise commence réellement à sécher."
+      },
+      "makerworld": {
+        "title": "Compte MakerWorld",
+        "description": "Utilisez les informations d'identification Bambu Cloud fonctionnelles à partir d'une entrée d'imprimante existante. Aucune connexion supplémentaire n'est requise.",
+        "data": {
+          "username": "Compte Bambu :",
+          "credential_source": "Compte Bambu :"
+        }
       }
     }
   },

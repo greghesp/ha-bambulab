@@ -124,13 +124,6 @@
         "data": {
           "username": "Bambu konto:"
         }
-      },
-      "reconfigure": {
-        "title": "Genkonfigurer MakerWorld-konto",
-        "description": "Vælg en anden eksisterende printerpost med arbejdslegitimationsoplysninger for denne Bambu-konto.",
-        "data": {
-          "credential_source": "Oplysningskilde:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Juster forbindelsesindstillinger",
         "description": "Konfiguration via Bambu Lab cloud er enklest og hurtigst. Konti på sociale medier uden adgangskode understøttes ikke.\n\rDu kan også genbruge fungerende godkendelsesoplysninger fra andre printere. Hvis de findes, vil disse blive angivet af e-mailadressen.\n\rEller du kan oprette forbindelse ved manuelt at angive printerens lokale forbindelsesoplysninger. Dette er påkrævet for en printer i Lan-tilstand.",
         "data": {
-          "printer_mode": "Printerkonfigurationsmetode:",
-          "credential_source": "Bambu konto:"
+          "printer_mode": "Printerkonfigurationsmetode:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Ekstern AMS varmelegeme eller tørretumbler",
         "description": "Ekstra AMS-varmere og -tørretumblere såsom SUNLU AMS Heater og EIBOS Series X (Dyas/Tetras) har ingen netværksforbindelse, så Home Assistant styrer en ved at skifte det smarte stik, den får strøm fra.\n\nVælg det stik til hver AMS, der har et varmelegeme monteret, eller lad det stå tomt. Hvert forbundet AMS får varmelegemetørringstilstand, varmelegemeeffekt, fugttærskel, temperaturafskæring og driftstidsgrænseenheder.\n\nIndstil selve varmeapparatet eller tørretumbleren til at starte opvarmning, når den er tændt, så at skifte stikket faktisk begynder at tørre."
+      },
+      "makerworld": {
+        "title": "MakerWorld-konto",
+        "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
+        "data": {
+          "username": "Bambu konto:",
+          "credential_source": "Bambu konto:"
+        }
       }
     }
   },

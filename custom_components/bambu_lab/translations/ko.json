@@ -124,13 +124,6 @@
         "data": {
           "username": "밤부 계정:"
         }
-      },
-      "reconfigure": {
-        "title": "MakerWorld 계정 재구성",
-        "description": "이 Bambu 계정에 대해 작동 중인 자격 증명이 있는 다른 기존 프린터 항목을 선택하세요.",
-        "data": {
-          "credential_source": "자격 증명 소스:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "연결 설정 조정",
         "description": "Bambu Lab 클라우드를 통한 구성은 가장 간단하고 빠릅니다. 비밀번호가 없는 소셜 미디어 계정은 지원되지 않습니다.\n\r다른 프린터에서 작동하는 인증 자격 증명을 재사용할 수도 있습니다. 발견되면 이메일 주소로 나열됩니다.\n\r또는 프린터 로컬 연결 세부 정보를 수동으로 제공하여 연결할 수 있습니다. 이는 LAN 모드의 프린터에 필요합니다.",
         "data": {
-          "printer_mode": "프린터 구성 모드:",
-          "credential_source": "밤부 계정:"
+          "printer_mode": "프린터 구성 모드:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "외부 AMS 히터 또는 건조기",
         "description": "SUNLU AMS Heater 및 EIBOS Series X(Dyas/Tetras)와 같은 추가 AMS 히터 및 건조기는 네트워크 연결이 없으므로 Home Assistant는 전원이 공급되는 스마트 플러그를 전환하여 하나를 제어합니다.\n\n히터가 장착된 각 AMS에 대해 해당 플러그를 선택하거나 비워 두십시오. 연결된 각 AMS는 히터 건조 모드, 히터 전력, 습도 임계값, 온도 차단 및 런타임 제한 엔터티를 가져옵니다.\n\n히터나 건조기 자체에 전원을 켜면 가열이 시작되도록 설정해 놓으면 플러그를 바꾸면 실제로 건조가 시작됩니다."
+      },
+      "makerworld": {
+        "title": "메이커월드 계정",
+        "description": "기존 프린터 항목에서 작동 중인 Bambu Cloud 자격 증명을 사용합니다. 추가 로그인이 필요하지 않습니다.",
+        "data": {
+          "username": "밤부 계정:",
+          "credential_source": "밤부 계정:"
+        }
       }
     }
   },

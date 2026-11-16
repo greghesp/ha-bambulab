@@ -124,13 +124,6 @@
         "data": {
           "username": "Bambu-account:"
         }
-      },
-      "reconfigure": {
-        "title": "Configureer het MakerWorld-account opnieuw",
-        "description": "Kies een ander bestaand printeritem met werkende inloggegevens voor dit Bambu-account.",
-        "data": {
-          "credential_source": "Referentiebron:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Verbindingsinstellingen aanpassen",
         "description": "Configuratie via Bambu Lab Cloud is het eenvoudigst en snelst. Social media accounts zonder wachtwoord worden niet ondersteund.\n\rU kunt ook werkende authenticatiegegevens van andere printers hergebruiken. Als deze worden gevonden, worden ze weergegeven op basis van het e-mailadres.\n\rOf u kunt verbinding maken door handmatig de lokale verbindingsgegevens van de printer op te geven. Dit is vereist voor een printer in lan-modus.",
         "data": {
-          "printer_mode": "Printerconfiguratiemodus:",
-          "credential_source": "Bambu-account:"
+          "printer_mode": "Printerconfiguratiemodus:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Externe AMS verwarming of droger",
         "description": "Add-on AMS-verwarmers en -drogers zoals de SUNLU AMS Heater en EIBOS Series X (Dyas/Tetras) hebben geen netwerkverbinding, dus Home Assistant bestuurt er één door de slimme stekker te schakelen waarmee deze wordt gevoed.\n\nKies die stekker voor elke AMS waarop een verwarming is gemonteerd, of laat hem leeg. Elke gekoppelde AMS krijgt de droogmodus van de verwarming, het verwarmingsvermogen, de vochtigheidsdrempel, de temperatuuruitschakeling en de looptijdlimieten.\n\nStel de verwarming of droger zelf zo in dat deze begint te verwarmen wanneer deze aanstaat, zodat het schakelen van de stekker daadwerkelijk begint met drogen."
+      },
+      "makerworld": {
+        "title": "MakerWorld-account",
+        "description": "Gebruik werkende Bambu Cloud-inloggegevens van een bestaand printeritem. Er is geen extra login vereist.",
+        "data": {
+          "username": "Bambu-account:",
+          "credential_source": "Bambu-account:"
+        }
       }
     }
   },

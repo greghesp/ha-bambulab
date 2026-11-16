@@ -124,13 +124,6 @@
         "data": {
           "username": "Účet Bambu:"
         }
-      },
-      "reconfigure": {
-        "title": "Prekonfigurujte účet MakerWorld",
-        "description": "Vyberte inú existujúcu položku tlačiarne s pracovnými povereniami pre tento účet Bambu.",
-        "data": {
-          "credential_source": "Zdroj poverení:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Úprava nastavenia pripojenia",
         "description": "Konfigurácia cez cloud Bambu Lab je najjednoduchšia a najrýchlejšia. Účty sociálnych médií bez hesla nie sú podporované.\n\rMôžete tiež znova použiť funkčné overovacie poverenia z iných tlačiarní. Ak sa nájdu, budú uvedené podľa e-mailovej adresy.\n\rAlebo sa môžete pripojiť manuálnym zadaním podrobností o lokálnom pripojení tlačiarne. Vyžaduje sa to pre tlačiareň v režime LAN.",
         "data": {
-          "printer_mode": "Režim konfigurácie tlačiarne:",
-          "credential_source": "Účet Bambu:"
+          "printer_mode": "Režim konfigurácie tlačiarne:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Externý ohrievač alebo sušička AMS",
         "description": "Prídavné ohrievače a sušičky AMS, ako napríklad ohrievač SUNLU AMS a EIBOS Series X (Dyas/Tetras), nemajú žiadne sieťové pripojenie, takže Home Assistant ich ovláda prepnutím inteligentnej zástrčky, z ktorej je napájaný.\n\nVyberte túto zástrčku pre každý AMS, ktorý má namontovaný ohrievač, alebo ju nechajte prázdnu. Každý prepojený AMS dostane režim sušenia ohrievača, výkon ohrievača, prah vlhkosti, vypnutie teploty a obmedzenie doby chodu.\n\nNastavte ohrievač alebo sušičku tak, aby začala ohrievať, keď je zapnutá, takže prepnutím zástrčky skutočne začne sušenie."
+      },
+      "makerworld": {
+        "title": "Účet MakerWorld",
+        "description": "Použite funkčné poverenia Bambu Cloud z existujúcej položky tlačiarne. Nevyžaduje sa žiadne ďalšie prihlásenie.",
+        "data": {
+          "username": "Účet Bambu:",
+          "credential_source": "Účet Bambu:"
+        }
       }
     }
   },

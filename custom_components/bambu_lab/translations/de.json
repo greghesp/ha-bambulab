@@ -124,13 +124,6 @@
         "data": {
           "username": "Bambu-Konto:"
         }
-      },
-      "reconfigure": {
-        "title": "MakerWorld-Konto neu konfigurieren",
-        "description": "Wählen Sie einen anderen vorhandenen Druckereintrag mit funktionierenden Anmeldeinformationen für dieses Bambu-Konto.",
-        "data": {
-          "credential_source": "Quelle der Anmeldedaten:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Verbindungseinstellungen anpassen",
         "description": "Die Konfiguration über die Bambu Lab Cloud ist am einfachsten und schnellsten. Social-Media-Konten ohne Passwort werden nicht unterstützt.\n\rSie können auch funktionierende Authentifizierungsdaten von anderen Druckern wiederverwenden. Wenn diese gefunden werden, werden sie nach der E-Mail-Adresse aufgelistet.\n\rAlternativ können Sie eine Verbindung herstellen, indem Sie die lokalen Verbindungsdetails des Druckers manuell angeben. Dies ist für einen Drucker im LAN-Modus erforderlich.",
         "data": {
-          "printer_mode": "Drucker-Konfigurationsmodus:",
-          "credential_source": "Bambu-Konto:"
+          "printer_mode": "Drucker-Konfigurationsmodus:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Externe AMS-Heizung oder Trockner",
         "description": "Zusätzliche AMS-Heizgeräte und -Trockner wie der SUNLU AMS Heater und die EIBOS Series\n\nWählen Sie diesen Stecker für jedes AMS, das mit einer Heizung ausgestattet ist, oder lassen Sie ihn leer. Jedes verbundene AMS verfügt über Elemente für den Heiztrocknungsmodus, die Heizleistung, den Feuchtigkeitsschwellenwert, die Temperaturabschaltung und die Laufzeitbegrenzung.\n\nStellen Sie die Heizung oder den Trockner selbst so ein, dass er mit dem Heizen beginnt, wenn er eingeschaltet wird, sodass das Trocknen tatsächlich durch Einschalten des Steckers beginnt."
+      },
+      "makerworld": {
+        "title": "MakerWorld-Konto",
+        "description": "Verwenden Sie funktionierende Bambu Cloud-Anmeldeinformationen aus einem vorhandenen Druckereintrag. Es ist kein zusätzlicher Login erforderlich.",
+        "data": {
+          "username": "Bambu-Konto:",
+          "credential_source": "Bambu-Konto:"
+        }
       }
     }
   },

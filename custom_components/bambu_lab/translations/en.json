@@ -58,13 +58,6 @@
           "username": "Bambu account:"
         }
       },
-      "reconfigure": {
-        "title": "Reconfigure MakerWorld Account",
-        "description": "Choose another existing printer entry with working credentials for this Bambu account.",
-        "data": {
-          "credential_source": "Credential source:"
-        }
-      },
       "Bambu": {
         "title": "Bambu Lab Cloud Connection",
         "description": "Please provide your Bambu Lab credentials:",
@@ -172,7 +165,14 @@
         "title": "Adjust connection settings",
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
-          "printer_mode": "Printer configuration mode:",
+          "printer_mode": "Printer configuration mode:"
+        }
+      },
+      "makerworld": {
+        "title": "MakerWorld Account",
+        "description": "Use working Bambu Cloud credentials from an existing printer entry. No additional login is required.",
+        "data": {
+          "username": "Bambu account:",
           "credential_source": "Bambu account:"
         }
       },

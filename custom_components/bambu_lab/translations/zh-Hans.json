@@ -124,13 +124,6 @@
         "data": {
           "username": "班布帐号："
         }
-      },
-      "reconfigure": {
-        "title": "重新配置 MakerWorld 帐户",
-        "description": "选择具有此 Bambu 帐户的工作凭据的另一个现有打印机条目。",
-        "data": {
-          "credential_source": "凭证来源："
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "调整连接设置",
         "description": "通过 Bambu Lab 云进行的配置最简单、最快。不支持没有密码的社交媒体帐户。\n\r您还可以重复使用其他打印机的工作身份验证凭据。如果找到这些将通过电子邮件地址列出。\n\r或者，您可以通过手动提供打印机本地连接详细信息来进行连接。这是 LAN 模式下打印机所必需的。",
         "data": {
-          "printer_mode": "打印机配置模式：",
-          "credential_source": "班布帐号："
+          "printer_mode": "打印机配置模式："
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "外部 AMS 加热器或干燥器",
         "description": "附加 AMS 加热器和烘干机，例如 SUNLU AMS 加热器和 EIBOS X 系列（Dyas/Tetras）没有网络连接，因此家庭助理通过切换其供电的智能插头来控制它们。\n\n为每个装有加热器的 AMS 选择该插头，或将其留空。每个链接的 AMS 均获得加热器干燥模式、加热器功率、湿度阈值、温度截止和运行时间限制实体。\n\n将加热器或烘干机本身设置为在通电时开始加热，因此切换插头实际上开始烘干。"
+      },
+      "makerworld": {
+        "title": "创客世界账户",
+        "description": "使用现有打印机条目中的有效 Bambu Cloud 凭据。无需额外登录。",
+        "data": {
+          "username": "班布帐号：",
+          "credential_source": "班布帐号："
+        }
       }
     }
   },

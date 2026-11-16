@@ -124,13 +124,6 @@
         "data": {
           "username": "Compte Bambu:"
         }
-      },
-      "reconfigure": {
-        "title": "Torneu a configurar el compte MakerWorld",
-        "description": "Trieu una altra entrada d'impressora existent amb credencials de treball per a aquest compte de Bambu.",
-        "data": {
-          "credential_source": "Font de la credencial:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Ajusta la configuració de connexió",
         "description": "La configuració a través del núvol Bambu Lab és la més senzilla i ràpida. Els comptes de xarxes socials sense contrasenya no són compatibles.\n\rTambé podeu reutilitzar les credencials d'autenticació que funcionen d'altres impressores. En cas de trobar-los, es mostraran a l'adreça de correu electrònic.\n\rO podeu connectar-vos proporcionant manualment els detalls de connexió local de la impressora. Això és necessari per a una impressora en mode Lan.",
         "data": {
-          "printer_mode": "Mode de configuració de la impressora:",
-          "credential_source": "Compte Bambu:"
+          "printer_mode": "Mode de configuració de la impressora:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Escalfador o assecador AMS extern",
         "description": "Els escalfadors i assecadors AMS addicionals, com ara l'escalfador SUNLU AMS i EIBOS Sèrie X (Dyas/Tetras) no tenen connexió de xarxa, de manera que Home Assistant en controla un canviant l'endoll intel·ligent des del qual s'alimenta.\n\nTrieu aquest endoll per a cada AMS que tingui instal·lat un escalfador o deixeu-lo buit. Cada AMS enllaçat obté entitats de mode d'assecat de l'escalfador, potència de l'escalfador, llindar d'humitat, tall de temperatura i límit de temps d'execució.\n\nConfigureu l'escalfador o l'assecadora perquè comenci a escalfar quan estigui encès, de manera que canviar l'endoll comença a assecar-se."
+      },
+      "makerworld": {
+        "title": "Compte de MakerWorld",
+        "description": "Utilitzeu les credencials de Bambu Cloud que funcionin des d'una entrada d'impressora existent. No es requereix cap inici de sessió addicional.",
+        "data": {
+          "username": "Compte Bambu:",
+          "credential_source": "Compte Bambu:"
+        }
       }
     }
   },

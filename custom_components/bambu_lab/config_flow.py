@@ -295,7 +295,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 mode=SelectSelectorMode.LIST,
             )
         )
-        return self.async_show_form(step_id="reconfigure", data_schema=vol.Schema(fields))
+        return self.async_show_form(step_id="makerworld", data_schema=vol.Schema(fields))
 
     async def async_step_Bambu(
             self, user_input: dict[str, Any] | None = None
@@ -1219,6 +1219,9 @@ class MakerWorldOptionsFlowHandler(config_entries.OptionsFlow):
         self._config_entry = config_entry
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        return await self.async_step_makerworld(user_input)
+
+    async def async_step_makerworld(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         username = self._config_entry.data.get("username", "")
         credentials = await _get_working_makerworld_credentials(self.hass, username)
         if not credentials:
@@ -1243,4 +1246,4 @@ class MakerWorldOptionsFlowHandler(config_entries.OptionsFlow):
                 mode=SelectSelectorMode.LIST,
             )
         )
-        return self.async_show_form(step_id="init", data_schema=vol.Schema(fields))
+        return self.async_show_form(step_id="makerworld", data_schema=vol.Schema(fields))

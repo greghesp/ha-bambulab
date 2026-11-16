@@ -124,13 +124,6 @@
         "data": {
           "username": "Conta Bambu:"
         }
-      },
-      "reconfigure": {
-        "title": "Reconfigurar conta MakerWorld",
-        "description": "Escolha outra entrada de impressora existente com credenciais funcionais para esta conta Bambu.",
-        "data": {
-          "credential_source": "Fonte da credencial:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Ajustar definições de ligação",
         "description": "A configuração via Bambu Lab Cloud é a mais simples e rápida. Contas de redes sociais sem password não são suportadas.\n\rTambém podes reutilizar credenciais de autenticação de outras impressoras. Se encontradas, serão listadas pelo endereço de e-mail.\n\rOu podes ligar fornecendo manualmente os detalhes de ligação local da impressora. Isto é obrigatório para impressoras em Modo LAN .",
         "data": {
-          "printer_mode": "Modo de configuração da impressora:",
-          "credential_source": "Conta Bambu:"
+          "printer_mode": "Modo de configuração da impressora:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Aquecedor ou secador AMS externo",
         "description": "Aquecedores e secadores AMS complementares, como o aquecedor SUNLU AMS e o EIBOS Série X (Dyas/Tetras), não têm conexão de rede, portanto, o Home Assistant controla um trocando o plugue inteligente a partir do qual ele é alimentado.\n\nEscolha esse plugue para cada AMS que tenha um aquecedor instalado ou deixe-o vazio. Cada AMS vinculado obtém o modo de secagem do aquecedor, a potência do aquecedor, o limite de umidade, o corte de temperatura e as entidades de limite de tempo de execução.\n\nConfigure o aquecedor ou secador para começar a aquecer quando estiver ligado, de modo que trocar o plugue realmente comece a secar."
+      },
+      "makerworld": {
+        "title": "Conta MakerWorld",
+        "description": "Use credenciais funcionais do Bambu Cloud de uma entrada de impressora existente. Nenhum login adicional é necessário.",
+        "data": {
+          "username": "Conta Bambu:",
+          "credential_source": "Conta Bambu:"
+        }
       }
     }
   },

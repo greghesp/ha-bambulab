@@ -124,13 +124,6 @@
         "data": {
           "username": "Cuenta Bambú:"
         }
-      },
-      "reconfigure": {
-        "title": "Reconfigurar la cuenta MakerWorld",
-        "description": "Elija otra entrada de impresora existente con credenciales de trabajo para esta cuenta de Bambu.",
-        "data": {
-          "credential_source": "Fuente de credenciales:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Ajusta la configuración de conexión",
         "description": "La configuración a través de la nube de Bambu Lab es la más sencilla y rápida. No se admiten cuentas de redes sociales sin contraseña.\n\rTambién puede reutilizar las credenciales de autenticación que funcionan de otras impresoras. Si los encuentra, se enumerarán junto a la dirección de correo electrónico.\n\rO puede conectarse proporcionando manualmente los detalles de conexión local de la impresora. Esto es necesario para una impresora en modo Lan.",
         "data": {
-          "printer_mode": "Modo de configuración de la impresora:",
-          "credential_source": "Cuenta Bambú:"
+          "printer_mode": "Modo de configuración de la impresora:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Calentador o secador AMS externo",
         "description": "Los calentadores y secadores AMS complementarios, como el calentador SUNLU AMS y el EIBOS Serie X (Dyas/Tetras), no tienen conexión de red, por lo que Home Assistant controla uno cambiando el enchufe inteligente desde el que se alimenta.\n\nElija ese enchufe para cada AMS que tenga instalado un calentador o déjelo vacío. Cada AMS vinculado obtiene entidades de modo de secado del calentador, potencia del calentador, umbral de humedad, corte de temperatura y límite de tiempo de ejecución.\n\nConfigure el calentador o la secadora para que comience a calentar cuando esté encendido, de modo que al encender el enchufe realmente comience a secarse."
+      },
+      "makerworld": {
+        "title": "Cuenta MakerWorld",
+        "description": "Utilice credenciales de Bambu Cloud que funcionen desde una entrada de impresora existente. No se requiere inicio de sesión adicional.",
+        "data": {
+          "username": "Cuenta Bambú:",
+          "credential_source": "Cuenta Bambú:"
+        }
       }
     }
   },

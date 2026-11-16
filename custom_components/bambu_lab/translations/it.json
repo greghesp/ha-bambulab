@@ -124,13 +124,6 @@
         "data": {
           "username": "Conto Bambu:"
         }
-      },
-      "reconfigure": {
-        "title": "Riconfigura l'account MakerWorld",
-        "description": "Scegli un'altra voce di stampante esistente con credenziali funzionanti per questo account Bambu.",
-        "data": {
-          "credential_source": "Fonte credenziale:"
-        }
       }
     }
   },
@@ -168,8 +161,7 @@
         "title": "Regolare le impostazioni di connessione",
         "description": "La configurazione tramite cloud Bambu Lab è la più semplice e veloce. Gli account di social media senza password non sono supportati.\n\rÈ inoltre possibile riutilizzare le credenziali di autenticazione funzionanti di altre stampanti. Se trovati, verranno elencati in base all'indirizzo e-mail.\n\rOppure è possibile connettersi fornendo manualmente i dettagli della connessione locale della stampante. Ciò è necessario per una stampante in modalità Lan.",
         "data": {
-          "printer_mode": "Modalità di configurazione della stampante:",
-          "credential_source": "Conto Bambu:"
+          "printer_mode": "Modalità di configurazione della stampante:"
         }
       },
       "Bambu": {
@@ -236,6 +228,14 @@
       "ams_heater": {
         "title": "Riscaldatore o essiccatore AMS esterno",
         "description": "I riscaldatori e gli essiccatori AMS aggiuntivi come il riscaldatore SUNLU AMS e EIBOS Serie X (Dyas/Tetras) non hanno connessione di rete, quindi Home Assistant ne controlla uno cambiando la presa intelligente da cui è alimentato.\n\nScegliere la spina per ciascun AMS dotato di riscaldatore oppure lasciarla vuota. Ciascun AMS collegato ottiene la modalità di asciugatura del riscaldatore, la potenza del riscaldatore, la soglia di umidità, il limite di temperatura e i limiti di tempo di funzionamento.\n\nImposta il riscaldatore o l'asciugatrice stessa in modo che inizi a riscaldarsi quando è accesa, in modo che accendendo la spina si avvii effettivamente l'asciugatura."
+      },
+      "makerworld": {
+        "title": "Account MakerWorld",
+        "description": "Utilizza le credenziali Bambu Cloud funzionanti da una voce di stampante esistente. Non è richiesto alcun accesso aggiuntivo.",
+        "data": {
+          "username": "Conto Bambu:",
+          "credential_source": "Conto Bambu:"
+        }
       }
     }
   },
