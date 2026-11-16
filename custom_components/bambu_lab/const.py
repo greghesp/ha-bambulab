@@ -63,6 +63,7 @@ OPTION_NAME = {
 OPTION_ENABLE_FILAMENT_INVENTORY = "enable_filament_inventory"
 OPTION_FILAMENT_INVENTORY_INTERVAL = "filament_inventory_interval"
 DEFAULT_FILAMENT_INVENTORY_INTERVAL = 60  # minutes
+OPTION_ENABLE_MAKERWORLD_DEVICE = "enable_makerworld_device"
 
 def load_dict(filename: str) -> dict:
     with open(filename) as f:

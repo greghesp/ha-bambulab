@@ -86,6 +86,7 @@
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
               "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "enable_makerworld_device": "Enable MakerWorld stats (requires Bambu Cloud)",
               "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
@@ -110,6 +111,7 @@
               "disable_ssl_verify": "Disable SSL verification",
               "enable_firmware_update": "Enable firmware update support",
               "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "enable_makerworld_device": "Enable MakerWorld stats (requires Bambu Cloud)",
               "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }

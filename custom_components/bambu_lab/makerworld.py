@@ -11,6 +11,7 @@ from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
@@ -36,6 +37,14 @@ def account_key(entry: ConfigEntry) -> str:
     if not options.get('auth_token', ''):
         return ""
     return options.get('username', '') or ""
+
+
+def remove_makerworld_device(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Remove this entry's MakerWorld device when its sensors are disabled."""
+    registry = device_registry.async_get(hass)
+    for device in device_registry.async_entries_for_config_entry(registry, entry.entry_id):
+        if device.manufacturer == "MakerWorld" and device.model == "Creator profile":
+            registry.async_remove_device(device.id)
 
 
 def owns_makerworld_entities(hass: HomeAssistant, entry: ConfigEntry) -> bool:

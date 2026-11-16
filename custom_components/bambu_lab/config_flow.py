@@ -24,7 +24,12 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
-from .const import CONF_AMS_HEATERS, DOMAIN, LOGGER
+from .const import (
+    CONF_AMS_HEATERS,
+    DOMAIN,
+    LOGGER,
+    OPTION_ENABLE_MAKERWORLD_DEVICE,
+)
 from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
     CloudflareError,
@@ -41,6 +46,7 @@ CONFIG_VERSION = 2
 
 # Options-flow menu choice for linking a smart plug that powers an external AMS heater.
 AMS_HEATER_MODE = "ams_heater"
+
 
 BOOLEAN_SELECTOR = BooleanSelector()
 NUMBER_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.NUMBER))
@@ -886,6 +892,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                     options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                     options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
+                    options[OPTION_ENABLE_MAKERWORLD_DEVICE] = user_input['advanced'].get(OPTION_ENABLE_MAKERWORLD_DEVICE, False)
                     options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                     options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
@@ -922,6 +929,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
         default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
+        default_enable_makerworld_device = self._config_entry.options.get(OPTION_ENABLE_MAKERWORLD_DEVICE, False)
+        if user_input is not None:
+            default_enable_makerworld_device = user_input.get('advanced', {}).get(OPTION_ENABLE_MAKERWORLD_DEVICE, default_enable_makerworld_device)
         default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         # Build form
@@ -939,6 +949,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
                 vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
+                vol.Required(OPTION_ENABLE_MAKERWORLD_DEVICE, default=default_enable_makerworld_device): BOOLEAN_SELECTOR,
                 vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
@@ -989,6 +1000,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                 options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
+                options[OPTION_ENABLE_MAKERWORLD_DEVICE] = user_input['advanced'].get(OPTION_ENABLE_MAKERWORLD_DEVICE, False)
                 options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
@@ -1024,6 +1036,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
         default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
+        default_enable_makerworld_device = self._config_entry.options.get(OPTION_ENABLE_MAKERWORLD_DEVICE, False)
+        if user_input is not None:
+            default_enable_makerworld_device = user_input.get('advanced', {}).get(OPTION_ENABLE_MAKERWORLD_DEVICE, default_enable_makerworld_device)
         default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
@@ -1036,6 +1051,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
                 vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
+                vol.Required(OPTION_ENABLE_MAKERWORLD_DEVICE, default=default_enable_makerworld_device): BOOLEAN_SELECTOR,
                 vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
