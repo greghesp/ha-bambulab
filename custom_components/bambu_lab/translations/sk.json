@@ -168,7 +168,8 @@
         "title": "Úprava nastavenia pripojenia",
         "description": "Konfigurácia cez cloud Bambu Lab je najjednoduchšia a najrýchlejšia. Účty sociálnych médií bez hesla nie sú podporované.\n\rMôžete tiež znova použiť funkčné overovacie poverenia z iných tlačiarní. Ak sa nájdu, budú uvedené podľa e-mailovej adresy.\n\rAlebo sa môžete pripojiť manuálnym zadaním podrobností o lokálnom pripojení tlačiarne. Vyžaduje sa to pre tlačiareň v režime LAN.",
         "data": {
-          "printer_mode": "Režim konfigurácie tlačiarne:"
+          "printer_mode": "Režim konfigurácie tlačiarne:",
+          "credential_source": "Účet Bambu:"
         }
       },
       "Bambu": {

@@ -168,7 +168,8 @@
         "title": "Ajusta la configuración de conexión",
         "description": "La configuración a través de la nube de Bambu Lab es la más sencilla y rápida. No se admiten cuentas de redes sociales sin contraseña.\n\rTambién puede reutilizar las credenciales de autenticación que funcionan de otras impresoras. Si los encuentra, se enumerarán junto a la dirección de correo electrónico.\n\rO puede conectarse proporcionando manualmente los detalles de conexión local de la impresora. Esto es necesario para una impresora en modo Lan.",
         "data": {
-          "printer_mode": "Modo de configuración de la impresora:"
+          "printer_mode": "Modo de configuración de la impresora:",
+          "credential_source": "Cuenta Bambú:"
         }
       },
       "Bambu": {

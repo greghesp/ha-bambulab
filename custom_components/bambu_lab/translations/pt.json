@@ -168,7 +168,8 @@
         "title": "Ajustar definições de ligação",
         "description": "A configuração via Bambu Lab Cloud é a mais simples e rápida. Contas de redes sociais sem password não são suportadas.\n\rTambém podes reutilizar credenciais de autenticação de outras impressoras. Se encontradas, serão listadas pelo endereço de e-mail.\n\rOu podes ligar fornecendo manualmente os detalhes de ligação local da impressora. Isto é obrigatório para impressoras em Modo LAN .",
         "data": {
-          "printer_mode": "Modo de configuração da impressora:"
+          "printer_mode": "Modo de configuração da impressora:",
+          "credential_source": "Conta Bambu:"
         }
       },
       "Bambu": {

@@ -168,7 +168,8 @@
         "title": "Dostosuj ustawienia połączenia",
         "description": "Konfiguracja przez chmurę Bambu Lab jest najprostsza i najszybsza. Konta w mediach społecznościowych bez hasła nie są obsługiwane.\n\rMożesz również użyć danych logowania z innych drukarek. Jeśli zostaną znalezione, będą wyświetlone według adresu e-mail.\n\rMożna też podłączyć się ręcznie, podając dane lokalnego połączenia drukarki. Jest to wymagane w trybie Lan.",
         "data": {
-          "printer_mode": "Tryb konfiguracji drukarki:"
+          "printer_mode": "Tryb konfiguracji drukarki:",
+          "credential_source": "Konto Bambu:"
         }
       },
       "Bambu": {

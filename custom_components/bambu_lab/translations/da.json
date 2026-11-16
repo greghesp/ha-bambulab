@@ -168,7 +168,8 @@
         "title": "Juster forbindelsesindstillinger",
         "description": "Konfiguration via Bambu Lab cloud er enklest og hurtigst. Konti på sociale medier uden adgangskode understøttes ikke.\n\rDu kan også genbruge fungerende godkendelsesoplysninger fra andre printere. Hvis de findes, vil disse blive angivet af e-mailadressen.\n\rEller du kan oprette forbindelse ved manuelt at angive printerens lokale forbindelsesoplysninger. Dette er påkrævet for en printer i Lan-tilstand.",
         "data": {
-          "printer_mode": "Printerkonfigurationsmetode:"
+          "printer_mode": "Printerkonfigurationsmetode:",
+          "credential_source": "Bambu konto:"
         }
       },
       "Bambu": {

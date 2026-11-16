@@ -168,7 +168,8 @@
         "title": "Verbindingsinstellingen aanpassen",
         "description": "Configuratie via Bambu Lab Cloud is het eenvoudigst en snelst. Social media accounts zonder wachtwoord worden niet ondersteund.\n\rU kunt ook werkende authenticatiegegevens van andere printers hergebruiken. Als deze worden gevonden, worden ze weergegeven op basis van het e-mailadres.\n\rOf u kunt verbinding maken door handmatig de lokale verbindingsgegevens van de printer op te geven. Dit is vereist voor een printer in lan-modus.",
         "data": {
-          "printer_mode": "Printerconfiguratiemodus:"
+          "printer_mode": "Printerconfiguratiemodus:",
+          "credential_source": "Bambu-account:"
         }
       },
       "Bambu": {

@@ -168,7 +168,8 @@
         "title": "Ajusta la configuració de connexió",
         "description": "La configuració a través del núvol Bambu Lab és la més senzilla i ràpida. Els comptes de xarxes socials sense contrasenya no són compatibles.\n\rTambé podeu reutilitzar les credencials d'autenticació que funcionen d'altres impressores. En cas de trobar-los, es mostraran a l'adreça de correu electrònic.\n\rO podeu connectar-vos proporcionant manualment els detalls de connexió local de la impressora. Això és necessari per a una impressora en mode Lan.",
         "data": {
-          "printer_mode": "Mode de configuració de la impressora:"
+          "printer_mode": "Mode de configuració de la impressora:",
+          "credential_source": "Compte Bambu:"
         }
       },
       "Bambu": {

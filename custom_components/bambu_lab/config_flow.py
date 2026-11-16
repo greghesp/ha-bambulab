@@ -109,6 +109,7 @@ async def _get_working_makerworld_credentials(
                 "username": entry_username,
                 "auth_token": auth_token,
             }
+            break
     return credentials
 
 
@@ -167,6 +168,11 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             # Iterate over all existing entries and try any existing credentials to see if they work
             config_entries = self.hass.config_entries.async_entries(DOMAIN)
             LOGGER.debug(f"Found {len(config_entries)} existing config entries for the integration.")
+            existing_makerworld_accounts = {
+                config_entry.data.get("username")
+                for config_entry in config_entries
+                if config_entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD
+            }
             for config_entry in config_entries:
                 if config_entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
                     continue
@@ -190,12 +196,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             username,
                             auth_token
                         )
-                        self._makerworld_credentials.setdefault(username, {
-                            "region": default_region,
-                            "email": default_email,
-                            "username": username,
-                            "auth_token": auth_token,
-                        })
+                        if username not in existing_makerworld_accounts:
+                            self._makerworld_credentials.setdefault(username, {
+                                "region": default_region,
+                                "email": default_email,
+                                "username": username,
+                                "auth_token": auth_token,
+                            })
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
