@@ -85,6 +85,7 @@ from .commands import (
     HEATBED_LIGHT_ON,
     HEATBED_LIGHT_OFF,
 )
+from .orca_cloud import OrcaCloudAuthError, OrcaCloudError
 from .media_sources import (
     Ftps990MediaSource,
     RemoteMediaError,
@@ -5139,6 +5140,30 @@ class SlicerSettings:
         else:
             LOGGER.debug(f"Received no filament data: {filaments}")
 
+    def _load_orca_filaments(self, orca_cloud):
+        try:
+            filaments = orca_cloud.get_filament_profiles()
+        except OrcaCloudAuthError as e:
+            LOGGER.warning(f"Orca Cloud sign-in is no longer valid, custom Orca filaments not loaded: {e}")
+            self._client.callback("event_orca_cloud_authentication_failed")
+            return
+        except OrcaCloudError as e:
+            LOGGER.warning(f"Could not load custom filaments from Orca Cloud: {e}")
+            return
+        # Loaded after Bambu Cloud so a preset that exists in both uses the Orca
+        # copy: users who connected Orca Cloud have stopped syncing to Bambu.
+        for filament_id, filament in filaments.items():
+            self.custom_filaments[filament_id] = FilamentInfo(
+                name=filament["name"],
+                filament_vendor=filament["filament_vendor"],
+                filament_type=filament["filament_type"],
+                filament_density=0,
+                nozzle_temperature=0,
+                nozzle_temperature_range_high=filament["nozzle_temperature_range_high"],
+                nozzle_temperature_range_low=filament["nozzle_temperature_range_low"],
+            )
+        LOGGER.debug(f"Got {len(filaments)} custom filaments from Orca Cloud.")
+
     def update(self):
         self.custom_filaments = {}
         if self._client.bambu_cloud.auth_token != "":
@@ -5149,6 +5174,9 @@ class SlicerSettings:
                 self._client.callback("event_printer_bambu_authentication_failed")
             else:
                 self._load_custom_filaments(slicer_settings)
+        orca_cloud = getattr(self._client, "orca_cloud", None)
+        if orca_cloud is not None:
+            self._load_orca_filaments(orca_cloud)
 
 
 class FilamentInventory:

@@ -26,6 +26,10 @@ SERVICE_CALL_ID = "service_call_id"
 # external AMS heater or dryer (e.g. SUNLU AMS Heater, EIBOS Series X).
 CONF_AMS_HEATERS = "ams_heaters"
 
+# Options key holding the Orca Cloud (OrcaSlicer) refresh token used to read the
+# user's custom filament presets. Rotates on every use, so it is rewritten often.
+CONF_ORCA_REFRESH_TOKEN = "orca_refresh_token"
+
 PLATFORMS = (
     Platform.BINARY_SENSOR,
     Platform.BUTTON,

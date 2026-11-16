@@ -29,6 +29,7 @@ from homeassistant.helpers import entity_registry as er
 
 from .const import (
     BRAND,
+    CONF_ORCA_REFRESH_TOKEN,
     DOMAIN,
     LOGGER,
     LOGGERFORHA,
@@ -49,6 +50,7 @@ from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import build_print_project_file_command
 from .pybambu.models import FilamentInventory
+from .pybambu.orca_cloud import get_shared_client as get_shared_orca_client
 from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
@@ -109,6 +111,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self._access_denied_handled = False
         self.data = self.get_model()
         self._eventloop = asyncio.get_running_loop()
+        # Shared across reloads so the single-use refresh token is never spent twice.
+        # Unlinking or re-linking drops it and detaches this listener.
+        self.client.orca_cloud = get_shared_orca_client(entry.entry_id, config.get(CONF_ORCA_REFRESH_TOKEN, ""))
+        if self.client.orca_cloud is not None:
+            self.client.orca_cloud.set_token_listener(self._on_orca_token_refreshed)
         # Pass LOGGERFORHA logger into HA as otherwise it generates a debug output line every single time we tell it we have an update
         # which fills the logs and makes the useful logging data less accessible.
         super().__init__(
@@ -126,6 +133,23 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug("HOME ASSISTANT IS SHUTTING DOWN")
         self.shutdown()
 
+    def _on_orca_token_refreshed(self, refresh_token: str) -> None:
+        # Called from the slicer settings worker thread. Orca Cloud rotates the refresh
+        # token on every use and invalidates the old one, so it is saved even while
+        # shutting down, or the next start-up could not sign in.
+        try:
+            self._eventloop.call_soon_threadsafe(self._persist_orca_token, refresh_token)
+        except RuntimeError:
+            LOGGER.warning("Home Assistant stopped before the rotated Orca Cloud token could be saved; you may need to link Orca Cloud again.")
+
+    def _persist_orca_token(self, refresh_token: str) -> None:
+        options = dict(self._entry.options)
+        if options.get(CONF_ORCA_REFRESH_TOKEN, "") in ("", refresh_token):
+            # Unchanged, or Orca Cloud was unlinked while a refresh was in flight.
+            return
+        options[CONF_ORCA_REFRESH_TOKEN] = refresh_token
+        self._hass.config_entries.async_update_entry(entry=self._entry, options=options)
+
     def event_handler(self, event: str):
         if self._shutdown:
             # Handle race conditions when the integration is being deleted by re-registering and existing device.
@@ -141,6 +165,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         
         if event == "event_printer_bambu_authentication_failed":
             self._report_authentication_issue()
+
+        elif event == "event_orca_cloud_authentication_failed":
+            self._report_generic_issue("orca_cloud_authentication_failed", True)
 
         elif event == "event_printer_access_denied":
             self._hass.async_create_task(self._async_handle_access_denied())
