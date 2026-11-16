@@ -22,6 +22,7 @@ class TestExternalSpoolBlankPayload(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
         self.client.slicer_settings.custom_filaments = {}
+        self.client.slicer_settings.filaments = {}
         self.client._device.supports_feature.return_value = False
         self.spool = ExternalSpool(self.client, 0)
 
@@ -56,6 +57,7 @@ class TestExternalSpoolInactive(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
         self.client.slicer_settings.custom_filaments = {}
+        self.client.slicer_settings.filaments = {}
         self.client._device.supports_feature.return_value = True
         self.spool = ExternalSpool(self.client, 0)
         self.spool.print_update({"vt_tray": {
