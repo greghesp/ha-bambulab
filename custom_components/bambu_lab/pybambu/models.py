@@ -1192,6 +1192,9 @@ class PrintJob:
         self.current_layer = 0
         self.total_layers = 0
         self.print_error = 0
+        # Set when the current print is canceled by the user. The printer's own usage counter
+        # doesn't include canceled prints, so we skip adding their duration to usage_hours.
+        self._print_canceled = False
         self.print_weight = 0
         self.ams_mapping = []
         self._tray_mapping = None
@@ -1373,6 +1376,7 @@ class PrintJob:
             self.start_time = get_end_time(0)
             # Make sure we don't keep using a stale end time.
             self.end_time = None
+            self._print_canceled = False
             LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
             if not self._client.ftp_enabled:
@@ -1424,6 +1428,7 @@ class PrintJob:
         isCanceledPrint = False
         if data.get("print_error") == 50348044 and self.print_error == 0:
             isCanceledPrint = True
+            self._print_canceled = True
             self._download_timelapse()
             timelapseDownloaded = True
             self._client.callback("event_print_canceled")
@@ -1445,7 +1450,11 @@ class PrintJob:
             self._client.callback("event_print_finished")
 
         if currently_idle and not previously_idle and previous_gcode_state != "unknown":
-            if self.start_time != None:
+            if self._print_canceled:
+                # The printer doesn't count canceled prints towards its usage hours. Match it so the
+                # integration's tally doesn't drift ahead of the printer's.
+                LOGGER.debug("PRINT CANCELED - NOT ADDING USAGE HOURS")
+            elif self.start_time != None:
                 # self.end_time isn't updated if we hit an AMS retract at print end but the printer does count that entire
                 # paused time as usage hours. So we need to use the current time instead of the last recorded end time in
                 # our calculation here.
