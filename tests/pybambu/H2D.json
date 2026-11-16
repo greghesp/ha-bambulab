@@ -695,6 +695,12 @@
     "push_door_opened": {
         "stat": "46A58008"
     },
+    "push_top_cover_closed": {
+        "stat": "640258000"
+    },
+    "push_top_cover_opened": {
+        "stat": "641258000"
+    },
     "push_left_extruder": {
         "device": {
           "extruder": {"state": 274}

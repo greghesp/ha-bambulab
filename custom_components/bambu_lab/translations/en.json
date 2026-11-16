@@ -234,6 +234,9 @@
       "door_open": {
         "name": "Door"
       },
+      "top_cover_open": {
+        "name": "Top cover"
+      },
       "timelapse": {
         "name": "Timelapse"
       },

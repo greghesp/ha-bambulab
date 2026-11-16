@@ -1514,6 +1514,31 @@ class TestH2D(unittest.TestCase):
         self.assertTrue(result)
         self.assertFalse(self.info.door_open)
 
+    def test_h2d_top_cover_open(self):
+        data = self.h2d_data['push_all']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertFalse(self.info.top_cover_open)
+
+        # Top glass cover status is bit 0x01000000 of the stat field (issue #1805).
+        data = self.h2d_data['push_top_cover_opened']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertTrue(self.info.top_cover_open)
+        self.assertFalse(self.info.door_open)
+
+        data = self.h2d_data['push_top_cover_closed']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertFalse(self.info.top_cover_open)
+        self.assertFalse(self.info.door_open)
+
+    def test_h2d_door_does_not_set_top_cover(self):
+        data = self.h2d_data['push_door_opened']
+        self.info.print_update(data)
+        self.assertTrue(self.info.door_open)
+        self.assertFalse(self.info.top_cover_open)
+
     def test_h2d_door_ignores_old_flag(self):
         data = self.h2d_data['push_all']
         result = self.info.print_update(data)
