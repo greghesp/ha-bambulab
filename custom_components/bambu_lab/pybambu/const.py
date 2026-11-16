@@ -381,7 +381,7 @@ BAMBU_URL = {
     BambuUrl.EMAIL_CODE: 'https://api.bambulab.com/v1/user-service/user/sendemail/code',
     BambuUrl.SMS_CODE: 'https://bambulab.cn/api/v1/user-service/user/sendsmscode',
     BambuUrl.BIND: 'https://api.bambulab.com/v1/iot-service/api/user/bind',
-    BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=1.10.0.89',
+    BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=1.10.0.89&public=false',
     BambuUrl.TASKS: 'https://api.bambulab.com/v1/user-service/my/tasks',
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
     BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
