@@ -768,8 +768,15 @@ class BambuCloud:
         LOGGER.debug(f"Downloading cover image: {url}")
         try:
             # This is just a standard download from an unauthenticated end point.
-            response = requests.get(url, headers={'User-Agent': USER_AGENT})
-        except:
+            # It runs on the MQTT thread while the first push is processed, so it
+            # must never wait indefinitely: a stalled connection would hold back
+            # event_printer_ready and no entities would ever be created (#2171).
+            response = requests.get(url, headers={'User-Agent': USER_AGENT}, timeout=10)
+        except Exception as e:
+            LOGGER.debug(f"Cover image download failed: {type(e).__name__}: {e}")
+            return None
+        if response.status_code != 200:
+            LOGGER.debug(f"Cover image download failed: HTTP {response.status_code}")
             return None
         return response.content
 
