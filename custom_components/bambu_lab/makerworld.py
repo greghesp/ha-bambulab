@@ -25,7 +25,7 @@ from .pybambu.makerworld import MakerWorldProfile, as_int
 # These are slow moving vanity numbers and the endpoint is undocumented, so poll
 # gently. On failure the interval backs off up to MAX_SCAN_INTERVAL so a blocked
 # or broken endpoint isn't hammered every quarter hour.
-SCAN_INTERVAL = timedelta(minutes=240)
+SCAN_INTERVAL = timedelta(hours=4)
 MAX_SCAN_INTERVAL = timedelta(hours=24)
 
 
