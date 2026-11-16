@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Rechter extruderfilament"
+      },
+      "top_cover_open": {
+        "name": "Bovenklep"
       }
     },
     "button": {

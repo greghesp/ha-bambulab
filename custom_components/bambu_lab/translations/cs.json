@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Pravé vlákno extrudéru"
+      },
+      "top_cover_open": {
+        "name": "Horní kryt"
       }
     },
     "button": {

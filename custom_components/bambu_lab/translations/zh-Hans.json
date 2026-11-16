@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "右挤出机丝"
+      },
+      "top_cover_open": {
+        "name": "顶盖"
       }
     },
     "button": {

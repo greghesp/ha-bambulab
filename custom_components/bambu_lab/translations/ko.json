@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "오른쪽 압출기 필라멘트"
+      },
+      "top_cover_open": {
+        "name": "상단 커버"
       }
     },
     "button": {

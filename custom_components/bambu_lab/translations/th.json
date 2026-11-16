@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "เส้นใยเครื่องอัดรีดด้านขวา"
+      },
+      "top_cover_open": {
+        "name": "ฝาครอบด้านบน"
       }
     },
     "button": {

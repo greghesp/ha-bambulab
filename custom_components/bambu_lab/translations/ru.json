@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Филамент правого экструдера"
+      },
+      "top_cover_open": {
+        "name": "Верхняя крышка"
       }
     },
     "button": {

@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Δεξί νήμα εξωθητή"
+      },
+      "top_cover_open": {
+        "name": "Πάνω εξώφυλλο"
       }
     },
     "button": {

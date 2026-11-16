@@ -281,6 +281,9 @@
       },
       "right_extruder_filament_state": {
         "name": "Filamento extrusor derecho"
+      },
+      "top_cover_open": {
+        "name": "cubierta superior"
       }
     },
     "button": {
