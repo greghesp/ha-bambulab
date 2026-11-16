@@ -17,7 +17,10 @@
       "already_configured": "Das Gerät ist bereits eingerichtet",
       "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
-      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar.",
+      "no_working_credentials": "Für dieses Konto sind keine funktionierenden Anmeldeinformationen für den Bambu Cloud-Drucker verfügbar.",
+      "reconfigure_not_supported": "Auf diese Weise können nur MakerWorld-Kontoeinträge neu konfiguriert werden.",
+      "reconfigure_successful": "MakerWorld-Zugangsdaten aktualisiert."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
@@ -114,13 +117,29 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "MakerWorld-Konto",
+        "description": "Verwenden Sie funktionierende Bambu Cloud-Anmeldeinformationen aus einem vorhandenen Druckereintrag. Es ist kein zusätzlicher Login erforderlich.",
+        "data": {
+          "username": "Bambu-Konto:"
+        }
+      },
+      "reconfigure": {
+        "title": "MakerWorld-Konto neu konfigurieren",
+        "description": "Wählen Sie einen anderen vorhandenen Druckereintrag mit funktionierenden Anmeldeinformationen für dieses Bambu-Konto.",
+        "data": {
+          "credential_source": "Quelle der Anmeldedaten:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
-      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar.",
+      "no_working_credentials": "Für dieses Konto sind keine funktionierenden Anmeldeinformationen für den Bambu Cloud-Drucker verfügbar.",
+      "no_ams": "Auf diesem Drucker wurde noch kein AMS identifiziert. Warten Sie, bis der Drucker eine Verbindung hergestellt hat und seine AMS-Einheiten meldet, und versuchen Sie es dann erneut."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
@@ -212,6 +231,10 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Externe AMS-Heizung oder Trockner",
+        "description": "Zusätzliche AMS-Heizgeräte und -Trockner wie der SUNLU AMS Heater und die EIBOS Series\n\nWählen Sie diesen Stecker für jedes AMS, das mit einer Heizung ausgestattet ist, oder lassen Sie ihn leer. Jedes verbundene AMS verfügt über Elemente für den Heiztrocknungsmodus, die Heizleistung, den Feuchtigkeitsschwellenwert, die Temperaturabschaltung und die Laufzeitbegrenzung.\n\nStellen Sie die Heizung oder den Trockner selbst so ein, dass er mit dem Heizen beginnt, wenn er eingeschaltet wird, sodass das Trocknen tatsächlich durch Einschalten des Steckers beginnt."
       }
     }
   },
@@ -362,6 +385,18 @@
       },
       "target_chamber_temperature": {
         "name": "Zieltemperatur der Kammer"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Luftfeuchtigkeit beim Einschalten der Heizung"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Luftfeuchtigkeit beim Ausschalten der Heizung"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Temperaturabschaltung der Heizung"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maximale Laufzeit der Heizung"
       }
     },
     "select": {
@@ -1196,6 +1231,12 @@
       },
       "ftp": {
         "name": "Modelldaten vom Drucker laden"
+      },
+      "ams_heater_drying": {
+        "name": "Heizungstrocknungsmodus"
+      },
+      "ams_heater_power": {
+        "name": "Heizleistung"
       }
     },
     "update": {
@@ -1208,7 +1249,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab-Cloud",
-        "lan": "LAN-Modus"
+        "lan": "LAN-Modus",
+        "makerworld": "MakerWorld-Konto",
+        "ams_heater": "Externe AMS-Heizung oder Trockner (Smart Plug)"
       }
     }
   },

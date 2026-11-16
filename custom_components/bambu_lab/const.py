@@ -11,6 +11,9 @@ from homeassistant.const import Platform
 
 # Integration domain
 DOMAIN = "bambu_lab"
+ENTRY_TYPE = "entry_type"
+ENTRY_TYPE_MAKERWORLD = "makerworld"
+MAKERWORLD_DATA = f"{DOMAIN}_makerworld"
 BRAND = "Bambu Lab"
 URL_BASE = "/bambu_lab"
 
@@ -63,7 +66,6 @@ OPTION_NAME = {
 OPTION_ENABLE_FILAMENT_INVENTORY = "enable_filament_inventory"
 OPTION_FILAMENT_INVENTORY_INTERVAL = "filament_inventory_interval"
 DEFAULT_FILAMENT_INVENTORY_INTERVAL = 60  # minutes
-OPTION_ENABLE_MAKERWORLD_DEVICE = "enable_makerworld_device"
 
 def load_dict(filename: str) -> dict:
     with open(filename) as f:

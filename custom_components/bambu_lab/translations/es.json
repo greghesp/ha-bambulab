@@ -17,7 +17,10 @@
       "already_configured": "El dispositivo ya estaba configurado",
       "no_printers": "No se encontraron impresoras configuradas en la cuenta.",
       "cloudflare": "Cloudflare ha bloqueado el intento de conexión.",
-      "curl_unavailable": "La librería curl_cffi no está disponible."
+      "curl_unavailable": "La librería curl_cffi no está disponible.",
+      "no_working_credentials": "No hay credenciales de impresora Bambu Cloud que funcionen disponibles para esta cuenta.",
+      "reconfigure_not_supported": "Sólo las entradas de la cuenta MakerWorld se pueden reconfigurar de esta manera.",
+      "reconfigure_successful": "Credenciales de MakerWorld actualizadas."
     },
     "error": {
       "cannot_connect": "Error al conectar. Revisa las credenciales.",
@@ -114,13 +117,29 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Cuenta MakerWorld",
+        "description": "Utilice credenciales de Bambu Cloud que funcionen desde una entrada de impresora existente. No se requiere inicio de sesión adicional.",
+        "data": {
+          "username": "Cuenta Bambú:"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigurar la cuenta MakerWorld",
+        "description": "Elija otra entrada de impresora existente con credenciales de trabajo para esta cuenta de Bambu.",
+        "data": {
+          "credential_source": "Fuente de credenciales:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare ha bloqueado el intento de conexión.",
-      "curl_unavailable": "La librería curl_cffi no está disponible."
+      "curl_unavailable": "La librería curl_cffi no está disponible.",
+      "no_working_credentials": "No hay credenciales de impresora Bambu Cloud que funcionen disponibles para esta cuenta.",
+      "no_ams": "Aún no se ha identificado ningún AMS en esta impresora. Espere a que la impresora se conecte e informe sus unidades AMS y vuelva a intentarlo."
     },
     "error": {
       "cannot_connect": "Error al conectar",
@@ -212,6 +231,10 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Calentador o secador AMS externo",
+        "description": "Los calentadores y secadores AMS complementarios, como el calentador SUNLU AMS y el EIBOS Serie X (Dyas/Tetras), no tienen conexión de red, por lo que Home Assistant controla uno cambiando el enchufe inteligente desde el que se alimenta.\n\nElija ese enchufe para cada AMS que tenga instalado un calentador o déjelo vacío. Cada AMS vinculado obtiene entidades de modo de secado del calentador, potencia del calentador, umbral de humedad, corte de temperatura y límite de tiempo de ejecución.\n\nConfigure el calentador o la secadora para que comience a calentar cuando esté encendido, de modo que al encender el enchufe realmente comience a secarse."
       }
     }
   },
@@ -362,6 +385,18 @@
       },
       "target_chamber_temperature": {
         "name": "Temperatura objetivo de la cámara"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Humedad al encender el calentador"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Humedad al apagar el calentador"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Corte de temperatura del calentador"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Tiempo de funcionamiento máximo del calentador"
       }
     },
     "select": {
@@ -1196,6 +1231,12 @@
       },
       "ftp": {
         "name": "Cargar datos del modelo de la impresora"
+      },
+      "ams_heater_drying": {
+        "name": "Modo de secado del calentador"
+      },
+      "ams_heater_power": {
+        "name": "Potencia del calentador"
       }
     },
     "update": {
@@ -1208,7 +1249,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Nube de laboratorio de bambú",
-        "lan": "Modo LAN"
+        "lan": "Modo LAN",
+        "makerworld": "Cuenta MakerWorld",
+        "ams_heater": "Calentador o secador AMS externo (enchufe inteligente)"
       }
     }
   },

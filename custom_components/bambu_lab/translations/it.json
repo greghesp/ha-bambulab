@@ -17,7 +17,10 @@
       "already_configured": "Il dispositivo è già configurato",
       "no_printers": "Nessuna stampante non configurata trovata nell'account.",
       "cloudflare": "Cloudflare ha bloccato il tentativo di connessione.",
-      "curl_unavailable": "La libreria curl_cffi non è disponibile."
+      "curl_unavailable": "La libreria curl_cffi non è disponibile.",
+      "no_working_credentials": "Per questo account non sono disponibili credenziali della stampante Bambu Cloud funzionanti.",
+      "reconfigure_not_supported": "Solo le voci dell'account MakerWorld possono essere riconfigurate in questo modo.",
+      "reconfigure_successful": "Credenziali MakerWorld aggiornate."
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
@@ -114,13 +117,29 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Account MakerWorld",
+        "description": "Utilizza le credenziali Bambu Cloud funzionanti da una voce di stampante esistente. Non è richiesto alcun accesso aggiuntivo.",
+        "data": {
+          "username": "Conto Bambu:"
+        }
+      },
+      "reconfigure": {
+        "title": "Riconfigura l'account MakerWorld",
+        "description": "Scegli un'altra voce di stampante esistente con credenziali funzionanti per questo account Bambu.",
+        "data": {
+          "credential_source": "Fonte credenziale:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare ha bloccato il tentativo di connessione.",
-      "curl_unavailable": "La libreria curl_cffi non è disponibile."
+      "curl_unavailable": "La libreria curl_cffi non è disponibile.",
+      "no_working_credentials": "Per questo account non sono disponibili credenziali della stampante Bambu Cloud funzionanti.",
+      "no_ams": "Nessun AMS è stato ancora identificato su questa stampante. Attendere che la stampante si connetta e segnali le sue unità AMS, quindi riprovare."
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
@@ -212,6 +231,10 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Riscaldatore o essiccatore AMS esterno",
+        "description": "I riscaldatori e gli essiccatori AMS aggiuntivi come il riscaldatore SUNLU AMS e EIBOS Serie X (Dyas/Tetras) non hanno connessione di rete, quindi Home Assistant ne controlla uno cambiando la presa intelligente da cui è alimentato.\n\nScegliere la spina per ciascun AMS dotato di riscaldatore oppure lasciarla vuota. Ciascun AMS collegato ottiene la modalità di asciugatura del riscaldatore, la potenza del riscaldatore, la soglia di umidità, il limite di temperatura e i limiti di tempo di funzionamento.\n\nImposta il riscaldatore o l'asciugatrice stessa in modo che inizi a riscaldarsi quando è accesa, in modo che accendendo la spina si avvii effettivamente l'asciugatura."
       }
     }
   },
@@ -362,6 +385,18 @@
       },
       "target_chamber_temperature": {
         "name": "Temperatura target della camera"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Umidità all'accensione del riscaldatore"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Umidità di spegnimento del riscaldatore"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Interruzione della temperatura del riscaldatore"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Autonomia massima del riscaldatore"
       }
     },
     "select": {
@@ -1196,6 +1231,12 @@
       },
       "ftp": {
         "name": "Carica i dati del modello dalla stampante"
+      },
+      "ams_heater_drying": {
+        "name": "Modalità di asciugatura del riscaldatore"
+      },
+      "ams_heater_power": {
+        "name": "Potenza del riscaldatore"
       }
     },
     "update": {
@@ -1208,7 +1249,9 @@
     "configuration_type": {
       "options": {
         "bambu": "La nuvola di Bambu Lab",
-        "lan": "Modalità Lan"
+        "lan": "Modalità Lan",
+        "makerworld": "Account MakerWorld",
+        "ams_heater": "Riscaldatore o essiccatore AMS esterno (presa intelligente)"
       }
     }
   },

@@ -17,7 +17,10 @@
       "already_configured": "裝置已設定",
       "no_printers": "帳號中找不到尚未設定的印表機。",
       "cloudflare": "Cloudflare 已封鎖連線嘗試。",
-      "curl_unavailable": "curl_cffi 函式庫無法使用。"
+      "curl_unavailable": "curl_cffi 函式庫無法使用。",
+      "no_working_credentials": "此帳戶沒有可用的 Bambu Cloud 印表機憑證。",
+      "reconfigure_not_supported": "只有 MakerWorld 帳戶條目可以透過這種方式重新配置。",
+      "reconfigure_successful": "MakerWorld 憑證已更新。"
     },
     "error": {
       "cannot_connect": "連線失敗，請檢查憑證。",
@@ -114,13 +117,28 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "創客世界帳戶",
+        "description": "使用現有印表機條目中的有效 Bambu Cloud 憑證。無需額外登入。",
+        "data": {
+          "username": "班布帳號："
+        }
+      },
+      "reconfigure": {
+        "title": "重新配置 MakerWorld 帳戶",
+        "data": {
+          "credential_source": "憑證來源："
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare 已封鎖連線嘗試。",
-      "curl_unavailable": "curl_cffi 函式庫無法使用。"
+      "curl_unavailable": "curl_cffi 函式庫無法使用。",
+      "no_working_credentials": "此帳戶沒有可用的 Bambu Cloud 印表機憑證。",
+      "no_ams": "此打印机上尚未识别出 AMS。等待印表機連接並報告其 AMS 單位，然後重試。"
     },
     "error": {
       "cannot_connect": "連線失敗",
@@ -212,6 +230,10 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "外部 AMS 加熱器或乾燥器",
+        "description": "附加 AMS 加熱器和烘乾機，例如 SUNLU AMS 加熱器和 EIBOS X 系列（Dyas/Tetras）沒有網路連接，因此家庭助理透過切換其供電的智慧插頭來控制它們。\n\n為每個裝有加熱器的 AMS 選擇該插頭，或將其留空。每個連結的 AMS 均獲得加熱器乾燥模式、加熱器功率、濕度閾值、溫度截止和運行時間限制實體。\n\n將加熱器或烘乾機本身設定為在通電時開始加熱，因此切換插頭實際上開始烘乾。"
       }
     }
   },
@@ -362,6 +384,18 @@
       },
       "target_chamber_temperature": {
         "name": "機箱目標溫度"
+      },
+      "ams_heater_humidity_on": {
+        "name": "加熱器開啟濕度"
+      },
+      "ams_heater_humidity_off": {
+        "name": "加熱器關閉濕度"
+      },
+      "ams_heater_max_temperature": {
+        "name": "加熱器溫度截止"
+      },
+      "ams_heater_max_runtime": {
+        "name": "加熱器最大運轉時間"
       }
     },
     "select": {
@@ -1196,6 +1230,12 @@
       },
       "prompt_sound": {
         "name": "提示音"
+      },
+      "ams_heater_drying": {
+        "name": "加熱器乾燥方式"
+      },
+      "ams_heater_power": {
+        "name": "加熱器功率"
       }
     },
     "update": {
@@ -1208,7 +1248,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab 雲端",
-        "lan": "區域網路模式"
+        "lan": "區域網路模式",
+        "makerworld": "創客世界帳戶",
+        "ams_heater": "外部 AMS 加熱器或乾燥器（智慧插頭）"
       }
     }
   },

@@ -42,12 +42,11 @@ from .const import (
     OPTION_ENABLE_FILAMENT_INVENTORY,
     OPTION_FILAMENT_INVENTORY_INTERVAL,
     DEFAULT_FILAMENT_INVENTORY_INTERVAL,
-    OPTION_ENABLE_MAKERWORLD_DEVICE,
 )
 
-from .makerworld import create_makerworld_coordinator, remove_makerworld_device
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
+from .makerworld import remove_legacy_makerworld_device
 from .pybambu.utils import build_print_project_file_command
 from .pybambu.models import FilamentInventory
 from .pybambu.const import (
@@ -87,14 +86,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config['user_language'] = hass.config.language
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
         self.client = BambuClient(config)
-
-        # Account level MakerWorld stats. None unless enabled, cloud-connected,
-        # and this entry owns the account's entities.
-        self.makerworld = None
-        if config.get(OPTION_ENABLE_MAKERWORLD_DEVICE, False):
-            self.makerworld = create_makerworld_coordinator(hass, entry, self.client.bambu_cloud)
-        else:
-            remove_makerworld_device(hass, entry)
+        remove_legacy_makerworld_device(hass, entry)
 
         # Account level filament inventory ("Filament Manager"). None unless the
         # entry has opted in. Kept here rather than in hass.data[DOMAIN], whose

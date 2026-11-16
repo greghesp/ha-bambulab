@@ -17,7 +17,10 @@
       "already_configured": "L'appareil est déjà configuré",
       "no_printers": "Aucune imprimante non configurée n’a été trouvée dans le compte.",
       "cloudflare": "Cloudflare a bloqué la tentative de connexion.",
-      "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible."
+      "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible.",
+      "no_working_credentials": "Aucun identifiant d'imprimante Bambu Cloud fonctionnel n'est disponible pour ce compte.",
+      "reconfigure_not_supported": "Seules les entrées du compte MakerWorld peuvent être reconfigurées de cette façon.",
+      "reconfigure_successful": "Informations d'identification MakerWorld mises à jour."
     },
     "error": {
       "cannot_connect": "Échec de la connexion. Vérifiez les identifiants.",
@@ -114,13 +117,29 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Compte MakerWorld",
+        "description": "Utilisez les informations d'identification Bambu Cloud fonctionnelles à partir d'une entrée d'imprimante existante. Aucune connexion supplémentaire n'est requise.",
+        "data": {
+          "username": "Compte Bambu :"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigurer le compte MakerWorld",
+        "description": "Choisissez une autre entrée d'imprimante existante avec des informations d'identification fonctionnelles pour ce compte Bambu.",
+        "data": {
+          "credential_source": "Source des informations d'identification :"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare a bloqué la tentative de connexion.",
-      "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible."
+      "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible.",
+      "no_working_credentials": "Aucun identifiant d'imprimante Bambu Cloud fonctionnel n'est disponible pour ce compte.",
+      "no_ams": "Aucun AMS n'a encore été identifié sur cette imprimante. Attendez que l'imprimante se connecte et signale ses unités AMS, puis réessayez."
     },
     "error": {
       "cannot_connect": "Échec de la connexion. Vérifiez les identifiants.",
@@ -212,6 +231,10 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Chauffage ou sèche-linge AMS externe",
+        "description": "Les radiateurs et sèche-linge AMS supplémentaires tels que le radiateur SUNLU AMS et l'EIBOS série X (Dyas/Tetras) n'ont pas de connexion réseau, donc Home Assistant en contrôle un en commutant la prise intelligente à partir de laquelle il est alimenté.\n\nChoisissez cette prise pour chaque AMS équipé d’un chauffage ou laissez-la vide. Chaque AMS lié obtient les entités du mode de séchage du chauffage, de la puissance du chauffage, du seuil d'humidité, de la coupure de température et de la limite de durée de fonctionnement.\n\nRéglez le radiateur ou le sèche-linge lui-même pour qu'il commence à chauffer lorsqu'il est allumé, afin que le fait de changer la prise commence réellement à sécher."
       }
     }
   },
@@ -362,6 +385,18 @@
       },
       "target_chamber_temperature": {
         "name": "Température cible de la chambre"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Humidité d'allumage du chauffage"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Humidité d'arrêt du chauffage"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Coupure de température du chauffage"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Durée de fonctionnement maximale du chauffage"
       }
     },
     "select": {
@@ -1196,6 +1231,12 @@
       },
       "ftp": {
         "name": "Chargement des modèles"
+      },
+      "ams_heater_drying": {
+        "name": "Mode de séchage par chauffage"
+      },
+      "ams_heater_power": {
+        "name": "Puissance de chauffage"
       }
     },
     "update": {
@@ -1208,7 +1249,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Cloud Bambu Lab",
-        "lan": "Réseau local"
+        "lan": "Réseau local",
+        "makerworld": "Compte MakerWorld",
+        "ams_heater": "Chauffage ou sèche-linge AMS externe (prise intelligente)"
       }
     }
   },
