@@ -508,6 +508,12 @@
           "cutter": "Cutter"
         }
       },
+      "processing_material": {
+        "name": "Laser/cutter material"
+      },
+      "check_in_remaining": {
+        "name": "Laser check-in remaining"
+      },
       "track_switch_input": {
         "name": "Track switch input {input_number}",
         "state": {
