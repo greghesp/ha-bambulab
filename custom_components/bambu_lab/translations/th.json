@@ -386,7 +386,9 @@
       "target_chamber_temperature": {
         "name": "อุณหภูมิเป้าหมายห้อง"
       },
-      "ams_heater_humidity_on": {},
+      "ams_heater_humidity_on": {
+        "name": "เครื่องทำความร้อนเปิดความชื้น"
+      },
       "ams_heater_humidity_off": {
         "name": "เครื่องทำความร้อนปิดความชื้น"
       },

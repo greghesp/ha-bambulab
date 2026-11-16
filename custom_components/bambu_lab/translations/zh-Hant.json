@@ -129,7 +129,8 @@
         "title": "重新配置 MakerWorld 帳戶",
         "data": {
           "credential_source": "憑證來源："
-        }
+        },
+        "description": "選擇具有此 Bambu 帳戶的工作憑證的另一個現有印表機項目。"
       }
     }
   },
