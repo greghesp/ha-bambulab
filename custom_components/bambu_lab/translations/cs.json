@@ -84,7 +84,9 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Bzučák - Pípání"
+      },
+      "hotend_rack_raise": {
+        "name": "Zvedněte stojan"
+      },
+      "hotend_rack_lower": {
+        "name": "Spodní stojan"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "Výfukový ventilátor"
+      },
+      "air_purifier": {
+        "name": "Čistička vzduchu",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Tichý",
+              "standard": "Norma",
+              "max": "Max"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1066,22 +1093,90 @@
           }
         }
       },
-      "zone_remaining_drying_time": {
-        "name": "Zbývající doba sušení zóny {zone_number}",
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Rychlost ventilátoru"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Pozice swaptek (raw)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Stav Swaptek (raw)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Jízdní",
+          "docked": "Ukotveno",
+          "empty": "Prázdný"
+        },
         "state_attributes": {
-          "zone": {
-            "name": "Zóna"
+          "tool": {
+            "name": "Nástroj"
           },
-          "zone_id": {
-            "name": "ID zóny"
+          "filament_diameter": {
+            "name": "Průměr vlákna"
           },
-          "slots": {
-            "name": "Sloty"
+          "filament_name": {
+            "name": "Název vlákna"
           },
-          "dry_setting": {
-            "name": "Nastavení sušení"
+          "filament_type": {
+            "name": "Typ vlákna"
+          },
+          "remaining_weight_g": {
+            "name": "Zbývající hmotnost vlákna"
+          },
+          "remaining_percent": {
+            "name": "Zbývající vlákno"
+          },
+          "ams_id": {
+            "name": "ID AMS"
+          },
+          "ams_slot": {
+            "name": "Slot AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Průměr trysky"
+          },
+          "nozzle_type": {
+            "name": "Typ trysky"
+          },
+          "nozzle_type_code": {
+            "name": "Kód typu trysky"
+          },
+          "max_temperature": {
+            "name": "Maximální teplota"
+          },
+          "serial": {
+            "name": "Sériové číslo"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "wear": {
+            "name": "Nosit"
+          },
+          "status_raw": {
+            "name": "Stav (nezpracovaný)"
           }
         }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Teplota PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Cílová teplota PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "Čas tisku PrintTool {tool_number}"
+      },
+      "filament_inventory": {
+        "name": "Inventář vláken"
       }
     },
     "camera": {

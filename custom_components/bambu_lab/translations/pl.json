@@ -84,7 +84,9 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "Sygnał dźwiękowy (brzęczyk)"
+      },
+      "hotend_rack_raise": {
+        "name": "Podnieś stojak"
+      },
+      "hotend_rack_lower": {
+        "name": "Dolny stojak"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "Wentylator wyciągowy"
+      },
+      "air_purifier": {
+        "name": "Oczyszczacz powietrza",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automatyczny",
+              "silent": "Cichy",
+              "standard": "Standard",
+              "max": "Maks"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1066,22 +1093,90 @@
           }
         }
       },
-      "zone_remaining_drying_time": {
-        "name": "Pozostały czas suszenia strefy {zone_number}",
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Prędkość wentylatora"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Pozycja Swaptek (surowa)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Stan Swaptek (surowy)"
+      },
+      "hotend_rack_printtool": {
+        "name": "Narzędzie do drukowania {tool_number}",
+        "state": {
+          "mounted": "Zmontowany",
+          "docked": "Zadokowany",
+          "empty": "Pusty"
+        },
         "state_attributes": {
-          "zone": {
-            "name": "Strefa"
+          "tool": {
+            "name": "Narzędzie"
           },
-          "zone_id": {
-            "name": "Identyfikator strefy"
+          "filament_diameter": {
+            "name": "Średnica włókna"
           },
-          "slots": {
-            "name": "Sloty"
+          "filament_name": {
+            "name": "Nazwa włókna"
           },
-          "dry_setting": {
-            "name": "Ustawienie suszenia"
+          "filament_type": {
+            "name": "Typ włókna"
+          },
+          "remaining_weight_g": {
+            "name": "Pozostała masa żarnika"
+          },
+          "remaining_percent": {
+            "name": "Pozostały włókno"
+          },
+          "ams_id": {
+            "name": "Identyfikator AMS"
+          },
+          "ams_slot": {
+            "name": "gniazdo AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Średnica dyszy"
+          },
+          "nozzle_type": {
+            "name": "Typ dyszy"
+          },
+          "nozzle_type_code": {
+            "name": "Kod typu dyszy"
+          },
+          "max_temperature": {
+            "name": "Maksymalna temperatura"
+          },
+          "serial": {
+            "name": "Numer seryjny"
+          },
+          "filament_id": {
+            "name": "Identyfikator włókna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "wear": {
+            "name": "Nosić"
+          },
+          "status_raw": {
+            "name": "Stan (surowy)"
           }
         }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura narzędzia PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Temperatura docelowa PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "Czas drukowania PrintTool {tool_number}"
+      },
+      "filament_inventory": {
+        "name": "Inwentarz włókien"
       }
     },
     "camera": {

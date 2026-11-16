@@ -28,6 +28,7 @@ from .const import (
     SERVICE_CALL_FUTURES,
     SERVICE_CALL_ID,
 )
+from .ams_heater_controller import async_setup_ams_heaters
 from .coordinator import BambuDataUpdateCoordinator
 from .panda_devices import async_setup_panda_devices
 from .pybambu.utils import normalize_service_target
@@ -392,6 +393,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+    coordinator.ams_heaters = async_setup_ams_heaters(hass, entry, coordinator)
 
     coordinator.panda_devices = async_setup_panda_devices(hass, entry, coordinator)
 
@@ -400,6 +402,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         # bonus, so a failure here must not hold up the printer. The sensors are
         # created either way and report unavailable until a poll succeeds.
         await coordinator.makerworld.async_refresh()
+
+    if coordinator.filament_inventory is not None:
+        # Same reasoning as MakerWorld above: a cloud failure must not block
+        # printer setup, so don't use async_config_entry_first_refresh().
+        await coordinator.filament_inventory.async_refresh()
 
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
@@ -432,6 +439,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "read_rfid": SupportsResponse.NONE,
         "start_filament_drying": SupportsResponse.NONE,
         "stop_filament_drying": SupportsResponse.NONE,
+        "force_filament_sync": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(

@@ -22,6 +22,7 @@ import xml.etree.ElementTree as ElementTree
 from PIL import Image
 import asyncio
 
+from .air_purifier import AirPurifier
 from .utils import (
     search,
     fan_percentage,
@@ -69,6 +70,7 @@ from .const import (
     AMS_FILAMENT_CHANGE_STEPS,
 )
 from .commands import (
+    GET_VERSION,
     CHAMBER_LIGHT_ON,
     CHAMBER_LIGHT_OFF,
     CHAMBER_LIGHT_2_ON,
@@ -118,6 +120,7 @@ class Device:
         self.extruder_tool = ExtruderTool(client=client)
         self.hotend_rack = HotendRack(client=client)
         self.track_switch = FilamentTrackSwitch(client=client)
+        self.air_purifier = AirPurifier(client=client)
         self.push_all_data = None
         self.get_version_data = None
         self.chamber_image = ChamberImage(client = client)
@@ -126,6 +129,9 @@ class Device:
         self.print_fun = PrintFun(client = client)
 
     def print_update(self, data) -> bool:
+        had_full_printer_data = self.has_full_printer_data
+        previous_purifier_identity = self.air_purifier.identity
+        previously_connected = self.air_purifier.connected
         send_event = False
         send_event = send_event | self.info.print_update(data = data)
         send_event = send_event | self.upgrade.print_update(data = data)
@@ -147,6 +153,7 @@ class Device:
         send_event = send_event | self.extruder_tool.print_update(data = data)
         send_event = send_event | self.hotend_rack.print_update(data = data)
         send_event = send_event | self.track_switch.print_update(data = data)
+        send_event = send_event | self.air_purifier.print_update(data = data)
 
         if data.get("command") == "push_status":
             if data.get("msg", 0) == 0:
@@ -156,6 +163,13 @@ class Device:
                 self.push_all_data = data
                 if send_ready_event:
                     self._client.callback("event_printer_ready")
+
+        if (self.has_full_printer_data and self.air_purifier.connected is True and
+            not self.air_purifier.ready and (previously_connected is not True or not had_full_printer_data)):
+            # A newly attached accessory needs a fresh serial number from get_version.
+            self._client.publish(GET_VERSION)
+        if had_full_printer_data and self.air_purifier.identity and self.air_purifier.identity != previous_purifier_identity:
+            self._client.callback("event_printer_ready")
 
         # Only notify Home Assistant when something actually changed. The printer pushes
         # status roughly once a second; without this gate every push forces all entities
@@ -181,18 +195,27 @@ class Device:
 
     def info_update(self, data):
         had_full_printer_data = self.has_full_printer_data
+        previous_purifier_identity = self.air_purifier.identity
         self.info.info_update(data = data)
         self.home_flag.info_update(data = data)
         ams_info_changed = self.ams.info_update(data = data)
+        purifier_info_changed = self.air_purifier.info_update(data = data)
 
         if data.get("command") == "get_version":
             send_ready_event = self.get_version_data is None and self.push_all_data is not None
             if self.get_version_data is None:
                 LOGGER.debug("Reached first push of version data.")
             self.get_version_data = data
+            if (not had_full_printer_data and self.has_full_printer_data and
+                self.air_purifier.connected is True and not self.air_purifier.ready):
+                # The initial version response may precede accessory identification.
+                self._client.publish(GET_VERSION)
             if send_ready_event:
                 self._client.callback("event_printer_ready")
-            elif had_full_printer_data and ams_info_changed:
+            elif had_full_printer_data and (ams_info_changed or (
+                purifier_info_changed and self.air_purifier.identity and
+                self.air_purifier.identity != previous_purifier_identity
+            )):
                 # A later get_version response can fill in AMS identity metadata that was
                 # missing during initial startup. Re-run entity setup so placeholder AMS
                 # entries are replaced with entities using the real serial/model.
@@ -207,6 +230,7 @@ class Device:
         a1_printers = {Printers.A1, Printers.A1MINI}
         a2_printers = {Printers.A2L}
         h2_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.H2S}
+        h3_printers = {Printers.H3C}
         p1_printers = {Printers.P1P, Printers.P1S}
         p2_printers = {Printers.P2S}
         x1_printer  = {Printers.X1, Printers.X1C}
@@ -230,7 +254,7 @@ class Device:
         # processing the mqtt payload and so may be called before full initialization is complete as it processes
         # the very first payload.
         if feature == Features.CAMERA_RTSP:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
+            return model in (h2_printers | h3_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.CAMERA_IMAGE:
             return model in (a1_printers | a2_printers | p1_printers)
         elif feature == Features.SUPPORTS_EARLY_FTP_DOWNLOAD:
@@ -250,7 +274,7 @@ class Device:
             # flag would largely be good though but not accessible here.
             return model not in (a1_printers | a2_printers)
         elif feature == Features.CHAMBER_TEMPERATURE:
-            return model in (h2_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
+            return model in (h2_printers | h3_printers | p2_printers | x1_printer | x1e_printer | x2_printers)
         elif feature == Features.AMS:
             return len(self.ams.data) != 0
         elif feature == Features.K_VALUE:
@@ -263,7 +287,7 @@ class Device:
             return True
         elif feature == Features.AIRDUCT_MODE:
             # Airduct mode (Filter/Heating and Cooling) is present on P2S and H2 series
-            return model in (h2_printers | p2_printers | x2_printers)
+            return model in (h2_printers | h3_printers | p2_printers | x2_printers)
         elif feature == Features.HYBRID_MODE_BLOCKS_CONTROL:
             if model in p1_printers:
                 # Not sure what the first version that did this was. At least this - could be earlier.
@@ -271,7 +295,7 @@ class Device:
             # Only the P1 firmware did this as far as I know. Not the A1.
             return False
         elif feature == Features.DOOR_SENSOR:
-            if model in (h2_printers | p2_printers | x2_printers):
+            if model in (h2_printers | h3_printers | p2_printers | x2_printers):
                 return True
             if model in x1e_printer:
                 return self.supports_sw_version("01.01.02.00")
@@ -296,7 +320,7 @@ class Device:
                 return self.supports_sw_version("01.06.10.33")
             return True
         elif feature == Features.PROMPT_SOUND:
-            if model in (a1_printers | a2_printers | h2_printers | p2_printers | x2_printers):
+            if model in (a1_printers | a2_printers | h2_printers | h3_printers | p2_printers | x2_printers):
                 return not self.print_fun.mqtt_signature_required
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -335,13 +359,17 @@ class Device:
                 return self.supports_sw_version("01.01.50.40")
             if model == Printers.H2C:
                 return self.supports_sw_version("01.01.50.00")
+            if model in h2_printers:
+                return True # Don't know what version it was added to H2S and H2D and H2D Pro
+            if model in h3_printers:
+                return True
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
             return model in h2_printers
         elif feature == Features.DUAL_NOZZLES:
             return model in dual_nozzle_printers
         elif feature == Features.EXTRUDER_TOOL:
-            return model in (h2_printers | x2_printers)
+            return model in (h2_printers | h3_printers | x2_printers)
         elif feature == Features.MQTT_ENCRYPTION_FIRMWARE:
             if model in a1_printers:
                 return self.supports_sw_version("01.05.00.00")
@@ -358,13 +386,13 @@ class Device:
         elif feature == Features.FIRE_ALARM_BUZZER:
             return model in h2_printers
         elif feature == Features.HEATBED_LIGHT:
-            return model in h2_printers
+            return model in (h2_printers | h3_printers)
         elif feature == Features.SECONDARY_AUX_FAN:
             return model in (p2_printers | x2_printers)
         elif feature == Features.HOTEND_RACK:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         elif feature == Features.ACTIVE_CHAMBER_HEATER:
-            return model in (x1e_printer | h2_printers | x2_printers)
+            return model in (x1e_printer | h2_printers | h3_printers | x2_printers)
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -697,6 +725,9 @@ class Fans:
         self._secondary_aux_fan_speed = 0
         self._secondary_aux_fan_speed_override = 0
         self._secondary_aux_fan_speed_override_time = None
+        self._h3c_chamber_fan_speed_percentage = None
+        self._airduct_mode = None
+        self._airduct_modes = {}
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -721,7 +752,13 @@ class Fans:
                 self._cooling_fan_speed_override_time = None
         self._heatbreak_fan_speed = data.get("heatbreak_fan_speed", self._heatbreak_fan_speed)
         self._heatbreak_fan_speed_percentage = fan_percentage(self._heatbreak_fan_speed)
-        airduct_parts = data.get("device", {}).get("airduct", {}).get("parts")
+        airduct = data.get("device", {}).get("airduct", {}) or {}
+        if "modeCur" in airduct:
+            self._airduct_mode = airduct["modeCur"]
+        for mode in airduct.get("modeList") or []:
+            if isinstance(mode, dict) and "modeId" in mode and isinstance(mode.get("ctrl"), list):
+                self._airduct_modes[mode["modeId"]] = mode
+        airduct_parts = airduct.get("parts")
         if airduct_parts:
             fan_part = next((item for item in airduct_parts if item.get("id") == 160), None)
             if fan_part is not None:
@@ -731,6 +768,11 @@ class Fans:
                 self._secondary_aux_fan_speed_percentage = fan_part.get(
                     "state", self._secondary_aux_fan_speed_percentage
                 )
+            chamber_part = next((item for item in airduct_parts if item.get("id") == 240), None)
+            if chamber_part is not None:
+                state = chamber_part.get("state")
+                if type(state) is int and state >= 0 and (state & 0xFF) <= 100:
+                    self._h3c_chamber_fan_speed_percentage = state & 0xFF
         if self._secondary_aux_fan_speed_override_time is not None:
             delta = datetime.now() - self._secondary_aux_fan_speed_override_time
             if delta.seconds > 5:
@@ -740,6 +782,13 @@ class Fans:
 
     def set_fan_speed(self, fan: FansEnum, percentage: int) -> bool:
         """Set fan speed"""
+        if fan == FansEnum.H3C_CHAMBER:
+            if not self.h3c_chamber_fan_controllable or not 0 <= percentage <= 100:
+                return False
+            percentage = round(percentage / 10) * 10
+            return bool(self._client.publish({"print": {
+                "command": "set_fan", "sequence_id": "0", "fan_index": 15, "speed": percentage,
+            }}))
         percentage = round(percentage / 10) * 10
         command = fan_percentage_to_gcode(fan, percentage)
 
@@ -763,7 +812,12 @@ class Fans:
         self._client.callback("event_printer_data_update")
         return True
 
-    def get_fan_speed(self, fan: FansEnum) -> int:
+    @property
+    def h3c_chamber_fan_controllable(self) -> bool:
+        mode = self._airduct_modes.get(self._airduct_mode, {})
+        return 240 in (mode.get("ctrl") or []) and 240 not in (mode.get("off") or [])
+
+    def get_fan_speed(self, fan: FansEnum) -> int | None:
         if fan == FansEnum.PART_COOLING:
             if self._cooling_fan_speed_override_time is not None:
                 return self._cooling_fan_speed_override
@@ -785,6 +839,8 @@ class Fans:
             if self._secondary_aux_fan_speed_override_time is not None:
                 return self._secondary_aux_fan_speed_override
             return self._secondary_aux_fan_speed_percentage
+        elif fan == FansEnum.H3C_CHAMBER:
+            return self._h3c_chamber_fan_speed_percentage
 
 @dataclass
 class Upgrade:
@@ -918,6 +974,10 @@ class Upgrade:
                 self.upgrade_progress = int(state.get("progress", self.upgrade_progress))
             except ValueError:
                 # Prevents unexpected "" strings from being empty.
+                self.upgrade_progress = 0
+            if state.get("status") in ("UPGRADE_SUCCESS", "UPGRADE_FAIL"):
+                # The upgrade has finished, so don't leave a stale progress
+                # value behind or the update entity reports it as in progress.
                 self.upgrade_progress = 0
             self.new_version_state = state.get("new_version_state", self.new_version_state)
             self.cur_version = self._client._device.info.sw_ver
@@ -1336,7 +1396,7 @@ class PrintJob:
                     LOGGER.debug(f"DOWNLOAD TO PRINTER IS COMPLETE")
                     self._update_task_data()
 
-            if self.gcode_state in ("RUNNING", "PAUSE", "FINISH") and (previously_idle or previous_gcode_state in ("PREPARE", "unknown")):
+            if self.gcode_state == "RUNNING" and (previously_idle or previous_gcode_state == "PREPARE"):
                 # We haven't yet downloaded model data off the printer. Scenarios where this happens:
                 # 1. This is a lan mode print where the gcode was pushed to the printer before the print ever started
                 # 2. On the P1/P2/A1 download completes or prepare_percent never reaches 100
@@ -3096,6 +3156,8 @@ class Info:
     def set_online(self, online):
         if self.online != online:
             self.online = online
+            if not online:
+                self._client._device.hotend_rack.invalidate_control_state()
             self._client.callback("event_printer_data_update")
 
     def info_update(self, data):
@@ -3484,6 +3546,97 @@ class HotendRack:
         self.holder_pos: int = 0
         self.holder_stat: int = 0
         self.mounted_slot_id: int | None = None
+        self._holder_job = None
+        self._holder_stat_known = False
+        self._print_state_known = False
+        self._move_pending_at = None
+        self._move_seen_busy = False
+        self._move_lock = threading.RLock()
+
+    def invalidate_control_state(self):
+        """Require fresh printer and holder status after a disconnect."""
+        with self._move_lock:
+            self._holder_job = None
+            self._holder_stat_known = False
+            self._print_state_known = False
+            self._move_pending_at = None
+            self._move_seen_busy = False
+
+    @property
+    def can_move(self) -> bool:
+        """Only permit H3C rack movement when the reported state is safe."""
+        with self._move_lock:
+            device = self._client._device
+            return bool(
+                self.is_swaptek and device.has_full_printer_data and device.info.online
+                and device.supports_feature(Features.HOTEND_RACK)
+                and not device.print_fun.mqtt_signature_required
+                and self._print_state_known
+                and device.print_job.gcode_state in ("IDLE", "FINISH", "FAILED")
+                and self._holder_stat_known and self.holder_stat == 0
+                and self._holder_job == 0 and self._move_pending_at is None
+            )
+
+    def move(self, direction: str) -> bool:
+        """Publish an H3C rack movement request, not an assumed result."""
+        action = {"up": 1, "down": 2}.get(direction)
+        with self._move_lock:
+            if action is None or not self.can_move:
+                return False
+            self._move_pending_at = time.monotonic()
+            self._move_seen_busy = False
+            try:
+                published = self._client.publish({"print": {
+                    "command": "nozzle_holder_ctrl", "sequence_id": "0", "action": action,
+                }})
+            except Exception:
+                self._move_pending_at = None
+                raise
+            if not published:
+                self._move_pending_at = None
+            return bool(published)
+
+    def _update_holder(self, data) -> bool:
+        """Track holder-only reports and confirm completed movement."""
+        changed = False
+        with self._move_lock:
+            if isinstance(data.get("gcode_state"), str) and not self._print_state_known:
+                self._print_state_known = True
+                changed = True
+            device = data.get("device")
+            holder = device.get("holder") if isinstance(device, dict) else None
+            if not isinstance(holder, dict):
+                return changed
+            for attr, key in (("holder_pos", "pos"), ("holder_stat", "stat"), ("_holder_job", "job")):
+                value = holder.get(key)
+                if type(value) is int and value >= 0:
+                    if value != getattr(self, attr):
+                        setattr(self, attr, value)
+                        changed = True
+                    if key == "stat" and not self._holder_stat_known:
+                        self._holder_stat_known = True
+                        changed = True
+                elif key in holder and key in ("stat", "job"):
+                    if key == "stat" and self._holder_stat_known:
+                        self._holder_stat_known = False
+                        changed = True
+                    elif key == "job" and self._holder_job is not None:
+                        self._holder_job = None
+                        changed = True
+            if self._move_pending_at is not None:
+                # Status reports can be partial. Do not combine a post-move idle
+                # value with a cached pre-move value to declare the move complete.
+                if (self._holder_stat_known and self.holder_stat != 0) or (
+                    self._holder_job is not None and self._holder_job != 0
+                ):
+                    self._move_seen_busy = True
+                elif (type(holder.get("stat")) is int and holder["stat"] == 0
+                      and type(holder.get("job")) is int and holder["job"] == 0
+                      and (self._move_seen_busy or time.monotonic() - self._move_pending_at >= 30)):
+                    self._move_pending_at = None
+                    self._move_seen_busy = False
+                    changed = True
+        return changed
 
     @property
     def is_swaptek(self) -> bool:
@@ -3532,17 +3685,17 @@ class HotendRack:
         return False
 
     def print_update(self, data) -> bool:
-        changed = False
+        changed = self._update_holder(data)
 
         nozzle_data = data.get("device", {}).get("nozzle", {})
         if not nozzle_data:
-            return False
+            return changed
 
         exist = nozzle_data.get("exist", self.exist_bitmask)
         nozzle_info = nozzle_data.get("info")
 
         if not self._is_vortek_system(exist, nozzle_info):
-            return False
+            return changed
 
         if self.exist_bitmask != exist:
             self.exist_bitmask = exist
@@ -3597,15 +3750,6 @@ class HotendRack:
                     hotend.active = active
                     changed = True
 
-        # Holder data
-        holder_data = data.get("device", {}).get("holder", {})
-        if holder_data:
-            for attr, key in [("holder_pos", "pos"), ("holder_stat", "stat")]:
-                value = holder_data.get(key)
-                if value is not None and value != getattr(self, attr):
-                    setattr(self, attr, value)
-                    changed = True
-
         return changed
 
 
@@ -3657,6 +3801,22 @@ class AMSInstance:
     @property
     def active(self):
         return self._active
+
+    @property
+    def drying_time(self) -> int | None:
+        """Return the remaining drying time in minutes."""
+        if self.model != "AMS 3H":
+            return self.remaining_drying_time
+
+        # Observed H3C reports put drying settings in zone 0 and repeat the timer in zone 1.
+        value = self.zones.get(0, {}).get("dry_time")
+        return value if type(value) is int and value >= 0 else None
+
+    @property
+    def is_drying(self) -> bool | None:
+        """Report AMS-wide drying activity from the available timer."""
+        remaining = self.drying_time
+        return remaining > 0 if remaining is not None else None
 
 
 @dataclass
@@ -4238,10 +4398,8 @@ class ExternalSpool(AMSTray):
 
     @property
     def empty(self) -> bool:
-        """True when no spool is mounted, or this external slot is not active."""
-        if self._physically_empty:
-            return True
-        return not self.active
+        """True when no spool is mounted. Whether the slot is feeding is in `active`."""
+        return self._physically_empty
 
     @empty.setter
     def empty(self, value: bool) -> None:
@@ -4288,7 +4446,7 @@ class ExternalSpool(AMSTray):
         self.bed_temp = 0
 
     def _resolve_loaded_state(self, metadata_only: bool) -> None:
-        """External spool: keep filament data; empty reflects active status."""
+        """External spool: keep filament data; empty only when nothing is mounted."""
         # The holder has no sensor, so blank filament fields mean nothing is mounted.
         if metadata_only or not self._has_filament_metadata():
             self._reset_empty_slot()
@@ -4991,6 +5149,93 @@ class SlicerSettings:
                 self._client.callback("event_printer_bambu_authentication_failed")
             else:
                 self._load_custom_filaments(slicer_settings)
+
+
+class FilamentInventory:
+    """Parsed account-level filament inventory from the Bambu cloud
+    ('Filament Manager'). Driven by BambuFilamentCoordinator, not MQTT."""
+
+    def __init__(self):
+        self.spools: list[dict] = []
+        self.groups: list[dict] = []
+        self.total_spool_count: int = 0
+        self.total_remaining_g: int = 0
+
+    @staticmethod
+    def _str(hit: dict, key: str) -> str:
+        # The API returns explicit JSON null for some fields (e.g. "colors":
+        # null on manual entries), and any field could plausibly be null. A
+        # plain .get(key, "") returns None when the key is present-but-null, so
+        # always coerce: missing OR null -> "".
+        value = hit.get(key)
+        return value if isinstance(value, str) else ""
+
+    @staticmethod
+    def _int(hit: dict, key: str, default: int = 0) -> int:
+        # Coerce missing/null/non-numeric to default; tolerate numeric strings.
+        value = hit.get(key, default)
+        if value is None:
+            return default
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
+
+    @classmethod
+    def _parse_spool(cls, hit: dict) -> dict:
+        remaining_g = cls._int(hit, "netWeight")
+        total_g = cls._int(hit, "totalNetWeight")
+        remaining_pct = min(100, max(0, int(round((remaining_g / total_g) * 100)))) if total_g > 0 else 0
+        return {
+            "id": hit.get("id"),
+            "rfid": cls._str(hit, "RFID"),
+            "vendor": cls._str(hit, "filamentVendor"),
+            "name": cls._str(hit, "filamentName"),
+            "type": cls._str(hit, "filamentType"),
+            "filament_id": cls._str(hit, "filamentId"),
+            "color": cls._str(hit, "color"),
+            # Manual entries send "colors": null (key present, value null), so
+            # `.get("colors", [])` would return None. `or []` coerces both the
+            # missing-key and explicit-null cases to an empty list.
+            "colors": hit.get("colors") or [],
+            "color_type": cls._int(hit, "colorType"),
+            "remaining_g": remaining_g,
+            "total_g": total_g,
+            "remaining_pct": remaining_pct,
+            "tray_id_name": cls._str(hit, "trayIdName"),
+            "note": cls._str(hit, "note"),
+            "updated_at": cls._int(hit, "updatedAt"),
+        }
+
+    def update(self, payload: dict | None) -> None:
+        """Replace inventory from a raw cloud payload (or None on fetch failure)."""
+        hits = (payload or {}).get("hits", []) or []
+
+        # Skip any non-dict entry defensively (e.g. a null in the hits array).
+        spools = [self._parse_spool(h) for h in hits if isinstance(h, dict)]
+
+        groups_by_key = {}
+        for spool in spools:
+            key = (spool["vendor"], spool["name"])
+            group = groups_by_key.get(key)
+            if group is None:
+                group = {
+                    "vendor": spool["vendor"],
+                    "name": spool["name"],
+                    "count": 0,
+                    "total_remaining_g": 0,
+                    "spools": [],
+                }
+                groups_by_key[key] = group
+            group["count"] += 1
+            group["total_remaining_g"] += spool["remaining_g"]
+            group["spools"].append(spool)
+
+        self.spools = spools
+        self.groups = list(groups_by_key.values())
+        self.total_spool_count = len(spools)
+        self.total_remaining_g = sum(s["remaining_g"] for s in spools)
+
 
 class ExtruderTool:
     """Contains parsed _values from the ext_tool sensor"""

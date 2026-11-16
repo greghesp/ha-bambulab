@@ -11,22 +11,25 @@ from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN, LOGGER
 from .definitions import (
+    AIR_PURIFIER_SENSORS,
     PRINTER_SENSORS,
     VIRTUAL_TRAY_SENSORS,
     AMS_SENSORS,
     HOTEND_RACK_SENSORS,
     HOTEND_RACK_HOTEND_SENSORS,
+    H3C_FAN_ENTITY_KEYS,
     X2D_TRANSLATION_KEYS,
     MAKERWORLD_SENSORS,
+    FILAMENT_INVENTORY_SENSORS,
     BambuLabAMSSensorEntityDescription,
     BambuLabHotendRackSensorEntityDescription,
     BambuLabMakerWorldSensorEntityDescription,
     BambuLabSensorEntityDescription,
 )
-from .coordinator import BambuDataUpdateCoordinator
+from .coordinator import BambuDataUpdateCoordinator, BambuFilamentCoordinator
 from . import panda_entities
 from .makerworld import MakerWorldDataUpdateCoordinator, MakerWorldEntity
-from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
+from .models import AirPurifierEntity, BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity, FilamentInventoryEntity
 from .pybambu.const import Features, Printers
 
 
@@ -84,6 +87,10 @@ async def async_setup_entry(
 
     _migrate_h3c_storage_entities(er.async_get(hass), entry.entry_id, coordinator.get_model().info)
 
+    if coordinator.get_model().air_purifier.ready:
+        for sensor in AIR_PURIFIER_SENSORS:
+            async_add_entities([BambuLabAirPurifierSensor(coordinator, sensor)])
+
     for sensor in VIRTUAL_TRAY_SENSORS:
         if sensor.exists_fn(coordinator):
             if coordinator.get_model().supports_feature(Features.DUAL_NOZZLES):
@@ -117,6 +124,23 @@ async def async_setup_entry(
             sensor_class = BambuLabRestoreSensor if sensor.is_restoring else BambuLabSensor
             async_add_entities([sensor_class(coordinator, sensor)])
 
+    if coordinator.filament_inventory is not None:
+        for sensor in FILAMENT_INVENTORY_SENSORS:
+            async_add_entities([BambuLabFilamentInventorySensor(coordinator.filament_inventory, sensor)])
+
+
+class BambuLabAirPurifierSensor(AirPurifierEntity, SensorEntity):
+    """A measurement belonging to the attached air purifier."""
+
+    def __init__(self, coordinator, description):
+        super().__init__(coordinator)
+        self.entity_description = description
+        self._attr_unique_id = f"{self._purifier_serial}_{description.key}"
+
+    @property
+    def native_value(self):
+        return self.entity_description.value_fn(self)
+
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
     """Representation of a BambuLab that is updated via MQTT."""
@@ -130,7 +154,11 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         super().__init__(coordinator=coordinator)
         self.entity_description = description
         printer = coordinator.get_model().info
-        self._attr_unique_id = f"{printer.serial}_{description.key}"
+        key = description.key
+        if printer.device_type == Printers.H3C and key in H3C_FAN_ENTITY_KEYS:
+            key = H3C_FAN_ENTITY_KEYS[key]
+            self._attr_translation_key = key
+        self._attr_unique_id = f"{printer.serial}_{key}"
         if printer.device_type == Printers.X2D and description.key in X2D_TRANSLATION_KEYS:
             self._attr_translation_key = X2D_TRANSLATION_KEYS[description.key]
         if description.options_fn is not None:
@@ -363,3 +391,25 @@ class BambuLabMakerWorldSensor(MakerWorldEntity, SensorEntity):
         if self.profile is None:
             return {}
         return self.entity_description.extra_attributes(self)
+
+
+class BambuLabFilamentInventorySensor(FilamentInventoryEntity, SensorEntity):
+    """Account-level filament inventory, polled from the Bambu cloud."""
+
+    def __init__(
+            self,
+            coordinator: BambuFilamentCoordinator,
+            description: BambuLabSensorEntityDescription
+    ) -> None:
+        super().__init__(coordinator=coordinator)
+        self.entity_description = description
+        printer = coordinator.printer_coordinator.get_model().info
+        self._attr_unique_id = f"{printer.serial}_{description.key}"
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return self.entity_description.extra_attributes(self)
+
+    @property
+    def native_value(self) -> datetime | StateType:
+        return self.entity_description.value_fn(self)

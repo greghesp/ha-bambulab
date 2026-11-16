@@ -84,7 +84,9 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -179,7 +183,9 @@
             "description": "这些高级选项是早期或风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -200,7 +206,9 @@
             "description": "这些高级选项是早期或有风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -276,6 +284,12 @@
       },
       "buzzer_beeping": {
         "name": "蜂鸣器 - 蜂鸣器"
+      },
+      "hotend_rack_raise": {
+        "name": "升高架"
+      },
+      "hotend_rack_lower": {
+        "name": "下机架"
       }
     },
     "fan": {
@@ -302,6 +316,19 @@
       },
       "exhaust_fan": {
         "name": "排气扇"
+      },
+      "air_purifier": {
+        "name": "空气净化器",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "汽车",
+              "silent": "沉默的",
+              "standard": "标准",
+              "max": "最大限度"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -1066,22 +1093,90 @@
           }
         }
       },
-      "zone_remaining_drying_time": {
-        "name": "区域 {zone_number} 剩余干燥时间",
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "风扇转速"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 位置（原始）"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 状态（原始）"
+      },
+      "hotend_rack_printtool": {
+        "name": "打印工具 {tool_number}",
+        "state": {
+          "mounted": "已安装",
+          "docked": "停靠",
+          "empty": "空的"
+        },
         "state_attributes": {
-          "zone": {
-            "name": "区"
+          "tool": {
+            "name": "工具"
           },
-          "zone_id": {
-            "name": "区域ID"
+          "filament_diameter": {
+            "name": "灯丝直径"
           },
-          "slots": {
-            "name": "老虎机"
+          "filament_name": {
+            "name": "灯丝名称"
           },
-          "dry_setting": {
-            "name": "烘干设定"
+          "filament_type": {
+            "name": "灯丝类型"
+          },
+          "remaining_weight_g": {
+            "name": "剩余灯丝重量"
+          },
+          "remaining_percent": {
+            "name": "剩余灯丝"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS插槽"
+          },
+          "nozzle_diameter": {
+            "name": "喷嘴直径"
+          },
+          "nozzle_type": {
+            "name": "喷嘴类型"
+          },
+          "nozzle_type_code": {
+            "name": "喷嘴类型代码"
+          },
+          "max_temperature": {
+            "name": "最高温度"
+          },
+          "serial": {
+            "name": "序列号"
+          },
+          "filament_id": {
+            "name": "灯丝内径"
+          },
+          "color": {
+            "name": "颜色"
+          },
+          "wear": {
+            "name": "穿"
+          },
+          "status_raw": {
+            "name": "状态（原始）"
           }
         }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 温度"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 目标温度"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 打印时间"
+      },
+      "filament_inventory": {
+        "name": "长丝库存"
       }
     },
     "camera": {

@@ -27,6 +27,10 @@ CONF_PANDA_BREATH_HOST = "panda_breath_host"
 CONF_PANDA_STATUS_HOST = "panda_status_host"
 CONF_PANDA_PWR_HOST = "panda_pwr_host"
 
+# Options key mapping AMS serial -> switch entity_id of the smart plug powering an
+# external AMS heater or dryer (e.g. SUNLU AMS Heater, EIBOS Series X).
+CONF_AMS_HEATERS = "ams_heaters"
+
 PLATFORMS = (
     Platform.BINARY_SENSOR,
     Platform.BUTTON,
@@ -45,7 +49,7 @@ BAMBU_LAB_CARDS = [
     {
         'name': 'Bambu Lab Cards',
         'filename': 'ha-bambulab-cards.js',
-        'version': '0.8.0'
+        'version': '0.8.4'
     }
 ]
 
@@ -59,6 +63,11 @@ OPTION_NAME = {
     Options.IMAGECAMERA:    "camera_as_image_sensor",
     Options.FIRMWAREUPDATE: "enable_firmware_update",
 }
+
+# Filament inventory ("Filament Manager") options.
+OPTION_ENABLE_FILAMENT_INVENTORY = "enable_filament_inventory"
+OPTION_FILAMENT_INVENTORY_INTERVAL = "filament_inventory_interval"
+DEFAULT_FILAMENT_INVENTORY_INTERVAL = 60  # minutes
 
 def load_dict(filename: str) -> dict:
     with open(filename) as f:
