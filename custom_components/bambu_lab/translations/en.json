@@ -143,9 +143,25 @@
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now.",
-      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
+      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below.",
+      "orca_invalid_redirect": "That doesn't look like the sign-in redirect. Copy the whole address from the browser's address bar after signing in - it starts with http://localhost:41172/callback?code=",
+      "orca_auth_rejected": "Orca Cloud rejected the sign-in. Sign-in links only work once and expire quickly - close this dialog and start the sign-in again."
     },
     "step": {
+      "orca_cloud": {
+        "title": "Orca Cloud filament profiles",
+        "description": "OrcaSlicer syncs your custom filament presets to Orca Cloud instead of Bambu Lab cloud. Link your Orca Cloud account so the names and temperatures of your custom filaments show up for this printer, including in Lan Mode.\n\nChoose the account you sign in to OrcaSlicer with. Home Assistant only reads your presets and never changes them. Each printer is linked separately.",
+        "data": {
+          "orca_action": "Sign in with:"
+        }
+      },
+      "orca_cloud_code": {
+        "title": "Sign in to Orca Cloud",
+        "description": "1. Open this link and sign in: [Sign in to Orca Cloud]({url})\n2. Your browser then tries to open a page on http://localhost:41172 and shows an error such as \"This site can't be reached\". That is expected.\n3. Copy the whole address from the browser's address bar and paste it below.",
+        "data": {
+          "redirect_url": "Redirect address"
+        }
+      },
       "ams_heater": {
         "title": "External AMS heater or dryer",
         "description": "Add-on AMS heaters and dryers such as the SUNLU AMS Heater and EIBOS Series X (Dyas/Tetras) have no network connection, so Home Assistant controls one by switching the smart plug it is powered from.\n\nChoose that plug for each AMS that has a heater fitted, or leave it empty. Each linked AMS gets heater drying mode, heater power, humidity threshold, temperature cutoff and runtime limit entities.\n\nSet the heater or dryer itself to start heating when it is powered on, so switching the plug actually starts drying."
@@ -1166,11 +1182,25 @@
       "options": {
         "bambu": "Bambu Lab cloud",
         "lan": "Lan Mode",
-        "ams_heater": "External AMS heater or dryer (smart plug)"
+        "ams_heater": "External AMS heater or dryer (smart plug)",
+        "orca_cloud": "Orca Cloud filament profiles (OrcaSlicer)"
+      }
+    },
+    "orca_action": {
+      "options": {
+        "google": "Google",
+        "github": "GitHub",
+        "apple": "Apple",
+        "facebook": "Facebook",
+        "unlink": "Unlink Orca Cloud from this printer"
       }
     }
   },
   "issues": {
+    "orca_cloud_authentication_failed": {
+      "title": "Orca Cloud sign-in expired",
+      "description": "Home Assistant could not sign in to Orca Cloud for {device}, so custom OrcaSlicer filament names are not loaded. Open the integration's options, choose Orca Cloud filament profiles and sign in again."
+    },
     "authentication_failed": {
       "title": "Authentication Failed",
       "description": "Attempting to connect to Bambu Lab failed for {device}. Please reconfigure the integration and provide fresh credentials."

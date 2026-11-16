@@ -24,8 +24,21 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
-from .const import CONF_AMS_HEATERS, DOMAIN, LOGGER
+from homeassistant.helpers import issue_registry
+
+from .const import CONF_AMS_HEATERS, CONF_ORCA_REFRESH_TOKEN, DOMAIN, LOGGER
 from .pybambu import BambuClient, BambuCloud
+from .pybambu.orca_cloud import (
+    ORCA_PROVIDERS,
+    OrcaCloud,
+    OrcaCloudAuthError,
+    OrcaCloudError,
+    PkceChallenge,
+    build_authorize_url,
+    create_pkce,
+    drop_shared_client as drop_shared_orca_client,
+    extract_auth_code,
+)
 from .pybambu.bambu_cloud import (
     CloudflareError,
     CurlUnavailableError,
@@ -41,6 +54,9 @@ CONFIG_VERSION = 2
 
 # Options-flow menu choice for linking a smart plug that powers an external AMS heater.
 AMS_HEATER_MODE = "ams_heater"
+# Options-flow menu choice for linking Orca Cloud as a source of custom filament presets.
+ORCA_CLOUD_MODE = "orca_cloud"
+ORCA_UNLINK = "unlink"
 
 BOOLEAN_SELECTOR = BooleanSelector()
 NUMBER_SELECTOR = TextSelector(TextSelectorConfig(type=TextSelectorType.NUMBER))
@@ -592,6 +608,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
     authentication_type: str = None
     _logging_level: None
     _config_entry: config_entries.ConfigEntry = None
+    _orca_pkce: PkceChallenge | None = None
+    _orca_authorize_url: str = ""
+    _orca_refresh_token: str = ""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         # Set logging level to DEBUG during the configuration flow
@@ -618,6 +637,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             if user_input['printer_mode'] == AMS_HEATER_MODE:
                 return await self.async_step_ams_heater(None)
+            elif user_input['printer_mode'] == ORCA_CLOUD_MODE:
+                return await self.async_step_orca_cloud(None)
             elif user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
@@ -671,6 +692,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             ]
         if self._ams_heater_choices():
             modes.append(SelectOptionDict(value=AMS_HEATER_MODE, label=""))
+        modes.append(SelectOptionDict(value=ORCA_CLOUD_MODE, label=""))
 
         selector = SelectSelector(
             SelectSelectorConfig(
@@ -1094,3 +1116,86 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             step_id="ams_heater",
             data_schema=vol.Schema(fields),
         )
+
+    async def async_step_orca_cloud(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        """Pick an Orca Cloud sign-in provider, or unlink the current account."""
+        is_linked = self._config_entry.options.get(CONF_ORCA_REFRESH_TOKEN, "") != ""
+
+        if user_input is not None:
+            choice = user_input["orca_action"]
+            if choice == ORCA_UNLINK:
+                return await self._async_save_orca_token("")
+            self._orca_pkce = create_pkce()
+            self._orca_authorize_url = build_authorize_url(choice, self._orca_pkce.challenge)
+            return await self.async_step_orca_cloud_code(None)
+
+        choices = [SelectOptionDict(value=provider, label="") for provider in ORCA_PROVIDERS]
+        if is_linked:
+            choices.append(SelectOptionDict(value=ORCA_UNLINK, label=""))
+        selector = SelectSelector(SelectSelectorConfig(
+            options=choices,
+            translation_key="orca_action",
+            mode=SelectSelectorMode.LIST,
+        ))
+        return self.async_show_form(
+            step_id="orca_cloud",
+            data_schema=vol.Schema({vol.Required("orca_action", default=ORCA_PROVIDERS[0]): selector}),
+            last_step=False,
+        )
+
+    async def async_step_orca_cloud_code(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        """Show the sign-in link and take back the URL the browser was redirected to."""
+        if self._orca_pkce is None:
+            return await self.async_step_orca_cloud(None)
+        errors = {}
+        if user_input is not None:
+            try:
+                code = extract_auth_code(user_input.get("redirect_url", ""))
+            except ValueError as e:
+                LOGGER.debug(f"Orca Cloud redirect URL rejected: {e}")
+                errors["base"] = "orca_invalid_redirect"
+            else:
+                errors = await self._async_link_orca(code)
+                if not errors:
+                    return await self._async_save_orca_token(self._orca_refresh_token)
+
+        return self.async_show_form(
+            step_id="orca_cloud_code",
+            data_schema=vol.Schema({vol.Required("redirect_url"): TEXT_SELECTOR}),
+            description_placeholders={"url": self._orca_authorize_url},
+            errors=errors,
+            last_step=True,
+        )
+
+    async def _async_link_orca(self, code: str) -> dict[str, str]:
+        """Exchange the sign-in code and prove the session works. Returns form errors."""
+        def link() -> str:
+            cloud = OrcaCloud(OrcaCloud.exchange_code(code, self._orca_pkce.verifier))
+            cloud.link()
+            # The check may have rotated the token; keep the live one.
+            return cloud.refresh_token
+
+        try:
+            self._orca_refresh_token = await self.hass.async_add_executor_job(link)
+        except OrcaCloudAuthError as e:
+            LOGGER.warning(f"Orca Cloud sign-in rejected: {e}")
+            return {"base": "orca_auth_rejected"}
+        except OrcaCloudError as e:
+            LOGGER.warning(f"Orca Cloud sign-in failed: {e}")
+            return {"base": "cannot_connect"}
+        return {}
+
+    async def _async_save_orca_token(self, refresh_token: str) -> FlowResult:
+        options = dict(self._config_entry.options)
+        if refresh_token:
+            options[CONF_ORCA_REFRESH_TOKEN] = refresh_token
+        else:
+            options.pop(CONF_ORCA_REFRESH_TOKEN, None)
+        # The running client holds the old session; drop it so the reload starts fresh
+        # and its in-flight rotations can no longer overwrite this change.
+        drop_shared_orca_client(self._config_entry.entry_id)
+        serial = self._config_entry.data.get("serial", "")
+        issue_registry.async_delete_issue(self.hass, DOMAIN, f"orca_cloud_authentication_failed_{serial}")
+        self.hass.config_entries.async_update_entry(entry=self._config_entry, options=options)
+        await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+        return self.async_create_entry(title="", data=None)

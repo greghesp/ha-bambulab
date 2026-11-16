@@ -55,3 +55,14 @@ If you signed up using any OAuth method, you need to set a password for your Bam
 
 This will allow you to set a password. Now you can login to the HA integration using your Bambu username and password
 instead of OAuth.
+
+### OrcaSlicer custom filaments (Orca Cloud)
+
+The integration shows the names and temperatures of your custom filament presets by reading them from your slicer's cloud account. OrcaSlicer now syncs presets to its own Orca Cloud instead of Bambu Cloud, so if you slice with OrcaSlicer, link Orca Cloud as well. This works with any connection mode, including LAN mode.
+
+1. Go to the integration, choose **Configure** on the printer, then pick **Orca Cloud filament profiles (OrcaSlicer)**.
+2. Choose the account you sign in to OrcaSlicer with (Google, GitHub, Apple or Facebook).
+3. Open the sign-in link and sign in. Your browser then tries to open `http://localhost:41172/callback?code=...` and shows an error such as "This site can't be reached". That is expected.
+4. Copy the whole address from the browser's address bar and paste it into Home Assistant.
+
+Home Assistant only reads your presets and never changes them. If a preset exists in both Bambu Cloud and Orca Cloud, the Orca Cloud copy is used. Presets are read each time the printer connects. Each printer is linked separately. To disconnect, open the same option and choose **Unlink Orca Cloud from this printer**.
