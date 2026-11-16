@@ -809,6 +809,44 @@ class TestPrintJob(unittest.TestCase):
 
         self.assertEqual(4.44, self.print_job.print_weight)
 
+    def test_cloud_task_times_are_not_applied_to_a_local_print_with_ftp(self):
+        """A stale task's start time would be counted as usage hours at print end (#2242)."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+        generated_start = datetime(2026, 11, 11, 9, 0, tzinfo=timezone.utc)
+        self.print_job.start_time = generated_start
+        self.print_job.end_time = None
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(generated_start, self.print_job.start_time)
+        self.assertIsNone(self.print_job.end_time)
+
+    def test_cloud_task_times_are_still_applied_to_a_cloud_print(self):
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "cloud"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(datetime(2026, 9, 23, 14, 32, tzinfo=timezone.utc), self.print_job.start_time)
+        self.assertEqual(datetime(2026, 9, 23, 14, 33, 7, tzinfo=timezone.utc), self.print_job.end_time)
+
+    def test_usage_hours_count_whole_days_of_a_long_print(self):
+        """timedelta.seconds drops the days, so a 26 hour print used to add 2 hours."""
+        from pybambu.utils import get_end_time
+        from datetime import timedelta
+        self.client._device.info.usage_hours = 0.0
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job.start_time = get_end_time(0) - timedelta(hours=26)
+
+        self.print_job.print_update({"gcode_state": "FINISH"})
+
+        self.assertAlmostEqual(26.0, self.client._device.info.usage_hours, delta=0.05)
+
 class TestInfo(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()

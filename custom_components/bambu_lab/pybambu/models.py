@@ -1448,7 +1448,7 @@ class PrintJob:
                 # our calculation here.
                 duration = get_end_time(0) - self.start_time
                 # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
-                new_hours = round((duration.seconds / 60 / 60) * 100) / 100
+                new_hours = round((duration.total_seconds() / 60 / 60) * 100) / 100
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
                 self._client._device.info.usage_hours += new_hours
 
@@ -2940,7 +2940,10 @@ class PrintJob:
 
             status = self._task_data['status']
             LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
-            if status == 4:
+            # The same staleness guard as the print figures: for a local FTP print the
+            # newest cloud task can be an older job, and its start time would then be
+            # counted as usage hours when this print ends.
+            if status == 4 and use_cloud_task:
                 # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                 # do so uniformly so we always have matched start/end times.
                 # "startTime": "2023-12-21T19:02:16Z"
