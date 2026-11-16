@@ -399,7 +399,7 @@ class BambuClient:
             self._print_cache_count = 1
         self._timelapse_cache_count = max(-1, int(config.get('timelapse_cache_count', 0)))
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
-        self._cache_path = config.get('file_cache_path', f'/config/www/media/ha-bambulab/{self._serial}')
+        self._cache_path = config.get('file_cache_path', f'/media/ha-bambulab/{self._serial}')
         self._tcp6000_media_supported = None
         self._tcp6000_media_storages = []
         self._tcp6000_media_probe_time = 0.0

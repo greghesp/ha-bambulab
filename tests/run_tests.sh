@@ -11,4 +11,4 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 cd "$REPO_ROOT"
 
 python3 -m pip install --quiet -r tests/requirements.txt
-python3 -m pytest tests/pybambu -v
+python3 -m pytest tests/pybambu tests/test_file_cache.py -v
