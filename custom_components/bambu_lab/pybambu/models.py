@@ -302,6 +302,9 @@ class Device:
             if model in x1_printer:
                 return self.supports_sw_version("01.07.00.00")
             return False
+        elif feature == Features.TOP_COVER_SENSOR:
+            # Top glass cover sensor confirmed on the H2C (issue #1805). Assumed common to the H2 series.
+            return model in h2_printers
         elif feature == Features.AMS_READ_RFID_COMMAND:
             if model in a1_printers:
                 return self.supports_sw_version("01.06.00.00")
@@ -3118,6 +3121,7 @@ class Info:
     usage_hours: float
     hw_switch_state: int
     door_open: bool
+    top_cover_open: bool
     airduct_mode: int
         
     _ip_address: str
@@ -3140,6 +3144,7 @@ class Info:
         self.usage_hours = client._usage_hours
         self.hw_switch_state = 0
         self.door_open = False
+        self.top_cover_open = False
         self.airduct_mode = 0
         self.airduct_modes_available = []
         self._ip_address = client.host
@@ -3337,6 +3342,10 @@ class Info:
         elif "stat" in data:
             stat_value = int(data["stat"], 16)
             self.door_open = (stat_value & Stat_Flag_Values.DOOR_OPEN) != 0
+            # H2 series top glass cover, e.g. H2C:
+            #   "stat": "640258000",  # closed
+            #   "stat": "641258000",  # open
+            self.top_cover_open = (stat_value & Stat_Flag_Values.TOP_COVER_OPEN) != 0
 
 
         # Airduct mode is provided under print/device/airduct
@@ -5053,10 +5062,11 @@ class PrintFun:
 
         # Some firmware reports an empty "fun" and signals the newer authorization
         # control system through bit 16 of "flag3" instead. "flag3" is only present
-        # in full status frames, so latch the bit once it has been seen.
+        # in full status frames, so keep the last value across incremental frames,
+        # but follow it both ways: enabling developer mode clears the bit.
         flag3 = data.get("flag3")
-        if isinstance(flag3, int) and (flag3 & Print_Flag3_Values.AUTHORIZATION_CONTROL_ENABLED) != 0:
-            self._flag3_authorization_control = True
+        if isinstance(flag3, int):
+            self._flag3_authorization_control = (flag3 & Print_Flag3_Values.AUTHORIZATION_CONTROL_ENABLED) != 0
 
         if self._value:
             # "fun" is authoritative whenever the printer reports it.
@@ -5064,10 +5074,14 @@ class PrintFun:
         else:
             self._encryption_enabled = self._flag3_authorization_control
 
-        if self._encryption_enabled:
-            if not self._fired_encryption_enabled_event:
-                self._fired_encryption_enabled_event = True
-                self._client.callback("event_printer_mqtt_encryption_enabled")
+        if self._encryption_enabled and not self._fired_encryption_enabled_event:
+            self._fired_encryption_enabled_event = True
+            self._client.callback("event_printer_mqtt_encryption_enabled")
+        elif not self._encryption_enabled and self._fired_encryption_enabled_event:
+            # Signing is no longer required (e.g. developer mode was turned on). The
+            # control entities were skipped at setup, so let the coordinator reload.
+            self._fired_encryption_enabled_event = False
+            self._client.callback("event_printer_mqtt_encryption_disabled")
 
         return (old_data != f"{self.__dict__}")
 

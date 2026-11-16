@@ -67,6 +67,7 @@ class Features(IntEnum):
     HOTEND_RACK = 26,
     ACTIVE_CHAMBER_HEATER = 27,
     AMS_DRYING_SETTINGS = 28,
+    TOP_COVER_SENSOR = 29,
 
 
 class FansEnum(IntEnum):
@@ -355,6 +356,7 @@ class Print_Flag3_Values(IntEnum):
 class Stat_Flag_Values(IntEnum):
     # Gap
     DOOR_OPEN                           = 0x00800000,
+    TOP_COVER_OPEN                      = 0x01000000,
     # Gap
 
 class BambuUrl(IntEnum):

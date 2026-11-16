@@ -151,6 +151,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif event == "event_printer_mqtt_encryption_enabled":
             self._report_encryption_enabled_issue()
 
+        elif event == "event_printer_mqtt_encryption_disabled":
+            self._handle_encryption_disabled()
+
         elif event == "event_printer_ready":
             # A successful connection ends any access denied episode.
             self._access_denied_handled = False
@@ -1215,6 +1218,17 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _report_encryption_enabled_issue(self, force: bool = False):
         self._report_generic_issue("mqtt_encryption_enabled", force)
+
+    def _handle_encryption_disabled(self):
+        # The printer stopped requiring signed MQTT commands (developer mode turned on).
+        # Control entities are only created at setup when signing isn't required, so
+        # clear the repair issue and reload to bring them back.
+        LOGGER.info("Printer no longer requires signed MQTT commands. Reloading to restore controls.")
+        issue_registry.async_delete_issue(
+            hass=self._hass,
+            domain=DOMAIN,
+            issue_id=f"mqtt_encryption_enabled_{self.get_model().info.serial}")
+        self._hass.async_create_task(self.hass.config_entries.async_reload(self.config_entry.entry_id))
 
     def _report_hybrid_mode_blocking_issue(self, force: bool = False):
         self._report_generic_issue("hybrid_mode_blocking", force)

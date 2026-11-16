@@ -261,6 +261,14 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DOOR_SENSOR),
     ),
     BambuLabBinarySensorEntityDescription(
+        key="top_cover_open",
+        translation_key="top_cover_open",
+        device_class=BinarySensorDeviceClass.DOOR,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().info.top_cover_open,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.TOP_COVER_SENSOR),
+    ),
+    BambuLabBinarySensorEntityDescription(
         key="developer_lan_mode",
         translation_key="developer_lan_mode",
         device_class=BinarySensorDeviceClass.RUNNING,
