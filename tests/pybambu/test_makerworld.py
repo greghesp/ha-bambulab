@@ -293,6 +293,39 @@ class TestMakerWorldCloudCalls(unittest.TestCase):
             self.assertIsNone(self.cloud.get_makerworld_points())
             self.assertIsNone(self.cloud.get_makerworld_boosts())
 
+    def test_rejected_points_and_boosts_are_not_polled_again(self):
+        # Bambu reported these endpoints for abnormal traffic (#2270): once the
+        # token is refused, retrying it every poll only produces more 401s.
+        with patch.object(BambuCloud, '_get', side_effect=PermissionError(401, "nope")) as mock_get:
+            self.assertIsNone(self.cloud.get_makerworld_points())
+            self.assertIsNone(self.cloud.get_makerworld_boosts())
+            self.assertIsNone(self.cloud.get_makerworld_points())
+            self.assertIsNone(self.cloud.get_makerworld_boosts())
+        self.assertEqual(mock_get.call_count, 2)
+
+    def test_rejected_points_are_retried_with_a_new_token(self):
+        with patch.object(BambuCloud, '_get', side_effect=PermissionError(401, "nope")):
+            self.assertIsNone(self.cloud.get_makerworld_points())
+
+        self.cloud._auth_token = "new-token"
+        response = MagicMock()
+        response.json.return_value = POINTS_RESPONSE
+        with patch.object(BambuCloud, '_get', return_value=response) as mock_get:
+            self.assertEqual(self.cloud.get_makerworld_points(), POINTS_RESPONSE)
+        mock_get.assert_called_once_with(BambuUrl.POINT_BILL)
+
+    def test_transient_failures_are_retried(self):
+        # Only an authorization rejection stops polling; a timeout must not.
+        with patch.object(BambuCloud, '_get', side_effect=TimeoutError("slow")) as mock_get:
+            self.assertIsNone(self.cloud.get_makerworld_points())
+            self.assertIsNone(self.cloud.get_makerworld_points())
+        self.assertEqual(mock_get.call_count, 2)
+
+    def test_slicer_settings_url_only_asks_for_private_settings(self):
+        # Only the private section is used; Bambu asked for public=false (#2270).
+        from pybambu.const import BAMBU_URL
+        self.assertIn("public=false", BAMBU_URL[BambuUrl.SLICER_SETTINGS])
+
     def test_get_uid_reads_the_mqtt_username(self):
         # The cloud login already stores the account id as 'u_<uid>', so no
         # extra request is needed.
