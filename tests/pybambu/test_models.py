@@ -702,6 +702,42 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual("/cache/prints/dragon.gcode.3mf", result)
         self.assertEqual(2, self.print_job._download_model_file_from_remote.call_count)
 
+    def test_failed_remote_download_does_not_leave_download_percentage_at_zero(self):
+        """A failed download must not leave the sensor stuck below 100 (issue #2233)."""
+        remote_file = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 22, 40, tzinfo=timezone.utc),
+        )
+        source = MagicMock()
+        source.name = Ftps990MediaSource.name
+
+        with tempfile.TemporaryDirectory() as cache_dir:
+            self.client.cache_path = cache_dir
+            self.print_job._download_remote_file_atomic = MagicMock(side_effect=OSError("connection reset"))
+
+            result = self.print_job._download_model_file_from_remote(source, remote_file)
+
+        self.assertIsNone(result)
+        self.assertEqual(100, self.print_job.model_download_percentage)
+
+    def test_failed_ftp_download_does_not_leave_download_percentage_at_zero(self):
+        """A failed FTP transfer must not leave the sensor stuck below 100 (issue #2233)."""
+        ftp = MagicMock()
+        ftp.size.return_value = 954727
+        ftp.retrbinary.side_effect = EOFError("connection closed")
+
+        with tempfile.TemporaryDirectory() as cache_dir:
+            self.client.cache_path = cache_dir
+            result = self.print_job._attempt_ftp_download_of_file(ftp, "/dragon.gcode.3mf")
+
+        self.assertIsNone(result)
+        self.assertEqual(100, self.print_job.model_download_percentage)
+
     def test_newest_file_fallback_still_returns_only_aliases(self):
         """With no subtask name, the newest-file fallback must not fan out to unrelated models."""
         newest = RemoteMediaFile(
