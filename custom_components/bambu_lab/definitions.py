@@ -729,7 +729,11 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
                 self.coordinator.get_model().ams.active_tray.type,
             ),
         },
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
+        # Dual-nozzle printers without an AMS still switch between their two external spools.
+        exists_fn=lambda coordinator: (
+            coordinator.get_model().supports_feature(Features.AMS)
+            or coordinator.get_model().supports_feature(Features.DUAL_NOZZLES)
+        )
     ),
     BambuLabSensorEntityDescription(
         key="nozzle_diameter",

@@ -4407,14 +4407,13 @@ class ExternalSpool(AMSTray):
 
     @property
     def active(self) -> bool:
-        if self._client._device.supports_feature(Features.AMS):
-            active_ams_index = self._client._device.ams.active_ams_index
-            active_tray_index = self._client._device.ams.active_tray_index
-            if active_ams_index == (255 - self._index) and active_tray_index == 0:
-                return True
-        else:
+        device = self._client._device
+        # Dual-nozzle printers (H2D, X2D, ...) report the tray feeding each nozzle even
+        # without an AMS, so the spool on the idle nozzle isn't active (#2181).
+        if not (device.supports_feature(Features.AMS) or device.supports_feature(Features.DUAL_NOZZLES)):
+            # Single nozzle and no AMS: this is the only filament source.
             return True
-        return False
+        return device.ams.active_ams_index == (255 - self._index) and device.ams.active_tray_index == 0
 
     @property
     def remain(self) -> int:
