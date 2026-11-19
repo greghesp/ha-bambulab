@@ -1143,6 +1143,26 @@ def tray_mapping_location(value: int) -> dict | None:
     return {"ams": value >> 8, "tray": value & 0xFF}
 
 
+def tray_mapping_slot_index(value: int) -> int | None:
+    """Flat AMS slot index for a print.mapping entry, or None for external spools and unused filaments."""
+    unit, tray = value >> 8, value & 0xFF
+    if 0 <= unit < AMS_UNIT_COUNT and 0 <= tray < AMS_TRAYS_PER_UNIT:
+        return unit * AMS_TRAYS_PER_UNIT + tray
+    if AMS_HT_UNIT_BASE <= unit < AMS_HT_UNIT_END and tray == 0:
+        return AMS_HT_SLOT_BASE + unit - AMS_HT_UNIT_BASE
+    return None
+
+
+# File in the integration's cache that remembers the last ams_mapping seen at a print start, so it
+# can be restored if Home Assistant restarts mid-print. Older firmware only sends it at that moment.
+ACTIVE_PRINT_RECORD = "active_print_job.json"
+# The fields that must match for a saved ams_mapping to belong to the print that is running.
+ACTIVE_PRINT_IDENTITY = ("subtask_name", "task_id", "plate_idx", "gcode_start_time")
+# An ams_mapping that arrives while idle belongs to a print about to start. If none has started
+# after this many seconds, the print was rejected or canceled and the mapping is dropped.
+AMS_MAPPING_MAX_AGE = 600
+
+
 @dataclass
 class PrintJob:
     """Return all information related content"""
@@ -1209,6 +1229,15 @@ class PrintJob:
         self._ftpThread = None
         self._ftp_download_percentage = 100
         self._next_model_retry_at = 0.0
+        self._gcode_start_time = ""
+        # An ams_mapping arrived that hasn't been written to the restart record yet.
+        self._ams_mapping_unsaved = False
+        self._ams_mapping_received_at = 0.0
+        # Startup restore is retried once the print's name arrives.
+        self._restore_pending = False
+        self._active_print_record_deleted = False
+        # The restart record written for the print that is running, None once the printer is idle.
+        self._active_print_record = None
 
     @property
     def model_download_percentage(self) -> int:
@@ -1231,6 +1260,16 @@ class PrintJob:
             return [tray_mapping_location(value) for value in self._tray_mapping]
         return [ams_slot_location(index) for index in self.ams_mapping or []]
     
+    def _filament_slot_indexes(self) -> list:
+        """Flat AMS slot index per slicer filament, None where the filament isn't on an AMS slot.
+
+        ams_mapping is only sent when a print starts. Newer firmware also reports print.mapping in
+        every full status, so it still gives the trays when the integration restarted mid-print.
+        """
+        if self.ams_mapping:
+            return list(self.ams_mapping)
+        return [tray_mapping_slot_index(value) for value in self._tray_mapping or []]
+
     @property
     def get_print_weights(self) -> dict:
         values = {}
@@ -1335,11 +1374,15 @@ class PrintJob:
         self.total_layers = data.get("total_layer_num", self.total_layers)
         if "ams_mapping" in data:
             self.ams_mapping = [normalize_ams_slot(index) for index in data["ams_mapping"]]
+            self._ams_mapping_unsaved = len(self.ams_mapping) > 0
+            self._ams_mapping_received_at = time.monotonic()
         self._tray_mapping = data.get("mapping", self._tray_mapping)
         self._skipped_objects = data.get("s_obj", self._skipped_objects)
+        self._gcode_start_time = str(data.get("gcode_start_time", self._gcode_start_time))
 
         # Initialize task data at startup.
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
+            self._restore_active_print_record()
             self._update_task_data()
             self._download_timelapse()
 
@@ -1455,7 +1498,130 @@ class PrintJob:
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
                 self._client._device.info.usage_hours += new_hours
 
+        self._update_active_print_record()
+
         return (old_data != f"{self.__dict__}")
+
+    def _is_printing(self) -> bool:
+        return self.gcode_state not in ("IDLE", "FAILED", "FINISH", "unknown")
+
+    def _active_print_identity(self) -> dict:
+        return {
+            "subtask_name": self._subtask_name,
+            "task_id": str(self.task_id),
+            "plate_idx": str(self.plate_idx),
+            "gcode_start_time": self._gcode_start_time,
+        }
+
+    def _active_print_record_path(self) -> Path:
+        return Path(self._client.cache_path) / "prints" / ACTIVE_PRINT_RECORD
+
+    def _update_active_print_record(self):
+        """Keep the restart record in step with the print that is running.
+
+        It is written once an ams_mapping and the print's name are both known, and rewritten if the
+        print's identity fills in later. Once the printer goes idle the record is deleted: the next
+        print needs an ams_mapping of its own, so a touchscreen reprint of the same file never
+        inherits the previous run's.
+        """
+        try:
+            if not self._is_printing():
+                self._active_print_record = None
+                if self.gcode_state != "unknown":
+                    self._delete_active_print_record()
+                if self._ams_mapping_unsaved and (
+                    time.monotonic() - self._ams_mapping_received_at > AMS_MAPPING_MAX_AGE
+                ):
+                    # The print this mapping was sent for never started.
+                    self._ams_mapping_unsaved = False
+                return
+            if not self._subtask_name:
+                return
+            if self._restore_pending:
+                # The first status after startup didn't identify the print yet.
+                self._restore_active_print_record()
+            self._save_active_print_record()
+        except Exception as e:
+            # Never let the restart record break MQTT processing.
+            LOGGER.warning(f"Unable to update the active print record: {e}")
+
+    def _delete_active_print_record(self):
+        if self._active_print_record_deleted:
+            return
+        self._active_print_record_deleted = True
+        try:
+            self._active_print_record_path().unlink(missing_ok=True)
+        except (OSError, TypeError) as e:
+            LOGGER.debug(f"Unable to delete the active print record: {e}")
+
+    def _save_active_print_record(self):
+
+        identity = self._active_print_identity()
+        if self._ams_mapping_unsaved:
+            record = {**identity, "ams_mapping": list(self.ams_mapping)}
+        elif self._active_print_record is not None and any(
+            self._active_print_record.get(key) != value for key, value in identity.items()
+        ):
+            record = {**self._active_print_record, **identity}
+        else:
+            return
+        record["start_time"] = self.start_time.isoformat() if self.start_time else None
+
+        self._ams_mapping_unsaved = False
+        self._active_print_record = record
+        self._active_print_record_deleted = False
+        try:
+            path = self._active_print_record_path()
+            path.parent.mkdir(parents=True, exist_ok=True)
+            temp_path = path.with_suffix(".tmp")
+            temp_path.write_text(json.dumps(record), encoding="utf-8")
+            os.replace(temp_path, path)
+            LOGGER.debug(f"Saved active print record: {record}")
+        except (OSError, TypeError) as e:
+            LOGGER.warning(f"Unable to save the AMS mapping for the active print: {e}")
+
+    def _restore_active_print_record(self):
+        """After a restart mid-print, recover the ams_mapping and start time the printer only sent at the start."""
+        self._restore_pending = False
+        if not self._is_printing() or self.ams_mapping:
+            return
+        if not self._subtask_name:
+            self._restore_pending = True
+            return
+        try:
+            path = self._active_print_record_path()
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            return
+        except (OSError, TypeError, ValueError) as e:
+            LOGGER.warning(f"Ignoring unreadable active print record: {e}")
+            return
+        if not isinstance(record, dict) or not isinstance(record.get("ams_mapping"), list):
+            LOGGER.warning(f"Ignoring malformed active print record {path}")
+            return
+
+        identity = self._active_print_identity()
+        for key in ACTIVE_PRINT_IDENTITY:
+            saved, current = str(record.get(key) or ""), identity[key]
+            if key == "gcode_start_time" and (saved in ("", "0") or current in ("", "0")):
+                # Not every printer reports it. It is only used to tell two runs of one file apart.
+                continue
+            if saved != current:
+                LOGGER.debug(f"Active print record is for another print ({key}: '{saved}' != '{current}')")
+                return
+
+        try:
+            self.ams_mapping = [int(index) for index in record["ams_mapping"]]
+        except (TypeError, ValueError):
+            LOGGER.warning(f"Ignoring malformed ams_mapping in active print record {path}")
+            return
+        if self.start_time is None and record.get("start_time"):
+            try:
+                self.start_time = datetime.fromisoformat(record["start_time"])
+            except (TypeError, ValueError):
+                LOGGER.debug(f"Ignoring invalid start_time in active print record: {record['start_time']}")
+        self._active_print_record = record
+        LOGGER.info(f"Restored AMS mapping {self.ams_mapping} for '{self._subtask_name}' after restart")
 
     # FTP implementation differences between P1 and X1 printers:
     # - X1 includes the path in the returned filenames for the NLST command
@@ -2506,7 +2672,8 @@ class PrintJob:
             print_length = 0
             plate_number = None
             _printable_objects = {}
-            filament_count = len(self.ams_mapping)
+            filament_slots = self._filament_slot_indexes()
+            filament_count = len(filament_slots)
             plate_filament_count = len(plate.findall('filament'))
 
             # Reset filament data
@@ -2556,15 +2723,15 @@ class PrintJob:
 
                         # Filament count should be greater than the zero-indexed filament ID
                         if filament_count > filament_index:
-                            ams_index = self.ams_mapping[filament_index]
-                            ams_name = ams_slot_name(ams_index)
+                            ams_index = filament_slots[filament_index]
+                            ams_name = ams_slot_name(ams_index) if ams_index is not None else None
                             if ams_name is not None:
                                 # We add the filament as you can map multiple slicer filaments to the same physical filament.
                                 self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
                                 self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
                                 log_label = ams_name
                             else:
-                                LOGGER.debug(f"ams_mapping: {self.ams_mapping}")
+                                LOGGER.debug(f"ams_mapping: {self.ams_mapping} mapping: {self._tray_mapping}")
                         elif plate_filament_count > 0:
                             # Multi filament print but the AMS mapping is unknown
                             # The data is only sent in the mqtt payload once and isn't part of the 'full' data so the integration must be
