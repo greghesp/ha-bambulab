@@ -86,6 +86,7 @@ nextTitle: Device Triggers
 | Buzzer controls     | H2D only, allows to set one of 3 modes                     |
 | Airduct Mode        | Switch airduct modes on P2S/H2/H3C/X2D                     |
 | Allow Prompt Sound  | A1/A2L/H2/H3C/P2S/X2D                                    |
+| Live view camera    | Main or BirdsEye camera. Only on printers that report a BirdsEye camera (see [Cameras](#cameras)) |
 
 <Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
 <Warning>If you are running the latest X1 firmware with Bambu Authorisation, the only functional control is the Chamber Light</Warning>
@@ -314,6 +315,14 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | ------- | --------------------------------------------------------------- |
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
+
+### BirdsEye camera
+
+Printers with a BirdsEye camera (fitted as standard on the H2D and H2S Laser editions, and sold as an accessory for the other H2D and H2S models) stream one camera at a time. When the printer reports both cameras, a **Live view camera** select appears with *Main camera* and *BirdsEye camera*. Choosing one switches the printer's live view, and the Chamber camera entity shows that camera. Both can't be shown at once.
+
+The select uses the same command as Bambu Studio's camera switch button. It appears after the printer has reported its cameras, so reload the integration if you fit a BirdsEye camera later.
+
+<Warning>This is new and has only been tested against Bambu Studio's behaviour, not on a printer. If you have a BirdsEye camera, please report how it works for you.</Warning>
 
 ## MakerWorld
 
