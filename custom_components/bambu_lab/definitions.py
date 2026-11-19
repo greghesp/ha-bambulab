@@ -311,6 +311,23 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRUDER_TOOL),
     ),
     BambuLabSensorEntityDescription(
+        key="processing_material",
+        translation_key="processing_material",
+        icon="mdi:texture-box",
+        value_fn=lambda self: self.coordinator.get_model().processing_2d.material,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRUDER_TOOL),
+    ),
+    BambuLabSensorEntityDescription(
+        key="check_in_remaining",
+        translation_key="check_in_remaining",
+        icon="mdi:timer-alert-outline",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        value_fn=lambda self: self.coordinator.get_model().processing_2d.check_in_remaining,
+        available_fn=lambda self: self.coordinator.get_model().processing_2d.check_in_required,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRUDER_TOOL),
+    ),
+    BambuLabSensorEntityDescription(
         key="wifi_signal",
         translation_key="wifi_signal",
         native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
