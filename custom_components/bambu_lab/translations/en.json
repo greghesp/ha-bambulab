@@ -1208,7 +1208,7 @@
     },
     "live_view_disabled": {
       "title": "Live View Disabled",
-      "description": "{device} has live view disabled in the printer settings. Please enable this to use the camera features."
+      "description": "{device} has LAN Only Liveview turned off, so Home Assistant cannot reach the camera. On the printer's touchscreen, open Settings and turn on **LAN Only Liveview** (on the Network or LAN Only page, depending on the model). You do not need to turn on LAN Only mode itself, so the Bambu Handy app keeps working away from home. This message clears automatically once the printer reports live view is on."
     },
     "mqtt_encryption_enabled": {
       "title": "MQTT Encryption Enabled",
