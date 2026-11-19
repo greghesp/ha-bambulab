@@ -556,6 +556,14 @@ class Camera:
         
         return (old_data != f"{self.__dict__}")
 
+# While nothing is heating, the printer reports ambient temperatures that flip
+# by ±1°C every few seconds. Forwarding every flip floods the Home Assistant
+# recorder (#2228), so when idle we only report a change of at least
+# IDLE_TEMP_DEADBAND, or any change once IDLE_TEMP_REFRESH has passed since the
+# sensor was last reported. While heating, every change is reported.
+IDLE_TEMP_DEADBAND = 2
+IDLE_TEMP_REFRESH = timedelta(minutes=10)
+
 @dataclass
 class Temperature:
     """Return all temperature related info"""
@@ -573,6 +581,7 @@ class Temperature:
         self.target_chamber_temp = 0
         self.nozzle_temps = { 0: 0, 1: 0, 15: 0}
         self.target_nozzle_temps = { 0:0, 1: 0, 15: 0}
+        self._temp_reported_at = {}
 
     @property
     def active_nozzle_temperature(self):
@@ -600,8 +609,38 @@ class Temperature:
     def right_nozzle_target_temperature(self):
         return self.target_nozzle_temps[0]
 
+    def _is_heating(self) -> bool:
+        return (self.target_bed_temp > 0
+                or self.target_chamber_temp > 0
+                or any(target > 0 for target in self.target_nozzle_temps.values()))
+
+    def _debounce(self, key: str, previous: int, current: int, heating: bool, now: datetime) -> int:
+        """Return the value to report for one sensor, suppressing idle ±1°C noise."""
+        if current == previous:
+            return current
+        last_reported = self._temp_reported_at.get(key)
+        if (heating
+                or last_reported is None
+                or abs(current - previous) >= IDLE_TEMP_DEADBAND
+                or now - last_reported >= IDLE_TEMP_REFRESH):
+            self._temp_reported_at[key] = now
+            return current
+        return previous
+
+    def _apply_idle_deadband(self, previous_bed: int, previous_chamber: int, previous_nozzles: dict) -> None:
+        heating = self._is_heating()
+        now = datetime.now()
+        self.bed_temp = self._debounce("bed", previous_bed, self.bed_temp, heating, now)
+        self.chamber_temp = self._debounce("chamber", previous_chamber, self.chamber_temp, heating, now)
+        for index, previous in previous_nozzles.items():
+            self.nozzle_temps[index] = self._debounce(
+                f"nozzle_{index}", previous, self.nozzle_temps[index], heating, now)
+
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
+        previous_bed = self.bed_temp
+        previous_chamber = self.chamber_temp
+        previous_nozzles = dict(self.nozzle_temps)
 
         # New firmware puts bed temperature in two different places. Low word is current value. High word is the target.
         # "device": {
@@ -669,6 +708,8 @@ class Temperature:
             # stomps the right nozzle's real (idle) temperature with the left nozzle's.
             self.nozzle_temps[0] = round(data.get("nozzle_temper", self.nozzle_temps[0]))
             self.target_nozzle_temps[0] = round(data.get("nozzle_target_temper", self.target_nozzle_temps[0]))
+
+        self._apply_idle_deadband(previous_bed, previous_chamber, previous_nozzles)
 
         return (old_data != f"{self.__dict__}")
 
