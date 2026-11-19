@@ -1041,6 +1041,28 @@ class TestAMSList(unittest.TestCase):
         self.assertEqual(self.ams_list.data[0].status, "calibration")
         self.assertEqual(self.ams_list.data[128].status, "calibration")
 
+    def test_ams_status_external_spool_change_is_reported_at_printer_level(self):
+        # An external spool load/unload involves no AMS unit, so the units stay idle but the
+        # printer-level status still reports the step (#2307)
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        self.ams_list.print_update({"ams_status": 0x0103, "ams": {"tray_now": "254", "tray_tar": "254"}})
+        self.assertEqual(self.ams_list.status, "cutting_filament")
+        for index in self.ams_list.data:
+            self.assertEqual(self.ams_list.data[index].status, "idle")
+
+        self.ams_list.print_update({"ams_status": 0x0105})
+        self.assertEqual(self.ams_list.status, "pushing_new_filament")
+
+        self.ams_list.print_update({"ams_status": 0})
+        self.assertEqual(self.ams_list.status, "idle")
+
+    def test_ams_status_printer_level_without_any_ams(self):
+        # Printers with only an external spool still get the step
+        self.assertEqual(self.ams_list.data, {})
+        self.assertTrue(self.ams_list.print_update({"ams_status": 0x0107}))
+        self.assertEqual(self.ams_list.status, "purging_old_filament")
+
     def test_h2d_ams_detection(self):
         # Test that two AMS files are properly detected from H2D.json
         data = self.h2d_data['push_all']
