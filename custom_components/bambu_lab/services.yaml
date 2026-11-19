@@ -177,10 +177,24 @@ extrude_retract:
 retry_load_filament:
   name: Retry loading external filament
   description: Retry loading external filament
+  fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
 
 done_load_filament:
   name: Finish loading external filament
   description: Once loading external filament is done, use this action to signal that to the printer.
+  fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
 
 unload_filament:
   name: Unload filament
