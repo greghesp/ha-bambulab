@@ -3762,6 +3762,15 @@ class HotendRack:
         return changed
 
 
+# The AMS occasionally reports a single wildly wrong temperature/humidity sample
+# (e.g. 28 C -> 88 C -> 28 C), which shows up as spikes in history (#2134). A jump
+# larger than this is held back until the next reading confirms it.
+AMS_READING_SPIKE_THRESHOLDS = {
+    "temperature": 5.0,  # degrees C between consecutive readings
+    "humidity": 5,       # percentage points between consecutive readings
+}
+
+
 @dataclass
 class AMSInstance:
     """Return all AMS instance related info"""
@@ -3783,11 +3792,15 @@ class AMSInstance:
     drying_filament: str = ""
     connected_nozzle: str | None = None
     status: str = "idle"
+    _accepted_readings: dict = field(default_factory=dict, repr=False)
+    _unconfirmed_readings: dict = field(default_factory=dict, repr=False)
 
     def __init__(self, client, model, index):
         self.model = model
         self.index = index
         self.zones = {}
+        self._accepted_readings = {}
+        self._unconfirmed_readings = {}
         if model == "AMS 3H":
             self.tray = [AMSTray(client) for _ in range(9)]
         elif index >= 128:
@@ -3799,6 +3812,31 @@ class AMSInstance:
             self.tray[1] = AMSTray(client)
             self.tray[2] = AMSTray(client)
             self.tray[3] = AMSTray(client)
+
+    def accept_reading(self, attribute: str, value) -> bool:
+        """Return whether a sensor reading should be applied, rejecting one-off spikes.
+
+        A reading close to the last accepted one is applied immediately. A large jump is
+        held back and only applied when the following reading lands close to it, so a
+        genuine step change is delayed by one message while a single glitch is dropped.
+        """
+        threshold = AMS_READING_SPIKE_THRESHOLDS.get(attribute)
+        if threshold is None:
+            return True
+        last = self._accepted_readings.get(attribute)
+        unconfirmed = self._unconfirmed_readings.pop(attribute, None)
+        is_plausible = (
+            last is None
+            or abs(value - last) <= threshold
+            or (unconfirmed is not None and abs(value - unconfirmed) <= threshold)
+        )
+        if not is_plausible:
+            LOGGER.debug("Holding AMS %s %s reading %s (last accepted %s) until confirmed",
+                         self.index, attribute, value, last)
+            self._unconfirmed_readings[attribute] = value
+            return False
+        self._accepted_readings[attribute] = value
+        return True
 
     @property
     def device_name_suffix(self) -> str:
@@ -4122,7 +4160,8 @@ class AMSList:
                     ("dry_time", "remaining_drying_time", int, 0, math.inf),
                 ):
                     value = optional_number(ams, key, converter)
-                    if value is not None and minimum <= value <= maximum:
+                    if (value is not None and minimum <= value <= maximum
+                            and instance.accept_reading(attribute, value)):
                         setattr(instance, attribute, value)
 
                 dry_setting = ams.get("dry_setting")
