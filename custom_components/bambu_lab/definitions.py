@@ -261,6 +261,13 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DOOR_SENSOR),
     ),
     BambuLabBinarySensorEntityDescription(
+        key="p1s_upgrade_installed",
+        translation_key="p1s_upgrade_installed",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().home_flag.p1s_upgrade_installed,
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.P1P,
+    ),
+    BambuLabBinarySensorEntityDescription(
         key="top_cover_open",
         translation_key="top_cover_open",
         device_class=BinarySensorDeviceClass.DOOR,
