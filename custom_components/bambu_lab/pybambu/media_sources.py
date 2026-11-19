@@ -470,7 +470,7 @@ class Tcp6000MediaSource(RemoteMediaSource):
         if payload:
             self._ssl.sendall(payload)
 
-    def _read_exact(self, length: int, timeout: float | None = None) -> bytes:
+    def _read_exact(self, length: int, timeout: float | None = None, deadline: float | None = None) -> bytes:
         if self._ssl is None:
             raise RemoteMediaError("TCP 6000 session is not connected")
 
@@ -480,21 +480,32 @@ class Tcp6000MediaSource(RemoteMediaSource):
         try:
             data = bytearray()
             while len(data) < length:
+                if deadline is not None:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise RemoteMediaError("Metadata frame read timed out")
+                    self._ssl.settimeout(remaining)
                 chunk = self._ssl.recv(length - len(data))
                 if not chunk:
                     raise RemoteMediaError("TCP 6000 connection closed by printer")
                 data.extend(chunk)
             return bytes(data)
         finally:
-            if timeout is not None:
+            if timeout is not None or deadline is not None:
                 self._ssl.settimeout(original_timeout)
 
-    def _read_frame(self, timeout: float | None = None) -> tuple[int, int, bytes]:
-        header = self._read_exact(16, timeout)
+    def _read_frame(self, timeout: float | None = None, max_payload: int | None = None) -> tuple[int, int, bytes]:
+        deadline = time.monotonic() + timeout if max_payload is not None and timeout is not None else None
+        header = self._read_exact(16, timeout, deadline=deadline) if deadline is not None else self._read_exact(16, timeout)
         payload_len = struct.unpack_from("<I", header, 0)[0]
         magic = struct.unpack_from("<I", header, 4)[0]
         sequence = struct.unpack_from("<I", header, 8)[0]
-        payload = self._read_exact(payload_len, timeout) if payload_len else b""
+        if max_payload is not None and payload_len > max_payload:
+            raise RemoteMediaError("Metadata frame exceeds limit")
+        if payload_len and deadline is not None:
+            payload = self._read_exact(payload_len, timeout, deadline=deadline)
+        else:
+            payload = self._read_exact(payload_len, timeout) if payload_len else b""
         return magic, sequence, payload
 
     def _handshake(self) -> None:
@@ -528,11 +539,15 @@ class Tcp6000MediaSource(RemoteMediaSource):
         cmdtype: int,
         sequence: int,
         timeout: float | None = None,
+        max_payload: int | None = None,
     ) -> tuple[dict[str, Any], bytes]:
         deadline = time.monotonic() + (timeout if timeout is not None else self._command_timeout)
         while time.monotonic() < deadline:
             remaining = max(0.1, deadline - time.monotonic())
-            _magic, _seq, payload = self._read_frame(timeout=remaining)
+            if max_payload is None:
+                _magic, _seq, payload = self._read_frame(timeout=remaining)
+            else:
+                _magic, _seq, payload = self._read_frame(timeout=remaining, max_payload=max_payload)
             reply, binary = _split_json_and_binary(payload)
             if not reply:
                 continue
@@ -544,6 +559,40 @@ class Tcp6000MediaSource(RemoteMediaSource):
                 continue
             return reply, binary
         raise RemoteMediaError(f"TCP 6000 timed out waiting for cmdtype={cmdtype} sequence={sequence}")
+
+    def model_metadata(self, remote_file: RemoteMediaFile, plate: int | None = None,
+                       timeout: float = 10.0) -> bytes:
+        """Read the same zipped model members as Studio's SUB_FILE command."""
+        from .model_metadata import MAX_METADATA_BYTES, METADATA_MEMBERS
+        if not remote_file.path or "#" in remote_file.path:
+            raise RemoteMediaError("Invalid model metadata path")
+        request = {"paths": [remote_file.path + "#" + name for name in METADATA_MEMBERS], "zip": True}
+        if plate is not None:
+            if type(plate) is not int or not 0 < plate <= 1000:
+                raise RemoteMediaError("Invalid selected plate")
+            request["paths"].append(remote_file.path + f"#Metadata/plate_{plate}.gcode.md5")
+        if remote_file.storage:
+            request["storage"] = remote_file.storage
+        sequence = self._send_ctrl_request(2, request)
+        deadline = time.monotonic() + min(timeout, 10.0)
+        result = bytearray()
+        while time.monotonic() < deadline:
+            response, chunk = self._read_matching_reply(
+                2, sequence, timeout=max(0.1, deadline-time.monotonic()),
+                max_payload=MAX_METADATA_BYTES + 65536)
+            reply = response.get("reply") or {}
+            if int(response.get("result", -1)) not in (0, 1):
+                raise RemoteMediaError("Model metadata request refused")
+            if reply.get("path") != remote_file.path or int(reply.get("size", -1)) != len(chunk):
+                raise RemoteMediaError("Model metadata response mismatch")
+            result.extend(chunk)
+            if len(result) > MAX_METADATA_BYTES:
+                raise RemoteMediaError("Model metadata exceeds limit")
+            if not reply.get("continue", False):
+                if not result:
+                    raise RemoteMediaError("Empty model metadata")
+                return bytes(result)
+        raise RemoteMediaError("Model metadata request timed out")
 
     def probe(self) -> list[str]:
         self._connect()
@@ -615,9 +664,19 @@ class Tcp6000MediaSource(RemoteMediaSource):
         media_type: str,
         extensions: list[str],
         search_paths: list[str] | None = None,
+        require_complete: bool = False,
+        timeout: float = 20.0,
     ) -> list[RemoteMediaFile]:
         files: list[RemoteMediaFile] = []
-        for storage in self._storage_candidates(media_type):
+        if require_complete:
+            # A partial storage listing cannot establish a unique title match.
+            deadline = time.monotonic() + timeout
+            storages = self.media_ability()
+            if not storages:
+                raise RemoteMediaError("Complete storage listing unavailable")
+        else:
+            storages = self._storage_candidates(media_type)
+        for storage in storages:
             req: dict[str, Any] = {
                 "type": media_type,
                 "api_version": 2,
@@ -627,22 +686,32 @@ class Tcp6000MediaSource(RemoteMediaSource):
                 req["storage"] = storage
 
             try:
+                if require_complete and time.monotonic() >= deadline:
+                    raise RemoteMediaError("Storage listing timed out")
                 sequence = self._send_ctrl_request(1, req)
-                reply, _binary = self._read_matching_reply(1, sequence, timeout=15.0)
+                reply, _binary = self._read_matching_reply(1, sequence, timeout=min(15.0, max(0.1, deadline-time.monotonic())) if require_complete else 15.0)
                 result = int(reply.get("result", -1))
                 if result != RESULT_OK:
                     LOGGER.debug(f"TCP 6000 LIST_INFO failed for {media_type}/{storage}: result={result}")
+                    if require_complete:
+                        raise RemoteMediaError("Storage listing failed")
                     continue
-                raw_files = (reply.get("reply") or {}).get("file_lists", [])
+                raw_files = (reply.get("reply") or {}).get("file_lists", None if require_complete else [])
                 if not isinstance(raw_files, list):
+                    if require_complete:
+                        raise RemoteMediaError("Invalid storage listing")
                     continue
 
                 for item in raw_files:
                     if not isinstance(item, dict):
+                        if require_complete:
+                            raise RemoteMediaError("Invalid storage item")
                         continue
                     name = str(item.get("name") or item.get("file") or item.get("filename") or "")
                     path = str(item.get("path") or "")
                     basename = name or path.replace("\\", "/").rstrip("/").rsplit("/", 1)[-1]
+                    if require_complete and not basename:
+                        raise RemoteMediaError("Storage item has no name")
                     extension = os.path.splitext(basename)[1].lower()
                     if extension not in extensions:
                         continue
@@ -659,6 +728,8 @@ class Tcp6000MediaSource(RemoteMediaSource):
                         )
                     )
             except Exception as e:
+                if require_complete:
+                    raise RemoteMediaError("Complete storage listing failed") from e
                 LOGGER.debug(f"TCP 6000 list failed for {media_type}/{storage}: {type(e)} Args: {e}")
 
         return dedupe_remote_files(files)
