@@ -3,6 +3,7 @@ from typing import Any
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 
 from .const import (
     DOMAIN,
@@ -17,6 +18,7 @@ from .definitions import BambuLabUpdateEntityDescription
 from homeassistant.components.update import UpdateEntity, UpdateEntityFeature
 
 from .coordinator import BambuDataUpdateCoordinator
+from .pybambu.models import FirmwareUpdateError
 
 FIRMWARE_UPDATE_DESCRIPTION = BambuLabUpdateEntityDescription(
         key="firmware_update",
@@ -91,4 +93,7 @@ class BambuLabUpdate(BambuLabEntity, UpdateEntity):
         self, version: str | None, backup: bool, **kwargs: Any
     ) -> None:
         """Install an update."""
-        self.coordinator.get_model().upgrade.install()
+        try:
+            self.coordinator.get_model().upgrade.install()
+        except FirmwareUpdateError as e:
+            raise HomeAssistantError(str(e)) from e

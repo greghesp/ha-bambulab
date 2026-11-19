@@ -492,8 +492,17 @@ def get_Url(url: str, region: str):
 
 
 def get_upgrade_url(name: str):
-    """Retrieve upgrade URL from BambuLab website"""
-    response = requests.get(f"https://bambulab.com/en/support/firmware-download/{name}")
+    """Retrieve upgrade URL from BambuLab website, or None if it can't be found."""
+    page_url = f"https://bambulab.com/en/support/firmware-download/{name}"
+    try:
+        response = requests.get(page_url, timeout=10)
+    except requests.RequestException as e:
+        LOGGER.warning(f"Failed to fetch firmware download page {page_url}: {e}")
+        return None
+    if response.status_code != 200:
+        # Typically a 403 when Cloudflare blocks the request.
+        LOGGER.warning(f"Firmware download page {page_url} returned HTTP {response.status_code}")
+        return None
     soup = BeautifulSoup(response.text, 'html.parser')
     selector = soup.select_one(
         "#__next > div > div > div > "
