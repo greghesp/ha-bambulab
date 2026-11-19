@@ -8,6 +8,7 @@ import os
 import io
 import html
 import re
+import random
 import threading
 import shutil
 import time
@@ -23,6 +24,7 @@ from PIL import Image
 import asyncio
 
 from .air_purifier import AirPurifier
+from .bambu_cloud import CloudAuthError
 from .utils import (
     search,
     fan_percentage,
@@ -5153,16 +5155,44 @@ class SlicerSettings:
         else:
             LOGGER.debug(f"Received no filament data: {filaments}")
 
+    # Slicer settings are account-level, so every printer on one account requests them
+    # within seconds of a restart and the cloud answers some with 429. Spread the
+    # initial requests out and retry transient failures with backoff and jitter (#2304).
+    MAX_ATTEMPTS = 4
+    INITIAL_JITTER_S = (0, 10)
+    RETRY_DELAY_S = (15, 45)
+
     def update(self):
+        """Load slicer settings. Runs on its own thread, so sleeping here is safe."""
         self.custom_filaments = {}
-        if self._client.bambu_cloud.auth_token != "":
-            LOGGER.debug(f"Loading slicer settings for {self._client._device.info.device_type} / {self._client._serial}")
-            slicer_settings = self._client.bambu_cloud.get_slicer_settings()
-            if slicer_settings is None:
-                LOGGER.debug(f"Failed to get slicer settings for {self._client._device.info.device_type} / {self._client._serial}")
+        if self._client.bambu_cloud.auth_token == "":
+            return
+
+        printer = f"{self._client._device.info.device_type} / {self._client._serial}"
+        LOGGER.debug(f"Loading slicer settings for {printer}")
+        time.sleep(random.uniform(*self.INITIAL_JITTER_S))
+
+        for attempt in range(1, self.MAX_ATTEMPTS + 1):
+            try:
+                slicer_settings = self._client.bambu_cloud.get_slicer_settings()
+            except CloudAuthError as e:
+                LOGGER.debug(f"Bambu Cloud rejected the token loading slicer settings for {printer}: {e}")
                 self._client.callback("event_printer_bambu_authentication_failed")
-            else:
+                return
+
+            if slicer_settings is not None:
                 self._load_custom_filaments(slicer_settings)
+                self._client.callback("event_printer_bambu_authentication_succeeded")
+                return
+
+            if attempt < self.MAX_ATTEMPTS:
+                delay = random.uniform(*self.RETRY_DELAY_S) * attempt
+                LOGGER.debug(f"Slicer settings fetch for {printer} failed (attempt {attempt}), retrying in {delay:.0f}s")
+                time.sleep(delay)
+
+        LOGGER.warning(f"Could not load slicer settings for {printer} after {self.MAX_ATTEMPTS} attempts "
+                       "(transient Bambu Cloud error, not an authentication failure). Custom filaments "
+                       "will be unavailable until the printer reconnects.")
 
 
 class FilamentInventory:
