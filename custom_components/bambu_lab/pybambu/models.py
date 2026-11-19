@@ -1023,6 +1023,8 @@ AMS_HT_SLOT_BASE = AMS_SLOT_COUNT
 AMS_HT_SLOT_END = AMS_HT_SLOT_BASE + AMS_HT_COUNT
 AMS_HT_UNIT_BASE = 128
 AMS_HT_UNIT_END = AMS_HT_UNIT_BASE + AMS_HT_COUNT
+# Unit id H3C reports for its AMS 3H in push_status; used when the version module omits it.
+AMS_3H_DEFAULT_UNIT_ID = 32
 
 # Characters that cannot appear in a file name on the printer's storage. The printer stores
 # each one in a model name as its hex code with the '%' dropped: a project called
@@ -3885,6 +3887,25 @@ class AMSList:
         else:
             return self.data[self.active_ams_index].tray[self.active_tray_index]
 
+    def _ams_3h_index(self, module) -> int | None:
+        """Resolve the push_status unit id for an AMS 3H version module.
+
+        Some firmware (e.g. H3C 01.00.02.00) reports the module as a bare "n10a" with
+        no "id" field (#2305). Fall back to the unit already seen in push_status, which
+        is the only one carrying zone_info, and otherwise to the id H3C reports.
+        """
+        name = module.get("name", "")
+        explicit = module.get("id", name.split("/", 1)[1] if "/" in name else None)
+        if explicit is not None:
+            try:
+                return int(explicit)
+            except (TypeError, ValueError):
+                return None
+        zoned = [index for index, ams in self.data.items() if ams.zones or ams.model == "AMS 3H"]
+        if len(zoned) == 1:
+            return zoned[0]
+        return AMS_3H_DEFAULT_UNIT_ID if not zoned else None
+
     def info_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
 
@@ -3921,9 +3942,8 @@ class AMSList:
             model = ""
             if name == "n10a" or name.startswith("n10a/"):
                 model = "AMS 3H"
-                try:
-                    index = int(module["id"] if "id" in module else name.split("/", 1)[1])
-                except (KeyError, IndexError, TypeError, ValueError):
+                index = self._ams_3h_index(module)
+                if index is None:
                     continue
             elif name.startswith("ams/"):
                 model = "AMS"
