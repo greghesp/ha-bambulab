@@ -139,6 +139,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if event == "event_printer_bambu_authentication_failed":
             self._report_authentication_issue()
 
+        elif event == "event_printer_bambu_authentication_succeeded":
+            # A later successful cloud call means the token is fine again - clear any stale repair.
+            issue_registry.async_delete_issue(
+                hass=self._hass,
+                domain=DOMAIN,
+                issue_id=f"authentication_failed_{self.get_model().info.serial}")
+
         elif event == "event_printer_access_denied":
             self._hass.async_create_task(self._async_handle_access_denied())
 

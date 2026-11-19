@@ -84,6 +84,14 @@ class CsrfObtainError(Exception):
         super().__init__("Not able to obtain CSRF cookie")
         self.error_code = 403
 
+class CloudAuthError(Exception):
+    """Bambu Cloud rejected the auth token (HTTP 401/403 that isn't a Cloudflare block)."""
+    def __init__(self, error_code: int):
+        super().__init__(f"Bambu Cloud rejected the auth token ({error_code})")
+        self.error_code = error_code
+
+AUTH_REJECTED_STATUS_CODES = (401, 403)
+
 
 @dataclass
 class BambuCloud:
@@ -508,13 +516,25 @@ class BambuCloud:
     #     "settings": {}
     # }
 
-    def get_slicer_settings(self) -> dict:
+    def get_slicer_settings(self) -> dict | None:
+        """Return the account's slicer settings, or None on a transient failure.
+
+        Raises CloudAuthError only when the cloud genuinely rejects the token, so a
+        rate limit (429), server error, Cloudflare block or network failure is never
+        mistaken for an authentication problem (#2304)."""
         LOGGER.debug("Getting slicer settings from Bambu Cloud")
         try:
             response = self._get(BambuUrl.SLICER_SETTINGS)
-        except:
+            return response.json()
+        except PermissionError as e:
+            status = e.args[0] if e.args else None
+            if status in AUTH_REJECTED_STATUS_CODES:
+                raise CloudAuthError(status) from e
+            LOGGER.debug(f"Transient failure getting slicer settings: {status}")
             return None
-        return response.json()
+        except Exception as e:
+            LOGGER.debug(f"Transient failure getting slicer settings: {e}")
+            return None
 
     # The filament inventory ("Filament Manager") is of the following form:
     #
