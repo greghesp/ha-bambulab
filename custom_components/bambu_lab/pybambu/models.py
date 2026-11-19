@@ -3869,6 +3869,28 @@ class AMSList:
         return self._nozzle_tray_index[active_nozzle]
     
     @property
+    def active_global_tray_index(self) -> int | str:
+        """Printer-wide index of the tray feeding the active nozzle.
+
+        Follows the legacy tray_now numbering so it changes on every tray
+        switch, even when both trays hold identical filament:
+        standard AMS -> ams_index * 4 + tray (0-15), AMS HT -> its AMS index
+        (128-135), external spools -> "external" / "external_2", and
+        "none" when nothing is loaded.
+        """
+        ams_index = self.active_ams_index
+        tray_index = self.active_tray_index
+        if tray_index == 255:
+            return "none"
+        if ams_index == 255:
+            return "external"
+        if ams_index == 254:
+            return "external_2"
+        if ams_index >= AMS_HT_UNIT_BASE:
+            return ams_index
+        return ams_index * 4 + tray_index
+
+    @property
     def active_tray(self):
         if self.active_ams_index == 255:
             if self.active_tray_index == 255:

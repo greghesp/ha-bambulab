@@ -1091,6 +1091,45 @@ class TestAMSList(unittest.TestCase):
         self.client._device.extruder.print_update({"device": {"extruder": {"state": 0x12}}})
         self.assertIsNone(self.ams_list.active_tray)
 
+    def test_active_global_tray_index_legacy_tray_now(self):
+        # Legacy payloads report tray_now as a global index: ams * 4 + tray
+        cases = {
+            "0": 0,      # AMS 1, tray 1
+            "3": 3,      # AMS 1, tray 4
+            "5": 5,      # AMS 2, tray 2
+            "13": 13,    # AMS 4, tray 2
+            "128": 128,  # AMS HT
+            "254": "external",
+            "255": "none",
+        }
+        for tray_now, expected in cases.items():
+            with self.subTest(tray_now=tray_now):
+                self.ams_list.print_update({"ams": {"tray_now": tray_now}})
+                self.assertEqual(self.ams_list.active_global_tray_index, expected)
+
+    def test_active_global_tray_index_changes_on_mid_print_swap(self):
+        # Same filament in two trays must still produce a state change
+        self.ams_list.print_update({"ams": {"tray_now": "0"}})
+        before = self.ams_list.active_global_tray_index
+        self.ams_list.print_update({"ams": {"tray_now": "1"}})
+        self.assertNotEqual(before, self.ams_list.active_global_tray_index)
+
+    def test_active_global_tray_index_extruder_snow(self):
+        # H2D style payloads report per-nozzle snow = (ams << 8) | tray
+        cases = {
+            (1 << 8) | 2: 6,          # AMS 2, tray 3
+            (128 << 8) | 0: 128,      # AMS HT
+            0xFF00: "external",       # external spool (left / main)
+            0xFE00: "external_2",     # second external spool
+            0xFFFF: "none",           # unloaded
+        }
+        for snow, expected in cases.items():
+            with self.subTest(snow=hex(snow)):
+                self.ams_list.print_update({"device": {"extruder": {"info": [
+                    {"id": 0, "snow": snow},
+                ]}}})
+                self.assertEqual(self.ams_list.active_global_tray_index, expected)
+
     def test_multi_ams_detection(self):
         # Test detection of 4 different AMS instances (2 AMS, 1 AMS 2 Pro, 1 AMS HT)
 
