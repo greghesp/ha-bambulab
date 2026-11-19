@@ -1214,6 +1214,13 @@ class PrintJob:
     def model_download_percentage(self) -> int:
         return self._ftp_download_percentage
 
+    def _end_failed_model_download(self) -> None:
+        # A download that fails part way must not leave the percentage below 100: the cards
+        # treat anything under 100 as a download in progress and show it over the cover image.
+        if self._ftp_download_percentage != 100:
+            self._ftp_download_percentage = 100
+            self._client.callback("event_printer_data_update")
+
     @property
     def get_printable_objects(self) -> json:
         return self._printable_objects
@@ -1876,6 +1883,7 @@ class PrintJob:
                 f"Failed downloading model {remote_file.path} from {remote_file.source}/"
                 f"{remote_file.storage}: {type(e)} Args: {e}"
             )
+            self._end_failed_model_download()
             return None
 
     def _attempt_remote_model_download(self, sources: list[RemoteMediaSource]) -> str | None:
@@ -2022,10 +2030,10 @@ class PrintJob:
         except ftplib.error_perm as e:
              if '550' not in str(e.args): # 550 is unavailable.
                  LOGGER.debug(f"Failed to download model at '{file_path}': {e}")
+             self._end_failed_model_download()
         except Exception as e:
             LOGGER.debug(f"Unexpected exception at '{file_path}': {type(e)} Args: {e}")
-            # Optionally add retry logic here
-            pass
+            self._end_failed_model_download()
         return None
 
     ftp_search_paths = ['/cache/', '/']
