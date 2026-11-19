@@ -839,6 +839,14 @@
           "none": "None"
         }
       },
+      "active_tray_index": {
+        "name": "Active tray index",
+        "state": {
+          "none": "None",
+          "external": "External spool",
+          "external_2": "External spool 2"
+        }
+      },
       "nozzle_diameter": {
         "name": "Nozzle size"
       },

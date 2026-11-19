@@ -740,6 +740,17 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
     ),
     BambuLabSensorEntityDescription(
+        key="active_tray_index",
+        translation_key="active_tray_index",
+        icon="mdi:tray-full",
+        value_fn=lambda self: self.coordinator.get_model().ams.active_global_tray_index,
+        extra_attributes=lambda self: {
+            "ams_index": self.coordinator.get_model().ams.active_ams_index,
+            "tray_index": self.coordinator.get_model().ams.active_tray_index,
+        },
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
+    ),
+    BambuLabSensorEntityDescription(
         key="nozzle_diameter",
         translation_key="nozzle_diameter",
         native_unit_of_measurement=UnitOfLength.MILLIMETERS,
