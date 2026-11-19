@@ -17,6 +17,7 @@ class TestH3C(unittest.TestCase):
         self.client = MagicMock()
         self.client._device_type = Printers.H3C
         self.client.slicer_settings.custom_filaments = {}
+        self.client.slicer_settings.filaments = {}
         self.device = Device(self.client)
         self.client._device = self.device
 

@@ -17,6 +17,7 @@ from homeassistant.helpers import (
     entity_registry
 )
 from homeassistant.helpers.dispatcher import async_dispatcher_send
+from homeassistant.helpers.storage import STORAGE_DIR
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.core import Event, HomeAssistant, callback
@@ -28,6 +29,7 @@ from homeassistant.helpers import issue_registry
 from homeassistant.helpers import entity_registry as er
 
 from .const import (
+    LEARNED_FILAMENTS_STORAGE_FILE,
     BRAND,
     DOMAIN,
     LOGGER,
@@ -85,6 +87,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config.update(entry.options.items())
         config['user_language'] = hass.config.language
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
+        config['custom_filament_store_path'] = hass.config.path(STORAGE_DIR, LEARNED_FILAMENTS_STORAGE_FILE)
         self.client = BambuClient(config)
         remove_legacy_makerworld_device(hass, entry)
 

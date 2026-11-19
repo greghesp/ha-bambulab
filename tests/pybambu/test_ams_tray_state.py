@@ -30,6 +30,7 @@ class TestAMSTrayState(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
         self.client.slicer_settings.custom_filaments = {}
+        self.client.slicer_settings.filaments = {}
         self.tray = AMSTray(self.client)
 
     def test_legacy_state_0_empty(self):
@@ -171,6 +172,7 @@ class TestAMSTrayNoStateFirmware(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
         self.client.slicer_settings.custom_filaments = {}
+        self.client.slicer_settings.filaments = {}
         self.tray = AMSTray(self.client)
 
     def test_full_payload_without_state_is_loaded(self):
@@ -228,6 +230,7 @@ class TestAMSTrayWithoutStateField(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
         self.client.slicer_settings.custom_filaments = {}
+        self.client.slicer_settings.filaments = {}
         self.tray = AMSTray(self.client)
 
     def test_full_payload_is_loaded(self):

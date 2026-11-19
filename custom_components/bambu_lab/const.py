@@ -23,6 +23,8 @@ LOGGERFORHA = logging.getLogger(f"{__package__}_HA")
 SERVICE_CALL_EVENT = "bambu_lab_service_call"
 # hass.data[DOMAIN] key holding the pending service calls, by the id sent in the event data.
 SERVICE_CALL_FUTURES = "service_call_futures"
+# Custom filaments learned from print files, shared by all printers. Lives in HA's .storage dir.
+LEARNED_FILAMENTS_STORAGE_FILE = "bambu_lab.learned_filaments.json"
 SERVICE_CALL_ID = "service_call_id"
 
 # Options key mapping AMS serial -> switch entity_id of the smart plug powering an
