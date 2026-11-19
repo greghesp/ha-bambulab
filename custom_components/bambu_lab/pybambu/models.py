@@ -2481,6 +2481,74 @@ class PrintJob:
 
         return False
 
+    @staticmethod
+    def _pick_image_names(*plates) -> list[str]:
+        """Pick image filenames to look for, in order, ending with the single-plate pick_1.png."""
+        names = []
+        for plate in (*plates, "1"):
+            if plate and f"pick_{plate}.png" not in names:
+                names.append(f"pick_{plate}.png")
+        return names
+
+    def _read_active_metadata_file(self, source: RemoteMediaSource, remote_path: str) -> bytes | None:
+        """Read one file from the active print's Metadata directory over TCP 6000."""
+        remote_file = RemoteMediaFile(
+            name=os.path.basename(remote_path),
+            path=remote_path,
+            size=0,
+            media_type="model",
+            source=source.name,
+            storage="",
+        )
+        local_path = Path(self._client.cache_path) / "prints" / f"active-{remote_file.name}"
+        try:
+            self._download_remote_file_atomic(source, remote_file, local_path)
+            return local_path.read_bytes() or None
+        except Exception as e:
+            LOGGER.debug(f"Direct active metadata lookup failed for {remote_path}: {type(e)} Args: {e}")
+            return None
+
+    def _try_active_metadata_from_printer(self, sources: list[RemoteMediaSource]) -> bool:
+        """Load the active print's pick image and slice info directly from the printer.
+
+        The P2S (like the X1/H2) keeps the running job's Metadata on a RAM drive that FTPS
+        can't see, so when no 3mf is found this is the only way to get the pick image.
+        """
+        if not self.gcode_file or not self.plate_idx:
+            return False
+
+        metadata_dir = self.gcode_file.replace("\\", "/").rsplit("/", 1)[0]
+        for source in sources:
+            if source.name != Tcp6000MediaSource.name:
+                continue
+
+            pick_image_bytes = None
+            for pick_name in self._pick_image_names(str(self.plate_idx)):
+                pick_image_bytes = self._read_active_metadata_file(source, f"{metadata_dir}/{pick_name}")
+                if pick_image_bytes:
+                    break
+
+            slice_info_bytes = self._read_active_metadata_file(source, f"{metadata_dir}/slice_info.config")
+            if slice_info_bytes:
+                plate_json_bytes = self._read_active_metadata_file(
+                    source, f"{metadata_dir}/plate_{self.plate_idx}.json"
+                )
+                if self._parse_and_apply_model_metadata(
+                    slice_info_bytes=slice_info_bytes,
+                    plate_json_bytes=plate_json_bytes,
+                    pick_image_bytes=pick_image_bytes,
+                ):
+                    LOGGER.debug(f"Loaded active metadata directly from {metadata_dir}")
+                    return True
+
+            if pick_image_bytes:
+                # No usable slice info, so objects can't be named, but the image itself is still useful.
+                self._client._device.pick_image.set_image(pick_image_bytes)
+                LOGGER.debug(f"Loaded active pick image directly from {metadata_dir}")
+                return True
+
+        return False
+
     def _parse_and_apply_model_metadata(
         self,
         slice_info_bytes: bytes,
@@ -2672,8 +2740,13 @@ class PrintJob:
                     LOGGER.debug(f"Failed to download {target_plate_json}: {e}")
 
             pick_image_bytes = None
-            target_pick = f"pick_{target_plate}.png"
-            if target_pick in files:
+            # Like the cover, single-plate exports can name the pick image pick_1.png
+            # whatever the plate index is.
+            target_pick = next(
+                (name for name in self._pick_image_names(target_plate, active_plate) if name in files),
+                None,
+            )
+            if target_pick:
                 try:
                     pick_buf = io.BytesIO()
                     ftp.retrbinary(f"RETR {target_pick}", pick_buf.write)
@@ -2721,12 +2794,20 @@ class PrintJob:
                             cover_loaded = self._try_active_cover_from_printer(sources)
                 else:
                     break
+
+            metadata_loaded = False
+            if model_file_path is None:
+                LOGGER.debug("No model .3mf file found. Attempting direct metadata download from printer...")
+                # FTPS first; then the active job's Metadata over TCP 6000, which needs the sources still open.
+                metadata_loaded = (
+                    self._attempt_direct_metadata_download()
+                    or self._try_active_metadata_from_printer(sources)
+                )
         finally:
             self._close_remote_media_sources(sources)
 
         if model_file_path is None:
-            LOGGER.debug("No model .3mf file found. Attempting direct metadata download from printer...")
-            if self._attempt_direct_metadata_download():
+            if metadata_loaded:
                 LOGGER.info("Direct metadata download from printer succeeded.")
                 self.prune_print_history_files()
                 return True
@@ -2806,8 +2887,9 @@ class PrintJob:
                         break
 
                 pick_image_bytes = None
-                for pc in [f"Metadata/pick_{target_plate}.png", f"Metadata/pick_{active_plate_number}.png", "Metadata/pick_1.png"]:
-                    if pc and pc.lower() in namelist_map:
+                for pick_name in self._pick_image_names(target_plate, active_plate_number):
+                    pc = f"Metadata/{pick_name}"
+                    if pc.lower() in namelist_map:
                         pick_image_bytes = archive.read(namelist_map[pc.lower()])
                         break
 
