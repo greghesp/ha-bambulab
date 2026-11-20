@@ -10,12 +10,14 @@ pytest.importorskip("homeassistant")
 
 from homeassistant.components.fan import FanEntityFeature
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
-from homeassistant.const import CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 from homeassistant.exceptions import HomeAssistantError
 
 from custom_components.bambu_lab.const import DOMAIN
 from custom_components.bambu_lab.coordinator import BambuDataUpdateCoordinator
-from custom_components.bambu_lab.definitions import AIR_PURIFIER_SENSORS
+from custom_components.bambu_lab.definitions import (
+    AIR_PURIFIER_SENSORS,
+    MICROGRAMS_PER_CUBIC_METER,
+)
 from custom_components.bambu_lab.fan import BambuLabAirPurifierFan
 from custom_components.bambu_lab.fan import async_setup_entry as setup_fans
 from custom_components.bambu_lab.pybambu.air_purifier import AirPurifier
@@ -74,7 +76,7 @@ def test_particulate_sensor_is_pm25(coordinator):
     assert sensor.unique_id == "TEST-E1_pm25"
     assert sensor.translation_key == "air_purifier_pm25"
     assert sensor.device_class == SensorDeviceClass.PM25
-    assert sensor.native_unit_of_measurement == CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
+    assert sensor.native_unit_of_measurement == MICROGRAMS_PER_CUBIC_METER
     assert sensor.state_class == SensorStateClass.MEASUREMENT
     assert sensor.native_value == 3
 

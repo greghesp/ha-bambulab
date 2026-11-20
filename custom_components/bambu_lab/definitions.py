@@ -19,7 +19,6 @@ from homeassistant.components.update import (
     UpdateEntityDescription
 )
 from homeassistant.const import (
-    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
     REVOLUTIONS_PER_MINUTE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
@@ -52,6 +51,12 @@ from .pybambu.const import (
     Printers,
 )
 from .pybambu.utils import get_filament_name
+
+# Home Assistant 2026.10 replaced the deprecated
+# CONCENTRATION_MICROGRAMS_PER_CUBIC_METER constant with
+# UnitOfDensity.MICROGRAMS_PER_CUBIC_METER. Keep the literal so the integration
+# keeps working on the older Home Assistant versions it supports.
+MICROGRAMS_PER_CUBIC_METER = "µg/m³"
 
 def fan_to_percent(speed):
     percentage = (int(speed) / 15) * 100
@@ -108,7 +113,7 @@ AIR_PURIFIER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="pm25",
         translation_key="air_purifier_pm25",
         device_class=SensorDeviceClass.PM25,
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        native_unit_of_measurement=MICROGRAMS_PER_CUBIC_METER,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:air-filter",
         value_fn=lambda self: self.coordinator.get_model().air_purifier.pm,
