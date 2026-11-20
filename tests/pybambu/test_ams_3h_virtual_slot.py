@@ -78,6 +78,28 @@ class TestAms3hVirtualSlot(unittest.TestCase):
         self.assertEqual(tray.remaining_weight_g, 914)
         self.assertEqual(tray.remain, 91)
 
+    def test_virtual_slot_without_state_field_is_shown_on_its_ams_3h_slot(self):
+        # Some H3C firmware sends vir_slot entries with no `state` field. The AMS still
+        # reports `state: 160` (no spool) for the tray, which must not hide the spool.
+        stateless = {key: value for key, value in TPU_VIR_SLOT.items() if key != "state"}
+        self.push(vir_slot=vir_slots(stateless))
+
+        tray = self.tpu_tray
+        self.assertFalse(tray.empty)
+        self.assertEqual(tray.type, "TPU")
+        self.assertEqual(tray.tag_uid, "7E611ABD00000100")
+        self.assertEqual(tray.remaining_weight_g, 914)
+
+    def test_stateless_virtual_slot_survives_regular_tray_delta(self):
+        stateless = {key: value for key, value in TPU_VIR_SLOT.items() if key != "state"}
+        self.push(vir_slot=vir_slots(stateless))
+        self.device.print_update({
+            "ams": {"ams": [{"id": str(AMS_3H_INDEX), "tray": [{"id": str(TPU_SLOT), "state": 160}]}]},
+        })
+
+        self.assertFalse(self.tpu_tray.empty)
+        self.assertEqual(self.tpu_tray.type, "TPU")
+
     def test_virtual_slot_filament_is_not_reported_as_external_spool(self):
         self.push(vir_slot=vir_slots(TPU_VIR_SLOT))
 

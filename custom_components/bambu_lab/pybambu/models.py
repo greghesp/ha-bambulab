@@ -68,6 +68,7 @@ from .const import (
     AMS_STATUS_MAIN_FILAMENT_CHANGE,
     AMS_STATUS_MAIN_ASSIST,
     AMS_FILAMENT_CHANGE_STEPS,
+    AMSTrayStateFlags,
 )
 from .commands import (
     GET_VERSION,
@@ -3822,6 +3823,10 @@ class AMSInstance:
 # The H3C reports a 2.85 mm spool in AMS 3H slot k as virtual slot 255 - k instead of as
 # AMS tray k. Ids 255 and 254 stay with the external spools, as on every other printer.
 AMS_3H_VIRTUAL_SLOT_IDS = range(247, 254)
+# Tray state used when a loaded vir_slot entry carries no `state` field of its own. Without it,
+# the tray keeps the state the AMS reported for it (no spool), which would hide the spool.
+AMS_3H_VIRTUAL_SLOT_LOADED_STATE = (AMSTrayStateFlags.SPOOL | AMSTrayStateFlags.METADATA
+                                    | AMSTrayStateFlags.STEADY)
 
 
 def _virtual_slot_loaded(entry: dict) -> bool:
@@ -4267,7 +4272,8 @@ class AMSList:
                 continue
             tray = trays[tray_index]
             if _virtual_slot_loaded(entry):
-                tray.print_update({**entry, "id": str(tray_index)})
+                tray.print_update({"state": AMS_3H_VIRTUAL_SLOT_LOADED_STATE, **entry,
+                                   "id": str(tray_index)})
                 tray.exists = True
                 overlaid.add(tray_index)
             elif tray_index in self._virtual_overlaid_trays:
