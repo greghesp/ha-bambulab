@@ -68,6 +68,8 @@ class Features(IntEnum):
     ACTIVE_CHAMBER_HEATER = 27,
     AMS_DRYING_SETTINGS = 28,
     TOP_COVER_SENSOR = 29,
+    PA_CALIBRATION = 30,
+    PA_CALIBRATION_PROFILES = 31,
 
 
 class FansEnum(IntEnum):
@@ -334,6 +336,7 @@ class Home_Flag_Values(IntEnum):
     WIRED_NETWORK                       = 0x00040000,
     FILAMENT_TANGLE_DETECT_SUPPORTED    = 0x00080000,
     FILAMENT_TANGLE_DETECTED            = 0x00100000,
+    PA_CALIBRATION                      = 0x00010000,
     SUPPORTS_MOTOR_CALIBRATION          = 0x00200000,
     # Gap
     DOOR_OPEN                           = 0x00800000,
