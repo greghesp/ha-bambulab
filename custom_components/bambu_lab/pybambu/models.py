@@ -1479,7 +1479,7 @@ class PrintJob:
                 # our calculation here.
                 duration = self.finish_time - self.start_time
                 # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
-                new_hours = round((duration.seconds / 60 / 60) * 100) / 100
+                new_hours = round((duration.total_seconds() / 60 / 60) * 100) / 100
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
                 self._client._device.info.usage_hours += new_hours
 

@@ -56,6 +56,13 @@ class TestPrintElapsedTime(unittest.TestCase):
 
         self.assertEqual(self._elapsed_at(START + timedelta(days=2)), 27 * 60)
 
+    def test_usage_hours_include_whole_days(self):
+        self.client._device.info.usage_hours = 10
+        self._update({"gcode_state": "RUNNING"}, START)
+        self._update({"gcode_state": "FINISH"}, START + timedelta(days=1, hours=3, minutes=30))
+
+        self.assertAlmostEqual(self.client._device.info.usage_hours, 10 + 27.5)
+
     def test_elapsed_time_is_final_when_finished_event_fires(self):
         seen = []
         self.client.callback.side_effect = lambda event: seen.append((event, self.print_job.elapsed_time))
