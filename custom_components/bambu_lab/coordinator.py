@@ -521,7 +521,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_device = dev_reg.async_get(device_id)
         model = ams_device.model
         if model not in AMS_DRYING_MODELS:
-            LOGGER.error("Passed device is not an AMS 2 or AMS HT.")
+            LOGGER.error("Passed device is not an AMS 2, AMS 3H, or AMS HT.")
             return False
         
         ams_index = self._get_ams_index_from_device(ams_device)
@@ -535,7 +535,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 LOGGER.error(f"Temperature value of '{temp}' not set or out of range.")
                 return False
             if model != 'AMS HT' and temp > 65:
-                LOGGER.error(f"Temperature value of {temp}C too high for AMS 2.")
+                LOGGER.error(f"Temperature value of {temp}C too high for {model}.")
                 return False
             command['print']['temp'] = temp
             command['print']['cooling_temp'] = 45 # Must be at least 45 or the command is ignored
