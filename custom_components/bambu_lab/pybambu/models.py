@@ -1158,6 +1158,7 @@ class PrintJob:
     plate_idx: int
     start_time: datetime
     end_time: datetime
+    finish_time: datetime
     remaining_time: int
     current_layer: int
     total_layers: int
@@ -1188,6 +1189,7 @@ class PrintJob:
         self.plate_idx = 0
         self.start_time = None
         self.end_time = None
+        self.finish_time = None
         self.remaining_time = 0
         self.current_layer = 0
         self.total_layers = 0
@@ -1209,6 +1211,26 @@ class PrintJob:
         self._ftpThread = None
         self._ftp_download_percentage = 100
         self._next_model_retry_at = 0.0
+
+    @property
+    def elapsed_time(self) -> int | None:
+        """Whole minutes the current or most recent print has been running.
+
+        Counts up while printing and is frozen once the print finishes, fails or is
+        canceled, matching the "print elapsed time" shown on the printer screen.
+        """
+        if self.start_time is None:
+            return None
+        end = self.finish_time
+        if end is None:
+            if self.gcode_state in ("IDLE", "FAILED", "FINISH"):
+                # e.g. after a restart: only the cloud task's end time is available.
+                end = self.end_time
+            else:
+                end = get_end_time(0)
+        if end is None:
+            return None
+        return max(0, int((end - self.start_time).total_seconds() // 60))
 
     @property
     def model_download_percentage(self) -> int:
@@ -1373,6 +1395,7 @@ class PrintJob:
             self.start_time = get_end_time(0)
             # Make sure we don't keep using a stale end time.
             self.end_time = None
+            self.finish_time = None
             LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
             if not self._client.ftp_enabled:
@@ -1413,6 +1436,11 @@ class PrintJob:
                 LOGGER.debug("RETRYING MISSING ACTIVE PRINT MEDIA")
                 self._update_task_data()
 
+        print_ended = currently_idle and not previously_idle and previous_gcode_state != "unknown"
+        if print_ended:
+            # Record before firing the finished/failed events so automations see the final elapsed time.
+            self.finish_time = get_end_time(0)
+
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -1444,12 +1472,12 @@ class PrintJob:
                 timelapseDownloaded = True
             self._client.callback("event_print_finished")
 
-        if currently_idle and not previously_idle and previous_gcode_state != "unknown":
+        if print_ended:
             if self.start_time != None:
                 # self.end_time isn't updated if we hit an AMS retract at print end but the printer does count that entire
                 # paused time as usage hours. So we need to use the current time instead of the last recorded end time in
                 # our calculation here.
-                duration = get_end_time(0) - self.start_time
+                duration = self.finish_time - self.start_time
                 # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
                 new_hours = round((duration.seconds / 60 / 60) * 100) / 100
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
