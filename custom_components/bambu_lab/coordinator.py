@@ -47,7 +47,7 @@ from .const import (
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
 from .makerworld import remove_legacy_makerworld_device
-from .pybambu.utils import build_print_project_file_command
+from .pybambu.utils import ams_tray_number_from_unique_id, build_print_project_file_command
 from .pybambu.models import FilamentInventory
 from .pybambu.const import (
     AMS_MODELS,
@@ -462,14 +462,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return ams_index
 
     def _get_ams_and_tray_index_from_entity_entry(self, ams_device, entity_entry):
-        match = re.search(r"tray_([1-4])$", entity_entry.unique_id)
-        # Zero-index the tray ID and find the AMS index
-        tray = int(match.group(1)) - 1
+        # Zero-index the tray number and find the AMS index
+        tray = ams_tray_number_from_unique_id(entity_entry.unique_id) - 1
         # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
         ams_index = self._get_ams_index_from_device(ams_device)
-
-        full_tray = tray + ams_index * 4
-        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index}")
+        LOGGER.debug(f"Tray {tray + 1} on AMS {ams_index}")
 
         return ams_index, tray
 
@@ -600,12 +597,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
-        elif re.search(r"tray_([1-4])$", entity_unique_id):
+        elif ams_tray_number_from_unique_id(entity_unique_id) is not None:
             ams_index, tray_index = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
             if ams_index is None:
                 LOGGER.error("Unable to locate AMS.")
                 return
-            ams_tray = self.get_model().ams.data[ams_index].tray[tray_index]
+            ams_trays = self.get_model().ams.data[ams_index].tray
+            if tray_index >= len(ams_trays):
+                LOGGER.error(f"AMS {ams_index + 1} has no tray {tray_index + 1}")
+                return
+            ams_tray = ams_trays[tray_index]
             # A spool without an RFID tag carries no filament metadata until
             # set_filament writes it, so on firmware that omits the per-tray
             # `state` field `empty` stays True for it. Trust the AMS presence bit

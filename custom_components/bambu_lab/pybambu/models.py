@@ -4159,6 +4159,9 @@ class AMSList:
             # tray_exist_bits: hex bitmask of slots that physically hold a spool,
             # bit (ams_index * 4 + tray_index) for 4-slot AMS units. Reported even
             # by firmware (e.g. P1S) that never sends the per-tray `state` field.
+            # Other units are skipped and keep `exists` unknown: the AMS HT has its
+            # own id range, and the 9-slot AMS 3H (id 32 on the H3C) puts its trays
+            # at bit 28 rather than 32 * 4, a layout seen on only one printer so far.
             exist_bits = ams_data.get("tray_exist_bits")
             if exist_bits is not None:
                 try:
@@ -4167,7 +4170,7 @@ class AMSList:
                     bits = None
                 if bits is not None:
                     for ams_index, ams_instance in self.data.items():
-                        if ams_index >= 128:
+                        if ams_index >= 128 or len(ams_instance.tray) != 4:
                             continue
                         for tray_id, ams_tray in enumerate(ams_instance.tray):
                             ams_tray.exists = bool((bits >> (ams_index * 4 + tray_id)) & 1)
