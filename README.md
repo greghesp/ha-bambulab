@@ -87,6 +87,7 @@ A short tour. The complete list, with per-model notes, is in the
 | Print Progress | Percentage complete |
 | Current Layer / Total Layer Count | Layer counter |
 | Remaining Time / Start Time / End Time | Time left and the estimated finish |
+| Print Elapsed Time | How long the current or last print has run; frozen when the print ends |
 | Task Name | The job being printed, with the AMS mapping per slicer filament as an attribute |
 | Print Weight / Print Length | Filament the job needs (with Bambu credentials, or loaded from the printer) |
 | Print Bed Type | Plate chosen in the job |
