@@ -396,6 +396,10 @@ class Device:
             return model == Printers.H2C and len(self.hotend_rack.hotends) > 0
         elif feature == Features.ACTIVE_CHAMBER_HEATER:
             return model in (x1e_printer | h2_printers | h3_printers | x2_printers)
+        elif feature == Features.PA_CALIBRATION:
+            return (self.home_flag._value & Home_Flag_Values.PA_CALIBRATION) != 0 or (self.print_fun._int_value & (1 << 7)) != 0
+        elif feature == Features.PA_CALIBRATION_PROFILES:
+            return self.supports_feature(Features.PA_CALIBRATION) and self.info.cali_version is not None
         return False
     
     def supports_sw_version(self, version: str) -> bool:
@@ -3123,6 +3127,7 @@ class Info:
     door_open: bool
     top_cover_open: bool
     airduct_mode: int
+    cali_version: int | None
         
     _ip_address: str
     _force_ip: bool
@@ -3147,6 +3152,7 @@ class Info:
         self.top_cover_open = False
         self.airduct_mode = 0
         self.airduct_modes_available = []
+        self.cali_version = None
         self._ip_address = client.host
         self._force_ip = client.settings.get('force_ip', False)                
 
@@ -3362,6 +3368,9 @@ class Info:
 
         # Bit 0 is the right (or only) extruder, bit 1 the left.
         self.hw_switch_state = data.get("hw_switch_state", self.hw_switch_state)
+
+        # Calibration version is provided under print/cali_version
+        self.cali_version = data.get("cali_version", self.cali_version)
 
         # Compute if there's a delta before we check the wifi_signal value.
         changed = (old_data != f"{self.__dict__}")
@@ -4251,6 +4260,7 @@ class AMSTray:
         self.bed_temp = 0
         self.filament_diameter: float | None = None
         self.remaining_weight_g: float | None = None
+        self.cali_idx = None
 
     @property
     def unknown(self) -> bool:
@@ -4295,6 +4305,7 @@ class AMSTray:
         self.bed_temp = 0
         self.filament_diameter = None
         self.remaining_weight_g = None
+        self.cali_idx = None
 
     def _resolve_tray_name(self, idx: str, tray_type: str) -> str:
         """Human-readable tray name; empty tray_type means unknown (?)."""
@@ -4335,6 +4346,8 @@ class AMSTray:
             self.dry_temp = data.get('drying_temp', data.get('tray_temp', self.dry_temp))
             self.dry_time = data.get('drying_time', data.get('tray_time', self.dry_time))
             self.bed_temp = data.get('bed_temp', self.bed_temp)
+            if 'cali_idx' in data:
+                self.cali_idx = data['cali_idx']
 
         if "tray_diameter" in data:
             value = data["tray_diameter"]
@@ -4453,6 +4466,7 @@ class ExternalSpool(AMSTray):
         self.dry_temp = 0
         self.dry_time = 0
         self.bed_temp = 0
+        self.cali_idx = None
 
     def _resolve_loaded_state(self, metadata_only: bool) -> None:
         """External spool: keep filament data; empty only when nothing is mounted."""
