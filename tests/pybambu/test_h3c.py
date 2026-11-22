@@ -222,3 +222,30 @@ class TestH3C(unittest.TestCase):
         self.assertEqual(len(self.device.ams.data[32].tray), 9)
         self.assertIs(self.device.ams.data[32].tray[0], first)
         self.assertEqual(first.remaining_weight_g, 612)
+
+    def without_ams_module_id(self):
+        """Firmware 01.00.02.00 reports the AMS 3H module with neither an id nor a /N suffix (#2305)."""
+        for module in self.payload["get_version"]["module"]:
+            if module["name"] == "n10a":
+                module.pop("id", None)
+
+    def test_ams_3h_module_without_id_is_identified_in_either_order(self):
+        for status_first in (True, False):
+            with self.subTest(status_first=status_first):
+                self.setUp()
+                self.without_ams_module_id()
+                self.load(status_first)
+                self.assertEqual(list(self.device.ams.data), [32])
+                ams = self.device.ams.data[32]
+                self.assertEqual(ams.model, "AMS 3H")
+                self.assertEqual(ams.serial, "TEST-DEVICE")
+                self.assertEqual(len(ams.tray), 9)
+                self.assertTrue(all(unit.serial for unit in self.device.ams.data.values()))
+
+    def test_ams_3h_module_without_id_follows_reported_unit_id(self):
+        self.without_ams_module_id()
+        self.device.ams.print_update({"ams": {"ams": [{"id": "33", "zone_info": [{"zone_id": 0}]}]}})
+        self.device.info_update(self.payload["get_version"])
+        self.assertEqual(list(self.device.ams.data), [33])
+        self.assertEqual(self.device.ams.data[33].model, "AMS 3H")
+        self.assertEqual(self.device.ams.data[33].serial, "TEST-DEVICE")
