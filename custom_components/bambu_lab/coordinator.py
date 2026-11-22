@@ -1401,6 +1401,36 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _cache_sidecar_paths(file_path: Path, file_type: str) -> List[Path]:
         return [file_path.with_suffix(extension) for extension in BambuDataUpdateCoordinator._cache_sidecar_extensions(file_type)]
     
+    async def delete_cached_print_file(self, relative_path: str) -> Dict[str, Any]:
+        """Delete one cached 3MF and its related print sidecars."""
+        cache_root = Path(self.get_file_cache_directory()).resolve()
+        requested_path = Path(relative_path)
+        if requested_path.is_absolute() or ".." in requested_path.parts or not requested_path.parts or requested_path.parts[0] != "prints":
+            return {"success": False, "error": "Invalid print cache path"}
+        if requested_path.suffix.lower() != ".3mf":
+            return {"success": False, "error": "Only cached 3MF print files can be deleted"}
+
+        file_path = cache_root / requested_path
+        try:
+            file_path.resolve().relative_to(cache_root)
+        except ValueError:
+            return {"success": False, "error": "Invalid print cache path"}
+        if not file_path.is_file():
+            return {"success": False, "error": "Cached print file not found"}
+
+        paths = [file_path, *self._cache_sidecar_paths(file_path, "prints"), Path(f"{file_path}.part")]
+        deleted_count = 0
+        try:
+            for path in paths:
+                if path.is_file():
+                    path.unlink()
+                    deleted_count += 1
+        except OSError as err:
+            LOGGER.error("Error deleting cached print file %s: %s", file_path, err)
+            return {"success": False, "error": str(err)}
+
+        return {"success": True, "deleted_count": deleted_count}
+
     async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:
         """Clear the file cache."""
         cache_dir = self.get_file_cache_directory()
