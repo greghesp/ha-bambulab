@@ -2457,7 +2457,6 @@ class PrintJob:
             return
         LOGGER.debug("Pruning timelapse history")
         self._prune_timelapses(keep=self._client._timelapse_cache_count)
-        self._refresh_last_timelapse_path(Path(cache_file_path))
 
     async def async_clear_print_history_files(self):
         loop = asyncio.get_event_loop()
@@ -2484,7 +2483,8 @@ class PrintJob:
                               extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS)
 
     def _prune_timelapses(self, keep: int):
-        self._prune_old_files(directory=os.path.join(self._client.cache_path, "timelapse"),
+        cache_file_path = os.path.join(self._client.cache_path, "timelapse")
+        self._prune_old_files(directory=cache_file_path),
                               extensions=TIMELAPSE_CACHE_EXTENSIONS,
                               keep=keep,
                               extra_extensions=TIMELAPSE_CACHE_SIDECAR_EXTENSIONS)
