@@ -242,6 +242,109 @@ class TestPrintJob(unittest.TestCase):
             b"active-cover"
         )
 
+    @staticmethod
+    def _pick_png_with_object_1() -> bytes:
+        """A pick image where identify_id 1 is drawn as the colour (r=1, g=0, b=0)."""
+        pick = Image.new("RGBA", (2, 1), (0, 0, 0, 0))
+        pick.putpixel((0, 0), (1, 0, 0, 255))
+        pick_buf = io.BytesIO()
+        pick.save(pick_buf, format="PNG")
+        return pick_buf.getvalue()
+
+    def _tcp6000_metadata_download(self, remote_files: dict):
+        """Fake _download_remote_file_atomic that serves remote_files by path, failing others."""
+        requested = []
+
+        def download(_source, remote_file, local_path, progress_callback=None):
+            requested.append(remote_file.path)
+            if remote_file.path not in remote_files:
+                raise FileNotFoundError(remote_file.path)
+            Path(local_path).parent.mkdir(parents=True, exist_ok=True)
+            Path(local_path).write_bytes(remote_files[remote_file.path])
+            return len(remote_files[remote_file.path])
+
+        return download, requested
+
+    def test_active_metadata_loads_pick_image_over_tcp6000(self):
+        """With no 3mf, the pick image and objects come from the active Metadata dir (#2175)."""
+        self.print_job.gcode_file = "/data/Metadata/plate_1.gcode"
+        self.print_job.plate_idx = 1
+        self.print_job.ams_mapping = []
+        pick_bytes = self._pick_png_with_object_1()
+
+        source = MagicMock()
+        source.name = Tcp6000MediaSource.name
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            download, requested = self._tcp6000_metadata_download({
+                "/data/Metadata/slice_info.config": (
+                    b'<config><plate><metadata key="index" value="1" />'
+                    b'<object identify_id="1" name="Cube" skipped="false" />'
+                    b'<object identify_id="2" name="Hidden" skipped="false" />'
+                    b'</plate></config>'
+                ),
+                "/data/Metadata/pick_1.png": pick_bytes,
+            })
+            self.print_job._download_remote_file_atomic = MagicMock(side_effect=download)
+
+            result = self.print_job._try_active_metadata_from_printer([source])
+
+        self.assertTrue(result)
+        self.client._device.pick_image.set_image.assert_called_with(pick_bytes)
+        self.assertEqual(self.print_job.get_printable_objects, {"1": "Cube"})
+        self.assertIn("/data/Metadata/pick_1.png", requested)
+
+    def test_active_metadata_sets_pick_image_without_slice_info(self):
+        """The pick image is still shown when slice_info.config cannot be read."""
+        self.print_job.gcode_file = "/data/Metadata/plate_2.gcode"
+        self.print_job.plate_idx = 2
+        pick_bytes = self._pick_png_with_object_1()
+
+        source = MagicMock()
+        source.name = Tcp6000MediaSource.name
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            download, _ = self._tcp6000_metadata_download({
+                "/data/Metadata/pick_2.png": pick_bytes,
+            })
+            self.print_job._download_remote_file_atomic = MagicMock(side_effect=download)
+
+            result = self.print_job._try_active_metadata_from_printer([source])
+
+        self.assertTrue(result)
+        self.client._device.pick_image.set_image.assert_called_with(pick_bytes)
+
+    def test_active_metadata_skips_without_tcp6000_source(self):
+        """Only the TCP 6000 source can reach the printer's Metadata RAM drive."""
+        self.print_job.gcode_file = "/data/Metadata/plate_1.gcode"
+        self.print_job.plate_idx = 1
+        source = MagicMock()
+        source.name = Ftps990MediaSource.name
+        self.print_job._download_remote_file_atomic = MagicMock()
+
+        self.assertFalse(self.print_job._try_active_metadata_from_printer([source]))
+        self.print_job._download_remote_file_atomic.assert_not_called()
+
+    def test_worker_falls_back_to_active_metadata_when_no_3mf(self):
+        """P2S: no 3mf and no FTPS Metadata dir, but TCP 6000 still provides the pick image."""
+        self.client._device.supports_feature.return_value = True
+        self.print_job.prune_print_history_files = MagicMock()
+        sources = [MagicMock()]
+        self.print_job._remote_media_sources = MagicMock(return_value=sources)
+        self.print_job._try_active_cover_from_printer = MagicMock(return_value=True)
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._attempt_direct_metadata_download = MagicMock(return_value=False)
+        self.print_job._try_active_metadata_from_printer = MagicMock(return_value=True)
+        close_sources = MagicMock()
+        self.print_job._close_remote_media_sources = close_sources
+
+        self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+        self.print_job._try_active_metadata_from_printer.assert_called_once_with(sources)
+        # The TCP 6000 sources must still be open when the metadata fallback runs.
+        close_sources.assert_called_once_with(sources)
+
     def test_ftp_cover_uses_active_mqtt_plate(self):
         """The active MQTT plate wins when archive metadata points elsewhere."""
         self.client.ftp_enabled = True
@@ -525,6 +628,35 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.print_weight, 32.85)
         self.assertEqual(self.print_job.print_bed_type, "textured_plate")
         self.client._device.cover_image.set_image.assert_called_with(b"direct-plate-cover-bytes")
+
+    def test_direct_metadata_download_uses_pick_1_fallback(self):
+        """Single-plate exports name the pick image pick_1.png even when the plate index differs."""
+        self.client.ftp_enabled = True
+        self.print_job.plate_idx = 2
+        self.print_job.ams_mapping = []
+        pick_bytes = self._pick_png_with_object_1()
+
+        ftp_mock = MagicMock()
+        self.client.ftp_connection.return_value = ftp_mock
+        ftp_mock.nlst.return_value = ["slice_info.config", "plate_1.png", "pick_1.png"]
+
+        def mock_retrbinary(cmd, callback):
+            if "slice_info.config" in cmd:
+                callback(
+                    b'<config><plate><metadata key="index" value="2" />'
+                    b'<object identify_id="1" name="Cube" skipped="false" />'
+                    b'</plate></config>'
+                )
+            elif "pick_1.png" in cmd:
+                callback(pick_bytes)
+            elif "plate_1.png" in cmd:
+                callback(b"cover")
+
+        ftp_mock.retrbinary.side_effect = mock_retrbinary
+
+        self.assertTrue(self.print_job._attempt_direct_metadata_download())
+        self.client._device.pick_image.set_image.assert_called_with(pick_bytes)
+        self.assertEqual(self.print_job.get_printable_objects, {"1": "Cube"})
 
     def test_select_model_files_prefers_ftps_and_retains_fallback(self):
         ftps_file = RemoteMediaFile(
