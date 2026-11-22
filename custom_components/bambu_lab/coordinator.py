@@ -67,7 +67,9 @@ from .pybambu.commands import (
     AMS_READ_RFID_GCODE,
     AMS_FILAMENT_DRYING_TEMPLATE,
     RETRY_LOAD_FILAMENT_TEMPLATE,
-    DONE_LOAD_FILAMENT_TEMPLATE
+    DONE_LOAD_FILAMENT_TEMPLATE,
+    EXTRUSION_CALI_GET_TEMPLATE,
+    EXTRUSION_CALI_SEL_TEMPLATE,
 )
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
@@ -337,7 +339,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _run_service_call(self, data: dict) -> Any:
         service_call_name = data['service']
         write_action = True
-        if service_call_name in ('get_filament_data', 'force_filament_sync'):
+        if service_call_name in ('get_filament_data', 'force_filament_sync', 'get_pa_profiles'):
             write_action = False
 
         if write_action:
@@ -378,6 +380,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_filament_drying(data)
             case "stop_filament_drying":
                 result = self._service_call_filament_drying(data)
+            case "get_pa_profiles":
+                result = self._service_call_get_pa_profiles(data)
+            case "select_pa_profile":
+                result = self._service_call_select_pa_profile(data)
             case _:
                 LOGGER.error(f"Unknown service call: {data}")
 
@@ -782,6 +788,104 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _service_call_print_project_file(self, data: dict):
         command = build_print_project_file_command(self.config_entry.data["device_type"], data)
         self.client.publish(command)
+
+    def _resolve_tray_from_entity(self, data: dict):
+        """Resolve entity_id to (tray_object, tray_id, ams_id, slot_id) or None on failure."""
+        ams_device_and_entity = self._get_ams_device_and_tray(data)
+        if ams_device_and_entity is None:
+            return None
+
+        ams_device, entity_id = ams_device_and_entity
+        er_reg = entity_registry.async_get(self._hass)
+        entity_entry = er_reg.async_get(entity_id)
+        entity_unique_id = entity_entry.unique_id
+
+        if entity_unique_id.endswith('_external_spool'):
+            if self.get_model().supports_feature(Features.DUAL_NOZZLES):
+                suffix_tray_map = [('2', 255), ('', 254)]
+            else:
+                suffix_tray_map = [('', 255)]
+            for suffix, tray_id in suffix_tray_map:
+                vtray = self.get_virtual_tray_device(suffix)
+                if vtray['identifiers'] == ams_device.identifiers:
+                    spool_obj = self.get_model().external_spool[255 - tray_id]
+                    return spool_obj, tray_id, tray_id, 0
+            return self.get_model().external_spool[0], 255, 255, 0
+        elif re.search(r"tray_([1-4])$", entity_unique_id):
+            ams_index, tray_index = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
+            if ams_index is None:
+                LOGGER.error("Unable to locate AMS.")
+                return None
+            tray_obj = self.get_model().ams.data[ams_index].tray[tray_index]
+            flat_tray_id = ams_index * 4 + tray_index
+            return tray_obj, flat_tray_id, ams_index, tray_index
+        else:
+            LOGGER.error("An AMS tray or external spool entity is required")
+            return None
+
+    def _service_call_get_pa_profiles(self, data: dict):
+        if not self.get_model().supports_feature(Features.PA_CALIBRATION_PROFILES):
+            LOGGER.error("Printer does not support PA calibration profiles")
+            return {"error": "Printer does not support PA calibration"}
+
+        import copy
+        from concurrent.futures import Future
+        command = copy.deepcopy(EXTRUSION_CALI_GET_TEMPLATE)
+        command['print']['filament_id'] = data.get('filament_id', '')
+        nozzle_diameter = self.get_model().info.active_nozzle_diameter
+        command['print']['nozzle_diameter'] = str(nozzle_diameter) if nozzle_diameter else "0.4"
+        if data.get("extruder_id") is not None:
+            command['print']['extruder_id'] = int(data["extruder_id"])
+
+        # Completed from the MQTT thread. An asyncio future would only be resolved
+        # by the Home Assistant loop, which this synchronous call is running on.
+        future = Future()
+        self.client._pending_response = future
+        self.client._pending_response_command = "extrusion_cali_get"
+        self.client.publish(command)
+
+        try:
+            response = future.result(timeout=5.0)
+        except TimeoutError:
+            if self.client._pending_response is future:
+                self.client._pending_response = None
+                self.client._pending_response_command = None
+            LOGGER.error("Timeout waiting for extrusion_cali_get response")
+            return {"error": "Timeout waiting for printer response"}
+
+        profiles = response.get("filaments", [])
+        return {
+            "profiles": profiles,
+        }
+
+    def _service_call_select_pa_profile(self, data: dict):
+        if not self.get_model().supports_feature(Features.PA_CALIBRATION_PROFILES):
+            LOGGER.error("Printer does not support PA calibration profiles")
+            return False
+
+        resolved = self._resolve_tray_from_entity(data)
+        if resolved is None:
+            return False
+
+        tray_obj, tray_id, ams_id, slot_id = resolved
+        if tray_id < 254 and tray_obj.empty:
+            LOGGER.error("Tray is empty, cannot select PA profile")
+            return False
+
+        cali_idx = data.get('cali_idx', -1)
+
+        import copy
+        command = copy.deepcopy(EXTRUSION_CALI_SEL_TEMPLATE)
+        command['print']['tray_id'] = tray_id
+        command['print']['cali_idx'] = cali_idx
+        command['print']['filament_id'] = data.get('filament_id', '')
+        nozzle_diameter = self.get_model().info.active_nozzle_diameter
+        command['print']['nozzle_diameter'] = str(nozzle_diameter) if nozzle_diameter else "0.4"
+        command['print']['ams_id'] = ams_id
+        command['print']['slot_id'] = slot_id
+
+        self.client.publish(command)
+        return True
 
     async def _async_update_data(self):
         LOGGER.debug(f"_async_update_data() called")

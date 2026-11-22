@@ -409,7 +409,7 @@ async def async_call_service(hass: HomeAssistant, service: str, data: dict, time
 
     try:
         result = await asyncio.wait_for(future, timeout=timeout)
-        if service in ('extrude_retract', 'get_filament_data'):
+        if service in ('extrude_retract', 'get_filament_data', 'get_pa_profiles'):
             # Only report result for service calls that return a result to avoid confusion.
             if isinstance(result, (list, dict, tuple)):
                 LOGGER.debug("Service call result: %s with length %d", type(result).__name__, len(result))
@@ -487,6 +487,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "start_filament_drying": SupportsResponse.NONE,
         "stop_filament_drying": SupportsResponse.NONE,
         "force_filament_sync": SupportsResponse.NONE,
+        "get_pa_profiles": SupportsResponse.ONLY,
+        "select_pa_profile": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(
