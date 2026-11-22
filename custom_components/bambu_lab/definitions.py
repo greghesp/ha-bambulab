@@ -608,6 +608,16 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().print_job.remaining_time
     ),
     BambuLabSensorEntityDescription(
+        key="print_elapsed_time",
+        translation_key="print_elapsed_time",
+        icon="mdi:timer-outline",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        suggested_display_precision=3,
+        device_class=SensorDeviceClass.DURATION,
+        value_fn=lambda self: self.coordinator.get_model().print_job.elapsed_time
+    ),
+    BambuLabSensorEntityDescription(
         key="last_timelapse",
         translation_key="last_timelapse",
         icon="mdi:filmstrip",

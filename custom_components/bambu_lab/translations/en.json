@@ -822,6 +822,9 @@
       "remaining_time": {
         "name": "Remaining time"
       },
+      "print_elapsed_time": {
+        "name": "Print elapsed time"
+      },
       "end_time": {
         "name": "End time"
       },
