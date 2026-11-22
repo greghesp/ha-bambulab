@@ -172,3 +172,8 @@ BUZZER_SET_BEEPING = {"print" : {"sequence_id": "0", "command": "buzzer_ctrl", "
 
 AIRDUCT_SET_MODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "set_airduct", "modeId": 0, "submode": -1}}
 
+# Choose which camera feeds the live view (4 = main, 5 = BirdsEye), exactly as Bambu Studio's
+# MachineObject::command_switch_camera sends it, peer_name included: how the firmware treats
+# another value is unknown.
+SWITCH_LIVEVIEW_CAMERA_TEMPLATE = {"camera": {"sequence_id": "0", "command": "change_liveview_cam_idx", "camera_id": 4, "peer_name": "studio", "version": 1}}
+
