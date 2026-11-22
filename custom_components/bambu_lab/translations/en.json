@@ -503,7 +503,19 @@
         "name": "Level"
       },
       "filament_inventory": {
-        "name": "Filament inventory"
+        "name": "Filament inventory",
+        "state_attributes": {
+          "spools": {
+            "name": "Spools"
+          },
+          "groups": {
+            "name": "Filament groups"
+          },
+          "total_remaining_g": {
+            "name": "Total remaining filament",
+            "unit_of_measurement": "g"
+          }
+        }
       },
       "airduct_mode": {
         "name": "Airduct mode",
