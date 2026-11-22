@@ -2484,7 +2484,7 @@ class PrintJob:
 
     def _prune_timelapses(self, keep: int):
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
-        self._prune_old_files(directory=cache_file_path),
+        self._prune_old_files(directory=cache_file_path,
                               extensions=TIMELAPSE_CACHE_EXTENSIONS,
                               keep=keep,
                               extra_extensions=TIMELAPSE_CACHE_SIDECAR_EXTENSIONS)
