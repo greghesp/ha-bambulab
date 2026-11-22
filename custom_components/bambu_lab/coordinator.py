@@ -951,7 +951,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_devices_to_remove = []
         for device in device_registry.async_entries_for_config_entry(dev_reg, config_entry_id):
             # This device is associated with this printer.
-            is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT', 'AMS 3H')
+            is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT')
             is_placeholder_ams = (
                 device.model == 'Unknown'
                 and (DOMAIN, "") in device.identifiers
