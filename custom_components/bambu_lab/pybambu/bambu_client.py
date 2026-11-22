@@ -569,7 +569,9 @@ class BambuClient:
         if not self._device.supports_feature(Features.CAMERA_RTSP):
             if self._device.supports_feature(Features.CAMERA_IMAGE):
                 if self._enable_camera and not self._test_mode:
-                    if self._device.info.ip_address != "" and self._device.info.ip_address != "0.0.0.0" and self._access_code != "":
+                    if self._camera is not None and self._camera.is_alive():
+                        LOGGER.debug("Chamber Image thread already running")
+                    elif self._device.info.ip_address != "" and self._device.info.ip_address != "0.0.0.0" and self._access_code != "":
                         LOGGER.debug("Starting Chamber Image thread")
                         self._camera = ChamberImageThread(self)
                         self._camera.start()

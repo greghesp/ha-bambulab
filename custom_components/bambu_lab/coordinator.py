@@ -147,6 +147,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         elif event == "event_printer_live_view_disabled":
             self._report_live_view_disabled_issue()
+
+        elif event == "event_printer_live_view_enabled":
+            self._clear_live_view_disabled_issue()
+            # Chamber-image printers give up connecting while live view is off, so kick the
+            # image thread again. No-op for RTSP printers or if the thread is still running.
+            self.client.start_camera()
         
         elif event == "event_printer_mqtt_encryption_enabled":
             self._report_encryption_enabled_issue()
@@ -1245,6 +1251,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _report_live_view_disabled_issue(self):
         self._report_generic_issue("live_view_disabled")
+
+    def _clear_live_view_disabled_issue(self):
+        issue_id = f"live_view_disabled_{self.get_model().info.serial}"
+        LOGGER.debug("Live view enabled on the printer, clearing repair issue")
+        issue_registry.async_delete_issue(hass=self._hass, domain=DOMAIN, issue_id=issue_id)
 
     def _report_encryption_enabled_issue(self, force: bool = False):
         self._report_generic_issue("mqtt_encryption_enabled", force)

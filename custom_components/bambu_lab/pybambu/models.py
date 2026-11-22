@@ -548,12 +548,16 @@ class Camera:
         self.recording = (data.get("ipcam") or {}).get("ipcam_record", self.recording)
         self.resolution = (data.get("ipcam") or {}).get("resolution", self.resolution)
         self.rtsp_url = (data.get("ipcam") or {}).get("rtsp_url", self.rtsp_url)
-        if self._client._enable_camera:
-            if self.rtsp_url == "disable":
-                if not self._fired_camera_disabled_event:
-                    self._fired_camera_disabled_event = True
-                    self._client.callback("event_printer_live_view_disabled")
-        
+        if self.rtsp_url == "disable":
+            if self._client._enable_camera and not self._fired_camera_disabled_event:
+                self._fired_camera_disabled_event = True
+                self._client.callback("event_printer_live_view_disabled")
+        elif self.rtsp_url and self._fired_camera_disabled_event:
+            # The user turned LAN Only Liveview back on. Let the integration clear the
+            # repair issue and restart the camera without needing a reload.
+            self._fired_camera_disabled_event = False
+            self._client.callback("event_printer_live_view_enabled")
+
         return (old_data != f"{self.__dict__}")
 
 @dataclass
