@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Error d'impressió esborrat",
       "event_printer_error": "Error d'HMS",
       "event_printer_error_cleared": "Error d'HMS esborrat",
-      "event_printer_missing_sdcard": "Falta la targeta SD"
+      "event_printer_missing_sdcard": "Falta la targeta SD",
+      "event_timelapse_downloaded": "Timelapse descarregat"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Coberta superior"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Kit d'actualització P1S instal·lat"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Inventari de filaments"
+      },
+      "processing_material": {
+        "name": "Material làser/tallador"
+      },
+      "check_in_remaining": {
+        "name": "Làser check-in restant"
+      },
+      "print_elapsed_time": {
+        "name": "Imprimeix el temps transcorregut"
+      },
+      "last_timelapse": {
+        "name": "Últim timelapse"
+      },
+      "filament_change_status": {
+        "name": "Estat de canvi de filament",
+        "state": {
+          "idle": "Inactiu",
+          "changing_filament": "Canvi de filament",
+          "heating_nozzle": "Broquet de calefacció",
+          "cutting_filament": "Filament de tall",
+          "pulling_back_filament": "Tirant enrere el filament actual",
+          "pushing_new_filament": "Empenyent filament nou",
+          "purging_old_filament": "Purgant filament vell",
+          "checking_position": "Comprovació de la posició del filament",
+          "rfid_identifying": "Identificació RFID",
+          "filament_loaded": "Filament carregat",
+          "calibration": "Calibració",
+          "cold_pull": "Tirada en fred",
+          "self_check": "Autocontrol",
+          "debug": "Depuració",
+          "unknown": "Desconegut"
+        }
       }
     },
     "camera": {

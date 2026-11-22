@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
 
-from pybambu.models import ExternalSpool
+from pybambu.const import Features
+from pybambu.models import AMSList, ExternalSpool, Extruder
 
 
 class TestExternalSpoolBlankPayload(unittest.TestCase):
@@ -80,3 +81,73 @@ class TestExternalSpoolInactive(unittest.TestCase):
 
         self.assertTrue(self.spool.active)
         self.assertFalse(self.spool.empty)
+
+
+class TestExternalSpoolDualNozzleWithoutAms(unittest.TestCase):
+    """An IDEX/dual-nozzle printer (X2D, H2D) with no AMS feeds each nozzle from its own
+    external spool. Only the spool feeding the active nozzle is active (#2181)."""
+
+    # Extruder "snow" is unit << 8 | tray. Unit 255 is external spool 0, 254 external spool 1,
+    # tray 0xFF means nothing loaded.
+    RIGHT_EXT_LOADED = 0xFF00
+    LEFT_EXT_LOADED = 0xFE00
+    NOTHING_LOADED = 0xFFFF
+
+    def setUp(self):
+        self.client = MagicMock()
+        self.client.slicer_settings.custom_filaments = {}
+        device = self.client._device
+        device.extruder = Extruder(self.client)
+        device.ams = AMSList(self.client)
+        device.external_spool = [ExternalSpool(self.client, 0), ExternalSpool(self.client, 1)]
+        device.supports_feature.side_effect = lambda feature: {
+            Features.AMS: len(device.ams.data) != 0,
+            Features.DUAL_NOZZLES: True,
+        }.get(feature, False)
+
+    def _push(self, active_index: int, right_snow: int, left_snow: int):
+        data = {"device": {"extruder": {
+            "state": (active_index << 4) | 2,
+            "info": [
+                {"id": 0, "snow": right_snow},
+                {"id": 1, "snow": left_snow},
+            ],
+        }}}
+        self.client._device.extruder.print_update(data)
+        self.client._device.ams.print_update(data)
+
+    def test_right_nozzle_printing_activates_only_first_spool(self):
+        self._push(0, self.RIGHT_EXT_LOADED, self.LEFT_EXT_LOADED)
+        spools = self.client._device.external_spool
+
+        self.assertTrue(spools[0].active)
+        self.assertFalse(spools[1].active)
+        self.assertIs(self.client._device.ams.active_tray, spools[0])
+
+    def test_switching_to_left_nozzle_moves_active_spool(self):
+        self._push(0, self.RIGHT_EXT_LOADED, self.LEFT_EXT_LOADED)
+        self._push(1, self.RIGHT_EXT_LOADED, self.LEFT_EXT_LOADED)
+        spools = self.client._device.external_spool
+
+        self.assertFalse(spools[0].active)
+        self.assertTrue(spools[1].active)
+        self.assertIs(self.client._device.ams.active_tray, spools[1])
+
+    def test_nothing_loaded_leaves_both_spools_inactive(self):
+        self._push(0, self.NOTHING_LOADED, self.NOTHING_LOADED)
+        spools = self.client._device.external_spool
+
+        self.assertFalse(spools[0].active)
+        self.assertFalse(spools[1].active)
+        self.assertIsNone(self.client._device.ams.active_tray)
+
+
+class TestExternalSpoolSingleNozzleWithoutAms(unittest.TestCase):
+    """Single-nozzle printers without an AMS only have the one spool, so it stays active."""
+
+    def test_only_spool_is_active(self):
+        client = MagicMock()
+        client.slicer_settings.custom_filaments = {}
+        client._device.supports_feature.return_value = False
+
+        self.assertTrue(ExternalSpool(client, 0).active)

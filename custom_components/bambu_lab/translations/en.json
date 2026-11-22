@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Print error cleared",
       "event_printer_error": "HMS error",
       "event_printer_error_cleared": "HMS error cleared",
-      "event_printer_missing_sdcard": "Missing SD card"
+      "event_printer_missing_sdcard": "Missing SD card",
+      "event_timelapse_downloaded": "Timelapse downloaded"
     }
   },
   "config": {
@@ -252,6 +253,9 @@
       },
       "door_open": {
         "name": "Door"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S upgrade kit installed"
       },
       "top_cover_open": {
         "name": "Top cover"
@@ -507,6 +511,12 @@
           "laser40": "Laser (40W)",
           "cutter": "Cutter"
         }
+      },
+      "processing_material": {
+        "name": "Laser/cutter material"
+      },
+      "check_in_remaining": {
+        "name": "Laser check-in remaining"
       },
       "track_switch_input": {
         "name": "Track switch input {input_number}",
@@ -821,8 +831,14 @@
       "remaining_time": {
         "name": "Remaining time"
       },
+      "print_elapsed_time": {
+        "name": "Print elapsed time"
+      },
       "end_time": {
         "name": "End time"
+      },
+      "last_timelapse": {
+        "name": "Last timelapse"
       },
       "total_usage_hours": {
         "name": "Total usage"
@@ -837,6 +853,26 @@
         "name": "Active tray",
         "state": {
           "none": "None"
+        }
+      },
+      "filament_change_status": {
+        "name": "Filament change status",
+        "state": {
+          "idle": "Idle",
+          "changing_filament": "Changing filament",
+          "heating_nozzle": "Heating nozzle",
+          "cutting_filament": "Cutting filament",
+          "pulling_back_filament": "Pulling back current filament",
+          "pushing_new_filament": "Pushing new filament",
+          "purging_old_filament": "Purging old filament",
+          "checking_position": "Checking filament position",
+          "rfid_identifying": "Identifying RFID",
+          "filament_loaded": "Filament loaded",
+          "calibration": "Calibration",
+          "cold_pull": "Cold pull",
+          "self_check": "Self check",
+          "debug": "Debug",
+          "unknown": "Unknown"
         }
       },
       "nozzle_diameter": {
@@ -1208,7 +1244,7 @@
     },
     "live_view_disabled": {
       "title": "Live View Disabled",
-      "description": "{device} has live view disabled in the printer settings. Please enable this to use the camera features."
+      "description": "{device} has LAN Only Liveview turned off, so Home Assistant cannot reach the camera. On the printer's touchscreen, open Settings and turn on **LAN Only Liveview** (on the Network or LAN Only page, depending on the model). You do not need to turn on LAN Only mode itself, so the Bambu Handy app keeps working away from home. This message clears automatically once the printer reports live view is on."
     },
     "mqtt_encryption_enabled": {
       "title": "MQTT Encryption Enabled",

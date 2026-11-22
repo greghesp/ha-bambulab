@@ -67,6 +67,16 @@ def normalize_service_target(data) -> dict:
     return normalized
 
 
+# AMS tray sensor unique IDs end in tray_<n>: 1-4 on 4-slot units, up to 9 on the AMS 3H.
+_AMS_TRAY_UNIQUE_ID = re.compile(r"_tray_([1-9])$")
+
+
+def ams_tray_number_from_unique_id(unique_id: str | None) -> int | None:
+    """Return the 1-based AMS tray number from a tray sensor's unique ID, or None."""
+    match = _AMS_TRAY_UNIQUE_ID.search(unique_id or "")
+    return int(match.group(1)) if match else None
+
+
 def build_print_project_file_command(device_type: Printers | str, data: dict) -> dict:
     """Build the MQTT project_file command for the print_project_file service.
 
@@ -492,8 +502,17 @@ def get_Url(url: str, region: str):
 
 
 def get_upgrade_url(name: str):
-    """Retrieve upgrade URL from BambuLab website"""
-    response = requests.get(f"https://bambulab.com/en/support/firmware-download/{name}")
+    """Retrieve upgrade URL from BambuLab website, or None if it can't be found."""
+    page_url = f"https://bambulab.com/en/support/firmware-download/{name}"
+    try:
+        response = requests.get(page_url, timeout=10)
+    except requests.RequestException as e:
+        LOGGER.warning(f"Failed to fetch firmware download page {page_url}: {e}")
+        return None
+    if response.status_code != 200:
+        # Typically a 403 when Cloudflare blocks the request.
+        LOGGER.warning(f"Firmware download page {page_url} returned HTTP {response.status_code}")
+        return None
     soup = BeautifulSoup(response.text, 'html.parser')
     selector = soup.select_one(
         "#__next > div > div > div > "

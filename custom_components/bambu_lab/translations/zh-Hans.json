@@ -9,7 +9,8 @@
       "event_print_error_cleared": "打印错误已清除",
       "event_printer_error": "移动管理系统错误",
       "event_printer_error_cleared": "HMS 错误已清除",
-      "event_printer_missing_sdcard": "缺少 SD 卡"
+      "event_printer_missing_sdcard": "缺少 SD 卡",
+      "event_timelapse_downloaded": "游戏中时光倒流下载"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "顶盖"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S升级套件已安装"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "长丝库存"
+      },
+      "processing_material": {
+        "name": "激光/切割材料"
+      },
+      "check_in_remaining": {
+        "name": "激光办理登机手续剩余时间"
+      },
+      "print_elapsed_time": {
+        "name": "打印经过的时间"
+      },
+      "last_timelapse": {
+        "name": "最后一次延时拍摄"
+      },
+      "filament_change_status": {
+        "name": "灯丝更换状态",
+        "state": {
+          "idle": "闲置的",
+          "changing_filament": "更换灯丝",
+          "heating_nozzle": "加热喷嘴",
+          "cutting_filament": "切割灯丝",
+          "pulling_back_filament": "拉回电流灯丝",
+          "pushing_new_filament": "推新丝",
+          "purging_old_filament": "清除旧灯丝",
+          "checking_position": "检查灯丝位置",
+          "rfid_identifying": "识别射频识别",
+          "filament_loaded": "灯丝加载",
+          "calibration": "校准",
+          "cold_pull": "冷拉",
+          "self_check": "自检",
+          "debug": "调试",
+          "unknown": "未知"
+        }
       }
     },
     "camera": {

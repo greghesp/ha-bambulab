@@ -10,7 +10,6 @@ pytest.importorskip("homeassistant")
 
 from homeassistant.components.fan import FanEntityFeature
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
-from homeassistant.const import CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 from homeassistant.exceptions import HomeAssistantError
 
 from custom_components.bambu_lab.const import DOMAIN
@@ -74,7 +73,7 @@ def test_particulate_sensor_is_pm25(coordinator):
     assert sensor.unique_id == "TEST-E1_pm25"
     assert sensor.translation_key == "air_purifier_pm25"
     assert sensor.device_class == SensorDeviceClass.PM25
-    assert sensor.native_unit_of_measurement == CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
+    assert sensor.native_unit_of_measurement == "μg/m³"
     assert sensor.state_class == SensorStateClass.MEASUREMENT
     assert sensor.native_value == 3
 

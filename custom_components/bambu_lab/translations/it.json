@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Errore di stampa eliminato",
       "event_printer_error": "Errore HMS",
       "event_printer_error_cleared": "Errore HMS cancellato",
-      "event_printer_missing_sdcard": "Scheda SD mancante"
+      "event_printer_missing_sdcard": "Scheda SD mancante",
+      "event_timelapse_downloaded": "Timelapse scaricato"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Copertura superiore"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Kit di aggiornamento P1S installato"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Inventario dei filamenti"
+      },
+      "processing_material": {
+        "name": "Materiale laser/taglierina"
+      },
+      "check_in_remaining": {
+        "name": "Check-in laser rimanente"
+      },
+      "print_elapsed_time": {
+        "name": "Stampa il tempo trascorso"
+      },
+      "last_timelapse": {
+        "name": "L'ultimo time-lapse"
+      },
+      "filament_change_status": {
+        "name": "Stato di modifica del filamento",
+        "state": {
+          "idle": "Oziare",
+          "changing_filament": "Cambiare filamento",
+          "heating_nozzle": "Ugello riscaldante",
+          "cutting_filament": "Taglio del filamento",
+          "pulling_back_filament": "Tirare indietro il filamento di corrente",
+          "pushing_new_filament": "Spingendo il nuovo filamento",
+          "purging_old_filament": "Eliminazione del vecchio filamento",
+          "checking_position": "Controllo della posizione del filamento",
+          "rfid_identifying": "Identificazione dell'RFID",
+          "filament_loaded": "Filamento caricato",
+          "calibration": "Calibrazione",
+          "cold_pull": "Tirata fredda",
+          "self_check": "Autocontrollo",
+          "debug": "Debug",
+          "unknown": "Sconosciuto"
+        }
       }
     },
     "camera": {
