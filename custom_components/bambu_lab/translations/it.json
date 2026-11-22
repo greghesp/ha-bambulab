@@ -88,9 +88,7 @@
             "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_filament_inventory": "Abilita l'inventario dei filamenti (Filament Manager, richiede Bambu Cloud)",
-              "filament_inventory_interval": "Intervallo di aggiornamento dell'inventario dei filamenti (minuti):"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "Queste opzioni sono necessarie solo se si dispone di una configurazione non standard.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_filament_inventory": "Abilita l'inventario dei filamenti (Filament Manager, richiede Bambu Cloud)",
-              "filament_inventory_interval": "Intervallo di aggiornamento dell'inventario dei filamenti (minuti):"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "Utilizza le credenziali Bambu Cloud funzionanti da una voce di stampante esistente. Non è richiesto alcun accesso aggiuntivo.",
         "data": {
           "username": "Conto Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inventario dei filamenti",
+        "description": "Utilizza le credenziali Bambu Cloud funzionanti da una voce di stampante esistente. Non è richiesto alcun accesso aggiuntivo.",
+        "data": {
+          "username": "Conto Bambu:",
+          "credential_source": "Fonte credenziale:",
+          "filament_inventory_interval": "Intervallo di aggiornamento dell'inventario dei filamenti (minuti):"
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "Queste opzioni avanzate sono funzionalità precoci o rischiose. Leggi la documentazione e usali a proprio rischio.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_filament_inventory": "Abilita l'inventario dei filamenti (Filament Manager, richiede Bambu Cloud)",
-              "filament_inventory_interval": "Intervallo di aggiornamento dell'inventario dei filamenti (minuti):"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "Queste opzioni avanzate sono funzionalità precoci o rischiose. Leggi la documentazione e usali a proprio rischio.",
             "data": {
               "disable_ssl_verify": "Disabilita la verifica SSL",
-              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware",
-              "enable_filament_inventory": "Abilita l'inventario dei filamenti (Filament Manager, richiede Bambu Cloud)",
-              "filament_inventory_interval": "Intervallo di aggiornamento dell'inventario dei filamenti (minuti):"
+              "enable_firmware_update": "Abilita supporto per l'aggiornamento del firmware"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "Conto Bambu:",
           "credential_source": "Conto Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inventario dei filamenti",
+        "description": "Utilizza le credenziali Bambu Cloud funzionanti da una voce di stampante esistente. Non è richiesto alcun accesso aggiuntivo.",
+        "data": {
+          "username": "Conto Bambu:",
+          "credential_source": "Fonte credenziale:",
+          "filament_inventory_interval": "Intervallo di aggiornamento dell'inventario dei filamenti (minuti):"
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "Raffreddamento",
           "heating": "Riscaldamento"
+        }
+      },
+      "liveview_camera": {
+        "name": "Telecamera con visione dal vivo",
+        "state": {
+          "main": "Fotocamera principale",
+          "birdseye": "Fotocamera BirdsEye"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "PrintTool {tool_number} ora di stampa"
       },
       "filament_inventory": {
-        "name": "Inventario dei filamenti"
+        "name": "Inventario dei filamenti",
+        "state_attributes": {
+          "spools": {
+            "name": "Bobine"
+          },
+          "groups": {
+            "name": "Gruppi di filamenti"
+          },
+          "total_remaining_g": {
+            "name": "Filamento rimanente totale"
+          }
+        }
       },
       "processing_material": {
         "name": "Materiale laser/taglierina"
@@ -1291,7 +1319,8 @@
         "bambu": "La nuvola di Bambu Lab",
         "lan": "Modalità Lan",
         "makerworld": "Account MakerWorld",
-        "ams_heater": "Riscaldatore o essiccatore AMS esterno (presa intelligente)"
+        "ams_heater": "Riscaldatore o essiccatore AMS esterno (presa intelligente)",
+        "filament_inventory": "Inventario dei filamenti"
       }
     }
   },

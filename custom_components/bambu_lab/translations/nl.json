@@ -88,9 +88,7 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
-              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "Deze opties zijn alleen nodig als u een niet-standaardinstelling hebt.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
-              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "Gebruik werkende Bambu Cloud-inloggegevens van een bestaand printeritem. Er is geen extra login vereist.",
         "data": {
           "username": "Bambu-account:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Filamentinventaris",
+        "description": "Gebruik werkende Bambu Cloud-inloggegevens van een bestaand printeritem. Er is geen extra login vereist.",
+        "data": {
+          "username": "Bambu-account:",
+          "credential_source": "Referentiebron:",
+          "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
-              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "Deze geavanceerde opties zijn vroege of risicovolle functionaliteit. Lees de documentatie en gebruik ze op eigen risico.",
             "data": {
               "disable_ssl_verify": "Schakel SSL -verificatie uit",
-              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen",
-              "enable_filament_inventory": "Schakel filamentinventaris in (Filament Manager, vereist Bambu Cloud)",
-              "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
+              "enable_firmware_update": "Ondersteuning van firmware -updates inschakelen"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "Bambu-account:",
           "credential_source": "Bambu-account:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Filamentinventaris",
+        "description": "Gebruik werkende Bambu Cloud-inloggegevens van een bestaand printeritem. Er is geen extra login vereist.",
+        "data": {
+          "username": "Bambu-account:",
+          "credential_source": "Referentiebron:",
+          "filament_inventory_interval": "Vernieuwingsinterval voor filamentinventaris (minuten):"
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "Koeling",
           "heating": "Verwarming"
+        }
+      },
+      "liveview_camera": {
+        "name": "Liveview-camera",
+        "state": {
+          "main": "Hoofdcamera",
+          "birdseye": "BirdsEye-camera"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "PrintTool {tool_number} afdruktijd"
       },
       "filament_inventory": {
-        "name": "Filamentinventaris"
+        "name": "Filamentinventaris",
+        "state_attributes": {
+          "spools": {
+            "name": "Spoelen"
+          },
+          "groups": {
+            "name": "Gloeidraadgroepen"
+          },
+          "total_remaining_g": {
+            "name": "Totaal resterend filament"
+          }
+        }
       },
       "processing_material": {
         "name": "Laser-/snijdermateriaal"
@@ -1291,7 +1319,8 @@
         "bambu": "Bambu Lab-cloud",
         "lan": "Lan-modus",
         "makerworld": "MakerWorld-account",
-        "ams_heater": "Externe AMS verwarming of droger (smart plug)"
+        "ams_heater": "Externe AMS verwarming of droger (smart plug)",
+        "filament_inventory": "Filamentinventaris"
       }
     }
   },

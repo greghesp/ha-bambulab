@@ -88,9 +88,7 @@
             "description": "Эти параметры нужны только при нестандартной конфигурации.",
             "data": {
               "disable_ssl_verify": "Отключить проверку SSL",
-              "enable_firmware_update": "Включить поддержку обновления прошивки",
-              "enable_filament_inventory": "Включить учёт филамента (Filament Manager, требуется Bambu Cloud)",
-              "filament_inventory_interval": "Интервал обновления учёта филамента (минуты):"
+              "enable_firmware_update": "Включить поддержку обновления прошивки"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "Эти параметры нужны только при нестандартной конфигурации.",
             "data": {
               "disable_ssl_verify": "Отключить проверку SSL",
-              "enable_firmware_update": "Включить поддержку обновления прошивки",
-              "enable_filament_inventory": "Включить учёт филамента (Filament Manager, требуется Bambu Cloud)",
-              "filament_inventory_interval": "Интервал обновления учёта филамента (минуты):"
+              "enable_firmware_update": "Включить поддержку обновления прошивки"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "Используйте рабочие учетные данные Bambu Cloud из существующей записи принтера. Никакого дополнительного входа не требуется.",
         "data": {
           "username": "Аккаунт Бамбу:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Инвентаризация нитей",
+        "description": "Используйте рабочие учетные данные Bambu Cloud из существующей записи принтера. Никакого дополнительного входа не требуется.",
+        "data": {
+          "username": "Аккаунт Бамбу:",
+          "credential_source": "Источник учетных данных:",
+          "filament_inventory_interval": "Интервал обновления запасов нитей (минуты):"
         }
       }
     }
@@ -200,9 +205,7 @@
             "description": "Эти дополнительные параметры относятся к экспериментальным или потенциально нестабильным функциям. Используйте их на свой страх и риск.",
             "data": {
               "disable_ssl_verify": "Отключить проверку SSL",
-              "enable_firmware_update": "Включить поддержку обновления прошивки",
-              "enable_filament_inventory": "Включить учёт филамента (Filament Manager, требуется Bambu Cloud)",
-              "filament_inventory_interval": "Интервал обновления учёта филамента (минуты):"
+              "enable_firmware_update": "Включить поддержку обновления прошивки"
             }
           }
         }
@@ -223,9 +226,7 @@
             "description": "Эти дополнительные параметры относятся к экспериментальным или потенциально нестабильным функциям. Используйте их на свой страх и риск.",
             "data": {
               "disable_ssl_verify": "Отключить проверку SSL",
-              "enable_firmware_update": "Включить поддержку обновления прошивки",
-              "enable_filament_inventory": "Включить учёт филамента (Filament Manager, требуется Bambu Cloud)",
-              "filament_inventory_interval": "Интервал обновления учёта филамента (минуты):"
+              "enable_firmware_update": "Включить поддержку обновления прошивки"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "Аккаунт Бамбу:",
           "credential_source": "Аккаунт Бамбу:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Инвентаризация нитей",
+        "description": "Используйте рабочие учетные данные Bambu Cloud из существующей записи принтера. Никакого дополнительного входа не требуется.",
+        "data": {
+          "username": "Аккаунт Бамбу:",
+          "credential_source": "Источник учетных данных:",
+          "filament_inventory_interval": "Интервал обновления запасов нитей (минуты):"
         }
       }
     }
@@ -423,6 +433,13 @@
           "cooling": "Охлаждение",
           "heating": "Нагрев"
         }
+      },
+      "liveview_camera": {
+        "name": "Камера просмотра в реальном времени",
+        "state": {
+          "main": "Основная камера",
+          "birdseye": "Камера BirdsEye"
+        }
       }
     },
     "sensor": {
@@ -493,7 +510,18 @@
         "name": "Уровень"
       },
       "filament_inventory": {
-        "name": "Учёт филамента"
+        "name": "Учёт филамента",
+        "state_attributes": {
+          "spools": {
+            "name": "Катушки"
+          },
+          "groups": {
+            "name": "Группы нитей"
+          },
+          "total_remaining_g": {
+            "name": "Всего оставшаяся нить"
+          }
+        }
       },
       "airduct_mode": {
         "name": "Режим воздуховода",
@@ -1291,7 +1319,8 @@
         "bambu": "Облако Bambu Lab",
         "lan": "Режим LAN",
         "ams_heater": "Внешний нагреватель или сушилка AMS (умная розетка)",
-        "makerworld": "Аккаунт MakerWorld"
+        "makerworld": "Аккаунт MakerWorld",
+        "filament_inventory": "Инвентаризация нитей"
       }
     }
   },

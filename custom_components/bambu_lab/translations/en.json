@@ -519,8 +519,7 @@
             "name": "Filament groups"
           },
           "total_remaining_g": {
-            "name": "Total remaining filament",
-            "unit_of_measurement": "g"
+            "name": "Total remaining filament"
           }
         }
       },

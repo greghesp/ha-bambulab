@@ -88,9 +88,7 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
-              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "Disse indstillinger er kun nødvendige, hvis du har en ikke-standardopsætning.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
-              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
         "data": {
           "username": "Bambu konto:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Filament inventar",
+        "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
+        "data": {
+          "username": "Bambu konto:",
+          "credential_source": "Oplysningskilde:",
+          "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen, og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
-              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "Disse avancerede muligheder er tidlig eller risikabel funktionalitet. Læs dokumentationen og brug dem på din egen risiko.",
             "data": {
               "disable_ssl_verify": "Deaktiver SSL -verifikation",
-              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte",
-              "enable_filament_inventory": "Aktiver filamentbeholdning (Filament Manager, kræver Bambu Cloud)",
-              "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
+              "enable_firmware_update": "Aktivér firmwareopdateringsstøtte"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "Bambu konto:",
           "credential_source": "Bambu konto:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Filament inventar",
+        "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
+        "data": {
+          "username": "Bambu konto:",
+          "credential_source": "Oplysningskilde:",
+          "filament_inventory_interval": "Opdateringsinterval for filamentbeholdning (minutter):"
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "Køling",
           "heating": "Opvarmning"
+        }
+      },
+      "liveview_camera": {
+        "name": "Live view kamera",
+        "state": {
+          "main": "Hovedkamera",
+          "birdseye": "BirdsEye kamera"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "PrintTool {tool_number} udskrivningstid"
       },
       "filament_inventory": {
-        "name": "Filament inventar"
+        "name": "Filament inventar",
+        "state_attributes": {
+          "spools": {
+            "name": "Spoler"
+          },
+          "groups": {
+            "name": "Filamentgrupper"
+          },
+          "total_remaining_g": {
+            "name": "Samlet resterende filament"
+          }
+        }
       },
       "processing_material": {
         "name": "Laser/skærer materiale"
@@ -1291,7 +1319,8 @@
         "bambu": "Bambu Lab sky",
         "lan": "Lan-tilstand",
         "makerworld": "MakerWorld-konto",
-        "ams_heater": "Ekstern AMS varmelegeme eller tørretumbler (smart stik)"
+        "ams_heater": "Ekstern AMS varmelegeme eller tørretumbler (smart stik)",
+        "filament_inventory": "Filament inventar"
       }
     }
   },

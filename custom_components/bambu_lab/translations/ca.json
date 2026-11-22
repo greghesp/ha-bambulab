@@ -88,9 +88,7 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
-              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "Aquestes opcions només són necessàries si teniu una configuració no estàndard.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
-              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "Utilitzeu les credencials de Bambu Cloud que funcionin des d'una entrada d'impressora existent. No es requereix cap inici de sessió addicional.",
         "data": {
           "username": "Compte Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inventari de filaments",
+        "description": "Utilitzeu les credencials de Bambu Cloud que funcionin des d'una entrada d'impressora existent. No es requereix cap inici de sessió addicional.",
+        "data": {
+          "username": "Compte Bambu:",
+          "credential_source": "Font de la credencial:",
+          "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
-              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "Aquestes opcions avançades són una funcionalitat precoç o arriscada. Llegiu la documentació i utilitzeu -les pel vostre propi risc.",
             "data": {
               "disable_ssl_verify": "Desactiva la verificació SSL",
-              "enable_firmware_update": "Activa l'assistència d'actualització del firmware",
-              "enable_filament_inventory": "Activa l'inventari de filaments (Gestor de filaments, requereix Bambu Cloud)",
-              "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
+              "enable_firmware_update": "Activa l'assistència d'actualització del firmware"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "Compte Bambu:",
           "credential_source": "Compte Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inventari de filaments",
+        "description": "Utilitzeu les credencials de Bambu Cloud que funcionin des d'una entrada d'impressora existent. No es requereix cap inici de sessió addicional.",
+        "data": {
+          "username": "Compte Bambu:",
+          "credential_source": "Font de la credencial:",
+          "filament_inventory_interval": "Interval d'actualització de l'inventari de filaments (minuts):"
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "Refrigeració",
           "heating": "Calefacció"
+        }
+      },
+      "liveview_camera": {
+        "name": "Càmera de visualització en directe",
+        "state": {
+          "main": "Càmera principal",
+          "birdseye": "Càmera BirdsEye"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "PrintTool {tool_number} temps d'impressió"
       },
       "filament_inventory": {
-        "name": "Inventari de filaments"
+        "name": "Inventari de filaments",
+        "state_attributes": {
+          "spools": {
+            "name": "Bobines"
+          },
+          "groups": {
+            "name": "Grups de filaments"
+          },
+          "total_remaining_g": {
+            "name": "Filament restant total"
+          }
+        }
       },
       "processing_material": {
         "name": "Material làser/tallador"
@@ -1291,7 +1319,8 @@
         "bambu": "Núvol Bambu Lab",
         "lan": "Mode LAN",
         "makerworld": "Compte de MakerWorld",
-        "ams_heater": "Escalfador o assecador AMS extern (endoll intel·ligent)"
+        "ams_heater": "Escalfador o assecador AMS extern (endoll intel·ligent)",
+        "filament_inventory": "Inventari de filaments"
       }
     }
   },

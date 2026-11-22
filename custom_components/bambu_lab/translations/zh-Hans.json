@@ -88,9 +88,7 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "使用现有打印机条目中的有效 Bambu Cloud 凭据。无需额外登录。",
         "data": {
           "username": "班布帐号："
+        }
+      },
+      "filament_inventory": {
+        "title": "长丝库存",
+        "description": "使用现有打印机条目中的有效 Bambu Cloud 凭据。无需额外登录。",
+        "data": {
+          "username": "班布帐号：",
+          "credential_source": "凭证来源：",
+          "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "这些高级选项是早期或风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "这些高级选项是早期或有风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持",
-              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
+              "enable_firmware_update": "启用固件更新支持"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "班布帐号：",
           "credential_source": "班布帐号："
+        }
+      },
+      "filament_inventory": {
+        "title": "长丝库存",
+        "description": "使用现有打印机条目中的有效 Bambu Cloud 凭据。无需额外登录。",
+        "data": {
+          "username": "班布帐号：",
+          "credential_source": "凭证来源：",
+          "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "冷却",
           "heating": "加热"
+        }
+      },
+      "liveview_camera": {
+        "name": "实时取景相机",
+        "state": {
+          "main": "主摄像头",
+          "birdseye": "鸟眼相机"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "PrintTool {tool_number} 打印时间"
       },
       "filament_inventory": {
-        "name": "长丝库存"
+        "name": "长丝库存",
+        "state_attributes": {
+          "spools": {
+            "name": "线轴"
+          },
+          "groups": {
+            "name": "灯丝组"
+          },
+          "total_remaining_g": {
+            "name": "剩余灯丝总量"
+          }
+        }
       },
       "processing_material": {
         "name": "激光/切割材料"
@@ -1291,7 +1319,8 @@
         "bambu": "Bambu Lab 云",
         "lan": "局域网模式",
         "makerworld": "创客世界账户",
-        "ams_heater": "外部 AMS 加热器或干燥器（智能插头）"
+        "ams_heater": "外部 AMS 加热器或干燥器（智能插头）",
+        "filament_inventory": "长丝库存"
       }
     }
   },
