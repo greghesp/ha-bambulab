@@ -13,6 +13,7 @@ from .pybambu.utils import get_authenticated_rtsp_url
 from .definitions import BambuLabSensorEntityDescription
 
 from homeassistant.components.camera import Camera, CameraEntityFeature
+from homeassistant.components.stream.const import CONF_USE_WALLCLOCK_AS_TIMESTAMPS
 
 from .coordinator import BambuDataUpdateCoordinator
 
@@ -94,6 +95,10 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
+        # P2S and X1 RTSPS feeds start at dts 0 and then jump by hours.
+        # The stream worker aborts when that gap exceeds 30 seconds.
+        # Arrival-time timestamps keep the live view open.
+        self.stream_options[CONF_USE_WALLCLOCK_AS_TIMESTAMPS] = True
 
     @property
     def is_streaming(self) -> bool:
