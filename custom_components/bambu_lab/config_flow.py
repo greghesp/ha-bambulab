@@ -28,8 +28,11 @@ from .const import (
     CONF_AMS_HEATERS,
     DOMAIN,
     ENTRY_TYPE,
+    ENTRY_TYPE_FILAMENT_INVENTORY,
     ENTRY_TYPE_MAKERWORLD,
     LOGGER,
+    DEFAULT_FILAMENT_INVENTORY_INTERVAL,
+    OPTION_FILAMENT_INVENTORY_INTERVAL,
 )
 from .pybambu import BambuClient, BambuCloud
 from .pybambu.bambu_cloud import (
@@ -80,12 +83,15 @@ def _async_get_printer_device(hass, serial: str):
     return None
 
 
-async def _get_working_makerworld_credentials(
+async def _get_working_account_credentials(
     hass: HomeAssistant, username: str
 ) -> dict[str, dict[str, str]]:
     credentials = {}
     for entry in hass.config_entries.async_entries(DOMAIN):
-        if entry.disabled_by is not None or entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+        if entry.disabled_by is not None or entry.data.get(ENTRY_TYPE) in (
+            ENTRY_TYPE_MAKERWORLD,
+            ENTRY_TYPE_FILAMENT_INVENTORY,
+        ):
             continue
         options = entry.options
         region = options.get("region", "")
@@ -130,6 +136,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> config_entries.OptionsFlow:
         if config_entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
             return MakerWorldOptionsFlowHandler(config_entry)
+        if config_entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_FILAMENT_INVENTORY:
+            return FilamentInventoryOptionsFlowHandler(config_entry)
         return BambuOptionsFlowHandler(config_entry)
 
     def __init__(self) -> None:
@@ -141,6 +149,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         self._bambu_cloud = BambuCloud("", "", "", "")
         self._show_existing = False
         self._makerworld_credentials: dict[str, dict[str, str]] = {}
+        self._filament_inventory_credentials: dict[str, dict[str, str]] = {}
 
     def __del__(self) -> None:
         # This isn't as immediate as I'd like it takes garbage collection but it'll kick in after a bit.
@@ -155,6 +164,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             if user_input['printer_mode'] == "makerworld":
                 return await self.async_step_makerworld(None)
+            if user_input['printer_mode'] == "filament_inventory":
+                return await self.async_step_filament_inventory(None)
             if user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
                 return await self.async_step_Lan(None)
@@ -173,8 +184,16 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 for config_entry in config_entries
                 if config_entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD
             }
+            existing_filament_inventory_accounts = {
+                config_entry.data.get("username")
+                for config_entry in config_entries
+                if config_entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_FILAMENT_INVENTORY
+            }
             for config_entry in config_entries:
-                if config_entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+                if config_entry.data.get(ENTRY_TYPE) in (
+                    ENTRY_TYPE_MAKERWORLD,
+                    ENTRY_TYPE_FILAMENT_INVENTORY,
+                ):
                     continue
                 if config_entry.options.get('region', '') != '' and config_entry.options.get('email', '') != '' and config_entry.options.get('username', '') != '' and config_entry.options.get('auth_token', '') != '':
                     LOGGER.debug(f"Testing credentials from existing entry id: {config_entry.entry_id}")
@@ -203,6 +222,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                                 "username": username,
                                 "auth_token": auth_token,
                             })
+                        if username not in existing_filament_inventory_accounts:
+                            self._filament_inventory_credentials.setdefault(username, {
+                                "region": default_region,
+                                "email": default_email,
+                                "username": username,
+                                "auth_token": auth_token,
+                            })
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -223,6 +249,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             ]
         if self._makerworld_credentials:
             modes.append(SelectOptionDict(value="makerworld", label=""))
+        if self._filament_inventory_credentials:
+            modes.append(SelectOptionDict(value="filament_inventory", label=""))
         selector = SelectSelector(
             SelectSelectorConfig(
                 options=modes,
@@ -264,15 +292,42 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         )
         return self.async_show_form(step_id="makerworld", data_schema=vol.Schema(fields))
 
+    async def async_step_filament_inventory(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        if not self._filament_inventory_credentials:
+            return self.async_abort(reason="no_working_credentials")
+
+        if user_input is not None:
+            credentials = self._filament_inventory_credentials[user_input["username"]]
+            await self.async_set_unique_id(f"filament_inventory_{credentials['username']}")
+            self._abort_if_unique_id_configured()
+            return self.async_create_entry(
+                title="Filament Inventory",
+                data={ENTRY_TYPE: ENTRY_TYPE_FILAMENT_INVENTORY, **credentials},
+                options={OPTION_FILAMENT_INVENTORY_INTERVAL: DEFAULT_FILAMENT_INVENTORY_INTERVAL},
+            )
+
+        account_options = [
+            SelectOptionDict(value=username, label=credentials["email"] or username)
+            for username, credentials in self._filament_inventory_credentials.items()
+        ]
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Required("username")] = SelectSelector(
+            SelectSelectorConfig(options=account_options, mode=SelectSelectorMode.LIST)
+        )
+        return self.async_show_form(step_id="filament_inventory", data_schema=vol.Schema(fields))
+
     async def async_step_reconfigure(
             self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         entry = self._get_reconfigure_entry()
-        if entry.data.get(ENTRY_TYPE) != ENTRY_TYPE_MAKERWORLD:
+        entry_type = entry.data.get(ENTRY_TYPE)
+        if entry_type not in (ENTRY_TYPE_MAKERWORLD, ENTRY_TYPE_FILAMENT_INVENTORY):
             return self.async_abort(reason="reconfigure_not_supported")
 
         username = entry.data.get("username", "")
-        credentials = await _get_working_makerworld_credentials(self.hass, username)
+        credentials = await _get_working_account_credentials(self.hass, username)
         if not credentials:
             return self.async_abort(reason="no_working_credentials")
 
@@ -281,7 +336,12 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 **entry.data,
                 **credentials[user_input["credential_source"]],
             }
-            self.hass.config_entries.async_update_entry(entry, data=updated_data)
+            options = dict(entry.options)
+            if entry_type == ENTRY_TYPE_FILAMENT_INVENTORY:
+                options[OPTION_FILAMENT_INVENTORY_INTERVAL] = max(
+                    1, int(user_input[OPTION_FILAMENT_INVENTORY_INTERVAL])
+                )
+            self.hass.config_entries.async_update_entry(entry, data=updated_data, options=options)
             await self.hass.config_entries.async_reload(entry.entry_id)
             return self.async_abort(reason="reconfigure_successful")
 
@@ -295,7 +355,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 mode=SelectSelectorMode.LIST,
             )
         )
-        return self.async_show_form(step_id="makerworld", data_schema=vol.Schema(fields))
+        if entry_type == ENTRY_TYPE_FILAMENT_INVENTORY:
+            interval = entry.options.get(
+                OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL
+            )
+            fields[vol.Required(OPTION_FILAMENT_INVENTORY_INTERVAL, default=str(interval))] = NUMBER_SELECTOR
+        step_id = "makerworld" if entry_type == ENTRY_TYPE_MAKERWORLD else "filament_inventory"
+        return self.async_show_form(step_id=step_id, data_schema=vol.Schema(fields))
 
     async def async_step_Bambu(
             self, user_input: dict[str, Any] | None = None
@@ -1003,8 +1069,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["usage_hours"] = float(user_input['usage_hours'])
                     options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                     options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
-                    options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
-                    options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                     options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                     options["force_ip"] = force_ip
@@ -1039,8 +1103,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
-        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
-        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         # Build form
         fields: OrderedDict[vol.Marker, Any] = OrderedDict()
@@ -1056,8 +1118,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
-                vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -1106,8 +1166,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
-                options["enable_filament_inventory"] = user_input['advanced'].get('enable_filament_inventory', False)
-                options["filament_inventory_interval"] = max(1, int(user_input['advanced'].get('filament_inventory_interval', 60)))
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
 
                 title = self._config_entry.data['serial']
@@ -1141,8 +1199,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
-        default_enable_filament_inventory = self._config_entry.options.get('enable_filament_inventory', False) if user_input is None else user_input.get('advanced', {}).get('enable_filament_inventory', self._config_entry.options.get('enable_filament_inventory', False))
-        default_filament_inventory_interval = str(self._config_entry.options.get('filament_inventory_interval', 60)) if user_input is None else user_input.get('advanced', {}).get('filament_inventory_interval', self._config_entry.options.get('filament_inventory_interval', 60))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
@@ -1153,8 +1209,6 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
                 vol.Required('enable_firmware_update', default=default_enable_firmware_update): BOOLEAN_SELECTOR,
-                vol.Required('enable_filament_inventory', default=default_enable_filament_inventory): BOOLEAN_SELECTOR,
-                vol.Required('filament_inventory_interval', default=default_filament_inventory_interval): NUMBER_SELECTOR,
             }),
             {'collapsed': True},
         )
@@ -1223,7 +1277,7 @@ class MakerWorldOptionsFlowHandler(config_entries.OptionsFlow):
 
     async def async_step_makerworld(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         username = self._config_entry.data.get("username", "")
-        credentials = await _get_working_makerworld_credentials(self.hass, username)
+        credentials = await _get_working_account_credentials(self.hass, username)
         if not credentials:
             return self.async_abort(reason="no_working_credentials")
 
@@ -1247,3 +1301,49 @@ class MakerWorldOptionsFlowHandler(config_entries.OptionsFlow):
             )
         )
         return self.async_show_form(step_id="makerworld", data_schema=vol.Schema(fields))
+
+
+class FilamentInventoryOptionsFlowHandler(config_entries.OptionsFlow):
+    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+        self._config_entry = config_entry
+
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        return await self.async_step_filament_inventory(user_input)
+
+    async def async_step_filament_inventory(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        username = self._config_entry.data.get("username", "")
+        credentials = await _get_working_account_credentials(self.hass, username)
+        if not credentials:
+            return self.async_abort(reason="no_working_credentials")
+
+        if user_input is not None:
+            data = {
+                **self._config_entry.data,
+                **credentials[user_input["credential_source"]],
+            }
+            options = dict(self._config_entry.options)
+            options[OPTION_FILAMENT_INVENTORY_INTERVAL] = max(
+                1, int(user_input[OPTION_FILAMENT_INVENTORY_INTERVAL])
+            )
+            self.hass.config_entries.async_update_entry(self._config_entry, data=data, options=options)
+            await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+            return self.async_create_entry(title="", data=None)
+
+        interval = self._config_entry.options.get(
+            OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL
+        )
+        fields: OrderedDict[vol.Marker, Any] = OrderedDict()
+        fields[vol.Required("credential_source")] = SelectSelector(
+            SelectSelectorConfig(
+                options=[
+                    SelectOptionDict(value=source_id, label=source["email"] or source_id)
+                    for source_id, source in credentials.items()
+                ],
+                mode=SelectSelectorMode.LIST,
+            )
+        )
+        fields[vol.Required(OPTION_FILAMENT_INVENTORY_INTERVAL, default=str(interval))] = NUMBER_SELECTOR
+        return self.async_show_form(
+            step_id="filament_inventory",
+            data_schema=vol.Schema(fields),
+        )

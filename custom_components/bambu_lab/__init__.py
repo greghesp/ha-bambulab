@@ -23,9 +23,13 @@ from aiohttp import web
 from .const import (
     DOMAIN,
     ENTRY_TYPE,
+    ENTRY_TYPE_FILAMENT_INVENTORY,
     ENTRY_TYPE_MAKERWORLD,
+    DEFAULT_FILAMENT_INVENTORY_INTERVAL,
     LOGGER,
+    FILAMENT_INVENTORY_DATA,
     MAKERWORLD_DATA,
+    OPTION_FILAMENT_INVENTORY_INTERVAL,
     PLATFORMS,
     SERVICE_CALL_EVENT,
     SERVICE_CALL_FUTURES,
@@ -33,6 +37,7 @@ from .const import (
 )
 from .ams_heater_controller import async_setup_ams_heaters
 from .coordinator import BambuDataUpdateCoordinator, migrate_legacy_file_cache
+from .filamentinventory import BambuFilamentCoordinator
 from .makerworld import create_makerworld_coordinator
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import normalize_service_target
@@ -420,11 +425,7 @@ async def async_call_service(hass: HomeAssistant, service: str, data: dict, time
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
     LOGGER.debug("async_setup_entry Start")
-    try:
-        await hass.async_add_executor_job(migrate_legacy_file_cache, hass, entry.data["serial"])
-    except Exception as err:
-        LOGGER.error(f"Failed to move the file cache out of www/: {err}")
-        
+
     if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
         cloud = BambuCloud(
             entry.data["region"],
@@ -438,16 +439,36 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await hass.config_entries.async_forward_entry_setups(entry, [Platform.SENSOR])
         return True
 
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_FILAMENT_INVENTORY:
+        cloud = BambuCloud(
+            entry.data["region"],
+            entry.data["email"],
+            entry.data["username"],
+            entry.data["auth_token"],
+        )
+        coordinator = BambuFilamentCoordinator(
+            hass,
+            entry=entry,
+            bambu_cloud=cloud,
+            interval_minutes=entry.options.get(
+                OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL
+            ),
+        )
+        hass.data.setdefault(FILAMENT_INVENTORY_DATA, {})[entry.entry_id] = coordinator
+        await coordinator.async_refresh()
+        await hass.config_entries.async_forward_entry_setups(entry, [Platform.SENSOR])
+        return True
+
+    try:
+        await hass.async_add_executor_job(migrate_legacy_file_cache, hass, entry.data["serial"])
+    except Exception as err:
+        LOGGER.error(f"Failed to move the file cache out of www/: {err}")
+        
     coordinator = BambuDataUpdateCoordinator(hass, entry=entry)
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     coordinator.ams_heaters = async_setup_ams_heaters(hass, entry, coordinator)
-
-    if coordinator.filament_inventory is not None:
-        # Same reasoning as MakerWorld above: a cloud failure must not block
-        # printer setup, so don't use async_config_entry_first_refresh().
-        await coordinator.filament_inventory.async_refresh()
 
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
@@ -516,6 +537,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
         unloaded = await hass.config_entries.async_unload_platforms(entry, [Platform.SENSOR])
         coordinator = hass.data.get(MAKERWORLD_DATA, {}).pop(entry.entry_id, None)
+        if coordinator is not None:
+            await coordinator.async_shutdown()
+        return unloaded
+
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_FILAMENT_INVENTORY:
+        unloaded = await hass.config_entries.async_unload_platforms(entry, [Platform.SENSOR])
+        coordinator = hass.data.get(FILAMENT_INVENTORY_DATA, {}).pop(entry.entry_id, None)
         if coordinator is not None:
             await coordinator.async_shutdown()
         return unloaded

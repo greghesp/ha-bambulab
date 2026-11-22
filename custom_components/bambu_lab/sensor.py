@@ -9,7 +9,15 @@ from homeassistant.helpers.restore_state import RestoreEntity, RestoredExtraData
 from homeassistant.helpers import entity_registry as er
 from homeassistant.util import dt as dt_util
 
-from .const import DOMAIN, ENTRY_TYPE, ENTRY_TYPE_MAKERWORLD, LOGGER, MAKERWORLD_DATA
+from .const import (
+    DOMAIN,
+    ENTRY_TYPE,
+    ENTRY_TYPE_FILAMENT_INVENTORY,
+    ENTRY_TYPE_MAKERWORLD,
+    FILAMENT_INVENTORY_DATA,
+    LOGGER,
+    MAKERWORLD_DATA,
+)
 from .definitions import (
     AIR_PURIFIER_SENSORS,
     PRINTER_SENSORS,
@@ -26,8 +34,9 @@ from .definitions import (
     BambuLabMakerWorldSensorEntityDescription,
     BambuLabSensorEntityDescription,
 )
-from .coordinator import BambuDataUpdateCoordinator, BambuFilamentCoordinator
+from .coordinator import BambuDataUpdateCoordinator
 from .makerworld import MakerWorldDataUpdateCoordinator, MakerWorldEntity
+from .filamentinventory import BambuFilamentCoordinator
 from .models import AirPurifierEntity, BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity, FilamentInventoryEntity
 from .pybambu.const import Features, Printers
 
@@ -74,6 +83,12 @@ async def async_setup_entry(
             async_add_entities([BambuLabMakerWorldSensor(coordinator, sensor)])
         return
 
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_FILAMENT_INVENTORY:
+        coordinator = hass.data[FILAMENT_INVENTORY_DATA][entry.entry_id]
+        for sensor in FILAMENT_INVENTORY_SENSORS:
+            async_add_entities([BambuLabFilamentInventorySensor(coordinator, sensor)])
+        return
+
     coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     if not coordinator.get_model().has_full_printer_data:
@@ -117,11 +132,6 @@ async def async_setup_entry(
         if sensor.exists_fn(coordinator):
             sensor_class = BambuLabRestoreSensor if sensor.is_restoring else BambuLabSensor
             async_add_entities([sensor_class(coordinator, sensor)])
-
-    if coordinator.filament_inventory is not None:
-        for sensor in FILAMENT_INVENTORY_SENSORS:
-            async_add_entities([BambuLabFilamentInventorySensor(coordinator.filament_inventory, sensor)])
-
 
 class BambuLabAirPurifierSensor(AirPurifierEntity, SensorEntity):
     """A measurement belonging to the attached air purifier."""
@@ -416,8 +426,7 @@ class BambuLabFilamentInventorySensor(FilamentInventoryEntity, SensorEntity):
     ) -> None:
         super().__init__(coordinator=coordinator)
         self.entity_description = description
-        printer = coordinator.printer_coordinator.get_model().info
-        self._attr_unique_id = f"{printer.serial}_{description.key}"
+        self._attr_unique_id = f"{coordinator.unique_id_prefix}_{description.key}"
 
     @property
     def extra_state_attributes(self) -> dict:
