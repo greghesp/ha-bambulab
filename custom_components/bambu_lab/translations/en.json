@@ -84,7 +84,9 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -106,7 +108,9 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -116,7 +120,8 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare has blocked the connection attempt.",
-      "curl_unavailable": "curl_cffi library is not available."
+      "curl_unavailable": "curl_cffi library is not available.",
+      "no_ams": "No AMS has been identified on this printer yet. Wait for the printer to connect and report its AMS units, then try again."
     },
     "error": {
       "cannot_connect": "Failed to connect",
@@ -141,6 +146,10 @@
       "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
     },
     "step": {
+      "ams_heater": {
+        "title": "External AMS heater or dryer",
+        "description": "Add-on AMS heaters and dryers such as the SUNLU AMS Heater and EIBOS Series X (Dyas/Tetras) have no network connection, so Home Assistant controls one by switching the smart plug it is powered from.\n\nChoose that plug for each AMS that has a heater fitted, or leave it empty. Each linked AMS gets heater drying mode, heater power, humidity threshold, temperature cutoff and runtime limit entities.\n\nSet the heater or dryer itself to start heating when it is powered on, so switching the plug actually starts drying."
+      },
       "init": {
         "title": "Adjust connection settings",
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
@@ -179,7 +188,9 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -200,7 +211,9 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support"
+              "enable_firmware_update": "Enable firmware update support",
+              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
+              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
         }
@@ -253,6 +266,12 @@
       }
     },
     "button": {
+      "hotend_rack_raise": {
+        "name": "Raise rack"
+      },
+      "hotend_rack_lower": {
+        "name": "Lower rack"
+      },
       "pause": {
         "name": "Pause"
       },
@@ -279,6 +298,19 @@
       }
     },
     "fan": {
+      "air_purifier": {
+        "name": "Air purifier",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Silent",
+              "standard": "Standard",
+              "max": "Max"
+            }
+          }
+        }
+      },
       "cooling_fan": {
         "name": "Cooling fan"
       },
@@ -335,6 +367,18 @@
       },
       "target_chamber_temperature": {
         "name": "Chamber target temperature"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Heater turn-on humidity"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Heater turn-off humidity"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Heater temperature cutoff"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Heater maximum runtime"
       }
     },
     "select": {
@@ -353,9 +397,22 @@
           "cooling": "Cooling",
           "heating": "Heating"
         }
+      },
+      "liveview_camera": {
+        "name": "Live view camera",
+        "state": {
+          "main": "Main camera",
+          "birdseye": "BirdsEye camera"
+        }
       }
     },
     "sensor": {
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Fan speed"
+      },
       "makerworld_boosts_received": {
         "name": "Boosts received"
       },
@@ -415,6 +472,9 @@
       },
       "makerworld_level": {
         "name": "Level"
+      },
+      "filament_inventory": {
+        "name": "Filament inventory"
       },
       "airduct_mode": {
         "name": "Airduct mode",
@@ -536,6 +596,7 @@
           "printing": "Printing",
           "auto_bed_leveling": "Auto bed leveling",
           "heatbed_preheating": "Heatbed preheating",
+          "heatbed_stabilizing": "Stabilizing heatbed",
           "sweeping_xy_mech_mode": "Sweeping XY mech mode",
           "changing_filament": "Changing filament",
           "m400_pause": "M400 pause",
@@ -613,13 +674,30 @@
           "idle": "Idle"
         }
       },
+      "external_storage_connection": {
+        "name": "External Storage connection",
+        "state": {
+          "connected": "Connected",
+          "disconnected": "Disconnected"
+        }
+      },
+      "external_storage_total": {
+        "name": "External Storage total"
+      },
+      "external_storage_used": {
+        "name": "External Storage used"
+      },
+      "external_storage_free": {
+        "name": "External Storage free"
+      },
       "sdcard_status": {
         "name": "SD card status",
         "state": {
           "missing": "Missing",
           "normal": "Normal",
           "abnormal": "Abnormal",
-          "readonly": "Read only"
+          "readonly": "Read only",
+          "not_applicable": "Not applicable"
         }
       },
       "print_progress": {
@@ -660,6 +738,24 @@
       },
       "remaining_drying_time": {
         "name": "Remaining drying time"
+      },
+      "zone_temperature": {
+        "name": "Zone {zone_number} temperature",
+        "state_attributes": {
+          "zone": { "name": "Zone" },
+          "zone_id": { "name": "Zone ID" },
+          "slots": { "name": "Slots" },
+          "dry_setting": { "name": "Drying setting" }
+        }
+      },
+      "zone_humidity": {
+        "name": "Zone {zone_number} humidity",
+        "state_attributes": {
+          "zone": { "name": "Zone" },
+          "zone_id": { "name": "Zone ID" },
+          "slots": { "name": "Slots" },
+          "dry_setting": { "name": "Drying setting" }
+        }
       },
       "drying_temperature": {
         "name": "Drying temperature"
@@ -957,6 +1053,12 @@
           "lock_hotend": "Locking hotend"
         }
       },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek position (raw)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek status (raw)"
+      },
       "hotend_rack_hotend": {
         "name": "Hotend {hotend_id}",
         "state": {
@@ -997,6 +1099,42 @@
       },
       "hotend_rack_hotend_used_time": {
         "name": "Hotend {hotend_id} used time"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Mounted",
+          "docked": "Docked",
+          "empty": "Empty"
+        },
+        "state_attributes": {
+          "tool": { "name": "Tool" },
+          "filament_diameter": { "name": "Filament diameter" },
+          "filament_name": { "name": "Filament name" },
+          "filament_type": { "name": "Filament type" },
+          "remaining_weight_g": { "name": "Remaining filament weight" },
+          "remaining_percent": { "name": "Remaining filament" },
+          "ams_id": { "name": "AMS ID" },
+          "ams_slot": { "name": "AMS slot" },
+          "nozzle_diameter": { "name": "Nozzle diameter" },
+          "nozzle_type": { "name": "Nozzle type" },
+          "nozzle_type_code": { "name": "Nozzle type code" },
+          "max_temperature": { "name": "Max temperature" },
+          "serial": { "name": "Serial number" },
+          "filament_id": { "name": "Filament ID" },
+          "color": { "name": "Color" },
+          "wear": { "name": "Wear" },
+          "status_raw": { "name": "Status (raw)" }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} temperature"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} target temperature"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} print time"
       }
     },
     "camera": {
@@ -1016,6 +1154,12 @@
       },
       "prompt_sound": {
         "name": "Prompt sound"
+      },
+      "ams_heater_drying": {
+        "name": "Heater drying mode"
+      },
+      "ams_heater_power": {
+        "name": "Heater power"
       }
     },
     "update": {
@@ -1028,7 +1172,8 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab cloud",
-        "lan": "Lan Mode"
+        "lan": "Lan Mode",
+        "ams_heater": "External AMS heater or dryer (smart plug)"
       }
     }
   },
