@@ -254,6 +254,9 @@
       "door_open": {
         "name": "Door"
       },
+      "p1s_upgrade_installed": {
+        "name": "P1S upgrade kit installed"
+      },
       "top_cover_open": {
         "name": "Top cover"
       },
