@@ -16,9 +16,11 @@ nextTitle: Device Triggers
 | Aux           |                   |
 | Chamber       | Not on A1/A1 Mini |
 | Cooling       |                   |
-| Secondary aux | P2S, X2D          |
+| Secondary aux | P2S, X2D, H3C     |
 
 <Info>On the X2D these are named to match the printer screen: Part fan, Left aux fan, Right aux fan (secondary aux) and Exhaust fan (chamber).</Info>
+
+<Info>On the H3C these are named Part fan, Right aux fan, Left aux fan, Exhaust fan and Chamber fan.</Info>
 
 ## Temperatures
 
@@ -26,8 +28,8 @@ nextTitle: Device Triggers
 | ---------------- | ------- |
 | Bed              |         |
 | Target Bed       |         |
-| Chamber          | P2/X1/H2 only |
-| Target Chamber   | X1E/H2 only |
+| Chamber          | P2/X1/H2/H3C/X2D |
+| Target Chamber   | X1E/H2/H3C/X2D |
 | Nozzle(s)        | Three on dual-nozzle printers (left, right, and active nozzle) |
 | Target Nozzle(s) | Three on dual-nozzle printers (left, right, and active nozzle) |
 
@@ -65,7 +67,7 @@ nextTitle: Device Triggers
 | Timelapse Active         |       |
 | Extruder Filament Status | Also left and right on dual-nozzle printers |
 | Track Switch Input 1/2   | Filament Track Switch only. Nozzle each input feeds, with the loaded filament as attributes |
-| Airduct Mode             | Current airduct mode: Cooling, Heating, or Laser. P2S/H2 only |
+| Airduct Mode             | Current airduct mode: Cooling, Heating, or Laser. P2S/H2/H3C/X2D |
 | Tool Module State        | Current mounted tool (H2D exclusive): none, laser, cutter or unavailable |
 
 
@@ -74,16 +76,17 @@ nextTitle: Device Triggers
 | Control             | Notes                                                      |
 | ------------------- | ---------------------------------------------------------- |
 | Chamber Light       |                                                            |
-| Heatbed Light       | H2D only, initial state not known                          |
+| Heatbed Light       | H2 series and H3C; initial state unknown until a command is observed |
 | Pause               |                                                            |
 | Resume              |                                                            |
 | Stop                |                                                            |
 | Bed temperature     | On P1/A1 this is not available in hybrid connection mode\* |
-| Chamber temperature | X1E/H2 only. Max 60°C on X1E, 65°C on H2 series          |
+| Chamber temperature | X1E/H2/H3C/X2D. Integration limit: 60°C on X1E, 65°C on the others |
 | Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
 | Buzzer controls     | H2D only, allows to set one of 3 modes                     |
-| Airduct Mode        | Switch between Cooling and Heating modes. P2S/H2 only        |
-| Allow Prompt Sound  | A1 and H2D only, enables startup, print start and end sounds |
+| Airduct Mode        | Switch airduct modes on P2S/H2/H3C/X2D                     |
+| Allow Prompt Sound  | A1/A2L/H2/H3C/P2S/X2D                                    |
+| Live view camera    | Main or BirdsEye camera. Only on printers that report a BirdsEye camera (see [Cameras](#cameras)) |
 
 <Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
 <Warning>If you are running the latest X1 firmware with Bambu Authorisation, the only functional control is the Chamber Light</Warning>
@@ -95,7 +98,7 @@ nextTitle: Device Triggers
 | ----------------- | -------------- |
 | Active tray       | If AMS present |
 | Active tray index | If AMS present |
-| Drying            | AMS 2 Pro/AMS HT only |
+| Drying            | AMS 2 Pro/AMS HT/AMS 3H |
 | Connected nozzle  | Dual-nozzle printers only: Left or Right. Through a Filament Track Switch, the nozzle its loaded filament is routed to, otherwise Track switch |
 
 
@@ -105,7 +108,7 @@ nextTitle: Device Triggers
 | Status                | Filament change step  |
 | Humidity              | P1/P2/X1/H2 only      |
 | Temperature           | P1/P2/X1/H2 only      |
-| Remaining drying time | AMS 2 Pro/AMS HT only |
+| Remaining drying time | AMS 2 Pro/AMS HT/AMS 3H |
 | Drying temperature    | AMS 2 Pro/AMS HT only |
 | Drying duration       | AMS 2 Pro/AMS HT only |
 | Drying filament       | AMS 2 Pro/AMS HT only |
@@ -113,6 +116,10 @@ nextTitle: Device Triggers
 | Tray 2                |                       |
 | Tray 3                |                       |
 | Tray 4                |                       |
+
+AMS 3H exposes temperature and humidity for both zones. Zone sensor attributes
+include the associated slots and drying settings. The remaining drying time and
+drying binary sensors describe the whole AMS. It exposes up to nine trays.
 
 | Tray attributes:    | Notes      |
 | ------------------- | ---------- |
@@ -136,6 +143,23 @@ nextTitle: Device Triggers
 - **`empty: false`, `unknown: false`** — spool present with a correct profile.
 </Info>
 
+### External AMS heater or dryer (SUNLU AMS Heater, EIBOS Series X)
+
+Add-on heated lids and dryers such as the [SUNLU AMS Heater](https://store.sunlu.com/products/sunlu-ams-heater-upgraded-your-bambu-ams-save-an-ams-2pro-for-you) and the [EIBOS Series X](https://shop.eibos3d.com/products/eibos-filament-dryer-series-x-tetras) (Dyas/Tetras) have no network connection and never report to the printer. ha-bambulab can still run one by switching the smart plug it is powered from, using the AMS's own humidity and temperature readings.
+
+To set it up, plug the heater into a smart plug that Home Assistant can switch, and set the heater or dryer to start heating whenever it gets power. Then open the integration's **Configure** dialog, pick **External AMS heater or dryer (smart plug)**, and choose the plug for each AMS that has a heater fitted. These entities are added to that AMS:
+
+| Entity                    | Notes |
+| ------------------------- | ----- |
+| Heater drying mode        | While on, the plug is switched automatically. Turning it off switches the heater off and hands the plug back to manual control. Attributes: `heater_plug`, `last_reason`, `runtime_lockout`. |
+| Heater power              | Mirrors and switches the plug. While drying mode is on, the next printer update can override a manual change. |
+| Heater turn-on humidity   | Heating starts at or above this AMS humidity (default 40%). |
+| Heater turn-off humidity  | Heating stops at or below this AMS humidity (default 25%). Must be lower than the turn-on humidity. |
+| Heater temperature cutoff | The heater is switched off while the AMS temperature is at or above this (default 60 °C). Only added when the printer reports AMS temperature. |
+| Heater maximum runtime    | The heater is switched off after running this long (default 12 h, 0 = no limit). It then stays off until the AMS dries to the turn-off humidity or drying mode is switched on again. The runtime is counted from when the plug last turned on, so a Home Assistant restart or the plug dropping offline restarts the count. |
+
+The heater is also switched off whenever the printer is offline, the AMS humidity isn't reported, the plug is unlinked, or the integration is unloaded while drying. Automatic control needs the AMS **Humidity** sensor in percent, listed above. The heater's own controls still set its heating temperature. On the EIBOS Series X, the plug powers all chambers together, so per-chamber temperature and humidity settings stay on the dryer itself.
+
 ## External Spool
 
 | Sensor         | Notes |
@@ -144,8 +168,9 @@ nextTitle: Device Triggers
 
 | Attributes:     | Notes      |
 | --------------- | ---------- |
+| Active          | `true` while this slot is feeding the printer |
 | Color           |            |
-| Empty           |            |
+| Empty           | `true` when no filament is set on the holder. A loaded spool that isn't feeding stays `false`; see Active. |
 | Unknown         |            |
 | State           |            |
 | K Value         | P1/A1 only |
@@ -154,9 +179,82 @@ nextTitle: Device Triggers
 | Nozzle min temp |            |
 | Type            |            |
 
+## Filament Inventory
+
+| Sensor              | Notes                                                                 |
+| ------------------- | --------------------------------------------------------------------- |
+| Filament Inventory  | Opt-in sensor exposing account-level Bambu Filament Manager spools. Requires Bambu Cloud authentication. |
+
+The filament inventory sensor exposes your Bambu account's entire spool collection from the Filament Manager. State represents the total number of spools.
+
+| Attributes:         | Notes                                                              |
+| ------------------- | ------------------------------------------------------------------ |
+| spools              | List of all spools with detailed information (see below)           |
+| groups              | Spools grouped by vendor and name, mirroring slicer's grouped view |
+| total_remaining_g   | Total remaining grams across all spools                            |
+
+### Spool Attributes
+
+Each spool in the `spools` list contains:
+
+| Field            | Notes                                                                           |
+| ---------------- | ------------------------------------------------------------------------------- |
+| id               | Internal spool identifier                                                       |
+| rfid             | RFID tag value for Bambu-branded spools                                         |
+| vendor           | Filament vendor/manufacturer                                                    |
+| name             | Filament product name                                                           |
+| type             | Filament type (e.g., PLA, PETG, ABS)                                            |
+| filament_id      | Bambu's filament database ID                                                    |
+| color            | Hex color code (e.g., `#FFFFFFFF`)                                              |
+| colors           | List of hex color codes (empty list for manually-added spools)                  |
+| color_type       | `2` for solid colors, `0` for gradient/dual colors                              |
+| remaining_g      | Remaining filament weight in grams                                              |
+| total_g          | Original total weight in grams                                                  |
+| remaining_pct    | Remaining percentage (0-100)                                                    |
+| tray_id_name     | Associated tray identifier                                                      |
+| note             | Freeform user notes                                                             |
+| updated_at       | Unix timestamp of last update                                                   |
+
+### Group Attributes
+
+Each group in the `groups` list contains:
+
+| Field              | Notes                                           |
+| ------------------ | ----------------------------------------------- |
+| vendor             | Vendor name for this group                      |
+| name               | Product name for this group                     |
+| count              | Number of spools in this group                  |
+| total_remaining_g  | Total remaining grams for spools in this group  |
+| spools             | List of spool objects belonging to this group   |
+
+<Info>
+**Known data limitations:** The Bambu Cloud API does not provide filament diameter (e.g., 1.75mm), human-readable color names (e.g., "Grass Green"), or 5-digit SKU codes. Only hex color values are available.
+</Info>
+
+<Info>
+The integration does not create alert sensors for low filament. You can build custom template sensors for notifications. For example, to count spools below 100g:
+
+```yaml
+template:
+  - sensor:
+      - name: "Spools below 100g"
+        state: >-
+          {{ state_attr('sensor.x1c_filament_inventory', 'spools')
+             | selectattr('remaining_g', 'lt', 100) | list | count }}
+```
+</Info>
+
 ## Hotend Rack
 
-H2C only (Vortek system).
+H2C (Vortek system) and H3C (Swaptek system).
+
+The H3C exposes nine PrintTool sensors, each with temperature, target
+temperature and print-time sensors. Its Swaptek position and status are exposed
+as raw diagnostic values. The H2C entities are listed below.
+
+The H3C rack has Raise rack and Lower rack buttons. They’re available when MQTT
+control is unsigned, the printer and rack report idle, and no move is pending.
+The printer may home the rack and move the toolhead before the requested move.
 
 | Sensor                 | Notes                                      |
 | ---------------------- | ------------------------------------------ |
@@ -183,12 +281,21 @@ When a slot is empty, all attributes are set to `None`.
 | Holder position    | Unknown, Position A, Position B, Centre                                  |
 | Holder state       | Idle, Centering hotend, Centering toolhead, Calibrating rack, Cutting material, Unlocking hotend, Lifting rack, Placing hotend, Picking hotend, Locking hotend |
 
+## E1 Air Purifier
+
+When an E1 is connected, it appears as a separate device linked to the printer.
+It exposes an air purifier fan with Auto, Silent, Standard and Max modes, a
+PM2.5 sensor in µg/m³, and a fan speed sensor in rpm. The fan
+entity also exposes raw filter telemetry as attributes; their units have not
+been confirmed. Fan control requires unsigned MQTT commands. Use the preset
+selector to choose a mode; percentage-based fan speed control is not supported.
+
 ## Diagnostics
 
 | Sensor                    | Notes                                                          |
 | ------------------------- | -------------------------------------------------------------- |
 | Developer Lan Mode        | Does the printer have Developer Lan Mode enabled?              |
-| Enclosure Door            | X1/P2/H2 only                                                        |
+| Enclosure Door            | X1/P2/H2/H3C/X2D                               |
 | Firmware Update Available |                                                                |
 | Force Refresh             |                                                                |
 | HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
@@ -207,6 +314,14 @@ When a slot is empty, all attributes are set to `None`.
 | ------- | --------------------------------------------------------------- |
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
+
+### BirdsEye camera
+
+Printers with a BirdsEye camera (fitted as standard on the H2D and H2S Laser editions, and sold as an accessory for the other H2D and H2S models) stream one camera at a time. When the printer reports both cameras, a **Live view camera** select appears with *Main camera* and *BirdsEye camera*. Choosing one switches the printer's live view, and the Chamber camera entity shows that camera. Both can't be shown at once.
+
+The select uses the same command as Bambu Studio's camera switch button. It appears after the printer has reported its cameras, so reload the integration if you fit a BirdsEye camera later.
+
+<Warning>This is new and has only been tested against Bambu Studio's behaviour, not on a printer. If you have a BirdsEye camera, please report how it works for you.</Warning>
 
 ## MakerWorld
 
