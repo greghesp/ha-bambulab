@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Ошибка печати устранена",
       "event_printer_error": "Ошибка HMS",
       "event_printer_error_cleared": "Ошибка HMS устранена",
-      "event_printer_missing_sdcard": "SD-карта отсутствует"
+      "event_printer_missing_sdcard": "SD-карта отсутствует",
+      "event_timelapse_downloaded": "Таймлапс скачан"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Верхняя крышка"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Установлен комплект обновления P1S"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "Время печати PrintTool {tool_number}"
+      },
+      "processing_material": {
+        "name": "Лазерный/режущий материал"
+      },
+      "check_in_remaining": {
+        "name": "Осталось пройти лазерную регистрацию"
+      },
+      "print_elapsed_time": {
+        "name": "Распечатать прошедшее время"
+      },
+      "last_timelapse": {
+        "name": "Последний таймлапс"
+      },
+      "filament_change_status": {
+        "name": "Статус замены нити",
+        "state": {
+          "idle": "Праздный",
+          "changing_filament": "Замена нити",
+          "heating_nozzle": "Нагревательное сопло",
+          "cutting_filament": "Резка нити",
+          "pulling_back_filament": "Оттягивание нити тока назад",
+          "pushing_new_filament": "Проталкивание новой нити",
+          "purging_old_filament": "Очистка старой нити",
+          "checking_position": "Проверка положения нити",
+          "rfid_identifying": "Идентификация RFID",
+          "filament_loaded": "Нить загружена",
+          "calibration": "Калибровка",
+          "cold_pull": "Холодное притяжение",
+          "self_check": "Самопроверка",
+          "debug": "Отлаживать",
+          "unknown": "Неизвестный"
+        }
       }
     },
     "camera": {

@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Erreur d'impression effacée",
       "event_printer_error": "Erreur HMS",
       "event_printer_error_cleared": "Erreur HMS effacée",
-      "event_printer_missing_sdcard": "Carte SD manquante"
+      "event_printer_missing_sdcard": "Carte SD manquante",
+      "event_timelapse_downloaded": "Timelapse téléchargé"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Capot supérieur"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Kit de mise à niveau P1S installé"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Inventaire des filaments"
+      },
+      "processing_material": {
+        "name": "Matériau laser/découpeur"
+      },
+      "check_in_remaining": {
+        "name": "Enregistrement laser restant"
+      },
+      "print_elapsed_time": {
+        "name": "Imprimer le temps écoulé"
+      },
+      "last_timelapse": {
+        "name": "Dernier timelapse"
+      },
+      "filament_change_status": {
+        "name": "Statut de changement de filament",
+        "state": {
+          "idle": "Inactif",
+          "changing_filament": "Changement de filament",
+          "heating_nozzle": "Buse chauffante",
+          "cutting_filament": "Filament de coupe",
+          "pulling_back_filament": "Retirer le filament actuel",
+          "pushing_new_filament": "Pousser un nouveau filament",
+          "purging_old_filament": "Purger l'ancien filament",
+          "checking_position": "Vérification de la position du filament",
+          "rfid_identifying": "Identifier la RFID",
+          "filament_loaded": "Filament chargé",
+          "calibration": "Étalonnage",
+          "cold_pull": "Tirage à froid",
+          "self_check": "Auto-vérification",
+          "debug": "Déboguer",
+          "unknown": "Inconnu"
+        }
       }
     },
     "camera": {
