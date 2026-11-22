@@ -4149,6 +4149,12 @@ class AMSList:
         return AMS_STATUS_MAIN.get(main, "unknown")
 
     @property
+    def status(self) -> str:
+        """Printer-wide filament status. Unlike the per-AMS status, this also covers
+        filament changes that involve no AMS unit, such as the external spool."""
+        return self._status_description()
+
+    @property
     def active_ams_index(self):
         active_nozzle = self._client._device.extruder.active_nozzle_index
         return self._nozzle_ams_index[active_nozzle]

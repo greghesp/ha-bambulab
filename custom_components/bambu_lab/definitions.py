@@ -794,6 +794,14 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
     ),
     BambuLabSensorEntityDescription(
+        key="filament_change_status",
+        translation_key="filament_change_status",
+        icon="mdi:swap-horizontal",
+        device_class=SensorDeviceClass.ENUM,
+        options=AMS_STATUS_OPTIONS,
+        value_fn=lambda self: self.coordinator.get_model().ams.status
+    ),
+    BambuLabSensorEntityDescription(
         key="nozzle_diameter",
         translation_key="nozzle_diameter",
         native_unit_of_measurement=UnitOfLength.MILLIMETERS,
