@@ -48,6 +48,7 @@ from .const import (
     DEFAULT_FILAMENT_INVENTORY_INTERVAL,
 )
 
+from .file_cache import cache_root, legacy_cache_dir, migrate_legacy_cache
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
 from .makerworld import remove_legacy_makerworld_device
@@ -73,6 +74,17 @@ from .pybambu.commands import (
     RETRY_LOAD_FILAMENT_TEMPLATE,
     DONE_LOAD_FILAMENT_TEMPLATE
 )
+
+
+def file_cache_dir(hass: HomeAssistant, serial: str) -> Path:
+    """The file cache directory for a printer, inside the local media dir."""
+    return cache_root(hass.config.media_dirs.get("local"), hass.config.config_dir) / serial
+
+
+def migrate_legacy_file_cache(hass: HomeAssistant, serial: str) -> None:
+    """Move a printer's cache out of the public www/ folder. Blocking: run in the executor."""
+    migrate_legacy_cache(legacy_cache_dir(hass.config.config_dir, serial), file_cache_dir(hass, serial))
+
 
 class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     hass: HomeAssistant
@@ -1310,16 +1322,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         """Get the file cache directory for this printer."""
         if serial is None:
             serial = self.get_model().info.serial
-        default_path = Path(self._hass.config.path(f"www/media/ha-bambulab/{serial}"))
+        # Never under www/: Home Assistant serves that at /local/ without authentication (#2167).
+        path = file_cache_dir(self._hass, serial)
         try:
-            default_path.mkdir(parents=True, exist_ok=True)
-            return str(default_path)
-        except (OSError, PermissionError):
-            media_dir = self._hass.config.media_dirs.get("local")
-            LOGGER.debug(f"Default media directory not writable, falling back to local media directory : '{media_dir}'")
-            fallback_path = Path(media_dir) / f"ha-bambulab/{serial}"
-            fallback_path.mkdir(parents=True, exist_ok=True)
-            return str(fallback_path)
+            path.mkdir(parents=True, exist_ok=True)
+        except OSError as err:
+            LOGGER.error(f"Could not create file cache directory '{path}': {err}")
+        return str(path)
 
     async def get_cached_files(self, file_type: str) -> List[Dict[str, Any]]:
         """Get list of cached files with metadata."""

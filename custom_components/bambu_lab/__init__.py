@@ -19,7 +19,6 @@ from homeassistant.core import (
 from homeassistant.helpers import entity_platform
 from homeassistant.components.http import HomeAssistantView
 from aiohttp import web
-import aiofiles
 
 from .const import (
     DOMAIN,
@@ -33,7 +32,7 @@ from .const import (
     SERVICE_CALL_ID,
 )
 from .ams_heater_controller import async_setup_ams_heaters
-from .coordinator import BambuDataUpdateCoordinator
+from .coordinator import BambuDataUpdateCoordinator, migrate_legacy_file_cache
 from .makerworld import create_makerworld_coordinator
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import normalize_service_target
@@ -290,29 +289,20 @@ class FileCacheFileView(HomeAssistantView):
             if not full_path.exists() or not full_path.is_file():
                 return web.json_response({"error": "File not found"}, status=404)
 
-            # Get file info
-            stat = full_path.stat()
             content_type, _ = mimetypes.guess_type(str(full_path))
             if not content_type:
                 content_type = 'application/octet-stream'
 
-            # Read and serve the file
-            async with aiofiles.open(full_path, 'rb') as f:
-                content = await f.read()
-
-            # Always set Content-Disposition: attachment
+            # FileResponse streams the file and honours Range requests, so the
+            # cards can play cached timelapses from here (via a signed path)
+            # rather than from the public /local/ URL. The cache is private,
+            # so browsers may cache it but shared caches must not.
             headers = {
                 'Content-Type': content_type,
-                'Content-Length': str(stat.st_size),
-                'Cache-Control': 'public, max-age=3600',  # Cache for 1 hour
-                'Last-Modified': datetime.fromtimestamp(stat.st_mtime).strftime('%a, %d %b %Y %H:%M:%S GMT'),
+                'Cache-Control': 'private, max-age=3600',
                 'Content-Disposition': f'attachment; filename="{os.path.basename(filepath)}"',
             }
-
-            return web.Response(
-                body=content,
-                headers=headers
-            )
+            return web.FileResponse(full_path, headers=headers)
         except Exception as e:
             LOGGER.error(f"Error serving file: {e}")
             return web.json_response({"error": "Internal server error"}, status=500)
@@ -355,8 +345,8 @@ class EnsureCacheFileAPIView(HomeAssistantView):
             base_cache_path = Path(coordinator.get_file_cache_directory()).parent
             local_path = str(base_cache_path / cache_path)
 
-            # local_path is of form '/config/www/media/ha-bambulab/<SERIAL>/prints/<file_size>-Fidgets_v14.3mf'
-            #                    or '/config/www/media/ha-bambulab/<SERIAL>/prints/cache/<file_size>-Fidgets_v14.3mf'
+            # local_path is of form '<media>/ha-bambulab/<SERIAL>/prints/<file_size>-Fidgets_v14.3mf'
+            #                    or '<media>/ha-bambulab/<SERIAL>/prints/cache/<file_size>-Fidgets_v14.3mf'
             # Depending where the print source chose to put the file onto the printer.
             # Orca likes the root. Bambu Studio likes the cache directory.
             remote_path_index = cache_path.find('/prints/')
@@ -430,6 +420,11 @@ async def async_call_service(hass: HomeAssistant, service: str, data: dict, time
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
     LOGGER.debug("async_setup_entry Start")
+    try:
+        await hass.async_add_executor_job(migrate_legacy_file_cache, hass, entry.data["serial"])
+    except Exception as err:
+        LOGGER.error(f"Failed to move the file cache out of www/: {err}")
+        
     if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
         cloud = BambuCloud(
             entry.data["region"],
