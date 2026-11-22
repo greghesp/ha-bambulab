@@ -19,7 +19,6 @@ from homeassistant.components.update import (
     UpdateEntityDescription
 )
 from homeassistant.const import (
-    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
     REVOLUTIONS_PER_MINUTE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
@@ -31,6 +30,16 @@ from homeassistant.const import (
 )
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.util import dt as dt_util
+
+try:
+    from homeassistant.const import UnitOfDensity
+except ImportError:
+    # UnitOfDensity was introduced in Home Assistant 2026.7.
+    from homeassistant.const import (
+        CONCENTRATION_MICROGRAMS_PER_CUBIC_METER as _MICROGRAMS_PER_CUBIC_METER,
+    )
+else:
+    _MICROGRAMS_PER_CUBIC_METER = UnitOfDensity.MICROGRAMS_PER_CUBIC_METER
 
 from .const import (
     FILAMENT_DATA,
@@ -108,7 +117,7 @@ AIR_PURIFIER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="pm25",
         translation_key="air_purifier_pm25",
         device_class=SensorDeviceClass.PM25,
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        native_unit_of_measurement=_MICROGRAMS_PER_CUBIC_METER,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:air-filter",
         value_fn=lambda self: self.coordinator.get_model().air_purifier.pm,
@@ -261,6 +270,21 @@ PRINTER_BINARY_SENSORS: tuple[BambuLabBinarySensorEntityDescription, ...] = (
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.DOOR_SENSOR),
     ),
     BambuLabBinarySensorEntityDescription(
+        key="p1s_upgrade_installed",
+        translation_key="p1s_upgrade_installed",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().home_flag.p1s_upgrade_installed,
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.P1P,
+    ),
+    BambuLabBinarySensorEntityDescription(
+        key="top_cover_open",
+        translation_key="top_cover_open",
+        device_class=BinarySensorDeviceClass.DOOR,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        is_on_fn=lambda self: self.coordinator.get_model().info.top_cover_open,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.TOP_COVER_SENSOR),
+    ),
+    BambuLabBinarySensorEntityDescription(
         key="developer_lan_mode",
         translation_key="developer_lan_mode",
         device_class=BinarySensorDeviceClass.RUNNING,
@@ -300,6 +324,23 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENUM,
         options=["none", "laser10", "laser40", "cutter"],
         value_fn=lambda self: self.coordinator.get_model().extruder_tool.state,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRUDER_TOOL),
+    ),
+    BambuLabSensorEntityDescription(
+        key="processing_material",
+        translation_key="processing_material",
+        icon="mdi:texture-box",
+        value_fn=lambda self: self.coordinator.get_model().processing_2d.material,
+        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRUDER_TOOL),
+    ),
+    BambuLabSensorEntityDescription(
+        key="check_in_remaining",
+        translation_key="check_in_remaining",
+        icon="mdi:timer-alert-outline",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        value_fn=lambda self: self.coordinator.get_model().processing_2d.check_in_remaining,
+        available_fn=lambda self: self.coordinator.get_model().processing_2d.check_in_required,
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.EXTRUDER_TOOL),
     ),
     BambuLabSensorEntityDescription(
@@ -600,6 +641,27 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().print_job.remaining_time
     ),
     BambuLabSensorEntityDescription(
+        key="print_elapsed_time",
+        translation_key="print_elapsed_time",
+        icon="mdi:timer-outline",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        suggested_unit_of_measurement=UnitOfTime.HOURS,
+        suggested_display_precision=3,
+        device_class=SensorDeviceClass.DURATION,
+        value_fn=lambda self: self.coordinator.get_model().print_job.elapsed_time
+    ),
+    BambuLabSensorEntityDescription(
+        key="last_timelapse",
+        translation_key="last_timelapse",
+        icon="mdi:filmstrip",
+        available_fn=lambda self: True,
+        value_fn=lambda self: self.coordinator.get_model().print_job.last_timelapse_name,
+        extra_attributes=lambda self: {
+            "path": self.coordinator.get_model().print_job.last_timelapse_path,
+            "url": self.coordinator.get_local_media_url(self.coordinator.get_model().print_job.last_timelapse_path),
+        },
+    ),
+    BambuLabSensorEntityDescription(
         key="end_time",
         translation_key="end_time",
         icon="mdi:clock",
@@ -729,7 +791,19 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
                 self.coordinator.get_model().ams.active_tray.type,
             ),
         },
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.AMS)
+        # Dual-nozzle printers without an AMS still switch between their two external spools.
+        exists_fn=lambda coordinator: (
+            coordinator.get_model().supports_feature(Features.AMS)
+            or coordinator.get_model().supports_feature(Features.DUAL_NOZZLES)
+        )
+    ),
+    BambuLabSensorEntityDescription(
+        key="filament_change_status",
+        translation_key="filament_change_status",
+        icon="mdi:swap-horizontal",
+        device_class=SensorDeviceClass.ENUM,
+        options=AMS_STATUS_OPTIONS,
+        value_fn=lambda self: self.coordinator.get_model().ams.status
     ),
     BambuLabSensorEntityDescription(
         key="nozzle_diameter",

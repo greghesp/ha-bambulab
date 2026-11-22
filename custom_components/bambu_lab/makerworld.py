@@ -11,6 +11,7 @@ from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry, entity_registry
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
@@ -18,43 +19,38 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 
-from .const import DOMAIN, LOGGER, LOGGERFORHA
+from .const import DOMAIN, ENTRY_TYPE, ENTRY_TYPE_MAKERWORLD, LOGGER, LOGGERFORHA
 from .pybambu.makerworld import MakerWorldProfile, as_int
 
 # These are slow moving vanity numbers and the endpoint is undocumented, so poll
 # gently. On failure the interval backs off up to MAX_SCAN_INTERVAL so a blocked
 # or broken endpoint isn't hammered every quarter hour.
-SCAN_INTERVAL = timedelta(minutes=15)
-MAX_SCAN_INTERVAL = timedelta(hours=2)
+SCAN_INTERVAL = timedelta(hours=4)
+MAX_SCAN_INTERVAL = timedelta(hours=24)
 
 
 def account_key(entry: ConfigEntry) -> str:
-    """The cloud account a config entry is bound to, or '' for LAN only setups.
-
-    The cloud login stores the account as its mqtt username, 'u_<uid>'."""
-    options = entry.options
+    """Return the account identifier stored on this MakerWorld entry."""
+    options = entry.data
+    if options.get(ENTRY_TYPE) != ENTRY_TYPE_MAKERWORLD:
+        return ""
     if not options.get('auth_token', ''):
         return ""
     return options.get('username', '') or ""
 
 
-def owns_makerworld_entities(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Whether this config entry is the one that publishes the account's sensors.
+def remove_legacy_makerworld_device(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Remove the former printer-owned MakerWorld device during upgrade."""
+    devices = device_registry.async_get(hass)
+    entities = entity_registry.async_get(hass)
+    for device in device_registry.async_entries_for_config_entry(devices, entry.entry_id):
+        if device.manufacturer != "MakerWorld" or device.model != "Creator profile":
+            continue
 
-    MakerWorld stats belong to the account, not to a printer, so with several
-    printers on one account only one entry may create them. Picking the lowest
-    entry id keeps that choice stable across restarts without extra state. If
-    that entry is later removed, the next one adopts the entities - the unique
-    ids are keyed off the account, not the entry."""
-    key = account_key(entry)
-    if not key:
-        return False
-    peers = sorted(
-        other.entry_id
-        for other in hass.config_entries.async_entries(DOMAIN)
-        if other.disabled_by is None and account_key(other) == key
-    )
-    return bool(peers) and peers[0] == entry.entry_id
+        for entity in tuple(entities.entities.values()):
+            if entity.config_entry_id == entry.entry_id and entity.device_id == device.id:
+                entities.async_remove(entity.entity_id)
+        devices.async_remove_device(device.id)
 
 
 class MakerWorldDataUpdateCoordinator(DataUpdateCoordinator[MakerWorldProfile]):
@@ -131,7 +127,7 @@ class MakerWorldDataUpdateCoordinator(DataUpdateCoordinator[MakerWorldProfile]):
         if profile is not None and profile.name:
             name = f"MakerWorld ({profile.name})"
         device_info = DeviceInfo(
-            identifiers={(DOMAIN, f"makerworld_{self._account_key}")},
+            identifiers={(DOMAIN, f"makerworld_account_{self._account_key}")},
             name=name,
             manufacturer="MakerWorld",
             model="Creator profile",
@@ -147,10 +143,8 @@ class MakerWorldDataUpdateCoordinator(DataUpdateCoordinator[MakerWorldProfile]):
 
 def create_makerworld_coordinator(
     hass: HomeAssistant, entry: ConfigEntry, bambu_cloud
-) -> MakerWorldDataUpdateCoordinator | None:
-    """Build the coordinator, or None when this entry shouldn't have one."""
-    if not owns_makerworld_entities(hass, entry):
-        return None
+) -> MakerWorldDataUpdateCoordinator:
+    """Build the coordinator for a standalone MakerWorld entry."""
     return MakerWorldDataUpdateCoordinator(hass, entry, bambu_cloud)
 
 

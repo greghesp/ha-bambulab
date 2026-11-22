@@ -67,6 +67,7 @@ class Features(IntEnum):
     HOTEND_RACK = 26,
     ACTIVE_CHAMBER_HEATER = 27,
     AMS_DRYING_SETTINGS = 28,
+    TOP_COVER_SENSOR = 29,
 
 
 class FansEnum(IntEnum):
@@ -258,14 +259,16 @@ PRINT_TYPE_OPTIONS = {
 
 AMS_DRYING_MODELS = [
     "AMS 2 Pro",
-    "AMS HT"
+    "AMS HT",
+    "AMS 3H"
 ]
 
 AMS_MODELS = [
     "AMS",
     "AMS Lite",
     "AMS 2 Pro",
-    "AMS HT"
+    "AMS HT",
+    "AMS 3H"
 ]
 
 AMS_MODELS_AND_EXTERNAL_SPOOL = [
@@ -273,6 +276,7 @@ AMS_MODELS_AND_EXTERNAL_SPOOL = [
     "AMS Lite",
     "AMS 2 Pro",
     "AMS HT",
+    "AMS 3H",
     "External Spool"
 ]
 
@@ -355,6 +359,7 @@ class Print_Flag3_Values(IntEnum):
 class Stat_Flag_Values(IntEnum):
     # Gap
     DOOR_OPEN                           = 0x00800000,
+    TOP_COVER_OPEN                      = 0x01000000,
     # Gap
 
 class BambuUrl(IntEnum):
@@ -381,7 +386,7 @@ BAMBU_URL = {
     BambuUrl.EMAIL_CODE: 'https://api.bambulab.com/v1/user-service/user/sendemail/code',
     BambuUrl.SMS_CODE: 'https://bambulab.cn/api/v1/user-service/user/sendsmscode',
     BambuUrl.BIND: 'https://api.bambulab.com/v1/iot-service/api/user/bind',
-    BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=1.10.0.89',
+    BambuUrl.SLICER_SETTINGS: 'https://api.bambulab.com/v1/iot-service/api/slicer/setting?version=1.10.0.89&public=false',
     BambuUrl.TASKS: 'https://api.bambulab.com/v1/user-service/my/tasks',
     BambuUrl.PROJECTS: 'https://api.bambulab.com/v1/iot-service/api/user/project',
     BambuUrl.PREFERENCE: 'https://api.bambulab.com/v1/design-user-service/my/preference',
