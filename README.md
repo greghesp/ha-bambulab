@@ -420,3 +420,7 @@ If this integration is useful to you, you can
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+### H3C BirdsEye liveview selection
+
+On supported printers with both Main and BirdsEye cameras, the **Live view camera** select switches which camera feeds the existing live stream. Only one view is streamed at a time. This select is available even when `mqtt_signature_required=True`; speed and airduct controls remain restricted.

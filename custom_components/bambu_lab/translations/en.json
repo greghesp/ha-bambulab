@@ -433,6 +433,13 @@
           "cooling": "Cooling",
           "heating": "Heating"
         }
+      },
+      "liveview_camera": {
+        "name": "Live view camera",
+        "state": {
+          "main": "Main camera",
+          "birdseye": "BirdsEye camera"
+        }
       }
     },
     "sensor": {
@@ -713,7 +720,7 @@
           "moving_toolhead_to_center_of_heatbed": "Moving toolhead to center of heatbed",
           "active_arc_fitting": "Active arc fitting",
           "hotend_type_detection": "Hotend type detection",
-          "build_plate_alignment_detection" : "Build plate alignment detection",
+          "build_plate_alignment_detection": "Build plate alignment detection",
           "heatbed_surface_foreign_object_detection": "Heatbed surface foreign object detection",
           "heatbed_underside_foreign_object_detection": "Heatbed underside foreign object detection",
           "pre_extrusion_before_printing": "Pre-extrusion before printing",
@@ -789,19 +796,35 @@
       "zone_temperature": {
         "name": "Zone {zone_number} temperature",
         "state_attributes": {
-          "zone": { "name": "Zone" },
-          "zone_id": { "name": "Zone ID" },
-          "slots": { "name": "Slots" },
-          "dry_setting": { "name": "Drying setting" }
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Drying setting"
+          }
         }
       },
       "zone_humidity": {
         "name": "Zone {zone_number} humidity",
         "state_attributes": {
-          "zone": { "name": "Zone" },
-          "zone_id": { "name": "Zone ID" },
-          "slots": { "name": "Slots" },
-          "dry_setting": { "name": "Drying setting" }
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Drying setting"
+          }
         }
       },
       "drying_temperature": {
@@ -1140,7 +1163,9 @@
           "empty": "Empty"
         },
         "state_attributes": {
-          "slot": { "name": "Slot" },
+          "slot": {
+            "name": "Slot"
+          },
           "nozzle_type": {
             "name": "Nozzle type",
             "state": {
@@ -1153,10 +1178,18 @@
               "unknown": "Unknown"
             }
           },
-          "nozzle_diameter": { "name": "Nozzle diameter" },
-          "serial": { "name": "Serial number" },
-          "max_temp": { "name": "Max temperature" },
-          "wear": { "name": "Wear" },
+          "nozzle_diameter": {
+            "name": "Nozzle diameter"
+          },
+          "serial": {
+            "name": "Serial number"
+          },
+          "max_temp": {
+            "name": "Max temperature"
+          },
+          "wear": {
+            "name": "Wear"
+          },
           "status": {
             "name": "Status",
             "state": {
@@ -1165,9 +1198,15 @@
               "unknown": "Unknown"
             }
           },
-          "color": { "name": "Color" },
-          "filament_id": { "name": "Filament ID" },
-          "filament_name": { "name": "Filament name" }
+          "color": {
+            "name": "Color"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "filament_name": {
+            "name": "Filament name"
+          }
         }
       },
       "hotend_rack_hotend_used_time": {
@@ -1181,23 +1220,57 @@
           "empty": "Empty"
         },
         "state_attributes": {
-          "tool": { "name": "Tool" },
-          "filament_diameter": { "name": "Filament diameter" },
-          "filament_name": { "name": "Filament name" },
-          "filament_type": { "name": "Filament type" },
-          "remaining_weight_g": { "name": "Remaining filament weight" },
-          "remaining_percent": { "name": "Remaining filament" },
-          "ams_id": { "name": "AMS ID" },
-          "ams_slot": { "name": "AMS slot" },
-          "nozzle_diameter": { "name": "Nozzle diameter" },
-          "nozzle_type": { "name": "Nozzle type" },
-          "nozzle_type_code": { "name": "Nozzle type code" },
-          "max_temperature": { "name": "Max temperature" },
-          "serial": { "name": "Serial number" },
-          "filament_id": { "name": "Filament ID" },
-          "color": { "name": "Color" },
-          "wear": { "name": "Wear" },
-          "status_raw": { "name": "Status (raw)" }
+          "tool": {
+            "name": "Tool"
+          },
+          "filament_diameter": {
+            "name": "Filament diameter"
+          },
+          "filament_name": {
+            "name": "Filament name"
+          },
+          "filament_type": {
+            "name": "Filament type"
+          },
+          "remaining_weight_g": {
+            "name": "Remaining filament weight"
+          },
+          "remaining_percent": {
+            "name": "Remaining filament"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS slot"
+          },
+          "nozzle_diameter": {
+            "name": "Nozzle diameter"
+          },
+          "nozzle_type": {
+            "name": "Nozzle type"
+          },
+          "nozzle_type_code": {
+            "name": "Nozzle type code"
+          },
+          "max_temperature": {
+            "name": "Max temperature"
+          },
+          "serial": {
+            "name": "Serial number"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "wear": {
+            "name": "Wear"
+          },
+          "status_raw": {
+            "name": "Status (raw)"
+          }
         }
       },
       "hotend_rack_printtool_temperature": {
