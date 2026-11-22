@@ -1244,7 +1244,9 @@
           "groups": {
             "name": "燈絲組"
           },
-          "total_remaining_g": {}
+          "total_remaining_g": {
+            "name": "剩餘燈絲總量"
+          }
         }
       },
       "processing_material": {
