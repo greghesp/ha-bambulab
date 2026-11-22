@@ -3940,8 +3940,9 @@ class AMSList:
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
-                # required as part of the home assistant device identity.
-                if not module['sn'] == '':
+                # required as part of the home assistant device identity. An AMS the printer cannot currently identify
+                # reports the placeholder "N/A"; it is not a serial, and several units can report it at once.
+                if module.get('sn', '') not in ('', 'N/A'):
                     # May get data before info so create entries if necessary
                     if index not in self.data:
                         data_changed = True
