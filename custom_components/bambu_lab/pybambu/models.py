@@ -118,6 +118,7 @@ class Device:
         self.home_flag = HomeFlag(client=client)
         self.extruder = Extruder(client=client)
         self.extruder_tool = ExtruderTool(client=client)
+        self.processing_2d = Processing2D(client=client)
         self.hotend_rack = HotendRack(client=client)
         self.track_switch = FilamentTrackSwitch(client=client)
         self.air_purifier = AirPurifier(client=client)
@@ -151,6 +152,7 @@ class Device:
         send_event = send_event | self.home_flag.print_update(data = data)
         send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
+        send_event = send_event | self.processing_2d.print_update(data = data)
         send_event = send_event | self.hotend_rack.print_update(data = data)
         send_event = send_event | self.track_switch.print_update(data = data)
         send_event = send_event | self.air_purifier.print_update(data = data)
@@ -5570,7 +5572,56 @@ class ExtruderTool:
                 self.state = None
         
         return (old_data != f"{self.__dict__}")
-    
+
+
+# 2D.cur_stage.state value once a laser/cutter job has finished or been cancelled.
+PROCESSING_2D_STAGE_IDLE = 0
+
+
+class Processing2D:
+    """Laser and cutter (2D) job details from the '2D' block (H2D Laser Edition)."""
+
+    def __init__(self, client):
+        self._client = client
+        self.material: str | None = None
+        self._steps: list = []
+        self._stage: dict = {}
+
+    def print_update(self, data) -> bool:
+        two_d = data.get("2D")
+        if not isinstance(two_d, dict):
+            return False
+        old_data = (self.material, self.check_in_required, self.check_in_remaining)
+
+        material = two_d.get("material")
+        if isinstance(material, dict) and "tar_name" in material:
+            self.material = material.get("tar_name") or None
+        steps = two_d.get("bs", {}).get("bi")
+        if isinstance(steps, list):
+            self._steps = steps
+        stage = two_d.get("cur_stage")
+        if isinstance(stage, dict):
+            self._stage = {**self._stage, **stage}
+
+        return old_data != (self.material, self.check_in_required, self.check_in_remaining)
+
+    @property
+    def check_in_required(self) -> bool:
+        """True while the active step needs periodic check-ins (flammable material)."""
+        if self._stage.get("state", PROCESSING_2D_STAGE_IDLE) == PROCESSING_2D_STAGE_IDLE:
+            return False
+        idx = self._stage.get("idx")
+        step = next((s for s in self._steps if isinstance(s, dict) and s.get("idx") == idx), None)
+        return bool(step and step.get("clock_in"))
+
+    @property
+    def check_in_remaining(self) -> int | None:
+        """Seconds left before the printer pauses for a missed check-in."""
+        if not self.check_in_required:
+            return None
+        return self._stage.get("clock_in_time")
+
+
 class Extruder:
     _active_nozzle_index: int
     _active_nozzle: str | None
