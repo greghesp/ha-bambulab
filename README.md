@@ -88,6 +88,7 @@ A short tour. The complete list, with per-model notes, is in the
 | Current Layer / Total Layer Count | Layer counter |
 | Remaining Time / Start Time / End Time | Time left and the estimated finish |
 | Print Elapsed Time | How long the current or last print has run; frozen when the print ends |
+| Last Timelapse | File name of the newest downloaded timelapse, with its local `path` and `/local/` `url` as attributes |
 | Task Name | The job being printed, with the AMS mapping per slicer filament as an attribute |
 | Print Weight / Print Length | Filament the job needs (with Bambu credentials, or loaded from the printer) |
 | Print Bed Type | Plate chosen in the job |
@@ -300,13 +301,16 @@ More detail in the [overview](https://docs.page/greghesp/ha-bambulab).
 The printer device offers **device triggers**, so common automations are
 point-and-click: *Print started*, *Print finished*, *Print canceled*,
 *Print failed*, *Printer error detected* (HMS), *Print error detected*, the
-matching *error cleared* triggers and *SD card missing*.
+matching *error cleared* triggers, *SD card missing* and *Timelapse downloaded*.
 
 <img src="docs/images/AddDeviceTriggerAutomation5.png" alt="Bambu Lab device triggers in the automation editor" width="420">
 
 Behind them is one event, `bambu_lab_event`. Its data carries the
 `device_id`, the printer `name` and the trigger `type`, plus `code`, `error`
-and `url` (wiki link) for errors.
+and `url` (wiki link) for errors. `event_timelapse_downloaded` fires once the
+timelapse of a finished print is in the local cache (FTP access and a timelapse
+cache count above 0 are required) and carries the video's local `path` and,
+when it is under `www`, its `/local/` `url`.
 
 Example: notify with the HMS error text.
 
@@ -339,6 +343,25 @@ automation:
       - service: notify.notify
         data:
           message: "{{ trigger.event.data.name }} has finished printing."
+```
+
+Example: send the timelapse with Telegram. Telegram reads the file from disk,
+so the cache folder (default `/config/www/media/ha-bambulab`) must be listed in
+`homeassistant: allowlist_external_dirs`.
+
+```yaml
+automation:
+  - alias: "Bambu timelapse to Telegram"
+    trigger:
+      - platform: event
+        event_type: bambu_lab_event
+        event_data:
+          type: event_timelapse_downloaded
+    action:
+      - service: telegram_bot.send_video
+        data:
+          file: "{{ trigger.event.data.path }}"
+          caption: "Timelapse from {{ trigger.event.data.name }}"
 ```
 
 More in [Device Triggers](https://docs.page/greghesp/ha-bambulab/device-triggers).

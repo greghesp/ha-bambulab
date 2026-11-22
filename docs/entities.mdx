@@ -315,6 +315,16 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
 
+On P1/A1 printers the chamber image is pushed by the printer rather than pulled
+on demand, so the connection stays open for as long as the printer is
+connected. The camera entity therefore supports `camera.turn_on` and
+`camera.turn_off`: turning it off stops the image stream and leaves the entity
+`idle`, and image requests fail until it is turned back on. This is useful to
+keep the printer link quiet between prints - for example turn the camera on
+when the print status becomes `running` and off again when it is `finish` or
+`failed`. The state is not persisted, so after a restart the camera follows the
+"Enable camera" option of the integration.
+
 ## MakerWorld
 
 A MakerWorld profile belongs to the same Bambu Lab account the cloud connection

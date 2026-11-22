@@ -1159,6 +1159,7 @@ class PrintJob:
     start_time: datetime
     end_time: datetime
     finish_time: datetime
+    last_timelapse_path: str | None
     remaining_time: int
     current_layer: int
     total_layers: int
@@ -1190,6 +1191,8 @@ class PrintJob:
         self.start_time = None
         self.end_time = None
         self.finish_time = None
+        # Local path of the most recently downloaded timelapse video, if any.
+        self.last_timelapse_path = None
         self.remaining_time = 0
         self.current_layer = 0
         self.total_layers = 0
@@ -1231,6 +1234,13 @@ class PrintJob:
         if end is None:
             return None
         return max(0, int((end - self.start_time).total_seconds() // 60))
+      
+    @property
+    def last_timelapse_name(self) -> str | None:
+        """File name of the most recently downloaded timelapse video."""
+        if not self.last_timelapse_path:
+            return None
+        return os.path.basename(self.last_timelapse_path)
 
     @property
     def model_download_percentage(self) -> int:
@@ -2211,6 +2221,29 @@ class PrintJob:
                               extensions=['.mp4','.avi','.mov'],
                               keep=self._client._timelapse_cache_count,
                               extra_extensions=['.jpg', '.jpeg', '.png'])
+        self._refresh_last_timelapse_path(Path(cache_file_path))
+
+    def _refresh_last_timelapse_path(self, timelapse_dir: Path):
+        """Keep last_timelapse_path pointing at a file that exists.
+
+        Pruning can delete the file, and after a restart nothing has been downloaded yet, so
+        fall back to the newest timelapse already in the cache.
+        """
+        if self.last_timelapse_path is not None and os.path.isfile(self.last_timelapse_path):
+            return
+
+        newest = None
+        if timelapse_dir.is_dir():
+            videos = [
+                path for path in timelapse_dir.rglob('*')
+                if path.is_file() and path.suffix.lower() in ('.mp4', '.avi', '.mov')
+            ]
+            if videos:
+                newest = str(max(videos, key=lambda path: path.stat().st_mtime))
+
+        if newest != self.last_timelapse_path:
+            self.last_timelapse_path = newest
+            self._client.callback("event_printer_data_update")
             
     def _cleanup_stale_part_files(self, dir_path: Path, older_than_seconds: int = 24 * 60 * 60) -> int:
         cutoff_time = time.time() - older_than_seconds
@@ -2396,6 +2429,9 @@ class PrintJob:
                             self._download_remote_file_atomic(source, remote_file, local_file_path)
 
                         self._download_timelapse_thumbnail(source, remote_file, local_file_path)
+                        self.last_timelapse_path = str(local_file_path)
+                        LOGGER.debug(f"Latest timelapse available at '{self.last_timelapse_path}'")
+                        self._client.callback("event_timelapse_downloaded")
                         break
                     except Exception as e:
                         LOGGER.debug(
@@ -3968,8 +4004,9 @@ class AMSList:
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
-                # required as part of the home assistant device identity.
-                if not module['sn'] == '':
+                # required as part of the home assistant device identity. An AMS the printer cannot currently identify
+                # reports the placeholder "N/A"; it is not a serial, and several units can report it at once.
+                if module.get('sn', '') not in ('', 'N/A'):
                     # May get data before info so create entries if necessary
                     if index not in self.data:
                         data_changed = True

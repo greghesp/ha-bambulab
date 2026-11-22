@@ -618,6 +618,17 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.get_model().print_job.elapsed_time
     ),
     BambuLabSensorEntityDescription(
+        key="last_timelapse",
+        translation_key="last_timelapse",
+        icon="mdi:filmstrip",
+        available_fn=lambda self: True,
+        value_fn=lambda self: self.coordinator.get_model().print_job.last_timelapse_name,
+        extra_attributes=lambda self: {
+            "path": self.coordinator.get_model().print_job.last_timelapse_path,
+            "url": self.coordinator.get_local_media_url(self.coordinator.get_model().print_job.last_timelapse_path),
+        },
+    ),
+    BambuLabSensorEntityDescription(
         key="end_time",
         translation_key="end_time",
         icon="mdi:clock",

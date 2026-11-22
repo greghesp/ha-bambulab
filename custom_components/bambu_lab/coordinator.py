@@ -202,6 +202,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif event == "event_print_error":
             self._update_print_error()
 
+        elif event == "event_timelapse_downloaded":
+            self._update_data()
+            self._publish_timelapse_downloaded()
+
         # event_print_started
         # event_print_finished
         # event_print_canceled
@@ -521,7 +525,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_device = dev_reg.async_get(device_id)
         model = ams_device.model
         if model not in AMS_DRYING_MODELS:
-            LOGGER.error("Passed device is not an AMS 2 or AMS HT.")
+            LOGGER.error("Passed device is not an AMS 2, AMS 3H, or AMS HT.")
             return False
         
         ams_index = self._get_ams_index_from_device(ams_device)
@@ -535,7 +539,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 LOGGER.error(f"Temperature value of '{temp}' not set or out of range.")
                 return False
             if model != 'AMS HT' and temp > 65:
-                LOGGER.error(f"Temperature value of {temp}C too high for AMS 2.")
+                LOGGER.error(f"Temperature value of {temp}C too high for {model}.")
                 return False
             command['print']['temp'] = temp
             command['print']['cooling_temp'] = 45 # Must be at least 45 or the command is ignored
@@ -938,6 +942,32 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
         self.hass.async_create_task(self._reinitialize_sensors())
+
+    def get_local_media_url(self, file_path: str | None) -> str | None:
+        """Return the /local/ URL for a file under the HA www folder, or None if it isn't served."""
+        if file_path is None:
+            return None
+        try:
+            relative = Path(file_path).relative_to(Path(self._hass.config.path("www")))
+        except ValueError:
+            return None
+        return f"/local/{relative.as_posix()}"
+
+    def _publish_timelapse_downloaded(self):
+        hadevice = self.get_ha_printer_device()
+        if hadevice is None:
+            LOGGER.debug("_publish_timelapse_downloaded: device not registered yet, skipping")
+            return
+        path = self.get_model().print_job.last_timelapse_path
+        event_data = {
+            "device_id": hadevice.id,
+            "name": self.config_entry.options.get('name', ''),
+            "type": "event_timelapse_downloaded",
+            "path": path,
+            "url": self.get_local_media_url(path),
+        }
+        LOGGER.debug(f"BUS EVENT: event_timelapse_downloaded: {event_data}")
+        self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
     def PublishDeviceTriggerEvent(self, event: str):
         hadevice = self.get_ha_printer_device()

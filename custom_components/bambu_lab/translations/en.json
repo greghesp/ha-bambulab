@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Print error cleared",
       "event_printer_error": "HMS error",
       "event_printer_error_cleared": "HMS error cleared",
-      "event_printer_missing_sdcard": "Missing SD card"
+      "event_printer_missing_sdcard": "Missing SD card",
+      "event_timelapse_downloaded": "Timelapse downloaded"
     }
   },
   "config": {
@@ -826,6 +827,9 @@
       },
       "end_time": {
         "name": "End time"
+      },
+      "last_timelapse": {
+        "name": "Last timelapse"
       },
       "total_usage_hours": {
         "name": "Total usage"
