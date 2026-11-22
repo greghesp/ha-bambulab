@@ -19,7 +19,6 @@ from homeassistant.components.update import (
     UpdateEntityDescription
 )
 from homeassistant.const import (
-    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
     REVOLUTIONS_PER_MINUTE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
@@ -31,6 +30,16 @@ from homeassistant.const import (
 )
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.util import dt as dt_util
+
+try:
+    from homeassistant.const import UnitOfDensity
+except ImportError:
+    # UnitOfDensity was introduced in Home Assistant 2026.7.
+    from homeassistant.const import (
+        CONCENTRATION_MICROGRAMS_PER_CUBIC_METER as _MICROGRAMS_PER_CUBIC_METER,
+    )
+else:
+    _MICROGRAMS_PER_CUBIC_METER = UnitOfDensity.MICROGRAMS_PER_CUBIC_METER
 
 from .const import (
     FILAMENT_DATA,
@@ -108,7 +117,7 @@ AIR_PURIFIER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         key="pm25",
         translation_key="air_purifier_pm25",
         device_class=SensorDeviceClass.PM25,
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        native_unit_of_measurement=_MICROGRAMS_PER_CUBIC_METER,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:air-filter",
         value_fn=lambda self: self.coordinator.get_model().air_purifier.pm,
