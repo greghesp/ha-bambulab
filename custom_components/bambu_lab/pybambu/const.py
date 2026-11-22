@@ -259,14 +259,16 @@ PRINT_TYPE_OPTIONS = {
 
 AMS_DRYING_MODELS = [
     "AMS 2 Pro",
-    "AMS HT"
+    "AMS HT",
+    "AMS 3H"
 ]
 
 AMS_MODELS = [
     "AMS",
     "AMS Lite",
     "AMS 2 Pro",
-    "AMS HT"
+    "AMS HT",
+    "AMS 3H"
 ]
 
 AMS_MODELS_AND_EXTERNAL_SPOOL = [
@@ -274,6 +276,7 @@ AMS_MODELS_AND_EXTERNAL_SPOOL = [
     "AMS Lite",
     "AMS 2 Pro",
     "AMS HT",
+    "AMS 3H",
     "External Spool"
 ]
 
