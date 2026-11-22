@@ -371,3 +371,33 @@ force_filament_sync:
       selector:
         device:
           integration: bambu_lab
+
+clear_file_cache:
+  name: Clear File Cache
+  description: >-
+    Delete the 3MF models, cover images and timelapses this integration has cached
+    in Home Assistant for a printer. This empties the print history and timelapse
+    lists and frees disk space. Nothing on the printer itself is deleted; a model is
+    downloaded again the next time it is printed.
+  fields:
+    device_id:
+      name: Printer
+      description: The printer whose local cache should be cleared.
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
+    file_type:
+      name: What to clear
+      description: Clear the print history, the timelapse videos, or both.
+      required: false
+      default: all
+      selector:
+        select:
+          options:
+            - label: Print history and timelapses
+              value: all
+            - label: Print history only
+              value: prints
+            - label: Timelapses only
+              value: timelapse

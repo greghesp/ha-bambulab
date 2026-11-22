@@ -38,6 +38,10 @@ from .const import (
     SERVICE_CALL_EVENT,
     SERVICE_CALL_FUTURES,
     SERVICE_CALL_ID,
+    CLEAR_FILE_CACHE_ALL,
+    CLEAR_FILE_CACHE_PRINTS,
+    CLEAR_FILE_CACHE_TIMELAPSE,
+    CLEAR_FILE_CACHE_TYPES,
     FILAMENT_DATA,
     OPTION_ENABLE_FILAMENT_INVENTORY,
     OPTION_FILAMENT_INVENTORY_INTERVAL,
@@ -320,7 +324,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         try:
-            result = self._run_service_call(data)
+            if data.get('service') == 'clear_file_cache':
+                # Local file deletion only: it doesn't talk to the printer, so it isn't blocked by
+                # MQTT encryption, and it runs off the event loop.
+                result = await self._service_call_clear_file_cache(data)
+            else:
+                result = self._run_service_call(data)
         except Exception:
             LOGGER.exception(f"Service call '{data.get('service')}' failed")
             result = False
@@ -382,6 +391,22 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 LOGGER.error(f"Unknown service call: {data}")
 
         return result
+
+    async def _service_call_clear_file_cache(self, data: dict) -> bool:
+        file_type = data.get('file_type', CLEAR_FILE_CACHE_ALL)
+        if file_type not in CLEAR_FILE_CACHE_TYPES:
+            LOGGER.error(
+                f"clear_file_cache: invalid file_type '{file_type}'. "
+                f"Expected one of {', '.join(CLEAR_FILE_CACHE_TYPES)}."
+            )
+            return False
+
+        print_job = self.get_model().print_job
+        if file_type in (CLEAR_FILE_CACHE_PRINTS, CLEAR_FILE_CACHE_ALL):
+            await print_job.async_clear_print_history_files()
+        if file_type in (CLEAR_FILE_CACHE_TIMELAPSE, CLEAR_FILE_CACHE_ALL):
+            await print_job.async_clear_timelapse_files()
+        return True
 
     def _service_call_skip_objects(self, data: dict):
         # All command templates are deep-copied before mutation - filling in the shared

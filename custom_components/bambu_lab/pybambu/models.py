@@ -1225,6 +1225,14 @@ ACTIVE_PRINT_IDENTITY = ("subtask_name", "task_id", "plate_idx", "gcode_start_ti
 AMS_MAPPING_MAX_AGE = 600
 
 
+# Files kept in the local print history and timelapse caches. A sidecar shares its primary
+# file's base name and is removed along with it.
+PRINT_CACHE_EXTENSIONS = ['.3mf']
+PRINT_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode']
+TIMELAPSE_CACHE_EXTENSIONS = ['.mp4', '.avi', '.mov']
+TIMELAPSE_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png']
+
+
 @dataclass
 class PrintJob:
     """Return all information related content"""
@@ -2438,11 +2446,7 @@ class PrintJob:
     def prune_print_history_files(self):
         if self._client._test_mode:
             return
-        cache_file_path = os.path.join(self._client.cache_path, "prints")
-        self._prune_old_files(directory=cache_file_path,
-                              extensions=['.3mf'],
-                              keep=self._client._print_cache_count,
-                              extra_extensions=['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode'])
+        self._prune_print_history(keep=self._client._print_cache_count)
 
     async def async_prune_timelapse_files(self):
         loop = asyncio.get_event_loop()
@@ -2452,11 +2456,38 @@ class PrintJob:
         if self._client._test_mode:
             return
         LOGGER.debug("Pruning timelapse history")
+        self._prune_timelapses(keep=self._client._timelapse_cache_count)
+
+    async def async_clear_print_history_files(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.clear_print_history_files)
+
+    def clear_print_history_files(self):
+        """Delete every cached print model and its extracted sidecars, ignoring print_cache_count."""
+        LOGGER.info("Clearing cached print history")
+        self._prune_print_history(keep=0)
+
+    async def async_clear_timelapse_files(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.clear_timelapse_files)
+
+    def clear_timelapse_files(self):
+        """Delete every cached timelapse video and thumbnail, ignoring timelapse_cache_count."""
+        LOGGER.info("Clearing cached timelapses")
+        self._prune_timelapses(keep=0)
+
+    def _prune_print_history(self, keep: int):
+        self._prune_old_files(directory=os.path.join(self._client.cache_path, "prints"),
+                              extensions=PRINT_CACHE_EXTENSIONS,
+                              keep=keep,
+                              extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS)
+
+    def _prune_timelapses(self, keep: int):
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
         self._prune_old_files(directory=cache_file_path,
-                              extensions=['.mp4','.avi','.mov'],
-                              keep=self._client._timelapse_cache_count,
-                              extra_extensions=['.jpg', '.jpeg', '.png'])
+                              extensions=TIMELAPSE_CACHE_EXTENSIONS,
+                              keep=keep,
+                              extra_extensions=TIMELAPSE_CACHE_SIDECAR_EXTENSIONS)
         self._refresh_last_timelapse_path(Path(cache_file_path))
 
     def _refresh_last_timelapse_path(self, timelapse_dir: Path):

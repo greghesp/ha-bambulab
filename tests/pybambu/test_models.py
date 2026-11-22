@@ -727,6 +727,62 @@ class TestPrintJob(unittest.TestCase):
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
 
+    def test_clear_print_history_deletes_every_model_and_sidecar(self):
+        """Clearing removes all cached prints, even when pruning is disabled (#1585)."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            self.client._print_cache_count = -1
+            cache_dir = Path(temp_dir) / "prints" / "cache"
+            cache_dir.mkdir(parents=True)
+            files = []
+            for name in ("123-plate.3mf", "456-other.gcode.3mf"):
+                stem = name.removesuffix(".3mf")
+                for suffix in (".3mf", ".png", ".jpg", ".slice_info.config", ".gcode"):
+                    path = cache_dir / f"{stem}{suffix}"
+                    path.write_bytes(b"data")
+                    files.append(path)
+
+            self.print_job.clear_print_history_files()
+
+            for path in files:
+                self.assertFalse(path.exists(), path)
+
+    def test_clear_timelapse_deletes_every_video_and_thumbnail(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            self.client._timelapse_cache_count = -1
+            timelapse_dir = Path(temp_dir) / "timelapse"
+            timelapse_dir.mkdir(parents=True)
+            video = timelapse_dir / "video_2026.mp4"
+            thumbnail = timelapse_dir / "video_2026.jpg"
+            video.write_bytes(b"video")
+            thumbnail.write_bytes(b"thumb")
+
+            self.print_job.clear_timelapse_files()
+
+            self.assertFalse(video.exists())
+            self.assertFalse(thumbnail.exists())
+
+    def test_clear_print_history_leaves_timelapses_alone(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            (Path(temp_dir) / "prints").mkdir()
+            timelapse_dir = Path(temp_dir) / "timelapse"
+            timelapse_dir.mkdir()
+            video = timelapse_dir / "video.mp4"
+            video.write_bytes(b"video")
+
+            self.print_job.clear_print_history_files()
+
+            self.assertTrue(video.exists())
+
+    def test_clear_with_missing_cache_directory_is_a_no_op(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = os.path.join(temp_dir, "missing")
+
+            self.print_job.clear_print_history_files()
+            self.print_job.clear_timelapse_files()
+
     def test_model_selection_keeps_other_storage_copies_as_fallback(self):
         """A copy on another volume stays available when the preferred one cannot be read."""
         emmc = RemoteMediaFile(
