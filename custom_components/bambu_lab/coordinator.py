@@ -7,7 +7,7 @@ import os
 import re
 import time
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Optional, List, Dict
 
 from homeassistant import config_entries
@@ -18,7 +18,7 @@ from homeassistant.helpers import (
 )
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.entity import DeviceInfo
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
@@ -36,21 +36,30 @@ from .const import (
     OPTION_NAME,
     PLATFORMS,
     SERVICE_CALL_EVENT,
+    SERVICE_CALL_FUTURES,
+    SERVICE_CALL_ID,
+    CLEAR_FILE_CACHE_ALL,
+    CLEAR_FILE_CACHE_PRINTS,
+    CLEAR_FILE_CACHE_TIMELAPSE,
+    CLEAR_FILE_CACHE_TYPES,
     FILAMENT_DATA,
+    OPTION_ENABLE_FILAMENT_INVENTORY,
+    OPTION_FILAMENT_INVENTORY_INTERVAL,
+    DEFAULT_FILAMENT_INVENTORY_INTERVAL,
 )
 
-from .makerworld import create_makerworld_coordinator
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
+from .makerworld import remove_legacy_makerworld_device
+from .pybambu.utils import ams_tray_number_from_unique_id, build_print_project_file_command
+from .pybambu.models import FilamentInventory
 from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
     AMS_MODELS_AND_EXTERNAL_SPOOL,
     Features,
-    Printers
 )
 from .pybambu.commands import (
-    PRINT_PROJECT_FILE_TEMPLATE,
     SEND_GCODE_TEMPLATE,
     SKIP_OBJECTS_TEMPLATE,
     MOVE_AXIS_GCODE,
@@ -81,11 +90,19 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config['user_language'] = hass.config.language
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
         self.client = BambuClient(config)
+        remove_legacy_makerworld_device(hass, entry)
 
-        # Account level MakerWorld stats. None when the entry has no cloud
-        # connection, or when another entry on the same account already owns them.
-        self.makerworld = create_makerworld_coordinator(hass, entry, self.client.bambu_cloud)
-            
+        # Account level filament inventory ("Filament Manager"). None unless the
+        # entry has opted in. Kept here rather than in hass.data[DOMAIN], whose
+        # values are all expected to be printer coordinators.
+        self.filament_inventory = None
+        if config.get(OPTION_ENABLE_FILAMENT_INVENTORY, False):
+            self.filament_inventory = BambuFilamentCoordinator(
+                hass,
+                printer_coordinator=self,
+                interval_minutes=int(config.get(OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL)),
+            )
+
         self._updatedDevice = False
         self._shutdown = False
         # Guards the access denied recovery so one failure episode triggers at most one
@@ -126,6 +143,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if event == "event_printer_bambu_authentication_failed":
             self._report_authentication_issue()
 
+        elif event == "event_printer_bambu_authentication_succeeded":
+            # A later successful cloud call means the token is fine again - clear any stale repair.
+            issue_registry.async_delete_issue(
+                hass=self._hass,
+                domain=DOMAIN,
+                issue_id=f"authentication_failed_{self.get_model().info.serial}")
+
         elif event == "event_printer_access_denied":
             self._hass.async_create_task(self._async_handle_access_denied())
 
@@ -134,9 +158,18 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         elif event == "event_printer_live_view_disabled":
             self._report_live_view_disabled_issue()
+
+        elif event == "event_printer_live_view_enabled":
+            self._clear_live_view_disabled_issue()
+            # Chamber-image printers give up connecting while live view is off, so kick the
+            # image thread again. No-op for RTSP printers or if the thread is still running.
+            self.client.start_camera()
         
         elif event == "event_printer_mqtt_encryption_enabled":
             self._report_encryption_enabled_issue()
+
+        elif event == "event_printer_mqtt_encryption_disabled":
+            self._handle_encryption_disabled()
 
         elif event == "event_printer_ready":
             # A successful connection ends any access denied episode.
@@ -185,6 +218,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         elif event == "event_print_error":
             self._update_print_error()
+
+        elif event == "event_timelapse_downloaded":
+            self._update_data()
+            self._publish_timelapse_downloaded()
 
         # event_print_started
         # event_print_finished
@@ -278,7 +315,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             is_for_me = self._is_service_call_for_me(data)
         except Exception:
-            # The future is shared between printers. Resolving it here could discard the
+            # Every printer sees the call. Resolving its future here could discard the
             # result from the printer this call was actually meant for.
             LOGGER.exception(f"Unable to determine the target of service call '{data.get('service')}'")
             return
@@ -287,14 +324,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         try:
-            result = self._run_service_call(data)
+            if data.get('service') == 'clear_file_cache':
+                # Local file deletion only: it doesn't talk to the printer, so it isn't blocked by
+                # MQTT encryption, and it runs off the event loop.
+                result = await self._service_call_clear_file_cache(data)
+            else:
+                result = self._run_service_call(data)
         except Exception:
             LOGGER.exception(f"Service call '{data.get('service')}' failed")
             result = False
 
-        future = self._hass.data[DOMAIN].get('service_call_future')
+        futures = self._hass.data[DOMAIN].get(SERVICE_CALL_FUTURES) or {}
+        future = futures.get(data.get(SERVICE_CALL_ID))
         if future is None:
-            LOGGER.error("Future is None")
+            # The caller already timed out, or the integration was reloaded meanwhile.
+            LOGGER.error(f"No pending service call for '{data.get('service')}'")
             return
         if not future.done():
             future.set_result(False if result is None else result)
@@ -302,7 +346,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _run_service_call(self, data: dict) -> Any:
         service_call_name = data['service']
         write_action = True
-        if service_call_name == 'get_filament_data':
+        if service_call_name in ('get_filament_data', 'force_filament_sync'):
             write_action = False
 
         if write_action:
@@ -331,6 +375,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 result = self._service_call_set_filament(data)
             case "get_filament_data":
                 result = self._service_call_get_filament_data(data)
+            case "force_filament_sync":
+                result = self._service_call_force_filament_sync(data)
             case "read_rfid":
                 result = self._service_call_read_rfid(data)
             case "print_project_file":
@@ -345,6 +391,22 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 LOGGER.error(f"Unknown service call: {data}")
 
         return result
+
+    async def _service_call_clear_file_cache(self, data: dict) -> bool:
+        file_type = data.get('file_type', CLEAR_FILE_CACHE_ALL)
+        if file_type not in CLEAR_FILE_CACHE_TYPES:
+            LOGGER.error(
+                f"clear_file_cache: invalid file_type '{file_type}'. "
+                f"Expected one of {', '.join(CLEAR_FILE_CACHE_TYPES)}."
+            )
+            return False
+
+        print_job = self.get_model().print_job
+        if file_type in (CLEAR_FILE_CACHE_PRINTS, CLEAR_FILE_CACHE_ALL):
+            await print_job.async_clear_print_history_files()
+        if file_type in (CLEAR_FILE_CACHE_TIMELAPSE, CLEAR_FILE_CACHE_ALL):
+            await print_job.async_clear_timelapse_files()
+        return True
 
     def _service_call_skip_objects(self, data: dict):
         # All command templates are deep-copied before mutation - filling in the shared
@@ -442,14 +504,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return ams_index
 
     def _get_ams_and_tray_index_from_entity_entry(self, ams_device, entity_entry):
-        match = re.search(r"tray_([1-4])$", entity_entry.unique_id)
-        # Zero-index the tray ID and find the AMS index
-        tray = int(match.group(1)) - 1
+        # Zero-index the tray number and find the AMS index
+        tray = ams_tray_number_from_unique_id(entity_entry.unique_id) - 1
         # identifiers is a set of tuples. We only have one tuple in the set - DOMAIN + serial.
         ams_index = self._get_ams_index_from_device(ams_device)
-
-        full_tray = tray + ams_index * 4
-        LOGGER.debug(f"FINAL TRAY VALUE: {full_tray + 1}/16 = Tray {tray + 1}/4 on AMS {ams_index}")
+        LOGGER.debug(f"Tray {tray + 1} on AMS {ams_index}")
 
         return ams_index, tray
 
@@ -501,7 +560,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_device = dev_reg.async_get(device_id)
         model = ams_device.model
         if model not in AMS_DRYING_MODELS:
-            LOGGER.error("Passed device is not an AMS 2 or AMS HT.")
+            LOGGER.error("Passed device is not an AMS 2, AMS 3H, or AMS HT.")
             return False
         
         ams_index = self._get_ams_index_from_device(ams_device)
@@ -515,7 +574,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 LOGGER.error(f"Temperature value of '{temp}' not set or out of range.")
                 return False
             if model != 'AMS HT' and temp > 65:
-                LOGGER.error(f"Temperature value of {temp}C too high for AMS 2.")
+                LOGGER.error(f"Temperature value of {temp}C too high for {model}.")
                 return False
             command['print']['temp'] = temp
             command['print']['cooling_temp'] = 45 # Must be at least 45 or the command is ignored
@@ -580,13 +639,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif not self.get_model().supports_feature(Features.AMS):
             LOGGER.error(f"AMS not available")
             return False
-        elif re.search(r"tray_([1-4])$", entity_unique_id):
+        elif ams_tray_number_from_unique_id(entity_unique_id) is not None:
             ams_index, tray_index = self._get_ams_and_tray_index_from_entity_entry(ams_device, entity_entry)
             if ams_index is None:
                 LOGGER.error("Unable to locate AMS.")
                 return
-            ams_tray = self.get_model().ams.data[ams_index].tray[tray_index]
-            if ams_tray.empty:
+            ams_trays = self.get_model().ams.data[ams_index].tray
+            if tray_index >= len(ams_trays):
+                LOGGER.error(f"AMS {ams_index + 1} has no tray {tray_index + 1}")
+                return
+            ams_tray = ams_trays[tray_index]
+            # A spool without an RFID tag carries no filament metadata until
+            # set_filament writes it, so on firmware that omits the per-tray
+            # `state` field `empty` stays True for it. Trust the AMS presence bit
+            # in that case, or set_filament could never configure such a spool.
+            if ams_tray.empty and ams_tray.exists is not True:
                 LOGGER.error(f"AMS {ams_index + 1} tray {tray_index + 1} is empty")
                 return
         else:
@@ -619,22 +686,27 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _service_call_get_filament_data(self, data: dict):
         # Create a copy of FILAMENT_DATA
         combined_data = FILAMENT_DATA.copy()
-        
+
         # Only add entries from slicer_settings that don't exist in FILAMENT_DATA otherwise named custom settings entries
         # overwrite the default settings. We can only support one entry per filament id.
         for filament_id, filament_data in self.client.slicer_settings.filaments.items():
             if filament_id not in FILAMENT_DATA:
                 combined_data[filament_id] = filament_data
-        
+
         return combined_data
 
+    def _service_call_force_filament_sync(self, data: dict):
+        if self.filament_inventory is None:
+            LOGGER.warning("force_filament_sync called but filament inventory is not enabled for this printer.")
+            return False
+        self._hass.async_create_task(self.filament_inventory.async_request_refresh())
+        return True
+
     def _service_call_retry_load_filament(self, data: dict):
-        command = RETRY_LOAD_FILAMENT_TEMPLATE
-        self.client.publish(command)
-    
+        return self.client.publish(RETRY_LOAD_FILAMENT_TEMPLATE)
+
     def _service_call_done_load_filament(self, data: dict):
-        command = DONE_LOAD_FILAMENT_TEMPLATE
-        self.client.publish(command)
+        return self.client.publish(DONE_LOAD_FILAMENT_TEMPLATE)
 
     def _service_call_load_filament(self, data: dict):
         ams_device, entity_id = self._get_ams_device_and_tray(data)
@@ -733,36 +805,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         self.client.publish(command)
 
     def _service_call_print_project_file(self, data: dict):
-        command = copy.deepcopy(PRINT_PROJECT_FILE_TEMPLATE)
-        filepath = data.get("filepath")
-        plate = data.get("plate", 1)
-        timelapse = data.get("timelapse", False)
-        bed_leveling = data.get("bed_leveling", False)
-        flow_cali = data.get("flow_cali", False)
-        vibration_cali = data.get("vibration_cali", False)
-        layer_inspect = data.get("layer_inspect", False)
-        use_ams = data.get("use_ams", False)
-        ams_mapping = data.get("ams_mapping")
-
-        command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
-        if '//' in filepath:
-            command["print"]["url"] = filepath
-        else:
-            if self.config_entry.data["device_type"] in [Printers.H2C, Printers.H2S, Printers.H2D]:
-                command["print"]["url"] = f"ftp:///{filepath}"
-            else:
-                command["print"]["url"] = f"file:///sdcard/{filepath}"
-
-        command["print"]["timelapse"] = timelapse
-        command["print"]["bed_leveling"] = bed_leveling
-        command["print"]["flow_cali"] = flow_cali
-        command["print"]["vibration_cali"] = vibration_cali
-        command["print"]["layer_inspect"] = layer_inspect
-        command["print"]["use_ams"] = use_ams
-        if use_ams:
-            command["print"]["ams_mapping"] = [int(x) for x in ams_mapping.split(',')]
-        command["print"]["subtask_name"] = os.path.basename(filepath)
-
+        command = build_print_project_file_command(self.config_entry.data["device_type"], data)
         self.client.publish(command)
 
     async def _async_update_data(self):
@@ -870,6 +913,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         """Remove entities no longer created by the integration."""
 
         entity_registry = er.async_get(self.hass)
+        dev_reg = device_registry.async_get(self.hass)
         config_entry_id = self.config_entry.entry_id
 
         entities = [
@@ -880,11 +924,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         for entity in entities:
             state = self.hass.states.get(entity.entity_id)
             if state is not None and state.attributes.get("restored") is True:
+                device = dev_reg.async_get(entity.device_id) if entity.device_id else None
+                if device is not None and device.model == "E1 Air Purifier":
+                    # The accessory may simply be unplugged or still awaiting version
+                    # metadata. Preserve its entities and user configuration.
+                    continue
                 LOGGER.debug(f"{entity.entity_id} is DEAD. Removing it.")
                 entity_registry.async_remove(entity.entity_id)
         
     def _printer_ready(self):
-        LOGGER.debug(f"_printer_ready: {self.config_entry.data["serial"]}")
+        LOGGER.debug(f"_printer_ready: {self.config_entry.data['serial']}")
 
         # First clean up orphaned AMS devices such as when an AMS is moved between printers.
         existing_ams_devices = []
@@ -902,7 +951,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         ams_devices_to_remove = []
         for device in device_registry.async_entries_for_config_entry(dev_reg, config_entry_id):
             # This device is associated with this printer.
-            is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT')
+            is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT', 'AMS 3H')
             is_placeholder_ams = (
                 device.model == 'Unknown'
                 and (DOMAIN, "") in device.identifiers
@@ -930,6 +979,32 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
         self.hass.async_create_task(self._reinitialize_sensors())
+
+    def get_local_media_url(self, file_path: str | None) -> str | None:
+        """Return the /local/ URL for a file under the HA www folder, or None if it isn't served."""
+        if file_path is None:
+            return None
+        try:
+            relative = Path(file_path).relative_to(Path(self._hass.config.path("www")))
+        except ValueError:
+            return None
+        return f"/local/{relative.as_posix()}"
+
+    def _publish_timelapse_downloaded(self):
+        hadevice = self.get_ha_printer_device()
+        if hadevice is None:
+            LOGGER.debug("_publish_timelapse_downloaded: device not registered yet, skipping")
+            return
+        path = self.get_model().print_job.last_timelapse_path
+        event_data = {
+            "device_id": hadevice.id,
+            "name": self.config_entry.options.get('name', ''),
+            "type": "event_timelapse_downloaded",
+            "path": path,
+            "url": self.get_local_media_url(path),
+        }
+        LOGGER.debug(f"BUS EVENT: event_timelapse_downloaded: {event_data}")
+        self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
     def PublishDeviceTriggerEvent(self, event: str):
         hadevice = self.get_ha_printer_device()
@@ -992,13 +1067,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         )
 
     def get_ams_device(self, index):
-        # Adjust indices to be 1-based for normal AMS, 128-based for HT.
-        ams_index = index
-        if ams_index < 128:
-            ams_index = index + 1
         printer_serial = self.config_entry.data["serial"]
         device_type = self.config_entry.data["device_type"]
-        device_name = f"{device_type}_{printer_serial}_AMS_{ams_index}"
+        ams = self.get_model().ams.data[index]
+        device_name = f"{device_type}_{printer_serial}_{ams.device_name_suffix}"
         ams_serial = self.get_model().ams.data[index].serial
         model = self.get_model().ams.data[index].model
 
@@ -1041,6 +1113,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             manufacturer=BRAND,
             hw_version="",
             sw_version=""
+        )
+        self._set_via_device(device_info)
+        return device_info
+
+    def get_air_purifier_device(self):
+        purifier = self.get_model().air_purifier
+        printer_serial = self.config_entry.data["serial"]
+        device_type = self.config_entry.data["device_type"]
+        device_info = DeviceInfo(
+            identifiers={(DOMAIN, purifier.serial)},
+            name=f"{device_type}_{printer_serial}_AirPurifier",
+            model=purifier.model or "E1 Air Purifier",
+            manufacturer=BRAND,
+            hw_version=purifier.hw_version,
+            sw_version=purifier.sw_version,
         )
         self._set_via_device(device_info)
         return device_info
@@ -1196,8 +1283,24 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _report_live_view_disabled_issue(self):
         self._report_generic_issue("live_view_disabled")
 
+    def _clear_live_view_disabled_issue(self):
+        issue_id = f"live_view_disabled_{self.get_model().info.serial}"
+        LOGGER.debug("Live view enabled on the printer, clearing repair issue")
+        issue_registry.async_delete_issue(hass=self._hass, domain=DOMAIN, issue_id=issue_id)
+
     def _report_encryption_enabled_issue(self, force: bool = False):
         self._report_generic_issue("mqtt_encryption_enabled", force)
+
+    def _handle_encryption_disabled(self):
+        # The printer stopped requiring signed MQTT commands (developer mode turned on).
+        # Control entities are only created at setup when signing isn't required, so
+        # clear the repair issue and reload to bring them back.
+        LOGGER.info("Printer no longer requires signed MQTT commands. Reloading to restore controls.")
+        issue_registry.async_delete_issue(
+            hass=self._hass,
+            domain=DOMAIN,
+            issue_id=f"mqtt_encryption_enabled_{self.get_model().info.serial}")
+        self._hass.async_create_task(self.hass.config_entries.async_reload(self.config_entry.entry_id))
 
     def _report_hybrid_mode_blocking_issue(self, force: bool = False):
         self._report_generic_issue("hybrid_mode_blocking", force)
@@ -1331,6 +1434,36 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _cache_sidecar_paths(file_path: Path, file_type: str) -> List[Path]:
         return [file_path.with_suffix(extension) for extension in BambuDataUpdateCoordinator._cache_sidecar_extensions(file_type)]
     
+    async def delete_cached_print_file(self, relative_path: str) -> Dict[str, Any]:
+        """Delete one cached 3MF and its related print sidecars."""
+        cache_root = Path(self.get_file_cache_directory()).resolve()
+        requested_path = Path(relative_path)
+        if requested_path.is_absolute() or ".." in requested_path.parts or not requested_path.parts or requested_path.parts[0] != "prints":
+            return {"success": False, "error": "Invalid print cache path"}
+        if requested_path.suffix.lower() != ".3mf":
+            return {"success": False, "error": "Only cached 3MF print files can be deleted"}
+
+        file_path = cache_root / requested_path
+        try:
+            file_path.resolve().relative_to(cache_root)
+        except ValueError:
+            return {"success": False, "error": "Invalid print cache path"}
+        if not file_path.is_file():
+            return {"success": False, "error": "Cached print file not found"}
+
+        paths = [file_path, *self._cache_sidecar_paths(file_path, "prints"), Path(f"{file_path}.part")]
+        deleted_count = 0
+        try:
+            for path in paths:
+                if path.is_file():
+                    path.unlink()
+                    deleted_count += 1
+        except OSError as err:
+            LOGGER.error("Error deleting cached print file %s: %s", file_path, err)
+            return {"success": False, "error": str(err)}
+
+        return {"success": True, "deleted_count": deleted_count}
+
     async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:
         """Clear the file cache."""
         cache_dir = self.get_file_cache_directory()
@@ -1384,3 +1517,39 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as e:
             LOGGER.error(f"Error clearing file cache: {e}")
             return {"success": False, "error": str(e)}
+
+
+class BambuFilamentCoordinator(DataUpdateCoordinator):
+    """Polls the account-level filament inventory ('Filament Manager') from the
+    Bambu cloud. Independent of the MQTT push coordinator."""
+
+    def __init__(self, hass: HomeAssistant, *, printer_coordinator: "BambuDataUpdateCoordinator", interval_minutes: int) -> None:
+        self._printer_coordinator = printer_coordinator
+        self.inventory = FilamentInventory()
+        super().__init__(
+            hass,
+            LOGGER,
+            name=f"{DOMAIN}_filament_inventory",
+            update_interval=timedelta(minutes=max(1, int(interval_minutes))),
+        )
+
+    @property
+    def printer_coordinator(self) -> "BambuDataUpdateCoordinator":
+        return self._printer_coordinator
+
+    async def _async_update_data(self):
+        client = self._printer_coordinator.client
+        if not client.bambu_cloud.bambu_connected:
+            LOGGER.debug("Filament inventory: cloud auth not available; skipping fetch.")
+            return self.inventory
+
+        payload = await self.hass.async_add_executor_job(client.bambu_cloud.get_filaments)
+        if payload is None:
+            # Fetch failed (Cloudflare/timeout/auth). Raise so HA marks the
+            # update failed and the sensor reflects unavailability; recovers
+            # on the next successful poll.
+            raise UpdateFailed("Failed to fetch filament inventory from Bambu cloud")
+
+        self.inventory.update(payload)
+        LOGGER.debug(f"Filament inventory updated: {self.inventory.total_spool_count} spools")
+        return self.inventory

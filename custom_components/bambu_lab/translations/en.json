@@ -9,13 +9,17 @@
       "event_print_error_cleared": "Print error cleared",
       "event_printer_error": "HMS error",
       "event_printer_error_cleared": "HMS error cleared",
-      "event_printer_missing_sdcard": "Missing SD card"
+      "event_printer_missing_sdcard": "Missing SD card",
+      "event_timelapse_downloaded": "Timelapse downloaded"
     }
   },
   "config": {
     "abort": {
       "already_configured": "Device is already configured",
       "no_printers": "No unconfigured printers found in the account.",
+      "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
+      "reconfigure_not_supported": "Only MakerWorld account entries can be reconfigured this way.",
+      "reconfigure_successful": "MakerWorld credentials updated.",
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available."
     },
@@ -46,6 +50,13 @@
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
+        }
+      },
+      "makerworld": {
+        "title": "MakerWorld Account",
+        "description": "Use working Bambu Cloud credentials from an existing printer entry. No additional login is required.",
+        "data": {
+          "username": "Bambu account:"
         }
       },
       "Bambu": {
@@ -121,6 +132,7 @@
     "abort": {
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available.",
+      "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
       "no_ams": "No AMS has been identified on this printer yet. Wait for the printer to connect and report its AMS units, then try again."
     },
     "error": {
@@ -155,6 +167,14 @@
         "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
+        }
+      },
+      "makerworld": {
+        "title": "MakerWorld Account",
+        "description": "Use working Bambu Cloud credentials from an existing printer entry. No additional login is required.",
+        "data": {
+          "username": "Bambu account:",
+          "credential_source": "Bambu account:"
         }
       },
       "Bambu": {
@@ -233,6 +253,12 @@
       },
       "door_open": {
         "name": "Door"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S upgrade kit installed"
+      },
+      "top_cover_open": {
+        "name": "Top cover"
       },
       "timelapse": {
         "name": "Timelapse"
@@ -493,6 +519,12 @@
           "cutter": "Cutter"
         }
       },
+      "processing_material": {
+        "name": "Laser/cutter material"
+      },
+      "check_in_remaining": {
+        "name": "Laser check-in remaining"
+      },
       "track_switch_input": {
         "name": "Track switch input {input_number}",
         "state": {
@@ -666,7 +698,7 @@
           "moving_toolhead_to_center_of_heatbed": "Moving toolhead to center of heatbed",
           "active_arc_fitting": "Active arc fitting",
           "hotend_type_detection": "Hotend type detection",
-          "build_plate_alignment_detection" : "Build plate alignment detection",
+          "build_plate_alignment_detection": "Build plate alignment detection",
           "heatbed_surface_foreign_object_detection": "Heatbed surface foreign object detection",
           "heatbed_underside_foreign_object_detection": "Heatbed underside foreign object detection",
           "pre_extrusion_before_printing": "Pre-extrusion before printing",
@@ -742,19 +774,35 @@
       "zone_temperature": {
         "name": "Zone {zone_number} temperature",
         "state_attributes": {
-          "zone": { "name": "Zone" },
-          "zone_id": { "name": "Zone ID" },
-          "slots": { "name": "Slots" },
-          "dry_setting": { "name": "Drying setting" }
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Drying setting"
+          }
         }
       },
       "zone_humidity": {
         "name": "Zone {zone_number} humidity",
         "state_attributes": {
-          "zone": { "name": "Zone" },
-          "zone_id": { "name": "Zone ID" },
-          "slots": { "name": "Slots" },
-          "dry_setting": { "name": "Drying setting" }
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zone ID"
+          },
+          "slots": {
+            "name": "Slots"
+          },
+          "dry_setting": {
+            "name": "Drying setting"
+          }
         }
       },
       "drying_temperature": {
@@ -806,8 +854,14 @@
       "remaining_time": {
         "name": "Remaining time"
       },
+      "print_elapsed_time": {
+        "name": "Print elapsed time"
+      },
       "end_time": {
         "name": "End time"
+      },
+      "last_timelapse": {
+        "name": "Last timelapse"
       },
       "total_usage_hours": {
         "name": "Total usage"
@@ -822,6 +876,26 @@
         "name": "Active tray",
         "state": {
           "none": "None"
+        }
+      },
+      "filament_change_status": {
+        "name": "Filament change status",
+        "state": {
+          "idle": "Idle",
+          "changing_filament": "Changing filament",
+          "heating_nozzle": "Heating nozzle",
+          "cutting_filament": "Cutting filament",
+          "pulling_back_filament": "Pulling back current filament",
+          "pushing_new_filament": "Pushing new filament",
+          "purging_old_filament": "Purging old filament",
+          "checking_position": "Checking filament position",
+          "rfid_identifying": "Identifying RFID",
+          "filament_loaded": "Filament loaded",
+          "calibration": "Calibration",
+          "cold_pull": "Cold pull",
+          "self_check": "Self check",
+          "debug": "Debug",
+          "unknown": "Unknown"
         }
       },
       "nozzle_diameter": {
@@ -1067,7 +1141,9 @@
           "empty": "Empty"
         },
         "state_attributes": {
-          "slot": { "name": "Slot" },
+          "slot": {
+            "name": "Slot"
+          },
           "nozzle_type": {
             "name": "Nozzle type",
             "state": {
@@ -1080,10 +1156,18 @@
               "unknown": "Unknown"
             }
           },
-          "nozzle_diameter": { "name": "Nozzle diameter" },
-          "serial": { "name": "Serial number" },
-          "max_temp": { "name": "Max temperature" },
-          "wear": { "name": "Wear" },
+          "nozzle_diameter": {
+            "name": "Nozzle diameter"
+          },
+          "serial": {
+            "name": "Serial number"
+          },
+          "max_temp": {
+            "name": "Max temperature"
+          },
+          "wear": {
+            "name": "Wear"
+          },
           "status": {
             "name": "Status",
             "state": {
@@ -1092,9 +1176,15 @@
               "unknown": "Unknown"
             }
           },
-          "color": { "name": "Color" },
-          "filament_id": { "name": "Filament ID" },
-          "filament_name": { "name": "Filament name" }
+          "color": {
+            "name": "Color"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "filament_name": {
+            "name": "Filament name"
+          }
         }
       },
       "hotend_rack_hotend_used_time": {
@@ -1108,23 +1198,57 @@
           "empty": "Empty"
         },
         "state_attributes": {
-          "tool": { "name": "Tool" },
-          "filament_diameter": { "name": "Filament diameter" },
-          "filament_name": { "name": "Filament name" },
-          "filament_type": { "name": "Filament type" },
-          "remaining_weight_g": { "name": "Remaining filament weight" },
-          "remaining_percent": { "name": "Remaining filament" },
-          "ams_id": { "name": "AMS ID" },
-          "ams_slot": { "name": "AMS slot" },
-          "nozzle_diameter": { "name": "Nozzle diameter" },
-          "nozzle_type": { "name": "Nozzle type" },
-          "nozzle_type_code": { "name": "Nozzle type code" },
-          "max_temperature": { "name": "Max temperature" },
-          "serial": { "name": "Serial number" },
-          "filament_id": { "name": "Filament ID" },
-          "color": { "name": "Color" },
-          "wear": { "name": "Wear" },
-          "status_raw": { "name": "Status (raw)" }
+          "tool": {
+            "name": "Tool"
+          },
+          "filament_diameter": {
+            "name": "Filament diameter"
+          },
+          "filament_name": {
+            "name": "Filament name"
+          },
+          "filament_type": {
+            "name": "Filament type"
+          },
+          "remaining_weight_g": {
+            "name": "Remaining filament weight"
+          },
+          "remaining_percent": {
+            "name": "Remaining filament"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS slot"
+          },
+          "nozzle_diameter": {
+            "name": "Nozzle diameter"
+          },
+          "nozzle_type": {
+            "name": "Nozzle type"
+          },
+          "nozzle_type_code": {
+            "name": "Nozzle type code"
+          },
+          "max_temperature": {
+            "name": "Max temperature"
+          },
+          "serial": {
+            "name": "Serial number"
+          },
+          "filament_id": {
+            "name": "Filament ID"
+          },
+          "color": {
+            "name": "Color"
+          },
+          "wear": {
+            "name": "Wear"
+          },
+          "status_raw": {
+            "name": "Status (raw)"
+          }
         }
       },
       "hotend_rack_printtool_temperature": {
@@ -1173,6 +1297,7 @@
       "options": {
         "bambu": "Bambu Lab cloud",
         "lan": "Lan Mode",
+        "makerworld": "MakerWorld account",
         "ams_heater": "External AMS heater or dryer (smart plug)"
       }
     }
@@ -1192,7 +1317,7 @@
     },
     "live_view_disabled": {
       "title": "Live View Disabled",
-      "description": "{device} has live view disabled in the printer settings. Please enable this to use the camera features."
+      "description": "{device} has LAN Only Liveview turned off, so Home Assistant cannot reach the camera. On the printer's touchscreen, open Settings and turn on **LAN Only Liveview** (on the Network or LAN Only page, depending on the model). You do not need to turn on LAN Only mode itself, so the Bambu Handy app keeps working away from home. This message clears automatically once the printer reports live view is on."
     },
     "mqtt_encryption_enabled": {
       "title": "MQTT Encryption Enabled",

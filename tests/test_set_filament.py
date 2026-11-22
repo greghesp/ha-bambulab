@@ -14,7 +14,12 @@ pytest.importorskip("homeassistant")
 
 from homeassistant.core import Event
 from custom_components.bambu_lab import coordinator as coordinator_module
-from custom_components.bambu_lab.const import DOMAIN, SERVICE_CALL_EVENT
+from custom_components.bambu_lab.const import (
+    DOMAIN,
+    SERVICE_CALL_EVENT,
+    SERVICE_CALL_FUTURES,
+    SERVICE_CALL_ID,
+)
 from custom_components.bambu_lab.coordinator import BambuDataUpdateCoordinator
 
 ENTITY_ID = "sensor.x1c_externalspool_external_spool"
@@ -41,8 +46,11 @@ def _publish_set_filament(data: dict) -> list:
 
     async def fire():
         future = asyncio.get_running_loop().create_future()
-        coordinator._hass.data = {DOMAIN: {"service_call_future": future}}
-        event = Event(SERVICE_CALL_EVENT, {"service": "set_filament", "entity_id": ENTITY_ID, **data})
+        coordinator._hass.data = {DOMAIN: {SERVICE_CALL_FUTURES: {"call": future}}}
+        event = Event(
+            SERVICE_CALL_EVENT,
+            {"service": "set_filament", "entity_id": ENTITY_ID, SERVICE_CALL_ID: "call", **data},
+        )
         await coordinator._handle_service_call_event(event)
 
     with patch.object(coordinator_module.entity_registry, "async_get", return_value=entity_reg), \

@@ -177,10 +177,24 @@ extrude_retract:
 retry_load_filament:
   name: Retry loading external filament
   description: Retry loading external filament
+  fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
 
 done_load_filament:
   name: Finish loading external filament
   description: Once loading external filament is done, use this action to signal that to the printer.
+  fields:
+    device_id:
+      name: Bambu Printer
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
 
 unload_filament:
   name: Unload filament
@@ -299,7 +313,7 @@ start_filament_drying:
   description: Starts AMS filament drying.
   fields:
     device_id:
-      name: AMS 2 Pro or AMS HT
+      name: AMS 2 Pro, AMS 3H, or AMS HT
       required: true
       selector:
         device:
@@ -337,8 +351,53 @@ stop_filament_drying:
   fields:
     device_id:
       name: AMS Device
-      description: Select the AMS 2 or AMS HT device to stop drying on.
+      description: Select the AMS 2, AMS 3H, or AMS HT device to stop drying on.
       required: true
       selector:
         device:
           integration: bambu_lab
+
+force_filament_sync:
+  name: Force Filament Inventory Sync
+  description: >-
+    Immediately refresh the account-level filament inventory ("Filament
+    Manager") from the Bambu cloud, instead of waiting for the next scheduled
+    poll. No effect if filament inventory is not enabled for the printer.
+  fields:
+    device_id:
+      name: Printer
+      description: The printer whose account filament inventory should be refreshed.
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
+
+clear_file_cache:
+  name: Clear File Cache
+  description: >-
+    Delete the 3MF models, cover images and timelapses this integration has cached
+    in Home Assistant for a printer. This empties the print history and timelapse
+    lists and frees disk space. Nothing on the printer itself is deleted; a model is
+    downloaded again the next time it is printed.
+  fields:
+    device_id:
+      name: Printer
+      description: The printer whose local cache should be cleared.
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
+    file_type:
+      name: What to clear
+      description: Clear the print history, the timelapse videos, or both.
+      required: false
+      default: all
+      selector:
+        select:
+          options:
+            - label: Print history and timelapses
+              value: all
+            - label: Print history only
+              value: prints
+            - label: Timelapses only
+              value: timelapse

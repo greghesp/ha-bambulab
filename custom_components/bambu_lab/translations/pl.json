@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Błąd drukowania usunięty",
       "event_printer_error": "Błąd HMS",
       "event_printer_error_cleared": "Błąd HMS usunięty",
-      "event_printer_missing_sdcard": "Brakująca karta SD"
+      "event_printer_missing_sdcard": "Brakująca karta SD",
+      "event_timelapse_downloaded": "Pobrano timelapse"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "To urządzenie jest już dodane",
       "no_printers": "Nie znaleziono nieskonfigurowanych drukarek na koncie.",
       "cloudflare": "Cloudflare zablokował próbę połączenia.",
-      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna."
+      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna.",
+      "no_working_credentials": "Dla tego konta nie są dostępne żadne działające dane uwierzytelniające drukarki Bambu Cloud.",
+      "reconfigure_not_supported": "W ten sposób można ponownie skonfigurować tylko wpisy konta MakerWorld.",
+      "reconfigure_successful": "Zaktualizowano dane uwierzytelniające MakerWorld."
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć. Sprawdź dane logowania.",
@@ -84,7 +88,9 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
         }
@@ -106,9 +112,18 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
+        }
+      },
+      "makerworld": {
+        "title": "Konto MakerWorld",
+        "description": "Użyj działających danych uwierzytelniających Bambu Cloud z istniejącego wpisu drukarki. Nie jest wymagane żadne dodatkowe logowanie.",
+        "data": {
+          "username": "Konto Bambu:"
         }
       }
     }
@@ -116,7 +131,9 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare zablokował próbę połączenia.",
-      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna."
+      "curl_unavailable": "Biblioteka curl_cffi jest niedostępna.",
+      "no_working_credentials": "Dla tego konta nie są dostępne żadne działające dane uwierzytelniające drukarki Bambu Cloud.",
+      "no_ams": "W tej drukarce nie zidentyfikowano jeszcze żadnego modułu AMS. Poczekaj, aż drukarka połączy się i zgłosi swoje jednostki AMS, a następnie spróbuj ponownie."
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć",
@@ -179,7 +196,9 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
         }
@@ -200,9 +219,23 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania",
+              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
+              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
             }
           }
+        }
+      },
+      "ams_heater": {
+        "title": "Zewnętrzna nagrzewnica lub suszarka AMS",
+        "description": "Dodatkowe grzejniki i suszarki AMS, takie jak SUNLU AMS Heater i EIBOS Series X (Dyas/Tetras), nie mają połączenia sieciowego, więc Home Assistant steruje nimi, przełączając inteligentną wtyczkę, z której są zasilane.\n\nWybierz tę wtyczkę dla każdego modułu AMS wyposażonego w grzałkę lub pozostaw ją pustą. Każdy połączony AMS otrzymuje tryb suszenia grzejnika, moc grzejnika, próg wilgotności, odcięcie temperatury i elementy ograniczające czas pracy.\n\nUstaw grzejnik lub suszarkę tak, aby rozpoczynała ogrzewanie po włączeniu zasilania, tak aby włączenie wtyczki faktycznie rozpoczęło suszenie."
+      },
+      "makerworld": {
+        "title": "Konto MakerWorld",
+        "description": "Użyj działających danych uwierzytelniających Bambu Cloud z istniejącego wpisu drukarki. Nie jest wymagane żadne dodatkowe logowanie.",
+        "data": {
+          "username": "Konto Bambu:",
+          "credential_source": "Konto Bambu:"
         }
       }
     }
@@ -250,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Prawy włókno wytłaczarki"
+      },
+      "top_cover_open": {
+        "name": "Górna pokrywa"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Zainstalowany zestaw aktualizacyjny P1S"
       }
     },
     "button": {
@@ -276,6 +315,12 @@
       },
       "buzzer_beeping": {
         "name": "Sygnał dźwiękowy (brzęczyk)"
+      },
+      "hotend_rack_raise": {
+        "name": "Podnieś stojak"
+      },
+      "hotend_rack_lower": {
+        "name": "Dolny stojak"
       }
     },
     "fan": {
@@ -302,6 +347,19 @@
       },
       "exhaust_fan": {
         "name": "Wentylator wyciągowy"
+      },
+      "air_purifier": {
+        "name": "Oczyszczacz powietrza",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automatyczny",
+              "silent": "Cichy",
+              "standard": "Standard",
+              "max": "Maks"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -335,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Docelowa temperatura komory"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Wilgotność po włączeniu grzejnika"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Wilgotność wyłączająca grzejnik"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Odcięcie temperatury grzejnika"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maksymalny czas pracy nagrzewnicy"
       }
     },
     "select": {
@@ -493,7 +563,8 @@
           "build_plate_alignment_detection": "Wykrywanie wyrównania płyty konstrukcyjnej",
           "heatbed_surface_foreign_object_detection": "Wykrywanie ciał obcych na powierzchni podgrzewanego stołu",
           "heatbed_underside_foreign_object_detection": "Wykrywanie ciał obcych pod podgrzewanym spodem stołu",
-          "pre_extrusion_before_printing": "Wstępne wytłaczanie przed drukiem"
+          "pre_extrusion_before_printing": "Wstępne wytłaczanie przed drukiem",
+          "heatbed_stabilizing": "Stabilizujący stół grzewczy"
         }
       },
       "print_progress": {
@@ -757,7 +828,8 @@
           "missing": "Brak karty",
           "normal": "Obecna, OK",
           "abnormal": "Nieprawidłowy",
-          "readonly": "Tylko do odczytu"
+          "readonly": "Tylko do odczytu",
+          "not_applicable": "Nie dotyczy"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1085,173 @@
       },
       "exhaust_fan_speed": {
         "name": "Prędkość wentylatora wyciągowego"
+      },
+      "external_storage_connection": {
+        "name": "Połączenie z pamięcią zewnętrzną",
+        "state": {
+          "connected": "Połączony",
+          "disconnected": "Bezładny"
+        }
+      },
+      "external_storage_total": {
+        "name": "Całkowita pamięć zewnętrzna"
+      },
+      "external_storage_used": {
+        "name": "Używana pamięć zewnętrzna"
+      },
+      "external_storage_free": {
+        "name": "Pamięć zewnętrzna bezpłatna"
+      },
+      "zone_temperature": {
+        "name": "Temperatura w strefie {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Strefa"
+          },
+          "zone_id": {
+            "name": "Identyfikator strefy"
+          },
+          "slots": {
+            "name": "Sloty"
+          },
+          "dry_setting": {
+            "name": "Ustawienie suszenia"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Wilgotność strefy {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Strefa"
+          },
+          "zone_id": {
+            "name": "Identyfikator strefy"
+          },
+          "slots": {
+            "name": "Sloty"
+          },
+          "dry_setting": {
+            "name": "Ustawienie suszenia"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Prędkość wentylatora"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Pozycja Swaptek (surowa)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Stan Swaptek (surowy)"
+      },
+      "hotend_rack_printtool": {
+        "name": "Narzędzie do drukowania {tool_number}",
+        "state": {
+          "mounted": "Zmontowany",
+          "docked": "Zadokowany",
+          "empty": "Pusty"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Narzędzie"
+          },
+          "filament_diameter": {
+            "name": "Średnica włókna"
+          },
+          "filament_name": {
+            "name": "Nazwa włókna"
+          },
+          "filament_type": {
+            "name": "Typ włókna"
+          },
+          "remaining_weight_g": {
+            "name": "Pozostała masa żarnika"
+          },
+          "remaining_percent": {
+            "name": "Pozostały włókno"
+          },
+          "ams_id": {
+            "name": "Identyfikator AMS"
+          },
+          "ams_slot": {
+            "name": "gniazdo AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Średnica dyszy"
+          },
+          "nozzle_type": {
+            "name": "Typ dyszy"
+          },
+          "nozzle_type_code": {
+            "name": "Kod typu dyszy"
+          },
+          "max_temperature": {
+            "name": "Maksymalna temperatura"
+          },
+          "serial": {
+            "name": "Numer seryjny"
+          },
+          "filament_id": {
+            "name": "Identyfikator włókna"
+          },
+          "color": {
+            "name": "Kolor"
+          },
+          "wear": {
+            "name": "Nosić"
+          },
+          "status_raw": {
+            "name": "Stan (surowy)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatura narzędzia PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Temperatura docelowa PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "Czas drukowania PrintTool {tool_number}"
+      },
+      "filament_inventory": {
+        "name": "Inwentarz włókien"
+      },
+      "processing_material": {
+        "name": "Materiał do cięcia laserowego/tnącego"
+      },
+      "check_in_remaining": {
+        "name": "Pozostała odprawa laserowa"
+      },
+      "print_elapsed_time": {
+        "name": "Wydrukuj czas, który upłynął"
+      },
+      "last_timelapse": {
+        "name": "Ostatni timelapse"
+      },
+      "filament_change_status": {
+        "name": "Stan wymiany żarnika",
+        "state": {
+          "idle": "Bezczynny",
+          "changing_filament": "Zmiana włókna",
+          "heating_nozzle": "Dysza grzewcza",
+          "cutting_filament": "Cięcie włókna",
+          "pulling_back_filament": "Odciąganie bieżącego żarnika",
+          "pushing_new_filament": "Wciskanie nowego żarnika",
+          "purging_old_filament": "Czyszczenie starego żarnika",
+          "checking_position": "Sprawdzanie położenia żarnika",
+          "rfid_identifying": "Identyfikacja RFID",
+          "filament_loaded": "Załadowano żarnik",
+          "calibration": "Kalibrowanie",
+          "cold_pull": "Zimne pociągnięcie",
+          "self_check": "Samokontrola",
+          "debug": "Odpluskwić",
+          "unknown": "Nieznany"
+        }
       }
     },
     "camera": {
@@ -1032,6 +1271,12 @@
       },
       "prompt_sound": {
         "name": "Włącz dźwięk powiadomień"
+      },
+      "ams_heater_drying": {
+        "name": "Tryb suszenia grzejnikowego"
+      },
+      "ams_heater_power": {
+        "name": "Moc grzejnika"
       }
     },
     "update": {
@@ -1044,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Chmura Bambu Lab",
-        "lan": "Tryb Lan"
+        "lan": "Tryb Lan",
+        "makerworld": "Konto MakerWorld",
+        "ams_heater": "Zewnętrzny grzejnik lub suszarka AMS (inteligentna wtyczka)"
       }
     }
   },

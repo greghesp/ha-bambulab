@@ -176,4 +176,3 @@ AIRDUCT_SET_MODE_TEMPLATE = {"print": {"sequence_id": "0", "command": "set_airdu
 # MachineObject::command_switch_camera sends it, peer_name included: how the firmware treats
 # another value is unknown.
 SWITCH_LIVEVIEW_CAMERA_TEMPLATE = {"camera": {"sequence_id": "0", "command": "change_liveview_cam_idx", "camera_id": 4, "peer_name": "studio", "version": 1}}
-

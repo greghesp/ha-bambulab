@@ -35,6 +35,7 @@ from dataclasses import dataclass
 
 from .const import (
      LOGGER,
+     USER_AGENT,
      BambuUrl,
      Printers
 )
@@ -83,6 +84,14 @@ class CsrfObtainError(Exception):
         super().__init__("Not able to obtain CSRF cookie")
         self.error_code = 403
 
+class CloudAuthError(Exception):
+    """Bambu Cloud rejected the auth token (HTTP 401/403 that isn't a Cloudflare block)."""
+    def __init__(self, error_code: int):
+        super().__init__(f"Bambu Cloud rejected the auth token ({error_code})")
+        self.error_code = error_code
+
+AUTH_REJECTED_STATUS_CODES = (401, 403)
+
 
 @dataclass
 class BambuCloud:
@@ -93,17 +102,19 @@ class BambuCloud:
         self._username = username
         self._auth_token = auth_token
         self._tfaKey = None
+        # MakerWorld endpoint -> the auth token it refused. See _get_makerworld_private.
+        self._makerworld_rejected: dict[BambuUrl, str] = {}
 
     def _get_headers(self):
         return {
-            'User-Agent': 'bambu_network_agent/01.09.05.01',
-            'X-BBL-Client-Name': 'OrcaSlicer',
-            'X-BBL-Client-Type': 'slicer',
-            'X-BBL-Client-Version': '01.09.05.51',
+            'User-Agent': USER_AGENT,
+            'X-BBL-Client-Name': 'ha-bambulab',
+            'X-BBL-Client-Type': 'homeautomation',
+            'X-BBL-Client-Version': '01.00.00.00',
             'X-BBL-Language': 'en-US',
             'X-BBL-OS-Type': 'linux',
             'X-BBL-OS-Version': '6.2.0',
-            'X-BBL-Agent-Version': '01.09.05.01',
+            'X-BBL-Agent-Version': '01.00.00.00',
             'X-BBL-Executable-info': '{}',
             'X-BBL-Agent-OS-Type': 'linux',
             'accept': 'application/json',
@@ -313,7 +324,12 @@ class BambuCloud:
         headers['x-bbl-csrf-token'] = csrf_response.cookies.get('bbl_csrf_token')
         headers['Cookie'] = f"bbl_csrf_token={csrf_response.cookies.get('bbl_csrf_token')}"
 
-        response = self._post(BambuUrl.TFA_LOGIN, headers=headers, json=data)
+        response = self._post(BambuUrl.TFA_LOGIN, headers=headers, json=data, return400=True)
+        if response.status_code == 400:
+            LOGGER.debug(f"Response: '{response.text}'")
+            if 'Incorrect code' in response.text:
+                raise CodeIncorrectError()
+            raise PermissionError(response.status_code, response.text)
 
         LOGGER.debug(f"Response: {response.status_code}")
         if response.status_code == 200:
@@ -500,14 +516,63 @@ class BambuCloud:
     #     "settings": {}
     # }
 
-    def get_slicer_settings(self) -> dict:
+    def get_slicer_settings(self) -> dict | None:
+        """Return the account's slicer settings, or None on a transient failure.
+
+        Raises CloudAuthError only when the cloud genuinely rejects the token, so a
+        rate limit (429), server error, Cloudflare block or network failure is never
+        mistaken for an authentication problem (#2304)."""
         LOGGER.debug("Getting slicer settings from Bambu Cloud")
         try:
             response = self._get(BambuUrl.SLICER_SETTINGS)
+            return response.json()
+        except PermissionError as e:
+            status = e.args[0] if e.args else None
+            if status in AUTH_REJECTED_STATUS_CODES:
+                raise CloudAuthError(status) from e
+            LOGGER.debug(f"Transient failure getting slicer settings: {status}")
+            return None
+        except Exception as e:
+            LOGGER.debug(f"Transient failure getting slicer settings: {e}")
+            return None
+
+    # The filament inventory ("Filament Manager") is of the following form:
+    #
+    # {
+    #     "hits": [
+    #         {
+    #             "id": 6915055,
+    #             "createType": "ams",
+    #             "filamentVendor": "Bambu Lab",
+    #             "filamentType": "PLA",
+    #             "filamentName": "PLA Basic",
+    #             "filamentId": "GFA00",
+    #             "RFID": "REDACTED",
+    #             "color": "#FFFFFFFF",
+    #             "colorType": 2,
+    #             "colors": ["#FFFFFFFF"],
+    #             "netWeight": 931,
+    #             "totalNetWeight": 1000,
+    #             "note": "",
+    #             "createdAt": 1780424283,
+    #             "updatedAt": 1780424283,
+    #             "status": 0,
+    #             "isSupport": false,
+    #             "trayIdName": "A00-W01",
+    #             "category": "PLA"
+    #         },
+    #         ...
+    #     ]
+    # }
+
+    def get_filaments(self) -> dict:
+        LOGGER.debug("Getting filament inventory from Bambu Cloud")
+        try:
+            response = self._get(BambuUrl.FILAMENTS)
         except:
             return None
         return response.json()
-    
+
     # The task list is of the following form with a 'hits' array with typical 20 entries.
     #
     # "total": 531,
@@ -674,11 +739,28 @@ class BambuCloud:
     def get_makerworld_points(self) -> dict:
         """Retrieve the MakerWorld points ledger totals for the account."""
         LOGGER.debug("Getting MakerWorld points from Bambu Cloud")
+        return self._get_makerworld_private(BambuUrl.POINT_BILL, "MakerWorld points")
+
+    def _get_makerworld_private(self, urlenum: BambuUrl, what: str) -> dict | None:
+        """Best effort GET of an account private MakerWorld endpoint.
+
+        Once the endpoint refuses the current token, it isn't asked again until
+        the token changes: polling it anyway only produces a 401 per poll, which
+        Bambu has flagged as abnormal traffic (#2270)."""
+        if self._makerworld_rejected.get(urlenum) == self._auth_token:
+            return None
         try:
-            response = self._get(BambuUrl.POINT_BILL)
+            response = self._get(urlenum)
             return response.json()
+        except PermissionError as e:
+            if e.args and e.args[0] in (401, 403):
+                LOGGER.debug(f"{what} refused for this token; not polling it again until re-login")
+                self._makerworld_rejected[urlenum] = self._auth_token
+            else:
+                LOGGER.debug(f"Failed to retrieve {what}: {e}")
+            return None
         except Exception as e:
-            LOGGER.debug(f"Failed to retrieve MakerWorld points: {e}")
+            LOGGER.debug(f"Failed to retrieve {what}: {e}")
             return None
 
     # Boost tokens. Verified shape:
@@ -694,12 +776,7 @@ class BambuCloud:
     def get_makerworld_boosts(self) -> dict:
         """Retrieve the account's boost token counts."""
         LOGGER.debug("Getting MakerWorld boost tokens from Bambu Cloud")
-        try:
-            response = self._get(BambuUrl.BOOST_RIGHT)
-            return response.json()
-        except Exception as e:
-            LOGGER.debug(f"Failed to retrieve MakerWorld boost tokens: {e}")
-            return None
+        return self._get_makerworld_private(BambuUrl.BOOST_RIGHT, "MakerWorld boost tokens")
 
     def get_uid(self) -> str | None:
         """The numeric account id, which doubles as the MakerWorld profile id."""
@@ -725,7 +802,7 @@ class BambuCloud:
         LOGGER.debug(f"Downloading cover image: {url}")
         try:
             # This is just a standard download from an unauthenticated end point.
-            response = requests.get(url)
+            response = requests.get(url, headers={'User-Agent': USER_AGENT})
         except:
             return None
         return response.content

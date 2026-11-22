@@ -12,6 +12,7 @@
     "http",
     "lovelace",
     "mqtt",
+    "stream",
     "websocket_api"
   ],
   "documentation": "https://github.com/greghesp/ha-bambulab",

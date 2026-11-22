@@ -3,12 +3,15 @@ import unittest
 from unittest.mock import call, MagicMock, patch
 from datetime import datetime, timezone
 import os
+import io
 import json
 import tempfile
 import time
 from zipfile import ZipFile
 
 from pathlib import Path
+
+from PIL import Image
 
 from pybambu.models import (
     AMSList,
@@ -26,6 +29,7 @@ from pybambu.models import (
     StageAction,
     Temperature,
     ams_slot_name,
+    normalize_ams_slot,
 )
 
 from pybambu.media_sources import (
@@ -57,6 +61,19 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.remaining_time, 759)
         self.assertEqual(self.print_job.current_layer, 1)
         self.assertEqual(self.print_job.total_layers, 70)
+
+    def test_normalize_ams_slot(self):
+        # Touchscreen-started print from the second AMS HT: ams_mapping [516] = unit 129, tray 0.
+        self.assertEqual(normalize_ams_slot(516), 17)
+        self.assertEqual(normalize_ams_slot(512), 16)
+        self.assertEqual(ams_slot_name(normalize_ams_slot(516)), "AMS HT 2")
+        # Regular trays, flat HT slots and the external spool are left alone.
+        for index in (0, 3, 15, 16, 23, 254, 255):
+            self.assertEqual(normalize_ams_slot(index), index)
+
+    def test_ams_mapping_is_normalized_on_receipt(self):
+        self.print_job.print_update({"ams_mapping": [3, 516]})
+        self.assertEqual(self.print_job.ams_mapping, [3, 17])
 
     def test_ams_slot_name(self):
         # Regular AMS units occupy slots 0-15, four trays each.
@@ -225,6 +242,109 @@ class TestPrintJob(unittest.TestCase):
             b"active-cover"
         )
 
+    @staticmethod
+    def _pick_png_with_object_1() -> bytes:
+        """A pick image where identify_id 1 is drawn as the colour (r=1, g=0, b=0)."""
+        pick = Image.new("RGBA", (2, 1), (0, 0, 0, 0))
+        pick.putpixel((0, 0), (1, 0, 0, 255))
+        pick_buf = io.BytesIO()
+        pick.save(pick_buf, format="PNG")
+        return pick_buf.getvalue()
+
+    def _tcp6000_metadata_download(self, remote_files: dict):
+        """Fake _download_remote_file_atomic that serves remote_files by path, failing others."""
+        requested = []
+
+        def download(_source, remote_file, local_path, progress_callback=None):
+            requested.append(remote_file.path)
+            if remote_file.path not in remote_files:
+                raise FileNotFoundError(remote_file.path)
+            Path(local_path).parent.mkdir(parents=True, exist_ok=True)
+            Path(local_path).write_bytes(remote_files[remote_file.path])
+            return len(remote_files[remote_file.path])
+
+        return download, requested
+
+    def test_active_metadata_loads_pick_image_over_tcp6000(self):
+        """With no 3mf, the pick image and objects come from the active Metadata dir (#2175)."""
+        self.print_job.gcode_file = "/data/Metadata/plate_1.gcode"
+        self.print_job.plate_idx = 1
+        self.print_job.ams_mapping = []
+        pick_bytes = self._pick_png_with_object_1()
+
+        source = MagicMock()
+        source.name = Tcp6000MediaSource.name
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            download, requested = self._tcp6000_metadata_download({
+                "/data/Metadata/slice_info.config": (
+                    b'<config><plate><metadata key="index" value="1" />'
+                    b'<object identify_id="1" name="Cube" skipped="false" />'
+                    b'<object identify_id="2" name="Hidden" skipped="false" />'
+                    b'</plate></config>'
+                ),
+                "/data/Metadata/pick_1.png": pick_bytes,
+            })
+            self.print_job._download_remote_file_atomic = MagicMock(side_effect=download)
+
+            result = self.print_job._try_active_metadata_from_printer([source])
+
+        self.assertTrue(result)
+        self.client._device.pick_image.set_image.assert_called_with(pick_bytes)
+        self.assertEqual(self.print_job.get_printable_objects, {"1": "Cube"})
+        self.assertIn("/data/Metadata/pick_1.png", requested)
+
+    def test_active_metadata_sets_pick_image_without_slice_info(self):
+        """The pick image is still shown when slice_info.config cannot be read."""
+        self.print_job.gcode_file = "/data/Metadata/plate_2.gcode"
+        self.print_job.plate_idx = 2
+        pick_bytes = self._pick_png_with_object_1()
+
+        source = MagicMock()
+        source.name = Tcp6000MediaSource.name
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            download, _ = self._tcp6000_metadata_download({
+                "/data/Metadata/pick_2.png": pick_bytes,
+            })
+            self.print_job._download_remote_file_atomic = MagicMock(side_effect=download)
+
+            result = self.print_job._try_active_metadata_from_printer([source])
+
+        self.assertTrue(result)
+        self.client._device.pick_image.set_image.assert_called_with(pick_bytes)
+
+    def test_active_metadata_skips_without_tcp6000_source(self):
+        """Only the TCP 6000 source can reach the printer's Metadata RAM drive."""
+        self.print_job.gcode_file = "/data/Metadata/plate_1.gcode"
+        self.print_job.plate_idx = 1
+        source = MagicMock()
+        source.name = Ftps990MediaSource.name
+        self.print_job._download_remote_file_atomic = MagicMock()
+
+        self.assertFalse(self.print_job._try_active_metadata_from_printer([source]))
+        self.print_job._download_remote_file_atomic.assert_not_called()
+
+    def test_worker_falls_back_to_active_metadata_when_no_3mf(self):
+        """P2S: no 3mf and no FTPS Metadata dir, but TCP 6000 still provides the pick image."""
+        self.client._device.supports_feature.return_value = True
+        self.print_job.prune_print_history_files = MagicMock()
+        sources = [MagicMock()]
+        self.print_job._remote_media_sources = MagicMock(return_value=sources)
+        self.print_job._try_active_cover_from_printer = MagicMock(return_value=True)
+        self.print_job._attempt_remote_model_download = MagicMock(return_value=None)
+        self.print_job._attempt_direct_metadata_download = MagicMock(return_value=False)
+        self.print_job._try_active_metadata_from_printer = MagicMock(return_value=True)
+        close_sources = MagicMock()
+        self.print_job._close_remote_media_sources = close_sources
+
+        self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+        self.print_job._try_active_metadata_from_printer.assert_called_once_with(sources)
+        # The TCP 6000 sources must still be open when the metadata fallback runs.
+        close_sources.assert_called_once_with(sources)
+
     def test_ftp_cover_uses_active_mqtt_plate(self):
         """The active MQTT plate wins when archive metadata points elsewhere."""
         self.client.ftp_enabled = True
@@ -334,6 +454,49 @@ class TestPrintJob(unittest.TestCase):
 
         self.assertEqual(self.print_job.print_weight, 49.59)
         self.assertEqual(self.print_job.get_print_weights, {"External Spool": 49.59})
+
+    def test_pick_image_sets_printable_objects_without_error(self):
+        """Objects found in the pick image are kept and nothing is logged as an error (#2218)."""
+        self.client.ftp_enabled = True
+        self.client._device.supports_feature.return_value = False
+        self.client._device.external_spool[0].active = True
+        self.print_job.plate_idx = 1
+        self.print_job.ams_mapping = []
+        self.print_job.prune_print_history_files = MagicMock()
+
+        # identify_id 1 is drawn as the colour (r=1, g=0, b=0); identify_id 2 is hidden.
+        pick = Image.new("RGBA", (2, 1), (0, 0, 0, 0))
+        pick.putpixel((0, 0), (1, 0, 0, 255))
+        pick_buf = io.BytesIO()
+        pick.save(pick_buf, format="PNG")
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            model_path = os.path.join(temp_dir, "current.3mf")
+            with ZipFile(model_path, "w") as archive:
+                archive.writestr(
+                    "Metadata/slice_info.config",
+                    '<config><plate><metadata key="index" value="1" />'
+                    '<object identify_id="1" name="Cube" skipped="false" />'
+                    '<object identify_id="2" name="Hidden" skipped="false" />'
+                    '</plate></config>',
+                )
+                archive.writestr("Metadata/plate_1.png", b"cover")
+                archive.writestr("Metadata/pick_1.png", pick_buf.getvalue())
+                archive.writestr("Metadata/plate_1.gcode", b"gcode")
+                archive.writestr("Metadata/plate_1.json", '{"bed_type": "textured_plate"}')
+
+            self.print_job._remote_media_sources = MagicMock(return_value=[MagicMock()])
+            self.print_job._attempt_remote_model_download = MagicMock(return_value=model_path)
+            self.print_job._close_remote_media_sources = MagicMock()
+
+            with patch("pybambu.models.LOGGER") as logger:
+                self.assertTrue(self.print_job._async_download_task_data_from_printer_worker())
+
+        logged_errors = [str(c.args[0]) for c in logger.error.call_args_list]
+        self.assertFalse(
+            [m for m in logged_errors if "pick image" in m], logged_errors
+        )
+        self.assertEqual(self.print_job.get_printable_objects, {"1": "Cube"})
 
     def _parse_multi_plate_3mf(self, plate_idx, extra_covers=()):
         """Run the FTP worker over a two plate 3MF, as written by "Export all sliced file".
@@ -466,6 +629,35 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual(self.print_job.print_bed_type, "textured_plate")
         self.client._device.cover_image.set_image.assert_called_with(b"direct-plate-cover-bytes")
 
+    def test_direct_metadata_download_uses_pick_1_fallback(self):
+        """Single-plate exports name the pick image pick_1.png even when the plate index differs."""
+        self.client.ftp_enabled = True
+        self.print_job.plate_idx = 2
+        self.print_job.ams_mapping = []
+        pick_bytes = self._pick_png_with_object_1()
+
+        ftp_mock = MagicMock()
+        self.client.ftp_connection.return_value = ftp_mock
+        ftp_mock.nlst.return_value = ["slice_info.config", "plate_1.png", "pick_1.png"]
+
+        def mock_retrbinary(cmd, callback):
+            if "slice_info.config" in cmd:
+                callback(
+                    b'<config><plate><metadata key="index" value="2" />'
+                    b'<object identify_id="1" name="Cube" skipped="false" />'
+                    b'</plate></config>'
+                )
+            elif "pick_1.png" in cmd:
+                callback(pick_bytes)
+            elif "plate_1.png" in cmd:
+                callback(b"cover")
+
+        ftp_mock.retrbinary.side_effect = mock_retrbinary
+
+        self.assertTrue(self.print_job._attempt_direct_metadata_download())
+        self.client._device.pick_image.set_image.assert_called_with(pick_bytes)
+        self.assertEqual(self.print_job.get_printable_objects, {"1": "Cube"})
+
     def test_select_model_files_prefers_ftps_and_retains_fallback(self):
         ftps_file = RemoteMediaFile(
             name="all_models.gcode.3mf",
@@ -534,6 +726,62 @@ class TestPrintJob(unittest.TestCase):
             for sidecar in sidecars:
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
+
+    def test_clear_print_history_deletes_every_model_and_sidecar(self):
+        """Clearing removes all cached prints, even when pruning is disabled (#1585)."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            self.client._print_cache_count = -1
+            cache_dir = Path(temp_dir) / "prints" / "cache"
+            cache_dir.mkdir(parents=True)
+            files = []
+            for name in ("123-plate.3mf", "456-other.gcode.3mf"):
+                stem = name.removesuffix(".3mf")
+                for suffix in (".3mf", ".png", ".jpg", ".slice_info.config", ".gcode"):
+                    path = cache_dir / f"{stem}{suffix}"
+                    path.write_bytes(b"data")
+                    files.append(path)
+
+            self.print_job.clear_print_history_files()
+
+            for path in files:
+                self.assertFalse(path.exists(), path)
+
+    def test_clear_timelapse_deletes_every_video_and_thumbnail(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            self.client._timelapse_cache_count = -1
+            timelapse_dir = Path(temp_dir) / "timelapse"
+            timelapse_dir.mkdir(parents=True)
+            video = timelapse_dir / "video_2026.mp4"
+            thumbnail = timelapse_dir / "video_2026.jpg"
+            video.write_bytes(b"video")
+            thumbnail.write_bytes(b"thumb")
+
+            self.print_job.clear_timelapse_files()
+
+            self.assertFalse(video.exists())
+            self.assertFalse(thumbnail.exists())
+
+    def test_clear_print_history_leaves_timelapses_alone(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            (Path(temp_dir) / "prints").mkdir()
+            timelapse_dir = Path(temp_dir) / "timelapse"
+            timelapse_dir.mkdir()
+            video = timelapse_dir / "video.mp4"
+            video.write_bytes(b"video")
+
+            self.print_job.clear_print_history_files()
+
+            self.assertTrue(video.exists())
+
+    def test_clear_with_missing_cache_directory_is_a_no_op(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = os.path.join(temp_dir, "missing")
+
+            self.print_job.clear_print_history_files()
+            self.print_job.clear_timelapse_files()
 
     def test_model_selection_keeps_other_storage_copies_as_fallback(self):
         """A copy on another volume stays available when the preferred one cannot be read."""
@@ -642,6 +890,42 @@ class TestPrintJob(unittest.TestCase):
         self.assertEqual("/cache/prints/dragon.gcode.3mf", result)
         self.assertEqual(2, self.print_job._download_model_file_from_remote.call_count)
 
+    def test_failed_remote_download_does_not_leave_download_percentage_at_zero(self):
+        """A failed download must not leave the sensor stuck below 100 (issue #2233)."""
+        remote_file = RemoteMediaFile(
+            name="dragon.gcode.3mf",
+            path="/dragon.gcode.3mf",
+            size=954727,
+            media_type="model",
+            source=Ftps990MediaSource.name,
+            storage="external",
+            modified=datetime(2026, 9, 21, 22, 40, tzinfo=timezone.utc),
+        )
+        source = MagicMock()
+        source.name = Ftps990MediaSource.name
+
+        with tempfile.TemporaryDirectory() as cache_dir:
+            self.client.cache_path = cache_dir
+            self.print_job._download_remote_file_atomic = MagicMock(side_effect=OSError("connection reset"))
+
+            result = self.print_job._download_model_file_from_remote(source, remote_file)
+
+        self.assertIsNone(result)
+        self.assertEqual(100, self.print_job.model_download_percentage)
+
+    def test_failed_ftp_download_does_not_leave_download_percentage_at_zero(self):
+        """A failed FTP transfer must not leave the sensor stuck below 100 (issue #2233)."""
+        ftp = MagicMock()
+        ftp.size.return_value = 954727
+        ftp.retrbinary.side_effect = EOFError("connection closed")
+
+        with tempfile.TemporaryDirectory() as cache_dir:
+            self.client.cache_path = cache_dir
+            result = self.print_job._attempt_ftp_download_of_file(ftp, "/dragon.gcode.3mf")
+
+        self.assertIsNone(result)
+        self.assertEqual(100, self.print_job.model_download_percentage)
+
     def test_newest_file_fallback_still_returns_only_aliases(self):
         """With no subtask name, the newest-file fallback must not fan out to unrelated models."""
         newest = RemoteMediaFile(
@@ -748,6 +1032,44 @@ class TestPrintJob(unittest.TestCase):
         self.print_job._download_task_data_from_cloud()
 
         self.assertEqual(4.44, self.print_job.print_weight)
+
+    def test_cloud_task_times_are_not_applied_to_a_local_print_with_ftp(self):
+        """A stale task's start time would be counted as usage hours at print end (#2242)."""
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "local"
+        generated_start = datetime(2026, 11, 11, 9, 0, tzinfo=timezone.utc)
+        self.print_job.start_time = generated_start
+        self.print_job.end_time = None
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(generated_start, self.print_job.start_time)
+        self.assertIsNone(self.print_job.end_time)
+
+    def test_cloud_task_times_are_still_applied_to_a_cloud_print(self):
+        self.client.ftp_enabled = True
+        self.client.bambu_cloud.auth_token = "token"
+        self.client.bambu_cloud.get_latest_task_for_printer.return_value = self._stale_cloud_task()
+        self.print_job._print_type = "cloud"
+
+        self.print_job._download_task_data_from_cloud()
+
+        self.assertEqual(datetime(2026, 9, 23, 14, 32, tzinfo=timezone.utc), self.print_job.start_time)
+        self.assertEqual(datetime(2026, 9, 23, 14, 33, 7, tzinfo=timezone.utc), self.print_job.end_time)
+
+    def test_usage_hours_count_whole_days_of_a_long_print(self):
+        """timedelta.seconds drops the days, so a 26 hour print used to add 2 hours."""
+        from pybambu.utils import get_end_time
+        from datetime import timedelta
+        self.client._device.info.usage_hours = 0.0
+        self.print_job.gcode_state = "RUNNING"
+        self.print_job.start_time = get_end_time(0) - timedelta(hours=26)
+
+        self.print_job.print_update({"gcode_state": "FINISH"})
+
+        self.assertAlmostEqual(26.0, self.client._device.info.usage_hours, delta=0.05)
 
 class TestInfo(unittest.TestCase):
     def setUp(self):
@@ -980,6 +1302,28 @@ class TestAMSList(unittest.TestCase):
         self.ams_list.print_update({"ams_status": 0x0400})
         self.assertEqual(self.ams_list.data[0].status, "calibration")
         self.assertEqual(self.ams_list.data[128].status, "calibration")
+
+    def test_ams_status_external_spool_change_is_reported_at_printer_level(self):
+        # An external spool load/unload involves no AMS unit, so the units stay idle but the
+        # printer-level status still reports the step (#2307)
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        self.ams_list.print_update({"ams_status": 0x0103, "ams": {"tray_now": "254", "tray_tar": "254"}})
+        self.assertEqual(self.ams_list.status, "cutting_filament")
+        for index in self.ams_list.data:
+            self.assertEqual(self.ams_list.data[index].status, "idle")
+
+        self.ams_list.print_update({"ams_status": 0x0105})
+        self.assertEqual(self.ams_list.status, "pushing_new_filament")
+
+        self.ams_list.print_update({"ams_status": 0})
+        self.assertEqual(self.ams_list.status, "idle")
+
+    def test_ams_status_printer_level_without_any_ams(self):
+        # Printers with only an external spool still get the step
+        self.assertEqual(self.ams_list.data, {})
+        self.assertTrue(self.ams_list.print_update({"ams_status": 0x0107}))
+        self.assertEqual(self.ams_list.status, "purging_old_filament")
 
     def test_h2d_ams_detection(self):
         # Test that two AMS files are properly detected from H2D.json
@@ -1454,6 +1798,31 @@ class TestH2D(unittest.TestCase):
         self.assertTrue(result)
         self.assertFalse(self.info.door_open)
 
+    def test_h2d_top_cover_open(self):
+        data = self.h2d_data['push_all']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertFalse(self.info.top_cover_open)
+
+        # Top glass cover status is bit 0x01000000 of the stat field (issue #1805).
+        data = self.h2d_data['push_top_cover_opened']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertTrue(self.info.top_cover_open)
+        self.assertFalse(self.info.door_open)
+
+        data = self.h2d_data['push_top_cover_closed']
+        result = self.info.print_update(data)
+        self.assertTrue(result)
+        self.assertFalse(self.info.top_cover_open)
+        self.assertFalse(self.info.door_open)
+
+    def test_h2d_door_does_not_set_top_cover(self):
+        data = self.h2d_data['push_door_opened']
+        self.info.print_update(data)
+        self.assertTrue(self.info.door_open)
+        self.assertFalse(self.info.top_cover_open)
+
     def test_h2d_door_ignores_old_flag(self):
         data = self.h2d_data['push_all']
         result = self.info.print_update(data)
@@ -1730,6 +2099,61 @@ class TestFans(unittest.TestCase):
         self.assertEqual(
             self.fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY), 70
         )
+
+    def test_h3c_chamber_fan_reads_reported_speed_and_partial_updates(self):
+        self.assertIsNone(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER))
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 70}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 160, "state": 80}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 256 + 60}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 60)
+        for invalid in (None, -1, 101, "70", True):
+            self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": invalid}]}}})
+            self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 60)
+
+    def test_h3c_chamber_fan_sends_verified_mqtt_command(self):
+        self.fans.print_update({"device": {"airduct": {
+            "modeCur": 0,
+            "modeList": [{"modeId": 0, "ctrl": [16, 32, 160, 48, 240], "off": []}],
+            "parts": [{"id": 240, "state": 70}],
+        }}})
+        self.client.publish.return_value = True
+        self.assertTrue(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 60))
+        self.client.publish.assert_called_once_with({"print": {
+            "command": "set_fan", "sequence_id": "0", "fan_index": 15, "speed": 60,
+        }})
+        # A published command is not proof of a physical state change.
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 60}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 60)
+        self.assertTrue(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 70))
+        self.fans.print_update({"device": {"airduct": {"parts": [{"id": 240, "state": 70}]}}})
+        self.assertEqual(self.fans.get_fan_speed(FansEnum.H3C_CHAMBER), 70)
+
+    def test_h3c_chamber_fan_requires_reported_manual_control(self):
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 60))
+        self.fans.print_update({"device": {"airduct": {"modeList": [
+            {"modeId": 0, "ctrl": [240], "off": []},
+            {"modeId": 1, "ctrl": [160], "off": []},
+        ], "modeCur": 0}}})
+        self.assertTrue(self.fans.h3c_chamber_fan_controllable)
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 101))
+        self.fans.print_update({"device": {"airduct": {"modeCur": 1}}})
+        self.assertFalse(self.fans.h3c_chamber_fan_controllable)
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 60))
+        self.fans.print_update({"device": {"airduct": {"modeCur": 0, "modeList": [
+            {"modeId": 0, "ctrl": [240], "off": [240]},
+        ]}}})
+        self.assertFalse(self.fans.h3c_chamber_fan_controllable)
+        self.client.publish.assert_not_called()
+
+    def test_h3c_chamber_fan_reports_publish_failure(self):
+        self.fans.print_update({"device": {"airduct": {
+            "modeCur": 0, "modeList": [{"modeId": 0, "ctrl": [240]}],
+        }}})
+        self.client.publish.return_value = False
+        self.assertFalse(self.fans.set_fan_speed(FansEnum.H3C_CHAMBER, 70))
 
 
 if __name__ == '__main__':

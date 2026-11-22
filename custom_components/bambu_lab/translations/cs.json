@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Chyba tisku vyřešena",
       "event_printer_error": "Chyba HMS",
       "event_printer_error_cleared": "Chyba HMS vyřešena",
-      "event_printer_missing_sdcard": "Chybí SD karta"
+      "event_printer_missing_sdcard": "Chybí SD karta",
+      "event_timelapse_downloaded": "Timelapse stažen"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "Zařízení je již nakonfigurováno",
       "no_printers": "Na účtu nebyly nalezeny žádné nenakonfigurované tiskárny.",
       "cloudflare": "Cloudflare zablokoval pokus o připojení.",
-      "curl_unavailable": "Knihovna curl_cffi není k dispozici."
+      "curl_unavailable": "Knihovna curl_cffi není k dispozici.",
+      "no_working_credentials": "Pro tento účet nejsou k dispozici žádné funkční přihlašovací údaje k tiskárně Bambu Cloud.",
+      "reconfigure_not_supported": "Tímto způsobem lze překonfigurovat pouze položky účtu MakerWorld.",
+      "reconfigure_successful": "Přihlašovací údaje MakerWorld byly aktualizovány."
     },
     "error": {
       "cannot_connect": "Nepodařilo se připojit. Zkontrolujte přihlašovací údaje.",
@@ -84,7 +88,9 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -106,9 +112,18 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
+        }
+      },
+      "makerworld": {
+        "title": "Účet MakerWorld",
+        "description": "Použijte funkční přihlašovací údaje Bambu Cloud z existující položky tiskárny. Není vyžadováno žádné další přihlášení.",
+        "data": {
+          "username": "Účet Bambu:"
         }
       }
     }
@@ -116,7 +131,9 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare zablokoval pokus o připojení.",
-      "curl_unavailable": "Knihovna curl_cffi není k dispozici."
+      "curl_unavailable": "Knihovna curl_cffi není k dispozici.",
+      "no_working_credentials": "Pro tento účet nejsou k dispozici žádné funkční přihlašovací údaje k tiskárně Bambu Cloud.",
+      "no_ams": "Na této tiskárně nebyl dosud identifikován žádný AMS. Počkejte, až se tiskárna připojí a nahlásí své jednotky AMS, a zkuste to znovu."
     },
     "error": {
       "cannot_connect": "Nepodařilo se připojit",
@@ -179,7 +196,9 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
         }
@@ -200,9 +219,23 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
+              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
+              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
             }
           }
+        }
+      },
+      "ams_heater": {
+        "title": "Externí ohřívač nebo sušička AMS",
+        "description": "Přídavná ohřívače a sušičky AMS, jako je SUNLU AMS Heater a EIBOS Series X (Dyas/Tetras), nemají připojení k síti, takže Home Assistant je ovládá přepínáním chytré zástrčky, ze které je napájen.\n\nVyberte tuto zástrčku pro každý AMS, který má nainstalovaný ohřívač, nebo ji nechte prázdnou. Každý připojený AMS získá režim sušení ohřívače, výkon ohřívače, prahovou hodnotu vlhkosti, teplotní přerušení a omezení doby provozu.\n\nNastavte ohřívač nebo sušičku tak, aby začala ohřívat, když je zapnutá, takže přepnutím zástrčky skutečně začne sušit."
+      },
+      "makerworld": {
+        "title": "Účet MakerWorld",
+        "description": "Použijte funkční přihlašovací údaje Bambu Cloud z existující položky tiskárny. Není vyžadováno žádné další přihlášení.",
+        "data": {
+          "username": "Účet Bambu:",
+          "credential_source": "Účet Bambu:"
         }
       }
     }
@@ -250,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Pravé vlákno extrudéru"
+      },
+      "top_cover_open": {
+        "name": "Horní kryt"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Instalována sada pro upgrade P1S"
       }
     },
     "button": {
@@ -276,6 +315,12 @@
       },
       "buzzer_beeping": {
         "name": "Bzučák - Pípání"
+      },
+      "hotend_rack_raise": {
+        "name": "Zvedněte stojan"
+      },
+      "hotend_rack_lower": {
+        "name": "Spodní stojan"
       }
     },
     "fan": {
@@ -302,6 +347,19 @@
       },
       "exhaust_fan": {
         "name": "Výfukový ventilátor"
+      },
+      "air_purifier": {
+        "name": "Čistička vzduchu",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "silent": "Tichý",
+              "standard": "Norma",
+              "max": "Max"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -335,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Cílová teplota komory"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Vlhkost při zapnutí ohřívače"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Vlhkost při vypnutí ohřívače"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Vypnutí teploty ohřívače"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maximální doba chodu ohřívače"
       }
     },
     "select": {
@@ -508,7 +578,8 @@
           "build_plate_alignment_detection": "Detekce zarovnání desky sestavení",
           "heatbed_surface_foreign_object_detection": "Detekce cizích předmětů na povrchu vyhřívané podložky",
           "heatbed_underside_foreign_object_detection": "Detekce cizích předmětů na spodní straně vyhřívané podložky",
-          "pre_extrusion_before_printing": "Předběžné vytlačování před tiskem"
+          "pre_extrusion_before_printing": "Předběžné vytlačování před tiskem",
+          "heatbed_stabilizing": "Stabilizační vyhřívaná postel"
         }
       },
       "sdcard_status": {
@@ -517,7 +588,8 @@
           "missing": "Chybí",
           "normal": "Normální",
           "abnormal": "Abnormální",
-          "readonly": "Pouze pro čtení"
+          "readonly": "Pouze pro čtení",
+          "not_applicable": "Nelze použít"
         }
       },
       "print_progress": {
@@ -1013,6 +1085,173 @@
       },
       "exhaust_fan_speed": {
         "name": "Rychlost výfukového ventilátoru"
+      },
+      "external_storage_connection": {
+        "name": "Připojení externího úložiště",
+        "state": {
+          "connected": "Připojeno",
+          "disconnected": "Odpojeno"
+        }
+      },
+      "external_storage_total": {
+        "name": "Externí úložiště celkem"
+      },
+      "external_storage_used": {
+        "name": "Použito externí úložiště"
+      },
+      "external_storage_free": {
+        "name": "Externí úložiště zdarma"
+      },
+      "zone_temperature": {
+        "name": "Teplota zóny {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zóna"
+          },
+          "zone_id": {
+            "name": "ID zóny"
+          },
+          "slots": {
+            "name": "Sloty"
+          },
+          "dry_setting": {
+            "name": "Nastavení sušení"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Vlhkost zóny {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zóna"
+          },
+          "zone_id": {
+            "name": "ID zóny"
+          },
+          "slots": {
+            "name": "Sloty"
+          },
+          "dry_setting": {
+            "name": "Nastavení sušení"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2,5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Rychlost ventilátoru"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Pozice swaptek (raw)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Stav Swaptek (raw)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Jízdní",
+          "docked": "Ukotveno",
+          "empty": "Prázdný"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Nástroj"
+          },
+          "filament_diameter": {
+            "name": "Průměr vlákna"
+          },
+          "filament_name": {
+            "name": "Název vlákna"
+          },
+          "filament_type": {
+            "name": "Typ vlákna"
+          },
+          "remaining_weight_g": {
+            "name": "Zbývající hmotnost vlákna"
+          },
+          "remaining_percent": {
+            "name": "Zbývající vlákno"
+          },
+          "ams_id": {
+            "name": "ID AMS"
+          },
+          "ams_slot": {
+            "name": "Slot AMS"
+          },
+          "nozzle_diameter": {
+            "name": "Průměr trysky"
+          },
+          "nozzle_type": {
+            "name": "Typ trysky"
+          },
+          "nozzle_type_code": {
+            "name": "Kód typu trysky"
+          },
+          "max_temperature": {
+            "name": "Maximální teplota"
+          },
+          "serial": {
+            "name": "Sériové číslo"
+          },
+          "filament_id": {
+            "name": "ID vlákna"
+          },
+          "color": {
+            "name": "Barva"
+          },
+          "wear": {
+            "name": "Nosit"
+          },
+          "status_raw": {
+            "name": "Stav (nezpracovaný)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Teplota PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "Cílová teplota PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "Čas tisku PrintTool {tool_number}"
+      },
+      "filament_inventory": {
+        "name": "Inventář vláken"
+      },
+      "processing_material": {
+        "name": "Laserový/řezací materiál"
+      },
+      "check_in_remaining": {
+        "name": "Zbývá laserové odbavení"
+      },
+      "print_elapsed_time": {
+        "name": "Vytisknout uplynulý čas"
+      },
+      "last_timelapse": {
+        "name": "Poslední časosběr"
+      },
+      "filament_change_status": {
+        "name": "Stav změny vlákna",
+        "state": {
+          "idle": "Líný",
+          "changing_filament": "Výměna vlákna",
+          "heating_nozzle": "Ohřívací tryska",
+          "cutting_filament": "Řezací vlákno",
+          "pulling_back_filament": "Vytažení vlákna proudu zpět",
+          "pushing_new_filament": "Zatlačení nového vlákna",
+          "purging_old_filament": "Čištění starého vlákna",
+          "checking_position": "Kontrola polohy vlákna",
+          "rfid_identifying": "Identifikace RFID",
+          "filament_loaded": "Vlákno nabité",
+          "calibration": "Kalibrace",
+          "cold_pull": "Studený tah",
+          "self_check": "Vlastní kontrola",
+          "debug": "Ladit",
+          "unknown": "Neznámý"
+        }
       }
     },
     "camera": {
@@ -1032,6 +1271,12 @@
       },
       "prompt_sound": {
         "name": "Povolit zvukové upozornění"
+      },
+      "ams_heater_drying": {
+        "name": "Režim sušení ohřívače"
+      },
+      "ams_heater_power": {
+        "name": "Výkon ohřívače"
       }
     },
     "update": {
@@ -1044,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab cloud",
-        "lan": "LAN Režim"
+        "lan": "LAN Režim",
+        "makerworld": "Účet MakerWorld",
+        "ams_heater": "Externí ohřívač nebo sušička AMS (chytrá zástrčka)"
       }
     }
   },

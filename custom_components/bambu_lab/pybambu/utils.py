@@ -5,6 +5,7 @@ import gzip
 import json
 import logging
 import math
+import os
 import requests
 import socket
 import re
@@ -29,8 +30,9 @@ from .const import (
     TempEnum,
     AMSTrayStateFlags,
     AMS_TRAY_STATE_LEGACY_MAX,
+    LEGACY_SDCARD_PRINTERS,
 )
-from .commands import SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
+from .commands import PRINT_PROJECT_FILE_TEMPLATE, SEND_GCODE_TEMPLATE, UPGRADE_CONFIRM_TEMPLATE
 
 def search(lst, predicate, default={}):
     """Search an array for a string"""
@@ -65,12 +67,68 @@ def normalize_service_target(data) -> dict:
     return normalized
 
 
+# AMS tray sensor unique IDs end in tray_<n>: 1-4 on 4-slot units, up to 9 on the AMS 3H.
+_AMS_TRAY_UNIQUE_ID = re.compile(r"_tray_([1-9])$")
+
+
+def ams_tray_number_from_unique_id(unique_id: str | None) -> int | None:
+    """Return the 1-based AMS tray number from a tray sensor's unique ID, or None."""
+    match = _AMS_TRAY_UNIQUE_ID.search(unique_id or "")
+    return int(match.group(1)) if match else None
+
+
+def build_print_project_file_command(device_type: Printers | str, data: dict) -> dict:
+    """Build the MQTT project_file command for the print_project_file service.
+
+    A filepath that already contains '//' is sent as-is. Otherwise the legacy printers
+    take file:///sdcard/<path> and every other printer takes ftp:///<path>.
+
+    Besides the bed_leveling / flow_cali booleans, the integer auto_bed_leveling and
+    extrude_cali_flag fields are sent the way Bambu Studio does: newer printers such
+    as the P2S decide from those and calibrate anyway when they are missing.
+    """
+    command = copy.deepcopy(PRINT_PROJECT_FILE_TEMPLATE)
+    filepath = data.get("filepath")
+    plate = data.get("plate", 1)
+    bed_leveling = data.get("bed_leveling", False)
+    flow_cali = data.get("flow_cali", False)
+    use_ams = data.get("use_ams", False)
+
+    if "//" in filepath:
+        url = filepath
+    elif device_type in LEGACY_SDCARD_PRINTERS:
+        url = f"file:///sdcard/{filepath}"
+    else:
+        url = f"ftp:///{filepath}"
+
+    command["print"]["param"] = f"Metadata/plate_{plate}.gcode"
+    command["print"]["url"] = url
+    command["print"]["timelapse"] = data.get("timelapse", False)
+    command["print"]["bed_leveling"] = bed_leveling
+    command["print"]["auto_bed_leveling"] = 1 if bed_leveling else 0
+    command["print"]["flow_cali"] = flow_cali
+    command["print"]["extrude_cali_flag"] = 1 if flow_cali else 0
+    command["print"]["vibration_cali"] = data.get("vibration_cali", False)
+    command["print"]["layer_inspect"] = data.get("layer_inspect", False)
+    command["print"]["use_ams"] = use_ams
+    if use_ams:
+        command["print"]["ams_mapping"] = [int(x) for x in data.get("ams_mapping").split(',')]
+    command["print"]["subtask_name"] = os.path.basename(filepath)
+    return command
+
+
 def get_authenticated_rtsp_url(
-    reported_url: str | None,
+    reported_url: str | bytes | bytearray | None,
     configured_host: str,
     access_code: str,
 ) -> str | None:
     """Build an authenticated RTSP URL, or None when LiveView is disabled."""
+    if isinstance(reported_url, (bytes, bytearray)):
+        # urlparse on bytes yields a bytes netloc, which the str handling below can't use.
+        try:
+            reported_url = bytes(reported_url).decode()
+        except UnicodeDecodeError:
+            return None
     if not reported_url or reported_url == "disable" or not access_code:
         return None
 
@@ -243,9 +301,12 @@ def _get_error_text(error_type: str, error_code: str, device_type: Printers | st
         if not code_entry:
             continue
 
-        # Pick message matching device_type or default (empty list)
+        # Prefer an explicit model match regardless of JSON key ordering.
         for msg, models in code_entry.items():
-            if not models or str(device_type) in models:
+            if str(device_type) in models:
+                return msg
+        for msg, models in code_entry.items():
+            if not models:
                 return msg
 
     return 'unknown'
@@ -343,6 +404,7 @@ def get_printer_type(modules, default):
             "Bambu Lab P1S": "P1S",
             "Bambu Lab P2S": "P2S",
             "Bambu Lab H2C": "H2C",
+            "Bambu Lab H3C": "H3C",
             "Bambu Lab H2D": "H2D",
             "Bambu Lab H2D Pro": "H2DPRO",
             "Bambu Lab H2S": "H2S",
@@ -352,6 +414,11 @@ def get_printer_type(modules, default):
     for product_name, code in product_map.items():
             if search(modules, lambda x: x.get('product_name', "") == product_name):
                     return code
+
+    # Keep a known H3C identity when a partial reply omits product_name.
+    # Its AP05 board would otherwise be mistaken for an X1C.
+    if default == "H3C":
+        return default
 
     # Legacy identification logic that became unreliable as they started to re-use hw_ver for different models.
     apNode = search(modules, lambda x: x.get('hw_ver', "").find("AP0") == 0)
@@ -435,8 +502,17 @@ def get_Url(url: str, region: str):
 
 
 def get_upgrade_url(name: str):
-    """Retrieve upgrade URL from BambuLab website"""
-    response = requests.get(f"https://bambulab.com/en/support/firmware-download/{name}")
+    """Retrieve upgrade URL from BambuLab website, or None if it can't be found."""
+    page_url = f"https://bambulab.com/en/support/firmware-download/{name}"
+    try:
+        response = requests.get(page_url, timeout=10)
+    except requests.RequestException as e:
+        LOGGER.warning(f"Failed to fetch firmware download page {page_url}: {e}")
+        return None
+    if response.status_code != 200:
+        # Typically a 403 when Cloudflare blocks the request.
+        LOGGER.warning(f"Firmware download page {page_url} returned HTTP {response.status_code}")
+        return None
     soup = BeautifulSoup(response.text, 'html.parser')
     selector = soup.select_one(
         "#__next > div > div > div > "

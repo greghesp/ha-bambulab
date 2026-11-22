@@ -1,0 +1,408 @@
+{
+  "get_version": {
+    "module": [
+      {
+        "hw_ver": "N/A",
+        "id": 0,
+        "name": "ota",
+        "product_name": "Bambu Lab H3C",
+        "sw_ver": "01.01.03.00",
+        "sn": "TEST-DEVICE"
+      },
+      {
+        "hw_ver": "N10A05",
+        "id": 32,
+        "name": "n10a",
+        "product_name": "AMS 3H",
+        "sw_ver": "02.00.32.82",
+        "sn": "TEST-DEVICE"
+      },
+      {
+        "hw_ver": "AP05",
+        "id": 0,
+        "name": "ap2",
+        "product_name": "",
+        "sw_ver": "00.00.66.66",
+        "sn": "TEST-DEVICE"
+      }
+    ]
+  },
+  "push_status": {
+    "command": "push_status",
+    "msg": 0,
+    "ams": {
+      "ams": [
+        {
+          "dry_info": "1",
+          "id": "32",
+          "info": "240002006",
+          "tray": [
+            {
+              "bed_temp": "0",
+              "bed_temp_type": "0",
+              "cali_idx": -1,
+              "cols": [
+                "000000FF"
+              ],
+              "ctype": 2,
+              "drying_temp": "55",
+              "drying_time": "8",
+              "id": "0",
+              "ins_cyc": 1,
+              "nozzle_temp_max": "230",
+              "nozzle_temp_min": "190",
+              "print_status": 1,
+              "remain": 61,
+              "remain_g": 612,
+              "state": 283,
+              "total_len": 330000,
+              "tray_color": "000000FF",
+              "tray_diameter": "1.75",
+              "tray_id_name": "A00-K00",
+              "tray_info_idx": "GFA00",
+              "tray_sub_brands": "PLA Basic",
+              "tray_type": "PLA",
+              "tray_weight": "1000"
+            },
+            {
+              "bed_temp": "0",
+              "bed_temp_type": "0",
+              "cali_idx": -1,
+              "cols": [
+                "FFFFFFFF"
+              ],
+              "ctype": 2,
+              "drying_temp": "55",
+              "drying_time": "8",
+              "id": "1",
+              "ins_cyc": 1,
+              "nozzle_temp_max": "230",
+              "nozzle_temp_min": "190",
+              "print_status": 0,
+              "remain": 67,
+              "remain_g": 670,
+              "state": 283,
+              "total_len": 330000,
+              "tray_color": "FFFFFFFF",
+              "tray_diameter": "1.75",
+              "tray_id_name": "A00-W1",
+              "tray_info_idx": "GFA00",
+              "tray_sub_brands": "PLA Basic",
+              "tray_type": "PLA",
+              "tray_weight": "1000"
+            },
+            {
+              "id": "2",
+              "print_status": 0,
+              "state": 160
+            },
+            {
+              "id": "3",
+              "print_status": 0,
+              "state": 160
+            },
+            {
+              "id": "4",
+              "print_status": 0,
+              "state": 160
+            },
+            {
+              "id": "5",
+              "print_status": 0,
+              "state": 160
+            },
+            {
+              "id": "6",
+              "print_status": 0,
+              "state": 160
+            },
+            {
+              "id": "7",
+              "print_status": 0,
+              "state": 160
+            },
+            {
+              "id": "8",
+              "print_status": 0,
+              "state": 160
+            }
+          ],
+          "zone_info": [
+            {
+              "dry_setting": {
+                "dry_duration": -1,
+                "dry_filament": "",
+                "dry_temperature": -1
+              },
+              "dry_sf_reason": [],
+              "dry_time": 0,
+              "humidity": "4",
+              "humidity_raw": "24",
+              "info": "240002006",
+              "temp": "28.2",
+              "zone_dry_info": "1",
+              "zone_id": 0,
+              "zone_slots": [
+                5,
+                7
+              ]
+            },
+            {
+              "dry_setting": {
+                "dry_duration": -1,
+                "dry_filament": "",
+                "dry_temperature": -1
+              },
+              "dry_sf_reason": [],
+              "dry_time": 0,
+              "humidity": "2",
+              "humidity_raw": "33",
+              "info": "240002006",
+              "temp": "27.7",
+              "zone_dry_info": "0",
+              "zone_id": 1,
+              "zone_slots": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                6,
+                8
+              ]
+            }
+          ]
+        }
+      ],
+      "ams_exist_bits": "2000",
+      "ams_exist_bits_raw": "2000",
+      "cali_id": 255,
+      "cali_stat": 0,
+      "cfs": [
+        2,
+        5,
+        7
+      ],
+      "cfs_m": [],
+      "csl": [
+        8192
+      ],
+      "insert_flag": true,
+      "power_on_flag": false,
+      "stat": 0,
+      "tray_exist_bits": "30000000",
+      "tray_hall_out_bits": "30000000",
+      "tray_is_bbl_bits": "30000000",
+      "tray_now": "0",
+      "tray_pre": "0",
+      "tray_read_done_bits": "30000000",
+      "tray_reading_bits": "0",
+      "tray_tar": "0",
+      "unbind_ams_stat": 0,
+      "version": 80227
+    },
+    "device": {
+      "nozzle": {
+        "exist": 33423361,
+        "hc": 511,
+        "info": [
+          {
+            "addr_id": 0,
+            "base_type": 0,
+            "bind_ams": [],
+            "c_t": 21,
+            "color_m": "000000FF",
+            "diameter": 0.4,
+            "fila_id": "GFA00",
+            "id": 0,
+            "p_t": 26473,
+            "rfid": 3,
+            "sn": "TEST-HOTEND",
+            "snow": 8192,
+            "stat": 176,
+            "temp": 14418140,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 1,
+            "base_type": 0,
+            "c_t": 24,
+            "color_m": "FFFFFFFF",
+            "diameter": 0.4,
+            "fila_id": "GFA00",
+            "id": 17,
+            "p_t": 22029,
+            "rfid": 3,
+            "sn": "TEST-HOTEND",
+            "snow": 8193,
+            "stat": 160,
+            "temp": 31,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 2,
+            "base_type": 0,
+            "c_t": 0,
+            "color_m": "00000000",
+            "diameter": 0.4,
+            "fila_id": "",
+            "id": 18,
+            "p_t": 0,
+            "rfid": 0,
+            "sn": "TEST-HOTEND",
+            "snow": 65023,
+            "stat": 1,
+            "temp": 32,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 3,
+            "base_type": 0,
+            "c_t": 0,
+            "color_m": "00000000",
+            "diameter": 0.4,
+            "fila_id": "",
+            "id": 19,
+            "p_t": 0,
+            "rfid": 0,
+            "sn": "TEST-HOTEND",
+            "snow": 64767,
+            "stat": 1,
+            "temp": 32,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 4,
+            "base_type": 0,
+            "c_t": 2,
+            "color_m": "00000000",
+            "diameter": 0.4,
+            "fila_id": "",
+            "id": 20,
+            "p_t": 4041,
+            "rfid": 0,
+            "sn": "TEST-HOTEND",
+            "snow": 64511,
+            "stat": 1,
+            "temp": 32,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 5,
+            "base_type": 0,
+            "c_t": 0,
+            "color_m": "00000000",
+            "diameter": 0.4,
+            "fila_id": "",
+            "id": 21,
+            "p_t": 0,
+            "rfid": 0,
+            "sn": "TEST-HOTEND",
+            "snow": 64255,
+            "stat": 1,
+            "temp": 32,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 6,
+            "base_type": 0,
+            "c_t": 0,
+            "color_m": "00000000",
+            "diameter": 0.4,
+            "fila_id": "",
+            "id": 22,
+            "p_t": 0,
+            "rfid": 0,
+            "sn": "TEST-HOTEND",
+            "snow": 63999,
+            "stat": 1,
+            "temp": 33,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 7,
+            "base_type": 1,
+            "c_t": 0,
+            "color_m": "00000000",
+            "diameter": 0.4,
+            "fila_id": "",
+            "id": 23,
+            "p_t": 0,
+            "rfid": 0,
+            "sn": "TEST-HOTEND",
+            "snow": 63488,
+            "stat": 1,
+            "temp": 33,
+            "tm": 350,
+            "type": "HT01",
+            "wear": 0.0
+          },
+          {
+            "addr_id": 8,
+            "base_type": 0,
+            "c_t": 0,
+            "color_m": "00000000",
+            "diameter": 0.4,
+            "fila_id": "",
+            "id": 24,
+            "p_t": 0,
+            "rfid": 0,
+            "sn": "TEST-HOTEND",
+            "snow": 63487,
+            "stat": 1,
+            "temp": 32,
+            "tm": 350,
+            "type": "HS01",
+            "wear": 0.0
+          }
+        ],
+        "refresh_list": [],
+        "src_id": 16,
+        "state": 2101248,
+        "tar_id": 16
+      },
+      "holder": {
+        "info": 1,
+        "info2": 16355,
+        "job": 0,
+        "pos": 2,
+        "stat": 0,
+        "step": [
+          0
+        ]
+      },
+      "extruder": {
+        "info": [
+          {
+            "hnow": 0,
+            "hpre": 0,
+            "htar": 0,
+            "id": 0,
+            "info": 3659,
+            "snow": 8192,
+            "spre": 8192,
+            "star": 8192,
+            "stat": 197376,
+            "temp": 14418140,
+            "z_bias": 0.0
+          }
+        ],
+        "state": 1
+      }
+    }
+  }
+}

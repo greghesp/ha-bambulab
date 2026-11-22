@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import uuid
 import mimetypes
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -9,6 +10,7 @@ from pathlib import Path
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import Platform
 from homeassistant.core import (
     HomeAssistant,
     ServiceCall,
@@ -21,11 +23,19 @@ import aiofiles
 
 from .const import (
     DOMAIN,
+    ENTRY_TYPE,
+    ENTRY_TYPE_MAKERWORLD,
     LOGGER,
+    MAKERWORLD_DATA,
     PLATFORMS,
-    SERVICE_CALL_EVENT
+    SERVICE_CALL_EVENT,
+    SERVICE_CALL_FUTURES,
+    SERVICE_CALL_ID,
 )
+from .ams_heater_controller import async_setup_ams_heaters
 from .coordinator import BambuDataUpdateCoordinator
+from .makerworld import create_makerworld_coordinator
+from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
 from .frontend import BambuLabCardRegistration
@@ -54,7 +64,7 @@ class PrintHistoryAPIView(HomeAssistantView):
             
             # Iterate through all coordinators
             for entry_id in self.hass.data[DOMAIN]:
-                if entry_id == "service_call_future":
+                if entry_id == SERVICE_CALL_FUTURES:
                     continue
                 
                 coordinator = self.hass.data[DOMAIN][entry_id]
@@ -117,6 +127,42 @@ class PrintHistoryAPIView(HomeAssistantView):
             )
 
 
+class DeletePrintHistoryAPIView(HomeAssistantView):
+    """API endpoint to delete a cached print and its sidecar files."""
+
+    url = "/api/bambu_lab/print_history/delete"
+    name = "api:bambu_lab:print_history_delete"
+    requires_auth = True
+
+    def __init__(self, hass: HomeAssistant):
+        self.hass = hass
+
+    async def post(self, request: web.Request) -> web.Response:
+        try:
+            data = await request.json()
+            serial = data.get("serial")
+            relative_path = data.get("path")
+            if not isinstance(serial, str) or not serial or not isinstance(relative_path, str) or not relative_path:
+                return web.json_response({"error": "Missing required parameters: serial and path"}, status=400)
+
+            coordinator = next((
+                coord for entry_id, coord in self.hass.data[DOMAIN].items()
+                if entry_id != SERVICE_CALL_FUTURES and coord.get_model().info.serial == serial
+            ), None)
+            if coordinator is None:
+                return web.json_response({"error": f"Printer with serial {serial} not found"}, status=404)
+
+            result = await coordinator.delete_cached_print_file(relative_path)
+            if not result["success"]:
+                status = 404 if result["error"] == "Cached print file not found" else 400
+                return web.json_response({"error": result["error"]}, status=status)
+
+            return web.json_response(result)
+        except Exception as e:
+            LOGGER.error("Error deleting print history file: %s", e)
+            return web.json_response({"error": "Internal server error"}, status=500)
+
+
 class VideoAPIView(HomeAssistantView):
     """API endpoint for video data from all printers."""
     
@@ -139,7 +185,7 @@ class VideoAPIView(HomeAssistantView):
            
             # Iterate through all coordinators
             for entry_id in self.hass.data[DOMAIN]:
-                if entry_id == "service_call_future":
+                if entry_id == SERVICE_CALL_FUTURES:
                     continue
                 
                 coordinator = self.hass.data[DOMAIN][entry_id]
@@ -217,7 +263,7 @@ class FileCacheFileView(HomeAssistantView):
             # Find the coordinator for this serial
             coordinator = None
             for entry_id in self.hass.data[DOMAIN]:
-                if entry_id == "service_call_future":
+                if entry_id == SERVICE_CALL_FUTURES:
                     continue
                 coord = self.hass.data[DOMAIN][entry_id]
                 if coord.get_model().info.serial == serial:
@@ -294,7 +340,7 @@ class EnsureCacheFileAPIView(HomeAssistantView):
             # Find the coordinator for this serial
             coordinator = None
             for entry_id in self.hass.data[DOMAIN]:
-                if entry_id == "service_call_future":
+                if entry_id == SERVICE_CALL_FUTURES:
                     continue
                 coord = self.hass.data[DOMAIN][entry_id]
                 if coord.get_model().info.serial == serial:
@@ -348,22 +394,69 @@ class EnsureCacheFileAPIView(HomeAssistantView):
             return web.json_response({"error": "Internal server error"}, status=500)
 
 
+async def async_call_service(hass: HomeAssistant, service: str, data: dict, timeout: float = 15):
+    """Fire a service call at the coordinators and wait for the target printer's result.
+
+    Each call gets its own future, keyed by an id sent with the event, so calls that overlap
+    (two dashboards, a script, several clicks) don't overwrite each other's future and time out.
+    """
+    call_id = uuid.uuid4().hex
+    event_data = {**data, "service": service, SERVICE_CALL_ID: call_id}
+    future = asyncio.get_running_loop().create_future()
+    futures = hass.data[DOMAIN].setdefault(SERVICE_CALL_FUTURES, {})
+    futures[call_id] = future
+    hass.bus.fire(SERVICE_CALL_EVENT, event_data)
+
+    try:
+        result = await asyncio.wait_for(future, timeout=timeout)
+        if service in ('extrude_retract', 'get_filament_data'):
+            # Only report result for service calls that return a result to avoid confusion.
+            if isinstance(result, (list, dict, tuple)):
+                LOGGER.debug("Service call result: %s with length %d", type(result).__name__, len(result))
+            else:
+                LOGGER.debug("Service call result: %s", result)
+        else:
+            LOGGER.debug("Service call complete.")
+        return result
+    except asyncio.TimeoutError:
+        LOGGER.error(f"Service call '{service}' timed out")
+        return None
+    finally:
+        # The integration may have been reloaded in the meantime, so don't assume the dict is there.
+        domain_data = hass.data.get(DOMAIN) or {}
+        domain_data.get(SERVICE_CALL_FUTURES, {}).pop(call_id, None)
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Bambu Lab integration."""
     LOGGER.debug("async_setup_entry Start")
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+        cloud = BambuCloud(
+            entry.data["region"],
+            entry.data["email"],
+            entry.data["username"],
+            entry.data["auth_token"],
+        )
+        coordinator = create_makerworld_coordinator(hass, entry, cloud)
+        hass.data.setdefault(MAKERWORLD_DATA, {})[entry.entry_id] = coordinator
+        await coordinator.async_refresh()
+        await hass.config_entries.async_forward_entry_setups(entry, [Platform.SENSOR])
+        return True
+
     coordinator = BambuDataUpdateCoordinator(hass, entry=entry)
     await coordinator.async_config_entry_first_refresh()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+    coordinator.ams_heaters = async_setup_ams_heaters(hass, entry, coordinator)
 
-    if coordinator.makerworld is not None:
-        # Deliberately not async_config_entry_first_refresh(): MakerWorld is a
-        # bonus, so a failure here must not hold up the printer. The sensors are
-        # created either way and report unavailable until a poll succeeds.
-        await coordinator.makerworld.async_refresh()
+    if coordinator.filament_inventory is not None:
+        # Same reasoning as MakerWorld above: a cloud failure must not block
+        # printer setup, so don't use async_config_entry_first_refresh().
+        await coordinator.filament_inventory.async_refresh()
 
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
+    hass.http.register_view(DeletePrintHistoryAPIView(hass))
     hass.http.register_view(VideoAPIView(hass))
     hass.http.register_view(FileCacheFileView(hass))
     hass.http.register_view(EnsureCacheFileAPIView(hass))
@@ -375,36 +468,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         except ValueError as e:
             LOGGER.error(f"Service call '{call.service}' rejected: {e}")
             return None
-        data['service'] = call.service
-        
-        future = asyncio.Future()
-        call.hass.data[DOMAIN]['service_call_future'] = future
-        hass.bus.fire(SERVICE_CALL_EVENT, data)
-
-        # Wait for the result from the second instance
-        try:
-            result = await asyncio.wait_for(future, timeout=15)
-            if (call.service == 'extrude_retract' or
-                call.service == 'get_filament_data'):
-                # Only report result for service calls that return a result to avoid confusion.
-                if isinstance(result, (list, dict, tuple)):
-                    LOGGER.debug("Service call result: %s with length %d", type(result).__name__, len(result))
-                else:
-                    LOGGER.debug("Service call result: %s", result)
-            else:
-                LOGGER.debug("Service call complete.")
-            return result
-        except asyncio.TimeoutError:
-            LOGGER.error("Service call timed out")
-            return None
-        finally:
-            # Clean up the future safely
-            try:
-                if 'service_call_future' in call.hass.data[DOMAIN]:
-                    del call.hass.data[DOMAIN]['service_call_future']
-            except (KeyError, TypeError):
-                # Integration may have been reloaded, ignore cleanup errors
-                pass
+        return await async_call_service(call.hass, call.service, data)
 
     # Register the services with Home Assistant
     services = {
@@ -422,6 +486,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "read_rfid": SupportsResponse.NONE,
         "start_filament_drying": SupportsResponse.NONE,
         "stop_filament_drying": SupportsResponse.NONE,
+        "force_filament_sync": SupportsResponse.NONE,
+        "clear_file_cache": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(
@@ -451,6 +517,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload the Bambu Lab integration."""
     LOGGER.debug("async_unload_entry")
+
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+        unloaded = await hass.config_entries.async_unload_platforms(entry, [Platform.SENSOR])
+        coordinator = hass.data.get(MAKERWORLD_DATA, {}).pop(entry.entry_id, None)
+        if coordinator is not None:
+            await coordinator.async_shutdown()
+        return unloaded
 
     # Unload the platforms
     LOGGER.debug(f"async_unload_entry: {PLATFORMS}")

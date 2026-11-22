@@ -268,7 +268,7 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 ## Move Axis
 
 <Property name="action" type="bambu_lab.move_axis" required>
-  Move the printer axis.
+  Move a printer axis, or home all axes.
 
     ```yaml
     action: bambu_lab.move_axis
@@ -282,17 +282,97 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
   <Accordion title="data" defaultOpen>
     <Property name="axis" type="string" required>
-      The axis to move. X1 and P1 devices, X and Y move the printhead, Z moves the bed. A1, Z moves the gantry, Y the bed, X the printhead.	
+      The axis to move: `X`, `Y`, `Z`, or `Home` to home all axes. On X1, P1, P2 and H2 printers, X and Y move the printhead and Z moves the bed. On the A1, X moves the printhead, Y moves the bed and Z moves the gantry.
     </Property>
 
     ---
 
-    <Property name="distance" type="number" required>
-      The distance (in mm) to move the axis A negative distance moves Z up, X left, Y forward.	
+    <Property name="distance" type="number">
+      The distance in mm to move the axis, from -100 to 100. Defaults to 10. A negative distance moves Z up, X left and Y forward. Ignored when `axis` is `Home`.
     </Property>
 
   </Accordion>
 </Property>
+
+### Standalone axis controls on a dashboard
+
+The Print Status Card has jog controls for X, Y and Z on its Controls page. To put axis controls on a dashboard without the
+Print Status Card, call this action from Home Assistant's built-in button cards. You need the printer's device ID: open
+**Settings > Devices & services > Devices**, select the printer, and copy the ID at the end of the page URL.
+
+```yaml
+type: vertical-stack
+cards:
+  - type: grid
+    columns: 4
+    square: false
+    cards:
+      - type: button
+        name: X -10
+        icon: mdi:chevron-double-left
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: X, distance: -10}}
+      - type: button
+        name: X -1
+        icon: mdi:chevron-left
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: X, distance: -1}}
+      - type: button
+        name: X +1
+        icon: mdi:chevron-right
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: X, distance: 1}}
+      - type: button
+        name: X +10
+        icon: mdi:chevron-double-right
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: X, distance: 10}}
+      - type: button
+        name: Y -10
+        icon: mdi:chevron-double-down
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Y, distance: -10}}
+      - type: button
+        name: Y -1
+        icon: mdi:chevron-down
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Y, distance: -1}}
+      - type: button
+        name: Y +1
+        icon: mdi:chevron-up
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Y, distance: 1}}
+      - type: button
+        name: Y +10
+        icon: mdi:chevron-double-up
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Y, distance: 10}}
+      - type: button
+        name: Z -10 (up)
+        icon: mdi:arrow-collapse-up
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Z, distance: -10}}
+      - type: button
+        name: Z -1 (up)
+        icon: mdi:arrow-up
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Z, distance: -1}}
+      - type: button
+        name: Z +1 (down)
+        icon: mdi:arrow-down
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Z, distance: 1}}
+      - type: button
+        name: Z +10 (down)
+        icon: mdi:arrow-collapse-down
+        tap_action: {action: perform-action, perform_action: bambu_lab.move_axis, data: {device_id: a1b2c3d4e5f6g7h8i9j0, axis: Z, distance: 10}}
+  - type: button
+    name: Home all axes
+    icon: mdi:home
+    tap_action:
+      action: perform-action
+      perform_action: bambu_lab.move_axis
+      data:
+        device_id: a1b2c3d4e5f6g7h8i9j0
+        axis: Home
+      confirmation:
+        text: Home all axes?
+```
+
+Replace every `a1b2c3d4e5f6g7h8i9j0` with your printer's device ID. Drop any rows or buttons you don't need.
+
+<Warning>
+  The printer does not check whether a print is running before it moves. Only use these controls when the printer is idle.
+</Warning>
 
 ## Skip Objects
 
@@ -370,4 +450,43 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
     data:
       device_id: a1b2c3d4e5f6g7h8i9j0
     ```
+</Property>
+
+## Force Filament Inventory Sync
+<Property name="action" type="bambu_lab.force_filament_sync" required>
+  Triggers an immediate refresh of the filament inventory sensor data from the Bambu Cloud. This action has no effect if the filament inventory sensor is not enabled for the specified printer.
+
+    ```yaml
+    action: bambu_lab.force_filament_sync
+    data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
+    ```
+</Property>
+
+## Clear File Cache
+<Property name="action" type="bambu_lab.clear_file_cache" required>
+  Deletes the 3MF models, cover images and timelapse videos the integration has cached in Home Assistant for a printer. This empties the print history and timelapse lists in the cards and frees the disk space they used. Nothing on the printer is deleted, and a model is downloaded again the next time it is printed.
+
+  To keep the cache small automatically instead, lower the print and timelapse cache counts in the printer's integration options.
+
+    ```yaml
+    action: bambu_lab.clear_file_cache
+    data:
+      device_id: a1b2c3d4e5f6g7h8i9j0
+      file_type: all
+    ```
+
+    The `data` object should contain the following properties:
+
+  <Accordion title="data" defaultOpen>
+    <Property name="device_id" type="string" required>
+      The printer whose local cache should be cleared.
+    </Property>
+
+    ---
+
+    <Property name="file_type" type="string">
+      What to clear: `all` (default), `prints` for the print history only, or `timelapse` for timelapse videos only.
+    </Property>
+  </Accordion>
 </Property>

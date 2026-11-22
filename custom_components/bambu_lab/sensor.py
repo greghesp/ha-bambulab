@@ -5,27 +5,60 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.helpers.restore_state import RestoreEntity, RestoredExtraData
+from homeassistant.helpers import entity_registry as er
 from homeassistant.util import dt as dt_util
 
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN, ENTRY_TYPE, ENTRY_TYPE_MAKERWORLD, LOGGER, MAKERWORLD_DATA
 from .definitions import (
+    AIR_PURIFIER_SENSORS,
     PRINTER_SENSORS,
     VIRTUAL_TRAY_SENSORS,
     AMS_SENSORS,
     HOTEND_RACK_SENSORS,
     HOTEND_RACK_HOTEND_SENSORS,
+    H3C_FAN_ENTITY_KEYS,
     X2D_TRANSLATION_KEYS,
     MAKERWORLD_SENSORS,
+    FILAMENT_INVENTORY_SENSORS,
     BambuLabAMSSensorEntityDescription,
     BambuLabHotendRackSensorEntityDescription,
     BambuLabMakerWorldSensorEntityDescription,
     BambuLabSensorEntityDescription,
 )
-from .coordinator import BambuDataUpdateCoordinator
+from .coordinator import BambuDataUpdateCoordinator, BambuFilamentCoordinator
 from .makerworld import MakerWorldDataUpdateCoordinator, MakerWorldEntity
-from .models import BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity
+from .models import AirPurifierEntity, BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity, FilamentInventoryEntity
 from .pybambu.const import Features, Printers
+
+
+def _migrate_h3c_storage_entities(registry, entry_id, printer):
+    """Preserve existing registry entries while renaming the initial USB sensors."""
+    if printer.device_type != Printers.H3C:
+        return
+    keys = {
+        "usb_connection": "external_storage_connection",
+        "usb_storage_total": "external_storage_total",
+        "usb_storage_used": "external_storage_used",
+        "usb_storage_free": "external_storage_free",
+    }
+    for old_key, new_key in keys.items():
+        old_id = registry.async_get_entity_id("sensor", DOMAIN, f"{printer.serial}_{old_key}")
+        if old_id is None:
+            continue
+        old = registry.async_get(old_id)
+        if old.config_entry_id != entry_id:
+            continue
+        unique_id = f"{printer.serial}_{new_key}"
+        if registry.async_get_entity_id("sensor", DOMAIN, unique_id) is not None:
+            continue
+        new_id = f"sensor.h3c_{printer.serial.lower()}_{new_key}"
+        if registry.async_get(new_id) is not None:
+            # Keep a conflicting entity's ID; still migrate the unique ID so
+            # setup reuses this registry entry instead of creating a duplicate.
+            registry.async_update_entity(old_id, new_unique_id=unique_id)
+        else:
+            registry.async_update_entity(old_id, new_unique_id=unique_id, new_entity_id=new_id)
 
 
 async def async_setup_entry(
@@ -35,17 +68,22 @@ async def async_setup_entry(
 ) -> None:
     """Set up BambuLab sensor based on a config entry."""
 
-    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-
-    # The MakerWorld stats belong to the cloud account rather than to the printer,
-    # so they are added before the printer data check below and stay available
-    # even while the printer itself hasn't reported in yet.
-    if coordinator.makerworld is not None:
+    if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_MAKERWORLD:
+        coordinator = hass.data[MAKERWORLD_DATA][entry.entry_id]
         for sensor in MAKERWORLD_SENSORS:
-            async_add_entities([BambuLabMakerWorldSensor(coordinator.makerworld, sensor)])
+            async_add_entities([BambuLabMakerWorldSensor(coordinator, sensor)])
+        return
+
+    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     if not coordinator.get_model().has_full_printer_data:
         return
+
+    _migrate_h3c_storage_entities(er.async_get(hass), entry.entry_id, coordinator.get_model().info)
+
+    if coordinator.get_model().air_purifier.ready:
+        for sensor in AIR_PURIFIER_SENSORS:
+            async_add_entities([BambuLabAirPurifierSensor(coordinator, sensor)])
 
     for sensor in VIRTUAL_TRAY_SENSORS:
         if sensor.exists_fn(coordinator):
@@ -80,6 +118,23 @@ async def async_setup_entry(
             sensor_class = BambuLabRestoreSensor if sensor.is_restoring else BambuLabSensor
             async_add_entities([sensor_class(coordinator, sensor)])
 
+    if coordinator.filament_inventory is not None:
+        for sensor in FILAMENT_INVENTORY_SENSORS:
+            async_add_entities([BambuLabFilamentInventorySensor(coordinator.filament_inventory, sensor)])
+
+
+class BambuLabAirPurifierSensor(AirPurifierEntity, SensorEntity):
+    """A measurement belonging to the attached air purifier."""
+
+    def __init__(self, coordinator, description):
+        super().__init__(coordinator)
+        self.entity_description = description
+        self._attr_unique_id = f"{self._purifier_serial}_{description.key}"
+
+    @property
+    def native_value(self):
+        return self.entity_description.value_fn(self)
+
 
 class BambuLabSensor(BambuLabEntity, SensorEntity):
     """Representation of a BambuLab that is updated via MQTT."""
@@ -93,7 +148,11 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         super().__init__(coordinator=coordinator)
         self.entity_description = description
         printer = coordinator.get_model().info
-        self._attr_unique_id = f"{printer.serial}_{description.key}"
+        key = description.key
+        if printer.device_type == Printers.H3C and key in H3C_FAN_ENTITY_KEYS:
+            key = H3C_FAN_ENTITY_KEYS[key]
+            self._attr_translation_key = key
+        self._attr_unique_id = f"{printer.serial}_{key}"
         if printer.device_type == Printers.X2D and description.key in X2D_TRANSLATION_KEYS:
             self._attr_translation_key = X2D_TRANSLATION_KEYS[description.key]
         if description.options_fn is not None:
@@ -121,59 +180,78 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
 
 
 class BambuLabRestoreSensor(BambuLabSensor, RestoreEntity):
-    """A BambuLabSensor that restores its state on restart."""
+    """A BambuLabSensor that restores the print start time on restart.
+
+    The printer never reports when a print started, so the integration records
+    it when it sees the print begin. That is lost if Home Assistant restarts
+    mid-print (and Bambu Cloud only backfills it for some jobs). We persist the
+    start time together with an identity for the print it belongs to, and only
+    restore it if the printer is still on that same print.
+    """
 
     def __init__(self, coordinator, description):
         super().__init__(coordinator, description)
-        self._restored_state = None
+        self._restored_start_time = None
+        self._restored_job_key = None
+
+    @staticmethod
+    def _job_key(job) -> str | None:
+        """Identify the current print, or None if the printer hasn't told us yet."""
+        if not job.gcode_file and not job.subtask_name:
+            return None
+        return "|".join((str(job.task_id or ""), job.gcode_file or "", job.subtask_name or ""))
+
+    @property
+    def extra_restore_state_data(self) -> RestoredExtraData | None:
+        """Persist the live start time and the print it belongs to."""
+        job = self.coordinator.get_model().print_job
+        job_key = self._job_key(job)
+        if job.start_time is None or job_key is None:
+            return None
+        return RestoredExtraData({
+            "start_time": dt_util.as_utc(job.start_time).isoformat(),
+            "job_key": job_key,
+        })
 
     async def async_added_to_hass(self) -> None:
-        """Handle restore logic"""
+        """Load any start time saved before the last restart."""
         await super().async_added_to_hass()
-        if (last_state := await self.async_get_last_state()) is not None:
-            if last_state.state not in ("unknown", "unavailable"):
-                self._restored_state = last_state.state
-                LOGGER.debug(f"State pulled from Restore Entity: {last_state}")
+        extra_data = await self.async_get_last_extra_data()
+        if extra_data is None:
+            return
+        data = extra_data.as_dict()
+        start_time = dt_util.parse_datetime(str(data.get("start_time", "")))
+        if start_time is None or start_time.tzinfo is None or not data.get("job_key"):
+            LOGGER.debug(f"Ignoring unusable restored start time data: {data}")
+            return
+        self._restored_start_time = dt_util.as_utc(start_time)
+        self._restored_job_key = data["job_key"]
+        LOGGER.debug(f"Restored start time {self._restored_start_time} for print '{self._restored_job_key}'")
 
-    def _start_time_avail_fn(self) -> bool:
-        """
-        Availability callback with restored state handling for LAN only Start Time
-        """
-        model = self.coordinator.get_model()
-        if model.print_job.start_time is not None:
-            return True
-        job = model.print_job
-        has_end_time = job.end_time is not None
-        is_lan_mode = model.info.mqtt_mode == "local"
-        if is_lan_mode and has_end_time and self._restored_state is not None:
-            return True
-        return False
+    def _restore_start_time(self, job) -> datetime | None:
+        """Return the saved start time if the printer is still on the same print."""
+        if self._restored_start_time is None:
+            return None
+        job_key = self._job_key(job)
+        if job_key is None:
+            # Printer hasn't reported the current job yet; try again on the next update.
+            return None
+        if job_key != self._restored_job_key or self._restored_start_time > dt_util.utcnow():
+            LOGGER.debug(f"Discarding restored start time; current print is '{job_key}'")
+            self._restored_start_time = None
+            self._restored_job_key = None
+            return None
+        # Hand it back to pybambu so usage hours are also counted for this print.
+        job.start_time = self._restored_start_time
+        LOGGER.debug(f"Injected restored start time into pybambu: {job.start_time}")
+        return job.start_time
 
-    def _start_time_value_fn(self):
-        """
-        Value callback with restored state handling for LAN only Start Time
-        """
-        model = self.coordinator.get_model()
-        live_value = model.print_job.start_time
-        if live_value is not None:
-            return dt_util.as_utc(live_value)
-        job = model.print_job
-        is_printing = job.gcode_state.lower() in ("running", "pause")
-        has_end_time = job.end_time is not None
-        is_lan_mode = model.info.mqtt_mode == "local"
-        if is_printing and is_lan_mode and has_end_time and self._restored_state is not None:
-            try:
-                dt_value = dt_util.parse_datetime(str(self._restored_state))
-                if dt_value.tzinfo is None:
-                    dt_value = dt_value.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
-                dt_value = dt_util.as_utc(dt_value)
-                job.start_time = dt_value
-                LOGGER.debug(f"LAN Mode: Injected restored start_time into pybambu: {dt_value}")
-            except (ValueError, TypeError, AttributeError):
-                LOGGER.error("Failed to parse restored start_time string for pybambu")
-                return None
-            return dt_value
-        return None
+    def _start_time_value_fn(self) -> datetime | None:
+        """Live start time, falling back to the one saved before a restart."""
+        job = self.coordinator.get_model().print_job
+        if job.start_time is not None:
+            return dt_util.as_utc(job.start_time)
+        return self._restore_start_time(job)
 
 
 class BambuLabAMSSensor(AMSEntity, SensorEntity):
@@ -326,3 +404,25 @@ class BambuLabMakerWorldSensor(MakerWorldEntity, SensorEntity):
         if self.profile is None:
             return {}
         return self.entity_description.extra_attributes(self)
+
+
+class BambuLabFilamentInventorySensor(FilamentInventoryEntity, SensorEntity):
+    """Account-level filament inventory, polled from the Bambu cloud."""
+
+    def __init__(
+            self,
+            coordinator: BambuFilamentCoordinator,
+            description: BambuLabSensorEntityDescription
+    ) -> None:
+        super().__init__(coordinator=coordinator)
+        self.entity_description = description
+        printer = coordinator.printer_coordinator.get_model().info
+        self._attr_unique_id = f"{printer.serial}_{description.key}"
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return self.entity_description.extra_attributes(self)
+
+    @property
+    def native_value(self) -> datetime | StateType:
+        return self.entity_description.value_fn(self)

@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Druckfehler behoben",
       "event_printer_error": "HMS-Fehler",
       "event_printer_error_cleared": "HMS-Fehler behoben",
-      "event_printer_missing_sdcard": "SD-Karte fehlt"
+      "event_printer_missing_sdcard": "SD-Karte fehlt",
+      "event_timelapse_downloaded": "Zeitraffer heruntergeladen"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "Das Gerät ist bereits eingerichtet",
       "no_printers": "Keine nicht konfigurierten Drucker im Konto gefunden",
       "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
-      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar.",
+      "no_working_credentials": "Für dieses Konto sind keine funktionierenden Anmeldeinformationen für den Bambu Cloud-Drucker verfügbar.",
+      "reconfigure_not_supported": "Auf diese Weise können nur MakerWorld-Kontoeinträge neu konfiguriert werden.",
+      "reconfigure_successful": "MakerWorld-Zugangsdaten aktualisiert."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
@@ -84,7 +88,9 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -106,9 +112,18 @@
             "description": "Diese Optionen sind nur erforderlich, wenn Sie ein nicht standardmäßiges Setup haben.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
+        }
+      },
+      "makerworld": {
+        "title": "MakerWorld-Konto",
+        "description": "Verwenden Sie funktionierende Bambu Cloud-Anmeldeinformationen aus einem vorhandenen Druckereintrag. Es ist kein zusätzlicher Login erforderlich.",
+        "data": {
+          "username": "Bambu-Konto:"
         }
       }
     }
@@ -116,7 +131,9 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
-      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar."
+      "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar.",
+      "no_working_credentials": "Für dieses Konto sind keine funktionierenden Anmeldeinformationen für den Bambu Cloud-Drucker verfügbar.",
+      "no_ams": "Auf diesem Drucker wurde noch kein AMS identifiziert. Warten Sie, bis der Drucker eine Verbindung hergestellt hat und seine AMS-Einheiten meldet, und versuchen Sie es dann erneut."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
@@ -179,7 +196,9 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
         }
@@ -200,9 +219,23 @@
             "description": "Diese erweiterten Optionen sind frühe oder riskante Funktionen. Lesen Sie die Dokumentation und verwenden Sie sie auf eigenes Risiko.",
             "data": {
               "disable_ssl_verify": "SSL-Überprüfung deaktivieren",
-              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren"
+              "enable_firmware_update": "Unterstützung für Firmware-Updates aktivieren",
+              "enable_filament_inventory": "Filamentinventar aktivieren (Filament Manager, erfordert Bambu Cloud)",
+              "filament_inventory_interval": "Aktualisierungsintervall des Filamentbestands (Minuten):"
             }
           }
+        }
+      },
+      "ams_heater": {
+        "title": "Externe AMS-Heizung oder Trockner",
+        "description": "Zusätzliche AMS-Heizgeräte und -Trockner wie der SUNLU AMS Heater und die EIBOS Series\n\nWählen Sie diesen Stecker für jedes AMS, das mit einer Heizung ausgestattet ist, oder lassen Sie ihn leer. Jedes verbundene AMS verfügt über Elemente für den Heiztrocknungsmodus, die Heizleistung, den Feuchtigkeitsschwellenwert, die Temperaturabschaltung und die Laufzeitbegrenzung.\n\nStellen Sie die Heizung oder den Trockner selbst so ein, dass er mit dem Heizen beginnt, wenn er eingeschaltet wird, sodass das Trocknen tatsächlich durch Einschalten des Steckers beginnt."
+      },
+      "makerworld": {
+        "title": "MakerWorld-Konto",
+        "description": "Verwenden Sie funktionierende Bambu Cloud-Anmeldeinformationen aus einem vorhandenen Druckereintrag. Es ist kein zusätzlicher Login erforderlich.",
+        "data": {
+          "username": "Bambu-Konto:",
+          "credential_source": "Bambu-Konto:"
         }
       }
     }
@@ -250,9 +283,21 @@
       },
       "right_extruder_filament_state": {
         "name": "Rechtes Extruderfilament"
+      },
+      "top_cover_open": {
+        "name": "Obere Abdeckung"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S-Upgrade-Kit installiert"
       }
     },
     "button": {
+      "hotend_rack_raise": {
+        "name": "Rack anheben"
+      },
+      "hotend_rack_lower": {
+        "name": "Rack absenken"
+      },
       "pause": {
         "name": "Druckvorgang anhalten"
       },
@@ -279,6 +324,19 @@
       }
     },
     "fan": {
+      "air_purifier": {
+        "name": "Luftreiniger",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Automatisch",
+              "silent": "Leise",
+              "standard": "Standard",
+              "max": "Maximum"
+            }
+          }
+        }
+      },
       "cooling_fan": {
         "name": "Druckkopflüfter"
       },
@@ -335,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Zieltemperatur der Kammer"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Luftfeuchtigkeit beim Einschalten der Heizung"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Luftfeuchtigkeit beim Ausschalten der Heizung"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Temperaturabschaltung der Heizung"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maximale Laufzeit der Heizung"
       }
     },
     "select": {
@@ -356,6 +426,12 @@
       }
     },
     "sensor": {
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "Lüfterdrehzahl"
+      },
       "makerworld_boosts_received": {
         "name": "Erhaltene Boosts"
       },
@@ -479,6 +555,7 @@
           "printing": "Drucken",
           "auto_bed_leveling": "Automatische Bettnivellierung",
           "heatbed_preheating": "Heizbettvorwärmung",
+          "heatbed_stabilizing": "Heizbett stabilisieren",
           "sweeping_xy_mech_mode": "Fegen im XY-Mechanik-Modus",
           "changing_filament": "Filament wechseln",
           "m400_pause": "M400 Pause",
@@ -811,13 +888,30 @@
       "right_target_nozzle_temp": {
         "name": "Rechte Düsenzieltemperatur"
       },
+      "external_storage_connection": {
+        "name": "Externer Speicher Verbindung",
+        "state": {
+          "connected": "Verbunden",
+          "disconnected": "Getrennt"
+        }
+      },
+      "external_storage_total": {
+        "name": "Externer Speicher gesamt"
+      },
+      "external_storage_used": {
+        "name": "Externer Speicher belegt"
+      },
+      "external_storage_free": {
+        "name": "Externer Speicher frei"
+      },
       "sdcard_status": {
         "name": "SD -Kartenstatus",
         "state": {
           "missing": "Fehlen",
           "normal": "Normal",
           "abnormal": "Abnormal",
-          "readonly": "Nur lesen"
+          "readonly": "Nur lesen",
+          "not_applicable": "Nicht zutreffend"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1107,151 @@
       },
       "exhaust_fan_speed": {
         "name": "Geschwindigkeit des Abluftventilators"
+      },
+      "zone_temperature": {
+        "name": "Temperatur der Zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zonen-ID"
+          },
+          "slots": {
+            "name": "Spielautomaten"
+          },
+          "dry_setting": {
+            "name": "Trocknungseinstellung"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "Luftfeuchtigkeit der Zone {zone_number}",
+        "state_attributes": {
+          "zone": {
+            "name": "Zone"
+          },
+          "zone_id": {
+            "name": "Zonen-ID"
+          },
+          "slots": {
+            "name": "Spielautomaten"
+          },
+          "dry_setting": {
+            "name": "Trocknungseinstellung"
+          }
+        }
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek-Position (roh)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek-Status (roh)"
+      },
+      "hotend_rack_printtool": {
+        "name": "PrintTool {tool_number}",
+        "state": {
+          "mounted": "Montiert",
+          "docked": "Angedockt",
+          "empty": "Leer"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "Werkzeug"
+          },
+          "filament_diameter": {
+            "name": "Filamentdurchmesser"
+          },
+          "filament_name": {
+            "name": "Filamentname"
+          },
+          "filament_type": {
+            "name": "Filamenttyp"
+          },
+          "remaining_weight_g": {
+            "name": "Verbleibendes Filamentgewicht"
+          },
+          "remaining_percent": {
+            "name": "Restliches Filament"
+          },
+          "ams_id": {
+            "name": "AMS-ID"
+          },
+          "ams_slot": {
+            "name": "AMS-Steckplatz"
+          },
+          "nozzle_diameter": {
+            "name": "Düsendurchmesser"
+          },
+          "nozzle_type": {
+            "name": "Düsentyp"
+          },
+          "nozzle_type_code": {
+            "name": "Düsentypcode"
+          },
+          "max_temperature": {
+            "name": "Maximale Temperatur"
+          },
+          "serial": {
+            "name": "Seriennummer"
+          },
+          "filament_id": {
+            "name": "Filament-ID"
+          },
+          "color": {
+            "name": "Farbe"
+          },
+          "wear": {
+            "name": "Tragen"
+          },
+          "status_raw": {
+            "name": "Status (roh)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "Temperatur von PrintTool {tool_number}"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} Zieltemperatur"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} Druckzeit"
+      },
+      "filament_inventory": {
+        "name": "Filamentbestand"
+      },
+      "processing_material": {
+        "name": "Laser-/Cuttermaterial"
+      },
+      "check_in_remaining": {
+        "name": "Der Laser-Check-in bleibt bestehen"
+      },
+      "print_elapsed_time": {
+        "name": "Verstrichene Zeit drucken"
+      },
+      "last_timelapse": {
+        "name": "Letzter Zeitraffer"
+      },
+      "filament_change_status": {
+        "name": "Status des Filamentwechsels",
+        "state": {
+          "idle": "Leerlauf",
+          "changing_filament": "Filament wechseln",
+          "heating_nozzle": "Heizdüse",
+          "cutting_filament": "Filament schneiden",
+          "pulling_back_filament": "Zurückziehen des aktuellen Filaments",
+          "pushing_new_filament": "Neues Filament einschieben",
+          "purging_old_filament": "Altes Filament entfernen",
+          "checking_position": "Überprüfung der Filamentposition",
+          "rfid_identifying": "RFID identifizieren",
+          "filament_loaded": "Filament geladen",
+          "calibration": "Kalibrierung",
+          "cold_pull": "Kaltzug",
+          "self_check": "Selbstkontrolle",
+          "debug": "Debuggen",
+          "unknown": "Unbekannt"
+        }
       }
     },
     "camera": {
@@ -1032,6 +1271,12 @@
       },
       "ftp": {
         "name": "Modelldaten vom Drucker laden"
+      },
+      "ams_heater_drying": {
+        "name": "Heizungstrocknungsmodus"
+      },
+      "ams_heater_power": {
+        "name": "Heizleistung"
       }
     },
     "update": {
@@ -1044,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab-Cloud",
-        "lan": "LAN-Modus"
+        "lan": "LAN-Modus",
+        "makerworld": "MakerWorld-Konto",
+        "ams_heater": "Externe AMS-Heizung oder Trockner (Smart Plug)"
       }
     }
   },
@@ -1063,7 +1310,7 @@
     },
     "mqtt_encryption_enabled": {
       "title": "MQTT-Verschlüsselung aktiviert",
-      "description": "{device} ist mit der Cloud verbunden und die MQTT-Verschlüsselung ist aktiviert. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Der Drucker muss auf den Entwickler-LAN-Modus eingestellt sein, um die Steuerung über den Heimassistenten zu ermöglichen."
+      "description": "{device} ist mit der Cloud verbunden und die MQTT-Verschlüsselung ist aktiviert. Durch diese Integration kann lediglich das Licht gesteuert werden. Alle anderen Steuerelemente sind nicht verfügbar. Der Drucker muss auf den Entwickler-LAN-Modus eingestellt sein, um die Steuerung über Home Assistant zu ermöglichen."
     },
     "hybrid_mode_blocking": {
       "title": "Steuerung der Hybridverbindungsblöcke",

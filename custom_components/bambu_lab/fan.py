@@ -13,8 +13,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
-from .definitions import X2D_TRANSLATION_KEYS
-from .models import BambuLabEntity
+from .definitions import H3C_FAN_ENTITY_KEYS, X2D_TRANSLATION_KEYS
+from .models import AirPurifierEntity, BambuLabEntity
 from .pybambu.const import Features, FansEnum, Printers
 
 
@@ -47,14 +47,27 @@ FANS: tuple[FanEntityDescription, ...] = (
         key="chamber_fan",
         translation_key="chamber_fan",
         value_fn=lambda device: device.fans.get_fan_speed(FansEnum.CHAMBER),
-        exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type != Printers.H3C
+                                      and coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
     ),
     BambuLabFanEntityDescription(
         key="secondary_aux_fan",
         translation_key="secondary_aux_fan",
         value_fn=lambda device: device.fans.get_fan_speed(FansEnum.SECONDARY_AUXILIARY),
         exists_fn=lambda coordinator: coordinator.get_model().supports_feature(Features.SECONDARY_AUX_FAN)
-    )
+    ),
+    BambuLabFanEntityDescription(
+        key="exhaust_fan",
+        translation_key="exhaust_fan",
+        value_fn=lambda device: device.fans.get_fan_speed(FansEnum.CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
+    ),
+    BambuLabFanEntityDescription(
+        key="h3c_chamber_fan",
+        translation_key="chamber_fan",
+        value_fn=lambda device: device.fans.get_fan_speed(FansEnum.H3C_CHAMBER),
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
+    ),
 )
 
 
@@ -69,6 +82,8 @@ async def async_setup_entry(
         return
     
     LOGGER.debug("FAN::async_setup_entry")
+    if coordinator.get_model().air_purifier.ready:
+        async_add_entities([BambuLabAirPurifierFan(coordinator)])
     # Fans work in hybrid mode so we don't need to block entities on that.
     if not coordinator.get_model().print_fun.mqtt_signature_required:
         for description in FANS:
@@ -88,8 +103,13 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     ) -> None:
         """Initialize the fan."""
         self.entity_description = description
-        self._attr_unique_id = f"{config_entry.data['serial']}_{description.key}"
-        if coordinator.get_model().info.device_type == Printers.X2D:
+        printer_type = coordinator.get_model().info.device_type
+        key = description.key
+        if printer_type == Printers.H3C and key in H3C_FAN_ENTITY_KEYS:
+            key = H3C_FAN_ENTITY_KEYS[key]
+            self._attr_translation_key = key
+        self._attr_unique_id = f"{config_entry.data['serial']}_{key}"
+        if printer_type == Printers.X2D:
             self._attr_translation_key = X2D_TRANSLATION_KEYS[description.key]
         self._attr_supported_features = (
             FanEntityFeature.SET_SPEED  
@@ -99,14 +119,13 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         super().__init__(coordinator=coordinator)
 
     @property
-    def is_on(self) -> bool:
+    def is_on(self) -> bool | None:
         """Return the state of the fan"""
-        if self.entity_description.value_fn(self.coordinator.data) > 0:
-            return True
-        return False
+        speed = self.entity_description.value_fn(self.coordinator.get_model())
+        return speed > 0 if speed is not None else None
 
     @property
-    def percentage(self) -> int:
+    def percentage(self) -> int | None:
         """Return the current speed percentage."""
         return self.entity_description.value_fn(self.coordinator.get_model())
 
@@ -117,7 +136,11 @@ class BambuLabFan(BambuLabEntity, FanEntity):
             "aux_fan": FansEnum.AUXILIARY,
             "chamber_fan": FansEnum.CHAMBER,
             "secondary_aux_fan": FansEnum.SECONDARY_AUXILIARY,
+            "exhaust_fan": FansEnum.CHAMBER,
+            "h3c_chamber_fan": FansEnum.H3C_CHAMBER,
         }[self.entity_description.key]
+        if fan == FansEnum.H3C_CHAMBER and not self.coordinator.get_model().fans.h3c_chamber_fan_controllable:
+            raise HomeAssistantError("Chamber fan is not controllable in the current airduct mode")
         if not self.coordinator.get_model().fans.set_fan_speed(fan, percentage):
             raise HomeAssistantError("Fan command could not be published")
 
@@ -132,3 +155,63 @@ class BambuLabFan(BambuLabEntity, FanEntity):
     def turn_off(self, **kwargs) -> None:
         """Turn the fan off."""
         self._set_percentage(0)
+
+
+class BambuLabAirPurifierFan(AirPurifierEntity, FanEntity):
+    """Control the E1's discrete modes without assuming command success."""
+
+    _attr_translation_key = "air_purifier"
+    _attr_icon = "mdi:air-purifier"
+    _attr_preset_modes = ["auto", "silent", "standard", "max"]
+    _mode_by_gear = {0: "off", 1: "silent", 2: "standard", 3: "max", 15: "auto"}
+
+    def __init__(self, coordinator):
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{self._purifier_serial}_air_purifier"
+
+    @property
+    def supported_features(self) -> FanEntityFeature:
+        if self.coordinator.get_model().print_fun.mqtt_signature_required:
+            return FanEntityFeature(0)
+        return FanEntityFeature.PRESET_MODE | FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF
+
+    @property
+    def is_on(self) -> bool | None:
+        gear = self.coordinator.get_model().air_purifier.gear
+        return gear != 0 if gear in self._mode_by_gear else None
+
+    @property
+    def preset_mode(self) -> str | None:
+        mode = self._mode_by_gear.get(self.coordinator.get_model().air_purifier.gear)
+        return mode if mode != "off" else None
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        purifier = self.coordinator.get_model().air_purifier
+        return {
+            "filter_type_raw": purifier.filter_type,
+            "filter_used_raw": purifier.filter_used_raw,
+            "filter_total_raw": purifier.filter_total_raw,
+        }
+
+    def _set_mode(self, mode: str) -> None:
+        if self.coordinator.get_model().print_fun.mqtt_signature_required:
+            raise HomeAssistantError("Air purifier control requires unsigned MQTT commands")
+        if not self.available or not self.coordinator.get_model().air_purifier.set_mode(mode):
+            raise HomeAssistantError("Air purifier command could not be published")
+
+    def set_preset_mode(self, preset_mode: str) -> None:
+        if preset_mode not in self._attr_preset_modes:
+            raise HomeAssistantError(f"Unsupported air purifier mode: {preset_mode}")
+        self._set_mode(preset_mode)
+
+    def turn_on(self, percentage: int | None = None, preset_mode: str | None = None, **kwargs) -> None:
+        if percentage is not None:
+            raise HomeAssistantError("Air purifier does not support percentage-based speed control")
+        if preset_mode is not None:
+            self.set_preset_mode(preset_mode)
+        else:
+            self._set_mode("auto")
+
+    def turn_off(self, **kwargs) -> None:
+        self._set_mode("off")

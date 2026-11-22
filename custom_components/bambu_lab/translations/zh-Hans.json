@@ -9,7 +9,8 @@
       "event_print_error_cleared": "打印错误已清除",
       "event_printer_error": "移动管理系统错误",
       "event_printer_error_cleared": "HMS 错误已清除",
-      "event_printer_missing_sdcard": "缺少 SD 卡"
+      "event_printer_missing_sdcard": "缺少 SD 卡",
+      "event_timelapse_downloaded": "游戏中时光倒流下载"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "设备已配置",
       "no_printers": "在帐户中未找到未配置的打印机",
       "cloudflare": "Cloudflare 已阻止连接尝试。",
-      "curl_unavailable": "curl_cffi 库不可用。"
+      "curl_unavailable": "curl_cffi 库不可用。",
+      "no_working_credentials": "此帐户没有可用的 Bambu Cloud 打印机凭据。",
+      "reconfigure_not_supported": "只有 MakerWorld 帐户条目可以通过这种方式重新配置。",
+      "reconfigure_successful": "MakerWorld 凭证已更新。"
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
@@ -84,7 +88,9 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -106,9 +112,18 @@
             "description": "仅当您具有非标准设置时，才需要这些选项。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
+        }
+      },
+      "makerworld": {
+        "title": "创客世界账户",
+        "description": "使用现有打印机条目中的有效 Bambu Cloud 凭据。无需额外登录。",
+        "data": {
+          "username": "班布帐号："
         }
       }
     }
@@ -116,7 +131,9 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare 已阻止连接尝试。",
-      "curl_unavailable": "curl_cffi 库不可用。"
+      "curl_unavailable": "curl_cffi 库不可用。",
+      "no_working_credentials": "此帐户没有可用的 Bambu Cloud 打印机凭据。",
+      "no_ams": "此打印机上尚未识别出 AMS。等待打印机连接并报告其 AMS 单位，然后重试。"
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
@@ -179,7 +196,9 @@
             "description": "这些高级选项是早期或风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
         }
@@ -200,9 +219,23 @@
             "description": "这些高级选项是早期或有风险的功能。阅读文档并自行使用它们。",
             "data": {
               "disable_ssl_verify": "禁用SSL验证",
-              "enable_firmware_update": "启用固件更新支持"
+              "enable_firmware_update": "启用固件更新支持",
+              "enable_filament_inventory": "启用灯丝库存（灯丝管理器，需要 Bambu Cloud）",
+              "filament_inventory_interval": "灯丝库存刷新间隔（分钟）："
             }
           }
+        }
+      },
+      "ams_heater": {
+        "title": "外部 AMS 加热器或干燥器",
+        "description": "附加 AMS 加热器和烘干机，例如 SUNLU AMS 加热器和 EIBOS X 系列（Dyas/Tetras）没有网络连接，因此家庭助理通过切换其供电的智能插头来控制它们。\n\n为每个装有加热器的 AMS 选择该插头，或将其留空。每个链接的 AMS 均获得加热器干燥模式、加热器功率、湿度阈值、温度截止和运行时间限制实体。\n\n将加热器或烘干机本身设置为在通电时开始加热，因此切换插头实际上开始烘干。"
+      },
+      "makerworld": {
+        "title": "创客世界账户",
+        "description": "使用现有打印机条目中的有效 Bambu Cloud 凭据。无需额外登录。",
+        "data": {
+          "username": "班布帐号：",
+          "credential_source": "班布帐号："
         }
       }
     }
@@ -250,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "右挤出机丝"
+      },
+      "top_cover_open": {
+        "name": "顶盖"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S升级套件已安装"
       }
     },
     "button": {
@@ -276,6 +315,12 @@
       },
       "buzzer_beeping": {
         "name": "蜂鸣器 - 蜂鸣器"
+      },
+      "hotend_rack_raise": {
+        "name": "升高架"
+      },
+      "hotend_rack_lower": {
+        "name": "下机架"
       }
     },
     "fan": {
@@ -302,6 +347,19 @@
       },
       "exhaust_fan": {
         "name": "排气扇"
+      },
+      "air_purifier": {
+        "name": "空气净化器",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "汽车",
+              "silent": "沉默的",
+              "standard": "标准",
+              "max": "最大限度"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -335,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "室目标温度"
+      },
+      "ams_heater_humidity_on": {
+        "name": "加热器开启湿度"
+      },
+      "ams_heater_humidity_off": {
+        "name": "加热器关闭湿度"
+      },
+      "ams_heater_max_temperature": {
+        "name": "加热器温度截止"
+      },
+      "ams_heater_max_runtime": {
+        "name": "加热器最大运行时间"
       }
     },
     "select": {
@@ -493,7 +563,8 @@
           "build_plate_alignment_detection": "构建板对齐检测",
           "heatbed_surface_foreign_object_detection": "热床表面异物检测",
           "heatbed_underside_foreign_object_detection": "热床底部异物检测",
-          "pre_extrusion_before_printing": "印刷前预挤出"
+          "pre_extrusion_before_printing": "印刷前预挤出",
+          "heatbed_stabilizing": "稳定热床"
         }
       },
       "print_progress": {
@@ -757,7 +828,8 @@
           "missing": "丢失的",
           "normal": "普通的",
           "abnormal": "异常",
-          "readonly": "只读"
+          "readonly": "只读",
+          "not_applicable": "不适用"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1085,173 @@
       },
       "exhaust_fan_speed": {
         "name": "排风扇转速"
+      },
+      "external_storage_connection": {
+        "name": "外部存储连接",
+        "state": {
+          "connected": "已连接",
+          "disconnected": "已断开连接"
+        }
+      },
+      "external_storage_total": {
+        "name": "外部存储总计"
+      },
+      "external_storage_used": {
+        "name": "使用的外部存储"
+      },
+      "external_storage_free": {
+        "name": "外部存储免费"
+      },
+      "zone_temperature": {
+        "name": "区域 {zone_number} 温度",
+        "state_attributes": {
+          "zone": {
+            "name": "区"
+          },
+          "zone_id": {
+            "name": "区域ID"
+          },
+          "slots": {
+            "name": "老虎机"
+          },
+          "dry_setting": {
+            "name": "烘干设定"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "区域 {zone_number} 湿度",
+        "state_attributes": {
+          "zone": {
+            "name": "区"
+          },
+          "zone_id": {
+            "name": "区域ID"
+          },
+          "slots": {
+            "name": "老虎机"
+          },
+          "dry_setting": {
+            "name": "烘干设定"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "风扇转速"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 位置（原始）"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 状态（原始）"
+      },
+      "hotend_rack_printtool": {
+        "name": "打印工具 {tool_number}",
+        "state": {
+          "mounted": "已安装",
+          "docked": "停靠",
+          "empty": "空的"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "工具"
+          },
+          "filament_diameter": {
+            "name": "灯丝直径"
+          },
+          "filament_name": {
+            "name": "灯丝名称"
+          },
+          "filament_type": {
+            "name": "灯丝类型"
+          },
+          "remaining_weight_g": {
+            "name": "剩余灯丝重量"
+          },
+          "remaining_percent": {
+            "name": "剩余灯丝"
+          },
+          "ams_id": {
+            "name": "AMS ID"
+          },
+          "ams_slot": {
+            "name": "AMS插槽"
+          },
+          "nozzle_diameter": {
+            "name": "喷嘴直径"
+          },
+          "nozzle_type": {
+            "name": "喷嘴类型"
+          },
+          "nozzle_type_code": {
+            "name": "喷嘴类型代码"
+          },
+          "max_temperature": {
+            "name": "最高温度"
+          },
+          "serial": {
+            "name": "序列号"
+          },
+          "filament_id": {
+            "name": "灯丝内径"
+          },
+          "color": {
+            "name": "颜色"
+          },
+          "wear": {
+            "name": "穿"
+          },
+          "status_raw": {
+            "name": "状态（原始）"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 温度"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 目标温度"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 打印时间"
+      },
+      "filament_inventory": {
+        "name": "长丝库存"
+      },
+      "processing_material": {
+        "name": "激光/切割材料"
+      },
+      "check_in_remaining": {
+        "name": "激光办理登机手续剩余时间"
+      },
+      "print_elapsed_time": {
+        "name": "打印经过的时间"
+      },
+      "last_timelapse": {
+        "name": "最后一次延时拍摄"
+      },
+      "filament_change_status": {
+        "name": "灯丝更换状态",
+        "state": {
+          "idle": "闲置的",
+          "changing_filament": "更换灯丝",
+          "heating_nozzle": "加热喷嘴",
+          "cutting_filament": "切割灯丝",
+          "pulling_back_filament": "拉回电流灯丝",
+          "pushing_new_filament": "推新丝",
+          "purging_old_filament": "清除旧灯丝",
+          "checking_position": "检查灯丝位置",
+          "rfid_identifying": "识别射频识别",
+          "filament_loaded": "灯丝加载",
+          "calibration": "校准",
+          "cold_pull": "冷拉",
+          "self_check": "自检",
+          "debug": "调试",
+          "unknown": "未知"
+        }
       }
     },
     "camera": {
@@ -1032,6 +1271,12 @@
       },
       "ftp": {
         "name": "打印机加载模型数据"
+      },
+      "ams_heater_drying": {
+        "name": "加热器干燥方式"
+      },
+      "ams_heater_power": {
+        "name": "加热器功率"
       }
     },
     "update": {
@@ -1044,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab 云",
-        "lan": "局域网模式"
+        "lan": "局域网模式",
+        "makerworld": "创客世界账户",
+        "ams_heater": "外部 AMS 加热器或干燥器（智能插头）"
       }
     }
   },

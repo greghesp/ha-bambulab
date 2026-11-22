@@ -9,7 +9,8 @@
       "event_print_error_cleared": "인쇄 오류가 해결되었습니다.",
       "event_printer_error": "HMS 오류",
       "event_printer_error_cleared": "HMS 오류가 해결되었습니다.",
-      "event_printer_missing_sdcard": "SD 카드 없음"
+      "event_printer_missing_sdcard": "SD 카드 없음",
+      "event_timelapse_downloaded": "타임랩스 다운로드됨"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "장치가 이미 구성되어 있습니다",
       "no_printers": "계정에서 구성되지 않은 프린터를 찾을 수 없습니다.",
       "cloudflare": "Cloudflare가 연결 시도를 차단했습니다.",
-      "curl_unavailable": "curl_cffi 라이브러리를 사용할 수 없습니다."
+      "curl_unavailable": "curl_cffi 라이브러리를 사용할 수 없습니다.",
+      "no_working_credentials": "이 계정에는 작동 중인 Bambu 클라우드 프린터 자격 증명이 없습니다.",
+      "reconfigure_not_supported": "MakerWorld 계정 항목만 이 방법으로 재구성할 수 있습니다.",
+      "reconfigure_successful": "MakerWorld 자격 증명이 업데이트되었습니다."
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다. 자격 증명을 확인하세요.",
@@ -84,7 +88,9 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -106,9 +112,18 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
+        }
+      },
+      "makerworld": {
+        "title": "메이커월드 계정",
+        "description": "기존 프린터 항목에서 작동 중인 Bambu Cloud 자격 증명을 사용합니다. 추가 로그인이 필요하지 않습니다.",
+        "data": {
+          "username": "밤부 계정:"
         }
       }
     }
@@ -116,7 +131,9 @@
   "options": {
     "abort": {
       "cloudflare": "Cloudflare가 연결 시도를 차단했습니다.",
-      "curl_unavailable": "curl_cffi 라이브러리를 사용할 수 없습니다."
+      "curl_unavailable": "curl_cffi 라이브러리를 사용할 수 없습니다.",
+      "no_working_credentials": "이 계정에는 작동 중인 Bambu 클라우드 프린터 자격 증명이 없습니다.",
+      "no_ams": "이 프린터에서는 아직 AMS가 식별되지 않았습니다. 프린터가 연결되어 AMS 장치를 보고할 때까지 기다린 후 다시 시도하십시오."
     },
     "error": {
       "cannot_connect": "연결에 실패했습니다.",
@@ -179,7 +196,9 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
         }
@@ -200,9 +219,23 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
+              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
+              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
             }
           }
+        }
+      },
+      "ams_heater": {
+        "title": "외부 AMS 히터 또는 건조기",
+        "description": "SUNLU AMS Heater 및 EIBOS Series X(Dyas/Tetras)와 같은 추가 AMS 히터 및 건조기는 네트워크 연결이 없으므로 Home Assistant는 전원이 공급되는 스마트 플러그를 전환하여 하나를 제어합니다.\n\n히터가 장착된 각 AMS에 대해 해당 플러그를 선택하거나 비워 두십시오. 연결된 각 AMS는 히터 건조 모드, 히터 전력, 습도 임계값, 온도 차단 및 런타임 제한 엔터티를 가져옵니다.\n\n히터나 건조기 자체에 전원을 켜면 가열이 시작되도록 설정해 놓으면 플러그를 바꾸면 실제로 건조가 시작됩니다."
+      },
+      "makerworld": {
+        "title": "메이커월드 계정",
+        "description": "기존 프린터 항목에서 작동 중인 Bambu Cloud 자격 증명을 사용합니다. 추가 로그인이 필요하지 않습니다.",
+        "data": {
+          "username": "밤부 계정:",
+          "credential_source": "밤부 계정:"
         }
       }
     }
@@ -250,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "오른쪽 압출기 필라멘트"
+      },
+      "top_cover_open": {
+        "name": "상단 커버"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S 업그레이드 키트 설치됨"
       }
     },
     "button": {
@@ -276,6 +315,12 @@
       },
       "buzzer_beeping": {
         "name": "부저 - 삐"
+      },
+      "hotend_rack_raise": {
+        "name": "랙 올리기"
+      },
+      "hotend_rack_lower": {
+        "name": "하단 랙"
       }
     },
     "fan": {
@@ -302,6 +347,19 @@
       },
       "exhaust_fan": {
         "name": "배기팬"
+      },
+      "air_purifier": {
+        "name": "공기청정기",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "자동",
+              "silent": "조용한",
+              "standard": "기준",
+              "max": "맥스"
+            }
+          }
+        }
       }
     },
     "image": {
@@ -335,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "챔버 목표 온도"
+      },
+      "ams_heater_humidity_on": {
+        "name": "히터 가동 습도"
+      },
+      "ams_heater_humidity_off": {
+        "name": "히터 끄기 습도"
+      },
+      "ams_heater_max_temperature": {
+        "name": "히터 온도 차단"
+      },
+      "ams_heater_max_runtime": {
+        "name": "히터 최대 런타임"
       }
     },
     "select": {
@@ -493,7 +563,8 @@
           "build_plate_alignment_detection": "빌드 플레이트 정렬 감지",
           "heatbed_surface_foreign_object_detection": "히트베드 표면 이물질 감지",
           "heatbed_underside_foreign_object_detection": "히트베드 밑면 이물질 감지",
-          "pre_extrusion_before_printing": "인쇄 전 사전 압출"
+          "pre_extrusion_before_printing": "인쇄 전 사전 압출",
+          "heatbed_stabilizing": "안정 히트베드"
         }
       },
       "print_progress": {
@@ -757,7 +828,8 @@
           "missing": "없어진",
           "normal": "정상",
           "abnormal": "이상",
-          "readonly": "만 읽으십시오"
+          "readonly": "만 읽으십시오",
+          "not_applicable": "해당 없음"
         }
       },
       "left_nozzle_diameter": {
@@ -1013,6 +1085,173 @@
       },
       "exhaust_fan_speed": {
         "name": "배기 팬 속도"
+      },
+      "external_storage_connection": {
+        "name": "외부 저장소 연결",
+        "state": {
+          "connected": "연결됨",
+          "disconnected": "연결이 끊김"
+        }
+      },
+      "external_storage_total": {
+        "name": "외부 저장소 합계"
+      },
+      "external_storage_used": {
+        "name": "사용된 외부 저장소"
+      },
+      "external_storage_free": {
+        "name": "외부 저장소 무료"
+      },
+      "zone_temperature": {
+        "name": "구역 {zone_number} 온도",
+        "state_attributes": {
+          "zone": {
+            "name": "존"
+          },
+          "zone_id": {
+            "name": "구역 ID"
+          },
+          "slots": {
+            "name": "슬롯"
+          },
+          "dry_setting": {
+            "name": "건조 설정"
+          }
+        }
+      },
+      "zone_humidity": {
+        "name": "구역 {zone_number} 습도",
+        "state_attributes": {
+          "zone": {
+            "name": "존"
+          },
+          "zone_id": {
+            "name": "구역 ID"
+          },
+          "slots": {
+            "name": "슬롯"
+          },
+          "dry_setting": {
+            "name": "건조 설정"
+          }
+        }
+      },
+      "air_purifier_pm25": {
+        "name": "PM2.5"
+      },
+      "air_purifier_fan_speed": {
+        "name": "팬 속도"
+      },
+      "hotend_rack_swaptek_holder_position": {
+        "name": "Swaptek 포지션(원시)"
+      },
+      "hotend_rack_swaptek_holder_state": {
+        "name": "Swaptek 상태(원시)"
+      },
+      "hotend_rack_printtool": {
+        "name": "인쇄 도구 {tool_number}",
+        "state": {
+          "mounted": "탑재됨",
+          "docked": "도킹됨",
+          "empty": "비어 있는"
+        },
+        "state_attributes": {
+          "tool": {
+            "name": "도구"
+          },
+          "filament_diameter": {
+            "name": "필라멘트 직경"
+          },
+          "filament_name": {
+            "name": "필라멘트 이름"
+          },
+          "filament_type": {
+            "name": "필라멘트 유형"
+          },
+          "remaining_weight_g": {
+            "name": "남은 필라멘트 무게"
+          },
+          "remaining_percent": {
+            "name": "남은 필라멘트"
+          },
+          "ams_id": {
+            "name": "AMS 아이디"
+          },
+          "ams_slot": {
+            "name": "AMS 슬롯"
+          },
+          "nozzle_diameter": {
+            "name": "노즐 직경"
+          },
+          "nozzle_type": {
+            "name": "노즐 유형"
+          },
+          "nozzle_type_code": {
+            "name": "노즐 유형 코드"
+          },
+          "max_temperature": {
+            "name": "최대 온도"
+          },
+          "serial": {
+            "name": "일련번호"
+          },
+          "filament_id": {
+            "name": "필라멘트 ID"
+          },
+          "color": {
+            "name": "색상"
+          },
+          "wear": {
+            "name": "입다"
+          },
+          "status_raw": {
+            "name": "상태(원시)"
+          }
+        }
+      },
+      "hotend_rack_printtool_temperature": {
+        "name": "PrintTool {tool_number} 온도"
+      },
+      "hotend_rack_printtool_target_temperature": {
+        "name": "PrintTool {tool_number} 목표 온도"
+      },
+      "hotend_rack_printtool_used_time": {
+        "name": "PrintTool {tool_number} 인쇄 시간"
+      },
+      "filament_inventory": {
+        "name": "필라멘트 재고"
+      },
+      "processing_material": {
+        "name": "레이저/절단기 재료"
+      },
+      "check_in_remaining": {
+        "name": "레이저 체크인 남음"
+      },
+      "print_elapsed_time": {
+        "name": "경과 시간 인쇄"
+      },
+      "last_timelapse": {
+        "name": "마지막 시간 경과"
+      },
+      "filament_change_status": {
+        "name": "필라멘트 교체 상태",
+        "state": {
+          "idle": "게으른",
+          "changing_filament": "필라멘트 교체",
+          "heating_nozzle": "가열노즐",
+          "cutting_filament": "필라멘트 절단",
+          "pulling_back_filament": "현재 필라멘트를 뒤로 당기는 중",
+          "pushing_new_filament": "새 필라멘트 밀어넣기",
+          "purging_old_filament": "오래된 필라멘트 제거",
+          "checking_position": "필라멘트 위치 확인",
+          "rfid_identifying": "RFID 식별",
+          "filament_loaded": "필라멘트 로드됨",
+          "calibration": "구경 측정",
+          "cold_pull": "콜드 풀",
+          "self_check": "셀프체크",
+          "debug": "디버그",
+          "unknown": "알려지지 않은"
+        }
       }
     },
     "camera": {
@@ -1032,6 +1271,12 @@
       },
       "ftp": {
         "name": "프린터에서 모델 데이터 로드"
+      },
+      "ams_heater_drying": {
+        "name": "히터 건조 모드"
+      },
+      "ams_heater_power": {
+        "name": "히터 전력"
       }
     },
     "update": {
@@ -1044,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "뱀부랩 클라우드",
-        "lan": "랜 모드"
+        "lan": "랜 모드",
+        "makerworld": "메이커월드 계정",
+        "ams_heater": "외부 AMS 히터 또는 건조기(스마트 플러그)"
       }
     }
   },
