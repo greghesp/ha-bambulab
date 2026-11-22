@@ -53,7 +53,15 @@ nextTitle: Device Triggers
 | Total Usage Hours | \* See Note                                        |
 
 <Info>
-\* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+\* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known, unless the integration was running when that print started (see below). It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+</Info>
+
+<Info>
+**Per-tray Print Weight / Print Length after a restart.** The Print Weight and Print Length attributes split the usage per AMS tray. Which tray each slicer filament went to is only sent by the printer when a print starts. If Home Assistant restarts mid-print the integration recovers it from:
+- the `mapping` the printer reports in its full status, on newer firmware, or
+- `prints/active_print_job.json` in the file cache, written when the integration saw the print start. It is only used when the task name, task id and plate of the running print match.
+
+If neither is available, for example when a multi-filament print was started while Home Assistant was down on older firmware, the totals are still reported but not the per-tray split.
 </Info>
 
 ## Miscellaneous
