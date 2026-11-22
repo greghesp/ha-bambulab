@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Chyba tisku vyřešena",
       "event_printer_error": "Chyba HMS",
       "event_printer_error_cleared": "Chyba HMS vyřešena",
-      "event_printer_missing_sdcard": "Chybí SD karta"
+      "event_printer_missing_sdcard": "Chybí SD karta",
+      "event_timelapse_downloaded": "Timelapse stažen"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Horní kryt"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Instalována sada pro upgrade P1S"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Inventář vláken"
+      },
+      "processing_material": {
+        "name": "Laserový/řezací materiál"
+      },
+      "check_in_remaining": {
+        "name": "Zbývá laserové odbavení"
+      },
+      "print_elapsed_time": {
+        "name": "Vytisknout uplynulý čas"
+      },
+      "last_timelapse": {
+        "name": "Poslední časosběr"
+      },
+      "filament_change_status": {
+        "name": "Stav změny vlákna",
+        "state": {
+          "idle": "Líný",
+          "changing_filament": "Výměna vlákna",
+          "heating_nozzle": "Ohřívací tryska",
+          "cutting_filament": "Řezací vlákno",
+          "pulling_back_filament": "Vytažení vlákna proudu zpět",
+          "pushing_new_filament": "Zatlačení nového vlákna",
+          "purging_old_filament": "Čištění starého vlákna",
+          "checking_position": "Kontrola polohy vlákna",
+          "rfid_identifying": "Identifikace RFID",
+          "filament_loaded": "Vlákno nabité",
+          "calibration": "Kalibrace",
+          "cold_pull": "Studený tah",
+          "self_check": "Vlastní kontrola",
+          "debug": "Ladit",
+          "unknown": "Neznámý"
+        }
       }
     },
     "camera": {

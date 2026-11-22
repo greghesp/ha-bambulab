@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Print fejl ryddet",
       "event_printer_error": "HMS fejl",
       "event_printer_error_cleared": "HMS fejl ryddet",
-      "event_printer_missing_sdcard": "Mangler SD-kort"
+      "event_printer_missing_sdcard": "Mangler SD-kort",
+      "event_timelapse_downloaded": "Timelapse downloadet"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Topdæksel"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S opgraderingssæt installeret"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Filament inventar"
+      },
+      "processing_material": {
+        "name": "Laser/skærer materiale"
+      },
+      "check_in_remaining": {
+        "name": "Laser check-in tilbage"
+      },
+      "print_elapsed_time": {
+        "name": "Udskriv forløbet tid"
+      },
+      "last_timelapse": {
+        "name": "Sidste timelapse"
+      },
+      "filament_change_status": {
+        "name": "Filamentændringsstatus",
+        "state": {
+          "idle": "Ledig",
+          "changing_filament": "Udskiftning af filament",
+          "heating_nozzle": "Varmemundstykke",
+          "cutting_filament": "Skære filament",
+          "pulling_back_filament": "Trækker nuværende glødetråd tilbage",
+          "pushing_new_filament": "Skub ny filament",
+          "purging_old_filament": "Udrensning af gammel filament",
+          "checking_position": "Kontrol af filamentposition",
+          "rfid_identifying": "Identifikation af RFID",
+          "filament_loaded": "Filament ladet",
+          "calibration": "Kalibrering",
+          "cold_pull": "Koldt træk",
+          "self_check": "Selvtjek",
+          "debug": "Debug",
+          "unknown": "Ukendt"
+        }
       }
     },
     "camera": {
