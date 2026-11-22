@@ -70,6 +70,7 @@ from .const import (
     AMS_STATUS_MAIN_FILAMENT_CHANGE,
     AMS_STATUS_MAIN_ASSIST,
     AMS_FILAMENT_CHANGE_STEPS,
+    AMSTrayStateFlags,
 )
 from .commands import (
     GET_VERSION,
@@ -4161,6 +4162,26 @@ class AMSInstance:
         return remaining > 0 if remaining is not None else None
 
 
+# The H3C reports a 2.85 mm spool in AMS 3H slot k as virtual slot 255 - k instead of as
+# AMS tray k. Ids 255 and 254 stay with the external spools, as on every other printer.
+AMS_3H_VIRTUAL_SLOT_IDS = range(247, 254)
+# Tray state used when a loaded vir_slot entry carries no `state` field of its own. Without it,
+# the tray keeps the state the AMS reported for it (no spool), which would hide the spool.
+AMS_3H_VIRTUAL_SLOT_LOADED_STATE = (AMSTrayStateFlags.SPOOL | AMSTrayStateFlags.METADATA
+                                    | AMSTrayStateFlags.STEADY)
+
+
+def _virtual_slot_loaded(entry: dict) -> bool:
+    """True when a vir_slot entry reports a mounted spool."""
+    if "state" in entry:
+        try:
+            return ams_tray_spool_loaded(int(entry["state"]))
+        except (TypeError, ValueError):
+            return False
+    tray_type = entry.get("tray_type")
+    return bool(entry.get("tray_info_idx")) or bool(tray_type and tray_type != "Empty")
+
+
 @dataclass
 class AMSList:
     """Return all AMS related info"""
@@ -4178,11 +4199,33 @@ class AMSList:
         self._nozzle_ams_index = { 0: 0, 1: 0, 15: 0}
         self._nozzle_target_ams_index = { 0: 255, 1: 255, 15: 255}
         self.data = {}
+        # Latest vir_slot payload per AMS 3H virtual slot id.
+        self._virtual_slots: dict[int, dict] = {}
+        # Last per-tray `state` the AMS itself reported, keyed by (ams index, tray index).
+        self._reported_tray_states: dict[tuple[int, int], int] = {}
+        # AMS 3H tray indices currently showing virtual slot filament.
+        self._virtual_overlaid_trays: frozenset[int] = frozenset()
+
+    def _ams_3h_index(self) -> int | None:
+        return next((index for index, ams in self.data.items() if ams.model == "AMS 3H"), None)
+
+    def _resolve_virtual_slot(self, ams_index: int, tray_index: int) -> tuple[int, int]:
+        """Map an AMS 3H virtual slot id onto its AMS 3H unit and tray."""
+        if ams_index in AMS_3H_VIRTUAL_SLOT_IDS:
+            ams_3h_index = self._ams_3h_index()
+            if ams_3h_index is not None:
+                return ams_3h_index, 255 - ams_index
+        return ams_index, tray_index
+
+    def _active_slot(self) -> tuple[int, int]:
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self._resolve_virtual_slot(self._nozzle_ams_index[active_nozzle],
+                                          self._nozzle_tray_index[active_nozzle])
 
     @property
     def target_ams_index(self):
         active_nozzle = self._client._device.extruder.active_nozzle_index
-        return self._nozzle_target_ams_index[active_nozzle]
+        return self._resolve_virtual_slot(self._nozzle_target_ams_index[active_nozzle], 0)[0]
 
     def _status_description(self) -> str:
         main = (self._ams_status >> 8) & 0xFF
@@ -4199,14 +4242,12 @@ class AMSList:
 
     @property
     def active_ams_index(self):
-        active_nozzle = self._client._device.extruder.active_nozzle_index
-        return self._nozzle_ams_index[active_nozzle]
-    
+        return self._active_slot()[0]
+
     @property
     def active_tray_index(self):
-        active_nozzle = self._client._device.extruder.active_nozzle_index
-        return self._nozzle_tray_index[active_nozzle]
-    
+        return self._active_slot()[1]
+
     @property
     def active_tray(self):
         if self.active_ams_index == 255:
@@ -4219,10 +4260,10 @@ class AMSList:
                 return None
             else:
                 return self._client._device.external_spool[1]
-        elif self.data[self.active_ams_index] is None:
+        ams = self.data.get(self.active_ams_index)
+        if ams is None or not 0 <= self.active_tray_index < len(ams.tray):
             return None
-        else:
-            return self.data[self.active_ams_index].tray[self.active_tray_index]
+        return ams.tray[self.active_tray_index]
 
     def info_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -4495,6 +4536,10 @@ class AMSList:
                     if tray_id is None or not 0 <= tray_id < len(instance.tray):
                         LOGGER.debug("Ignoring unsupported AMS tray id: %r", tray.get("id"))
                         continue
+                    reported_state = optional_number(tray, "state", int)
+                    if reported_state is not None:
+                        self._reported_tray_states = {**self._reported_tray_states,
+                                                      (index, tray_id): reported_state}
                     instance.tray[tray_id].print_update(tray)
 
             # tray_exist_bits: hex bitmask of slots that physically hold a spool,
@@ -4515,6 +4560,8 @@ class AMSList:
                             continue
                         for tray_id, ams_tray in enumerate(ams_instance.tray):
                             ams_tray.exists = bool((bits >> (ams_index * 4 + tray_id)) & 1)
+
+        self._apply_virtual_slots(data.get("vir_slot"))
 
         if data.get("ams_status") is not None:
             self._ams_status = int(data["ams_status"])
@@ -4538,6 +4585,54 @@ class AMSList:
 
         data_changed = (old_data != f"{self.__dict__}")
         return data_changed
+
+    def _store_virtual_slots(self, vir_slots) -> None:
+        """Remember the latest payload of each AMS 3H virtual slot; deltas merge into it."""
+        if not isinstance(vir_slots, list):
+            return
+        for entry in vir_slots:
+            if not isinstance(entry, dict):
+                continue
+            try:
+                slot_id = int(entry.get("id"))
+            except (TypeError, ValueError):
+                continue
+            if slot_id not in AMS_3H_VIRTUAL_SLOT_IDS:
+                continue
+            # A bare id/state entry means the slot was emptied, so stale filament fields must go.
+            metadata_only = set(entry.keys()).issubset({"id", "state"})
+            previous = {} if metadata_only else self._virtual_slots.get(slot_id, {})
+            self._virtual_slots = {**self._virtual_slots, slot_id: {**previous, **entry}}
+
+    def _apply_virtual_slots(self, vir_slots) -> None:
+        """Show a 2.85 mm spool the H3C reports as a virtual slot on its AMS 3H tray (#2253).
+
+        The AMS reports that tray as empty, so the virtual slot is re-applied after every AMS
+        update. A spool the AMS itself reports in the tray takes precedence.
+        """
+        self._store_virtual_slots(vir_slots)
+        ams_3h_index = self._ams_3h_index()
+        if ams_3h_index is None:
+            return
+        trays = self.data[ams_3h_index].tray
+        overlaid = set()
+        for slot_id, entry in self._virtual_slots.items():
+            tray_index = 255 - slot_id
+            if tray_index >= len(trays):
+                continue
+            reported_state = self._reported_tray_states.get((ams_3h_index, tray_index), 0)
+            if ams_tray_spool_loaded(reported_state):
+                continue
+            tray = trays[tray_index]
+            if _virtual_slot_loaded(entry):
+                tray.print_update({"state": AMS_3H_VIRTUAL_SLOT_LOADED_STATE, **entry,
+                                   "id": str(tray_index)})
+                tray.exists = True
+                overlaid.add(tray_index)
+            elif tray_index in self._virtual_overlaid_trays:
+                # Back to what the AMS reports for the tray, which is empty.
+                tray.print_update({"id": str(tray_index), "state": reported_state})
+        self._virtual_overlaid_trays = frozenset(overlaid)
 
 @dataclass
 class AMSTray:
