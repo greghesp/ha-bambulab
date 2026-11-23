@@ -34,6 +34,7 @@ from .const import (
 from .ams_heater_controller import async_setup_ams_heaters
 from .coordinator import BambuDataUpdateCoordinator, migrate_legacy_file_cache
 from .makerworld import create_makerworld_coordinator
+from .panda_devices import async_setup_panda_devices
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import normalize_service_target
 from .diagnostics import TO_REDACT
@@ -443,6 +444,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     coordinator.ams_heaters = async_setup_ams_heaters(hass, entry, coordinator)
+
+    coordinator.panda_devices = async_setup_panda_devices(hass, entry, coordinator)
 
     if coordinator.filament_inventory is not None:
         # Same reasoning as MakerWorld above: a cloud failure must not block
