@@ -21,6 +21,7 @@ from typing import Any
 import paho.mqtt.client as mqtt
 
 from .bambu_cloud import BambuCloud
+from .orca_cloud import OrcaCloud
 from .const import (
     LOGGER,
     Features,
@@ -417,6 +418,9 @@ class BambuClient:
             username = config.get('username', ''),
             auth_token = config.get('auth_token', '')
         )
+        # Optional second source of custom filament presets for OrcaSlicer users. Set by
+        # the owner, which must also persist the rotating refresh token (see orca_cloud.py).
+        self.orca_cloud: OrcaCloud | None = None
         self._loaded_slicer_settings = False
         self.slicer_settings = SlicerSettings(self)
         language = config.get('user_language', 'pt')

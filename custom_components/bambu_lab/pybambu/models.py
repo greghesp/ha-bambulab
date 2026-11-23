@@ -90,6 +90,7 @@ from .commands import (
     HEATBED_LIGHT_ON,
     HEATBED_LIGHT_OFF,
 )
+from .orca_cloud import OrcaCloudAuthError, OrcaCloudError
 from .media_sources import (
     Ftps990MediaSource,
     RemoteMediaError,
@@ -5758,6 +5759,37 @@ class SlicerSettings:
         else:
             LOGGER.debug(f"Received no filament data: {filaments}")
 
+    def _fetch_orca_filaments(self) -> dict:
+        orca_cloud = getattr(self._client, "orca_cloud", None)
+        if orca_cloud is None:
+            return {}
+        try:
+            filaments = orca_cloud.get_filament_profiles()
+        except OrcaCloudAuthError as e:
+            LOGGER.warning(f"Orca Cloud sign-in is no longer valid, custom Orca filaments not loaded: {e}")
+            self._client.callback("event_orca_cloud_authentication_failed")
+            return {}
+        except OrcaCloudError as e:
+            LOGGER.warning(f"Could not load custom filaments from Orca Cloud: {e}")
+            return {}
+        except Exception as e:
+            # The API is undocumented. An unexpected response must not stop Bambu Cloud loading.
+            LOGGER.error(f"Unexpected error loading custom filaments from Orca Cloud: {type(e).__name__}: {e}")
+            return {}
+        LOGGER.debug(f"Got {len(filaments)} custom filaments from Orca Cloud.")
+        return {
+            filament_id: FilamentInfo(
+                name=filament["name"],
+                filament_vendor=filament["filament_vendor"],
+                filament_type=filament["filament_type"],
+                filament_density=0,
+                nozzle_temperature=0,
+                nozzle_temperature_range_high=filament["nozzle_temperature_range_high"],
+                nozzle_temperature_range_low=filament["nozzle_temperature_range_low"],
+            )
+            for filament_id, filament in filaments.items()
+        }
+
     # Slicer settings are account-level, so every printer on one account requests them
     # within seconds of a restart and the cloud answers some with 429. Spread the
     # initial requests out and retry transient failures with backoff and jitter (#2304).
@@ -5767,7 +5799,15 @@ class SlicerSettings:
 
     def update(self):
         """Load slicer settings. Runs on its own thread, so sleeping here is safe."""
-        self.custom_filaments = {}
+        # Orca goes first so a Bambu Cloud rejection or its retries can't skip or delay it.
+        orca_filaments = self._fetch_orca_filaments()
+        self.custom_filaments = dict(orca_filaments)
+        self._update_from_bambu_cloud()
+        # A preset that exists in both uses the Orca copy: users who connected Orca
+        # Cloud have stopped syncing to Bambu.
+        self.custom_filaments = {**self.custom_filaments, **orca_filaments}
+
+    def _update_from_bambu_cloud(self):
         if self._client.bambu_cloud.auth_token == "":
             return
 
