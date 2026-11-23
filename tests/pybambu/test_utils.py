@@ -1,6 +1,13 @@
+import asyncio
+import socket
 import unittest
+from unittest.mock import AsyncMock, patch
 
-from pybambu.utils import fan_percentage, get_authenticated_rtsp_url
+from pybambu.utils import (
+    async_resolve_ipv4,
+    fan_percentage,
+    get_authenticated_rtsp_url,
+)
 
 
 class TestAuthenticatedRTSPUrl(unittest.TestCase):
@@ -49,6 +56,47 @@ class TestAuthenticatedRTSPUrl(unittest.TestCase):
                 "https://192.0.2.20/live", "", "12345678"
             )
         )
+
+
+class TestResolveIpv4(unittest.IsolatedAsyncioTestCase):
+    """The camera URL handed to go2rtc needs an address, not a name (#1798)."""
+
+    def _patch_getaddrinfo(self, **kwargs):
+        return patch.object(
+            asyncio.get_running_loop(), "getaddrinfo", AsyncMock(**kwargs)
+        )
+
+    async def test_hostname_is_resolved(self):
+        result = [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("192.0.2.10", 0))]
+        with self._patch_getaddrinfo(return_value=result) as getaddrinfo:
+            self.assertEqual(await async_resolve_ipv4("x1c.example"), "192.0.2.10")
+        # go2rtc can't parse IPv6 hosts, so only IPv4 is any use.
+        self.assertEqual(getaddrinfo.call_args.kwargs["family"], socket.AF_INET)
+
+    async def test_addresses_and_empty_host_are_not_looked_up(self):
+        with self._patch_getaddrinfo() as getaddrinfo:
+            for host in ("192.0.2.10", "2001:db8::1", ""):
+                self.assertEqual(await async_resolve_ipv4(host), host)
+        getaddrinfo.assert_not_called()
+
+    async def test_unresolvable_name_is_returned_unchanged(self):
+        for error in (socket.gaierror(), UnicodeError()):
+            with self._patch_getaddrinfo(side_effect=error):
+                self.assertEqual(await async_resolve_ipv4("x1c.example"), "x1c.example")
+
+    async def test_no_ipv4_address_returns_name_unchanged(self):
+        with self._patch_getaddrinfo(return_value=[]):
+            self.assertEqual(await async_resolve_ipv4("x1c.example"), "x1c.example")
+
+    async def test_slow_lookup_returns_name_unchanged(self):
+        async def never_answers(*args, **kwargs):
+            await asyncio.sleep(60)
+
+        with (
+            self._patch_getaddrinfo(side_effect=never_answers),
+            patch("pybambu.utils.HOST_LOOKUP_TIMEOUT", 0.01),
+        ):
+            self.assertEqual(await async_resolve_ipv4("x1c.example"), "x1c.example")
 
 
 class TestFanPercentage(unittest.TestCase):

@@ -9,10 +9,11 @@ from PIL import Image, ImageDraw
 from .const import DOMAIN, LOGGER, Options
 from .models import BambuLabEntity
 from .pybambu.const import Features
-from .pybambu.utils import get_authenticated_rtsp_url
+from .pybambu.utils import async_resolve_ipv4, get_authenticated_rtsp_url
 from .definitions import BambuLabSensorEntityDescription
 
 from homeassistant.components.camera import Camera, CameraEntityFeature
+from homeassistant.components.stream import Stream
 from homeassistant.components.stream.const import CONF_USE_WALLCLOCK_AS_TIMESTAMPS
 
 from .coordinator import BambuDataUpdateCoordinator
@@ -118,14 +119,28 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
         return True
 
     async def stream_source(self) -> str | None:
-        return self._stream_source()
+        # go2rtc checks the certificate when the URL contains a hostname, but not when
+        # it contains an IP address. The printer's certificate never carries the user's
+        # hostname, so the connection fails unless the name is resolved here.
+        if self._stream_source() is None:
+            return None
+        host = self.coordinator.get_model().info.ip_address
+        return self._stream_source(await async_resolve_ipv4(host))
 
-    def _stream_source(self) -> str | None:
+    async def async_create_stream(self) -> Stream | None:
+        # Home Assistant keeps this stream's URL for the life of the entity, so a resolved
+        # address would go stale if DHCP moved the printer. ffmpeg doesn't check the
+        # certificate, so it can keep using the hostname.
+        stream = await super().async_create_stream()
+        if stream and (source := self._stream_source()):
+            stream.source = source
+        return stream
+
+    def _stream_source(self, host: str | None = None) -> str | None:
         model = self.coordinator.get_model()
-        ip_address = model.info.ip_address
         return get_authenticated_rtsp_url(
             model.camera.rtsp_url,
-            ip_address,
+            host or model.info.ip_address,
             self._access_code,
         )
 
