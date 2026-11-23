@@ -712,7 +712,7 @@ PRINTER_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
     BambuLabSensorEntityDescription(
         key="subtask_name",
         translation_key="subtask_name",
-        value_fn=lambda self: self.coordinator.get_model().print_job.subtask_name,
+        value_fn=lambda self: self.coordinator.get_model().print_job.task_name,
         icon_fn=lambda self: self.coordinator.get_model().print_job.file_type_icon,
         extra_attributes=lambda self: {"ams_mapping": self.coordinator.get_model().print_job.get_ams_mapping},
     ),
