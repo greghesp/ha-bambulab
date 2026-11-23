@@ -1014,6 +1014,9 @@
           "color": {
             "name": "Color"
           },
+          "color_name": {
+            "name": "Color name"
+          },
           "cols": {
             "name": "Colors"
           },
@@ -1075,6 +1078,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "color_name": {
+            "name": "Color name"
           },
           "cols": {
             "name": "Colors"

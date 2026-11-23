@@ -134,6 +134,7 @@ drying binary sensors describe the whole AMS. It exposes up to nine trays.
 | Tray attributes:    | Notes      |
 | ------------------- | ---------- |
 | Color               |            |
+| Color name          | Bambu Lab's English name for the color, e.g. `Jade White`. Only for Bambu Lab filament profiles, and only when the color is one Bambu Lab lists for that filament. |
 | Empty               | `true` when no spool is in the slot, or the tray is loading / scanning (RFID motion). See note below. |
 | Unknown             | `true` when a spool is loaded but `tray_type` is not set — sensor state shows `?`, matching the printer UI. |
 | State               | Raw MQTT tray `state` integer (bitmask). Diagnostic; used internally. |

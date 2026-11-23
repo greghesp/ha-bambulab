@@ -25,6 +25,7 @@ import asyncio
 
 from .air_purifier import AirPurifier
 from .bambu_cloud import CloudAuthError
+from .filament_colors import get_filament_color_name
 from .utils import (
     search,
     fan_percentage,
@@ -4875,6 +4876,7 @@ class AMSTray:
     tray_uuid: str
     tray_weight: int
     _active: bool
+    tray_id_name: str
     cols: list
     ctype: int
     filament_diameter: float | None
@@ -4906,6 +4908,7 @@ class AMSTray:
         self.tray_uuid = ""
         self.tray_weight = 0
         self._active = False
+        self.tray_id_name = ""
         self.cols = []
         self.ctype = 0
         self.dry_temp = 0
@@ -4918,6 +4921,13 @@ class AMSTray:
     def unknown(self) -> bool:
         """True when a spool is loaded but vendor/material/colour are not assigned."""
         return not self.empty and self.name == UNKNOWN_TRAY_LABEL
+
+    @property
+    def color_name(self) -> str | None:
+        """Bambu Lab's name for the filament color, None when it has none."""
+        # cols is not part of every update, so it may belong to an earlier color.
+        colors = self.cols if self.color in self.cols else [self.color]
+        return get_filament_color_name(self.idx, colors, self.tray_id_name)
 
     @property
     def remain(self) -> int:
@@ -4950,6 +4960,7 @@ class AMSTray:
         self.tray_uuid = ""
         self.k = 0
         self.tray_weight = 0
+        self.tray_id_name = ""
         self.cols = []
         self.ctype = 0
         self.dry_temp = 0
@@ -4984,6 +4995,9 @@ class AMSTray:
             self.idx = data.get('tray_info_idx', self.idx)
             self.type = data.get('tray_type', self.type)
             self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+            if data.get('tray_color', self.color) != self.color:
+                # The tag code belongs to the previous color.
+                self.tray_id_name = ""
             self.color = data.get('tray_color', self.color)
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
             self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
@@ -4992,6 +5006,7 @@ class AMSTray:
             self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
             self.tray_weight = data.get('tray_weight', self.tray_weight)
+            self.tray_id_name = data.get('tray_id_name', self.tray_id_name)
             self.cols = data.get('cols', self.cols)
             self.ctype = data.get('ctype', self.ctype)
             self.dry_temp = data.get('drying_temp', data.get('tray_temp', self.dry_temp))
@@ -5109,6 +5124,7 @@ class ExternalSpool(AMSTray):
         self.tray_uuid = ""
         self.k = 0
         self.tray_weight = 0
+        self.tray_id_name = ""
         self.cols = []
         self.ctype = 0
         self.dry_temp = 0
