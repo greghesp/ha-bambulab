@@ -133,7 +133,8 @@
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available.",
       "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
-      "no_ams": "No AMS has been identified on this printer yet. Wait for the printer to connect and report its AMS units, then try again."
+      "no_ams": "No AMS has been identified on this printer yet. Wait for the printer to connect and report its AMS units, then try again.",
+      "camera_relay_not_supported": "A shared relay requires a loaded printer entry with an RTSP camera."
     },
     "error": {
       "cannot_connect": "Failed to connect",
@@ -155,7 +156,8 @@
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
       "code_incorrect": "Verification code was incorrect. Please re-enter.",
       "tfaCode": "2FA code is required. Please enter it now.",
-      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below."
+      "tfa_csrf_fallback": "Bambu Lab's two factor authentication endpoint is currently rejecting requests. A verification code has been sent to your email or phone instead - please enter it below.",
+      "invalid_camera_relay_url": "Enter a valid relay URL with the required scheme and host. A snapshot URL requires a relay stream URL."
     },
     "step": {
       "ams_heater": {
@@ -236,6 +238,14 @@
               "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
             }
           }
+        }
+      },
+      "camera_relay": {
+        "title": "Shared camera relay",
+        "description": "Optional: use an existing local relay such as go2rtc for this printer. Configure one persistent upstream connection in the relay first. The integration does not install or manage the relay. Leave both fields empty to restore the direct camera. The default HA camera viewer still chooses its own playback mode; see the camera relay documentation for an MSE card example.",
+        "data": {
+          "camera_relay_stream": "Relay stream URL (rtsp:// or rtsps://)",
+          "camera_relay_snapshot": "Relay JPEG snapshot URL (optional, http:// or https://)"
         }
       }
     }
@@ -1298,7 +1308,8 @@
         "bambu": "Bambu Lab cloud",
         "lan": "Lan Mode",
         "makerworld": "MakerWorld account",
-        "ams_heater": "External AMS heater or dryer (smart plug)"
+        "ams_heater": "External AMS heater or dryer (smart plug)",
+        "camera_relay": "Shared camera relay (RTSP printers)"
       }
     }
   },

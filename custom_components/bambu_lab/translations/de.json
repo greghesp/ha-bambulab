@@ -133,7 +133,8 @@
       "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
       "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar.",
       "no_working_credentials": "Für dieses Konto sind keine funktionierenden Anmeldeinformationen für den Bambu Cloud-Drucker verfügbar.",
-      "no_ams": "Auf diesem Drucker wurde noch kein AMS identifiziert. Warten Sie, bis der Drucker eine Verbindung hergestellt hat und seine AMS-Einheiten meldet, und versuchen Sie es dann erneut."
+      "no_ams": "Auf diesem Drucker wurde noch kein AMS identifiziert. Warten Sie, bis der Drucker eine Verbindung hergestellt hat und seine AMS-Einheiten meldet, und versuchen Sie es dann erneut.",
+      "camera_relay_not_supported": "Ein gemeinsamer Stream benötigt einen geladenen Druckereintrag mit RTSP-Kamera."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
@@ -155,7 +156,8 @@
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-Cloud-Adresse nicht erreichbar.",
       "cannot_connect_cloud_unknown": "Unbekannter Fehler beim Herstellen der Verbindung zur Bambu Lab-Cloud.",
       "cannot_connect_local_unknown": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
-      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein."
+      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein.",
+      "invalid_camera_relay_url": "Eine gültige Relay-URL mit passendem Protokoll und Host eingeben. Eine Schnappschuss-URL benötigt auch eine Relay-Stream-URL."
     },
     "step": {
       "init": {
@@ -236,6 +238,14 @@
         "data": {
           "username": "Bambu-Konto:",
           "credential_source": "Bambu-Konto:"
+        }
+      },
+      "camera_relay": {
+        "title": "Gemeinsamer Kamerastream",
+        "description": "Optional: Einen vorhandenen lokalen Relay-Server wie go2rtc für diesen Drucker verwenden. Zuerst dort eine dauerhafte Verbindung zum Drucker konfigurieren. Die Integration installiert oder verwaltet den Relay-Server nicht. Beide Felder leeren, um die direkte Kamera wiederherzustellen. Die normale HA-Kameraansicht wählt weiterhin selbst den Wiedergabemodus. Die Dokumentation enthält ein Beispiel für eine MSE-Karte.",
+        "data": {
+          "camera_relay_stream": "Relay-Stream-URL (rtsp:// oder rtsps://)",
+          "camera_relay_snapshot": "Relay-JPEG-Schnappschuss-URL (optional, http:// oder https://)"
         }
       }
     }
@@ -1291,7 +1301,8 @@
         "bambu": "Bambu Lab-Cloud",
         "lan": "LAN-Modus",
         "makerworld": "MakerWorld-Konto",
-        "ams_heater": "Externe AMS-Heizung oder Trockner (Smart Plug)"
+        "ams_heater": "Externe AMS-Heizung oder Trockner (Smart Plug)",
+        "camera_relay": "Gemeinsamer Kamerastream (RTSP-Drucker)"
       }
     }
   },
