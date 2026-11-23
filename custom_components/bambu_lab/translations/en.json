@@ -16,7 +16,8 @@
   "config": {
     "abort": {
       "already_configured": "Device is already configured",
-      "no_printers": "No unconfigured printers found in the account.",
+      "no_printers": "Bambu Cloud reports no printers for this account. Check that this is the account the printer is bound to. If the printer is in LAN Only mode, add it using Lan Mode instead.",
+      "device_list_failed": "Failed to get the printer list from Bambu Cloud. Check the Home Assistant log and try again.",
       "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
       "reconfigure_not_supported": "Only MakerWorld account entries can be reconfigured this way.",
       "reconfigure_successful": "MakerWorld credentials updated.",

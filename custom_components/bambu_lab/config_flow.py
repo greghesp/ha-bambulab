@@ -201,20 +201,19 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     default_email = config_entry.options['email']
                     username = config_entry.options['username']
                     auth_token = config_entry.options['auth_token']
-                    if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
+                    # test_authentication() leaves the tested credentials on the client, so use a
+                    # fresh one per entry to keep a later entry from replacing a working account.
+                    cloud = BambuCloud("", "", "", "")
+                    if await self.hass.async_add_executor_job(cloud.test_authentication,
                                                               default_region,
                                                               default_email,
                                                               username,
                                                               auth_token):
                         LOGGER.debug("Found working credentials.")
-                        self.region = default_region
-                        self.email = default_email
-                        self.bambu_cloud = BambuCloud(
-                            default_region,
-                            default_email,
-                            username,
-                            auth_token
-                        )
+                        if self.email == '':
+                            self.region = default_region
+                            self.email = default_email
+                            self._bambu_cloud = cloud
                         if username not in existing_makerworld_accounts:
                             self._makerworld_credentials.setdefault(username, {
                                 "region": default_region,
@@ -479,6 +478,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
         printer_list = []
         for device in device_list:
@@ -525,6 +526,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
         for device in device_list:
             if device['dev_id'] == self.serial:
