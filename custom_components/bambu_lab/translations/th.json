@@ -1280,6 +1280,9 @@
           "debug": "ดีบัก",
           "unknown": "ไม่ทราบ"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "สินค้าคงคลังเส้นใยที่เหลืออยู่"
       }
     },
     "camera": {

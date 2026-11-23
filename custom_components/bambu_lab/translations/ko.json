@@ -1280,6 +1280,9 @@
           "debug": "디버그",
           "unknown": "알려지지 않은"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "남은 필라멘트 재고"
       }
     },
     "camera": {

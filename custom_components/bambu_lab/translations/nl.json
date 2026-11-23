@@ -1280,6 +1280,9 @@
           "debug": "Foutopsporing",
           "unknown": "Onbekend"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Resterende filamentvoorraad"
       }
     },
     "camera": {

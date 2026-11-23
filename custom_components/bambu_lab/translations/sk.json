@@ -1280,6 +1280,9 @@
           "debug": "Debug",
           "unknown": "Neznámy"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Zostávajúci inventár vlákna"
       }
     },
     "camera": {

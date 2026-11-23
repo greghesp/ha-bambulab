@@ -1280,6 +1280,9 @@
           "debug": "Depurar",
           "unknown": "Desconhecido"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Inventário de filamentos restante"
       }
     },
     "camera": {

@@ -98,7 +98,7 @@ class BambuLabCardRegistration:
         all_resources = list(self.lovelace_resources.async_items())
 
         for card in BAMBU_LAB_CARDS:
-            url = f"{URL_BASE}/{card.get("filename")}"
+            url = f"{URL_BASE}/{card.get('filename')}"
 
             external = find_external_card_resources(all_resources, card.get("filename"))
             if external:
@@ -155,7 +155,7 @@ class BambuLabCardRegistration:
         # Unload lovelace module resource
         if self.lovelace_resource_mode == "storage":
             for card in BAMBU_LAB_CARDS:
-                url = f"{URL_BASE}/{card.get("filename")}"
+                url = f"{URL_BASE}/{card.get('filename')}"
                 bambu_resources = [
                     resource
                      for resource in self.lovelace_resources.async_items()

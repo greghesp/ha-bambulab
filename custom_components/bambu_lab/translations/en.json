@@ -523,6 +523,9 @@
           }
         }
       },
+      "filament_inventory_total_remaining": {
+        "name": "Filament inventory remaining"
+      },
       "airduct_mode": {
         "name": "Airduct mode",
         "state": {

@@ -1280,6 +1280,9 @@
           "debug": "Отлаживать",
           "unknown": "Неизвестный"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Оставшийся запас нити"
       }
     },
     "camera": {

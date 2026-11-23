@@ -1280,6 +1280,9 @@
           "debug": "调试",
           "unknown": "未知"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "剩余耗材库存"
       }
     },
     "camera": {

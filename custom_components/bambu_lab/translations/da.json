@@ -1280,6 +1280,9 @@
           "debug": "Debug",
           "unknown": "Ukendt"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Filamentbeholdning tilbage"
       }
     },
     "camera": {

@@ -1280,6 +1280,9 @@
           "debug": "Debug",
           "unknown": "Sconosciuto"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Scorte di filamenti rimanenti"
       }
     },
     "camera": {

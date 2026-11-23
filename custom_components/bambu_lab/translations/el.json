@@ -1280,6 +1280,9 @@
           "debug": "Εντοπισμός σφαλμάτων",
           "unknown": "Αγνωστος"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Απομένει απόθεμα νήματος"
       }
     },
     "camera": {

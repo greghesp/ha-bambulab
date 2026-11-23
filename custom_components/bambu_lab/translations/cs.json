@@ -1280,6 +1280,9 @@
           "debug": "Ladit",
           "unknown": "Neznámý"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Zbývající zásoby vláken"
       }
     },
     "camera": {

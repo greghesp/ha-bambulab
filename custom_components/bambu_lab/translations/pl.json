@@ -1280,6 +1280,9 @@
           "debug": "Odpluskwić",
           "unknown": "Nieznany"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Pozostały zapasy żarnika"
       }
     },
     "camera": {
