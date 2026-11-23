@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Το σφάλμα εκτύπωσης διαγράφηκε",
       "event_printer_error": "Σφάλμα HMS",
       "event_printer_error_cleared": "Το σφάλμα HMS διαγράφηκε",
-      "event_printer_missing_sdcard": "Λείπει κάρτα SD"
+      "event_printer_missing_sdcard": "Λείπει κάρτα SD",
+      "event_timelapse_downloaded": "Έγινε λήψη του Timelapse"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Πάνω εξώφυλλο"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Εγκατεστημένο κιτ αναβάθμισης P1S"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Απογραφή νήματος"
+      },
+      "processing_material": {
+        "name": "Υλικό λέιζερ/κόφτη"
+      },
+      "check_in_remaining": {
+        "name": "Απομένει το check-in με λέιζερ"
+      },
+      "print_elapsed_time": {
+        "name": "Εκτύπωση του χρόνου που έχει παρέλθει"
+      },
+      "last_timelapse": {
+        "name": "Τελευταίο timelapse"
+      },
+      "filament_change_status": {
+        "name": "Κατάσταση αλλαγής νήματος",
+        "state": {
+          "idle": "Αεργος",
+          "changing_filament": "Αλλαγή νήματος",
+          "heating_nozzle": "Ακροφύσιο θέρμανσης",
+          "cutting_filament": "Νηματάκι κοπής",
+          "pulling_back_filament": "Τραβώντας προς τα πίσω το τρέχον νήμα",
+          "pushing_new_filament": "Σπρώξιμο νέου νήματος",
+          "purging_old_filament": "Καθαρισμός παλαιού νήματος",
+          "checking_position": "Έλεγχος της θέσης του νήματος",
+          "rfid_identifying": "Αναγνώριση RFID",
+          "filament_loaded": "Το νήμα έχει φορτωθεί",
+          "calibration": "Διαμέτρηση",
+          "cold_pull": "Ψυχρό τράβηγμα",
+          "self_check": "Αυτοέλεγχος",
+          "debug": "Εντοπισμός σφαλμάτων",
+          "unknown": "Αγνωστος"
+        }
       }
     },
     "camera": {

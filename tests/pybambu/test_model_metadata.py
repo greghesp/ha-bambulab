@@ -368,3 +368,70 @@ def test_mapping_change_in_image_callback_does_not_apply_old_allocation():
     assert current._parse_and_apply_model_metadata(xml, b"cover", expected_job=expected) is False
     assert current.print_weight == 99
     assert current._ams_print_weights == [0, 99]
+
+
+def test_new_firmware_mapping_fallback_survives_metadata_staging():
+    current = configured_job()
+    current.ams_mapping = []
+    current._tray_mapping = [(1 << 8) | 2]
+    xml = (b'<config><plate><metadata key="index" value="2"/>'
+           b'<metadata key="weight" value="12.3"/>'
+           b'<filament id="1" used_g="12.3" used_m="4.1"/></plate></config>')
+    assert current._parse_and_apply_model_metadata(xml, expected_job=metadata.job_identity(current))
+    assert current._ams_print_weights[6] == 12.3
+    assert current._ams_print_lengths[6] == 4.1
+
+
+def test_new_firmware_mapping_change_rejects_old_allocation():
+    current = configured_job()
+    current.ams_mapping = []
+    current._tray_mapping = [0]
+    stamp = metadata.job_identity(current)
+    xml = b'<config><plate><metadata key="index" value="2"/><metadata key="weight" value="12.3"/></plate></config>'
+    def change_mapping(_):
+        current._tray_mapping = [1]
+        current.print_weight = 99
+    current._client._device.cover_image.set_image.side_effect = change_mapping
+    assert current._parse_and_apply_model_metadata(xml, b"cover", expected_job=stamp) is False
+    assert current.print_weight == 99
+
+
+def test_active_metadata_job_change_during_read_cannot_apply_old_weights():
+    current = configured_job()
+    source = SimpleNamespace(name="tcp6000")
+    def read(_source, path):
+        if path.endswith("slice_info.config"):
+            current.task_id = "next-job"
+            current.print_weight = 99
+            return b'<config><plate><metadata key="index" value="2"/><metadata key="weight" value="12.3"/></plate></config>'
+    current._read_active_metadata_file = read
+    assert current._try_active_metadata_from_printer([source]) is False
+    assert current.print_weight == 99
+
+
+def test_active_metadata_keeps_successful_direct_read_path():
+    current = configured_job()
+    source = SimpleNamespace(name="tcp6000")
+    current._read_active_metadata_file = lambda _, path: (
+        b'<config><plate><metadata key="index" value="2"/><metadata key="weight" value="12.3"/></plate></config>'
+        if path.endswith("slice_info.config") else None)
+    assert current._try_active_metadata_from_printer([source]) is True
+    assert current.print_weight == 12.3
+
+
+def test_active_pick_image_only_does_not_suppress_stored_lookup_retry():
+    current = configured_job()
+    source = SimpleNamespace(name="tcp6000")
+    current._loaded_model_data = True
+    current.prune_print_history_files = MagicMock()
+    current._remote_media_sources = MagicMock(return_value=[source])
+    current._close_remote_media_sources = MagicMock()
+    current._try_active_cover_from_printer = MagicMock(return_value=True)
+    current._attempt_remote_model_download = MagicMock(return_value=None)
+    current._attempt_direct_metadata_download = MagicMock(return_value=False)
+    current._read_active_metadata_file = lambda _, path: b"pick" if path.endswith(".png") else None
+    current._async_download_task_data_from_printer()
+    current._client._device.pick_image.set_image.assert_called_with(b"pick")
+    assert current._loaded_model_data is False
+    assert current._next_model_retry_at > 0
+    current._close_remote_media_sources.assert_called_once_with([source])

@@ -22,7 +22,9 @@ METADATA_MEMBERS = ("3D/3dmodel.model", "Metadata/slice_info.config")
 
 
 def job_identity(job) -> tuple:
-    return job.task_id, job._subtask_name, job.gcode_file, job.plate_idx, tuple(getattr(job, "ams_mapping", ()))
+    return (job.task_id, job._subtask_name, job.gcode_file, job.plate_idx,
+            tuple(getattr(job, "ams_mapping", ()) or ()),
+            tuple(getattr(job, "_tray_mapping", ()) or ()))
 
 
 def normalized_title(value: str) -> str:

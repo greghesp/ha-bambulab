@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Druckfehler behoben",
       "event_printer_error": "HMS-Fehler",
       "event_printer_error_cleared": "HMS-Fehler behoben",
-      "event_printer_missing_sdcard": "SD-Karte fehlt"
+      "event_printer_missing_sdcard": "SD-Karte fehlt",
+      "event_timelapse_downloaded": "Zeitraffer heruntergeladen"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Obere Abdeckung"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S-Upgrade-Kit installiert"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Filamentbestand"
+      },
+      "processing_material": {
+        "name": "Laser-/Cuttermaterial"
+      },
+      "check_in_remaining": {
+        "name": "Der Laser-Check-in bleibt bestehen"
+      },
+      "print_elapsed_time": {
+        "name": "Verstrichene Zeit drucken"
+      },
+      "last_timelapse": {
+        "name": "Letzter Zeitraffer"
+      },
+      "filament_change_status": {
+        "name": "Status des Filamentwechsels",
+        "state": {
+          "idle": "Leerlauf",
+          "changing_filament": "Filament wechseln",
+          "heating_nozzle": "Heizdüse",
+          "cutting_filament": "Filament schneiden",
+          "pulling_back_filament": "Zurückziehen des aktuellen Filaments",
+          "pushing_new_filament": "Neues Filament einschieben",
+          "purging_old_filament": "Altes Filament entfernen",
+          "checking_position": "Überprüfung der Filamentposition",
+          "rfid_identifying": "RFID identifizieren",
+          "filament_loaded": "Filament geladen",
+          "calibration": "Kalibrierung",
+          "cold_pull": "Kaltzug",
+          "self_check": "Selbstkontrolle",
+          "debug": "Debuggen",
+          "unknown": "Unbekannt"
+        }
       }
     },
     "camera": {

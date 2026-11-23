@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Printfout gewist",
       "event_printer_error": "HMS-fout",
       "event_printer_error_cleared": "HMS-fout gewist",
-      "event_printer_missing_sdcard": "Ontbrekende SD-kaart"
+      "event_printer_missing_sdcard": "Ontbrekende SD-kaart",
+      "event_timelapse_downloaded": "Time-lapse gedownload"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Bovenklep"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S-upgradekit geïnstalleerd"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Filamentinventaris"
+      },
+      "processing_material": {
+        "name": "Laser-/snijdermateriaal"
+      },
+      "check_in_remaining": {
+        "name": "Laser check-in resterend"
+      },
+      "print_elapsed_time": {
+        "name": "Verstreken tijd afdrukken"
+      },
+      "last_timelapse": {
+        "name": "Laatste timelapse"
+      },
+      "filament_change_status": {
+        "name": "Status van filamentwijziging",
+        "state": {
+          "idle": "Inactief",
+          "changing_filament": "Wisselend filament",
+          "heating_nozzle": "Verwarmingsmondstuk",
+          "cutting_filament": "Filament snijden",
+          "pulling_back_filament": "Het terugtrekken van de huidige gloeidraad",
+          "pushing_new_filament": "Nieuw filament duwen",
+          "purging_old_filament": "Oud filament verwijderen",
+          "checking_position": "Positie van filament controleren",
+          "rfid_identifying": "RFID identificeren",
+          "filament_loaded": "Filament geladen",
+          "calibration": "Kalibratie",
+          "cold_pull": "Koude trek",
+          "self_check": "Zelfcontrole",
+          "debug": "Foutopsporing",
+          "unknown": "Onbekend"
+        }
       }
     },
     "camera": {
