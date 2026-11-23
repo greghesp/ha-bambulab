@@ -297,6 +297,17 @@ get_filament_data:
         device:
           integration: bambu_lab
 
+get_filament_inventory:
+  name: Get filament inventory
+  description: Return the latest full filament inventory response from Bambu Cloud.
+  fields:
+    device_id:
+      name: Filament Inventory
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
+
 read_rfid:
   name: Read the RFID tag on a Bambu spool
   description: Triggers the AMS to attempt to re-read the RFID tag on the current spool.

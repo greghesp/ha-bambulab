@@ -37,7 +37,7 @@ from .const import (
 )
 from .ams_heater_controller import async_setup_ams_heaters
 from .coordinator import BambuDataUpdateCoordinator, migrate_legacy_file_cache
-from .filamentinventory import BambuFilamentCoordinator
+from .filamentinventory import BambuFilamentCoordinator, async_get_filament_inventory
 from .makerworld import create_makerworld_coordinator
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.utils import normalize_service_target
@@ -457,6 +457,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data.setdefault(FILAMENT_INVENTORY_DATA, {})[entry.entry_id] = coordinator
         await coordinator.async_refresh()
         await hass.config_entries.async_forward_entry_setups(entry, [Platform.SENSOR])
+        hass.services.async_register(
+            DOMAIN, "get_filament_inventory", async_get_filament_inventory,
+            supports_response=SupportsResponse.ONLY,
+        )
         return True
 
     try:
@@ -543,9 +547,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     if entry.data.get(ENTRY_TYPE) == ENTRY_TYPE_FILAMENT_INVENTORY:
         unloaded = await hass.config_entries.async_unload_platforms(entry, [Platform.SENSOR])
+        if not unloaded:
+            return False
         coordinator = hass.data.get(FILAMENT_INVENTORY_DATA, {}).pop(entry.entry_id, None)
         if coordinator is not None:
             await coordinator.async_shutdown()
+        if not hass.data.get(FILAMENT_INVENTORY_DATA):
+            hass.services.async_remove(DOMAIN, "get_filament_inventory")
         return unloaded
 
     # Unload the platforms

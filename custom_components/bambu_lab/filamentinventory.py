@@ -1,16 +1,40 @@
 """Standalone Filament Inventory account coordinator."""
 from __future__ import annotations
 
+import copy
 from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.helpers import device_registry
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import BRAND, DOMAIN, LOGGER
+from .const import BRAND, DOMAIN, FILAMENT_INVENTORY_DATA, LOGGER
 from .pybambu.bambu_cloud import BambuCloud
 from .pybambu.models import FilamentInventory
+from .pybambu.utils import normalize_service_target
+
+
+async def async_get_filament_inventory(call: ServiceCall) -> dict:
+    """Return the latest cloud response for the selected inventory device."""
+    try:
+        target = normalize_service_target(call.data)
+    except ValueError as err:
+        return {"error": str(err)}
+
+    device_id = target.get("device_id")
+    if not device_id or target.get("entity_id"):
+        return {"error": "Specify a filament inventory device_id without an entity_id"}
+    device = device_registry.async_get(call.hass).async_get(device_id)
+    if device is not None:
+        for entry_id, coordinator in call.hass.data.get(FILAMENT_INVENTORY_DATA, {}).items():
+            if entry_id in device.config_entries and (DOMAIN, coordinator.unique_id_prefix) in device.identifiers:
+                payload = coordinator.inventory.raw_data
+                if payload is None:
+                    return {"error": "Filament inventory has not been fetched"}
+                return copy.deepcopy(payload)
+    return {"error": "Filament inventory device not found"}
 
 
 class BambuFilamentCoordinator(DataUpdateCoordinator):

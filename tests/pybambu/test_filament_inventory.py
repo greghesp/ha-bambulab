@@ -31,6 +31,14 @@ class TestFilamentInventory(unittest.TestCase):
         # 1000 (TPU) + 931 + 86 + 0
         self.assertEqual(self.inventory.total_remaining_g, 2017)
 
+    def test_raw_data_preserves_full_payload(self):
+        self.assertIsNone(self.inventory.raw_data)
+        payload = {"hits": [{"id": 9, "netWeight": 500, "extra": {"value": 42}}], "extra": "unchanged"}
+        self.inventory.update(payload)
+        self.assertEqual(self.inventory.raw_data, payload)
+        self.inventory.update({"hits": []})
+        self.assertEqual(self.inventory.raw_data, {"hits": []})
+
     def test_spool_fields(self):
         self.inventory.update(self.data)
         spool = next(s for s in self.inventory.spools if s["id"] == 1001)
