@@ -26,10 +26,18 @@ async def async_get_filament_inventory(call: ServiceCall) -> dict:
     device_id = target.get("device_id")
     if not device_id or target.get("entity_id"):
         return {"error": "Specify a filament inventory device_id without an entity_id"}
-    device = device_registry.async_get(call.hass).async_get(device_id)
+    registry = device_registry.async_get(call.hass)
+    device = registry.async_get(device_id)
     if device is not None:
         for entry_id, coordinator in call.hass.data.get(FILAMENT_INVENTORY_DATA, {}).items():
-            if entry_id in device.config_entries and (DOMAIN, coordinator.unique_id_prefix) in device.identifiers:
+            if hasattr(device, "config_entry_id"):
+                belongs_to_entry = device.config_entry_id == entry_id
+            else:
+                belongs_to_entry = any(
+                    entry_device.id == device.id
+                    for entry_device in device_registry.async_entries_for_config_entry(registry, entry_id)
+                )
+            if belongs_to_entry and (DOMAIN, coordinator.unique_id_prefix) in device.identifiers:
                 payload = coordinator.inventory.raw_data
                 if payload is None:
                     return {"error": "Filament inventory has not been fetched"}

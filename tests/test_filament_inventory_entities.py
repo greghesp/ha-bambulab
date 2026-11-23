@@ -56,9 +56,10 @@ def test_get_filament_inventory_targets_standalone_devices():
     first = SimpleNamespace(unique_id_prefix="filament_inventory_first", inventory=SimpleNamespace(raw_data=payload))
     second = SimpleNamespace(unique_id_prefix="filament_inventory_second", inventory=SimpleNamespace(raw_data={"hits": []}))
     devices = {
-        "first": SimpleNamespace(config_entries={"first_entry"}, identifiers={(DOMAIN, first.unique_id_prefix)}),
-        "second": SimpleNamespace(config_entries={"second_entry"}, identifiers={(DOMAIN, second.unique_id_prefix)}),
-        "printer": SimpleNamespace(config_entries={"first_entry"}, identifiers={(DOMAIN, "printer")}),
+        "first": SimpleNamespace(config_entry_id="first_entry", identifiers={(DOMAIN, first.unique_id_prefix)}),
+        "second": SimpleNamespace(config_entry_id="second_entry", identifiers={(DOMAIN, second.unique_id_prefix)}),
+        "printer": SimpleNamespace(config_entry_id="first_entry", identifiers={(DOMAIN, "printer")}),
+        "legacy": SimpleNamespace(id="legacy", identifiers={(DOMAIN, first.unique_id_prefix)}),
     }
     hass = SimpleNamespace(data={FILAMENT_INVENTORY_DATA: {"first_entry": first, "second_entry": second}})
     device_registry = SimpleNamespace(async_get=lambda device_id: devices.get(device_id))
@@ -66,12 +67,15 @@ def test_get_filament_inventory_targets_standalone_devices():
     def call(data):
         return asyncio.run(async_get_filament_inventory(SimpleNamespace(hass=hass, data=data)))
 
-    with patch("custom_components.bambu_lab.filamentinventory.device_registry.async_get", return_value=device_registry):
+    with patch("custom_components.bambu_lab.filamentinventory.device_registry.async_get", return_value=device_registry), \
+         patch("custom_components.bambu_lab.filamentinventory.device_registry.async_entries_for_config_entry",
+               side_effect=lambda registry, entry_id: [devices["legacy"]] if entry_id == "first_entry" else []):
         result = call({"device_id": ["first"]})
         assert result == payload
         result["hits"][0]["extra"]["value"] = 0
         assert payload["hits"][0]["extra"]["value"] == 42
         assert call({"device_id": "second"}) == {"hits": []}
+        assert call({"device_id": "legacy"}) == payload
         assert "error" in call({"entity_id": "sensor.inventory"})
         assert "error" in call({"device_id": ""})
         assert "error" in call({"device_id": "printer"})
