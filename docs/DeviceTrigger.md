@@ -23,6 +23,8 @@ The print canceled and print error events are only a transient event from the pr
 
 The printer sensor that exposes HMS errors as a list would very complex to effectively handle correctly in the multi-error case so the printer errors event just gives you the most recent error to allow much easier handling in a notification.
 
+The X1 reports its routine first layer inspection (HMS_0C00_0300_0003_000B) as an HMS error while it runs. It isn't a problem so it is left out of the HMS errors sensor and events. Anything the inspection finds is still reported.
+
 Event payload always contains the device_id and name. And the additional data where called out above. When crafting a notification or similar you can access the event data with a template of {{ trigger.event.data.[data_name]}} - e.g. {{ trigger.event.data.**error** }}.
 
 # Actions for Device Triggers

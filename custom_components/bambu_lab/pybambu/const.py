@@ -327,6 +327,11 @@ HMS_MODULES = {
     0x03: "mc"
 }
 
+# HMS codes the printer uses to report routine progress rather than a problem.
+HMS_STATUS_CODES = frozenset({
+    "0C00_0300_0003_000B",  # Inspecting the first layer: please wait a moment.
+})
+
 class Home_Flag_Values(IntEnum):
     X_AXIS                              = 0x00000001,
     Y_AXIS                              = 0x00000002,
