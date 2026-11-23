@@ -4,6 +4,8 @@ from unittest.mock import MagicMock, call, patch
 from pybambu.commands import GET_VERSION
 from pybambu.models import Device
 
+OTA = {"name": "ota", "sw_ver": "01.10.00.00", "hw_ver": "OTA", "sn": "01P00A000000000"}
+
 
 class TestAmsIdentitiesResolved(unittest.TestCase):
     """Registered AMS devices may only be judged stale once the printer has told us the
@@ -23,7 +25,7 @@ class TestAmsIdentitiesResolved(unittest.TestCase):
     def version(self, sn):
         return {
             "command": "get_version",
-            "module": [{
+            "module": [OTA, {
                 "name": "ams/0",
                 "project_name": "",
                 "sw_ver": "00.00.05.96",
@@ -50,7 +52,7 @@ class TestAmsIdentitiesResolved(unittest.TestCase):
 
     def test_not_resolved_when_push_all_has_no_ams_block(self):
         self.device.print_update({"command": "push_status", "msg": 0})
-        self.device.info_update({"command": "get_version", "module": []})
+        self.device.info_update({"command": "get_version", "module": [OTA]})
 
         self.assertFalse(self.device.ams_identities_resolved)
 
@@ -93,6 +95,7 @@ class TestAmsIdentitiesResolved(unittest.TestCase):
         self.device.info_update({
             "command": "get_version",
             "module": [
+                OTA,
                 {"name": "n3f/0", "sw_ver": "00.00.07.10", "hw_ver": "N3F05", "sn": "N/A"},
                 {"name": "n3f/2", "sw_ver": "00.00.07.10", "hw_ver": "N3F05", "sn": "N/A"},
             ],
@@ -103,7 +106,7 @@ class TestAmsIdentitiesResolved(unittest.TestCase):
 
     def test_resolved_when_the_printer_reports_no_ams(self):
         self.device.print_update({"command": "push_status", "msg": 0, "ams": {"ams": []}})
-        self.device.info_update({"command": "get_version", "module": []})
+        self.device.info_update({"command": "get_version", "module": [OTA]})
 
         self.assertTrue(self.device.ams_identities_resolved)
 
@@ -128,7 +131,7 @@ class TestMissingAmsIdentityRequest(unittest.TestCase):
     def version(**serials):
         return {
             "command": "get_version",
-            "module": [
+            "module": [OTA] + [
                 {"name": name.replace("_", "/"), "sw_ver": "03.00.21.29", "hw_ver": "N3F05", "sn": sn}
                 for name, sn in serials.items()
             ],

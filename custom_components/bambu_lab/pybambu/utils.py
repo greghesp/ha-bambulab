@@ -484,7 +484,7 @@ def get_sw_version(modules, default):
     """Retrieve software version of printer"""
     ota = search(modules, lambda x: x.get('name', "") == "ota")
     if len(ota.keys()) > 1:
-        return ota.get("sw_ver")
+        return ota.get("sw_ver") or default
     return default
 
 def safe_int(part):
