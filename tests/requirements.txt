@@ -1,7 +1,8 @@
 pytest>=8.0.0  # Test runner
+aiohttp>=3.11.0  # Relay snapshot HTTP client (provided by HA at runtime)
 Pillow>=10.0.0  # For PIL (Python Imaging Library)
 paho-mqtt>=1.6.1  # For MQTT client
 requests>=2.31.0  # For HTTP requests
 python-dateutil>=2.8.2  # For date parsing
 packaging>=23.0  # For version parsing
-beautifulsoup4>=4.12.0  # For HTML parsing 
+beautifulsoup4>=4.12.0  # For HTML parsing

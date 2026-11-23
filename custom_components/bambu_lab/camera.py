@@ -1,8 +1,11 @@
 import os
 
+from aiohttp import ClientError
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from io import BytesIO
 from PIL import Image, ImageDraw
 
@@ -16,6 +19,11 @@ from homeassistant.components.camera import Camera, CameraEntityFeature
 from homeassistant.components.stream.const import CONF_USE_WALLCLOCK_AS_TIMESTAMPS
 
 from .coordinator import BambuDataUpdateCoordinator
+from .camera_relay import (
+    CONF_CAMERA_RELAY_SNAPSHOT,
+    CONF_CAMERA_RELAY_STREAM,
+    RelaySnapshotClient,
+)
 
 CHAMBER_CAMERA_SENSOR = BambuLabSensorEntityDescription(
         key="p1p_camera",
@@ -92,6 +100,9 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
         self._attr_unique_id = f"{config_entry.data['serial']}_camera"
         self._access_code = config_entry.options.get("access_code", "")
+        self._relay_stream = config_entry.options.get(CONF_CAMERA_RELAY_STREAM, "")
+        self._relay_snapshot_url = config_entry.options.get(CONF_CAMERA_RELAY_SNAPSHOT, "")
+        self._relay_snapshot: RelaySnapshotClient | None = None
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
@@ -115,12 +126,30 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
     @property
     def use_stream_for_stills(self) -> bool:
-        return True
+        return not bool(self._relay_stream and self._relay_snapshot_url)
+
+    async def async_camera_image(self, width=None, height=None) -> bytes | None:
+        """Use the relay JPEG endpoint without starting a second printer stream."""
+        if not (self._relay_stream and self._relay_snapshot_url):
+            return await super().async_camera_image(width, height)
+        if self._relay_snapshot is None:
+            self._relay_snapshot = RelaySnapshotClient(
+                async_get_clientsession(self.hass), self._relay_snapshot_url
+            )
+        try:
+            return await self._relay_snapshot.async_get_image()
+        except (ClientError, TimeoutError, ValueError):
+            # URLs/exceptions can contain authentication. Don't log them, and
+            # don't open the direct printer connection as a fallback.
+            LOGGER.debug("Shared camera snapshot unavailable for %s", self.entity_id)
+            return None
 
     async def stream_source(self) -> str | None:
         return self._stream_source()
 
     def _stream_source(self) -> str | None:
+        if self._relay_stream:
+            return self._relay_stream
         model = self.coordinator.get_model()
         ip_address = model.info.ip_address
         return get_authenticated_rtsp_url(

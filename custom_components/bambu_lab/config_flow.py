@@ -32,6 +32,14 @@ from .const import (
     LOGGER,
 )
 from .pybambu import BambuClient, BambuCloud
+from .pybambu.const import Features
+from .camera_relay import (
+    CAMERA_RELAY_MODE,
+    CONF_CAMERA_RELAY_SNAPSHOT,
+    CONF_CAMERA_RELAY_STREAM,
+    InvalidRelayURL,
+    update_relay_options,
+)
 from .pybambu.bambu_cloud import (
     CloudflareError,
     CurlUnavailableError,
@@ -723,7 +731,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         self._bambu_cloud = BambuCloud("", "", "", "")
 
-        LOGGER.debug(self._config_entry)
+        LOGGER.debug("Options flow for printer entry %s", self._config_entry.entry_id)
 
     def __del__(self) -> None:
         # This isn't as immediate as I'd like it takes garbage collection but it'll kick in after a bit.
@@ -734,7 +742,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
-            if user_input['printer_mode'] == AMS_HEATER_MODE:
+            if user_input['printer_mode'] == CAMERA_RELAY_MODE:
+                return await self.async_step_camera_relay(None)
+            elif user_input['printer_mode'] == AMS_HEATER_MODE:
                 return await self.async_step_ams_heater(None)
             elif user_input['printer_mode'] == "lan":
                 self._bambu_cloud = BambuCloud("", "", "", "")
@@ -789,6 +799,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             ]
         if self._ams_heater_choices():
             modes.append(SelectOptionDict(value=AMS_HEATER_MODE, label=""))
+        if self._supports_camera_relay():
+            modes.append(SelectOptionDict(value=CAMERA_RELAY_MODE, label=""))
 
         selector = SelectSelector(
             SelectSelectorConfig(
@@ -1164,6 +1176,38 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema(fields),
             errors=errors or {},
             last_step=True,
+        )
+
+    def _supports_camera_relay(self) -> bool:
+        coordinator = self.hass.data.get(DOMAIN, {}).get(self._config_entry.entry_id)
+        return coordinator is not None and coordinator.get_model().supports_feature(Features.CAMERA_RTSP)
+
+    async def async_step_camera_relay(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        """Use an existing shared RTSP relay; don't change MQTT or cloud login."""
+        if not self._supports_camera_relay():
+            return self.async_abort(reason="camera_relay_not_supported")
+        errors = {}
+        if user_input is not None:
+            try:
+                options = update_relay_options(self._config_entry.options, user_input)
+            except InvalidRelayURL as err:
+                errors[err.field] = "invalid_camera_relay_url"
+            else:
+                self.hass.config_entries.async_update_entry(
+                    entry=self._config_entry, options=options
+                )
+                await self.hass.config_entries.async_reload(self._config_entry.entry_id)
+                return self.async_create_entry(title="", data=None)
+
+        current = self._config_entry.options if user_input is None else user_input
+        fields = {
+            vol.Optional(field, description={"suggested_value": current.get(field, "")}): TEXT_SELECTOR
+            for field in (CONF_CAMERA_RELAY_STREAM, CONF_CAMERA_RELAY_SNAPSHOT)
+        }
+        return self.async_show_form(
+            step_id=CAMERA_RELAY_MODE,
+            data_schema=vol.Schema(fields),
+            errors=errors,
         )
 
     def _ams_heater_choices(self) -> dict[str, str]:

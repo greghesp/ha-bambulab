@@ -18,4 +18,4 @@ jobs:
         run: pip install -r tests/requirements.txt
 
       - name: Run unit tests
-        run: python -m pytest tests/pybambu tests/test_file_cache.py -v
+        run: python -m pytest tests/pybambu tests/test_file_cache.py tests/test_camera_relay.py -v

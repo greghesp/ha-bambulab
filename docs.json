@@ -29,7 +29,6 @@
       "href": "/issues"
     }
   ],
-
   "sidebar": [
     {
       "group": "Getting Started",
@@ -70,6 +69,11 @@
           "title": "Actions",
           "href": "actions",
           "icon": "microchip"
+        },
+        {
+          "title": "Shared camera relay",
+          "href": "camera-relay",
+          "icon": "video"
         }
       ]
     },

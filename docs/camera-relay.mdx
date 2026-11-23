@@ -1,0 +1,101 @@
+---
+title: Shared camera relay
+description: Optional shared upstream connection and low-latency MSE playback
+---
+
+Some Bambu RTSP cameras stall with repeated or concurrent connections for live
+video and snapshots. The integration's arrival-time timestamp correction addresses
+HA's HLS timestamp checks; it does not change HA's choice of video player.
+
+This optional setup uses an existing relay such as
+[go2rtc](https://github.com/AlexxIT/go2rtc) to hold one upstream connection. The
+existing Bambu camera entity can use it for video and JPEG snapshots. Entity IDs,
+MQTT telemetry, printer commands and main/Birdseye selection are preserved.
+
+The relay and MSE player are separate prerequisites. This integration does not
+download a streaming binary, force HA's default viewer to use MSE, expose a public
+camera endpoint, or configure the relay itself.
+
+## Configure the relay
+
+Use a supported go2rtc deployment, version **1.9.11 or newer** for `preload`.
+This example runs in the **same container/network namespace as HA**, such as the
+server managed by WebRTC Camera. For an app in a separate container, substitute
+its internal hostname/ports for `127.0.0.1`. Protect the relay's API and camera
+ports from untrusted networks.
+
+```yaml
+streams:
+  bambu_shared:
+    - "rtsps://bblp:PRINTER_ACCESS_CODE@PRINTER_IP:322/streaming/live/1"
+preload:
+  bambu_shared: video
+api:
+  listen: 127.0.0.1:1984
+rtsp:
+  listen: 127.0.0.1:8554
+webrtc:
+  listen: 127.0.0.1:8555
+```
+
+Replace placeholders locally and URL-encode special characters in the access
+code. Keep the file private; never put a real code in a dashboard or bug report.
+
+## Configure the existing Bambu camera
+
+Open **Settings → Devices & services → Bambu Lab → Configure → Shared camera
+relay (RTSP printers)**. This does not convert A1/P1 image cameras into RTSP cameras.
+
+| Field | Same-container example |
+| --- | --- |
+| Relay stream URL | `rtsp://127.0.0.1:8554/bambu_shared` |
+| Relay JPEG snapshot URL | `http://127.0.0.1:1984/api/frame.jpeg?src=bambu_shared` |
+
+HA fetches these URLs server-side. The snapshot endpoint is recommended: it
+avoids starting an HA HLS decoder just for previews. Simultaneous requests share
+one request with a one-second cache. A failed snapshot returns no image rather
+than an old frame or a second direct printer connection. Relay URLs are redacted
+in integration diagnostics. The integration does not copy printer credentials
+to a relay; these stay in the relay configuration. If the relay requires its own
+credentials, use only those in the URLs.
+
+Saving reloads the printer integration and discards its old camera instance;
+it does not restart or pause the printer. Clear **both** fields to restore direct
+camera behavior, including the upstream timestamp correction. MQTT/cloud
+reconfiguration retains relay options.
+
+## MSE playback
+
+Configure [WebRTC Camera](https://github.com/AlexxIT/WebRTC) separately, connected
+to the **same go2rtc instance**. Use its named stream to reuse the upstream:
+
+```yaml
+type: custom:webrtc-camera
+url: bambu_shared
+mode: mse
+media: video
+muted: true
+ui: false
+digital_ptz: false
+```
+
+The normal HA more-info dialog may still choose WebRTC. Opening it is not a
+controlled MSE/HLS comparison, and the relay option alone does not guarantee the
+start time or smoothness of an MSE card. Avoid additional direct-camera viewers
+while evaluating the shared connection.
+
+Main/Birdseye is a printer-side selection seen by all consumers. Pause automatic
+camera switching while viewing live video; changing sources can interrupt either
+playback path. Dashboard rotation/interaction automations are not part of this PR.
+
+## Validation and limits
+
+A manually configured H3C with a shared stream and an MSE tablet card was reported
+to start immediately and play smoothly; direct HA playback still stuttered with
+the timestamp correction. This is an observation from one setup, not a guarantee
+for other printers or networks.
+
+The relay helper is unit-tested with a local HTTP server for concurrent requests,
+expiry, errors, redirects, payload limits and timeouts. The new integration
+options still need in-HA testing before release. No real IPs, serials, access
+codes or household images belong in test fixtures or the pull request.

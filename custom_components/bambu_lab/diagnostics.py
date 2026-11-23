@@ -29,7 +29,9 @@ TO_REDACT = [
     "username",
     "cover",
     "deviceId",
-    "modelId"
+    "modelId",
+    "camera_relay_stream",
+    "camera_relay_snapshot",
 ]
 
 
