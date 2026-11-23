@@ -9,7 +9,8 @@
       "event_print_error_cleared": "列印錯誤已清除",
       "event_printer_error": "HMS 錯誤",
       "event_printer_error_cleared": "HMS 錯誤已清除",
-      "event_printer_missing_sdcard": "找不到 SD 卡"
+      "event_printer_missing_sdcard": "找不到 SD 卡",
+      "event_timelapse_downloaded": "遊戲中時光倒流下載"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "頂蓋"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S升級套件已安裝"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "長絲庫存"
+      },
+      "processing_material": {
+        "name": "雷射/切割材料"
+      },
+      "check_in_remaining": {
+        "name": "雷射辦理登機手續剩餘時間"
+      },
+      "print_elapsed_time": {
+        "name": "列印經過的時間"
+      },
+      "last_timelapse": {
+        "name": "最後一次縮時拍攝"
+      },
+      "filament_change_status": {
+        "name": "燈絲更換狀態",
+        "state": {
+          "idle": "閒置的",
+          "changing_filament": "更換燈絲",
+          "heating_nozzle": "加熱噴嘴",
+          "cutting_filament": "切割燈絲",
+          "pulling_back_filament": "拉回電流燈絲",
+          "pushing_new_filament": "推新絲",
+          "purging_old_filament": "清除舊燈絲",
+          "checking_position": "檢查燈絲位置",
+          "rfid_identifying": "識別射頻識別",
+          "filament_loaded": "燈絲加載",
+          "calibration": "校準",
+          "cold_pull": "冷拉",
+          "self_check": "自檢",
+          "debug": "偵錯",
+          "unknown": "未知"
+        }
       }
     },
     "camera": {

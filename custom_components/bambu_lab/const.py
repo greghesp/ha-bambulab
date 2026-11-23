@@ -27,6 +27,12 @@ SERVICE_CALL_FUTURES = "service_call_futures"
 LEARNED_FILAMENTS_STORAGE_FILE = "bambu_lab.learned_filaments.json"
 SERVICE_CALL_ID = "service_call_id"
 
+# file_type values accepted by the clear_file_cache service.
+CLEAR_FILE_CACHE_PRINTS = "prints"
+CLEAR_FILE_CACHE_TIMELAPSE = "timelapse"
+CLEAR_FILE_CACHE_ALL = "all"
+CLEAR_FILE_CACHE_TYPES = (CLEAR_FILE_CACHE_PRINTS, CLEAR_FILE_CACHE_TIMELAPSE, CLEAR_FILE_CACHE_ALL)
+
 # Options key mapping AMS serial -> switch entity_id of the smart plug powering an
 # external AMS heater or dryer (e.g. SUNLU AMS Heater, EIBOS Series X).
 CONF_AMS_HEATERS = "ams_heaters"
@@ -49,7 +55,7 @@ BAMBU_LAB_CARDS = [
     {
         'name': 'Bambu Lab Cards',
         'filename': 'ha-bambulab-cards.js',
-        'version': '0.8.5'
+        'version': '0.8.6'
     }
 ]
 

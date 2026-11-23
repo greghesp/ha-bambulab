@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Błąd drukowania usunięty",
       "event_printer_error": "Błąd HMS",
       "event_printer_error_cleared": "Błąd HMS usunięty",
-      "event_printer_missing_sdcard": "Brakująca karta SD"
+      "event_printer_missing_sdcard": "Brakująca karta SD",
+      "event_timelapse_downloaded": "Pobrano timelapse"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "Górna pokrywa"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Zainstalowany zestaw aktualizacyjny P1S"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Inwentarz włókien"
+      },
+      "processing_material": {
+        "name": "Materiał do cięcia laserowego/tnącego"
+      },
+      "check_in_remaining": {
+        "name": "Pozostała odprawa laserowa"
+      },
+      "print_elapsed_time": {
+        "name": "Wydrukuj czas, który upłynął"
+      },
+      "last_timelapse": {
+        "name": "Ostatni timelapse"
+      },
+      "filament_change_status": {
+        "name": "Stan wymiany żarnika",
+        "state": {
+          "idle": "Bezczynny",
+          "changing_filament": "Zmiana włókna",
+          "heating_nozzle": "Dysza grzewcza",
+          "cutting_filament": "Cięcie włókna",
+          "pulling_back_filament": "Odciąganie bieżącego żarnika",
+          "pushing_new_filament": "Wciskanie nowego żarnika",
+          "purging_old_filament": "Czyszczenie starego żarnika",
+          "checking_position": "Sprawdzanie położenia żarnika",
+          "rfid_identifying": "Identyfikacja RFID",
+          "filament_loaded": "Załadowano żarnik",
+          "calibration": "Kalibrowanie",
+          "cold_pull": "Zimne pociągnięcie",
+          "self_check": "Samokontrola",
+          "debug": "Odpluskwić",
+          "unknown": "Nieznany"
+        }
       }
     },
     "camera": {

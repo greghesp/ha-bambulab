@@ -61,6 +61,46 @@ class TestAmsIdentitiesResolved(unittest.TestCase):
 
         self.assertTrue(self.device.ams_identities_resolved)
 
+    def test_not_resolved_when_version_reports_na_serial(self):
+        self.device.print_update(self.AMS_PAYLOAD)
+        self.device.info_update(self.version("N/A"))
+
+        self.assertTrue(self.device.has_full_printer_data)
+        self.assertEqual(self.device.ams.data[0].serial, "")
+        self.assertFalse(self.device.ams_identities_resolved)
+
+    def test_na_serial_does_not_replace_a_known_serial(self):
+        self.device.print_update(self.AMS_PAYLOAD)
+        self.device.info_update(self.version("00600A000000000"))
+        self.device.info_update(self.version("N/A"))
+
+        self.assertEqual(self.device.ams.data[0].serial, "00600A000000000")
+        self.assertTrue(self.device.ams_identities_resolved)
+
+    def test_units_reporting_na_do_not_share_a_serial(self):
+        self.device.print_update({
+            "command": "push_status",
+            "msg": 0,
+            "ams": {
+                "ams": [
+                    {"id": "0", "humidity": "4", "temp": "25.0", "tray": []},
+                    {"id": "2", "humidity": "4", "temp": "25.0", "tray": []},
+                ],
+                "tray_now": "255",
+                "tray_tar": "255",
+            },
+        })
+        self.device.info_update({
+            "command": "get_version",
+            "module": [
+                {"name": "n3f/0", "sw_ver": "00.00.07.10", "hw_ver": "N3F05", "sn": "N/A"},
+                {"name": "n3f/2", "sw_ver": "00.00.07.10", "hw_ver": "N3F05", "sn": "N/A"},
+            ],
+        })
+
+        self.assertNotIn("N/A", [ams.serial for ams in self.device.ams.data.values()])
+        self.assertFalse(self.device.ams_identities_resolved)
+
     def test_resolved_when_the_printer_reports_no_ams(self):
         self.device.print_update({"command": "push_status", "msg": 0, "ams": {"ams": []}})
         self.device.info_update({"command": "get_version", "module": []})

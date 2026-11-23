@@ -53,7 +53,7 @@ def serialize_pybambu_object(obj: Any) -> Any:
     
     # Handle dictionaries
     if isinstance(obj, dict):
-        return {key: serialize_pybambu_object(value) for key, value in obj.items()}
+        return {str(key): serialize_pybambu_object(value) for key, value in obj.items()}
     
     # Handle binary data types
     if isinstance(obj, (bytes, bytearray)):

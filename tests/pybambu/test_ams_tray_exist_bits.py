@@ -12,6 +12,14 @@ def _ams(ams_id, trays):
     return {"id": str(ams_id), "humidity": "4", "temp": "25.0", "tray": trays}
 
 
+def _ams_3h(ams_id=32):
+    # Shape from the H3C diagnostics in #2305: 9 trays split over two drying zones.
+    zones = [{"zone_id": 0, "zone_slots": [5, 7]},
+             {"zone_id": 1, "zone_slots": [0, 1, 2, 3, 4, 6, 8]}]
+    trays = [_tray(t, **TestTrayExistBits.TAGGED) for t in range(9)]
+    return {**_ams(ams_id, trays), "zone_info": zones}
+
+
 class TestTrayExistBits(unittest.TestCase):
     """tray_exist_bits reports physical spool presence even on firmware (e.g. P1S) that
     omits the per-tray ``state`` field. A spool without an RFID tag has no filament
@@ -66,6 +74,23 @@ class TestTrayExistBits(unittest.TestCase):
         self.assertEqual([t.exists for t in self.trays(1)], [True] * 4)
         self.assertEqual([t.exists for t in self.trays(2)], [False, True, True, True])
         self.assertIsNone(self.trays(128)[0].exists)
+
+    def test_ams_3h_presence_is_left_unknown(self):
+        # H3C + AMS 3H (#2305): the 9-slot unit reports id 32 and its trays sit at bit 28
+        # of the mask, not at 32 * 4. Without a known layout, presence must stay unknown
+        # rather than read every loaded slot as missing.
+        self.push([_ams_3h()], tray_exist_bits="17e0000000")
+
+        self.assertEqual(len(self.trays(32)), 9)
+        self.assertEqual([t.exists for t in self.trays(32)], [None] * 9)
+
+    def test_four_slot_ams_still_decoded_next_to_ams_3h(self):
+        units = [_ams(0, [_tray(t, **self.TAGGED) for t in range(4)]),
+                 _ams_3h()]
+        self.push(units, tray_exist_bits="17e0000005")
+
+        self.assertEqual([t.exists for t in self.trays(0)], [True, False, True, False])
+        self.assertEqual([t.exists for t in self.trays(32)], [None] * 9)
 
     def test_presence_updates_when_spool_removed(self):
         self.push([_ams(0, [_tray(i, **self.UNTAGGED) for i in range(4)])], tray_exist_bits="f")

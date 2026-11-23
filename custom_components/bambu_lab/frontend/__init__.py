@@ -19,6 +19,25 @@ from ..const import BAMBU_LAB_CARDS, URL_BASE, LOGGER
 
 _LOGGER = logging.getLogger(__name__)
 
+
+def find_external_card_resources(resources, filename: str) -> list:
+    """Return Lovelace resources that load ``filename`` from outside URL_BASE.
+
+    A separately installed copy of the cards (e.g. the standalone HACS
+    frontend repo served from /hacsfiles/ha-bambulab-cards/) defines the same
+    custom elements as the bundled copy. Loading both makes the browser throw
+    "the name ... has already been used with this registry".
+    """
+    external = []
+    for resource in resources:
+        path = str(resource.get("url", "")).split("?")[0]
+        if path.startswith(URL_BASE):
+            continue
+        if path.rsplit("/", 1)[-1] == filename:
+            external.append(resource)
+    return external
+
+
 class BambuLabCardRegistration:
     def __init__(self, hass: HomeAssistant):
         self.hass = hass
@@ -76,8 +95,24 @@ class BambuLabCardRegistration:
             if resource["url"].startswith(URL_BASE)
         ]
 
+        all_resources = list(self.lovelace_resources.async_items())
+
         for card in BAMBU_LAB_CARDS:
             url = f"{URL_BASE}/{card.get("filename")}"
+
+            external = find_external_card_resources(all_resources, card.get("filename"))
+            if external:
+                _LOGGER.warning(
+                    "%s is already loaded from %s. Skipping the copy bundled with the "
+                    "integration to avoid loading the cards twice. Remove that resource "
+                    "(and the separate HACS frontend install) to use the bundled cards.",
+                    card.get("name"),
+                    ", ".join(str(res.get("url")) for res in external),
+                )
+                for res in bambu_resources:
+                    if self.get_resource_path(res["url"]) == url:
+                        await self.lovelace_resources.async_delete_item(res.get("id"))
+                continue
 
             card_registered = False
 
