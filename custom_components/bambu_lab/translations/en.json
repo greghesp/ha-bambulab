@@ -7,6 +7,7 @@
       "event_print_started": "Print started",
       "event_print_error": "Print error",
       "event_print_error_cleared": "Print error cleared",
+      "event_print_layer_changed": "Print layer changed",
       "event_printer_error": "HMS error",
       "event_printer_error_cleared": "HMS error cleared",
       "event_printer_missing_sdcard": "Missing SD card",

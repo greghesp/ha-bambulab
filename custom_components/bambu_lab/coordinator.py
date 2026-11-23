@@ -235,6 +235,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self._update_data()
             self._publish_timelapse_downloaded()
 
+        elif event == "event_print_layer_changed":
+            # Refresh the sensors first so automations see the new layer on them too.
+            self._update_data()
+            print_job = self.get_model().print_job
+            self.PublishDeviceTriggerEvent(
+                event, layer=print_job.current_layer, total_layers=print_job.total_layers)
+
         # event_print_started
         # event_print_finished
         # event_print_canceled
@@ -1018,7 +1025,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"BUS EVENT: event_timelapse_downloaded: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
-    def PublishDeviceTriggerEvent(self, event: str):
+    def PublishDeviceTriggerEvent(self, event: str, **extra_data):
         hadevice = self.get_ha_printer_device()
         if hadevice is None:
             # Events can arrive during initial connect, before the device entry exists.
@@ -1029,6 +1036,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             "device_id": hadevice.id,
             "name": self.config_entry.options.get('name', ''),
             "type": event,
+            **extra_data,
         }
         LOGGER.debug(f"BUS EVENT: {event}: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)

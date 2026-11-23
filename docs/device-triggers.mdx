@@ -18,6 +18,9 @@ Available events:
 - Print finished
 - Print canceled
 - Print failed (X1 only)
+- Print layer changed. The printer's updates lag by a second or two, and if several layers pass between two updates it fires once. With additional data payload:
+    - layer
+    - total_layers
 - HMS error detected. With additional data payload:
     - code
     - error

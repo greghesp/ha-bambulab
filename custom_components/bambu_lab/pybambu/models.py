@@ -1525,6 +1525,7 @@ class PrintJob:
             self._clear_model_data()
             self._update_task_data()
         self.file_type_icon = "mdi:file" if self._print_type != "cloud" else "mdi:cloud-outline"
+        previous_layer = self.current_layer
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         if "ams_mapping" in data:
@@ -1577,6 +1578,11 @@ class PrintJob:
             if not self._client.ftp_enabled:
                 # We can update task data from the cloud immediately. But ftp has to wait.
                 self._update_task_data()
+
+        # Handle layer change. The reset to 0 between prints isn't a layer, and the first data after
+        # connecting mid-print only tells us the layer already in progress.
+        if previous_gcode_state != "unknown" and self.current_layer > 0 and self.current_layer != previous_layer:
+            self._client.callback("event_print_layer_changed")
 
         old_gcode_file_prepare_percent = self._gcode_file_prepare_percent
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
