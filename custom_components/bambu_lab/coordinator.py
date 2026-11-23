@@ -173,8 +173,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         elif event == "event_printer_live_view_enabled":
             self._clear_live_view_disabled_issue()
-            # Chamber-image printers give up connecting while live view is off, so kick the
-            # image thread again. No-op for RTSP printers or if the thread is still running.
+            # The image thread keeps retrying while live view is off. This only matters if it
+            # isn't running at all, and is a no-op for RTSP printers.
             self.client.start_camera()
         
         elif event == "event_printer_mqtt_encryption_enabled":
