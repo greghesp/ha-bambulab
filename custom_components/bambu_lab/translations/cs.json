@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Chyba tisku vyřešena",
       "event_printer_error": "Chyba HMS",
       "event_printer_error_cleared": "Chyba HMS vyřešena",
-      "event_printer_missing_sdcard": "Chybí SD karta"
+      "event_printer_missing_sdcard": "Chybí SD karta",
+      "event_timelapse_downloaded": "Timelapse stažen"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "Zařízení je již nakonfigurováno",
       "no_printers": "Na účtu nebyly nalezeny žádné nenakonfigurované tiskárny.",
       "cloudflare": "Cloudflare zablokoval pokus o připojení.",
-      "curl_unavailable": "Knihovna curl_cffi není k dispozici."
+      "curl_unavailable": "Knihovna curl_cffi není k dispozici.",
+      "no_working_credentials": "Pro tento účet nejsou k dispozici žádné funkční přihlašovací údaje k tiskárně Bambu Cloud.",
+      "reconfigure_not_supported": "Tímto způsobem lze překonfigurovat pouze položky účtu MakerWorld.",
+      "reconfigure_successful": "Přihlašovací údaje MakerWorld byly aktualizovány."
     },
     "error": {
       "cannot_connect": "Nepodařilo se připojit. Zkontrolujte přihlašovací údaje.",
@@ -114,13 +118,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Účet MakerWorld",
+        "description": "Použijte funkční přihlašovací údaje Bambu Cloud z existující položky tiskárny. Není vyžadováno žádné další přihlášení.",
+        "data": {
+          "username": "Účet Bambu:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare zablokoval pokus o připojení.",
-      "curl_unavailable": "Knihovna curl_cffi není k dispozici."
+      "curl_unavailable": "Knihovna curl_cffi není k dispozici.",
+      "no_working_credentials": "Pro tento účet nejsou k dispozici žádné funkční přihlašovací údaje k tiskárně Bambu Cloud.",
+      "no_ams": "Na této tiskárně nebyl dosud identifikován žádný AMS. Počkejte, až se tiskárna připojí a nahlásí své jednotky AMS, a zkuste to znovu."
     },
     "error": {
       "cannot_connect": "Nepodařilo se připojit",
@@ -212,6 +225,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Externí ohřívač nebo sušička AMS",
+        "description": "Přídavná ohřívače a sušičky AMS, jako je SUNLU AMS Heater a EIBOS Series X (Dyas/Tetras), nemají připojení k síti, takže Home Assistant je ovládá přepínáním chytré zástrčky, ze které je napájen.\n\nVyberte tuto zástrčku pro každý AMS, který má nainstalovaný ohřívač, nebo ji nechte prázdnou. Každý připojený AMS získá režim sušení ohřívače, výkon ohřívače, prahovou hodnotu vlhkosti, teplotní přerušení a omezení doby provozu.\n\nNastavte ohřívač nebo sušičku tak, aby začala ohřívat, když je zapnutá, takže přepnutím zástrčky skutečně začne sušit."
+      },
+      "makerworld": {
+        "title": "Účet MakerWorld",
+        "description": "Použijte funkční přihlašovací údaje Bambu Cloud z existující položky tiskárny. Není vyžadováno žádné další přihlášení.",
+        "data": {
+          "username": "Účet Bambu:",
+          "credential_source": "Účet Bambu:"
+        }
       }
     }
   },
@@ -258,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Pravé vlákno extrudéru"
+      },
+      "top_cover_open": {
+        "name": "Horní kryt"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Instalována sada pro upgrade P1S"
       }
     },
     "button": {
@@ -362,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Cílová teplota komory"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Vlhkost při zapnutí ohřívače"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Vlhkost při vypnutí ohřívače"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Vypnutí teploty ohřívače"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Maximální doba chodu ohřívače"
       }
     },
     "select": {
@@ -1177,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Inventář vláken"
+      },
+      "processing_material": {
+        "name": "Laserový/řezací materiál"
+      },
+      "check_in_remaining": {
+        "name": "Zbývá laserové odbavení"
+      },
+      "print_elapsed_time": {
+        "name": "Vytisknout uplynulý čas"
+      },
+      "last_timelapse": {
+        "name": "Poslední časosběr"
+      },
+      "filament_change_status": {
+        "name": "Stav změny vlákna",
+        "state": {
+          "idle": "Líný",
+          "changing_filament": "Výměna vlákna",
+          "heating_nozzle": "Ohřívací tryska",
+          "cutting_filament": "Řezací vlákno",
+          "pulling_back_filament": "Vytažení vlákna proudu zpět",
+          "pushing_new_filament": "Zatlačení nového vlákna",
+          "purging_old_filament": "Čištění starého vlákna",
+          "checking_position": "Kontrola polohy vlákna",
+          "rfid_identifying": "Identifikace RFID",
+          "filament_loaded": "Vlákno nabité",
+          "calibration": "Kalibrace",
+          "cold_pull": "Studený tah",
+          "self_check": "Vlastní kontrola",
+          "debug": "Ladit",
+          "unknown": "Neznámý"
+        }
       }
     },
     "camera": {
@@ -1196,6 +1271,12 @@
       },
       "prompt_sound": {
         "name": "Povolit zvukové upozornění"
+      },
+      "ams_heater_drying": {
+        "name": "Režim sušení ohřívače"
+      },
+      "ams_heater_power": {
+        "name": "Výkon ohřívače"
       }
     },
     "update": {
@@ -1208,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab cloud",
-        "lan": "LAN Režim"
+        "lan": "LAN Režim",
+        "makerworld": "Účet MakerWorld",
+        "ams_heater": "Externí ohřívač nebo sušička AMS (chytrá zástrčka)"
       }
     }
   },

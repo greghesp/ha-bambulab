@@ -13,6 +13,7 @@ from .pybambu.utils import get_authenticated_rtsp_url
 from .definitions import BambuLabSensorEntityDescription
 
 from homeassistant.components.camera import Camera, CameraEntityFeature
+from homeassistant.components.stream.const import CONF_USE_WALLCLOCK_AS_TIMESTAMPS
 
 from .coordinator import BambuDataUpdateCoordinator
 
@@ -94,6 +95,10 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
+        # P2S and X1 RTSPS feeds start at dts 0 and then jump by hours.
+        # The stream worker aborts when that gap exceeds 30 seconds.
+        # Arrival-time timestamps keep the live view open.
+        self.stream_options[CONF_USE_WALLCLOCK_AS_TIMESTAMPS] = True
 
     @property
     def is_streaming(self) -> bool:
@@ -168,6 +173,10 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
     _attr_translation_key = "camera"
     _attr_icon = "mdi:camera"
     _attr_brand = "Bambu Lab"
+    # The chamber image is pushed by the printer over its own socket rather
+    # than pulled on demand, so it keeps running even when nobody is looking.
+    # ON_OFF exposes camera.turn_on / camera.turn_off to start and stop it.
+    _attr_supported_features = CameraEntityFeature.ON_OFF
 
     def __init__(
         self,
@@ -181,7 +190,17 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
         super().__init__(coordinator=coordinator)
         Camera.__init__(self)
 
+    @property
+    def _camera_enabled(self) -> bool:
+        """Return whether the chamber image thread is running."""
+        return self.coordinator.client.camera_enabled
+
     def camera_image(self, width: int | None = None, height: int | None = None) -> bytes | None:
+        # Do not serve the last frame captured before the camera was turned off:
+        # a stale image would look like a live view of a printer we stopped
+        # watching. Returning None fails the request instead.
+        if not self._camera_enabled:
+            return None
         return self.coordinator.get_model().chamber_image.get_image()
 
     @property
@@ -191,8 +210,24 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
 
     @property
     def is_streaming(self) -> bool:
-        return self.available
+        return self.available and self._camera_enabled
 
     @property
     def is_recording(self) -> bool:
         return False
+
+    async def async_turn_on(self) -> None:
+        """Start the chamber image stream."""
+        # set_camera_enabled() starts or stops the chamber image thread and
+        # joins it, so keep it off the event loop.
+        await self.hass.async_add_executor_job(
+            self.coordinator.client.set_camera_enabled, True
+        )
+        self.async_write_ha_state()
+
+    async def async_turn_off(self) -> None:
+        """Stop the chamber image stream."""
+        await self.hass.async_add_executor_job(
+            self.coordinator.client.set_camera_enabled, False
+        )
+        self.async_write_ha_state()
