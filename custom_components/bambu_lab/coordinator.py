@@ -209,6 +209,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     data=self.config_entry.data,
                     options=options)
 
+        elif event == "event_printer_name_update":
+            self._update_printer_name()
+
         # Image updates are dispatched directly to the affected image entity instead of
         # refreshing the full entity set - chamber images arrive at up to a couple of
         # frames per second and a full refresh per frame is needlessly expensive.
@@ -833,6 +836,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error("An exception occurred calling async_set_updated_data():")
             LOGGER.error(f"Exception type: {type(e)}")
             LOGGER.error(f"Exception data: {e}")
+
+    def _update_printer_name(self):
+        name = self.get_model().info.name
+        if name == self.config_entry.options.get('name'):
+            return
+        LOGGER.debug(f"Printer was renamed to '{name}'")
+        self._hass.config_entries.async_update_entry(
+            self.config_entry,
+            options={**self.config_entry.options, 'name': name})
+        self._update_data()
 
     def _update_printer_error(self):
         hadevice = self.get_ha_printer_device()

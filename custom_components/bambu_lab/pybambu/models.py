@@ -3586,6 +3586,7 @@ class Info:
     door_open: bool
     top_cover_open: bool
     airduct_mode: int
+    name: str | None
         
     _ip_address: str
     _force_ip: bool
@@ -3594,6 +3595,7 @@ class Info:
         self._client = client
 
         self.serial = self._client._serial
+        self.name = None # Unknown until the printer is renamed, no other payload carries it.
         self.device_type = self._client._device_type
         self.wifi_signal = 0
         self.wifi_sent = datetime.now()
@@ -3658,6 +3660,26 @@ class Info:
         self.hw_ver = get_hw_version(modules, self.hw_ver)
         self.sw_ver = get_sw_version(modules, self.sw_ver)
         self._client.callback("event_printer_info_update")
+
+    def name_update(self, data):
+        # Sent by the printer when it is renamed, e.g. in Bambu Studio or Bambu Handy.
+        #
+        # Example payload:
+        # {
+        #     "update": {
+        #         "name": "My P1S",
+        #         "reason": "success",
+        #         "result": "success",
+        #         "sequence_id": "0"
+        #     }
+        # }
+        if not isinstance(data, dict) or str(data.get("result")).lower() != "success":
+            return
+        name = data.get("name")
+        if not isinstance(name, str) or name.strip() == "":
+            return
+        self.name = name
+        self._client.callback("event_printer_name_update")
 
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
