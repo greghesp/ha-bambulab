@@ -75,6 +75,9 @@ from .pybambu.commands import (
     DONE_LOAD_FILAMENT_TEMPLATE
 )
 
+# How long unloading the integration waits for a reinitialization pass to stop, in seconds.
+REINITIALIZE_STOP_TIMEOUT = 30
+
 
 def file_cache_dir(hass: HomeAssistant, serial: str) -> Path:
     """The file cache directory for a printer, inside the local media dir."""
@@ -107,6 +110,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         self._updatedDevice = False
         self._shutdown = False
+        # Reinitialization passes must not overlap, see _request_reinitialize.
+        self._reinitialize_requested = False
+        self._reinitialize_lock = asyncio.Lock()
         # Guards the access denied recovery so one failure episode triggers at most one
         # cloud lookup. Reset once the printer connects successfully again.
         self._access_denied_handled = False
@@ -912,13 +918,53 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver, serial_number=self.config_entry.data["serial"])
                 self._updatedDevice = True
 
+    def _request_reinitialize(self):
+        """Reinitialize the sensors, after the pass already in progress if there is one.
+
+        A reconnecting printer can fire event_printer_ready several times in quick succession.
+        Adding and removing an RTSP camera awaits go2rtc, so overlapping passes can remove it
+        while another pass is still adding it. That leaves behind a camera state without a
+        registry entry, and the next pass then registers the camera under a new numbered
+        entity ID (#2337). Requests made during a pass share a single follow-up pass, which is
+        needed as the pass in progress may have already read the model."""
+        self._reinitialize_requested = True
+        self.hass.async_create_task(self._run_requested_reinitializes())
+
+    async def _run_requested_reinitializes(self):
+        async with self._reinitialize_lock:
+            if not self._reinitialize_requested or self._shutdown:
+                # An earlier pass already covered this request.
+                return
+            self._reinitialize_requested = False
+            await self._reinitialize_sensors()
+
+    async def async_stop_reinitialize(self):
+        """Stop reinitializing sensors and wait for a pass in progress to stop.
+
+        Call before unloading the platforms, as a pass must not overlap that either."""
+        self._shutdown = True
+        try:
+            async with asyncio.timeout(REINITIALIZE_STOP_TIMEOUT):
+                async with self._reinitialize_lock:
+                    pass
+        except TimeoutError:
+            # Don't block the unload forever: the pass may itself be waiting for the config
+            # entry setup lock, which Home Assistant holds during an unload.
+            LOGGER.warning("Timed out waiting for sensor reinitialization to stop")
+
     async def _reinitialize_sensors(self):
         LOGGER.debug("_reinitialize_sensors START")
         LOGGER.debug("async_forward_entry_unload")
         for platform in PLATFORMS:
             await self.hass.config_entries.async_forward_entry_unload(self.config_entry, platform)
+        if self._shutdown:
+            LOGGER.debug("_reinitialize_sensors stopped: integration is unloading")
+            return
         LOGGER.debug("async_forward_entry_setups")
         await self.hass.config_entries.async_forward_entry_setups(self.config_entry, PLATFORMS)
+        if self._shutdown:
+            LOGGER.debug("_reinitialize_sensors stopped: integration is unloading")
+            return
         LOGGER.debug("_reinitialize_sensors DONE")
 
         # Versions may have changed so update those now that the device and sensors are ready.
@@ -1002,7 +1048,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     dev_reg.async_remove_device(device.id)
 
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
-        self.hass.async_create_task(self._reinitialize_sensors())
+        self._request_reinitialize()
 
     def get_local_media_url(self, file_path: str | None) -> str | None:
         """Return the /local/ URL for a file under the HA www folder, or None if it isn't served."""
