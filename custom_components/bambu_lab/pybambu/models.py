@@ -104,6 +104,12 @@ from .media_sources import (
     storage_cache_segment,
 )
 
+# Seconds between get_version requests while the serial of an attached AMS is unknown. The delay
+# doubles after each request up to the maximum.
+AMS_IDENTITY_RETRY_MIN = 5
+AMS_IDENTITY_RETRY_MAX = 300
+
+
 class Device:
     def __init__(self, client):
         self._client = client
@@ -133,6 +139,9 @@ class Device:
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
         self.print_fun = PrintFun(client = client)
+        self._unidentified_ams: frozenset[int] = frozenset()
+        self._ams_identity_retry_delay = AMS_IDENTITY_RETRY_MIN
+        self._next_ams_identity_request_at = 0.0
 
     def print_update(self, data) -> bool:
         had_full_printer_data = self.has_full_printer_data
@@ -178,11 +187,35 @@ class Device:
         if had_full_printer_data and self.air_purifier.identity and self.air_purifier.identity != previous_purifier_identity:
             self._client.callback("event_printer_ready")
 
+        if self.has_full_printer_data:
+            self._request_missing_ams_identities()
+
         # Only notify Home Assistant when something actually changed. The printer pushes
         # status roughly once a second; without this gate every push forces all entities
         # to recompute and rewrite their state.
         if send_event:
             self._client.callback("event_printer_data_update")
+
+    def _request_missing_ams_identities(self) -> None:
+        """Ask for version info again while an attached AMS has no serial.
+
+        The printer only sends version info when asked, and the request made on connect can be
+        answered before the AMS has been identified or attached (#1831). No entities are created
+        for an AMS without a serial, so it would stay missing until the integration is reloaded.
+        """
+        unidentified = frozenset(index for index, ams in self.ams.data.items() if not ams.serial)
+        now = time.monotonic()
+        if unidentified != self._unidentified_ams:
+            self._unidentified_ams = unidentified
+            self._ams_identity_retry_delay = AMS_IDENTITY_RETRY_MIN
+            self._next_ams_identity_request_at = now
+        if not unidentified or now < self._next_ams_identity_request_at:
+            return
+
+        LOGGER.debug(f"Requesting version info for AMS units without a serial: {sorted(unidentified)}")
+        self._next_ams_identity_request_at = now + self._ams_identity_retry_delay
+        self._ams_identity_retry_delay = min(self._ams_identity_retry_delay * 2, AMS_IDENTITY_RETRY_MAX)
+        self._client.publish(GET_VERSION)
 
     @property
     def has_full_printer_data(self):
