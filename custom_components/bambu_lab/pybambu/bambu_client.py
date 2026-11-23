@@ -400,7 +400,7 @@ class BambuClient:
             self._print_cache_count = 1
         self._timelapse_cache_count = max(-1, int(config.get('timelapse_cache_count', 0)))
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
-        self._cache_path = config.get('file_cache_path', f'/config/www/media/ha-bambulab/{self._serial}')
+        self._cache_path = config.get('file_cache_path', f'/media/ha-bambulab/{self._serial}')
         self._tcp6000_media_supported = None
         self._tcp6000_media_storages = []
         self._tcp6000_media_probe_time = 0.0
@@ -573,7 +573,9 @@ class BambuClient:
         if not self._device.supports_feature(Features.CAMERA_RTSP):
             if self._device.supports_feature(Features.CAMERA_IMAGE):
                 if self._enable_camera and not self._test_mode:
-                    if self._device.info.ip_address != "" and self._device.info.ip_address != "0.0.0.0" and self._access_code != "":
+                    if self._camera is not None and self._camera.is_alive():
+                        LOGGER.debug("Chamber Image thread already running")
+                    elif self._device.info.ip_address != "" and self._device.info.ip_address != "0.0.0.0" and self._access_code != "":
                         LOGGER.debug("Starting Chamber Image thread")
                         self._camera = ChamberImageThread(self)
                         self._camera.start()

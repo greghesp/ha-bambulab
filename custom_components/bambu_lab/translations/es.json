@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Error de impresión borrado",
       "event_printer_error": "error de HMS",
       "event_printer_error_cleared": "Error de HMS borrado",
-      "event_printer_missing_sdcard": "Falta tarjeta SD"
+      "event_printer_missing_sdcard": "Falta tarjeta SD",
+      "event_timelapse_downloaded": "Timelapse descargado"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "El dispositivo ya estaba configurado",
       "no_printers": "No se encontraron impresoras configuradas en la cuenta.",
       "cloudflare": "Cloudflare ha bloqueado el intento de conexión.",
-      "curl_unavailable": "La librería curl_cffi no está disponible."
+      "curl_unavailable": "La librería curl_cffi no está disponible.",
+      "no_working_credentials": "No hay credenciales de impresora Bambu Cloud que funcionen disponibles para esta cuenta.",
+      "reconfigure_not_supported": "Sólo las entradas de la cuenta MakerWorld se pueden reconfigurar de esta manera.",
+      "reconfigure_successful": "Credenciales de MakerWorld actualizadas."
     },
     "error": {
       "cannot_connect": "Error al conectar. Revisa las credenciales.",
@@ -114,13 +118,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Cuenta MakerWorld",
+        "description": "Utilice credenciales de Bambu Cloud que funcionen desde una entrada de impresora existente. No se requiere inicio de sesión adicional.",
+        "data": {
+          "username": "Cuenta Bambú:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare ha bloqueado el intento de conexión.",
-      "curl_unavailable": "La librería curl_cffi no está disponible."
+      "curl_unavailable": "La librería curl_cffi no está disponible.",
+      "no_working_credentials": "No hay credenciales de impresora Bambu Cloud que funcionen disponibles para esta cuenta.",
+      "no_ams": "Aún no se ha identificado ningún AMS en esta impresora. Espere a que la impresora se conecte e informe sus unidades AMS y vuelva a intentarlo."
     },
     "error": {
       "cannot_connect": "Error al conectar",
@@ -212,6 +225,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Calentador o secador AMS externo",
+        "description": "Los calentadores y secadores AMS complementarios, como el calentador SUNLU AMS y el EIBOS Serie X (Dyas/Tetras), no tienen conexión de red, por lo que Home Assistant controla uno cambiando el enchufe inteligente desde el que se alimenta.\n\nElija ese enchufe para cada AMS que tenga instalado un calentador o déjelo vacío. Cada AMS vinculado obtiene entidades de modo de secado del calentador, potencia del calentador, umbral de humedad, corte de temperatura y límite de tiempo de ejecución.\n\nConfigure el calentador o la secadora para que comience a calentar cuando esté encendido, de modo que al encender el enchufe realmente comience a secarse."
+      },
+      "makerworld": {
+        "title": "Cuenta MakerWorld",
+        "description": "Utilice credenciales de Bambu Cloud que funcionen desde una entrada de impresora existente. No se requiere inicio de sesión adicional.",
+        "data": {
+          "username": "Cuenta Bambú:",
+          "credential_source": "Cuenta Bambú:"
+        }
       }
     }
   },
@@ -258,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Filamento extrusor derecho"
+      },
+      "top_cover_open": {
+        "name": "cubierta superior"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Kit de actualización P1S instalado"
       }
     },
     "button": {
@@ -362,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Temperatura objetivo de la cámara"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Humedad al encender el calentador"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Humedad al apagar el calentador"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Corte de temperatura del calentador"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Tiempo de funcionamiento máximo del calentador"
       }
     },
     "select": {
@@ -1177,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "inventario de filamentos"
+      },
+      "processing_material": {
+        "name": "Material de corte/láser"
+      },
+      "check_in_remaining": {
+        "name": "Queda el check-in láser"
+      },
+      "print_elapsed_time": {
+        "name": "Imprimir tiempo transcurrido"
+      },
+      "last_timelapse": {
+        "name": "Último lapso de tiempo"
+      },
+      "filament_change_status": {
+        "name": "Estado de cambio de filamento",
+        "state": {
+          "idle": "Inactivo",
+          "changing_filament": "Cambiando de filamento",
+          "heating_nozzle": "Boquilla calefactora",
+          "cutting_filament": "Filamento de corte",
+          "pulling_back_filament": "Retirando el filamento actual",
+          "pushing_new_filament": "Empujando nuevo filamento",
+          "purging_old_filament": "Purgar filamento viejo",
+          "checking_position": "Comprobando la posición del filamento",
+          "rfid_identifying": "Identificación de RFID",
+          "filament_loaded": "filamento cargado",
+          "calibration": "Calibración",
+          "cold_pull": "tirón en frío",
+          "self_check": "Autocomprobación",
+          "debug": "Depurar",
+          "unknown": "Desconocido"
+        }
       }
     },
     "camera": {
@@ -1196,6 +1271,12 @@
       },
       "ftp": {
         "name": "Cargar datos del modelo de la impresora"
+      },
+      "ams_heater_drying": {
+        "name": "Modo de secado del calentador"
+      },
+      "ams_heater_power": {
+        "name": "Potencia del calentador"
       }
     },
     "update": {
@@ -1208,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Nube de laboratorio de bambú",
-        "lan": "Modo LAN"
+        "lan": "Modo LAN",
+        "makerworld": "Cuenta MakerWorld",
+        "ams_heater": "Calentador o secador AMS externo (enchufe inteligente)"
       }
     }
   },

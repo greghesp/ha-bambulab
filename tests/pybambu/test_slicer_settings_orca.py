@@ -1,6 +1,7 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
+from pybambu.bambu_cloud import CloudAuthError
 from pybambu.models import SlicerSettings
 from pybambu.orca_cloud import OrcaCloudAuthError, OrcaCloudError
 
@@ -38,7 +39,17 @@ def _client(bambu_token="", orca_filaments=None, orca_error=None, bambu_settings
     return client
 
 
+def _events(client):
+    return [call.args[0] for call in client.callback.call_args_list]
+
+
 class TestSlicerSettingsOrcaCloud(unittest.TestCase):
+    def setUp(self):
+        # Bambu Cloud loading staggers its first request and backs off between retries.
+        patcher = patch("pybambu.models.time.sleep")
+        self.sleep = patcher.start()
+        self.addCleanup(patcher.stop)
+
     def test_lan_only_printer_loads_orca_filaments(self):
         client = _client(orca_filaments={"PORCA": ORCA_FILAMENT})
         settings = SlicerSettings(client)
@@ -71,7 +82,10 @@ class TestSlicerSettingsOrcaCloud(unittest.TestCase):
 
         settings.update()
 
-        client.callback.assert_called_once_with("event_orca_cloud_authentication_failed")
+        self.assertCountEqual(_events(client), [
+            "event_orca_cloud_authentication_failed",
+            "event_printer_bambu_authentication_succeeded",
+        ])
         self.assertIn("PBAMBU", settings.filaments)
 
     def test_orca_outage_is_not_reported_as_auth_failure(self):
@@ -82,6 +96,28 @@ class TestSlicerSettingsOrcaCloud(unittest.TestCase):
 
         client.callback.assert_not_called()
         self.assertEqual(settings.filaments, {})
+
+    def test_orca_filaments_load_when_bambu_rejects_the_token(self):
+        client = _client(bambu_token="tok", orca_filaments={"PORCA": ORCA_FILAMENT})
+        client.bambu_cloud.get_slicer_settings.side_effect = CloudAuthError(401)
+        settings = SlicerSettings(client)
+
+        settings.update()
+
+        self.assertEqual(_events(client), ["event_printer_bambu_authentication_failed"])
+        self.assertEqual(set(settings.filaments), {"PORCA"})
+
+    def test_orca_filaments_do_not_wait_for_bambu_retries(self):
+        client = _client(bambu_token="tok", orca_filaments={"PORCA": ORCA_FILAMENT})
+        settings = SlicerSettings(client)
+        seen_while_waiting = []
+        self.sleep.side_effect = lambda _: seen_while_waiting.append(set(settings.filaments))
+
+        settings.update()
+
+        self.assertEqual(client.bambu_cloud.get_slicer_settings.call_count, SlicerSettings.MAX_ATTEMPTS)
+        self.assertEqual(seen_while_waiting, [{"PORCA"}] * SlicerSettings.MAX_ATTEMPTS)
+        self.assertEqual(set(settings.filaments), {"PORCA"})
 
     def test_bambu_only_behaviour_is_unchanged(self):
         client = _client(bambu_token="tok", bambu_settings=BAMBU_SETTINGS)

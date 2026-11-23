@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Print fejl ryddet",
       "event_printer_error": "HMS fejl",
       "event_printer_error_cleared": "HMS fejl ryddet",
-      "event_printer_missing_sdcard": "Mangler SD-kort"
+      "event_printer_missing_sdcard": "Mangler SD-kort",
+      "event_timelapse_downloaded": "Timelapse downloadet"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "Enhed er allerede konfigureret",
       "no_printers": "Ingen ukonfigurerede printere fundet på kontoen.",
       "cloudflare": "Cloudflare har blokeret forbindelsesforsøget.",
-      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt."
+      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt.",
+      "no_working_credentials": "Ingen fungerende Bambu Cloud-printerlegitimationsoplysninger er tilgængelige for denne konto.",
+      "reconfigure_not_supported": "Kun MakerWorld-kontoposter kan omkonfigureres på denne måde.",
+      "reconfigure_successful": "MakerWorld legitimationsoplysninger opdateret."
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes. Tjek legitimationsoplysninger.",
@@ -114,13 +118,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "MakerWorld-konto",
+        "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
+        "data": {
+          "username": "Bambu konto:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare har blokeret forbindelsesforsøget.",
-      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt."
+      "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt.",
+      "no_working_credentials": "Ingen fungerende Bambu Cloud-printerlegitimationsoplysninger er tilgængelige for denne konto.",
+      "no_ams": "Ingen AMS er blevet identificeret på denne printer endnu. Vent på, at printeren har oprettet forbindelse og rapporterer sine AMS-enheder, og prøv derefter igen."
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes",
@@ -212,6 +225,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Ekstern AMS varmelegeme eller tørretumbler",
+        "description": "Ekstra AMS-varmere og -tørretumblere såsom SUNLU AMS Heater og EIBOS Series X (Dyas/Tetras) har ingen netværksforbindelse, så Home Assistant styrer en ved at skifte det smarte stik, den får strøm fra.\n\nVælg det stik til hver AMS, der har et varmelegeme monteret, eller lad det stå tomt. Hvert forbundet AMS får varmelegemetørringstilstand, varmelegemeeffekt, fugttærskel, temperaturafskæring og driftstidsgrænseenheder.\n\nIndstil selve varmeapparatet eller tørretumbleren til at starte opvarmning, når den er tændt, så at skifte stikket faktisk begynder at tørre."
+      },
+      "makerworld": {
+        "title": "MakerWorld-konto",
+        "description": "Brug fungerende Bambu Cloud-legitimationsoplysninger fra en eksisterende printerpost. Der kræves ikke yderligere login.",
+        "data": {
+          "username": "Bambu konto:",
+          "credential_source": "Bambu konto:"
+        }
       }
     }
   },
@@ -258,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Højre ekstruderfilament"
+      },
+      "top_cover_open": {
+        "name": "Topdæksel"
+      },
+      "p1s_upgrade_installed": {
+        "name": "P1S opgraderingssæt installeret"
       }
     },
     "button": {
@@ -362,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Kammerets måltemperatur"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Varmelegeme tændt fugtighed"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Fugtighed fra varmeapparatet"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Varmetemperaturafbrydelse"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Varmeapparat maksimal driftstid"
       }
     },
     "select": {
@@ -1177,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Filament inventar"
+      },
+      "processing_material": {
+        "name": "Laser/skærer materiale"
+      },
+      "check_in_remaining": {
+        "name": "Laser check-in tilbage"
+      },
+      "print_elapsed_time": {
+        "name": "Udskriv forløbet tid"
+      },
+      "last_timelapse": {
+        "name": "Sidste timelapse"
+      },
+      "filament_change_status": {
+        "name": "Filamentændringsstatus",
+        "state": {
+          "idle": "Ledig",
+          "changing_filament": "Udskiftning af filament",
+          "heating_nozzle": "Varmemundstykke",
+          "cutting_filament": "Skære filament",
+          "pulling_back_filament": "Trækker nuværende glødetråd tilbage",
+          "pushing_new_filament": "Skub ny filament",
+          "purging_old_filament": "Udrensning af gammel filament",
+          "checking_position": "Kontrol af filamentposition",
+          "rfid_identifying": "Identifikation af RFID",
+          "filament_loaded": "Filament ladet",
+          "calibration": "Kalibrering",
+          "cold_pull": "Koldt træk",
+          "self_check": "Selvtjek",
+          "debug": "Debug",
+          "unknown": "Ukendt"
+        }
       }
     },
     "camera": {
@@ -1196,6 +1271,12 @@
       },
       "ftp": {
         "name": "Indlæsningsmodeldata fra printer"
+      },
+      "ams_heater_drying": {
+        "name": "Varmetørringstilstand"
+      },
+      "ams_heater_power": {
+        "name": "Varmekraft"
       }
     },
     "update": {
@@ -1208,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Bambu Lab sky",
-        "lan": "Lan-tilstand"
+        "lan": "Lan-tilstand",
+        "makerworld": "MakerWorld-konto",
+        "ams_heater": "Ekstern AMS varmelegeme eller tørretumbler (smart stik)"
       }
     }
   },

@@ -53,7 +53,15 @@ nextTitle: Device Triggers
 | Total Usage Hours | \* See Note                                        |
 
 <Info>
-\* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known. It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+\* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known, unless the integration was running when that print started (see below). It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
+</Info>
+
+<Info>
+**Per-tray Print Weight / Print Length after a restart.** The Print Weight and Print Length attributes split the usage per AMS tray. Which tray each slicer filament went to is only sent by the printer when a print starts. If Home Assistant restarts mid-print the integration recovers it from:
+- the `mapping` the printer reports in its full status, on newer firmware, or
+- `prints/active_print_job.json` in the file cache, written when the integration saw the print start. It is only used when the task name, task id and plate of the running print match.
+
+If neither is available, for example when a multi-filament print was started while Home Assistant was down on older firmware, the totals are still reported but not the per-tray split.
 </Info>
 
 ## Miscellaneous
@@ -66,9 +74,12 @@ nextTitle: Device Triggers
 | Speed Profile            |       |
 | Timelapse Active         |       |
 | Extruder Filament Status | Also left and right on dual-nozzle printers |
+| Filament Change Status   | Current filament load/unload step, including from the external spool |
 | Track Switch Input 1/2   | Filament Track Switch only. Nozzle each input feeds, with the loaded filament as attributes |
 | Airduct Mode             | Current airduct mode: Cooling, Heating, or Laser. P2S/H2/H3C/X2D |
 | Tool Module State        | Current mounted tool (H2D exclusive): none, laser, cutter or unavailable |
+| Laser/Cutter Material    | Material selected for the current or last laser/cutter job |
+| Laser Check-in Remaining | Seconds until the printer pauses unless you check in at the printer. Only available while lasering a material that needs check-ins (e.g. acrylic) |
 
 
 ## Controls
@@ -95,7 +106,7 @@ nextTitle: Device Triggers
 
 | Sensor            | Notes          |
 | ----------------- | -------------- |
-| Active tray       | If AMS present |
+| Active tray       | If AMS present or dual nozzle |
 | Active tray index | If AMS present |
 | Drying            | AMS 2 Pro/AMS HT/AMS 3H |
 | Connected nozzle  | Dual-nozzle printers only: Left or Right. Through a Filament Track Switch, the nozzle its loaded filament is routed to, otherwise Track switch |
@@ -295,6 +306,7 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | ------------------------- | -------------------------------------------------------------- |
 | Developer Lan Mode        | Does the printer have Developer Lan Mode enabled?              |
 | Enclosure Door            | X1/P2/H2/H3C/X2D                               |
+| Top Cover                 | H2 series (top glass lid)                      |
 | Firmware Update Available |                                                                |
 | Force Refresh             |                                                                |
 | HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
@@ -313,6 +325,16 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | ------- | --------------------------------------------------------------- |
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1    - Make sure to enable "LAN Mode LiveView" on your printer |
+
+On P1/A1 printers the chamber image is pushed by the printer rather than pulled
+on demand, so the connection stays open for as long as the printer is
+connected. The camera entity therefore supports `camera.turn_on` and
+`camera.turn_off`: turning it off stops the image stream and leaves the entity
+`idle`, and image requests fail until it is turned back on. This is useful to
+keep the printer link quiet between prints - for example turn the camera on
+when the print status becomes `running` and off again when it is `finish` or
+`failed`. The state is not persisted, so after a restart the camera follows the
+"Enable camera" option of the integration.
 
 ## MakerWorld
 
@@ -361,3 +383,7 @@ token. If that call is rejected the integration falls back to the public
 creator profile, which carries the same counts but no points and no boosts -
 those sensors then report unavailable while the rest keep working.
 </Info>
+
+### Live view camera select (BirdsEye)
+
+On supported H3C printers with a BirdsEye camera, the **Live view camera** select offers Main camera and BirdsEye camera. Switching changes the view of the existing camera stream, not a second stream. The MQTT signature requirement for speed and airduct controls does not block this select.
