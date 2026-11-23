@@ -5738,6 +5738,9 @@ class SlicerSettings:
     def _load_custom_filaments(self, slicer_settings: dict):
         filaments = slicer_settings.get("filament")
         if filaments is not None:
+            # Build the new set aside and swap it in whole, so readers on other threads
+            # never see it empty or half loaded.
+            custom_filaments = {}
             private_filaments = filaments.get("private", {})
             for filament in private_filaments:
                 if filament.get("filament_id", "") != "":
@@ -5745,7 +5748,7 @@ class SlicerSettings:
                     if " @" in name:
                         name = name[:name.index(" @")]
                     id = filament["filament_id"]
-                    self.custom_filaments[id] = FilamentInfo(
+                    custom_filaments[id] = FilamentInfo(
                         name=name,
                         filament_vendor=filament["filament_vendor"],
                         filament_type=filament["filament_type"],
@@ -5754,7 +5757,8 @@ class SlicerSettings:
                         nozzle_temperature_range_high=filament["nozzle_temperature"][1],
                         nozzle_temperature_range_low=filament["nozzle_temperature"][0]
                     )
-            LOGGER.debug(f"Got {len(self.custom_filaments)} custom filaments.")
+            self.custom_filaments = custom_filaments
+            LOGGER.debug(f"Got {len(custom_filaments)} custom filaments.")
         else:
             LOGGER.debug(f"Received no filament data: {filaments}")
 
@@ -5766,9 +5770,12 @@ class SlicerSettings:
     RETRY_DELAY_S = (15, 45)
 
     def update(self):
-        """Load slicer settings. Runs on its own thread, so sleeping here is safe."""
-        self.custom_filaments = {}
+        """Load slicer settings. Runs on its own thread, so sleeping here is safe.
+
+        This runs on every printer reconnect, so the filaments already loaded are kept
+        until a fetch succeeds (#2338)."""
         if self._client.bambu_cloud.auth_token == "":
+            self.custom_filaments = {}
             return
 
         printer = f"{self._client._device.info.device_type} / {self._client._serial}"
@@ -5795,7 +5802,7 @@ class SlicerSettings:
 
         LOGGER.warning(f"Could not load slicer settings for {printer} after {self.MAX_ATTEMPTS} attempts "
                        "(transient Bambu Cloud error, not an authentication failure). Custom filaments "
-                       "will be unavailable until the printer reconnects.")
+                       "will not be refreshed until the printer reconnects.")
 
 
 class FilamentInventory:
