@@ -8,6 +8,7 @@ import os
 import io
 import html
 import re
+import random
 import threading
 import shutil
 import time
@@ -23,6 +24,7 @@ from PIL import Image
 import asyncio
 
 from .air_purifier import AirPurifier
+from .bambu_cloud import CloudAuthError
 from .utils import (
     search,
     fan_percentage,
@@ -58,6 +60,7 @@ from .const import (
     PRINT_TYPE_OPTIONS,
     AIRDUCT_MODES,
     AMS_CONNECTED_NOZZLES,
+    LIVEVIEW_CAMERAS,
     NOZZLE_SIDES,
     TempEnum,
     Print_Fun_Values,
@@ -68,6 +71,7 @@ from .const import (
     AMS_STATUS_MAIN_FILAMENT_CHANGE,
     AMS_STATUS_MAIN_ASSIST,
     AMS_FILAMENT_CHANGE_STEPS,
+    AMSTrayStateFlags,
 )
 from .commands import (
     GET_VERSION,
@@ -79,6 +83,7 @@ from .commands import (
     PROMPT_SOUND_DISABLE,
     AIRDUCT_SET_MODE_TEMPLATE,
     SPEED_PROFILE_TEMPLATE,
+    SWITCH_LIVEVIEW_CAMERA_TEMPLATE,
     BUZZER_SET_SILENT,
     BUZZER_SET_ALARM,
     BUZZER_SET_BEEPING,
@@ -118,6 +123,7 @@ class Device:
         self.home_flag = HomeFlag(client=client)
         self.extruder = Extruder(client=client)
         self.extruder_tool = ExtruderTool(client=client)
+        self.processing_2d = Processing2D(client=client)
         self.hotend_rack = HotendRack(client=client)
         self.track_switch = FilamentTrackSwitch(client=client)
         self.air_purifier = AirPurifier(client=client)
@@ -151,6 +157,7 @@ class Device:
         send_event = send_event | self.home_flag.print_update(data = data)
         send_event = send_event | self.print_fun.print_update(data = data)
         send_event = send_event | self.extruder_tool.print_update(data = data)
+        send_event = send_event | self.processing_2d.print_update(data = data)
         send_event = send_event | self.hotend_rack.print_update(data = data)
         send_event = send_event | self.track_switch.print_update(data = data)
         send_event = send_event | self.air_purifier.print_update(data = data)
@@ -521,6 +528,8 @@ class Camera:
     resolution: str
     rtsp_url: str
     timelapse: str
+    current_liveview: int | None
+    support_liveview_cams: list
     _fired_camera_disabled_event: bool
 
     def __init__(self, client):
@@ -529,6 +538,8 @@ class Camera:
         self.resolution = ''
         self.rtsp_url = None
         self.timelapse = ''
+        self.current_liveview = None
+        self.support_liveview_cams = []
         self._fired_camera_disabled_event = False
 
     def print_update(self, data) -> bool:
@@ -548,13 +559,65 @@ class Camera:
         self.recording = (data.get("ipcam") or {}).get("ipcam_record", self.recording)
         self.resolution = (data.get("ipcam") or {}).get("resolution", self.resolution)
         self.rtsp_url = (data.get("ipcam") or {}).get("rtsp_url", self.rtsp_url)
-        if self._client._enable_camera:
-            if self.rtsp_url == "disable":
-                if not self._fired_camera_disabled_event:
-                    self._fired_camera_disabled_event = True
-                    self._client.callback("event_printer_live_view_disabled")
-        
+        self._update_liveview_cameras(data.get("ipcam") or {})
+        if self.rtsp_url == "disable":
+            if self._client._enable_camera and not self._fired_camera_disabled_event:
+                self._fired_camera_disabled_event = True
+                self._client.callback("event_printer_live_view_disabled")
+        elif self.rtsp_url and self._fired_camera_disabled_event:
+            # The user turned LAN Only Liveview back on. Let the integration clear the
+            # repair issue and restart the camera without needing a reload.
+            self._fired_camera_disabled_event = False
+            self._client.callback("event_printer_live_view_enabled")
+
         return (old_data != f"{self.__dict__}")
+
+    def _update_liveview_cameras(self, ipcam: dict):
+        # "ipcam": {
+        #   "current_liveview": 4,
+        #   "support_liveview_cams": [4, 5],
+        #   ...
+        # }
+        current = ipcam.get("current_liveview", self.current_liveview)
+        if current is None or (isinstance(current, int) and not isinstance(current, bool)):
+            self.current_liveview = current
+        cams = ipcam.get("support_liveview_cams")
+        if isinstance(cams, list):
+            self.support_liveview_cams = [
+                cam for cam in cams if isinstance(cam, int) and not isinstance(cam, bool)
+            ]
+
+    @property
+    def liveview_camera(self) -> str | None:
+        """The camera feeding the live view ("main" or "birdseye"), or None if not reported."""
+        return LIVEVIEW_CAMERAS.get(self.current_liveview)
+
+    @property
+    def liveview_camera_options(self) -> list[str]:
+        """The known cameras the printer says it can show in the live view, in id order."""
+        return [LIVEVIEW_CAMERAS[cam] for cam in sorted(set(self.support_liveview_cams)) if cam in LIVEVIEW_CAMERAS]
+
+    @property
+    def supports_liveview_switch(self) -> bool:
+        """True when the printer has more than one known camera to show."""
+        return len(self.liveview_camera_options) > 1
+
+    def set_liveview_camera(self, option: str):
+        """Switch the live view to the named camera, if the printer has it."""
+        camera_id = next((k for k, v in LIVEVIEW_CAMERAS.items() if v == option), None)
+        if camera_id is None or camera_id not in self.support_liveview_cams:
+            LOGGER.error(f"Live view camera '{option}' isn't available on this printer")
+            return
+        command = {"camera": {**SWITCH_LIVEVIEW_CAMERA_TEMPLATE["camera"], "camera_id": camera_id}}
+        self._client.publish(command)
+
+# While nothing is heating, the printer reports ambient temperatures that flip
+# by ±1°C every few seconds. Forwarding every flip floods the Home Assistant
+# recorder (#2228), so when idle we only report a change of at least
+# IDLE_TEMP_DEADBAND, or any change once IDLE_TEMP_REFRESH has passed since the
+# sensor was last reported. While heating, every change is reported.
+IDLE_TEMP_DEADBAND = 2
+IDLE_TEMP_REFRESH = timedelta(minutes=10)
 
 @dataclass
 class Temperature:
@@ -573,6 +636,7 @@ class Temperature:
         self.target_chamber_temp = 0
         self.nozzle_temps = { 0: 0, 1: 0, 15: 0}
         self.target_nozzle_temps = { 0:0, 1: 0, 15: 0}
+        self._temp_reported_at = {}
 
     @property
     def active_nozzle_temperature(self):
@@ -600,8 +664,38 @@ class Temperature:
     def right_nozzle_target_temperature(self):
         return self.target_nozzle_temps[0]
 
+    def _is_heating(self) -> bool:
+        return (self.target_bed_temp > 0
+                or self.target_chamber_temp > 0
+                or any(target > 0 for target in self.target_nozzle_temps.values()))
+
+    def _debounce(self, key: str, previous: int, current: int, heating: bool, now: datetime) -> int:
+        """Return the value to report for one sensor, suppressing idle ±1°C noise."""
+        if current == previous:
+            return current
+        last_reported = self._temp_reported_at.get(key)
+        if (heating
+                or last_reported is None
+                or abs(current - previous) >= IDLE_TEMP_DEADBAND
+                or now - last_reported >= IDLE_TEMP_REFRESH):
+            self._temp_reported_at[key] = now
+            return current
+        return previous
+
+    def _apply_idle_deadband(self, previous_bed: int, previous_chamber: int, previous_nozzles: dict) -> None:
+        heating = self._is_heating()
+        now = datetime.now()
+        self.bed_temp = self._debounce("bed", previous_bed, self.bed_temp, heating, now)
+        self.chamber_temp = self._debounce("chamber", previous_chamber, self.chamber_temp, heating, now)
+        for index, previous in previous_nozzles.items():
+            self.nozzle_temps[index] = self._debounce(
+                f"nozzle_{index}", previous, self.nozzle_temps[index], heating, now)
+
     def print_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
+        previous_bed = self.bed_temp
+        previous_chamber = self.chamber_temp
+        previous_nozzles = dict(self.nozzle_temps)
 
         # New firmware puts bed temperature in two different places. Low word is current value. High word is the target.
         # "device": {
@@ -669,6 +763,8 @@ class Temperature:
             # stomps the right nozzle's real (idle) temperature with the left nozzle's.
             self.nozzle_temps[0] = round(data.get("nozzle_temper", self.nozzle_temps[0]))
             self.target_nozzle_temps[0] = round(data.get("nozzle_target_temper", self.target_nozzle_temps[0]))
+
+        self._apply_idle_deadband(previous_bed, previous_chamber, previous_nozzles)
 
         return (old_data != f"{self.__dict__}")
 
@@ -845,6 +941,10 @@ class Fans:
         elif fan == FansEnum.H3C_CHAMBER:
             return self._h3c_chamber_fan_speed_percentage
 
+class FirmwareUpdateError(Exception):
+    """Raised when a firmware update can't be started."""
+
+
 @dataclass
 class Upgrade:
     """ Upgrade class """
@@ -882,18 +982,26 @@ class Upgrade:
         return f"https://bambulab.com/en/support/firmware-download/{self.printer_name}"
     
     def install(self):
-        """Install the update"""
+        """Install the update. Raises FirmwareUpdateError if it can't be started."""
         if self.printer_name is None:
-            LOGGER.error("Printer name not found for firmware update.")
-            return
+            # printer_name is resolved by release_url(), which may not have run yet.
+            self.release_url()
+        if self.printer_name is None:
+            raise FirmwareUpdateError(
+                f"No firmware download page is known for printer model {self._client._device.info.device_type}")
 
         url = get_upgrade_url(self.printer_name)
-        if url is not None:
-            template = upgrade_template(url)
-            if template is not None:
-                LOGGER.debug(template)
-                self._client.publish(template)
-                self._client.callback("event_printer_data_update")
+        if url is None:
+            raise FirmwareUpdateError(
+                "Could not retrieve the firmware download URL from bambulab.com")
+
+        template = upgrade_template(url)
+        if template is None:
+            raise FirmwareUpdateError(f"Could not parse the firmware download URL: {url}")
+
+        LOGGER.debug(template)
+        self._client.publish(template)
+        self._client.callback("event_printer_data_update")
                 
     def print_update(self, data) -> bool:
         """Update the upgrade state"""
@@ -1143,6 +1251,34 @@ def tray_mapping_location(value: int) -> dict | None:
     return {"ams": value >> 8, "tray": value & 0xFF}
 
 
+def tray_mapping_slot_index(value: int) -> int | None:
+    """Flat AMS slot index for a print.mapping entry, or None for external spools and unused filaments."""
+    unit, tray = value >> 8, value & 0xFF
+    if 0 <= unit < AMS_UNIT_COUNT and 0 <= tray < AMS_TRAYS_PER_UNIT:
+        return unit * AMS_TRAYS_PER_UNIT + tray
+    if AMS_HT_UNIT_BASE <= unit < AMS_HT_UNIT_END and tray == 0:
+        return AMS_HT_SLOT_BASE + unit - AMS_HT_UNIT_BASE
+    return None
+
+
+# File in the integration's cache that remembers the last ams_mapping seen at a print start, so it
+# can be restored if Home Assistant restarts mid-print. Older firmware only sends it at that moment.
+ACTIVE_PRINT_RECORD = "active_print_job.json"
+# The fields that must match for a saved ams_mapping to belong to the print that is running.
+ACTIVE_PRINT_IDENTITY = ("subtask_name", "task_id", "plate_idx", "gcode_start_time")
+# An ams_mapping that arrives while idle belongs to a print about to start. If none has started
+# after this many seconds, the print was rejected or canceled and the mapping is dropped.
+AMS_MAPPING_MAX_AGE = 600
+
+
+# Files kept in the local print history and timelapse caches. A sidecar shares its primary
+# file's base name and is removed along with it.
+PRINT_CACHE_EXTENSIONS = ['.3mf']
+PRINT_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode']
+TIMELAPSE_CACHE_EXTENSIONS = ['.mp4', '.avi', '.mov']
+TIMELAPSE_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png']
+
+
 @dataclass
 class PrintJob:
     """Return all information related content"""
@@ -1158,6 +1294,8 @@ class PrintJob:
     plate_idx: int
     start_time: datetime
     end_time: datetime
+    finish_time: datetime
+    last_timelapse_path: str | None
     remaining_time: int
     current_layer: int
     total_layers: int
@@ -1188,6 +1326,9 @@ class PrintJob:
         self.plate_idx = 0
         self.start_time = None
         self.end_time = None
+        self.finish_time = None
+        # Local path of the most recently downloaded timelapse video, if any.
+        self.last_timelapse_path = None
         self.remaining_time = 0
         self.current_layer = 0
         self.total_layers = 0
@@ -1209,10 +1350,53 @@ class PrintJob:
         self._ftpThread = None
         self._ftp_download_percentage = 100
         self._next_model_retry_at = 0.0
+        self._gcode_start_time = ""
+        # An ams_mapping arrived that hasn't been written to the restart record yet.
+        self._ams_mapping_unsaved = False
+        self._ams_mapping_received_at = 0.0
+        # Startup restore is retried once the print's name arrives.
+        self._restore_pending = False
+        self._active_print_record_deleted = False
+        # The restart record written for the print that is running, None once the printer is idle.
+        self._active_print_record = None
+
+    @property
+    def elapsed_time(self) -> int | None:
+        """Whole minutes the current or most recent print has been running.
+
+        Counts up while printing and is frozen once the print finishes, fails or is
+        canceled, matching the "print elapsed time" shown on the printer screen.
+        """
+        if self.start_time is None:
+            return None
+        end = self.finish_time
+        if end is None:
+            if self.gcode_state in ("IDLE", "FAILED", "FINISH"):
+                # e.g. after a restart: only the cloud task's end time is available.
+                end = self.end_time
+            else:
+                end = get_end_time(0)
+        if end is None:
+            return None
+        return max(0, int((end - self.start_time).total_seconds() // 60))
+      
+    @property
+    def last_timelapse_name(self) -> str | None:
+        """File name of the most recently downloaded timelapse video."""
+        if not self.last_timelapse_path:
+            return None
+        return os.path.basename(self.last_timelapse_path)
 
     @property
     def model_download_percentage(self) -> int:
         return self._ftp_download_percentage
+
+    def _end_failed_model_download(self) -> None:
+        # A download that fails part way must not leave the percentage below 100: the cards
+        # treat anything under 100 as a download in progress and show it over the cover image.
+        if self._ftp_download_percentage != 100:
+            self._ftp_download_percentage = 100
+            self._client.callback("event_printer_data_update")
 
     @property
     def get_printable_objects(self) -> json:
@@ -1231,6 +1415,16 @@ class PrintJob:
             return [tray_mapping_location(value) for value in self._tray_mapping]
         return [ams_slot_location(index) for index in self.ams_mapping or []]
     
+    def _filament_slot_indexes(self) -> list:
+        """Flat AMS slot index per slicer filament, None where the filament isn't on an AMS slot.
+
+        ams_mapping is only sent when a print starts. Newer firmware also reports print.mapping in
+        every full status, so it still gives the trays when the integration restarted mid-print.
+        """
+        if self.ams_mapping:
+            return list(self.ams_mapping)
+        return [tray_mapping_slot_index(value) for value in self._tray_mapping or []]
+
     @property
     def get_print_weights(self) -> dict:
         values = {}
@@ -1335,11 +1529,15 @@ class PrintJob:
         self.total_layers = data.get("total_layer_num", self.total_layers)
         if "ams_mapping" in data:
             self.ams_mapping = [normalize_ams_slot(index) for index in data["ams_mapping"]]
+            self._ams_mapping_unsaved = len(self.ams_mapping) > 0
+            self._ams_mapping_received_at = time.monotonic()
         self._tray_mapping = data.get("mapping", self._tray_mapping)
         self._skipped_objects = data.get("s_obj", self._skipped_objects)
+        self._gcode_start_time = str(data.get("gcode_start_time", self._gcode_start_time))
 
         # Initialize task data at startup.
         if previous_gcode_state == "unknown" and self.gcode_state != "unknown":
+            self._restore_active_print_record()
             self._update_task_data()
             self._download_timelapse()
 
@@ -1373,6 +1571,7 @@ class PrintJob:
             self.start_time = get_end_time(0)
             # Make sure we don't keep using a stale end time.
             self.end_time = None
+            self.finish_time = None
             LOGGER.debug(f"GENERATED START TIME: {self.start_time}")
 
             if not self._client.ftp_enabled:
@@ -1413,6 +1612,11 @@ class PrintJob:
                 LOGGER.debug("RETRYING MISSING ACTIVE PRINT MEDIA")
                 self._update_task_data()
 
+        print_ended = currently_idle and not previously_idle and previous_gcode_state != "unknown"
+        if print_ended:
+            # Record before firing the finished/failed events so automations see the final elapsed time.
+            self.finish_time = get_end_time(0)
+
         # When a print is canceled by the user, this is the payload that's sent. A couple of seconds later
         # print_error will be reset to zero.
         # {
@@ -1444,18 +1648,141 @@ class PrintJob:
                 timelapseDownloaded = True
             self._client.callback("event_print_finished")
 
-        if currently_idle and not previously_idle and previous_gcode_state != "unknown":
+        if print_ended:
             if self.start_time != None:
                 # self.end_time isn't updated if we hit an AMS retract at print end but the printer does count that entire
                 # paused time as usage hours. So we need to use the current time instead of the last recorded end time in
                 # our calculation here.
-                duration = get_end_time(0) - self.start_time
+                duration = self.finish_time - self.start_time
                 # Round usage hours to 2 decimal places (about 1/2 a minute accuracy)
-                new_hours = round((duration.seconds / 60 / 60) * 100) / 100
+                new_hours = round((duration.total_seconds() / 60 / 60) * 100) / 100
                 LOGGER.debug(f"NEW USAGE HOURS: {new_hours}")
                 self._client._device.info.usage_hours += new_hours
 
+        self._update_active_print_record()
+
         return (old_data != f"{self.__dict__}")
+
+    def _is_printing(self) -> bool:
+        return self.gcode_state not in ("IDLE", "FAILED", "FINISH", "unknown")
+
+    def _active_print_identity(self) -> dict:
+        return {
+            "subtask_name": self._subtask_name,
+            "task_id": str(self.task_id),
+            "plate_idx": str(self.plate_idx),
+            "gcode_start_time": self._gcode_start_time,
+        }
+
+    def _active_print_record_path(self) -> Path:
+        return Path(self._client.cache_path) / "prints" / ACTIVE_PRINT_RECORD
+
+    def _update_active_print_record(self):
+        """Keep the restart record in step with the print that is running.
+
+        It is written once an ams_mapping and the print's name are both known, and rewritten if the
+        print's identity fills in later. Once the printer goes idle the record is deleted: the next
+        print needs an ams_mapping of its own, so a touchscreen reprint of the same file never
+        inherits the previous run's.
+        """
+        try:
+            if not self._is_printing():
+                self._active_print_record = None
+                if self.gcode_state != "unknown":
+                    self._delete_active_print_record()
+                if self._ams_mapping_unsaved and (
+                    time.monotonic() - self._ams_mapping_received_at > AMS_MAPPING_MAX_AGE
+                ):
+                    # The print this mapping was sent for never started.
+                    self._ams_mapping_unsaved = False
+                return
+            if not self._subtask_name:
+                return
+            if self._restore_pending:
+                # The first status after startup didn't identify the print yet.
+                self._restore_active_print_record()
+            self._save_active_print_record()
+        except Exception as e:
+            # Never let the restart record break MQTT processing.
+            LOGGER.warning(f"Unable to update the active print record: {e}")
+
+    def _delete_active_print_record(self):
+        if self._active_print_record_deleted:
+            return
+        self._active_print_record_deleted = True
+        try:
+            self._active_print_record_path().unlink(missing_ok=True)
+        except (OSError, TypeError) as e:
+            LOGGER.debug(f"Unable to delete the active print record: {e}")
+
+    def _save_active_print_record(self):
+
+        identity = self._active_print_identity()
+        if self._ams_mapping_unsaved:
+            record = {**identity, "ams_mapping": list(self.ams_mapping)}
+        elif self._active_print_record is not None and any(
+            self._active_print_record.get(key) != value for key, value in identity.items()
+        ):
+            record = {**self._active_print_record, **identity}
+        else:
+            return
+        record["start_time"] = self.start_time.isoformat() if self.start_time else None
+
+        self._ams_mapping_unsaved = False
+        self._active_print_record = record
+        self._active_print_record_deleted = False
+        try:
+            path = self._active_print_record_path()
+            path.parent.mkdir(parents=True, exist_ok=True)
+            temp_path = path.with_suffix(".tmp")
+            temp_path.write_text(json.dumps(record), encoding="utf-8")
+            os.replace(temp_path, path)
+            LOGGER.debug(f"Saved active print record: {record}")
+        except (OSError, TypeError) as e:
+            LOGGER.warning(f"Unable to save the AMS mapping for the active print: {e}")
+
+    def _restore_active_print_record(self):
+        """After a restart mid-print, recover the ams_mapping and start time the printer only sent at the start."""
+        self._restore_pending = False
+        if not self._is_printing() or self.ams_mapping:
+            return
+        if not self._subtask_name:
+            self._restore_pending = True
+            return
+        try:
+            path = self._active_print_record_path()
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            return
+        except (OSError, TypeError, ValueError) as e:
+            LOGGER.warning(f"Ignoring unreadable active print record: {e}")
+            return
+        if not isinstance(record, dict) or not isinstance(record.get("ams_mapping"), list):
+            LOGGER.warning(f"Ignoring malformed active print record {path}")
+            return
+
+        identity = self._active_print_identity()
+        for key in ACTIVE_PRINT_IDENTITY:
+            saved, current = str(record.get(key) or ""), identity[key]
+            if key == "gcode_start_time" and (saved in ("", "0") or current in ("", "0")):
+                # Not every printer reports it. It is only used to tell two runs of one file apart.
+                continue
+            if saved != current:
+                LOGGER.debug(f"Active print record is for another print ({key}: '{saved}' != '{current}')")
+                return
+
+        try:
+            self.ams_mapping = [int(index) for index in record["ams_mapping"]]
+        except (TypeError, ValueError):
+            LOGGER.warning(f"Ignoring malformed ams_mapping in active print record {path}")
+            return
+        if self.start_time is None and record.get("start_time"):
+            try:
+                self.start_time = datetime.fromisoformat(record["start_time"])
+            except (TypeError, ValueError):
+                LOGGER.debug(f"Ignoring invalid start_time in active print record: {record['start_time']}")
+        self._active_print_record = record
+        LOGGER.info(f"Restored AMS mapping {self.ams_mapping} for '{self._subtask_name}' after restart")
 
     # FTP implementation differences between P1 and X1 printers:
     # - X1 includes the path in the returned filenames for the NLST command
@@ -1876,6 +2203,7 @@ class PrintJob:
                 f"Failed downloading model {remote_file.path} from {remote_file.source}/"
                 f"{remote_file.storage}: {type(e)} Args: {e}"
             )
+            self._end_failed_model_download()
             return None
 
     def _attempt_remote_model_download(self, sources: list[RemoteMediaSource]) -> str | None:
@@ -2022,10 +2350,10 @@ class PrintJob:
         except ftplib.error_perm as e:
              if '550' not in str(e.args): # 550 is unavailable.
                  LOGGER.debug(f"Failed to download model at '{file_path}': {e}")
+             self._end_failed_model_download()
         except Exception as e:
             LOGGER.debug(f"Unexpected exception at '{file_path}': {type(e)} Args: {e}")
-            # Optionally add retry logic here
-            pass
+            self._end_failed_model_download()
         return None
 
     ftp_search_paths = ['/cache/', '/']
@@ -2164,11 +2492,7 @@ class PrintJob:
     def prune_print_history_files(self):
         if self._client._test_mode:
             return
-        cache_file_path = os.path.join(self._client.cache_path, "prints")
-        self._prune_old_files(directory=cache_file_path,
-                              extensions=['.3mf'],
-                              keep=self._client._print_cache_count,
-                              extra_extensions=['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode'])
+        self._prune_print_history(keep=self._client._print_cache_count)
 
     async def async_prune_timelapse_files(self):
         loop = asyncio.get_event_loop()
@@ -2178,11 +2502,61 @@ class PrintJob:
         if self._client._test_mode:
             return
         LOGGER.debug("Pruning timelapse history")
+        self._prune_timelapses(keep=self._client._timelapse_cache_count)
+
+    async def async_clear_print_history_files(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.clear_print_history_files)
+
+    def clear_print_history_files(self):
+        """Delete every cached print model and its extracted sidecars, ignoring print_cache_count."""
+        LOGGER.info("Clearing cached print history")
+        self._prune_print_history(keep=0)
+
+    async def async_clear_timelapse_files(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.clear_timelapse_files)
+
+    def clear_timelapse_files(self):
+        """Delete every cached timelapse video and thumbnail, ignoring timelapse_cache_count."""
+        LOGGER.info("Clearing cached timelapses")
+        self._prune_timelapses(keep=0)
+
+    def _prune_print_history(self, keep: int):
+        self._prune_old_files(directory=os.path.join(self._client.cache_path, "prints"),
+                              extensions=PRINT_CACHE_EXTENSIONS,
+                              keep=keep,
+                              extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS)
+
+    def _prune_timelapses(self, keep: int):
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
         self._prune_old_files(directory=cache_file_path,
-                              extensions=['.mp4','.avi','.mov'],
-                              keep=self._client._timelapse_cache_count,
-                              extra_extensions=['.jpg', '.jpeg', '.png'])
+                              extensions=TIMELAPSE_CACHE_EXTENSIONS,
+                              keep=keep,
+                              extra_extensions=TIMELAPSE_CACHE_SIDECAR_EXTENSIONS)
+        self._refresh_last_timelapse_path(Path(cache_file_path))
+
+    def _refresh_last_timelapse_path(self, timelapse_dir: Path):
+        """Keep last_timelapse_path pointing at a file that exists.
+
+        Pruning can delete the file, and after a restart nothing has been downloaded yet, so
+        fall back to the newest timelapse already in the cache.
+        """
+        if self.last_timelapse_path is not None and os.path.isfile(self.last_timelapse_path):
+            return
+
+        newest = None
+        if timelapse_dir.is_dir():
+            videos = [
+                path for path in timelapse_dir.rglob('*')
+                if path.is_file() and path.suffix.lower() in ('.mp4', '.avi', '.mov')
+            ]
+            if videos:
+                newest = str(max(videos, key=lambda path: path.stat().st_mtime))
+
+        if newest != self.last_timelapse_path:
+            self.last_timelapse_path = newest
+            self._client.callback("event_printer_data_update")
             
     def _cleanup_stale_part_files(self, dir_path: Path, older_than_seconds: int = 24 * 60 * 60) -> int:
         cutoff_time = time.time() - older_than_seconds
@@ -2368,6 +2742,9 @@ class PrintJob:
                             self._download_remote_file_atomic(source, remote_file, local_file_path)
 
                         self._download_timelapse_thumbnail(source, remote_file, local_file_path)
+                        self.last_timelapse_path = str(local_file_path)
+                        LOGGER.debug(f"Latest timelapse available at '{self.last_timelapse_path}'")
+                        self._client.callback("event_timelapse_downloaded")
                         break
                     except Exception as e:
                         LOGGER.debug(
@@ -2481,6 +2858,74 @@ class PrintJob:
 
         return False
 
+    @staticmethod
+    def _pick_image_names(*plates) -> list[str]:
+        """Pick image filenames to look for, in order, ending with the single-plate pick_1.png."""
+        names = []
+        for plate in (*plates, "1"):
+            if plate and f"pick_{plate}.png" not in names:
+                names.append(f"pick_{plate}.png")
+        return names
+
+    def _read_active_metadata_file(self, source: RemoteMediaSource, remote_path: str) -> bytes | None:
+        """Read one file from the active print's Metadata directory over TCP 6000."""
+        remote_file = RemoteMediaFile(
+            name=os.path.basename(remote_path),
+            path=remote_path,
+            size=0,
+            media_type="model",
+            source=source.name,
+            storage="",
+        )
+        local_path = Path(self._client.cache_path) / "prints" / f"active-{remote_file.name}"
+        try:
+            self._download_remote_file_atomic(source, remote_file, local_path)
+            return local_path.read_bytes() or None
+        except Exception as e:
+            LOGGER.debug(f"Direct active metadata lookup failed for {remote_path}: {type(e)} Args: {e}")
+            return None
+
+    def _try_active_metadata_from_printer(self, sources: list[RemoteMediaSource]) -> bool:
+        """Load the active print's pick image and slice info directly from the printer.
+
+        The P2S (like the X1/H2) keeps the running job's Metadata on a RAM drive that FTPS
+        can't see, so when no 3mf is found this is the only way to get the pick image.
+        """
+        if not self.gcode_file or not self.plate_idx:
+            return False
+
+        metadata_dir = self.gcode_file.replace("\\", "/").rsplit("/", 1)[0]
+        for source in sources:
+            if source.name != Tcp6000MediaSource.name:
+                continue
+
+            pick_image_bytes = None
+            for pick_name in self._pick_image_names(str(self.plate_idx)):
+                pick_image_bytes = self._read_active_metadata_file(source, f"{metadata_dir}/{pick_name}")
+                if pick_image_bytes:
+                    break
+
+            slice_info_bytes = self._read_active_metadata_file(source, f"{metadata_dir}/slice_info.config")
+            if slice_info_bytes:
+                plate_json_bytes = self._read_active_metadata_file(
+                    source, f"{metadata_dir}/plate_{self.plate_idx}.json"
+                )
+                if self._parse_and_apply_model_metadata(
+                    slice_info_bytes=slice_info_bytes,
+                    plate_json_bytes=plate_json_bytes,
+                    pick_image_bytes=pick_image_bytes,
+                ):
+                    LOGGER.debug(f"Loaded active metadata directly from {metadata_dir}")
+                    return True
+
+            if pick_image_bytes:
+                # No usable slice info, so objects can't be named, but the image itself is still useful.
+                self._client._device.pick_image.set_image(pick_image_bytes)
+                LOGGER.debug(f"Loaded active pick image directly from {metadata_dir}")
+                return True
+
+        return False
+
     def _parse_and_apply_model_metadata(
         self,
         slice_info_bytes: bytes,
@@ -2506,7 +2951,8 @@ class PrintJob:
             print_length = 0
             plate_number = None
             _printable_objects = {}
-            filament_count = len(self.ams_mapping)
+            filament_slots = self._filament_slot_indexes()
+            filament_count = len(filament_slots)
             plate_filament_count = len(plate.findall('filament'))
 
             # Reset filament data
@@ -2556,15 +3002,15 @@ class PrintJob:
 
                         # Filament count should be greater than the zero-indexed filament ID
                         if filament_count > filament_index:
-                            ams_index = self.ams_mapping[filament_index]
-                            ams_name = ams_slot_name(ams_index)
+                            ams_index = filament_slots[filament_index]
+                            ams_name = ams_slot_name(ams_index) if ams_index is not None else None
                             if ams_name is not None:
                                 # We add the filament as you can map multiple slicer filaments to the same physical filament.
                                 self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
                                 self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
                                 log_label = ams_name
                             else:
-                                LOGGER.debug(f"ams_mapping: {self.ams_mapping}")
+                                LOGGER.debug(f"ams_mapping: {self.ams_mapping} mapping: {self._tray_mapping}")
                         elif plate_filament_count > 0:
                             # Multi filament print but the AMS mapping is unknown
                             # The data is only sent in the mqtt payload once and isn't part of the 'full' data so the integration must be
@@ -2672,8 +3118,13 @@ class PrintJob:
                     LOGGER.debug(f"Failed to download {target_plate_json}: {e}")
 
             pick_image_bytes = None
-            target_pick = f"pick_{target_plate}.png"
-            if target_pick in files:
+            # Like the cover, single-plate exports can name the pick image pick_1.png
+            # whatever the plate index is.
+            target_pick = next(
+                (name for name in self._pick_image_names(target_plate, active_plate) if name in files),
+                None,
+            )
+            if target_pick:
                 try:
                     pick_buf = io.BytesIO()
                     ftp.retrbinary(f"RETR {target_pick}", pick_buf.write)
@@ -2721,12 +3172,20 @@ class PrintJob:
                             cover_loaded = self._try_active_cover_from_printer(sources)
                 else:
                     break
+
+            metadata_loaded = False
+            if model_file_path is None:
+                LOGGER.debug("No model .3mf file found. Attempting direct metadata download from printer...")
+                # FTPS first; then the active job's Metadata over TCP 6000, which needs the sources still open.
+                metadata_loaded = (
+                    self._attempt_direct_metadata_download()
+                    or self._try_active_metadata_from_printer(sources)
+                )
         finally:
             self._close_remote_media_sources(sources)
 
         if model_file_path is None:
-            LOGGER.debug("No model .3mf file found. Attempting direct metadata download from printer...")
-            if self._attempt_direct_metadata_download():
+            if metadata_loaded:
                 LOGGER.info("Direct metadata download from printer succeeded.")
                 self.prune_print_history_files()
                 return True
@@ -2806,8 +3265,9 @@ class PrintJob:
                         break
 
                 pick_image_bytes = None
-                for pc in [f"Metadata/pick_{target_plate}.png", f"Metadata/pick_{active_plate_number}.png", "Metadata/pick_1.png"]:
-                    if pc and pc.lower() in namelist_map:
+                for pick_name in self._pick_image_names(target_plate, active_plate_number):
+                    pc = f"Metadata/{pick_name}"
+                    if pc.lower() in namelist_map:
                         pick_image_bytes = archive.read(namelist_map[pc.lower()])
                         break
 
@@ -2943,7 +3403,10 @@ class PrintJob:
 
             status = self._task_data['status']
             LOGGER.debug(f"CLOUD PRINT STATUS: {status}")
-            if status == 4:
+            # The same staleness guard as the print figures: for a local FTP print the
+            # newest cloud task can be an older job, and its start time would then be
+            # counted as usage hours when this print ends.
+            if status == 4 and use_cloud_task:
                 # If we generate the start time (not X1), then rely more heavily on the cloud task data and
                 # do so uniformly so we always have matched start/end times.
                 # "startTime": "2023-12-21T19:02:16Z"
@@ -3762,6 +4225,15 @@ class HotendRack:
         return changed
 
 
+# The AMS occasionally reports a single wildly wrong temperature/humidity sample
+# (e.g. 28 C -> 88 C -> 28 C), which shows up as spikes in history (#2134). A jump
+# larger than this is held back until the next reading confirms it.
+AMS_READING_SPIKE_THRESHOLDS = {
+    "temperature": 5.0,  # degrees C between consecutive readings
+    "humidity": 5,       # percentage points between consecutive readings
+}
+
+
 @dataclass
 class AMSInstance:
     """Return all AMS instance related info"""
@@ -3783,11 +4255,15 @@ class AMSInstance:
     drying_filament: str = ""
     connected_nozzle: str | None = None
     status: str = "idle"
+    _accepted_readings: dict = field(default_factory=dict, repr=False)
+    _unconfirmed_readings: dict = field(default_factory=dict, repr=False)
 
     def __init__(self, client, model, index):
         self.model = model
         self.index = index
         self.zones = {}
+        self._accepted_readings = {}
+        self._unconfirmed_readings = {}
         if model == "AMS 3H":
             self.tray = [AMSTray(client) for _ in range(9)]
         elif index >= 128:
@@ -3799,6 +4275,31 @@ class AMSInstance:
             self.tray[1] = AMSTray(client)
             self.tray[2] = AMSTray(client)
             self.tray[3] = AMSTray(client)
+
+    def accept_reading(self, attribute: str, value) -> bool:
+        """Return whether a sensor reading should be applied, rejecting one-off spikes.
+
+        A reading close to the last accepted one is applied immediately. A large jump is
+        held back and only applied when the following reading lands close to it, so a
+        genuine step change is delayed by one message while a single glitch is dropped.
+        """
+        threshold = AMS_READING_SPIKE_THRESHOLDS.get(attribute)
+        if threshold is None:
+            return True
+        last = self._accepted_readings.get(attribute)
+        unconfirmed = self._unconfirmed_readings.pop(attribute, None)
+        is_plausible = (
+            last is None
+            or abs(value - last) <= threshold
+            or (unconfirmed is not None and abs(value - unconfirmed) <= threshold)
+        )
+        if not is_plausible:
+            LOGGER.debug("Holding AMS %s %s reading %s (last accepted %s) until confirmed",
+                         self.index, attribute, value, last)
+            self._unconfirmed_readings[attribute] = value
+            return False
+        self._accepted_readings[attribute] = value
+        return True
 
     @property
     def device_name_suffix(self) -> str:
@@ -3828,6 +4329,26 @@ class AMSInstance:
         return remaining > 0 if remaining is not None else None
 
 
+# The H3C reports a 2.85 mm spool in AMS 3H slot k as virtual slot 255 - k instead of as
+# AMS tray k. Ids 255 and 254 stay with the external spools, as on every other printer.
+AMS_3H_VIRTUAL_SLOT_IDS = range(247, 254)
+# Tray state used when a loaded vir_slot entry carries no `state` field of its own. Without it,
+# the tray keeps the state the AMS reported for it (no spool), which would hide the spool.
+AMS_3H_VIRTUAL_SLOT_LOADED_STATE = (AMSTrayStateFlags.SPOOL | AMSTrayStateFlags.METADATA
+                                    | AMSTrayStateFlags.STEADY)
+
+
+def _virtual_slot_loaded(entry: dict) -> bool:
+    """True when a vir_slot entry reports a mounted spool."""
+    if "state" in entry:
+        try:
+            return ams_tray_spool_loaded(int(entry["state"]))
+        except (TypeError, ValueError):
+            return False
+    tray_type = entry.get("tray_type")
+    return bool(entry.get("tray_info_idx")) or bool(tray_type and tray_type != "Empty")
+
+
 @dataclass
 class AMSList:
     """Return all AMS related info"""
@@ -3845,11 +4366,33 @@ class AMSList:
         self._nozzle_ams_index = { 0: 0, 1: 0, 15: 0}
         self._nozzle_target_ams_index = { 0: 255, 1: 255, 15: 255}
         self.data = {}
+        # Latest vir_slot payload per AMS 3H virtual slot id.
+        self._virtual_slots: dict[int, dict] = {}
+        # Last per-tray `state` the AMS itself reported, keyed by (ams index, tray index).
+        self._reported_tray_states: dict[tuple[int, int], int] = {}
+        # AMS 3H tray indices currently showing virtual slot filament.
+        self._virtual_overlaid_trays: frozenset[int] = frozenset()
+
+    def _ams_3h_index(self) -> int | None:
+        return next((index for index, ams in self.data.items() if ams.model == "AMS 3H"), None)
+
+    def _resolve_virtual_slot(self, ams_index: int, tray_index: int) -> tuple[int, int]:
+        """Map an AMS 3H virtual slot id onto its AMS 3H unit and tray."""
+        if ams_index in AMS_3H_VIRTUAL_SLOT_IDS:
+            ams_3h_index = self._ams_3h_index()
+            if ams_3h_index is not None:
+                return ams_3h_index, 255 - ams_index
+        return ams_index, tray_index
+
+    def _active_slot(self) -> tuple[int, int]:
+        active_nozzle = self._client._device.extruder.active_nozzle_index
+        return self._resolve_virtual_slot(self._nozzle_ams_index[active_nozzle],
+                                          self._nozzle_tray_index[active_nozzle])
 
     @property
     def target_ams_index(self):
         active_nozzle = self._client._device.extruder.active_nozzle_index
-        return self._nozzle_target_ams_index[active_nozzle]
+        return self._resolve_virtual_slot(self._nozzle_target_ams_index[active_nozzle], 0)[0]
 
     def _status_description(self) -> str:
         main = (self._ams_status >> 8) & 0xFF
@@ -3859,15 +4402,19 @@ class AMSList:
         return AMS_STATUS_MAIN.get(main, "unknown")
 
     @property
+    def status(self) -> str:
+        """Printer-wide filament status. Unlike the per-AMS status, this also covers
+        filament changes that involve no AMS unit, such as the external spool."""
+        return self._status_description()
+
+    @property
     def active_ams_index(self):
-        active_nozzle = self._client._device.extruder.active_nozzle_index
-        return self._nozzle_ams_index[active_nozzle]
-    
+        return self._active_slot()[0]
+
     @property
     def active_tray_index(self):
-        active_nozzle = self._client._device.extruder.active_nozzle_index
-        return self._nozzle_tray_index[active_nozzle]
-    
+        return self._active_slot()[1]
+
     @property
     def active_global_tray_index(self) -> int | str:
         """Printer-wide index of the tray feeding the active nozzle.
@@ -3902,10 +4449,10 @@ class AMSList:
                 return None
             else:
                 return self._client._device.external_spool[1]
-        elif self.data[self.active_ams_index] is None:
+        ams = self.data.get(self.active_ams_index)
+        if ams is None or not 0 <= self.active_tray_index < len(ams.tray):
             return None
-        else:
-            return self.data[self.active_ams_index].tray[self.active_tray_index]
+        return ams.tray[self.active_tray_index]
 
     def info_update(self, data) -> bool:
         old_data = f"{self.__dict__}"
@@ -3962,8 +4509,9 @@ class AMSList:
             
             if index != -1:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
-                # required as part of the home assistant device identity.
-                if not module['sn'] == '':
+                # required as part of the home assistant device identity. An AMS the printer cannot currently identify
+                # reports the placeholder "N/A"; it is not a serial, and several units can report it at once.
+                if module.get('sn', '') not in ('', 'N/A'):
                     # May get data before info so create entries if necessary
                     if index not in self.data:
                         data_changed = True
@@ -4144,7 +4692,8 @@ class AMSList:
                     ("dry_time", "remaining_drying_time", int, 0, math.inf),
                 ):
                     value = optional_number(ams, key, converter)
-                    if value is not None and minimum <= value <= maximum:
+                    if (value is not None and minimum <= value <= maximum
+                            and instance.accept_reading(attribute, value)):
                         setattr(instance, attribute, value)
 
                 dry_setting = ams.get("dry_setting")
@@ -4176,11 +4725,18 @@ class AMSList:
                     if tray_id is None or not 0 <= tray_id < len(instance.tray):
                         LOGGER.debug("Ignoring unsupported AMS tray id: %r", tray.get("id"))
                         continue
+                    reported_state = optional_number(tray, "state", int)
+                    if reported_state is not None:
+                        self._reported_tray_states = {**self._reported_tray_states,
+                                                      (index, tray_id): reported_state}
                     instance.tray[tray_id].print_update(tray)
 
             # tray_exist_bits: hex bitmask of slots that physically hold a spool,
             # bit (ams_index * 4 + tray_index) for 4-slot AMS units. Reported even
             # by firmware (e.g. P1S) that never sends the per-tray `state` field.
+            # Other units are skipped and keep `exists` unknown: the AMS HT has its
+            # own id range, and the 9-slot AMS 3H (id 32 on the H3C) puts its trays
+            # at bit 28 rather than 32 * 4, a layout seen on only one printer so far.
             exist_bits = ams_data.get("tray_exist_bits")
             if exist_bits is not None:
                 try:
@@ -4189,10 +4745,12 @@ class AMSList:
                     bits = None
                 if bits is not None:
                     for ams_index, ams_instance in self.data.items():
-                        if ams_index >= 128:
+                        if ams_index >= 128 or len(ams_instance.tray) != 4:
                             continue
                         for tray_id, ams_tray in enumerate(ams_instance.tray):
                             ams_tray.exists = bool((bits >> (ams_index * 4 + tray_id)) & 1)
+
+        self._apply_virtual_slots(data.get("vir_slot"))
 
         if data.get("ams_status") is not None:
             self._ams_status = int(data["ams_status"])
@@ -4216,6 +4774,54 @@ class AMSList:
 
         data_changed = (old_data != f"{self.__dict__}")
         return data_changed
+
+    def _store_virtual_slots(self, vir_slots) -> None:
+        """Remember the latest payload of each AMS 3H virtual slot; deltas merge into it."""
+        if not isinstance(vir_slots, list):
+            return
+        for entry in vir_slots:
+            if not isinstance(entry, dict):
+                continue
+            try:
+                slot_id = int(entry.get("id"))
+            except (TypeError, ValueError):
+                continue
+            if slot_id not in AMS_3H_VIRTUAL_SLOT_IDS:
+                continue
+            # A bare id/state entry means the slot was emptied, so stale filament fields must go.
+            metadata_only = set(entry.keys()).issubset({"id", "state"})
+            previous = {} if metadata_only else self._virtual_slots.get(slot_id, {})
+            self._virtual_slots = {**self._virtual_slots, slot_id: {**previous, **entry}}
+
+    def _apply_virtual_slots(self, vir_slots) -> None:
+        """Show a 2.85 mm spool the H3C reports as a virtual slot on its AMS 3H tray (#2253).
+
+        The AMS reports that tray as empty, so the virtual slot is re-applied after every AMS
+        update. A spool the AMS itself reports in the tray takes precedence.
+        """
+        self._store_virtual_slots(vir_slots)
+        ams_3h_index = self._ams_3h_index()
+        if ams_3h_index is None:
+            return
+        trays = self.data[ams_3h_index].tray
+        overlaid = set()
+        for slot_id, entry in self._virtual_slots.items():
+            tray_index = 255 - slot_id
+            if tray_index >= len(trays):
+                continue
+            reported_state = self._reported_tray_states.get((ams_3h_index, tray_index), 0)
+            if ams_tray_spool_loaded(reported_state):
+                continue
+            tray = trays[tray_index]
+            if _virtual_slot_loaded(entry):
+                tray.print_update({"state": AMS_3H_VIRTUAL_SLOT_LOADED_STATE, **entry,
+                                   "id": str(tray_index)})
+                tray.exists = True
+                overlaid.add(tray_index)
+            elif tray_index in self._virtual_overlaid_trays:
+                # Back to what the AMS reports for the tray, which is empty.
+                tray.print_update({"id": str(tray_index), "state": reported_state})
+        self._virtual_overlaid_trays = frozenset(overlaid)
 
 @dataclass
 class AMSTray:
@@ -4438,14 +5044,13 @@ class ExternalSpool(AMSTray):
 
     @property
     def active(self) -> bool:
-        if self._client._device.supports_feature(Features.AMS):
-            active_ams_index = self._client._device.ams.active_ams_index
-            active_tray_index = self._client._device.ams.active_tray_index
-            if active_ams_index == (255 - self._index) and active_tray_index == 0:
-                return True
-        else:
+        device = self._client._device
+        # Dual-nozzle printers (H2D, X2D, ...) report the tray feeding each nozzle even
+        # without an AMS, so the spool on the idle nozzle isn't active (#2181).
+        if not (device.supports_feature(Features.AMS) or device.supports_feature(Features.DUAL_NOZZLES)):
+            # Single nozzle and no AMS: this is the only filament source.
             return True
-        return False
+        return device.ams.active_ams_index == (255 - self._index) and device.ams.active_tray_index == 0
 
     @property
     def remain(self) -> int:
@@ -5175,16 +5780,44 @@ class SlicerSettings:
         else:
             LOGGER.debug(f"Received no filament data: {filaments}")
 
+    # Slicer settings are account-level, so every printer on one account requests them
+    # within seconds of a restart and the cloud answers some with 429. Spread the
+    # initial requests out and retry transient failures with backoff and jitter (#2304).
+    MAX_ATTEMPTS = 4
+    INITIAL_JITTER_S = (0, 10)
+    RETRY_DELAY_S = (15, 45)
+
     def update(self):
+        """Load slicer settings. Runs on its own thread, so sleeping here is safe."""
         self.custom_filaments = {}
-        if self._client.bambu_cloud.auth_token != "":
-            LOGGER.debug(f"Loading slicer settings for {self._client._device.info.device_type} / {self._client._serial}")
-            slicer_settings = self._client.bambu_cloud.get_slicer_settings()
-            if slicer_settings is None:
-                LOGGER.debug(f"Failed to get slicer settings for {self._client._device.info.device_type} / {self._client._serial}")
+        if self._client.bambu_cloud.auth_token == "":
+            return
+
+        printer = f"{self._client._device.info.device_type} / {self._client._serial}"
+        LOGGER.debug(f"Loading slicer settings for {printer}")
+        time.sleep(random.uniform(*self.INITIAL_JITTER_S))
+
+        for attempt in range(1, self.MAX_ATTEMPTS + 1):
+            try:
+                slicer_settings = self._client.bambu_cloud.get_slicer_settings()
+            except CloudAuthError as e:
+                LOGGER.debug(f"Bambu Cloud rejected the token loading slicer settings for {printer}: {e}")
                 self._client.callback("event_printer_bambu_authentication_failed")
-            else:
+                return
+
+            if slicer_settings is not None:
                 self._load_custom_filaments(slicer_settings)
+                self._client.callback("event_printer_bambu_authentication_succeeded")
+                return
+
+            if attempt < self.MAX_ATTEMPTS:
+                delay = random.uniform(*self.RETRY_DELAY_S) * attempt
+                LOGGER.debug(f"Slicer settings fetch for {printer} failed (attempt {attempt}), retrying in {delay:.0f}s")
+                time.sleep(delay)
+
+        LOGGER.warning(f"Could not load slicer settings for {printer} after {self.MAX_ATTEMPTS} attempts "
+                       "(transient Bambu Cloud error, not an authentication failure). Custom filaments "
+                       "will be unavailable until the printer reconnects.")
 
 
 class FilamentInventory:
@@ -5302,7 +5935,56 @@ class ExtruderTool:
                 self.state = None
         
         return (old_data != f"{self.__dict__}")
-    
+
+
+# 2D.cur_stage.state value once a laser/cutter job has finished or been cancelled.
+PROCESSING_2D_STAGE_IDLE = 0
+
+
+class Processing2D:
+    """Laser and cutter (2D) job details from the '2D' block (H2D Laser Edition)."""
+
+    def __init__(self, client):
+        self._client = client
+        self.material: str | None = None
+        self._steps: list = []
+        self._stage: dict = {}
+
+    def print_update(self, data) -> bool:
+        two_d = data.get("2D")
+        if not isinstance(two_d, dict):
+            return False
+        old_data = (self.material, self.check_in_required, self.check_in_remaining)
+
+        material = two_d.get("material")
+        if isinstance(material, dict) and "tar_name" in material:
+            self.material = material.get("tar_name") or None
+        steps = two_d.get("bs", {}).get("bi")
+        if isinstance(steps, list):
+            self._steps = steps
+        stage = two_d.get("cur_stage")
+        if isinstance(stage, dict):
+            self._stage = {**self._stage, **stage}
+
+        return old_data != (self.material, self.check_in_required, self.check_in_remaining)
+
+    @property
+    def check_in_required(self) -> bool:
+        """True while the active step needs periodic check-ins (flammable material)."""
+        if self._stage.get("state", PROCESSING_2D_STAGE_IDLE) == PROCESSING_2D_STAGE_IDLE:
+            return False
+        idx = self._stage.get("idx")
+        step = next((s for s in self._steps if isinstance(s, dict) and s.get("idx") == idx), None)
+        return bool(step and step.get("clock_in"))
+
+    @property
+    def check_in_remaining(self) -> int | None:
+        """Seconds left before the printer pauses for a missed check-in."""
+        if not self.check_in_required:
+            return None
+        return self._stage.get("clock_in_time")
+
+
 class Extruder:
     _active_nozzle_index: int
     _active_nozzle: str | None

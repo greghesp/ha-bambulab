@@ -9,7 +9,8 @@
       "event_print_error_cleared": "ล้างข้อผิดพลาดการพิมพ์",
       "event_printer_error": "ข้อผิดพลาดของ HMS",
       "event_printer_error_cleared": "เคลียร์ข้อผิดพลาด HMS",
-      "event_printer_missing_sdcard": "การ์ด SD หายไป"
+      "event_printer_missing_sdcard": "การ์ด SD หายไป",
+      "event_timelapse_downloaded": "ดาวน์โหลดไทม์แลปส์แล้ว"
     }
   },
   "config": {
@@ -285,6 +286,9 @@
       },
       "top_cover_open": {
         "name": "ฝาครอบด้านบน"
+      },
+      "p1s_upgrade_installed": {
+        "name": "ติดตั้งชุดอัปเกรด P1S แล้ว"
       }
     },
     "button": {
@@ -1216,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "สินค้าคงคลังเส้นใย"
+      },
+      "processing_material": {
+        "name": "วัสดุเลเซอร์/เครื่องตัด"
+      },
+      "check_in_remaining": {
+        "name": "เหลือการเช็คอินด้วยเลเซอร์"
+      },
+      "print_elapsed_time": {
+        "name": "พิมพ์เวลาที่ผ่านไป"
+      },
+      "last_timelapse": {
+        "name": "ไทม์แลปส์ครั้งสุดท้าย"
+      },
+      "filament_change_status": {
+        "name": "สถานะการเปลี่ยนไส้หลอด",
+        "state": {
+          "idle": "ไม่ได้ใช้งาน",
+          "changing_filament": "การเปลี่ยนไส้หลอด",
+          "heating_nozzle": "หัวฉีดความร้อน",
+          "cutting_filament": "ตัดเส้นใย",
+          "pulling_back_filament": "การดึงไส้ปัจจุบันกลับ",
+          "pushing_new_filament": "ดันเส้นใยใหม่",
+          "purging_old_filament": "การล้างเส้นใยเก่า",
+          "checking_position": "การตรวจสอบตำแหน่งเส้นใย",
+          "rfid_identifying": "การระบุ RFID",
+          "filament_loaded": "โหลดฟิลาเมนต์แล้ว",
+          "calibration": "การสอบเทียบ",
+          "cold_pull": "ดึงเย็น",
+          "self_check": "ตรวจสอบด้วยตนเอง",
+          "debug": "ดีบัก",
+          "unknown": "ไม่ทราบ"
+        }
       }
     },
     "camera": {
