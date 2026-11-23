@@ -986,6 +986,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
         # Get the device we are working with.
         device = None

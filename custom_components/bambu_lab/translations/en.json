@@ -136,6 +136,7 @@
   },
   "options": {
     "abort": {
+      "device_list_failed": "Failed to get the printer list from Bambu Cloud. If your saved login has expired, reconfigure again and choose Bambu Lab cloud to log in. Otherwise check the Home Assistant log and try again.",
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available.",
       "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
