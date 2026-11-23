@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 from pybambu.bambu_cloud import CloudAuthError
 from pybambu.models import SlicerSettings
-from pybambu.orca_cloud import OrcaCloudAuthError, OrcaCloudError
+from pybambu.orca_cloud import OrcaCloud, OrcaCloudAuthError, OrcaCloudError
 
 ORCA_FILAMENT = {
     "name": "Orca PLA",
@@ -118,6 +118,20 @@ class TestSlicerSettingsOrcaCloud(unittest.TestCase):
         self.assertEqual(client.bambu_cloud.get_slicer_settings.call_count, SlicerSettings.MAX_ATTEMPTS)
         self.assertEqual(seen_while_waiting, [{"PORCA"}] * SlicerSettings.MAX_ATTEMPTS)
         self.assertEqual(set(settings.filaments), {"PORCA"})
+
+    def test_unexpected_orca_response_does_not_block_bambu(self):
+        # A sign-in response that is JSON but not an object, through the real client.
+        session = MagicMock()
+        session.post.return_value.status_code = 200
+        session.post.return_value.json.return_value = ["unexpected"]
+        client = _client(bambu_token="tok", bambu_settings=BAMBU_SETTINGS)
+        client.orca_cloud = OrcaCloud("token", session=session)
+        settings = SlicerSettings(client)
+
+        settings.update()
+
+        self.assertEqual(_events(client), ["event_printer_bambu_authentication_succeeded"])
+        self.assertEqual(set(settings.filaments), {"PBAMBU"})
 
     def test_bambu_only_behaviour_is_unchanged(self):
         client = _client(bambu_token="tok", bambu_settings=BAMBU_SETTINGS)

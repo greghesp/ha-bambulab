@@ -5772,6 +5772,10 @@ class SlicerSettings:
         except OrcaCloudError as e:
             LOGGER.warning(f"Could not load custom filaments from Orca Cloud: {e}")
             return {}
+        except Exception as e:
+            # The API is undocumented. An unexpected response must not stop Bambu Cloud loading.
+            LOGGER.error(f"Unexpected error loading custom filaments from Orca Cloud: {type(e).__name__}: {e}")
+            return {}
         LOGGER.debug(f"Got {len(filaments)} custom filaments from Orca Cloud.")
         return {
             filament_id: FilamentInfo(
