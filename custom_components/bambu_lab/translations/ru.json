@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Ошибка печати устранена",
       "event_printer_error": "Ошибка HMS",
       "event_printer_error_cleared": "Ошибка HMS устранена",
-      "event_printer_missing_sdcard": "SD-карта отсутствует"
+      "event_printer_missing_sdcard": "SD-карта отсутствует",
+      "event_timelapse_downloaded": "Таймлапс скачан"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "Устройство уже настроено",
       "no_printers": "В аккаунте не найдено ненастроенных принтеров.",
       "cloudflare": "Cloudflare заблокировал попытку подключения.",
-      "curl_unavailable": "Библиотека curl_cffi недоступна."
+      "curl_unavailable": "Библиотека curl_cffi недоступна.",
+      "no_working_credentials": "Для этой учетной записи недоступны учетные данные рабочего принтера Bambu Cloud.",
+      "reconfigure_not_supported": "Таким образом можно перенастроить только записи учетной записи MakerWorld.",
+      "reconfigure_successful": "Учетные данные MakerWorld обновлены."
     },
     "error": {
       "cannot_connect": "Не удалось подключиться. Проверьте учётные данные.",
@@ -114,6 +118,13 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Аккаунт MakerWorld",
+        "description": "Используйте рабочие учетные данные Bambu Cloud из существующей записи принтера. Никакого дополнительного входа не требуется.",
+        "data": {
+          "username": "Аккаунт Бамбу:"
+        }
       }
     }
   },
@@ -121,7 +132,8 @@
     "abort": {
       "cloudflare": "Cloudflare заблокировал попытку подключения.",
       "curl_unavailable": "Библиотека curl_cffi недоступна.",
-      "no_ams": "На этом принтере пока не обнаружено ни одной AMS. Дождитесь, пока принтер подключится и сообщит о своих блоках AMS, затем повторите попытку."
+      "no_ams": "На этом принтере пока не обнаружено ни одной AMS. Дождитесь, пока принтер подключится и сообщит о своих блоках AMS, затем повторите попытку.",
+      "no_working_credentials": "Для этой учетной записи недоступны учетные данные рабочего принтера Bambu Cloud."
     },
     "error": {
       "cannot_connect": "Не удалось подключиться",
@@ -217,6 +229,14 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Аккаунт MakerWorld",
+        "description": "Используйте рабочие учетные данные Bambu Cloud из существующей записи принтера. Никакого дополнительного входа не требуется.",
+        "data": {
+          "username": "Аккаунт Бамбу:",
+          "credential_source": "Аккаунт Бамбу:"
+        }
       }
     }
   },
@@ -263,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Филамент правого экструдера"
+      },
+      "top_cover_open": {
+        "name": "Верхняя крышка"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Установлен комплект обновления P1S"
       }
     },
     "button": {
@@ -1194,6 +1220,38 @@
       },
       "hotend_rack_printtool_used_time": {
         "name": "Время печати PrintTool {tool_number}"
+      },
+      "processing_material": {
+        "name": "Лазерный/режущий материал"
+      },
+      "check_in_remaining": {
+        "name": "Осталось пройти лазерную регистрацию"
+      },
+      "print_elapsed_time": {
+        "name": "Распечатать прошедшее время"
+      },
+      "last_timelapse": {
+        "name": "Последний таймлапс"
+      },
+      "filament_change_status": {
+        "name": "Статус замены нити",
+        "state": {
+          "idle": "Праздный",
+          "changing_filament": "Замена нити",
+          "heating_nozzle": "Нагревательное сопло",
+          "cutting_filament": "Резка нити",
+          "pulling_back_filament": "Оттягивание нити тока назад",
+          "pushing_new_filament": "Проталкивание новой нити",
+          "purging_old_filament": "Очистка старой нити",
+          "checking_position": "Проверка положения нити",
+          "rfid_identifying": "Идентификация RFID",
+          "filament_loaded": "Нить загружена",
+          "calibration": "Калибровка",
+          "cold_pull": "Холодное притяжение",
+          "self_check": "Самопроверка",
+          "debug": "Отлаживать",
+          "unknown": "Неизвестный"
+        }
       }
     },
     "camera": {
@@ -1232,7 +1290,8 @@
       "options": {
         "bambu": "Облако Bambu Lab",
         "lan": "Режим LAN",
-        "ams_heater": "Внешний нагреватель или сушилка AMS (умная розетка)"
+        "ams_heater": "Внешний нагреватель или сушилка AMS (умная розетка)",
+        "makerworld": "Аккаунт MakerWorld"
       }
     }
   },

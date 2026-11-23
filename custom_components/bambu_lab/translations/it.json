@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Errore di stampa eliminato",
       "event_printer_error": "Errore HMS",
       "event_printer_error_cleared": "Errore HMS cancellato",
-      "event_printer_missing_sdcard": "Scheda SD mancante"
+      "event_printer_missing_sdcard": "Scheda SD mancante",
+      "event_timelapse_downloaded": "Timelapse scaricato"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "Il dispositivo è già configurato",
       "no_printers": "Nessuna stampante non configurata trovata nell'account.",
       "cloudflare": "Cloudflare ha bloccato il tentativo di connessione.",
-      "curl_unavailable": "La libreria curl_cffi non è disponibile."
+      "curl_unavailable": "La libreria curl_cffi non è disponibile.",
+      "no_working_credentials": "Per questo account non sono disponibili credenziali della stampante Bambu Cloud funzionanti.",
+      "reconfigure_not_supported": "Solo le voci dell'account MakerWorld possono essere riconfigurate in questo modo.",
+      "reconfigure_successful": "Credenziali MakerWorld aggiornate."
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
@@ -114,13 +118,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Account MakerWorld",
+        "description": "Utilizza le credenziali Bambu Cloud funzionanti da una voce di stampante esistente. Non è richiesto alcun accesso aggiuntivo.",
+        "data": {
+          "username": "Conto Bambu:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Cloudflare ha bloccato il tentativo di connessione.",
-      "curl_unavailable": "La libreria curl_cffi non è disponibile."
+      "curl_unavailable": "La libreria curl_cffi non è disponibile.",
+      "no_working_credentials": "Per questo account non sono disponibili credenziali della stampante Bambu Cloud funzionanti.",
+      "no_ams": "Nessun AMS è stato ancora identificato su questa stampante. Attendere che la stampante si connetta e segnali le sue unità AMS, quindi riprovare."
     },
     "error": {
       "cannot_connect": "Impossibile connettersi. Controlla le credenziali.",
@@ -212,6 +225,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Riscaldatore o essiccatore AMS esterno",
+        "description": "I riscaldatori e gli essiccatori AMS aggiuntivi come il riscaldatore SUNLU AMS e EIBOS Serie X (Dyas/Tetras) non hanno connessione di rete, quindi Home Assistant ne controlla uno cambiando la presa intelligente da cui è alimentato.\n\nScegliere la spina per ciascun AMS dotato di riscaldatore oppure lasciarla vuota. Ciascun AMS collegato ottiene la modalità di asciugatura del riscaldatore, la potenza del riscaldatore, la soglia di umidità, il limite di temperatura e i limiti di tempo di funzionamento.\n\nImposta il riscaldatore o l'asciugatrice stessa in modo che inizi a riscaldarsi quando è accesa, in modo che accendendo la spina si avvii effettivamente l'asciugatura."
+      },
+      "makerworld": {
+        "title": "Account MakerWorld",
+        "description": "Utilizza le credenziali Bambu Cloud funzionanti da una voce di stampante esistente. Non è richiesto alcun accesso aggiuntivo.",
+        "data": {
+          "username": "Conto Bambu:",
+          "credential_source": "Conto Bambu:"
+        }
       }
     }
   },
@@ -258,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Filamento dell'estrusore destro"
+      },
+      "top_cover_open": {
+        "name": "Copertura superiore"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Kit di aggiornamento P1S installato"
       }
     },
     "button": {
@@ -362,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Temperatura target della camera"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Umidità all'accensione del riscaldatore"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Umidità di spegnimento del riscaldatore"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Interruzione della temperatura del riscaldatore"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Autonomia massima del riscaldatore"
       }
     },
     "select": {
@@ -1177,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Inventario dei filamenti"
+      },
+      "processing_material": {
+        "name": "Materiale laser/taglierina"
+      },
+      "check_in_remaining": {
+        "name": "Check-in laser rimanente"
+      },
+      "print_elapsed_time": {
+        "name": "Stampa il tempo trascorso"
+      },
+      "last_timelapse": {
+        "name": "L'ultimo time-lapse"
+      },
+      "filament_change_status": {
+        "name": "Stato di modifica del filamento",
+        "state": {
+          "idle": "Oziare",
+          "changing_filament": "Cambiare filamento",
+          "heating_nozzle": "Ugello riscaldante",
+          "cutting_filament": "Taglio del filamento",
+          "pulling_back_filament": "Tirare indietro il filamento di corrente",
+          "pushing_new_filament": "Spingendo il nuovo filamento",
+          "purging_old_filament": "Eliminazione del vecchio filamento",
+          "checking_position": "Controllo della posizione del filamento",
+          "rfid_identifying": "Identificazione dell'RFID",
+          "filament_loaded": "Filamento caricato",
+          "calibration": "Calibrazione",
+          "cold_pull": "Tirata fredda",
+          "self_check": "Autocontrollo",
+          "debug": "Debug",
+          "unknown": "Sconosciuto"
+        }
       }
     },
     "camera": {
@@ -1196,6 +1271,12 @@
       },
       "ftp": {
         "name": "Carica i dati del modello dalla stampante"
+      },
+      "ams_heater_drying": {
+        "name": "Modalità di asciugatura del riscaldatore"
+      },
+      "ams_heater_power": {
+        "name": "Potenza del riscaldatore"
       }
     },
     "update": {
@@ -1208,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "La nuvola di Bambu Lab",
-        "lan": "Modalità Lan"
+        "lan": "Modalità Lan",
+        "makerworld": "Account MakerWorld",
+        "ams_heater": "Riscaldatore o essiccatore AMS esterno (presa intelligente)"
       }
     }
   },
