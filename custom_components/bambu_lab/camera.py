@@ -2,7 +2,7 @@ import os
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from io import BytesIO
 from PIL import Image, ImageDraw
 
@@ -99,6 +99,18 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
         # The stream worker aborts when that gap exceeds 30 seconds.
         # Arrival-time timestamps keep the live view open.
         self.stream_options[CONF_USE_WALLCLOCK_AS_TIMESTAMPS] = True
+        self._had_stream_source = False
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        # Home Assistant only picks a WebRTC provider (go2rtc) when a camera is added.
+        # LAN Only Liveview may be off at that point, so look again when the stream URL
+        # appears or goes away. Otherwise the camera stays on HLS until a reload.
+        has_stream_source = self._stream_source() is not None
+        if has_stream_source != self._had_stream_source:
+            self._had_stream_source = has_stream_source
+            self.hass.async_create_task(self.async_refresh_providers())
+        super()._handle_coordinator_update()
 
     @property
     def is_streaming(self) -> bool:
