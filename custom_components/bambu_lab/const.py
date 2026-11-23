@@ -11,6 +11,9 @@ from homeassistant.const import Platform
 
 # Integration domain
 DOMAIN = "bambu_lab"
+ENTRY_TYPE = "entry_type"
+ENTRY_TYPE_MAKERWORLD = "makerworld"
+MAKERWORLD_DATA = f"{DOMAIN}_makerworld"
 BRAND = "Bambu Lab"
 URL_BASE = "/bambu_lab"
 
@@ -26,6 +29,12 @@ SERVICE_CALL_ID = "service_call_id"
 CONF_PANDA_BREATH_HOST = "panda_breath_host"
 CONF_PANDA_STATUS_HOST = "panda_status_host"
 CONF_PANDA_PWR_HOST = "panda_pwr_host"
+
+# file_type values accepted by the clear_file_cache service.
+CLEAR_FILE_CACHE_PRINTS = "prints"
+CLEAR_FILE_CACHE_TIMELAPSE = "timelapse"
+CLEAR_FILE_CACHE_ALL = "all"
+CLEAR_FILE_CACHE_TYPES = (CLEAR_FILE_CACHE_PRINTS, CLEAR_FILE_CACHE_TIMELAPSE, CLEAR_FILE_CACHE_ALL)
 
 # Options key mapping AMS serial -> switch entity_id of the smart plug powering an
 # external AMS heater or dryer (e.g. SUNLU AMS Heater, EIBOS Series X).
@@ -49,7 +58,7 @@ BAMBU_LAB_CARDS = [
     {
         'name': 'Bambu Lab Cards',
         'filename': 'ha-bambulab-cards.js',
-        'version': '0.8.4'
+        'version': '0.8.6'
     }
 ]
 

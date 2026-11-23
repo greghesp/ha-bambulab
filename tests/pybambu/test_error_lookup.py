@@ -5,6 +5,7 @@ Correctness may be affected by an update to the error_text.json; if this occurs
 simply update the text or select a different locale, printer serial number, etc.
 """
 import unittest
+from unittest.mock import patch
 
 from pybambu.const import Printers
 from pybambu.utils import get_HMS_error_text, get_print_error_text
@@ -69,3 +70,37 @@ class TestErrorLookup(unittest.TestCase):
             "unknown",
             get_HMS_error_text("1234_1234_1234_1234", Printers.H2S, "xx-YY"),
             )
+
+class TestH3CErrorLookup(unittest.TestCase):
+    def test_h3c_ams_3h_messages(self):
+        cases = {
+            "2A00_2800_0002_0004": "AMS 3H slot 9",
+            "2A00_2500_0002_0004": "AMS 3H slot 6",
+            "2A00_2000_0002_0004": "AMS 3H slot 1",
+            "2A00_2000_0002_0008": "returned filament",
+            "2A00_2000_0002_0001": "AMS 3H slot 1",
+            "2A00_2000_0003_0001": "AMS 3H slot 1",
+            "2A00_2600_0002_0001": "AMS 3H slot 7",
+            "2A00_2600_0003_0001": "AMS 3H slot 7",
+        }
+        for code, expected in cases.items():
+            with self.subTest(code=code):
+                self.assertIn(expected, get_HMS_error_text(code, Printers.H3C, "en"))
+                self.assertEqual(
+                    get_HMS_error_text(code, Printers.H3C, "en"),
+                    get_HMS_error_text(code, Printers.H3C, "xx-YY"),
+                )
+
+    def test_model_override_precedes_alphabetically_earlier_default(self):
+        # Generated JSON is sorted; a default must not hide a model override.
+        from pybambu.utils import _get_error_text
+        data = {"device_hms": {"1234000000020001": {
+            "A generic message": [], "Z model-specific message": ["H3C"],
+        }}}
+        _get_error_text.cache_clear()
+        try:
+            with patch("pybambu.utils._load_error_data", return_value=data):
+                self.assertEqual("Z model-specific message", get_HMS_error_text("1234000000020001", Printers.H3C, "en"))
+                self.assertEqual("A generic message", get_HMS_error_text("1234000000020001", Printers.H2C, "en"))
+        finally:
+            _get_error_text.cache_clear()

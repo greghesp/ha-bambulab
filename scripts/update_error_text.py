@@ -28,6 +28,7 @@ _DEVICE_TYPES = {
     "P2S": "22E",
     "H2S": "093",
     "H2D": "094",
+    "H3C": "32X",
 }
 
 # Map from printer model on https://wiki.bambulab.com/en/hms/home, to device name

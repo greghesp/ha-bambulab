@@ -9,7 +9,8 @@
       "event_print_error_cleared": "Το σφάλμα εκτύπωσης διαγράφηκε",
       "event_printer_error": "Σφάλμα HMS",
       "event_printer_error_cleared": "Το σφάλμα HMS διαγράφηκε",
-      "event_printer_missing_sdcard": "Λείπει κάρτα SD"
+      "event_printer_missing_sdcard": "Λείπει κάρτα SD",
+      "event_timelapse_downloaded": "Έγινε λήψη του Timelapse"
     }
   },
   "config": {
@@ -17,7 +18,10 @@
       "already_configured": "Η συσκευή είναι ήδη ρυθμισμένη",
       "no_printers": "Δεν βρέθηκαν μη ρυθμισμένοι εκτυπωτές στον λογαριασμό.",
       "cloudflare": "Το Cloudflare έχει μπλοκάρει την προσπάθεια σύνδεσης.",
-      "curl_unavailable": "Η βιβλιοθήκη curl_cffi δεν είναι διαθέσιμη."
+      "curl_unavailable": "Η βιβλιοθήκη curl_cffi δεν είναι διαθέσιμη.",
+      "no_working_credentials": "Δεν διατίθενται διαπιστευτήρια εκτυπωτή Bambu Cloud που να λειτουργούν για αυτόν τον λογαριασμό.",
+      "reconfigure_not_supported": "Μόνο οι καταχωρίσεις λογαριασμού MakerWorld μπορούν να διαμορφωθούν εκ νέου με αυτόν τον τρόπο.",
+      "reconfigure_successful": "Τα διαπιστευτήρια MakerWorld ενημερώθηκαν."
     },
     "error": {
       "cannot_connect": "Αποτυχία σύνδεσης. Ελέγξτε τα στοιχεία σύνδεσης.",
@@ -114,13 +118,22 @@
             }
           }
         }
+      },
+      "makerworld": {
+        "title": "Λογαριασμός MakerWorld",
+        "description": "Χρησιμοποιήστε λειτουργικά διαπιστευτήρια Bambu Cloud από μια υπάρχουσα καταχώρηση εκτυπωτή. Δεν απαιτείται πρόσθετη σύνδεση.",
+        "data": {
+          "username": "Λογαριασμός Bambu:"
+        }
       }
     }
   },
   "options": {
     "abort": {
       "cloudflare": "Το Cloudflare έχει μπλοκάρει την προσπάθεια σύνδεσης.",
-      "curl_unavailable": "Η βιβλιοθήκη curl_cffi δεν είναι διαθέσιμη."
+      "curl_unavailable": "Η βιβλιοθήκη curl_cffi δεν είναι διαθέσιμη.",
+      "no_working_credentials": "Δεν διατίθενται διαπιστευτήρια εκτυπωτή Bambu Cloud που να λειτουργούν για αυτόν τον λογαριασμό.",
+      "no_ams": "Δεν έχει εντοπιστεί ακόμη AMS σε αυτόν τον εκτυπωτή. Περιμένετε να συνδεθεί ο εκτυπωτής και αναφέρετε τις μονάδες AMS του και, στη συνέχεια, δοκιμάστε ξανά."
     },
     "error": {
       "cannot_connect": "Αποτυχία σύνδεσης",
@@ -212,6 +225,18 @@
             }
           }
         }
+      },
+      "ams_heater": {
+        "title": "Εξωτερική θερμάστρα ή στεγνωτήριο AMS",
+        "description": "Οι πρόσθετες θερμάστρες και στεγνωτήρια AMS, όπως το SUNLU AMS Heater και το EIBOS Series X (Dyas/Tetras) δεν έχουν σύνδεση δικτύου, επομένως το Home Assistant ελέγχει ένα, αλλάζοντας το έξυπνο βύσμα από το οποίο τροφοδοτείται.\n\nΕπιλέξτε το βύσμα για κάθε AMS που έχει τοποθετημένο θερμαντήρα ή αφήστε το άδειο. Κάθε συνδεδεμένο AMS λαμβάνει τη λειτουργία στεγνώματος θερμαντήρα, την ισχύ του θερμαντήρα, το όριο υγρασίας, τη διακοπή θερμοκρασίας και τις οντότητες ορίου χρόνου λειτουργίας.\n\nΡυθμίστε το ίδιο το θερμαντήρα ή το στεγνωτήριο ώστε να ξεκινά τη θέρμανση όταν είναι ενεργοποιημένο, έτσι η ενεργοποίηση του βύσματος αρχίζει να στεγνώνει."
+      },
+      "makerworld": {
+        "title": "Λογαριασμός MakerWorld",
+        "description": "Χρησιμοποιήστε λειτουργικά διαπιστευτήρια Bambu Cloud από μια υπάρχουσα καταχώρηση εκτυπωτή. Δεν απαιτείται πρόσθετη σύνδεση.",
+        "data": {
+          "username": "Λογαριασμός Bambu:",
+          "credential_source": "Λογαριασμός Bambu:"
+        }
       }
     }
   },
@@ -258,6 +283,12 @@
       },
       "right_extruder_filament_state": {
         "name": "Δεξί νήμα εξωθητή"
+      },
+      "top_cover_open": {
+        "name": "Πάνω εξώφυλλο"
+      },
+      "p1s_upgrade_installed": {
+        "name": "Εγκατεστημένο κιτ αναβάθμισης P1S"
       }
     },
     "button": {
@@ -362,6 +393,18 @@
       },
       "target_chamber_temperature": {
         "name": "Θερμοκρασία στόχου θαλάμου"
+      },
+      "ams_heater_humidity_on": {
+        "name": "Υγρασία ενεργοποίησης θερμαντήρα"
+      },
+      "ams_heater_humidity_off": {
+        "name": "Υγρασία απενεργοποίησης θερμαντήρα"
+      },
+      "ams_heater_max_temperature": {
+        "name": "Διακοπή θερμοκρασίας θερμαντήρα"
+      },
+      "ams_heater_max_runtime": {
+        "name": "Μέγιστος χρόνος λειτουργίας θερμαντήρα"
       }
     },
     "select": {
@@ -1177,6 +1220,38 @@
       },
       "filament_inventory": {
         "name": "Απογραφή νήματος"
+      },
+      "processing_material": {
+        "name": "Υλικό λέιζερ/κόφτη"
+      },
+      "check_in_remaining": {
+        "name": "Απομένει το check-in με λέιζερ"
+      },
+      "print_elapsed_time": {
+        "name": "Εκτύπωση του χρόνου που έχει παρέλθει"
+      },
+      "last_timelapse": {
+        "name": "Τελευταίο timelapse"
+      },
+      "filament_change_status": {
+        "name": "Κατάσταση αλλαγής νήματος",
+        "state": {
+          "idle": "Αεργος",
+          "changing_filament": "Αλλαγή νήματος",
+          "heating_nozzle": "Ακροφύσιο θέρμανσης",
+          "cutting_filament": "Νηματάκι κοπής",
+          "pulling_back_filament": "Τραβώντας προς τα πίσω το τρέχον νήμα",
+          "pushing_new_filament": "Σπρώξιμο νέου νήματος",
+          "purging_old_filament": "Καθαρισμός παλαιού νήματος",
+          "checking_position": "Έλεγχος της θέσης του νήματος",
+          "rfid_identifying": "Αναγνώριση RFID",
+          "filament_loaded": "Το νήμα έχει φορτωθεί",
+          "calibration": "Διαμέτρηση",
+          "cold_pull": "Ψυχρό τράβηγμα",
+          "self_check": "Αυτοέλεγχος",
+          "debug": "Εντοπισμός σφαλμάτων",
+          "unknown": "Αγνωστος"
+        }
       }
     },
     "camera": {
@@ -1196,6 +1271,12 @@
       },
       "ftp": {
         "name": "Φόρτωση δεδομένων μοντέλου από εκτυπωτή"
+      },
+      "ams_heater_drying": {
+        "name": "Λειτουργία στεγνώματος θερμαντήρα"
+      },
+      "ams_heater_power": {
+        "name": "Ισχύς θερμαντήρα"
       }
     },
     "update": {
@@ -1208,7 +1289,9 @@
     "configuration_type": {
       "options": {
         "bambu": "Σύννεφο Bambu Lab",
-        "lan": "Lan Mode"
+        "lan": "Lan Mode",
+        "makerworld": "Λογαριασμός MakerWorld",
+        "ams_heater": "Εξωτερική θερμάστρα ή στεγνωτήριο AMS (έξυπνο βύσμα)"
       }
     }
   },

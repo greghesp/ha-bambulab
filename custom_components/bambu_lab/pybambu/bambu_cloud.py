@@ -84,6 +84,14 @@ class CsrfObtainError(Exception):
         super().__init__("Not able to obtain CSRF cookie")
         self.error_code = 403
 
+class CloudAuthError(Exception):
+    """Bambu Cloud rejected the auth token (HTTP 401/403 that isn't a Cloudflare block)."""
+    def __init__(self, error_code: int):
+        super().__init__(f"Bambu Cloud rejected the auth token ({error_code})")
+        self.error_code = error_code
+
+AUTH_REJECTED_STATUS_CODES = (401, 403)
+
 
 @dataclass
 class BambuCloud:
@@ -94,6 +102,8 @@ class BambuCloud:
         self._username = username
         self._auth_token = auth_token
         self._tfaKey = None
+        # MakerWorld endpoint -> the auth token it refused. See _get_makerworld_private.
+        self._makerworld_rejected: dict[BambuUrl, str] = {}
 
     def _get_headers(self):
         return {
@@ -506,13 +516,25 @@ class BambuCloud:
     #     "settings": {}
     # }
 
-    def get_slicer_settings(self) -> dict:
+    def get_slicer_settings(self) -> dict | None:
+        """Return the account's slicer settings, or None on a transient failure.
+
+        Raises CloudAuthError only when the cloud genuinely rejects the token, so a
+        rate limit (429), server error, Cloudflare block or network failure is never
+        mistaken for an authentication problem (#2304)."""
         LOGGER.debug("Getting slicer settings from Bambu Cloud")
         try:
             response = self._get(BambuUrl.SLICER_SETTINGS)
-        except:
+            return response.json()
+        except PermissionError as e:
+            status = e.args[0] if e.args else None
+            if status in AUTH_REJECTED_STATUS_CODES:
+                raise CloudAuthError(status) from e
+            LOGGER.debug(f"Transient failure getting slicer settings: {status}")
             return None
-        return response.json()
+        except Exception as e:
+            LOGGER.debug(f"Transient failure getting slicer settings: {e}")
+            return None
 
     # The filament inventory ("Filament Manager") is of the following form:
     #
@@ -717,11 +739,28 @@ class BambuCloud:
     def get_makerworld_points(self) -> dict:
         """Retrieve the MakerWorld points ledger totals for the account."""
         LOGGER.debug("Getting MakerWorld points from Bambu Cloud")
+        return self._get_makerworld_private(BambuUrl.POINT_BILL, "MakerWorld points")
+
+    def _get_makerworld_private(self, urlenum: BambuUrl, what: str) -> dict | None:
+        """Best effort GET of an account private MakerWorld endpoint.
+
+        Once the endpoint refuses the current token, it isn't asked again until
+        the token changes: polling it anyway only produces a 401 per poll, which
+        Bambu has flagged as abnormal traffic (#2270)."""
+        if self._makerworld_rejected.get(urlenum) == self._auth_token:
+            return None
         try:
-            response = self._get(BambuUrl.POINT_BILL)
+            response = self._get(urlenum)
             return response.json()
+        except PermissionError as e:
+            if e.args and e.args[0] in (401, 403):
+                LOGGER.debug(f"{what} refused for this token; not polling it again until re-login")
+                self._makerworld_rejected[urlenum] = self._auth_token
+            else:
+                LOGGER.debug(f"Failed to retrieve {what}: {e}")
+            return None
         except Exception as e:
-            LOGGER.debug(f"Failed to retrieve MakerWorld points: {e}")
+            LOGGER.debug(f"Failed to retrieve {what}: {e}")
             return None
 
     # Boost tokens. Verified shape:
@@ -737,12 +776,7 @@ class BambuCloud:
     def get_makerworld_boosts(self) -> dict:
         """Retrieve the account's boost token counts."""
         LOGGER.debug("Getting MakerWorld boost tokens from Bambu Cloud")
-        try:
-            response = self._get(BambuUrl.BOOST_RIGHT)
-            return response.json()
-        except Exception as e:
-            LOGGER.debug(f"Failed to retrieve MakerWorld boost tokens: {e}")
-            return None
+        return self._get_makerworld_private(BambuUrl.BOOST_RIGHT, "MakerWorld boost tokens")
 
     def get_uid(self) -> str | None:
         """The numeric account id, which doubles as the MakerWorld profile id."""

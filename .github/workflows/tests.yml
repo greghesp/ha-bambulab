@@ -17,5 +17,5 @@ jobs:
       - name: Install test dependencies
         run: pip install -r tests/requirements.txt
 
-      - name: Run pybambu unit tests
-        run: python -m pytest tests/pybambu -v
+      - name: Run unit tests
+        run: python -m pytest tests/pybambu tests/test_file_cache.py -v
