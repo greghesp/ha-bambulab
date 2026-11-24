@@ -23,6 +23,11 @@ class TestPrintFunSignatureDetection(unittest.TestCase):
         self.fun.print_update({"fun": "", "flag3": 65552})
         self.assertTrue(self.fun.mqtt_signature_required)
 
+    # A1 mini on 01.07.02.00 in cloud mode, issue #1851: no "fun" key and bit 16 is clear.
+    def test_absent_fun_with_flag3_bit4_and_no_bit16_means_secured(self):
+        self.fun.print_update({"flag3": 8863})  # 0x229F
+        self.assertTrue(self.fun.mqtt_signature_required)
+
     def test_flag3_bit4_is_kept_across_incremental_frames(self):
         self.fun.print_update({"fun": "", "flag3": 65552})
         self.fun.print_update({"gcode_state": "IDLE"})
