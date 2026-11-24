@@ -16,11 +16,11 @@ nextTitle: Device Triggers
 | Aux           |                   |
 | Chamber       | Not on A1/A1 Mini |
 | Cooling       |                   |
-| Secondary aux | P2S, X2D, H3C     |
+| Secondary aux | P2S, P3C, X2D, H3C |
 
 <Info>On the X2D these are named to match the printer screen: Part fan, Left aux fan, Right aux fan (secondary aux) and Exhaust fan (chamber).</Info>
 
-<Info>On the H3C these are named Part fan, Right aux fan, Left aux fan, Exhaust fan and Chamber fan.</Info>
+<Info>On the H3C these are named Part fan, Right aux fan, Left aux fan, Exhaust fan and Chamber fan. The P3C has the same fans except the Chamber fan.</Info>
 
 ## Temperatures
 
@@ -28,7 +28,7 @@ nextTitle: Device Triggers
 | ---------------- | ------- |
 | Bed              |         |
 | Target Bed       |         |
-| Chamber          | P2/X1/H2/H3C/X2D |
+| Chamber          | P2/P3C/X1/H2/H3C/X2D |
 | Target Chamber   | X1E/H2/H3C/X2D |
 | Nozzle(s)        | Three on dual-nozzle printers (left, right, and active nozzle) |
 | Target Nozzle(s) | Three on dual-nozzle printers (left, right, and active nozzle) |
@@ -76,7 +76,7 @@ If neither is available, for example when a multi-filament print was started whi
 | Extruder Filament Status | Also left and right on dual-nozzle printers |
 | Filament Change Status   | Current filament load/unload step, including from the external spool |
 | Track Switch Input 1/2   | Filament Track Switch only. Nozzle each input feeds, with the loaded filament as attributes |
-| Airduct Mode             | Current airduct mode: Cooling, Heating, or Laser. P2S/H2/H3C/X2D |
+| Airduct Mode             | Current airduct mode: Cooling, Heating, or Laser. P2S/P3C/H2/H3C/X2D |
 | Tool Module State        | Current mounted tool (H2D exclusive): none, laser, cutter or unavailable |
 | Laser/Cutter Material    | Material selected for the current or last laser/cutter job |
 | Laser Check-in Remaining | Seconds until the printer pauses unless you check in at the printer. Only available while lasering a material that needs check-ins (e.g. acrylic) |
@@ -95,8 +95,8 @@ If neither is available, for example when a multi-filament print was started whi
 | Chamber temperature | X1E/H2/H3C/X2D. Integration limit: 60°C on X1E, 65°C on the others |
 | Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
 | Buzzer controls     | H2D only, allows to set one of 3 modes                     |
-| Airduct Mode        | Switch airduct modes on P2S/H2/H3C/X2D                     |
-| Allow Prompt Sound  | A1/A2L/H2/H3C/P2S/X2D                                    |
+| Airduct Mode        | Switch airduct modes on P2S/P3C/H2/H3C/X2D                 |
+| Allow Prompt Sound  | A1/A2L/H2/H3C/P2S/P3C/X2D                                |
 
 <Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
 <Warning>If you are running the latest X1 firmware with Bambu Authorisation, the only functional control is the Chamber Light</Warning>
@@ -127,7 +127,7 @@ If neither is available, for example when a multi-filament print was started whi
 | Tray 3                |                       |
 | Tray 4                |                       |
 
-AMS 3H exposes temperature and humidity for both zones. Zone sensor attributes
+AMS 3H exposes temperature and humidity for both zones, and AMS 3P for each zone it reports. Zone sensor attributes
 include the associated slots and drying settings. The remaining drying time and
 drying binary sensors describe the whole AMS. It exposes up to nine trays.
 
@@ -243,13 +243,13 @@ template:
 
 ## Hotend Rack
 
-H2C (Vortek system) and H3C (Swaptek system).
+H2C (Vortek system), H3C and P3C (Swaptek system).
 
-The H3C exposes nine PrintTool sensors, each with temperature, target
-temperature and print-time sensors. Its Swaptek position and status are exposed
-as raw diagnostic values. The H2C entities are listed below.
+The H3C exposes nine PrintTool sensors and the P3C seven, each with temperature,
+target temperature and print-time sensors. The Swaptek position and status are
+exposed as raw diagnostic values. The H2C entities are listed below.
 
-The H3C rack has Raise rack and Lower rack buttons. They’re available when MQTT
+The H3C and P3C racks have Raise rack and Lower rack buttons. They’re available when MQTT
 control is unsigned, the printer and rack report idle, and no move is pending.
 The printer may home the rack and move the toolhead before the requested move.
 
@@ -292,7 +292,7 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | Sensor                    | Notes                                                          |
 | ------------------------- | -------------------------------------------------------------- |
 | Developer Lan Mode        | Does the printer have Developer Lan Mode enabled?              |
-| Enclosure Door            | X1/P2/H2/H3C/X2D                               |
+| Enclosure Door            | X1/P2/P3C/H2/H3C/X2D                           |
 | Top Cover                 | H2 series (top glass lid)                      |
 | Firmware Update Available |                                                                |
 | Force Refresh             |                                                                |
@@ -311,7 +311,7 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | Sensor  | Notes                                                           |
 | ------- | --------------------------------------------------------------- |
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
-|         | X1/P2S/X2D/H2/H3 - Make sure to enable "LAN Only Liveview" on your printer. It does not require LAN Only mode |
+|         | X1/P2S/P3C/X2D/H2/H3 - Make sure to enable "LAN Only Liveview" on your printer. It does not require LAN Only mode |
 
 On P1/A1 printers the chamber image is pushed by the printer rather than pulled
 on demand, so the connection stays open for as long as the printer is

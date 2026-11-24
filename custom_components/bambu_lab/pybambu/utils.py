@@ -30,6 +30,7 @@ from .const import (
     Printers,
     TempEnum,
     AMSTrayStateFlags,
+    SWAPTEK_TOOL_COUNT,
     AMS_TRAY_STATE_LEGACY_MAX,
     LEGACY_SDCARD_PRINTERS,
 )
@@ -68,7 +69,7 @@ def normalize_service_target(data) -> dict:
     return normalized
 
 
-# AMS tray sensor unique IDs end in tray_<n>: 1-4 on 4-slot units, up to 9 on the AMS 3H.
+# AMS tray sensor unique IDs end in tray_<n>: 1-4 on 4-slot units, up to 9 on the AMS 3H and 7 on the AMS 3P.
 _AMS_TRAY_UNIQUE_ID = re.compile(r"_tray_([1-9])$")
 
 
@@ -431,6 +432,7 @@ def get_printer_type(modules, default):
             "Bambu Lab P1P": "P1P",
             "Bambu Lab P1S": "P1S",
             "Bambu Lab P2S": "P2S",
+            "Bambu Lab P3C": "P3C",
             "Bambu Lab H2C": "H2C",
             "Bambu Lab H3C": "H3C",
             "Bambu Lab H2D": "H2D",
@@ -443,9 +445,9 @@ def get_printer_type(modules, default):
             if search(modules, lambda x: x.get('product_name', "") == product_name):
                     return code
 
-    # Keep a known H3C identity when a partial reply omits product_name.
-    # Its AP05 board would otherwise be mistaken for an X1C.
-    if default == "H3C":
+    # Keep a known Swaptek printer's identity when a partial reply omits product_name.
+    # The H3C's AP05 board would otherwise be mistaken for an X1C.
+    if default in SWAPTEK_TOOL_COUNT:
         return default
 
     # Legacy identification logic that became unreliable as they started to re-use hw_ver for different models.
