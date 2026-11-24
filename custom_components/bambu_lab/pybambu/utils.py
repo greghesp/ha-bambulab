@@ -2,6 +2,7 @@ import asyncio
 import copy
 import functools
 import gzip
+import ipaddress
 import json
 import logging
 import math
@@ -115,6 +116,33 @@ def build_print_project_file_command(device_type: Printers | str, data: dict) ->
         command["print"]["ams_mapping"] = [int(x) for x in data.get("ams_mapping").split(',')]
     command["print"]["subtask_name"] = os.path.basename(filepath)
     return command
+
+
+HOST_LOOKUP_TIMEOUT = 3
+
+
+async def async_resolve_ipv4(host: str) -> str:
+    """Resolve a hostname to an IPv4 address, or return it unchanged if that isn't possible."""
+    if not host:
+        return host
+    try:
+        ipaddress.ip_address(host)
+        return host
+    except ValueError:
+        pass
+
+    try:
+        addresses = await asyncio.wait_for(
+            asyncio.get_running_loop().getaddrinfo(
+                host, None, family=socket.AF_INET, type=socket.SOCK_STREAM
+            ),
+            HOST_LOOKUP_TIMEOUT,
+        )
+    except (OSError, UnicodeError) as err:
+        # OSError covers failed lookups and the timeout. UnicodeError is a name that can't be encoded.
+        LOGGER.debug(f"Could not resolve {host}: {type(err).__name__} {err}")
+        return host
+    return addresses[0][4][0] if addresses else host
 
 
 def get_authenticated_rtsp_url(
