@@ -271,15 +271,18 @@ class MqttThread(threading.Thread):
                 if exceptionSeen != "TimeoutError":
                     LOGGER.debug(f"TimeoutError: {e}.")
                 exceptionSeen = "TimeoutError"
+                self._client.on_connect_fail()
                 if self._stop_event.wait(5):
                     break
             except ConnectionError as e:
                 if exceptionSeen != "ConnectionError":
                     LOGGER.debug(f"ConnectionError: {e}.")
                 exceptionSeen = "ConnectionError"
+                self._client.on_connect_fail()
                 if self._stop_event.wait(5):
                     break
             except OSError as e:
+                self._client.on_connect_fail()
                 if e.errno == 113:
                     if exceptionSeen != "OSError113":
                         LOGGER.debug(f"OSError: {e}.")
@@ -528,6 +531,7 @@ class BambuClient:
             self.client.enable_logger()
         self._callback = callback
         self.client.on_connect = self.on_connect
+        self.client.on_connect_fail = self.on_connect_fail
         self.client.on_disconnect = self.on_disconnect
         self.client.on_message = self.on_message
         # Set reconnect polling back off. Starting at 1s doubling up to 30s between connection attempts.
@@ -564,6 +568,13 @@ class BambuClient:
         """Handle connection"""
         LOGGER.debug(f"On Connect: Connected to printer: {result_code}")
         self._on_connect()
+
+    def on_connect_fail(self, client_: mqtt.Client | None = None, userdata: None = None):
+        """Called when a connection attempt fails: by MqttThread for the first connection and
+        by paho for its own reconnects."""
+        if self._local_mqtt:
+            # The printer is off or its IP address changed. The coordinator finds out which.
+            self.callback("event_printer_unreachable")
 
     def start_camera(self):
         if not self._device.supports_feature(Features.CAMERA_RTSP):
@@ -878,7 +889,8 @@ class BambuClient:
             return return_result
         except OSError as e:
             LOGGER.error(f"Connection test to '{host}' failed: {type(e)} Args: {e}")
-            return e.errno
+            # A socket timeout has no errno.
+            return -1 if isinstance(e, TimeoutError) else e.errno
         except queue.Empty:
             LOGGER.error(f"Connection test to '{host}' failed with timeout")
             return -1

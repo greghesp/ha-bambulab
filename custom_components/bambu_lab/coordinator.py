@@ -52,6 +52,7 @@ from .file_cache import cache_root, legacy_cache_dir, migrate_legacy_cache
 from .pybambu import BambuClient
 from .pybambu.bambu_cloud import BambuCloud
 from .makerworld import remove_legacy_makerworld_device
+from .printer_address import find_moved_printer
 from .pybambu.utils import ams_tray_number_from_unique_id, build_print_project_file_command
 from .pybambu.models import FilamentInventory
 from .pybambu.const import (
@@ -74,6 +75,10 @@ from .pybambu.commands import (
     RETRY_LOAD_FILAMENT_TEMPLATE,
     DONE_LOAD_FILAMENT_TEMPLATE
 )
+
+# Seconds between looking up the address of a printer that can't be reached. Most of the time
+# it is just switched off.
+ADDRESS_LOOKUP_INTERVAL = 600
 
 
 def file_cache_dir(hass: HomeAssistant, serial: str) -> Path:
@@ -110,6 +115,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         # Guards the access denied recovery so one failure episode triggers at most one
         # cloud lookup. Reset once the printer connects successfully again.
         self._access_denied_handled = False
+        self._next_address_lookup = 0.0
+        self._address_lookup_running = False
         self.data = self.get_model()
         self._eventloop = asyncio.get_running_loop()
         # Pass LOGGERFORHA logger into HA as otherwise it generates a debug output line every single time we tell it we have an update
@@ -154,6 +161,9 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         elif event == "event_printer_access_denied":
             self._hass.async_create_task(self._async_handle_access_denied())
+
+        elif event == "event_printer_unreachable":
+            self._handle_printer_unreachable()
 
         elif event == "event_printer_no_external_storage":
             self._report_no_external_storage_issue()
@@ -1284,12 +1294,47 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 return
             if new_access_code != '' and new_access_code == options.get('access_code', ''):
                 # The stored code still matches the cloud - the rejection has another cause,
-                # such as the printer being powered off or mid-boot. Nothing to repair here.
+                # such as the printer being powered off or mid-boot. Nothing to repair here,
+                # unless the printer moved and another one now has its old address.
                 LOGGER.debug("Printer rejected the access code but it matches Bambu Cloud. Not an access code problem.")
+                await self._async_follow_moved_printer()
                 return
         # LAN-only setup, or the cloud lookup failed - the user has to read the new code off
         # the printer's screen, so tell them with a visible repair issue instead of a log line.
         self._report_access_code_rejected_issue()
+
+    def _handle_printer_unreachable(self):
+        # Sent for every failed connection attempt, so every few seconds while the printer is off.
+        now = time.monotonic()
+        if now < self._next_address_lookup:
+            return
+        self._next_address_lookup = now + ADDRESS_LOOKUP_INTERVAL
+        # In the background as it can take half a minute, which would hold up startup.
+        self._hass.async_create_background_task(
+            self._async_follow_moved_printer(), name="bambu_lab printer address lookup")
+
+    async def _async_follow_moved_printer(self):
+        # A local connection only has the stored address to go by, so it never recovers on its
+        # own when the router gives the printer a different one.
+        if self._address_lookup_running:
+            return
+        self._address_lookup_running = True
+        try:
+            changes = await self._hass.async_add_executor_job(
+                find_moved_printer, self.config_entry.data, self.config_entry.options)
+        except Exception as e:
+            LOGGER.error(f"Looking up the printer's address failed: {type(e)} Args: {e}")
+            return
+        finally:
+            self._address_lookup_running = False
+        if changes is None or self._shutdown:
+            return
+        LOGGER.info(f"Printer moved to {changes['host']}. Updating the config entry and reloading.")
+        self._hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            data=self.config_entry.data,
+            options={**self.config_entry.options, **changes})
+        await self.hass.config_entries.async_reload(self.config_entry.entry_id)
 
     def _report_access_code_rejected_issue(self):
         self._report_generic_issue("access_code_rejected", True)
