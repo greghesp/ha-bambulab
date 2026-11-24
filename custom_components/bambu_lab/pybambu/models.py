@@ -4510,6 +4510,15 @@ AMS_3H_VIRTUAL_SLOT_LOADED_STATE = (AMSTrayStateFlags.SPOOL | AMSTrayStateFlags.
                                     | AMSTrayStateFlags.STEADY)
 
 
+def extruder_slot(value: int) -> tuple[int, int]:
+    """Split an extruder `snow`/`star` value (unit << 8 | tray) into (ams index, tray index)."""
+    if value == 0xFF:
+        # Sent instead of 0xFFFF for "no tray" (the X1C does so when idle), like the legacy
+        # tray_now/tray_tar. Splitting it would give AMS 0.
+        return 255, 255
+    return value >> 8, value & 0xFF
+
+
 def _virtual_slot_loaded(entry: dict) -> bool:
     """True when a vir_slot entry reports a mounted spool."""
     if "state" in entry:
@@ -4756,11 +4765,11 @@ class AMSList:
             for entry in extruder_data:
                 if entry.get("id") in (0, 1):
                     if "snow" in entry:
-                        tray_now = entry["snow"]
-                        self._nozzle_ams_index[entry["id"]] = tray_now >> 8
-                        self._nozzle_tray_index[entry["id"]] = tray_now & 0xFF
+                        ams_index, tray_index = extruder_slot(entry["snow"])
+                        self._nozzle_ams_index[entry["id"]] = ams_index
+                        self._nozzle_tray_index[entry["id"]] = tray_index
                     if "star" in entry:
-                        self._nozzle_target_ams_index[entry["id"]] = entry["star"] >> 8
+                        self._nozzle_target_ams_index[entry["id"]], _ = extruder_slot(entry["star"])
         else:
             tray_tar = ams_data.get('tray_tar')
             if tray_tar is not None:

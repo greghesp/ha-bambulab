@@ -1319,6 +1319,55 @@ class TestAMSList(unittest.TestCase):
         self.ams_list.print_update({"ams_status": 0})
         self.assertEqual(self.ams_list.status, "idle")
 
+    def _push_extruder(self, snow, star, **fields):
+        data = {"device": {"extruder": {"state": 1, "info": [{"id": 0, "snow": snow, "star": star}]}}, **fields}
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+
+    def test_active_tray_on_single_nozzle_while_a_print_starts(self):
+        # snow/star as an X1C with one AMS reported them from idle to feeding. The external spool has
+        # filament set but isn't feeding, so it must not show up as the active tray (#1963)
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        self._push_extruder(snow=0xFFFF, star=0xFF)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertEqual(self.ams_list.target_ams_index, 255)
+
+        self._push_extruder(snow=0xFFFF, star=0xFFFF)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertEqual(self.ams_list.target_ams_index, 255)
+
+        self._push_extruder(snow=0xFFFF, star=0)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertEqual(self.ams_list.target_ams_index, 0)
+
+        self._push_extruder(snow=0, star=0)
+        self.assertIs(self.ams_list.active_tray, self.ams_list.data[0].tray[0])
+
+    def test_extruder_bare_255_is_no_tray_rather_than_ams_0(self):
+        # The capture is idle with nothing loaded: snow 0xFFFF and star 0xFF
+        data = self.multi_ams_data['push_all']
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+        self.assertEqual(self.ams_list.target_ams_index, 255)
+
+        self._push_extruder(snow=0xFF, star=0xFF)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertFalse(self.ams_list.data[0].active)
+
+    def test_ams_status_unload_is_not_shown_on_ams_0(self):
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        # Unload AMS 1 slot 2, with nothing to load afterwards
+        self._push_extruder(snow=0x0101, star=0xFF, ams_status=0x0103)
+        self.assertEqual(self.ams_list.data[1].status, "cutting_filament")
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+
+        # Unload the external spool: no AMS unit is involved
+        self._push_extruder(snow=0xFF00, star=0xFF, ams_status=0x0103)
+        for index in self.ams_list.data:
+            self.assertEqual(self.ams_list.data[index].status, "idle")
+
     def test_ams_status_printer_level_without_any_ams(self):
         # Printers with only an external spool still get the step
         self.assertEqual(self.ams_list.data, {})
