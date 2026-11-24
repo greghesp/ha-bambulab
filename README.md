@@ -301,13 +301,15 @@ More detail in the [overview](https://docs.page/greghesp/ha-bambulab).
 The printer device offers **device triggers**, so common automations are
 point-and-click: *Print started*, *Print finished*, *Print canceled*,
 *Print failed*, *Printer error detected* (HMS), *Print error detected*, the
-matching *error cleared* triggers, *SD card missing* and *Timelapse downloaded*.
+matching *error cleared* triggers, *Print layer changed*, *SD card missing* and
+*Timelapse downloaded*.
 
 <img src="docs/images/AddDeviceTriggerAutomation5.png" alt="Bambu Lab device triggers in the automation editor" width="420">
 
 Behind them is one event, `bambu_lab_event`. Its data carries the
 `device_id`, the printer `name` and the trigger `type`, plus `code`, `error`
-and `url` (wiki link) for errors. `event_timelapse_downloaded` fires once the
+and `url` (wiki link) for errors, and `layer` and `total_layers` for layer
+changes. `event_timelapse_downloaded` fires once the
 timelapse of a finished print is in the local cache (FTP access and a timelapse
 cache count above 0 are required) and carries the video's local `path` and,
 when it is under `www`, its `/local/` `url`.
