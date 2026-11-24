@@ -43,6 +43,7 @@ from .pybambu.bambu_cloud import (
     CodeIncorrectError,
     CsrfError,
     CsrfObtainError,
+    IncorrectPasswordError,
     TfaCodeRequiredError
 )
 
@@ -403,7 +404,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         self._bambu_cloud.login,
                         user_input['region'],
                         user_input['email'],
-                        user_input['password'])
+                        user_input.get('password', ''))
                     return await self.async_step_Bambu_Choose_Device(None)
 
             # Handle possible failure cases
@@ -421,6 +422,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 self.authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
+            except IncorrectPasswordError:
+                errors['base'] = 'incorrect_password'
+                # Fall through to form generation to ask for the password again
             except TfaCodeRequiredError:
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
@@ -452,7 +456,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             default_email = default_email if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
-            fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+            # A blank password logs in with an email/SMS code. The frontend won't submit an empty
+            # required field, and leaves a cleared optional one out, which a default would refill.
+            fields[vol.Optional('password', description={'suggested_value': default_password})] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
             fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
             fields[vol.Optional('verifyCode', default='')] = TEXT_SELECTOR
@@ -911,7 +917,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         self._bambu_cloud.login,
                         user_input['region'],
                         user_input['email'],
-                        user_input['password'])
+                        user_input.get('password', ''))
                     return await self.async_step_Bambu_Lan(None)
 
             # Handle possible failure cases
@@ -929,6 +935,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 self.authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
+            except IncorrectPasswordError:
+                errors['base'] = 'incorrect_password'
+                # Fall through to form generation to ask for the password again
             except TfaCodeRequiredError:
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
@@ -960,7 +969,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             default_email = self._config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
-            fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+            # A blank password logs in with an email/SMS code. The frontend won't submit an empty
+            # required field, and leaves a cleared optional one out, which a default would refill.
+            fields[vol.Optional('password', description={'suggested_value': default_password})] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
             fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
             fields[vol.Optional('verifyCode', default='')] = TEXT_SELECTOR

@@ -38,6 +38,7 @@
       "cannot_connect_local_unknown": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
+      "incorrect_password": "Bambu Lab rejected the password. This must be your Bambu Lab account password, which is separate from your Google, Apple or Facebook password. If you don't have one, leave the password blank to log in with a verification code.",
       "code_needed": "Verification code must be provided.",
       "verifyCode": "Verification code is required. Check your email or phone.",
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
@@ -47,7 +48,7 @@
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Accounts that sign in with Google, Apple or Facebook can log in with a verification code instead of a password.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -78,6 +79,9 @@
           "newCode": "Request new code",
           "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
+        },
+        "data_description": {
+          "password": "Leave blank to log in with a verification code sent to your email or phone, for example if you sign in to Bambu Lab with Google, Apple or Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -155,6 +159,7 @@
       "cannot_connect_local_unknown": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
+      "incorrect_password": "Bambu Lab rejected the password. This must be your Bambu Lab account password, which is separate from your Google, Apple or Facebook password. If you don't have one, leave the password blank to log in with a verification code.",
       "code_needed": "Verification code must be provided.",
       "verifyCode": "Verification code is required. Check your email or phone.",
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
@@ -169,7 +174,7 @@
       },
       "init": {
         "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Accounts that sign in with Google, Apple or Facebook can log in with a verification code instead of a password.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -201,6 +206,9 @@
           "newCode": "Request new code",
           "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
+        },
+        "data_description": {
+          "password": "Leave blank to log in with a verification code sent to your email or phone, for example if you sign in to Bambu Lab with Google, Apple or Facebook."
         }
       },
       "Bambu_Lan": {

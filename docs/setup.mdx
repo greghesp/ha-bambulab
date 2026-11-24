@@ -10,7 +10,7 @@ nextTitle: Features
 For configuration, you'll ideally use your Bambu Credentials for the simplest setup and the most features as some sensors are supported by data from your Bambu cloud account print history.
 You can also, optionally, provide the printer's local IP address to enable the more efficient and reliable direct to printer connection for the printer sensor data and to enable the P1/A1 chamber image support.
 
-However, the Bambu cloud connection doesn't support passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode.
+However, the Bambu cloud connection does not support printers explicitly set to Lan Only Mode.
 
 Accounts with two factor authentication are supported. Bambu's 2FA endpoint is currently rejecting requests from the integration, so if your authenticator code is refused a verification code is sent to your email or phone instead - enter that when prompted.
 
@@ -49,7 +49,9 @@ Advanced options should only be used for non-standard setup.
 
 ### Setup using Bambu Cloud w/ OAuth
 
-If you signed up using any OAuth method, you need to set a password for your Bambu Cloud account:
+If you signed up using any OAuth method (Google, Apple or Facebook), you don't need a password. Enter the email address of your Bambu account, leave the password blank, and enter the verification code Bambu emails you.
+
+Your Google, Apple or Facebook password will not work, as it is not the password of your Bambu account. If you would rather log in with a password, set one first:
 
 - Login to the Bambu mobile app using OAuth.
 - Tap the person icon at the bottom right.
