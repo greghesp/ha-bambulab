@@ -1097,7 +1097,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             default_host = user_input['host']
         default_serial = self._config_entry.data['serial']
         default_local_mqtt = self._config_entry.options.get('local_mqtt', False)
-        default_access_code = self._config_entry.options.get('access_code', access_code)
+        # Prefer the cloud's code: the stored one is what's wrong after the printer's code changes.
+        default_access_code = (access_code or self._config_entry.options.get('access_code', '')) if user_input is None else user_input['access_code']
         default_print_cache_count = self._config_entry.options.get('print_cache_count', "100") if user_input is None else user_input['print_cache_count']
         default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', "1") if user_input is None else user_input['timelapse_cache_count']
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
