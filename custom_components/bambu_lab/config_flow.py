@@ -602,17 +602,17 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
                 if result == 0:
                     if self._show_existing:
-                        # Check to see if this device is already registered and delete it if so.
-                        hadevice = _async_get_printer_device(self.hass, device['dev_id'])
-                        if hadevice is not None:
-                            for config_entry in hadevice.config_entries:
-                                LOGGER.debug(f"Removing existing config_entry: {config_entry}")
-                                try:
-                                    # Remove the config entry
-                                    await self.hass.config_entries.async_remove(config_entry)
-                                    LOGGER.debug("Successfully removed config entry.")
-                                except Exception as e:
-                                    LOGGER.error("Failed to remove config entry: %s", e)
+                        # Replace any existing entry for this printer. Match on our own entries rather than
+                        # the device's, as other integrations can share the device before HA 2026.9.
+                        for config_entry in self.hass.config_entries.async_entries(DOMAIN):
+                            if config_entry.data.get('serial') != device['dev_id']:
+                                continue
+                            LOGGER.debug(f"Removing existing config_entry: {config_entry.entry_id}")
+                            try:
+                                await self.hass.config_entries.async_remove(config_entry.entry_id)
+                                LOGGER.debug("Successfully removed config entry.")
+                            except Exception as e:
+                                LOGGER.error("Failed to remove config entry: %s", e)
 
                     printer_name = device['name']
                     LOGGER.debug(f"Config Flow: Writing entry for '{printer_name}'")
