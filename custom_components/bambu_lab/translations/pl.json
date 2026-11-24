@@ -88,9 +88,7 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania",
-              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
-              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "Te opcje są potrzebne tylko przy niestandardowej konfiguracji.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania",
-              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
-              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "Użyj działających danych uwierzytelniających Bambu Cloud z istniejącego wpisu drukarki. Nie jest wymagane żadne dodatkowe logowanie.",
         "data": {
           "username": "Konto Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inwentarz włókien",
+        "description": "Użyj działających danych uwierzytelniających Bambu Cloud z istniejącego wpisu drukarki. Nie jest wymagane żadne dodatkowe logowanie.",
+        "data": {
+          "username": "Konto Bambu:",
+          "credential_source": "Źródło uwierzytelnienia:",
+          "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania",
-              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
-              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "Te zaawansowane opcje są wczesnymi lub ryzykownymi funkcjami. Zapoznaj się z dokumentacją i korzystaj na własne ryzyko.",
             "data": {
               "disable_ssl_verify": "Wyłącz weryfikację SSL",
-              "enable_firmware_update": "Włącz aktualizację oprogramowania",
-              "enable_filament_inventory": "Włącz inwentaryzację włókien (Filament Manager, wymaga Bambu Cloud)",
-              "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
+              "enable_firmware_update": "Włącz aktualizację oprogramowania"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "Konto Bambu:",
           "credential_source": "Konto Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inwentarz włókien",
+        "description": "Użyj działających danych uwierzytelniających Bambu Cloud z istniejącego wpisu drukarki. Nie jest wymagane żadne dodatkowe logowanie.",
+        "data": {
+          "username": "Konto Bambu:",
+          "credential_source": "Źródło uwierzytelnienia:",
+          "filament_inventory_interval": "Interwał odświeżania zapasów żarnika (w minutach):"
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "Chłodzenie",
           "heating": "Ogrzewanie"
+        }
+      },
+      "liveview_camera": {
+        "name": "Kamera z podglądem na żywo",
+        "state": {
+          "main": "Główny aparat",
+          "birdseye": "Kamera BirdsEye"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "Czas drukowania PrintTool {tool_number}"
       },
       "filament_inventory": {
-        "name": "Inwentarz włókien"
+        "name": "Inwentarz włókien",
+        "state_attributes": {
+          "spools": {
+            "name": "Szpule"
+          },
+          "groups": {
+            "name": "Grupy włókien"
+          },
+          "total_remaining_g": {
+            "name": "Całkowity pozostały włókno"
+          }
+        }
       },
       "processing_material": {
         "name": "Materiał do cięcia laserowego/tnącego"
@@ -1252,6 +1280,9 @@
           "debug": "Odpluskwić",
           "unknown": "Nieznany"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Pozostały zapasy żarnika"
       }
     },
     "camera": {
@@ -1291,7 +1322,8 @@
         "bambu": "Chmura Bambu Lab",
         "lan": "Tryb Lan",
         "makerworld": "Konto MakerWorld",
-        "ams_heater": "Zewnętrzny grzejnik lub suszarka AMS (inteligentna wtyczka)"
+        "ams_heater": "Zewnętrzny grzejnik lub suszarka AMS (inteligentna wtyczka)",
+        "filament_inventory": "Inwentarz włókien"
       }
     }
   },

@@ -59,6 +59,15 @@
           "username": "Bambu account:"
         }
       },
+      "filament_inventory": {
+        "title": "Filament Inventory",
+        "description": "Use working Bambu Cloud credentials from an existing printer entry. No additional login is required.",
+        "data": {
+          "username": "Bambu account:",
+          "credential_source": "Credential source:",
+          "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
+        }
+      },
       "Bambu": {
         "title": "Bambu Lab Cloud Connection",
         "description": "Please provide your Bambu Lab credentials:",
@@ -95,9 +104,7 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
-              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -119,9 +126,7 @@
             "description": "These options are only needed if you have a non-standard setup.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
-              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -177,6 +182,15 @@
           "credential_source": "Bambu account:"
         }
       },
+      "filament_inventory": {
+        "title": "Filament Inventory",
+        "description": "Use working Bambu Cloud credentials from an existing printer entry. No additional login is required.",
+        "data": {
+          "username": "Bambu account:",
+          "credential_source": "Credential source:",
+          "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
+        }
+      },
       "Bambu": {
         "title": "Bambu Lab Cloud Connection",
         "description": "Please provide your Bambu Lab credentials:",
@@ -208,9 +222,7 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
-              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -231,9 +243,7 @@
             "description": "These advanced options are early or risky functionality. Read the documentation and use them at your own risk.",
             "data": {
               "disable_ssl_verify": "Disable SSL verification",
-              "enable_firmware_update": "Enable firmware update support",
-              "enable_filament_inventory": "Enable filament inventory (Filament Manager, requires Bambu Cloud)",
-              "filament_inventory_interval": "Filament inventory refresh interval (minutes):"
+              "enable_firmware_update": "Enable firmware update support"
             }
           }
         }
@@ -500,7 +510,21 @@
         "name": "Level"
       },
       "filament_inventory": {
-        "name": "Filament inventory"
+        "name": "Filament inventory",
+        "state_attributes": {
+          "spools": {
+            "name": "Spools"
+          },
+          "groups": {
+            "name": "Filament groups"
+          },
+          "total_remaining_g": {
+            "name": "Total remaining filament"
+          }
+        }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Filament inventory remaining"
       },
       "airduct_mode": {
         "name": "Airduct mode",
@@ -1297,8 +1321,9 @@
       "options": {
         "bambu": "Bambu Lab cloud",
         "lan": "Lan Mode",
-        "makerworld": "MakerWorld account",
-        "ams_heater": "External AMS heater or dryer (smart plug)"
+        "makerworld": "MakerWorld Account Statistics",
+        "ams_heater": "External AMS heater or dryer (smart plug)",
+        "filament_inventory": "Filament Inventory"
       }
     }
   },

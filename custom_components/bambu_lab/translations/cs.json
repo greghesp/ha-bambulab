@@ -88,9 +88,7 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
-              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
-              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "Tyto možnosti jsou potřeba pouze v případě, že máte nestandardní nastavení.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
-              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
-              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "Použijte funkční přihlašovací údaje Bambu Cloud z existující položky tiskárny. Není vyžadováno žádné další přihlášení.",
         "data": {
           "username": "Účet Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inventář vláken",
+        "description": "Použijte funkční přihlašovací údaje Bambu Cloud z existující položky tiskárny. Není vyžadováno žádné další přihlášení.",
+        "data": {
+          "username": "Účet Bambu:",
+          "credential_source": "Zdroj pověření:",
+          "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
-              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
-              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "Tyto pokročilé možnosti jsou rané nebo riskantní funkce. Přečtěte si dokumentaci a používejte je na vlastní nebezpečí.",
             "data": {
               "disable_ssl_verify": "Zakázat ověřování SSL",
-              "enable_firmware_update": "Povolit podporu aktualizace firmwaru",
-              "enable_filament_inventory": "Povolit inventář vláken (Filament Manager, vyžaduje Bambu Cloud)",
-              "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
+              "enable_firmware_update": "Povolit podporu aktualizace firmwaru"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "Účet Bambu:",
           "credential_source": "Účet Bambu:"
+        }
+      },
+      "filament_inventory": {
+        "title": "Inventář vláken",
+        "description": "Použijte funkční přihlašovací údaje Bambu Cloud z existující položky tiskárny. Není vyžadováno žádné další přihlášení.",
+        "data": {
+          "username": "Účet Bambu:",
+          "credential_source": "Zdroj pověření:",
+          "filament_inventory_interval": "Interval obnovy inventáře vláken (minuty):"
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "Chlazení",
           "heating": "Topení"
+        }
+      },
+      "liveview_camera": {
+        "name": "Kamera s živým náhledem",
+        "state": {
+          "main": "Hlavní fotoaparát",
+          "birdseye": "Kamera BirdsEye"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "Čas tisku PrintTool {tool_number}"
       },
       "filament_inventory": {
-        "name": "Inventář vláken"
+        "name": "Inventář vláken",
+        "state_attributes": {
+          "spools": {
+            "name": "Cívky"
+          },
+          "groups": {
+            "name": "Skupiny vláken"
+          },
+          "total_remaining_g": {
+            "name": "Celkové zbývající vlákno"
+          }
+        }
       },
       "processing_material": {
         "name": "Laserový/řezací materiál"
@@ -1252,6 +1280,9 @@
           "debug": "Ladit",
           "unknown": "Neznámý"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "Zbývající zásoby vláken"
       }
     },
     "camera": {
@@ -1291,7 +1322,8 @@
         "bambu": "Bambu Lab cloud",
         "lan": "LAN Režim",
         "makerworld": "Účet MakerWorld",
-        "ams_heater": "Externí ohřívač nebo sušička AMS (chytrá zástrčka)"
+        "ams_heater": "Externí ohřívač nebo sušička AMS (chytrá zástrčka)",
+        "filament_inventory": "Inventář vláken"
       }
     }
   },

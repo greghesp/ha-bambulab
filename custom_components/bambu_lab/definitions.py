@@ -1570,8 +1570,16 @@ FILAMENT_INVENTORY_SENSORS: tuple[BambuLabSensorEntityDescription, ...] = (
         value_fn=lambda self: self.coordinator.inventory.total_spool_count,
         extra_attributes=lambda self: {
             "spools": self.coordinator.inventory.spools,
-            "groups": self.coordinator.inventory.groups,
-            "total_remaining_g": self.coordinator.inventory.total_remaining_g,
         },
+    ),
+    BambuLabSensorEntityDescription(
+        key="filament_inventory_total_remaining",
+        translation_key="filament_inventory_total_remaining",
+        icon="mdi:scale",
+        device_class=SensorDeviceClass.WEIGHT,
+        native_unit_of_measurement=UnitOfMass.GRAMS,
+        suggested_unit_of_measurement=UnitOfMass.GRAMS,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda self: self.coordinator.inventory.total_remaining_g,
     ),
 )

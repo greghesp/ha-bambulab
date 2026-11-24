@@ -5807,6 +5807,7 @@ class FilamentInventory:
         self.groups: list[dict] = []
         self.total_spool_count: int = 0
         self.total_remaining_g: int = 0
+        self.raw_data: dict | None = None
 
     @staticmethod
     def _str(hit: dict, key: str) -> str:
@@ -5856,6 +5857,7 @@ class FilamentInventory:
 
     def update(self, payload: dict | None) -> None:
         """Replace inventory from a raw cloud payload (or None on fetch failure)."""
+        self.raw_data = payload
         hits = (payload or {}).get("hits", []) or []
 
         # Skip any non-dict entry defensively (e.g. a null in the hits array).

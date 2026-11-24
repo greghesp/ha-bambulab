@@ -88,9 +88,7 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
-              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "이 옵션은 비표준 설정이있는 경우에만 필요합니다.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
-              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "기존 프린터 항목에서 작동 중인 Bambu Cloud 자격 증명을 사용합니다. 추가 로그인이 필요하지 않습니다.",
         "data": {
           "username": "밤부 계정:"
+        }
+      },
+      "filament_inventory": {
+        "title": "필라멘트 재고",
+        "description": "기존 프린터 항목에서 작동 중인 Bambu Cloud 자격 증명을 사용합니다. 추가 로그인이 필요하지 않습니다.",
+        "data": {
+          "username": "밤부 계정:",
+          "credential_source": "자격 증명 소스:",
+          "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
-              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "이러한 고급 옵션은 초기 또는 위험한 기능입니다. 문서를 읽고 자신의 위험에 따라 사용하십시오.",
             "data": {
               "disable_ssl_verify": "SSL 확인을 비활성화합니다",
-              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다",
-              "enable_filament_inventory": "필라멘트 재고 활성화(Filament Manager, Bambu Cloud 필요)",
-              "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
+              "enable_firmware_update": "펌웨어 업데이트 지원을 활성화합니다"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "밤부 계정:",
           "credential_source": "밤부 계정:"
+        }
+      },
+      "filament_inventory": {
+        "title": "필라멘트 재고",
+        "description": "기존 프린터 항목에서 작동 중인 Bambu Cloud 자격 증명을 사용합니다. 추가 로그인이 필요하지 않습니다.",
+        "data": {
+          "username": "밤부 계정:",
+          "credential_source": "자격 증명 소스:",
+          "filament_inventory_interval": "필라멘트 인벤토리 새로 고침 간격(분):"
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "냉각",
           "heating": "난방"
+        }
+      },
+      "liveview_camera": {
+        "name": "라이브 뷰 카메라",
+        "state": {
+          "main": "메인 카메라",
+          "birdseye": "BirdsEye 카메라"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "PrintTool {tool_number} 인쇄 시간"
       },
       "filament_inventory": {
-        "name": "필라멘트 재고"
+        "name": "필라멘트 재고",
+        "state_attributes": {
+          "spools": {
+            "name": "스풀"
+          },
+          "groups": {
+            "name": "필라멘트 그룹"
+          },
+          "total_remaining_g": {
+            "name": "총 남은 필라멘트"
+          }
+        }
       },
       "processing_material": {
         "name": "레이저/절단기 재료"
@@ -1252,6 +1280,9 @@
           "debug": "디버그",
           "unknown": "알려지지 않은"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "남은 필라멘트 재고"
       }
     },
     "camera": {
@@ -1291,7 +1322,8 @@
         "bambu": "뱀부랩 클라우드",
         "lan": "랜 모드",
         "makerworld": "메이커월드 계정",
-        "ams_heater": "외부 AMS 히터 또는 건조기(스마트 플러그)"
+        "ams_heater": "외부 AMS 히터 또는 건조기(스마트 플러그)",
+        "filament_inventory": "필라멘트 재고"
       }
     }
   },

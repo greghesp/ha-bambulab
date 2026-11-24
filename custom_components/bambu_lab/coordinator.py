@@ -43,9 +43,9 @@ from .const import (
     CLEAR_FILE_CACHE_TIMELAPSE,
     CLEAR_FILE_CACHE_TYPES,
     FILAMENT_DATA,
-    OPTION_ENABLE_FILAMENT_INVENTORY,
     OPTION_FILAMENT_INVENTORY_INTERVAL,
     DEFAULT_FILAMENT_INVENTORY_INTERVAL,
+    FILAMENT_INVENTORY_DATA,
 )
 
 from .file_cache import cache_root, legacy_cache_dir, migrate_legacy_cache
@@ -103,17 +103,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         config['file_cache_path'] = self.get_file_cache_directory(config['serial'])
         self.client = BambuClient(config)
         remove_legacy_makerworld_device(hass, entry)
-
-        # Account level filament inventory ("Filament Manager"). None unless the
-        # entry has opted in. Kept here rather than in hass.data[DOMAIN], whose
-        # values are all expected to be printer coordinators.
-        self.filament_inventory = None
-        if config.get(OPTION_ENABLE_FILAMENT_INVENTORY, False):
-            self.filament_inventory = BambuFilamentCoordinator(
-                hass,
-                printer_coordinator=self,
-                interval_minutes=int(config.get(OPTION_FILAMENT_INVENTORY_INTERVAL, DEFAULT_FILAMENT_INVENTORY_INTERVAL)),
-            )
+        remove_legacy_filament_inventory_entity(hass, entry)
 
         self._updatedDevice = False
         self._shutdown = False
@@ -708,10 +698,19 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         return combined_data
 
     def _service_call_force_filament_sync(self, data: dict):
-        if self.filament_inventory is None:
-            LOGGER.warning("force_filament_sync called but filament inventory is not enabled for this printer.")
+        username = self.config_entry.options.get("username", "")
+        coordinator = next(
+            (
+                inventory
+                for inventory in self._hass.data.get(FILAMENT_INVENTORY_DATA, {}).values()
+                if inventory.username == username
+            ),
+            None,
+        )
+        if coordinator is None:
+            LOGGER.warning("force_filament_sync called but no Filament Inventory entry exists for this account.")
             return False
-        self._hass.async_create_task(self.filament_inventory.async_request_refresh())
+        self._hass.async_create_task(coordinator.async_request_refresh())
         return True
 
     def _service_call_retry_load_filament(self, data: dict):
@@ -1528,37 +1527,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return {"success": False, "error": str(e)}
 
 
-class BambuFilamentCoordinator(DataUpdateCoordinator):
-    """Polls the account-level filament inventory ('Filament Manager') from the
-    Bambu cloud. Independent of the MQTT push coordinator."""
+def remove_legacy_filament_inventory_entity(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Remove the former printer-owned Filament Inventory sensor during upgrade."""
+    registry = er.async_get(hass)
+    unique_id = f"{entry.data['serial']}_filament_inventory"
+    entity_id = registry.async_get_entity_id("sensor", DOMAIN, unique_id)
+    entity = registry.async_get(entity_id) if entity_id else None
+    if entity is not None and entity.config_entry_id == entry.entry_id:
+        registry.async_remove(entity.entity_id)
 
-    def __init__(self, hass: HomeAssistant, *, printer_coordinator: "BambuDataUpdateCoordinator", interval_minutes: int) -> None:
-        self._printer_coordinator = printer_coordinator
-        self.inventory = FilamentInventory()
-        super().__init__(
-            hass,
-            LOGGER,
-            name=f"{DOMAIN}_filament_inventory",
-            update_interval=timedelta(minutes=max(1, int(interval_minutes))),
-        )
 
-    @property
-    def printer_coordinator(self) -> "BambuDataUpdateCoordinator":
-        return self._printer_coordinator
-
-    async def _async_update_data(self):
-        client = self._printer_coordinator.client
-        if not client.bambu_cloud.bambu_connected:
-            LOGGER.debug("Filament inventory: cloud auth not available; skipping fetch.")
-            return self.inventory
-
-        payload = await self.hass.async_add_executor_job(client.bambu_cloud.get_filaments)
-        if payload is None:
-            # Fetch failed (Cloudflare/timeout/auth). Raise so HA marks the
-            # update failed and the sensor reflects unavailability; recovers
-            # on the next successful poll.
-            raise UpdateFailed("Failed to fetch filament inventory from Bambu cloud")
-
-        self.inventory.update(payload)
-        LOGGER.debug(f"Filament inventory updated: {self.inventory.total_spool_count} spools")
-        return self.inventory

@@ -88,9 +88,7 @@
             "description": "只有在非標準設定的情況下才需要這些選項。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援",
-              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
+              "enable_firmware_update": "啟用韌體更新支援"
             }
           }
         }
@@ -112,9 +110,7 @@
             "description": "只有在非標準設定的情況下才需要這些選項。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援",
-              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
+              "enable_firmware_update": "啟用韌體更新支援"
             }
           }
         }
@@ -124,6 +120,15 @@
         "description": "使用現有印表機條目中的有效 Bambu Cloud 憑證。無需額外登入。",
         "data": {
           "username": "班布帳號："
+        }
+      },
+      "filament_inventory": {
+        "title": "長絲庫存",
+        "description": "使用現有印表機條目中的有效 Bambu Cloud 憑證。無需額外登入。",
+        "data": {
+          "username": "班布帳號：",
+          "credential_source": "憑證來源：",
+          "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
         }
       }
     }
@@ -196,9 +201,7 @@
             "description": "這些進階選項屬於早期或有風險的功能，請閱讀文件並自行承擔使用風險。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援",
-              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
+              "enable_firmware_update": "啟用韌體更新支援"
             }
           }
         }
@@ -219,9 +222,7 @@
             "description": "這些進階選項屬於早期或有風險的功能，請閱讀文件並自行承擔使用風險。",
             "data": {
               "disable_ssl_verify": "停用 SSL 驗證",
-              "enable_firmware_update": "啟用韌體更新支援",
-              "enable_filament_inventory": "啟用燈絲庫存（燈絲管理器，需要 Bambu Cloud）",
-              "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
+              "enable_firmware_update": "啟用韌體更新支援"
             }
           }
         }
@@ -236,6 +237,15 @@
         "data": {
           "username": "班布帳號：",
           "credential_source": "班布帳號："
+        }
+      },
+      "filament_inventory": {
+        "title": "長絲庫存",
+        "description": "使用現有印表機條目中的有效 Bambu Cloud 憑證。無需額外登入。",
+        "data": {
+          "username": "班布帳號：",
+          "credential_source": "憑證來源：",
+          "filament_inventory_interval": "燈絲庫存刷新間隔（分鐘）："
         }
       }
     }
@@ -422,6 +432,13 @@
         "state": {
           "cooling": "製冷",
           "heating": "加熱"
+        }
+      },
+      "liveview_camera": {
+        "name": "即時取景相機",
+        "state": {
+          "main": "主相機",
+          "birdseye": "鳥眼相機"
         }
       }
     },
@@ -1219,7 +1236,18 @@
         "name": "PrintTool {tool_number} 列印時間"
       },
       "filament_inventory": {
-        "name": "長絲庫存"
+        "name": "長絲庫存",
+        "state_attributes": {
+          "spools": {
+            "name": "線軸"
+          },
+          "groups": {
+            "name": "燈絲組"
+          },
+          "total_remaining_g": {
+            "name": "剩餘燈絲總量"
+          }
+        }
       },
       "processing_material": {
         "name": "雷射/切割材料"
@@ -1252,6 +1280,9 @@
           "debug": "偵錯",
           "unknown": "未知"
         }
+      },
+      "filament_inventory_total_remaining": {
+        "name": "剩餘耗材庫存"
       }
     },
     "camera": {
@@ -1291,7 +1322,8 @@
         "bambu": "Bambu Lab 雲端",
         "lan": "區域網路模式",
         "makerworld": "創客世界帳戶",
-        "ams_heater": "外部 AMS 加熱器或乾燥器（智慧插頭）"
+        "ams_heater": "外部 AMS 加熱器或乾燥器（智慧插頭）",
+        "filament_inventory": "長絲庫存"
       }
     }
   },
