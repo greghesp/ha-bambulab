@@ -62,6 +62,7 @@ from .const import (
     PRINT_TYPE_OPTIONS,
     AIRDUCT_MODES,
     AMS_CONNECTED_NOZZLES,
+    AMS_PLACEHOLDER_SERIALS,
     LIVEVIEW_CAMERAS,
     NOZZLE_SIDES,
     TempEnum,
@@ -4660,7 +4661,7 @@ class AMSList:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
                 # required as part of the home assistant device identity. An AMS the printer cannot currently identify
                 # reports the placeholder "N/A"; it is not a serial, and several units can report it at once.
-                if module.get('sn', '') not in ('', 'N/A'):
+                if module.get('sn', '') not in AMS_PLACEHOLDER_SERIALS:
                     # May get data before info so create entries if necessary
                     if index not in self.data:
                         data_changed = True
