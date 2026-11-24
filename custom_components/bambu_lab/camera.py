@@ -106,8 +106,10 @@ class BambuLabRtspCamera(BambuLabEntity, Camera):
 
     @property
     def available(self) -> bool:
-        """Return whether the printer has supplied a usable RTSP endpoint."""
-        return super().available and self._stream_source() is not None
+        """Return whether the printer is online and has supplied a usable RTSP endpoint."""
+        return (super().available
+                and self.coordinator.get_model().info.online
+                and self._stream_source() is not None)
 
     @property
     def is_recording(self) -> bool:
@@ -202,9 +204,14 @@ class BambuLabImageCamera(BambuLabEntity, Camera):
         return self.coordinator.get_model().chamber_image.get_image()
 
     @property
+    def available(self) -> bool:
+        """Go unavailable while the printer is offline rather than serving the last stale frame."""
+        return super().available and self.coordinator.get_model().info.online
+
+    @property
     def is_streaming(self) -> bool:
         return self.available and self._camera_enabled
-    
+
     @property
     def is_recording(self) -> bool:
         return False

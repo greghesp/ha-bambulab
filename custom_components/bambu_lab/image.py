@@ -152,6 +152,11 @@ class ChamberImage(DispatchedImageEntity, ImageEntity, BambuLabEntity):
         """The time when the image was last updated."""
         return self.coordinator.get_model().chamber_image.get_last_update_time()
 
+    @property
+    def available(self) -> bool:
+        """Go unavailable while the printer is offline rather than serving the last stale frame."""
+        return self.coordinator.last_update_success and self.coordinator.get_model().info.online
+
 
 class PickImage(DispatchedImageEntity, ImageEntity, BambuLabEntity):
     """Representation of an object pick image entity."""
