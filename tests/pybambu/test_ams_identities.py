@@ -1,6 +1,7 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, call, patch
 
+from pybambu.commands import GET_VERSION
 from pybambu.models import Device
 
 
@@ -105,3 +106,148 @@ class TestAmsIdentitiesResolved(unittest.TestCase):
         self.device.info_update({"command": "get_version", "module": []})
 
         self.assertTrue(self.device.ams_identities_resolved)
+
+
+class TestMissingAmsIdentityRequest(unittest.TestCase):
+    """The printer only sends version info when asked. If an AMS had not been identified when
+    the connection came up, its serial must be requested again or it never gets a device (#1831)."""
+
+    @staticmethod
+    def status(*indices):
+        return {
+            "command": "push_status",
+            "msg": 0,
+            "ams": {
+                "ams": [{"id": str(index), "humidity": "4", "temp": "25.0", "tray": []} for index in indices],
+                "tray_now": "255",
+                "tray_tar": "255",
+            },
+        }
+
+    @staticmethod
+    def version(**serials):
+        return {
+            "command": "get_version",
+            "module": [
+                {"name": name.replace("_", "/"), "sw_ver": "03.00.21.29", "hw_ver": "N3F05", "sn": sn}
+                for name, sn in serials.items()
+            ],
+        }
+
+    def setUp(self):
+        self.connect_new_device()
+        patcher = patch("pybambu.models.time.monotonic", side_effect=lambda: self.now)
+        self.now = 1000.0
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def connect_new_device(self):
+        self.client = MagicMock()
+        self.client.slicer_settings.custom_filaments = {}
+        self.device = Device(self.client)
+        self.client._device = self.device
+
+    @property
+    def request_count(self):
+        return self.client.publish.call_args_list.count(call(GET_VERSION))
+
+    def ready_count(self):
+        return self.client.callback.call_args_list.count(call("event_printer_ready"))
+
+    def test_requests_serial_when_ams_appears_after_version_info(self):
+        self.device.info_update(self.version())
+        self.device.print_update(self.status())
+        self.assertEqual(self.request_count, 0)
+
+        self.device.print_update(self.status(0))
+
+        self.assertEqual(self.request_count, 1)
+
+    def test_requests_serial_when_version_info_had_none(self):
+        for serial in ("", "N/A"):
+            with self.subTest(serial=serial):
+                self.connect_new_device()
+                self.device.print_update(self.status(0))
+                self.device.info_update(self.version(n3f_0=serial))
+
+                self.device.print_update(self.status(0))
+
+                self.assertEqual(self.request_count, 1)
+
+    def test_late_serial_reinitializes_entities(self):
+        self.device.info_update(self.version())
+        self.device.print_update(self.status())
+        self.device.print_update(self.status(0))
+        ready_before = self.ready_count()
+
+        self.device.info_update(self.version(n3f_0="19C00A000000000"))
+
+        self.assertEqual(self.device.ams.data[0].serial, "19C00A000000000")
+        self.assertEqual(self.device.ams.data[0].model, "AMS 2 Pro")
+        self.assertEqual(self.ready_count(), ready_before + 1)
+
+    def test_no_request_before_the_first_version_info(self):
+        # The request sent on connect is still outstanding.
+        self.device.print_update(self.status(0))
+        self.device.print_update(self.status(0))
+
+        self.assertEqual(self.request_count, 0)
+
+    def test_no_request_when_every_serial_is_known(self):
+        self.device.print_update(self.status(0))
+        self.device.info_update(self.version(n3f_0="19C00A000000000"))
+        for _ in range(5):
+            self.now += 600
+            self.device.print_update(self.status(0))
+
+        self.assertEqual(self.request_count, 0)
+
+    def test_incremental_push_can_request_the_serial(self):
+        self.device.info_update(self.version())
+        self.device.print_update(self.status())
+
+        self.device.print_update({**self.status(0), "msg": 1})
+
+        self.assertEqual(self.request_count, 1)
+
+    def test_requests_back_off_while_the_serial_stays_unknown(self):
+        self.device.info_update(self.version(n3f_0="N/A"))
+        self.device.print_update(self.status(0))
+        start = self.now
+        ready_before = self.ready_count()
+        times = [0.0]
+        for _ in range(3600):
+            self.now += 1
+            before = self.request_count
+            self.device.print_update(self.status(0))
+            self.device.info_update(self.version(n3f_0="N/A"))
+            if self.request_count > before:
+                times.append(self.now - start)
+
+        gaps = [later - earlier for earlier, later in zip(times, times[1:])]
+        self.assertEqual(gaps[:7], [5, 10, 20, 40, 80, 160, 300])
+        self.assertTrue(all(gap == 300 for gap in gaps[7:]))
+        self.assertGreater(len(gaps), 7)
+        # Replies that change nothing must not set up the entities again.
+        self.assertEqual(self.ready_count(), ready_before)
+
+    def test_a_newly_attached_ams_is_requested_without_waiting(self):
+        self.device.info_update(self.version(n3f_0="N/A"))
+        for _ in range(3600):
+            self.now += 1
+            self.device.print_update(self.status(0))
+        before = self.request_count
+
+        self.device.print_update(self.status(0, 1))
+
+        self.assertEqual(self.request_count, before + 1)
+
+    def test_requests_stop_once_the_serial_arrives(self):
+        self.device.info_update(self.version())
+        self.device.print_update(self.status(0))
+        self.device.info_update(self.version(n3f_0="19C00A000000000"))
+        for _ in range(600):
+            self.now += 1
+            self.device.print_update(self.status(0))
+
+        self.assertEqual(self.request_count, 1)
