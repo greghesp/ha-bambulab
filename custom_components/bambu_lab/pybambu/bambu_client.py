@@ -79,6 +79,9 @@ class WatchdogThread(threading.Thread):
 THREAD_STOP_TIMEOUT = 5
 # Without a timeout, connecting to a host that silently drops packets can block for minutes.
 CHAMBER_CONNECT_TIMEOUT = 10
+# Seconds a dropped connection gets to come back before the printer is reported offline. Long enough
+# for paho's first three reconnect attempts, about 1, 3 and 7 seconds after the drop.
+OFFLINE_GRACE_PERIOD = 10
 # Frames normally arrive every second or two. If the printer drops off without closing the
 # connection, reads just report that no data is ready forever, so reconnect after this long.
 CHAMBER_STALL_TIMEOUT = 30
@@ -436,6 +439,8 @@ class BambuClient:
         self._port = 8883
         self._refreshed = False
         self._last_error_code = 0
+        self._offline_timer: threading.Timer | None = None
+        self._offline_lock = threading.Lock()
 
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(
@@ -652,25 +657,70 @@ class BambuClient:
             else:
                 LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._last_error_code = result_code
-        self._on_disconnect()
+        # A clean disconnect is one we asked for and access denied won't resolve itself. Anything else
+        # may be a momentary drop that paho recovers from straight away.
+        self._on_disconnect(allow_grace_period=result_code not in (0, 5))
         if self._last_error_code == 5:
             # Error code 5 is access denied. This is not likely to resolve itself. Do not loop forever.
             self.client.disconnect()
 
-    def _on_disconnect(self):
+    def _on_disconnect(self, allow_grace_period: bool = True):
         LOGGER.debug("_on_disconnect: Lost connection to the printer")
         self._loaded_slicer_settings = False
         self._connected = False
         self._device_confirmed = False
-        self._device.info.set_online(False)
+        if allow_grace_period:
+            self._set_offline_after_grace_period()
+        else:
+            self._set_offline()
         if self._watchdog is not None:
             LOGGER.debug("Stopping watchdog thread")
             _stop_thread(self._watchdog, "Watchdog")
         self.stop_camera()
 
+    def _cancel_offline_timer(self):
+        """Callers must hold the offline lock."""
+        if self._offline_timer is not None:
+            self._offline_timer.cancel()
+            self._offline_timer = None
+
+    def _set_online(self):
+        with self._offline_lock:
+            self._cancel_offline_timer()
+            self._device.info.set_online(True)
+
+    def _set_offline(self):
+        with self._offline_lock:
+            self._cancel_offline_timer()
+            self._device.info.set_online(False)
+
+    def _set_offline_after_grace_period(self):
+        # State reported before the drop can't be trusted even if the printer never shows as offline.
+        self._device.hotend_rack.invalidate_control_state()
+        with self._offline_lock:
+            if self.client is None:
+                # We have been shut down.
+                return
+            if self._offline_timer is not None or not self._device.info.online:
+                # Already waiting or already offline. A repeated drop must not extend the wait.
+                return
+            self._offline_timer = threading.Timer(OFFLINE_GRACE_PERIOD, self._on_grace_period_expired)
+            self._offline_timer.daemon = True
+            self._offline_timer.start()
+
+    def _on_grace_period_expired(self):
+        """Called on the timer's own thread."""
+        with self._offline_lock:
+            if threading.current_thread() is not self._offline_timer:
+                # The printer came back just as this timer fired.
+                return
+            self._offline_timer = None
+            LOGGER.debug(f"Connection not restored within {OFFLINE_GRACE_PERIOD} seconds.")
+            self._device.info.set_online(False)
+
     def _on_watchdog_fired(self):
         LOGGER.info("Watch dog fired")
-        self._device.info.set_online(False)
+        self._set_offline()
         self.publish(START_PUSH)
 
     def on_jpeg_received(self, bytes):
@@ -714,9 +764,9 @@ class BambuClient:
                     self._on_connect()
                 elif json_data.get("event").get("event") == "client.disconnected":
                     LOGGER.debug("Client disconnected event received.")
-                    self._on_disconnect()
+                    self._on_disconnect(allow_grace_period=False)
             else:
-                self._device.info.set_online(True)
+                self._set_online()
                 self._on_device_confirmed()
                 if self._watchdog is not None:
                     self._watchdog.received_data()
@@ -799,7 +849,9 @@ class BambuClient:
             self._camera.join(timeout=5)
             self._camera = None
 
-        self.client = None
+        with self._offline_lock:
+            self._cancel_offline_timer()
+            self.client = None
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS:
