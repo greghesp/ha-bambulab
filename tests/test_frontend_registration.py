@@ -193,7 +193,9 @@ def _hass_with(*entries):
 
     hass.config_entries.async_entries = async_entries
     hass.config_entries.async_unload_platforms = AsyncMock(return_value=True)
-    hass.data = {DOMAIN: {e.entry_id: MagicMock() for e in entries}}
+    hass.data = {
+        DOMAIN: {e.entry_id: MagicMock(async_stop_reinitialize=AsyncMock()) for e in entries}
+    }
     return hass
 
 

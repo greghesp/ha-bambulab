@@ -1,0 +1,9 @@
+# Everything in requirements.txt, plus Home Assistant and the packages its
+# components pull in at import time. Needed for the tests outside
+# tests/pybambu, which import the integration itself.
+-r requirements.txt
+homeassistant
+pytest-asyncio
+async-upnp-client  # ssdp (manifest "ssdp" discovery)
+numpy  # stream
+PyTurboJPEG  # camera / stream

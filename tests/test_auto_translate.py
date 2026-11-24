@@ -28,6 +28,13 @@ def load_auto_translate_module():
         "cloudscraper": None,
         "curl_requests": None,
         "subprocess": __import__("subprocess"),
+        "os": __import__("os"),
+        "sys": __import__("sys"),
+        "base64": __import__("base64"),
+        # The script builds its session at import time from CLI args; tests
+        # replace send_request, so the session itself is never used.
+        "HTTP_SESSION": None,
+        "__file__": str(SCRIPT_PATH),
     }
     exec(compile(ast.Module(body=kept_nodes, type_ignores=[]), str(SCRIPT_PATH), "exec"), namespace)
     return namespace
@@ -82,6 +89,8 @@ def test_get_last_release_content_uses_repo_relative_path(monkeypatch):
         return FakeCompleted()
 
     monkeypatch.setattr(module["subprocess"], "run", fake_run)
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
 
     assert module["get_last_release_content"]() == '{"device_automation": {}}'
-    assert calls and calls[0][1] == "custom_components/bambu_lab/translations/en.json"
+    assert calls
+    assert calls[0][-1] == "HEAD:custom_components/bambu_lab/translations/en.json"
