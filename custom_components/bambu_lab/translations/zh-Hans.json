@@ -10,7 +10,8 @@
       "event_printer_error": "移动管理系统错误",
       "event_printer_error_cleared": "HMS 错误已清除",
       "event_printer_missing_sdcard": "缺少 SD 卡",
-      "event_timelapse_downloaded": "游戏中时光倒流下载"
+      "event_timelapse_downloaded": "游戏中时光倒流下载",
+      "event_print_layer_changed": "打印层已更改"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "curl_cffi 库不可用。",
       "no_working_credentials": "此帐户没有可用的 Bambu Cloud 打印机凭据。",
       "reconfigure_not_supported": "只有 MakerWorld 帐户条目可以通过这种方式重新配置。",
-      "reconfigure_successful": "MakerWorld 凭证已更新。"
+      "reconfigure_successful": "MakerWorld 凭证已更新。",
+      "device_not_found": "该打印机不在 Bambu 云帐户中。重试并使用打印机绑定的帐户登录。",
+      "device_list_failed": "无法从Bambu云获取打印机列表。检查 Home Assistant 日志并重试。"
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_connection_refused": "Bambu Lab 云拒绝连接。",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab 云地址无法访问。",
       "cannot_connect_cloud_unknown": "连接到 Bambu Lab 云时出现未知错误。",
-      "cannot_connect_local_unknown": "连接失败。检查提供的设置。"
+      "cannot_connect_local_unknown": "连接失败。检查提供的设置。",
+      "incorrect_password": "Bambu Lab 拒绝了密码。这必须是您的 Bambu Lab 帐户密码，该密码与您的 Google、Apple 或 Facebook 密码分开。如果没有，请将密码留空以使用验证码登录。"
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "请求新代码",
           "verifyCode": "邮箱或短信验证码",
           "tfaCode": "2FA 代码"
+        },
+        "data_description": {
+          "password": "留空可使用发送到您的电子邮件或手机的验证码登录，例如，如果您通过 Google、Apple 或 Facebook 登录 Bambu Lab。"
         }
       },
       "Bambu_Choose_Device": {
@@ -138,7 +145,9 @@
       "cloudflare": "Cloudflare 已阻止连接尝试。",
       "curl_unavailable": "curl_cffi 库不可用。",
       "no_working_credentials": "此帐户没有可用的 Bambu Cloud 打印机凭据。",
-      "no_ams": "此打印机上尚未识别出 AMS。等待打印机连接并报告其 AMS 单位，然后重试。"
+      "no_ams": "此打印机上尚未识别出 AMS。等待打印机连接并报告其 AMS 单位，然后重试。",
+      "device_not_found": "该打印机不在 Bambu 云帐户中。重试并使用打印机绑定的帐户登录。",
+      "device_list_failed": "无法从Bambu云获取打印机列表。如果您保存的登录信息已过期，请重新重新配置并选择 Bambu Lab 云进行登录。否则请检查 Home Assistant 日志并重试。"
     },
     "error": {
       "cannot_connect": "连接失败。检查凭据。",
@@ -160,7 +169,8 @@
       "cannot_connect_cloud_connection_refused": "Bambu Lab 云拒绝连接。",
       "cannot_connect_cloud_address_unreachable": "Bambu Lab 云地址无法访问。",
       "cannot_connect_cloud_unknown": "连接到 Bambu Lab 云时出现未知错误。",
-      "cannot_connect_local_unknown": "连接失败。检查提供的设置。"
+      "cannot_connect_local_unknown": "连接失败。检查提供的设置。",
+      "incorrect_password": "Bambu Lab 拒绝了密码。这必须是您的 Bambu Lab 帐户密码，该密码与您的 Google、Apple 或 Facebook 密码分开。如果没有，请将密码留空以使用验证码登录。"
     },
     "step": {
       "init": {
@@ -180,6 +190,9 @@
           "newCode": "请求新代码",
           "verifyCode": "邮箱或短信验证码",
           "tfaCode": "2FA 代码"
+        },
+        "data_description": {
+          "password": "留空可使用发送到您的电子邮件或手机的验证码登录，例如，如果您通过 Google、Apple 或 Facebook 登录 Bambu Lab。"
         }
       },
       "Bambu_Lan": {
@@ -738,6 +751,9 @@
           },
           "dry_time": {
             "name": "干燥时间"
+          },
+          "color_name": {
+            "name": "颜色名称"
           }
         }
       },
@@ -803,6 +819,9 @@
           },
           "dry_time": {
             "name": "干燥时间"
+          },
+          "color_name": {
+            "name": "颜色名称"
           }
         }
       },

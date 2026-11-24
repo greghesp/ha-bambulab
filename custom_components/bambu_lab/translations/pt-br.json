@@ -10,7 +10,8 @@
       "event_printer_error": "Erro HMS",
       "event_printer_error_cleared": "Erro HMS eliminado",
       "event_printer_missing_sdcard": "Cartão SD ausente",
-      "event_timelapse_downloaded": "Lapso de tempo baixado"
+      "event_timelapse_downloaded": "Lapso de tempo baixado",
+      "event_print_layer_changed": "Camada de impressão alterada"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "A biblioteca curl_cffi não está disponível.",
       "no_working_credentials": "Nenhuma credencial de impressora Bambu Cloud funcional está disponível para esta conta.",
       "reconfigure_not_supported": "Somente as entradas da conta MakerWorld podem ser reconfiguradas desta forma.",
-      "reconfigure_successful": "Credenciais do MakerWorld atualizadas."
+      "reconfigure_successful": "Credenciais do MakerWorld atualizadas.",
+      "device_not_found": "Esta impressora não está na conta Bambu Cloud. Tente novamente e faça login com a conta à qual a impressora está vinculada.",
+      "device_list_failed": "Falha ao obter a lista de impressoras do Bambu Cloud. Verifique o registro do Home Assistant e tente novamente."
     },
     "error": {
       "cannot_connect": "Falha ao conectar. Verifique as credenciais.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "Endereço da nuvem do Bambu Lab inacessível.",
       "cannot_connect_cloud_unknown": "Erro desconhecido ao conectar-se à nuvem do Bambu Lab.",
       "cannot_connect_local_unknown": "Falha ao conectar. Verifique as configurações fornecidas.",
-      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo."
+      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo.",
+      "incorrect_password": "Bambu Lab rejeitou a senha. Esta deve ser a senha da sua conta Bambu Lab, que é separada da sua senha do Google, Apple ou Facebook. Se você não tiver uma, deixe a senha em branco para fazer login com um código de verificação."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Solicitar novo código",
           "verifyCode": "Código de verificação por e-mail ou telefone",
           "tfaCode": "Código de autenticação de dois fatores"
+        },
+        "data_description": {
+          "password": "Deixe em branco para fazer login com um código de verificação enviado para seu e-mail ou telefone, por exemplo, se você fizer login no Bambu Lab com Google, Apple ou Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -138,7 +145,9 @@
       "cloudflare": "Cloudflare bloqueou a tentativa de conexão.",
       "curl_unavailable": "A biblioteca curl_cffi não está disponível.",
       "no_working_credentials": "Nenhuma credencial de impressora Bambu Cloud funcional está disponível para esta conta.",
-      "no_ams": "Nenhum AMS foi identificado nesta impressora ainda. Aguarde até que a impressora se conecte e relate suas unidades AMS e tente novamente."
+      "no_ams": "Nenhum AMS foi identificado nesta impressora ainda. Aguarde até que a impressora se conecte e relate suas unidades AMS e tente novamente.",
+      "device_not_found": "Esta impressora não está na conta Bambu Cloud. Tente novamente e faça login com a conta à qual a impressora está vinculada.",
+      "device_list_failed": "Falha ao obter a lista de impressoras do Bambu Cloud. Se o seu login salvo expirou, reconfigure novamente e escolha a nuvem Bambu Lab para fazer login. Caso contrário, verifique o log do Home Assistant e tente novamente."
     },
     "error": {
       "cannot_connect": "Falha na conexão",
@@ -160,7 +169,8 @@
       "cannot_connect_cloud_address_unreachable": "Endereço da nuvem do Bambu Lab inacessível.",
       "cannot_connect_cloud_unknown": "Erro desconhecido ao conectar-se à nuvem do Bambu Lab.",
       "cannot_connect_local_unknown": "Falha ao conectar. Verifique as configurações fornecidas.",
-      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo."
+      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo.",
+      "incorrect_password": "Bambu Lab rejeitou a senha. Esta deve ser a senha da sua conta Bambu Lab, que é separada da sua senha do Google, Apple ou Facebook. Se você não tiver uma, deixe a senha em branco para fazer login com um código de verificação."
     },
     "step": {
       "init": {
@@ -180,6 +190,9 @@
           "newCode": "Solicitar novo código",
           "verifyCode": "Código de verificação por e-mail ou telefone",
           "tfaCode": "Código de autenticação de dois fatores"
+        },
+        "data_description": {
+          "password": "Deixe em branco para fazer login com um código de verificação enviado para seu e-mail ou telefone, por exemplo, se você fizer login no Bambu Lab com Google, Apple ou Facebook."
         }
       },
       "Bambu_Lan": {
@@ -738,6 +751,9 @@
           },
           "dry_time": {
             "name": "Tempo de secagem"
+          },
+          "color_name": {
+            "name": "Nome da cor"
           }
         }
       },
@@ -803,6 +819,9 @@
           },
           "dry_time": {
             "name": "Tempo de secagem"
+          },
+          "color_name": {
+            "name": "Nome da cor"
           }
         }
       },

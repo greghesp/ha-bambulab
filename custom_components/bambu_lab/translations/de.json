@@ -10,7 +10,8 @@
       "event_printer_error": "HMS-Fehler",
       "event_printer_error_cleared": "HMS-Fehler behoben",
       "event_printer_missing_sdcard": "SD-Karte fehlt",
-      "event_timelapse_downloaded": "Zeitraffer heruntergeladen"
+      "event_timelapse_downloaded": "Zeitraffer heruntergeladen",
+      "event_print_layer_changed": "Druckebene geändert"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar.",
       "no_working_credentials": "Für dieses Konto sind keine funktionierenden Anmeldeinformationen für den Bambu Cloud-Drucker verfügbar.",
       "reconfigure_not_supported": "Auf diese Weise können nur MakerWorld-Kontoeinträge neu konfiguriert werden.",
-      "reconfigure_successful": "MakerWorld-Zugangsdaten aktualisiert."
+      "reconfigure_successful": "MakerWorld-Zugangsdaten aktualisiert.",
+      "device_not_found": "Dieser Drucker ist nicht im Bambu Cloud-Konto. Versuchen Sie es erneut und melden Sie sich mit dem Konto an, an das der Drucker gebunden ist.",
+      "device_list_failed": "Die Druckerliste konnte nicht von Bambu Cloud abgerufen werden. Überprüfen Sie das Home Assistant-Protokoll und versuchen Sie es erneut."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-Cloud-Adresse nicht erreichbar.",
       "cannot_connect_cloud_unknown": "Unbekannter Fehler beim Herstellen der Verbindung zur Bambu Lab-Cloud.",
       "cannot_connect_local_unknown": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
-      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein."
+      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein.",
+      "incorrect_password": "Bambu Lab hat das Passwort abgelehnt. Dies muss das Passwort Ihres Bambu Lab-Kontos sein, das von Ihrem Google-, Apple- oder Facebook-Passwort getrennt ist. Wenn Sie noch keins haben, lassen Sie das Passwort leer, um sich mit einem Bestätigungscode anzumelden."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Fordern Sie einen neuen Code an",
           "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
           "tfaCode": "Zwei-Faktor-Authentifizierungscode"
+        },
+        "data_description": {
+          "password": "Lassen Sie das Feld leer, um sich mit einem Bestätigungscode anzumelden, der an Ihre E-Mail-Adresse oder Ihr Telefon gesendet wird, beispielsweise wenn Sie sich mit Google, Apple oder Facebook bei Bambu Lab anmelden."
         }
       },
       "Bambu_Choose_Device": {
@@ -138,7 +145,9 @@
       "cloudflare": "Cloudflare hat den Verbindungsversuch blockiert.",
       "curl_unavailable": "Die Bibliothek „curl_cffi“ ist nicht verfügbar.",
       "no_working_credentials": "Für dieses Konto sind keine funktionierenden Anmeldeinformationen für den Bambu Cloud-Drucker verfügbar.",
-      "no_ams": "Auf diesem Drucker wurde noch kein AMS identifiziert. Warten Sie, bis der Drucker eine Verbindung hergestellt hat und seine AMS-Einheiten meldet, und versuchen Sie es dann erneut."
+      "no_ams": "Auf diesem Drucker wurde noch kein AMS identifiziert. Warten Sie, bis der Drucker eine Verbindung hergestellt hat und seine AMS-Einheiten meldet, und versuchen Sie es dann erneut.",
+      "device_not_found": "Dieser Drucker ist nicht im Bambu Cloud-Konto. Versuchen Sie es erneut und melden Sie sich mit dem Konto an, an das der Drucker gebunden ist.",
+      "device_list_failed": "Die Druckerliste konnte nicht von Bambu Cloud abgerufen werden. Wenn Ihr gespeichertes Login abgelaufen ist, konfigurieren Sie es erneut und wählen Sie die Bambu Lab-Cloud, um sich anzumelden. Überprüfen Sie andernfalls das Home Assistant-Protokoll und versuchen Sie es erneut."
     },
     "error": {
       "cannot_connect": "Es konnte keine Verbindung hergestellt werden. Überprüfen Sie die Anmeldeinformationen.",
@@ -160,7 +169,8 @@
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-Cloud-Adresse nicht erreichbar.",
       "cannot_connect_cloud_unknown": "Unbekannter Fehler beim Herstellen der Verbindung zur Bambu Lab-Cloud.",
       "cannot_connect_local_unknown": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie die bereitgestellten Einstellungen.",
-      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein."
+      "tfa_csrf_fallback": "Der Zwei-Faktor-Authentifizierungsendpunkt von Bambu Lab lehnt derzeit Anfragen ab. Stattdessen wurde ein Bestätigungscode an Ihre E-Mail-Adresse oder Ihr Telefon gesendet. Geben Sie ihn bitte unten ein.",
+      "incorrect_password": "Bambu Lab hat das Passwort abgelehnt. Dies muss das Passwort Ihres Bambu Lab-Kontos sein, das von Ihrem Google-, Apple- oder Facebook-Passwort getrennt ist. Wenn Sie noch keins haben, lassen Sie das Passwort leer, um sich mit einem Bestätigungscode anzumelden."
     },
     "step": {
       "init": {
@@ -180,6 +190,9 @@
           "newCode": "Fordern Sie einen neuen Code an",
           "verifyCode": "Bestätigungscode per E-Mail oder Telefon",
           "tfaCode": "Zwei-Faktor-Authentifizierungscode"
+        },
+        "data_description": {
+          "password": "Lassen Sie das Feld leer, um sich mit einem Bestätigungscode anzumelden, der an Ihre E-Mail-Adresse oder Ihr Telefon gesendet wird, beispielsweise wenn Sie sich mit Google, Apple oder Facebook bei Bambu Lab anmelden."
         }
       },
       "Bambu_Lan": {
@@ -807,6 +820,9 @@
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
+          },
+          "color_name": {
+            "name": "Farbname"
           }
         }
       },
@@ -872,6 +888,9 @@
           },
           "tray_weight": {
             "name": "Maximales Filamentgewicht"
+          },
+          "color_name": {
+            "name": "Farbname"
           }
         }
       },

@@ -10,7 +10,8 @@
       "event_printer_error": "HMS fejl",
       "event_printer_error_cleared": "HMS fejl ryddet",
       "event_printer_missing_sdcard": "Mangler SD-kort",
-      "event_timelapse_downloaded": "Timelapse downloadet"
+      "event_timelapse_downloaded": "Timelapse downloadet",
+      "event_print_layer_changed": "Udskriftslag ændret"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt.",
       "no_working_credentials": "Ingen fungerende Bambu Cloud-printerlegitimationsoplysninger er tilgængelige for denne konto.",
       "reconfigure_not_supported": "Kun MakerWorld-kontoposter kan omkonfigureres på denne måde.",
-      "reconfigure_successful": "MakerWorld legitimationsoplysninger opdateret."
+      "reconfigure_successful": "MakerWorld legitimationsoplysninger opdateret.",
+      "device_not_found": "Denne printer er ikke på Bambu Cloud-kontoen. Prøv igen og log ind med den konto, som printeren er bundet til.",
+      "device_list_failed": "Kunne ikke hente printerlisten fra Bambu Cloud. Tjek Home Assistant-loggen, og prøv igen."
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes. Tjek legitimationsoplysninger.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "Bambu Labs cloud-adresse kan ikke nås.",
       "cannot_connect_cloud_unknown": "Ukendt fejl ved forbindelse til Bambu Lab-skyen.",
       "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger.",
-      "tfa_csrf_fallback": "Bambu Labs tofaktorautentificeringsslutpunkt afviser i øjeblikket anmodninger. En bekræftelseskode er blevet sendt til din e-mail eller telefon i stedet - indtast den nedenfor."
+      "tfa_csrf_fallback": "Bambu Labs tofaktorautentificeringsslutpunkt afviser i øjeblikket anmodninger. En bekræftelseskode er blevet sendt til din e-mail eller telefon i stedet - indtast den nedenfor.",
+      "incorrect_password": "Bambu Lab afviste adgangskoden. Dette skal være adgangskoden til din Bambu Lab-konto, som er adskilt fra din Google-, Apple- eller Facebook-adgangskode. Hvis du ikke har en, skal du lade adgangskoden stå tom for at logge på med en bekræftelseskode."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Anmod om ny kode",
           "verifyCode": "E-mail eller telefonbekræftelseskode",
           "tfaCode": "To-faktor autentifikationskode"
+        },
+        "data_description": {
+          "password": "Lad stå tomt for at logge ind med en bekræftelseskode sendt til din e-mail eller telefon, for eksempel hvis du logger ind på Bambu Lab med Google, Apple eller Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -138,7 +145,9 @@
       "cloudflare": "Cloudflare har blokeret forbindelsesforsøget.",
       "curl_unavailable": "curl_cffi-biblioteket er ikke tilgængeligt.",
       "no_working_credentials": "Ingen fungerende Bambu Cloud-printerlegitimationsoplysninger er tilgængelige for denne konto.",
-      "no_ams": "Ingen AMS er blevet identificeret på denne printer endnu. Vent på, at printeren har oprettet forbindelse og rapporterer sine AMS-enheder, og prøv derefter igen."
+      "no_ams": "Ingen AMS er blevet identificeret på denne printer endnu. Vent på, at printeren har oprettet forbindelse og rapporterer sine AMS-enheder, og prøv derefter igen.",
+      "device_not_found": "Denne printer er ikke på Bambu Cloud-kontoen. Prøv igen og log ind med den konto, som printeren er bundet til.",
+      "device_list_failed": "Kunne ikke hente printerlisten fra Bambu Cloud. Hvis dit gemte login er udløbet, skal du omkonfigurere igen og vælge Bambu Lab cloud for at logge på. Ellers skal du tjekke Home Assistant-loggen og prøve igen."
     },
     "error": {
       "cannot_connect": "Forbindelse mislykkedes",
@@ -160,7 +169,8 @@
       "cannot_connect_cloud_address_unreachable": "Bambu Labs cloud-adresse kan ikke nås.",
       "cannot_connect_cloud_unknown": "Ukendt fejl ved forbindelse til Bambu Lab-skyen.",
       "cannot_connect_local_unknown": "Kunne ikke oprette forbindelse. Tjek de angivne indstillinger.",
-      "tfa_csrf_fallback": "Bambu Labs tofaktorautentificeringsslutpunkt afviser i øjeblikket anmodninger. En bekræftelseskode er blevet sendt til din e-mail eller telefon i stedet - indtast den nedenfor."
+      "tfa_csrf_fallback": "Bambu Labs tofaktorautentificeringsslutpunkt afviser i øjeblikket anmodninger. En bekræftelseskode er blevet sendt til din e-mail eller telefon i stedet - indtast den nedenfor.",
+      "incorrect_password": "Bambu Lab afviste adgangskoden. Dette skal være adgangskoden til din Bambu Lab-konto, som er adskilt fra din Google-, Apple- eller Facebook-adgangskode. Hvis du ikke har en, skal du lade adgangskoden stå tom for at logge på med en bekræftelseskode."
     },
     "step": {
       "init": {
@@ -180,6 +190,9 @@
           "newCode": "Anmod om ny kode",
           "verifyCode": "E-mail eller telefonbekræftelseskode",
           "tfaCode": "To-faktor autentifikationskode"
+        },
+        "data_description": {
+          "password": "Lad stå tomt for at logge ind med en bekræftelseskode sendt til din e-mail eller telefon, for eksempel hvis du logger ind på Bambu Lab med Google, Apple eller Facebook."
         }
       },
       "Bambu_Lan": {
@@ -738,6 +751,9 @@
           },
           "dry_time": {
             "name": "Tørretid"
+          },
+          "color_name": {
+            "name": "Farvenavn"
           }
         }
       },
@@ -803,6 +819,9 @@
           },
           "tray_weight": {
             "name": "Maksimal vægt af glødetråd"
+          },
+          "color_name": {
+            "name": "Farvenavn"
           }
         }
       },
