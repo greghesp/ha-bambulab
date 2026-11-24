@@ -110,6 +110,8 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         self._updatedDevice = False
         self._shutdown = False
+        # Whether the control entities have been set up from the printer's data.
+        self._controls_set_up = False
         # Reinitialization passes must not overlap, see _request_reinitialize.
         self._reinitialize_requested = False
         self._reinitialize_lock = asyncio.Lock()
@@ -174,7 +176,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             self.client.start_camera()
         
         elif event == "event_printer_mqtt_encryption_enabled":
-            self._report_encryption_enabled_issue()
+            self._handle_encryption_enabled()
 
         elif event == "event_printer_mqtt_encryption_disabled":
             self._handle_encryption_disabled()
@@ -182,6 +184,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif event == "event_printer_ready":
             # A successful connection ends any access denied episode.
             self._access_denied_handled = False
+            self._controls_set_up = True
             self._printer_ready()
 
         elif event == "event_light_update":
@@ -1368,6 +1371,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
     def _report_encryption_enabled_issue(self, force: bool = False):
         self._report_generic_issue("mqtt_encryption_enabled", force)
+
+    def _handle_encryption_enabled(self):
+        self._report_encryption_enabled_issue()
+        if not self._controls_set_up:
+            # The requirement was there at startup: the setup that follows skips the controls.
+            return
+        # The printer started requiring signed MQTT commands (developer mode turned off), so the
+        # existing control entities no longer work. Set up the entities again without them.
+        LOGGER.info("Printer now requires signed MQTT commands. Removing the controls.")
+        self._hass.async_create_task(self._reinitialize_sensors())
 
     def _handle_encryption_disabled(self):
         # The printer stopped requiring signed MQTT commands (developer mode turned on).
