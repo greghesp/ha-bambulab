@@ -80,6 +80,7 @@ def test_h3c_fan_names_and_commands_match_printer(key, expected_key, fan_type):
     coordinator = MagicMock()
     coordinator.get_model().info.device_type = Printers.H3C
     coordinator.get_model().fans.h3c_chamber_fan_controllable = True
+    coordinator.get_model().fans.secondary_aux_fan_locked_off = False
     coordinator.get_model().fans.set_fan_speed.return_value = True
     description = next(description for description in FANS if description.key == key)
     fan = BambuLabFan(coordinator, description, SimpleNamespace(data={"serial": "TESTSERIAL"}))
@@ -134,3 +135,31 @@ def test_h3c_fan_entities_are_not_exposed_on_other_models(model):
     assert descriptions["chamber_fan"].exists_fn(coordinator)
     assert not descriptions["exhaust_fan"].exists_fn(coordinator)
     assert not descriptions["h3c_chamber_fan"].exists_fn(coordinator)
+
+
+def secondary_aux_fan(locked_off):
+    coordinator = MagicMock()
+    coordinator.get_model().info.device_type = Printers.P2S
+    coordinator.get_model().fans.secondary_aux_fan_locked_off = locked_off
+    coordinator.get_model().fans.set_fan_speed.return_value = True
+    description = next(description for description in FANS if description.key == "secondary_aux_fan")
+    return BambuLabFan(coordinator, description, SimpleNamespace(data={"serial": "TESTSERIAL"}))
+
+
+def test_secondary_aux_fan_locked_off_by_airduct_mode_raises():
+    fan = secondary_aux_fan(locked_off=True)
+    with pytest.raises(HomeAssistantError, match="airduct mode"):
+        fan.turn_on()
+    fan.coordinator.get_model().fans.set_fan_speed.assert_not_called()
+
+
+def test_secondary_aux_fan_locked_off_can_still_be_turned_off():
+    fan = secondary_aux_fan(locked_off=True)
+    fan.turn_off()
+    fan.coordinator.get_model().fans.set_fan_speed.assert_called_once_with(FansEnum.SECONDARY_AUXILIARY, 0)
+
+
+def test_secondary_aux_fan_can_be_turned_on_when_not_locked():
+    fan = secondary_aux_fan(locked_off=False)
+    fan.turn_on(percentage=50)
+    fan.coordinator.get_model().fans.set_fan_speed.assert_called_once_with(FansEnum.SECONDARY_AUXILIARY, 50)

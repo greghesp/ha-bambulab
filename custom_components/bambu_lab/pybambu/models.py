@@ -923,6 +923,8 @@ class Fans:
                 "command": "set_fan", "sequence_id": "0", "fan_index": 15, "speed": percentage,
             }}))
         percentage = round(percentage / 10) * 10
+        if fan == FansEnum.SECONDARY_AUXILIARY and percentage > 0 and self.secondary_aux_fan_locked_off:
+            return False
         command = fan_percentage_to_gcode(fan, percentage)
 
         # Do not report a local override when the broker rejected the publish.
@@ -949,6 +951,12 @@ class Fans:
     def h3c_chamber_fan_controllable(self) -> bool:
         mode = self._airduct_modes.get(self._airduct_mode, {})
         return 240 in (mode.get("ctrl") or []) and 240 not in (mode.get("off") or [])
+
+    @property
+    def secondary_aux_fan_locked_off(self) -> bool:
+        """True when the current airduct mode keeps the fan off, e.g. heating mode on the P2S."""
+        mode = self._airduct_modes.get(self._airduct_mode, {})
+        return 160 in (mode.get("off") or [])
 
     def get_fan_speed(self, fan: FansEnum) -> int | None:
         if fan == FansEnum.PART_COOLING:
