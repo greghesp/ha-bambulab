@@ -110,5 +110,56 @@ class TestSlicerSettingsUpdate(unittest.TestCase):
         self.assertEqual(_events(client), [])
 
 
+@patch("pybambu.models.time.sleep")
+class TestCustomFilamentsSurviveRefresh(unittest.TestCase):
+    """Every printer reconnect refetches the slicer settings. The filaments already
+    loaded must stay usable until a fetch succeeds, or a reconnect during a cloud
+    outage loses every custom filament name (#2338)."""
+
+    def setUp(self):
+        self.client = _client([SETTINGS])
+        self.settings = SlicerSettings(self.client)
+        with patch("pybambu.models.time.sleep"):
+            self.settings.update()
+
+    def _refresh(self, get_slicer_settings):
+        self.client.bambu_cloud.get_slicer_settings.side_effect = get_slicer_settings
+        self.settings.update()
+
+    def test_kept_when_refresh_fails(self, sleep):
+        self._refresh(lambda: None)
+        self.assertIn("P1", self.settings.filaments)
+
+    def test_kept_when_token_is_rejected(self, sleep):
+        self._refresh(CloudAuthError(401))
+        self.assertIn("P1", self.settings.filaments)
+
+    def test_available_while_refresh_is_retrying(self, sleep):
+        seen = []
+        sleep.side_effect = lambda _: seen.append("P1" in self.settings.filaments)
+        self._refresh([None, SETTINGS])
+        self.assertEqual(seen, [True, True])
+
+    def test_kept_when_response_has_no_filament_section(self, sleep):
+        self._refresh([{"message": "success"}])
+        self.assertIn("P1", self.settings.filaments)
+
+    def test_filament_removed_from_account_is_dropped(self, sleep):
+        self._refresh([{"filament": {"private": []}}])
+        self.assertEqual(self.settings.filaments, {})
+
+    def test_cleared_when_there_is_no_token(self, sleep):
+        self.client.bambu_cloud.auth_token = ""
+        self.settings.update()
+        self.assertEqual(self.settings.filaments, {})
+
+    def test_refresh_replaces_the_dict_a_reader_is_iterating(self, sleep):
+        # Home Assistant iterates filaments on its event loop while this runs on a thread.
+        held = self.settings.filaments
+        self._refresh([{"filament": {"private": [{**SETTINGS["filament"]["private"][0], "filament_id": "P2"}]}}])
+        self.assertEqual(list(held), ["P1"])
+        self.assertEqual(list(self.settings.filaments), ["P2"])
+
+
 if __name__ == "__main__":
     unittest.main()

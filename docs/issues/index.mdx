@@ -5,6 +5,18 @@ description: Debugging the integration
 
 ## Issues
 
+### Only 6 camera feeds show
+
+If you have more than 6 P1, A1, A1 Mini or A2L printers, live camera views may show only the first 6 feeds and leave the rest black. Reordering the cards changes which ones load.
+
+This is a browser limit, not an integration bug. Live views of these cameras are sent as MJPEG streams, and each stream keeps one connection open to Home Assistant. Over HTTP/1.1, which Home Assistant's built-in web server uses, browsers and the companion app allow only 6 open connections per server, so feed 7 onward waits for one to close. Printers with RTSP feeds (X1, P2S, X2D, H2 and H3 series) aren't affected because they use HLS or WebRTC instead.
+
+Any one of these avoids it:
+
+- **Serve Home Assistant over HTTP/2.** Put it behind a reverse proxy with TLS and HTTP/2 enabled (for example NGINX Proxy Manager or Caddy). HTTP/2 carries all the streams over one connection, so every feed can stay live.
+- **Use still images on your dashboard.** Set `camera_view: auto` instead of `camera_view: live` on your picture cards. The card then refreshes a still image about every 10 seconds instead of holding a stream open.
+- **Use the image entity instead of the camera.** Turn on the printer's **Image sensor camera** switch and show the chamber image entity on your dashboard. It loads a new image on each update rather than holding a stream open.
+
 ### Diagnostic File
 
 If you run into any issues, we now have built in diagnostics.

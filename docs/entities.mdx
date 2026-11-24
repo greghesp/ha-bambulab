@@ -134,6 +134,7 @@ drying binary sensors describe the whole AMS. It exposes up to nine trays.
 | Tray attributes:    | Notes      |
 | ------------------- | ---------- |
 | Color               |            |
+| Color name          | Bambu Lab's English name for the color, e.g. `Jade White`. Only for Bambu Lab filament profiles, and only when the color is one Bambu Lab lists for that filament. |
 | Empty               | `true` when no spool is in the slot, or the tray is loading / scanning (RFID motion). See note below. |
 | Unknown             | `true` when a spool is loaded but `tray_type` is not set — sensor state shows `?`, matching the printer UI. |
 | State               | Raw MQTT tray `state` integer (bitmask). Diagnostic; used internally. |
@@ -312,6 +313,8 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | ------- | --------------------------------------------------------------- |
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1/P2S/X2D/H2/H3 - Make sure to enable "LAN Only Liveview" on your printer. It does not require LAN Only mode |
+
+<Info>If you have more than 6 P1/A1/A1 Mini/A2L printers and only the first 6 camera feeds show in your browser, see [Only 6 camera feeds show](/issues#only-6-camera-feeds-show).</Info>
 
 On P1/A1 printers the chamber image is pushed by the printer rather than pulled
 on demand, so the connection stays open for as long as the printer is

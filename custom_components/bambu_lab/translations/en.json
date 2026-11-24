@@ -7,6 +7,7 @@
       "event_print_started": "Print started",
       "event_print_error": "Print error",
       "event_print_error_cleared": "Print error cleared",
+      "event_print_layer_changed": "Print layer changed",
       "event_printer_error": "HMS error",
       "event_printer_error_cleared": "HMS error cleared",
       "event_printer_missing_sdcard": "Missing SD card",
@@ -16,7 +17,9 @@
   "config": {
     "abort": {
       "already_configured": "Device is already configured",
-      "no_printers": "No unconfigured printers found in the account.",
+      "no_printers": "Bambu Cloud reports no printers for this account. Check that this is the account the printer is bound to. If the printer is in LAN Only mode, add it using Lan Mode instead.",
+      "device_not_found": "This printer is not in the Bambu Cloud account. Try again and log in with the account the printer is bound to.",
+      "device_list_failed": "Failed to get the printer list from Bambu Cloud. Check the Home Assistant log and try again.",
       "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
       "reconfigure_not_supported": "Only MakerWorld account entries can be reconfigured this way.",
       "reconfigure_successful": "MakerWorld credentials updated.",
@@ -135,6 +138,8 @@
   },
   "options": {
     "abort": {
+      "device_not_found": "This printer is not in the Bambu Cloud account. Try again and log in with the account the printer is bound to.",
+      "device_list_failed": "Failed to get the printer list from Bambu Cloud. If your saved login has expired, reconfigure again and choose Bambu Lab cloud to log in. Otherwise check the Home Assistant log and try again.",
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available.",
       "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
@@ -1014,6 +1019,9 @@
           "color": {
             "name": "Color"
           },
+          "color_name": {
+            "name": "Color name"
+          },
           "cols": {
             "name": "Colors"
           },
@@ -1075,6 +1083,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "color_name": {
+            "name": "Color name"
           },
           "cols": {
             "name": "Colors"
