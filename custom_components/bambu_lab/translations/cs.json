@@ -10,7 +10,8 @@
       "event_printer_error": "Chyba HMS",
       "event_printer_error_cleared": "Chyba HMS vyřešena",
       "event_printer_missing_sdcard": "Chybí SD karta",
-      "event_timelapse_downloaded": "Timelapse stažen"
+      "event_timelapse_downloaded": "Timelapse stažen",
+      "event_print_layer_changed": "Vrstva tisku změněna"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "Knihovna curl_cffi není k dispozici.",
       "no_working_credentials": "Pro tento účet nejsou k dispozici žádné funkční přihlašovací údaje k tiskárně Bambu Cloud.",
       "reconfigure_not_supported": "Tímto způsobem lze překonfigurovat pouze položky účtu MakerWorld.",
-      "reconfigure_successful": "Přihlašovací údaje MakerWorld byly aktualizovány."
+      "reconfigure_successful": "Přihlašovací údaje MakerWorld byly aktualizovány.",
+      "device_not_found": "Tato tiskárna není v účtu Bambu Cloud. Zkuste to znovu a přihlaste se pomocí účtu, ke kterému je tiskárna vázána.",
+      "device_list_failed": "Nepodařilo se získat seznam tiskáren z Bambu Cloud. Zkontrolujte protokol Home Assistant a zkuste to znovu."
     },
     "error": {
       "cannot_connect": "Nepodařilo se připojit. Zkontrolujte přihlašovací údaje.",
@@ -43,7 +46,8 @@
       "code_expired": "Platnost ověřovacího kódu vypršela. Byl vyžádán nový kód. Zkontrolujte svůj e-mail nebo telefon.",
       "code_incorrect": "Ověřovací kód byl nesprávný. Zadejte jej prosím znovu.",
       "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní.",
-      "tfa_csrf_fallback": "Koncový bod dvoufaktorové autentizace společnosti Bambu Lab aktuálně odmítá požadavky. Místo toho byl na váš e-mail nebo telefon odeslán ověřovací kód – zadejte jej níže."
+      "tfa_csrf_fallback": "Koncový bod dvoufaktorové autentizace společnosti Bambu Lab aktuálně odmítá požadavky. Místo toho byl na váš e-mail nebo telefon odeslán ověřovací kód – zadejte jej níže.",
+      "incorrect_password": "Bambu Lab heslo odmítla. Musí to být heslo vašeho účtu Bambu Lab, které je oddělené od vašeho hesla Google, Apple nebo Facebook. Pokud jej nemáte, ponechte heslo prázdné, abyste se mohli přihlásit pomocí ověřovacího kódu."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Vyžádat nový kód",
           "verifyCode": "Ověřovací kód z e-mailu nebo telefonu",
           "tfaCode": "Kód dvoufaktorového ověření"
+        },
+        "data_description": {
+          "password": "Ponechte prázdné, chcete-li se přihlásit pomocí ověřovacího kódu zaslaného na váš e-mail nebo telefon, například pokud se přihlásíte do Bambu Lab pomocí Google, Apple nebo Facebooku."
         }
       },
       "Bambu_Choose_Device": {
@@ -138,7 +145,9 @@
       "cloudflare": "Cloudflare zablokoval pokus o připojení.",
       "curl_unavailable": "Knihovna curl_cffi není k dispozici.",
       "no_working_credentials": "Pro tento účet nejsou k dispozici žádné funkční přihlašovací údaje k tiskárně Bambu Cloud.",
-      "no_ams": "Na této tiskárně nebyl dosud identifikován žádný AMS. Počkejte, až se tiskárna připojí a nahlásí své jednotky AMS, a zkuste to znovu."
+      "no_ams": "Na této tiskárně nebyl dosud identifikován žádný AMS. Počkejte, až se tiskárna připojí a nahlásí své jednotky AMS, a zkuste to znovu.",
+      "device_not_found": "Tato tiskárna není v účtu Bambu Cloud. Zkuste to znovu a přihlaste se pomocí účtu, ke kterému je tiskárna vázána.",
+      "device_list_failed": "Nepodařilo se získat seznam tiskáren z Bambu Cloud. Pokud platnost vašeho uloženého přihlášení vypršela, proveďte znovu konfiguraci a pro přihlášení zvolte cloud Bambu Lab. Jinak zkontrolujte protokol Home Assistant a zkuste to znovu."
     },
     "error": {
       "cannot_connect": "Nepodařilo se připojit",
@@ -160,7 +169,8 @@
       "code_expired": "Platnost ověřovacího kódu vypršela. Byl vyžádán nový kód. Zkontrolujte svůj e-mail nebo telefon.",
       "code_incorrect": "Ověřovací kód byl nesprávný. Zadejte jej prosím znovu.",
       "tfaCode": "Je vyžadován 2FA kód. Zadejte jej nyní.",
-      "tfa_csrf_fallback": "Koncový bod dvoufaktorové autentizace společnosti Bambu Lab aktuálně odmítá požadavky. Místo toho byl na váš e-mail nebo telefon odeslán ověřovací kód – zadejte jej níže."
+      "tfa_csrf_fallback": "Koncový bod dvoufaktorové autentizace společnosti Bambu Lab aktuálně odmítá požadavky. Místo toho byl na váš e-mail nebo telefon odeslán ověřovací kód – zadejte jej níže.",
+      "incorrect_password": "Bambu Lab heslo odmítla. Musí to být heslo vašeho účtu Bambu Lab, které je oddělené od vašeho hesla Google, Apple nebo Facebook. Pokud jej nemáte, ponechte heslo prázdné, abyste se mohli přihlásit pomocí ověřovacího kódu."
     },
     "step": {
       "init": {
@@ -180,6 +190,9 @@
           "newCode": "Vyžádat nový kód",
           "verifyCode": "Ověřovací kód z e-mailu nebo telefonu",
           "tfaCode": "Kód dvoufaktorového ověření"
+        },
+        "data_description": {
+          "password": "Ponechte prázdné, chcete-li se přihlásit pomocí ověřovacího kódu zaslaného na váš e-mail nebo telefon, například pokud se přihlásíte do Bambu Lab pomocí Google, Apple nebo Facebooku."
         }
       },
       "Bambu_Lan": {
@@ -815,6 +828,9 @@
           },
           "dry_time": {
             "name": "Doba schnutí"
+          },
+          "color_name": {
+            "name": "Název barvy"
           }
         }
       },
@@ -880,6 +896,9 @@
           },
           "tray_weight": {
             "name": "Maximální hmotnost filamentu"
+          },
+          "color_name": {
+            "name": "Název barvy"
           }
         }
       },

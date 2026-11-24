@@ -10,7 +10,8 @@
       "event_printer_error": "Error d'HMS",
       "event_printer_error_cleared": "Error d'HMS esborrat",
       "event_printer_missing_sdcard": "Falta la targeta SD",
-      "event_timelapse_downloaded": "Timelapse descarregat"
+      "event_timelapse_downloaded": "Timelapse descarregat",
+      "event_print_layer_changed": "S'ha canviat la capa d'impressió"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "La llibreria curl_cffi no està disponible.",
       "no_working_credentials": "No hi ha cap credencial d'impressora de Bambu Cloud disponible per a aquest compte.",
       "reconfigure_not_supported": "Només es poden reconfigurar d'aquesta manera les entrades del compte MakerWorld.",
-      "reconfigure_successful": "S'han actualitzat les credencials de MakerWorld."
+      "reconfigure_successful": "S'han actualitzat les credencials de MakerWorld.",
+      "device_not_found": "Aquesta impressora no es troba al compte de Bambu Cloud. Torneu-ho a provar i inicieu la sessió amb el compte al qual està vinculada la impressora.",
+      "device_list_failed": "No s'ha pogut obtenir la llista d'impressores de Bambu Cloud. Comproveu el registre de Home Assistant i torneu-ho a provar."
     },
     "error": {
       "cannot_connect": "Error de connexió. Revisa les credencials.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "L'adreça del núvol de Bambu Lab no és accessible.",
       "cannot_connect_cloud_unknown": "Error desconegut en connectar-se al núvol de Bambu Lab.",
       "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada.",
-      "tfa_csrf_fallback": "Actualment, el punt final d'autenticació de dos factors de Bambu Lab està rebutjant sol·licituds. S'ha enviat un codi de verificació al vostre correu electrònic o telèfon; introduïu-lo a continuació."
+      "tfa_csrf_fallback": "Actualment, el punt final d'autenticació de dos factors de Bambu Lab està rebutjant sol·licituds. S'ha enviat un codi de verificació al vostre correu electrònic o telèfon; introduïu-lo a continuació.",
+      "incorrect_password": "Bambu Lab va rebutjar la contrasenya. Aquesta ha de ser la contrasenya del compte de Bambu Lab, que és independent de la contrasenya de Google, Apple o Facebook. Si no en teniu cap, deixeu la contrasenya en blanc per iniciar sessió amb un codi de verificació."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Sol·licita un codi nou",
           "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
+        },
+        "data_description": {
+          "password": "Deixa en blanc per iniciar sessió amb un codi de verificació enviat al teu correu electrònic o telèfon, per exemple, si inicies sessió a Bambu Lab amb Google, Apple o Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -138,7 +145,9 @@
       "cloudflare": "Cloudflare ha bloquejat l'intent de connexió.",
       "curl_unavailable": "La llibreria curl_cffi no està disponible.",
       "no_working_credentials": "No hi ha cap credencial d'impressora de Bambu Cloud disponible per a aquest compte.",
-      "no_ams": "Encara no s'ha identificat cap AMS en aquesta impressora. Espereu que la impressora es connecti i informi de les seves unitats AMS i, a continuació, torneu-ho a provar."
+      "no_ams": "Encara no s'ha identificat cap AMS en aquesta impressora. Espereu que la impressora es connecti i informi de les seves unitats AMS i, a continuació, torneu-ho a provar.",
+      "device_not_found": "Aquesta impressora no es troba al compte de Bambu Cloud. Torneu-ho a provar i inicieu la sessió amb el compte al qual està vinculada la impressora.",
+      "device_list_failed": "No s'ha pogut obtenir la llista d'impressores de Bambu Cloud. Si el vostre inici de sessió desat ha caducat, torneu a configurar-lo i seleccioneu Bambu Lab cloud per iniciar la sessió. En cas contrari, comproveu el registre de Home Assistant i torneu-ho a provar."
     },
     "error": {
       "cannot_connect": "Error de connexió.",
@@ -160,7 +169,8 @@
       "cannot_connect_cloud_address_unreachable": "L'adreça del núvol de Bambu Lab no és accessible.",
       "cannot_connect_cloud_unknown": "Error desconegut en connectar-se al núvol de Bambu Lab.",
       "cannot_connect_local_unknown": "No s'ha pogut connectar. Comproveu la configuració proporcionada.",
-      "tfa_csrf_fallback": "Actualment, el punt final d'autenticació de dos factors de Bambu Lab està rebutjant sol·licituds. S'ha enviat un codi de verificació al vostre correu electrònic o telèfon; introduïu-lo a continuació."
+      "tfa_csrf_fallback": "Actualment, el punt final d'autenticació de dos factors de Bambu Lab està rebutjant sol·licituds. S'ha enviat un codi de verificació al vostre correu electrònic o telèfon; introduïu-lo a continuació.",
+      "incorrect_password": "Bambu Lab va rebutjar la contrasenya. Aquesta ha de ser la contrasenya del compte de Bambu Lab, que és independent de la contrasenya de Google, Apple o Facebook. Si no en teniu cap, deixeu la contrasenya en blanc per iniciar sessió amb un codi de verificació."
     },
     "step": {
       "init": {
@@ -180,6 +190,9 @@
           "newCode": "Sol·licita un codi nou",
           "verifyCode": "Codi de verificació per correu electrònic o telèfon",
           "tfaCode": "Codi d'autenticació de dos factors"
+        },
+        "data_description": {
+          "password": "Deixa en blanc per iniciar sessió amb un codi de verificació enviat al teu correu electrònic o telèfon, per exemple, si inicies sessió a Bambu Lab amb Google, Apple o Facebook."
         }
       },
       "Bambu_Lan": {
@@ -738,6 +751,9 @@
           },
           "dry_time": {
             "name": "Temps d'assecat"
+          },
+          "color_name": {
+            "name": "Nom del color"
           }
         }
       },
@@ -803,6 +819,9 @@
           },
           "tray_weight": {
             "name": "Pes màxim del filament"
+          },
+          "color_name": {
+            "name": "Nom del color"
           }
         }
       },

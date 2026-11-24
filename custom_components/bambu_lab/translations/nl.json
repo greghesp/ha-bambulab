@@ -10,7 +10,8 @@
       "event_printer_error": "HMS-fout",
       "event_printer_error_cleared": "HMS-fout gewist",
       "event_printer_missing_sdcard": "Ontbrekende SD-kaart",
-      "event_timelapse_downloaded": "Time-lapse gedownload"
+      "event_timelapse_downloaded": "Time-lapse gedownload",
+      "event_print_layer_changed": "Printlaag gewijzigd"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "curl_cffi-library is niet beschikbaar.",
       "no_working_credentials": "Er zijn geen werkende Bambu Cloud-printergegevens beschikbaar voor dit account.",
       "reconfigure_not_supported": "Alleen MakerWorld-accountgegevens kunnen op deze manier opnieuw worden geconfigureerd.",
-      "reconfigure_successful": "MakerWorld-inloggegevens bijgewerkt."
+      "reconfigure_successful": "MakerWorld-inloggegevens bijgewerkt.",
+      "device_not_found": "Deze printer staat niet in het Bambu Cloud-account. Probeer het opnieuw en log in met het account waaraan de printer is gekoppeld.",
+      "device_list_failed": "Kan de printerlijst niet ophalen van Bambu Cloud. Controleer het Home Assistant-logboek en probeer het opnieuw."
     },
     "error": {
       "cannot_connect": "Verbinding mislukt. Controleer de logingegevens.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-cloudadres onbereikbaar.",
       "cannot_connect_cloud_unknown": "Onbekende fout bij het verbinden met de Bambu Lab-cloud.",
       "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen.",
-      "tfa_csrf_fallback": "Het tweefactorauthenticatie-eindpunt van Bambu Lab wijst momenteel verzoeken af. Er is in plaats daarvan een verificatiecode naar uw e-mailadres of telefoon verzonden. Voer deze hieronder in."
+      "tfa_csrf_fallback": "Het tweefactorauthenticatie-eindpunt van Bambu Lab wijst momenteel verzoeken af. Er is in plaats daarvan een verificatiecode naar uw e-mailadres of telefoon verzonden. Voer deze hieronder in.",
+      "incorrect_password": "Bambu Lab heeft het wachtwoord afgewezen. Dit moet het wachtwoord van uw Bambu Lab-account zijn, dat gescheiden is van uw Google-, Apple- of Facebook-wachtwoord. Als u er geen heeft, laat u het wachtwoord leeg om in te loggen met een verificatiecode."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Vraag nieuwe code aan",
           "verifyCode": "Verificatiecode vanuit e-mail of telefoon",
           "tfaCode": "Twee-factor-authenticatiecode"
+        },
+        "data_description": {
+          "password": "Laat dit veld leeg om in te loggen met een verificatiecode die naar uw e-mail of telefoon wordt verzonden, bijvoorbeeld als u zich aanmeldt bij Bambu Lab met Google, Apple of Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -138,7 +145,9 @@
       "cloudflare": "Cloudflare heeft de verbindingspoging geblokkeerd.",
       "curl_unavailable": "curl_cffi-library is niet beschikbaar.",
       "no_working_credentials": "Er zijn geen werkende Bambu Cloud-printergegevens beschikbaar voor dit account.",
-      "no_ams": "Er is nog geen AMS geïdentificeerd op deze printer. Wacht tot de printer verbinding heeft gemaakt en de AMS-eenheden heeft gerapporteerd en probeer het vervolgens opnieuw."
+      "no_ams": "Er is nog geen AMS geïdentificeerd op deze printer. Wacht tot de printer verbinding heeft gemaakt en de AMS-eenheden heeft gerapporteerd en probeer het vervolgens opnieuw.",
+      "device_not_found": "Deze printer staat niet in het Bambu Cloud-account. Probeer het opnieuw en log in met het account waaraan de printer is gekoppeld.",
+      "device_list_failed": "Kan de printerlijst niet ophalen van Bambu Cloud. Als uw opgeslagen login is verlopen, configureer dan opnieuw en kies Bambu Lab cloud om in te loggen. Controleer anders het Home Assistant-logboek en probeer het opnieuw."
     },
     "error": {
       "cannot_connect": "Verbinden mislukt",
@@ -160,7 +169,8 @@
       "cannot_connect_cloud_address_unreachable": "Bambu Lab-cloudadres onbereikbaar.",
       "cannot_connect_cloud_unknown": "Onbekende fout bij het verbinden met de Bambu Lab-cloud.",
       "cannot_connect_local_unknown": "Kan geen verbinding maken. Controleer de opgegeven instellingen.",
-      "tfa_csrf_fallback": "Het tweefactorauthenticatie-eindpunt van Bambu Lab wijst momenteel verzoeken af. Er is in plaats daarvan een verificatiecode naar uw e-mailadres of telefoon verzonden. Voer deze hieronder in."
+      "tfa_csrf_fallback": "Het tweefactorauthenticatie-eindpunt van Bambu Lab wijst momenteel verzoeken af. Er is in plaats daarvan een verificatiecode naar uw e-mailadres of telefoon verzonden. Voer deze hieronder in.",
+      "incorrect_password": "Bambu Lab heeft het wachtwoord afgewezen. Dit moet het wachtwoord van uw Bambu Lab-account zijn, dat gescheiden is van uw Google-, Apple- of Facebook-wachtwoord. Als u er geen heeft, laat u het wachtwoord leeg om in te loggen met een verificatiecode."
     },
     "step": {
       "init": {
@@ -180,6 +190,9 @@
           "newCode": "Vraag nieuwe code aan",
           "verifyCode": "Verificatiecode vanuit e-mail of telefoon",
           "tfaCode": "Twee-factor-authenticatiecode"
+        },
+        "data_description": {
+          "password": "Laat dit veld leeg om in te loggen met een verificatiecode die naar uw e-mail of telefoon wordt verzonden, bijvoorbeeld als u zich aanmeldt bij Bambu Lab met Google, Apple of Facebook."
         }
       },
       "Bambu_Lan": {
@@ -744,6 +757,9 @@
           },
           "dry_time": {
             "name": "Droogtijd"
+          },
+          "color_name": {
+            "name": "Kleur naam"
           }
         }
       },
@@ -809,6 +825,9 @@
           },
           "tray_weight": {
             "name": "Maximaal gewicht van de gloeidraad"
+          },
+          "color_name": {
+            "name": "Kleur naam"
           }
         }
       },
