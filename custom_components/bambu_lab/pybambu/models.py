@@ -1305,6 +1305,13 @@ ACTIVE_PRINT_IDENTITY = ("subtask_name", "task_id", "plate_idx", "gcode_start_ti
 AMS_MAPPING_MAX_AGE = 600
 
 
+# Cloud task statuses of a job that has ended, successfully or not.
+CLOUD_TASK_ENDED_STATUSES = (2, 3)
+# Seconds to wait before each new attempt to get a running cloud print's own task. When the print
+# starts, the cloud can still list the previous job as the newest or have no weight for this one.
+CLOUD_TASK_RETRY_DELAYS = (15, 30, 60, 120, 300, 600)
+
+
 # Files kept in the local print history and timelapse caches. A sidecar shares its primary
 # file's base name and is removed along with it.
 PRINT_CACHE_EXTENSIONS = ['.3mf']
@@ -1325,6 +1332,7 @@ class PrintJob:
     _subtask_name: str
     model_id: str
     task_id: str
+    subtask_id: str
     plate_idx: int
     start_time: datetime
     end_time: datetime
@@ -1357,6 +1365,7 @@ class PrintJob:
         self._subtask_name = ""
         self.model_id = ""
         self.task_id = ""
+        self.subtask_id = ""
         self.plate_idx = 0
         self.start_time = None
         self.end_time = None
@@ -1384,6 +1393,12 @@ class PrintJob:
         self._ftpThread = None
         self._ftp_download_percentage = 100
         self._next_model_retry_at = 0.0
+        self._task_data = None
+        self._cloud_task_retries = 0
+        # None until the cloud has been asked about the print that is running.
+        self._next_cloud_task_retry_at = None
+        # The print figures were read from the printer, so a cloud retry must not replace them.
+        self._model_metadata_loaded = False
         self._gcode_start_time = ""
         # An ams_mapping arrived that hasn't been written to the restart record yet.
         self._ams_mapping_unsaved = False
@@ -1542,6 +1557,7 @@ class PrintJob:
 
         self.model_id = data.get("model_id", self.model_id)
         self.task_id = data.get("task_id", self.task_id)
+        self.subtask_id = data.get("subtask_id", self.subtask_id)
         self.plate_idx = data.get("plate_idx", self.plate_idx)
 
         # Printer-initiated prints and reprints can reach RUNNING before the
@@ -1651,6 +1667,9 @@ class PrintJob:
             elif self.gcode_state == "RUNNING" and time.monotonic() >= self._next_model_retry_at:
                 LOGGER.debug("RETRYING MISSING ACTIVE PRINT MEDIA")
                 self._update_task_data()
+
+        if self._cloud_task_retry_due():
+            self._retry_cloud_task()
 
         print_ended = currently_idle and not previously_idle and previous_gcode_state != "unknown"
         if print_ended:
@@ -2824,6 +2843,9 @@ class PrintJob:
     def _clear_model_data(self):
         LOGGER.debug("Clearing model data")
         self._loaded_model_data = False
+        self._model_metadata_loaded = False
+        self._cloud_task_retries = 0
+        self._next_cloud_task_retry_at = None
         self._client._device.cover_image.set_image(None)
         self._clear_pick_data()
         # These figures describe one specific job. If they survive and the next
@@ -3068,6 +3090,7 @@ class PrintJob:
                         LOGGER.error(f"Failed to parse filament data: {e}")
 
             self.print_length = print_length
+            self._model_metadata_loaded = True
 
             if pick_image_bytes is not None and plate_number is not None:
                 try:
@@ -3393,7 +3416,67 @@ class PrintJob:
         if self._client.bambu_cloud.auth_token == "":
             return
 
-        self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
+        self._apply_cloud_task(self._fetch_cloud_task())
+
+    def _cloud_task_ids(self) -> frozenset[str]:
+        """The ids the running job's cloud task can have, empty if the printer reported none."""
+        # Newer firmware reports the cloud task's id in both fields, older firmware two different ids.
+        return frozenset(str(value) for value in (self.task_id, self.subtask_id) if value) - {"0"}
+
+    def _fetch_cloud_task(self) -> dict | None:
+        retry = min(self._cloud_task_retries, len(CLOUD_TASK_RETRY_DELAYS) - 1)
+        self._next_cloud_task_retry_at = time.monotonic() + CLOUD_TASK_RETRY_DELAYS[retry]
+        return self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial, self._cloud_task_ids())
+
+    def _is_own_cloud_task(self, task: dict) -> bool:
+        return str(task.get('id')) in self._cloud_task_ids()
+
+    def _is_previous_cloud_task(self, task: dict) -> bool:
+        """Whether this task can only belong to a job before the one that is running."""
+        return (
+            self._is_printing()
+            and self._print_type != "local"
+            and not self._is_own_cloud_task(task)
+            and task.get('status') in CLOUD_TASK_ENDED_STATUSES
+        )
+
+    def _is_unconfirmed_cloud_task(self, task: dict) -> bool:
+        """Whether this task may not be the running job's, as far as the printer's ids can tell."""
+        if self._cloud_task_ids():
+            return not self._is_own_cloud_task(task)
+        return self._is_previous_cloud_task(task)
+
+    def _cloud_task_retry_due(self) -> bool:
+        if not self._is_printing() or self._print_type != "cloud":
+            return False
+        if self._client.bambu_cloud.auth_token == "":
+            return False
+        if self._model_metadata_loaded or self._ftpThread is not None:
+            return False
+        if self._cloud_task_retries >= len(CLOUD_TASK_RETRY_DELAYS):
+            return False
+        if self._next_cloud_task_retry_at is None or time.monotonic() < self._next_cloud_task_retry_at:
+            return False
+        return (
+            self._task_data is None
+            or not self._task_data.get('weight')
+            or self._is_unconfirmed_cloud_task(self._task_data)
+        )
+
+    def _retry_cloud_task(self):
+        LOGGER.debug("RETRYING CLOUD TASK FOR ACTIVE PRINT")
+        self._cloud_task_retries += 1
+        task = self._fetch_cloud_task()
+        if task is None or self._is_unconfirmed_cloud_task(task):
+            return
+        # Applying a task downloads its cover, so don't repeat that for one that still has no weight.
+        already_applied = self._task_data is not None and self._task_data.get('id') == task.get('id')
+        if already_applied and not task.get('weight'):
+            return
+        self._apply_cloud_task(task)
+
+    def _apply_cloud_task(self, task: dict | None):
+        self._task_data = task
         self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         if self._task_data is None:
@@ -3404,6 +3487,10 @@ class PrintJob:
             self.print_bed_type = "unknown"
             self.start_time = None
             self.end_time = None
+        elif self._is_previous_cloud_task(task):
+            LOGGER.debug("Newest bambu cloud task belongs to an earlier print.")
+            self.print_weight = 0
+            self.print_length = 0
         else:
             LOGGER.debug("Updating bambu cloud task data found for printer.")
             # For local prints with FTP available, the printer's 3mf is the

@@ -650,10 +650,14 @@ class BambuCloud:
             return None
         return response.json()
 
-    def get_latest_task_for_printer(self, deviceId: str) -> dict:
+    def get_latest_task_for_printer(self, deviceId: str, task_ids: frozenset[str] = frozenset()) -> dict:
+        """Return the printer's task that has one of task_ids, or its newest task if none does."""
         LOGGER.debug(f"Getting latest task for printer from Bambu Cloud")
         try:
             data = self.get_tasklist_for_printer(deviceId)
+            for task in data:
+                if str(task.get('id')) in task_ids:
+                    return task
             if len(data) != 0:
                 return data[0]
             LOGGER.debug("No tasks found for printer")
