@@ -58,6 +58,7 @@ from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
     AMS_MODELS_AND_EXTERNAL_SPOOL,
+    AMS_PLACEHOLDER_SERIALS,
     Features,
 )
 from .pybambu.commands import (
@@ -977,14 +978,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # This device is associated with this printer.
             is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT')
             is_placeholder_ams = (
-                device.model == 'Unknown'
-                and (DOMAIN, "") in device.identifiers
-                and (device.name or "").startswith(f"{self.config_entry.data['device_type']}_{self.config_entry.data['serial']}_AMS_")
+                device.model in ('Unknown', *AMS_MODELS)
+                and any((DOMAIN, serial) in device.identifiers for serial in AMS_PLACEHOLDER_SERIALS)
             )
             if is_known_ams or is_placeholder_ams:
                 # push_status can create an AMS placeholder before version metadata is
-                # available. Older versions registered that placeholder with an empty
-                # identifier; always discard it so the real serial can own the device.
+                # available. Older versions registered that placeholder with an identifier
+                # that isn't a serial; always discard it so the real serial can own the device.
+                # Every printer used the same identifier, so the device is shown under all of
+                # them, named after whichever registered it last. HA 2026.8 split it into one
+                # device per printer, all with that name, so the name doesn't say whose it is.
                 ams_serial = list(device.identifiers)[0][1]
                 if is_placeholder_ams or (ams_identities_resolved and ams_serial not in existing_ams_devices):
                     LOGGER.debug(f"Found stale attached AMS with serial {ams_serial}")
