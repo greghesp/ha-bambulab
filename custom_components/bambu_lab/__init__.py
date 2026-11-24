@@ -463,6 +463,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return True
 
+    # Do this before anything slow or that can fail, so that dashboards opened while
+    # Home Assistant is starting can already load the cards.
+    await BambuLabCardRegistration(hass).async_register()
+
     try:
         await hass.async_add_executor_job(migrate_legacy_file_cache, hass, entry.data["serial"])
     except Exception as err:
@@ -527,9 +531,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # sensor reinitialization happens entirely after the initial setup.
     await coordinator.start_mqtt()
 
-    cards = BambuLabCardRegistration(hass)
-    await cards.async_register()
-
     LOGGER.debug("async_setup_entry Complete")
 
     return True
@@ -571,11 +572,28 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
 
-    cards = BambuLabCardRegistration(hass)
-    await cards.async_unregister()
+    # The cards are shared by all printers and have to survive a reload.
+    if entry.disabled_by:
+        await _async_unregister_unused_cards(hass, entry)
 
     LOGGER.debug("async_unload_entry Done")
     return True
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Clean up after a removed config entry."""
+    LOGGER.debug("async_remove_entry")
+    if _is_printer_entry(entry):
+        await _async_unregister_unused_cards(hass, entry)
+
+def _is_printer_entry(entry: ConfigEntry) -> bool:
+    return entry.data.get(ENTRY_TYPE) not in (ENTRY_TYPE_MAKERWORLD, ENTRY_TYPE_FILAMENT_INVENTORY)
+
+async def _async_unregister_unused_cards(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Remove the cards unless another enabled printer still uses them."""
+    entries = hass.config_entries.async_entries(DOMAIN, include_ignore=False, include_disabled=False)
+    if any(other.entry_id != entry.entry_id and _is_printer_entry(other) for other in entries):
+        return
+    await BambuLabCardRegistration(hass).async_unregister()
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload the config entry when it changed."""
