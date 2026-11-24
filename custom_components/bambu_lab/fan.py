@@ -141,6 +141,10 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         }[self.entity_description.key]
         if fan == FansEnum.H3C_CHAMBER and not self.coordinator.get_model().fans.h3c_chamber_fan_controllable:
             raise HomeAssistantError("Chamber fan is not controllable in the current airduct mode")
+        # Turning it off stays allowed so automations that switch every fan off keep working.
+        if (fan == FansEnum.SECONDARY_AUXILIARY and percentage > 0
+                and self.coordinator.get_model().fans.secondary_aux_fan_locked_off):
+            raise HomeAssistantError("The printer keeps this fan off in the current airduct mode")
         if not self.coordinator.get_model().fans.set_fan_speed(fan, percentage):
             raise HomeAssistantError("Fan command could not be published")
 
