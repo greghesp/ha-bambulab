@@ -556,12 +556,16 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             hass.services.async_remove(DOMAIN, "get_filament_inventory")
         return unloaded
 
+    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    # Stop reinitializing sensors so that it can't overlap with unloading the platforms.
+    await coordinator.async_stop_reinitialize()
+
     # Unload the platforms
     LOGGER.debug(f"async_unload_entry: {PLATFORMS}")
     await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     # Halt the mqtt listener thread
-    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     coordinator.shutdown()
 
     # Delete existing config entry
