@@ -1468,6 +1468,48 @@ class TestHms(unittest.TestCase):
         self.assertEqual(0, self.hms.error_count)
         self.assertDictEqual({"Count": 0}, self.hms.errors)
 
+    def test_first_layer_inspection_is_not_an_error(self):
+        """The X1C's routine first layer inspection notice is not reported as an error."""
+        self.client._device.info.device_type = Printers.X1C
+        self.client.user_language = "en"
+
+        # HMS_0C00_0300_0003_000B: Inspecting the first layer: please wait a moment.
+        result = self.hms.print_update({"hms": [{"attr": 201327360, "code": 196619}]})
+        self.assertFalse(result)
+        self.assertEqual(0, self.hms.error_count)
+        self.assertDictEqual({"Count": 0}, self.hms.errors)
+
+        # No cleared event either once the inspection ends.
+        result = self.hms.print_update({"hms": []})
+        self.assertFalse(result)
+        self.client.callback.assert_not_called()
+
+    def test_first_layer_inspection_does_not_hide_other_errors(self):
+        """An error reported along with the inspection notice is still reported, as the first one."""
+        self.client._device.info.device_type = Printers.X1C
+        self.client.user_language = "en"
+        inspecting = {"attr": 201327360, "code": 196619}
+        heatbed = {"attr": 50331904, "code": 65543}
+
+        self.assertFalse(self.hms.print_update({"hms": [inspecting]}))
+        self.assertTrue(self.hms.print_update({"hms": [inspecting, heatbed]}))
+        self.assertEqual(1, self.hms.error_count)
+        self.assertEqual("HMS_0300_0100_0001_0007", self.hms.errors["1-Code"])
+
+        # The inspection ending doesn't fire the event for the remaining error again.
+        self.assertFalse(self.hms.print_update({"hms": [heatbed]}))
+        self.client.callback.assert_called_once_with("event_printer_error")
+
+    def test_first_layer_inspection_result_is_an_error(self):
+        """Possible first layer defects (HMS_0C00_0300_0003_0007) are still reported."""
+        self.client._device.info.device_type = Printers.X1C
+        self.client.user_language = "en"
+
+        self.assertTrue(self.hms.print_update({"hms": [{"attr": 201327360, "code": 196615}]}))
+        self.assertEqual(1, self.hms.error_count)
+        self.assertEqual("HMS_0C00_0300_0003_0007", self.hms.errors["1-Code"])
+        self.client.callback.assert_called_once_with("event_printer_error")
+
     def test_error_english(self):
         """When the user language is English, an HMS error message is in English."""
         self.client._device.info.device_type = Printers.X1

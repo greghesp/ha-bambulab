@@ -52,6 +52,7 @@ from .const import (
     LOGGER,
     Features,
     FansEnum,
+    HMS_STATUS_CODES,
     Home_Flag_Values,
     Stat_Flag_Values,
     Printers,
@@ -5365,6 +5366,9 @@ class HMSList:
                 attr=attr,
                 code=code
                 )
+            if hms_notif.hms_code in HMS_STATUS_CODES:
+                LOGGER.debug("Skipping HMS notification with code %s (not an error).", hms_notif.hms_code)
+                continue
             if not hms_notif.hms_error:
                 LOGGER.debug("Skipping HMS notification with code %s (no text).", hms_notif.hms_code)
                 continue  # skip invalid entries
