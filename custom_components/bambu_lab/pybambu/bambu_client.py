@@ -701,6 +701,8 @@ class BambuClient:
                     self._device.info_update(data=json_data.get("info"))
                 elif json_data.get("system") and json_data.get("system").get("command"):
                     self._device.observe_system_command(data=json_data.get("system"))
+                elif json_data.get("update"):
+                    self._device.info.name_update(data=json_data.get("update"))
 
 
         except Exception as e:
