@@ -35,6 +35,7 @@ class TestAmsIdentitiesResolved(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock()
         self.client.slicer_settings.custom_filaments = {}
+        self.client.slicer_settings.filaments = {}
         self.device = Device(self.client)
         self.client._device = self.device
 

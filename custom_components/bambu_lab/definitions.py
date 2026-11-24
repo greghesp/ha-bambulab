@@ -1247,7 +1247,7 @@ def _hotend_sensor(slot_id: int, display_id: int) -> BambuLabHotendRackSensorEnt
             )(rack.is_slot_occupied(sid) or sid == rack.tar_id)
         )(self.coordinator.get_model().hotend_rack, self.entity_description.hotend_id,
           int(self.entity_description.translation_placeholders["hotend_id"]),
-          self.coordinator.client.slicer_settings.custom_filaments),
+          self.coordinator.client.slicer_settings.filaments),
     )
 
 def _hotend_used_time_sensor(

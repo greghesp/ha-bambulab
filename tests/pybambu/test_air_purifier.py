@@ -89,6 +89,7 @@ class TestAirPurifier(unittest.TestCase):
         client = MagicMock()
         client._device_type = "H3C"
         client.slicer_settings.custom_filaments = {}
+        client.slicer_settings.filaments = {}
         device = Device(client)
         client._device = device
         device.get_version_data = {"command": "get_version"}
@@ -114,6 +115,7 @@ class TestAirPurifier(unittest.TestCase):
                 client = MagicMock()
                 client._device_type = "H3C"
                 client.slicer_settings.custom_filaments = {}
+                client.slicer_settings.filaments = {}
                 device = Device(client)
                 client._device = device
                 status = {**E1_STATUS, "command": "push_status", "msg": 0}
@@ -133,6 +135,7 @@ class TestAirPurifier(unittest.TestCase):
         client = MagicMock()
         client._device_type = "H3C"
         client.slicer_settings.custom_filaments = {}
+        client.slicer_settings.filaments = {}
         device = Device(client)
         client._device = device
         device.get_version_data = {"command": "get_version"}

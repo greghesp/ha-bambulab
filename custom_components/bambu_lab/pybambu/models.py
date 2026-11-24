@@ -25,6 +25,7 @@ import asyncio
 
 from .air_purifier import AirPurifier
 from .bambu_cloud import CloudAuthError
+from .learned_filaments import FilamentInfo, get_learned_filament_store
 from .utils import (
     search,
     fan_percentage,
@@ -3151,6 +3152,14 @@ class PrintJob:
                 except Exception as e:
                     LOGGER.debug(f"Failed to download {target_plate_json}: {e}")
 
+            if "project_settings.config" in files:
+                try:
+                    settings_buf = io.BytesIO()
+                    ftp.retrbinary("RETR project_settings.config", settings_buf.write)
+                    self._client.slicer_settings.learned.learn_from_project_settings(settings_buf.getvalue())
+                except Exception as e:
+                    LOGGER.debug(f"Failed to learn custom filaments from project_settings.config: {e}")
+
             pick_image_bytes = None
             # Like the cover, single-plate exports can name the pick image pick_1.png
             # whatever the plate index is.
@@ -3239,6 +3248,10 @@ class PrintJob:
 
             # Open the 3mf zip archive
             with ZipFile(model_file_path) as archive:
+                try:
+                    self._client.slicer_settings.learned.learn_from_3mf(archive)
+                except Exception as e:
+                    LOGGER.error(f"Failed to learn custom filaments from 3mf: {e}")
                 slice_info_bytes = archive.read('Metadata/slice_info.config')
                 slice_info = ElementTree.fromstring(slice_info_bytes)
                 plate = slice_info.find('plate')
@@ -4963,7 +4976,7 @@ class AMSTray:
         if not tray_type or tray_type in ("", "Empty"):
             return UNKNOWN_TRAY_LABEL
         if idx:
-            name = get_filament_name(idx, self._client.slicer_settings.custom_filaments)
+            name = get_filament_name(idx, self._client.slicer_settings.filaments)
             if name not in ("unknown", "Empty"):
                 return name
         return tray_type
@@ -5754,15 +5767,6 @@ class PrintFun:
         return self._encryption_enabled
     
 
-@dataclass
-class FilamentInfo:
-    name: str
-    filament_vendor: str
-    filament_type: str
-    filament_density: float
-    nozzle_temperature: int
-    nozzle_temperature_range_high: int
-    nozzle_temperature_range_low: int
 
 # Example custom filament;
 # {
@@ -5789,10 +5793,13 @@ class SlicerSettings:
     def __init__(self, client):
         self._client = client
         self.custom_filaments = {}
+        # Filaments seen in print files. The only source of custom filament names in LAN mode.
+        self.learned = get_learned_filament_store(getattr(client, "custom_filament_store_path", None))
 
     @property
     def filaments(self):
-        return self.custom_filaments
+        """Custom filaments by id. Cloud presets win over ones learned from print files."""
+        return {**self.learned.filaments, **self.custom_filaments}
 
     def _load_custom_filaments(self, slicer_settings: dict):
         filaments = slicer_settings.get("filament")
