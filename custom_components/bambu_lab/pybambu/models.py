@@ -1236,6 +1236,14 @@ def model_name_pattern(name: str) -> re.Pattern:
     return re.compile("".join(parts), re.IGNORECASE)
 
 
+def is_same_reported_name(title: str, reported_name: str) -> bool:
+    """Whether a printer's reported name is this title. P1 and A1 printers report "/" as "_"."""
+    def normalize(name: str) -> str:
+        return "".join("_" if c in FILENAME_ILLEGAL_CHARS else c for c in name).strip()
+
+    return normalize(title) == normalize(reported_name)
+
+
 def strip_model_extension(filename: str) -> str:
     lowered = filename.lower()
     for extension in ('.gcode.3mf', '.3mf'):
@@ -1325,6 +1333,7 @@ class PrintJob:
     _subtask_name: str
     model_id: str
     task_id: str
+    subtask_id: str
     plate_idx: int
     start_time: datetime
     end_time: datetime
@@ -1357,6 +1366,7 @@ class PrintJob:
         self._subtask_name = ""
         self.model_id = ""
         self.task_id = ""
+        self.subtask_id = ""
         self.plate_idx = 0
         self.start_time = None
         self.end_time = None
@@ -1384,6 +1394,7 @@ class PrintJob:
         self._ftpThread = None
         self._ftp_download_percentage = 100
         self._next_model_retry_at = 0.0
+        self._task_data = None
         self._gcode_start_time = ""
         # An ams_mapping arrived that hasn't been written to the restart record yet.
         self._ams_mapping_unsaved = False
@@ -1490,7 +1501,24 @@ class PrintJob:
     @property
     def subtask_name(self) -> str:
         return None if self._subtask_name == "" else self._subtask_name
-    
+
+    @property
+    def task_name(self) -> str | None:
+        """The name of the print to show to the user.
+
+        For a MakerWorld print the printer reports the print profile's title as the subtask name. The
+        job's cloud task has the model's name too. Use subtask_name to find the print's files.
+        """
+        # Read once, a new print clears it on another thread.
+        task = self._task_data
+        if self._subtask_name != "" and task is not None and self._is_own_cloud_task(task):
+            model_title = task.get('designTitle')
+            profile_title = task.get('instanceTitle')
+            # A name the user gave the print is not the profile title and is kept.
+            if model_title and profile_title and is_same_reported_name(profile_title, self._subtask_name):
+                return model_title
+        return self.subtask_name
+
     @property
     def print_type(self) -> str:
         return "unknown" if self._print_type == "" else self._print_type
@@ -1542,6 +1570,7 @@ class PrintJob:
 
         self.model_id = data.get("model_id", self.model_id)
         self.task_id = data.get("task_id", self.task_id)
+        self.subtask_id = data.get("subtask_id", self.subtask_id)
         self.plate_idx = data.get("plate_idx", self.plate_idx)
 
         # Printer-initiated prints and reprints can reach RUNNING before the
@@ -2818,6 +2847,7 @@ class PrintJob:
     def _clear_model_data(self):
         LOGGER.debug("Clearing model data")
         self._loaded_model_data = False
+        self._task_data = None
         self._client._device.cover_image.set_image(None)
         self._clear_pick_data()
         # These figures describe one specific job. If they survive and the next
@@ -3465,6 +3495,14 @@ class PrintJob:
                     # Convert everything to UTC-aware datetime
                     self.end_time = cloud_dt.astimezone(tz.UTC)
                     LOGGER.debug(f"CLOUD END TIME2: {self.end_time}")
+
+    def _cloud_task_ids(self) -> frozenset[str]:
+        """The ids the running job's cloud task can have, empty if the printer reported none."""
+        # Newer firmware reports the cloud task's id in both fields, older firmware two different ids.
+        return frozenset(str(value) for value in (self.task_id, self.subtask_id) if value) - {"0"}
+
+    def _is_own_cloud_task(self, task: dict) -> bool:
+        return str(task.get('id')) in self._cloud_task_ids()
 
     def _identify_objects_in_pick_image(self, image: Image) -> set:
         LOGGER.debug(f"Processing the pick image for objects")
