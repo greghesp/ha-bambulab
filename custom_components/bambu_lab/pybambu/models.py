@@ -106,10 +106,10 @@ from .media_sources import (
     storage_cache_segment,
 )
 
-# Seconds between get_version requests while the serial of an attached AMS is unknown. The delay
-# doubles after each request up to the maximum.
-AMS_IDENTITY_RETRY_MIN = 5
-AMS_IDENTITY_RETRY_MAX = 300
+# Seconds between get_version requests while the firmware version or the serial of an attached AMS
+# is unknown. The delay doubles after each request up to the maximum.
+VERSION_INFO_RETRY_MIN = 5
+VERSION_INFO_RETRY_MAX = 300
 
 
 class Device:
@@ -141,9 +141,9 @@ class Device:
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
         self.print_fun = PrintFun(client = client)
-        self._unidentified_ams: frozenset[int] = frozenset()
-        self._ams_identity_retry_delay = AMS_IDENTITY_RETRY_MIN
-        self._next_ams_identity_request_at = 0.0
+        self._missing_version_info: frozenset[str] = frozenset()
+        self._version_info_retry_delay = VERSION_INFO_RETRY_MIN
+        self._next_version_info_request_at = 0.0
 
     def print_update(self, data) -> bool:
         had_full_printer_data = self.has_full_printer_data
@@ -175,11 +175,10 @@ class Device:
 
         if data.get("command") == "push_status":
             if data.get("msg", 0) == 0:
-                send_ready_event = self.get_version_data is not None and self.push_all_data is None
                 if self.push_all_data is None:
                     LOGGER.debug("Reached first push of all data.")
                 self.push_all_data = data
-                if send_ready_event:
+                if not had_full_printer_data and self.has_full_printer_data:
                     self._client.callback("event_printer_ready")
 
         if (self.has_full_printer_data and self.air_purifier.connected is True and
@@ -189,8 +188,7 @@ class Device:
         if had_full_printer_data and self.air_purifier.identity and self.air_purifier.identity != previous_purifier_identity:
             self._client.callback("event_printer_ready")
 
-        if self.has_full_printer_data:
-            self._request_missing_ams_identities()
+        self._request_missing_version_info()
 
         # Only notify Home Assistant when something actually changed. The printer pushes
         # status roughly once a second; without this gate every push forces all entities
@@ -198,30 +196,45 @@ class Device:
         if send_event:
             self._client.callback("event_printer_data_update")
 
-    def _request_missing_ams_identities(self) -> None:
-        """Ask for version info again while an attached AMS has no serial.
+    def _request_missing_version_info(self) -> None:
+        """Ask for version info again while the firmware version or the serial of an AMS is unknown.
 
         The printer only sends version info when asked, and the request made on connect can be
-        answered before the AMS has been identified or attached (#1831). No entities are created
-        for an AMS without a serial, so it would stay missing until the integration is reloaded.
+        answered before the printer has finished starting up (#2033) or before an AMS has been
+        identified or attached (#1831). Entities are only set up once the firmware version is known,
+        and an AMS without a serial gets none, so they would stay missing until something else
+        requests it.
         """
-        unidentified = frozenset(index for index, ams in self.ams.data.items() if not ams.serial)
+        missing = {f"AMS {index}" for index, ams in self.ams.data.items() if not ams.serial}
+        if not self.has_firmware_version:
+            missing.add("firmware")
         now = time.monotonic()
-        if unidentified != self._unidentified_ams:
-            self._unidentified_ams = unidentified
-            self._ams_identity_retry_delay = AMS_IDENTITY_RETRY_MIN
-            self._next_ams_identity_request_at = now
-        if not unidentified or now < self._next_ams_identity_request_at:
+        if missing != self._missing_version_info:
+            self._missing_version_info = frozenset(missing)
+            self._version_info_retry_delay = VERSION_INFO_RETRY_MIN
+            # Until the first reply, the request made on connect is still outstanding.
+            is_first_reply_pending = self.get_version_data is None
+            self._next_version_info_request_at = now + (VERSION_INFO_RETRY_MIN if is_first_reply_pending else 0)
+        if not missing or now < self._next_version_info_request_at:
             return
 
-        LOGGER.debug(f"Requesting version info for AMS units without a serial: {sorted(unidentified)}")
-        self._next_ams_identity_request_at = now + self._ams_identity_retry_delay
-        self._ams_identity_retry_delay = min(self._ams_identity_retry_delay * 2, AMS_IDENTITY_RETRY_MAX)
+        LOGGER.debug(f"Requesting missing version info: {sorted(missing)}")
+        self._next_version_info_request_at = now + self._version_info_retry_delay
+        next_delay = min(self._version_info_retry_delay * 2, VERSION_INFO_RETRY_MAX)
+        if not self.has_firmware_version and self._version_info_retry_delay < next_delay == VERSION_INFO_RETRY_MAX:
+            LOGGER.warning("The printer has not reported its firmware version, so its entities can't be set up yet.")
+        self._version_info_retry_delay = next_delay
         self._client.publish(GET_VERSION)
 
     @property
+    def has_firmware_version(self) -> bool:
+        return self.info.sw_ver != "unknown"
+
+    @property
     def has_full_printer_data(self):
-        return (self.push_all_data != None) and (self.get_version_data != None)
+        # A printer that is still starting up can send version info without its firmware version.
+        # Feature checks need that version, so such a reply doesn't count.
+        return (self.push_all_data != None) and (self.get_version_data != None) and self.has_firmware_version
 
     @property
     def ams_identities_resolved(self) -> bool:
@@ -244,11 +257,11 @@ class Device:
         purifier_info_changed = self.air_purifier.info_update(data = data)
 
         if data.get("command") == "get_version":
-            send_ready_event = self.get_version_data is None and self.push_all_data is not None
             if self.get_version_data is None:
                 LOGGER.debug("Reached first push of version data.")
             self.get_version_data = data
-            if (not had_full_printer_data and self.has_full_printer_data and
+            send_ready_event = not had_full_printer_data and self.has_full_printer_data
+            if (send_ready_event and
                 self.air_purifier.connected is True and not self.air_purifier.ready):
                 # The initial version response may precede accessory identification.
                 self._client.publish(GET_VERSION)

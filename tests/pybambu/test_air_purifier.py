@@ -8,7 +8,8 @@ from pybambu.commands import GET_VERSION
 from pybambu.models import Device
 
 
-E1_VERSION = {"command": "get_version", "module": [{
+OTA = {"name": "ota", "sw_ver": "01.00.00.00", "hw_ver": "OTA"}
+E1_VERSION = {"command": "get_version", "module": [OTA, {
     "name": "aps", "id": 0, "sn": "TEST-E1-SERIAL", "product_name": "E1 Air Purifier",
     "hw_ver": "APS04", "sw_ver": "00.00.25.92",
 }]}
@@ -91,6 +92,7 @@ class TestAirPurifier(unittest.TestCase):
         client.slicer_settings.custom_filaments = {}
         device = Device(client)
         client._device = device
+        device.info.sw_ver = OTA["sw_ver"]
         device.get_version_data = {"command": "get_version"}
         device.push_all_data = {"command": "push_status"}
         device.air_purifier.connected = False
@@ -117,7 +119,7 @@ class TestAirPurifier(unittest.TestCase):
                 device = Device(client)
                 client._device = device
                 status = {**E1_STATUS, "command": "push_status", "msg": 0}
-                version = {"command": "get_version", "module": []}
+                version = {"command": "get_version", "module": [OTA]}
                 if status_first:
                     device.print_update(status)
                     device.info_update(version)
@@ -135,6 +137,7 @@ class TestAirPurifier(unittest.TestCase):
         client.slicer_settings.custom_filaments = {}
         device = Device(client)
         client._device = device
+        device.info.sw_ver = OTA["sw_ver"]
         device.get_version_data = {"command": "get_version"}
         device.push_all_data = {"command": "push_status"}
         device.air_purifier.info_update(E1_VERSION)
