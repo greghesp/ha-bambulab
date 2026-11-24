@@ -66,7 +66,7 @@ def serialize_pybambu_object(obj: Any) -> Any:
         # Include all attributes from __dict__
         for key, value in obj.__dict__.items():
             # Skip client references, binary data, and MQTT data that's captured separately
-            if key not in ['_client', '_bytes', 'push_all_data', 'get_version_data']:
+            if key not in ['_client', '_bytes', 'push_all_data', 'get_version_data', '_stored_model_lookup']:
                 try:
                     if isinstance(value, (bytes, bytearray)):
                         result[key] = {"type": "binary_data", "size_bytes": len(value)}

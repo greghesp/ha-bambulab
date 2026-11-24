@@ -313,7 +313,7 @@ class TestPrintJob(unittest.TestCase):
 
             result = self.print_job._try_active_metadata_from_printer([source])
 
-        self.assertTrue(result)
+        self.assertFalse(result)  # Image-only success must not stop metadata retries.
         self.client._device.pick_image.set_image.assert_called_with(pick_bytes)
 
     def test_active_metadata_skips_without_tcp6000_source(self):

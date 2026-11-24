@@ -25,6 +25,7 @@ import asyncio
 
 from .air_purifier import AirPurifier
 from .bambu_cloud import CloudAuthError
+from .model_metadata import StoredModelLookup, job_identity
 from .utils import (
     search,
     fan_percentage,
@@ -2171,17 +2172,18 @@ class PrintJob:
         source: RemoteMediaSource,
         remote_file: RemoteMediaFile,
         progress_callback=None,
+        force_download: bool = False,
     ) -> str | None:
         cache_file_path, cache_file_path_legacy = self._model_cache_paths(remote_file)
         size = int(remote_file.size)
         cache_file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if size > 0 and cache_file_path.exists() and cache_file_path.stat().st_size == size:
+        if not force_download and size > 0 and cache_file_path.exists() and cache_file_path.stat().st_size == size:
             LOGGER.debug(f"File already in cache: {cache_file_path}")
             os.utime(cache_file_path, None)
             return str(cache_file_path)
 
-        if size > 0 and cache_file_path_legacy.exists() and cache_file_path_legacy.stat().st_size == size:
+        if not force_download and size > 0 and cache_file_path_legacy.exists() and cache_file_path_legacy.stat().st_size == size:
             LOGGER.debug(f"File already in legacy cache: {cache_file_path_legacy}")
             extensions = [
                 ".3mf",
@@ -2249,8 +2251,18 @@ class PrintJob:
             ftps_search_paths=self.ftp_search_paths,
         )
         selected_files = self._select_model_files(remote_files, filenames_to_try)
+        title_selection = None
+        stamp = job_identity(self)
         if not selected_files:
-            return None
+            source = next((item for item in sources if item.name == Tcp6000MediaSource.name), None)
+            if source is None:
+                return None
+            if not hasattr(self, "_stored_model_lookup"):
+                self._stored_model_lookup = StoredModelLookup()
+            title_selection = self._stored_model_lookup.select(self, source)
+            if title_selection is None:
+                return None
+            selected_files = [title_selection.file]
 
         for selected in selected_files:
             source = next((item for item in sources if item.name == selected.source), None)
@@ -2266,8 +2278,22 @@ class PrintJob:
             ):
                 continue
 
-            result = self._download_model_file_from_remote(source, selected)
+            if stamp != job_identity(self):
+                return None
+            if title_selection is not None:
+                # The upstream name+size cache cannot distinguish a replaced same-size slice.
+                result = self._download_model_file_from_remote(source, selected, force_download=True)
+            else:
+                result = self._download_model_file_from_remote(source, selected)
             if result is not None:
+                if title_selection is not None:
+                    try:
+                        title_selection.validate_archive(result)
+                    except Exception as error:
+                        LOGGER.debug("Stored model changed during download: %s", type(error).__name__)
+                        return None
+                if stamp != job_identity(self):
+                    return None
                 return result
 
         return None
@@ -2843,7 +2869,12 @@ class PrintJob:
             while True:
                 self._ftpRunAgain = False
                 start_time = datetime.now()
-                self._async_download_task_data_from_printer_worker()
+                stamp = job_identity(self)
+                result = self._async_download_task_data_from_printer_worker()
+                if not result and stamp == job_identity(self):
+                    # A thumbnail alone is not complete model metadata.
+                    self._loaded_model_data = False
+                    self._next_model_retry_at = time.monotonic() + 300
                 if not self._ftpRunAgain:
                     break
                 end_time = datetime.now()
@@ -2928,6 +2959,7 @@ class PrintJob:
         if not self.gcode_file or not self.plate_idx:
             return False
 
+        stamp = job_identity(self)
         metadata_dir = self.gcode_file.replace("\\", "/").rsplit("/", 1)[0]
         for source in sources:
             if source.name != Tcp6000MediaSource.name:
@@ -2936,6 +2968,8 @@ class PrintJob:
             pick_image_bytes = None
             for pick_name in self._pick_image_names(str(self.plate_idx)):
                 pick_image_bytes = self._read_active_metadata_file(source, f"{metadata_dir}/{pick_name}")
+                if stamp != job_identity(self):
+                    return False
                 if pick_image_bytes:
                     break
 
@@ -2948,15 +2982,19 @@ class PrintJob:
                     slice_info_bytes=slice_info_bytes,
                     plate_json_bytes=plate_json_bytes,
                     pick_image_bytes=pick_image_bytes,
+                    expected_job=stamp,
                 ):
                     LOGGER.debug(f"Loaded active metadata directly from {metadata_dir}")
                     return True
 
+            if stamp != job_identity(self):
+                return False
             if pick_image_bytes:
                 # No usable slice info, so objects can't be named, but the image itself is still useful.
                 self._client._device.pick_image.set_image(pick_image_bytes)
                 LOGGER.debug(f"Loaded active pick image directly from {metadata_dir}")
-                return True
+                # Keep the image, but allow retries until slicer metadata is available.
+                return False
 
         return False
 
@@ -2966,8 +3004,15 @@ class PrintJob:
         cover_image_bytes: bytes | None = None,
         plate_json_bytes: bytes | None = None,
         pick_image_bytes: bytes | None = None,
+        expected_job: tuple | None = None,
+        downloaded_gcode_filename: str | None = None,
     ) -> bool:
         try:
+            if expected_job is not None and expected_job != job_identity(self):
+                return False
+            weight = self.print_weight
+            bed_type = self.print_bed_type
+            objects = self._printable_objects
             slice_info = ElementTree.fromstring(slice_info_bytes)
             plate = slice_info.find('plate')
             # "Export all sliced file" writes one <plate> per sliced plate. Use the one MQTT says is
@@ -2990,8 +3035,8 @@ class PrintJob:
             plate_filament_count = len(plate.findall('filament'))
 
             # Reset filament data
-            self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
-            self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+            weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
+            lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
 
             if cover_image_bytes is not None:
                 self._client._device.cover_image.set_image(cover_image_bytes)
@@ -3005,7 +3050,7 @@ class PrintJob:
 
                     if plate_json_bytes is not None:
                         try:
-                            self.print_bed_type = json.loads(plate_json_bytes.decode('utf-8')).get('bed_type')
+                            bed_type = json.loads(plate_json_bytes.decode('utf-8')).get('bed_type')
                         except Exception as e:
                             LOGGER.debug(f"Failed to parse plate json bed_type: {e}")
 
@@ -3013,7 +3058,7 @@ class PrintJob:
                     LOGGER.debug(f"Weight: {metadata.get('value')}")
                     try:
                         # The XML attribute is a string; print_weight is a float everywhere else.
-                        self.print_weight = float(metadata.get('value'))
+                        weight = float(metadata.get('value'))
                     except (TypeError, ValueError) as e:
                         LOGGER.error(f"Failed to parse print weight: {e}")
                 elif (metadata.get('key') == 'prediction'):
@@ -3040,8 +3085,8 @@ class PrintJob:
                             ams_name = ams_slot_name(ams_index) if ams_index is not None else None
                             if ams_name is not None:
                                 # We add the filament as you can map multiple slicer filaments to the same physical filament.
-                                self._ams_print_weights[ams_index] += float(metadata.get('used_g'))
-                                self._ams_print_lengths[ams_index] += float(metadata.get('used_m'))
+                                weights[ams_index] += float(metadata.get('used_g'))
+                                lengths[ams_index] += float(metadata.get('used_m'))
                                 log_label = ams_name
                             else:
                                 LOGGER.debug(f"ams_mapping: {self.ams_mapping} mapping: {self._tray_mapping}")
@@ -3061,7 +3106,6 @@ class PrintJob:
                     except Exception as e:
                         LOGGER.error(f"Failed to parse filament data: {e}")
 
-            self.print_length = print_length
 
             if pick_image_bytes is not None and plate_number is not None:
                 try:
@@ -3071,10 +3115,20 @@ class PrintJob:
 
                     # Filter the printable objects from slice_info.config, removing
                     # any that weren't identified in the pick image.
-                    self._printable_objects = {identify_id: _printable_objects[identify_id] for identify_id in identify_ids if identify_id in _printable_objects}
+                    objects = {identify_id: _printable_objects[identify_id] for identify_id in identify_ids if identify_id in _printable_objects}
                 except Exception as e:
                     LOGGER.error(f"Failed to extract pick image: {e}")
 
+            if expected_job is not None and expected_job != job_identity(self):
+                return False
+            self._ams_print_weights = weights
+            self._ams_print_lengths = lengths
+            self.print_weight = weight
+            self.print_length = print_length
+            self.print_bed_type = bed_type
+            self._printable_objects = objects
+            if downloaded_gcode_filename is not None:
+                self.gcode_file_downloaded = downloaded_gcode_filename
             self._client.callback("event_printer_data_update")
             return True
         except Exception as e:
@@ -3083,6 +3137,7 @@ class PrintJob:
 
     def _attempt_direct_metadata_download(self) -> bool:
         """Attempt to download slice_info.config and plate image directly via FTPS (e.g. for P1/P2/A1 printers in LAN mode)."""
+        stamp = job_identity(self)
         ftp = None
         try:
             ftp = self._client.ftp_connection()
@@ -3171,6 +3226,7 @@ class PrintJob:
                 cover_image_bytes=cover_image_bytes,
                 plate_json_bytes=plate_json_bytes,
                 pick_image_bytes=pick_image_bytes,
+                expected_job=stamp,
             )
         except Exception as e:
             LOGGER.debug(f"Direct metadata download failed: {type(e)} Args: {e}")
@@ -3183,12 +3239,15 @@ class PrintJob:
                     pass
 
     def _async_download_task_data_from_printer_worker(self):
+        stamp = job_identity(self)
         model_file_path = None
         cover_loaded = False
         sources = self._remote_media_sources()
         try:
             cover_loaded = self._try_active_cover_from_printer(sources)
             for i in range(1,13):
+                if stamp != job_identity(self):
+                    return False
                 model_file_path = self._attempt_remote_model_download(sources)
                 if model_file_path is not None:
                     break
@@ -3218,6 +3277,8 @@ class PrintJob:
         finally:
             self._close_remote_media_sources(sources)
 
+        if stamp != job_identity(self):
+            return False
         if model_file_path is None:
             if metadata_loaded:
                 LOGGER.info("Direct metadata download from printer succeeded.")
@@ -3231,7 +3292,8 @@ class PrintJob:
             return False
 
         result = False
-        
+        downloaded_gcode_filename = None
+
         try:
             LOGGER.debug(f"File size is {os.path.getsize(model_file_path)} bytes")
 
@@ -3313,9 +3375,9 @@ class PrintJob:
                             gcode_path = os.path.join(model_dir, gcode_filename)
                             with archive.open(gcode_entry) as ge, open(gcode_path, "wb") as tp:
                                 shutil.copyfileobj(ge, tp)
-                                self.gcode_file_downloaded = gcode_filename
+                                downloaded_gcode_filename = gcode_filename
                     except Exception as e:
-                        self.gcode_file_downloaded = "ERROR"
+                        downloaded_gcode_filename = "ERROR"
                         LOGGER.error(f"Error while extracting gcode zip entry to target path: {repr(e)}")
 
                 try:
@@ -3326,7 +3388,11 @@ class PrintJob:
                 except Exception as e:
                     LOGGER.error(f"Failed to save slice_info.config: {e}")
 
+                if stamp != job_identity(self):
+                    return False
                 result = self._parse_and_apply_model_metadata(
+                    expected_job=stamp,
+                    downloaded_gcode_filename=downloaded_gcode_filename,
                     slice_info_bytes=slice_info_bytes,
                     cover_image_bytes=cover_image_bytes,
                     plate_json_bytes=plate_json_bytes,
