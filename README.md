@@ -66,11 +66,11 @@ arrive (`local_push`), with no polling delay.
 
 | Connection | What you provide | What you get |
 |---|---|---|
-| **Bambu Cloud** (recommended) | Bambu Lab account e-mail and password, optionally the printer's IP | Everything, including print weight/length and cover image from your cloud print history, and MakerWorld stats. Adding the IP connects sensor data directly to the printer, which is faster and more reliable |
+| **Bambu Cloud** (recommended) | Bambu Lab account e-mail and password (or an e-mailed code), optionally the printer's IP | Everything, including print weight/length and cover image from your cloud print history, and MakerWorld stats. Adding the IP connects sensor data directly to the printer, which is faster and more reliable |
 | **LAN Mode** | Serial number, IP address and access code | Everything that comes from the printer itself. Works without an internet connection and with printers set to LAN Only Mode |
 
 Two-factor authentication is supported. Bambu accounts created with
-Google, Apple or Facebook need a password set first ([how](#signed-up-with-google-apple-or-facebook)).
+Google, Apple or Facebook log in with a code ([how](#signed-up-with-google-apple-or-facebook)).
 
 ---
 
@@ -271,9 +271,12 @@ Some entities need an extra printer setting:
   *Store Sent Files on External Storage* and insert a USB drive / SD card.
 
 ### Signed up with Google, Apple or Facebook?
-Set a password first: in the Bambu Handy app, tap the person icon →
-**Account Security → Change Password**. Then sign in to the integration
-with your e-mail and that password.
+Enter the e-mail of your Bambu account, leave the password blank, and enter
+the verification code Bambu e-mails you.
+
+Your Google, Apple or Facebook password won't work. To use a password instead,
+set one in the Bambu Handy app: tap the person icon →
+**Account Security → Change Password**.
 
 ---
 
@@ -395,7 +398,7 @@ Parameters and examples: [Actions](https://docs.page/greghesp/ha-bambulab/action
 | Symptom | Fix |
 |---|---|
 | Controls do nothing, only the light works | Your firmware enforces Bambu authorization. See [above](#bambu-lab-firmware-and-authorization) |
-| Can't sign in with a Google/Apple/Facebook account | Set a Bambu account password ([how](#signed-up-with-google-apple-or-facebook)) |
+| Can't sign in with a Google/Apple/Facebook account | Leave the password blank to log in with a code ([how](#signed-up-with-google-apple-or-facebook)) |
 | No camera image | P1/A1: add the printer's IP. X1: enable *LAN Mode Liveview*. H2D/H2S/H3C/X2D: enable *LAN Only Liveview* |
 | Cover image, print weight or bed type empty | Newer firmware: enable *Store Sent Files on External Storage* with a USB drive / SD card inserted |
 | Cards missing from the card picker | Hard-refresh the browser (Ctrl+Shift+R). YAML dashboards: add the resource ([above](#spool-and-print-control-cards)) |

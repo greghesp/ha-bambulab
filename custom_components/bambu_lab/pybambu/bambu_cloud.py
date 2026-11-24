@@ -65,6 +65,11 @@ class CodeIncorrectError(Exception):
         super().__init__("Email code incorrect")
         self.error_code = 400
 
+class IncorrectPasswordError(Exception):
+    def __init__(self):
+        super().__init__("Incorrect password")
+        self.error_code = 400
+
 class TfaCodeRequiredError(Exception):
     def __init__(self):
         super().__init__("Two factor authentication code required")
@@ -220,7 +225,12 @@ class BambuCloud:
             "apiError": ""
         }
 
-        response = self._post(BambuUrl.LOGIN, json=data)
+        response = self._post(BambuUrl.LOGIN, json=data, return400=True)
+        if response.status_code == 400:
+            LOGGER.debug(f"Response: '{response.text}'")
+            if 'Incorrect password' in response.text:
+                raise IncorrectPasswordError()
+            raise PermissionError(response.status_code, response.text)
 
         auth_json = response.json()
         accessToken = auth_json.get('accessToken', '')
@@ -424,6 +434,12 @@ class BambuCloud:
         self._region = region
         self._email = email
         self._password = password
+
+        if password == '':
+            # Accounts made with Google, Apple or Facebook have no Bambu password. The code
+            # login doesn't need one.
+            self._get_new_code()
+            raise CodeRequiredError()
 
         result = self._get_authentication_token()
         self._auth_token = result
