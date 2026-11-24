@@ -5,6 +5,7 @@ from enum import (
 
 import base64
 import json
+import time
 import requests
 
 cloudscraper_available = False
@@ -802,14 +803,56 @@ class BambuCloud:
             return Printers.X1C
         return device_product_name.replace(" ", "").upper()
 
-    def download(self, url: str) -> bytearray:
+    # The cover image is fetched on the MQTT thread, so the download must stay
+    # well inside the 30s MQTT keepalive. requests' timeout only bounds each
+    # socket read, so a body that trickles in also needs an overall deadline.
+    # Worst case is the deadline plus one read timeout.
+    COVER_IMAGE_READ_TIMEOUT = 10
+    COVER_IMAGE_DEADLINE = 15
+    COVER_IMAGE_CHUNK_SIZE = 8192
+
+    def download(self, url: str) -> bytes | None:
         LOGGER.debug(f"Downloading cover image: {url}")
+        deadline = time.monotonic() + self.COVER_IMAGE_DEADLINE
         try:
             # This is just a standard download from an unauthenticated end point.
-            response = requests.get(url, headers={'User-Agent': USER_AGENT})
-        except:
+            # It runs on the MQTT thread while the first push is processed, so it
+            # must never wait indefinitely: a stalled connection would hold back
+            # event_printer_ready and no entities would ever be created (#2171).
+            with requests.get(url,
+                              headers={'User-Agent': USER_AGENT},
+                              timeout=self.COVER_IMAGE_READ_TIMEOUT,
+                              stream=True) as response:
+                if response.status_code != 200:
+                    LOGGER.debug(f"Cover image download failed: HTTP {response.status_code}")
+                    return None
+                chunks = []
+                for chunk in self._iter_available(response):
+                    chunks.append(chunk)
+                    if time.monotonic() > deadline:
+                        LOGGER.debug(f"Cover image download failed: not complete after {self.COVER_IMAGE_DEADLINE}s")
+                        return None
+                return b"".join(chunks)
+        except Exception as e:
+            LOGGER.debug(f"Cover image download failed: {type(e).__name__}: {e}")
             return None
-        return response.content
+
+    def _iter_available(self, response):
+        """Yield the body as bytes arrive, so a caller can check a deadline.
+
+        urllib3's read(amt), which iter_content uses, keeps reading until it has
+        amt bytes, so a slow trickle never returns to the caller. read1 returns
+        whatever is available. Older urllib3 (< 2.3) has no read1.
+        """
+        raw = response.raw
+        if not hasattr(raw, "read1"):
+            yield from response.iter_content(chunk_size=self.COVER_IMAGE_CHUNK_SIZE)
+            return
+        while True:
+            chunk = raw.read1(self.COVER_IMAGE_CHUNK_SIZE, decode_content=True)
+            if not chunk:
+                return
+            yield chunk
 
     @property
     def username(self):
