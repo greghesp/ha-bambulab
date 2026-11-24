@@ -4,6 +4,7 @@ import asyncio
 import ftplib
 import functools
 import json
+import logging
 import math
 import os
 import queue
@@ -78,6 +79,12 @@ class WatchdogThread(threading.Thread):
 THREAD_STOP_TIMEOUT = 5
 # Without a timeout, connecting to a host that silently drops packets can block for minutes.
 CHAMBER_CONNECT_TIMEOUT = 10
+# Frames normally arrive every second or two. If the printer drops off without closing the
+# connection, reads just report that no data is ready forever, so reconnect after this long.
+CHAMBER_STALL_TIMEOUT = 30
+# Consecutive failed connects before slowing down the retries and no longer logging each one.
+CHAMBER_FAST_CONNECT_ATTEMPTS = 12
+CHAMBER_SLOW_RETRY_INTERVAL = 60
 
 
 def _stop_thread(thread: threading.Thread, name: str) -> None:
@@ -110,8 +117,11 @@ class ChamberImageThread(threading.Thread):
         access_code = self._client._access_code
         hostname = self._client._device.info.ip_address
         port = 6000
-        MAX_CONNECT_ATTEMPTS = 12
         connect_attempts = 0
+
+        def log_failure(message: str) -> None:
+            retrying_slowly = connect_attempts > CHAMBER_FAST_CONNECT_ATTEMPTS
+            LOGGER.log(logging.DEBUG if retrying_slowly else logging.ERROR, message)
 
         auth_data += struct.pack("<I", 0x40)   # '@'\0\0\0
         auth_data += struct.pack("<I", 0x3000) # \0'0'\0\0
@@ -146,8 +156,13 @@ class ChamberImageThread(threading.Thread):
         # Bytes payload_size-2:payload_size = jpeg_end magic bytes
         #
         # Further attempts to receive data will get SSLWantReadError until a new image is ready (1-2 seconds later)
-        while connect_attempts < MAX_CONNECT_ATTEMPTS and not self._stop_event.is_set():
+        while not self._stop_event.is_set():
+            if connect_attempts >= CHAMBER_FAST_CONNECT_ATTEMPTS:
+                # Never give up. Nothing restarts this thread while MQTT stays connected.
+                if self._stop_event.wait(CHAMBER_SLOW_RETRY_INTERVAL):
+                    break
             connect_attempts += 1
+            sslSock = None
             try:
                 with socket.create_connection((hostname, port), timeout=CHAMBER_CONNECT_TIMEOUT) as sock:
                     try:
@@ -159,19 +174,25 @@ class ChamberImageThread(threading.Thread):
                         status = sslSock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
                         LOGGER.debug(f"SOCKET STATUS: {status}")
                         if status != 0:
-                            LOGGER.error(f"Socket error: {status}")
+                            log_failure(f"Socket error: {status}")
                     except socket.error as e:
-                        LOGGER.error(f"Socket error: {e}")
+                        log_failure(f"Socket error: {e}")
                         # Sleep to allow printer to stabilize during boot when it may fail these connection attempts repeatedly.
                         if self._stop_event.wait(1):
                             break
                         continue
 
                     sslSock.setblocking(False)
+                    last_data_time = time.monotonic()
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
+                            last_data_time = time.monotonic()
                         except ssl.SSLWantReadError:
+                            if time.monotonic() - last_data_time > CHAMBER_STALL_TIMEOUT:
+                                if connect_attempts == 0:
+                                    LOGGER.warning(f"No chamber image data received for {CHAMBER_STALL_TIMEOUT} seconds, reconnecting.")
+                                raise TimeoutError("Chamber image connection stalled")
                             if self._stop_event.wait(1):
                                 break
                             continue
@@ -208,27 +229,33 @@ class ChamberImageThread(threading.Thread):
 
                         elif len(dr) == 0:
                             # This occurs if the wrong access code was provided.
-                            LOGGER.error("Chamber image connection rejected by the printer. Check provided access code and IP address.")
+                            log_failure("Chamber image connection rejected by the printer. Check provided access code and IP address.")
                             raise RuntimeError("Received no data unexpectedly.")
 
                         else:
-                            LOGGER.error(f"UNEXPECTED DATA RECEIVED: {len(dr)}")
+                            log_failure(f"UNEXPECTED DATA RECEIVED: {len(dr)}")
                             raise RuntimeError(f"Unexpected data chunk size received: {len(dr)}")
 
             except OSError as e:
                 if e.errno == 113 or isinstance(e, TimeoutError):
-                    LOGGER.debug("Host is unreachable")
+                    LOGGER.debug(f"Host is unreachable: {e}")
                 else:
-                    LOGGER.error("Chamber Image thread outer exception occurred:")
-                    LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                    log_failure("Chamber Image thread outer exception occurred:")
+                    log_failure(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(2)  # Avoid a tight loop if this is a persistent error.
 
             except Exception as e:
-                LOGGER.error(f"Chamber Image thread exception occurred:")
-                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                log_failure("Chamber Image thread exception occurred:")
+                log_failure(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(2)  # Avoid a tight loop if this is a persistent error.
+
+            finally:
+                # wrap_socket() takes over the socket, so the with block does not close it.
+                # Release it before retrying as the printer limits the number of viewers.
+                if sslSock is not None:
+                    sslSock.close()
 
         LOGGER.debug("Chamber image thread exited.")
 
