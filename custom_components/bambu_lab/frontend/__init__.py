@@ -1,5 +1,6 @@
 """Frontend for Bambu Lab Cards"""
 
+import asyncio
 import logging
 import os
 import pathlib
@@ -7,7 +8,6 @@ import pathlib
 from packaging.version import parse
 
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.event import async_call_later
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.const import __version__
 
@@ -59,9 +59,22 @@ class BambuLabCardRegistration:
             return self.hass.data["lovelace"]["resources"]
 
     async def async_register(self):
-        await self.async_register_bambu_path()
-        if self.lovelace_resource_mode == "storage":
-            await self.async_wait_for_lovelace_resources()
+        """Serve the cards and add them to the Lovelace resources.
+
+        The printer works without the cards, so a failure here is only logged.
+        """
+        try:
+            await self.async_register_bambu_path()
+            if self.lovelace_resource_mode == "storage":
+                await self.async_load_lovelace_resources()
+                await self.async_register_bambu_cards()
+            else:
+                _LOGGER.debug(
+                    "Not installing Bambu Cards because Lovelace resources are in %s mode",
+                    self.lovelace_resource_mode,
+                )
+        except Exception:
+            _LOGGER.exception("Failed to register the Bambu Lab cards")
 
     # install card 
     async def async_register_bambu_path(self):
@@ -75,15 +88,19 @@ class BambuLabCardRegistration:
             _LOGGER.debug("Bambu Lab static path already registered")
 
 
-    async def async_wait_for_lovelace_resources(self) -> None:
-        async def check_lovelace_resources_loaded(now):
-            if self.lovelace_resources.loaded:
-                await self.async_register_bambu_cards()
-            else:
-                _LOGGER.debug("Unable to install Bambu Cards because Lovelace resources not yet loaded. Trying again in 5 seconds")
-                async_call_later(self.hass, 5, check_lovelace_resources_loaded)
-        
-        await check_lovelace_resources_loaded(0)
+    async def async_load_lovelace_resources(self) -> None:
+        """Load the resources now instead of waiting for a browser to do it.
+
+        Home Assistant only loads them when the first dashboard asks for the list.
+        Waiting for that gives that dashboard the list from before the cards were
+        added or updated, and it doesn't ask again until the page is reloaded.
+        """
+        if self.lovelace_resources.loaded:
+            return
+        await self.lovelace_resources.async_get_info()
+        # A dashboard that asked while we were loading shares our read, but stores its
+        # result after us. Let it finish so that it doesn't undo what we change next.
+        await asyncio.sleep(0)
 
     async def async_register_bambu_cards(self):
         _LOGGER.debug("Installing Lovelace resource for Bambu Cards")
@@ -154,6 +171,7 @@ class BambuLabCardRegistration:
     async def async_unregister(self):
         # Unload lovelace module resource
         if self.lovelace_resource_mode == "storage":
+            await self.async_load_lovelace_resources()
             for card in BAMBU_LAB_CARDS:
                 url = f"{URL_BASE}/{card.get('filename')}"
                 bambu_resources = [

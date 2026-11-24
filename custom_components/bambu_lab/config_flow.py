@@ -83,6 +83,11 @@ def _async_get_printer_device(hass, serial: str):
     return None
 
 
+def _find_cloud_device(device_list: list[dict], serial: str) -> dict | None:
+    """Find a printer in the cloud device list. The account may not own it."""
+    return next((device for device in device_list if device['dev_id'] == serial), None)
+
+
 async def _get_working_account_credentials(
     hass: HomeAssistant, username: str
 ) -> dict[str, dict[str, str]]:
@@ -201,20 +206,19 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     default_email = config_entry.options['email']
                     username = config_entry.options['username']
                     auth_token = config_entry.options['auth_token']
-                    if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
+                    # test_authentication() leaves the tested credentials on the client, so use a
+                    # fresh one per entry to keep a later entry from replacing a working account.
+                    cloud = BambuCloud("", "", "", "")
+                    if await self.hass.async_add_executor_job(cloud.test_authentication,
                                                               default_region,
                                                               default_email,
                                                               username,
                                                               auth_token):
                         LOGGER.debug("Found working credentials.")
-                        self.region = default_region
-                        self.email = default_email
-                        self.bambu_cloud = BambuCloud(
-                            default_region,
-                            default_email,
-                            username,
-                            auth_token
-                        )
+                        if self.email == '':
+                            self.region = default_region
+                            self.email = default_email
+                            self._bambu_cloud = cloud
                         if username not in existing_makerworld_accounts:
                             self._makerworld_credentials.setdefault(username, {
                                 "region": default_region,
@@ -479,6 +483,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
         printer_list = []
         for device in device_list:
@@ -525,10 +531,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
-        for device in device_list:
-            if device['dev_id'] == self.serial:
-                break
+        device = _find_cloud_device(device_list, self.serial)
+        if device is None:
+            LOGGER.error(f"Unable to find device for serial: {self.serial}")
+            return self.async_abort(reason='device_not_found')
 
         device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
         default_host = ""
@@ -593,17 +602,17 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
                 if result == 0:
                     if self._show_existing:
-                        # Check to see if this device is already registered and delete it if so.
-                        hadevice = _async_get_printer_device(self.hass, device['dev_id'])
-                        if hadevice is not None:
-                            for config_entry in hadevice.config_entries:
-                                LOGGER.debug(f"Removing existing config_entry: {config_entry}")
-                                try:
-                                    # Remove the config entry
-                                    await self.hass.config_entries.async_remove(config_entry)
-                                    LOGGER.debug("Successfully removed config entry.")
-                                except Exception as e:
-                                    LOGGER.error("Failed to remove config entry: %s", e)
+                        # Replace any existing entry for this printer. Match on our own entries rather than
+                        # the device's, as other integrations can share the device before HA 2026.9.
+                        for config_entry in self.hass.config_entries.async_entries(DOMAIN):
+                            if config_entry.data.get('serial') != device['dev_id']:
+                                continue
+                            LOGGER.debug(f"Removing existing config_entry: {config_entry.entry_id}")
+                            try:
+                                await self.hass.config_entries.async_remove(config_entry.entry_id)
+                                LOGGER.debug("Successfully removed config entry.")
+                            except Exception as e:
+                                LOGGER.error("Failed to remove config entry: %s", e)
 
                     printer_name = device['name']
                     LOGGER.debug(f"Config Flow: Writing entry for '{printer_name}'")
@@ -983,14 +992,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
         # Get the device we are working with.
-        device = None
-        for device in device_list:
-            if device['dev_id'] == self._config_entry.data['serial']:
-                break
-
-        if device is None: 
+        device = _find_cloud_device(device_list, self._config_entry.data['serial'])
+        if device is None:
             LOGGER.error(f"Unable to find device for serial: {self._config_entry.data['serial']}")
             return self.async_abort(reason='device_not_found')
 
