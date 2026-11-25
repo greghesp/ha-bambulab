@@ -1588,7 +1588,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error("Error deleting cached file %s: %s", file_path, err)
             return {"success": False, "error": str(err)}
 
-        LOGGER.info("Deleted cached file %s (%d files)", relative_path, deleted_count)
+        LOGGER.info("Deleted cached file %s (%d files)", file_path, deleted_count)
         return {"success": True, "deleted_count": deleted_count}
 
     async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:
