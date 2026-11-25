@@ -22,9 +22,11 @@ body:
         - H2C
         - H2D
         - H2S
+        - H3C
         - P1P
         - P1S
         - P2S
+        - P3C
         - R1
         - X1
         - X1C
@@ -32,6 +34,8 @@ body:
         - X2D
         - AMS
         - AMS 2 Pro
+        - AMS 3H
+        - AMS 3P
         - AMS HT
         - AMS Lite
     validations:
