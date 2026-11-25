@@ -804,7 +804,9 @@ class TestPrintJob(unittest.TestCase):
             self.assertTrue(newest[0].exists())
             self.assertFalse(oldest[0].exists())
 
-    def test_prune_print_history_keeps_only_newest_gcode_regardless_of_model_count(self):
+    def test_prune_print_history_keeps_only_newest_gcode_regardless_of_model_count(
+        self,
+    ):
         for keep, expected_gcode_count in ((0, 0), (1, 1), (3, 1)):
             with self.subTest(keep=keep), tempfile.TemporaryDirectory() as temp_dir:
                 self.client.cache_path = temp_dir
@@ -817,8 +819,12 @@ class TestPrintJob(unittest.TestCase):
 
                 self.print_job._prune_print_history(keep=keep)
 
-                self.assertEqual(sum(model.exists() for model, _ in models), min(keep, len(models)))
-                self.assertEqual(sum(gcode.exists() for _, gcode in models), expected_gcode_count)
+                self.assertEqual(
+                    sum(model.exists() for model, _ in models), min(keep, len(models))
+                )
+                self.assertEqual(
+                    sum(gcode.exists() for _, gcode in models), expected_gcode_count
+                )
 
     def test_clear_print_history_deletes_every_model_and_sidecar(self):
         """Clearing removes all cached prints, even when pruning is disabled (#1585)."""
