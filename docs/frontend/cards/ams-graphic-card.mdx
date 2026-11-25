@@ -1,0 +1,28 @@
+---
+title: AMS Graphic Card
+---
+
+# AMS Graphic Card
+
+## Description
+
+Draws the AMS unit itself (AMS, AMS 2 Pro, AMS HT) with spool fill levels and optional labels. There's no drawing of the AMS 3H yet, so use the [AMS Card](/frontend/cards/ams-card) for it.
+
+![AMS Graphic card for an AMS 2 Pro](/images/readme/ams-card-graphic.png)
+
+## Configuration
+
+All configuration can be done via the dashboard card editor. The YAML below is for reference.
+
+```yaml
+type: custom:ha-bambulab-ams-graphic-card
+ams: <AMS device id>
+show_info_bar: true
+show_title: true
+subtitle: AMS 2 Pro
+show_labels: true
+label_mode: type          # type (e.g. PLA) or name (spool name)
+show_empty_label: false
+custom_temperature: sensor.my_ams_temperature
+custom_humidity: sensor.my_ams_humidity
+```

@@ -5,6 +5,17 @@ description: Integrate your Bambu Lab 3D Printer with Home Assistant
 
 ha-bambulab is an open-source Home Assistant integration, to connect your Bambu Lab 3D Printer to Home Assistant
 
+# Supported printers
+
+| Series | Models |
+|---|---|
+| A | A1, A1 Mini, A2L |
+| P | P1P, P1S, P2S |
+| X | X1, X1 Carbon, X1E, X2D |
+| H | H2C, H2D, H2D Pro, H2S, H3C |
+
+AMS units: **AMS**, **AMS Lite**, **AMS 2 Pro**, **AMS HT** and **AMS 3H**, plus the external spool holder. Some entities only exist on some models; the [entity reference](/entities) says which.
+
 # Bambu Lab Authorization Control
 
 As of X1C firmware 01.08.05.00; P1 firmware 01.08.02.00 and A1 firmware 01.05.00.00, Bambu Lab has introduced new security measures to disable certain functionality that will impact this integration.  
