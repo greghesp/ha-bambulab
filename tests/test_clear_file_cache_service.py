@@ -35,7 +35,7 @@ def _coordinator():
     return coordinator, print_job
 
 
-def _call(coordinator, data, service="clear_file_cache"):
+def _call(coordinator, data, service):
     async def run():
         future = asyncio.get_running_loop().create_future()
         coordinator._hass = SimpleNamespace(data={DOMAIN: {SERVICE_CALL_FUTURES: {"id": future}}})
@@ -58,7 +58,7 @@ def test_clears_the_requested_cache(file_type, prints_cleared, timelapses_cleare
     data = {} if file_type is None else {"file_type": file_type}
 
     # The printer requires signed MQTT here, which blocks control actions but not a local cleanup.
-    assert _call(coordinator, data) is True
+    assert _call(coordinator, data, service="clear_file_cache") is True
 
     assert print_job.async_clear_print_history_files.await_count == int(prints_cleared)
     assert print_job.async_clear_timelapse_files.await_count == int(timelapses_cleared)
@@ -67,7 +67,10 @@ def test_clears_the_requested_cache(file_type, prints_cleared, timelapses_cleare
 def test_rejects_an_unknown_file_type():
     coordinator, print_job = _coordinator()
 
-    assert _call(coordinator, {"file_type": "everything"}) is False
+    assert (
+        _call(coordinator, {"file_type": "everything"}, service="clear_file_cache")
+        is False
+    )
 
     print_job.async_clear_print_history_files.assert_not_awaited()
     print_job.async_clear_timelapse_files.assert_not_awaited()
