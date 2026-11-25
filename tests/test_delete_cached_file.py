@@ -1,4 +1,5 @@
 """Tests for deleting individual cached files."""
+
 import asyncio
 from pathlib import Path
 
