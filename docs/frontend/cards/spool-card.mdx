@@ -6,15 +6,21 @@ title: Spool Card
 
 ## Description
 
-The Spool Card is designed to be used for the external spool.
+The Spool Card shows one spool: the external spool, or a single slot of an AMS.
+
+![Spool card](/images/readme/spool-card.png)
 
 ## Configuration
 
-All configuration should be done via the dashboard card editor. The configuration options available are:
+All configuration can be done via the dashboard card editor. The YAML below is for reference.
 
-- Spool Selection
-- Show/Hide Types
-
-## Spool Card
-
-![Spool card](/images/cards/spool-card.png)
+```yaml
+type: custom:ha-bambulab-spool-card
+spool: <external spool or AMS device id>
+tray: 1                   # 1 to 4 for an AMS, 1 to 9 for an AMS 3H
+show_info_bar: true
+subtitle: External spool
+show_type: true
+spool_anim_reflection: true
+spool_anim_wiggle: true
+```
