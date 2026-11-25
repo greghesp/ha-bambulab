@@ -1564,6 +1564,8 @@ class PrintJob:
             self.gcode_state = "unknown"
         if previous_gcode_state != self.gcode_state:
             LOGGER.debug(f"GCODE_STATE: {previous_gcode_state} -> {self.gcode_state}")
+        if self._has_stale_print_percentage(data, previous_gcode_state):
+            self.print_percentage = 0
         old_gcode_file = self.gcode_file
         self.gcode_file = data.get("gcode_file", self.gcode_file)
         if old_gcode_file != self.gcode_file:
@@ -1744,6 +1746,17 @@ class PrintJob:
         self._update_active_print_record()
 
         return (old_data != f"{self.__dict__}")
+
+    def _has_stale_print_percentage(self, data, previous_gcode_state) -> bool:
+        """Whether print_percentage is still the previous print's value.
+
+        While a new print is being prepared, mc_percent can still be the previous print's value.
+        """
+        if self.gcode_state in ("PREPARE", "SLICING"):
+            return True
+        # A print can also start without passing through PREPARE. Only a finished print is known not
+        # to be resumed: a resume after a power loss goes from idle or failed to running part way through.
+        return previous_gcode_state == "FINISH" and self.gcode_state == "RUNNING" and "mc_percent" not in data
 
     def _is_printing(self) -> bool:
         return self.gcode_state not in ("IDLE", "FAILED", "FINISH", "unknown")
