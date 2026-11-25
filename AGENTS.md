@@ -15,7 +15,7 @@ A Home Assistant custom integration (`bambu_lab`, installed through HACS) for Ba
 - `custom_components/bambu_lab/frontend/ha-bambulab-cards.js`: the built Lovelace cards bundle. It is synced from a frontend release; don't hand-edit it.
 - `tests/`: integration tests. `tests/pybambu/`: library tests, with real printer payloads as JSON fixtures.
 - `scripts/`: maintenance tooling (linting, translation checks, data fetchers).
-- `docs/`: user documentation (Mintlify `.mdx`).
+- `docs/`: user documentation, published with [docs.page](https://use.docs.page) from `.mdx` files and `docs.json`. Use only [docs.page components](https://use.docs.page/components): callouts are `<Info>`, `<Warning>`, `<Error>` and `<Success>` (there is no `<Note>` or `<Tip>`).
 
 ## Commands
 
