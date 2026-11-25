@@ -59,7 +59,7 @@ BAMBU_LAB_CARDS = [
     {
         'name': 'Bambu Lab Cards',
         'filename': 'ha-bambulab-cards.js',
-        'version': '0.8.8'
+        'version': '0.8.9'
     }
 ]
 
