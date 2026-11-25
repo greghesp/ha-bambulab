@@ -2,7 +2,7 @@
 
 # ha-bambulab
 
-[![Static Badge](https://img.shields.io/badge/HACS-Custom-41BDF5?style=for-the-badge&logo=homeassistantcommunitystore&logoColor=white)](https://github.com/hacs/integration)
+[![Static Badge](https://img.shields.io/badge/HACS-Default-41BDF5?style=for-the-badge&logo=homeassistantcommunitystore&logoColor=white)](https://github.com/hacs/integration)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/greghesp/ha-bambulab/total?style=for-the-badge)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/greghesp/ha-bambulab?style=for-the-badge)
 [![Discord](https://img.shields.io/discord/1337028866643857429?style=for-the-badge&logo=discord&logoColor=white&label=Discord&color=7289da)](https://discord.gg/rsUHAW3DKz)
@@ -120,14 +120,14 @@ A short tour. The complete list, with per-model notes, is in the
 |---|---|
 | Pause / Resume / Stop | Control the active print |
 | Chamber Light (and Heatbed Light on H2D) | On/off |
-| Bed, Nozzle and Chamber target temperature | Chamber on X1E and H2 only |
+| Bed, Nozzle and Chamber target temperature | Chamber on X1E, H2, H3C and X2D only |
 | Printing speed | Silent / Standard / Sport / Ludicrous |
-| Airduct Mode | Cooling or heating (P2S, H2) |
-| Buzzer, Prompt Sound | Model-specific extras (H2D, A1) |
+| Airduct Mode | Cooling or heating (P2S, H2, H3C, X2D) |
+| Buzzer, Prompt Sound | Model-specific extras: the buzzer on the H2 series, prompt sound on A1, A2L, H2, H3C, P2S and X2D |
 
 ### Camera
 A **chamber camera** entity on every model. On P1/A1 printers it needs the
-printer's IP; on X1 enable *LAN Mode Liveview*; on H2D, H2S, H3C and X2D
+printer's IP; on X1 enable *LAN Mode Liveview*; on P2S, X2D, the H2 series and H3C
 enable *LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
 
 ### Diagnostics
@@ -206,16 +206,28 @@ show_info_bar: true
 - **Print Control card**: printing speed plus Pause, Resume and Stop, and
   **skip objects** on the plate mid-print.
 
-> **YAML-mode dashboards:** the cards aren't registered automatically, so add
-> the resource yourself:
->
-> ```yaml
-> lovelace:
->   mode: yaml
->   resources:
->     - url: /bambu_lab/ha-bambulab-cards.js
->       type: module
-> ```
+### Error and Skip Objects cards
+
+- **Error card** (`custom:ha-bambulab-error-card`): the current print error
+  and HMS errors for one or more printers, most severe first, each HMS error
+  linked to its Bambu Lab wiki page. It can hide itself while there are no
+  errors.
+- **Skip Objects card** (`custom:ha-bambulab-skip_objects-card`): just the
+  skip objects button, as a small card for your own layouts.
+
+Each card's options are in the [card docs](https://docs.page/greghesp/ha-bambulab/frontend).
+
+### YAML-mode dashboards
+
+The cards aren't registered automatically, so add the resource yourself:
+
+```yaml
+lovelace:
+  mode: yaml
+  resources:
+    - url: /bambu_lab/ha-bambulab-cards.js
+      type: module
+```
 
 Prefer a full pre-built dashboard? WolfWithSword's
 [dashboard configurator](https://www.wolfwithsword.com/bambulab-home-assistant-dashboard/)
@@ -266,7 +278,7 @@ You need, from the printer:
 | Access code | Network / LAN settings |
 
 Some entities need an extra printer setting:
-- **Camera on H2D / H2S / H3C / X2D**: enable *LAN Only Liveview* (LAN mode itself is not required).
+- **Camera on P2S / X2D / H2 series / H3C**: enable *LAN Only Liveview* (LAN mode itself is not required).
 - **Cover image, print weight and bed type on newer firmware** (e.g. H2D, H2S, P2S): enable
   *Store Sent Files on External Storage* and insert a USB drive / SD card.
 
@@ -399,9 +411,9 @@ Parameters and examples: [Actions](https://docs.page/greghesp/ha-bambulab/action
 |---|---|
 | Controls do nothing, only the light works | Your firmware enforces Bambu authorization. See [above](#bambu-lab-firmware-and-authorization) |
 | Can't sign in with a Google/Apple/Facebook account | Leave the password blank to log in with a code ([how](#signed-up-with-google-apple-or-facebook)) |
-| No camera image | P1/A1: add the printer's IP. X1: enable *LAN Mode Liveview*. H2D/H2S/H3C/X2D: enable *LAN Only Liveview* |
+| No camera image | P1/A1: add the printer's IP. X1: enable *LAN Mode Liveview*. P2S/X2D/H2 series/H3C: enable *LAN Only Liveview* |
 | Cover image, print weight or bed type empty | Newer firmware: enable *Store Sent Files on External Storage* with a USB drive / SD card inserted |
-| Cards missing from the card picker | Hard-refresh the browser (Ctrl+Shift+R). YAML dashboards: add the resource ([above](#spool-and-print-control-cards)) |
+| Cards missing from the card picker | Hard-refresh the browser (Ctrl+Shift+R). YAML dashboards: add the resource ([above](#yaml-mode-dashboards)) |
 | Values look stale | Press the **Force Refresh** button on the printer device |
 
 When reporting an issue, attach diagnostics: on the printer's device page,
