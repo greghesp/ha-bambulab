@@ -6,7 +6,12 @@ next: /misc/contributing
 nextTitle: Misc
 ---
 
-For all actions the target device or entity is passed as a data field. In actions involving an AMS or external spool tray, this must be the tray entity id. In all other cases a device id.
+For all actions the target device or entity is passed as a data field. Which one an action needs depends on what it acts on:
+
+- **An AMS or external spool tray** (Load Filament, Set Filament, Read RFID): the tray's entity id.
+- **An AMS unit** (Start and Stop filament drying): the AMS device id, not the printer's.
+- **The Filament Inventory** (Get Filament Inventory): the Filament Inventory device id.
+- **Everything else**: the printer's device id.
 
 ```yaml
   data:
@@ -17,6 +22,10 @@ For all actions the target device or entity is passed as a data field. In action
   data:
     entity_id: a1b2c3d4e5f6g7h8i9j0
 ```
+
+<Note>
+  If your printer's firmware requires signed MQTT messages, every action that controls the printer is blocked and Home Assistant shows a repair issue. Only Get Filament Data, Get Filament Inventory and Force Filament Inventory Sync keep working.
+</Note>
 
 ## Send Command
 
@@ -43,7 +52,9 @@ or not so before invoking this action, you should check the printer state to ens
 ## Print 3MF project file
 
 <Property name="action" type="bambu_lab.print_project_file" required>
-Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and it must contain gcode (e.g., "Export sliced file" from slicer)
+Prints a 3MF file stored on the printer's SD card. The file must contain gcode (e.g., "Export sliced file" from slicer).
+
+In YAML, any option you leave out is off, `plate` defaults to 1, and `ams_mapping` is only needed when `use_ams` is true. The action form in the Home Assistant UI fills in its own starting values, with the calibration options turned on, so check them before you run it from there.
 
     ```yaml
     action: bambu_lab.print_project_file
@@ -64,55 +75,55 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
   <Accordion title="data" defaultOpen>
     <Property name="filepath" type="string" required>
-     Filename on SD card (e.g. `test.3mf`)
+     Path to the file, relative to the root of the SD card (e.g. `test.3mf` or `cache/filename.3mf`)
     </Property>
 
     ---
 
     <Property name="plate" type="number" optional>
-      Plate number to print
+      Plate number to print. Defaults to 1.
     </Property>
 
     ---
 
     <Property name="timelapse" type="boolean" optional>
-      Record timelapse of the print
+      Record timelapse of the print. Defaults to false.
     </Property>
 
     ---
 
     <Property name="bed_leveling" type="boolean" optional>
-      Perform bed leveling before print
+      Perform bed leveling before print. Defaults to false.
     </Property>
 
     ---
 
     <Property name="flow_cali" type="boolean" optional>
-      Perform flow calibration before print
+      Perform flow calibration before print. Defaults to false.
     </Property>
 
     ---
 
     <Property name="vibration_cali" type="boolean" optional>
-      Perform vibration calibration (aka XY Mech Sweep) before print
+      Perform vibration calibration (aka XY Mech Sweep) before print. Defaults to false.
     </Property>
 
     ---
 
     <Property name="layer_inspect" type="boolean" optional>
-      Perform first layer inspection during print
+      Perform first layer inspection during print. Defaults to false.
     </Property>
 
     ---
 
     <Property name="use_ams" type="boolean" optional>
-      Use AMS for print. Uses external spool otherwise
+      Use AMS for print. Uses external spool otherwise. Defaults to false.
     </Property>
 
     ---
 
     <Property name="ams_mapping" type="string" optional>
-     See [https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738](https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738). ie:  `2,-1,0`
+     Required when `use_ams` is true. See [https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738](https://community.home-assistant.io/t/bambu-lab-x1-x1c-mqtt/489510/738). ie:  `2,-1,0`
     </Property>
   </Accordion>
 </Property>
@@ -120,7 +131,7 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 ## Extrude or Retract Filament
 
 <Property name="action" type="bambu_lab.extrude_retract" required>
-  Extrude or retract filament.
+  Extrude or retract 10 mm of filament. The action returns a response, so you must give it a `response_variable`. The response has `Success` (true or false) and, when it fails, an `Error` message.
 
     ```yaml
     action: bambu_lab.extrude_retract
@@ -128,6 +139,7 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
       device_id: a1b2c3d4e5f6g7h8i9j0
       type: Extrude
       force: false
+    response_variable: result
     ```
 
     The `data` object should contain the following properties:
@@ -140,7 +152,7 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
     ---
 
     <Property name="force" type="boolean" optional>
-      Perform extrusion or retraction if nozzle temperature is below 170ºC.
+      Perform extrusion or retraction even if the nozzle temperature is below 170ºC. Without it, the action fails when the nozzle is colder than that.
     </Property>
 
   </Accordion>
@@ -182,7 +194,7 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 ## Finish loading filament from external spool
 
 <Property name="action" type="bambu_lab.done_load_filament" required>
-  Once loading filemant from external spool is finished, use this action to tell the printer you are done. Otherwise it will go into error mode.
+  Once loading filament from external spool is finished, use this action to tell the printer you are done. Otherwise it will go into error mode.
 
     ```yaml
     action: bambu_lab.done_load_filament
@@ -255,12 +267,13 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 ## Get Filament Data
 
 <Property name="action" type="bambu_lab.get_filament_data" required>
-  Gets a json string with details about all known filaments
+  Returns details about all known filaments, keyed by filament ID. It includes Bambu's built-in filaments and the custom filaments from your slicer settings. The action returns a response, so you must give it a `response_variable`.
 
     ```yaml
     action: bambu_lab.get_filament_data
     data:
       device_id: a1b2c3d4e5f6g7h8i9j0
+    response_variable: filaments
     ```
 
 </Property>
@@ -269,6 +282,8 @@ Prints 3MF file stored on SD card. 3MF file must be stored on SD card root and i
 
 <Property name="action" type="bambu_lab.get_filament_inventory" required>
   Returns the complete JSON response from the most recent successful Bambu Cloud filament inventory fetch. The standalone Filament Inventory device ID is required; entity IDs are not supported. The action returns an `error` field if the device is unavailable or its inventory has not been fetched yet.
+
+  This action only exists once you have added a Filament Inventory entry to the integration.
 
     ```yaml
     action: bambu_lab.get_filament_inventory
@@ -422,7 +437,7 @@ Replace every `a1b2c3d4e5f6g7h8i9j0` with your printer's device ID. Drop any row
 
 ## Start the AMS filament drying
 <Property name="action" type="bambu_lab.start_filament_drying" required>
-  Starts AMS filament drying.
+  Starts filament drying on an AMS 2 Pro, AMS 3H or AMS HT. Pass the AMS device id, not the printer's.
 
     ```yaml
     action: bambu_lab.start_filament_drying
@@ -437,26 +452,26 @@ Replace every `a1b2c3d4e5f6g7h8i9j0` with your printer's device ID. Drop any row
 
   <Accordion title="data" defaultOpen>
     <Property name="temp" type="number" required>
-      Heating temperature. AMS 2 max is 65C. AMS HT max is 85C.
+      Heating temperature in ºC, from 45. AMS 2 Pro and AMS 3H max is 65C. AMS HT max is 85C. A value out of range is rejected.
     </Property>
 
     ---
 
-    <Property name="rotate_tray" type="boolean" required>
-      Rotate tray while drying
+    <Property name="rotate_tray" type="boolean" optional>
+      Rotate tray while drying. Defaults to false.
     </Property>
 
     ---
 
     <Property name="duration" type="number" required>
-      Drying time in hours.
+      Drying time in hours, from 1 to 24.
     </Property>
   </Accordion>
 </Property>
 
 ## Stops the AMS filament drying
 <Property name="action" type="bambu_lab.stop_filament_drying" required>
-  Stops AMS filament drying.
+  Stops AMS filament drying. Pass the AMS device id, not the printer's.
 
     ```yaml
     action: bambu_lab.stop_filament_drying
@@ -467,7 +482,7 @@ Replace every `a1b2c3d4e5f6g7h8i9j0` with your printer's device ID. Drop any row
 
 ## Force Filament Inventory Sync
 <Property name="action" type="bambu_lab.force_filament_sync" required>
-  Triggers an immediate refresh of the filament inventory sensor data from the Bambu Cloud. This action has no effect if the filament inventory sensor is not enabled for the specified printer.
+  Triggers an immediate refresh of the filament inventory from the Bambu Cloud, instead of waiting for the next scheduled refresh. Pass a printer's device id: the action refreshes the Filament Inventory entry for that printer's Bambu Cloud account. It has no effect if there is no Filament Inventory entry for that account.
 
     ```yaml
     action: bambu_lab.force_filament_sync
