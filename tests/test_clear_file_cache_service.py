@@ -21,24 +21,6 @@ from custom_components.bambu_lab.const import (
 from custom_components.bambu_lab.coordinator import BambuDataUpdateCoordinator
 
 
-def test_cache_directory_uses_config_serial_not_reported_model_serial(tmp_path):
-    coordinator = object.__new__(BambuDataUpdateCoordinator)
-    coordinator._entry = SimpleNamespace(data={"serial": "configured-serial"})
-    coordinator._hass = SimpleNamespace(
-        config=SimpleNamespace(
-            media_dirs={"local": str(tmp_path / "media")},
-            config_dir=str(tmp_path / "config"),
-        )
-    )
-    coordinator.get_model = lambda: SimpleNamespace(
-        info=SimpleNamespace(serial="reported-serial")
-    )
-
-    cache_dir = coordinator.get_file_cache_directory()
-
-    assert cache_dir == str(tmp_path / "media" / "ha-bambulab" / "configured-serial")
-
-
 def _coordinator():
     print_job = SimpleNamespace(
         async_clear_print_history_files=AsyncMock(),

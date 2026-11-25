@@ -1420,7 +1420,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def get_file_cache_directory(self, serial: str|None = None) -> str:
         """Get the file cache directory for this printer."""
         if serial is None:
-            serial = self._entry.data["serial"]
+            serial = self.get_model().info.serial
         # Never under www/: Home Assistant serves that at /local/ without authentication (#2167).
         path = file_cache_dir(self._hass, serial)
         try:
