@@ -102,6 +102,7 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
@@ -124,6 +125,7 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
@@ -226,6 +228,7 @@
           "local_mqtt": "Connect directly to printer mqtt:",
           "skip_local_mqtt": "Skip local mqtt connection test (not recommended):",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
@@ -247,6 +250,7 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },

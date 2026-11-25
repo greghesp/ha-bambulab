@@ -32,6 +32,7 @@ from .const import (
     ENTRY_TYPE_MAKERWORLD,
     LOGGER,
     DEFAULT_FILAMENT_INVENTORY_INTERVAL,
+    DEFAULT_PRINT_CACHE_MAX_MB,
     OPTION_FILAMENT_INVENTORY_INTERVAL,
 )
 from .pybambu import BambuClient, BambuCloud
@@ -636,6 +637,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             "auth_token": self._bambu_cloud.auth_token,
                             "access_code": user_input['access_code'],
                             "print_cache_count": max(-1, int(user_input['print_cache_count'])),
+                            "print_cache_max_mb": max(0, int(user_input.get('print_cache_max_mb', 0))),
                             "timelapse_cache_count": max(-1, int(user_input['timelapse_cache_count'])),
                             "usage_hours": float(user_input['usage_hours']),
                             "disable_ssl_verify": user_input['advanced']['disable_ssl_verify'],
@@ -665,6 +667,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(DEFAULT_PRINT_CACHE_MAX_MB if user_input is None else user_input.get('print_cache_max_mb', DEFAULT_PRINT_CACHE_MAX_MB)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
@@ -719,6 +722,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "auth_token": "",
                         "access_code": user_input['access_code'],
                         "print_cache_count": max(-1, int(user_input['print_cache_count'])),
+                        "print_cache_max_mb": max(0, int(user_input.get('print_cache_max_mb', 0))),
                         "timelapse_cache_count": max(-1, int(user_input['timelapse_cache_count'])),
                         "usage_hours": float(user_input['usage_hours']),
                         "disable_ssl_verify": user_input['advanced']['disable_ssl_verify'],
@@ -760,6 +764,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('serial', default = default_serial)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(DEFAULT_PRINT_CACHE_MAX_MB if user_input is None else user_input.get('print_cache_max_mb', DEFAULT_PRINT_CACHE_MAX_MB)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
@@ -1088,6 +1093,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                     options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                     options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
+                    options["print_cache_max_mb"] = max(0, int(user_input.get('print_cache_max_mb', 0)))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                     options["force_ip"] = force_ip
                     
@@ -1130,6 +1136,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('skip_local_mqtt', default = False)] = BOOLEAN_SELECTOR
         fields[vol.Optional('access_code', default=default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(self._config_entry.options.get('print_cache_max_mb', 0) if user_input is None else user_input.get('print_cache_max_mb', 0)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
@@ -1180,6 +1187,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["auth_token"] = ''
                 options["access_code"] = user_input['access_code']
                 options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
+                options["print_cache_max_mb"] = max(0, int(user_input.get('print_cache_max_mb', 0)))
                 options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
@@ -1221,6 +1229,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(self._config_entry.options.get('print_cache_max_mb', 0) if user_input is None else user_input.get('print_cache_max_mb', 0)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(

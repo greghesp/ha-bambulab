@@ -2574,7 +2574,8 @@ class PrintJob:
     def prune_print_history_files(self):
         if self._client._test_mode:
             return
-        self._prune_print_history(keep=self._client._print_cache_count)
+        self._prune_print_history(keep=self._client._print_cache_count,
+                                  max_bytes=self._client._print_cache_max_mb * 1024 * 1024)
 
     async def async_prune_timelapse_files(self):
         loop = asyncio.get_event_loop()
@@ -2604,11 +2605,12 @@ class PrintJob:
         LOGGER.info("Clearing cached timelapses")
         self._prune_timelapses(keep=0)
 
-    def _prune_print_history(self, keep: int):
+    def _prune_print_history(self, keep: int, max_bytes: int = 0):
         self._prune_old_files(directory=os.path.join(self._client.cache_path, "prints"),
                               extensions=PRINT_CACHE_EXTENSIONS,
                               keep=keep,
-                              extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS)
+                              extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS,
+                              max_bytes=max_bytes)
 
     def _prune_timelapses(self, keep: int):
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
@@ -2656,21 +2658,33 @@ class PrintJob:
                 LOGGER.error(f"Failed to delete stale partial download {part_file}: {e}")
         return deleted_count
 
-    def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=None):
+    @staticmethod
+    def _cache_entry_size(primary_file: Path, extra_extensions: List[str]) -> int:
+        """Size in bytes of a cached file plus any sidecars that are pruned with it."""
+        size = 0
+        base_name = os.path.splitext(primary_file)[0]
+        for path in [str(primary_file)] + [base_name + ext for ext in extra_extensions]:
+            try:
+                size += os.path.getsize(path)
+            except OSError:
+                pass
+        return size
+
+    def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=None, max_bytes: int = 0):
         dir_path = Path(directory)
         if not dir_path.is_dir():
             return
 
         self._cleanup_stale_part_files(dir_path)
 
-        if keep == -1:
+        if keep == -1 and max_bytes <= 0:
             # Cache pruning is disabled.
             LOGGER.debug("Skipping as pruning is disabled.")
             return
 
         if extra_extensions is None:
             extra_extensions = []
-        
+
         LOGGER.debug(f"{dir_path}")
 
         extension_set = {extension.lower() for extension in extensions}
@@ -2684,11 +2698,26 @@ class PrintJob:
         # Sort files by last modification time, newest first
         matching_files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
 
-        # Files to delete: those beyond the 'keep' most recent
-        old_files = matching_files[keep:]
+        # Files to delete: those beyond the 'keep' most recent (-1 keeps any number)
+        if keep == -1:
+            kept_files, old_files = matching_files, []
+        else:
+            kept_files, old_files = matching_files[:keep], matching_files[keep:]
 
         LOGGER.debug(f"Keeping up to {keep} files. Deleting {len(old_files)} excess files.")
-        
+
+        if max_bytes > 0:
+            # Also enforce a total size limit across each kept file and its sidecars. The newest
+            # file is always kept so the active print's model is never removed.
+            total_bytes = 0
+            for index, primary_file in enumerate(kept_files):
+                total_bytes += self._cache_entry_size(primary_file, extra_extensions)
+                if index > 0 and total_bytes > max_bytes:
+                    over_limit = kept_files[index:]
+                    LOGGER.debug(f"Cache exceeds {max_bytes} bytes. Deleting {len(over_limit)} more files.")
+                    old_files = over_limit + old_files
+                    break
+
         for primary_file in old_files:
             try:
                 os.remove(primary_file )

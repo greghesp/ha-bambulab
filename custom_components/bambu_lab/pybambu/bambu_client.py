@@ -427,6 +427,8 @@ class BambuClient:
         if self._print_cache_count == 0:
             # We always cache at least one model as we use that to avoid redownloading from ftp on startup.
             self._print_cache_count = 1
+        # Total size limit for the print cache in MB. 0 means no size limit (count limit only).
+        self._print_cache_max_mb = max(0, int(config.get('print_cache_max_mb', 0)))
         self._timelapse_cache_count = max(-1, int(config.get('timelapse_cache_count', 0)))
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
         self._cache_path = config.get('file_cache_path', f'/media/ha-bambulab/{self._serial}')
