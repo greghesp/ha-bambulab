@@ -346,10 +346,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         try:
-            if data.get('service') == 'clear_file_cache':
-                # Local file deletion only: it doesn't talk to the printer, so it isn't blocked by
-                # MQTT encryption, and it runs off the event loop.
-                result = await self._service_call_clear_file_cache(data)
+            if data.get("service") in ("clear_file_cache", "delete_cached_file"):
+                # Cache deletion is local and is not blocked by MQTT encryption.
+                if data.get("service") == "clear_file_cache":
+                    result = await self._service_call_clear_file_cache(data)
+                else:
+                    result = await self._service_call_delete_cached_file(data)
             else:
                 result = self._run_service_call(data)
         except Exception:
@@ -429,6 +431,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if file_type in (CLEAR_FILE_CACHE_TIMELAPSE, CLEAR_FILE_CACHE_ALL):
             await print_job.async_clear_timelapse_files()
         return True
+
+    async def _service_call_delete_cached_file(self, data: dict) -> bool:
+        relative_path = data.get("path")
+        if not isinstance(relative_path, str) or not relative_path:
+            LOGGER.error("delete_cached_file: missing required path")
+            return False
+
+        result = await self.delete_cached_file(relative_path)
+        if not result["success"]:
+            LOGGER.warning(
+                "delete_cached_file: could not delete '%s': %s",
+                relative_path,
+                result["error"],
+            )
+        return result["success"]
 
     def _service_call_skip_objects(self, data: dict):
         # All command templates are deep-copied before mutation - filling in the shared
@@ -1524,25 +1541,43 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     @staticmethod
     def _cache_sidecar_paths(file_path: Path, file_type: str) -> List[Path]:
         return [file_path.with_suffix(extension) for extension in BambuDataUpdateCoordinator._cache_sidecar_extensions(file_type)]
-    
-    async def delete_cached_print_file(self, relative_path: str) -> Dict[str, Any]:
-        """Delete one cached 3MF and its related print sidecars."""
+
+    async def delete_cached_file(self, relative_path: str) -> dict[str, Any]:
+        """Delete one cached print model or timelapse and its sidecars."""
+        if not isinstance(relative_path, str) or not relative_path:
+            return {"success": False, "error": "Invalid file cache path"}
+
         cache_root = Path(self.get_file_cache_directory()).resolve()
         requested_path = Path(relative_path)
-        if requested_path.is_absolute() or ".." in requested_path.parts or not requested_path.parts or requested_path.parts[0] != "prints":
-            return {"success": False, "error": "Invalid print cache path"}
-        if requested_path.suffix.lower() != ".3mf":
-            return {"success": False, "error": "Only cached 3MF print files can be deleted"}
+        if (
+            requested_path.is_absolute()
+            or ".." in requested_path.parts
+            or not requested_path.parts
+            or requested_path.parts[0] not in ("prints", "timelapse")
+        ):
+            return {"success": False, "error": "Invalid file cache path"}
+
+        file_type = requested_path.parts[0]
+        allowed_extensions = {
+            "prints": {".3mf"},
+            "timelapse": {".mp4", ".avi", ".mov"},
+        }
+        if requested_path.suffix.lower() not in allowed_extensions[file_type]:
+            return {"success": False, "error": "Unsupported cached file type"}
 
         file_path = cache_root / requested_path
         try:
             file_path.resolve().relative_to(cache_root)
         except ValueError:
-            return {"success": False, "error": "Invalid print cache path"}
+            return {"success": False, "error": "Invalid file cache path"}
         if not file_path.is_file():
-            return {"success": False, "error": "Cached print file not found"}
+            return {"success": False, "error": "Cached file not found"}
 
-        paths = [file_path, *self._cache_sidecar_paths(file_path, "prints"), Path(f"{file_path}.part")]
+        paths = [
+            file_path,
+            *self._cache_sidecar_paths(file_path, file_type),
+            Path(f"{file_path}.part"),
+        ]
         deleted_count = 0
         try:
             for path in paths:
@@ -1550,9 +1585,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     path.unlink()
                     deleted_count += 1
         except OSError as err:
-            LOGGER.error("Error deleting cached print file %s: %s", file_path, err)
+            LOGGER.error("Error deleting cached file %s: %s", file_path, err)
             return {"success": False, "error": str(err)}
 
+        LOGGER.info("Deleted cached file %s (%d files)", file_path, deleted_count)
         return {"success": True, "deleted_count": deleted_count}
 
     async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:
