@@ -6,87 +6,86 @@ title: Contributing
 
 Want to contribute to ha-bambulab? Great! We have a few small asks though!
 
-- Please create your patch pull requests against the `main` branch.
+- Please create your pull requests against the `main` branch.
 - Please be verbose in your description of your changes in your pull requests.
+- Name your commits with a [Conventional Commits](https://www.conventionalcommits.org/) prefix (`fix:`, `feat:`, `docs:`, `chore:`) and describe the change the way a user would notice it.
 
-# Frontend Development
+ha-bambulab is split across two repositories:
 
-## Setup
+| What you want to change | Repository |
+|---|---|
+| The integration: entities, actions, config flow, the printer connection | [greghesp/ha-bambulab](https://github.com/greghesp/ha-bambulab) (this one) |
+| The dashboard cards | [greghesp/ha-bambulab-cards](https://github.com/greghesp/ha-bambulab-cards) |
+
+# Integration Development
 
 <Steps>
   <Step title="Clone this repo">
-    Clone this repo
-
-    ```js
+    ```bash
     git clone https://github.com/greghesp/ha-bambulab.git
     ```
-
   </Step>
-  <Step title="Setup Home Assistant">
-    Setup a local instance of Home Assistant, I prefer to use Docker with the [Home Assistant Container](https://www.home-assistant.io/installation/#advanced-installation-methods) for this
-  </Step>
-  <Step title="Bind to Docker Volume">
-    Setup a docker-compose.yml file with the correct volume binds. My file as an example
-    ```yml
-    version: "3.3"
-    services:
-      hass:
-        image: homeassistant/home-assistant:beta
-        container_name: homeassistant
-        restart: unless-stopped # To reboot the container when the host comes back up from restarts.
-        ports:
-          - 8123:8123
-        volumes:
-          - type: bind
-            source: ../this_repo/custom_components/bambu_lab # Path to this folder within this repo
-            target: /config/www/community/ha-bambulab-cards
-          - ./hass_dev:/config
+  <Step title="Run the tests">
+    ```bash
+    tests/run_tests.sh
     ```
+
+    This creates a fresh `.venv`. If you already have an environment with `tests/requirements_ha.txt` installed, `python -m pytest tests` does the same.
+  </Step>
+  <Step title="Lint your changes">
+    ```bash
+    python scripts/lint_changed_lines.py
+    ```
+
+    It only checks the lines your branch changes, so you won't be asked to fix older code. Add `--fix` to format those lines. It needs [Ruff](https://docs.astral.sh/ruff/) at the version pinned in `pyproject.toml`.
+  </Step>
+  <Step title="Open a pull request">
+    Fill in the **Tested on** and **Evidence** sections of the PR template. Most changes depend on what one printer model reports, and reviewers usually don't have that printer, so the MQTT payload or debug log is what lets them check your change. Remove serial numbers, access codes and IP addresses first.
   </Step>
 </Steps>
 
-## Development
+New user-facing text goes in `custom_components/bambu_lab/translations/en.json`. If you speak any of the other languages in that folder, you're welcome to add your own translations; anything left out is filled in later.
+
+Using an AI coding agent? Point it at [AGENTS.md](https://github.com/greghesp/ha-bambulab/blob/main/AGENTS.md).
+
+# Frontend Development
+
+The cards are developed in [ha-bambulab-cards](https://github.com/greghesp/ha-bambulab-cards), not in this repository. Its [README](https://github.com/greghesp/ha-bambulab-cards#development) covers setup, the dev server and the project layout.
+
+<Warning>
+  Don't edit `custom_components/bambu_lab/frontend/ha-bambulab-cards.js` in this repository. It's the built bundle, and it's replaced automatically every time the cards are released.
+</Warning>
+
+In short:
 
 <Steps>
-  <Step title="Navigate">
-    Navigate to the frontend directory of your clone
-  </Step>
-  <Step title="Install Dependencies">
-    Install dependencies from npm
-
-    ```js
-    npm install
+  <Step title="Clone the cards repo">
+    ```bash
+    git clone https://github.com/greghesp/ha-bambulab-cards.git
     ```
 
+    You need Node.js 20 or later.
   </Step>
-  <Step title="Start Dev Server">
-    Start the development server
-
-    ```js
-    npm run dev
+  <Step title="Start the dev server">
+    ```bash
+    npm ci
+    npm start
     ```
 
+    This rebuilds on every change and serves the cards on port 4000. In a test Home Assistant, add a dashboard resource of type **JavaScript module** with the URL `http://<your-machine>:4000/ha-bambulab-cards.js`, and remove it when you're done.
   </Step>
-    <Step title="Build">
-    Once your work is complete, build the frontend to generate the `dist/ha-bambulab-cards.js` file before comitting
-
-    ```js
-    npm run build
+  <Step title="Check the build">
+    ```bash
+    npm run build:strict
     ```
 
+    CI runs this on every pull request, and it fails on type errors.
+  </Step>
+  <Step title="Open a pull request">
+    Open it against `main` in ha-bambulab-cards. Report card problems on [ha-bambulab's issues](https://github.com/greghesp/ha-bambulab/issues?q=label%3Afrontend) with the **frontend** label.
   </Step>
 </Steps>
 
-## Adding Cards
+## How card changes reach users
 
-<Warning>Please do not edit the `example-card`</Warning>
-
-To develop a new card, copy the `example-card` folder and rename the folder, files to match, and the variables within `const.ts`
-
-To include your card into the integration, open `ha-bambulab-cards.ts` and import your card:
-
-```js
-import "./cards/my-new-card/my-new-card";
-```
-
-Add your card to `custom_components/bambu_lab/const.py`, into the `BAMBU_LAB_CARDS` array. If you modify your card, ensure you update the version here
+When a cards release is published, it opens a pull request here that copies the new build into `custom_components/bambu_lab/frontend/` and bumps the card version in `const.py`. Your change reaches users with the next ha-bambulab release after that pull request is merged.
