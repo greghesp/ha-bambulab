@@ -127,8 +127,8 @@ A short tour. The complete list, with per-model notes, is in the
 
 ### Camera
 A **chamber camera** entity on every model. On P1/A1 printers it needs the
-printer's IP; on X1 enable *LAN Mode Liveview*; on P2S, X2D, the H2 series and H3C
-enable *LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
+printer's IP; on X1, P2S, X2D, the H2 series and H3C enable
+*LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
 
 ### Diagnostics
 HMS errors (with codes, descriptions and wiki links), print errors, online
@@ -278,7 +278,7 @@ You need, from the printer:
 | Access code | Network / LAN settings |
 
 Some entities need an extra printer setting:
-- **Camera on P2S / X2D / H2 series / H3C**: enable *LAN Only Liveview* (LAN mode itself is not required).
+- **Camera on X1 / P2S / X2D / H2 series / H3C**: enable *LAN Only Liveview* (LAN mode itself is not required).
 - **Cover image, print weight and bed type on newer firmware** (e.g. H2D, H2S, P2S): enable
   *Store Sent Files on External Storage* and insert a USB drive / SD card.
 
@@ -411,7 +411,7 @@ Parameters and examples: [Actions](https://docs.page/greghesp/ha-bambulab/action
 |---|---|
 | Controls do nothing, only the light works | Your firmware enforces Bambu authorization. See [above](#bambu-lab-firmware-and-authorization) |
 | Can't sign in with a Google/Apple/Facebook account | Leave the password blank to log in with a code ([how](#signed-up-with-google-apple-or-facebook)) |
-| No camera image | P1/A1: add the printer's IP. X1: enable *LAN Mode Liveview*. P2S/X2D/H2 series/H3C: enable *LAN Only Liveview* |
+| No camera image | P1/A1: add the printer's IP. X1/P2S/X2D/H2 series/H3C: enable *LAN Only Liveview* |
 | Cover image, print weight or bed type empty | Newer firmware: enable *Store Sent Files on External Storage* with a USB drive / SD card inserted |
 | Cards missing from the card picker | Hard-refresh the browser (Ctrl+Shift+R). YAML dashboards: add the resource ([above](#yaml-mode-dashboards)) |
 | Values look stale | Press the **Force Refresh** button on the printer device |
