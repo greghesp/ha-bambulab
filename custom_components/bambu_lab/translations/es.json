@@ -209,7 +209,8 @@
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
           "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
           "skip_local_mqtt": "Omita la prueba de conexión mqtt local (no recomendado):",
-          "print_cache_max_mb": "Tamaño total máximo de modelos almacenados en caché en MB (0 sin límite de tamaño):"
+          "print_cache_max_mb": "Tamaño total máximo de modelos almacenados en caché en MB (0 sin límite de tamaño):",
+          "register_cards": "Agregue las tarjetas de Bambu Lab a los recursos del tablero (permanecen mientras cualquier impresora tenga esto encendido):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "usage_hours": "Cantidad de horas de uso (opcional):",
           "print_cache_count": "Número de modelos para almacenar en caché al asistente de inicio (-1 para ilimitado):",
           "timelapse_cache_count": "Número de videos de tiempo de tiempo para almacenar en caché al asistente de inicio (-1 para ilimitado):",
-          "print_cache_max_mb": "Tamaño total máximo de modelos almacenados en caché en MB (0 sin límite de tamaño):"
+          "print_cache_max_mb": "Tamaño total máximo de modelos almacenados en caché en MB (0 sin límite de tamaño):",
+          "register_cards": "Agregue las tarjetas de Bambu Lab a los recursos del tablero (permanecen mientras cualquier impresora tenga esto encendido):"
         },
         "sections": {
           "advanced": {

@@ -209,7 +209,8 @@
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "usage_hours": "Aktuální počet provozních hodin (volitelné):",
-          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):"
+          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):",
+          "register_cards": "Přidejte karty Bambu Lab do zdrojů řídicího panelu (zůstanou, dokud je tato tiskárna zapnutá):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "usage_hours": "Aktuální počet provozních hodin (volitelné):",
-          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):"
+          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):",
+          "register_cards": "Přidejte karty Bambu Lab do zdrojů řídicího panelu (zůstanou, dokud je tato tiskárna zapnutá):"
         },
         "sections": {
           "advanced": {

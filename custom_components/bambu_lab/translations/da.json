@@ -209,7 +209,8 @@
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
           "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
           "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):",
-          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):"
+          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):",
+          "register_cards": "Tilføj Bambu Lab-kortene til dashboard-ressourcerne (de bliver, mens enhver printer har dette tændt):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
           "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
-          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):"
+          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):",
+          "register_cards": "Tilføj Bambu Lab-kortene til dashboard-ressourcerne (de bliver, mens enhver printer har dette tændt):"
         },
         "sections": {
           "advanced": {
@@ -591,7 +593,7 @@
           "measuring_rotary_attachment": "Måling af roterende tilbehør",
           "moving_toolhead_above_purge_chute": "Bevægelse af værktøjshoved over skylleskakt",
           "cooling_nozzle": "Kølemundstykke",
-          "moving_toolhead_to_center_of_heatbed": "Flytning af værktøjshovedet til midten af ​​heatbed",
+          "moving_toolhead_to_center_of_heatbed": "Flytning af værktøjshovedet til midten af heatbed",
           "active_arc_fitting": "Aktiv lysbue fitting",
           "hotend_type_detection": "Hotend type detektion",
           "build_plate_alignment_detection": "Detektion af byggepladejustering",

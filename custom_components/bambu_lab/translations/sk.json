@@ -209,7 +209,8 @@
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
           "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
           "skip_local_mqtt": "Preskočiť test miestneho pripojenia mqtt (neodporúča sa):",
-          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):"
+          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):",
+          "register_cards": "Pridajte karty Bambu Lab do zdrojov palubnej dosky (zostanú, kým je zapnutá akákoľvek tlačiareň):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "usage_hours": "Aktuálne hodiny používania (voliteľné):",
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
           "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
-          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):"
+          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):",
+          "register_cards": "Pridajte karty Bambu Lab do zdrojov palubnej dosky (zostanú, kým je zapnutá akákoľvek tlačiareň):"
         },
         "sections": {
           "advanced": {

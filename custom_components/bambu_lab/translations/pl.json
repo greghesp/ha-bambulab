@@ -209,7 +209,8 @@
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
           "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
           "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):",
-          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):",
+          "register_cards": "Dodaj karty Bambu Lab do zasobów pulpitu nawigacyjnego (pozostają, dopóki dowolna drukarka ma tę opcję):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
           "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):",
+          "register_cards": "Dodaj karty Bambu Lab do zasobów pulpitu nawigacyjnego (pozostają, dopóki dowolna drukarka ma tę opcję):"
         },
         "sections": {
           "advanced": {
