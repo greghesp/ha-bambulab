@@ -131,42 +131,6 @@ class PrintHistoryAPIView(HomeAssistantView):
             )
 
 
-class DeletePrintHistoryAPIView(HomeAssistantView):
-    """API endpoint to delete a cached print and its sidecar files."""
-
-    url = "/api/bambu_lab/print_history/delete"
-    name = "api:bambu_lab:print_history_delete"
-    requires_auth = True
-
-    def __init__(self, hass: HomeAssistant):
-        self.hass = hass
-
-    async def post(self, request: web.Request) -> web.Response:
-        try:
-            data = await request.json()
-            serial = data.get("serial")
-            relative_path = data.get("path")
-            if not isinstance(serial, str) or not serial or not isinstance(relative_path, str) or not relative_path:
-                return web.json_response({"error": "Missing required parameters: serial and path"}, status=400)
-
-            coordinator = next((
-                coord for entry_id, coord in self.hass.data[DOMAIN].items()
-                if entry_id != SERVICE_CALL_FUTURES and coord.get_model().info.serial == serial
-            ), None)
-            if coordinator is None:
-                return web.json_response({"error": f"Printer with serial {serial} not found"}, status=404)
-
-            result = await coordinator.delete_cached_print_file(relative_path)
-            if not result["success"]:
-                status = 404 if result["error"] == "Cached print file not found" else 400
-                return web.json_response({"error": result["error"]}, status=status)
-
-            return web.json_response(result)
-        except Exception as e:
-            LOGGER.error("Error deleting print history file: %s", e)
-            return web.json_response({"error": "Internal server error"}, status=500)
-
-
 class VideoAPIView(HomeAssistantView):
     """API endpoint for video data from all printers."""
     
@@ -480,7 +444,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
-    hass.http.register_view(DeletePrintHistoryAPIView(hass))
     hass.http.register_view(VideoAPIView(hass))
     hass.http.register_view(FileCacheFileView(hass))
     hass.http.register_view(EnsureCacheFileAPIView(hass))
@@ -512,6 +475,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "stop_filament_drying": SupportsResponse.NONE,
         "force_filament_sync": SupportsResponse.NONE,
         "clear_file_cache": SupportsResponse.NONE,
+        "delete_cached_file": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(

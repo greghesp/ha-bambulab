@@ -21,6 +21,24 @@ from custom_components.bambu_lab.const import (
 from custom_components.bambu_lab.coordinator import BambuDataUpdateCoordinator
 
 
+def test_cache_directory_uses_config_serial_not_reported_model_serial(tmp_path):
+    coordinator = object.__new__(BambuDataUpdateCoordinator)
+    coordinator._entry = SimpleNamespace(data={"serial": "configured-serial"})
+    coordinator._hass = SimpleNamespace(
+        config=SimpleNamespace(
+            media_dirs={"local": str(tmp_path / "media")},
+            config_dir=str(tmp_path / "config"),
+        )
+    )
+    coordinator.get_model = lambda: SimpleNamespace(
+        info=SimpleNamespace(serial="reported-serial")
+    )
+
+    cache_dir = coordinator.get_file_cache_directory()
+
+    assert cache_dir == str(tmp_path / "media" / "ha-bambulab" / "configured-serial")
+
+
 def _coordinator():
     print_job = SimpleNamespace(
         async_clear_print_history_files=AsyncMock(),
@@ -31,15 +49,18 @@ def _coordinator():
     coordinator._is_service_call_for_me = lambda data: True
     coordinator.get_model = lambda: model
     coordinator._run_service_call = MagicMock(side_effect=AssertionError("must not use the MQTT path"))
+    coordinator.delete_cached_file = AsyncMock(return_value={"success": True})
     return coordinator, print_job
 
 
-def _call(coordinator, data):
+def _call(coordinator, data, service="clear_file_cache"):
     async def run():
         future = asyncio.get_running_loop().create_future()
         coordinator._hass = SimpleNamespace(data={DOMAIN: {SERVICE_CALL_FUTURES: {"id": future}}})
         await coordinator._handle_service_call_event(
-            Event(SERVICE_CALL_EVENT, {"service": "clear_file_cache", SERVICE_CALL_ID: "id", **data})
+            Event(
+                SERVICE_CALL_EVENT, {"service": service, SERVICE_CALL_ID: "id", **data}
+            )
         )
         return future.result()
 
@@ -68,3 +89,22 @@ def test_rejects_an_unknown_file_type():
 
     print_job.async_clear_print_history_files.assert_not_awaited()
     print_job.async_clear_timelapse_files.assert_not_awaited()
+
+
+def test_delete_cached_file_service_uses_local_delete_path():
+    coordinator, print_job = _coordinator()
+    path = "timelapse/video.mp4"
+
+    assert _call(coordinator, {"path": path}, service="delete_cached_file") is True
+
+    coordinator.delete_cached_file.assert_awaited_once_with(path)
+    print_job.async_clear_print_history_files.assert_not_awaited()
+    print_job.async_clear_timelapse_files.assert_not_awaited()
+
+
+def test_delete_cached_file_service_requires_a_path():
+    coordinator, _ = _coordinator()
+
+    assert _call(coordinator, {}, service="delete_cached_file") is False
+
+    coordinator.delete_cached_file.assert_not_awaited()
