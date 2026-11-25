@@ -209,7 +209,8 @@
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
           "usage_hours": "Horas de utilização atuais (opcional):",
-          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):",
+          "register_cards": "Adicione os cartões Bambu Lab aos recursos do painel (eles permanecem enquanto qualquer impressora estiver ligada):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
           "usage_hours": "Horas de utilização atuais (opcional):",
-          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):",
+          "register_cards": "Adicione os cartões Bambu Lab aos recursos do painel (eles permanecem enquanto qualquer impressora estiver ligada):"
         },
         "sections": {
           "advanced": {
