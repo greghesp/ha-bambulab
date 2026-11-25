@@ -2614,7 +2614,9 @@ class PrintJob:
             extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS,
             max_bytes=max_bytes,
         )
-        self._prune_old_files(directory=cache_dir, extensions=['.gcode'], keep=1 if keep != 0 else 0)
+        self._prune_old_files(
+            directory=cache_dir, extensions=[".gcode"], keep=1 if keep != 0 else 0
+        )
 
     def _prune_timelapses(self, keep: int):
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
