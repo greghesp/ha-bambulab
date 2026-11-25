@@ -87,7 +87,8 @@
           "access_code": "Přístupový kód:",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "Přístupový kód:",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "skip_local_mqtt": "Přeskočit test místního připojení MQTT (nedoporučuje se):",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "Přístupový kód:",
           "print_cache_count": "Počet modelů k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
           "timelapse_cache_count": "Počet časosběrných videí k uložení do mezipaměti Home Assistant (-1 pro neomezeně):",
-          "usage_hours": "Aktuální počet provozních hodin (volitelné):"
+          "usage_hours": "Aktuální počet provozních hodin (volitelné):",
+          "print_cache_max_mb": "Maximální celková velikost modelů uložených v mezipaměti v MB (0 bez omezení velikosti):"
         },
         "sections": {
           "advanced": {

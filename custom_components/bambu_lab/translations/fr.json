@@ -87,7 +87,8 @@
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
+          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
+          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :"
         },
         "sections": {
           "advanced": {

@@ -109,7 +109,8 @@
           "access_code": "存取碼：",
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
-          "usage_hours": "目前使用時數（選填）："
+          "usage_hours": "目前使用時數（選填）：",
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）："
         },
         "sections": {
           "advanced": {
@@ -206,7 +207,8 @@
           "skip_local_mqtt": "略過本機 MQTT 連線測試（不建議）：",
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
-          "usage_hours": "目前使用時數（選填）："
+          "usage_hours": "目前使用時數（選填）：",
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）："
         },
         "sections": {
           "advanced": {
@@ -227,7 +229,8 @@
           "access_code": "存取碼：",
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
-          "usage_hours": "目前使用時數（選填）："
+          "usage_hours": "目前使用時數（選填）：",
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）："
         },
         "sections": {
           "advanced": {

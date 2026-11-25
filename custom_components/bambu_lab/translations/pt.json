@@ -87,7 +87,8 @@
           "access_code": "Código de Acesso:",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "Código de Acesso:",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "skip_local_mqtt": "Saltar teste de ligação MQTT local (não recomendado):",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "Código de Acesso:",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
         },
         "sections": {
           "advanced": {
