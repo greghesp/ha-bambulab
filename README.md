@@ -111,6 +111,7 @@ A short tour. The complete list, with per-model notes, is in the
 | AMS 3H Zone Temperature / Humidity / Remaining Drying Time | Per drying zone of the H3C's AMS 3H, which has no unit-wide reading. The trays in each zone are an attribute |
 | AMS Drying | Drying state, time left, temperature and filament (AMS 2 Pro / AMS HT) |
 | Active Tray | The slot feeding the nozzle right now |
+| Active Tray Index | Printer-wide number of the slot feeding the nozzle (AMS 0-15, AMS HT 128-135, `external`, `none`). Changes on every tray switch, even between identical filaments |
 | External Spool | Filament on the external spool holder, same attributes as a tray |
 | Hotend Rack | Mounted/docked hotends, wear and usage time (H2C Vortek) |
 | External AMS heater | Runs a SUNLU AMS Heater or EIBOS Series X from the smart plug it's powered by, switching on and off at the AMS humidity you set, with a temperature cutoff and maximum runtime ([details](https://docs.page/greghesp/ha-bambulab/entities#external-ams-heater-or-dryer-sunlu-ams-heater-eibos-series-x)) |

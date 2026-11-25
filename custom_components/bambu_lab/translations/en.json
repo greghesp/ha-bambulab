@@ -921,6 +921,14 @@
           "none": "None"
         }
       },
+      "active_tray_index": {
+        "name": "Active tray index",
+        "state": {
+          "none": "None",
+          "external": "External spool",
+          "external_2": "External spool 2"
+        }
+      },
       "filament_change_status": {
         "name": "Filament change status",
         "state": {
