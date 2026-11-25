@@ -727,6 +727,83 @@ class TestPrintJob(unittest.TestCase):
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
 
+    def _make_cached_model(self, directory, name, model_bytes, gcode_bytes, age_seconds):
+        model = Path(directory) / f"{name}.3mf"
+        gcode = Path(directory) / f"{name}.gcode"
+        model.write_bytes(b"m" * model_bytes)
+        gcode.write_bytes(b"g" * gcode_bytes)
+        mtime = time.time() - age_seconds
+        os.utime(model, (mtime, mtime))
+        return model, gcode
+
+    def test_prune_enforces_size_limit_including_sidecars(self):
+        """Old models are pruned once the total size, counting sidecars, passes max_bytes."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            newest = self._make_cached_model(temp_dir, "newest", 300, 300, 10)
+            middle = self._make_cached_model(temp_dir, "middle", 300, 300, 20)
+            oldest = self._make_cached_model(temp_dir, "oldest", 300, 300, 30)
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=100, extra_extensions=['.gcode'], max_bytes=1500)
+
+            for path in newest + middle:
+                self.assertTrue(path.exists(), path)
+            for path in oldest:
+                self.assertFalse(path.exists(), path)
+
+    def test_prune_size_limit_always_keeps_newest_model(self):
+        """A single model larger than the limit is kept so the active print keeps its model."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            newest = self._make_cached_model(temp_dir, "newest", 2000, 2000, 10)
+            older = self._make_cached_model(temp_dir, "older", 10, 10, 20)
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=100, extra_extensions=['.gcode'], max_bytes=1000)
+
+            for path in newest:
+                self.assertTrue(path.exists(), path)
+            for path in older:
+                self.assertFalse(path.exists(), path)
+
+    def test_prune_size_limit_applies_when_count_is_unlimited(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            newest = self._make_cached_model(temp_dir, "newest", 600, 0, 10)
+            oldest = self._make_cached_model(temp_dir, "oldest", 600, 0, 20)
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=-1, extra_extensions=['.gcode'], max_bytes=1000)
+
+            self.assertTrue(newest[0].exists())
+            self.assertFalse(oldest[0].exists())
+
+    def test_prune_without_size_limit_is_count_only(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            models = [self._make_cached_model(temp_dir, f"m{i}", 5000, 5000, 10 * (i + 1)) for i in range(3)]
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=2, extra_extensions=['.gcode'])
+
+            self.assertTrue(models[0][0].exists())
+            self.assertTrue(models[1][0].exists())
+            self.assertFalse(models[2][0].exists())
+            self.assertFalse(models[2][1].exists())
+
+    def test_prune_print_history_files_uses_client_size_limit(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            self.client._test_mode = False
+            self.client._print_cache_count = 100
+            self.client._print_cache_max_mb = 1
+            cache_dir = Path(temp_dir) / "prints" / "cache"
+            cache_dir.mkdir(parents=True)
+            newest = self._make_cached_model(cache_dir, "newest", 700 * 1024, 0, 10)
+            oldest = self._make_cached_model(cache_dir, "oldest", 700 * 1024, 0, 20)
+
+            self.print_job.prune_print_history_files()
+
+            self.assertTrue(newest[0].exists())
+            self.assertFalse(oldest[0].exists())
+
     def test_clear_print_history_deletes_every_model_and_sidecar(self):
         """Clearing removes all cached prints, even when pruning is disabled (#1585)."""
         with tempfile.TemporaryDirectory() as temp_dir:
