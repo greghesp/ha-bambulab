@@ -55,6 +55,9 @@ PLATFORMS = (
     Platform.UPDATE,
 )
 
+# The ha-bambulab-cards release workflow rewrites this list with json.dumps, so
+# it keeps that layout. Ruff formatting it would fail every frontend sync PR.
+# fmt: off
 BAMBU_LAB_CARDS = [
     {
         'name': 'Bambu Lab Cards',
@@ -62,6 +65,8 @@ BAMBU_LAB_CARDS = [
         'version': '0.8.8'
     }
 ]
+# fmt: on
+
 
 class Options(IntEnum):
     CAMERA = 1,
