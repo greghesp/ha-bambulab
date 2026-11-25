@@ -36,9 +36,9 @@ The printer sensor that exposes HMS errors as a list would be very complex to ha
 
 The X1 reports its routine first layer inspection (HMS_0C00_0300_0003_000B) as an HMS error while it runs. It isn't a problem, so it is left out of the HMS errors sensor and events. Anything the inspection finds is still reported.
 
-<Note>
+<Info>
   For *Timelapse downloaded*, `path` is where the video was saved. `url` is only filled in when that file is under Home Assistant's `www` folder. The print cache is kept out of `www` because Home Assistant serves that folder without authentication, so `url` is normally empty. Use `path` instead.
-</Note>
+</Info>
 
 When crafting a notification or similar you can access the event data with a template of `{{ trigger.event.data.[data_name] }}` - e.g. `{{ trigger.event.data.error }}`.
 
