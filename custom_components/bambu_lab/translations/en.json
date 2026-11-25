@@ -230,7 +230,8 @@
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
           "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "register_cards": "Add the Bambu Lab cards to the dashboard resources (they stay while any printer has this on):"
         },
         "sections": {
           "advanced": {
@@ -252,7 +253,8 @@
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
           "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "register_cards": "Add the Bambu Lab cards to the dashboard resources (they stay while any printer has this on):"
         },
         "sections": {
           "advanced": {

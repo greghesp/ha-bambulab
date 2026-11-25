@@ -465,7 +465,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Do this before anything slow or that can fail, so that dashboards opened while
     # Home Assistant is starting can already load the cards.
-    await BambuLabCardRegistration(hass).async_register()
+    await _async_update_card_registration(hass)
 
     try:
         await hass.async_add_executor_job(migrate_legacy_file_cache, hass, entry.data["serial"])
@@ -588,10 +588,36 @@ async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 def _is_printer_entry(entry: ConfigEntry) -> bool:
     return entry.data.get(ENTRY_TYPE) not in (ENTRY_TYPE_MAKERWORLD, ENTRY_TYPE_FILAMENT_INVENTORY)
 
+def _wants_cards(entry: ConfigEntry) -> bool:
+    """Whether this entry asks for the cards. They are shared by all printers."""
+    return _is_printer_entry(entry) and entry.options.get("register_cards", True)
+
+
+async def _async_update_card_registration(hass: HomeAssistant) -> None:
+    """Register the cards while any enabled printer wants them, otherwise remove them.
+
+    Without the removal, turning the option off would leave the resource behind and
+    every dashboard would keep downloading the cards (#2174).
+    """
+    entries = hass.config_entries.async_entries(
+        DOMAIN, include_ignore=False, include_disabled=False
+    )
+    if any(_wants_cards(other) for other in entries):
+        await BambuLabCardRegistration(hass).async_register()
+        return
+    try:
+        await BambuLabCardRegistration(hass).async_unregister()
+    except Exception:
+        # The printer works without the cards, so don't fail its setup over this.
+        LOGGER.exception("Failed to remove the Bambu Lab cards")
+
+
 async def _async_unregister_unused_cards(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Remove the cards unless another enabled printer still uses them."""
+    """Remove the cards unless another enabled printer still wants them."""
     entries = hass.config_entries.async_entries(DOMAIN, include_ignore=False, include_disabled=False)
-    if any(other.entry_id != entry.entry_id and _is_printer_entry(other) for other in entries):
+    if any(
+        other.entry_id != entry.entry_id and _wants_cards(other) for other in entries
+    ):
         return
     await BambuLabCardRegistration(hass).async_unregister()
 
