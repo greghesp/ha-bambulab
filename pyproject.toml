@@ -7,8 +7,8 @@
 [tool.ruff]
 # Pinned so CI and local runs agree; bump together with .github/workflows/lint.yml.
 required-version = "==0.17.6"
-# Oldest Python supported by the minimum Home Assistant in hacs.json (2025.1).
-target-version = "py312"
+# Oldest Python supported by the minimum Home Assistant in hacs.json (2026.5).
+target-version = "py314"
 
 [tool.ruff.lint]
 select = [
