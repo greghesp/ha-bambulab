@@ -94,7 +94,9 @@ def make_coordinator(monkeypatch):
             config_entries=entries, async_create_task=create_task
         )
         coordinator.config_entry = SimpleNamespace(
-            entry_id="entry", data={"serial": "SERIAL", "device_type": "H2C"}
+            entry_id="entry",
+            data={"serial": "SERIAL", "device_type": "H2C"},
+            disabled_by=None,
         )
         coordinator._shutdown = False
         coordinator._reinitialize_requested = False

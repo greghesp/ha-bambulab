@@ -1,0 +1,24 @@
+# Tool configuration only - this repo isn't an installable package.
+#
+# Ruff is enforced on the lines a pull request changes, not on the whole
+# repo (see scripts/lint_changed_lines.py), so existing code doesn't need a
+# big-bang reformat before this can be turned on.
+
+[tool.ruff]
+# Pinned so CI and local runs agree; bump together with .github/workflows/lint.yml.
+required-version = "==0.17.6"
+# Oldest Python supported by the minimum Home Assistant in hacs.json (2025.1).
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes: unused/undefined names, imports
+    "I",  # import sorting
+    "UP", # pyupgrade
+    "B",  # bugbear: likely bugs
+]
+ignore = [
+    "E501", # line length - the formatter owns this
+]

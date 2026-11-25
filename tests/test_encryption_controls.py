@@ -32,6 +32,8 @@ def coordinator(monkeypatch):
     coordinator.client = MagicMock()
     coordinator.client.get_device().ams.data = {}
     coordinator._reinitialize_sensors = MagicMock()
+    # event_printer_ready queues a serialized reinitialize pass (#2341).
+    coordinator._request_reinitialize = MagicMock()
     return coordinator
 
 
@@ -44,6 +46,7 @@ def print_fun(coordinator):
 def _printer_ready(coordinator):
     coordinator.event_handler_internal("event_printer_ready")
     coordinator._reinitialize_sensors.reset_mock()
+    coordinator._request_reinitialize.reset_mock()
 
 
 def test_turning_developer_mode_off_rebuilds_the_entities(coordinator, print_fun):
@@ -59,7 +62,9 @@ def test_startup_with_developer_mode_off_sets_up_the_entities_once(coordinator, 
     print_fun.print_update(DEVELOPER_MODE_OFF)
     coordinator.event_handler_internal("event_printer_ready")
 
-    coordinator._reinitialize_sensors.assert_called_once_with()
+    # Only the setup requested by printer ready, no extra pass for the encryption requirement.
+    coordinator._reinitialize_sensors.assert_not_called()
+    coordinator._request_reinitialize.assert_called_once_with()
 
 
 def test_unchanged_requirement_does_not_rebuild_again(coordinator, print_fun):

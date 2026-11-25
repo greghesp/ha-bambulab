@@ -10,12 +10,18 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Current Home Assistant releases require Python 3.14.
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v10.4.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: tests/requirements*.txt
 
       - name: Install test dependencies
-        run: pip install -r tests/requirements.txt
+        run: uv pip install --system -r tests/requirements_ha.txt
 
       - name: Run unit tests
-        run: python -m pytest tests/pybambu tests/test_file_cache.py -v
+        run: python -m pytest tests -v

@@ -13,5 +13,5 @@ cd "$REPO_ROOT"
 python3 -m venv .venv
 source .venv/bin/activate
 
-python3 -m pip install --quiet -r tests/requirements.txt
-python3 -m pytest tests/pybambu tests/test_file_cache.py -v
+python3 -m pip install --quiet -r tests/requirements_ha.txt
+python3 -m pytest tests -v
