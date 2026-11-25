@@ -480,7 +480,7 @@ Replace every `a1b2c3d4e5f6g7h8i9j0` with your printer's device ID. Drop any row
 <Property name="action" type="bambu_lab.clear_file_cache" required>
   Deletes the 3MF models, cover images and timelapse videos the integration has cached in Home Assistant for a printer. This empties the print history and timelapse lists in the cards and frees the disk space they used. Nothing on the printer is deleted, and a model is downloaded again the next time it is printed.
 
-  To keep the cache small automatically instead, lower the print and timelapse cache counts in the printer's integration options.
+  To keep the cache small automatically instead, lower the print and timelapse cache counts in the printer's integration options, or set a maximum print cache size in MB there.
 
     ```yaml
     action: bambu_lab.clear_file_cache
