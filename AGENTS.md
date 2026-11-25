@@ -22,11 +22,12 @@ A Home Assistant custom integration (`bambu_lab`, installed through HACS) for Ba
 ```bash
 python -m pytest tests                  # full suite (needs tests/requirements_ha.txt installed)
 tests/run_tests.sh                      # same, in a fresh .venv
+tests/run_tests.sh minimum              # against the minimum Home Assistant in hacs.json (needs uv)
 python scripts/lint_changed_lines.py    # Ruff on the lines your branch changes; add --fix to format them
 python scripts/check_translation_parity.py
 ```
 
-CI runs on Python 3.14. Ruff is pinned in `pyproject.toml` (`ruff==0.17.6`); use that version.
+CI runs the tests twice: against the newest Home Assistant and against the minimum in `hacs.json`, each on the oldest Python that release supports. Code has to work on both. The minimum follows a "last 6 months of releases" policy: a monthly workflow raises it with a PR (`scripts/ha_min_version.py`). Don't use a Home Assistant API newer than the minimum without raising it by hand in the same PR. Ruff is pinned in `pyproject.toml` (`ruff==0.17.6`); use that version.
 
 ## Rules
 
