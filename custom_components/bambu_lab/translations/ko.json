@@ -209,7 +209,8 @@
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
           "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
           "skip_local_mqtt": "로컬 mqtt 연결 테스트 건너뛰기(권장되지 않음):",
-          "print_cache_max_mb": "캐시된 모델의 최대 총 크기(MB)(크기 제한이 없는 경우 0):"
+          "print_cache_max_mb": "캐시된 모델의 최대 총 크기(MB)(크기 제한이 없는 경우 0):",
+          "register_cards": "Bambu Lab 카드를 대시보드 리소스에 추가합니다(프린터에 이 카드가 켜져 있는 동안 유지됩니다)."
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "usage_hours": "현재 사용 시간 (선택 사항):",
           "print_cache_count": "홈 어시스턴트로 캐시 할 모델 수 (무제한의 경우 -1) :",
           "timelapse_cache_count": "홈 어시스턴트로 캐시 할 Timelapse 비디오 수 (무제한의 경우 -1) :",
-          "print_cache_max_mb": "캐시된 모델의 최대 총 크기(MB)(크기 제한이 없는 경우 0):"
+          "print_cache_max_mb": "캐시된 모델의 최대 총 크기(MB)(크기 제한이 없는 경우 0):",
+          "register_cards": "Bambu Lab 카드를 대시보드 리소스에 추가합니다(프린터에 이 카드가 켜져 있는 동안 유지됩니다)."
         },
         "sections": {
           "advanced": {

@@ -175,11 +175,12 @@ def test_unregister_loads_resources_first():
     assert _urls(resources) == ["/hacsfiles/x/x.js"]
 
 
-def _entry(entry_id, disabled=False, entry_type=None):
+def _entry(entry_id, disabled=False, entry_type=None, cards=None):
     return SimpleNamespace(
         entry_id=entry_id,
         disabled_by="user" if disabled else None,
         data={ENTRY_TYPE: entry_type} if entry_type else {"serial": entry_id},
+        options={} if cards is None else {"register_cards": cards},
     )
 
 
@@ -246,3 +247,64 @@ def test_removing_a_cloud_entry_keeps_the_resource(unregister, entry_type):
         bambu_lab.async_remove_entry(_hass_with(), _entry("cloud", entry_type=entry_type))
     )
     unregister.assert_not_awaited()
+
+
+@pytest.fixture
+def register(monkeypatch):
+    register = AsyncMock()
+    monkeypatch.setattr(BambuLabCardRegistration, "async_register", register)
+    return register
+
+
+def _update(*entries):
+    asyncio.run(bambu_lab._async_update_card_registration(_hass_with(*entries)))
+
+
+def test_registers_cards_by_default(register, unregister):
+    _update(_entry("a"))
+    register.assert_awaited_once()
+    unregister.assert_not_awaited()
+
+
+def test_turning_the_option_off_removes_the_resource(register, unregister):
+    _update(_entry("a", cards=False))
+    register.assert_not_awaited()
+    unregister.assert_awaited_once()
+
+
+def test_one_printer_with_the_option_on_keeps_the_cards(register, unregister):
+    _update(_entry("a", cards=False), _entry("b", cards=True))
+    register.assert_awaited_once()
+    unregister.assert_not_awaited()
+
+
+def test_disabled_printer_with_the_option_on_does_not_keep_the_cards(
+    register, unregister
+):
+    _update(_entry("a", cards=False), _entry("b", disabled=True))
+    register.assert_not_awaited()
+    unregister.assert_awaited_once()
+
+
+@pytest.mark.parametrize(
+    "entry_type", [ENTRY_TYPE_MAKERWORLD, ENTRY_TYPE_FILAMENT_INVENTORY]
+)
+def test_cloud_entries_do_not_keep_the_cards(register, unregister, entry_type):
+    _update(_entry("a", cards=False), _entry("cloud", entry_type=entry_type))
+    register.assert_not_awaited()
+    unregister.assert_awaited_once()
+
+
+def test_failing_to_remove_the_cards_does_not_fail_setup(register, unregister, caplog):
+    unregister.side_effect = RuntimeError("boom")
+    _update(_entry("a", cards=False))
+    assert "Failed to remove the Bambu Lab cards" in caplog.text
+
+
+def test_removing_the_last_printer_that_wants_the_cards_removes_the_resource(
+    unregister,
+):
+    asyncio.run(
+        bambu_lab.async_remove_entry(_hass_with(_entry("b", cards=False)), _entry("a"))
+    )
+    unregister.assert_awaited_once()

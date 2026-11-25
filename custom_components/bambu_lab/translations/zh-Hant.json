@@ -209,7 +209,8 @@
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
           "usage_hours": "目前使用時數（選填）：",
-          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）："
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）：",
+          "register_cards": "將 Bambu Lab 卡新增至儀表板資源（當任何印表機開啟該卡時，它們會保留）："
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
           "usage_hours": "目前使用時數（選填）：",
-          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）："
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）：",
+          "register_cards": "將 Bambu Lab 卡新增至儀表板資源（當任何印表機開啟該卡時，它們會保留）："
         },
         "sections": {
           "advanced": {

@@ -1096,7 +1096,8 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["print_cache_max_mb"] = max(0, int(user_input.get('print_cache_max_mb', 0)))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                     options["force_ip"] = force_ip
-                    
+                    options["register_cards"] = user_input.get("register_cards", True)
+
                     title = device['dev_id']
                     self.hass.config_entries.async_update_entry(
                         entry=self._config_entry,
@@ -1125,6 +1126,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_print_cache_count = self._config_entry.options.get('print_cache_count', "100") if user_input is None else user_input['print_cache_count']
         default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', "1") if user_input is None else user_input['timelapse_cache_count']
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        default_register_cards = (user_input or self._config_entry.options).get(
+            "register_cards", True
+        )
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
 
@@ -1139,6 +1143,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('print_cache_max_mb', default=str(self._config_entry.options.get('print_cache_max_mb', 0) if user_input is None else user_input.get('print_cache_max_mb', 0)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
+        fields[vol.Required("register_cards", default=default_register_cards)] = (
+            BOOLEAN_SELECTOR
+        )
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
@@ -1193,6 +1200,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
+                options["register_cards"] = user_input.get("register_cards", True)
 
                 title = self._config_entry.data['serial']
                 self.hass.config_entries.async_update_entry(
@@ -1223,6 +1231,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_print_cache_count = self._config_entry.options.get('print_cache_count', "100") if user_input is None else user_input['print_cache_count']
         default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', "1") if user_input is None else user_input['timelapse_cache_count']
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        default_register_cards = (user_input or self._config_entry.options).get(
+            "register_cards", True
+        )
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
 
@@ -1232,6 +1243,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('print_cache_max_mb', default=str(self._config_entry.options.get('print_cache_max_mb', 0) if user_input is None else user_input.get('print_cache_max_mb', 0)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
+        fields[vol.Required("register_cards", default=default_register_cards)] = (
+            BOOLEAN_SELECTOR
+        )
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,

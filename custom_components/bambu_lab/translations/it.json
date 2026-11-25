@@ -209,7 +209,8 @@
           "print_cache_count": "Numero di modelli da cache per Home Assistant (-1 per illimitato):",
           "timelapse_cache_count": "Numero di video di timelapse per la cache per Home Assistant (-1 per illimitato):",
           "skip_local_mqtt": "Salta il test di connessione mqtt locale (non consigliato):",
-          "print_cache_max_mb": "Dimensione totale massima dei modelli memorizzati nella cache in MB (0 per nessun limite di dimensione):"
+          "print_cache_max_mb": "Dimensione totale massima dei modelli memorizzati nella cache in MB (0 per nessun limite di dimensione):",
+          "register_cards": "Aggiungi le schede Bambu Lab alle risorse del dashboard (rimangono finché qualsiasi stampante è attiva):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "usage_hours": "Orari di utilizzo attuali (facoltativo):",
           "print_cache_count": "Numero di modelli da cache per Home Assistant (-1 per illimitato):",
           "timelapse_cache_count": "Numero di video di timelapse per la cache per Home Assistant (-1 per illimitato):",
-          "print_cache_max_mb": "Dimensione totale massima dei modelli memorizzati nella cache in MB (0 per nessun limite di dimensione):"
+          "print_cache_max_mb": "Dimensione totale massima dei modelli memorizzati nella cache in MB (0 per nessun limite di dimensione):",
+          "register_cards": "Aggiungi le schede Bambu Lab alle risorse del dashboard (rimangono finché qualsiasi stampante è attiva):"
         },
         "sections": {
           "advanced": {

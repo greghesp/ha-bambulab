@@ -209,7 +209,8 @@
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
           "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
           "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):",
-          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):"
+          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):",
+          "register_cards": "Fügen Sie die Bambu Lab-Karten zu den Dashboard-Ressourcen hinzu (sie bleiben bestehen, solange dies auf einem beliebigen Drucker aktiviert ist):"
         },
         "sections": {
           "advanced": {
@@ -231,7 +232,8 @@
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
           "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
-          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):"
+          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):",
+          "register_cards": "Fügen Sie die Bambu Lab-Karten zu den Dashboard-Ressourcen hinzu (sie bleiben bestehen, solange dies auf einem beliebigen Drucker aktiviert ist):"
         },
         "sections": {
           "advanced": {
