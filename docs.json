@@ -94,6 +94,11 @@
           "icon": "palette"
         },
         {
+          "title": "AMS Graphic Card",
+          "href": "/frontend/cards/ams-graphic-card",
+          "icon": "image"
+        },
+        {
           "title": "Spool Card",
           "href": "/frontend/cards/spool-card",
           "icon": "circle"
@@ -107,6 +112,16 @@
           "title": "Print Status Card",
           "href": "/frontend/cards/print-status-card",
           "icon": "chart-column"
+        },
+        {
+          "title": "Error Card",
+          "href": "/frontend/cards/error-card",
+          "icon": "triangle-exclamation"
+        },
+        {
+          "title": "Skip Objects Card",
+          "href": "/frontend/cards/skip-objects-card",
+          "icon": "forward"
         }
       ]
     },

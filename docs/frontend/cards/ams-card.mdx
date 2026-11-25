@@ -6,29 +6,48 @@ title: AMS Card
 
 ## Description
 
-The AMS Card shows the information about your AMS devices
-
-## Configuration
-
-All configuration should be done via the dashboard card editor. The configuration options available are:
-
-- Card Title
-- Custom Sensors
-- AMS Selection
-- Card Style
-- Show/Hide Types
-
-## Vector Card
-
-![Vector ams card](/images/cards/vector-ams-card.png)
+The AMS Card shows one AMS unit. Tap a spool to see its details or change its filament.
 
 - Shows dynamic spool volume remaining if enabled in the slicer, and is a Bambu Filament
   - If there is an MQTT issue where the filament remaining value is not reported correctly, the card will show a full spool
 - Active spool can be identified by the highlighted border and animation
+- The info bar shows the AMS humidity and temperature. Tap a reading to open its history.
 
-## Graphic Card
+For a drawing of the AMS unit itself with fill levels and labels, see the [AMS Graphic Card](/frontend/cards/ams-graphic-card).
+
+## Configuration
+
+All configuration can be done via the dashboard card editor. The YAML below is for reference.
+
+```yaml
+type: custom:ha-bambulab-ams-card
+ams: <AMS device id>
+style: vector             # vector or graphic
+show_info_bar: true       # humidity and temperature bar
+show_humidity_percentage: true   # false shows the 1 to 5 index instead
+subtitle: AMS 1
+show_type: true           # filament type on each spool
+spool_anim_reflection: true
+spool_anim_wiggle: true
+# Optional overrides
+custom_humidity: sensor.my_ams_humidity
+custom_temperature: sensor.my_ams_temperature
+custom_remaining_1: sensor.tray_1_remaining   # one per tray: _1 to _4, or _1 to _9 on an AMS 3H
+```
+
+## Vector style
+
+![Vector ams card](/images/readme/ams-card-vector.png)
+
+## Graphic style
 
 ![Graphic ams card](/images/cards/graphic-ams-card.png)
+
+## External AMS heater or dryer
+
+If the AMS has an [external heater or dryer](/entities#external-ams-heater-or-dryer-sunlu-ams-heater-eibos-series-x) linked, the info bar also shows the heater: **Off**, **On**, **Auto** (drying mode waiting for the humidity to rise), **Drying**, or **Limit** once it hits the maximum runtime. Tap it to open drying mode.
+
+![AMS card with an external heater linked](/images/readme/ams-card-heater.png)
 
 ## AMS 3H
 

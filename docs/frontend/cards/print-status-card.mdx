@@ -6,20 +6,51 @@ title: Print Status Card
 
 ## Description
 
-The Print Status Card is designed to be used for the print status.
+Your printer with its live values, in one of three styles:
+
+- **Graphic**: a picture of your printer model with live values laid over it. You get progress and time left, nozzle, bed and chamber temperatures, fans, the light, the door, humidity, and the print preview on the bed. Tap a value to open it.
+- **Simple**: a touchscreen-style card with the cover image or camera feed, progress, temperatures and pages for controls and the AMS.
+- **Minimal**: one compact row with progress, status and time left, and optionally the printer name, cover image and camera.
+
+| Light theme | Dark theme |
+|---|---|
+| ![Print Status card, graphic style, light theme](/images/readme/print-status-light.png) | ![Print Status card, graphic style, dark theme](/images/readme/print-status-dark.png) |
 
 ## Configuration
 
-All configuration should be done via the dashboard card editor. The configuration options available are:
+All configuration can be done via the dashboard card editor. The YAML below is for reference.
 
-- Printer Selection
+```yaml
+type: custom:ha-bambulab-print_status-card
+printer: <printer device id>
+style: graphic            # graphic, simple or minimal
+# Optional: use your own entities instead of the printer's
+custom_temperature: sensor.my_chamber_temperature
+custom_humidity: sensor.my_chamber_humidity
+custom_light: light.my_printer_light
+custom_power: switch.my_printer_plug
+custom_camera: camera.my_printer_camera
+# Graphic and simple styles: a second light or switch, and your own power sensor (such as a smart plug's)
+custom_light_2: light.my_room_light
+custom_power_usage: sensor.my_printer_plug_power
+# All styles: show when the print will end
+show_end_time: false
+# Simple and minimal styles: show the progress percentage
+show_percentage: false
+# Simple and minimal styles: fill the cover image from the bottom up as layers print
+cover_progress: false
+# Simple style only: hide the buttons and make the card read-only
+hide_controls: false
+# Minimal style only
+show_printer_name: true
+show_cover: true
+cover_position: left      # left or right
+show_camera_feed: false
+camera_position: right    # left or right
+```
 
 ## Axis controls
 
 The Controls page of the card has jog controls for the X, Y and Z axes and a home button. These controls are not
 available as a separate card. To put them on a dashboard without the Print Status Card, see
 [Standalone axis controls on a dashboard](/actions#standalone-axis-controls-on-a-dashboard).
-
-## Print Status Card
-
-To be added

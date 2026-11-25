@@ -6,14 +6,19 @@ title: Print Control Card
 
 ## Description
 
-The Print Control Card is designed to be used for the print control.
+Printing speed plus Pause, Resume and Stop, and **skip objects** on the plate mid-print.
+
+![Print Control card with speed, pause, resume and stop](/images/readme/print-control-card.png)
+
+To put only the skip objects button on a dashboard, use the [Skip Objects Card](/frontend/cards/skip-objects-card).
 
 ## Configuration
 
-All configuration should be done via the dashboard card editor. The configuration options available are:
+All configuration can be done via the dashboard card editor. The YAML below is for reference.
 
-- Printer Selection
+```yaml
+type: custom:ha-bambulab-print_control-card
+printer: <printer device id>
+```
 
-## Print Control Card
-
-To be added
+<Info>These controls need a printer that accepts unsigned MQTT commands. See [Entities](/entities) for which controls are affected.</Info>
