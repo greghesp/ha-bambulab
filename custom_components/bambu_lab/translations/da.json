@@ -87,7 +87,8 @@
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
           "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
-          "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):"
+          "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):",
+          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
-          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
           "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
-          "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):"
+          "skip_local_mqtt": "Spring lokal mqtt-forbindelsestest over (anbefales ikke):",
+          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "Adgangskode:",
           "usage_hours": "Aktuelle brugstimer (valgfrit):",
           "print_cache_count": "Antal modeller til cache til hjemmeassistent (-1 for ubegrænset):",
-          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):"
+          "timelapse_cache_count": "Antal Timelapse-videoer til cache til hjemmeassistent (-1 for ubegrænset):",
+          "print_cache_max_mb": "Maksimal samlet størrelse af cachelagrede modeller i MB (0 for ingen størrelsesgrænse):"
         },
         "sections": {
           "advanced": {

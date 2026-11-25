@@ -87,7 +87,8 @@
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
           "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
-          "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):"
+          "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):",
+          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "Zugangscode",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
-          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):"
+          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
           "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
-          "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):"
+          "skip_local_mqtt": "Lokalen MQTT-Verbindungstest überspringen (nicht empfohlen):",
+          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "Zugangscode",
           "usage_hours": "Aktuelle Nutzungsstunden (optional):",
           "print_cache_count": "Anzahl der Modelle, die zum Home-Assistenten zwischenstrahlen sind (-1 für unbegrenzt):",
-          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):"
+          "timelapse_cache_count": "Anzahl der Timelapse-Videos zum Cache zum Home Assistant (-1 für unbegrenzt):",
+          "print_cache_max_mb": "Maximale Gesamtgröße der zwischengespeicherten Modelle in MB (0 für keine Größenbeschränkung):"
         },
         "sections": {
           "advanced": {

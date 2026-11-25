@@ -87,7 +87,8 @@
           "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
           "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
           "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):",
-          "skip_local_mqtt": "Sla de lokale mqtt-verbindingstest over (niet aanbevolen):"
+          "skip_local_mqtt": "Sla de lokale mqtt-verbindingstest over (niet aanbevolen):",
+          "print_cache_max_mb": "Maximale totale grootte van gecachte modellen in MB (0 voor geen groottelimiet):"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "Toegangscode:",
           "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
           "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
-          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):"
+          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):",
+          "print_cache_max_mb": "Maximale totale grootte van gecachte modellen in MB (0 voor geen groottelimiet):"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
           "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
           "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):",
-          "skip_local_mqtt": "Sla de lokale mqtt-verbindingstest over (niet aanbevolen):"
+          "skip_local_mqtt": "Sla de lokale mqtt-verbindingstest over (niet aanbevolen):",
+          "print_cache_max_mb": "Maximale totale grootte van gecachte modellen in MB (0 voor geen groottelimiet):"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "Toegangscode:",
           "usage_hours": "Huidige gebruiksduur in uren (optioneel):",
           "print_cache_count": "Aantal modellen om te cache naar Home Assistant (-1 voor onbeperkt):",
-          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):"
+          "timelapse_cache_count": "Aantal Timelapse-video's om te cache naar Home Assistant (-1 voor onbeperkt):",
+          "print_cache_max_mb": "Maximale totale grootte van gecachte modellen in MB (0 voor geen groottelimiet):"
         },
         "sections": {
           "advanced": {

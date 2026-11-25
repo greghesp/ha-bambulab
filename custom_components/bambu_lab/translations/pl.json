@@ -87,7 +87,8 @@
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
           "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):",
-          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
+          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
-          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):"
+          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
           "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
+          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):"
+          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
         },
         "sections": {
           "advanced": {

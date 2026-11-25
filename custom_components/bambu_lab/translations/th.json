@@ -87,7 +87,8 @@
           "usage_hours": "ชั่วโมงการใช้งานปัจจุบัน (ไม่บังคับ):",
           "print_cache_count": "จำนวนรุ่นที่จะแคชให้กับผู้ช่วยที่บ้าน (-1 สำหรับไม่ จำกัด ):",
           "timelapse_cache_count": "จำนวนวิดีโอ Timelapse สำหรับ Cache to Home Assistant (-1 สำหรับไม่ จำกัด ):",
-          "skip_local_mqtt": "ข้ามการทดสอบการเชื่อมต่อ mqtt ในเครื่อง (ไม่แนะนำ):"
+          "skip_local_mqtt": "ข้ามการทดสอบการเชื่อมต่อ mqtt ในเครื่อง (ไม่แนะนำ):",
+          "print_cache_max_mb": "ขนาดรวมสูงสุดของโมเดลที่แคชไว้เป็น MB (0 สำหรับการไม่จำกัดขนาด):"
         },
         "sections": {
           "advanced": {
@@ -109,7 +110,8 @@
           "access_code": "รหัสการเข้าถึง:",
           "usage_hours": "ชั่วโมงการใช้งานปัจจุบัน (ไม่บังคับ):",
           "print_cache_count": "จำนวนรุ่นที่จะแคชให้กับผู้ช่วยที่บ้าน (-1 สำหรับไม่ จำกัด ):",
-          "timelapse_cache_count": "จำนวนวิดีโอ Timelapse สำหรับ Cache to Home Assistant (-1 สำหรับไม่ จำกัด ):"
+          "timelapse_cache_count": "จำนวนวิดีโอ Timelapse สำหรับ Cache to Home Assistant (-1 สำหรับไม่ จำกัด ):",
+          "print_cache_max_mb": "ขนาดรวมสูงสุดของโมเดลที่แคชไว้เป็น MB (0 สำหรับการไม่จำกัดขนาด):"
         },
         "sections": {
           "advanced": {
@@ -206,7 +208,8 @@
           "usage_hours": "ชั่วโมงการใช้งานปัจจุบัน (ไม่บังคับ):",
           "print_cache_count": "จำนวนรุ่นที่จะแคชให้กับผู้ช่วยที่บ้าน (-1 สำหรับไม่ จำกัด ):",
           "timelapse_cache_count": "จำนวนวิดีโอ Timelapse สำหรับ Cache to Home Assistant (-1 สำหรับไม่ จำกัด ):",
-          "skip_local_mqtt": "ข้ามการทดสอบการเชื่อมต่อ mqtt ในเครื่อง (ไม่แนะนำ):"
+          "skip_local_mqtt": "ข้ามการทดสอบการเชื่อมต่อ mqtt ในเครื่อง (ไม่แนะนำ):",
+          "print_cache_max_mb": "ขนาดรวมสูงสุดของโมเดลที่แคชไว้เป็น MB (0 สำหรับการไม่จำกัดขนาด):"
         },
         "sections": {
           "advanced": {
@@ -227,7 +230,8 @@
           "access_code": "รหัสการเข้าถึง:",
           "usage_hours": "ชั่วโมงการใช้งานปัจจุบัน (ไม่บังคับ):",
           "print_cache_count": "จำนวนรุ่นที่จะแคชให้กับผู้ช่วยที่บ้าน (-1 สำหรับไม่ จำกัด ):",
-          "timelapse_cache_count": "จำนวนวิดีโอ Timelapse สำหรับ Cache to Home Assistant (-1 สำหรับไม่ จำกัด ):"
+          "timelapse_cache_count": "จำนวนวิดีโอ Timelapse สำหรับ Cache to Home Assistant (-1 สำหรับไม่ จำกัด ):",
+          "print_cache_max_mb": "ขนาดรวมสูงสุดของโมเดลที่แคชไว้เป็น MB (0 สำหรับการไม่จำกัดขนาด):"
         },
         "sections": {
           "advanced": {

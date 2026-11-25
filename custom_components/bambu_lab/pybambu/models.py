@@ -1338,7 +1338,7 @@ CLOUD_TASK_RETRY_DELAYS = (15, 30, 60, 120, 300, 600)
 # Files kept in the local print history and timelapse caches. A sidecar shares its primary
 # file's base name and is removed along with it.
 PRINT_CACHE_EXTENSIONS = ['.3mf']
-PRINT_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode']
+PRINT_CACHE_SIDECAR_EXTENSIONS = [".jpg", ".jpeg", ".png", ".slice_info.config"]
 TIMELAPSE_CACHE_EXTENSIONS = ['.mp4', '.avi', '.mov']
 TIMELAPSE_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png']
 
@@ -2606,11 +2606,17 @@ class PrintJob:
         self._prune_timelapses(keep=0)
 
     def _prune_print_history(self, keep: int, max_bytes: int = 0):
-        self._prune_old_files(directory=os.path.join(self._client.cache_path, "prints"),
-                              extensions=PRINT_CACHE_EXTENSIONS,
-                              keep=keep,
-                              extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS,
-                              max_bytes=max_bytes)
+        cache_dir = os.path.join(self._client.cache_path, "prints")
+        self._prune_old_files(
+            directory=cache_dir,
+            extensions=PRINT_CACHE_EXTENSIONS,
+            keep=keep,
+            extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS,
+            max_bytes=max_bytes,
+        )
+        self._prune_old_files(
+            directory=cache_dir, extensions=[".gcode"], keep=1 if keep != 0 else 0
+        )
 
     def _prune_timelapses(self, keep: int):
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
