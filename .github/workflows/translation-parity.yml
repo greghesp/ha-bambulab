@@ -16,9 +16,13 @@ on:
       - ".github/workflows/translation-parity.yml"
 
 permissions:
-  # PR comments are served by the Issues API under the hood, so this - not
-  # pull-requests: write - is the scope that actually grants comment access.
+  # The repo's default token is read-only, and setting this block drops every
+  # scope not listed. checkout needs contents: read. Commenting on a PR goes
+  # through the Issues API, but GitHub requires both issues: write and
+  # pull-requests: write for it (x-accepted-github-permissions on the 403).
+  contents: read
   issues: write
+  pull-requests: write
 
 jobs:
   parity:
@@ -35,7 +39,9 @@ jobs:
 
       # Comments are only meaningful in a PR context (push events - e.g. a
       # merge to main - have no PR to comment on).
+      # Reporting is best-effort: a failed comment must never fail the check.
       - if: github.event_name == 'pull_request'
+        continue-on-error: true
         uses: actions/github-script@v9
         with:
           script: |
@@ -58,17 +64,21 @@ jobs:
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
 
-            const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
-            const existing = comments.data.find((c) => c.body.startsWith(marker));
+            try {
+              const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
+              const existing = comments.data.find((c) => c.body.startsWith(marker));
 
-            if (!drift && !existing) {
-              // Common case: no drift, and we've never had anything to say. Stay silent.
-              return;
-            }
-            if (existing) {
-              // Update our previous comment in place, whether that's new drift
-              // details or flipping it over to "resolved".
-              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
-            } else {
-              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+              if (!drift && !existing) {
+                // Common case: no drift, and we've never had anything to say. Stay silent.
+                return;
+              }
+              if (existing) {
+                // Update our previous comment in place, whether that's new drift
+                // details or flipping it over to "resolved".
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              } else {
+                await github.rest.issues.createComment({ owner, repo, issue_number, body });
+              }
+            } catch (error) {
+              core.warning(`Could not post the translation parity comment: ${error.message}. See the step above for the parity results.`);
             }
