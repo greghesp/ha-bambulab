@@ -148,6 +148,11 @@ The integration ships its own cards and registers them for you when your
 dashboards are UI-managed. **Edit dashboard → Add card → search "Bambu Lab"**.
 Every option is in the visual editor.
 
+Don't use them? Turn off **Add the Bambu Lab cards to the dashboard resources**
+in the printer's options (**Settings → Devices & services → Bambu Lab →
+Configure**). Once no printer has it on, the resource is removed and dashboards
+stop downloading the cards.
+
 ### Print Status card
 
 A picture of your printer with live values laid over it: progress and time
