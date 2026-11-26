@@ -66,6 +66,9 @@
     "03004024": {
       "Fren Hall Sensörü kalibrasyonu başarısız oldu. Lütfen Fren Hall Sensörü'nün ve ilgili mıknatısın doğru şekilde takılıp takılmadığını kontrol edin.": []
     },
+    "03004028": {
+      "Y ekseni hareket hatası. Takım kafasını Y ekseni boyunca elle hareket ettirin ve sıkışma veya anormal direnç olup olmadığını kontrol edin.": []
+    },
     "03004030": {
       "Z ekseni başlangıç noktasına dönüşü başarısız oldu. Isıtmalı tabla kızağının sabitleme vidalarını çıkarın ve ısıtmalı tablanın dikey hareketini engelleyen herhangi bir engel olmadığından emin olun. Sorunu çözdükten sonra cihaz üzerinde yeniden kalibre edin.": []
     },
@@ -249,14 +252,26 @@
     "03008046": {
       "Yabancı cisim algılama zaman aşımı: lütfen yazıcıyı yeniden başlatın.": []
     },
+    "0300805B": {
+      "Takım kafasında Çizim Aracı algılandı. Takım kafası hareket etmek üzere. Devam etmeden önce lütfen Kalem Kapağını çıkar.": []
+    },
+    "0300805E": {
+      "Takım kafasında Çizim Aracı algılandı. Takım kafası hareket etmek üzere. Devam etmeden önce lütfen Kalem Kapağını çıkar.": []
+    },
     "03008061": {
       "Hava akışı sistemi modu etkinleştirilemedi; hava kapısının durumunu kontrol edin.": []
     },
     "03008063": {
-      "Oda sıcaklığı çok yüksek. AMS 3H yan kapağını ve yazıcı ön kapısını soğuması için açın.": []
+      "Oda sıcaklığı çok yüksek. AMS 3H yan kapağını ve yazıcı ön kapısını soğuması için açın.": [],
+      "Oda sıcaklığı çok yüksek. AMS 3P yan kapağını ve yazıcı ön kapısını soğuması için açın.": [
+        "P3C"
+      ]
     },
     "0300806E": {
-      "Anormal püskürtme ucu sıcaklık kontrolü algılandı; ısıtma modülü hasar görmüş olabilir. Cihazın gücünü hemen kesin. Başlangıç kalibrasyon sürecindeyseniz ve duman veya ateş görmüyorsanız, önce kalibrasyonu atlayın, ardından sorun giderme için ekranın sol alt köşesindeki ayrıntılı uyarıya bakın.": []
+      "Anormal püskürtme ucu sıcaklık kontrolü algılandı; ısıtma modülü hasar görmüş olabilir. Cihazın gücünü hemen kesin. Başlangıç kalibrasyon sürecindeyseniz ve duman veya ateş görmüyorsanız, önce kalibrasyonu atlayın, ardından sorun giderme için ekranın sol alt köşesindeki ayrıntılı uyarıya bakın.": [],
+      "Püskürtme ucu sıcaklık kontrolünde anormallik tespit edildi; ısıtma modülü hasar görmüş olabilir. Cihazın güç bağlantısını derhal kes. Başlangıç kalibrasyonu sırasında duman veya alev görmüyorsan önce kalibrasyonu atla; ardından sorun giderme için ekranın sol alt köşesindeki ayrıntılı uyarıya bak.": [
+        "P3C"
+      ]
     },
     "0300806F": {
       "Isıtmalı tablada anormal sıcaklık artışı tespit edildi. Isıtma modülü hasar görmüş olabilir. Lütfen cihazı derhal kapatın ve kullanmayı bırakın.": []
@@ -265,7 +280,10 @@
       "Oda ısıtıcısı sıcaklığı anormal şekilde yükseliyor ve ısıtma modülü hasar görmüş olabilir. Lütfen cihazı derhal kapatın ve kullanmayı bırakın.": []
     },
     "03008084": {
-      "Hotend ısı kırıcı sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Lütfen oda sıcaklığını düşürmek için AMS 3H yan kapağını ve yazıcı ön kapağını açın veya ortam sıcaklığını düşürün.": []
+      "Hotend ısı kırıcı sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Lütfen oda sıcaklığını düşürmek için AMS 3H yan kapağını ve yazıcı ön kapağını açın veya ortam sıcaklığını düşürün.": [],
+      "Hotend ısı kırıcı sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Lütfen oda sıcaklığını düşürmek için AMS 3P yan kapağını ve yazıcı ön kapağını açın veya ortam sıcaklığını düşürün.": [
+        "P3C"
+      ]
     },
     "0300C012": {
       "Lütfen püskürtme ucunu 170°C üzerine ısıtın.": []
@@ -621,6 +639,9 @@
     "050040AF": {
       "Filament Tamponu kimlik doğrulaması başarısız oldu. Kabloyu yeniden bağlayın veya yazıcıyı yeniden başlatın.": []
     },
+    "050040B0": {
+      "AMS Kurutma Modülü kimlik doğrulaması başarısız oldu. Kabloyu yeniden bağlayın veya yazıcıyı yeniden başlatın.": []
+    },
     "050040B4": {
       "Görev yürütme hatası. Lütfen cihazı yeniden başlatın. Sorun devam ederse teknik destekle iletişime geçin.": []
     },
@@ -635,6 +656,9 @@
     },
     "05008013": {
       "Yazdırma dosyası mevcut değil. Lütfen depolama ortamının çıkarılıp çıkarılmadığını kontrol edin.": []
+    },
+    "05008030": {
+      "": []
     },
     "05008036": {
       "Dilimlenmiş dosyanız mevcut yazıcı modeliyle uyumlu değil. Devam edilsin mi?": []
@@ -975,6 +999,24 @@
     "05024005": {
       "AMS henüz kalibre edilmediğinden yazdırma işlemi başlatılamaz.": []
     },
+    "05024007": {
+      "": []
+    },
+    "05024008": {
+      "": []
+    },
+    "05024009": {
+      "": []
+    },
+    "0502400A": {
+      "": []
+    },
+    "0502400B": {
+      "": []
+    },
+    "0502400C": {
+      "": []
+    },
     "0502400D": {
       "Yeni bir görev başlatılamadı: filament yükleme/boşaltma işlemi tamamlanmadı.": []
     },
@@ -989,6 +1031,9 @@
     },
     "05024011": {
       "Yetkilendirilmiş dilimleme özelliği algılandı. Kullanmadan önce gerekli tüm yetkilerin alındığından emin olun. Bambu Lab, ürünün bu şekilde kullanımına izin veremez ve gerekli yetkiler alınmadan veya geçerli gerekliliklere ya da yasalara aykırı şekilde gerçekleştirilen kullanımlardan sorumlu değildir. Ayrıntılar için lütfen QR kodunu tarayın.": []
+    },
+    "05024012": {
+      "": []
     },
     "05024014": {
       "Dilimlenmiş dosya eksik. Cihaz çalışırken çarpışmayı veya anormal ısınmayı önlemek için lütfen modeli yeniden dilimle ve işi başlat.": []
@@ -1258,6 +1303,9 @@
       "Yazdırma Aracı 9 ile Yazdırma Aracı Kontrol Panosu arasında bağlantı hatası. Devam etmeden önce kablo bağlantısını kontrol et.": []
     },
     "052040AD": {
+      "AMS sertifikasyonu başarısız oldu. Kabloyu yeniden bağlayın veya yazıcıyı yeniden başlatın.": []
+    },
+    "052140AE": {
       "AMS sertifikasyonu başarısız oldu. Kabloyu yeniden bağlayın veya yazıcıyı yeniden başlatın.": []
     },
     "05804096": {
@@ -1770,6 +1818,9 @@
     "07F9C014": {
       "Filament, Yazdırma Aracı 7'ye başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
+    "07F9C017": {
+      "Filament, Yazdırma Aracı 7'ye başarıyla beslendi. 'Devam Et'e tıkladıktan sonra Takım Kafası rafa hareket edecektir. Yazıcının içine uzanmayın.": []
+    },
     "07FA8003": {
       "Lütfen filamenti 6 numaralı Yazdırma Takımı'ndan çıkarın. Bu mesaj devam ederse Yazdırma Takımı'nda sıkışmış kırık filament olup olmadığını kontrol edin. (Daha sonra AMS kullanmayı planlıyorsanız PTFE borusunu bağlayın.)": []
     },
@@ -1823,6 +1874,9 @@
     },
     "07FAC014": {
       "Filament, Yazdırma Aracı 6'ya başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
+    },
+    "07FAC017": {
+      "Filament, Yazdırma Aracı 6'ya başarıyla beslendi. 'Devam Et'e tıkladıktan sonra Takım Kafası rafa hareket edecektir. Yazıcının içine uzanmayın.": []
     },
     "07FB8003": {
       "Lütfen filamenti 5 numaralı Yazdırma Takımı'ndan çıkarın. Bu mesaj devam ederse Yazdırma Takımı'nda sıkışmış kırık filament olup olmadığını kontrol edin. (Daha sonra AMS kullanmayı planlıyorsanız PTFE borusunu bağlayın.)": []
@@ -1878,6 +1932,9 @@
     "07FBC014": {
       "Filament, Yazdırma Aracı 5'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
+    "07FBC017": {
+      "Filament, Yazdırma Aracı 5'e başarıyla beslendi. 'Devam Et'e tıkladıktan sonra Takım Kafası rafa hareket edecektir. Yazıcının içine uzanmayın.": []
+    },
     "07FC8003": {
       "Lütfen filamenti 4 numaralı Yazdırma Takımı'ndan çıkarın. Bu mesaj devam ederse Yazdırma Takımı'nda sıkışmış kırık filament olup olmadığını kontrol edin. (Daha sonra AMS kullanmayı planlıyorsanız PTFE borusunu bağlayın.)": []
     },
@@ -1932,6 +1989,9 @@
     "07FCC014": {
       "Filament, Yazdırma Aracı 4'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
+    "07FCC017": {
+      "Filament, Yazdırma Aracı 4'e başarıyla beslendi. 'Devam Et'e tıkladıktan sonra Takım Kafası rafa hareket edecektir. Yazıcının içine uzanmayın.": []
+    },
     "07FD8003": {
       "Lütfen filamenti 3 numaralı Yazdırma Takımı'ndan çıkarın. Bu mesaj devam ederse Yazdırma Takımı'nda sıkışmış kırık filament olup olmadığını kontrol edin. (Daha sonra AMS kullanmayı planlıyorsanız PTFE borusunu bağlayın.)": []
     },
@@ -1985,6 +2045,9 @@
     },
     "07FDC014": {
       "Filament, Yazdırma Aracı 3'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
+    },
+    "07FDC017": {
+      "Filament, Yazdırma Aracı 3'e başarıyla beslendi. 'Devam Et'e tıkladıktan sonra Takım Kafası rafa hareket edecektir. Yazıcının içine uzanmayın.": []
     },
     "07FE8003": {
       "Lütfen filamenti 2 numaralı Yazdırma Takımı'ndan çıkarın. Bu mesaj devam ederse Yazdırma Takımı'nda sıkışmış kırık filament olup olmadığını kontrol edin. (Daha sonra AMS kullanmayı planlıyorsanız PTFE borusunu bağlayın.)": []
@@ -2042,6 +2105,9 @@
     },
     "07FEC014": {
       "Filament, Yazdırma Aracı 2'ye başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
+    },
+    "07FEC017": {
+      "Filament, Yazdırma Aracı 2'ye başarıyla beslendi. 'Devam Et'e tıkladıktan sonra Takım Kafası rafa hareket edecektir. Yazıcının içine uzanmayın.": []
     },
     "07FEC030": {
       "Dilimleme yazılımında belirtilen filament tükendi. Yazdırma işlemi duraklatıldı. Lütfen malzemeyi değiştirmek ve yazdırmaya devam etmek için makineye gidin.": []
@@ -2108,6 +2174,12 @@
     },
     "07FFC014": {
       "Filament, Yazdırma Aracı 1'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
+    },
+    "07FFC016": {
+      "Boşaltma tamamlandı. PTFE borusunu daha sonra kullanmanız gerekirse, Yazdırma Aracı Filament Girişi'ne geri takın.": []
+    },
+    "07FFC017": {
+      "Filament, Yazdırma Aracı 1'e başarıyla beslendi. 'Devam Et'e tıkladıktan sonra Takım Kafası rafa hareket edecektir. Yazıcının içine uzanmayın.": []
     },
     "07FFC030": {
       "Dilimleme yazılımında belirtilen filament tükendi. Yazdırma işlemi duraklatıldı. Lütfen malzemeyi değiştirmek ve yazdırmaya devam etmek için makineye gidin.": []
@@ -2695,16 +2767,28 @@
       "Z ekseni başlangıç noktasına dönüş işlemi başarısız oldu. Görev iptal edildi. Takım Kafası'na veya Raf'a bir Çizim Takımı takın ve Bağlantı Kalibrasyonu'nu tamamlayın.": []
     },
     "2A008003": {
-      "Lütfen AMS 3H yuva 1'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 1'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 1'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A008005": {
-      "AMS 3H yuva 1'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 1'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 1'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A008006": {
-      "AMS 3H yuva 1'ye filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 1'ye filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 1'deki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A008007": {
-      "AMS 3H yuva 1 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
+      "AMS 3H yuva 1 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": [],
+      "AMS 3P yuva 1'de filament ekstrüzyonu başarısız oldu. 'Tekrar Dene'ye dokunun ve ekstrüzyon gözlemlenene kadar filamenti yavaşça ileri doğru itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A00800E": {
       "Takım Kafası'nda hâlâ filament tespit edildi ve yükünün boşaltılması gerekiyor. Filament çıkarıldıktan sonra bu mesaj devam ediyorsa Takım Kafası'nda kırık filament kalıp kalmadığını kontrol edin.": []
@@ -2713,19 +2797,37 @@
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 1 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A008011": {
-      "AMS 3H yuva 1'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 1'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 1'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A008012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A008013": {
-      "AMS 3H Yuva 1'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 1'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 1'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
+    },
+    "2A008019": {
+      "AMS 3P yuva 1'de filament ekstrüzyonu başarısız oldu. Filamenti hafifçe ileri itin, ardından 'Tekrar Dene'ye dokunun.": []
     },
     "2A00801A": {
-      "AMS 3H yuva 1'deki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
+      "AMS 3H yuva 1'deki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": [],
+      "AMS 3P yuva 1'deki filament bitti. Lütfen filamentleri hazırlayın. 'Devam Et'e dokunduktan sonra, yükleme işlemini tamamlamak için talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "2A00801C": {
-      "AMS 3H iletişim hatası. Filament değiştirme işlemi devam edemiyor. Lütfen AMS ile yazıcı arasındaki bağlantı kablosunu çıkarıp yeniden tak.": []
+      "AMS 3H iletişim hatası. Filament değiştirme işlemi devam edemiyor. Lütfen AMS ile yazıcı arasındaki bağlantı kablosunu çıkarıp yeniden tak.": [],
+      "AMS 3P iletişim hatası. Filament değiştirme işlemi devam edemiyor. Lütfen AMS ile yazıcı arasındaki bağlantı kablosunu çıkarıp yeniden tak.": [
+        "P3C"
+      ]
     },
     "2A00801D": {
       "Filament boşaltılamadı. Yazdırma Aracı 1 rafa geri yerleştirildi. Filamenti manuel olarak çıkar, ardından 'Tekrar Dene'ye dokun.": []
@@ -2770,43 +2872,88 @@
       "Ön kapı açık. Sıcak ve hareketli parçalara teması önlemek için baskı duraklatıldı. Ön kapıyı kapat ve baskıya devam etmek için Devam Et'e dokun. Kapı Algılama özelliğini kapatmak için Ayarlar > Yazdırma Seçenekleri bölümüne git.": []
     },
     "2A00C003": {
-      "Lütfen AMS 3H yuva 1 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 1 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 1 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A00C006": {
+      "AMS 3P yuva 1'deki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
     },
     "2A00C007": {
       "Lütfen geri çekilen tüm filamenti çıkarın. Bu mesaj görünmeye devam ederse hotend'de kırık filament olup olmadığını kontrol edin.": []
     },
+    "2A00C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
+    },
+    "2A00C014": {
+      "Filament, Yazdırma Aracı 1'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
+    },
     "2A00C069": {
-      "AMS 3H kurutma sırasında bir hata oluştu. Daha fazla ayrıntı için lütfen Asistan'a gidin.": []
+      "AMS 3H kurutma sırasında bir hata oluştu. Daha fazla ayrıntı için lütfen Asistan'a gidin.": [],
+      "AMS 3P kurutması sırasında bir hata oluştu. Daha fazla ayrıntı için lütfen Asistan'a gidin.": [
+        "P3C"
+      ]
     },
     "2A00C06E": {
-      "AMS 3H kendi kendini test ediyor. Kurutma başlatılamıyor. Lütfen daha sonra tekrar deneyin.": []
+      "AMS 3H kendi kendini test ediyor. Kurutma başlatılamıyor. Lütfen daha sonra tekrar deneyin.": [],
+      "AMS 3P kendi kendini test ediyor. Kurutma başlatılamıyor. Lütfen daha sonra tekrar deneyin.": [
+        "P3C"
+      ]
     },
     "2A018003": {
-      "Lütfen AMS 3H yuva 2'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 2'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 2'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A018005": {
-      "AMS 3H yuva 2'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 2'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 2'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A018006": {
-      "AMS 3H yuva 2'ye filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 2'ye filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 2'deki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A018007": {
-      "AMS 3H yuva 2 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
+      "AMS 3H yuva 2 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": [],
+      "AMS 3P yuva 2'de filament ekstrüzyonu başarısız oldu. 'Tekrar Dene'ye dokunun ve ekstrüzyon gözlemlenene kadar filamenti yavaşça ileri doğru itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A01800F": {
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 2 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A018011": {
-      "AMS 3H yuva 2'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 2'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 2'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A018012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A018013": {
-      "AMS 3H Yuva 2'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 2'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 2'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
+    },
+    "2A018019": {
+      "AMS 3P yuva 2'de filament ekstrüzyonu başarısız oldu. Filamenti hafifçe ileri itin, ardından 'Tekrar Dene'ye dokunun.": []
     },
     "2A01801A": {
-      "AMS 3H yuva 2'deki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
+      "AMS 3H yuva 2'deki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": [],
+      "AMS 3P yuva 2'deki filament bitti. Lütfen filamentleri hazırlayın. 'Devam Et'e dokunduktan sonra, yükleme işlemini tamamlamak için talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "2A01801D": {
       "Filament boşaltılamadı. Yazdırma Aracı 2 rafa geri yerleştirildi. Filamenti manuel olarak çıkar, ardından 'Tekrar Dene'ye dokun.": []
@@ -2836,34 +2983,73 @@
       "2 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 2 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A01C003": {
-      "Lütfen AMS 3H yuva 2 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 2 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 2 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A01C006": {
+      "AMS 3P yuva 2'deki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A01C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
+    },
+    "2A01C014": {
+      "Filament, Yazdırma Aracı 2'ye başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
     "2A028003": {
-      "Lütfen AMS 3H yuva 3'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 3'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 3'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A028005": {
-      "AMS 3H yuva 3'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 3'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 3'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A028006": {
-      "AMS 3H yuva 3'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun..": []
+      "AMS 3H yuva 3'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun..": [],
+      "AMS 3P yuva 3'teki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A028007": {
-      "AMS 3H yuva 3 için Ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
+      "AMS 3H yuva 3 için Ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": [],
+      "AMS 3P yuva 3'te filament ekstrüzyonu başarısız oldu. 'Tekrar Dene'ye dokunun ve ekstrüzyon gözlemlenene kadar filamenti yavaşça ileri doğru itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A02800F": {
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 3 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A028011": {
-      "AMS 3H yuva 3'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 3'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 3'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A028012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A028013": {
-      "AMS 3H Yuva 3'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 3'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 3'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
+    },
+    "2A028019": {
+      "AMS 3P yuva 3'te filament ekstrüzyonu başarısız oldu. Filamenti hafifçe ileri itin, ardından 'Tekrar Dene'ye dokunun.": []
     },
     "2A02801A": {
-      "AMS 3H yuva 3'teki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
+      "AMS 3H yuva 3'teki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": [],
+      "AMS 3P yuva 3'teki filament bitti. Lütfen filamentleri hazırlayın. 'Devam Et'e dokunduktan sonra, yükleme işlemini tamamlamak için talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "2A02801D": {
       "Filament boşaltılamadı. Yazdırma Aracı 3 rafa geri yerleştirildi. Filamenti manuel olarak çıkar, ardından 'Tekrar Dene'ye dokun.": []
@@ -2890,34 +3076,73 @@
       "3 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 3 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A02C003": {
-      "Lütfen AMS 3H yuva 3 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 3 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 3 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A02C006": {
+      "AMS 3P yuva 3'teki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A02C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
+    },
+    "2A02C014": {
+      "Filament, Yazdırma Aracı 3'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
     "2A038003": {
-      "Lütfen AMS 3H yuva 4'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 4'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 4'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A038005": {
-      "AMS 3H yuva 4'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 4'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 4'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A038006": {
-      "AMS 3H yuva 4'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 4'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 4'teki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A038007": {
-      "AMS 3H yuva 4 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
+      "AMS 3H yuva 4 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": [],
+      "AMS 3P yuva 4'te filament ekstrüzyonu başarısız oldu. 'Tekrar Dene'ye dokunun ve ekstrüzyon gözlemlenene kadar filamenti yavaşça ileri doğru itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A03800F": {
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 4 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A038011": {
-      "AMS 3H yuva 4'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 4'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 4'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A038012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A038013": {
-      "AMS 3H Yuva 4'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 4'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 4'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
+    },
+    "2A038019": {
+      "AMS 3P yuva 4'te filament ekstrüzyonu başarısız oldu. Filamenti hafifçe ileri itin, ardından 'Tekrar Dene'ye dokunun.": []
     },
     "2A03801A": {
-      "AMS 3H yuva 4'teki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
+      "AMS 3H yuva 4'teki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": [],
+      "AMS 3P yuva 4'teki filament bitti. Lütfen filamentleri hazırlayın. 'Devam Et'e dokunduktan sonra, yükleme işlemini tamamlamak için talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "2A03801D": {
       "Filament boşaltılamadı. Yazdırma Aracı 4 rafa geri yerleştirildi. Filamenti manuel olarak çıkar, ardından 'Tekrar Dene'ye dokun.": []
@@ -2944,34 +3169,73 @@
       "4 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 4 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A03C003": {
-      "Lütfen AMS 3H yuva 4 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 4 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 4 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A03C006": {
+      "AMS 3P yuva 4'teki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A03C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
+    },
+    "2A03C014": {
+      "Filament, Yazdırma Aracı 4'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
     "2A048003": {
-      "Lütfen AMS 3H yuva 5'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 5'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 5'teki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A048005": {
-      "AMS 3H yuva 5'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 5'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 5'te filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A048006": {
-      "AMS 3H yuva 5'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 5'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 5'teki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A048007": {
-      "AMS 3H yuva 5 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
+      "AMS 3H yuva 5 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": [],
+      "AMS 3P yuva 5'te filament ekstrüzyonu başarısız oldu. 'Tekrar Dene'ye dokunun ve ekstrüzyon gözlemlenene kadar filamenti yavaşça ileri doğru itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A04800F": {
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 5 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A048011": {
-      "AMS 3H yuva 5'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 5'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 5'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A048012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A048013": {
-      "AMS 3H Yuva 5'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 5'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 5'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
+    },
+    "2A048019": {
+      "AMS 3P yuva 5'te filament ekstrüzyonu başarısız oldu. Filamenti hafifçe ileri itin, ardından 'Tekrar Dene'ye dokunun.": []
     },
     "2A04801A": {
-      "AMS 3H yuva 5'teki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
+      "AMS 3H yuva 5'teki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": [],
+      "AMS 3P yuva 5'teki filament bitti. Lütfen filamentleri hazırlayın. 'Devam Et'e dokunduktan sonra, yükleme işlemini tamamlamak için talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "2A04801D": {
       "Filament boşaltılamadı. Yazdırma Aracı 5 rafa geri yerleştirildi. Filamenti manuel olarak çıkar, ardından 'Tekrar Dene'ye dokun.": []
@@ -2998,34 +3262,73 @@
       "5 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 5 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A04C003": {
-      "Lütfen AMS 3H yuva 5 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 5 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 5 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A04C006": {
+      "AMS 3P yuva 5'teki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A04C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
+    },
+    "2A04C014": {
+      "Filament, Yazdırma Aracı 5'e başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
     "2A058003": {
-      "Lütfen AMS 3H yuva 6'daki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 6'daki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 6'daki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A058005": {
-      "AMS 3H yuva 6'da filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 6'da filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 6'da filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A058006": {
-      "AMS 3H yuva 6'ya filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 6'ya filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 6'daki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A058007": {
-      "AMS 3H yuva 6 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
+      "AMS 3H yuva 6 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": [],
+      "AMS 3P yuva 6'da filament ekstrüzyonu başarısız oldu. 'Tekrar Dene'ye dokunun ve ekstrüzyon gözlemlenene kadar filamenti yavaşça ileri doğru itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A05800F": {
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 6 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A058011": {
-      "AMS 3H yuva 6'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 6'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 6'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A058012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A058013": {
-      "AMS 3H Yuva 6'daki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 6'daki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 6'daki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
+    },
+    "2A058019": {
+      "AMS 3P yuva 6'da filament ekstrüzyonu başarısız oldu. Filamenti hafifçe ileri itin, ardından 'Tekrar Dene'ye dokunun.": []
     },
     "2A05801A": {
-      "AMS 3H yuva 6'daki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
+      "AMS 3H yuva 6'daki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": [],
+      "AMS 3P yuva 6'daki filament bitti. Lütfen filamentleri hazırlayın. 'Devam Et'e dokunduktan sonra, yükleme işlemini tamamlamak için talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "2A05801D": {
       "Filament boşaltılamadı. Yazdırma Aracı 6 rafa geri yerleştirildi. Filamenti manuel olarak çıkar, ardından 'Tekrar Dene'ye dokun.": []
@@ -3052,34 +3355,73 @@
       "6 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 6 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A05C003": {
-      "Lütfen AMS 3H yuva 6 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 6 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 6 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A05C006": {
+      "AMS 3P yuva 6'daki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A05C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
+    },
+    "2A05C014": {
+      "Filament, Yazdırma Aracı 6'ya başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
     "2A068003": {
-      "Lütfen AMS 3H yuva 7'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 7'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 7'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A068005": {
-      "AMS 3H yuva 7'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 7'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 7'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A068006": {
-      "AMS 3H yuva 7'ye filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 7'ye filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 7'deki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A068007": {
-      "AMS 3H yuva 7 için Ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
+      "AMS 3H yuva 7 için Ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": [],
+      "AMS 3P yuva 7'de filament ekstrüzyonu başarısız oldu. 'Tekrar Dene'ye dokunun ve ekstrüzyon gözlemlenene kadar filamenti yavaşça ileri doğru itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A06800F": {
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 7 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A068011": {
-      "AMS 3H yuva 7'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 7'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 7'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A068012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A068013": {
-      "AMS 3H Yuva 7'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 7'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 7'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
+    },
+    "2A068019": {
+      "AMS 3P yuvı 7'de filament ekstrüzyonu başarısız oldu. Filamenti hafifçe ileri itin, ardından 'Tekrar Dene'ye dokunun.": []
     },
     "2A06801A": {
-      "AMS 3H yuva 7'deki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
+      "AMS 3H yuva 7'deki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": [],
+      "AMS 3P yuva 7'deki filament bitti. Lütfen filamentleri hazırlayın. 'Devam Et'e dokunduktan sonra, yükleme işlemini tamamlamak için talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "2A06801D": {
       "Filament boşaltılamadı. Yazdırma Aracı 7 rafa geri yerleştirildi. Filamenti manuel olarak çıkar, ardından 'Tekrar Dene'ye dokun.": []
@@ -3106,16 +3448,37 @@
       "7 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 7 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A06C003": {
-      "Lütfen AMS 3H yuva 7 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 7 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 7 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A06C006": {
+      "AMS 3P yuva 7'deki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A06C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
+    },
+    "2A06C014": {
+      "Filament, Yazdırma Aracı 7'ye başarıyla beslendi. 'Tekrar Dene'ye tıkladıktan sonra Takım Kafası, filamenti kavramak için atık oluğuna gidecektir. Lütfen açık tutun.": []
     },
     "2A078003": {
-      "Lütfen AMS 3H yuva 8'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 8'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 8'deki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A078005": {
-      "AMS 3H yuva 8'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 8'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 8'de filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A078006": {
-      "AMS 3H yuva 8'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 8'e filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 8'deki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A078007": {
       "AMS 3H yuva 8 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -3124,13 +3487,22 @@
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 8 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A078011": {
-      "AMS 3H yuva 8'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 8'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 8'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A078012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A078013": {
-      "AMS 3H Yuva 8'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 8'teki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 8'deki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A07801A": {
       "AMS 3H yuva 8'deki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
@@ -3160,16 +3532,34 @@
       "8 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 8 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A07C003": {
-      "Lütfen AMS 3H yuva 8 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 8 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 8 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A07C006": {
+      "AMS 3P yuva 8'deki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A07C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
     },
     "2A088003": {
-      "Lütfen AMS 3H yuva 9'daki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 9'daki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 9'daki filamenti, Yazdırma Aracı'ndan çıkarın. Filament çıkarıldıktan sonra bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A088005": {
-      "AMS 3H yuva 9'da filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 9'da filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 9'da filament algılanmadı. Lütfen filament yükleyin ve 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A088006": {
-      "AMS 3H yuva 9'a filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 9'a filament besleme başarısız oldu. Lütfen filamentin dolaşmadığından, makaranın sıkışmadığından ve AMS PTFE Boru'nun bağlı olduğundan emin olun. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 9'daki filament bitti veya takılı değil. Lütfen filamenti bu yuvaya manuel olarak takın, Yazdırma Aracı'na itilemeyecek kadar ileri besleyin ve ardından 'Devam Et'e tıklayın.": [
+        "P3C"
+      ]
     },
     "2A088007": {
       "AMS 3H yuva 9 için ekstrüzyon hatası. Sorunu giderdikten sonra, filamenti Yazdırma Aracı'ndan çıkarın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -3178,13 +3568,22 @@
       "Filament ekstrüzyonu başarısız oldu. Yazdırma Aracı 9 rafa geri yerleştirildi. Filamenti çıkarın ve ucunda aşınma veya bükülme olup olmadığını kontrol edin. Filamentin ucunu düz kesin, ardından 'Tekrar Dene'ye tıklayın ve yönergeleri izleyerek filamenti yeniden takın.": []
     },
     "2A088011": {
-      "AMS 3H yuva 9'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": []
+      "AMS 3H yuva 9'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Sürdür'e dokunun.": [],
+      "AMS 3P yuva 9'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyinve Yazdırma Aracı'na besleyin, ardından 'Devam Et'e dokunun. Ekstrüder filamenti çekebilene kadar itmeye devam edin.": [
+        "P3C"
+      ]
     },
     "2A088012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A088013": {
-      "AMS 3H Yuva 9'daki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": []
+      "AMS 3H Yuva 9'daki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [],
+      "AMS 3P Yuva 9'daki eski filament temizlenirken zaman aşımı oluştu. Lütfen filamentin sıkışıp sıkışmadığını veya hotend'in tıkalı olup olmadığını kontrol edin. Sorun gidermeden sonra, 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A08801A": {
       "AMS 3H  yuva 9'daki filament bitti. Lütfen boş makarayı çıkarın ve yeni filamenti manuel olarak besleme girişine takın.": []
@@ -3214,10 +3613,22 @@
       "9 numaralı Yazdırma Takımı alınırken birden fazla takım kafası adım kaybı tespit edildi. 9 numaralı Yazdırma Takımı'nı manuel olarak Raf'a doğru şekilde yeniden konumlandırın ve alma sırasında yabancı cisim müdahalesi olup olmadığını kontrol edin.": []
     },
     "2A08C003": {
-      "Lütfen AMS 3H yuva 9 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": []
+      "Lütfen AMS 3H yuva 9 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [],
+      "Lütfen AMS 3P yuva 9 için filamenti, Yazdırma Aracı'ndan çıkarın. Bu mesaj devam ederse, Yazdırma Aracı'nda sıkışmış kırık filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
+    },
+    "2A08C006": {
+      "AMS 3P yuva 9'daki filamenti, daha fazla ilerlemeyene kadar Yazdırma Aracı'na itin.": []
+    },
+    "2A08C013": {
+      "Filament kavrama işlemi tekrar tekrar başarısız oldu. Sorun giderme için Yazdırma Aracı'nı Raf'a geri yerleştirmek üzere 'Devam Et'e dokunun. Uzak durun.": []
     },
     "2A098012": {
-      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": []
+      "AMS 3H haritalama tablosu alınamadı; lütfen tekrar denemek için 'Devam Et'i seçin.": [],
+      "AMS 3P eşleme tablosu alınamadı; tekrar denemek için lütfen 'Devam Et' seçeneğini seçin.": [
+        "P3C"
+      ]
     },
     "2A108032": {
       "1 numaralı Kesme Takımı Raf'tan ayrıldı. Devam etmek için lütfen onu ilgili rıhtımına geri yerleştirin.": []
@@ -3578,6 +3989,9 @@
     },
     "2AFF8012": {
       "Eşleme tablosu alınamadı; yeniden denemek için lütfen “Sürdür” seçeneğini seçin.": []
+    },
+    "2E00C069": {
+      "Kurutma Modülü kurutma işlemi sırasında bir hata oluştu. Daha fazla bilgi için lütfen Asistan'a başvurun.": []
     }
   },
   "device_hms": {
@@ -3713,6 +4127,12 @@
     "0300090000030009": {
       "Hava baskısı algılandı. Otomatik yeniden deneme ve kurtarma devam ediyor. Lütfen bekleyin.": []
     },
+    "030009000003000C": {
+      "": []
+    },
+    "030009000003000D": {
+      "": []
+    },
     "03000E0000010001": {
       "MC'nin Takım Kafası'yla iletişimi başarısız oldu. Lütfen bağlantı kablosunun doğru takılı olup olmadığını kontrol edin.": []
     },
@@ -3746,6 +4166,9 @@
     "0300160000010001": {
       "Ekstrüder servo motorunun akım sensöründe bir arıza var. Bu durum, donanım örnekleme devresindeki bir arızadan kaynaklanabilir.": []
     },
+    "0300180000000000": {
+      "": []
+    },
     "0300180000010001": {
       "Ekstrüder girdap akımı sensörünün sinyal frekansı çok düşük. Sensörün hedef metal plakadan çok uzakta olup olmadığını veya plakanın yerinden düşüp düşmediğini kontrol et. Sorun hâlâ giderilemiyorsa girdap akımı bobinini değiştir.": []
     },
@@ -3753,7 +4176,13 @@
       "Ekstrüder Girdap Akımı Sensörü hassasiyeti çok düşük. Sensör hedef metal plakadan çok uzakta olabilir, plaka düşmüş olabilir veya sensör hasar görmüş olabilir.": []
     },
     "0300180000010003": {
-      "Ekstrüderin girdap akımı sensörü yanıt vermiyor. MC-TH iletişim bağlantısı kopmuş olabilir veya sensör hasar görmüş olabilir.": []
+      "Ekstrüderin girdap akımı sensörü yanıt vermiyor. MC-TH iletişim bağlantısı kopmuş olabilir veya sensör hasar görmüş olabilir.": [],
+      "Ekstrüderin girdap akımı sensörü yanıt vermiyor. İletişim bağlantısı kopmuş olabilir veya sensör hasar görmüş olabilir.": [
+        "P3C"
+      ]
+    },
+    "0300180000010004": {
+      "Ekstrüder girdap akımı sensörünün kendi kendine testi başarısız oldu: iletişim kesintisi veya sensör hasarı.": []
     },
     "0300180000010005": {
       "Z ekseni motorunun dönüşü engellenmiş; lütfen Z kızağına veya Z zamanlama kasnağına yabancı cisimlerin sıkışıp sıkışmadığını kontrol edin. Ayrıca, çevredeki yapılarla çarpışmayı önlemek için baskı tablasının doğru yerleştirildiğinden emin olun.": []
@@ -4046,8 +4475,14 @@
     "0300400000020001": {
       "Seri port üzerinden veri iletimi anormal; yazılım sisteminde bir arıza olabilir.": []
     },
+    "0300400000020002": {
+      "": []
+    },
     "0300400000020003": {
       "Dilimlenmiş dosyada birden fazla kez anormallik tespit edildi. Görev iptal edildi. Lütfen dilimlenmiş dosyayı kontrol edin.": []
+    },
+    "0300400000020004": {
+      "": []
     },
     "0300410000010001": {
       "Sistem voltajı kararsız. Güç kesintisi koruma işlevi tetikleniyor.": []
@@ -4122,7 +4557,10 @@
       "Arka oda ısıtıcısının sıcaklığı anormal. Oda ısıtıcısı aşırı ısındı.": []
     },
     "0300910000010005": {
-      "Arka oda ısıtıcısı aşırı ısındı. Lütfen cihazı derhal kapat. AC kartını değiştirmek için Wiki'ye bak veya destek ekibiyle iletişime geç.": []
+      "Arka oda ısıtıcısı aşırı ısındı. Lütfen cihazı derhal kapat. AC kartını değiştirmek için Wiki'ye bak veya destek ekibiyle iletişime geç.": [],
+      "Oda ısıtıcısı sıcaklık kontrolünde bir sorun tespit edildi ve ısıtma modülü hasar görmüş olabilir. Lütfen cihazı derhal kapatın ve AC kartını değiştirmek için Wiki'deki talimatları izleyin.": [
+        "P3C"
+      ]
     },
     "0300910000010006": {
       "Arka oda ısıtıcısının sıcaklığı anormal. Oda sıcaklık sensöründe kısa devre.": []
@@ -4200,19 +4638,79 @@
       "Ön kapı açık. Lütfen baskı sırasında güvenliğine dikkat et. Kapı davranışını Ayarlar > Yazdırma Seçenekleri bölümünden ayarla.": []
     },
     "0300A10000010001": {
-      "Oda sıcaklığı çok yüksek. Soğuması için AMS 3H yan panelini ve yazıcınınön kapısını açın.": []
+      "Oda sıcaklığı çok yüksek. Soğuması için AMS 3H yan panelini ve yazıcınınön kapısını açın.": [],
+      "Oda sıcaklığı çok yüksek. Soğuması için AMS 3P yan panelini ve yazıcınınön kapısını açın.": [
+        "P3C"
+      ]
     },
     "0300A20000010001": {
       "MC modülünün sıcaklığı çok yüksek; bunun nedeni yazıcı odasının sıcaklığının yüksek olması olabilir. Kullanmadan önce ortam sıcaklığını düşürmeyi deneyebilirsiniz.": []
     },
     "0300AB0000010001": {
-      "Hotend ısı kırıcı sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Lütfen oda sıcaklığını düşürmek için AMS 3H yan kapağını ve yazıcı ön kapağını açın veya ortam sıcaklığını düşürün.": []
+      "Hotend ısı kırıcı sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Lütfen oda sıcaklığını düşürmek için AMS 3H yan kapağını ve yazıcı ön kapağını açın veya ortam sıcaklığını düşürün.": [],
+      "Hotend ısı kırıcı sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Lütfen oda sıcaklığını düşürmek için AMS 3P yan kapağını ve yazıcı ön kapağını açın veya ortam sıcaklığını düşürün.": [
+        "P3C"
+      ]
     },
     "0300AB0000020002": {
       "Hotend soğutucusunun sıcaklığı yüksek. Tıkanmayı önlemek için soğutma fanı yüksek hızda çalışmaya devam edecektir. Cihaz boşta olduğunda sıcaklık sensörünü kontrol edin.": []
     },
     "0300AB0000020003": {
       "Hotend Soğutucusu Sıcaklık Sensörü Hatası. Tıkanmayı önlemek için soğutma fanı yüksek hızda çalışmaya devam edecektir. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0100010001": {
+      "Hotend 1 soğutucu sıcaklığı çok yüksek, bu da tıkanmaya neden olabilir. Lütfen yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açarak oda sıcaklığını düşürün veya ortam sıcaklığını azaltın.": []
+    },
+    "0300AB0100020003": {
+      "Hotend 1 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0200010001": {
+      "Hotend 2 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0200020003": {
+      "Hotend 2 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0300010001": {
+      "Hotend 3 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0300020003": {
+      "Hotend 3 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0400010001": {
+      "Hotend 4 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0400020003": {
+      "Hotend 4 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0500010001": {
+      "Hotend 5 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0500020003": {
+      "Hotend 5 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0600010001": {
+      "Hotend 6 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0600020003": {
+      "Hotend 6 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0700010001": {
+      "Hotend 7 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0700020003": {
+      "Hotend 7 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0800010001": {
+      "Hotend 8 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0800020003": {
+      "Hotend 8 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
+    },
+    "0300AB0900010001": {
+      "Hotend 9 soğutucu sıcaklığı çok yüksek, bu tıkanmaya neden olabilir. Oda sıcaklığını düşürmek için yazıcının üstündeki AMS yan kapağını ve yazıcının ön kapağını açın veya ortam sıcaklığını düşürün.": []
+    },
+    "0300AB0900020003": {
+      "Hotend 9 soğutucu sıcaklık sensörü hatası. Cihaz boşta iken sensörü kontrol edin.": []
     },
     "0300B00000010001": {
       "3 numaralı püskürtme ucu sıcaklığı anormal; ısıtıcıda kısa devre olabilir.": []
@@ -4404,6 +4902,9 @@
       "9 numaralı yazdırma aracı algılanmadı. Lütfen sinyal kablosu konektörünün Yazdırma Aracı Kontrol Panosuna düzgün şekilde takıldığını doğrulayın. Kablo gevşekse, sıkıca yeniden takın ve tekrar deneyin.": []
     },
     "0300BC0000010002": {
+      "AC kartında anormal bir ısı kaynağı veya ışık tespit edildi; bu durum donanım devresindeki bir hasardan kaynaklanıyor olabilir. Lütfen derhal güç bağlantısını kes, cihazı kullanmayı bırak ve sorun giderme konusunda yardım almak için müşteri hizmetleriyle iletişime geç.": [
+        "P3C"
+      ],
       "AC kartında anormal ısı kaynağı veya ışık tespit edildi; bu durum donanım devresi hasarından kaynaklanıyor olabilir. Lütfen derhal güç kaynağını ayırın ve cihazı kullanmayı bırakın, sorun giderme kılavuzluğu için müşteri hizmetleriyle iletişime geçin.": []
     },
     "0300C00000010001": {
@@ -4436,6 +4937,9 @@
     "0300E00000010002": {
       "Raf motoru hatası. Lütfen yazıcıyı yeniden başlatın.": []
     },
+    "0300E00000020004": {
+      "": []
+    },
     "0300E20000010002": {
       "Raf konum sensörü kalibrasyon parametresi hatası. Lütfen Wiki'deki talimatları izle.": []
     },
@@ -4448,14 +4952,41 @@
     "0300E30000010002": {
       "MC ile raf kontrol kartı arasındaki iletişim başarısız oldu. Lütfen bağlantı kablosunun doğru şekilde takılı olup olmadığını kontrol edin.": []
     },
+    "0300E40000010009": {
+      "Takım kafası Y ekseni hareketi kısıtlandı. Filament kesici kolunun beklenmedik şekilde dışarı çıkıp çıkmadığını veya hareket yolunun tıkalı olup olmadığını kontrol edin.": []
+    },
     "0300E40000020001": {
+      "": [
+        "P3C"
+      ],
       "CrashGuard Sensörü kendi kendini kontrolü başarısız oldu. Lütfen sensör ile Raf Kontrol Kartı arasındaki bağlantı kablosunun gevşek olup olmadığını veya CrashGuard Sensörü mıknatısının anormal monte edilip edilmediğini kontrol edin.": []
     },
+    "0300E40000020002": {
+      "": []
+    },
     "0300E40000020003": {
+      "": [
+        "P3C"
+      ],
       "CrashGuard Sensörü kalibrasyonu başarısız oldu. Sensör ile Raf Kontrol Kartı arasındaki kablonun gevşek olup olmadığını veya sensörün yanlış monte edilmiş olup olmadığını kontrol edin.": []
     },
     "0300E40000020004": {
+      "": [
+        "P3C"
+      ],
       "CrashGuard Sensörü kalibrasyonu başarısız oldu. Sensör ile Raf Kontrol Kartı arasındaki kablonun gevşek olup olmadığını veya CrashGuard Sensörü mıknatısının anormal şekilde takılıp takılmadığını kontrol edin.": []
+    },
+    "0300E40000020005": {
+      "": []
+    },
+    "0300E40000020006": {
+      "": []
+    },
+    "0300E40000020007": {
+      "": []
+    },
+    "0300E40000020008": {
+      "": []
     },
     "0300E50000020001": {
       "Hareket sırasında birden fazla adım kaybı algılandı. Lütfen önce takım kafasının yabancı cisimler tarafından engellenip engellenmediğini veya anormal ses çıkarıp çıkarmadığını kontrol et. Devam edebilir ve kaliteyi gözlemleyebilirsiniz. Belirgin katman kayması oluşursa bakım için Wiki'ye başvurun.": []
@@ -4613,11 +5144,23 @@
     "0318090000020001": {
       "Yazdırma Aracı 9'da ekstrüzyon direnci aşırı yüksek. Bunun nedeni filamentin dolaşması veya filament makarasının düzgün dönmemesi olabilir. Ayrıca 'Araçlar ve Ekstrüder' sayfasına gidip Yazdırma Aracını rafa yerleştirebilir ve ekstrüderin içinde tıkanıklık olup olmadığını kontrol edebilirsin.": []
     },
+    "050001000001000A": {
+      "": []
+    },
     "0500010000020001": {
       "Medya işlem hattında arıza var. Lütfen cihazı yeniden başlat. Birden fazla deneme başarısız olursa lütfen müşteri desteğiyle iletişime geç.": []
     },
     "0500010000020002": {
       "Canlı Görüntü Kamerası bağlı değil. Lütfen donanım ve kablo bağlantılarını kontrol edin.": []
+    },
+    "0500010000020003": {
+      "": []
+    },
+    "0500010000020008": {
+      "": []
+    },
+    "0500010000020009": {
+      "": []
     },
     "050001000002000C": {
       "Kuşbakışı kameranın bağlantısında anormallik var. Lütfen cihazı yeniden başlat. Birden fazla denemeden sonra sorun devam ederse müşteri desteğiyle iletişime geç.": []
@@ -4627,6 +5170,15 @@
     },
     "050001000002000E": {
       "Kuşbakışı kamera formatı yanlış. Lütfen yazıcıyı yeniden başlatın. Birden fazla deneme başarısız olursa lütfen müşteri desteğiyle iletişime geçin.": []
+    },
+    "050001000002000F": {
+      "": []
+    },
+    "0500010000020010": {
+      "": []
+    },
+    "0500010000020011": {
+      "": []
     },
     "0500010000030004": {
       "USB bellekte yeterli alan yok. Video kaydı ve hızlandırılmış çekim yapılamıyor. Lütfen biraz yer açın.": []
@@ -4638,7 +5190,13 @@
       "USB sürücü biçimlendirilmemiş veya yazılamıyor; lütfen USB sürücüyü biçimlendirin.": []
     },
     "0500010000030007": {
+      "USB bellek algılanmadı. Canlı görüntü kamerası hızlandırılmış çekim kaydı için kullanılamaz.": [
+        "P3C"
+      ],
       "USB sürücüsü algılanmadı. Canlı görüntü kamerası video kaydı veya hızlandırılmış çekim kaydı için kullanılamaz.": []
+    },
+    "0500010000030009": {
+      "": []
     },
     "0500010000030015": {
       "Hızlandırılmış çekim için ayrılan dahili depolama alanı azalıyor, bu nedenle hızlandırılmış çekim başarısız olabilir. Wiki'deki talimatları izleyerek dahili depolama alanındaki dosyaları silip yer açın, ardından tekrar kayıt yapmayı deneyin.": []
@@ -4667,8 +5225,38 @@
     "0500020000020008": {
       "Zaman senkronizasyonu başarısız oldu": []
     },
+    "0500020000030009": {
+      "": []
+    },
+    "050002000003000A": {
+      "": []
+    },
+    "050002000003000B": {
+      "": []
+    },
+    "050002000003000C": {
+      "": []
+    },
     "050002000003000D": {
       "Kablosuz donanım hatası: Lütfen Wi-Fi'yi kapatıp tekrar aç veya cihazını yeniden başlat.": []
+    },
+    "050002000003000E": {
+      "": []
+    },
+    "050002000003000F": {
+      "": []
+    },
+    "0500020000030010": {
+      "": []
+    },
+    "0500020000030011": {
+      "": []
+    },
+    "0500020000030012": {
+      "": []
+    },
+    "0500020000030013": {
+      "": []
     },
     "0500030000010001": {
       "MC modülü arızalı; lütfen cihazı yeniden başlatın veya cihaz kablosu bağlantısını kontrol edin.": []
@@ -4721,11 +5309,47 @@
     "0500030000010027": {
       "AP ve MC arasındaki USB bağlantısı anormal. Kabloyu yeniden bağlamadan önce cihazı kapatın.": []
     },
+    "0500030000010053": {
+      "": []
+    },
+    "0500030000010071": {
+      "": []
+    },
     "050003000002000C": {
       "Kablosuz donanım hatası: Lütfen WiFi'yi kapatıp tekrar açın veya cihazı yeniden başlatın.": []
     },
     "050003000002000E": {
       "Bazı modüller cihazın ürün yazılımı sürümüyle uyumlu değil; bu durum kullanımı etkileyebilir. İnternete bağlandıktan sonra güncelleme yapmak için 'Ürün Yazılımı' sayfasına git veya Wiki'deki talimatlara göre çevrimdışı güncelleme yap.": []
+    },
+    "0500030000020010": {
+      "": []
+    },
+    "0500030000020011": {
+      "": []
+    },
+    "0500030000020012": {
+      "": []
+    },
+    "0500030000020013": {
+      "": []
+    },
+    "0500030000020014": {
+      "": []
+    },
+    "0500030000020015": {
+      "": []
+    },
+    "0500030000020016": {
+      "": []
+    },
+    "0500030000020017": {
+      "": []
+    },
+    "0500030000020018": {
+      "": []
+    },
+    "0500030000020019": {
+      "": []
     },
     "0500030000020020": {
       "USB flash belleğin kapasitesi, yazdırma dosyalarını önbelleğe almak için yetersiz.": []
@@ -4736,11 +5360,38 @@
     "0500030000020026": {
       "Yazdırma Aracının kontrol panosu ile cihazın ürün yazılımı arasında sürüm uyumsuzluğu tespit edildi. Bu durum cihazın normal çalışmasını etkileyebilir. Ağa bağlanıp güncelleme yapmak için 'Ürün Yazılımı' sayfasına gidin veya çevrimdışı güncelleme talimatları için Wiki'ye bakın.": []
     },
+    "0500030000020050": {
+      "": []
+    },
+    "0500030000020051": {
+      "": []
+    },
+    "0500030000020052": {
+      "": []
+    },
+    "0500030000020053": {
+      "": []
+    },
+    "0500030000020054": {
+      "": []
+    },
     "0500030000020055": {
       "Kullanıcı bilgileri süresi doldu; lütfen tekrar giriş yapın.": []
     },
+    "0500030000020056": {
+      "": []
+    },
+    "0500030000020057": {
+      "": []
+    },
     "0500030000020058": {
       "AP kartı sıcaklığı çok yüksek ve yazdırma işlemini etkileyebilir. Lütfen ortam sıcaklığını düşürün, makinenin sol tarafındaki havalandırma deliklerinin tıkalı olmadığını kontrol edin ve soğutucuya termal macun uygulayın.": []
+    },
+    "0500030000020070": {
+      "": []
+    },
+    "0500030000030007": {
+      "": []
     },
     "0500040000010001": {
       "Görev indirilemedi; lütfen ağ bağlantını kontrol et.": []
@@ -4762,6 +5413,15 @@
     },
     "0500040000010044": {
       "AMS A'nın ürün yazılımı yazıcıyla uyumlu değil. Lütfen 'Firmware' sayfasından güncelleyin.": []
+    },
+    "0500040000010056": {
+      "": []
+    },
+    "0500040000010060": {
+      "": []
+    },
+    "0500040000010061": {
+      "": []
     },
     "0500040000020007": {
       "Yatak sıcaklığı, filamentin camsı geçiş sıcaklığını aşıyor; bu durum püskürtme ucunun tıkanmasına neden olabilir. Lütfen yazıcının ön kapısını açık bırakın veya yatak sıcaklığını düşürün.": []
@@ -4814,6 +5474,9 @@
     "050004000002001F": {
       "AMS D yuva 4'teki RFID etiketi tanımlanamıyor.": []
     },
+    "0500040000020020": {
+      "": []
+    },
     "0500040000020042": {
       "Canlı görüntü kamerası kirli veya görüşü engellenmiş; lütfen kamerayı temizleyin ve devam edin.": []
     },
@@ -4822,6 +5485,9 @@
     },
     "0500040000030009": {
       "Yatak sıcaklığı, filamentin camsı geçiş sıcaklığını aşıyor; bu durum püskürtme ucunun tıkanmasına neden olabilir. Lütfen yazıcının ön kapısını açık bırakın. Kapı açık algılama özelliği geçici olarak devre dışı bırakıldı.": []
+    },
+    "0500040000030021": {
+      "": []
     },
     "0500040000030057": {
       "Görev tamamlandı. Otomatik hava temizleme işlemi devam ediyor.": []
@@ -4834,6 +5500,21 @@
     },
     "0500050000010007": {
       "MQTT komut doğrulaması başarısız oldu. Lütfen Studio/Suite'i (ağ eklentisi dahil) veya Handy'yi en son sürüme güncelle, ardından yazılımı yeniden başlatıp tekrar dene.": []
+    },
+    "0500050000010008": {
+      "": []
+    },
+    "0500050000010009": {
+      "": []
+    },
+    "050005000001000A": {
+      "": []
+    },
+    "050005000001000B": {
+      "": []
+    },
+    "050005000001000C": {
+      "": []
     },
     "050005000001000F": {
       "Aksesuarın ürün yazılımı cihazla eşleşmiyor. Lütfen 'Ürün Yazılımı' sayfasından yükselt.": []
@@ -4862,6 +5543,9 @@
     "0500050000010025": {
       "Kuşbakışı kamera sertifikasyonu başarısız oldu. Muhtemel iletişim hatası. Lütfen yazıcıyı yeniden başlatın.": []
     },
+    "0500050000010028": {
+      "AMS 3P Kurutucu sertifikasyonu başarısız oldu. Lütfen kabloyu yeniden bağlayın veya yazıcıyı yeniden başlatın.": []
+    },
     "0500050000010029": {
       "MC kartı doğrulaması başarısız oldu. Olası iletişim hatası. Lütfen cihazı yeniden başlat.": []
     },
@@ -4877,11 +5561,20 @@
     "050005000002001F": {
       "Temizleyicinin ürün yazılımı sürümünde hata var. Lütfen güncelleme yapmak için Ayarlar-Ürün Yazılımı sayfasına git.": []
     },
+    "0500050000020023": {
+      "": []
+    },
     "0500050000020024": {
       "Filament tamponunun ürün yazılımı sürümünde hata var. Lütfen güncelleme yapmak için Ayarlar-Ürün Yazılımı sayfasına git.": []
     },
+    "0500050000020028": {
+      "AMS 3P kurutma modülü ürün yazılımı sürüm hatası. Lütfen güncellemek için Ürün Yazılımı sayfasına gidin.": []
+    },
     "0500050000020029": {
       "MC anakartının ürün yazılımı sürümünde hata var. Lütfen güncelleme yapmak için 'Ayarlar > Ürün Yazılımı' sayfasına git.": []
+    },
+    "0500050000020030": {
+      "": []
     },
     "0500050000030002": {
       "Cihaz mühendislik modunda; lütfen bilgi güvenliğiyle ilgili hususlara dikkat edin.": []
@@ -4895,6 +5588,48 @@
     "0500060000020004": {
       "Canlı görüntü kamerası yerinde değil; lütfen donanım bağlantısını kontrol edin.": []
     },
+    "0500060000020005": {
+      "": []
+    },
+    "0500060000020007": {
+      "": []
+    },
+    "0500060000020008": {
+      "": []
+    },
+    "0500060000020009": {
+      "": []
+    },
+    "0500060000020011": {
+      "": []
+    },
+    "0500060000020012": {
+      "": []
+    },
+    "0500060000020013": {
+      "": []
+    },
+    "0500060000020014": {
+      "": []
+    },
+    "0500060000020015": {
+      "": []
+    },
+    "0500060000020021": {
+      "": []
+    },
+    "0500060000020022": {
+      "": []
+    },
+    "0500060000020023": {
+      "": []
+    },
+    "0500060000020024": {
+      "": []
+    },
+    "0500060000020025": {
+      "": []
+    },
     "0500060000020031": {
       "Takım kafası kamerası bağlı değil. Lütfen donanım ve kablo bağlantılarını kontrol edin.": []
     },
@@ -4904,8 +5639,65 @@
     "0500060000020034": {
       "Canlı Görüntü Kamerası bağlı değil. Lütfen donanım ve kablo bağlantılarını kontrol edin.": []
     },
+    "0500060000020035": {
+      "": []
+    },
+    "0500060000020041": {
+      "": []
+    },
+    "0500060000020043": {
+      "": []
+    },
+    "0500060000020044": {
+      "": []
+    },
+    "0500060000020045": {
+      "": []
+    },
+    "0500060000020051": {
+      "": []
+    },
+    "0500060000020053": {
+      "": []
+    },
+    "0500060000020054": {
+      "": []
+    },
+    "0500060000020061": {
+      "": []
+    },
+    "0500060000020062": {
+      "": []
+    },
+    "0500060000020070": {
+      "": []
+    },
+    "0500060000020071": {
+      "": []
+    },
     "0500060000020072": {
       "USB yazma hatası. Kayıt, hızlandırılmış çekim veya dosya kaydetme başarısız olabilir. USB sürücüsünü çıkarıp yeniden takın. Sorun devam ederse, biçimlendirin veya değiştirin.": []
+    },
+    "05000600000200A0": {
+      "": []
+    },
+    "05000600000200A1": {
+      "": []
+    },
+    "0500070000020001": {
+      "": []
+    },
+    "0500070000020002": {
+      "": []
+    },
+    "0500070000020003": {
+      "": []
+    },
+    "0500070000020101": {
+      "": []
+    },
+    "0500070000020201": {
+      "": []
     },
     "0501040000010044": {
       "AMS B'nin ürün yazılımı yazıcıyla eşleşmiyor. Lütfen 'Ürün Yazılımı' sayfasından yükseltin.": []
@@ -4993,6 +5785,15 @@
     },
     "050205000002001E": {
       "3 numaralı Yazdırma Takımı ürün yazılımı sürümü hatası. Lütfen güncellemek için Ürün Yazılımı sayfasına gidin.": []
+    },
+    "0503000000030027": {
+      "": []
+    },
+    "0503000000030028": {
+      "": []
+    },
+    "0503000000030029": {
+      "": []
     },
     "0503040000010044": {
       "AMS D'nin ürün yazılımı yazıcıyla uyumlu değil. Lütfen 'Firmware' sayfasından güncelleyin.": []
@@ -5218,6 +6019,12 @@
     },
     "0520050000020026": {
       "AMS 3H ürün yazılımı sürümü hatası. Lütfen güncellemek için Ürün Yazılımı sayfasına gidin.": []
+    },
+    "0521050000010027": {
+      "AMS 3P sertifikasyonu başarısız oldu. Lütfen kabloyu yeniden bağlayın veya yazıcıyı yeniden başlatın.": []
+    },
+    "0521050000020027": {
+      "AMS 3P ürün yazılımı sürümü hatası. Lütfen güncellemek için Ürün Yazılımı sayfasına gidin.": []
     },
     "0580040000010045": {
       "AMS-HT A'nın ürün yazılımı yazıcıyla uyumlu değil. Lütfen 'Firmware' sayfasından güncelleyin.": []
@@ -8465,6 +9272,9 @@
     "0800200000020002": {
       "Rıhtım Hizalama Sensörü'nün bekleme voltajı anormal derecede yüksek. Manyetik girişim veya sensör arızası olabilir.": []
     },
+    "0800310000030001": {
+      "": []
+    },
     "0800840000010001": {
       "LockTool motor bağlantısı başarısız oldu. Bunun nedeni gevşek bir motor kablosu veya motor ya da kontrol panosundaki bir arıza olabilir. Motor ile kontrol panosu arasındaki kablo bağlantısını kontrol et. Gerekirse motoru veya kontrol panosunu değiştir.": []
     },
@@ -8516,8 +9326,29 @@
     "0C0001000001000F": {
       "Canlı görüntü kamerası kalibrasyonu başarısız oldu. Lütfen cihazları yeniden başlatın veya ürün yazılımını güncelleyin.": []
     },
+    "0C00010000010018": {
+      "": []
+    },
     "0C00010000020008": {
       "Canlı Görüntü Kamerasından görüntü alınamadı. Spagetti ve atık oluğunda birikme algılama işlevi şu anda kullanılamıyor.": []
+    },
+    "0C0001000002000E": {
+      "": []
+    },
+    "0C00010000020015": {
+      "": []
+    },
+    "0C00010000020016": {
+      "": []
+    },
+    "0C00010000020019": {
+      "": []
+    },
+    "0C0001000002001A": {
+      "": []
+    },
+    "0C0001000002001B": {
+      "": []
     },
     "0C00030000020012": {
       "Yabancı nesne algılama çalışmıyor. Canlı Görüntü Kamerası kalibrasyon gerektiriyor. Lütfen yazıcı ekranında 'Ayarlar > Kalibrasyon' seçeneğine dokunun.": []
@@ -8543,6 +9374,9 @@
     "0C00030000030008": {
       "Olası bir spagetti hatası algılandı. Lütfen baskı kalitesini kontrol et ve işi durdurup durdurmayacağına karar ver. Baskı tablasını deterjanla temizlemek veya filamenti kurutmak, spagetti hatası riskini etkili şekilde azaltabilir.": []
     },
+    "0C0003000003001A": {
+      "": []
+    },
     "0C00040000020017": {
       "PrintThenCut sırasında görsel işaretleyici algılanamadı. Lütfen malzemeyi doğru konuma yeniden yapıştırın. Ayrıca kirlenmeyi önlemek için Takım Kafası Kamerasını temizleyin ve kameranın görüşünü engelleyebilecek nesneleri kaldırın.": []
     },
@@ -8557,6 +9391,9 @@
     },
     "0C00040000020037": {
       "Kuşbakışı kamera hatası. Cihazı yeniden başlatın.": []
+    },
+    "0C00040000020038": {
+      "": []
     },
     "0C00040000030018": {
       "Kesme bıçağı ofset kalibrasyonu başarısız oldu. Bu durum kesme doğruluğunu etkileyebilir. Bıçak ucunun aşınmış olup olmadığını kontrol etmek için lütfen Wiki'ye bakın.": []
@@ -10617,7 +11454,10 @@
       "Yazdırma Aracı 1'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00010000010051": {
-      "1 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "1 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 1, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00010000010052": {
       "1 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 1 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10661,11 +11501,32 @@
     "1A0001000002005B": {
       "1 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0001000002005F": {
+      "": []
+    },
+    "1A00010000020060": {
+      "": []
+    },
+    "1A00010000020061": {
+      "": []
+    },
+    "1A00010000020062": {
+      "": []
+    },
+    "1A0001000002006A": {
+      "": []
+    },
+    "1A0001000002006C": {
+      "": []
+    },
     "1A00020000010050": {
       "Yazdırma Aracı 2'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00020000010051": {
-      "2 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "2 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 2, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00020000010052": {
       "2 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 2 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10703,11 +11564,20 @@
     "1A0002000002005B": {
       "2 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0002000002005F": {
+      "": []
+    },
+    "1A0002000002006A": {
+      "": []
+    },
     "1A00030000010050": {
       "Yazdırma Aracı 3'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00030000010051": {
-      "3 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "3 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 3, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00030000010052": {
       "3 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 3 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10745,11 +11615,20 @@
     "1A0003000002005B": {
       "3 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0003000002005F": {
+      "": []
+    },
+    "1A0003000002006A": {
+      "": []
+    },
     "1A00040000010050": {
       "Yazdırma Aracı 4'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00040000010051": {
-      "4 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "4 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 4, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00040000010052": {
       "4 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 4 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10787,11 +11666,20 @@
     "1A0004000002005B": {
       "4 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0004000002005F": {
+      "": []
+    },
+    "1A0004000002006A": {
+      "": []
+    },
     "1A00050000010050": {
       "Yazdırma Aracı 5'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00050000010051": {
-      "5 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "5 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 5, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00050000010052": {
       "5 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 5 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10829,11 +11717,20 @@
     "1A0005000002005B": {
       "5 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0005000002005F": {
+      "": []
+    },
+    "1A0005000002006A": {
+      "": []
+    },
     "1A00060000010050": {
       "Yazdırma Aracı 6'da kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00060000010051": {
-      "6 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "6 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 6, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00060000010052": {
       "6 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 6 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10871,11 +11768,20 @@
     "1A0006000002005B": {
       "6 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0006000002005F": {
+      "": []
+    },
+    "1A0006000002006A": {
+      "": []
+    },
     "1A00070000010050": {
       "Yazdırma Aracı 7'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00070000010051": {
-      "7 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "7 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 7, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00070000010052": {
       "7 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 7 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10913,11 +11819,20 @@
     "1A0007000002005B": {
       "7 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0007000002005F": {
+      "": []
+    },
+    "1A0007000002006A": {
+      "": []
+    },
     "1A00080000010050": {
       "Yazdırma Aracı 8'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00080000010051": {
-      "8 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "8 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 8, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00080000010052": {
       "8 numaralı Yazdırma Takımı yuvalanırken hata oluştu: 8 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10955,11 +11870,20 @@
     "1A0008000002005B": {
       "8 numaralı Yazdırma Takımı raftan düştü. Onu doğru Raf Rıhtımı'na geri yerleştirin.": []
     },
+    "1A0008000002005F": {
+      "": []
+    },
+    "1A0008000002006A": {
+      "": []
+    },
     "1A00090000010050": {
       "Yazdırma Aracı 9'da kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00090000010051": {
-      "9 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "9 numaralı Yazdırma Takımı üzerindeki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Yazdırma Aracı 9, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00090000010052": {
       "9 numaralı Yazdırma Takımı yerleştirme hatası: 9 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -10996,6 +11920,12 @@
     },
     "1A0009000002005B": {
       "9 numaralı Yazdırma Takımı Raf'tan düştü. Lütfen doğru Raf Rıhtımı'na geri yerleştirin.": []
+    },
+    "1A0009000002005F": {
+      "": []
+    },
+    "1A0009000002006A": {
+      "": []
     },
     "1A000F0000010050": {
       "Alet kimliği tanınmadı. Alet ile takım kafası kontrol panosu arasındaki konektörün gevşek olup olmadığını veya alet kimliği sensörünün kirli olup olmadığını kontrol et. Ayrıntılı sorun giderme adımları için Wiki'ye bak.": []
@@ -11331,7 +12261,10 @@
       "Kesme Aracı 1'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00610000010051": {
-      "1 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "1 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 1, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00610000010052": {
       "1 numaralı Kesme Takımı yuvalanırken hata oluştu: 1 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11376,7 +12309,10 @@
       "Kesme Aracı 2'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00620000010051": {
-      "2 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "2 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 2, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00620000010052": {
       "2 numaralı Kesme Takımı yuvalanırken hata oluştu: 2 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11421,7 +12357,10 @@
       "Kesme Aracı 3'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00630000010051": {
-      "3 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "3 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 3, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00630000010052": {
       "3 numaralı Kesme Takımı yuvalanırken hata oluştu: 3 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11466,7 +12405,10 @@
       "Kesme Aracı 4'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00640000010051": {
-      "4 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "4 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 4, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00640000010052": {
       "4 numaralı Kesme Takımı yuvalanırken hata oluştu: 4 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11511,7 +12453,10 @@
       "Kesme Aracı 5'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00650000010051": {
-      "5 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "5 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 5, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00650000010052": {
       "5 numaralı Kesme Takımı yuvalanırken hata oluştu: 5 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11556,7 +12501,10 @@
       "Kesme Aracı 6'da kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00660000010051": {
-      "6 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "6 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 6, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00660000010052": {
       "6 numaralı Kesme Takımı'nın yuvalanmasında hata oluştu: 6 numaralı raf rıhtımı zaten dolu. Aleti yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11601,7 +12549,10 @@
       "Kesme Aracı 7'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00670000010051": {
-      "7 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "7 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 7, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00670000010052": {
       "7 numaralı Kesme Takımı yuvalanırken hata oluştu: 7 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11646,7 +12597,10 @@
       "Kesme Aracı 8'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00680000010051": {
-      "8 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "8 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 8, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00680000010052": {
       "8 numaralı Kesme Takımı yuvalanırken hata oluştu: 8 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11691,7 +12645,10 @@
       "Kesme Aracı 9'da kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00690000010051": {
-      "9 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "9 numaralı Kesme Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Kesme Aracı 9, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00690000010052": {
       "9 numaralı Kesme Takımı yuvalanırken hata oluştu: 9 numaralı Raf Rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11736,7 +12693,10 @@
       "Çizim Aracı 1'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00710000010051": {
-      "1 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "1 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 1, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00710000010052": {
       "1 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 1 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11781,7 +12741,10 @@
       "Çizim Aracı 2'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00720000010051": {
-      "2 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "2 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 2, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00720000010052": {
       "2 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 2 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11826,7 +12789,10 @@
       "Çizim Aracı 3'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00730000010051": {
-      "3 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "3 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 3, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00730000010052": {
       "3 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 3 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11871,7 +12837,10 @@
       "Çizim Aracı 4'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00740000010051": {
-      "4 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "4 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 4, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00740000010052": {
       "4 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 4 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11916,7 +12885,10 @@
       "Çizim Aracı 5'te kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00750000010051": {
-      "5 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "5 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 5, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00750000010052": {
       "5 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 5 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -11961,7 +12933,10 @@
       "Çizim Aracı 6'da kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00760000010051": {
-      "6 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "6 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 6, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00760000010052": {
       "6 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 6 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -12006,7 +12981,10 @@
       "Çizim Aracı 7'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00770000010051": {
-      "7 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "7 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 7, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00770000010052": {
       "7 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 7 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -12051,7 +13029,10 @@
       "Çizim Aracı 8'de kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00780000010051": {
-      "8 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "8 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 8, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00780000010052": {
       "8 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 8 numaralı raf rıhtımı zaten dolu. Aleti yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -12096,7 +13077,10 @@
       "Çizim Aracı 9'da kimlik (ID) hatası. Alet kimliği sensörünün kirli olup olmadığını veya önünün kapanıp kapanmadığını kontrol et. Sorun giderme için Wiki'ye bak.": []
     },
     "1A00790000010051": {
-      "9 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": []
+      "9 numaralı Çizim Takımı'ndaki mıknatıs yerinden çıkmış olabilir. Sorun giderme talimatları için lütfen Wiki'yi ziyaret edin. Sorunu çözdükten sonra 'Tekrar Dene'ye tıklayın.": [],
+      "Çizim Aracı 9, Dock'a yanlış hizalanmış olabilir. Lütfen aracı yeniden yerleştir ve Dock Kalibrasyonunu gerçekleştir. Ayrıntılı adımlar için Wiki'deki sorun giderme kılavuzuna bak.": [
+        "P3C"
+      ]
     },
     "1A00790000010052": {
       "9 numaralı Çizim Takımı'nın yuvalanmasında hata oluştu: 9 numaralı raf rıhtımı zaten dolu. Takımı yeniden konumlandırın, ardından 'Tekrar Dene'ye dokunun.": []
@@ -12204,16 +13188,28 @@
       "AMS 3H başlangıç noktasına dönüş başarısız oldu. Başlangıç noktasına dönüş mıknatısı polaritesi yanlış. Lütfen başlangıç noktasına dönüş mıknatısını Wiki'ye göre yeniden takın.": []
     },
     "2A00200000020001": {
-      "AMS 3H yuva 1'de filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 1'de filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 1'de filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00200000020002": {
-      "AMS 3H yuva 1 boş; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 1 boş; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 1'de filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00200000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 1'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 1'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 1'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00200000020005": {
-      "AMS 3H yuva 1'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 1'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 1'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00200000020008": {
       "Lütfen geri çekilen tüm filamenti çıkarın. Bu mesaj görünmeye devam ederse hotend'de kırık filament olup olmadığını kontrol edin.": []
@@ -12240,19 +13236,34 @@
       "AMS 3H yuva 1'deki filament bitti. Eski filament temizlenirken lütfen bekleyin.": []
     },
     "2A00200000030002": {
-      "AMS 3H yuva 1'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 1'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 1'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00210000020001": {
-      "AMS 3H yuva 2'de filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 2'de filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 2'de filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00210000020002": {
-      "AMS 3 yuva 2 boş; lütfen yeni bir filament takın.": []
+      "AMS 3 yuva 2 boş; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 2'de filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00210000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 2'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 2'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 2'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00210000020005": {
-      "AMS 3H yuva 2'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 2'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 2'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00210000020011": {
       "AMS 3H yuva 2 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12276,19 +13287,34 @@
       "AMS 3H yuva 2'deki filament bitti. Lütfen eski filament temizlenirken bekleyin.": []
     },
     "2A00210000030002": {
-      "AMS 3H yuva 2'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 2'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 2'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00220000020001": {
-      "AMS 3H yuva 3'te filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 3'te filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 3'te filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00220000020002": {
-      "AMS 3H yuva 3 boş; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 3 boş; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 3'te filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00220000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 3'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 3'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 3'ten geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00220000020005": {
-      "AMS 3H yuva 3'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 3'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 3'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00220000020011": {
       "AMS 3H yuva 3 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12312,19 +13338,34 @@
       "AMS 3H yuva 3'teki filament bitti. Eski filament temizlenirken lütfen bekleyin.": []
     },
     "2A00220000030002": {
-      "AMS 3H yuva 3'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 3'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 3'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00230000020001": {
-      "AMS 3H yuva 4'te filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 4'te filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 4'te filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00230000020002": {
-      "AMS 3H yuva 4 boş; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 4 boş; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 4'te filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00230000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 4'ten geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 4'ten geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 4'ten geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00230000020005": {
-      "AMS 3H yuva 4'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 4'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 4'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00230000020011": {
       "AMS 3H yuva 4 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12348,19 +13389,34 @@
       "AMS 3H yuva 4'teki filament bitti. Eski filament temizlenirken lütfen bekleyin.": []
     },
     "2A00230000030002": {
-      "AMS 3H yuva 4'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 4'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 4'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00240000020001": {
-      "AMS 3H yuva 5'te filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 5'te filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 5'te filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00240000020002": {
-      "AMS 3H yuva 5 boş; lütfen yeni Filament yükleyin.": []
+      "AMS 3H yuva 5 boş; lütfen yeni Filament yükleyin.": [],
+      "AMS 3P yuva 5'te filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00240000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 5'ten geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 5'ten geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 5'ten geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00240000020005": {
-      "AMS 3H yuva 5'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 5'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 5'teki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00240000020011": {
       "AMS 3H yuva 5 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12384,19 +13440,34 @@
       "AMS 3H yuva 5'teki filament bitti. Eski filament temizlenirken lütfen bekleyin.": []
     },
     "2A00240000030002": {
-      "AMS 3H yuva 5'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 5'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 5'teki filament bitti ve aynı filamentin olduğu yuvaya otomatik olarak geçiş yapıldı.": [
+        "P3C"
+      ]
     },
     "2A00250000020001": {
-      "AMS 3H yuva 6'da filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 6'da filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 6'da filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00250000020002": {
-      "AMS 3H yuva 6 boş; lütfen yeni Filament yükleyin.": []
+      "AMS 3H yuva 6 boş; lütfen yeni Filament yükleyin.": [],
+      "AMS 3P yuva 6'da filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00250000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 6'dan geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 6'dan geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 6'dan geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00250000020005": {
-      "AMS 3H yuva 6'daki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 6'daki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 6'daki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00250000020011": {
       "AMS 3H yuva 6 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12420,19 +13491,34 @@
       "AMS 3H yuva 6'daki filament bitti. Lütfen eski filament temizlenirken bekleyin.": []
     },
     "2A00250000030002": {
-      "AMS 3H yuva 6'daki filament bitti ve aynı filamentin olduğu yuvaya otomatik olarak geçiş yaptı.": []
+      "AMS 3H yuva 6'daki filament bitti ve aynı filamentin olduğu yuvaya otomatik olarak geçiş yaptı.": [],
+      "AMS 3P yuva 6'daki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00260000020001": {
-      "AMS 3H yuva 7'de filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 7'de filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 7'de filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00260000020002": {
-      "AMS 3H yuva 7 boş; lütfen yeni filament takın.": []
+      "AMS 3H yuva 7 boş; lütfen yeni filament takın.": [],
+      "AMS 3P yuva 7'de filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00260000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 7'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 7'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 7'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00260000020005": {
-      "AMS 3H yuva 7'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 7'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 7'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00260000020011": {
       "AMS 3H yuva 7 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12456,19 +13542,34 @@
       "AMS 3H yuva 7'deki filament bitti. Eski filament temizlenirken lütfen bekleyin.": []
     },
     "2A00260000030002": {
-      "AMS 3H yuva 7'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 7'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 7'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00270000020001": {
-      "AMS 3H yuva 8'de filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 8'de filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 8'de filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00270000020002": {
-      "AMS 3H yuva 8 boş; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 8 boş; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 8'de filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00270000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 8'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 8'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 8'den geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00270000020005": {
-      "AMS 3H yuva 8'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 8'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 8'deki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00270000020011": {
       "AMS 3H yuva 8 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12492,19 +13593,34 @@
       "AMS 3H yuva 8'deki filament bitti. Lütfen eski filament temizlenirken bekleyin.": []
     },
     "2A00270000030002": {
-      "AMS 3H yuva 8'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 8'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 8'deki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00280000020001": {
-      "AMS 3H yuva 9'da filament bitti; lütfen yeni bir filament takın.": []
+      "AMS 3H yuva 9'da filament bitti; lütfen yeni bir filament takın.": [],
+      "AMS 3P yuva 9'da filament bitti; lütfen yeni bir filament takın.": [
+        "P3C"
+      ]
     },
     "2A00280000020002": {
-      "AMS 3H yuva 9 boş; lütfen yeni bir Filament ekleyin.": []
+      "AMS 3H yuva 9 boş; lütfen yeni bir Filament ekleyin.": [],
+      "AMS 3P yuva 9'da filament algılanmadı. Lütfen filamenti yuvadan takın ve Yazdırma Aracı'na doğru itin.": [
+        "P3C"
+      ]
     },
     "2A00280000020004": {
-      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 9'dan geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": []
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3H yuva 9'dan geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [],
+      "Lütfen filamenti, Yazdırma Aracı'ndan çıkana kadar AMS 3P yuva 9'dan geri çekin. Filament çekildikten sonra bu mesaj devam ederse Yazdırma Aracı'nın içinde filamentin kırılmış olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00280000020005": {
-      "AMS 3H yuva 9'daki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": []
+      "AMS 3H yuva 9'daki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [],
+      "AMS 3P yuva 9'daki filament bitti ve eski filament temizlenirken bir anormallik oluştu. Lütfen Yazdırma Aracı'nda sıkışmış filament olup olmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00280000020011": {
       "AMS 3H yuva 9 besleme başarısız oldu. Yuva seçimi zaman aşımına uğradı. Sorun giderme için wiki'yi görüntülemek üzere lütfen QR kodunu tarayın.": []
@@ -12528,28 +13644,49 @@
       "AMS 3H yuva 9'daki filament bitti. Eski filament temizlenirken lütfen bekleyin.": []
     },
     "2A00280000030002": {
-      "AMS 3H yuva 9'daki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": []
+      "AMS 3H yuva 9'daki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [],
+      "AMS 3P yuva 9'daki filament bitti ve aynı filamentin olduğu yuvaya otomatik geçiş yaptı.": [
+        "P3C"
+      ]
     },
     "2A00350000010002": {
-      "AMS 3H kurutma alanındaki nem sensörü çevrim dışı. Konektörü kontrol edin, ardından yeniden bağlayın ve tekrar deneyin.": []
+      "AMS 3H kurutma alanındaki nem sensörü çevrim dışı. Konektörü kontrol edin, ardından yeniden bağlayın ve tekrar deneyin.": [],
+      "AMS 3P kurutma alanındaki nem sensörü çevrim dışı. Konektörü kontrol edin, ardından yeniden bağlayın ve tekrar deneyin.": [
+        "P3C"
+      ]
     },
     "2A00350000010003": {
-      "AMS 3H kurutma olmayan alandaki nem sensörü çevrim dışı. Konektörü kontrol edin, ardından yeniden bağlayın ve tekrar deneyin.": []
+      "AMS 3H kurutma olmayan alandaki nem sensörü çevrim dışı. Konektörü kontrol edin, ardından yeniden bağlayın ve tekrar deneyin.": [],
+      "AMS 3P kurutma olmayan alandaki nem sensörü çevrim dışı. Konektörü kontrol edin, ardından yeniden bağlayın ve tekrar deneyin.": [
+        "P3C"
+      ]
     },
     "2A00500000020001": {
-      "AMS 3H iletişimi anormal; lütfen bağlantı kablosunu kontrol edin.": []
+      "AMS 3H iletişimi anormal; lütfen bağlantı kablosunu kontrol edin.": [],
+      "AMS 3P iletişimi anormal; lütfen bağlantı kablosunu kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00560000030001": {
       "AMS 3H kurutma işleminden sonra soğuyor. Lütfen işleme devam etmeden önce soğumasını bekleyin.": []
     },
     "2A00700000020001": {
-      "AMS 3H yuva 1'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 1'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 1'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00700000020002": {
-      "AMS 3H yuva 1'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 1'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 1'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00700000020003": {
-      "AMS 3H yuva 1 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 1 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 1 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00700000020005": {
       "AMS 3H yuva 1'den filament beslenemedi. Lütfen filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12558,25 +13695,46 @@
       "AMS 3H yuva 1'de eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00700000020007": {
-      "AMS 3H yuva 1'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 1'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 1'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00700000020008": {
       "AMS eşleme tablosu alınamadı; lütfen yeniden denemek için 'Sürdür' seçeneğini seçin.": []
     },
     "2A00700000020011": {
-      "AMS 3H yuva 1'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 1'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 1'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00700000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 1'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 1'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 1'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00700000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00710000020001": {
-      "AMS 3H yuva 2'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 2'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 2'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00710000020002": {
-      "AMS 3H yuva 2'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 2'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 2'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00710000020003": {
-      "AMS 3H yuva 2 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 2 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 2 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00710000020005": {
       "AMS 3H yuva 2'den Filament beslenemedi. Lütfen Filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12585,22 +13743,43 @@
       "AMS 3H yuva 2'de eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00710000020007": {
-      "AMS 3H yuva 2'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 2'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 2'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00710000020011": {
-      "AMS 3H yuva 2'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 2'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 2'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00710000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 2'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 2'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 2'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00710000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00720000020001": {
-      "AMS 3H yuva 3'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 3'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 3'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00720000020002": {
-      "AMS 3H yuva 3'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 3'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 3'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00720000020003": {
-      "AMS 3H yuva 3 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 3 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 3 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00720000020005": {
       "AMS 3H yuva 3'ten filament beslenemedi. Lütfen filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12609,22 +13788,43 @@
       "AMS 3H yuva 3'te eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00720000020007": {
-      "AMS 3H yuva 3'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 3'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 3'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00720000020011": {
-      "AMS 3H yuva 3'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 3'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 3'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00720000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 3'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 3'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 3'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00720000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00730000020001": {
-      "AMS 3H yuva 4'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 4'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 4'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00730000020002": {
-      "AMS 3H yuva 4'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 4'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 4'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00730000020003": {
-      "AMS 3H yuva 4 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 4 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 4 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00730000020005": {
       "AMS 3H yuva 4'ten filament beslenemedi. Lütfen filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12633,22 +13833,43 @@
       "AMS 3H yuva 4'te eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00730000020007": {
-      "AMS 3H yuva 4'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 4'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 4'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00730000020011": {
-      "AMS 3H yuva 4'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 4'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 4'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00730000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 4'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 4'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 4'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00730000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00740000020001": {
-      "AMS 3H yuva 5'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 5'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 5'teki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00740000020002": {
-      "AMS 3H yuva 5'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 5'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 5'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00740000020003": {
-      "AMS 3H yuva 5 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 5 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 5 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00740000020005": {
       "AMS 3H yuva 5'ten filament beslenemedi. Lütfen filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12657,22 +13878,43 @@
       "AMS 3H yuva 5'te eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00740000020007": {
-      "AMS 3H yuva 5'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 5'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 5'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00740000020011": {
-      "AMS 3H yuva 5'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 5'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 5'te filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00740000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 5'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 5'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 5'ten boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00740000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00750000020001": {
-      "AMS 3H yuva 6'daki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 6'daki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 6'daki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00750000020002": {
-      "AMS 3H yuva 6'daki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 6'daki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 6'daki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00750000020003": {
-      "AMS 3H yuva 6 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 6 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 6 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00750000020005": {
       "AMS 3H yuva 6'den Filament beslenemedi. Lütfen Filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12681,22 +13923,43 @@
       "AMS 3H yuva 6'da eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00750000020007": {
-      "AMS 3H yuva 6'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 6'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 6'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00750000020011": {
-      "AMS 3H yuva 6'da filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 6'da filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 6'da filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00750000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 6'dan boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 6'dan boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 6'dan boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00750000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00760000020001": {
-      "AMS 3H yuva 7'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 7'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 7'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00760000020002": {
-      "AMS 3H yuva 7'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 7'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 7'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00760000020003": {
-      "AMS 3H yuva 7 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 7 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 7 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00760000020005": {
       "AMS 3H yuva 7'den Filament beslenemedi. Lütfen filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12705,22 +13968,43 @@
       "AMS 3H yuva 7'de eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00760000020007": {
-      "AMS 3H yuva 7'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 7'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 7'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00760000020011": {
-      "AMS 3H yuva 7'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 7'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 7'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00760000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 7'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 7'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 7'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00760000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00770000020001": {
-      "AMS 3H yuva 8'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 8'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 8'deki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00770000020002": {
-      "AMS 3H yuva 8'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 8'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 8'deki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00770000020003": {
-      "AMS 3H yuva 8 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 8 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 8 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00770000020005": {
       "AMS 3H yuva 8'den filament beslenemedi. Lütfen filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12729,22 +14013,43 @@
       "AMS 3H yuva 8'de eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00770000020007": {
-      "AMS 3H yuva 8'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 8'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 8'deki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00770000020011": {
-      "AMS 3H yuva 8'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 8'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 8'de filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00770000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 8'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 8'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 8'den boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00770000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00780000020001": {
-      "AMS 3H yuva 9'daki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": []
+      "AMS 3H yuva 9'daki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [],
+      "AMS 3P yuva 9'daki filament, Yazdırma Aracı'ndan geri çekilemedi. Kaldırmadan sonra bu mesaj devam ederse, takım kafasının içinde kırık filament parçaları kalıp kalmadığını kontrol edin.": [
+        "P3C"
+      ]
     },
     "2A00780000020002": {
-      "AMS 3H yuva 9'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": []
+      "AMS 3H yuva 9'teki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [],
+      "AMS 3P yuva 9'daki Filament, Yazdırma Aracı'na beslenemedi. Filament dolaşmış, makara sıkışmış veya filament Yazdırma Aracı'nda veya boruda takılmış olabilir.": [
+        "P3C"
+      ]
     },
     "2A00780000020003": {
-      "AMS 3H yuva 9 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": []
+      "AMS 3H yuva 9 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [],
+      "AMS 3P yuva 9 için ekstrüzyon hatası. Olası nedenler: filament ucu ekstrüder dişlilerine ulaşmamış, uç deforme olmuş veya yanlış hizalanmış ya da hotend tıkanmış.": [
+        "P3C"
+      ]
     },
     "2A00780000020005": {
       "AMS 3H yuva 9'dan filament beslenemedi. Lütfen filament ucunu kesin, tekrar takın ve makaranın sıkışıp sıkışmadığını kontrol edin.": []
@@ -12753,13 +14058,25 @@
       "AMS 3H yuva 9'da eski filament temizleme zaman aşımına uğradı. Filament sıkışmış olabilir veya hotend tıkanmış olabilir.": []
     },
     "2A00780000020007": {
-      "AMS 3H yuva 9'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": []
+      "AMS 3H yuva 9'teki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [],
+      "AMS 3P yuva 9'daki filament bitti. Lütfen aynı yuvaya yeni filament yükleyin, ardından 'Devam Et'e dokunun.": [
+        "P3C"
+      ]
     },
     "2A00780000020011": {
-      "AMS 3H yuva 9'da filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": []
+      "AMS 3H yuva 9'da filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [],
+      "AMS 3P yuva 9'da filament ekstrüzyonu başarısız oldu. Filament ucunda aşınma veya bükülme olup olmadığını kontrol edin ve ucunu düz olacak şekilde kesin. Ekstrüzyon hala başarısız olursa hotend tıkanmış olabilir. Daha fazla sorun giderme bilgisi için QR kodunu tarayarak wiki'yi görüntüleyin.": [
+        "P3C"
+      ]
     },
     "2A00780000020013": {
-      "AMS-3H filamenti Yazdırma Aracı 9'dan boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": []
+      "AMS-3H filamenti Yazdırma Aracı 9'dan boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yeniden deneme yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [],
+      "AMS-3P filamenti Yazdırma Aracı 9'dan boşaltılamadı. Filamenti manuel olarak çıkar. Filamenti çıkardıktan sonra yapılan yeniden denemeler yine başarısız olursa Yazdırma Aracının içindeki kırık filamenti çıkar.": [
+        "P3C"
+      ]
+    },
+    "2A00780000030012": {
+      "Ekstrüder filamenti kavrayamadı. Olası nedenler: ekstrüder dişlisinde filament bulunmaması, filament ucunun deforme olması veya yanlış hizalanması ya da hotend'in tıkanması.": []
     },
     "2A00800000010002": {
       "AMS 3H ısıtıcısı bağlantısı kesilmiş, bunun nedeni konektör temasının zayıf olması olabilir.": []
@@ -12841,6 +14158,114 @@
     },
     "2A20280000020060": {
       "AMS 3H yuva 9'daki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2A21200000020061": {
+      "AMS 3P yuva 1'deki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2A21210000020061": {
+      "AMS 3P yuva 2'deki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2A21220000020061": {
+      "AMS 3P yuva 3'teki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2A21230000020061": {
+      "AMS 3P yuva 4'teki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2A21240000020061": {
+      "AMS 3P yuva 5'teki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2A21250000020061": {
+      "AMS 3P yuva 6'daki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2A21260000020061": {
+      "AMS 3P yuva 7'deki makara etiketi içeriği tanınamıyor.": []
+    },
+    "2E00270000030001": {
+      "Mevcut cihazın ürün yazılımı sürümü kurutma modülünü desteklemiyor. Lütfen en son ürün yazılımına güncelleyin ve tekrar deneyin.": []
+    },
+    "2E00350000010002": {
+      "Kurutma modülündeki nem sensörü çevrimdışı. Konektörü kontrol edin, ardından yeniden bağlayıp tekrar deneyin.": []
+    },
+    "2E00350000020003": {
+      "Kurutma Modülü sıcaklık sensörü hatası. Gevşek konnektör temasından kaynaklanıyor olabilir. Konnektörü yeniden bağlayın.": []
+    },
+    "2E00350000020004": {
+      "Kurutma Modülü nem sensörü hatası. Gevşek konnektör temasından kaynaklanıyor olabilir. Konnektörü yeniden bağlayın.": []
+    },
+    "2E00800000010001": {
+      "Kurutma Modülü ısıtıcısında arıza veya akım sensörü hatası tespit edildi. Kurutma işlemini tekrar başlatmayı deneyin. Sorun devam ederse Wiki'ye bakın.": []
+    },
+    "2E00800000010002": {
+      "Kurutma modülü ısıtıcısı bağlı değil, bunun nedeni konektördeki zayıf temas olabilir.": []
+    },
+    "2E00800000010003": {
+      "Kurutma modülü ısıtıcısında kısa devre var; bu durum kablolama kısa devresinden veya ısıtıcının hasar görmesinden kaynaklanıyor olabilir.": []
+    },
+    "2E00800000010004": {
+      "Kurutma modülü ısıtıcısı anormal şekilde ısınıyor.": []
+    },
+    "2E00800000010005": {
+      "Kurutma Modülü ısıtıcı direnci anormal. Gevşek konnektör temasından kaynaklanıyor olabilir. Konnektörü yeniden bağlayın.": []
+    },
+    "2E00900000010002": {
+      "Kurutma modülü egzoz valfinin bobin direnci anormaldir; bu durum anormal kablolama veya hasardan kaynaklanıyor olabilir.": []
+    },
+    "2E00900000010003": {
+      "Kurutma modülü egzoz vanası bağlı değil; bu durum gevşek konnektör temasından kaynaklanıyor olabilir.": []
+    },
+    "2E00900000010004": {
+      "Kurutma modülü egzoz vanası akım sensörü hatası. Kurutma işlemini tekrar başlatmayı deneyin. Sorun devam ederse Wiki'ye bakın.": []
+    },
+    "2E00900000010005": {
+      "Kurutma modülü hava damperi Hall sensörü çevrimdışı. Hall sensörü kablosunu yeniden bağlayın.": []
+    },
+    "2E00900000020001": {
+      "Kurutma modülü egzoz vanasının çalışması anormal; bu durum aşırı dirençten kaynaklanıyor olabilir.": []
+    },
+    "2E00920000010001": {
+      "Kurutma modülü ısıtıcı soğutma fanı tıkalı, bu durum fanın sıkışmasından kaynaklanıyor olabilir.": []
+    },
+    "2E00920000010004": {
+      "Kurutma modülü hava girişinde tıkanıklık tespit edildi. Lütfen hava girişini açığa çıkarmak için etiketin çıkarıldığından emin ol. Aksi takdirde, kurutma modülü aşırı ısınacak ve hasar görecektir.": []
+    },
+    "2E00920000020002": {
+      "Kurutma modülü ısıtıcısının soğutma fanının hızı çok düşük, bunun nedeni aşırı fan direnci olabilir.": []
+    },
+    "2E00920000020003": {
+      "Güç adaptörü bağlı olmadığı için kurutma modülü ısıtıcı soğutma fanı çalıştırılamıyor.": []
+    },
+    "2E00920000030005": {
+      "Kurutma modülünün hava girişi tıkanmış olabilir. Hava girişini açığa çıkarmak için etiket zaten çıkarılmışsa lütfen bu mesajı dikkate alma.": []
+    },
+    "2E00940000010001": {
+      "Kurutma modülü ısıtıcısı sıcaklık sensörü çevrimdışı. Konektörde muhtemelen zayıf temas var. Konektörü yeniden bağlayın.": []
+    },
+    "2E00940000010002": {
+      "Kurutma modülü ısıtıcısındaki Sıcaklık Sensörü arızalandı ve bunun sonucunda anormal sıcaklık değerleri elde edildi.": []
+    },
+    "2E00950000010001": {
+      "Kurutma modülü ısıtıcısı sıcaklık sensörü çevrimdışı. Konektörde muhtemelen zayıf temas var. Konektörü yeniden bağlayın.": []
+    },
+    "2E00950000010002": {
+      "Kurutma modülü ısıtıcısındaki Sıcaklık Sensörü arızalandı ve bunun sonucunda anormal sıcaklık değerleri elde edildi.": []
+    },
+    "2E00960000010001": {
+      "Kurutma işlemi sırasında termal kaçak meydana gelebilir. Lütfen kurutma modülünün güç kaynağını kapatın.": []
+    },
+    "2E00960000020002": {
+      "Ortam sıcaklığı çok düşük, bu da kurutma kapasitesini etkileyecektir.": []
+    },
+    "2E00960000020004": {
+      "Kurutma modülü sıcaklık kontrolündeki hata çok büyük; bu durum kapağın açık olmasından veya ısıtıcıda bir arıza olmasından kaynaklanıyor olabilir.": []
+    },
+    "2E00980000020001": {
+      "Kurutma modülü güç adaptörünün voltajı çok düşük, bu da yetersiz kurutma sıcaklığına neden olabilir. Lütfen güç adaptörünü değiştirin.": []
+    },
+    "2E00980000020002": {
+      "Kurutma modülü güç adaptörünün voltajı çok yüksek, bu da ısıtıcı devresine zarar verebilir. Lütfen güç adaptörünü değiştirin.": []
+    },
+    "2E00980000020003": {
+      "Kurutma modülü güç kaynağı voltajı makineyle uyumlu değil; bu nedenle kurutma ısıtıcısı devre dışı bırakıldı.": []
     }
   }
 }

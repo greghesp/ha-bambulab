@@ -16,6 +16,7 @@ class Printers(StrEnum):
     P1P = "P1P"
     P1S = "P1S"
     P2S = "P2S"
+    P3C = "P3C"
     H2C = "H2C"
     H3C = "H3C"
     H2D = "H2D"
@@ -37,6 +38,12 @@ LEGACY_SDCARD_PRINTERS = [
     Printers.A1,
     Printers.A1MINI,
 ]
+
+# Printers with the Swaptek tool changer, and how many PrintTools their rack holds.
+SWAPTEK_TOOL_COUNT = {
+    Printers.H3C: 9,
+    Printers.P3C: 7,
+}
 
 class Features(IntEnum):
     AUX_FAN = 1,
@@ -264,6 +271,25 @@ PRINT_TYPE_OPTIONS = {
     "unknown"
 }
 
+# The AMS units built into the Swaptek printers, and how many slots they have. They report their
+# humidity and temperature per zone. Their type is in bits 0-3 of the `info` in their status.
+RACK_AMS_SLOT_COUNT = {
+    "AMS 3H": 9,
+    "AMS 3P": 7,
+}
+
+RACK_AMS_TYPES = {
+    6: "AMS 3H",
+    7: "AMS 3P",
+}
+
+# Their version modules. Other AMS units are named ams, ams_f1, n3f and n3s.
+RACK_AMS_MODULES = {
+    "n10a": "AMS 3H",
+    "n11a": "AMS 3P",
+}
+
+# The AMS 3P is not listed: its dryer is a separate accessory.
 AMS_DRYING_MODELS = [
     "AMS 2 Pro",
     "AMS HT",
@@ -275,7 +301,8 @@ AMS_MODELS = [
     "AMS Lite",
     "AMS 2 Pro",
     "AMS HT",
-    "AMS 3H"
+    "AMS 3H",
+    "AMS 3P"
 ]
 
 # What a printer reports as the serial of an AMS it has not identified. These are not serials:
@@ -288,6 +315,7 @@ AMS_MODELS_AND_EXTERNAL_SPOOL = [
     "AMS 2 Pro",
     "AMS HT",
     "AMS 3H",
+    "AMS 3P",
     "External Spool"
 ]
 

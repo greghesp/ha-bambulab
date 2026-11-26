@@ -47,12 +47,12 @@ For questions and help, join us on [Discord](https://discord.gg/rsUHAW3DKz).
 | Series | Models |
 |---|---|
 | A | A1, A1 Mini, A2L |
-| P | P1P, P1S, P2S |
+| P | P1P, P1S, P2S, P3C |
 | X | X1, X1 Carbon, X1E, X2D |
 | H | H2C, H2D, H2D Pro, H2S, H3C |
 
-AMS units: **AMS**, **AMS Lite**, **AMS 2 Pro**, **AMS HT** and **AMS 3H**,
-plus the external spool holder. Some entities only exist on some models;
+AMS units: **AMS**, **AMS Lite**, **AMS 2 Pro**, **AMS HT**, **AMS 3H** and
+**AMS 3P**, plus the external spool holder. Some entities only exist on some models;
 the [entity reference](https://docs.page/greghesp/ha-bambulab/entities) says
 which.
 
@@ -106,9 +106,10 @@ A short tour. The complete list, with per-model notes, is in the
 ### Filament
 | Entity | Description |
 |---|---|
-| AMS Tray 1–4 (1–9 on the AMS 3H) | Loaded filament per slot. Colour, type, remaining %, nozzle temperature range, K value and RFID serial as attributes |
+| AMS Tray 1–4 (1–9 on the AMS 3H, 1–7 on the AMS 3P) | Loaded filament per slot. Colour, type, remaining %, nozzle temperature range, K value and RFID serial as attributes |
 | AMS Humidity Index / Humidity / Temperature | Per AMS unit |
 | AMS 3H Zone Temperature / Humidity / Remaining Drying Time | Per drying zone of the H3C's AMS 3H, which has no unit-wide reading. The trays in each zone are an attribute |
+| AMS 3P Zone Temperature / Humidity | Per zone the P3C's AMS 3P reports. Its optional drying module is not supported yet |
 | AMS Drying | Drying state, time left, temperature and filament (AMS 2 Pro / AMS HT) |
 | Active Tray | The slot feeding the nozzle right now |
 | External Spool | Filament on the external spool holder, same attributes as a tray |
@@ -127,8 +128,8 @@ A short tour. The complete list, with per-model notes, is in the
 
 ### Camera
 A **chamber camera** entity on every model. On P1/A1 printers it needs the
-printer's IP; on X1, P2S, X2D, the H2 series and H3C enable
-*LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
+printer's IP; on X1 enable *LAN Mode Liveview*; on X2, P3, H2, and H3 series printers
+enable *LAN Only Liveview* ([details](https://docs.page/greghesp/ha-bambulab/setup)).
 
 ### Diagnostics
 HMS errors (with codes, descriptions and wiki links), print errors, online
@@ -180,6 +181,7 @@ The H3C's **AMS 3H** uses the AMS card, laid out like the unit: two back
 spools beside the dry box, whose temperature, humidity and drying time left
 show above its two spools, and the five front spools below
 ([details](https://docs.page/greghesp/ha-bambulab/frontend/cards/ams-card#ams-3h)).
+The P3C's **AMS 3P** shows its three back spools above the four front ones.
 
 With an external AMS heater set up, the AMS card's info bar also shows the
 heater: **Off**, **On**, **Auto** (drying mode waiting for the humidity to
@@ -283,7 +285,7 @@ You need, from the printer:
 | Access code | Network / LAN settings |
 
 Some entities need an extra printer setting:
-- **Camera on X1 / P2S / X2D / H2 series / H3C**: enable *LAN Only Liveview* (LAN mode itself is not required).
+- **Camera on P2/P3/X1/X2/H2/H3**: enable *LAN Only Liveview* (LAN mode itself is not required).
 - **Cover image, print weight and bed type on newer firmware** (e.g. H2D, H2S, P2S): enable
   *Store Sent Files on External Storage* and insert a USB drive / SD card.
 
@@ -416,7 +418,7 @@ Parameters and examples: [Actions](https://docs.page/greghesp/ha-bambulab/action
 |---|---|
 | Controls do nothing, only the light works | Your firmware enforces Bambu authorization. See [above](#bambu-lab-firmware-and-authorization) |
 | Can't sign in with a Google/Apple/Facebook account | Leave the password blank to log in with a code ([how](#signed-up-with-google-apple-or-facebook)) |
-| No camera image | P1/A1: add the printer's IP. X1/P2S/X2D/H2 series/H3C: enable *LAN Only Liveview* |
+| No camera image | P1/A1: add the printer's IP. X1: enable *LAN Mode Liveview*. H2/H3/P2/X2: enable *LAN Only Liveview* |
 | Cover image, print weight or bed type empty | Newer firmware: enable *Store Sent Files on External Storage* with a USB drive / SD card inserted |
 | Cards missing from the card picker | Hard-refresh the browser (Ctrl+Shift+R). YAML dashboards: add the resource ([above](#yaml-mode-dashboards)) |
 | Values look stale | Press the **Force Refresh** button on the printer device |

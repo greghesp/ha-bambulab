@@ -75,6 +75,10 @@ from .const import (
     AMS_STATUS_MAIN_ASSIST,
     AMS_FILAMENT_CHANGE_STEPS,
     AMSTrayStateFlags,
+    RACK_AMS_MODULES,
+    RACK_AMS_SLOT_COUNT,
+    RACK_AMS_TYPES,
+    SWAPTEK_TOOL_COUNT,
 )
 from .commands import (
     GET_VERSION,
@@ -287,6 +291,8 @@ class Device:
         a2_printers = {Printers.A2L}
         h2_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.H2S}
         h3_printers = {Printers.H3C}
+        p3_printers = {Printers.P3C}
+        swaptek_printers = h3_printers | p3_printers
         p1_printers = {Printers.P1P, Printers.P1S}
         p2_printers = {Printers.P2S}
         x1_printer  = {Printers.X1, Printers.X1C}
@@ -294,16 +300,18 @@ class Device:
         x2_printers = {Printers.X2D}
         dual_nozzle_printers = {Printers.H2C, Printers.H2D, Printers.H2DPRO, Printers.X2D}
         model = self.info.device_type
-        if model == Printers.H3C:
-            # Explicit support for reported telemetry. The H3C has one extruder,
+        if model in swaptek_printers:
+            # Explicit support for reported telemetry. The H3C and P3C have one extruder,
             # so never enable the H2C's left/right nozzle entities.
             if feature == Features.HOTEND_RACK:
                 return bool(self.hotend_rack.hotends)
             if feature in (Features.AMS_READ_RFID_COMMAND, Features.AMS_SWITCH_COMMAND):
                 return False
+            if feature == Features.ACTIVE_CHAMBER_HEATER:
+                # The P3C only reports its chamber temperature.
+                return model in h3_printers
             if feature in (Features.SECONDARY_AUX_FAN, Features.AIRDUCT_MODE,
-                           Features.ACTIVE_CHAMBER_HEATER, Features.CHAMBER_TEMPERATURE,
-                           Features.CAMERA_RTSP):
+                           Features.CHAMBER_TEMPERATURE, Features.CAMERA_RTSP):
                 return True
 
         # First check known early feature check scenarios. These are features that can be checked as part of
@@ -351,7 +359,7 @@ class Device:
             # Only the P1 firmware did this as far as I know. Not the A1.
             return False
         elif feature == Features.DOOR_SENSOR:
-            if model in (h2_printers | h3_printers | p2_printers | x2_printers):
+            if model in (h2_printers | swaptek_printers | p2_printers | x2_printers):
                 return True
             if model in x1e_printer:
                 return self.supports_sw_version("01.01.02.00")
@@ -379,7 +387,7 @@ class Device:
                 return self.supports_sw_version("01.06.10.33")
             return True
         elif feature == Features.PROMPT_SOUND:
-            if model in (a1_printers | a2_printers | h2_printers | h3_printers | p2_printers | x2_printers):
+            if model in (a1_printers | a2_printers | h2_printers | swaptek_printers | p2_printers | x2_printers):
                 return not self.print_fun.mqtt_signature_required
             return False
         elif feature == Features.AMS_SWITCH_COMMAND:
@@ -420,7 +428,7 @@ class Device:
                 return self.supports_sw_version("01.01.50.00")
             if model in h2_printers:
                 return True # Don't know what version it was added to H2S and H2D and H2D Pro
-            if model in h3_printers:
+            if model in swaptek_printers:
                 return True
             return False
         elif feature == Features.CHAMBER_LIGHT_2:
@@ -4243,7 +4251,7 @@ class HotendRack:
 
     @property
     def can_move(self) -> bool:
-        """Only permit H3C rack movement when the reported state is safe."""
+        """Only permit Swaptek rack movement when the reported state is safe."""
         with self._move_lock:
             device = self._client._device
             return bool(
@@ -4257,7 +4265,7 @@ class HotendRack:
             )
 
     def move(self, direction: str) -> bool:
-        """Publish an H3C rack movement request, not an assumed result."""
+        """Publish a Swaptek rack movement request, not an assumed result."""
         action = {"up": 1, "down": 2}.get(direction)
         with self._move_lock:
             if action is None or not self.can_move:
@@ -4319,7 +4327,12 @@ class HotendRack:
 
     @property
     def is_swaptek(self) -> bool:
-        return self._client._device.info.device_type == Printers.H3C
+        return self.tool_count is not None
+
+    @property
+    def tool_count(self) -> int | None:
+        """How many PrintTools the printer's Swaptek rack holds, or None without one."""
+        return SWAPTEK_TOOL_COUNT.get(self._client._device.info.device_type)
 
     def linked_filament(self, slot_id: int):
         """Return the nonempty spool explicitly linked by the printer."""
@@ -4387,7 +4400,8 @@ class HotendRack:
                 changed = True
 
         # Initialize rack slots that don't exist yet
-        for slot_id in (range(16, 25) if self.is_swaptek else self.RACK_SLOT_IDS):
+        tool_count = self.tool_count
+        for slot_id in (range(16, 16 + tool_count) if tool_count else self.RACK_SLOT_IDS):
             if slot_id not in self.hotends: 
                 self.hotends[slot_id] = Hotend(slot_id)
 
@@ -4399,7 +4413,7 @@ class HotendRack:
                     # addr_id identifies the PrintTool even while its live id is 0
                     # on the carriage. Parked ids are 16 + addr_id.
                     address = entry.get("addr_id")
-                    if isinstance(address, int) and 0 <= address < 9:
+                    if isinstance(address, int) and 0 <= address < tool_count:
                         slot_id = 16 + address
                         if isinstance(nid, int) and nid < 16:
                             if self.mounted_slot_id != slot_id:
@@ -4447,6 +4461,8 @@ class AMSInstance:
     model: str
     tray: list[AMSTray]
     zones: dict[int, dict] = field(default_factory=dict)
+    # The rack AMS model in the unit's status, which can arrive before its version module
+    reported_model: str | None = None
 
     _active: bool = False
     serial: str = ""
@@ -4471,8 +4487,8 @@ class AMSInstance:
         self.zones = {}
         self._accepted_readings = {}
         self._unconfirmed_readings = {}
-        if model == "AMS 3H":
-            self.tray = [AMSTray(client) for _ in range(9)]
+        if model in RACK_AMS_SLOT_COUNT:
+            self.tray = [AMSTray(client) for _ in range(RACK_AMS_SLOT_COUNT[model])]
         elif index >= 128:
             self.tray = [None]
             self.tray[0] = AMSTray(client)
@@ -4482,6 +4498,11 @@ class AMSInstance:
             self.tray[1] = AMSTray(client)
             self.tray[2] = AMSTray(client)
             self.tray[3] = AMSTray(client)
+
+    def set_slot_count(self, client, count: int) -> None:
+        """Match the trays to the unit's slots, keeping those already there."""
+        missing = max(count - len(self.tray), 0)
+        self.tray = self.tray[:count] + [AMSTray(client) for _ in range(missing)]
 
     def accept_reading(self, attribute: str, value) -> bool:
         """Return whether a sensor reading should be applied, rejecting one-off spikes.
@@ -4510,9 +4531,9 @@ class AMSInstance:
 
     @property
     def device_name_suffix(self) -> str:
-        """Use the model name for AMS 3H instead of treating its bus ID as a count."""
-        if self.model == "AMS 3H":
-            return "AMS_3H"
+        """Use the model name for a rack AMS instead of treating its bus ID as a count."""
+        if self.model in RACK_AMS_SLOT_COUNT:
+            return self.model.replace(" ", "_")
         return f"AMS_{self.index + 1 if self.index < 128 else self.index}"
 
     @property
@@ -4537,11 +4558,12 @@ class AMSInstance:
 
 
 # The H3C reports a 2.85 mm spool in AMS 3H slot k as virtual slot 255 - k instead of as
-# AMS tray k. Ids 255 and 254 stay with the external spools, as on every other printer.
-AMS_3H_VIRTUAL_SLOT_IDS = range(247, 254)
+# AMS tray k. Bambu Studio maps the P3C's virtual slots onto its PrintTools the same way. Ids 255
+# and 254 stay with the external spools, as on every other printer.
+RACK_AMS_VIRTUAL_SLOT_IDS = range(247, 254)
 # Tray state used when a loaded vir_slot entry carries no `state` field of its own. Without it,
 # the tray keeps the state the AMS reported for it (no spool), which would hide the spool.
-AMS_3H_VIRTUAL_SLOT_LOADED_STATE = (AMSTrayStateFlags.SPOOL | AMSTrayStateFlags.METADATA
+RACK_AMS_VIRTUAL_SLOT_LOADED_STATE = (AMSTrayStateFlags.SPOOL | AMSTrayStateFlags.METADATA
                                     | AMSTrayStateFlags.STEADY)
 
 
@@ -4565,6 +4587,17 @@ def _virtual_slot_loaded(entry: dict) -> bool:
     return bool(entry.get("tray_info_idx")) or bool(tray_type and tray_type != "Empty")
 
 
+def _parse_ams_info(value) -> int | None:
+    """The `info` bits of an AMS status entry, sent as a hex string or a number."""
+    if value is None:
+        return None
+    try:
+        return int(value, 16) if isinstance(value, str) else int(value)
+    except (TypeError, ValueError, OverflowError):
+        LOGGER.debug("Ignoring invalid AMS info: %r", value)
+        return None
+
+
 @dataclass
 class AMSList:
     """Return all AMS related info"""
@@ -4582,22 +4615,38 @@ class AMSList:
         self._nozzle_ams_index = { 0: 0, 1: 0, 15: 0}
         self._nozzle_target_ams_index = { 0: 255, 1: 255, 15: 255}
         self.data = {}
-        # Latest vir_slot payload per AMS 3H virtual slot id.
+        # Latest vir_slot payload per rack AMS virtual slot id.
         self._virtual_slots: dict[int, dict] = {}
         # Last per-tray `state` the AMS itself reported, keyed by (ams index, tray index).
         self._reported_tray_states: dict[tuple[int, int], int] = {}
-        # AMS 3H tray indices currently showing virtual slot filament.
+        # Rack AMS tray indices currently showing virtual slot filament.
         self._virtual_overlaid_trays: frozenset[int] = frozenset()
 
-    def _ams_3h_index(self) -> int | None:
-        return next((index for index, ams in self.data.items() if ams.model == "AMS 3H"), None)
+    def _rack_ams_index(self) -> int | None:
+        return next((index for index, ams in self.data.items() if ams.model in RACK_AMS_SLOT_COUNT), None)
+
+    def _rack_ams_module_index(self, module: dict, model: str) -> int | None:
+        """Resolve the unit id a rack AMS version module belongs to.
+
+        Some firmware (e.g. H3C 01.00.02.00) reports the module as a bare "n10a" with no id
+        (#2305), so fall back to the unit the status reports as that model. Until it does, the
+        module is skipped; the version is requested again once the unit shows up.
+        """
+        _, _, suffix = module["name"].partition("/")
+        for explicit in (module.get("id"), suffix):
+            try:
+                return int(explicit)
+            except (TypeError, ValueError):
+                continue
+        matching = [index for index, ams in self.data.items() if ams.reported_model == model]
+        return matching[0] if len(matching) == 1 else None
 
     def _resolve_virtual_slot(self, ams_index: int, tray_index: int) -> tuple[int, int]:
-        """Map an AMS 3H virtual slot id onto its AMS 3H unit and tray."""
-        if ams_index in AMS_3H_VIRTUAL_SLOT_IDS:
-            ams_3h_index = self._ams_3h_index()
-            if ams_3h_index is not None:
-                return ams_3h_index, 255 - ams_index
+        """Map a rack AMS virtual slot id onto its unit and tray."""
+        if ams_index in RACK_AMS_VIRTUAL_SLOT_IDS:
+            rack_ams_index = self._rack_ams_index()
+            if rack_ams_index is not None:
+                return rack_ams_index, 255 - ams_index
         return ams_index, tray_index
 
     def _active_slot(self) -> tuple[int, int]:
@@ -4682,11 +4731,11 @@ class AMSList:
             name = module["name"]
             index = -1
             model = ""
-            if name == "n10a" or name.startswith("n10a/"):
-                model = "AMS 3H"
-                try:
-                    index = int(module["id"] if "id" in module else name.split("/", 1)[1])
-                except (KeyError, IndexError, TypeError, ValueError):
+            rack_ams_model = RACK_AMS_MODULES.get(name.partition("/")[0])
+            if rack_ams_model is not None:
+                model = rack_ams_model
+                index = self._rack_ams_module_index(module, model)
+                if index is None:
                     continue
             elif name.startswith("ams/"):
                 model = "AMS"
@@ -4713,9 +4762,8 @@ class AMSList:
                     if self.data[index].model != model:
                         data_changed = True
                         self.data[index].model = model
-                    if model == "AMS 3H":
-                        while len(self.data[index].tray) < 9:
-                            self.data[index].tray.append(AMSTray(self._client))
+                    if rack_ams_model is not None:
+                        self.data[index].set_slot_count(self._client, RACK_AMS_SLOT_COUNT[model])
                     if self.data[index].serial != module['sn']:
                         data_changed = True
                         self.data[index].serial = module['sn']
@@ -4872,12 +4920,18 @@ class AMSList:
                         continue
                     previous = instance.zones.setdefault(zone_id, {})
                     previous.update(zone)
-                if ams.get("zone_info") and any(
+                info = _parse_ams_info(ams.get("info"))
+                if info is not None:
+                    instance.reported_model = RACK_AMS_TYPES.get(info & 0xF)
+                rack_slots = RACK_AMS_SLOT_COUNT.get(instance.reported_model)
+                if rack_slots is not None:
+                    instance.set_slot_count(self._client, rack_slots)
+                elif instance.model not in RACK_AMS_SLOT_COUNT and ams.get("zone_info") and any(
                     isinstance(t, dict) and optional_number(t, "id", int) in range(4, 9)
                     for t in ams.get("tray") or []
                 ):
-                    while len(instance.tray) < 9:
-                        instance.tray.append(AMSTray(self._client))
+                    # A rack AMS of unknown type: make room for the larger one
+                    instance.set_slot_count(self._client, RACK_AMS_SLOT_COUNT["AMS 3H"])
 
                 for key, attribute, converter, minimum, maximum in (
                     ("humidity", "humidity_index", int, 1, 5),
@@ -4903,14 +4957,8 @@ class AMSList:
                     if isinstance(filament, str):
                         instance.drying_filament = filament
 
-                if ams.get("info") is not None:
-                    try:
-                        info = ams["info"]
-                        info = int(info, 16) if isinstance(info, str) else int(info)
-                    except (TypeError, ValueError, OverflowError):
-                        LOGGER.debug("Ignoring invalid AMS nozzle info: %r", ams["info"])
-                    else:
-                        instance.connected_nozzle = AMS_CONNECTED_NOZZLES.get((info >> 8) & 0xF)
+                if info is not None:
+                    instance.connected_nozzle = AMS_CONNECTED_NOZZLES.get((info >> 8) & 0xF)
 
                 for tray in ams.get("tray") or []:
                     if not isinstance(tray, dict):
@@ -4929,8 +4977,9 @@ class AMSList:
             # bit (ams_index * 4 + tray_index) for 4-slot AMS units. Reported even
             # by firmware (e.g. P1S) that never sends the per-tray `state` field.
             # Other units are skipped and keep `exists` unknown: the AMS HT has its
-            # own id range, and the 9-slot AMS 3H (id 32 on the H3C) puts its trays
-            # at bit 28 rather than 32 * 4, a layout seen on only one printer so far.
+            # own id range, and the AMS 3H (id 32 on the H3C) puts its trays at bit 28
+            # rather than 32 * 4, a layout seen on only one printer so far. Bambu Studio
+            # has the AMS 3P's at bit 37.
             exist_bits = ams_data.get("tray_exist_bits")
             if exist_bits is not None:
                 try:
@@ -4970,7 +5019,7 @@ class AMSList:
         return data_changed
 
     def _store_virtual_slots(self, vir_slots) -> None:
-        """Remember the latest payload of each AMS 3H virtual slot; deltas merge into it."""
+        """Remember the latest payload of each rack AMS virtual slot; deltas merge into it."""
         if not isinstance(vir_slots, list):
             return
         for entry in vir_slots:
@@ -4980,7 +5029,7 @@ class AMSList:
                 slot_id = int(entry.get("id"))
             except (TypeError, ValueError):
                 continue
-            if slot_id not in AMS_3H_VIRTUAL_SLOT_IDS:
+            if slot_id not in RACK_AMS_VIRTUAL_SLOT_IDS:
                 continue
             # A bare id/state entry means the slot was emptied, so stale filament fields must go.
             metadata_only = set(entry.keys()).issubset({"id", "state"})
@@ -4988,27 +5037,27 @@ class AMSList:
             self._virtual_slots = {**self._virtual_slots, slot_id: {**previous, **entry}}
 
     def _apply_virtual_slots(self, vir_slots) -> None:
-        """Show a 2.85 mm spool the H3C reports as a virtual slot on its AMS 3H tray (#2253).
+        """Show a spool reported as a virtual slot, such as 2.85 mm ones, on its rack AMS tray (#2253).
 
         The AMS reports that tray as empty, so the virtual slot is re-applied after every AMS
         update. A spool the AMS itself reports in the tray takes precedence.
         """
         self._store_virtual_slots(vir_slots)
-        ams_3h_index = self._ams_3h_index()
-        if ams_3h_index is None:
+        rack_ams_index = self._rack_ams_index()
+        if rack_ams_index is None:
             return
-        trays = self.data[ams_3h_index].tray
+        trays = self.data[rack_ams_index].tray
         overlaid = set()
         for slot_id, entry in self._virtual_slots.items():
             tray_index = 255 - slot_id
             if tray_index >= len(trays):
                 continue
-            reported_state = self._reported_tray_states.get((ams_3h_index, tray_index), 0)
+            reported_state = self._reported_tray_states.get((rack_ams_index, tray_index), 0)
             if ams_tray_spool_loaded(reported_state):
                 continue
             tray = trays[tray_index]
             if _virtual_slot_loaded(entry):
-                tray.print_update({"state": AMS_3H_VIRTUAL_SLOT_LOADED_STATE, **entry,
+                tray.print_update({"state": RACK_AMS_VIRTUAL_SLOT_LOADED_STATE, **entry,
                                    "id": str(tray_index)})
                 tray.exists = True
                 overlaid.add(tray_index)
@@ -5811,7 +5860,7 @@ class HomeFlag:
 
     @property
     def sdcard_status(self) -> str:
-        if self._device_type == Printers.H3C:
+        if self._device_type in SWAPTEK_TOOL_COUNT:
             # The legacy SD-card flag is not a USB/internal-storage health check.
             return "not_applicable"
         if (self._value & Home_Flag_Values.SD_CARD_ABNORMAL) != 0:

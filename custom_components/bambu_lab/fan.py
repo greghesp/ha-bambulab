@@ -13,9 +13,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LOGGER
 from .coordinator import BambuDataUpdateCoordinator
-from .definitions import H3C_FAN_ENTITY_KEYS, X2D_TRANSLATION_KEYS
+from .definitions import SWAPTEK_FAN_ENTITY_KEYS, X2D_TRANSLATION_KEYS
 from .models import AirPurifierEntity, BambuLabEntity
-from .pybambu.const import Features, FansEnum, Printers
+from .pybambu.const import Features, FansEnum, Printers, SWAPTEK_TOOL_COUNT
 
 
 @dataclass
@@ -47,7 +47,7 @@ FANS: tuple[FanEntityDescription, ...] = (
         key="chamber_fan",
         translation_key="chamber_fan",
         value_fn=lambda device: device.fans.get_fan_speed(FansEnum.CHAMBER),
-        exists_fn=lambda coordinator: coordinator.get_model().info.device_type != Printers.H3C
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type not in SWAPTEK_TOOL_COUNT
                                       and coordinator.get_model().supports_feature(Features.CHAMBER_FAN)
     ),
     BambuLabFanEntityDescription(
@@ -60,7 +60,7 @@ FANS: tuple[FanEntityDescription, ...] = (
         key="exhaust_fan",
         translation_key="exhaust_fan",
         value_fn=lambda device: device.fans.get_fan_speed(FansEnum.CHAMBER),
-        exists_fn=lambda coordinator: coordinator.get_model().info.device_type == Printers.H3C,
+        exists_fn=lambda coordinator: coordinator.get_model().info.device_type in SWAPTEK_TOOL_COUNT,
     ),
     BambuLabFanEntityDescription(
         key="h3c_chamber_fan",
@@ -105,8 +105,8 @@ class BambuLabFan(BambuLabEntity, FanEntity):
         self.entity_description = description
         printer_type = coordinator.get_model().info.device_type
         key = description.key
-        if printer_type == Printers.H3C and key in H3C_FAN_ENTITY_KEYS:
-            key = H3C_FAN_ENTITY_KEYS[key]
+        if printer_type in SWAPTEK_TOOL_COUNT and key in SWAPTEK_FAN_ENTITY_KEYS:
+            key = SWAPTEK_FAN_ENTITY_KEYS[key]
             self._attr_translation_key = key
         self._attr_unique_id = f"{config_entry.data['serial']}_{key}"
         if printer_type == Printers.X2D:

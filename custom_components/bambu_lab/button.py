@@ -7,7 +7,7 @@ from homeassistant.helpers.entity import EntityCategory
 from .const import DOMAIN, LOGGER
 from .models import BambuLabEntity, HotendRackEntity
 from .pybambu.commands import PAUSE, RESUME, STOP, BUZZER_SET_SILENT, BUZZER_SET_ALARM, BUZZER_SET_BEEPING
-from .pybambu.const import Features, Printers
+from .pybambu.const import Features, SWAPTEK_TOOL_COUNT
 
 from homeassistant.components.button import (
     ButtonEntity,
@@ -103,7 +103,7 @@ async def async_setup_entry(
                 BambuLabBuzzerBeepingButton(coordinator, entry)
             ]
 
-        if (coordinator.get_model().info.device_type == Printers.H3C and
+        if (coordinator.get_model().info.device_type in SWAPTEK_TOOL_COUNT and
                 coordinator.get_model().supports_feature(Features.HOTEND_RACK)):
             buttons += [
                 BambuLabHotendRackButton(coordinator, entry, RACK_RAISE_BUTTON_DESCRIPTION, "up"),
@@ -129,7 +129,7 @@ class BambuLabButton(BambuLabEntity, ButtonEntity):
 
 
 class BambuLabHotendRackButton(HotendRackEntity, ButtonEntity):
-    """Move the H3C rack when printer and holder telemetry are idle."""
+    """Move the Swaptek rack when printer and holder telemetry are idle."""
 
     def __init__(self, coordinator, config_entry, description, direction):
         super().__init__(coordinator)

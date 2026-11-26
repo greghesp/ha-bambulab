@@ -25,7 +25,7 @@ from .definitions import (
     AMS_SENSORS,
     HOTEND_RACK_SENSORS,
     HOTEND_RACK_HOTEND_SENSORS,
-    H3C_FAN_ENTITY_KEYS,
+    SWAPTEK_FAN_ENTITY_KEYS,
     X2D_TRANSLATION_KEYS,
     MAKERWORLD_SENSORS,
     FILAMENT_INVENTORY_SENSORS,
@@ -38,7 +38,7 @@ from .coordinator import BambuDataUpdateCoordinator
 from .makerworld import MakerWorldDataUpdateCoordinator, MakerWorldEntity
 from .filamentinventory import BambuFilamentCoordinator
 from .models import AirPurifierEntity, BambuLabEntity, AMSEntity, VirtualTrayEntity, HotendRackEntity, FilamentInventoryEntity
-from .pybambu.const import Features, Printers
+from .pybambu.const import Features, Printers, SWAPTEK_TOOL_COUNT
 
 
 def _migrate_h3c_storage_entities(registry, entry_id, printer):
@@ -159,8 +159,8 @@ class BambuLabSensor(BambuLabEntity, SensorEntity):
         self.entity_description = description
         printer = coordinator.get_model().info
         key = description.key
-        if printer.device_type == Printers.H3C and key in H3C_FAN_ENTITY_KEYS:
-            key = H3C_FAN_ENTITY_KEYS[key]
+        if printer.device_type in SWAPTEK_TOOL_COUNT and key in SWAPTEK_FAN_ENTITY_KEYS:
+            key = SWAPTEK_FAN_ENTITY_KEYS[key]
             self._attr_translation_key = key
         self._attr_unique_id = f"{printer.serial}_{key}"
         if printer.device_type == Printers.X2D and description.key in X2D_TRANSLATION_KEYS:
