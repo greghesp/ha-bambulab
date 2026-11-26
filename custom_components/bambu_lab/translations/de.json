@@ -367,10 +367,10 @@
         }
       },
       "cooling_fan": {
-        "name": "Druckkopflüfter"
+        "name": "Bauteillüfter"
       },
       "aux_fan": {
-        "name": "Bauteillüfter"
+        "name": "Aux-Lüfter"
       },
       "chamber_fan": {
         "name": "Druckraumlüfter"
@@ -379,7 +379,7 @@
         "name": "Sekundärer Aux-Lüfter"
       },
       "part_fan": {
-        "name": "Teilweise Fan"
+        "name": "Bauteillüfter"
       },
       "left_aux_fan": {
         "name": "Linker Aux-Lüfter"
@@ -399,7 +399,7 @@
         "name": "Titelbild"
       },
       "pick_image": {
-        "name": "Bild wählen"
+        "name": "Objektkarte"
       }
     },
     "light": {
@@ -532,7 +532,7 @@
         "name": "Werkzeugmodul",
         "state": {
           "none": "Nicht montiert",
-          "cutter": "Schneider",
+          "cutter": "Schneidmodul",
           "laser10": "Laser (10W)",
           "laser40": "Laser (40 W)"
         }
@@ -556,10 +556,10 @@
         "name": "Temperatur der Düse"
       },
       "aux_fan_speed": {
-        "name": "Bauteillüfterdrehzahl"
+        "name": "Drehzahl des Aux-Lüfters"
       },
       "cooling_fan_speed": {
-        "name": "Druckkopflüfterdrehzahl"
+        "name": "Bauteillüfterdrehzahl"
       },
       "chamber_fan_speed": {
         "name": "Druckraumlüfterdrehzahl"
@@ -602,7 +602,7 @@
           "inspecting_first_layer": "Inspektion der ersten Schicht",
           "identifying_build_plate_type": "Identifizierung der Bauplatte",
           "calibrating_micro_lidar": "Kalibrierung des Mikro-Lidars",
-          "homing_toolhead": "Werkzeugkopf wird in die Mitte bewegt",
+          "homing_toolhead": "Druckkopf fährt zur Referenzposition",
           "cleaning_nozzle_tip": "Reinigung der Düsenspitze",
           "checking_extruder_temperature": "Kontrolle der Extrudertemperatur",
           "paused_user": "Der Druckvorgang wurde vom Benutzer angehalten",
@@ -615,7 +615,7 @@
           "filament_loading": "Filamentbeladung",
           "calibrating_motor_noise": "Motorgeräusch kalibrieren",
           "paused_ams_lost": "Pausiert wegen AMS-Verlust",
-          "paused_low_fan_speed_heat_break": "Pausiert aufgrund der niedrigen Lüftergeschwindigkeit der Hitzepause",
+          "paused_low_fan_speed_heat_break": "Pausiert: Hotend-Lüfter dreht zu langsam",
           "paused_chamber_temperature_control_error": "Aufgrund eines Fehlers bei der Kammertemperaturregelung angehalten",
           "cooling_chamber": "Kühlkammer",
           "paused_user_gcode": "Angehalten durch vom Benutzer hinzugefügte Gcode-Pauseanweisung",
@@ -630,7 +630,7 @@
           "check_absolute_accuracy_after_calibration": "Überprüfen Sie den Drucker die absolute Genauigkeit nach der Kalibrierung",
           "calibrate_nozzle_offset": "Düsenversetztkalibrierung",
           "bed_level_high_temperature": "Hochtemperatur -Auto -Bettniveau",
-          "check_quick_release": "Auto -Check: Schnellverkaufshebel",
+          "check_quick_release": "Automatische Prüfung: Schnellspannhebel",
           "check_door_and_cover": "Autoscheck: Tür und obere Abdeckung",
           "laser_calibration": "Laserkalibrierung",
           "check_plaform": "Autoscheck: Plattform",
@@ -659,7 +659,7 @@
           "preparing_ams": "AMS vorbereiten",
           "measuring_rotary_attachment": "Messdrehaufsatz",
           "moving_toolhead_above_purge_chute": "Beweglicher Werkzeugkopf über dem Spülschacht",
-          "cooling_nozzle": "Kühldüse",
+          "cooling_nozzle": "Düse wird gekühlt",
           "moving_toolhead_to_center_of_heatbed": "Bewegen des Werkzeugkopfes in die Mitte des Heizbetts",
           "active_arc_fitting": "Aktive Lichtbogenanpassung",
           "hotend_type_detection": "Erkennung des Hotend-Typs",
@@ -1003,7 +1003,7 @@
         }
       },
       "hotend_rack_holder_state": {
-        "name": "Inhaberstaat",
+        "name": "Status des Hotend-Halters",
         "state": {
           "unknown": "Unbekannt",
           "idle": "Leerlauf",
@@ -1014,7 +1014,7 @@
           "unlock_hotend": "Hotend entsperren",
           "lift_hotend_rack": "Hebegestell",
           "place_hotend": "Hotend platzieren",
-          "pick_hotend": "Hotend auswählen",
+          "pick_hotend": "Hotend wird aufgenommen",
           "lock_hotend": "Hotend sperren"
         }
       },
@@ -1051,7 +1051,7 @@
             "name": "Maximale Temperatur"
           },
           "wear": {
-            "name": "Tragen"
+            "name": "Verschleiß"
           },
           "status": {
             "name": "Status",
@@ -1081,7 +1081,7 @@
         }
       },
       "secondary_aux_fan_speed": {
-        "name": "Geschwindigkeit des sekundären Hilfslüfters"
+        "name": "Drehzahl des sekundären Aux-Lüfters"
       },
       "drying_temperature": {
         "name": "Trocknungstemperatur"
@@ -1107,7 +1107,7 @@
         "state": {
           "idle": "Leerlauf",
           "changing_filament": "Filament wechseln",
-          "heating_nozzle": "Heizdüse",
+          "heating_nozzle": "Düse wird aufgeheizt",
           "cutting_filament": "Filament schneiden",
           "pulling_back_filament": "Zurückziehen des aktuellen Filaments",
           "pushing_new_filament": "Neues Filament einschieben",
@@ -1123,7 +1123,7 @@
         }
       },
       "track_switch_input": {
-        "name": "Gleisschalter-Eingabe {input_number}",
+        "name": "Eingang {input_number} der Filamentweiche",
         "state": {
           "left": "Linke Düse",
           "right": "Rechte Düse",
@@ -1135,17 +1135,17 @@
         "state": {
           "left": "Links",
           "right": "Rechts",
-          "track_switch": "Gleisweiche"
+          "track_switch": "Filamentweiche"
         }
       },
       "part_fan_speed": {
-        "name": "Teilweise Lüftergeschwindigkeit"
+        "name": "Bauteillüfterdrehzahl"
       },
       "left_aux_fan_speed": {
-        "name": "Geschwindigkeit des linken Zusatzlüfters"
+        "name": "Drehzahl des linken Aux-Lüfters"
       },
       "right_aux_fan_speed": {
-        "name": "Rechte Aux-Lüftergeschwindigkeit"
+        "name": "Drehzahl des rechten Aux-Lüfters"
       },
       "exhaust_fan_speed": {
         "name": "Geschwindigkeit des Abluftventilators"
@@ -1160,7 +1160,7 @@
             "name": "Zonen-ID"
           },
           "slots": {
-            "name": "Spielautomaten"
+            "name": "AMS-Steckplätze"
           },
           "dry_setting": {
             "name": "Trocknungseinstellung"
@@ -1177,7 +1177,7 @@
             "name": "Zonen-ID"
           },
           "slots": {
-            "name": "Spielautomaten"
+            "name": "AMS-Steckplätze"
           },
           "dry_setting": {
             "name": "Trocknungseinstellung"
@@ -1244,7 +1244,7 @@
             "name": "Farbe"
           },
           "wear": {
-            "name": "Tragen"
+            "name": "Verschleiß"
           },
           "status_raw": {
             "name": "Status (roh)"
@@ -1281,7 +1281,7 @@
         "name": "Der Laser-Check-in bleibt bestehen"
       },
       "print_elapsed_time": {
-        "name": "Verstrichene Zeit drucken"
+        "name": "Verstrichene Druckzeit"
       },
       "last_timelapse": {
         "name": "Letzter Zeitraffer"
@@ -1291,7 +1291,7 @@
         "state": {
           "idle": "Leerlauf",
           "changing_filament": "Filament wechseln",
-          "heating_nozzle": "Heizdüse",
+          "heating_nozzle": "Düse wird aufgeheizt",
           "cutting_filament": "Filament schneiden",
           "pulling_back_filament": "Zurückziehen des aktuellen Filaments",
           "pushing_new_filament": "Neues Filament einschieben",
