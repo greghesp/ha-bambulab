@@ -996,7 +996,7 @@
             "module_name": "",
             "name": "ota",
             "product_name": "Bambu Lab P3C",
-            "sn": "TEST-P3C",
+            "sn": "MOCK-P3C",
             "sw_ver": "01.01.03.00",
             "visible": true
           },
@@ -1007,7 +1007,7 @@
             "module_name": "N11A",
             "name": "n11a",
             "product_name": "AMS 3P",
-            "sn": "TEST-AMS3P",
+            "sn": "MOCK-P3C-AMS3P",
             "sw_ver": "02.00.32.82",
             "visible": true
           },
