@@ -4,13 +4,13 @@ description: Setting up the Integration
 previous: /installation
 previousTitle: Installation
 next: /entities
-nextTitle: Features
+nextTitle: Entities
 ---
 
 For configuration, you'll ideally use your Bambu Credentials for the simplest setup and the most features as some sensors are supported by data from your Bambu cloud account print history.
 You can also, optionally, provide the printer's local IP address to enable the more efficient and reliable direct to printer connection for the printer sensor data and to enable the P1/A1 chamber image support.
 
-However, the Bambu cloud connection doesn't support passwordless social media accounts at this time. And it obviously does not support printers explicitly set to Lan Only Mode.
+However, the Bambu cloud connection does not support printers explicitly set to Lan Only Mode.
 
 Accounts with two factor authentication are supported. Bambu's 2FA endpoint is currently rejecting requests from the integration, so if your authenticator code is refused a verification code is sent to your email or phone instead - enter that when prompted.
 
@@ -20,11 +20,22 @@ Accounts with two factor authentication are supported. Bambu's 2FA endpoint is c
 2. Open 'Devices & Services' (second item in the list).
 3. Click the 'Add Integration' button (typically in the bottom right).
 4. In the pop up search for 'Bambu Lab' and select.
-6. Follow the steps as prompted in the wizard.
+5. Choose how to connect: **Bambu Lab cloud** or **Lan Mode**, then follow the steps as prompted in the wizard.
+
+The same wizard also adds the account-level entries described below: **MakerWorld Account Statistics** and **Filament Inventory**.
+
+### Bambu Lab Cloud Setup
+
+Choose your **Account region** (Asia Pacific, China, Europe, North America or Other), then enter the email address or phone number of your Bambu account and your password. If you have already set up another printer, its working credentials are offered instead, listed by email address, so you don't need to log in again.
+
+After you pick the printer, the **Setup Local Connection** step asks for its local IP address and access code. The integration checks that it can reach the printer, as this is needed for the camera, print history and timelapses.
+
+- **Connect directly to printer mqtt**: read the printer's data over the local network instead of through Bambu Lab cloud. This keeps working through cloud outages, but on P1 printers from firmware 01.07 Bambu Lab blocks setting temperatures and reprinting from history in this hybrid mode. See [Entities](/entities) for the controls it affects.
+- **Skip local mqtt connection test**: only if Home Assistant can't reach the printer at all. You lose the camera, print history and timelapses.
 
 ### LAN Mode Setup
 
-If you fall into any of these categories, select the Lan Mode Configuration connection option. You will need to manually provide:
+Choose **Lan Mode** if your printer is in LAN Only mode, or you don't want to use your Bambu account. You will need to manually provide:
 
 - Printer Serial Number - can be found in the printer settings or in Bambu Studio.
 - Local printer IP address - can be found in the printer network settings (LAN).
@@ -32,24 +43,52 @@ If you fall into any of these categories, select the Lan Mode Configuration conn
 
 The serial number is in the form `a1b2c3d4e5f6a1b2`, not the `3DP-000-000` identifier shown for the printers name. 
 
-Additional setup may be needed for specific entities to work:
+### Printer requirements
 
-- Camera feeds for X1 / P2S / P3C / X2D / H2 / H3 series printers - you must enable the "LAN Only Liveview" option in the LAN mode settings. It is not necessary to enable LAN mode generally to enable the "LAN Only Liveview" option. This simply enables the RTSP stream to be available locally. The camera feed will also continue to work via Bambu Studio / Bamby Handy remotely.
+Additional setup may be needed on the printer for specific entities to work, whichever way you connect:
+
+- Camera feeds for X1 / P2S / P3C /X2D / H2 / H3 series printers - you must enable the "LAN Only Liveview" option on the printer's touchscreen. It is not necessary to enable LAN mode generally to enable the "LAN Only Liveview" option. This simply enables the RTSP stream to be available locally. The camera feed will also continue to work via Bambu Studio / Bambu Handy remotely. Home Assistant raises a repair issue while it is off.
 - Cover image, Print weight, Print Bed Type - with newer firmware/printers (e.g. H2D 01.03.00.00, H2S 01.02.00.00, P2S), you must enable "Store Sent Files on External Storage" in the printer's "Print Options" settings, and use a USB drive/SD card (depending on the printer). These entities need to get the print file from the printer, but the internal storage doesn't seem to be exposed.
 
-To add account-level MakerWorld sensors, add another Bambu Lab integration entry and choose **MakerWorld account**. This option is available only when an existing printer entry has working Bambu Cloud credentials. The MakerWorld entry reuses those credentials and can be reconfigured to use another working printer entry for the same account.
+### Printer options
+
+Both connection types ask for these, and you can change them later from the printer's **Configure** dialog:
+
+| Option | Default | Notes |
+|---|---|---|
+| Number of models to cache | 100 | How many printed models (3MF files and cover images) to keep in Home Assistant for the print history. -1 for unlimited. |
+| Maximum total size of cached models | 2048 MB | The oldest models are removed once the cache is bigger than this. 0 for no size limit. |
+| Number of timelapse videos to cache | 1 | -1 for unlimited, 0 to not download timelapses. The *Timelapse downloaded* trigger needs this above 0. |
+| Current usage hours | | Optional. Starts the [Total Usage](/entities) count from the hours shown on the printer's screen. |
+
+To empty the cache straight away, use the [Clear File Cache](/actions#clear-file-cache) action.
 
 #### Advanced options
 
 Advanced options should only be used for non-standard setup.
 
-- Disable SSL verification - disabled certificate verification for MQTT, FTP and chamber camera connections to printer (unsafe).
-- Enable filament inventory - exposes a sensor with your account-level Bambu Filament Manager spool data. Requires Bambu Cloud authentication. Default: disabled.
-- Filament inventory refresh interval (minutes) - how often to poll the Bambu Cloud for updated inventory data. Default: 60 minutes.
+- **Disable SSL verification** - disables certificate verification for MQTT, FTP and chamber camera connections to the printer (unsafe).
+- **Enable firmware update support** - adds a Firmware update entity that shows the available firmware and can install it. It replaces the Firmware Update Available sensor. Default: disabled.
+
+### MakerWorld Account Statistics
+
+To add account-level MakerWorld sensors, add another Bambu Lab integration entry and choose **MakerWorld Account Statistics**. This option is available only when an existing printer entry has working Bambu Cloud credentials. The MakerWorld entry reuses those credentials and can be reconfigured to use another working printer entry for the same account. See [MakerWorld](/entities#makerworld) for its sensors.
+
+### Filament Inventory
+
+To add your Bambu Filament Manager spools, add another Bambu Lab integration entry and choose **Filament Inventory**. Like MakerWorld, it needs an existing printer entry with working Bambu Cloud credentials, and reuses them. It creates a separate Filament Inventory device; see [Filament Inventory](/entities#filament-inventory) for its sensors.
+
+The inventory is refreshed every 60 minutes. To change that, open the Filament Inventory entry's **Configure** dialog. The [Force Filament Inventory Sync](/actions#force-filament-inventory-sync) action refreshes it straight away.
+
+### External AMS heater or dryer
+
+If an AMS has an add-on heater or dryer powered from a smart plug, open the printer's **Configure** dialog and choose **External AMS heater or dryer (smart plug)**. See [External AMS heater or dryer](/entities#external-ams-heater-or-dryer-sunlu-ams-heater-eibos-series-x) for how it works.
 
 ### Setup using Bambu Cloud w/ OAuth
 
-If you signed up using any OAuth method, you need to set a password for your Bambu Cloud account:
+If you signed up using any OAuth method (Google, Apple or Facebook), you don't need a password. Enter the email address of your Bambu account, leave the password blank, and enter the verification code Bambu emails you.
+
+Your Google, Apple or Facebook password will not work, as it is not the password of your Bambu account. If you would rather log in with a password, set one first:
 
 - Login to the Bambu mobile app using OAuth.
 - Tap the person icon at the bottom right.

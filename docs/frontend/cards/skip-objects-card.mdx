@@ -1,0 +1,25 @@
+---
+title: Skip Objects Card
+---
+
+# Skip Objects Card
+
+## Description
+
+Just the **skip objects** button from the [Print Control Card](/frontend/cards/print-control-card), as its own small card. Use it to put skip objects into your own dashboard layout. It fits in a single grid cell, and you can restyle it with card-mod.
+
+Tap it to open the same skip objects dialog. The button is greyed out when skipping isn't possible: no print running, fewer than two objects on the plate, or MQTT encryption on without LAN developer mode.
+
+## Configuration
+
+All configuration can be done via the dashboard card editor. The YAML below is for reference.
+
+```yaml
+type: custom:ha-bambulab-skip_objects-card
+printer: <printer device id>
+name: Skip Objects          # optional
+icon: mdi:debug-step-over   # optional
+show_name: true             # optional, false for an icon-only button
+```
+
+To skip objects from an automation, use the [Skip Objects action](/actions#skip-objects).

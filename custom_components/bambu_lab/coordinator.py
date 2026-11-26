@@ -58,6 +58,7 @@ from .pybambu.const import (
     AMS_MODELS,
     AMS_DRYING_MODELS,
     AMS_MODELS_AND_EXTERNAL_SPOOL,
+    AMS_PLACEHOLDER_SERIALS,
     Features,
 )
 from .pybambu.commands import (
@@ -74,6 +75,9 @@ from .pybambu.commands import (
     RETRY_LOAD_FILAMENT_TEMPLATE,
     DONE_LOAD_FILAMENT_TEMPLATE
 )
+
+# How long unloading the integration waits for a reinitialization pass to stop, in seconds.
+REINITIALIZE_STOP_TIMEOUT = 30
 
 
 def file_cache_dir(hass: HomeAssistant, serial: str) -> Path:
@@ -107,6 +111,11 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         self._updatedDevice = False
         self._shutdown = False
+        # Whether the control entities have been set up from the printer's data.
+        self._controls_set_up = False
+        # Reinitialization passes must not overlap, see _request_reinitialize.
+        self._reinitialize_requested = False
+        self._reinitialize_lock = asyncio.Lock()
         # Guards the access denied recovery so one failure episode triggers at most one
         # cloud lookup. Reset once the printer connects successfully again.
         self._access_denied_handled = False
@@ -163,12 +172,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
 
         elif event == "event_printer_live_view_enabled":
             self._clear_live_view_disabled_issue()
-            # Chamber-image printers give up connecting while live view is off, so kick the
-            # image thread again. No-op for RTSP printers or if the thread is still running.
+            # The image thread keeps retrying while live view is off. This only matters if it
+            # isn't running at all, and is a no-op for RTSP printers.
             self.client.start_camera()
         
         elif event == "event_printer_mqtt_encryption_enabled":
-            self._report_encryption_enabled_issue()
+            self._handle_encryption_enabled()
 
         elif event == "event_printer_mqtt_encryption_disabled":
             self._handle_encryption_disabled()
@@ -176,6 +185,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif event == "event_printer_ready":
             # A successful connection ends any access denied episode.
             self._access_denied_handled = False
+            self._controls_set_up = True
             self._printer_ready()
 
         elif event == "event_light_update":
@@ -227,6 +237,13 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         elif event == "event_timelapse_downloaded":
             self._update_data()
             self._publish_timelapse_downloaded()
+
+        elif event == "event_print_layer_changed":
+            # Refresh the sensors first so automations see the new layer on them too.
+            self._update_data()
+            print_job = self.get_model().print_job
+            self.PublishDeviceTriggerEvent(
+                event, layer=print_job.current_layer, total_layers=print_job.total_layers)
 
         # event_print_started
         # event_print_finished
@@ -329,10 +346,12 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         try:
-            if data.get('service') == 'clear_file_cache':
-                # Local file deletion only: it doesn't talk to the printer, so it isn't blocked by
-                # MQTT encryption, and it runs off the event loop.
-                result = await self._service_call_clear_file_cache(data)
+            if data.get("service") in ("clear_file_cache", "delete_cached_file"):
+                # Cache deletion is local and is not blocked by MQTT encryption.
+                if data.get("service") == "clear_file_cache":
+                    result = await self._service_call_clear_file_cache(data)
+                else:
+                    result = await self._service_call_delete_cached_file(data)
             else:
                 result = self._run_service_call(data)
         except Exception:
@@ -412,6 +431,21 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         if file_type in (CLEAR_FILE_CACHE_TIMELAPSE, CLEAR_FILE_CACHE_ALL):
             await print_job.async_clear_timelapse_files()
         return True
+
+    async def _service_call_delete_cached_file(self, data: dict) -> bool:
+        relative_path = data.get("path")
+        if not isinstance(relative_path, str) or not relative_path:
+            LOGGER.error("delete_cached_file: missing required path")
+            return False
+
+        result = await self.delete_cached_file(relative_path)
+        if not result["success"]:
+            LOGGER.warning(
+                "delete_cached_file: could not delete '%s': %s",
+                relative_path,
+                result["error"],
+            )
+        return result["success"]
 
     def _service_call_skip_objects(self, data: dict):
         # All command templates are deep-copied before mutation - filling in the shared
@@ -912,13 +946,53 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                 dev_reg.async_update_device(hadevice.id, sw_version=new_sw_ver, hw_version=new_hw_ver, serial_number=self.config_entry.data["serial"])
                 self._updatedDevice = True
 
+    def _request_reinitialize(self):
+        """Reinitialize the sensors, after the pass already in progress if there is one.
+
+        A reconnecting printer can fire event_printer_ready several times in quick succession.
+        Adding and removing an RTSP camera awaits go2rtc, so overlapping passes can remove it
+        while another pass is still adding it. That leaves behind a camera state without a
+        registry entry, and the next pass then registers the camera under a new numbered
+        entity ID (#2337). Requests made during a pass share a single follow-up pass, which is
+        needed as the pass in progress may have already read the model."""
+        self._reinitialize_requested = True
+        self.hass.async_create_task(self._run_requested_reinitializes())
+
+    async def _run_requested_reinitializes(self):
+        async with self._reinitialize_lock:
+            if not self._reinitialize_requested or self._shutdown:
+                # An earlier pass already covered this request.
+                return
+            self._reinitialize_requested = False
+            await self._reinitialize_sensors()
+
+    async def async_stop_reinitialize(self):
+        """Stop reinitializing sensors and wait for a pass in progress to stop.
+
+        Call before unloading the platforms, as a pass must not overlap that either."""
+        self._shutdown = True
+        try:
+            async with asyncio.timeout(REINITIALIZE_STOP_TIMEOUT):
+                async with self._reinitialize_lock:
+                    pass
+        except TimeoutError:
+            # Don't block the unload forever: the pass may itself be waiting for the config
+            # entry setup lock, which Home Assistant holds during an unload.
+            LOGGER.warning("Timed out waiting for sensor reinitialization to stop")
+
     async def _reinitialize_sensors(self):
         LOGGER.debug("_reinitialize_sensors START")
         LOGGER.debug("async_forward_entry_unload")
         for platform in PLATFORMS:
             await self.hass.config_entries.async_forward_entry_unload(self.config_entry, platform)
+        if self._shutdown:
+            LOGGER.debug("_reinitialize_sensors stopped: integration is unloading")
+            return
         LOGGER.debug("async_forward_entry_setups")
         await self.hass.config_entries.async_forward_entry_setups(self.config_entry, PLATFORMS)
+        if self._shutdown:
+            LOGGER.debug("_reinitialize_sensors stopped: integration is unloading")
+            return
         LOGGER.debug("_reinitialize_sensors DONE")
 
         # Versions may have changed so update those now that the device and sensors are ready.
@@ -977,14 +1051,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             # This device is associated with this printer.
             is_known_ams = device.model in ('AMS', 'AMS Lite', 'AMS 2 Pro', 'AMS HT')
             is_placeholder_ams = (
-                device.model == 'Unknown'
-                and (DOMAIN, "") in device.identifiers
-                and (device.name or "").startswith(f"{self.config_entry.data['device_type']}_{self.config_entry.data['serial']}_AMS_")
+                device.model in ('Unknown', *AMS_MODELS)
+                and any((DOMAIN, serial) in device.identifiers for serial in AMS_PLACEHOLDER_SERIALS)
             )
             if is_known_ams or is_placeholder_ams:
                 # push_status can create an AMS placeholder before version metadata is
-                # available. Older versions registered that placeholder with an empty
-                # identifier; always discard it so the real serial can own the device.
+                # available. Older versions registered that placeholder with an identifier
+                # that isn't a serial; always discard it so the real serial can own the device.
+                # Every printer used the same identifier, so the device is shown under all of
+                # them, named after whichever registered it last. HA 2026.8 split it into one
+                # device per printer, all with that name, so the name doesn't say whose it is.
                 ams_serial = list(device.identifiers)[0][1]
                 if is_placeholder_ams or (ams_identities_resolved and ams_serial not in existing_ams_devices):
                     LOGGER.debug(f"Found stale attached AMS with serial {ams_serial}")
@@ -1002,7 +1078,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     dev_reg.async_remove_device(device.id)
 
         # And now we can reinitialize the sensors, which will trigger device creation as necessary.
-        self.hass.async_create_task(self._reinitialize_sensors())
+        self._request_reinitialize()
 
     def get_local_media_url(self, file_path: str | None) -> str | None:
         """Return the /local/ URL for a file under the HA www folder, or None if it isn't served."""
@@ -1030,7 +1106,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
         LOGGER.debug(f"BUS EVENT: event_timelapse_downloaded: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
 
-    def PublishDeviceTriggerEvent(self, event: str):
+    def PublishDeviceTriggerEvent(self, event: str, **extra_data):
         hadevice = self.get_ha_printer_device()
         if hadevice is None:
             # Events can arrive during initial connect, before the device entry exists.
@@ -1041,6 +1117,7 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
             "device_id": hadevice.id,
             "name": self.config_entry.options.get('name', ''),
             "type": event,
+            **extra_data,
         }
         LOGGER.debug(f"BUS EVENT: {event}: {event_data}")
         self._hass.bus.async_fire(f"{DOMAIN}_event", event_data)
@@ -1315,6 +1392,16 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     def _report_encryption_enabled_issue(self, force: bool = False):
         self._report_generic_issue("mqtt_encryption_enabled", force)
 
+    def _handle_encryption_enabled(self):
+        self._report_encryption_enabled_issue()
+        if not self._controls_set_up:
+            # The requirement was there at startup: the setup that follows skips the controls.
+            return
+        # The printer started requiring signed MQTT commands (developer mode turned off), so the
+        # existing control entities no longer work. Set up the entities again without them.
+        LOGGER.info("Printer now requires signed MQTT commands. Removing the controls.")
+        self._hass.async_create_task(self._reinitialize_sensors())
+
     def _handle_encryption_disabled(self):
         # The printer stopped requiring signed MQTT commands (developer mode turned on).
         # Control entities are only created at setup when signing isn't required, so
@@ -1454,25 +1541,43 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
     @staticmethod
     def _cache_sidecar_paths(file_path: Path, file_type: str) -> List[Path]:
         return [file_path.with_suffix(extension) for extension in BambuDataUpdateCoordinator._cache_sidecar_extensions(file_type)]
-    
-    async def delete_cached_print_file(self, relative_path: str) -> Dict[str, Any]:
-        """Delete one cached 3MF and its related print sidecars."""
+
+    async def delete_cached_file(self, relative_path: str) -> dict[str, Any]:
+        """Delete one cached print model or timelapse and its sidecars."""
+        if not isinstance(relative_path, str) or not relative_path:
+            return {"success": False, "error": "Invalid file cache path"}
+
         cache_root = Path(self.get_file_cache_directory()).resolve()
         requested_path = Path(relative_path)
-        if requested_path.is_absolute() or ".." in requested_path.parts or not requested_path.parts or requested_path.parts[0] != "prints":
-            return {"success": False, "error": "Invalid print cache path"}
-        if requested_path.suffix.lower() != ".3mf":
-            return {"success": False, "error": "Only cached 3MF print files can be deleted"}
+        if (
+            requested_path.is_absolute()
+            or ".." in requested_path.parts
+            or not requested_path.parts
+            or requested_path.parts[0] not in ("prints", "timelapse")
+        ):
+            return {"success": False, "error": "Invalid file cache path"}
+
+        file_type = requested_path.parts[0]
+        allowed_extensions = {
+            "prints": {".3mf"},
+            "timelapse": {".mp4", ".avi", ".mov"},
+        }
+        if requested_path.suffix.lower() not in allowed_extensions[file_type]:
+            return {"success": False, "error": "Unsupported cached file type"}
 
         file_path = cache_root / requested_path
         try:
             file_path.resolve().relative_to(cache_root)
         except ValueError:
-            return {"success": False, "error": "Invalid print cache path"}
+            return {"success": False, "error": "Invalid file cache path"}
         if not file_path.is_file():
-            return {"success": False, "error": "Cached print file not found"}
+            return {"success": False, "error": "Cached file not found"}
 
-        paths = [file_path, *self._cache_sidecar_paths(file_path, "prints"), Path(f"{file_path}.part")]
+        paths = [
+            file_path,
+            *self._cache_sidecar_paths(file_path, file_type),
+            Path(f"{file_path}.part"),
+        ]
         deleted_count = 0
         try:
             for path in paths:
@@ -1480,9 +1585,10 @@ class BambuDataUpdateCoordinator(DataUpdateCoordinator):
                     path.unlink()
                     deleted_count += 1
         except OSError as err:
-            LOGGER.error("Error deleting cached print file %s: %s", file_path, err)
+            LOGGER.error("Error deleting cached file %s: %s", file_path, err)
             return {"success": False, "error": str(err)}
 
+        LOGGER.info("Deleted cached file %s (%d files)", file_path, deleted_count)
         return {"success": True, "deleted_count": deleted_count}
 
     async def clear_file_cache(self, file_type: str = 'all') -> Dict[str, Any]:

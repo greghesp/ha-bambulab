@@ -1,0 +1,31 @@
+---
+title: Error Card
+---
+
+# Error Card
+
+## Description
+
+The selected printers' current errors: the print error, if there is one, then each HMS error, most severe first. Fatal errors show red, serious ones amber and the rest blue. Each HMS error links to its page on the Bambu Lab wiki.
+
+When multiple printers are selected, errors are grouped under the names from their printer name sensors, falling back to their device names when a sensor is unavailable.
+
+Turn off **Show the card when there are no errors** to have the card appear only while at least one selected printer has an error. It stays visible while you edit the dashboard so you can still find it.
+
+## Configuration
+
+All configuration can be done via the dashboard card editor. The YAML below is for reference.
+
+```yaml
+type: custom:ha-bambulab-error-card
+printers:
+  - <printer device id>
+  - <another printer device id>
+title: Printer errors     # optional
+show_when_clear: true     # false hides the card while there are no errors
+show_codes: true          # show the HMS or print error code under each message
+```
+
+Existing single-printer configurations using `printer: <printer device id>` continue to work. Use `printers` to select more than one device.
+
+To act on errors in automations instead, use the [HMS error and Print error device triggers](/device-triggers).

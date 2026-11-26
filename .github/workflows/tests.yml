@@ -6,16 +6,37 @@ on:
 
 jobs:
   pytest:
+    name: pytest (Home Assistant ${{ matrix.homeassistant }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # minimum: the version in hacs.json, so the floor we advertise is tested.
+        # latest: the newest release on PyPI.
+        homeassistant: [minimum, latest]
     steps:
       - uses: actions/checkout@v7
 
+      # Works out the Home Assistant version and the oldest Python it supports
+      # (from PyPI's requires_python), so neither is hard-coded here.
+      - name: Resolve Home Assistant and Python versions
+        id: ha
+        run: python3 scripts/ha_min_version.py ci-env ${{ matrix.homeassistant }}
+
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
+          python-version: ${{ steps.ha.outputs.python }}
+
+      - uses: astral-sh/setup-uv@v10.4.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: tests/requirements*.txt
 
       - name: Install test dependencies
-        run: pip install -r tests/requirements.txt
+        run: >-
+          uv pip install --system
+          -r tests/requirements_ha.txt
+          "homeassistant==${{ steps.ha.outputs.version }}"
 
       - name: Run unit tests
-        run: python -m pytest tests/pybambu tests/test_file_cache.py -v
+        run: python -m pytest tests -v

@@ -727,6 +727,105 @@ class TestPrintJob(unittest.TestCase):
                 self.assertFalse(sidecar.exists())
             self.assertTrue(new_model.exists())
 
+    def _make_cached_model(self, directory, name, model_bytes, gcode_bytes, age_seconds):
+        model = Path(directory) / f"{name}.3mf"
+        gcode = Path(directory) / f"{name}.gcode"
+        model.write_bytes(b"m" * model_bytes)
+        gcode.write_bytes(b"g" * gcode_bytes)
+        mtime = time.time() - age_seconds
+        os.utime(model, (mtime, mtime))
+        return model, gcode
+
+    def test_prune_enforces_size_limit_including_sidecars(self):
+        """Old models are pruned once the total size, counting sidecars, passes max_bytes."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            newest = self._make_cached_model(temp_dir, "newest", 300, 300, 10)
+            middle = self._make_cached_model(temp_dir, "middle", 300, 300, 20)
+            oldest = self._make_cached_model(temp_dir, "oldest", 300, 300, 30)
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=100, extra_extensions=['.gcode'], max_bytes=1500)
+
+            for path in newest + middle:
+                self.assertTrue(path.exists(), path)
+            for path in oldest:
+                self.assertFalse(path.exists(), path)
+
+    def test_prune_size_limit_always_keeps_newest_model(self):
+        """A single model larger than the limit is kept so the active print keeps its model."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            newest = self._make_cached_model(temp_dir, "newest", 2000, 2000, 10)
+            older = self._make_cached_model(temp_dir, "older", 10, 10, 20)
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=100, extra_extensions=['.gcode'], max_bytes=1000)
+
+            for path in newest:
+                self.assertTrue(path.exists(), path)
+            for path in older:
+                self.assertFalse(path.exists(), path)
+
+    def test_prune_size_limit_applies_when_count_is_unlimited(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            newest = self._make_cached_model(temp_dir, "newest", 600, 0, 10)
+            oldest = self._make_cached_model(temp_dir, "oldest", 600, 0, 20)
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=-1, extra_extensions=['.gcode'], max_bytes=1000)
+
+            self.assertTrue(newest[0].exists())
+            self.assertFalse(oldest[0].exists())
+
+    def test_prune_without_size_limit_is_count_only(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            models = [self._make_cached_model(temp_dir, f"m{i}", 5000, 5000, 10 * (i + 1)) for i in range(3)]
+
+            self.print_job._prune_old_files(
+                temp_dir, ['.3mf'], keep=2, extra_extensions=['.gcode'])
+
+            self.assertTrue(models[0][0].exists())
+            self.assertTrue(models[1][0].exists())
+            self.assertFalse(models[2][0].exists())
+            self.assertFalse(models[2][1].exists())
+
+    def test_prune_print_history_files_uses_client_size_limit(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self.client.cache_path = temp_dir
+            self.client._test_mode = False
+            self.client._print_cache_count = 100
+            self.client._print_cache_max_mb = 1
+            cache_dir = Path(temp_dir) / "prints" / "cache"
+            cache_dir.mkdir(parents=True)
+            newest = self._make_cached_model(cache_dir, "newest", 700 * 1024, 0, 10)
+            oldest = self._make_cached_model(cache_dir, "oldest", 700 * 1024, 0, 20)
+
+            self.print_job.prune_print_history_files()
+
+            self.assertTrue(newest[0].exists())
+            self.assertFalse(oldest[0].exists())
+
+    def test_prune_print_history_keeps_only_newest_gcode_regardless_of_model_count(
+        self,
+    ):
+        for keep, expected_gcode_count in ((0, 0), (1, 1), (3, 1)):
+            with self.subTest(keep=keep), tempfile.TemporaryDirectory() as temp_dir:
+                self.client.cache_path = temp_dir
+                cache_dir = Path(temp_dir) / "prints" / "cache"
+                cache_dir.mkdir(parents=True)
+                models = [
+                    self._make_cached_model(cache_dir, name, 100, 100, age)
+                    for name, age in (("old", 30), ("middle", 20), ("new", 10))
+                ]
+
+                self.print_job._prune_print_history(keep=keep)
+
+                self.assertEqual(
+                    sum(model.exists() for model, _ in models), min(keep, len(models))
+                )
+                self.assertEqual(
+                    sum(gcode.exists() for _, gcode in models), expected_gcode_count
+                )
+
     def test_clear_print_history_deletes_every_model_and_sidecar(self):
         """Clearing removes all cached prints, even when pruning is disabled (#1585)."""
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -1318,6 +1417,55 @@ class TestAMSList(unittest.TestCase):
 
         self.ams_list.print_update({"ams_status": 0})
         self.assertEqual(self.ams_list.status, "idle")
+
+    def _push_extruder(self, snow, star, **fields):
+        data = {"device": {"extruder": {"state": 1, "info": [{"id": 0, "snow": snow, "star": star}]}}, **fields}
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+
+    def test_active_tray_on_single_nozzle_while_a_print_starts(self):
+        # snow/star as an X1C with one AMS reported them from idle to feeding. The external spool has
+        # filament set but isn't feeding, so it must not show up as the active tray (#1963)
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        self._push_extruder(snow=0xFFFF, star=0xFF)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertEqual(self.ams_list.target_ams_index, 255)
+
+        self._push_extruder(snow=0xFFFF, star=0xFFFF)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertEqual(self.ams_list.target_ams_index, 255)
+
+        self._push_extruder(snow=0xFFFF, star=0)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertEqual(self.ams_list.target_ams_index, 0)
+
+        self._push_extruder(snow=0, star=0)
+        self.assertIs(self.ams_list.active_tray, self.ams_list.data[0].tray[0])
+
+    def test_extruder_bare_255_is_no_tray_rather_than_ams_0(self):
+        # The capture is idle with nothing loaded: snow 0xFFFF and star 0xFF
+        data = self.multi_ams_data['push_all']
+        self.client._device.extruder.print_update(data)
+        self.ams_list.print_update(data)
+        self.assertEqual(self.ams_list.target_ams_index, 255)
+
+        self._push_extruder(snow=0xFF, star=0xFF)
+        self.assertIsNone(self.ams_list.active_tray)
+        self.assertFalse(self.ams_list.data[0].active)
+
+    def test_ams_status_unload_is_not_shown_on_ams_0(self):
+        self.ams_list.info_update(self.multi_ams_data['get_version'])
+
+        # Unload AMS 1 slot 2, with nothing to load afterwards
+        self._push_extruder(snow=0x0101, star=0xFF, ams_status=0x0103)
+        self.assertEqual(self.ams_list.data[1].status, "cutting_filament")
+        self.assertEqual(self.ams_list.data[0].status, "idle")
+
+        # Unload the external spool: no AMS unit is involved
+        self._push_extruder(snow=0xFF00, star=0xFF, ams_status=0x0103)
+        for index in self.ams_list.data:
+            self.assertEqual(self.ams_list.data[index].status, "idle")
 
     def test_ams_status_printer_level_without_any_ams(self):
         # Printers with only an external spool still get the step

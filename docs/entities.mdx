@@ -11,12 +11,15 @@ nextTitle: Device Triggers
 
 ## Fans
 
-| Sensor        | Notes             |
-| ------------- | ----------------- |
-| Aux           |                   |
-| Chamber       | Not on A1/A1 Mini |
-| Cooling       |                   |
-| Secondary aux | P2S, P3C, X2D, H3C |
+Each fan has a fan entity you can switch and set the speed of, and a fan speed sensor. The fan entities are only created when the printer accepts unsigned MQTT commands.
+
+| Fan           | Notes                       |
+| ------------- | --------------------------- |
+| Aux           | Not on A1/A1 Mini/A2L       |
+| Chamber       | Not on A1/A1 Mini/A2L       |
+| Cooling       |                             |
+| Secondary aux | P2S, P3C, X2D, H3C          |
+| Heatbreak     | Fan speed sensor only       |
 
 <Info>On the X2D these are named to match the printer screen: Part fan, Left aux fan, Right aux fan (secondary aux) and Exhaust fan (chamber).</Info>
 
@@ -40,6 +43,13 @@ nextTitle: Device Triggers
 | Current Layer     |                                                    |
 | Total Layer Count |                                                    |
 | Print Progress    |                                                    |
+| Print Elapsed Time |                                                   |
+| Print Type        | Where the print came from, e.g. cloud, local or idle |
+| Printable Objects | Number of objects on the plate. `objects` attribute: their IDs and names, for the skip objects action |
+| Skipped Objects   | Number of objects skipped. `objects` attribute: their IDs |
+| Model Download    | Progress of the printer downloading the model, in percent |
+| Gcode Filename    | File the printer is printing                       |
+| Gcode File Downloaded | File the integration downloaded for the current print |
 | Print Weight      | With Bambu credentials or when loaded from printer |
 | Print Length      | With Bambu credentials or when loaded from printer |
 | Print Bed Type    | Bed choice in the print job                        |
@@ -49,8 +59,10 @@ nextTitle: Device Triggers
 | Current Stage     | `planned_stages`, `step`, `total_steps` attributes: the start-up stages the printer plans to run and the 1-based position of the current one |
 | Print Status      |                                                    |
 | Task Name         | `ams_mapping` attribute: AMS unit id and tray per slicer filament |
-| Cover Image       | With Bambu credentials or when loaded from printer |
-| Total Usage Hours | \* See Note                                        |
+| Cover Image       | Image entity. With Bambu credentials or when loaded from printer |
+| Pick Image        | Image entity. The plate's object map from the 3MF, used to pick objects to skip |
+| Last Timelapse    | Name of the most recent timelapse the integration saved. `path` attribute: where it was saved |
+| Total Usage       | Diagnostic. Running count of total usage hours. \* See Note |
 
 <Info>
 \* This is a running estimate that will be imprecise. Starting hours can be read of the printer screen and provided during initial printer setup or updated later via the configuration flow. And the integration must be running when a print completes to update the value. For non-X1 printers, if the integration is restarted mid-print and Bambu cloud connection isn't setup, the usage hours will not be added as print start time won't be known, unless the integration was running when that print started (see below). It's expected that you'll need to adjust this value occasionally to fix drift from the value the printer itself calculates.
@@ -71,6 +83,7 @@ If neither is available, for example when a multi-filament print was started whi
 | Nozzle Diameter(s)       | Three on dual-nozzle printers (left, right, and active nozzle) |
 | Nozzle Type(s)           | Three on dual-nozzle printers (left, right, and active nozzle) |
 | Active Nozzle            | Left or right. Dual nozzle printers only |
+| Printer Name             | The name the printer reports |
 | Speed Profile            |       |
 | Timelapse Active         |       |
 | Extruder Filament Status | Also left and right on dual-nozzle printers |
@@ -80,34 +93,40 @@ If neither is available, for example when a multi-filament print was started whi
 | Tool Module State        | Current mounted tool (H2D exclusive): none, laser, cutter or unavailable |
 | Laser/Cutter Material    | Material selected for the current or last laser/cutter job |
 | Laser Check-in Remaining | Seconds until the printer pauses unless you check in at the printer. Only available while lasering a material that needs check-ins (e.g. acrylic) |
+| External Storage connection, total, used, free | H3C only |
 
 
 ## Controls
 
 | Control             | Notes                                                      |
 | ------------------- | ---------------------------------------------------------- |
-| Chamber Light       |                                                            |
+| Chamber Light       | Named Camera Light on the A1 Mini                          |
 | Heatbed Light       | H2 series and H3C; initial state unknown until a command is observed |
-| Pause               |                                                            |
-| Resume              |                                                            |
-| Stop                |                                                            |
-| Bed temperature     | On P1/A1 this is not available in hybrid connection mode\* |
-| Chamber temperature | X1E/H2/H3C/X2D. Integration limit: 60°C on X1E, 65°C on the others |
-| Nozzle temperature  | On P1/A1 this is not available in hybrid connection mode\* |
-| Buzzer controls     | H2D only, allows to set one of 3 modes                     |
-| Airduct Mode        | Switch airduct modes on P2S/P3C/H2/H3C/X2D                 |
-| Allow Prompt Sound  | A1/A2L/H2/H3C/P2S/P3C/X2D                                |
+| Pause               | Unsigned MQTT only†                                        |
+| Resume              | Unsigned MQTT only†                                        |
+| Stop                | Unsigned MQTT only†                                        |
+| Force Refresh       | Button. Asks the printer for a full status update. Unsigned MQTT only† |
+| Bed temperature     | Not available in hybrid connection mode on P1 printers from firmware 01.07\*. Unsigned MQTT only† |
+| Chamber temperature | X1E/H2/H3C/X2D. Integration limit: 60°C on X1E, 65°C on the others. Same limits as bed temperature |
+| Nozzle temperature  | Same limits as bed temperature                             |
+| Printing speed      | Select: the print speed level. Unsigned MQTT only†         |
+| Buzzer              | H2 series. Three buttons: Silence, Fire alarm and Beeping. Unsigned MQTT only† |
+| Airduct Mode        | Select airduct modes on P2S/P3C/H2/H3C/X2D. Unsigned MQTT only† |
+| Prompt Sound        | A1/A2L/H2/H3C/P2S/P3C/X2D. Unsigned MQTT only†                 |
+| Camera              | Switch. Turns the integration's camera option on or off    |
+| Image Sensor Camera | Switch. P1/A1/A2L only: show the chamber image as an image entity instead of a camera |
+| Firmware Update     | Update entity. Only when firmware update support is enabled in the integration's options; it replaces the Firmware Update Available sensor |
 
-<Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer.</Info>
-<Warning>If you are running the latest X1 firmware with Bambu Authorisation, the only functional control is the Chamber Light</Warning>
+<Info>\* Hybrid connection mode is when you are connected to the local printer mqtt for a non-Lan Mode printer. The **Hybrid MQTT control blocked** diagnostic sensor shows when this applies.</Info>
+<Warning>† If your printer's firmware requires signed MQTT messages, these controls are not created. The lights, the camera switches and the Live view camera select still work.</Warning>
 
 
 ## AMS
 
 | Sensor            | Notes          |
 | ----------------- | -------------- |
-| Active tray       | If AMS present or dual nozzle |
-| Active tray index | If AMS present |
+| Active tray       | If AMS present or dual nozzle. `tray_index` attribute: the index of the active tray |
+| Active            | Binary sensor: on while this AMS is feeding the printer |
 | Drying            | AMS 2 Pro/AMS HT/AMS 3H |
 | Connected nozzle  | Dual-nozzle printers only: Left or Right. Through a Filament Track Switch, the nozzle its loaded filament is routed to, otherwise Track switch |
 
@@ -116,8 +135,8 @@ If neither is available, for example when a multi-filament print was started whi
 | --------------------- | --------------------- |
 | Humidity Index        |                       |
 | Status                | Filament change step  |
-| Humidity              | P1/P2/X1/H2 only      |
-| Temperature           | P1/P2/X1/H2 only      |
+| Humidity              | All printers except the X1E. Needs firmware 01.06.10.33 on A1, 01.07.50.18 on P1 and 01.08.50.18 on X1 |
+| Temperature           | All printers. Needs firmware 01.06.10.33 on A1 and 01.07.50.18 on P1 |
 | Remaining drying time | AMS 2 Pro/AMS HT/AMS 3H |
 | Drying temperature    | AMS 2 Pro/AMS HT only |
 | Drying duration       | AMS 2 Pro/AMS HT only |
@@ -134,10 +153,11 @@ drying binary sensors describe the whole AMS. It exposes up to nine trays.
 | Tray attributes:    | Notes      |
 | ------------------- | ---------- |
 | Color               |            |
+| Color name          | Bambu Lab's English name for the color, e.g. `Jade White`. Only for Bambu Lab filament profiles, and only when the color is one Bambu Lab lists for that filament. |
 | Empty               | `true` when no spool is in the slot, or the tray is loading / scanning (RFID motion). See note below. |
 | Unknown             | `true` when a spool is loaded but `tray_type` is not set — sensor state shows `?`, matching the printer UI. |
 | State               | Raw MQTT tray `state` integer (bitmask). Diagnostic; used internally. |
-| K Value             | P1/A1 only |
+| K Value             | P1/A1/A2L only |
 | Name                | Filament display name, `Empty`, or `?` |
 | Nozzle max temp     |            |
 | Nozzle min temp     |            |
@@ -183,7 +203,7 @@ The heater is also switched off whenever the printer is offline, the AMS humidit
 | Empty           | `true` when no filament is set on the holder. A loaded spool that isn't feeding stays `false`; see Active. |
 | Unknown         |            |
 | State           |            |
-| K Value         | P1/A1 only |
+| K Value         | P1/A1/A2L only |
 | Name            |            |
 | Nozzle max temp |            |
 | Nozzle min temp |            |
@@ -294,17 +314,20 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | Developer Lan Mode        | Does the printer have Developer Lan Mode enabled?              |
 | Enclosure Door            | X1/P2/P3C/H2/H3C/X2D                           |
 | Top Cover                 | H2 series (top glass lid)                      |
-| Firmware Update Available |                                                                |
-| Force Refresh             |                                                                |
+| Firmware Update Available | Not created when firmware update support is enabled; the Firmware Update entity replaces it |
 | HMS Errors                | Attributes contain the error codes, descriptions and wiki URLs |
+| Hybrid MQTT control blocked | Is the printer blocking controls because of hybrid connection mode? See Controls |
 | IP Address                |                                                                |
 | MQTT connection mode      | Bambu Cloud or Local                                           |
 | MQTT Encryption Firmware  | Is the printer running firmware that requires mqtt encryption? |
 | Online                    |                                                                |
+| P1S Upgrade Kit Installed | P1P only                                                       |
 | Print Error               | Has a print error been reported?                               |
 | SD Card Status            | Reported state of the SD card                                  |
-| Total Usage               | Running count of total usage hours                             |
+| Serial Number             |                                                                |
 | Wifi Signal               |                                                                |
+
+Total Usage, listed under Print Data, is also a diagnostic entity.
 
 ## Cameras
 
@@ -312,6 +335,8 @@ selector to choose a mode; percentage-based fan speed control is not supported.
 | ------- | --------------------------------------------------------------- |
 | Chamber | P1/A1/A1Mini - need the host IP providing                       |
 |         | X1/P2S/P3C/X2D/H2/H3 - Make sure to enable "LAN Only Liveview" on your printer. It does not require LAN Only mode |
+
+<Info>If you have more than 6 P1/A1/A1 Mini/A2L printers and only the first 6 camera feeds show in your browser, see [Only 6 camera feeds show](/issues#only-6-camera-feeds-show).</Info>
 
 On P1/A1 printers the chamber image is pushed by the printer rather than pulled
 on demand, so the connection stays open for as long as the printer is

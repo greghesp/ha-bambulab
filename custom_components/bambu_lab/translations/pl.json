@@ -10,7 +10,8 @@
       "event_printer_error": "Błąd HMS",
       "event_printer_error_cleared": "Błąd HMS usunięty",
       "event_printer_missing_sdcard": "Brakująca karta SD",
-      "event_timelapse_downloaded": "Pobrano timelapse"
+      "event_timelapse_downloaded": "Pobrano timelapse",
+      "event_print_layer_changed": "Warstwa wydruku została zmieniona"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "Biblioteka curl_cffi jest niedostępna.",
       "no_working_credentials": "Dla tego konta nie są dostępne żadne działające dane uwierzytelniające drukarki Bambu Cloud.",
       "reconfigure_not_supported": "W ten sposób można ponownie skonfigurować tylko wpisy konta MakerWorld.",
-      "reconfigure_successful": "Zaktualizowano dane uwierzytelniające MakerWorld."
+      "reconfigure_successful": "Zaktualizowano dane uwierzytelniające MakerWorld.",
+      "device_not_found": "Ta drukarka nie znajduje się na koncie Bambu Cloud. Spróbuj ponownie i zaloguj się na konto, z którym powiązana jest drukarka.",
+      "device_list_failed": "Nie udało się pobrać listy drukarek z Bambu Cloud. Sprawdź dziennik Home Assistant i spróbuj ponownie."
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć. Sprawdź dane logowania.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "Adres chmury Bambu Lab jest nieosiągalny.",
       "cannot_connect_cloud_unknown": "Nieznany błąd podczas łączenia z chmurą Bambu Lab.",
       "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia.",
-      "tfa_csrf_fallback": "Punkt końcowy uwierzytelniania dwuskładnikowego Bambu Lab aktualnie odrzuca żądania. Zamiast tego na Twój adres e-mail lub telefon został wysłany kod weryfikacyjny – wpisz go poniżej."
+      "tfa_csrf_fallback": "Punkt końcowy uwierzytelniania dwuskładnikowego Bambu Lab aktualnie odrzuca żądania. Zamiast tego na Twój adres e-mail lub telefon został wysłany kod weryfikacyjny – wpisz go poniżej.",
+      "incorrect_password": "Bambu Lab odrzucił hasło. Musi to być hasło do konta Bambu Lab, które jest odrębne od hasła do Google, Apple lub Facebooka. Jeśli go nie masz, pozostaw hasło puste, aby zalogować się przy użyciu kodu weryfikacyjnego."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Poproś o nowy kod",
           "verifyCode": "Kod weryfikacyjny z e-maila lub telefonu",
           "tfaCode": "Kod uwierzytelniania dwuskładnikowego"
+        },
+        "data_description": {
+          "password": "Pozostaw puste, aby zalogować się za pomocą kodu weryfikacyjnego wysłanego na Twój adres e-mail lub telefon, na przykład jeśli logujesz się do Bambu Lab za pomocą Google, Apple lub Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -80,7 +87,8 @@
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
           "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):",
-          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
+          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
         },
         "sections": {
           "advanced": {
@@ -102,7 +110,8 @@
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Bufor modeli do Home Assistant (-1 = bez limitu):",
-          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):"
+          "timelapse_cache_count": "Bufor filmów timelapse do Home Assistant (-1 = bez limitu):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):"
         },
         "sections": {
           "advanced": {
@@ -138,7 +147,9 @@
       "cloudflare": "Cloudflare zablokował próbę połączenia.",
       "curl_unavailable": "Biblioteka curl_cffi jest niedostępna.",
       "no_working_credentials": "Dla tego konta nie są dostępne żadne działające dane uwierzytelniające drukarki Bambu Cloud.",
-      "no_ams": "W tej drukarce nie zidentyfikowano jeszcze żadnego modułu AMS. Poczekaj, aż drukarka połączy się i zgłosi swoje jednostki AMS, a następnie spróbuj ponownie."
+      "no_ams": "W tej drukarce nie zidentyfikowano jeszcze żadnego modułu AMS. Poczekaj, aż drukarka połączy się i zgłosi swoje jednostki AMS, a następnie spróbuj ponownie.",
+      "device_not_found": "Ta drukarka nie znajduje się na koncie Bambu Cloud. Spróbuj ponownie i zaloguj się na konto, z którym powiązana jest drukarka.",
+      "device_list_failed": "Nie udało się pobrać listy drukarek z Bambu Cloud. Jeśli Twój zapisany login wygasł, skonfiguruj ponownie i wybierz chmurę Bambu Lab, aby się zalogować. W przeciwnym razie sprawdź dziennik Home Assistant i spróbuj ponownie."
     },
     "error": {
       "cannot_connect": "Nie udało się połączyć",
@@ -160,7 +171,8 @@
       "cannot_connect_cloud_address_unreachable": "Adres chmury Bambu Lab jest nieosiągalny.",
       "cannot_connect_cloud_unknown": "Nieznany błąd podczas łączenia z chmurą Bambu Lab.",
       "cannot_connect_local_unknown": "Nie udało się połączyć. Sprawdź podane ustawienia.",
-      "tfa_csrf_fallback": "Punkt końcowy uwierzytelniania dwuskładnikowego Bambu Lab aktualnie odrzuca żądania. Zamiast tego na Twój adres e-mail lub telefon został wysłany kod weryfikacyjny – wpisz go poniżej."
+      "tfa_csrf_fallback": "Punkt końcowy uwierzytelniania dwuskładnikowego Bambu Lab aktualnie odrzuca żądania. Zamiast tego na Twój adres e-mail lub telefon został wysłany kod weryfikacyjny – wpisz go poniżej.",
+      "incorrect_password": "Bambu Lab odrzucił hasło. Musi to być hasło do konta Bambu Lab, które jest odrębne od hasła do Google, Apple lub Facebooka. Jeśli go nie masz, pozostaw hasło puste, aby zalogować się przy użyciu kodu weryfikacyjnego."
     },
     "step": {
       "init": {
@@ -180,6 +192,9 @@
           "newCode": "Poproś o nowy kod",
           "verifyCode": "Kod weryfikacyjny z e-maila lub telefonu",
           "tfaCode": "Kod uwierzytelniania dwuskładnikowego"
+        },
+        "data_description": {
+          "password": "Pozostaw puste, aby zalogować się za pomocą kodu weryfikacyjnego wysłanego na Twój adres e-mail lub telefon, na przykład jeśli logujesz się do Bambu Lab za pomocą Google, Apple lub Facebook."
         }
       },
       "Bambu_Lan": {
@@ -193,7 +208,9 @@
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
           "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):"
+          "skip_local_mqtt": "Pomiń test połączenia lokalnego mqtt (niezalecane):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):",
+          "register_cards": "Dodaj karty Bambu Lab do zasobów pulpitu nawigacyjnego (pozostają, dopóki dowolna drukarka ma tę opcję):"
         },
         "sections": {
           "advanced": {
@@ -214,7 +231,9 @@
           "access_code": "Kod dostępu:",
           "usage_hours": "Aktualny czas pracy (opcjonalnie):",
           "print_cache_count": "Liczba modeli do buforowania asystenta domowego (-1 dla nieograniczonego):",
-          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):"
+          "timelapse_cache_count": "Liczba filmów Timelapse do buforowania asystenta domowego (-1 dla nieograniczonego):",
+          "print_cache_max_mb": "Maksymalny całkowity rozmiar modeli w pamięci podręcznej w MB (0 dla braku limitu rozmiaru):",
+          "register_cards": "Dodaj karty Bambu Lab do zasobów pulpitu nawigacyjnego (pozostają, dopóki dowolna drukarka ma tę opcję):"
         },
         "sections": {
           "advanced": {
@@ -750,6 +769,9 @@
           },
           "dry_time": {
             "name": "Czas suszenia"
+          },
+          "color_name": {
+            "name": "Nazwa koloru"
           }
         }
       },
@@ -815,6 +837,9 @@
           },
           "tray_weight": {
             "name": "Maksymalna waga filamentu"
+          },
+          "color_name": {
+            "name": "Nazwa koloru"
           }
         }
       },

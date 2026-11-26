@@ -7,6 +7,7 @@
       "event_print_started": "Print started",
       "event_print_error": "Print error",
       "event_print_error_cleared": "Print error cleared",
+      "event_print_layer_changed": "Print layer changed",
       "event_printer_error": "HMS error",
       "event_printer_error_cleared": "HMS error cleared",
       "event_printer_missing_sdcard": "Missing SD card",
@@ -16,7 +17,9 @@
   "config": {
     "abort": {
       "already_configured": "Device is already configured",
-      "no_printers": "No unconfigured printers found in the account.",
+      "no_printers": "Bambu Cloud reports no printers for this account. Check that this is the account the printer is bound to. If the printer is in LAN Only mode, add it using Lan Mode instead.",
+      "device_not_found": "This printer is not in the Bambu Cloud account. Try again and log in with the account the printer is bound to.",
+      "device_list_failed": "Failed to get the printer list from Bambu Cloud. Check the Home Assistant log and try again.",
       "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
       "reconfigure_not_supported": "Only MakerWorld account entries can be reconfigured this way.",
       "reconfigure_successful": "MakerWorld credentials updated.",
@@ -38,6 +41,7 @@
       "cannot_connect_local_unknown": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
+      "incorrect_password": "Bambu Lab rejected the password. This must be your Bambu Lab account password, which is separate from your Google, Apple or Facebook password. If you don't have one, leave the password blank to log in with a verification code.",
       "code_needed": "Verification code must be provided.",
       "verifyCode": "Verification code is required. Check your email or phone.",
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
@@ -47,7 +51,7 @@
     },
     "step": {
       "user": {
-        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Accounts that sign in with Google, Apple or Facebook can log in with a verification code instead of a password.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -78,6 +82,9 @@
           "newCode": "Request new code",
           "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
+        },
+        "data_description": {
+          "password": "Leave blank to log in with a verification code sent to your email or phone, for example if you sign in to Bambu Lab with Google, Apple or Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -95,6 +102,7 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
@@ -117,6 +125,7 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
           "usage_hours": "Current usage hours (optional):"
         },
@@ -135,6 +144,8 @@
   },
   "options": {
     "abort": {
+      "device_not_found": "This printer is not in the Bambu Cloud account. Try again and log in with the account the printer is bound to.",
+      "device_list_failed": "Failed to get the printer list from Bambu Cloud. If your saved login has expired, reconfigure again and choose Bambu Lab cloud to log in. Otherwise check the Home Assistant log and try again.",
       "cloudflare": "Cloudflare has blocked the connection attempt.",
       "curl_unavailable": "curl_cffi library is not available.",
       "no_working_credentials": "No working Bambu Cloud printer credentials are available for this account.",
@@ -155,6 +166,7 @@
       "cannot_connect_local_unknown": "Failed to connect. Check provided settings.",
       "invalid_auth": "Invalid authentication.",
       "unknown": "Unexpected error.",
+      "incorrect_password": "Bambu Lab rejected the password. This must be your Bambu Lab account password, which is separate from your Google, Apple or Facebook password. If you don't have one, leave the password blank to log in with a verification code.",
       "code_needed": "Verification code must be provided.",
       "verifyCode": "Verification code is required. Check your email or phone.",
       "code_expired": "Verification code expired. New code requested. Check your email or phone.",
@@ -169,7 +181,7 @@
       },
       "init": {
         "title": "Adjust connection settings",
-        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Social media accounts without a password are not supported.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
+        "description": "Configuration via Bambu Lab cloud is simplest and fastest. Accounts that sign in with Google, Apple or Facebook can log in with a verification code instead of a password.\n\rYou can also reuse working authentication credentials from other printers. If found these will be listed by the email address.\n\rOr you can connect by manually providing the printer local connection details. This is required for a printer in Lan Mode.",
         "data": {
           "printer_mode": "Printer configuration mode:"
         }
@@ -201,6 +213,9 @@
           "newCode": "Request new code",
           "verifyCode": "Email or phone verification code",
           "tfaCode": "Two factor authentication code"
+        },
+        "data_description": {
+          "password": "Leave blank to log in with a verification code sent to your email or phone, for example if you sign in to Bambu Lab with Google, Apple or Facebook."
         }
       },
       "Bambu_Lan": {
@@ -213,8 +228,10 @@
           "local_mqtt": "Connect directly to printer mqtt:",
           "skip_local_mqtt": "Skip local mqtt connection test (not recommended):",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "register_cards": "Add the Bambu Lab cards to the dashboard resources (they stay while any printer has this on):"
         },
         "sections": {
           "advanced": {
@@ -234,8 +251,10 @@
           "host": "Local Printer IP Address:",
           "access_code": "Access Code:",
           "print_cache_count": "Number of models to cache to home assistant (-1 for unlimited):",
+          "print_cache_max_mb": "Maximum total size of cached models in MB (0 for no size limit):",
           "timelapse_cache_count": "Number of timelapse videos to cache to home assistant (-1 for unlimited):",
-          "usage_hours": "Current usage hours (optional):"
+          "usage_hours": "Current usage hours (optional):",
+          "register_cards": "Add the Bambu Lab cards to the dashboard resources (they stay while any printer has this on):"
         },
         "sections": {
           "advanced": {
@@ -1014,6 +1033,9 @@
           "color": {
             "name": "Color"
           },
+          "color_name": {
+            "name": "Color name"
+          },
           "cols": {
             "name": "Colors"
           },
@@ -1075,6 +1097,9 @@
           },
           "color": {
             "name": "Color"
+          },
+          "color_name": {
+            "name": "Color name"
           },
           "cols": {
             "name": "Colors"

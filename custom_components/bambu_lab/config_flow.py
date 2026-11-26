@@ -32,6 +32,7 @@ from .const import (
     ENTRY_TYPE_MAKERWORLD,
     LOGGER,
     DEFAULT_FILAMENT_INVENTORY_INTERVAL,
+    DEFAULT_PRINT_CACHE_MAX_MB,
     OPTION_FILAMENT_INVENTORY_INTERVAL,
 )
 from .pybambu import BambuClient, BambuCloud
@@ -43,6 +44,7 @@ from .pybambu.bambu_cloud import (
     CodeIncorrectError,
     CsrfError,
     CsrfObtainError,
+    IncorrectPasswordError,
     TfaCodeRequiredError
 )
 
@@ -81,6 +83,11 @@ def _async_get_printer_device(hass, serial: str):
             if (DOMAIN, serial) in device.identifiers:
                 return device
     return None
+
+
+def _find_cloud_device(device_list: list[dict], serial: str) -> dict | None:
+    """Find a printer in the cloud device list. The account may not own it."""
+    return next((device for device in device_list if device['dev_id'] == serial), None)
 
 
 async def _get_working_account_credentials(
@@ -201,20 +208,19 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     default_email = config_entry.options['email']
                     username = config_entry.options['username']
                     auth_token = config_entry.options['auth_token']
-                    if await self.hass.async_add_executor_job(self._bambu_cloud.test_authentication,
+                    # test_authentication() leaves the tested credentials on the client, so use a
+                    # fresh one per entry to keep a later entry from replacing a working account.
+                    cloud = BambuCloud("", "", "", "")
+                    if await self.hass.async_add_executor_job(cloud.test_authentication,
                                                               default_region,
                                                               default_email,
                                                               username,
                                                               auth_token):
                         LOGGER.debug("Found working credentials.")
-                        self.region = default_region
-                        self.email = default_email
-                        self.bambu_cloud = BambuCloud(
-                            default_region,
-                            default_email,
-                            username,
-                            auth_token
-                        )
+                        if self.email == '':
+                            self.region = default_region
+                            self.email = default_email
+                            self._bambu_cloud = cloud
                         if username not in existing_makerworld_accounts:
                             self._makerworld_credentials.setdefault(username, {
                                 "region": default_region,
@@ -403,7 +409,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         self._bambu_cloud.login,
                         user_input['region'],
                         user_input['email'],
-                        user_input['password'])
+                        user_input.get('password', ''))
                     return await self.async_step_Bambu_Choose_Device(None)
 
             # Handle possible failure cases
@@ -421,6 +427,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 self.authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
+            except IncorrectPasswordError:
+                errors['base'] = 'incorrect_password'
+                # Fall through to form generation to ask for the password again
             except TfaCodeRequiredError:
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
@@ -452,7 +461,9 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             default_email = default_email if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
-            fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+            # A blank password logs in with an email/SMS code. The frontend won't submit an empty
+            # required field, and leaves a cleared optional one out, which a default would refill.
+            fields[vol.Optional('password', description={'suggested_value': default_password})] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
             fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
             fields[vol.Optional('verifyCode', default='')] = TEXT_SELECTOR
@@ -479,6 +490,8 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
         printer_list = []
         for device in device_list:
@@ -525,10 +538,13 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
-        for device in device_list:
-            if device['dev_id'] == self.serial:
-                break
+        device = _find_cloud_device(device_list, self.serial)
+        if device is None:
+            LOGGER.error(f"Unable to find device for serial: {self.serial}")
+            return self.async_abort(reason='device_not_found')
 
         device_type = self._bambu_cloud.get_device_type_from_device_product_name(device['dev_product_name'])
         default_host = ""
@@ -593,17 +609,17 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
                 if result == 0:
                     if self._show_existing:
-                        # Check to see if this device is already registered and delete it if so.
-                        hadevice = _async_get_printer_device(self.hass, device['dev_id'])
-                        if hadevice is not None:
-                            for config_entry in hadevice.config_entries:
-                                LOGGER.debug(f"Removing existing config_entry: {config_entry}")
-                                try:
-                                    # Remove the config entry
-                                    await self.hass.config_entries.async_remove(config_entry)
-                                    LOGGER.debug("Successfully removed config entry.")
-                                except Exception as e:
-                                    LOGGER.error("Failed to remove config entry: %s", e)
+                        # Replace any existing entry for this printer. Match on our own entries rather than
+                        # the device's, as other integrations can share the device before HA 2026.9.
+                        for config_entry in self.hass.config_entries.async_entries(DOMAIN):
+                            if config_entry.data.get('serial') != device['dev_id']:
+                                continue
+                            LOGGER.debug(f"Removing existing config_entry: {config_entry.entry_id}")
+                            try:
+                                await self.hass.config_entries.async_remove(config_entry.entry_id)
+                                LOGGER.debug("Successfully removed config entry.")
+                            except Exception as e:
+                                LOGGER.error("Failed to remove config entry: %s", e)
 
                     printer_name = device['name']
                     LOGGER.debug(f"Config Flow: Writing entry for '{printer_name}'")
@@ -621,6 +637,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             "auth_token": self._bambu_cloud.auth_token,
                             "access_code": user_input['access_code'],
                             "print_cache_count": max(-1, int(user_input['print_cache_count'])),
+                            "print_cache_max_mb": max(0, int(user_input.get('print_cache_max_mb', 0))),
                             "timelapse_cache_count": max(-1, int(user_input['timelapse_cache_count'])),
                             "usage_hours": float(user_input['usage_hours']),
                             "disable_ssl_verify": user_input['advanced']['disable_ssl_verify'],
@@ -650,6 +667,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Optional('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Optional('access_code', default = default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(DEFAULT_PRINT_CACHE_MAX_MB if user_input is None else user_input.get('print_cache_max_mb', DEFAULT_PRINT_CACHE_MAX_MB)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
@@ -704,6 +722,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         "auth_token": "",
                         "access_code": user_input['access_code'],
                         "print_cache_count": max(-1, int(user_input['print_cache_count'])),
+                        "print_cache_max_mb": max(0, int(user_input.get('print_cache_max_mb', 0))),
                         "timelapse_cache_count": max(-1, int(user_input['timelapse_cache_count'])),
                         "usage_hours": float(user_input['usage_hours']),
                         "disable_ssl_verify": user_input['advanced']['disable_ssl_verify'],
@@ -745,6 +764,7 @@ class BambuLabFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         fields[vol.Required('serial', default = default_serial)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default = default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(DEFAULT_PRINT_CACHE_MAX_MB if user_input is None else user_input.get('print_cache_max_mb', DEFAULT_PRINT_CACHE_MAX_MB)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
         fields[vol.Required('advanced')] = section(
@@ -911,7 +931,7 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                         self._bambu_cloud.login,
                         user_input['region'],
                         user_input['email'],
-                        user_input['password'])
+                        user_input.get('password', ''))
                     return await self.async_step_Bambu_Lan(None)
 
             # Handle possible failure cases
@@ -929,6 +949,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 self.authentication_type = 'verifyCode'
                 errors['base'] = 'verifyCode'
                 # Fall through to form generation to ask for verification code
+            except IncorrectPasswordError:
+                errors['base'] = 'incorrect_password'
+                # Fall through to form generation to ask for the password again
             except TfaCodeRequiredError:
                 self.authentication_type = 'tfaCode'
                 errors['base'] = 'tfaCode'
@@ -960,7 +983,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
             default_email = self._config_entry.options.get('email','') if user_input is None else user_input.get('email', '')
             fields[vol.Required('email', default=default_email)] = TEXT_SELECTOR
             default_password = '' if user_input is None else user_input.get('password', '')
-            fields[vol.Required('password', default=default_password)] = PASSWORD_SELECTOR
+            # A blank password logs in with an email/SMS code. The frontend won't submit an empty
+            # required field, and leaves a cleared optional one out, which a default would refill.
+            fields[vol.Optional('password', description={'suggested_value': default_password})] = PASSWORD_SELECTOR
         elif self.authentication_type == 'verifyCode':
             fields[vol.Optional('newCode')] = BOOLEAN_SELECTOR
             fields[vol.Optional('verifyCode', default='')] = TEXT_SELECTOR
@@ -983,14 +1008,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
 
         device_list = await self.hass.async_add_executor_job(
             self._bambu_cloud.get_device_list)
+        if device_list is None:
+            return self.async_abort(reason='device_list_failed')
 
         # Get the device we are working with.
-        device = None
-        for device in device_list:
-            if device['dev_id'] == self._config_entry.data['serial']:
-                break
-
-        if device is None: 
+        device = _find_cloud_device(device_list, self._config_entry.data['serial'])
+        if device is None:
             LOGGER.error(f"Unable to find device for serial: {self._config_entry.data['serial']}")
             return self.async_abort(reason='device_not_found')
 
@@ -1070,9 +1093,11 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                     options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                     options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                     options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
+                    options["print_cache_max_mb"] = max(0, int(user_input.get('print_cache_max_mb', 0)))
                     options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                     options["force_ip"] = force_ip
-                    
+                    options["register_cards"] = user_input.get("register_cards", True)
+
                     title = device['dev_id']
                     self.hass.config_entries.async_update_entry(
                         entry=self._config_entry,
@@ -1101,6 +1126,9 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_print_cache_count = self._config_entry.options.get('print_cache_count', "100") if user_input is None else user_input['print_cache_count']
         default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', "1") if user_input is None else user_input['timelapse_cache_count']
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        default_register_cards = (user_input or self._config_entry.options).get(
+            "register_cards", True
+        )
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
 
@@ -1112,8 +1140,12 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         fields[vol.Optional('skip_local_mqtt', default = False)] = BOOLEAN_SELECTOR
         fields[vol.Optional('access_code', default=default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(self._config_entry.options.get('print_cache_max_mb', 0) if user_input is None else user_input.get('print_cache_max_mb', 0)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
+        fields[vol.Required("register_cards", default=default_register_cards)] = (
+            BOOLEAN_SELECTOR
+        )
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,
@@ -1162,11 +1194,13 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
                 options["auth_token"] = ''
                 options["access_code"] = user_input['access_code']
                 options["print_cache_count"] = max(-1, int(user_input['print_cache_count']))
+                options["print_cache_max_mb"] = max(0, int(user_input.get('print_cache_max_mb', 0)))
                 options["timelapse_cache_count"] = max(-1, int(user_input['timelapse_cache_count']))
                 options["usage_hours"] = float(user_input['usage_hours'])
                 options["disable_ssl_verify"] = user_input['advanced']['disable_ssl_verify']
                 options["enable_firmware_update"] = user_input['advanced']['enable_firmware_update']
                 options["force_ip"] = (user_input['host'] != bambu.get_device().info.ip_address)
+                options["register_cards"] = user_input.get("register_cards", True)
 
                 title = self._config_entry.data['serial']
                 self.hass.config_entries.async_update_entry(
@@ -1197,14 +1231,21 @@ class BambuOptionsFlowHandler(config_entries.OptionsFlow):
         default_print_cache_count = self._config_entry.options.get('print_cache_count', "100") if user_input is None else user_input['print_cache_count']
         default_timelapse_cache_count = self._config_entry.options.get('timelapse_cache_count', "1") if user_input is None else user_input['timelapse_cache_count']
         default_usage_hours = str(self._config_entry.options.get('usage_hours', 0)) if user_input is None else user_input['usage_hours']
+        default_register_cards = (user_input or self._config_entry.options).get(
+            "register_cards", True
+        )
         default_disable_ssl_verify = self._config_entry.options.get('disable_ssl_verify', False) if user_input is None else user_input.get('advanced', {}).get('disable_ssl_verify', self._config_entry.options.get('disable_ssl_verify', ''))
         default_enable_firmware_update = self._config_entry.options.get('enable_firmware_update', False) if user_input is None else user_input.get('advanced', {}).get('enable_firmware_update', self._config_entry.options.get('enable_firmware_update', ''))
 
         fields[vol.Required('host', default=default_host)] = TEXT_SELECTOR
         fields[vol.Required('access_code', default=default_access_code)] = TEXT_SELECTOR
         fields[vol.Optional('print_cache_count', default=str(default_print_cache_count))] = NUMBER_SELECTOR
+        fields[vol.Optional('print_cache_max_mb', default=str(self._config_entry.options.get('print_cache_max_mb', 0) if user_input is None else user_input.get('print_cache_max_mb', 0)))] = NUMBER_SELECTOR
         fields[vol.Optional('timelapse_cache_count', default=str(default_timelapse_cache_count))] = NUMBER_SELECTOR
         fields[vol.Optional('usage_hours', default=default_usage_hours)] = NUMBER_SELECTOR
+        fields[vol.Required("register_cards", default=default_register_cards)] = (
+            BOOLEAN_SELECTOR
+        )
         fields[vol.Required('advanced')] = section(
             vol.Schema({
                 vol.Required('disable_ssl_verify', default=default_disable_ssl_verify): BOOLEAN_SELECTOR,

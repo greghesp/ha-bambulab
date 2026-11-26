@@ -10,7 +10,8 @@
       "event_printer_error": "Erro HMS",
       "event_printer_error_cleared": "Erro HMS resolvido",
       "event_printer_missing_sdcard": "Cartão SD ausente",
-      "event_timelapse_downloaded": "Lapso de tempo baixado"
+      "event_timelapse_downloaded": "Lapso de tempo baixado",
+      "event_print_layer_changed": "Camada de impressão alterada"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "A biblioteca curl_cffi não está disponível.",
       "no_working_credentials": "Nenhuma credencial de impressora Bambu Cloud funcional está disponível para esta conta.",
       "reconfigure_not_supported": "Somente as entradas da conta MakerWorld podem ser reconfiguradas desta forma.",
-      "reconfigure_successful": "Credenciais do MakerWorld atualizadas."
+      "reconfigure_successful": "Credenciais do MakerWorld atualizadas.",
+      "device_not_found": "Esta impressora não está na conta Bambu Cloud. Tente novamente e faça login com a conta à qual a impressora está vinculada.",
+      "device_list_failed": "Falha ao obter a lista de impressoras do Bambu Cloud. Verifique o registro do Home Assistant e tente novamente."
     },
     "error": {
       "cannot_connect": "Falha na ligação. Verifica as credenciais.",
@@ -43,7 +46,8 @@
       "code_expired": "Código de verificação expirado. Novo código solicitado. Verifica o e-mail ou telemóvel.",
       "code_incorrect": "O código de verificação está incorreto. Tenta de novo.",
       "tfaCode": "O código 2FA é obrigatório. Introduz o código agora.",
-      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo."
+      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo.",
+      "incorrect_password": "Bambu Lab rejeitou a senha. Esta deve ser a senha da sua conta Bambu Lab, que é separada da sua senha do Google, Apple ou Facebook. Se você não tiver uma, deixe a senha em branco para fazer login com um código de verificação."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Solicitar novo código",
           "verifyCode": "Código de verificação de e-mail ou telemóvel",
           "tfaCode": "Código de autenticação de dois fatores"
+        },
+        "data_description": {
+          "password": "Deixe em branco para fazer login com um código de verificação enviado para seu e-mail ou telefone, por exemplo, se você fizer login no Bambu Lab com Google, Apple ou Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -80,7 +87,8 @@
           "access_code": "Código de Acesso:",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
         },
         "sections": {
           "advanced": {
@@ -102,7 +110,8 @@
           "access_code": "Código de Acesso:",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):"
         },
         "sections": {
           "advanced": {
@@ -138,7 +147,9 @@
       "cloudflare": "A Cloudflare bloqueou a tentativa de ligação.",
       "curl_unavailable": "A biblioteca curl_cffi não está disponível.",
       "no_working_credentials": "Nenhuma credencial de impressora Bambu Cloud funcional está disponível para esta conta.",
-      "no_ams": "Nenhum AMS foi identificado nesta impressora ainda. Aguarde até que a impressora se conecte e relate suas unidades AMS e tente novamente."
+      "no_ams": "Nenhum AMS foi identificado nesta impressora ainda. Aguarde até que a impressora se conecte e relate suas unidades AMS e tente novamente.",
+      "device_not_found": "Esta impressora não está na conta Bambu Cloud. Tente novamente e faça login com a conta à qual a impressora está vinculada.",
+      "device_list_failed": "Falha ao obter a lista de impressoras do Bambu Cloud. Se o seu login salvo expirou, reconfigure novamente e escolha a nuvem Bambu Lab para fazer login. Caso contrário, verifique o log do Home Assistant e tente novamente."
     },
     "error": {
       "cannot_connect": "Falha na ligação",
@@ -160,7 +171,8 @@
       "code_expired": "Código de verificação expirado. Novo código solicitado. Verifica o e-mail ou telemóvel.",
       "code_incorrect": "O código de verificação está incorreto. Tenta de novo.",
       "tfaCode": "O código 2FA é obrigatório. Introduz o código agora.",
-      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo."
+      "tfa_csrf_fallback": "O endpoint de autenticação de dois fatores do Bambu Lab está atualmente rejeitando solicitações. Um código de verificação foi enviado para seu e-mail ou telefone. Insira-o abaixo.",
+      "incorrect_password": "Bambu Lab rejeitou a senha. Esta deve ser a senha da sua conta Bambu Lab, que é separada da sua senha do Google, Apple ou Facebook. Se você não tiver uma, deixe a senha em branco para fazer login com um código de verificação."
     },
     "step": {
       "init": {
@@ -180,6 +192,9 @@
           "newCode": "Solicitar novo código",
           "verifyCode": "Código de verificação de e-mail ou telemóvel",
           "tfaCode": "Código de autenticação de dois fatores"
+        },
+        "data_description": {
+          "password": "Deixe em branco para fazer login com um código de verificação enviado para seu e-mail ou telefone, por exemplo, se você fizer login no Bambu Lab com Google, Apple ou Facebook."
         }
       },
       "Bambu_Lan": {
@@ -193,7 +208,9 @@
           "skip_local_mqtt": "Saltar teste de ligação MQTT local (não recomendado):",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):",
+          "register_cards": "Adicione os cartões Bambu Lab aos recursos do painel (eles permanecem enquanto qualquer impressora estiver ligada):"
         },
         "sections": {
           "advanced": {
@@ -214,7 +231,9 @@
           "access_code": "Código de Acesso:",
           "print_cache_count": "Número de modelos em cache no Home Assistant (-1 para ilimitado):",
           "timelapse_cache_count": "Número de vídeos timelapse em cache no Home Assistant (-1 para ilimitado):",
-          "usage_hours": "Horas de utilização atuais (opcional):"
+          "usage_hours": "Horas de utilização atuais (opcional):",
+          "print_cache_max_mb": "Tamanho total máximo de modelos em cache em MB (0 sem limite de tamanho):",
+          "register_cards": "Adicione os cartões Bambu Lab aos recursos do painel (eles permanecem enquanto qualquer impressora estiver ligada):"
         },
         "sections": {
           "advanced": {
@@ -826,6 +845,9 @@
           },
           "tray_weight": {
             "name": "Peso máximo do filamento"
+          },
+          "color_name": {
+            "name": "Nome da cor"
           }
         }
       },
@@ -891,6 +913,9 @@
           },
           "tray_weight": {
             "name": "Peso máximo do filamento"
+          },
+          "color_name": {
+            "name": "Nome da cor"
           }
         }
       },

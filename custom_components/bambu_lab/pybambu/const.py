@@ -305,6 +305,10 @@ AMS_MODELS = [
     "AMS 3P"
 ]
 
+# What a printer reports as the serial of an AMS it has not identified. These are not serials:
+# any number of units, on any number of printers, can report them.
+AMS_PLACEHOLDER_SERIALS = ("", "N/A")
+
 AMS_MODELS_AND_EXTERNAL_SPOOL = [
     "AMS",
     "AMS Lite",

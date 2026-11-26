@@ -10,7 +10,8 @@
       "event_printer_error": "Erreur HMS",
       "event_printer_error_cleared": "Erreur HMS effacée",
       "event_printer_missing_sdcard": "Carte SD manquante",
-      "event_timelapse_downloaded": "Timelapse téléchargé"
+      "event_timelapse_downloaded": "Timelapse téléchargé",
+      "event_print_layer_changed": "Calque d'impression modifié"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible.",
       "no_working_credentials": "Aucun identifiant d'imprimante Bambu Cloud fonctionnel n'est disponible pour ce compte.",
       "reconfigure_not_supported": "Seules les entrées du compte MakerWorld peuvent être reconfigurées de cette façon.",
-      "reconfigure_successful": "Informations d'identification MakerWorld mises à jour."
+      "reconfigure_successful": "Informations d'identification MakerWorld mises à jour.",
+      "device_not_found": "Cette imprimante n'est pas dans le compte Bambu Cloud. Réessayez et connectez-vous avec le compte auquel l'imprimante est liée.",
+      "device_list_failed": "Échec de l'obtention de la liste des imprimantes depuis Bambu Cloud. Consultez le journal Home Assistant et réessayez."
     },
     "error": {
       "cannot_connect": "Échec de la connexion. Vérifiez les identifiants.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "Adresse cloud de Bambu Lab inaccessible.",
       "cannot_connect_cloud_unknown": "Erreur inconnue lors de la connexion au cloud Bambu Lab.",
       "cannot_connect_local_unknown": "Échec de la connexion. Vérifiez les paramètres fournis.",
-      "tfa_csrf_fallback": "Le point de terminaison d'authentification à deux facteurs de Bambu Lab rejette actuellement les demandes. Un code de vérification a été envoyé à votre adresse e-mail ou par téléphone - veuillez le saisir ci-dessous."
+      "tfa_csrf_fallback": "Le point de terminaison d'authentification à deux facteurs de Bambu Lab rejette actuellement les demandes. Un code de vérification a été envoyé à votre adresse e-mail ou par téléphone - veuillez le saisir ci-dessous.",
+      "incorrect_password": "Bambu Lab a rejeté le mot de passe. Il doit s'agir du mot de passe de votre compte Bambu Lab, qui est distinct de votre mot de passe Google, Apple ou Facebook. Si vous n'en avez pas, laissez le mot de passe vide pour vous connecter avec un code de vérification."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Demander un nouveau code",
           "verifyCode": "Code de vérification par e-mail ou par téléphone",
           "tfaCode": "Code d'authentification à deux facteurs"
+        },
+        "data_description": {
+          "password": "Laissez ce champ vide pour vous connecter avec un code de vérification envoyé à votre adresse e-mail ou à votre téléphone, par exemple si vous vous connectez à Bambu Lab avec Google, Apple ou Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -80,7 +87,8 @@
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
+          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :"
         },
         "sections": {
           "advanced": {
@@ -102,7 +110,8 @@
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :"
         },
         "sections": {
           "advanced": {
@@ -138,7 +147,9 @@
       "cloudflare": "Cloudflare a bloqué la tentative de connexion.",
       "curl_unavailable": "La bibliothèque curl_cffi n'est pas disponible.",
       "no_working_credentials": "Aucun identifiant d'imprimante Bambu Cloud fonctionnel n'est disponible pour ce compte.",
-      "no_ams": "Aucun AMS n'a encore été identifié sur cette imprimante. Attendez que l'imprimante se connecte et signale ses unités AMS, puis réessayez."
+      "no_ams": "Aucun AMS n'a encore été identifié sur cette imprimante. Attendez que l'imprimante se connecte et signale ses unités AMS, puis réessayez.",
+      "device_not_found": "Cette imprimante n'est pas dans le compte Bambu Cloud. Réessayez et connectez-vous avec le compte auquel l'imprimante est liée.",
+      "device_list_failed": "Échec de l'obtention de la liste des imprimantes depuis Bambu Cloud. Si votre connexion enregistrée a expiré, reconfigurez à nouveau et choisissez le cloud Bambu Lab pour vous connecter. Sinon, vérifiez le journal Home Assistant et réessayez."
     },
     "error": {
       "cannot_connect": "Échec de la connexion. Vérifiez les identifiants.",
@@ -160,7 +171,8 @@
       "cannot_connect_cloud_address_unreachable": "Adresse cloud de Bambu Lab inaccessible.",
       "cannot_connect_cloud_unknown": "Erreur inconnue lors de la connexion au cloud Bambu Lab.",
       "cannot_connect_local_unknown": "Échec de la connexion. Vérifiez les paramètres fournis.",
-      "tfa_csrf_fallback": "Le point de terminaison d'authentification à deux facteurs de Bambu Lab rejette actuellement les demandes. Un code de vérification a été envoyé à votre adresse e-mail ou par téléphone - veuillez le saisir ci-dessous."
+      "tfa_csrf_fallback": "Le point de terminaison d'authentification à deux facteurs de Bambu Lab rejette actuellement les demandes. Un code de vérification a été envoyé à votre adresse e-mail ou par téléphone - veuillez le saisir ci-dessous.",
+      "incorrect_password": "Bambu Lab a rejeté le mot de passe. Il doit s'agir du mot de passe de votre compte Bambu Lab, qui est distinct de votre mot de passe Google, Apple ou Facebook. Si vous n'en avez pas, laissez le mot de passe vide pour vous connecter avec un code de vérification."
     },
     "step": {
       "init": {
@@ -180,6 +192,9 @@
           "newCode": "Demander un nouveau code",
           "verifyCode": "Code de vérification par e-mail ou par téléphone",
           "tfaCode": "Code d'authentification à deux facteurs"
+        },
+        "data_description": {
+          "password": "Laissez ce champ vide pour vous connecter avec un code de vérification envoyé à votre adresse e-mail ou à votre téléphone, par exemple si vous vous connectez à Bambu Lab avec Google, Apple ou Facebook."
         }
       },
       "Bambu_Lan": {
@@ -193,7 +208,9 @@
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
           "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :"
+          "skip_local_mqtt": "Ignorer le test de connexion mqtt local (non recommandé) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :",
+          "register_cards": "Ajoutez les cartes Bambu Lab aux ressources du tableau de bord (elles restent tant que n'importe quelle imprimante l'active) :"
         },
         "sections": {
           "advanced": {
@@ -214,7 +231,9 @@
           "access_code": "Code d'accès",
           "usage_hours": "Heures d'utilisation actuelles (facultatif) :",
           "print_cache_count": "Nombre de modèles à mettre en cache dans Home Assistant (-1 pour illimité) :",
-          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :"
+          "timelapse_cache_count": "Nombre de vidéos timelapse à mettre en cache dans Home Assistant (-1 pour illimité) :",
+          "print_cache_max_mb": "Taille totale maximale des modèles mis en cache en Mo (0 pour aucune limite de taille) :",
+          "register_cards": "Ajoutez les cartes Bambu Lab aux ressources du tableau de bord (elles restent tant que n'importe quelle imprimante l'active) :"
         },
         "sections": {
           "advanced": {
@@ -766,6 +785,9 @@
           },
           "dry_time": {
             "name": "Temps de séchage"
+          },
+          "color_name": {
+            "name": "Nom de la couleur"
           }
         }
       },
@@ -831,6 +853,9 @@
           },
           "tray_weight": {
             "name": "Poids maximum de filament"
+          },
+          "color_name": {
+            "name": "Nom de la couleur"
           }
         }
       },

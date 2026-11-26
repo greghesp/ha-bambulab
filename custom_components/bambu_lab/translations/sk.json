@@ -10,7 +10,8 @@
       "event_printer_error": "Chyba HMS",
       "event_printer_error_cleared": "Chyba HMS odstránená",
       "event_printer_missing_sdcard": "Chýba SD karta",
-      "event_timelapse_downloaded": "Časozber bol stiahnutý"
+      "event_timelapse_downloaded": "Časozber bol stiahnutý",
+      "event_print_layer_changed": "Vrstva tlače zmenená"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "curl_cffi knižnica nie je k dispozícii.",
       "no_working_credentials": "Pre tento účet nie sú k dispozícii žiadne funkčné poverenia tlačiarne Bambu Cloud.",
       "reconfigure_not_supported": "Týmto spôsobom je možné prekonfigurovať iba položky účtu MakerWorld.",
-      "reconfigure_successful": "Poverenia MakerWorld boli aktualizované."
+      "reconfigure_successful": "Poverenia MakerWorld boli aktualizované.",
+      "device_not_found": "Táto tlačiareň nie je v účte Bambu Cloud. Skúste to znova a prihláste sa pomocou účtu, ku ktorému je tlačiareň viazaná.",
+      "device_list_failed": "Nepodarilo sa získať zoznam tlačiarní z Bambu Cloud. Skontrolujte denník Home Assistant a skúste to znova."
     },
     "error": {
       "cannot_connect": "Nepodarilo sa pripojiť. Skontrolujte poverenia.",
@@ -43,7 +46,8 @@
       "cannot_connect_cloud_address_unreachable": "Cloudová adresa Bambu Lab je nedostupná.",
       "cannot_connect_cloud_unknown": "Neznáma chyba pri pripájaní k cloudu Bambu Lab.",
       "cannot_connect_local_unknown": "Nepodarilo sa pripojiť. Skontrolujte poskytnuté nastavenia.",
-      "tfa_csrf_fallback": "Koncový bod dvojfaktorovej autentifikácie Bambu Lab momentálne odmieta žiadosti. Namiesto toho bol na váš e-mail alebo telefón odoslaný overovací kód – zadajte ho nižšie."
+      "tfa_csrf_fallback": "Koncový bod dvojfaktorovej autentifikácie Bambu Lab momentálne odmieta žiadosti. Namiesto toho bol na váš e-mail alebo telefón odoslaný overovací kód – zadajte ho nižšie.",
+      "incorrect_password": "Bambu Lab odmietlo heslo. Toto musí byť heslo vášho účtu Bambu Lab, ktoré je oddelené od vášho hesla Google, Apple alebo Facebook. Ak ho nemáte, nechajte heslo prázdne, aby ste sa mohli prihlásiť pomocou overovacieho kódu."
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "Požiadať o nový kód",
           "verifyCode": "E-mailový alebo telefónny overovací kód",
           "tfaCode": "Dvoj-faktorový overovací kód"
+        },
+        "data_description": {
+          "password": "Nechajte prázdne, ak sa chcete prihlásiť pomocou overovacieho kódu zaslaného na váš e-mail alebo telefón, napríklad ak sa prihlásite do Bambu Lab cez Google, Apple alebo Facebook."
         }
       },
       "Bambu_Choose_Device": {
@@ -80,7 +87,8 @@
           "usage_hours": "Aktuálne hodiny používania (voliteľné):",
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
           "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
-          "skip_local_mqtt": "Preskočiť test miestneho pripojenia mqtt (neodporúča sa):"
+          "skip_local_mqtt": "Preskočiť test miestneho pripojenia mqtt (neodporúča sa):",
+          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):"
         },
         "sections": {
           "advanced": {
@@ -102,7 +110,8 @@
           "access_code": "Prístupový kód:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):",
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
-          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):"
+          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
+          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):"
         },
         "sections": {
           "advanced": {
@@ -138,7 +147,9 @@
       "cloudflare": "Cloudflare zablokoval pokus o pripojenie.",
       "curl_unavailable": "curl_cffi knižnica nie je k dispozícii.",
       "no_working_credentials": "Pre tento účet nie sú k dispozícii žiadne funkčné poverenia tlačiarne Bambu Cloud.",
-      "no_ams": "Na tejto tlačiarni zatiaľ nebol identifikovaný žiadny AMS. Počkajte, kým sa tlačiareň pripojí a nahlási svoje jednotky AMS, potom skúste znova."
+      "no_ams": "Na tejto tlačiarni zatiaľ nebol identifikovaný žiadny AMS. Počkajte, kým sa tlačiareň pripojí a nahlási svoje jednotky AMS, potom skúste znova.",
+      "device_not_found": "Táto tlačiareň nie je v účte Bambu Cloud. Skúste to znova a prihláste sa pomocou účtu, ku ktorému je tlačiareň viazaná.",
+      "device_list_failed": "Nepodarilo sa získať zoznam tlačiarní z Bambu Cloud. Ak platnosť vášho uloženého prihlasovacieho mena vypršala, znova ho prekonfigurujte a na prihlásenie vyberte cloud Bambu Lab. V opačnom prípade skontrolujte protokol Home Assistant a skúste to znova."
     },
     "error": {
       "cannot_connect": "Nepodarilo sa pripojiť",
@@ -160,7 +171,8 @@
       "cannot_connect_cloud_address_unreachable": "Cloudová adresa Bambu Lab je nedostupná.",
       "cannot_connect_cloud_unknown": "Neznáma chyba pri pripájaní k cloudu Bambu Lab.",
       "cannot_connect_local_unknown": "Nepodarilo sa pripojiť. Skontrolujte poskytnuté nastavenia.",
-      "tfa_csrf_fallback": "Koncový bod dvojfaktorovej autentifikácie Bambu Lab momentálne odmieta žiadosti. Namiesto toho bol na váš e-mail alebo telefón odoslaný overovací kód – zadajte ho nižšie."
+      "tfa_csrf_fallback": "Koncový bod dvojfaktorovej autentifikácie Bambu Lab momentálne odmieta žiadosti. Namiesto toho bol na váš e-mail alebo telefón odoslaný overovací kód – zadajte ho nižšie.",
+      "incorrect_password": "Bambu Lab odmietlo heslo. Toto musí byť heslo vášho účtu Bambu Lab, ktoré je oddelené od vášho hesla Google, Apple alebo Facebook. Ak ho nemáte, nechajte heslo prázdne, aby ste sa mohli prihlásiť pomocou overovacieho kódu."
     },
     "step": {
       "init": {
@@ -180,6 +192,9 @@
           "newCode": "Požiadať o nový kód",
           "verifyCode": "E-mailový alebo telefónny overovací kód",
           "tfaCode": "Dvoj-faktorový overovací kód"
+        },
+        "data_description": {
+          "password": "Nechajte prázdne, ak sa chcete prihlásiť pomocou overovacieho kódu zaslaného na váš e-mail alebo telefón, napríklad ak sa prihlásite do Bambu Lab cez Google, Apple alebo Facebook."
         }
       },
       "Bambu_Lan": {
@@ -193,7 +208,9 @@
           "usage_hours": "Aktuálne hodiny používania (voliteľné):",
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
           "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
-          "skip_local_mqtt": "Preskočiť test miestneho pripojenia mqtt (neodporúča sa):"
+          "skip_local_mqtt": "Preskočiť test miestneho pripojenia mqtt (neodporúča sa):",
+          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):",
+          "register_cards": "Pridajte karty Bambu Lab do zdrojov palubnej dosky (zostanú, kým je zapnutá akákoľvek tlačiareň):"
         },
         "sections": {
           "advanced": {
@@ -214,7 +231,9 @@
           "access_code": "Prístupový kód:",
           "usage_hours": "Aktuálne hodiny používania (voliteľné):",
           "print_cache_count": "Počet modelov na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
-          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):"
+          "timelapse_cache_count": "Počet videí Timelapse na vyrovnávaciu pamäť na domáceho asistenta (-1 pre Unlimited):",
+          "print_cache_max_mb": "Maximálna celková veľkosť modelov uložených vo vyrovnávacej pamäti v MB (0 bez obmedzenia veľkosti):",
+          "register_cards": "Pridajte karty Bambu Lab do zdrojov palubnej dosky (zostanú, kým je zapnutá akákoľvek tlačiareň):"
         },
         "sections": {
           "advanced": {
@@ -738,6 +757,9 @@
           },
           "dry_time": {
             "name": "Doba schnutia"
+          },
+          "color_name": {
+            "name": "Názov farby"
           }
         }
       },
@@ -803,6 +825,9 @@
           },
           "dry_time": {
             "name": "Doba schnutia"
+          },
+          "color_name": {
+            "name": "Názov farby"
           }
         }
       },

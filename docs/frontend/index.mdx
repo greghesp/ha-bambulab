@@ -3,22 +3,32 @@ title: Frontend Overview
 description: Integrate your Bambu Lab 3D Printer with Home Assistant
 ---
 
-The Bambu Lab Cards, are a set of pre-made collection of cards for Home Assistant. Designed to work with the Bambu Lab Home Assistant Integration
+The Bambu Lab Cards are a collection of pre-made dashboard cards for Home Assistant, designed to work with the Bambu Lab Home Assistant Integration. They ship with the integration, so there is nothing extra to install.
 
-They are currently a work in progress
+| Card | Type | What it shows |
+|---|---|---|
+| [Print Status](/frontend/cards/print-status-card) | `custom:ha-bambulab-print_status-card` | Your printer with live values, in a graphic, simple or minimal style |
+| [AMS](/frontend/cards/ams-card) | `custom:ha-bambulab-ams-card` | One AMS unit's spools, humidity and temperature, including the H3C's nine-spool AMS 3H |
+| [AMS Graphic](/frontend/cards/ams-graphic-card) | `custom:ha-bambulab-ams-graphic-card` | The AMS drawn with fill levels and labels |
+| [Spool](/frontend/cards/spool-card) | `custom:ha-bambulab-spool-card` | A single spool: the external spool or one AMS slot |
+| [Print Control](/frontend/cards/print-control-card) | `custom:ha-bambulab-print_control-card` | Speed, pause, resume, stop and skip objects |
+| [Error](/frontend/cards/error-card) | `custom:ha-bambulab-error-card` | The printer's HMS and print errors, each with a link to its Bambu Lab wiki page |
+| [Skip Objects](/frontend/cards/skip-objects-card) | `custom:ha-bambulab-skip_objects-card` | A single button that opens the skip objects dialog |
 
 ## Usage
 
-All the cards can be configured using Dashboard UI editor.
+All the cards can be configured using Dashboard UI editor. Each card page also shows its YAML options for reference.
 
 <Steps>
   <Step>In the Dashboard UI, click 3 dots in top right corner.</Step>
-  <Step >Click _Edit Dashboard_.</Step>
+  <Step>Click _Edit Dashboard_.</Step>
   <Step>Click Plus button to add a new card.</Step>
-  <Step>Find one of the _Custom: Bambu_ card in the list.</Step>
+  <Step>Search for _Bambu Lab_ and pick one of the cards.</Step>
 </Steps>
 
-<Note>
+If the cards don't appear in the card picker after an update, hard-refresh the browser (Ctrl+Shift+R).
+
+<Info>
   The integration registers the card resource automatically only when your
   Lovelace dashboards are in **storage** (UI managed) mode. If you run Lovelace
   in **YAML** mode, the cards will not show up until you add the resource URL
@@ -31,7 +41,7 @@ All the cards can be configured using Dashboard UI editor.
       - url: /bambu_lab/ha-bambulab-cards.js
         type: module
   ```
-</Note>
+</Info>
 
 ## Pre-made Dashboard
 

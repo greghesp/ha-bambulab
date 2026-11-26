@@ -412,3 +412,26 @@ clear_file_cache:
               value: prints
             - label: Timelapses only
               value: timelapse
+
+delete_cached_file:
+  name: Delete Cached File
+  description: >-
+    Delete one cached print model or timelapse and its related sidecar files from
+    Home Assistant. The path must be relative to the printer cache, such as
+    prints/cache/model.3mf or timelapse/video.mp4. Nothing on the printer is deleted.
+  fields:
+    device_id:
+      name: Printer
+      description: The printer whose local cache contains the file.
+      required: true
+      selector:
+        device:
+          integration: bambu_lab
+    path:
+      name: Cached file path
+      description: >-
+        The file path relative to the printer cache, beginning with prints/ or
+        timelapse/. Do not include the printer serial prefix from the file listing.
+      required: true
+      selector:
+        text:

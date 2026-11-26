@@ -25,6 +25,7 @@ import asyncio
 
 from .air_purifier import AirPurifier
 from .bambu_cloud import CloudAuthError
+from .filament_colors import get_filament_color_name
 from .utils import (
     search,
     fan_percentage,
@@ -61,6 +62,7 @@ from .const import (
     PRINT_TYPE_OPTIONS,
     AIRDUCT_MODES,
     AMS_CONNECTED_NOZZLES,
+    AMS_PLACEHOLDER_SERIALS,
     LIVEVIEW_CAMERAS,
     NOZZLE_SIDES,
     TempEnum,
@@ -109,10 +111,10 @@ from .media_sources import (
     storage_cache_segment,
 )
 
-# Seconds between get_version requests while the serial of an attached AMS is unknown. The delay
-# doubles after each request up to the maximum.
-AMS_IDENTITY_RETRY_MIN = 5
-AMS_IDENTITY_RETRY_MAX = 300
+# Seconds between get_version requests while the firmware version or the serial of an attached AMS
+# is unknown. The delay doubles after each request up to the maximum.
+VERSION_INFO_RETRY_MIN = 5
+VERSION_INFO_RETRY_MAX = 300
 
 
 class Device:
@@ -144,9 +146,9 @@ class Device:
         self.cover_image = CoverImage(client = client)
         self.pick_image = PickImage(client = client)
         self.print_fun = PrintFun(client = client)
-        self._unidentified_ams: frozenset[int] = frozenset()
-        self._ams_identity_retry_delay = AMS_IDENTITY_RETRY_MIN
-        self._next_ams_identity_request_at = 0.0
+        self._missing_version_info: frozenset[str] = frozenset()
+        self._version_info_retry_delay = VERSION_INFO_RETRY_MIN
+        self._next_version_info_request_at = 0.0
 
     def print_update(self, data) -> bool:
         had_full_printer_data = self.has_full_printer_data
@@ -178,11 +180,10 @@ class Device:
 
         if data.get("command") == "push_status":
             if data.get("msg", 0) == 0:
-                send_ready_event = self.get_version_data is not None and self.push_all_data is None
                 if self.push_all_data is None:
                     LOGGER.debug("Reached first push of all data.")
                 self.push_all_data = data
-                if send_ready_event:
+                if not had_full_printer_data and self.has_full_printer_data:
                     self._client.callback("event_printer_ready")
 
         if (self.has_full_printer_data and self.air_purifier.connected is True and
@@ -192,8 +193,7 @@ class Device:
         if had_full_printer_data and self.air_purifier.identity and self.air_purifier.identity != previous_purifier_identity:
             self._client.callback("event_printer_ready")
 
-        if self.has_full_printer_data:
-            self._request_missing_ams_identities()
+        self._request_missing_version_info()
 
         # Only notify Home Assistant when something actually changed. The printer pushes
         # status roughly once a second; without this gate every push forces all entities
@@ -201,30 +201,45 @@ class Device:
         if send_event:
             self._client.callback("event_printer_data_update")
 
-    def _request_missing_ams_identities(self) -> None:
-        """Ask for version info again while an attached AMS has no serial.
+    def _request_missing_version_info(self) -> None:
+        """Ask for version info again while the firmware version or the serial of an AMS is unknown.
 
         The printer only sends version info when asked, and the request made on connect can be
-        answered before the AMS has been identified or attached (#1831). No entities are created
-        for an AMS without a serial, so it would stay missing until the integration is reloaded.
+        answered before the printer has finished starting up (#2033) or before an AMS has been
+        identified or attached (#1831). Entities are only set up once the firmware version is known,
+        and an AMS without a serial gets none, so they would stay missing until something else
+        requests it.
         """
-        unidentified = frozenset(index for index, ams in self.ams.data.items() if not ams.serial)
+        missing = {f"AMS {index}" for index, ams in self.ams.data.items() if not ams.serial}
+        if not self.has_firmware_version:
+            missing.add("firmware")
         now = time.monotonic()
-        if unidentified != self._unidentified_ams:
-            self._unidentified_ams = unidentified
-            self._ams_identity_retry_delay = AMS_IDENTITY_RETRY_MIN
-            self._next_ams_identity_request_at = now
-        if not unidentified or now < self._next_ams_identity_request_at:
+        if missing != self._missing_version_info:
+            self._missing_version_info = frozenset(missing)
+            self._version_info_retry_delay = VERSION_INFO_RETRY_MIN
+            # Until the first reply, the request made on connect is still outstanding.
+            is_first_reply_pending = self.get_version_data is None
+            self._next_version_info_request_at = now + (VERSION_INFO_RETRY_MIN if is_first_reply_pending else 0)
+        if not missing or now < self._next_version_info_request_at:
             return
 
-        LOGGER.debug(f"Requesting version info for AMS units without a serial: {sorted(unidentified)}")
-        self._next_ams_identity_request_at = now + self._ams_identity_retry_delay
-        self._ams_identity_retry_delay = min(self._ams_identity_retry_delay * 2, AMS_IDENTITY_RETRY_MAX)
+        LOGGER.debug(f"Requesting missing version info: {sorted(missing)}")
+        self._next_version_info_request_at = now + self._version_info_retry_delay
+        next_delay = min(self._version_info_retry_delay * 2, VERSION_INFO_RETRY_MAX)
+        if not self.has_firmware_version and self._version_info_retry_delay < next_delay == VERSION_INFO_RETRY_MAX:
+            LOGGER.warning("The printer has not reported its firmware version, so its entities can't be set up yet.")
+        self._version_info_retry_delay = next_delay
         self._client.publish(GET_VERSION)
 
     @property
+    def has_firmware_version(self) -> bool:
+        return self.info.sw_ver != "unknown"
+
+    @property
     def has_full_printer_data(self):
-        return (self.push_all_data != None) and (self.get_version_data != None)
+        # A printer that is still starting up can send version info without its firmware version.
+        # Feature checks need that version, so such a reply doesn't count.
+        return (self.push_all_data != None) and (self.get_version_data != None) and self.has_firmware_version
 
     @property
     def ams_identities_resolved(self) -> bool:
@@ -247,11 +262,11 @@ class Device:
         purifier_info_changed = self.air_purifier.info_update(data = data)
 
         if data.get("command") == "get_version":
-            send_ready_event = self.get_version_data is None and self.push_all_data is not None
             if self.get_version_data is None:
                 LOGGER.debug("Reached first push of version data.")
             self.get_version_data = data
-            if (not had_full_printer_data and self.has_full_printer_data and
+            send_ready_event = not had_full_printer_data and self.has_full_printer_data
+            if (send_ready_event and
                 self.air_purifier.connected is True and not self.air_purifier.ready):
                 # The initial version response may precede accessory identification.
                 self._client.publish(GET_VERSION)
@@ -931,6 +946,8 @@ class Fans:
                 "command": "set_fan", "sequence_id": "0", "fan_index": 15, "speed": percentage,
             }}))
         percentage = round(percentage / 10) * 10
+        if fan == FansEnum.SECONDARY_AUXILIARY and percentage > 0 and self.secondary_aux_fan_locked_off:
+            return False
         command = fan_percentage_to_gcode(fan, percentage)
 
         # Do not report a local override when the broker rejected the publish.
@@ -957,6 +974,12 @@ class Fans:
     def h3c_chamber_fan_controllable(self) -> bool:
         mode = self._airduct_modes.get(self._airduct_mode, {})
         return 240 in (mode.get("ctrl") or []) and 240 not in (mode.get("off") or [])
+
+    @property
+    def secondary_aux_fan_locked_off(self) -> bool:
+        """True when the current airduct mode keeps the fan off, e.g. heating mode on the P2S."""
+        mode = self._airduct_modes.get(self._airduct_mode, {})
+        return 160 in (mode.get("off") or [])
 
     def get_fan_speed(self, fan: FansEnum) -> int | None:
         if fan == FansEnum.PART_COOLING:
@@ -1313,10 +1336,17 @@ ACTIVE_PRINT_IDENTITY = ("subtask_name", "task_id", "plate_idx", "gcode_start_ti
 AMS_MAPPING_MAX_AGE = 600
 
 
+# Cloud task statuses of a job that has ended, successfully or not.
+CLOUD_TASK_ENDED_STATUSES = (2, 3)
+# Seconds to wait before each new attempt to get a running cloud print's own task. When the print
+# starts, the cloud can still list the previous job as the newest or have no weight for this one.
+CLOUD_TASK_RETRY_DELAYS = (15, 30, 60, 120, 300, 600)
+
+
 # Files kept in the local print history and timelapse caches. A sidecar shares its primary
 # file's base name and is removed along with it.
 PRINT_CACHE_EXTENSIONS = ['.3mf']
-PRINT_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.slice_info.config', '.gcode']
+PRINT_CACHE_SIDECAR_EXTENSIONS = [".jpg", ".jpeg", ".png", ".slice_info.config"]
 TIMELAPSE_CACHE_EXTENSIONS = ['.mp4', '.avi', '.mov']
 TIMELAPSE_CACHE_SIDECAR_EXTENSIONS = ['.jpg', '.jpeg', '.png']
 
@@ -1333,6 +1363,7 @@ class PrintJob:
     _subtask_name: str
     model_id: str
     task_id: str
+    subtask_id: str
     plate_idx: int
     start_time: datetime
     end_time: datetime
@@ -1365,6 +1396,7 @@ class PrintJob:
         self._subtask_name = ""
         self.model_id = ""
         self.task_id = ""
+        self.subtask_id = ""
         self.plate_idx = 0
         self.start_time = None
         self.end_time = None
@@ -1392,6 +1424,12 @@ class PrintJob:
         self._ftpThread = None
         self._ftp_download_percentage = 100
         self._next_model_retry_at = 0.0
+        self._task_data = None
+        self._cloud_task_retries = 0
+        # None until the cloud has been asked about the print that is running.
+        self._next_cloud_task_retry_at = None
+        # The print figures were read from the printer, so a cloud retry must not replace them.
+        self._model_metadata_loaded = False
         self._gcode_start_time = ""
         # An ams_mapping arrived that hasn't been written to the restart record yet.
         self._ams_mapping_unsaved = False
@@ -1550,6 +1588,7 @@ class PrintJob:
 
         self.model_id = data.get("model_id", self.model_id)
         self.task_id = data.get("task_id", self.task_id)
+        self.subtask_id = data.get("subtask_id", self.subtask_id)
         self.plate_idx = data.get("plate_idx", self.plate_idx)
 
         # Printer-initiated prints and reprints can reach RUNNING before the
@@ -1567,6 +1606,7 @@ class PrintJob:
             self._clear_model_data()
             self._update_task_data()
         self.file_type_icon = "mdi:file" if self._print_type != "cloud" else "mdi:cloud-outline"
+        previous_layer = self.current_layer
         self.current_layer = data.get("layer_num", self.current_layer)
         self.total_layers = data.get("total_layer_num", self.total_layers)
         if "ams_mapping" in data:
@@ -1620,6 +1660,11 @@ class PrintJob:
                 # We can update task data from the cloud immediately. But ftp has to wait.
                 self._update_task_data()
 
+        # Handle layer change. The reset to 0 between prints isn't a layer, and the first data after
+        # connecting mid-print only tells us the layer already in progress.
+        if previous_gcode_state != "unknown" and self.current_layer > 0 and self.current_layer != previous_layer:
+            self._client.callback("event_print_layer_changed")
+
         old_gcode_file_prepare_percent = self._gcode_file_prepare_percent
         self._gcode_file_prepare_percent = int(data.get("gcode_file_prepare_percent", str(self._gcode_file_prepare_percent)))
         if self.gcode_state == "PREPARE":
@@ -1653,6 +1698,9 @@ class PrintJob:
             elif self.gcode_state == "RUNNING" and time.monotonic() >= self._next_model_retry_at:
                 LOGGER.debug("RETRYING MISSING ACTIVE PRINT MEDIA")
                 self._update_task_data()
+
+        if self._cloud_task_retry_due():
+            self._retry_cloud_task()
 
         print_ended = currently_idle and not previously_idle and previous_gcode_state != "unknown"
         if print_ended:
@@ -2534,7 +2582,8 @@ class PrintJob:
     def prune_print_history_files(self):
         if self._client._test_mode:
             return
-        self._prune_print_history(keep=self._client._print_cache_count)
+        self._prune_print_history(keep=self._client._print_cache_count,
+                                  max_bytes=self._client._print_cache_max_mb * 1024 * 1024)
 
     async def async_prune_timelapse_files(self):
         loop = asyncio.get_event_loop()
@@ -2564,11 +2613,18 @@ class PrintJob:
         LOGGER.info("Clearing cached timelapses")
         self._prune_timelapses(keep=0)
 
-    def _prune_print_history(self, keep: int):
-        self._prune_old_files(directory=os.path.join(self._client.cache_path, "prints"),
-                              extensions=PRINT_CACHE_EXTENSIONS,
-                              keep=keep,
-                              extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS)
+    def _prune_print_history(self, keep: int, max_bytes: int = 0):
+        cache_dir = os.path.join(self._client.cache_path, "prints")
+        self._prune_old_files(
+            directory=cache_dir,
+            extensions=PRINT_CACHE_EXTENSIONS,
+            keep=keep,
+            extra_extensions=PRINT_CACHE_SIDECAR_EXTENSIONS,
+            max_bytes=max_bytes,
+        )
+        self._prune_old_files(
+            directory=cache_dir, extensions=[".gcode"], keep=1 if keep != 0 else 0
+        )
 
     def _prune_timelapses(self, keep: int):
         cache_file_path = os.path.join(self._client.cache_path, "timelapse")
@@ -2616,21 +2672,33 @@ class PrintJob:
                 LOGGER.error(f"Failed to delete stale partial download {part_file}: {e}")
         return deleted_count
 
-    def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=None):
+    @staticmethod
+    def _cache_entry_size(primary_file: Path, extra_extensions: List[str]) -> int:
+        """Size in bytes of a cached file plus any sidecars that are pruned with it."""
+        size = 0
+        base_name = os.path.splitext(primary_file)[0]
+        for path in [str(primary_file)] + [base_name + ext for ext in extra_extensions]:
+            try:
+                size += os.path.getsize(path)
+            except OSError:
+                pass
+        return size
+
+    def _prune_old_files(self, directory: str, extensions: List[str], keep: int, extra_extensions=None, max_bytes: int = 0):
         dir_path = Path(directory)
         if not dir_path.is_dir():
             return
 
         self._cleanup_stale_part_files(dir_path)
 
-        if keep == -1:
+        if keep == -1 and max_bytes <= 0:
             # Cache pruning is disabled.
             LOGGER.debug("Skipping as pruning is disabled.")
             return
 
         if extra_extensions is None:
             extra_extensions = []
-        
+
         LOGGER.debug(f"{dir_path}")
 
         extension_set = {extension.lower() for extension in extensions}
@@ -2644,11 +2712,26 @@ class PrintJob:
         # Sort files by last modification time, newest first
         matching_files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
 
-        # Files to delete: those beyond the 'keep' most recent
-        old_files = matching_files[keep:]
+        # Files to delete: those beyond the 'keep' most recent (-1 keeps any number)
+        if keep == -1:
+            kept_files, old_files = matching_files, []
+        else:
+            kept_files, old_files = matching_files[:keep], matching_files[keep:]
 
         LOGGER.debug(f"Keeping up to {keep} files. Deleting {len(old_files)} excess files.")
-        
+
+        if max_bytes > 0:
+            # Also enforce a total size limit across each kept file and its sidecars. The newest
+            # file is always kept so the active print's model is never removed.
+            total_bytes = 0
+            for index, primary_file in enumerate(kept_files):
+                total_bytes += self._cache_entry_size(primary_file, extra_extensions)
+                if index > 0 and total_bytes > max_bytes:
+                    over_limit = kept_files[index:]
+                    LOGGER.debug(f"Cache exceeds {max_bytes} bytes. Deleting {len(over_limit)} more files.")
+                    old_files = over_limit + old_files
+                    break
+
         for primary_file in old_files:
             try:
                 os.remove(primary_file )
@@ -2826,6 +2909,9 @@ class PrintJob:
     def _clear_model_data(self):
         LOGGER.debug("Clearing model data")
         self._loaded_model_data = False
+        self._model_metadata_loaded = False
+        self._cloud_task_retries = 0
+        self._next_cloud_task_retry_at = None
         self._client._device.cover_image.set_image(None)
         self._clear_pick_data()
         # These figures describe one specific job. If they survive and the next
@@ -3070,6 +3156,7 @@ class PrintJob:
                         LOGGER.error(f"Failed to parse filament data: {e}")
 
             self.print_length = print_length
+            self._model_metadata_loaded = True
 
             if pick_image_bytes is not None and plate_number is not None:
                 try:
@@ -3395,7 +3482,67 @@ class PrintJob:
         if self._client.bambu_cloud.auth_token == "":
             return
 
-        self._task_data = self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial)
+        self._apply_cloud_task(self._fetch_cloud_task())
+
+    def _cloud_task_ids(self) -> frozenset[str]:
+        """The ids the running job's cloud task can have, empty if the printer reported none."""
+        # Newer firmware reports the cloud task's id in both fields, older firmware two different ids.
+        return frozenset(str(value) for value in (self.task_id, self.subtask_id) if value) - {"0"}
+
+    def _fetch_cloud_task(self) -> dict | None:
+        retry = min(self._cloud_task_retries, len(CLOUD_TASK_RETRY_DELAYS) - 1)
+        self._next_cloud_task_retry_at = time.monotonic() + CLOUD_TASK_RETRY_DELAYS[retry]
+        return self._client.bambu_cloud.get_latest_task_for_printer(self._client._serial, self._cloud_task_ids())
+
+    def _is_own_cloud_task(self, task: dict) -> bool:
+        return str(task.get('id')) in self._cloud_task_ids()
+
+    def _is_previous_cloud_task(self, task: dict) -> bool:
+        """Whether this task can only belong to a job before the one that is running."""
+        return (
+            self._is_printing()
+            and self._print_type != "local"
+            and not self._is_own_cloud_task(task)
+            and task.get('status') in CLOUD_TASK_ENDED_STATUSES
+        )
+
+    def _is_unconfirmed_cloud_task(self, task: dict) -> bool:
+        """Whether this task may not be the running job's, as far as the printer's ids can tell."""
+        if self._cloud_task_ids():
+            return not self._is_own_cloud_task(task)
+        return self._is_previous_cloud_task(task)
+
+    def _cloud_task_retry_due(self) -> bool:
+        if not self._is_printing() or self._print_type != "cloud":
+            return False
+        if self._client.bambu_cloud.auth_token == "":
+            return False
+        if self._model_metadata_loaded or self._ftpThread is not None:
+            return False
+        if self._cloud_task_retries >= len(CLOUD_TASK_RETRY_DELAYS):
+            return False
+        if self._next_cloud_task_retry_at is None or time.monotonic() < self._next_cloud_task_retry_at:
+            return False
+        return (
+            self._task_data is None
+            or not self._task_data.get('weight')
+            or self._is_unconfirmed_cloud_task(self._task_data)
+        )
+
+    def _retry_cloud_task(self):
+        LOGGER.debug("RETRYING CLOUD TASK FOR ACTIVE PRINT")
+        self._cloud_task_retries += 1
+        task = self._fetch_cloud_task()
+        if task is None or self._is_unconfirmed_cloud_task(task):
+            return
+        # Applying a task downloads its cover, so don't repeat that for one that still has no weight.
+        already_applied = self._task_data is not None and self._task_data.get('id') == task.get('id')
+        if already_applied and not task.get('weight'):
+            return
+        self._apply_cloud_task(task)
+
+    def _apply_cloud_task(self, task: dict | None):
+        self._task_data = task
         self._ams_print_weights = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         self._ams_print_lengths = [0.0] * AMS_HT_UNIT_END # TODO: Convert to a dict in the future?
         if self._task_data is None:
@@ -3406,6 +3553,10 @@ class PrintJob:
             self.print_bed_type = "unknown"
             self.start_time = None
             self.end_time = None
+        elif self._is_previous_cloud_task(task):
+            LOGGER.debug("Newest bambu cloud task belongs to an earlier print.")
+            self.print_weight = 0
+            self.print_length = 0
         else:
             LOGGER.debug("Updating bambu cloud task data found for printer.")
             # For local prints with FTP available, the printer's 3mf is the
@@ -4416,6 +4567,15 @@ RACK_AMS_VIRTUAL_SLOT_LOADED_STATE = (AMSTrayStateFlags.SPOOL | AMSTrayStateFlag
                                     | AMSTrayStateFlags.STEADY)
 
 
+def extruder_slot(value: int) -> tuple[int, int]:
+    """Split an extruder `snow`/`star` value (unit << 8 | tray) into (ams index, tray index)."""
+    if value == 0xFF:
+        # Sent instead of 0xFFFF for "no tray" (the X1C does so when idle), like the legacy
+        # tray_now/tray_tar. Splitting it would give AMS 0.
+        return 255, 255
+    return value >> 8, value & 0xFF
+
+
 def _virtual_slot_loaded(entry: dict) -> bool:
     """True when a vir_slot entry reports a mounted spool."""
     if "state" in entry:
@@ -4594,7 +4754,7 @@ class AMSList:
                 # Sometimes we get incomplete version data. We have to skip if that occurs since the serial number is
                 # required as part of the home assistant device identity. An AMS the printer cannot currently identify
                 # reports the placeholder "N/A"; it is not a serial, and several units can report it at once.
-                if module.get('sn', '') not in ('', 'N/A'):
+                if module.get('sn', '') not in AMS_PLACEHOLDER_SERIALS:
                     # May get data before info so create entries if necessary
                     if index not in self.data:
                         data_changed = True
@@ -4688,11 +4848,11 @@ class AMSList:
             for entry in extruder_data:
                 if entry.get("id") in (0, 1):
                     if "snow" in entry:
-                        tray_now = entry["snow"]
-                        self._nozzle_ams_index[entry["id"]] = tray_now >> 8
-                        self._nozzle_tray_index[entry["id"]] = tray_now & 0xFF
+                        ams_index, tray_index = extruder_slot(entry["snow"])
+                        self._nozzle_ams_index[entry["id"]] = ams_index
+                        self._nozzle_tray_index[entry["id"]] = tray_index
                     if "star" in entry:
-                        self._nozzle_target_ams_index[entry["id"]] = entry["star"] >> 8
+                        self._nozzle_target_ams_index[entry["id"]], _ = extruder_slot(entry["star"])
         else:
             tray_tar = ams_data.get('tray_tar')
             if tray_tar is not None:
@@ -4924,6 +5084,7 @@ class AMSTray:
     tray_uuid: str
     tray_weight: int
     _active: bool
+    tray_id_name: str
     cols: list
     ctype: int
     filament_diameter: float | None
@@ -4955,6 +5116,7 @@ class AMSTray:
         self.tray_uuid = ""
         self.tray_weight = 0
         self._active = False
+        self.tray_id_name = ""
         self.cols = []
         self.ctype = 0
         self.dry_temp = 0
@@ -4967,6 +5129,13 @@ class AMSTray:
     def unknown(self) -> bool:
         """True when a spool is loaded but vendor/material/colour are not assigned."""
         return not self.empty and self.name == UNKNOWN_TRAY_LABEL
+
+    @property
+    def color_name(self) -> str | None:
+        """Bambu Lab's name for the filament color, None when it has none."""
+        # cols is not part of every update, so it may belong to an earlier color.
+        colors = self.cols if self.color in self.cols else [self.color]
+        return get_filament_color_name(self.idx, colors, self.tray_id_name)
 
     @property
     def remain(self) -> int:
@@ -4999,6 +5168,7 @@ class AMSTray:
         self.tray_uuid = ""
         self.k = 0
         self.tray_weight = 0
+        self.tray_id_name = ""
         self.cols = []
         self.ctype = 0
         self.dry_temp = 0
@@ -5033,6 +5203,9 @@ class AMSTray:
             self.idx = data.get('tray_info_idx', self.idx)
             self.type = data.get('tray_type', self.type)
             self.sub_brands = data.get('tray_sub_brands', self.sub_brands)
+            if data.get('tray_color', self.color) != self.color:
+                # The tag code belongs to the previous color.
+                self.tray_id_name = ""
             self.color = data.get('tray_color', self.color)
             self.nozzle_temp_min = data.get('nozzle_temp_min', self.nozzle_temp_min)
             self.nozzle_temp_max = data.get('nozzle_temp_max', self.nozzle_temp_max)
@@ -5041,6 +5214,7 @@ class AMSTray:
             self.tray_uuid = data.get('tray_uuid', self.tray_uuid)
             self.k = data.get('k', self.k)
             self.tray_weight = data.get('tray_weight', self.tray_weight)
+            self.tray_id_name = data.get('tray_id_name', self.tray_id_name)
             self.cols = data.get('cols', self.cols)
             self.ctype = data.get('ctype', self.ctype)
             self.dry_temp = data.get('drying_temp', data.get('tray_temp', self.dry_temp))
@@ -5158,6 +5332,7 @@ class ExternalSpool(AMSTray):
         self.tray_uuid = ""
         self.k = 0
         self.tray_weight = 0
+        self.tray_id_name = ""
         self.cols = []
         self.ctype = 0
         self.dry_temp = 0
@@ -5846,6 +6021,9 @@ class SlicerSettings:
     def _load_custom_filaments(self, slicer_settings: dict):
         filaments = slicer_settings.get("filament")
         if filaments is not None:
+            # Build the new set aside and swap it in whole, so readers on other threads
+            # never see it empty or half loaded.
+            custom_filaments = {}
             private_filaments = filaments.get("private", {})
             for filament in private_filaments:
                 if filament.get("filament_id", "") != "":
@@ -5853,7 +6031,7 @@ class SlicerSettings:
                     if " @" in name:
                         name = name[:name.index(" @")]
                     id = filament["filament_id"]
-                    self.custom_filaments[id] = FilamentInfo(
+                    custom_filaments[id] = FilamentInfo(
                         name=name,
                         filament_vendor=filament["filament_vendor"],
                         filament_type=filament["filament_type"],
@@ -5862,7 +6040,8 @@ class SlicerSettings:
                         nozzle_temperature_range_high=filament["nozzle_temperature"][1],
                         nozzle_temperature_range_low=filament["nozzle_temperature"][0]
                     )
-            LOGGER.debug(f"Got {len(self.custom_filaments)} custom filaments.")
+            self.custom_filaments = custom_filaments
+            LOGGER.debug(f"Got {len(custom_filaments)} custom filaments.")
         else:
             LOGGER.debug(f"Received no filament data: {filaments}")
 
@@ -5874,9 +6053,12 @@ class SlicerSettings:
     RETRY_DELAY_S = (15, 45)
 
     def update(self):
-        """Load slicer settings. Runs on its own thread, so sleeping here is safe."""
-        self.custom_filaments = {}
+        """Load slicer settings. Runs on its own thread, so sleeping here is safe.
+
+        This runs on every printer reconnect, so the filaments already loaded are kept
+        until a fetch succeeds (#2338)."""
         if self._client.bambu_cloud.auth_token == "":
+            self.custom_filaments = {}
             return
 
         printer = f"{self._client._device.info.device_type} / {self._client._serial}"
@@ -5903,7 +6085,7 @@ class SlicerSettings:
 
         LOGGER.warning(f"Could not load slicer settings for {printer} after {self.MAX_ATTEMPTS} attempts "
                        "(transient Bambu Cloud error, not an authentication failure). Custom filaments "
-                       "will be unavailable until the printer reconnects.")
+                       "will not be refreshed until the printer reconnects.")
 
 
 class FilamentInventory:

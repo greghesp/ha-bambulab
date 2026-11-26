@@ -4,6 +4,7 @@ import asyncio
 import ftplib
 import functools
 import json
+import logging
 import math
 import os
 import queue
@@ -78,6 +79,15 @@ class WatchdogThread(threading.Thread):
 THREAD_STOP_TIMEOUT = 5
 # Without a timeout, connecting to a host that silently drops packets can block for minutes.
 CHAMBER_CONNECT_TIMEOUT = 10
+# Seconds a dropped connection gets to come back before the printer is reported offline. Long enough
+# for paho's first three reconnect attempts, about 1, 3 and 7 seconds after the drop.
+OFFLINE_GRACE_PERIOD = 10
+# Frames normally arrive every second or two. If the printer drops off without closing the
+# connection, reads just report that no data is ready forever, so reconnect after this long.
+CHAMBER_STALL_TIMEOUT = 30
+# Consecutive failed connects before slowing down the retries and no longer logging each one.
+CHAMBER_FAST_CONNECT_ATTEMPTS = 12
+CHAMBER_SLOW_RETRY_INTERVAL = 60
 
 
 def _stop_thread(thread: threading.Thread, name: str) -> None:
@@ -110,8 +120,11 @@ class ChamberImageThread(threading.Thread):
         access_code = self._client._access_code
         hostname = self._client._device.info.ip_address
         port = 6000
-        MAX_CONNECT_ATTEMPTS = 12
         connect_attempts = 0
+
+        def log_failure(message: str) -> None:
+            retrying_slowly = connect_attempts > CHAMBER_FAST_CONNECT_ATTEMPTS
+            LOGGER.log(logging.DEBUG if retrying_slowly else logging.ERROR, message)
 
         auth_data += struct.pack("<I", 0x40)   # '@'\0\0\0
         auth_data += struct.pack("<I", 0x3000) # \0'0'\0\0
@@ -146,8 +159,13 @@ class ChamberImageThread(threading.Thread):
         # Bytes payload_size-2:payload_size = jpeg_end magic bytes
         #
         # Further attempts to receive data will get SSLWantReadError until a new image is ready (1-2 seconds later)
-        while connect_attempts < MAX_CONNECT_ATTEMPTS and not self._stop_event.is_set():
+        while not self._stop_event.is_set():
+            if connect_attempts >= CHAMBER_FAST_CONNECT_ATTEMPTS:
+                # Never give up. Nothing restarts this thread while MQTT stays connected.
+                if self._stop_event.wait(CHAMBER_SLOW_RETRY_INTERVAL):
+                    break
             connect_attempts += 1
+            sslSock = None
             try:
                 with socket.create_connection((hostname, port), timeout=CHAMBER_CONNECT_TIMEOUT) as sock:
                     try:
@@ -159,19 +177,25 @@ class ChamberImageThread(threading.Thread):
                         status = sslSock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
                         LOGGER.debug(f"SOCKET STATUS: {status}")
                         if status != 0:
-                            LOGGER.error(f"Socket error: {status}")
+                            log_failure(f"Socket error: {status}")
                     except socket.error as e:
-                        LOGGER.error(f"Socket error: {e}")
+                        log_failure(f"Socket error: {e}")
                         # Sleep to allow printer to stabilize during boot when it may fail these connection attempts repeatedly.
                         if self._stop_event.wait(1):
                             break
                         continue
 
                     sslSock.setblocking(False)
+                    last_data_time = time.monotonic()
                     while not self._stop_event.is_set():
                         try:
                             dr = sslSock.recv(read_chunk_size)
+                            last_data_time = time.monotonic()
                         except ssl.SSLWantReadError:
+                            if time.monotonic() - last_data_time > CHAMBER_STALL_TIMEOUT:
+                                if connect_attempts == 0:
+                                    LOGGER.warning(f"No chamber image data received for {CHAMBER_STALL_TIMEOUT} seconds, reconnecting.")
+                                raise TimeoutError("Chamber image connection stalled")
                             if self._stop_event.wait(1):
                                 break
                             continue
@@ -208,27 +232,33 @@ class ChamberImageThread(threading.Thread):
 
                         elif len(dr) == 0:
                             # This occurs if the wrong access code was provided.
-                            LOGGER.error("Chamber image connection rejected by the printer. Check provided access code and IP address.")
+                            log_failure("Chamber image connection rejected by the printer. Check provided access code and IP address.")
                             raise RuntimeError("Received no data unexpectedly.")
 
                         else:
-                            LOGGER.error(f"UNEXPECTED DATA RECEIVED: {len(dr)}")
+                            log_failure(f"UNEXPECTED DATA RECEIVED: {len(dr)}")
                             raise RuntimeError(f"Unexpected data chunk size received: {len(dr)}")
 
             except OSError as e:
                 if e.errno == 113 or isinstance(e, TimeoutError):
-                    LOGGER.debug("Host is unreachable")
+                    LOGGER.debug(f"Host is unreachable: {e}")
                 else:
-                    LOGGER.error("Chamber Image thread outer exception occurred:")
-                    LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                    log_failure("Chamber Image thread outer exception occurred:")
+                    log_failure(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(2)  # Avoid a tight loop if this is a persistent error.
 
             except Exception as e:
-                LOGGER.error(f"Chamber Image thread exception occurred:")
-                LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
+                log_failure("Chamber Image thread exception occurred:")
+                log_failure(f"Exception. Type: {type(e)} Args: {e}")
                 if not self._stop_event.is_set():
                     time.sleep(2)  # Avoid a tight loop if this is a persistent error.
+
+            finally:
+                # wrap_socket() takes over the socket, so the with block does not close it.
+                # Release it before retrying as the printer limits the number of viewers.
+                if sslSock is not None:
+                    sslSock.close()
 
         LOGGER.debug("Chamber image thread exited.")
 
@@ -397,6 +427,8 @@ class BambuClient:
         if self._print_cache_count == 0:
             # We always cache at least one model as we use that to avoid redownloading from ftp on startup.
             self._print_cache_count = 1
+        # Total size limit for the print cache in MB. 0 means no size limit (count limit only).
+        self._print_cache_max_mb = max(0, int(config.get('print_cache_max_mb', 0)))
         self._timelapse_cache_count = max(-1, int(config.get('timelapse_cache_count', 0)))
         self._disable_ssl_verify = config.get('disable_ssl_verify', False)
         self._cache_path = config.get('file_cache_path', f'/media/ha-bambulab/{self._serial}')
@@ -409,6 +441,8 @@ class BambuClient:
         self._port = 8883
         self._refreshed = False
         self._last_error_code = 0
+        self._offline_timer: threading.Timer | None = None
+        self._offline_lock = threading.Lock()
 
         self._device = Device(self)
         self.bambu_cloud = BambuCloud(
@@ -625,25 +659,70 @@ class BambuClient:
             else:
                 LOGGER.debug(f"On Disconnect: Printer disconnected with error code: {result_code}")
         self._last_error_code = result_code
-        self._on_disconnect()
+        # A clean disconnect is one we asked for and access denied won't resolve itself. Anything else
+        # may be a momentary drop that paho recovers from straight away.
+        self._on_disconnect(allow_grace_period=result_code not in (0, 5))
         if self._last_error_code == 5:
             # Error code 5 is access denied. This is not likely to resolve itself. Do not loop forever.
             self.client.disconnect()
 
-    def _on_disconnect(self):
+    def _on_disconnect(self, allow_grace_period: bool = True):
         LOGGER.debug("_on_disconnect: Lost connection to the printer")
         self._loaded_slicer_settings = False
         self._connected = False
         self._device_confirmed = False
-        self._device.info.set_online(False)
+        if allow_grace_period:
+            self._set_offline_after_grace_period()
+        else:
+            self._set_offline()
         if self._watchdog is not None:
             LOGGER.debug("Stopping watchdog thread")
             _stop_thread(self._watchdog, "Watchdog")
         self.stop_camera()
 
+    def _cancel_offline_timer(self):
+        """Callers must hold the offline lock."""
+        if self._offline_timer is not None:
+            self._offline_timer.cancel()
+            self._offline_timer = None
+
+    def _set_online(self):
+        with self._offline_lock:
+            self._cancel_offline_timer()
+            self._device.info.set_online(True)
+
+    def _set_offline(self):
+        with self._offline_lock:
+            self._cancel_offline_timer()
+            self._device.info.set_online(False)
+
+    def _set_offline_after_grace_period(self):
+        # State reported before the drop can't be trusted even if the printer never shows as offline.
+        self._device.hotend_rack.invalidate_control_state()
+        with self._offline_lock:
+            if self.client is None:
+                # We have been shut down.
+                return
+            if self._offline_timer is not None or not self._device.info.online:
+                # Already waiting or already offline. A repeated drop must not extend the wait.
+                return
+            self._offline_timer = threading.Timer(OFFLINE_GRACE_PERIOD, self._on_grace_period_expired)
+            self._offline_timer.daemon = True
+            self._offline_timer.start()
+
+    def _on_grace_period_expired(self):
+        """Called on the timer's own thread."""
+        with self._offline_lock:
+            if threading.current_thread() is not self._offline_timer:
+                # The printer came back just as this timer fired.
+                return
+            self._offline_timer = None
+            LOGGER.debug(f"Connection not restored within {OFFLINE_GRACE_PERIOD} seconds.")
+            self._device.info.set_online(False)
+
     def _on_watchdog_fired(self):
         LOGGER.info("Watch dog fired")
-        self._device.info.set_online(False)
+        self._set_offline()
         self.publish(START_PUSH)
 
     def on_jpeg_received(self, bytes):
@@ -687,9 +766,9 @@ class BambuClient:
                     self._on_connect()
                 elif json_data.get("event").get("event") == "client.disconnected":
                     LOGGER.debug("Client disconnected event received.")
-                    self._on_disconnect()
+                    self._on_disconnect(allow_grace_period=False)
             else:
-                self._device.info.set_online(True)
+                self._set_online()
                 self._on_device_confirmed()
                 if self._watchdog is not None:
                     self._watchdog.received_data()
@@ -772,7 +851,9 @@ class BambuClient:
             self._camera.join(timeout=5)
             self._camera = None
 
-        self.client = None
+        with self._offline_lock:
+            self._cancel_offline_timer()
+            self.client = None
 
 
     def ftp_connection(self) -> ImplicitFTP_TLS:

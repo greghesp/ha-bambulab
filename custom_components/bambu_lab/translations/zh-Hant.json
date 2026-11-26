@@ -10,7 +10,8 @@
       "event_printer_error": "HMS 錯誤",
       "event_printer_error_cleared": "HMS 錯誤已清除",
       "event_printer_missing_sdcard": "找不到 SD 卡",
-      "event_timelapse_downloaded": "遊戲中時光倒流下載"
+      "event_timelapse_downloaded": "遊戲中時光倒流下載",
+      "event_print_layer_changed": "列印層已更改"
     }
   },
   "config": {
@@ -21,7 +22,9 @@
       "curl_unavailable": "curl_cffi 函式庫無法使用。",
       "no_working_credentials": "此帳戶沒有可用的 Bambu Cloud 印表機憑證。",
       "reconfigure_not_supported": "只有 MakerWorld 帳戶條目可以透過這種方式重新配置。",
-      "reconfigure_successful": "MakerWorld 憑證已更新。"
+      "reconfigure_successful": "MakerWorld 憑證已更新。",
+      "device_not_found": "該印表機不在 Bambu 雲端帳戶中。重試並使用印表機綁定的帳戶登入。",
+      "device_list_failed": "無法從Bambu雲端取得印表機清單。檢查 Home Assistant 日誌並重試。"
     },
     "error": {
       "cannot_connect": "連線失敗，請檢查憑證。",
@@ -43,7 +46,8 @@
       "code_expired": "驗證碼已過期，已重新申請新的驗證碼，請檢查您的電子郵件或手機。",
       "code_incorrect": "驗證碼不正確，請重新輸入。",
       "tfaCode": "需要兩步驟驗證碼，請立即輸入。",
-      "tfa_csrf_fallback": "Bambu Lab 的兩步驟驗證端點目前拒絕請求，已改為將驗證碼寄送至您的電子郵件或手機，請在下方輸入。"
+      "tfa_csrf_fallback": "Bambu Lab 的兩步驟驗證端點目前拒絕請求，已改為將驗證碼寄送至您的電子郵件或手機，請在下方輸入。",
+      "incorrect_password": "Bambu Lab 拒絕了密碼。這必須是您的 Bambu Lab 帳戶密碼，該密碼與您的 Google、Apple 或 Facebook 密碼分開。如果沒有，請將密碼留空以使用驗證碼登入。"
     },
     "step": {
       "user": {
@@ -62,6 +66,9 @@
           "newCode": "申請新的驗證碼",
           "verifyCode": "電子郵件或手機驗證碼",
           "tfaCode": "兩步驟驗證碼"
+        },
+        "data_description": {
+          "password": "留空可使用發送到您的電子郵件或手機的驗證碼登錄，例如，如果您透過 Google、Apple 或 Facebook 登入 Bambu Lab。"
         }
       },
       "Bambu_Choose_Device": {
@@ -80,7 +87,8 @@
           "access_code": "存取碼：",
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
-          "usage_hours": "目前使用時數（選填）："
+          "usage_hours": "目前使用時數（選填）：",
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）："
         },
         "sections": {
           "advanced": {
@@ -102,7 +110,8 @@
           "access_code": "存取碼：",
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
-          "usage_hours": "目前使用時數（選填）："
+          "usage_hours": "目前使用時數（選填）：",
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）："
         },
         "sections": {
           "advanced": {
@@ -138,7 +147,9 @@
       "cloudflare": "Cloudflare 已封鎖連線嘗試。",
       "curl_unavailable": "curl_cffi 函式庫無法使用。",
       "no_working_credentials": "此帳戶沒有可用的 Bambu Cloud 印表機憑證。",
-      "no_ams": "此打印机上尚未识别出 AMS。等待印表機連接並報告其 AMS 單位，然後重試。"
+      "no_ams": "此打印机上尚未识别出 AMS。等待印表機連接並報告其 AMS 單位，然後重試。",
+      "device_not_found": "該印表機不在 Bambu 雲端帳戶中。重試並使用印表機綁定的帳戶登入。",
+      "device_list_failed": "無法從Bambu雲端取得印表機清單。如果您儲存的登入資訊已過期，請重新重新配置並選擇 Bambu Lab 雲端進行登入。否則請檢查 Home Assistant 日誌並重試。"
     },
     "error": {
       "cannot_connect": "連線失敗",
@@ -160,7 +171,8 @@
       "code_expired": "驗證碼已過期，已重新申請新的驗證碼，請檢查您的電子郵件或手機。",
       "code_incorrect": "驗證碼不正確，請重新輸入。",
       "tfaCode": "需要兩步驟驗證碼，請立即輸入。",
-      "tfa_csrf_fallback": "Bambu Lab 的兩步驟驗證端點目前拒絕請求，已改為將驗證碼寄送至您的電子郵件或手機，請在下方輸入。"
+      "tfa_csrf_fallback": "Bambu Lab 的兩步驟驗證端點目前拒絕請求，已改為將驗證碼寄送至您的電子郵件或手機，請在下方輸入。",
+      "incorrect_password": "Bambu Lab 拒絕了密碼。這必須是您的 Bambu Lab 帳戶密碼，該密碼與您的 Google、Apple 或 Facebook 密碼分開。如果沒有，請將密碼留空以使用驗證碼登入。"
     },
     "step": {
       "init": {
@@ -180,6 +192,9 @@
           "newCode": "申請新的驗證碼",
           "verifyCode": "電子郵件或手機驗證碼",
           "tfaCode": "兩步驟驗證碼"
+        },
+        "data_description": {
+          "password": "留空可使用發送到您的電子郵件或手機的驗證碼登錄，例如，如果您透過 Google、Apple 或 Facebook 登入 Bambu Lab。"
         }
       },
       "Bambu_Lan": {
@@ -193,7 +208,9 @@
           "skip_local_mqtt": "略過本機 MQTT 連線測試（不建議）：",
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
-          "usage_hours": "目前使用時數（選填）："
+          "usage_hours": "目前使用時數（選填）：",
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）：",
+          "register_cards": "將 Bambu Lab 卡新增至儀表板資源（當任何印表機開啟該卡時，它們會保留）："
         },
         "sections": {
           "advanced": {
@@ -214,7 +231,9 @@
           "access_code": "存取碼：",
           "print_cache_count": "快取至 Home Assistant 的模型數量（-1 表示無限制）：",
           "timelapse_cache_count": "快取至 Home Assistant 的縮時攝影影片數量（-1 表示無限制）：",
-          "usage_hours": "目前使用時數（選填）："
+          "usage_hours": "目前使用時數（選填）：",
+          "print_cache_max_mb": "快取模型的最大總大小（以 MB 為單位）（0 表示無大小限制）：",
+          "register_cards": "將 Bambu Lab 卡新增至儀表板資源（當任何印表機開啟該卡時，它們會保留）："
         },
         "sections": {
           "advanced": {
@@ -1003,6 +1022,9 @@
           },
           "tray_weight": {
             "name": "線材最大重量"
+          },
+          "color_name": {
+            "name": "顏色名稱"
           }
         }
       },
@@ -1068,6 +1090,9 @@
           },
           "tray_weight": {
             "name": "線材最大重量"
+          },
+          "color_name": {
+            "name": "顏色名稱"
           }
         }
       },

@@ -33,6 +33,10 @@ CLEAR_FILE_CACHE_TIMELAPSE = "timelapse"
 CLEAR_FILE_CACHE_ALL = "all"
 CLEAR_FILE_CACHE_TYPES = (CLEAR_FILE_CACHE_PRINTS, CLEAR_FILE_CACHE_TIMELAPSE, CLEAR_FILE_CACHE_ALL)
 
+# Default total size limit (MB) for the print cache offered when a printer is added.
+# Existing printers without the option keep a count-only limit (0 = no size limit).
+DEFAULT_PRINT_CACHE_MAX_MB = 2048
+
 # Options key mapping AMS serial -> switch entity_id of the smart plug powering an
 # external AMS heater or dryer (e.g. SUNLU AMS Heater, EIBOS Series X).
 CONF_AMS_HEATERS = "ams_heaters"
@@ -51,13 +55,18 @@ PLATFORMS = (
     Platform.UPDATE,
 )
 
+# The ha-bambulab-cards release workflow rewrites this list with json.dumps, so
+# it keeps that layout. Ruff formatting it would fail every frontend sync PR.
+# fmt: off
 BAMBU_LAB_CARDS = [
     {
         'name': 'Bambu Lab Cards',
         'filename': 'ha-bambulab-cards.js',
-        'version': '0.8.7'
+        'version': '0.8.9'
     }
 ]
+# fmt: on
+
 
 class Options(IntEnum):
     CAMERA = 1,

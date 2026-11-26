@@ -1,0 +1,64 @@
+name: Bump minimum Home Assistant
+
+# We support Home Assistant releases from the last 6 months (see
+# scripts/ha_min_version.py). Once a month this raises the minimum in hacs.json
+# and opens a pull request, so whatever is on main when a release is cut
+# already carries the right floor.
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Work out the new minimum
+        id: bump
+        run: python3 scripts/ha_min_version.py bump
+
+      # Pull requests opened with GITHUB_TOKEN don't trigger the Tests
+      # workflow, so test the new floor here before opening one.
+      - uses: actions/setup-python@v7
+        if: steps.bump.outputs.changed == 'true'
+        with:
+          python-version: ${{ steps.bump.outputs.python }}
+
+      - uses: astral-sh/setup-uv@v10.4.0
+        if: steps.bump.outputs.changed == 'true'
+
+      - name: Test against the new minimum
+        if: steps.bump.outputs.changed == 'true'
+        run: |
+          uv pip install --system -r tests/requirements_ha.txt "homeassistant==${{ steps.bump.outputs.new }}"
+          python -m pytest tests -q
+
+      - name: Open pull request
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OLD: ${{ steps.bump.outputs.old }}
+          NEW: ${{ steps.bump.outputs.new }}
+        run: |
+          BRANCH="chore/ha-minimum-$NEW"
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null; then
+            echo "$BRANCH already exists; leaving the open pull request alone."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git commit -am "chore: require Home Assistant $NEW or newer"
+          git push origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "chore: require Home Assistant $NEW or newer" \
+            --body "Raises the minimum Home Assistant version from $OLD to $NEW, in line with supporting the last 6 months of releases. The test suite passed against $NEW in the run that opened this.
+
+          HACS stops offering new releases to anyone below $NEW, so call this out at the top of the next release notes."

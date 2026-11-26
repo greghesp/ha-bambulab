@@ -31,15 +31,18 @@ def _coordinator():
     coordinator._is_service_call_for_me = lambda data: True
     coordinator.get_model = lambda: model
     coordinator._run_service_call = MagicMock(side_effect=AssertionError("must not use the MQTT path"))
+    coordinator.delete_cached_file = AsyncMock(return_value={"success": True})
     return coordinator, print_job
 
 
-def _call(coordinator, data):
+def _call(coordinator, data, service):
     async def run():
         future = asyncio.get_running_loop().create_future()
         coordinator._hass = SimpleNamespace(data={DOMAIN: {SERVICE_CALL_FUTURES: {"id": future}}})
         await coordinator._handle_service_call_event(
-            Event(SERVICE_CALL_EVENT, {"service": "clear_file_cache", SERVICE_CALL_ID: "id", **data})
+            Event(
+                SERVICE_CALL_EVENT, {"service": service, SERVICE_CALL_ID: "id", **data}
+            )
         )
         return future.result()
 
@@ -55,7 +58,7 @@ def test_clears_the_requested_cache(file_type, prints_cleared, timelapses_cleare
     data = {} if file_type is None else {"file_type": file_type}
 
     # The printer requires signed MQTT here, which blocks control actions but not a local cleanup.
-    assert _call(coordinator, data) is True
+    assert _call(coordinator, data, service="clear_file_cache") is True
 
     assert print_job.async_clear_print_history_files.await_count == int(prints_cleared)
     assert print_job.async_clear_timelapse_files.await_count == int(timelapses_cleared)
@@ -64,7 +67,29 @@ def test_clears_the_requested_cache(file_type, prints_cleared, timelapses_cleare
 def test_rejects_an_unknown_file_type():
     coordinator, print_job = _coordinator()
 
-    assert _call(coordinator, {"file_type": "everything"}) is False
+    assert (
+        _call(coordinator, {"file_type": "everything"}, service="clear_file_cache")
+        is False
+    )
 
     print_job.async_clear_print_history_files.assert_not_awaited()
     print_job.async_clear_timelapse_files.assert_not_awaited()
+
+
+def test_delete_cached_file_service_uses_local_delete_path():
+    coordinator, print_job = _coordinator()
+    path = "timelapse/video.mp4"
+
+    assert _call(coordinator, {"path": path}, service="delete_cached_file") is True
+
+    coordinator.delete_cached_file.assert_awaited_once_with(path)
+    print_job.async_clear_print_history_files.assert_not_awaited()
+    print_job.async_clear_timelapse_files.assert_not_awaited()
+
+
+def test_delete_cached_file_service_requires_a_path():
+    coordinator, _ = _coordinator()
+
+    assert _call(coordinator, {}, service="delete_cached_file") is False
+
+    coordinator.delete_cached_file.assert_not_awaited()

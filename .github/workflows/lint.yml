@@ -1,0 +1,38 @@
+name: Lint
+
+# Ruff on the lines each PR changes - see scripts/lint_changed_lines.py for
+# why it isn't a whole-repo check. Findings show as annotations on the diff.
+# Annotations come from workflow commands, not the API, so this works on
+# forked PRs with their read-only token.
+
+on:
+  pull_request:
+    paths:
+      - "**.py"
+      - "pyproject.toml"
+      - ".github/workflows/lint.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history so the script can find the merge base with the PR's base branch.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v10.4.0
+
+      # Keep in sync with required-version in pyproject.toml.
+      - name: Install Ruff
+        run: uv pip install --system ruff==0.17.6
+
+      - name: Ruff on changed lines
+        run: python scripts/lint_changed_lines.py "${{ github.event.pull_request.base.sha }}"

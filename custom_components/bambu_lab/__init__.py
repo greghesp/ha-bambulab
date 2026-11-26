@@ -131,42 +131,6 @@ class PrintHistoryAPIView(HomeAssistantView):
             )
 
 
-class DeletePrintHistoryAPIView(HomeAssistantView):
-    """API endpoint to delete a cached print and its sidecar files."""
-
-    url = "/api/bambu_lab/print_history/delete"
-    name = "api:bambu_lab:print_history_delete"
-    requires_auth = True
-
-    def __init__(self, hass: HomeAssistant):
-        self.hass = hass
-
-    async def post(self, request: web.Request) -> web.Response:
-        try:
-            data = await request.json()
-            serial = data.get("serial")
-            relative_path = data.get("path")
-            if not isinstance(serial, str) or not serial or not isinstance(relative_path, str) or not relative_path:
-                return web.json_response({"error": "Missing required parameters: serial and path"}, status=400)
-
-            coordinator = next((
-                coord for entry_id, coord in self.hass.data[DOMAIN].items()
-                if entry_id != SERVICE_CALL_FUTURES and coord.get_model().info.serial == serial
-            ), None)
-            if coordinator is None:
-                return web.json_response({"error": f"Printer with serial {serial} not found"}, status=404)
-
-            result = await coordinator.delete_cached_print_file(relative_path)
-            if not result["success"]:
-                status = 404 if result["error"] == "Cached print file not found" else 400
-                return web.json_response({"error": result["error"]}, status=status)
-
-            return web.json_response(result)
-        except Exception as e:
-            LOGGER.error("Error deleting print history file: %s", e)
-            return web.json_response({"error": "Internal server error"}, status=500)
-
-
 class VideoAPIView(HomeAssistantView):
     """API endpoint for video data from all printers."""
     
@@ -463,6 +427,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return True
 
+    # Do this before anything slow or that can fail, so that dashboards opened while
+    # Home Assistant is starting can already load the cards.
+    await _async_update_card_registration(hass)
+
     try:
         await hass.async_add_executor_job(migrate_legacy_file_cache, hass, entry.data["serial"])
     except Exception as err:
@@ -476,7 +444,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Register file cache API endpoints
     hass.http.register_view(PrintHistoryAPIView(hass))
-    hass.http.register_view(DeletePrintHistoryAPIView(hass))
     hass.http.register_view(VideoAPIView(hass))
     hass.http.register_view(FileCacheFileView(hass))
     hass.http.register_view(EnsureCacheFileAPIView(hass))
@@ -508,6 +475,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "stop_filament_drying": SupportsResponse.NONE,
         "force_filament_sync": SupportsResponse.NONE,
         "clear_file_cache": SupportsResponse.NONE,
+        "delete_cached_file": SupportsResponse.NONE,
     }
     for command in services:
         hass.services.async_register(
@@ -526,9 +494,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Now that we've finished initialization fully, start the MQTT connection so that any necessary
     # sensor reinitialization happens entirely after the initial setup.
     await coordinator.start_mqtt()
-
-    cards = BambuLabCardRegistration(hass)
-    await cards.async_register()
 
     LOGGER.debug("async_setup_entry Complete")
 
@@ -556,22 +521,69 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             hass.services.async_remove(DOMAIN, "get_filament_inventory")
         return unloaded
 
+    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    # Stop reinitializing sensors so that it can't overlap with unloading the platforms.
+    await coordinator.async_stop_reinitialize()
+
     # Unload the platforms
     LOGGER.debug(f"async_unload_entry: {PLATFORMS}")
     await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     # Halt the mqtt listener thread
-    coordinator: BambuDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     coordinator.shutdown()
 
     # Delete existing config entry
     del hass.data[DOMAIN][entry.entry_id]
 
-    cards = BambuLabCardRegistration(hass)
-    await cards.async_unregister()
+    # The cards are shared by all printers and have to survive a reload.
+    if entry.disabled_by:
+        await _async_unregister_unused_cards(hass, entry)
 
     LOGGER.debug("async_unload_entry Done")
     return True
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Clean up after a removed config entry."""
+    LOGGER.debug("async_remove_entry")
+    if _is_printer_entry(entry):
+        await _async_unregister_unused_cards(hass, entry)
+
+def _is_printer_entry(entry: ConfigEntry) -> bool:
+    return entry.data.get(ENTRY_TYPE) not in (ENTRY_TYPE_MAKERWORLD, ENTRY_TYPE_FILAMENT_INVENTORY)
+
+def _wants_cards(entry: ConfigEntry) -> bool:
+    """Whether this entry asks for the cards. They are shared by all printers."""
+    return _is_printer_entry(entry) and entry.options.get("register_cards", True)
+
+
+async def _async_update_card_registration(hass: HomeAssistant) -> None:
+    """Register the cards while any enabled printer wants them, otherwise remove them.
+
+    Without the removal, turning the option off would leave the resource behind and
+    every dashboard would keep downloading the cards (#2174).
+    """
+    entries = hass.config_entries.async_entries(
+        DOMAIN, include_ignore=False, include_disabled=False
+    )
+    if any(_wants_cards(other) for other in entries):
+        await BambuLabCardRegistration(hass).async_register()
+        return
+    try:
+        await BambuLabCardRegistration(hass).async_unregister()
+    except Exception:
+        # The printer works without the cards, so don't fail its setup over this.
+        LOGGER.exception("Failed to remove the Bambu Lab cards")
+
+
+async def _async_unregister_unused_cards(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Remove the cards unless another enabled printer still wants them."""
+    entries = hass.config_entries.async_entries(DOMAIN, include_ignore=False, include_disabled=False)
+    if any(
+        other.entry_id != entry.entry_id and _wants_cards(other) for other in entries
+    ):
+        return
+    await BambuLabCardRegistration(hass).async_unregister()
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload the config entry when it changed."""
