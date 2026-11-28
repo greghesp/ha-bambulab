@@ -88,6 +88,10 @@ CHAMBER_STALL_TIMEOUT = 30
 # Consecutive failed connects before slowing down the retries and no longer logging each one.
 CHAMBER_FAST_CONNECT_ATTEMPTS = 12
 CHAMBER_SLOW_RETRY_INTERVAL = 60
+# Seconds between MQTT connects while the printer's hostname doesn't resolve, e.g. because the router
+# forgets it while the printer is off. Doubles after each failure up to the maximum.
+MQTT_DNS_RETRY_MIN_DELAY = 5
+MQTT_DNS_RETRY_MAX_DELAY = 60
 
 
 def _stop_thread(thread: threading.Thread, name: str) -> None:
@@ -279,6 +283,7 @@ class MqttThread(threading.Thread):
 
         exceptionSeen = ""
         connectionSuccessful = False
+        dnsRetryDelay = MQTT_DNS_RETRY_MIN_DELAY
         while not self._stop_event.is_set():
             try:
                 host = self._client.host if self._client._local_mqtt else self._client.bambu_cloud.cloud_mqtt_host
@@ -292,6 +297,8 @@ class MqttThread(threading.Thread):
                 # ping, and the watchdog already detects dead connections after 60s.
                 self._client.client.connect(host, self._client._port, keepalive=30)
                 connectionSuccessful = True
+                exceptionSeen = ""
+                dnsRetryDelay = MQTT_DNS_RETRY_MIN_DELAY
 
                 LOGGER.debug("Starting listen loop")
                 self._client.client.loop_forever(retry_first_connection=False)
@@ -309,6 +316,20 @@ class MqttThread(threading.Thread):
                 exceptionSeen = "ConnectionError"
                 if self._stop_event.wait(5):
                     break
+            except socket.gaierror as e:
+                # The hostname doesn't resolve. Warn once, then back off quietly until it does.
+                if exceptionSeen != "gaierror":
+                    LOGGER.warning(
+                        f"Unable to resolve printer host '{host}': {e}. Retrying with increasing delay."
+                    )
+                else:
+                    LOGGER.debug(
+                        f"Still unable to resolve printer host '{host}': {e}. Retrying in {dnsRetryDelay} seconds."
+                    )
+                exceptionSeen = "gaierror"
+                if self._stop_event.wait(dnsRetryDelay):
+                    break
+                dnsRetryDelay = min(dnsRetryDelay * 2, MQTT_DNS_RETRY_MAX_DELAY)
             except OSError as e:
                 if e.errno == 113:
                     if exceptionSeen != "OSError113":
@@ -319,12 +340,16 @@ class MqttThread(threading.Thread):
                 else:
                     LOGGER.error("A listener loop thread exception occurred:")
                     LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-                    if self._stop_event.wait(1):  # Avoid a tight loop if this is a persistent error.
+                    if self._stop_event.wait(
+                        1
+                    ):  # Avoid a tight loop if this is a persistent error.
                         break
             except Exception as e:
                 LOGGER.error("A listener loop thread exception occurred:")
                 LOGGER.error(f"Exception. Type: {type(e)} Args: {e}")
-                if self._stop_event.wait(1):  # Avoid a tight loop if this is a persistent error.
+                if self._stop_event.wait(
+                    1
+                ):  # Avoid a tight loop if this is a persistent error.
                     break
 
             if self._client.client is None or self._stop_event.is_set():
