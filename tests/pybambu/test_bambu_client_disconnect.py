@@ -1,9 +1,10 @@
+import socket
 import threading
 import time
 import unittest
 from unittest.mock import MagicMock, patch
 
-from pybambu.bambu_client import BambuClient, ChamberImageThread
+from pybambu.bambu_client import BambuClient, ChamberImageThread, MqttThread
 from pybambu.const import LOGGER
 
 
@@ -117,3 +118,55 @@ class TestChamberConnectTimeout(unittest.TestCase):
 
         self.assertEqual(len(timeouts), 1)
         self.assertIsNotNone(timeouts[0])
+
+
+class TestMqttDnsFailureBackoff(unittest.TestCase):
+    """A printer added by hostname whose DNS entry disappears while it is off must not
+    retry every second and fill the log with errors."""
+
+    def setUp(self):
+        self.client = MagicMock()
+        self.client._local_mqtt = True
+        self.client.host = "printer.lan"
+        self.client._device.info.device_type = "P1S"
+        self.thread = MqttThread(self.client)
+        self.delays = []
+
+    def _run(self, connect_results):
+        results = iter(connect_results)
+
+        def connect(*args, **kwargs):
+            result = next(results)
+            if isinstance(result, Exception):
+                raise result
+
+        def wait(timeout=None):
+            self.delays.append(timeout)
+            return len(self.delays) >= 20
+
+        self.client.client.connect.side_effect = connect
+        # A successful connect drops straight back into the retry loop.
+        self.client.client.loop_forever.side_effect = ConnectionError("lost")
+        with patch.object(self.thread._stop_event, "wait", side_effect=wait):
+            self.thread.run()
+
+    def test_retry_delay_grows_and_is_capped(self):
+        dns_error = socket.gaierror(-2, "Name or service not known")
+        with self.assertLogs(LOGGER, level="DEBUG") as logs:
+            self._run([dns_error] * 20)
+
+        self.assertEqual(self.delays[:6], [5, 10, 20, 40, 60, 60])
+        self.assertEqual(max(self.delays), 60)
+        warnings = [line for line in logs.output if line.startswith("WARNING")]
+        self.assertEqual(len(warnings), 1)
+        self.assertFalse([line for line in logs.output if line.startswith("ERROR")])
+
+    def test_retry_delay_resets_after_a_successful_connect(self):
+        dns_error = socket.gaierror(-2, "Name or service not known")
+        with self.assertLogs(LOGGER, level="DEBUG") as logs:
+            # The successful connect is followed by a ConnectionError, which waits 5 seconds.
+            self._run([dns_error, dns_error, dns_error, None] + [dns_error] * 16)
+
+        self.assertEqual(self.delays[:6], [5, 10, 20, 5, 5, 10])
+        warnings = [line for line in logs.output if line.startswith("WARNING")]
+        self.assertEqual(len(warnings), 2)
